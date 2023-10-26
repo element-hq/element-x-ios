@@ -20,8 +20,7 @@ import XCTest
 
 @MainActor
 class AppLockSetupBiometricsScreenViewModelTests: XCTestCase {
-    var appLockService: AppLockService!
-    var keychainController: KeychainController!
+    var appLockService: AppLockServiceMock!
     var viewModel: AppLockSetupBiometricsScreenViewModelProtocol!
     
     var context: AppLockSetupBiometricsScreenViewModelType.Context { viewModel.context }
@@ -29,14 +28,10 @@ class AppLockSetupBiometricsScreenViewModelTests: XCTestCase {
     override func setUp() {
         AppSettings.reset()
         
-        keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-        keychainController.resetSecrets()
-        
-        let context = LAContextMock()
-        context.biometryTypeValue = .touchID
-        context.evaluatedPolicyDomainStateValue = "👆".data(using: .utf8)
-        
-        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings(), context: context)
+        appLockService = AppLockServiceMock()
+        appLockService.underlyingIsEnabled = true
+        appLockService.underlyingBiometryType = .touchID
+        appLockService.enableBiometricUnlockReturnValue = .success(())
         viewModel = AppLockSetupBiometricsScreenViewModel(appLockService: appLockService)
     }
     
@@ -44,36 +39,23 @@ class AppLockSetupBiometricsScreenViewModelTests: XCTestCase {
         AppSettings.reset()
     }
 
-    func testAllow() async {
-        // Given a service that has biometric unlock disabled.
-        guard case .success = appLockService.setupPINCode("2023") else {
-            XCTFail("The PIN should be valid.")
-            return
-        }
-        XCTAssertTrue(appLockService.isEnabled)
-        XCTAssertFalse(appLockService.biometricUnlockEnabled)
-        
+    func testAllow() async throws {
         // When allowing Touch/Face ID.
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .continue }
         context.send(viewAction: .allow)
-        await Task.yield()
+        try await deferred.fulfill()
         
         // Then the service should now have biometric unlock enabled.
-        XCTAssertTrue(appLockService.biometricUnlockEnabled)
+        XCTAssertEqual(appLockService.enableBiometricUnlockCallsCount, 1)
     }
 
-    func testSkip() {
-        // Given a service that has biometric unlock disabled.
-        guard case .success = appLockService.setupPINCode("2023") else {
-            XCTFail("The PIN should be valid.")
-            return
-        }
-        XCTAssertTrue(appLockService.isEnabled)
-        XCTAssertFalse(appLockService.biometricUnlockEnabled)
-        
+    func testSkip() async throws {
         // When skipping biometrics.
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .continue }
         context.send(viewAction: .skip)
+        try await deferred.fulfill()
         
         // Then the service should now have biometric unlock enabled.
-        XCTAssertFalse(appLockService.biometricUnlockEnabled)
+        XCTAssertEqual(appLockService.enableBiometricUnlockCallsCount, 0)
     }
 }
