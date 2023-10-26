@@ -94,7 +94,7 @@ struct ComposerToolbar: View {
                 }
             }
         }
-        .animation(.elementDefault, value: context.viewState.composerMode)
+        .animation(.linear(duration: 0.15), value: context.viewState.composerMode)
     }
     
     private var bottomBar: some View {

@@ -29,9 +29,6 @@ struct VoiceMessageRoomPlaybackView: View {
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     @State private var sendFeedback = false
-        
-    @ScaledMetric private var playPauseButtonSize = 32
-    @ScaledMetric private var playPauseImagePadding = 8
     
     private static let elapsedTimeFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -66,7 +63,9 @@ struct VoiceMessageRoomPlaybackView: View {
     var body: some View {
         HStack {
             HStack {
-                playPauseButton
+                VoiceMessageButton(state: .init(state: playerState.playbackState),
+                                   size: .medium,
+                                   action: onPlayPause)
                 Text(timeLabelContent)
                     .lineLimit(1)
                     .font(.compound.bodySMSemibold)
@@ -100,32 +99,6 @@ struct VoiceMessageRoomPlaybackView: View {
         }
         .padding(.leading, 2)
         .padding(.trailing, 8)
-    }
-    
-    @ViewBuilder
-    var playPauseButton: some View {
-        Button {
-            onPlayPause()
-        } label: {
-            ZStack {
-                Circle()
-                    .foregroundColor(.compound.bgCanvasDefault)
-                if playerState.playbackState == .loading {
-                    ProgressView()
-                } else {
-                    Image(asset: playerState.playbackState == .playing ? Asset.Images.mediaPause : Asset.Images.mediaPlay)
-                        .resizable()
-                        .padding(playPauseImagePadding)
-                        .offset(x: playerState.playbackState == .playing ? 0 : 2)
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(.compound.iconSecondary)
-                        .accessibilityLabel(playerState.playbackState == .playing ? L10n.a11yPause : L10n.a11yPlay)
-                }
-            }
-        }
-        .disabled(playerState.playbackState == .loading)
-        .frame(width: playPauseButtonSize,
-               height: playPauseButtonSize)
     }
 
     @ViewBuilder

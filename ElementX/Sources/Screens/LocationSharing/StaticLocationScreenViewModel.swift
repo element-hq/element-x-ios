@@ -48,7 +48,7 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
                 let action: () -> Void = { [weak self] in self?.actionsSubject.send(.openSystemSettings) }
                 state.bindings.alertInfo = .init(locationSharingViewError: .missingAuthorization,
                                                  primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
-                                                 secondaryButton: .init(title: L10n.actionOpenSettings, action: action))
+                                                 secondaryButton: .init(title: L10n.commonSettings, action: action))
             }
         }
     }

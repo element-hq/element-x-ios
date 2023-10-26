@@ -602,6 +602,7 @@
 		A021827B528F1EDC9101CA58 /* AppCoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC776F301D374A3298C69DA /* AppCoordinatorProtocol.swift */; };
 		A0A0D2A9564BDA3FDE2E360F /* FormattedBodyText.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73FF1A33198F5FAE9D34B1F /* FormattedBodyText.swift */; };
 		A0D7E5BD0298A97DCBDCE40B /* Prefire in Frameworks */ = {isa = PBXBuildFile; productRef = 2629CF48B33643CD5F69C612 /* Prefire */; };
+		A0FAB2BA2AE92AB5008F20B3 /* VoiceMessageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FAB2B92AE92AB5008F20B3 /* VoiceMessageButton.swift */; };
 		A10D6CCDE2010C09EEA1A593 /* HomeScreenRoomList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7661EFFCAA307A97D71132A /* HomeScreenRoomList.swift */; };
 		A14A9419105A1CD42F0511C4 /* UserIndicatorModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43005941B3A2C9671E23C85 /* UserIndicatorModalView.swift */; };
 		A17FAD2EBC53E17B5FD384DB /* InviteUsersScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22730A30C50AC2E3D5BA8642 /* InviteUsersScreenViewModelProtocol.swift */; };
@@ -1566,6 +1567,7 @@
 		A05707BF550D770168A406DB /* LoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTests.swift; sourceTree = "<group>"; };
 		A057F2FDC14866C3026A89A4 /* NotificationManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerProtocol.swift; sourceTree = "<group>"; };
 		A0A01AECFF54281CF35909A6 /* MessageComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposer.swift; sourceTree = "<group>"; };
+		A0FAB2B92AE92AB5008F20B3 /* VoiceMessageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMessageButton.swift; sourceTree = "<group>"; };
 		A12D3B1BCF920880CA8BBB6B /* UserIndicatorControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIndicatorControllerProtocol.swift; sourceTree = "<group>"; };
 		A16CD2C62CB7DB78A4238485 /* ReportContentScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportContentScreenCoordinator.swift; sourceTree = "<group>"; };
 		A1BF12A5E7C76777C4BF0F2B /* TimelineItemMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemMenu.swift; sourceTree = "<group>"; };
@@ -3857,6 +3859,7 @@
 			isa = PBXGroup;
 			children = (
 				AD0FF64B0E6470F66F42E182 /* EstimatedWaveformView.swift */,
+				A0FAB2B92AE92AB5008F20B3 /* VoiceMessageButton.swift */,
 				FB9EABCA9348DFA27439A809 /* WaveformCursorView.swift */,
 				94028A227645FA880B966211 /* WaveformSource.swift */,
 				03BA7958A4BB9C22CA8884EF /* WaveformViewDragGestureModifier.swift */,
@@ -5574,6 +5577,7 @@
 				C0090506A52A1991BAF4BA68 /* NotificationSettingsChatType.swift in Sources */,
 				AA93B3F9B5DD097DEF79F981 /* NotificationSettingsEditScreen.swift in Sources */,
 				53A59720F4729D9BBFFB7CAB /* NotificationSettingsEditScreenCoordinator.swift in Sources */,
+				A0FAB2BA2AE92AB5008F20B3 /* VoiceMessageButton.swift in Sources */,
 				4EA1CE0E88EA68E862FF0EA2 /* NotificationSettingsEditScreenModels.swift in Sources */,
 				119AE9A3FC6E0606C1146528 /* NotificationSettingsEditScreenRoomCell.swift in Sources */,
 				D5FE90A6AF5FD5AE91BD37C7 /* NotificationSettingsEditScreenViewModel.swift in Sources */,

@@ -962,7 +962,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 state.bindings.confirmationAlertInfo = .init(id: .init(),
                                                              title: L10n.dialogPermissionMicrophoneTitleIos(InfoPlistReader.main.bundleDisplayName),
                                                              message: L10n.dialogPermissionMicrophoneDescriptionIos,
-                                                             primaryButton: .init(title: L10n.actionOpenSettings, action: { [weak self] in self?.openSystemSettings() }),
+                                                             primaryButton: .init(title: L10n.commonSettings, action: { [weak self] in self?.openSystemSettings() }),
                                                              secondaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil))
             default:
                 MXLog.error("failed to start voice message recording: \(error)")
