@@ -27,7 +27,7 @@ struct VoiceMessageRoomPlaybackView: View {
     let onSeek: (Double) -> Void
     let onScrubbing: (Bool) -> Void
         
-    @GestureState var dragState: WaveformViewDragState = .inactive
+    @State var dragState: WaveformViewDragState = .inactive
 
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
@@ -58,10 +58,11 @@ struct VoiceMessageRoomPlaybackView: View {
                     .monospacedDigit()
                     .fixedSize(horizontal: true, vertical: true)
             }
+
             GeometryReader { geometry in
                 waveformView
                     .gesture(SpatialTapGesture()
-                        .updating($dragState) { tapGesture, dragState, _ in
+                        .onEnded { tapGesture in
                             let progress = tapGesture.location.x / geometry.size.width
                             dragState = .pressing(progress: progress)
                         })
@@ -73,9 +74,12 @@ struct VoiceMessageRoomPlaybackView: View {
                             .contentShape(Rectangle())
                             .offset(x: -25, y: 0)
                             .gesture(DragGesture(coordinateSpace: .named("waveform"))
-                                .updating($dragState) { dragGesture, dragState, _ in
+                                .onChanged { dragGesture in
                                     let progress = dragGesture.location.x / geometry.size.width
                                     dragState = .dragging(progress: progress)
+                                }
+                                .onEnded { _ in
+                                    dragState = .inactive
                                 }
                             )
                     }
@@ -87,7 +91,7 @@ struct VoiceMessageRoomPlaybackView: View {
             case .inactive:
                 onScrubbing(false)
             case .pressing(let progress):
-                onScrubbing(true)
+                onScrubbing(false)
                 onSeek(max(0, min(progress, 1.0)))
             case .dragging(let progress):
                 onScrubbing(true)

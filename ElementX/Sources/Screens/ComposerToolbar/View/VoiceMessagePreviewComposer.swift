@@ -42,7 +42,7 @@ struct VoiceMessagePreviewComposer: View {
     }
     
     var showWaveformCursor: Bool {
-        playerState.playbackState == .playing || dragState.isActive
+        playerState.playbackState == .playing || dragState.isDragging
     }
             
     var body: some View {
@@ -58,25 +58,45 @@ struct VoiceMessagePreviewComposer: View {
                     .monospacedDigit()
                     .fixedSize(horizontal: true, vertical: true)
             }
-            waveformView
-                .progressTapGesture(progress: $tappedProgress)
-                .progressCursor(progress: playerState.progress) {
-                    WaveformCursorView(color: .compound.iconAccentTertiary)
-                        .opacity(showWaveformCursor ? 1 : 0)
-                        .frame(width: waveformLineWidth)
-                }
-                .onChange(of: dragState) { dragState in
-                    switch dragState {
-                    case .inactive:
-                        onScrubbing(false)
-                    case .pressing(let progress):
-                        onScrubbing(true)
-                        onSeek(max(0, min(progress, 1.0)))
-                    case .dragging(let progress):
-                        onSeek(max(0, min(progress, 1.0)))
+
+            GeometryReader { geometry in
+                waveformView
+                    .gesture(SpatialTapGesture()
+                        .onEnded { tapGesture in
+                            let progress = tapGesture.location.x / geometry.size.width
+                            dragState = .pressing(progress: progress)
+                        })
+                    .progressCursor(progress: playerState.progress) {
+                        WaveformCursorView(color: .compound.iconAccentTertiary)
+                            .opacity(showWaveformCursor ? 1 : 0)
+                            .frame(width: waveformLineWidth)
+                            .frame(width: 50)
+                            .contentShape(Rectangle())
+                            .offset(x: -25, y: 0)
+                            .gesture(DragGesture(coordinateSpace: .named("waveform"))
+                                .onChanged { dragGesture in
+                                    let progress = dragGesture.location.x / geometry.size.width
+                                    dragState = .dragging(progress: progress)
+                                }
+                                .onEnded { _ in
+                                    dragState = .inactive
+                                }
+                            )
                     }
-                    self.dragState = dragState
-                }
+            }
+            .coordinateSpace(name: "waveform")
+        }
+        .onChange(of: dragState) { newDragState in
+            switch newDragState {
+            case .inactive:
+                onScrubbing(false)
+            case .pressing(let progress):
+                onScrubbing(false)
+                onSeek(max(0, min(progress, 1.0)))
+            case .dragging(let progress):
+                onScrubbing(true)
+                onSeek(max(0, min(progress, 1.0)))
+            }
         }
         .padding(.vertical, 4.0)
         .padding(.horizontal, 6.0)

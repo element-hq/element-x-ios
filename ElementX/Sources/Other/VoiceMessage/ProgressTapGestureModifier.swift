@@ -53,15 +53,6 @@ enum WaveformViewDragState: Equatable {
         }
     }
     
-    var isActive: Bool {
-        switch self {
-        case .inactive:
-            return false
-        case .pressing, .dragging:
-            return true
-        }
-    }
-    
     var isDragging: Bool {
         switch self {
         case .inactive, .pressing:
