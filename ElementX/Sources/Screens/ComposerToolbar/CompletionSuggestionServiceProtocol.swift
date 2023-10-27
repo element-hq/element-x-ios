@@ -18,8 +18,6 @@ import Combine
 
 // sourcery: AutoMockable
 protocol CompletionSuggestionServiceProtocol {
-    // To be removed once we suggestions and mentions are always enabled
-    var areSuggestionsEnabled: Bool { get }
     var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> { get }
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionPattern?)
@@ -27,13 +25,11 @@ protocol CompletionSuggestionServiceProtocol {
 
 extension CompletionSuggestionServiceMock {
     struct CompletionSuggestionServiceMockConfiguration {
-        var areSuggestionsEnabled = true
         var suggestions: [SuggestionItem] = []
     }
     
     convenience init(configuration: CompletionSuggestionServiceMockConfiguration) {
         self.init()
-        underlyingAreSuggestionsEnabled = configuration.areSuggestionsEnabled
         underlyingSuggestionsPublisher = Just(configuration.suggestions).eraseToAnyPublisher()
     }
 }

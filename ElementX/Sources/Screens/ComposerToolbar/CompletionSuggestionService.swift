@@ -20,17 +20,11 @@ import Foundation
 final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     private let roomProxy: RoomProxyProtocol
     private var canMentionAllUsers = false
-    let areSuggestionsEnabled: Bool
     private(set) var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> = Empty().eraseToAnyPublisher()
     
     private let suggestionTriggerSubject = CurrentValueSubject<SuggestionPattern?, Never>(nil)
     
-    init(roomProxy: RoomProxyProtocol, areSuggestionsEnabled: Bool) {
-        self.roomProxy = roomProxy
-        self.areSuggestionsEnabled = areSuggestionsEnabled
-        guard areSuggestionsEnabled else {
-            return
-        }
+    init(roomProxy: RoomProxyProtocol) {
         suggestionsPublisher = suggestionTriggerSubject
             .combineLatest(roomProxy.members)
             .map { [weak self] suggestionPattern, members -> [SuggestionItem] in

@@ -44,7 +44,7 @@ struct ComposerToolbar: View {
             topBar
             
             if context.composerActionsEnabled {
-                if context.viewState.areSuggestionsEnabled, context.composerExpanded {
+                if context.composerExpanded {
                     suggestionView
                         .padding(.leading, -5)
                         .padding(.trailing, -8)
@@ -58,7 +58,7 @@ struct ComposerToolbar: View {
             ViewFrameReader(frame: $frame)
         }
         .overlay(alignment: .bottom) {
-            if context.viewState.areSuggestionsEnabled, !context.composerExpanded {
+            if !context.composerExpanded {
                 suggestionView
                     .offset(y: -frame.height)
             }

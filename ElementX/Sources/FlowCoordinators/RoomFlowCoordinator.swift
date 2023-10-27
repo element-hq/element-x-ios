@@ -337,7 +337,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           mediaProvider: userSession.mediaProvider,
                                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL,
-                                                                                                           mentionBuilder: MentionBuilder(mentionsEnabled: appSettings.mentionsEnabled)),
+                                                                                                           mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
                                                           appSettings: appSettings)
                 
@@ -351,7 +351,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
         
-        let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy, areSuggestionsEnabled: appSettings.mentionsEnabled)
+        let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy)
         
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          timelineController: timelineController,

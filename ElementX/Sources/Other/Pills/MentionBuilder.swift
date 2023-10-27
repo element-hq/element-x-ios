@@ -18,15 +18,7 @@ import Foundation
 import UIKit
 
 struct MentionBuilder: MentionBuilderProtocol {
-    // Can be removed when mentions are enabled by default
-    let mentionsEnabled: Bool
-    
     func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String) {
-        guard mentionsEnabled else {
-            attributedString.addAttributes([.MatrixUserID: userID], range: range)
-            return
-        }
-        
         let attributes = attributedString.attributes(at: 0, longestEffectiveRange: nil, in: range)
         let font = attributes[.font] as? UIFont ?? .preferredFont(forTextStyle: .body)
         let blockquote = attributes[.MatrixBlockquote]
@@ -48,10 +40,6 @@ struct MentionBuilder: MentionBuilderProtocol {
     }
     
     func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange) {
-        guard mentionsEnabled else {
-            return
-        }
-        
         let attributes = attributedString.attributes(at: 0, longestEffectiveRange: nil, in: range)
         let font = attributes[.font] as? UIFont ?? .preferredFont(forTextStyle: .body)
         let blockquote = attributes[.MatrixBlockquote]

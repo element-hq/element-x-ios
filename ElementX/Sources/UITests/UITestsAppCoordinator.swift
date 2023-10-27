@@ -176,7 +176,7 @@ class MockScreen: Identifiable {
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             let coordinator = HomeScreenCoordinator(parameters: .init(userSession: session,
-                                                                      attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: true)),
+                                                                      attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder()),
                                                                       bugReportService: BugReportServiceMock(),
                                                                       navigationStackCoordinator: navigationStackCoordinator,
                                                                       selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher()))
