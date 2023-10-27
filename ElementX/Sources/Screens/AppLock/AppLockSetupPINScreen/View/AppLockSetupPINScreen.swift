@@ -23,8 +23,12 @@ struct AppLockSetupPINScreen: View {
     
     @FocusState private var textFieldFocus
     
+    var stackSpacing: CGFloat {
+        context.viewState.mode == .unlock ? 36 : 40
+    }
+    
     var subtitleColor: Color {
-        context.viewState.isSubtitleWarning ? .compound.textCriticalPrimary : .compound.textPrimary
+        context.viewState.isSubtitleWarning ? .compound.textCriticalPrimary : .compound.textSecondary
     }
     
     var interactiveDismissDisabled: Bool {
@@ -33,7 +37,7 @@ struct AppLockSetupPINScreen: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 36) {
+            VStack(spacing: stackSpacing) {
                 header
                 
                 PINTextField(pinCode: $context.pinCode,
