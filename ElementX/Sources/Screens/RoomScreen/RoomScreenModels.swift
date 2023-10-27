@@ -104,8 +104,7 @@ struct RoomScreenViewState: BindableState {
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this
     var swiftUITimelineEnabled = false
-    
-    var longPressDisabledItemID: TimelineItemIdentifier?
+
     var ownUserID: String
     
     var showCallButton = false

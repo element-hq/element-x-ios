@@ -18,7 +18,6 @@ import SwiftUI
 
 struct LongPressWithFeedback: ViewModifier {
     let action: () -> Void
-    let disabled: () -> Bool
     
     @State private var triggerTask: Task<Void, Never>?
     @State private var isLongPressing = false
@@ -50,8 +49,6 @@ struct LongPressWithFeedback: ViewModifier {
                     
                     if Task.isCancelled { return }
 
-                    guard !disabled() else { return }
-
                     action()
                     feedbackGenerator.impactOccurred()
                 }
@@ -60,8 +57,8 @@ struct LongPressWithFeedback: ViewModifier {
 }
 
 extension View {
-    func longPressWithFeedback(disabled: @escaping @autoclosure () -> Bool = false, action: @escaping () -> Void) -> some View {
-        modifier(LongPressWithFeedback(action: action, disabled: disabled))
+    func longPressWithFeedback(action: @escaping () -> Void) -> some View {
+        modifier(LongPressWithFeedback(action: action))
     }
 }
 
