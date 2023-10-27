@@ -38,13 +38,15 @@ struct ComposerToolbar: View {
     private let voiceMessageTooltipDuration = 1.0
     
     @State private var frame: CGRect = .zero
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     var body: some View {
         VStack(spacing: 8) {
             topBar
             
             if context.composerActionsEnabled {
-                if context.composerExpanded {
+                if verticalSizeClass != .compact,
+                   context.composerExpanded {
                     suggestionView
                         .padding(.leading, -5)
                         .padding(.trailing, -8)
@@ -58,7 +60,7 @@ struct ComposerToolbar: View {
             ViewFrameReader(frame: $frame)
         }
         .overlay(alignment: .bottom) {
-            if !context.composerExpanded {
+            if verticalSizeClass != .compact, !context.composerExpanded {
                 suggestionView
                     .offset(y: -frame.height)
             }

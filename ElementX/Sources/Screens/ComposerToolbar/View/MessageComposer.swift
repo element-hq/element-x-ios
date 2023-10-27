@@ -73,7 +73,7 @@ struct MessageComposer: View {
                     composerView
                         .background(ViewFrameReader(frame: $composerFrame))
                 }
-                .frame(maxHeight: max(composerHeight, composerFrame.height),
+                .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
                        alignment: .top)
                 .tint(.compound.iconAccentTertiary)
                 .padding(.vertical, 10)

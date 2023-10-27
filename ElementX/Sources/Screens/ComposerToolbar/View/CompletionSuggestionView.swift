@@ -28,7 +28,7 @@ struct CompletionSuggestionView: View {
         // added by the list itself when presenting the divider
         static let listItemSpacing: CGFloat = 4.0
         static let leadingPadding: CGFloat = 16.0
-        static let maxVisibleRows = 4
+        static let maxVisibleRows: CGFloat = 4.5
     }
 
     // MARK: Public
@@ -69,11 +69,11 @@ struct CompletionSuggestionView: View {
         }
         .listStyle(PlainListStyle())
         .frame(height: min(contentHeightForRowCount(Constants.maxVisibleRows),
-                           contentHeightForRowCount(items.count)))
+                           contentHeightForRowCount(CGFloat(items.count))))
         .background(Color.compound.bgCanvasDefault)
     }
     
-    private func contentHeightForRowCount(_ count: Int) -> CGFloat {
+    private func contentHeightForRowCount(_ count: CGFloat) -> CGFloat {
         (prototypeListItemFrame.height + Constants.listItemPadding * 2 + Constants.listItemSpacing) * CGFloat(count) - Constants.listItemSpacing / 2 + Constants.topPadding - Constants.listItemPadding
     }
 
