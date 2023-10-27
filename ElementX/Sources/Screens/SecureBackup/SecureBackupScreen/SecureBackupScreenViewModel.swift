@@ -55,8 +55,8 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
             actionsSubject.send(.recoveryKey)
         case .keyBackup:
             switch secureBackupController.keyBackupState.value {
-            case .disabled:
-                enableKeyBackup()
+            case .disabled, .unknown:
+                enableBackup()
             case .enabled:
                 actionsSubject.send(.keyBackup)
             default:
@@ -67,11 +67,11 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
     
     // MARK: - Private
     
-    private func enableKeyBackup() {
+    private func enableBackup() {
         Task {
             let loadingIndicatorIdentifier = "SecureBackupScreenLoading"
             userIndicatorController?.submitIndicator(.init(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
-            switch await secureBackupController.enableBackup() {
+            switch await secureBackupController.enable() {
             case .success:
                 break
             case .failure(let error):

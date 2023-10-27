@@ -44,6 +44,7 @@ class MockClientProxy: ClientProxyProtocol {
         let secureBackupController = SecureBackupControllerMock()
         secureBackupController.underlyingRecoveryKeyState = .init(CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.disabled))
         secureBackupController.underlyingKeyBackupState = .init(CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled))
+        secureBackupController.isLastSessionReturnValue = .success(false)
         return secureBackupController
     }()
 

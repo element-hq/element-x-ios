@@ -115,7 +115,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .dismissedSettings:
                 stateMachine.processEvent(.dismissedSettingsScreen)
             case .runLogoutFlow:
-                runLogoutFlow()
+                Task { await self.runLogoutFlow() }
             case .clearCache:
                 actionsSubject.send(.clearCache)
             case .forceLogout:
@@ -330,10 +330,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.feedbackScreen)
                 case .presentSessionVerificationScreen:
                     stateMachine.processEvent(.showSessionVerificationScreen)
+                case .presentSecureBackupSettings:
+                    settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
                 case .logout:
-                    runLogoutFlow()
+                    Task { await self.runLogoutFlow() }
                 case .presentInvitesScreen:
                     stateMachine.processEvent(.showInvitesScreen)
                 }
@@ -358,10 +360,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func runLogoutFlow() {
+    private func runLogoutFlow() async {
         let secureBackupController = userSession.clientProxy.secureBackupController
         
-        guard secureBackupController.isLastSession, appSettings.chatBackupEnabled else {
+        guard case let .success(isLastSession) = await secureBackupController.isLastSession() else {
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init())
+            return
+        }
+        
+        guard isLastSession, appSettings.chatBackupEnabled else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
                                                                             title: L10n.screenSignoutRecoveryDisabledTitle,
                                                                             message: L10n.screenSignoutRecoveryDisabledSubtitle,

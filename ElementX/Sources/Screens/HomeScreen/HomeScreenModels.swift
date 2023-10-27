@@ -23,6 +23,7 @@ enum HomeScreenViewModelAction {
     case presentRoomDetails(roomIdentifier: String)
     case roomLeft(roomIdentifier: String)
     case presentSessionVerificationScreen
+    case presentSecureBackupSettings
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentStartChatScreen
@@ -44,7 +45,9 @@ enum HomeScreenViewAction {
     case userMenu(action: HomeScreenViewUserMenuAction)
     case startChat
     case verifySession
+    case confirmRecoveryKey
     case skipSessionVerification
+    case skipRecoveryKeyConfirmation
     case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
     case selectInvites
 }
@@ -70,7 +73,8 @@ struct HomeScreenViewState: BindableState {
     let userID: String
     var userDisplayName: String?
     var userAvatarURL: URL?
-    var showSessionVerificationBanner = false
+    var needsSessionVerification = false
+    var needsRecoveryKeyConfirmation = false
     var showUserMenuBadge = false
     var showSettingsMenuOptionBadge = false
     var rooms: [HomeScreenRoom] = []

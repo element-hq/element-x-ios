@@ -68,6 +68,7 @@ struct A11yIdentifiers {
         let settings = "home_screen-settings"
         let signOut = "home_screen-sign_out"
         let verificationBannerContinue = "home_screen-verification_continue"
+        let recoveryKeyConfirmationBannerContinue = "home_screen-recovery_key_confirmation_continue"
         let invites = "home_screen-invites"
         let startChat = "home_screen-start_chat"
         

@@ -77,12 +77,10 @@ struct SecureBackupScreen: View {
             ListRow(label: .plain(title: L10n.screenChatBackupKeyBackupActionDisable, role: .destructive), kind: .navigationLink {
                 context.send(viewAction: .keyBackup)
             })
-        case .disabled, .enabling:
+        case .disabled, .enabling, .unknown:
             ListRow(label: .plain(title: L10n.screenChatBackupKeyBackupActionEnable), kind: .navigationLink {
                 context.send(viewAction: .keyBackup)
             })
-        default:
-            ListRow(label: .plain(title: L10n.commonLoading), details: .isWaiting(true), kind: .label)
         }
     }
     

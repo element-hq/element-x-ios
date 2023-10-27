@@ -2607,44 +2607,39 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol {
         set(value) { underlyingKeyBackupState = value }
     }
     var underlyingKeyBackupState: CurrentValuePublisher<SecureBackupKeyBackupState, Never>!
-    var isLastSession: Bool {
-        get { return underlyingIsLastSession }
-        set(value) { underlyingIsLastSession = value }
+
+    //MARK: - enable
+
+    var enableCallsCount = 0
+    var enableCalled: Bool {
+        return enableCallsCount > 0
     }
-    var underlyingIsLastSession: Bool!
+    var enableReturnValue: Result<Void, SecureBackupControllerError>!
+    var enableClosure: (() async -> Result<Void, SecureBackupControllerError>)?
 
-    //MARK: - enableBackup
-
-    var enableBackupCallsCount = 0
-    var enableBackupCalled: Bool {
-        return enableBackupCallsCount > 0
-    }
-    var enableBackupReturnValue: Result<Void, SecureBackupControllerError>!
-    var enableBackupClosure: (() async -> Result<Void, SecureBackupControllerError>)?
-
-    func enableBackup() async -> Result<Void, SecureBackupControllerError> {
-        enableBackupCallsCount += 1
-        if let enableBackupClosure = enableBackupClosure {
-            return await enableBackupClosure()
+    func enable() async -> Result<Void, SecureBackupControllerError> {
+        enableCallsCount += 1
+        if let enableClosure = enableClosure {
+            return await enableClosure()
         } else {
-            return enableBackupReturnValue
+            return enableReturnValue
         }
     }
-    //MARK: - disableBackup
+    //MARK: - disable
 
-    var disableBackupCallsCount = 0
-    var disableBackupCalled: Bool {
-        return disableBackupCallsCount > 0
+    var disableCallsCount = 0
+    var disableCalled: Bool {
+        return disableCallsCount > 0
     }
-    var disableBackupReturnValue: Result<Void, SecureBackupControllerError>!
-    var disableBackupClosure: (() async -> Result<Void, SecureBackupControllerError>)?
+    var disableReturnValue: Result<Void, SecureBackupControllerError>!
+    var disableClosure: (() async -> Result<Void, SecureBackupControllerError>)?
 
-    func disableBackup() async -> Result<Void, SecureBackupControllerError> {
-        disableBackupCallsCount += 1
-        if let disableBackupClosure = disableBackupClosure {
-            return await disableBackupClosure()
+    func disable() async -> Result<Void, SecureBackupControllerError> {
+        disableCallsCount += 1
+        if let disableClosure = disableClosure {
+            return await disableClosure()
         } else {
-            return disableBackupReturnValue
+            return disableReturnValue
         }
     }
     //MARK: - generateRecoveryKey
@@ -2683,6 +2678,23 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol {
             return await confirmRecoveryKeyClosure(key)
         } else {
             return confirmRecoveryKeyReturnValue
+        }
+    }
+    //MARK: - isLastSession
+
+    var isLastSessionCallsCount = 0
+    var isLastSessionCalled: Bool {
+        return isLastSessionCallsCount > 0
+    }
+    var isLastSessionReturnValue: Result<Bool, SecureBackupControllerError>!
+    var isLastSessionClosure: (() async -> Result<Bool, SecureBackupControllerError>)?
+
+    func isLastSession() async -> Result<Bool, SecureBackupControllerError> {
+        isLastSessionCallsCount += 1
+        if let isLastSessionClosure = isLastSessionClosure {
+            return await isLastSessionClosure()
+        } else {
+            return isLastSessionReturnValue
         }
     }
     //MARK: - waitForKeyBackup

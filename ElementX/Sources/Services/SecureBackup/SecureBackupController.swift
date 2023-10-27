@@ -16,10 +16,16 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 
 class SecureBackupController: SecureBackupControllerProtocol {
-    private let recoveryKeyStateSubject = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.disabled)
-    private let keyBackupStateSubject = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled)
+    private let encryption: Encryption
+    
+    private let recoveryKeyStateSubject = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.unknown)
+    private let keyBackupStateSubject = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.unknown)
+    
+    private var backupStateListenerTaskHandle: TaskHandle?
+    private var recoveryStateListenerTaskHandle: TaskHandle?
     
     var recoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never> {
         recoveryKeyStateSubject.asCurrentValuePublisher()
@@ -29,60 +35,153 @@ class SecureBackupController: SecureBackupControllerProtocol {
         keyBackupStateSubject.asCurrentValuePublisher()
     }
     
-    var isLastSession: Bool {
-        #warning("FIXME")
-        return true
+    init(encryption: Encryption) {
+        self.encryption = encryption
+        
+        backupStateListenerTaskHandle = encryption.backupStateListener(listener: SecureBackupControllerBackupStateListener { [weak self] state in
+            self?.keyBackupStateSubject.send(state.keyBackupState)
+        })
+        
+        recoveryStateListenerTaskHandle = encryption.recoveryStateListener(listener: SecureBackupRecoveryStateListener { [weak self] state in
+            guard let self else { return }
+            switch state {
+            case .unknown:
+                recoveryKeyStateSubject.send(.unknown)
+            case .enabled:
+                recoveryKeyStateSubject.send(.enabled)
+            case .disabled:
+                recoveryKeyStateSubject.send(.disabled)
+            case .incomplete:
+                recoveryKeyStateSubject.send(.incomplete)
+            }
+        })
     }
     
-    func enableBackup() async -> Result<Void, SecureBackupControllerError> {
-        keyBackupStateSubject.send(.enabling)
-        
-        try? await Task.sleep(for: .seconds(1))
-        
-        keyBackupStateSubject.send(.enabled)
-        
-        return .success(())
-    }
-    
-    func disableBackup() async -> Result<Void, SecureBackupControllerError> {
-        keyBackupStateSubject.send(.disabling)
-        
-        try? await Task.sleep(for: .seconds(1))
-        
-        keyBackupStateSubject.send(.disabled)
-        
-        return .success(())
-    }
-    
-    static var wohoo = 0
-    
-    func generateRecoveryKey() async -> Result<String, SecureBackupControllerError> {
-        recoveryKeyStateSubject.send(.settingUp)
-        
-        try? await Task.sleep(for: .seconds(1))
-        
-        if Self.wohoo > 0, Self.wohoo % 2 == 1 {
-            recoveryKeyStateSubject.send(.incomplete)
-        } else {
-            recoveryKeyStateSubject.send(.enabled)
+    func enable() async -> Result<Void, SecureBackupControllerError> {
+        do {
+            try await encryption.enableBackups()
+        } catch {
+            return .failure(.failedEnablingBackup)
         }
         
-        Self.wohoo += 1
+        return .success(())
+    }
+    
+    func disable() async -> Result<Void, SecureBackupControllerError> {
+        do {
+            try await encryption.disableRecovery()
+        } catch {
+            return .failure(.failedDisablingBackup)
+        }
         
-        return .success(UUID().uuidString)
+        return .success(())
+    }
+    
+    func generateRecoveryKey() async -> Result<String, SecureBackupControllerError> {
+        do {
+            guard recoveryKeyState.value == .disabled else {
+                let key = try await encryption.resetRecoveryKey()
+                return .success(key)
+            }
+            
+            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, progressListener: SecureBackupEnableRecoveryProgressListener { [weak self] state in
+                guard let self else { return }
+                
+                switch state {
+                case .creatingBackup:
+                    recoveryKeyStateSubject.send(.settingUp)
+                case .creatingRecoveryKey:
+                    recoveryKeyStateSubject.send(.settingUp)
+                case .backingUp:
+                    recoveryKeyStateSubject.send(.settingUp)
+                case .done:
+                    recoveryKeyStateSubject.send(.enabled)
+                }
+            })
+            
+            return .success(recoveryKey)
+        } catch {
+            return .failure(.failedGeneratingRecoveryKey)
+        }
     }
     
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
-        recoveryKeyStateSubject.send(.settingUp)
-        
-        try? await Task.sleep(for: .seconds(1))
-        
-        recoveryKeyStateSubject.send(.enabled)
-        
-        return .success(())
+        do {
+            try await encryption.fixRecoveryIssues(recoveryKey: key)
+            return .success(())
+        } catch {
+            return .failure(.failedConfirmingRecoveryKey)
+        }
+    }
+    
+    func isLastSession() async -> Result<Bool, SecureBackupControllerError> {
+        do {
+            return try await .success(encryption.isLastDevice())
+        } catch {
+            return .failure(.failedFetchingSessionState)
+        }
     }
     
     func waitForKeyBackup() async {
-        try? await Task.sleep(for: .seconds(5))
+        await encryption.waitForBackupUploadSteadyState(progressListener: nil)
+    }
+}
+
+private final class SecureBackupControllerBackupStateListener: BackupStateListener {
+    private let onUpdateClosure: (BackupState) -> Void
+    
+    init(_ onUpdateClosure: @escaping (BackupState) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(status: BackupState) {
+        onUpdateClosure(status)
+    }
+}
+
+private final class SecureBackupRecoveryStateListener: RecoveryStateListener {
+    private let onUpdateClosure: (RecoveryState) -> Void
+    
+    init(_ onUpdateClosure: @escaping (RecoveryState) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(status: RecoveryState) {
+        onUpdateClosure(status)
+    }
+}
+
+private final class SecureBackupEnableRecoveryProgressListener: EnableRecoveryProgressListener {
+    private let onUpdateClosure: (EnableRecoveryProgress) -> Void
+    
+    init(_ onUpdateClosure: @escaping (EnableRecoveryProgress) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(status: EnableRecoveryProgress) {
+        onUpdateClosure(status)
+    }
+}
+
+extension BackupState {
+    var keyBackupState: SecureBackupKeyBackupState {
+        switch self {
+        case .unknown:
+            return .unknown
+        case .creating:
+            return .enabling
+        case .enabling:
+            return .enabling
+        case .resuming:
+            return .enabled
+        case .enabled:
+            return .enabled
+        case .downloading:
+            return .enabled
+        case .disabling:
+            return .disabling
+        case .disabled:
+            return .disabled
+        }
     }
 }

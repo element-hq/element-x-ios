@@ -64,7 +64,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
             
             // The navigation stack doesn't like it if the root and the push happen
             // on the same loop run
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 self.presentSecureBackupScreen(animated: animated)
             }
         default:

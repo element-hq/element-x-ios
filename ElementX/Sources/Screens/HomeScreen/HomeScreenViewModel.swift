@@ -61,9 +61,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .sink { [weak self] callback in
                 switch callback {
                 case .sessionVerificationNeeded:
-                    self?.state.showSessionVerificationBanner = true
+                    self?.state.needsSessionVerification = true
                 case .didVerifySession:
-                    self?.state.showSessionVerificationBanner = false
+                    self?.state.needsSessionVerification = false
                 default:
                     break
                 }
@@ -82,14 +82,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         userSession.clientProxy.secureBackupController.recoveryKeyState
             .receive(on: DispatchQueue.main)
-            .map { state in
-                state == .unknown || state == .disabled
-            }
-            .sink { [weak self] requiresSecureBackupSetup in
-                guard let self else { return }
+            .sink { [weak self] recoveryKeyState in
+                guard let self, appSettings.chatBackupEnabled else { return }
                 
-                state.showUserMenuBadge = requiresSecureBackupSetup && appSettings.chatBackupEnabled
-                state.showSettingsMenuOptionBadge = requiresSecureBackupSetup && appSettings.chatBackupEnabled
+                let requiresSecureBackupSetup = recoveryKeyState == .unknown || recoveryKeyState == .disabled || recoveryKeyState == .incomplete
+                
+                state.showUserMenuBadge = requiresSecureBackupSetup
+                state.showSettingsMenuOptionBadge = requiresSecureBackupSetup
+                
+                state.needsRecoveryKeyConfirmation = recoveryKeyState == .incomplete
             }
             .store(in: &cancellables)
         
@@ -143,8 +144,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
         case .verifySession:
             actionsSubject.send(.presentSessionVerificationScreen)
+        case .confirmRecoveryKey:
+            actionsSubject.send(.presentSecureBackupSettings)
         case .skipSessionVerification:
-            state.showSessionVerificationBanner = false
+            state.needsSessionVerification = false
+        case .skipRecoveryKeyConfirmation:
+            state.needsRecoveryKeyConfirmation = false
         case .updateVisibleItemRange(let range, let isScrolling):
             visibleItemRangePublisher.send((range, isScrolling))
         case .startChat:

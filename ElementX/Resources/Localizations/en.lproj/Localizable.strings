@@ -172,6 +172,8 @@
 "common_waiting_for_decryption_key" = "Waiting for decryption key";
 "common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";
+"confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to confirm your recovery key to maintain access to your chat backup.";
+"confirm_recovery_key_banner_title" = "Confirm your recovery key";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
 "dialog_permission_generic" = "Please grant the permission in the system settings.";
@@ -196,7 +198,6 @@
 "error_failed_loading_messages" = "Failed loading messages";
 "error_failed_locating_user" = "%1$@ could not access your location. Please try again later.";
 "error_failed_uploading_voice_message" = "Failed to upload your voice message.";
-"error_missing_location_auth_ios" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
 "error_unknown" = "Sorry, an error occurred";

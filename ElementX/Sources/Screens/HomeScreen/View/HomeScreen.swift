@@ -191,8 +191,10 @@ struct HomeScreen: View {
     @ViewBuilder
     /// The session verification banner and invites button if either are needed.
     private var topSection: some View {
-        if context.viewState.showSessionVerificationBanner {
-            sessionVerificationBanner
+        if context.viewState.needsSessionVerification {
+            HomeScreenSessionVerificationBanner(context: context)
+        } else if context.viewState.needsRecoveryKeyConfirmation {
+            HomeScreenRecoveryKeyConfirmationBanner(context: context)
         }
         
         if context.viewState.hasPendingInvitations, !context.isSearchFieldFocused {
@@ -204,43 +206,7 @@ struct HomeScreen: View {
             .padding(.vertical, -8.0)
         }
     }
-    
-    private var sessionVerificationBanner: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 16) {
-                    Text(L10n.sessionVerificationBannerTitle)
-                        .font(.compound.bodyLGSemibold)
-                        .foregroundColor(.compound.textPrimary)
-                    
-                    Spacer()
-                    
-                    Button {
-                        context.send(viewAction: .skipSessionVerification)
-                    } label: {
-                        Image(systemName: "xmark")
-                            .foregroundColor(.compound.iconSecondary)
-                            .frame(width: 12, height: 12)
-                    }
-                }
-                Text(L10n.sessionVerificationBannerMessage)
-                    .font(.compound.bodyMD)
-                    .foregroundColor(.compound.textSecondary)
-            }
-            
-            Button(L10n.actionContinue) {
-                context.send(viewAction: .verifySession)
-            }
-            .frame(maxWidth: .infinity)
-            .buttonStyle(.compound(.primary, size: .medium))
-            .accessibilityIdentifier(A11yIdentifiers.homeScreen.verificationBannerContinue)
-        }
-        .padding(16)
-        .background(Color.compound.bgSubtleSecondary)
-        .cornerRadius(14)
-        .padding(.horizontal, 16)
-    }
-    
+        
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
@@ -333,13 +299,18 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func viewModel(_ state: MockRoomSummaryProviderState) -> HomeScreenViewModel {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@alice:example.com",
-                                                                       roomSummaryProvider: MockRoomSummaryProvider(state: state)),
+        let clientProxy = MockClientProxy(userID: "@alice:example.com",
+                                          roomSummaryProvider: MockRoomSummaryProvider(state: state))
+        
+        let userSession = MockUserSession(clientProxy: clientProxy,
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         
+        let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
+                                                              mentionBuilder: MentionBuilder())
+        
         return HomeScreenViewModel(userSession: userSession,
-                                   attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder()),
+                                   attributedStringBuilder: attributedStringBuilder,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: ServiceLocator.shared.settings,
                                    analytics: ServiceLocator.shared.analytics,
