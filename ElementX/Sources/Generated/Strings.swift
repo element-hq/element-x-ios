@@ -678,6 +678,8 @@ public enum L10n {
   public static var screenAppLockBiometricAuthentication: String { return L10n.tr("Localizable", "screen_app_lock_biometric_authentication") }
   /// biometric unlock
   public static var screenAppLockBiometricUnlock: String { return L10n.tr("Localizable", "screen_app_lock_biometric_unlock") }
+  /// Authentication is needed to access your app
+  public static var screenAppLockBiometricUnlockReasonIos: String { return L10n.tr("Localizable", "screen_app_lock_biometric_unlock_reason_ios") }
   /// Forgot PIN?
   public static var screenAppLockForgotPin: String { return L10n.tr("Localizable", "screen_app_lock_forgot_pin") }
   /// Change PIN code

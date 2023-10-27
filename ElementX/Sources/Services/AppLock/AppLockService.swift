@@ -149,7 +149,7 @@ class AppLockService: AppLockServiceProtocol {
         
         do {
             let context = unlockContext()
-            guard try await context.evaluatePolicy(unlockPolicy, localizedReason: UntranslatedL10n.screenAppLockBiometricPromptReason) else {
+            guard try await context.evaluatePolicy(unlockPolicy, localizedReason: L10n.screenAppLockBiometricUnlockReasonIos) else {
                 MXLog.warning("\(context.biometryType) failed without error.")
                 return false
             }

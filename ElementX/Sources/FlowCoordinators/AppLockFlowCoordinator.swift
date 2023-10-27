@@ -33,7 +33,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     let navigationCoordinator: NavigationRootCoordinator
     
     /// A task used to await biometric unlock before showing the PIN screen.
-    private var unlockTask: Task<Void, Never>?
+    @CancellableTask private var unlockTask: Task<Void, Never>?
     private var cancellables: Set<AnyCancellable> = []
     
     private let actionsSubject: PassthroughSubject<AppLockFlowCoordinatorAction, Never> = .init()
@@ -76,7 +76,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     // MARK: - App unlock
     
     private func applicationDidEnterBackground() {
-        unlockTask?.cancel()
+        unlockTask = nil
         
         guard appLockService.isEnabled else { return }
         
