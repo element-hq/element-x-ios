@@ -57,9 +57,14 @@ class UserSession: UserSessionProtocol {
         Task {
             switch await clientProxy.sessionVerificationControllerProxy() {
             case .success(let sessionVerificationController):
+                guard case let .success(isVerified) = await sessionVerificationController.isVerified() else {
+                    MXLog.error("Failed checking verification state. Will retry on the next sync update.")
+                    return
+                }
+                
                 tearDownSessionVerificationControllerWatchdog()
                 
-                if !sessionVerificationController.isVerified {
+                if !isVerified {
                     callbacks.send(.sessionVerificationNeeded)
                 }
                 

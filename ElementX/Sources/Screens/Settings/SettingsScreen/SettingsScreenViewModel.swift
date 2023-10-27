@@ -33,16 +33,10 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         self.userSession = userSession
         self.appSettings = appSettings
         
-        var isSessionVerified = true
-        if let sessionVerificationController = userSession.sessionVerificationController {
-            isSessionVerified = sessionVerificationController.isVerified
-        }
-        
         super.init(initialViewState: .init(deviceID: userSession.deviceID,
                                            userID: userSession.userID,
                                            accountProfileURL: userSession.clientProxy.accountURL(action: .profile),
                                            accountSessionsListURL: userSession.clientProxy.accountURL(action: .sessionsList),
-                                           isSessionVerified: isSessionVerified,
                                            showAppLockSettings: appSettings.appLockFlowEnabled,
                                            showDeveloperOptions: appSettings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
@@ -77,6 +71,11 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         Task {
             await userSession.clientProxy.loadUserAvatarURL()
             await userSession.clientProxy.loadUserDisplayName()
+            
+            if let sessionVerificationController = userSession.sessionVerificationController,
+               case let .success(isVerified) = await sessionVerificationController.isVerified() {
+                state.isSessionVerified = isVerified
+            }
         }
         
         userSession.callbacks

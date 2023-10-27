@@ -247,7 +247,7 @@ private extension TimelineStyle {
 struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let verificationController = SessionVerificationControllerProxyMock()
-        verificationController.isVerified = false
+        verificationController.isVerifiedReturnValue = .success(false)
         let userSession = MockUserSession(sessionVerificationController: verificationController,
                                           clientProxy: MockClientProxy(userID: "@userid:example.com",
                                                                        deviceID: "AAAAAAAAAAA"),

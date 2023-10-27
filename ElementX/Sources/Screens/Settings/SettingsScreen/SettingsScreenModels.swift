@@ -41,7 +41,7 @@ struct SettingsScreenViewState: BindableState {
     var accountSessionsListURL: URL?
     var userAvatarURL: URL?
     var userDisplayName: String?
-    var isSessionVerified: Bool
+    var isSessionVerified = false
     var chatBackupEnabled = false
     var showSecureBackupBadge = false
     var showAppLockSettings: Bool
