@@ -30,8 +30,8 @@ struct AppLockSetupSettingsScreenViewState: BindableState {
     let biometryType: LABiometryType
     var bindings: AppLockSetupSettingsScreenViewStateBindings
     
-    var supportsBiometry: Bool { biometryType != .none }
-    var enableBiometryTitle: String { L10n.screenAppLockSetupBiometricUnlockAllowTitle(biometryType.localizedString) }
+    var supportsBiometrics: Bool { biometryType != .none }
+    var enableBiometricsTitle: String { L10n.screenAppLockSetupBiometricUnlockAllowTitle(biometryType.localizedString) }
 }
 
 struct AppLockSetupSettingsScreenViewStateBindings {

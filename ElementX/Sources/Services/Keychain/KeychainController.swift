@@ -38,7 +38,8 @@ class KeychainController: KeychainControllerProtocol {
     private let mainKeychain: Keychain
     
     private enum Key: String {
-        case pinCode
+        case appLockPINCode
+        case appLockBiometricState
     }
 
     init(service: KeychainControllerService, accessGroup: String) {
@@ -129,16 +130,16 @@ class KeychainController: KeychainControllerProtocol {
     }
     
     func containsPINCode() throws -> Bool {
-        try mainKeychain.contains(Key.pinCode.rawValue)
+        try mainKeychain.contains(Key.appLockPINCode.rawValue)
     }
     
     func setPINCode(_ pinCode: String) throws {
-        try mainKeychain.set(pinCode, key: Key.pinCode.rawValue)
+        try mainKeychain.set(pinCode, key: Key.appLockPINCode.rawValue)
     }
     
     func pinCode() -> String? {
         do {
-            return try mainKeychain.getString(Key.pinCode.rawValue)
+            return try mainKeychain.getString(Key.appLockPINCode.rawValue)
         } catch {
             MXLog.error("Failed retrieving the PIN code.")
             return nil
@@ -147,9 +148,39 @@ class KeychainController: KeychainControllerProtocol {
     
     func removePINCode() {
         do {
-            try mainKeychain.remove(Key.pinCode.rawValue)
+            try mainKeychain.remove(Key.appLockPINCode.rawValue)
         } catch {
             MXLog.error("Failed removing the PIN code.")
+        }
+    }
+    
+    func containsPINCodeBiometricState() -> Bool {
+        do {
+            return try mainKeychain.contains(Key.appLockBiometricState.rawValue)
+        } catch {
+            MXLog.error("Failed checking for biometric state.")
+            return false // No need to re-throw the error, we can fall back to the PIN code.
+        }
+    }
+    
+    func setPINCodeBiometricState(_ state: Data) throws {
+        try mainKeychain.set(state, key: Key.appLockBiometricState.rawValue)
+    }
+    
+    func pinCodeBiometricState() -> Data? {
+        do {
+            return try mainKeychain.getData(Key.appLockBiometricState.rawValue)
+        } catch {
+            MXLog.error("Failed setting the PIN code biometric state.")
+            return nil
+        }
+    }
+    
+    func removePINCodeBiometricState() {
+        do {
+            try mainKeychain.remove(Key.appLockBiometricState.rawValue)
+        } catch {
+            MXLog.error("Failed removing the PIN code biometric state.")
         }
     }
 }

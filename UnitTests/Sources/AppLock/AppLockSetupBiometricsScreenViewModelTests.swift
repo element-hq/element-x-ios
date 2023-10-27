@@ -20,16 +20,18 @@ import XCTest
 
 @MainActor
 class AppLockSetupBiometricsScreenViewModelTests: XCTestCase {
-    var appLockService: AppLockService!
-    var keychainController: KeychainControllerMock!
+    var appLockService: AppLockServiceMock!
     var viewModel: AppLockSetupBiometricsScreenViewModelProtocol!
     
     var context: AppLockSetupBiometricsScreenViewModelType.Context { viewModel.context }
     
     override func setUp() {
         AppSettings.reset()
-        keychainController = KeychainControllerMock()
-        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
+        
+        appLockService = AppLockServiceMock()
+        appLockService.underlyingIsEnabled = true
+        appLockService.underlyingBiometryType = .touchID
+        appLockService.enableBiometricUnlockReturnValue = .success(())
         viewModel = AppLockSetupBiometricsScreenViewModel(appLockService: appLockService)
     }
     
@@ -38,24 +40,22 @@ class AppLockSetupBiometricsScreenViewModelTests: XCTestCase {
     }
 
     func testAllow() async throws {
-        // Given a service that has biometric unlock disabled.
-        XCTAssertFalse(appLockService.biometricUnlockEnabled)
-        
         // When allowing Touch/Face ID.
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .continue }
         context.send(viewAction: .allow)
+        try await deferred.fulfill()
         
         // Then the service should now have biometric unlock enabled.
-        XCTAssertTrue(appLockService.biometricUnlockEnabled)
+        XCTAssertEqual(appLockService.enableBiometricUnlockCallsCount, 1)
     }
 
     func testSkip() async throws {
-        // Given a service that has biometric unlock disabled.
-        XCTAssertFalse(appLockService.biometricUnlockEnabled)
-        
         // When skipping biometrics.
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .continue }
         context.send(viewAction: .skip)
+        try await deferred.fulfill()
         
         // Then the service should now have biometric unlock enabled.
-        XCTAssertFalse(appLockService.biometricUnlockEnabled)
+        XCTAssertEqual(appLockService.enableBiometricUnlockCallsCount, 0)
     }
 }

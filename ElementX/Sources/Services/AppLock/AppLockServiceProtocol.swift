@@ -24,6 +24,10 @@ enum AppLockServiceError: Error {
     case invalidPIN
     /// The PIN code was rejected as an insecure choice.
     case weakPIN
+    /// A PIN code hasn't been set yet.
+    case pinNotSet
+    /// Attempting to use biometric unlock when it isn't yet supported on this device.
+    case biometricUnlockNotSupported
 }
 
 @MainActor
@@ -36,7 +40,10 @@ protocol AppLockServiceProtocol: AnyObject {
     /// The type of biometric authentication supported by the device.
     var biometryType: LABiometryType { get }
     /// Whether or not the user has enabled unlock via TouchID, FaceID or (possibly) OpticID.
-    var biometricUnlockEnabled: Bool { get set }
+    var biometricUnlockEnabled: Bool { get }
+    /// Whether TouchID, FaceID or (possibly) OpticID are trusted, or if the app needs the user
+    /// to re-enter their PIN code to re-enable the feature (i.e. to accept a new face or fingerprint).
+    var biometricUnlockTrusted: Bool { get }
     
     /// A publisher that advertises when the service has been disabled.
     var disabledPublisher: AnyPublisher<Void, Never> { get }
@@ -45,6 +52,10 @@ protocol AppLockServiceProtocol: AnyObject {
     func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError>
     /// Validates the supplied PIN code is long enough, only contains digits and isn't a weak choice.
     func validate(_ pinCode: String) -> Result<Void, AppLockServiceError>
+    /// Enables the use of Touch ID/Face ID as an alternative to the PIN code.
+    func enableBiometricUnlock() -> Result<Void, AppLockServiceError>
+    /// Disables the use of Touch ID/Face ID as an alternative to the PIN code.
+    func disableBiometricUnlock()
     /// Disables the App Lock feature, removing the user's stored PIN code.
     func disable()
     
@@ -56,12 +67,12 @@ protocol AppLockServiceProtocol: AnyObject {
     /// Attempt to unlock the app with the supplied PIN code.
     func unlock(with pinCode: String) -> Bool
     /// Attempt to unlock the app using FaceID or TouchID.
-    func unlockWithBiometrics() -> Bool
+    func unlockWithBiometrics() async -> Bool
     
     /// The number of attempts the user had made to unlock with a PIN code.
+    ///
+    /// Note: We don't track the biometric attempts as LAContext does that automatically.
     var numberOfPINAttempts: AnyPublisher<Int, Never> { get }
-    /// The number of attempts the user has made to unlock with Touch/Face ID.
-    var numberOfBiometricAttempts: AnyPublisher<Int, Never> { get }
 }
 
 // sourcery: AutoMockable
@@ -73,7 +84,6 @@ extension AppLockServiceMock {
         mock.isEnabled = pinCode != nil
         mock.isMandatory = isMandatory
         mock.numberOfPINAttempts = PassthroughSubject<Int, Never>().eraseToAnyPublisher()
-        mock.numberOfBiometricAttempts = PassthroughSubject<Int, Never>().eraseToAnyPublisher()
         mock.underlyingBiometryType = biometryType
         mock.underlyingBiometricUnlockEnabled = biometryType != .none
         mock.unlockWithClosure = { $0 == pinCode }

@@ -140,6 +140,9 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
                 showBiometricsPrompt()
             case (.createPIN, .settings):
                 navigationStackCoordinator.setSheetCoordinator(nil)
+            // The above is fine for change pin, but not create PIN when biometrics are unavailable.
+            // Need to track the two flows differently to call the alternative below.
+            // showSettings()
             case (.biometricsPrompt, .settings):
                 showSettings()
             case (.settings, .createPIN):

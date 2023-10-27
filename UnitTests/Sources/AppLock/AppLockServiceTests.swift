@@ -14,12 +14,14 @@
 // limitations under the License.
 //
 
+import LocalAuthentication
 import XCTest
 
 @testable import ElementX
 
 @MainActor
 class AppLockServiceTests: XCTestCase {
+    var keychainController: KeychainController!
     var appSettings: AppSettings!
     var service: AppLockService!
     
@@ -28,7 +30,8 @@ class AppLockServiceTests: XCTestCase {
         appSettings = AppSettings()
         appSettings.appLockFlowEnabled = true
         
-        let keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+        keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+        keychainController.resetSecrets()
         
         service = AppLockService(keychainController: keychainController, appSettings: appSettings)
         service.disable()
@@ -37,6 +40,8 @@ class AppLockServiceTests: XCTestCase {
     override func tearDown() {
         AppSettings.reset()
     }
+    
+    // MARK: - PIN Code
     
     func testValidPINCode() {
         // Given a service that hasn't been enabled.
@@ -176,6 +181,137 @@ class AppLockServiceTests: XCTestCase {
         XCTAssertFalse(service.unlock(with: pinCode), "The initial PIN shouldn't work any more.")
     }
     
+    // MARK: - Biometric Unlock
+    
+    func testEnableBiometricUnlock() async {
+        // Given a service with the PIN code already set.
+        let context = LAContextMock()
+        context.biometryTypeValue = .touchID
+        context.evaluatedPolicyDomainStateValue = "👆".data(using: .utf8)
+        service = AppLockService(keychainController: keychainController, appSettings: appSettings, context: context)
+        guard case .success = service.setupPINCode("2023") else {
+            XCTFail("The PIN should be valid.")
+            return
+        }
+        XCTAssertTrue(service.isEnabled, "The service should be enabled.")
+        XCTAssertEqual(service.biometryType, .touchID, "The biometry type should be in sync with the mock.")
+        XCTAssertFalse(service.biometricUnlockEnabled, "Biometric unlock should not be enabled.")
+        XCTAssertFalse(service.biometricUnlockTrusted, "Biometric unlock should not be trusted.")
+        
+        // When enabling biometric unlock.
+        guard case .success = service.enableBiometricUnlock() else {
+            XCTFail("The biometric lock should enable.")
+            return
+        }
+        context.evaluatePolicyReturnValue = true
+        
+        // Then the service should be unlockable with biometrics.
+        XCTAssertEqual(service.biometryType, .touchID, "The biometry type should not change.")
+        XCTAssertTrue(service.biometricUnlockEnabled, "Biometric unlock should now be enabled.")
+        XCTAssertTrue(service.biometricUnlockTrusted, "Biometric unlock should now be trusted.")
+        guard await service.unlockWithBiometrics() else {
+            XCTFail("The biometric unlock should work.")
+            return
+        }
+    }
+    
+    func testBiometricUnlockTrust() {
+        // Given a service with the PIN code already set.
+        let context = LAContextMock()
+        context.biometryTypeValue = .touchID
+        context.evaluatedPolicyDomainStateValue = "👆".data(using: .utf8)
+        service = AppLockService(keychainController: keychainController, appSettings: appSettings, context: context)
+        let pinCode = "2023"
+        guard case .success = service.setupPINCode(pinCode) else {
+            XCTFail("The PIN should be valid.")
+            return
+        }
+        guard case .success = service.enableBiometricUnlock() else {
+            XCTFail("The biometric lock should enable.")
+            return
+        }
+        XCTAssertTrue(service.isEnabled, "The service should be enabled.")
+        XCTAssertEqual(service.biometryType, .touchID, "The biometry type should be in sync with the mock.")
+        XCTAssertTrue(service.biometricUnlockEnabled, "Biometric unlock should be enabled.")
+        XCTAssertTrue(service.biometricUnlockTrusted, "Biometric unlock should be trusted.")
+        
+        // When the user changes biometric data.
+        context.evaluatedPolicyDomainStateValue = "👈".data(using: .utf8)
+        
+        // Then biometric lock should remain enabled but untrusted.
+        XCTAssertTrue(service.isEnabled, "The service should remain enabled.")
+        XCTAssertEqual(service.biometryType, .touchID, "The biometry type should not change.")
+        XCTAssertTrue(service.biometricUnlockEnabled, "Biometric unlock should remain enabled.")
+        XCTAssertFalse(service.biometricUnlockTrusted, "Biometric unlock should no longer be trusted.")
+        
+        // When the user confirms their PIN code.
+        XCTAssertTrue(service.unlock(with: pinCode), "The PIN code should be accepted")
+        
+        // Then the biometric lock should once again be trusted.
+        XCTAssertTrue(service.isEnabled, "The service should remain enabled.")
+        XCTAssertEqual(service.biometryType, .touchID, "The biometry type should not change.")
+        XCTAssertTrue(service.biometricUnlockEnabled, "Biometric unlock should remain enabled.")
+        XCTAssertTrue(service.biometricUnlockTrusted, "Biometric unlock should once again be trusted.")
+    }
+    
+    func testDisableBiometricUnlock() {
+        // Given a service with the PIN code already set.
+        let context = LAContextMock()
+        context.biometryTypeValue = .touchID
+        context.evaluatedPolicyDomainStateValue = "👆".data(using: .utf8)
+        service = AppLockService(keychainController: keychainController, appSettings: appSettings, context: context)
+        guard case .success = service.setupPINCode("2023") else {
+            XCTFail("The PIN should be valid.")
+            return
+        }
+        guard case .success = service.enableBiometricUnlock() else {
+            XCTFail("The biometric lock should enable.")
+            return
+        }
+        XCTAssertTrue(service.isEnabled, "The service should be enabled.")
+        XCTAssertEqual(service.biometryType, .touchID, "The biometry type should be in sync with the mock.")
+        XCTAssertTrue(service.biometricUnlockEnabled, "Biometric unlock should be enabled.")
+        XCTAssertTrue(service.biometricUnlockTrusted, "Biometric unlock should be trusted.")
+        
+        // When disabling biometric unlock.
+        service.disableBiometricUnlock()
+        
+        // Then only PIN unlock should remain enabled.
+        XCTAssertTrue(service.isEnabled, "The service should remain enabled.")
+        XCTAssertEqual(service.biometryType, .touchID, "The biometry type should not change.")
+        XCTAssertFalse(service.biometricUnlockEnabled, "Biometric unlock should become disabled.")
+        XCTAssertFalse(service.biometricUnlockTrusted, "Biometric unlock should no longer be trusted.")
+    }
+    
+    func testDisablePINWithBiometricUnlock() {
+        // Given a service with the PIN code already set.
+        let context = LAContextMock()
+        context.biometryTypeValue = .touchID
+        context.evaluatedPolicyDomainStateValue = "👆".data(using: .utf8)
+        service = AppLockService(keychainController: keychainController, appSettings: appSettings, context: context)
+        guard case .success = service.setupPINCode("2023") else {
+            XCTFail("The PIN should be valid.")
+            return
+        }
+        guard case .success = service.enableBiometricUnlock() else {
+            XCTFail("The biometric lock should enable.")
+            return
+        }
+        XCTAssertTrue(service.isEnabled, "The service should be enabled.")
+        XCTAssertTrue(service.biometricUnlockEnabled, "Biometric unlock should be enabled.")
+        XCTAssertTrue(service.biometricUnlockTrusted, "Biometric unlock should be trusted.")
+        
+        // When disabling the PIN lock.
+        service.disable()
+        
+        // Then both PIN and biometric unlock should be disabled.
+        XCTAssertFalse(service.isEnabled, "The service should remain enabled.")
+        XCTAssertFalse(service.biometricUnlockEnabled, "Biometric unlock should become disabled.")
+        XCTAssertFalse(service.biometricUnlockTrusted, "Biometric unlock should no longer be trusted.")
+    }
+    
+    // MARK: - Attempt failures
+    
     func testResetAttemptsOnUnlock() {
         // Given a service that is enabled and has failed unlock attempts.
         let pinCode = "2023"
@@ -184,9 +320,7 @@ class AppLockServiceTests: XCTestCase {
             return
         }
         appSettings.appLockNumberOfPINAttempts = 2
-        appSettings.appLockNumberOfBiometricAttempts = 2
         XCTAssertEqual(appSettings.appLockNumberOfPINAttempts, 2, "The initial conditions should be stored.")
-        XCTAssertEqual(appSettings.appLockNumberOfBiometricAttempts, 2, "The initial conditions should be stored.")
         XCTAssertTrue(service.isEnabled, "The service should be enabled.")
         
         // When unlocking the service
@@ -194,7 +328,6 @@ class AppLockServiceTests: XCTestCase {
         
         // Then the attempts counts should both be reset.
         XCTAssertEqual(appSettings.appLockNumberOfPINAttempts, 0, "The PIN attempts should be reset.")
-        XCTAssertEqual(appSettings.appLockNumberOfBiometricAttempts, 0, "The biometric attempts should be reset.")
     }
     
     func testResetAttemptsOnDisable() {
@@ -205,9 +338,7 @@ class AppLockServiceTests: XCTestCase {
             return
         }
         appSettings.appLockNumberOfPINAttempts = 2
-        appSettings.appLockNumberOfBiometricAttempts = 2
         XCTAssertEqual(appSettings.appLockNumberOfPINAttempts, 2, "The initial conditions should be stored.")
-        XCTAssertEqual(appSettings.appLockNumberOfBiometricAttempts, 2, "The initial conditions should be stored.")
         XCTAssertTrue(service.isEnabled, "The service should be enabled.")
         
         // When disabling the service
@@ -216,6 +347,38 @@ class AppLockServiceTests: XCTestCase {
         
         // Then the attempts counts should both be reset.
         XCTAssertEqual(appSettings.appLockNumberOfPINAttempts, 0, "The PIN attempts should be reset.")
-        XCTAssertEqual(appSettings.appLockNumberOfBiometricAttempts, 0, "The biometric attempts should be reset.")
+    }
+}
+
+// MARK: - Mocks
+
+/// A customised context that allows injecting a few mock values but otherwise behaves as expected.
+/// It works as the actual context does and won't update the return values of `biometryType` and
+/// `evaluatedPolicyDomainStateValue` until either `canEvaluatePolicy` or
+/// `evaluatePolicy` have been called.
+private class LAContextMock: LAContext {
+    var biometryTypeValue: LABiometryType!
+    private var internalBiometryTypeValue: LABiometryType!
+    override var biometryType: LABiometryType { internalBiometryTypeValue }
+    
+    var evaluatedPolicyDomainStateValue: Data?
+    private var internalEvaluatedPolicyDomainStateValue: Data?
+    override var evaluatedPolicyDomainState: Data? { internalEvaluatedPolicyDomainStateValue }
+    
+    override func canEvaluatePolicy(_ policy: LAPolicy, error: NSErrorPointer) -> Bool {
+        let result = super.canEvaluatePolicy(policy, error: error)
+        updateInternalValues()
+        return result
+    }
+    
+    var evaluatePolicyReturnValue: Bool!
+    override func evaluatePolicy(_ policy: LAPolicy, localizedReason: String) async throws -> Bool {
+        updateInternalValues()
+        return evaluatePolicyReturnValue
+    }
+    
+    private func updateInternalValues() {
+        internalBiometryTypeValue = biometryTypeValue
+        internalEvaluatedPolicyDomainStateValue = evaluatedPolicyDomainStateValue
     }
 }

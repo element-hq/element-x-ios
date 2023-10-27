@@ -43,6 +43,7 @@ class AppLockScreenViewModelTests: XCTestCase {
         // Given a valid PIN code.
         let pinCode = "2023"
         keychainController.pinCodeReturnValue = pinCode
+        keychainController.containsPINCodeBiometricStateReturnValue = false
         
         // When entering it on the lock screen.
         let deferred = deferFulfillment(viewModel.actions) { $0 == .appUnlocked }
@@ -69,6 +70,7 @@ class AppLockScreenViewModelTests: XCTestCase {
         // Given an invalid PIN code.
         let pinCode = "2024"
         keychainController.pinCodeReturnValue = "2023"
+        keychainController.containsPINCodeBiometricStateReturnValue = false
         XCTAssertEqual(context.viewState.numberOfPINAttempts, 0, "The shouldn't be any attempts yet.")
         XCTAssertFalse(context.viewState.isSubtitleWarning, "No warning should be shown yet.")
         XCTAssertNil(context.alertInfo, "No alert should be shown yet.")
@@ -95,6 +97,7 @@ class AppLockScreenViewModelTests: XCTestCase {
     func testForceQuitRequiresLogout() {
         // Given an app with a PIN set where the user attempted to unlock 3 times.
         keychainController.pinCodeReturnValue = "2023"
+        keychainController.containsPINCodeBiometricStateReturnValue = false
         appSettings.appLockNumberOfPINAttempts = 2
         XCTAssertNil(context.alertInfo)
         viewModel.context.pinCode = "0000"

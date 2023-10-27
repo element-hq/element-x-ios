@@ -137,6 +137,11 @@ class AppLockServiceMock: AppLockServiceProtocol {
         set(value) { underlyingBiometricUnlockEnabled = value }
     }
     var underlyingBiometricUnlockEnabled: Bool!
+    var biometricUnlockTrusted: Bool {
+        get { return underlyingBiometricUnlockTrusted }
+        set(value) { underlyingBiometricUnlockTrusted = value }
+    }
+    var underlyingBiometricUnlockTrusted: Bool!
     var disabledPublisher: AnyPublisher<Void, Never> {
         get { return underlyingDisabledPublisher }
         set(value) { underlyingDisabledPublisher = value }
@@ -147,11 +152,6 @@ class AppLockServiceMock: AppLockServiceProtocol {
         set(value) { underlyingNumberOfPINAttempts = value }
     }
     var underlyingNumberOfPINAttempts: AnyPublisher<Int, Never>!
-    var numberOfBiometricAttempts: AnyPublisher<Int, Never> {
-        get { return underlyingNumberOfBiometricAttempts }
-        set(value) { underlyingNumberOfBiometricAttempts = value }
-    }
-    var underlyingNumberOfBiometricAttempts: AnyPublisher<Int, Never>!
 
     //MARK: - setupPINCode
 
@@ -194,6 +194,35 @@ class AppLockServiceMock: AppLockServiceProtocol {
         } else {
             return validateReturnValue
         }
+    }
+    //MARK: - enableBiometricUnlock
+
+    var enableBiometricUnlockCallsCount = 0
+    var enableBiometricUnlockCalled: Bool {
+        return enableBiometricUnlockCallsCount > 0
+    }
+    var enableBiometricUnlockReturnValue: Result<Void, AppLockServiceError>!
+    var enableBiometricUnlockClosure: (() -> Result<Void, AppLockServiceError>)?
+
+    func enableBiometricUnlock() -> Result<Void, AppLockServiceError> {
+        enableBiometricUnlockCallsCount += 1
+        if let enableBiometricUnlockClosure = enableBiometricUnlockClosure {
+            return enableBiometricUnlockClosure()
+        } else {
+            return enableBiometricUnlockReturnValue
+        }
+    }
+    //MARK: - disableBiometricUnlock
+
+    var disableBiometricUnlockCallsCount = 0
+    var disableBiometricUnlockCalled: Bool {
+        return disableBiometricUnlockCallsCount > 0
+    }
+    var disableBiometricUnlockClosure: (() -> Void)?
+
+    func disableBiometricUnlock() {
+        disableBiometricUnlockCallsCount += 1
+        disableBiometricUnlockClosure?()
     }
     //MARK: - disable
 
@@ -268,12 +297,12 @@ class AppLockServiceMock: AppLockServiceProtocol {
         return unlockWithBiometricsCallsCount > 0
     }
     var unlockWithBiometricsReturnValue: Bool!
-    var unlockWithBiometricsClosure: (() -> Bool)?
+    var unlockWithBiometricsClosure: (() async -> Bool)?
 
-    func unlockWithBiometrics() -> Bool {
+    func unlockWithBiometrics() async -> Bool {
         unlockWithBiometricsCallsCount += 1
         if let unlockWithBiometricsClosure = unlockWithBiometricsClosure {
-            return unlockWithBiometricsClosure()
+            return await unlockWithBiometricsClosure()
         } else {
             return unlockWithBiometricsReturnValue
         }
@@ -905,6 +934,72 @@ class KeychainControllerMock: KeychainControllerProtocol {
     func removePINCode() {
         removePINCodeCallsCount += 1
         removePINCodeClosure?()
+    }
+    //MARK: - containsPINCodeBiometricState
+
+    var containsPINCodeBiometricStateCallsCount = 0
+    var containsPINCodeBiometricStateCalled: Bool {
+        return containsPINCodeBiometricStateCallsCount > 0
+    }
+    var containsPINCodeBiometricStateReturnValue: Bool!
+    var containsPINCodeBiometricStateClosure: (() -> Bool)?
+
+    func containsPINCodeBiometricState() -> Bool {
+        containsPINCodeBiometricStateCallsCount += 1
+        if let containsPINCodeBiometricStateClosure = containsPINCodeBiometricStateClosure {
+            return containsPINCodeBiometricStateClosure()
+        } else {
+            return containsPINCodeBiometricStateReturnValue
+        }
+    }
+    //MARK: - setPINCodeBiometricState
+
+    var setPINCodeBiometricStateThrowableError: Error?
+    var setPINCodeBiometricStateCallsCount = 0
+    var setPINCodeBiometricStateCalled: Bool {
+        return setPINCodeBiometricStateCallsCount > 0
+    }
+    var setPINCodeBiometricStateReceivedState: Data?
+    var setPINCodeBiometricStateReceivedInvocations: [Data] = []
+    var setPINCodeBiometricStateClosure: ((Data) throws -> Void)?
+
+    func setPINCodeBiometricState(_ state: Data) throws {
+        if let error = setPINCodeBiometricStateThrowableError {
+            throw error
+        }
+        setPINCodeBiometricStateCallsCount += 1
+        setPINCodeBiometricStateReceivedState = state
+        setPINCodeBiometricStateReceivedInvocations.append(state)
+        try setPINCodeBiometricStateClosure?(state)
+    }
+    //MARK: - pinCodeBiometricState
+
+    var pinCodeBiometricStateCallsCount = 0
+    var pinCodeBiometricStateCalled: Bool {
+        return pinCodeBiometricStateCallsCount > 0
+    }
+    var pinCodeBiometricStateReturnValue: Data?
+    var pinCodeBiometricStateClosure: (() -> Data?)?
+
+    func pinCodeBiometricState() -> Data? {
+        pinCodeBiometricStateCallsCount += 1
+        if let pinCodeBiometricStateClosure = pinCodeBiometricStateClosure {
+            return pinCodeBiometricStateClosure()
+        } else {
+            return pinCodeBiometricStateReturnValue
+        }
+    }
+    //MARK: - removePINCodeBiometricState
+
+    var removePINCodeBiometricStateCallsCount = 0
+    var removePINCodeBiometricStateCalled: Bool {
+        return removePINCodeBiometricStateCallsCount > 0
+    }
+    var removePINCodeBiometricStateClosure: (() -> Void)?
+
+    func removePINCodeBiometricState() {
+        removePINCodeBiometricStateCallsCount += 1
+        removePINCodeBiometricStateClosure?()
     }
 }
 class MediaPlayerMock: MediaPlayerProtocol {

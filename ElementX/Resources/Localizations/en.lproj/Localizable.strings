@@ -33,6 +33,7 @@
 "action_edit" = "Edit";
 "action_enable" = "Enable";
 "action_end_poll" = "End poll";
+"action_enter_pin" = "Enter PIN";
 "action_forgot_password" = "Forgot password?";
 "action_forward" = "Forward";
 "action_invite" = "Invite";
@@ -277,6 +278,7 @@
 "screen_analytics_settings_share_data" = "Share analytics data";
 "screen_app_lock_biometric_authentication" = "biometric authentication";
 "screen_app_lock_biometric_unlock" = "biometric unlock";
+"screen_app_lock_biometric_unlock_reason_ios" = "Authentication is needed to access your app";
 "screen_app_lock_forgot_pin" = "Forgot PIN?";
 "screen_app_lock_settings_change_pin" = "Change PIN code";
 "screen_app_lock_settings_enable_biometric_unlock" = "Allow biometric unlock";

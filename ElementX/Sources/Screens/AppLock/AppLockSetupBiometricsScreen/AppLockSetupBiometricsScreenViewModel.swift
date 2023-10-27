@@ -39,13 +39,34 @@ class AppLockSetupBiometricsScreenViewModel: AppLockSetupBiometricsScreenViewMod
         
         switch viewAction {
         case .allow:
-            MXLog.info("Enable biometric unlock.")
-            appLockService.biometricUnlockEnabled = true
-            actionsSubject.send(.continue)
+            Task { await enableBiometricUnlock() }
         case .skip:
-            MXLog.info("Disable biometric unlock.")
-            appLockService.biometricUnlockEnabled = false
-            actionsSubject.send(.continue)
+            disableBiometricUnlock()
         }
+    }
+    
+    // MARK: - Private
+    
+    private func enableBiometricUnlock() async {
+        guard case .success = appLockService.enableBiometricUnlock() else {
+            MXLog.error("Enabling biometric unlock failed.")
+            return
+        }
+        MXLog.info("Biometric unlock enabled.")
+        
+        // Attempt unlock to trigger Face ID permissions alert.
+        if appLockService.biometryType == .faceID,
+           await !appLockService.unlockWithBiometrics() {
+            MXLog.info("Confirmation failed. Disabling biometric unlock.")
+            appLockService.disableBiometricUnlock()
+        }
+        
+        actionsSubject.send(.continue)
+    }
+    
+    private func disableBiometricUnlock() {
+        appLockService.disableBiometricUnlock()
+        MXLog.info("Biometric unlock disabled.")
+        actionsSubject.send(.continue)
     }
 }

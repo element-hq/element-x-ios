@@ -87,6 +87,7 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         let pinCode = "2023"
         keychainController.pinCodeReturnValue = pinCode
         keychainController.containsPINCodeReturnValue = true
+        keychainController.containsPINCodeBiometricStateReturnValue = false
         
         let deferred = deferFulfillment(viewModel.actions, message: "The screen should be finished.") { $0 == .complete }
         context.pinCode = pinCode

@@ -46,11 +46,7 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
         
         switch viewAction {
         case .submitPINCode:
-            guard appLockService.unlock(with: state.bindings.pinCode) else {
-                handleInvalidPIN()
-                return
-            }
-            actionsSubject.send(.appUnlocked)
+            submitPINCode()
         case .clearPINCode:
             state.bindings.pinCode = ""
         case .forgotPIN:
@@ -59,6 +55,14 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
     }
     
     // MARK: - Private
+    
+    private func submitPINCode() {
+        guard appLockService.unlock(with: state.bindings.pinCode) else {
+            handleInvalidPIN()
+            return
+        }
+        actionsSubject.send(.appUnlocked)
+    }
     
     private func handleForgotPIN() {
         state.bindings.alertInfo = .init(id: .confirmResetPIN,
