@@ -49,8 +49,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var userSuggestionsEnabled: Bool { get set }
     var readReceiptsEnabled: Bool { get set }
     var swiftUITimelineEnabled: Bool { get set }
-    var voiceMessageEnabled: Bool { get set }
-    var mentionsEnabled: Bool { get set }
     var appLockFlowEnabled: Bool { get set }
     var elementCallEnabled: Bool { get set }
     var chatBackupEnabled: Bool { get set }
