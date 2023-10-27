@@ -102,9 +102,9 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         try await deferred.fulfill()
         
         deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
-            suggestions == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL)),
-                            .user(item: .init(id: bob.userID, displayName: bob.displayName, avatarURL: bob.avatarURL)),
-                            .allUsers(item: .allUsersMention(roomAvatar: nil))]
+            suggestions == [.allUsers(item: .allUsersMention(roomAvatar: nil)),
+                            .user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL)),
+                            .user(item: .init(id: bob.userID, displayName: bob.displayName, avatarURL: bob.avatarURL))]
         }
         service.setSuggestionTrigger(.init(type: .user, text: ""))
         try await deferred.fulfill()

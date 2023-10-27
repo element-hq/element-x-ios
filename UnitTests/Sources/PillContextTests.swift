@@ -37,9 +37,6 @@ class PillContextTests: XCTestCase {
         let context = PillContext(roomContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertFalse(context.viewState.isOwnMention)
-        XCTAssertNil(context.viewState.avatarURL)
-        XCTAssertNil(context.viewState.name)
-        XCTAssertEqual(context.viewState.contentID, id)
         XCTAssertEqual(context.viewState.displayText, id)
         
         let name = "Mr. Test"
@@ -48,10 +45,7 @@ class PillContextTests: XCTestCase {
         await Task.yield()
         
         XCTAssertFalse(context.viewState.isOwnMention)
-        XCTAssertEqual(context.viewState.avatarURL, avatarURL)
-        XCTAssertEqual(context.viewState.name, name)
-        XCTAssertEqual(context.viewState.contentID, id)
-        XCTAssertEqual(context.viewState.displayText, name)
+        XCTAssertEqual(context.viewState.displayText, "@\(name)")
     }
     
     func testOwnUser() async throws {
@@ -90,9 +84,6 @@ class PillContextTests: XCTestCase {
         let context = PillContext(roomContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)
-        XCTAssertEqual(context.viewState.avatarURL, avatarURL)
-        XCTAssertEqual(context.viewState.name, displayName)
-        XCTAssertEqual(context.viewState.contentID, id)
-        XCTAssertEqual(context.viewState.displayText, "@room")
+        XCTAssertEqual(context.viewState.displayText, PillConstants.atRoom)
     }
 }
