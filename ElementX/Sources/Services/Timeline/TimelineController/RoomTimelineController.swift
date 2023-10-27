@@ -322,6 +322,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) else {
             return
         }
+        await mediaPlayerProvider.detachAllStates(except: playerState)
         await playerState.updateState(progress: progress)
     }
     

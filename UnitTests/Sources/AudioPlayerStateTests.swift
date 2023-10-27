@@ -37,6 +37,7 @@ class AudioPlayerStateTests: XCTestCase {
     private func buildAudioPlayerMock() -> AudioPlayerMock {
         let audioPlayerMock = AudioPlayerMock()
         audioPlayerMock.underlyingActions = audioPlayerActions
+        audioPlayerMock.state = .stopped
         audioPlayerMock.currentTime = 0.0
         audioPlayerMock.seekToClosure = { [audioPlayerSeekCallsSubject] progress in
             audioPlayerSeekCallsSubject?.send(progress)
@@ -65,6 +66,7 @@ class AudioPlayerStateTests: XCTestCase {
         XCTAssert(audioPlayerMock.stopCalled)
         XCTAssertFalse(audioPlayerState.isAttached)
         XCTAssertEqual(audioPlayerState.playbackState, .stopped)
+        XCTAssertFalse(audioPlayerState.showProgressIndicator)
     }
     
     func testReportError() async throws {
@@ -91,9 +93,19 @@ class AudioPlayerStateTests: XCTestCase {
         }
         
         do {
+            audioPlayerMock.state = .stopped
             await audioPlayerState.updateState(progress: 0.4)
             XCTAssertEqual(audioPlayerState.progress, 0.4)
             XCTAssertEqual(audioPlayerMock.seekToReceivedProgress, 0.4)
+            XCTAssertFalse(audioPlayerState.isPublishingProgress)
+        }
+
+        do {
+            audioPlayerMock.state = .playing
+            await audioPlayerState.updateState(progress: 0.4)
+            XCTAssertEqual(audioPlayerState.progress, 0.4)
+            XCTAssertEqual(audioPlayerMock.seekToReceivedProgress, 0.4)
+            XCTAssert(audioPlayerState.isPublishingProgress)
         }
     }
 
@@ -153,6 +165,7 @@ class AudioPlayerStateTests: XCTestCase {
         XCTAssertEqual(audioPlayerMock.seekToReceivedProgress, 0.4)
         XCTAssertEqual(audioPlayerState.playbackState, .playing)
         XCTAssert(audioPlayerState.isPublishingProgress)
+        XCTAssert(audioPlayerState.showProgressIndicator)
     }
     
     func testHandlingAudioPlayerActionDidPausePlaying() async throws {
@@ -173,6 +186,7 @@ class AudioPlayerStateTests: XCTestCase {
         XCTAssertEqual(audioPlayerState.playbackState, .stopped)
         XCTAssertEqual(audioPlayerState.progress, 0.4)
         XCTAssertFalse(audioPlayerState.isPublishingProgress)
+        XCTAssert(audioPlayerState.showProgressIndicator)
     }
     
     func testHandlingAudioPlayerActionsidStopPlaying() async throws {
@@ -193,6 +207,7 @@ class AudioPlayerStateTests: XCTestCase {
         XCTAssertEqual(audioPlayerState.playbackState, .stopped)
         XCTAssertEqual(audioPlayerState.progress, 0.4)
         XCTAssertFalse(audioPlayerState.isPublishingProgress)
+        XCTAssert(audioPlayerState.showProgressIndicator)
     }
     
     func testAudioPlayerActionsDidFinishPlaying() async throws {
@@ -214,5 +229,37 @@ class AudioPlayerStateTests: XCTestCase {
         // Progress should be reset to 0
         XCTAssertEqual(audioPlayerState.progress, 0.0)
         XCTAssertFalse(audioPlayerState.isPublishingProgress)
+        XCTAssertFalse(audioPlayerState.showProgressIndicator)
+    }
+    
+    func testAudioPlayerActionsDidFailed() async throws {
+        audioPlayerState.attachAudioPlayer(audioPlayerMock)
+
+        let deferredPlayingState = deferFulfillment(audioPlayerState.$playbackState) { action in
+            switch action {
+            case .playing:
+                return true
+            default:
+                return false
+            }
+        }
+        audioPlayerActionsSubject.send(.didStartPlaying)
+        try await deferredPlayingState.fulfill()
+        XCTAssertTrue(audioPlayerState.showProgressIndicator)
+
+        let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
+            switch action {
+            case .error:
+                return true
+            default:
+                return false
+            }
+        }
+        
+        audioPlayerActionsSubject.send(.didFailWithError(error: AudioPlayerError.genericError))
+        try await deferred.fulfill()
+        XCTAssertEqual(audioPlayerState.playbackState, .error)
+        XCTAssertFalse(audioPlayerState.isPublishingProgress)
+        XCTAssertTrue(audioPlayerState.showProgressIndicator)
     }
 }

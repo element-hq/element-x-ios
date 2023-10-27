@@ -155,6 +155,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             actionsSubject.send(.pauseVoiceMessagePlayback)
         case .seekVoiceMessagePlayback(let progress):
             actionsSubject.send(.seekVoiceMessagePlayback(progress: progress))
+        case .scrubVoiceMessagePlayback(let scrubbing):
+            actionsSubject.send(.scrubVoiceMessagePlayback(scrubbing: scrubbing))
         }
     }
 

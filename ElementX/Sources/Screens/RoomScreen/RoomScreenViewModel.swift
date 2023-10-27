@@ -41,6 +41,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
     private var canCurrentUserRedact = false
     private var paginateBackwardsTask: Task<Void, Never>?
+    private var resumeVoiceMessagePlaybackAfterScrubbing = false
 
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -208,14 +209,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .sendVoiceMessage:
             Task { await sendCurrentVoiceMessage() }
         case .startVoiceMessagePlayback:
-            Task {
-                await mediaPlayerProvider.detachAllStates(except: voiceMessageRecorder.previewAudioPlayerState)
-                await startPlayingRecordedVoiceMessage()
-            }
+            Task { await startPlayingRecordedVoiceMessage() }
         case .pauseVoiceMessagePlayback:
             pausePlayingRecordedVoiceMessage()
         case .seekVoiceMessagePlayback(let progress):
             Task { await seekRecordedVoiceMessage(to: progress) }
+        case .scrubVoiceMessagePlayback(let scrubbing):
+            Task { await scrubVoiceMessagePlayback(scrubbing: scrubbing) }
         }
     }
     
@@ -349,7 +349,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         switch await timelineController.sendReadReceipt(for: eventItemID) {
-        case .success():
+        case .success:
             break
         case let .failure(error):
             MXLog.error("[TimelineViewController] Failed to send read receipt: \(error)")
@@ -1015,6 +1015,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func startPlayingRecordedVoiceMessage() async {
+        await mediaPlayerProvider.detachAllStates(except: voiceMessageRecorder.previewAudioPlayerState)
         if case .failure(let error) = await voiceMessageRecorder.startPlayback() {
             MXLog.error("failed to play recorded voice message. \(error)")
         }
@@ -1025,7 +1026,25 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func seekRecordedVoiceMessage(to progress: Double) async {
+        await mediaPlayerProvider.detachAllStates(except: voiceMessageRecorder.previewAudioPlayerState)
         await voiceMessageRecorder.seekPlayback(to: progress)
+    }
+    
+    private func scrubVoiceMessagePlayback(scrubbing: Bool) async {
+        guard let audioPlayerState = voiceMessageRecorder.previewAudioPlayerState else {
+            return
+        }
+        if scrubbing {
+            if audioPlayerState.playbackState == .playing {
+                resumeVoiceMessagePlaybackAfterScrubbing = true
+                pausePlayingRecordedVoiceMessage()
+            }
+        } else {
+            if resumeVoiceMessagePlaybackAfterScrubbing {
+                resumeVoiceMessagePlaybackAfterScrubbing = false
+                await startPlayingRecordedVoiceMessage()
+            }
+        }
     }
     
     private func openSystemSettings() {

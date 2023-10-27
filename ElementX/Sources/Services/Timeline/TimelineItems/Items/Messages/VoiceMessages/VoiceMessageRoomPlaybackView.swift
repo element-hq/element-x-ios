@@ -40,10 +40,6 @@ struct VoiceMessageRoomPlaybackView: View {
         }
     }
     
-    var showWaveformCursor: Bool {
-        playerState.playbackState == .playing || isDragging
-    }
-    
     var body: some View {
         HStack {
             HStack {
@@ -61,7 +57,7 @@ struct VoiceMessageRoomPlaybackView: View {
             waveformView
                 .waveformInteraction(isDragging: $isDragging,
                                      progress: playerState.progress,
-                                     showCursor: showWaveformCursor,
+                                     showCursor: playerState.showProgressIndicator,
                                      onSeek: onSeek)
         }
         .padding(.leading, 2)

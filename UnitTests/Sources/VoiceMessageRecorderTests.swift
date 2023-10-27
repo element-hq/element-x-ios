@@ -43,6 +43,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         audioRecorder.averagePowerForChannelNumberReturnValue = 0
         audioPlayer = AudioPlayerMock()
         audioPlayer.actions = audioPlayerActions
+        audioPlayer.state = .stopped
         
         mediaPlayerProvider = MediaPlayerProviderMock()
         mediaPlayerProvider.playerForClosure = { _ in

@@ -91,12 +91,15 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
             return .failure(.previewNotAvailable)
         }
         
+        if await !previewAudioPlayerState.isAttached {
+            await previewAudioPlayerState.attachAudioPlayer(audioPlayer)
+        }
+        
         if audioPlayer.url == url {
             audioPlayer.play()
             return .success(())
         }
         
-        await previewAudioPlayerState.attachAudioPlayer(audioPlayer)
         let pendingMediaSource = MediaSourceProxy(url: url, mimeType: mp4accMimeType)
         audioPlayer.load(mediaSource: pendingMediaSource, using: url, autoplay: true)
         return .success(())
