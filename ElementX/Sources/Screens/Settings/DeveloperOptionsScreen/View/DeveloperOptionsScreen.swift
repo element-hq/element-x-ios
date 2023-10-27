@@ -73,12 +73,6 @@ struct DeveloperOptionsScreen: View {
                     Text("User suggestions")
                 }
             }
-            
-            Section("Voice message") {
-                Toggle(isOn: $context.voiceMessageEnabled) {
-                    Text("Enable voice messages")
-                }
-            }
 
             Section {
                 Button {

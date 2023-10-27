@@ -85,7 +85,7 @@ struct ComposerToolbar: View {
                 } else if context.viewState.showSendButton {
                     sendButton
                         .padding(.leading, 3)
-                } else if context.viewState.enableVoiceMessageComposer {
+                } else {
                     voiceMessageRecordingButton
                         .background {
                             ViewFrameReader(frame: $voiceMessageRecordingButtonFrame, coordinateSpace: .global)
@@ -246,10 +246,10 @@ struct ComposerToolbar: View {
     private var voiceMessageContent: some View {
         // Display the voice message composer above to keep the focus and keep the keyboard open if it's already open.
         switch context.viewState.composerMode {
-        case .recordVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
+        case .recordVoiceMessage(let state):
             VoiceMessageRecordingComposer(recorderState: state)
                 .padding(.leading, 12)
-        case .previewVoiceMessage(let state, let waveform, let isUploading) where context.viewState.enableVoiceMessageComposer:
+        case .previewVoiceMessage(let state, let waveform, let isUploading):
             topBarLayout {
                 voiceMessageTrashButton
                 voiceMessagePreviewComposer(audioPlayerState: state, waveform: waveform)
@@ -380,7 +380,6 @@ extension ComposerToolbar {
                                                  appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
             model.state.composerEmpty = focused
-            model.state.enableVoiceMessageComposer = true
             return model
         }
         return ComposerToolbar(context: composerViewModel.context,
@@ -397,7 +396,6 @@ extension ComposerToolbar {
                                                  appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
             model.state.composerMode = .recordVoiceMessage(state: AudioRecorderState())
-            model.state.enableVoiceMessageComposer = true
             return model
         }
         return ComposerToolbar(context: composerViewModel.context,
@@ -415,7 +413,6 @@ extension ComposerToolbar {
                                                  appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
             model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData), isUploading: uploading)
-            model.state.enableVoiceMessageComposer = true
             return model
         }
         return ComposerToolbar(context: composerViewModel.context,

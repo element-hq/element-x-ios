@@ -42,7 +42,6 @@ final class AppSettings {
         case userSuggestionsEnabled
         case readReceiptsEnabled
         case swiftUITimelineEnabled
-        case voiceMessageEnabled
         case mentionsEnabled
         case appLockFlowEnabled
         case elementCallEnabled
@@ -269,9 +268,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.voiceMessageEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var voiceMessageEnabled
     
     @UserPreference(key: UserDefaultsKeys.mentionsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var mentionsEnabled
