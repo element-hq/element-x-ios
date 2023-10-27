@@ -28,6 +28,7 @@ struct CompletionSuggestionView: View {
         // added by the list itself when presenting the divider
         static let listItemSpacing: CGFloat = 4.0
         static let leadingPadding: CGFloat = 16.0
+        // To make the scrolling more apparent we show a factional amount
         static let maxVisibleRows: CGFloat = 4.5
     }
 
@@ -68,8 +69,7 @@ struct CompletionSuggestionView: View {
             .listRowInsets(.init(top: 0, leading: Constants.leadingPadding, bottom: 0, trailing: 0))
         }
         .listStyle(PlainListStyle())
-        .frame(height: min(contentHeightForRowCount(Constants.maxVisibleRows),
-                           contentHeightForRowCount(CGFloat(items.count))))
+        .frame(height: contentHeightForRowCount(min(CGFloat(items.count), Constants.maxVisibleRows)))
         .background(Color.compound.bgCanvasDefault)
     }
     
