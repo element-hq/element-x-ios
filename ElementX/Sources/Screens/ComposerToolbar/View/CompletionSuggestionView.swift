@@ -74,7 +74,7 @@ struct CompletionSuggestionView: View {
     }
     
     private func contentHeightForRowCount(_ count: CGFloat) -> CGFloat {
-        (prototypeListItemFrame.height + Constants.listItemPadding * 2 + Constants.listItemSpacing) * CGFloat(count) - Constants.listItemSpacing / 2 + Constants.topPadding - Constants.listItemPadding
+        (prototypeListItemFrame.height + Constants.listItemPadding * 2 + Constants.listItemSpacing) * count - Constants.listItemSpacing / 2 + Constants.topPadding - Constants.listItemPadding
     }
 
     private struct ListItemPaddingModifier: ViewModifier {
