@@ -145,7 +145,7 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
     private func restartCreateIfNeeded() {
         state.bindings.pinCode = ""
         
-        if state.numberOfConfirmAttempts >= 3 {
+        if state.numberOfConfirmAttempts >= state.maximumAttempts {
             newPIN = ""
             state.mode = .create
             state.numberOfConfirmAttempts = 0
