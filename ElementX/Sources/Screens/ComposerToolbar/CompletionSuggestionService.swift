@@ -25,6 +25,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     private let suggestionTriggerSubject = CurrentValueSubject<SuggestionPattern?, Never>(nil)
     
     init(roomProxy: RoomProxyProtocol) {
+        self.roomProxy = roomProxy
         suggestionsPublisher = suggestionTriggerSubject
             .combineLatest(roomProxy.members)
             .map { [weak self] suggestionPattern, members -> [SuggestionItem] in
