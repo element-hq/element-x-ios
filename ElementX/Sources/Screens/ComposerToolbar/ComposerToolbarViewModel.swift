@@ -45,8 +45,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         self.completionSuggestionService = completionSuggestionService
         self.appSettings = appSettings
         
-        super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: completionSuggestionService.areSuggestionsEnabled,
-                                                              audioPlayerState: .init(id: .recorderPreview, duration: 0),
+        super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview, duration: 0),
                                                               audioRecorderState: .init(),
                                                               bindings: .init()),
                    imageProvider: mediaProvider)
@@ -89,9 +88,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .weakAssign(to: \.state.suggestions, on: self)
             .store(in: &cancellables)
         
-        if appSettings.mentionsEnabled {
-            setupMentionsHandling(mentionDisplayHelper: mentionDisplayHelper)
-        }
+        setupMentionsHandling(mentionDisplayHelper: mentionDisplayHelper)
     }
 
     // MARK: - Public
@@ -190,7 +187,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func setupMentionsHandling(mentionDisplayHelper: MentionDisplayHelper) {
         wysiwygViewModel.textView.mentionDisplayHelper = mentionDisplayHelper
         
-        let attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", permalinkBaseURL: appSettings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: appSettings.mentionsEnabled))
+        let attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", permalinkBaseURL: appSettings.permalinkBaseURL, mentionBuilder: MentionBuilder())
         
         wysiwygViewModel.mentionReplacer = ComposerMentionReplacer { urlString, string in
             let attributedString: NSMutableAttributedString

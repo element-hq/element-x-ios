@@ -190,7 +190,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
 
         let viewModel = HomeScreenViewModel(userSession: userSession,
                                             attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                             mentionBuilder: MentionBuilder(mentionsEnabled: ServiceLocator.shared.settings.mentionsEnabled)),
+                                                                                             mentionBuilder: MentionBuilder()),
                                             selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,

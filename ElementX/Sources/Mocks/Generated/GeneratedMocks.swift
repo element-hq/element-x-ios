@@ -686,11 +686,6 @@ class BugReportServiceMock: BugReportServiceProtocol {
     }
 }
 class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
-    var areSuggestionsEnabled: Bool {
-        get { return underlyingAreSuggestionsEnabled }
-        set(value) { underlyingAreSuggestionsEnabled = value }
-    }
-    var underlyingAreSuggestionsEnabled: Bool!
     var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> {
         get { return underlyingSuggestionsPublisher }
         set(value) { underlyingSuggestionsPublisher = value }

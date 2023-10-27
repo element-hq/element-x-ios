@@ -19,6 +19,7 @@ import SwiftUI
 struct CompletionSuggestionView: View {
     let imageProvider: ImageProviderProtocol?
     let items: [SuggestionItem]
+    var showBackgroundShadow = true
     let onTap: (SuggestionItem) -> Void
     
     private enum Constants {
@@ -27,12 +28,12 @@ struct CompletionSuggestionView: View {
         // added by the list itself when presenting the divider
         static let listItemSpacing: CGFloat = 4.0
         static let leadingPadding: CGFloat = 16.0
-        static let maxVisibleRows = 4
+        // To make the scrolling more apparent we show a factional amount
+        static let maxVisibleRows: CGFloat = 4.5
     }
 
     // MARK: Public
     
-    var showBackgroundShadow = true
     @State private var prototypeListItemFrame: CGRect = .zero
     
     var body: some View {
@@ -68,13 +69,12 @@ struct CompletionSuggestionView: View {
             .listRowInsets(.init(top: 0, leading: Constants.leadingPadding, bottom: 0, trailing: 0))
         }
         .listStyle(PlainListStyle())
-        .frame(height: min(contentHeightForRowCount(Constants.maxVisibleRows),
-                           contentHeightForRowCount(items.count)))
+        .frame(height: contentHeightForRowCount(min(CGFloat(items.count), Constants.maxVisibleRows)))
         .background(Color.compound.bgCanvasDefault)
     }
     
-    private func contentHeightForRowCount(_ count: Int) -> CGFloat {
-        (prototypeListItemFrame.height + Constants.listItemPadding * 2 + Constants.listItemSpacing) * CGFloat(count) - Constants.listItemSpacing / 2 + Constants.topPadding - Constants.listItemPadding
+    private func contentHeightForRowCount(_ count: CGFloat) -> CGFloat {
+        (prototypeListItemFrame.height + Constants.listItemPadding * 2 + Constants.listItemSpacing) * count - Constants.listItemSpacing / 2 + Constants.topPadding - Constants.listItemPadding
     }
 
     private struct ListItemPaddingModifier: ViewModifier {

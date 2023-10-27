@@ -58,11 +58,6 @@ struct DeveloperOptionsScreen: View {
                     Text("Resets on reboot")
                 }
                 
-                Toggle(isOn: $context.mentionsEnabled) {
-                    Text("Show user mentions")
-                    Text("Requires app reboot")
-                }
-                
                 Toggle(isOn: $context.elementCallEnabled) {
                     Text("Element Call")
                 }

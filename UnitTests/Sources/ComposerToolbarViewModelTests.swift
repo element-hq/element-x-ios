@@ -31,7 +31,6 @@ class ComposerToolbarViewModelTests: XCTestCase {
         AppSettings.reset()
         appSettings = AppSettings()
         appSettings.richTextEditorEnabled = true
-        appSettings.mentionsEnabled = true
         ServiceLocator.shared.register(appSettings: appSettings)
         wysiwygViewModel = WysiwygComposerViewModel()
         completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())

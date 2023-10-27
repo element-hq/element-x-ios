@@ -339,7 +339,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         
         return HomeScreenViewModel(userSession: userSession,
-                                   attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: ServiceLocator.shared.settings.mentionsEnabled)),
+                                   attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder()),
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: ServiceLocator.shared.settings,
                                    analytics: ServiceLocator.shared.analytics,
