@@ -148,6 +148,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
             }
         case .didFailWithError:
             stopPublishProgress()
+            playbackState = .error
         }
     }
     
