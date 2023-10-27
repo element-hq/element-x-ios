@@ -598,7 +598,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }
         
-        if item.isRemoteMessage {
+        if item.isForwardable {
             actions.append(.forward(itemID: itemID))
         }
 
