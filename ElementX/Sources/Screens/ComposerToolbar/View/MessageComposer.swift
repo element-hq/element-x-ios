@@ -26,11 +26,13 @@ struct MessageComposer: View {
     let mode: RoomScreenComposerMode
     let showResizeGrabber: Bool
     @Binding var isExpanded: Bool
+    let idealComposerHeight: CGFloat
     let sendAction: EnterKeyHandler
     let pasteAction: PasteHandler
     let replyCancellationAction: () -> Void
     let editCancellationAction: () -> Void
     let onAppearAction: () -> Void
+    let onHeightAction: (CGFloat) -> Void
     @FocusState private var focused: Bool
 
     @State private var composerTranslation: CGFloat = 0
@@ -63,30 +65,24 @@ struct MessageComposer: View {
 
     // MARK: - Private
     
-    @State private var composerFrame = CGRect.zero
-
     private var mainContent: some View {
-        VStack(alignment: .leading, spacing: -6) {
+        ComposerLayout(composerHeight: composerHeight, updateMaxComposerHeight: onHeightAction) {
             header
-            Color.clear
-                .overlay(alignment: .top) {
-                    composerView
-                        .background(ViewFrameReader(frame: $composerFrame))
-                }
-                .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
-                       alignment: .top)
+            composerView
                 .tint(.compound.iconAccentTertiary)
                 .padding(.vertical, 10)
+                .clipped()
                 .focused($focused)
                 .onAppear {
                     onAppearAction()
                 }
+                .layoutValue(key: ComposerLayout.IsComposer.self, value: true)
         }
     }
 
     private var composerHeight: CGFloat {
-        let baseHeight = isExpanded ? ComposerConstant.maxHeight : ComposerConstant.minHeight
-        return (baseHeight - composerTranslation).clamped(to: ComposerConstant.allowedHeightRange)
+        let baseHeight = idealComposerHeight
+        return baseHeight - composerTranslation
     }
     
     @ViewBuilder
@@ -219,11 +215,12 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                mode: mode,
                                showResizeGrabber: false,
                                isExpanded: .constant(false),
-                               sendAction: { },
+                               idealComposerHeight: viewModel.idealHeight, sendAction: { },
                                pasteAction: { _ in },
                                replyCancellationAction: { },
                                editCancellationAction: { },
-                               onAppearAction: { viewModel.setup() })
+                               onAppearAction: { viewModel.setup() },
+                               onHeightAction: { _ in })
     }
 
     static var previews: some View {

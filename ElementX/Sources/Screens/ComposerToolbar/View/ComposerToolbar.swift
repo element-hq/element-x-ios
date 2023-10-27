@@ -185,7 +185,8 @@ struct ComposerToolbar: View {
         MessageComposer(composerView: composerView,
                         mode: context.viewState.composerMode,
                         showResizeGrabber: context.viewState.bindings.composerActionsEnabled,
-                        isExpanded: $context.composerExpanded) {
+                        isExpanded: $context.composerExpanded,
+                        idealComposerHeight: context.viewState.idealComposerHeight) {
             context.send(viewAction: .sendMessage)
         } pasteAction: { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
@@ -195,6 +196,8 @@ struct ComposerToolbar: View {
             context.send(viewAction: .cancelEdit)
         } onAppearAction: {
             context.send(viewAction: .composerAppeared)
+        } onHeightAction: { value in
+            context.send(viewAction: .updateComposerMaxExpandedHeight(value))
         }
         .focused($composerFocused)
         .onChange(of: context.composerFocused) { newValue in

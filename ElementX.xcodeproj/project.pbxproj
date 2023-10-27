@@ -727,6 +727,7 @@
 		BD2BF1EC73FFB0C01552ECDA /* WelcomeScreenScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB782CE6176A5D2C082EC5D /* WelcomeScreenScreenModels.swift */; };
 		BD6D98676111DA8FC2BE4908 /* InvitesScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86873A768B13069BB5CAECF6 /* InvitesScreenViewModelProtocol.swift */; };
 		BD782053BE4C3D2F0BDE5699 /* ServiceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F95CADD0A5DBD76B990FCB /* ServiceLocator.swift */; };
+		BD9C32299518C8D2D5411AA5 /* ComposerLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C0461D817A64B2AC9AC063 /* ComposerLayout.swift */; };
 		BDA68E8D95B2B24B28825B8B /* LoginScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C368CAB3063EF275357ECD4 /* LoginScreenViewModel.swift */; };
 		BDED6DA7AD1E76018C424143 /* LegalInformationScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C34667458773B02AB5FB0B2 /* LegalInformationScreenViewModel.swift */; };
 		BEA646DF302711A753F0D420 /* MapTilerStyleBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225EFCA26877E75CDFE7F48D /* MapTilerStyleBuilderProtocol.swift */; };
@@ -1530,6 +1531,7 @@
 		9342F5D6729627B6393AF853 /* ServerConfirmationScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfirmationScreenModels.swift; sourceTree = "<group>"; };
 		9349F590E35CE514A71E6764 /* LoginHomeserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHomeserver.swift; sourceTree = "<group>"; };
 		935C2FB18EFB8EEE96B26330 /* CreateRoomFlowParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomFlowParameters.swift; sourceTree = "<group>"; };
+		93C0461D817A64B2AC9AC063 /* ComposerLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerLayout.swift; sourceTree = "<group>"; };
 		93CF7B19FFCF8EFBE0A8696A /* RoomScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScreenViewModelTests.swift; sourceTree = "<group>"; };
 		93E7304F5ECB4CB11CB10E60 /* SecureBackupRecoveryKeyScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupRecoveryKeyScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		94028A227645FA880B966211 /* WaveformSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformSource.swift; sourceTree = "<group>"; };
@@ -2807,6 +2809,7 @@
 			isa = PBXGroup;
 			children = (
 				8F421E51DF00377DE1A01354 /* CompletionSuggestionView.swift */,
+				93C0461D817A64B2AC9AC063 /* ComposerLayout.swift */,
 				D121B4FCFC38DBCC17BCC6D6 /* ComposerToolbar.swift */,
 				0AE449DFBA7CC863EEB2FD2A /* FormattingToolbar.swift */,
 				2FD0E68C42CA7DDCD4CAD68D /* MentionSuggestionItemView.swift */,
@@ -5364,6 +5367,7 @@
 				6213C897001F953E21D3CC16 /* CompletionSuggestionService.swift in Sources */,
 				A18E26A5121C7C545946E1F5 /* CompletionSuggestionServiceProtocol.swift in Sources */,
 				E4BAEED438A843D7B01D8069 /* CompletionSuggestionView.swift in Sources */,
+				BD9C32299518C8D2D5411AA5 /* ComposerLayout.swift in Sources */,
 				0B57C2399B9E1CE5CE0D8005 /* ComposerToolbar.swift in Sources */,
 				56BAB81A0D03C2EF09B86294 /* ComposerToolbarModels.swift in Sources */,
 				5995C63B1C61DE1373AA2BCE /* ComposerToolbarViewModel.swift in Sources */,

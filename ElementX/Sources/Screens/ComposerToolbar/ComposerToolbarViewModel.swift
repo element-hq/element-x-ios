@@ -83,11 +83,23 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 self?.completionSuggestionService.setSuggestionTrigger(suggestionPattern?.toElementPattern)
             }
             .store(in: &cancellables)
+                
+        wysiwygViewModel.$idealHeight
+            .weakAssign(to: \.state.idealComposerHeight, on: self)
+            .store(in: &cancellables)
         
         completionSuggestionService.suggestionsPublisher
             .weakAssign(to: \.state.suggestions, on: self)
             .store(in: &cancellables)
         
+        context.$viewState
+            .map(\.bindings.composerExpanded)
+            .removeDuplicates()
+            .sink { [weak wysiwygViewModel] value in
+                wysiwygViewModel?.maximised = value
+            }
+            .store(in: &cancellables)
+                
         setupMentionsHandling(mentionDisplayHelper: mentionDisplayHelper)
     }
 
@@ -157,6 +169,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             actionsSubject.send(.seekVoiceMessagePlayback(progress: progress))
         case .scrubVoiceMessagePlayback(let scrubbing):
             actionsSubject.send(.scrubVoiceMessagePlayback(scrubbing: scrubbing))
+        case let .updateComposerMaxExpandedHeight(height):
+            wysiwygViewModel.maxExpandedHeight = height
         }
     }
 

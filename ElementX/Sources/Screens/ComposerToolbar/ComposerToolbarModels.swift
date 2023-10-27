@@ -64,6 +64,7 @@ enum ComposerToolbarViewAction {
     case pauseVoiceMessagePlayback
     case scrubVoiceMessagePlayback(scrubbing: Bool)
     case seekVoiceMessagePlayback(progress: Double)
+    case updateComposerMaxExpandedHeight(_ height: CGFloat)
 }
 
 struct ComposerToolbarViewState: BindableState {
@@ -72,6 +73,8 @@ struct ComposerToolbarViewState: BindableState {
     var suggestions: [SuggestionItem] = []
     var audioPlayerState: AudioPlayerState
     var audioRecorderState: AudioRecorderState
+    
+    var idealComposerHeight = CGFloat.zero
     
     var bindings: ComposerToolbarViewStateBindings
 
