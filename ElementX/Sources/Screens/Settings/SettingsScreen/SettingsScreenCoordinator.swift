@@ -33,6 +33,8 @@ enum SettingsScreenCoordinatorAction {
     case logout
     case clearCache
     case secureBackup
+    /// Logout without a confirmation. The user forgot their PIN.
+    case forceLogout
 }
 
 final class SettingsScreenCoordinator: CoordinatorProtocol {
@@ -163,6 +165,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
             case .complete:
                 // The flow coordinator tidies up the stack, no need to do anything.
                 appLockSetupFlowCoordinator = nil
+            case .forceLogout:
+                actionsSubject.send(.forceLogout)
             }
         }
         .store(in: &cancellables)

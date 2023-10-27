@@ -27,10 +27,12 @@ struct AppLockSetupPINScreenCoordinatorParameters {
 }
 
 enum AppLockSetupPINScreenCoordinatorAction {
-    /// The user cancelled PIN entry.
-    case cancel
     /// The user succeeded PIN entry.
     case complete
+    /// The user cancelled PIN entry.
+    case cancel
+    /// The user failed to remember their PIN to unlock.
+    case forceLogout
 }
 
 final class AppLockSetupPINScreenCoordinator: CoordinatorProtocol {
@@ -62,6 +64,8 @@ final class AppLockSetupPINScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.complete)
             case .cancel:
                 actionsSubject.send(.cancel)
+            case .forceLogout:
+                actionsSubject.send(.forceLogout)
             }
         }
         .store(in: &cancellables)

@@ -21,6 +21,8 @@ enum AppLockSetupPINScreenViewModelAction {
     case complete
     /// The user cancelled PIN entry.
     case cancel
+    /// The user failed to remember their PIN to unlock.
+    case forceLogout
 }
 
 enum AppLockSetupPINScreenMode {
@@ -33,10 +35,19 @@ enum AppLockSetupPINScreenMode {
 }
 
 struct AppLockSetupPINScreenViewState: BindableState {
+    /// The number of attempts allowed to enter the PIN.
+    let maximumAttempts = 3
+    
     /// The current mode that the screen is in.
     var mode: AppLockSetupPINScreenMode
     /// Whether the screen is mandatory or can be cancelled.
     let isMandatory: Bool
+    /// The number of attempts the user has made in the `confirm` mode.
+    var numberOfConfirmAttempts = 0
+    /// The number of attempts the user has made in the `unlock` mode.
+    var numberOfUnlockAttempts = 0
+    /// The user failed to unlock the app (or forgot their PIN) and the log out is in progress.
+    var isLoggingOut = false
     
     var title: String {
         switch mode {
@@ -46,10 +57,14 @@ struct AppLockSetupPINScreenViewState: BindableState {
         }
     }
     
-    var subtitle: String? {
-        switch mode {
-        case .create, .confirm: return L10n.screenAppLockSetupPinContext(InfoPlistReader.main.bundleDisplayName)
-        case .unlock: return nil
+    /// Whether the subtitle is in a warning state or not.
+    var isSubtitleWarning: Bool { mode == .unlock && numberOfUnlockAttempts > 0 }
+    var subtitle: String {
+        guard mode == .unlock else { return L10n.screenAppLockSetupPinContext(InfoPlistReader.main.bundleDisplayName) }
+        if !isSubtitleWarning {
+            return L10n.screenAppLockSubtitle(maximumAttempts)
+        } else {
+            return L10n.screenAppLockSubtitleWrongPin(maximumAttempts - numberOfUnlockAttempts)
         }
     }
     
@@ -68,6 +83,8 @@ enum AppLockSetupPINScreenAlertType {
     case pinMismatch
     /// An error occurred setting the PIN code in the App Lock service.
     case failedToSetPIN
+    /// The user failed to unlock the app (or forgot their PIN).
+    case forceLogout
 }
 
 enum AppLockSetupPINScreenViewAction {

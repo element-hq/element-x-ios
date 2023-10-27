@@ -19,7 +19,10 @@ import SwiftState
 import SwiftUI
 
 enum AppLockSetupFlowCoordinatorAction: Equatable {
+    /// The flow is complete.
     case complete
+    /// The user failed to remember their existing PIN.
+    case forceLogout
 }
 
 /// Coordinates the display of any screens used to configure the App Lock feature.
@@ -49,8 +52,10 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
         case biometricsPrompt
         /// The settings screen.
         case settings
-        /// The flow is finished.
+        /// The flow is finished. This is a final state.
         case complete
+        /// The user is being signed out. This is a final state.
+        case loggingOut
     }
 
     /// Events that can be triggered on the flow state machine
@@ -63,8 +68,12 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
         case biometricsSet
         /// The user wants to change their PIN.
         case changePIN
-        /// The user wants to dismiss the flow.
-        case dismiss
+        /// The user has disabled the app lock feature.
+        case appLockDisabled
+        /// The user wants to cancel the flow.
+        case cancel
+        /// The user failed to remember their existing PIN.
+        case forceLogout
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -108,17 +117,23 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
                 return appLockService.isEnabled ? .unlock : .createPIN
             case (.pinEntered, .unlock):
                 return .settings
+            case (.cancel, .unlock):
+                return .complete
+            case (.forceLogout, .unlock):
+                return .loggingOut
             case (.pinEntered, .createPIN):
                 if presentingFlow == .authentication {
                     return appLockService.biometryType != .none ? .biometricsPrompt : .complete
                 } else {
                     return appLockService.biometricUnlockEnabled || appLockService.biometryType == .none ? .settings : .biometricsPrompt
                 }
+            case (.cancel, .createPIN):
+                return .complete
             case (.biometricsSet, .biometricsPrompt):
                 return presentingFlow == .settings ? .settings : .complete
             case (.changePIN, .settings):
                 return .createPIN
-            case (.dismiss, _):
+            case (.appLockDisabled, .settings):
                 return .complete
             default:
                 return nil
@@ -149,6 +164,8 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
                 showCreatePIN()
             case (_, .complete):
                 complete(from: context.fromState)
+            case (.unlock, .loggingOut):
+                actionsSubject.send(.forceLogout)
             default:
                 fatalError("Unhandled transition.")
             }
@@ -170,10 +187,12 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .cancel:
-                stateMachine.tryEvent(.dismiss)
             case .complete:
                 stateMachine.tryEvent(.pinEntered)
+            case .cancel:
+                stateMachine.tryEvent(.cancel)
+            case .forceLogout:
+                fatalError("Creating a PIN can't force a logout.")
             }
         }
         .store(in: &cancellables)
@@ -211,10 +230,12 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .cancel:
-                stateMachine.tryEvent(.dismiss)
             case .complete:
                 stateMachine.tryEvent(.pinEntered)
+            case .cancel:
+                stateMachine.tryEvent(.cancel)
+            case .forceLogout:
+                stateMachine.tryEvent(.forceLogout)
             }
         }
         .store(in: &cancellables)
@@ -231,7 +252,7 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
             case .changePINCode:
                 stateMachine.tryEvent(.changePIN)
             case .appLockDisabled:
-                stateMachine.tryEvent(.dismiss)
+                stateMachine.tryEvent(.appLockDisabled)
             }
         }
         .store(in: &cancellables)
@@ -245,7 +266,7 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
     /// Tear down the flow for completion.
     private func complete(from state: State) {
         switch state {
-        case .initial, .complete: fatalError()
+        case .initial, .complete, .loggingOut: fatalError()
         case .unlock:
             navigationStackCoordinator.setSheetCoordinator(nil)
             actionsSubject.send(.complete)

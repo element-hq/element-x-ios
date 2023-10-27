@@ -78,7 +78,7 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
     }
     
     private func showForceLogoutAlertIfNeeded() {
-        if state.numberOfPINAttempts >= 3 {
+        if state.numberOfPINAttempts >= state.maximumAttempts {
             state.bindings.alertInfo = .init(id: .forcedLogout,
                                              title: L10n.screenAppLockSignoutAlertTitle,
                                              message: L10n.screenAppLockSignoutAlertMessage,

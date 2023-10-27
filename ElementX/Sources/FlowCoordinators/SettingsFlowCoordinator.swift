@@ -22,6 +22,8 @@ enum SettingsFlowCoordinatorAction {
     case dismissedSettings
     case runLogoutFlow
     case clearCache
+    /// Logout without a confirmation. The user forgot their PIN.
+    case forceLogout
 }
 
 struct SettingsFlowCoordinatorParameters {
@@ -107,6 +109,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.clearCache)
                 case .secureBackup:
                     presentSecureBackupScreen(animated: true)
+                case .forceLogout:
+                    actionsSubject.send(.forceLogout)
                 }
             }
             .store(in: &cancellables)

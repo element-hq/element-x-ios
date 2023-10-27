@@ -23,9 +23,17 @@ struct AppLockSetupPINScreen: View {
     
     @FocusState private var textFieldFocus
     
+    var subtitleColor: Color {
+        context.viewState.isSubtitleWarning ? .compound.textCriticalPrimary : .compound.textPrimary
+    }
+    
+    var interactiveDismissDisabled: Bool {
+        context.viewState.isMandatory || context.viewState.isLoggingOut
+    }
+    
     var body: some View {
         ScrollView {
-            VStack(spacing: 48) {
+            VStack(spacing: 36) {
                 header
                 
                 PINTextField(pinCode: $context.pinCode,
@@ -44,7 +52,8 @@ struct AppLockSetupPINScreen: View {
         .toolbar { toolbar }
         .toolbar(.visible, for: .navigationBar)
         .navigationBarBackButtonHidden()
-        .interactiveDismissDisabled(context.viewState.isMandatory)
+        .interactiveDismissDisabled(interactiveDismissDisabled)
+        .disabled(context.viewState.isLoggingOut)
         .alert(item: $context.alertInfo)
         .onAppear { textFieldFocus = true }
     }
@@ -60,12 +69,10 @@ struct AppLockSetupPINScreen: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
             
-            if let subtitle = context.viewState.subtitle {
-                Text(subtitle)
-                    .font(.compound.bodyMD)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.compound.textSecondary)
-            }
+            Text(context.viewState.subtitle)
+                .font(.compound.bodyMD)
+                .multilineTextAlignment(.center)
+                .foregroundColor(subtitleColor)
         }
     }
     
@@ -84,8 +91,9 @@ struct AppLockSetupPINScreen: View {
 // MARK: - Previews
 
 struct AppLockSetupPINScreen_Previews: PreviewProvider, TestablePreview {
-    static let service = AppLockService(keychainController: KeychainControllerMock(),
-                                        appSettings: ServiceLocator.shared.settings)
+    static let service = AppLockServiceMock.mock()
+    static let failedService = AppLockServiceMock.mock(numberOfPINAttempts: 1)
+    
     static let createViewModel = AppLockSetupPINScreenViewModel(initialMode: .create,
                                                                 isMandatory: false,
                                                                 appLockService: service)
@@ -95,6 +103,9 @@ struct AppLockSetupPINScreen_Previews: PreviewProvider, TestablePreview {
     static let unlockViewModel = AppLockSetupPINScreenViewModel(initialMode: .unlock,
                                                                 isMandatory: false,
                                                                 appLockService: service)
+    static let unlockFailedViewModel = AppLockSetupPINScreenViewModel(initialMode: .unlock,
+                                                                      isMandatory: false,
+                                                                      appLockService: failedService)
     
     static var previews: some View {
         NavigationStack {
@@ -111,5 +122,10 @@ struct AppLockSetupPINScreen_Previews: PreviewProvider, TestablePreview {
             AppLockSetupPINScreen(context: unlockViewModel.context)
         }
         .previewDisplayName("Unlock")
+        
+        NavigationStack {
+            AppLockSetupPINScreen(context: unlockFailedViewModel.context)
+        }
+        .previewDisplayName("Unlock Failed")
     }
 }
