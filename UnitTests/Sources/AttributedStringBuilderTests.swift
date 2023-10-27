@@ -18,8 +18,9 @@
 import XCTest
 
 class AttributedStringBuilderTests: XCTestCase {
-    let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: true))
-    let maxHeaderPointSize = ceil(UIFont.preferredFont(forTextStyle: .body).pointSize * 1.2)
+    private let permalinkBaseURL = ServiceLocator.shared.settings.permalinkBaseURL
+    private lazy var attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: true))
+    private let maxHeaderPointSize = ceil(UIFont.preferredFont(forTextStyle: .body).pointSize * 1.2)
     
     func testRenderHTMLStringWithHeaders() {
         let h1HTMLString = "<h1>Large Heading</h1>"
@@ -191,22 +192,25 @@ class AttributedStringBuilderTests: XCTestCase {
     func testUserIdLink() {
         let userId = "@user:matrix.org"
         let string = "The user is \(userId)."
-        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: userId, expectedRuns: 3)
-        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: userId, expectedRuns: 3)
+        let expectedLink = "\(permalinkBaseURL)/#/\(userId)"
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink, expectedRuns: 3)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink, expectedRuns: 3)
     }
     
     func testRoomAliasLink() {
         let roomAlias = "#matrix:matrix.org"
         let string = "The room alias is \(roomAlias)."
-        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: roomAlias, expectedRuns: 3)
-        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: roomAlias, expectedRuns: 3)
+        let expectedLink = "https://matrix.to/#/%23matrix%3Amatrix.org"
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink, expectedRuns: 3)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink, expectedRuns: 3)
     }
     
     func testRoomIdLink() {
         let roomId = "!roomidentifier:matrix.org"
         let string = "The room is \(roomId)."
-        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: roomId, expectedRuns: 3)
-        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: roomId, expectedRuns: 3)
+        let expectedLink = "https://matrix.to/#/!roomidentifier%3Amatrix.org"
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink, expectedRuns: 3)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink, expectedRuns: 3)
     }
 
     // As of right now we do not handle event id links in any way so there is no need to add them as links
