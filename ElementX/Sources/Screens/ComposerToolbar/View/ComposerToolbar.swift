@@ -326,7 +326,7 @@ struct ComposerToolbar: View {
         } onSeek: { progress in
             context.send(viewAction: .seekVoiceMessagePlayback(progress: progress))
         } onScrubbing: { isScrubbing in
-            context.send(viewAction: .scrubbingVoiceMessagePlayback(scrubbing: isScrubbing))
+            context.send(viewAction: .scrubVoiceMessagePlayback(scrubbing: isScrubbing))
         }
     }
 }

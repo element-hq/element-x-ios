@@ -214,8 +214,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             pausePlayingRecordedVoiceMessage()
         case .seekVoiceMessagePlayback(let progress):
             Task { await seekRecordedVoiceMessage(to: progress) }
-        case .scrubbingVoiceMessagePlayback(let scrubbing):
-            Task { await scrubbingVoiceMessagePlayback(scrubbing: scrubbing) }
+        case .scrubVoiceMessagePlayback(let scrubbing):
+            Task { await scrubVoiceMessagePlayback(scrubbing: scrubbing) }
         }
     }
     
@@ -1030,7 +1030,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         await voiceMessageRecorder.seekPlayback(to: progress)
     }
     
-    private func scrubbingVoiceMessagePlayback(scrubbing: Bool) async {
+    private func scrubVoiceMessagePlayback(scrubbing: Bool) async {
         guard let audioPlayerState = voiceMessageRecorder.previewAudioPlayerState else {
             return
         }

@@ -37,7 +37,7 @@ enum ComposerToolbarViewModelAction {
     case deleteVoiceMessageRecording
     case startVoiceMessagePlayback
     case pauseVoiceMessagePlayback
-    case scrubbingVoiceMessagePlayback(scrubbing: Bool)
+    case scrubVoiceMessagePlayback(scrubbing: Bool)
     case seekVoiceMessagePlayback(progress: Double)
     case sendVoiceMessage
 }
@@ -62,7 +62,7 @@ enum ComposerToolbarViewAction {
     case deleteVoiceMessageRecording
     case startVoiceMessagePlayback
     case pauseVoiceMessagePlayback
-    case scrubbingVoiceMessagePlayback(scrubbing: Bool)
+    case scrubVoiceMessagePlayback(scrubbing: Bool)
     case seekVoiceMessagePlayback(progress: Double)
 }
 
