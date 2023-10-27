@@ -22,42 +22,26 @@ struct VoiceMessageRoomPlaybackView: View {
     @ObservedObject var playerState: AudioPlayerState
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
+    @GestureState var isDragging = false
 
     let onPlayPause: () -> Void
     let onSeek: (Double) -> Void
     let onScrubbing: (Bool) -> Void
 
-    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
-    @State private var sendFeedback = false
-    
-    private static let elapsedTimeFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "m:ss"
-        return dateFormatter
-    }()
-    
-    private static let longElapsedTimeFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "mm:ss"
-        return dateFormatter
-    }()
-        
-    @State var dragState: WaveformViewDragState = .inactive
-    
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
         let percent = playerState.progress > 0.0 ? playerState.progress : 1.0
         // If the duration is greater or equal 10 minutes, use the long format
         let elapsed = Date(timeIntervalSinceReferenceDate: playerState.duration * percent)
         if playerState.duration >= 600 {
-            return Self.longElapsedTimeFormatter.string(from: elapsed)
+            return DateFormatter.longElapsedTimeFormatter.string(from: elapsed)
         } else {
-            return Self.elapsedTimeFormatter.string(from: elapsed)
+            return DateFormatter.elapsedTimeFormatter.string(from: elapsed)
         }
     }
     
     var showWaveformCursor: Bool {
-        playerState.playbackState == .playing || dragState.isDragging
+        playerState.playbackState == .playing || isDragging
     }
     
     var body: some View {
@@ -73,32 +57,18 @@ struct VoiceMessageRoomPlaybackView: View {
                     .monospacedDigit()
                     .fixedSize(horizontal: true, vertical: true)
             }
+
             waveformView
-                .waveformDragGesture($dragState)
-                .progressCursor(progress: playerState.progress) {
-                    WaveformCursorView(color: .compound.iconAccentTertiary)
-                        .opacity(showWaveformCursor ? 1 : 0)
-                        .frame(width: waveformLineWidth)
-                }
-        }
-        .onChange(of: dragState) { newDragState in
-            switch newDragState {
-            case .inactive:
-                onScrubbing(false)
-            case .pressing:
-                onScrubbing(true)
-                feedbackGenerator.prepare()
-                sendFeedback = true
-            case .dragging(let progress):
-                if sendFeedback {
-                    feedbackGenerator.impactOccurred()
-                    sendFeedback = false
-                }
-                onSeek(max(0, min(progress, 1.0)))
-            }
+                .waveformInteraction(isDragging: $isDragging,
+                                     progress: playerState.progress,
+                                     showCursor: showWaveformCursor,
+                                     onSeek: onSeek)
         }
         .padding(.leading, 2)
         .padding(.trailing, 8)
+        .onChange(of: isDragging) { isDragging in
+            onScrubbing(isDragging)
+        }
     }
 
     @ViewBuilder
@@ -122,37 +92,18 @@ struct VoiceMessageRoomPlaybackView: View {
     }
 }
 
-private enum DragState: Equatable {
-    case inactive
-    case pressing(progress: Double)
-    case dragging(progress: Double)
-    
-    var progress: Double {
-        switch self {
-        case .inactive, .pressing:
-            return .zero
-        case .dragging(let progress):
-            return progress
-        }
-    }
-    
-    var isActive: Bool {
-        switch self {
-        case .inactive:
-            return false
-        case .pressing, .dragging:
-            return true
-        }
-    }
-    
-    var isDragging: Bool {
-        switch self {
-        case .inactive, .pressing:
-            return false
-        case .dragging:
-            return true
-        }
-    }
+private extension DateFormatter {
+    static let elapsedTimeFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "m:ss"
+        return dateFormatter
+    }()
+
+    static let longElapsedTimeFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "mm:ss"
+        return dateFormatter
+    }()
 }
 
 struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {

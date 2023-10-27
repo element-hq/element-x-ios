@@ -52,9 +52,7 @@ struct VoiceMessageRoomTimelineView: View {
                 resumePlaybackAfterScrubbing = true
                 context.send(viewAction: .playPauseAudio(itemID: timelineItem.id))
             }
-            context.send(viewAction: .disableLongPress(itemID: timelineItem.id))
         } else {
-            context.send(viewAction: .enableLongPress(itemID: timelineItem.id))
             if resumePlaybackAfterScrubbing {
                 context.send(viewAction: .playPauseAudio(itemID: timelineItem.id))
                 resumePlaybackAfterScrubbing = false

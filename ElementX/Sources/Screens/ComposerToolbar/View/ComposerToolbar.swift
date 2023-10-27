@@ -116,7 +116,7 @@ struct ComposerToolbar: View {
 
     @ViewBuilder
     private var mainTopBarContent: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             topBarLayout {
                 if !context.composerActionsEnabled {
                     RoomAttachmentPicker(context: context)

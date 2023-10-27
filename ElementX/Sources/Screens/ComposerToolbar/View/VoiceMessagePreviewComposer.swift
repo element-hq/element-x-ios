@@ -25,29 +25,22 @@ struct VoiceMessagePreviewComposer: View {
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
     @State private var resumePlaybackAfterScrubbing = false
+    @GestureState var isDragging = false
 
     let onPlay: () -> Void
     let onPause: () -> Void
     let onSeek: (Double) -> Void
 
-    @State var dragState: WaveformViewDragState = .inactive
-    
-    private static let elapsedTimeFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "mm:ss"
-        return dateFormatter
-    }()
-        
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
         let percent = playerState.progress > 0.0 ? playerState.progress : 1.0
         // If the duration is greater or equal 10 minutes, use the long format
         let elapsed = Date(timeIntervalSinceReferenceDate: playerState.duration * percent)
-        return Self.elapsedTimeFormatter.string(from: elapsed)
+        return DateFormatter.elapsedTimeFormatter.string(from: elapsed)
     }
     
     var showWaveformCursor: Bool {
-        playerState.playbackState == .playing || dragState.isActive
+        playerState.playbackState == .playing || isDragging
     }
             
     var body: some View {
@@ -63,25 +56,12 @@ struct VoiceMessagePreviewComposer: View {
                     .monospacedDigit()
                     .fixedSize(horizontal: true, vertical: true)
             }
+
             waveformView
-                .waveformDragGesture($dragState)
-                .progressCursor(progress: playerState.progress) {
-                    WaveformCursorView(color: .compound.iconAccentTertiary)
-                        .opacity(showWaveformCursor ? 1 : 0)
-                        .frame(width: waveformLineWidth)
-                }
-                .onChange(of: dragState) { dragState in
-                    switch dragState {
-                    case .inactive:
-                        onScrubbing(false)
-                    case .pressing(let progress):
-                        onScrubbing(true)
-                        onSeek(max(0, min(progress, 1.0)))
-                    case .dragging(let progress):
-                        onSeek(max(0, min(progress, 1.0)))
-                    }
-                    self.dragState = dragState
-                }
+                .waveformInteraction(isDragging: $isDragging,
+                                     progress: playerState.progress,
+                                     showCursor: showWaveformCursor,
+                                     onSeek: onSeek)
         }
         .padding(.vertical, 4.0)
         .padding(.horizontal, 6.0)
@@ -133,6 +113,14 @@ struct VoiceMessagePreviewComposer: View {
             }
         }
     }
+}
+
+private extension DateFormatter {
+    static let elapsedTimeFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "mm:ss"
+        return dateFormatter
+    }()
 }
 
 struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {

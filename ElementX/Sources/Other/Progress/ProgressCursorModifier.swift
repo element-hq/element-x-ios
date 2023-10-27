@@ -19,7 +19,7 @@ import SwiftUI
 
 extension View {
     func progressCursor<CursorView: View>(progress: CGFloat,
-                                          cursorView: @escaping () -> CursorView) -> some View {
+                                          @ViewBuilder cursorView: @escaping () -> CursorView) -> some View {
         modifier(ProgressCursorModifier(progress: progress,
                                         cursorView: cursorView))
     }
