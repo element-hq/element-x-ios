@@ -35,11 +35,6 @@ private struct WaveformInteractionModifier: ViewModifier {
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             content
-                .gesture(SpatialTapGesture()
-                    .onEnded { tapGesture in
-                        let progress = tapGesture.location.x / geometry.size.width
-                        onSeek(max(0, min(progress, 1.0)))
-                    })
                 .progressCursor(progress: progress) {
                     WaveformCursorView(color: .compound.iconAccentTertiary)
                         .frame(width: cursorVisibleWidth, height: cursorVisibleHeight)
@@ -56,6 +51,11 @@ private struct WaveformInteractionModifier: ViewModifier {
                         )
                         .offset(x: -cursorInteractiveSize / 2, y: 0)
                 }
+                .gesture(SpatialTapGesture()
+                    .onEnded { tapGesture in
+                        let progress = tapGesture.location.x / geometry.size.width
+                        onSeek(max(0, min(progress, 1.0)))
+                    })
         }
         .coordinateSpace(name: Self.namespaceName)
         .animation(nil, value: progress)
