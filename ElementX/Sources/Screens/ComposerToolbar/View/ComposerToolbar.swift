@@ -33,7 +33,6 @@ struct ComposerToolbar: View {
     @State private var showVoiceMessageRecordingTooltip = false
     @ScaledMetric private var voiceMessageTooltipPointerHeight = 6
     @State private var voiceMessageRecordingButtonFrame: CGRect = .zero
-    @State private var resumeVoiceMessagePlaybackAfterScrubbing = false
     
     private let voiceMessageMinimumRecordingDuration = 1.0
     private let voiceMessageTooltipDuration = 1.0
@@ -327,17 +326,7 @@ struct ComposerToolbar: View {
         } onSeek: { progress in
             context.send(viewAction: .seekVoiceMessagePlayback(progress: progress))
         } onScrubbing: { isScrubbing in
-            if isScrubbing {
-                if audioPlayerState.playbackState == .playing {
-                    resumeVoiceMessagePlaybackAfterScrubbing = true
-                    context.send(viewAction: .pauseVoiceMessagePlayback)
-                }
-            } else {
-                if resumeVoiceMessagePlaybackAfterScrubbing {
-                    context.send(viewAction: .startVoiceMessagePlayback)
-                    resumeVoiceMessagePlaybackAfterScrubbing = false
-                }
-            }
+            context.send(viewAction: .scrubbingVoiceMessagePlayback(scrubbing: isScrubbing))
         }
     }
 }

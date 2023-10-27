@@ -91,7 +91,9 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
             return .failure(.previewNotAvailable)
         }
         
-        await previewAudioPlayerState.attachAudioPlayer(audioPlayer)
+        if await !previewAudioPlayerState.isAttached {
+            await previewAudioPlayerState.attachAudioPlayer(audioPlayer)
+        }
         
         if audioPlayer.url == url {
             audioPlayer.play()
