@@ -55,7 +55,7 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
             actionsSubject.send(.recoveryKey)
         case .keyBackup:
             switch secureBackupController.keyBackupState.value {
-            case .disabled:
+            case .disabled, .unknown:
                 enableBackup()
             case .enabled:
                 actionsSubject.send(.keyBackup)

@@ -25,6 +25,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
     private let keyBackupStateSubject = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.unknown)
     
     private var backupStateListenerTaskHandle: TaskHandle?
+    private var recoveryStateListenerTaskHandle: TaskHandle?
     
     var recoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never> {
         recoveryKeyStateSubject.asCurrentValuePublisher()
@@ -39,6 +40,20 @@ class SecureBackupController: SecureBackupControllerProtocol {
         
         backupStateListenerTaskHandle = encryption.backupStateListener(listener: SecureBackupControllerBackupStateListener { [weak self] state in
             self?.keyBackupStateSubject.send(state.keyBackupState)
+        })
+        
+        recoveryStateListenerTaskHandle = encryption.recoveryStateListener(listener: SecureBackupRecoveryStateListener { [weak self] state in
+            guard let self else { return }
+            switch state {
+            case .unknown:
+                recoveryKeyStateSubject.send(.unknown)
+            case .enabled:
+                recoveryKeyStateSubject.send(.enabled)
+            case .disabled:
+                recoveryKeyStateSubject.send(.disabled)
+            case .incomplete:
+                recoveryKeyStateSubject.send(.incomplete)
+            }
         })
     }
     
@@ -72,7 +87,6 @@ class SecureBackupController: SecureBackupControllerProtocol {
             let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, progressListener: SecureBackupEnableRecoveryProgressListener { [weak self] state in
                 guard let self else { return }
                 
-                #warning("This should be a global recovery state instead. Should include some sort of .incomplete counterpart too")
                 switch state {
                 case .creatingBackup:
                     recoveryKeyStateSubject.send(.settingUp)
@@ -92,8 +106,12 @@ class SecureBackupController: SecureBackupControllerProtocol {
     }
     
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
-        #warning("FIXME")
-        fatalError("Not implemented yet")
+        do {
+            try await encryption.fixRecoveryIssues(recoveryKey: key)
+            return .success(())
+        } catch {
+            return .failure(.failedConfirmingRecoveryKey)
+        }
     }
     
     func isLastSession() async -> Result<Bool, SecureBackupControllerError> {
@@ -117,6 +135,18 @@ private final class SecureBackupControllerBackupStateListener: BackupStateListen
     }
     
     func onUpdate(status: BackupState) {
+        onUpdateClosure(status)
+    }
+}
+
+private final class SecureBackupRecoveryStateListener: RecoveryStateListener {
+    private let onUpdateClosure: (RecoveryState) -> Void
+    
+    init(_ onUpdateClosure: @escaping (RecoveryState) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(status: RecoveryState) {
         onUpdateClosure(status)
     }
 }

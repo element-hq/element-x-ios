@@ -115,7 +115,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .dismissedSettings:
                 stateMachine.processEvent(.dismissedSettingsScreen)
             case .runLogoutFlow:
-                runLogoutFlow()
+                Task { await self.runLogoutFlow() }
             case .clearCache:
                 actionsSubject.send(.clearCache)
             case .forceLogout:
@@ -335,7 +335,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
                 case .logout:
-                    runLogoutFlow()
+                    Task { await self.runLogoutFlow() }
                 case .presentInvitesScreen:
                     stateMachine.processEvent(.showInvitesScreen)
                 }
@@ -360,13 +360,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func runLogoutFlow() {
-        Task {
-            await runAsyncLogoutFlow()
-        }
-    }
-    
-    private func runAsyncLogoutFlow() async {
+    private func runLogoutFlow() async {
         let secureBackupController = userSession.clientProxy.secureBackupController
         
         guard case let .success(isLastSession) = await secureBackupController.isLastSession() else {
