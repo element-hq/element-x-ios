@@ -58,6 +58,7 @@ private struct WaveformInteractionModifier: ViewModifier {
                 }
         }
         .coordinateSpace(name: Self.namespaceName)
+        .animation(nil, value: progress)
     }
 
     private static let namespaceName = "voice-message-waveform"
