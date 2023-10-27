@@ -447,6 +447,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                     stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: false))
                 case .clearCache:
                     stateMachine.processEvent(.clearCache)
+                case .forceLogout:
+                    stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: true))
                 }
             }
             .store(in: &cancellables)

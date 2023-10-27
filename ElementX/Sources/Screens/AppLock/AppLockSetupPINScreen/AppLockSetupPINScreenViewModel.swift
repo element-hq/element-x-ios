@@ -32,7 +32,12 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
 
     init(initialMode: AppLockSetupPINScreenMode, isMandatory: Bool, appLockService: AppLockServiceProtocol) {
         self.appLockService = appLockService
+        
         super.init(initialViewState: AppLockSetupPINScreenViewState(mode: initialMode, isMandatory: isMandatory, bindings: .init(pinCode: "")))
+        
+        appLockService.numberOfPINAttempts
+            .weakAssign(to: \.state.numberOfUnlockAttempts, on: self)
+            .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -74,6 +79,7 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
         newPIN = pinCode
         state.mode = .confirm
         state.bindings.pinCode = ""
+        state.numberOfConfirmAttempts = 0
     }
     
     /// Handles a PIN input from the confirm mode. Stores the pin if it matches.
@@ -102,9 +108,10 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
     /// Handles a PIN input for the unlock mode.
     private func unlock() {
         guard appLockService.unlock(with: state.bindings.pinCode) else {
-            // show an error
-            // https://www.figma.com/file/0MMNu7cTOzLOlWb7ctTkv3?node-id=13067:107631&mode=dev#591068578
             state.bindings.pinCode = ""
+            if state.numberOfUnlockAttempts >= state.maximumAttempts {
+                handleError(.forceLogout)
+            }
             return
         }
         
@@ -119,12 +126,29 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
                                              message: L10n.screenAppLockSetupPinBlacklistedDialogContent,
                                              primaryButton: .init(title: L10n.actionOk) { self.state.bindings.pinCode = "" })
         case .pinMismatch:
+            state.numberOfConfirmAttempts += 1
             state.bindings.alertInfo = .init(id: error,
                                              title: L10n.screenAppLockSetupPinMismatchDialogTitle,
                                              message: L10n.screenAppLockSetupPinMismatchDialogContent,
-                                             primaryButton: .init(title: L10n.actionTryAgain) { self.state.bindings.pinCode = "" })
+                                             primaryButton: .init(title: L10n.actionTryAgain) { self.restartCreateIfNeeded() })
         case .failedToSetPIN:
             state.bindings.alertInfo = .init(id: error)
+        case .forceLogout:
+            state.isLoggingOut = true // Disable the screen before showing the alert.
+            state.bindings.alertInfo = .init(id: error,
+                                             title: L10n.screenAppLockSignoutAlertTitle,
+                                             message: L10n.screenAppLockSignoutAlertMessage,
+                                             primaryButton: .init(title: L10n.actionOk) { self.actionsSubject.send(.forceLogout) })
+        }
+    }
+    
+    private func restartCreateIfNeeded() {
+        state.bindings.pinCode = ""
+        
+        if state.numberOfConfirmAttempts >= state.maximumAttempts {
+            newPIN = ""
+            state.mode = .create
+            state.numberOfConfirmAttempts = 0
         }
     }
 }

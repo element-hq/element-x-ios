@@ -24,7 +24,8 @@ enum AppLockScreenViewModelAction {
 }
 
 struct AppLockScreenViewState: BindableState {
-    private let maximumAttempts = 3
+    /// The number of attempts allowed to unlock the app.
+    let maximumAttempts = 3
     
     /// The number of times the user attempted to enter their PIN.
     var numberOfPINAttempts = 0

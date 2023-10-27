@@ -20,6 +20,8 @@ import SwiftUI
 enum UserSessionFlowCoordinatorAction {
     case logout
     case clearCache
+    /// Logout without a confirmation. The user forgot their PIN.
+    case forceLogout
 }
 
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
@@ -116,6 +118,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 runLogoutFlow()
             case .clearCache:
                 actionsSubject.send(.clearCache)
+            case .forceLogout:
+                actionsSubject.send(.forceLogout)
             }
         }
         .store(in: &cancellables)

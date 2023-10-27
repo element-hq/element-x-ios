@@ -264,6 +264,8 @@ class AuthenticationCoordinator: CoordinatorProtocol {
                 } else {
                     delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
                 }
+            case .forceLogout:
+                fatalError("The PIN creation flow should not fail.")
             }
         }
         .store(in: &cancellables)
