@@ -22,6 +22,7 @@ struct ComposerLayout: Layout {
     }
     
     var spacing: CGFloat = -6
+    var composerVerticalPadding: CGFloat = 10
     let composerHeight: CGFloat
     let updateMaxComposerHeight: (CGFloat) -> Void
     
@@ -31,6 +32,7 @@ struct ComposerLayout: Layout {
         for subview in subviews {
             let size = subview.sizeThatFits(proposal)
             if subview[IsComposer.self] {
+                height += composerVerticalPadding * 2
                 let idealHeight = idealComposerHeight(proposedHeight: size.height,
                                                       availableHeight: (proposal.height ?? .greatestFiniteMagnitude) - height)
                 height += idealHeight
@@ -49,8 +51,9 @@ struct ComposerLayout: Layout {
         for subview in subviews {
             var size = subview.sizeThatFits(.init(bounds.size))
             if subview[IsComposer.self] {
+                y += composerVerticalPadding
                 let idealHeight = idealComposerHeight(proposedHeight: size.height,
-                                                      availableHeight: bounds.height - y)
+                                                      availableHeight: bounds.height - y - composerVerticalPadding)
                 DispatchQueue.main.async {
                     updateMaxComposerHeight(idealHeight)
                 }

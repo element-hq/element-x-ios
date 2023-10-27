@@ -70,7 +70,6 @@ struct MessageComposer: View {
             header
             composerView
                 .tint(.compound.iconAccentTertiary)
-                .padding(.vertical, 10)
                 .clipped()
                 .focused($focused)
                 .onAppear {
