@@ -45,6 +45,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     private var authenticationCoordinator: AuthenticationCoordinator?
     private let appLockFlowCoordinator: AppLockFlowCoordinator
+    private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
     
@@ -143,7 +144,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             return
         }
         
-        stateMachine.processEvent(userSessionStore.hasSessions ? .startWithExistingSession : .startWithAuthentication)
+        guard userSessionStore.hasSessions else {
+            stateMachine.processEvent(.startWithAuthentication)
+            return
+        }
+        
+        if appSettings.appLockFlowEnabled,
+           appSettings.appLockIsMandatory,
+           !appLockFlowCoordinator.appLockService.isEnabled {
+            stateMachine.processEvent(.startWithAppLockSetup)
+        } else {
+            stateMachine.processEvent(.startWithExistingSession)
+        }
     }
 
     func stop() {
@@ -319,28 +331,34 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .startWithAuthentication, .signedOut):
-                self.startAuthentication()
+                startAuthentication()
             case (.signedOut, .createdUserSession, .signedIn):
-                self.setupUserSession()
+                setupUserSession()
             case (.initial, .startWithExistingSession, .restoringSession):
-                self.restoreUserSession()
+                restoreUserSession()
             case (.restoringSession, .failedRestoringSession, .signedOut):
-                self.showLoginErrorToast()
-                self.presentSplashScreen()
+                showLoginErrorToast()
+                presentSplashScreen()
             case (.restoringSession, .createdUserSession, .signedIn):
-                self.setupUserSession()
+                setupUserSession()
+            
+            case (.initial, .startWithAppLockSetup, .mandatoryAppLockSetup):
+                startMandatoryAppLockSetup()
+            case (.mandatoryAppLockSetup, .appLockSetupComplete, .restoringSession):
+                restoreUserSession()
+            
             case (.signingOut, .signOut, .signingOut):
                 // We can ignore signOut when already in the process of signing out,
                 // such as the SDK sending an authError due to token invalidation.
                 break
             case (_, .signOut(let isSoft, _), .signingOut):
-                self.logout(isSoft: isSoft)
+                logout(isSoft: isSoft)
             case (.signingOut(_, let disableAppLock), .completedSigningOut, .signedOut):
-                self.presentSplashScreen(isSoftLogout: false, disableAppLock: disableAppLock)
+                presentSplashScreen(isSoftLogout: false, disableAppLock: disableAppLock)
             case (.signingOut(_, let disableAppLock), .showSoftLogout, .softLogout):
-                self.presentSplashScreen(isSoftLogout: true, disableAppLock: disableAppLock)
+                presentSplashScreen(isSoftLogout: true, disableAppLock: disableAppLock)
             case (.signedIn, .clearCache, .initial):
-                self.clearCache()
+                clearCache()
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -462,6 +480,31 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         if let storedAppRoute {
             userSessionFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
         }
+    }
+    
+    /// Used to add a PIN code to an existing session that somehow missed out mandatory PIN setup.
+    private func startMandatoryAppLockSetup() {
+        MXLog.info("Mandatory App Lock enabled but no PIN is set. Showing the setup flow.")
+        
+        let navigationCoordinator = NavigationStackCoordinator()
+        let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .onboarding,
+                                                      appLockService: appLockFlowCoordinator.appLockService,
+                                                      navigationStackCoordinator: navigationCoordinator)
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .complete:
+                stateMachine.processEvent(.appLockSetupComplete)
+                appLockSetupFlowCoordinator = nil
+            case .forceLogout:
+                fatalError("Creating a PIN shouldn't be able to fail in this way")
+            }
+        }
+        .store(in: &cancellables)
+        
+        appLockSetupFlowCoordinator = coordinator
+        navigationRootCoordinator.setRootCoordinator(navigationCoordinator)
+        coordinator.start()
     }
     
     private func logout(isSoft: Bool) {

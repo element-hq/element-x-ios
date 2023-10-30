@@ -34,8 +34,8 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
     
     /// The presentation context of the flow.
     enum PresentationFlow {
-        /// The flow is shown as for mandatory PIN creation in the authentication flow
-        case authentication
+        /// The flow is shown for mandatory PIN creation in the authentication flow or on app launch.
+        case onboarding
         /// The flow is shown from the Settings screen.
         case settings
     }
@@ -113,7 +113,7 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
             
             switch (event, fromState) {
             case (.start, .initial):
-                if presentingFlow == .authentication { return .createPIN(replacingExitingPIN: false) }
+                if presentingFlow == .onboarding { return .createPIN(replacingExitingPIN: false) }
                 return appLockService.isEnabled ? .unlock : .createPIN(replacingExitingPIN: false)
             case (.pinEntered, .unlock):
                 return .settings
@@ -122,7 +122,7 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
             case (.forceLogout, .unlock):
                 return .loggingOut
             case (.pinEntered, .createPIN(let replacingExitingPIN)):
-                if presentingFlow == .authentication {
+                if presentingFlow == .onboarding {
                     return appLockService.biometryType != .none ? .biometricsPrompt : .complete
                 } else if !replacingExitingPIN {
                     return appLockService.biometricUnlockEnabled || appLockService.biometryType == .none ? .settings : .biometricsPrompt
@@ -182,7 +182,7 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
     private func showCreatePIN() {
         // Despite appLockService.isMandatory existing, we don't use that here,
         // to allow for cancellation when changing the PIN code within settings.
-        let isMandatory = presentingFlow == .authentication
+        let isMandatory = presentingFlow == .onboarding
         
         let coordinator = AppLockSetupPINScreenCoordinator(parameters: .init(initialMode: .create,
                                                                              isMandatory: isMandatory,
@@ -200,8 +200,12 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        if presentingFlow == .authentication {
-            navigationStackCoordinator.push(coordinator)
+        if presentingFlow == .onboarding {
+            if navigationStackCoordinator.rootCoordinator == nil {
+                navigationStackCoordinator.setRootCoordinator(coordinator)
+            } else {
+                navigationStackCoordinator.push(coordinator)
+            }
         } else {
             modalNavigationStackCoordinator.setRootCoordinator(coordinator)
             navigationStackCoordinator.setSheetCoordinator(modalNavigationStackCoordinator)
@@ -219,7 +223,7 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        if presentingFlow == .authentication {
+        if presentingFlow == .onboarding {
             navigationStackCoordinator.push(coordinator)
         } else {
             modalNavigationStackCoordinator.push(coordinator)

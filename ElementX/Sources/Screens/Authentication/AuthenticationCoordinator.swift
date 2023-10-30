@@ -251,7 +251,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     }
     
     private func showAppLockSetupFlow(userSession: UserSessionProtocol) {
-        let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .authentication,
+        let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .onboarding,
                                                       appLockService: appLockService,
                                                       navigationStackCoordinator: navigationStackCoordinator)
         coordinator.actions.sink { [weak self] action in
