@@ -11,7 +11,6 @@ struct SetupProject: ParsableCommand {
         try setupGitHooks()
         try brewBundleInstall()
         try mintPackagesInstall()
-        try linkGitLFS()
         try xcodegen()
     }
 
@@ -28,19 +27,6 @@ struct SetupProject: ParsableCommand {
 
     func mintPackagesInstall() throws {
         try Utilities.zsh("mint install Asana/locheck")
-    }
-    
-    func linkGitLFS() throws {
-        guard let gitPath = try Utilities.zsh("git --exec-path")?.replacingOccurrences(of: "\n", with: "") else { return }
-        
-        let lfsPath = URL(fileURLWithPath: gitPath).appendingPathComponent("git-lfs").path
-        
-        guard !FileManager.default.fileExists(atPath: lfsPath) else {
-            print("Git LFS already linked.")
-            return
-        }
-        
-        try Utilities.zsh("ln -s \"$(which git-lfs)\" \"\(lfsPath)\"")
     }
 
     func xcodegen() throws {
