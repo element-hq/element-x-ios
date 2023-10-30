@@ -284,16 +284,15 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         let audioPlayerState = audioPlayerState(for: itemID)
         
-        // Detach all other states
-        await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
         // Ensure this one is attached
         if !audioPlayerState.isAttached {
             audioPlayerState.attachAudioPlayer(audioPlayer)
         }
 
+        // Detach all other states
+        await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
+
         guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
-            audioPlayer.stop()
-            
             // Load content
             do {
                 MXLog.info("Loading voice message audio content from source for itemID \(itemID)")

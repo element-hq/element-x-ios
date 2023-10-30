@@ -119,7 +119,6 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         isStopped = true
         internalAudioPlayer?.pause()
         internalAudioPlayer?.seek(to: .zero)
-        try? AVAudioSession.sharedInstance().setActive(false)
     }
     
     func seek(to progress: Double) async {
