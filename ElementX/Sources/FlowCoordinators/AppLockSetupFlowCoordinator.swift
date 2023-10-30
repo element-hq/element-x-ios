@@ -201,7 +201,11 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         if presentingFlow == .authentication {
-            navigationStackCoordinator.push(coordinator)
+            if navigationStackCoordinator.rootCoordinator == nil {
+                navigationStackCoordinator.setRootCoordinator(coordinator)
+            } else {
+                navigationStackCoordinator.push(coordinator)
+            }
         } else {
             modalNavigationStackCoordinator.setRootCoordinator(coordinator)
             navigationStackCoordinator.setSheetCoordinator(modalNavigationStackCoordinator)

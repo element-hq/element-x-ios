@@ -29,6 +29,11 @@ class AppCoordinatorStateMachine {
         /// Opening an existing session.
         case restoringSession
         
+        /// Showing the mandatory app lock setup flow before restoring the session.
+        /// This state should only be allowed before restoring an existing session. For
+        /// new users the setup is inserted in the middle of the authentication flow.
+        case mandatoryAppLockSetup
+        
         /// User session started
         case signedIn
 
@@ -44,11 +49,19 @@ class AppCoordinatorStateMachine {
         /// Start the `AppCoordinator` by restoring an existing account.
         case startWithExistingSession
 
+        /// Start the `AppCoordinator` by showing the mandatory PIN creation flow.
+        /// This event should only be sent if an account exists and a mandatory PIN is
+        /// missing. Normally it will be handled as part of the authentication flow.
+        case startWithAppLockSetup
+        
         /// Restoring session failed.
         case failedRestoringSession
         
         /// A session has been created.
         case createdUserSession
+        
+        /// The app lock setup has been completed.
+        case appLockSetupComplete
         
         /// Request sign out.
         case signOut(isSoft: Bool, disableAppLock: Bool)
@@ -79,6 +92,9 @@ class AppCoordinatorStateMachine {
         stateMachine.addRoutes(event: .startWithExistingSession, transitions: [.initial => .restoringSession])
         stateMachine.addRoutes(event: .createdUserSession, transitions: [.restoringSession => .signedIn])
         stateMachine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
+        
+        stateMachine.addRoutes(event: .startWithAppLockSetup, transitions: [.initial => .mandatoryAppLockSetup])
+        stateMachine.addRoutes(event: .appLockSetupComplete, transitions: [.mandatoryAppLockSetup => .restoringSession])
         
         stateMachine.addRoutes(event: .completedSigningOut, transitions: [.signingOut(isSoft: false, disableAppLock: false) => .signedOut,
                                                                           .signingOut(isSoft: false, disableAppLock: true) => .signedOut])
