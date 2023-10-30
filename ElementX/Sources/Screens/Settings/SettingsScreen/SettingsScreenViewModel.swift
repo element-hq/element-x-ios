@@ -37,7 +37,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            userID: userSession.userID,
                                            accountProfileURL: userSession.clientProxy.accountURL(action: .profile),
                                            accountSessionsListURL: userSession.clientProxy.accountURL(action: .sessionsList),
-                                           showAppLockSettings: appSettings.appLockFlowEnabled,
                                            showDeveloperOptions: appSettings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
         
@@ -49,10 +48,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         userSession.clientProxy.userDisplayName
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userDisplayName, on: self)
-            .store(in: &cancellables)
-
-        appSettings.$appLockFlowEnabled
-            .weakAssign(to: \.state.showAppLockSettings, on: self)
             .store(in: &cancellables)
         
         appSettings.$chatBackupEnabled

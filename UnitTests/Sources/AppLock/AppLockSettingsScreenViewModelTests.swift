@@ -29,18 +29,10 @@ class AppLockSetupSettingsScreenViewModelTests: XCTestCase {
     }
     
     override func setUpWithError() throws {
-        AppSettings.reset()
-        let appSettings = AppSettings()
-        appSettings.appLockFlowEnabled = true
-        
         keychainController = KeychainControllerMock()
-        appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
+        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
         
         viewModel = AppLockSetupSettingsScreenViewModel(appLockService: AppLockServiceMock.mock())
-    }
-    
-    override func tearDown() {
-        AppSettings.reset()
     }
 
     func testDisablingShowsAlert() {

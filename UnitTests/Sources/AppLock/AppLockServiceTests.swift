@@ -28,7 +28,6 @@ class AppLockServiceTests: XCTestCase {
     override func setUp() {
         AppSettings.reset()
         appSettings = AppSettings()
-        appSettings.appLockFlowEnabled = true
         
         keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
         keychainController.resetSecrets()
