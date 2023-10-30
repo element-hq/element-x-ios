@@ -53,7 +53,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         context.$viewState
             .map(\.composerMode)
             .removeDuplicates()
-            .sink { [weak self] in self?.actionsSubject.send(.composerModeChanged(mode: $0)) }
+            .sink { [weak self] in
+                self?.wysiwygViewModel.shouldReplaceText = $0.isTextEditingEnabled
+                self?.actionsSubject.send(.composerModeChanged(mode: $0))
+            }
             .store(in: &cancellables)
 
         context.$viewState
