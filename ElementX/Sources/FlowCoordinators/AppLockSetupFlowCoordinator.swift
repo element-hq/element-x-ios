@@ -47,7 +47,7 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
         /// The unlock screen.
         case unlock
         /// The create PIN screen.
-        case createPIN
+        case createPIN(replacingExitingPIN: Bool)
         /// The allow biometrics screen.
         case biometricsPrompt
         /// The settings screen.
@@ -113,26 +113,28 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
             
             switch (event, fromState) {
             case (.start, .initial):
-                if presentingFlow == .authentication { return .createPIN }
-                return appLockService.isEnabled ? .unlock : .createPIN
+                if presentingFlow == .authentication { return .createPIN(replacingExitingPIN: false) }
+                return appLockService.isEnabled ? .unlock : .createPIN(replacingExitingPIN: false)
             case (.pinEntered, .unlock):
                 return .settings
             case (.cancel, .unlock):
                 return .complete
             case (.forceLogout, .unlock):
                 return .loggingOut
-            case (.pinEntered, .createPIN):
+            case (.pinEntered, .createPIN(let replacingExitingPIN)):
                 if presentingFlow == .authentication {
                     return appLockService.biometryType != .none ? .biometricsPrompt : .complete
-                } else {
+                } else if !replacingExitingPIN {
                     return appLockService.biometricUnlockEnabled || appLockService.biometryType == .none ? .settings : .biometricsPrompt
+                } else {
+                    return .settings
                 }
-            case (.cancel, .createPIN):
-                return .complete
+            case (.cancel, .createPIN(let replacingExitingPIN)):
+                return replacingExitingPIN ? .settings : .complete
             case (.biometricsSet, .biometricsPrompt):
                 return presentingFlow == .settings ? .settings : .complete
             case (.changePIN, .settings):
-                return .createPIN
+                return .createPIN(replacingExitingPIN: true)
             case (.appLockDisabled, .settings):
                 return .complete
             default:
@@ -153,11 +155,12 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
                 showSettings()
             case (.createPIN, .biometricsPrompt):
                 showBiometricsPrompt()
-            case (.createPIN, .settings):
-                navigationStackCoordinator.setSheetCoordinator(nil)
-            // The above is fine for change pin, but not create PIN when biometrics are unavailable.
-            // Need to track the two flows differently to call the alternative below.
-            // showSettings()
+            case (.createPIN(let replacingExitingPIN), .settings):
+                if replacingExitingPIN {
+                    navigationStackCoordinator.setSheetCoordinator(nil) // Reveal the settings screen again.
+                } else {
+                    showSettings() // Biometrics was unavailable, push the settings screen now.
+                }
             case (.biometricsPrompt, .settings):
                 showSettings()
             case (.settings, .createPIN):
