@@ -2,6 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>a11y_digits_entered</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d zadaná číslica</string>
+			<key>few</key>
+			<string>%1$d zadané číslice</string>
+			<key>other</key>
+			<string>%1$d zadaných číslic</string>
+		</dict>
+	</dict>
 	<key>common_member_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -31,11 +49,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>1 hlas</string>
-			<key>few</key>
-			<string>%d hlasy</string>
+			<string>%d vote</string>
 			<key>other</key>
-			<string>%d hlasov</string>
+			<string>%d votes</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -164,6 +180,40 @@
 			<string>%1$d zmien miestnosti</string>
 		</dict>
 	</dict>
+	<key>screen_app_lock_subtitle</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>You have %1$d attempt to unlock</string>
+			<key>other</key>
+			<string>You have %1$d attempts to unlock</string>
+		</dict>
+	</dict>
+	<key>screen_app_lock_subtitle_wrong_pin</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Nesprávny PIN kód. Máte ešte %1$d pokus</string>
+			<key>few</key>
+			<string>Nesprávny PIN kód. Máte ešte %1$d pokusy</string>
+			<key>other</key>
+			<string>Nesprávny PIN kód. Máte ešte %1$d pokusov</string>
+		</dict>
+	</dict>
 	<key>screen_room_member_list_header_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -175,11 +225,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>1 osoba</string>
-			<key>few</key>
-			<string>%1$d ľudia</string>
+			<string>%1$d person</string>
 			<key>other</key>
-			<string>%1$d ľudí</string>
+			<string>%1$d people</string>
 		</dict>
 	</dict>
 </dict>

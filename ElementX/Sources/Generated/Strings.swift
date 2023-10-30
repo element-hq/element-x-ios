@@ -36,6 +36,8 @@ public enum L10n {
   public static var a11ySendFiles: String { return L10n.tr("Localizable", "a11y_send_files") }
   /// Show password
   public static var a11yShowPassword: String { return L10n.tr("Localizable", "a11y_show_password") }
+  /// Start a call
+  public static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
   /// User menu
   public static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
   /// Record voice message. Double tap and hold to record. Release to end recording.
@@ -308,6 +310,8 @@ public enum L10n {
   public static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
   /// Rich text editor
   public static var commonRichTextEditor: String { return L10n.tr("Localizable", "common_rich_text_editor") }
+  /// Room
+  public static var commonRoom: String { return L10n.tr("Localizable", "common_room") }
   /// Room name
   public static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
   /// e.g. your project name
@@ -1144,6 +1148,10 @@ public enum L10n {
   public static var screenRoomMemberListPendingHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_pending_header_title") }
   /// Room members
   public static var screenRoomMemberListRoomMembersHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_room_members_header_title") }
+  /// Notify the whole room
+  public static var screenRoomMentionsAtRoomSubtitle: String { return L10n.tr("Localizable", "screen_room_mentions_at_room_subtitle") }
+  /// Everyone
+  public static var screenRoomMentionsAtRoomTitle: String { return L10n.tr("Localizable", "screen_room_mentions_at_room_title") }
   /// Message copied
   public static var screenRoomMessageCopied: String { return L10n.tr("Localizable", "screen_room_message_copied") }
   /// You do not have permission to post to this room

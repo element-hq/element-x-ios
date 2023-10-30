@@ -10,6 +10,7 @@
 "a11y_poll_end" = "Ended poll";
 "a11y_send_files" = "Send files";
 "a11y_show_password" = "Show password";
+"a11y_start_call" = "Start a call";
 "a11y_user_menu" = "User menu";
 "a11y_voice_message_record" = "Record voice message. Double tap and hold to record. Release to end recording.";
 "action_accept" = "Accept";
@@ -134,6 +135,7 @@
 "common_report_a_bug" = "Report a bug";
 "common_report_submitted" = "Report submitted";
 "common_rich_text_editor" = "Rich text editor";
+"common_room" = "Room";
 "common_room_name" = "Room name";
 "common_room_name_placeholder" = "e.g. your project name";
 "common_screen_lock" = "Screen lock";
@@ -257,6 +259,7 @@
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
+"screen_room_mentions_at_room_subtitle" = "Notify the whole room";
 "screen_account_provider_change" = "Change account provider";
 "screen_account_provider_form_hint" = "Homeserver address";
 "screen_account_provider_form_notice" = "Enter a search term or a domain address.";
@@ -488,7 +491,6 @@
 "screen_room_notification_settings_error_restoring_default" = "Failed restoring the default mode, please try again.";
 "screen_room_notification_settings_error_setting_mode" = "Failed setting the mode, please try again.";
 "screen_room_notification_settings_mode_all_messages" = "All messages";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
 "screen_room_notification_settings_room_custom_settings_title" = "In this room, notify me for";
 "screen_room_reactions_show_less" = "Show less";
 "screen_room_reactions_show_more" = "Show more";
@@ -548,7 +550,6 @@
 "screen_start_chat_error_starting_chat" = "An error occurred when trying to start a chat";
 "screen_view_location_title" = "Location";
 "screen_waitlist_message" = "There's a high demand for %1$@ on %2$@ at the moment. Come back to the app in a few days and try again.\n\nThanks for your patience!";
-"screen_waitlist_message_success" = "Welcome to %1$@!";
 "screen_waitlist_title" = "You’re almost there.";
 "screen_waitlist_title_success" = "You're in.";
 "screen_welcome_bullet_1" = "Calls, polls, search and more will be added later this year.";
@@ -622,6 +623,7 @@
 "dialog_title_success" = "Success";
 "notification_fallback_content" = "Notification";
 "notification_room_action_quick_reply" = "Quick reply";
+"screen_room_mentions_at_room_title" = "Everyone";
 "screen_analytics_settings_help_us_improve" = "Share anonymous usage data to help us identify issues.";
 "screen_analytics_settings_read_terms" = "You can read all our terms %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "here";
@@ -639,5 +641,7 @@
 "screen_room_details_security_title" = "Security";
 "screen_room_details_topic_title" = "Topic";
 "screen_room_error_failed_processing_media" = "Failed processing media to upload, please try again.";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
 "screen_signout_confirmation_dialog_submit" = "Sign out";
 "screen_signout_preference_item" = "Sign out";
+"screen_waitlist_message_success" = "Welcome to %1$@!";
