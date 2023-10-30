@@ -35,6 +35,7 @@ struct VoiceMessageRoomTimelineView: View {
                                          onSeek: { onPlaybackSeek($0) },
                                          onScrubbing: { onPlaybackScrubbing($0) })
                 .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: 400)
         }
     }
     
