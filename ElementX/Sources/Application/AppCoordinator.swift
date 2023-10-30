@@ -487,7 +487,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         MXLog.info("Mandatory App Lock enabled but no PIN is set. Showing the setup flow.")
         
         let navigationCoordinator = NavigationStackCoordinator()
-        let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .authentication,
+        let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .onboarding,
                                                       appLockService: appLockFlowCoordinator.appLockService,
                                                       navigationStackCoordinator: navigationCoordinator)
         coordinator.actions.sink { [weak self] action in
