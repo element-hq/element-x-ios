@@ -139,12 +139,11 @@ private struct CreatePollOptionView: View {
     var body: some View {
         HStack {
             if editMode?.wrappedValue == .active {
-                Button(action: deleteAction) {
+                Button(role: .destructive, action: deleteAction) {
                     CompoundIcon(\.delete)
-                        .foregroundColor(.compound.iconCriticalPrimary)
                 }
                 .disabled(!canDeleteItem)
-                .buttonStyle(.plain)
+                .buttonStyle(.compound(.plain))
                 .accessibilityLabel(L10n.actionRemove)
             }
             TextField(text: $text) {
