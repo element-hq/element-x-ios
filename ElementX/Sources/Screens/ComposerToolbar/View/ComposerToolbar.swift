@@ -288,18 +288,17 @@ struct ComposerToolbar: View {
     }
         
     private var voiceMessageTrashButton: some View {
-        Button {
+        Button(role: .destructive) {
             context.send(viewAction: .deleteVoiceMessageRecording)
         } label: {
             CompoundIcon(\.delete)
                 .font(.compound.bodyLG)
-                .foregroundColor(.compound.textCriticalPrimary)
                 .frame(width: trashButtonIconSize, height: trashButtonIconSize)
                 .padding(EdgeInsets(top: 10, leading: 11, bottom: 10, trailing: 11))
                 .fixedSize()
                 .accessibilityLabel(L10n.a11yDelete)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.compound(.plain))
     }
     
     private var voiceMessageRecordingButtonTooltipView: some View {
