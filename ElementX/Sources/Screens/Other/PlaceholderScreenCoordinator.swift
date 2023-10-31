@@ -33,7 +33,7 @@ struct PlaceholderScreen: View {
     let showsBackgroundGradient: Bool
     
     var body: some View {
-        OnboardingLogo(isOnGradient: false)
+        OnboardingLogo(isOnGradient: showsBackgroundGradient)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background {
                 if showsBackgroundGradient {
