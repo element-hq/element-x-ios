@@ -75,6 +75,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             MXLog.configure(logLevel: appSettings.logLevel)
         }
         
+        let appName = InfoPlistReader.main.bundleDisplayName
+        let appVersion = InfoPlistReader.main.bundleShortVersionString
+        let appBuild = InfoPlistReader.main.bundleVersion
+        MXLog.info("\(appName) \(appVersion) (\(appBuild))")
+        
         if ProcessInfo.processInfo.environment["RESET_APP_SETTINGS"].map(Bool.init) == true {
             AppSettings.reset()
         }
@@ -298,6 +303,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private func performMigrationsIfNecessary(from oldVersion: Version, to newVersion: Version) {
         guard oldVersion != newVersion else { return }
         
+        MXLog.info("The app was upgraded from \(oldVersion) to \(newVersion)")
+        
         if oldVersion < Version(1, 1, 0) {
             MXLog.info("Migrating to v1.1.0, signing out the user.")
             // Version 1.1.0 switched the Rust crypto store to SQLite
@@ -306,7 +313,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         }
         
         if oldVersion < Version(1, 1, 7) {
-            MXLog.info("Migrating to v1.1.0, marking accounts as migrated.")
+            MXLog.info("Migrating to v1.1.7, marking accounts as migrated.")
             for userID in userSessionStore.userIDs {
                 appSettings.migratedAccounts[userID] = true
             }
