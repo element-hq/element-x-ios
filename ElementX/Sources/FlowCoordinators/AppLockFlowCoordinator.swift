@@ -118,7 +118,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     
     /// Displays the unlock flow with the app's placeholder view to hide obscure the view hierarchy in the app switcher.
     private func showPlaceholder() {
-        navigationCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(), animated: false)
+        navigationCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(showsBackgroundGradient: true), animated: false)
         actionsSubject.send(.lockApp)
     }
     
