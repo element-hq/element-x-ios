@@ -52,6 +52,15 @@ enum RoomScreenComposerMode: Equatable {
             return false
         }
     }
+
+    var isTextEditingEnabled: Bool {
+        switch self {
+        case .default, .reply, .edit:
+            return true
+        case .recordVoiceMessage, .previewVoiceMessage:
+            return false
+        }
+    }
 }
 
 enum RoomScreenViewAction {
