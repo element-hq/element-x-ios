@@ -17,16 +17,29 @@
 import SwiftUI
 
 class PlaceholderScreenCoordinator: CoordinatorProtocol {
+    private let showsBackgroundGradient: Bool
+    
+    init(showsBackgroundGradient: Bool = false) {
+        self.showsBackgroundGradient = showsBackgroundGradient
+    }
+    
     func toPresentable() -> AnyView {
-        AnyView(PlaceholderScreen())
+        AnyView(PlaceholderScreen(showsBackgroundGradient: showsBackgroundGradient))
     }
 }
 
 /// The screen shown in split view when the detail has no content.
 struct PlaceholderScreen: View {
+    let showsBackgroundGradient: Bool
+    
     var body: some View {
         OnboardingLogo(isOnGradient: false)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background {
+                if showsBackgroundGradient {
+                    OnboardingScreenBackgroundImage()
+                }
+            }
             .background()
             .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
             .ignoresSafeArea(edges: .top)
@@ -35,8 +48,11 @@ struct PlaceholderScreen: View {
 
 struct PlaceholderScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        PlaceholderScreen()
+        PlaceholderScreen(showsBackgroundGradient: false)
             .previewDisplayName("Screen")
+        
+        PlaceholderScreen(showsBackgroundGradient: true)
+            .previewDisplayName("With background")
         
         NavigationSplitView {
             List {
@@ -45,7 +61,7 @@ struct PlaceholderScreen_Previews: PreviewProvider, TestablePreview {
                 }
             }
         } detail: {
-            PlaceholderScreen()
+            PlaceholderScreen(showsBackgroundGradient: false)
         }
         .previewDisplayName("Split View")
         .previewInterfaceOrientation(.landscapeLeft)
