@@ -1,1 +1,0 @@
-Allow the app to be locked with a PIN code or Touch/Face ID.

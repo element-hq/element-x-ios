@@ -1,1 +1,0 @@
-Add support for running Element Calls through Rust side widgets

@@ -1,3 +1,35 @@
+## Changes in 1.4.0 (2023-10-31)
+
+✨ Features
+
+- Add support for running Element Calls through Rust side widgets ([#1906](https://github.com/vector-im/element-x-ios/pull/1906))
+- Pills for user mentions and the completion suggestion view are now enabled. ([#1971](https://github.com/vector-im/element-x-ios/pull/1971))
+- Allow the app to be locked with a PIN code or Touch/Face ID. ([#1990](https://github.com/vector-im/element-x-ios/pull/1990))
+- All users mention @room now appears in the completion suggestion view. ([#1875](https://github.com/vector-im/element-x-ios/issues/1875))
+- Enable Element Call for all users. ([#1983](https://github.com/vector-im/element-x-ios/issues/1983))
+
+🙌 Improvements
+
+- Remove DesignKit package. ([#1886](https://github.com/vector-im/element-x-ios/pull/1886))
+- Update Compound and use new pill colours. ([#1989](https://github.com/vector-im/element-x-ios/pull/1989))
+
+🐛 Bugfixes
+
+- Revert the OIDC redirect URL back to using a custom scheme. ([#1936](https://github.com/vector-im/element-x-ios/issues/1936))
+
+🚧 In development 🚧
+
+- Initial service implementation for using a PIN code ([#1912](https://github.com/vector-im/element-x-ios/pull/1912))
+- Add the App Lock settings screen. ([#1917](https://github.com/vector-im/element-x-ios/pull/1917))
+- Implement the AppLockScreen as per the designs. ([#1925](https://github.com/vector-im/element-x-ios/pull/1925))
+- Add PIN entry screen for creating/accessing PIN settings. ([#1930](https://github.com/vector-im/element-x-ios/pull/1930))
+- Add Biometrics screen for enabling Touch/Face ID after creating a PIN. ([#1942](https://github.com/vector-im/element-x-ios/pull/1942))
+- Add an AppLockSetupFlowCoordinator for creating a PIN with both mandatory and optional flows. ([#1949](https://github.com/vector-im/element-x-ios/pull/1949))
+- Add support for Face ID/Touch ID to app lock. ([#1966](https://github.com/vector-im/element-x-ios/pull/1966))
+- Handle invalid PIN input in the settings flow. ([#1972](https://github.com/vector-im/element-x-ios/pull/1972))
+- Fix a bug when setting up App Lock if biometrics aren't available. ([#1981](https://github.com/vector-im/element-x-ios/pull/1981))
+- Enforce mandatory app lock outside of the authentication flow. ([#1982](https://github.com/vector-im/element-x-ios/pull/1982))
+
 ## Changes in 1.3.3 (2023-10-12)
 
 🚧 In development 🚧

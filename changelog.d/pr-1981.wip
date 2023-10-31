@@ -1,1 +1,0 @@
-Fix a bug when setting up App Lock if biometrics aren't available.

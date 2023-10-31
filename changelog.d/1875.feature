@@ -1,1 +1,0 @@
-All users mention @room now appears in the completion suggestion view.
