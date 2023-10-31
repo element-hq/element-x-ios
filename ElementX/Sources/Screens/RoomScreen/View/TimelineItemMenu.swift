@@ -193,7 +193,7 @@ public struct TimelineItemMenu: View {
                     .font(.compound.bodySMSemibold)
                     .foregroundColor(.compound.textPrimary)
                 
-                Text(item.body.trimmingCharacters(in: .whitespacesAndNewlines))
+                Text(item.timelineMenuDescription)
                     .font(.compound.bodyMD)
                     .foregroundColor(.compound.textSecondary)
                     .lineLimit(1)

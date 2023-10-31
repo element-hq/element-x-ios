@@ -59,6 +59,15 @@ extension EventBasedTimelineItemProtocol {
         self is EncryptedRoomTimelineItem
     }
 
+    var timelineMenuDescription: String {
+        switch self {
+        case is VoiceMessageRoomTimelineItem:
+            return L10n.commonVoiceMessage
+        default:
+            return body.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+    }
+
     func additionalWhitespaces(timelineStyle: TimelineStyle) -> Int {
         guard timelineStyle == .bubbles else {
             return 0
