@@ -164,7 +164,9 @@ class MockScreen: Identifiable {
             return coordinator
         case .appLockSetupFlow:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let appLockService = AppLockService(keychainController: KeychainControllerMock(), appSettings: ServiceLocator.shared.settings)
+            let keychainController = KeychainControllerMock()
+            keychainController.containsPINCodeReturnValue = false
+            let appLockService = AppLockService(keychainController: keychainController, appSettings: ServiceLocator.shared.settings)
             let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .settings,
                                                           appLockService: appLockService,
                                                           navigationStackCoordinator: navigationStackCoordinator)
