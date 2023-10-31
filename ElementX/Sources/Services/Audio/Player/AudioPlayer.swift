@@ -50,7 +50,13 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     private var appBackgroundObserver: NSObjectProtocol?
     private var autoplay = false
     
+    private let audioSession = AVAudioSession.sharedInstance()
+    @CancellableTask private var releaseAudioSessionTask: Task<Void, Never>?
+    private let releaseAudioSessionTimeoutInterval = 5.0
+    
     private(set) var url: URL?
+    
+    private var deinitInProgress = false
     
     var duration: TimeInterval {
         abs(CMTimeGetSeconds(internalAudioPlayer?.currentItem?.duration ?? .zero))
@@ -83,6 +89,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     private var isStopped = true
     
     deinit {
+        deinitInProgress = true
         stop()
         unloadContent()
     }
@@ -100,18 +107,14 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     
     func play() {
         isStopped = false
-        do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            MXLog.error("Could not redirect audio playback to speakers.")
-        }
+        setupAudioSession()
         internalAudioPlayer?.play()
     }
     
     func pause() {
         guard case .playing = internalState else { return }
         internalAudioPlayer?.pause()
+        releaseAudioSession(after: releaseAudioSessionTimeoutInterval)
     }
     
     func stop() {
@@ -119,6 +122,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         isStopped = true
         internalAudioPlayer?.pause()
         internalAudioPlayer?.seek(to: .zero)
+        releaseAudioSession(after: releaseAudioSessionTimeoutInterval)
     }
     
     func seek(to progress: Double) async {
@@ -128,6 +132,38 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     }
     
     // MARK: - Private
+    
+    private func setupAudioSession() {
+        releaseAudioSessionTask = nil
+        do {
+            try audioSession.setCategory(AVAudioSession.Category.playback)
+            try audioSession.setActive(true)
+        } catch {
+            MXLog.error("Could not redirect audio playback to speakers.")
+        }
+    }
+    
+    private func releaseAudioSession(after timeInterval: TimeInterval) {
+        guard !deinitInProgress else {
+            releaseAudioSession()
+            return
+        }
+        releaseAudioSessionTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(timeInterval))
+            guard !Task.isCancelled else { return }
+            guard let self else { return }
+            self.releaseAudioSession()
+        }
+    }
+    
+    private func releaseAudioSession() {
+        releaseAudioSessionTask?.cancel()
+        releaseAudioSessionTask = nil
+        if audioSession.category == .playback, !audioSession.isOtherAudioPlaying {
+            MXLog.info("releasing audio session")
+            try? audioSession.setActive(false)
+        }
+    }
     
     private func unloadContent() {
         mediaSource = nil
@@ -183,6 +219,8 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.pause()
+                // Release the audio session right away, as we don't play audio in the background
+                self.releaseAudioSession()
             }
             .store(in: &cancellables)
     }
