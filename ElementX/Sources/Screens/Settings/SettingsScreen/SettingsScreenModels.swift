@@ -44,7 +44,6 @@ struct SettingsScreenViewState: BindableState {
     var isSessionVerified = false
     var chatBackupEnabled = false
     var showSecureBackupBadge = false
-    var showAppLockSettings: Bool
     var showDeveloperOptions: Bool
     
     /// The presentation anchor used to display the OIDC account URL.

@@ -36,11 +36,6 @@ struct DeveloperOptionsScreen: View {
                     Text("Chat backup")
                     Text("Requires app reboot")
                 }
-                
-                Toggle(isOn: $context.appLockFlowEnabled) {
-                    Text("PIN/Biometric lock")
-                    Text("Resets on reboot")
-                }
             }
             
             Section("Timeline") {

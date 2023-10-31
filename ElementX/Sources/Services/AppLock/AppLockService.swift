@@ -30,7 +30,6 @@ class AppLockService: AppLockServiceProtocol {
     
     var isEnabled: Bool {
         do {
-            guard appSettings.appLockFlowEnabled else { return false }
             return try keychainController.containsPINCode()
         } catch {
             MXLog.error("Keychain access error: \(error)")

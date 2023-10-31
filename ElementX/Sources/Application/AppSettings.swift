@@ -42,7 +42,6 @@ final class AppSettings {
         case userSuggestionsEnabled
         case readReceiptsEnabled
         case swiftUITimelineEnabled
-        case appLockFlowEnabled
         case elementCallEnabled
         case chatBackupEnabled
     }
@@ -267,9 +266,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.appLockFlowEnabled, defaultValue: false, storageType: .volatile)
-    var appLockFlowEnabled
     
     @UserPreference(key: UserDefaultsKeys.elementCallEnabled, defaultValue: true, storageType: .userDefaults(store))
     var elementCallEnabled

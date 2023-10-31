@@ -149,9 +149,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             return
         }
         
-        if appSettings.appLockFlowEnabled,
-           appSettings.appLockIsMandatory,
-           !appLockFlowCoordinator.appLockService.isEnabled {
+        if appSettings.appLockIsMandatory, !appLockFlowCoordinator.appLockService.isEnabled {
             stateMachine.processEvent(.startWithAppLockSetup)
         } else {
             stateMachine.processEvent(.startWithExistingSession)
