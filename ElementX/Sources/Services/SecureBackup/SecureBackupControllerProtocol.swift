@@ -45,6 +45,8 @@ enum SecureBackupControllerError: Error {
     case failedConfirmingRecoveryKey
     
     case failedFetchingSessionState
+    
+    case failedUploadingForBackup
 }
 
 // sourcery: AutoMockable
@@ -61,7 +63,7 @@ protocol SecureBackupControllerProtocol {
     
     func isLastSession() async -> Result<Bool, SecureBackupControllerError>
     
-    func waitForKeyBackup() async
+    func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError>
 }
 
 extension SecureBackupControllerMock {

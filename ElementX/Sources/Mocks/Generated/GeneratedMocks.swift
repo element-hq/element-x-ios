@@ -2697,17 +2697,22 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol {
             return isLastSessionReturnValue
         }
     }
-    //MARK: - waitForKeyBackup
+    //MARK: - waitForKeyBackupUpload
 
-    var waitForKeyBackupCallsCount = 0
-    var waitForKeyBackupCalled: Bool {
-        return waitForKeyBackupCallsCount > 0
+    var waitForKeyBackupUploadCallsCount = 0
+    var waitForKeyBackupUploadCalled: Bool {
+        return waitForKeyBackupUploadCallsCount > 0
     }
-    var waitForKeyBackupClosure: (() async -> Void)?
+    var waitForKeyBackupUploadReturnValue: Result<Void, SecureBackupControllerError>!
+    var waitForKeyBackupUploadClosure: (() async -> Result<Void, SecureBackupControllerError>)?
 
-    func waitForKeyBackup() async {
-        waitForKeyBackupCallsCount += 1
-        await waitForKeyBackupClosure?()
+    func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError> {
+        waitForKeyBackupUploadCallsCount += 1
+        if let waitForKeyBackupUploadClosure = waitForKeyBackupUploadClosure {
+            return await waitForKeyBackupUploadClosure()
+        } else {
+            return waitForKeyBackupUploadReturnValue
+        }
     }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {

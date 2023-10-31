@@ -77,7 +77,18 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
             state.mode = networkMonitor.reachabilityPublisher.value == .reachable ? .backupOngoing : .offline
             
             keyUploadWaitingTask = Task {
-                await secureBackupController.waitForKeyBackup()
+                var result = await secureBackupController.waitForKeyBackupUpload()
+                
+                if case .failure = result {
+                    // Retry the upload first, conditions might have changed.
+                    result = await secureBackupController.waitForKeyBackupUpload()
+                }
+                
+                guard case .success = result else {
+                    MXLog.error("Aborting logout due to failure waiting for backup upload.")
+                    state.bindings.alertInfo = .init(id: .backupUploadFailed)
+                    return
+                }
                 
                 guard !Task.isCancelled else { return }
                 

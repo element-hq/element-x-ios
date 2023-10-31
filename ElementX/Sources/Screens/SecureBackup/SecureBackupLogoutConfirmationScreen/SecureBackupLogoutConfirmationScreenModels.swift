@@ -30,6 +30,15 @@ enum SecureBackupLogoutConfirmationScreenViewMode {
 
 struct SecureBackupLogoutConfirmationScreenViewState: BindableState {
     var mode: SecureBackupLogoutConfirmationScreenViewMode
+    var bindings = SecureBackupLogoutConfirmationScreenBindings()
+}
+
+struct SecureBackupLogoutConfirmationScreenBindings {
+    var alertInfo: AlertInfo<SecureBackupLogoutConfirmationScreenAlertType>?
+}
+
+enum SecureBackupLogoutConfirmationScreenAlertType {
+    case backupUploadFailed
 }
 
 enum SecureBackupLogoutConfirmationScreenViewAction {
