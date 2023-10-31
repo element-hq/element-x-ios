@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import DSWaveformImage
 import Foundation
 import MatrixRustSDK
@@ -24,15 +25,25 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     private let voiceMessageCache: VoiceMessageCacheProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     
+    private let actionsSubject: PassthroughSubject<VoiceMessageRecorderAction, Never> = .init()
+    var actions: AnyPublisher<VoiceMessageRecorderAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
+
     private let mp4accMimeType = "audio/m4a"
     private let waveformSamplesCount = 100
     
     private(set) var recordingURL: URL?
-    private(set) var recordingDuration: TimeInterval = 0.0
+    var recordingDuration: TimeInterval {
+        audioRecorder.currentTime
+    }
     
+    private var recordingCancelled = false
+
     private(set) var previewAudioPlayerState: AudioPlayerState?
     private(set) var previewAudioPlayer: AudioPlayerProtocol?
-    
+    private var cancellables = Set<AnyCancellable>()
+        
     init(audioRecorder: AudioRecorderProtocol = AudioRecorder(),
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          audioConverter: AudioConverterProtocol = AudioConverter(),
@@ -41,32 +52,31 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         self.mediaPlayerProvider = mediaPlayerProvider
         self.audioConverter = audioConverter
         self.voiceMessageCache = voiceMessageCache
+        
+        addObservers()
+    }
+    
+    deinit {
+        removeObservers()
     }
     
     // MARK: - Recording
     
-    func startRecording() async -> Result<Void, VoiceMessageRecorderError> {
+    func startRecording() async {
         await stopPlayback()
         recordingURL = nil
-        switch await audioRecorder.record(with: .uuid(UUID())) {
-        case .failure(let error):
-            return .failure(.audioRecorderError(error))
-        case .success:
-            recordingURL = audioRecorder.url
-            return .success(())
-        }
+        recordingCancelled = false
+        
+        await audioRecorder.record(with: .uuid(UUID()))
     }
     
-    func stopRecording() async -> Result<Void, VoiceMessageRecorderError> {
-        recordingDuration = audioRecorder.currentTime
+    func stopRecording() async {
+        recordingCancelled = false
         await audioRecorder.stopRecording()
-        guard case .success = await finalizeRecording() else {
-            return .failure(.previewNotAvailable)
-        }
-        return .success(())
     }
     
     func cancelRecording() async {
+        recordingCancelled = true
         await audioRecorder.stopRecording()
         await audioRecorder.deleteRecording()
         recordingURL = nil
@@ -81,7 +91,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
 
     // MARK: - Preview
-        
+    
     func startPlayback() async -> Result<Void, VoiceMessageRecorderError> {
         guard let previewAudioPlayerState, let url = recordingURL else {
             return .failure(.previewNotAvailable)
@@ -182,7 +192,50 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         
     // MARK: - Private
     
+    private func addObservers() {
+        audioRecorder.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                self.handleAudioRecorderAction(action)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func removeObservers() {
+        cancellables.removeAll()
+    }
+    
+    private func handleAudioRecorderAction(_ action: AudioRecorderAction) {
+        MXLog.debug("handleAudioRecorderAction(\(action))")
+        switch action {
+        case .didStartRecording:
+            MXLog.info("audio recorder did start recording")
+            recordingURL = audioRecorder.url
+            actionsSubject.send(.didStartRecording(audioRecorder: audioRecorder))
+        case .didStopRecording, .didFailWithError(error: .interrupted):
+            MXLog.info("audio recorder did stop recording")
+            if !recordingCancelled {
+                Task {
+                    guard case .success = await finalizeRecording() else {
+                        actionsSubject.send(.didFailWithError(error: VoiceMessageRecorderError.previewNotAvailable))
+                        return
+                    }
+                    guard let recordingURL, let previewAudioPlayerState else {
+                        actionsSubject.send(.didFailWithError(error: VoiceMessageRecorderError.previewNotAvailable))
+                        return
+                    }
+                    await mediaPlayerProvider.register(audioPlayerState: previewAudioPlayerState)
+                    actionsSubject.send(.didStopRecording(previewState: previewAudioPlayerState, url: recordingURL))
+                }
+            }
+        case .didFailWithError(let error):
+            MXLog.info("audio recorder did failed with error: \(error)")
+            actionsSubject.send(.didFailWithError(error: .audioRecorderError(error)))
+        }
+    }
+    
     private func finalizeRecording() async -> Result<Void, VoiceMessageRecorderError> {
+        MXLog.info("finalize audio recording")
         guard let url = recordingURL else {
             return .failure(.previewNotAvailable)
         }
@@ -196,6 +249,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
             return .failure(.previewNotAvailable)
         }
         previewAudioPlayer = audioPlayer
+        
         return .success(())
     }
 }

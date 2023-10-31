@@ -42,6 +42,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private var canCurrentUserRedact = false
     private var paginateBackwardsTask: Task<Void, Never>?
     private var resumeVoiceMessagePlaybackAfterScrubbing = false
+    private var voiceMessageRecorderObserver: AnyCancellable?
 
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -935,19 +936,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Voice message
     
-    private func stopVoiceMessageRecorder() async {
-        _ = await voiceMessageRecorder.stopRecording()
-        await voiceMessageRecorder.stopPlayback()
-    }
-    
-    private func startRecordingVoiceMessage() async {
-        let audioRecordState = AudioRecorderState()
-        audioRecordState.attachAudioRecorder(voiceMessageRecorder.audioRecorder)
-        
-        switch await voiceMessageRecorder.startRecording() {
-        case .success:
+    private func handleVoiceMessageRecorderAction(_ action: VoiceMessageRecorderAction) {
+        MXLog.debug("handling voice recorder action: \(action) - (audio)")
+        switch action {
+        case .didStartRecording(let audioRecorder):
+            let audioRecordState = AudioRecorderState()
+            audioRecordState.attachAudioRecorder(audioRecorder)
             actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
-        case .failure(let error):
+        case .didStopRecording(let previewAudioPlayerState, let url):
+            actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: previewAudioPlayerState, waveform: .url(url), isUploading: false))))
+        case .didFailWithError(let error):
             switch error {
             case .audioRecorderError(.recordPermissionNotGranted):
                 MXLog.info("permission to record audio has not been granted.")
@@ -958,37 +956,35 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                              secondaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil))
             default:
                 MXLog.error("failed to start voice message recording. \(error)")
+                // TODO: display an error
+                actionsSubject.send(.composer(action: .setMode(mode: .default)))
             }
         }
     }
     
+    private func startRecordingVoiceMessage() async {
+        voiceMessageRecorderObserver = voiceMessageRecorder.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                self?.handleVoiceMessageRecorderAction(action)
+            }
+        
+        await voiceMessageRecorder.startRecording()
+    }
+    
     private func stopRecordingVoiceMessage() async {
-        if case .failure(let error) = await voiceMessageRecorder.stopRecording() {
-            MXLog.error("failed to stop the recording. \(error)")
-            return
-        }
-
-        guard let audioPlayerState = voiceMessageRecorder.previewAudioPlayerState else {
-            MXLog.error("the recorder preview is missing after the recording has been stopped")
-            return
-        }
-        
-        guard let recordingURL = voiceMessageRecorder.recordingURL else {
-            MXLog.error("the recording URL is missing after the recording has been stopped")
-            return
-        }
-        
-        mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
-        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: false))))
+        await voiceMessageRecorder.stopRecording()
     }
     
     private func cancelRecordingVoiceMessage() async {
         await voiceMessageRecorder.cancelRecording()
+        voiceMessageRecorderObserver = nil
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     
     private func deleteCurrentVoiceMessage() async {
         await voiceMessageRecorder.deleteRecording()
+        voiceMessageRecorderObserver = nil
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     

@@ -23,32 +23,33 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     private let silenceThreshold: Float = -50.0
     
     private var audioRecorder: AVAudioRecorder?
-    
+    private let audioSession = AVAudioSession.sharedInstance()
     private var cancellables = Set<AnyCancellable>()
     private let actionsSubject: PassthroughSubject<AudioRecorderAction, Never> = .init()
     var actions: AnyPublisher<AudioRecorderAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private var displayLink: CADisplayLink?
+
     var url: URL? {
         audioRecorder?.url
     }
     
-    var currentTime: TimeInterval {
-        audioRecorder?.currentTime ?? 0
-    }
+    private(set) var currentTime: TimeInterval = 0.0
     
     var isRecording: Bool {
         audioRecorder?.isRecording ?? false
     }
-    
+        
     private let dispatchQueue = DispatchQueue(label: "io.element.elementx.audio_recorder", qos: .userInitiated)
     private var stopped = false
-    
-    func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
+        
+    func record(with recordID: AudioRecordingIdentifier) async {
         stopped = false
         guard await requestRecordPermission() else {
-            return .failure(.recordPermissionNotGranted)
+            actionsSubject.send(.didFailWithError(error: .recordPermissionNotGranted))
+            return
         }
         let result = await startRecording(with: recordID)
         switch result {
@@ -57,7 +58,6 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         case .failure(let error):
             actionsSubject.send(.didFailWithError(error: error))
         }
-        return result
     }
     
     func stopRecording() async {
@@ -66,6 +66,11 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
                 continuation.resume()
             }
         }
+    }
+    
+    func cancelRecording() async {
+        await stopRecording()
+        await deleteRecording()
     }
     
     func deleteRecording() async {
@@ -98,10 +103,26 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     
     private func addObservers() {
         // Stop recording uppon UIApplication.didEnterBackgroundNotification notification
-        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
             .sink { [weak self] _ in
                 guard let self else { return }
+                MXLog.warning("Application will resign active while recording.")
                 Task { await self.stopRecording() }
+            }
+            .store(in: &cancellables)
+        
+        // Stop recording if audio route changes
+        NotificationCenter.default.publisher(for: AVAudioSession.routeChangeNotification)
+            .sink { [weak self] notification in
+                guard let self else { return }
+                self.handleRouteChange(notification: notification)
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)
+            .sink { [weak self] notification in
+                guard let self else { return }
+                self.handleInterruption(notification: notification)
             }
             .store(in: &cancellables)
     }
@@ -112,13 +133,56 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     
     private func requestRecordPermission() async -> Bool {
         await withCheckedContinuation { continuation in
-            AVAudioSession.sharedInstance().requestRecordPermission { granted in
+            audioSession.requestRecordPermission { granted in
                 continuation.resume(returning: granted)
             }
         }
     }
     
-    // MARK: - Private
+    private func setupAudioSession() {
+        MXLog.info("setup audio session")
+        do {
+            try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.allowBluetooth])
+            try audioSession.setActive(true)
+        } catch {
+            MXLog.error("Could not redirect audio playback to speakers.")
+        }
+        addObservers()
+    }
+    
+    private func releaseAudioSession() {
+        MXLog.info("releasing audio session")
+        try? audioSession.setActive(false)
+        removeObservers()
+    }
+    
+    func handleRouteChange(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
+              let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else {
+            return
+        }
+        MXLog.info("Audio session route changed (\(reason)). route: \(audioSession.currentRoute), category: \(audioSession.category)")
+    }
+    
+    func handleInterruption(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+            return
+        }
+        
+        switch type {
+        case .began:
+            MXLog.warning("AudioSession was interrupted: \(notification)")
+            actionsSubject.send(.didFailWithError(error: .interrupted))
+        case .ended:
+            MXLog.debug("Interruption ended: \(notification)")
+        @unknown default:
+            break
+        }
+    }
     
     private func startRecording(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
         await withCheckedContinuation { continuation in
@@ -141,15 +205,16 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
                             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
             
             do {
-                let audioSession = AVAudioSession.sharedInstance()
-                try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
-                try audioSession.setCategory(.playAndRecord, mode: .default)
-                try audioSession.setActive(true)
+                setupAudioSession()
                 let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
                 let audioRecorder = try AVAudioRecorder(url: url, settings: settings)
                 audioRecorder.delegate = self
                 audioRecorder.isMeteringEnabled = true
                 if audioRecorder.record() {
+                    MXLog.debug("starting display link - audio")
+                    displayLink = CADisplayLink(target: self, selector: #selector(updateRecordingTime))
+                    displayLink?.preferredFrameRateRange = .init(minimum: 5, maximum: 10)
+                    displayLink?.add(to: RunLoop.main, forMode: .common)
                     self.audioRecorder = audioRecorder
                     completion(.success(()))
                 } else {
@@ -174,6 +239,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
                 return
             }
             audioRecorder.stop()
+            MXLog.debug("audio recorder stopped")
         }
     }
     
@@ -187,12 +253,28 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         }
     }
     
+    @objc private func updateRecordingTime(displayLink: CADisplayLink) {
+        if let audioRecorder, audioRecorder.isRecording {
+            if audioRecorder.currentTime > 0 {
+                currentTime = audioRecorder.currentTime
+            }
+        } else {
+            MXLog.debug("invalidating display link - audio")
+            displayLink.invalidate()
+        }
+    }
+    
+    private func audioRecorderDidStop() {
+        actionsSubject.send(.didStopRecording)
+    }
+    
     // MARK: - AVAudioRecorderDelegate
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully success: Bool) {
-        try? AVAudioSession.sharedInstance().setActive(false)
+        releaseAudioSession()
         if success {
-            actionsSubject.send(.didStopRecording)
+            MXLog.info("audio recorder did finish recording.")
+            audioRecorderDidStop()
         } else {
             MXLog.error("audio recorder did finish recording with an error.")
             actionsSubject.send(.didFailWithError(error: AudioRecorderError.genericError))
@@ -200,9 +282,13 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     }
     
     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
-        try? AVAudioSession.sharedInstance().setActive(false)
+        releaseAudioSession()
         MXLog.error("audio recorder encode error did occur. \(error?.localizedDescription ?? "")")
-        actionsSubject.send(.didFailWithError(error: error ?? AudioRecorderError.genericError))
+        if let error {
+            actionsSubject.send(.didFailWithError(error: .internalError(error: error)))
+        } else {
+            actionsSubject.send(.didFailWithError(error: .genericError))
+        }
     }
     
     private func normalizedPowerLevelFromDecibels(_ decibels: Float) -> Float {

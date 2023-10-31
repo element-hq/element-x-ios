@@ -36,12 +36,13 @@ enum AudioRecorderError: Error {
     case recordPermissionNotGranted
     case recordingFailed
     case recordingCancelled
+    case interrupted
 }
 
 enum AudioRecorderAction {
     case didStartRecording
     case didStopRecording
-    case didFailWithError(error: Error)
+    case didFailWithError(error: AudioRecorderError)
 }
 
 protocol AudioRecorderProtocol: AnyObject {
@@ -50,7 +51,7 @@ protocol AudioRecorderProtocol: AnyObject {
     var isRecording: Bool { get }
     var url: URL? { get }
     
-    func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError>
+    func record(with recordID: AudioRecordingIdentifier) async
     func stopRecording() async
     func deleteRecording() async
     func averagePowerForChannelNumber(_ channelNumber: Int) -> Float
