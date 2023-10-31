@@ -28,7 +28,7 @@ struct EncryptedHistoryRoomTimelineView: View {
                 .font(.compound.bodyMDSemibold)
                 .foregroundColor(.compound.textInfoPrimary)
         } icon: {
-            CompoundIcon(\.info, size: .small, relativeTo: .compound.bodyMDSemibold)
+            CompoundIcon(\.infoSolid, size: .small, relativeTo: .compound.bodyMDSemibold)
                 .foregroundColor(.compound.iconInfoPrimary)
         }
         .labelStyle(EncryptedHistoryLabelStyle())
