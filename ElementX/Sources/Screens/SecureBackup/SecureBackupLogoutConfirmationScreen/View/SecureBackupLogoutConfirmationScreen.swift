@@ -33,6 +33,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
             .toolbar { toolbar }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .safeAreaInset(edge: .bottom) { footer.padding() }
+            .alert(item: $context.alertInfo)
         }
     }
     

@@ -122,8 +122,23 @@ class SecureBackupController: SecureBackupControllerProtocol {
         }
     }
     
-    func waitForKeyBackup() async {
-        await encryption.waitForBackupUploadSteadyState(progressListener: nil)
+    func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError> {
+        do {
+            try await encryption.waitForBackupUploadSteadyState(progressListener: nil)
+            return .success(())
+        } catch let error as SteadyStateError {
+            switch error {
+            case .BackupDisabled:
+                MXLog.error("Key backup disabled, continuing logout.")
+                return .success(())
+            case .Connection, .Laged:
+                MXLog.error("Key backup upload failure: \(error)")
+                return .failure(.failedUploadingForBackup)
+            }
+        } catch {
+            MXLog.error("Unknown key backup upload failure")
+            return .failure(.failedUploadingForBackup)
+        }
     }
 }
 
