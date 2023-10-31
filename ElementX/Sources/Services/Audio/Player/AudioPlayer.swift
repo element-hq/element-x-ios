@@ -157,7 +157,6 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     }
     
     private func releaseAudioSession() {
-        releaseAudioSessionTask?.cancel()
         releaseAudioSessionTask = nil
         if audioSession.category == .playback, !audioSession.isOtherAudioPlaying {
             MXLog.info("releasing audio session")
