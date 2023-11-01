@@ -3,7 +3,7 @@ require 'semantic'
 require_relative 'changelog'
 
 before_all do
-  xcversion(version: "~> 14.3")
+  xcversion(version: "~> 15.0")
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
@@ -76,9 +76,14 @@ lane :alpha do
 end
 
 lane :unit_tests do
+  create_simulator_if_necessary(
+    name: "iPhone 14",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-14"
+  )
+  
   run_tests(
     scheme: "UnitTests",
-    device: 'iPhone 14 (16.4)',
+    device: 'iPhone 14',
     ensure_devices_found: true,
     result_bundle: true,
     xcargs: '-skipPackagePluginValidation',
