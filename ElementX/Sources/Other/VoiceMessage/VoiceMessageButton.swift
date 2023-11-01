@@ -53,7 +53,7 @@ struct VoiceMessageButton: View {
                 .frame(width: buttonSize, height: buttonSize)
         }
         .animation(nil, value: state)
-        .buttonStyle(.plain)
+        .buttonStyle(VoiceMessageButtonStyle())
         .disabled(state == .loading)
         .background(Circle().foregroundColor(.compound.bgCanvasDefault))
     }
@@ -73,9 +73,17 @@ struct VoiceMessageButton: View {
                 .scaledToFit()
                 .frame(width: imageWidth, height: imageHeight)
                 .offset(x: offset)
-                .foregroundColor(.compound.iconSecondary)
                 .accessibilityLabel(accessibilityLabel)
         }
+    }
+}
+
+private struct VoiceMessageButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) var isEnabled: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundColor(isEnabled ? .compound.textSecondary.opacity(configuration.isPressed ? 0.6 : 1) : .compound.iconDisabled)
     }
 }
 

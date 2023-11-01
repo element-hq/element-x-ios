@@ -167,7 +167,7 @@ struct RoomScreen: View {
                 Button {
                     context.send(viewAction: .presentCall)
                 } label: {
-                    Label(L10n.actionJoin, icon: \.videoCall)
+                    Label(L10n.actionJoin, icon: \.videoCallSolid)
                         .labelStyle(.titleAndIcon)
                 }
                 .buttonStyle(ElementCallButtonStyle())
@@ -175,7 +175,7 @@ struct RoomScreen: View {
                 Button {
                     context.send(viewAction: .presentCall)
                 } label: {
-                    CompoundIcon(\.videoCall)
+                    CompoundIcon(\.videoCallSolid)
                 }
             }
         }

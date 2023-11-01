@@ -18,7 +18,6 @@ import Compound
 import SwiftUI
 
 struct VoiceMessageRecordingButton: View {
-    @ScaledMetric private var buttonIconSize = 24
     @State private var buttonPressed = false
 
     var startRecording: (() -> Void)?
@@ -38,14 +37,11 @@ struct VoiceMessageRecordingButton: View {
                 stopRecording?()
             }
         }
-        .fixedSize()
     }
     
     @ViewBuilder
     private var voiceMessageButtonImage: some View {
-        (buttonPressed ? Image(asset: Asset.Images.micFill) : Image(asset: Asset.Images.mic))
-            .resizable()
-            .frame(width: buttonIconSize, height: buttonIconSize)
+        CompoundIcon(buttonPressed ? \.micOnSolid : \.micOnOutline)
             .foregroundColor(.compound.iconSecondary)
             .padding(EdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6))
             .accessibilityLabel(L10n.a11yVoiceMessageRecord)

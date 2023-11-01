@@ -134,7 +134,7 @@ struct SecureBackupRecoveryKeyScreen: View {
             
             HStack(alignment: .top) {
                 if context.viewState.recoveryKey == nil {
-                    CompoundIcon(\.info, size: .small, relativeTo: .compound.bodySM)
+                    CompoundIcon(\.infoSolid, size: .small, relativeTo: .compound.bodySM)
                 }
                 
                 Text(context.viewState.recoveryKeySubtitle)
