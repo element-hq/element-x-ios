@@ -19,27 +19,38 @@ import Combine
 import Foundation
 import UIKit
 
-class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
-    private let silenceThreshold: Float = -50.0
-    
-    private var audioRecorder: AVAudioRecorder?
+class AudioRecorder: AudioRecorderProtocol {
+    private var audioEngine = AVAudioEngine()
+    private var audioFile: AVAudioFile?
     private let audioSession = AVAudioSession.sharedInstance()
+    private var audioFormat: AVAudioFormat {
+        let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+                        AVSampleRateKey: 48000,
+                        AVEncoderBitRateKey: 128_000,
+                        AVNumberOfChannelsKey: 1,
+                        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
+        
+        guard let audioFormat = AVAudioFormat(settings: settings) else {
+            fatalError("Invalid audio settings.")
+        }
+        return audioFormat
+    }
+    
     private var cancellables = Set<AnyCancellable>()
     private let actionsSubject: PassthroughSubject<AudioRecorderAction, Never> = .init()
     var actions: AnyPublisher<AudioRecorderAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-    
-    private var displayLink: CADisplayLink?
 
-    var url: URL? {
-        audioRecorder?.url
-    }
+    private let silenceThreshold: Float = -50.0
+    private var meterLevel: Float = 0
+
+    private(set) var audioFileUrl: URL?
     
-    private(set) var currentTime: TimeInterval = 0.0
+    var currentTime: TimeInterval = .zero
     
     var isRecording: Bool {
-        audioRecorder?.isRecording ?? false
+        audioEngine.isRunning
     }
         
     private let dispatchQueue = DispatchQueue(label: "io.element.elementx.audio_recorder", qos: .userInitiated)
@@ -81,26 +92,12 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         }
     }
         
-    func peakPowerForChannelNumber(_ channelNumber: Int) -> Float {
-        guard isRecording, let audioRecorder else {
-            return 0.0
-        }
-        
-        audioRecorder.updateMeters()
-        return normalizedPowerLevelFromDecibels(audioRecorder.peakPower(forChannel: channelNumber))
-    }
-    
-    func averagePowerForChannelNumber(_ channelNumber: Int) -> Float {
-        guard isRecording, let audioRecorder else {
-            return 0.0
-        }
-        
-        audioRecorder.updateMeters()
-        return normalizedPowerLevelFromDecibels(audioRecorder.averagePower(forChannel: channelNumber))
+    func averagePower() -> Float {
+        meterLevel
     }
     
     // MARK: - Private
-    
+        
     private func addObservers() {
         // Stop recording uppon UIApplication.didEnterBackgroundNotification notification
         NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
@@ -164,6 +161,12 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
             return
         }
         MXLog.info("Audio session route changed (\(reason)). route: \(audioSession.currentRoute), category: \(audioSession.category)")
+        audioEngine.pause()
+        do {
+            try audioEngine.start()
+        } catch {
+            MXLog.error("failed to resume audio engine after route change. \(error)")
+        }
     }
     
     func handleInterruption(notification: Notification) {
@@ -198,31 +201,50 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
                 completion(.failure(.recordingCancelled))
                 return
             }
-            let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-                            AVSampleRateKey: 48000,
-                            AVEncoderBitRateKey: 128_000,
-                            AVNumberOfChannelsKey: 1,
-                            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
             
+            MXLog.debug("setting up audio session")
+            setupAudioSession()
+
+            let outputURL = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
+            audioFileUrl = outputURL
             do {
-                setupAudioSession()
-                let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
-                let audioRecorder = try AVAudioRecorder(url: url, settings: settings)
-                audioRecorder.delegate = self
-                audioRecorder.isMeteringEnabled = true
-                if audioRecorder.record() {
-                    MXLog.debug("starting display link - audio")
-                    displayLink = CADisplayLink(target: self, selector: #selector(updateRecordingTime))
-                    displayLink?.preferredFrameRateRange = .init(minimum: 5, maximum: 10)
-                    displayLink?.add(to: RunLoop.main, forMode: .common)
-                    self.audioRecorder = audioRecorder
-                    completion(.success(()))
-                } else {
-                    MXLog.error("audio recording failed to start")
-                    completion(.failure(.recordingFailed))
+                MXLog.debug("creating audio file")
+                let inputFormat = audioEngine.inputNode.inputFormat(forBus: 0)
+                let fileFormat = audioFormat
+
+                MXLog.debug("audio input format: \(inputFormat)")
+                MXLog.debug("audio file format: \(fileFormat)")
+                
+                try audioFile = AVAudioFile(forWriting: outputURL, settings: fileFormat.settings)
+                
+                MXLog.debug("install tap")
+                audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: inputFormat) { [weak self] buffer, time in
+                    guard let self else { return }
+                    
+                    // Update the recording duration
+                    self.currentTime += Double(buffer.frameLength) / buffer.format.sampleRate
+                    
+                    // Compute the sample value for the waveform
+                    updateMeterLevel(buffer)
+                    
+                    // Write the buffer into the audio file
+                    do {
+                        try audioFile?.write(from: buffer)
+                    } catch {
+                        MXLog.error("failed to write sample. \(error)")
+                    }
                 }
+                
+                MXLog.debug("preparing audio engine")
+                audioEngine.prepare()
+                MXLog.debug("starting audio engine")
+                try audioEngine.start()
+                MXLog.debug("audio engine started")
+                completion(.success(()))
+
             } catch {
                 MXLog.error("audio recording failed to start. \(error)")
+                releaseAudioSession()
                 completion(.failure(.internalError(error: error)))
             }
         }
@@ -235,11 +257,12 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
             }
             guard let self else { return }
             stopped = true
-            guard let audioRecorder, audioRecorder.isRecording else {
-                return
-            }
-            audioRecorder.stop()
+            audioEngine.inputNode.removeTap(onBus: 0)
+            audioEngine.stop()
+            audioFile = nil // this will close the file
+            releaseAudioSession()
             MXLog.debug("audio recorder stopped")
+            actionsSubject.send(.didStopRecording)
         }
     }
     
@@ -249,49 +272,48 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
                 completion()
             }
             guard let self else { return }
-            audioRecorder?.deleteRecording()
-        }
-    }
-    
-    @objc private func updateRecordingTime(displayLink: CADisplayLink) {
-        if let audioRecorder, audioRecorder.isRecording {
-            if audioRecorder.currentTime > 0 {
-                currentTime = audioRecorder.currentTime
+            if let audioFileUrl {
+                try? FileManager.default.removeItem(at: audioFileUrl)
             }
-        } else {
-            MXLog.debug("invalidating display link - audio")
-            displayLink.invalidate()
+            audioFileUrl = nil
         }
     }
     
-    private func audioRecorderDidStop() {
-        actionsSubject.send(.didStopRecording)
-    }
+    // MARK: Audio metering
     
-    // MARK: - AVAudioRecorderDelegate
-    
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully success: Bool) {
-        releaseAudioSession()
-        if success {
-            MXLog.info("audio recorder did finish recording.")
-            audioRecorderDidStop()
+    // https://www.kodeco.com/21672160-avaudioengine-tutorial-for-ios-getting-started?page=2
+
+    private func scaledPower(power: Float) -> Float {
+        guard power.isFinite else {
+            return 0.0
+        }
+        
+        let minDb: Float = silenceThreshold
+        
+        if power < minDb {
+            return 0.0
+        } else if power >= 1.0 {
+            return 1.0
         } else {
-            MXLog.error("audio recorder did finish recording with an error.")
-            actionsSubject.send(.didFailWithError(error: AudioRecorderError.genericError))
+            return (abs(minDb) - abs(power)) / abs(minDb)
         }
     }
     
-    func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
-        releaseAudioSession()
-        MXLog.error("audio recorder encode error did occur. \(error?.localizedDescription ?? "")")
-        if let error {
-            actionsSubject.send(.didFailWithError(error: .internalError(error: error)))
-        } else {
-            actionsSubject.send(.didFailWithError(error: .genericError))
+    private func updateMeterLevel(_ buffer: AVAudioPCMBuffer) {
+        guard let channelData = buffer.floatChannelData else {
+            return
         }
-    }
-    
-    private func normalizedPowerLevelFromDecibels(_ decibels: Float) -> Float {
-        decibels / silenceThreshold
+        
+        let channelDataValue = channelData.pointee
+        let channelDataValueArray = stride(from: 0,
+                                           to: Int(buffer.frameLength),
+                                           by: buffer.stride)
+            .map { channelDataValue[$0] }
+        
+        let rms = sqrt(channelDataValueArray.map { $0 * $0 }
+            .reduce(0, +) / Float(buffer.frameLength))
+        
+        let avgPower = 20 * log10(rms)
+        meterLevel = scaledPower(power: avgPower)
     }
 }

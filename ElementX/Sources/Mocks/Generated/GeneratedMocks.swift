@@ -534,7 +534,7 @@ class AudioRecorderMock: AudioRecorderProtocol {
         set(value) { underlyingIsRecording = value }
     }
     var underlyingIsRecording: Bool!
-    var url: URL?
+    var audioFileUrl: URL?
 
     //MARK: - record
 
@@ -544,18 +544,13 @@ class AudioRecorderMock: AudioRecorderProtocol {
     }
     var recordWithReceivedRecordID: AudioRecordingIdentifier?
     var recordWithReceivedInvocations: [AudioRecordingIdentifier] = []
-    var recordWithReturnValue: Result<Void, AudioRecorderError>!
-    var recordWithClosure: ((AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError>)?
+    var recordWithClosure: ((AudioRecordingIdentifier) async -> Void)?
 
-    func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
+    func record(with recordID: AudioRecordingIdentifier) async {
         recordWithCallsCount += 1
         recordWithReceivedRecordID = recordID
         recordWithReceivedInvocations.append(recordID)
-        if let recordWithClosure = recordWithClosure {
-            return await recordWithClosure(recordID)
-        } else {
-            return recordWithReturnValue
-        }
+        await recordWithClosure?(recordID)
     }
     //MARK: - stopRecording
 
@@ -581,25 +576,21 @@ class AudioRecorderMock: AudioRecorderProtocol {
         deleteRecordingCallsCount += 1
         await deleteRecordingClosure?()
     }
-    //MARK: - averagePowerForChannelNumber
+    //MARK: - averagePower
 
-    var averagePowerForChannelNumberCallsCount = 0
-    var averagePowerForChannelNumberCalled: Bool {
-        return averagePowerForChannelNumberCallsCount > 0
+    var averagePowerCallsCount = 0
+    var averagePowerCalled: Bool {
+        return averagePowerCallsCount > 0
     }
-    var averagePowerForChannelNumberReceivedChannelNumber: Int?
-    var averagePowerForChannelNumberReceivedInvocations: [Int] = []
-    var averagePowerForChannelNumberReturnValue: Float!
-    var averagePowerForChannelNumberClosure: ((Int) -> Float)?
+    var averagePowerReturnValue: Float!
+    var averagePowerClosure: (() -> Float)?
 
-    func averagePowerForChannelNumber(_ channelNumber: Int) -> Float {
-        averagePowerForChannelNumberCallsCount += 1
-        averagePowerForChannelNumberReceivedChannelNumber = channelNumber
-        averagePowerForChannelNumberReceivedInvocations.append(channelNumber)
-        if let averagePowerForChannelNumberClosure = averagePowerForChannelNumberClosure {
-            return averagePowerForChannelNumberClosure(channelNumber)
+    func averagePower() -> Float {
+        averagePowerCallsCount += 1
+        if let averagePowerClosure = averagePowerClosure {
+            return averagePowerClosure()
         } else {
-            return averagePowerForChannelNumberReturnValue
+            return averagePowerReturnValue
         }
     }
 }
@@ -3168,6 +3159,11 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
         set(value) { underlyingRecordingDuration = value }
     }
     var underlyingRecordingDuration: TimeInterval!
+    var actions: AnyPublisher<VoiceMessageRecorderAction, Never> {
+        get { return underlyingActions }
+        set(value) { underlyingActions = value }
+    }
+    var underlyingActions: AnyPublisher<VoiceMessageRecorderAction, Never>!
 
     //MARK: - startRecording
 
@@ -3175,16 +3171,11 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     var startRecordingCalled: Bool {
         return startRecordingCallsCount > 0
     }
-    var startRecordingReturnValue: Result<Void, VoiceMessageRecorderError>!
-    var startRecordingClosure: (() async -> Result<Void, VoiceMessageRecorderError>)?
+    var startRecordingClosure: (() async -> Void)?
 
-    func startRecording() async -> Result<Void, VoiceMessageRecorderError> {
+    func startRecording() async {
         startRecordingCallsCount += 1
-        if let startRecordingClosure = startRecordingClosure {
-            return await startRecordingClosure()
-        } else {
-            return startRecordingReturnValue
-        }
+        await startRecordingClosure?()
     }
     //MARK: - stopRecording
 
@@ -3192,16 +3183,11 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     var stopRecordingCalled: Bool {
         return stopRecordingCallsCount > 0
     }
-    var stopRecordingReturnValue: Result<Void, VoiceMessageRecorderError>!
-    var stopRecordingClosure: (() async -> Result<Void, VoiceMessageRecorderError>)?
+    var stopRecordingClosure: (() async -> Void)?
 
-    func stopRecording() async -> Result<Void, VoiceMessageRecorderError> {
+    func stopRecording() async {
         stopRecordingCallsCount += 1
-        if let stopRecordingClosure = stopRecordingClosure {
-            return await stopRecordingClosure()
-        } else {
-            return stopRecordingReturnValue
-        }
+        await stopRecordingClosure?()
     }
     //MARK: - cancelRecording
 

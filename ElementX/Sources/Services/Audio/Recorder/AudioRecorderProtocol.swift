@@ -49,12 +49,12 @@ protocol AudioRecorderProtocol: AnyObject {
     var actions: AnyPublisher<AudioRecorderAction, Never> { get }
     var currentTime: TimeInterval { get }
     var isRecording: Bool { get }
-    var url: URL? { get }
+    var audioFileUrl: URL? { get }
     
     func record(with recordID: AudioRecordingIdentifier) async
     func stopRecording() async
     func deleteRecording() async
-    func averagePowerForChannelNumber(_ channelNumber: Int) -> Float
+    func averagePower() -> Float
 }
 
 // sourcery: AutoMockable

@@ -101,8 +101,8 @@ class AudioRecorderState: ObservableObject, Identifiable {
         if let currentTime = audioRecorder?.currentTime {
             duration = currentTime
         }
-        if let sample = audioRecorder?.averagePowerForChannelNumber(0) {
-            waveformSamples.append(sample)
+        if let averagePower = audioRecorder?.averagePower() {
+            waveformSamples.append(1.0 - averagePower)
         }
     }
     
