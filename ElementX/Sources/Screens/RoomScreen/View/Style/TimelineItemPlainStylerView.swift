@@ -27,7 +27,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     @State private var showItemActionMenu = false
 
     var body: some View {
-        VStack(alignment: .trailing) {
+        VStack(alignment: .trailing, spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
                 header
 
@@ -40,6 +40,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     supplementaryViews
                 }
             }
+            
             TimelineItemStatusView(timelineItem: timelineItem)
                 .environmentObject(context)
         }
@@ -47,7 +48,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     
     @ViewBuilder
     var contentWithReply: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 8) {
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
                 if messageTimelineItem.isThreaded {
                     ThreadDecorator()
@@ -118,7 +119,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     
     @ViewBuilder
     private var supplementaryViews: some View {
-        VStack {
+        VStack(spacing: 0) {
             if timelineItem.properties.isEdited {
                 Text(L10n.commonEditedSuffix)
                     .font(.compound.bodySM)

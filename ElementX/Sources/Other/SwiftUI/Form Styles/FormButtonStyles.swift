@@ -128,7 +128,7 @@ struct FormActionButtonStyle: ButtonStyle {
     @ScaledMetric private var menuIconSize = 54.0
     
     func makeBody(configuration: Configuration) -> some View {
-        VStack {
+        VStack(spacing: 8) {
             configuration.label
                 .buttonStyle(.plain)
                 .foregroundColor(.compound.textPrimary)

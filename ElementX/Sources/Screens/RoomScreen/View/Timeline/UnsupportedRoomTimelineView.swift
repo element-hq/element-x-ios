@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct UnsupportedRoomTimelineView: View {
@@ -22,7 +23,7 @@ struct UnsupportedRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             Label {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 0) {
                     Text("\(timelineItem.body): \(timelineItem.eventType)")
                         .fixedSize(horizontal: false, vertical: true)
                     
@@ -31,7 +32,7 @@ struct UnsupportedRoomTimelineView: View {
                         .font(.compound.bodySM)
                 }
             } icon: {
-                Image(systemName: "exclamationmark.triangle")
+                CompoundIcon(\.warning, size: .small, relativeTo: .compound.bodyLG)
             }
             .labelStyle(RoomTimelineViewLabelStyle())
         }

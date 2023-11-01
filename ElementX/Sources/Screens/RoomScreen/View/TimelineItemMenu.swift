@@ -188,7 +188,7 @@ public struct TimelineItemMenu: View {
             
             Spacer(minLength: 8.0)
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0.0) {
                 Text(item.sender.displayName ?? item.sender.id)
                     .font(.compound.bodySMSemibold)
                     .foregroundColor(.compound.textPrimary)

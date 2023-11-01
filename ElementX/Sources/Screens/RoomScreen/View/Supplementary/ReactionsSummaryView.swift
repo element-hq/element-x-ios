@@ -67,7 +67,7 @@ struct ReactionsSummaryView: View {
         TabView(selection: $selectedReactionKey) {
             ForEach(reactions, id: \.self) { reaction in
                 ScrollView {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 4) {
                         ForEach(reaction.senders, id: \.self) { sender in
                             ReactionSummarySenderView(sender: sender, member: members[sender.senderID], imageProvider: imageProvider)
                                 .padding(.horizontal, 16)

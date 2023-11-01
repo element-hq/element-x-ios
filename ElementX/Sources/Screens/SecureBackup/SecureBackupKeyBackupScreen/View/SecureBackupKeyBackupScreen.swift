@@ -52,7 +52,7 @@ struct SecureBackupKeyBackupScreen: View {
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 12) {
                 Label {
                     Text(L10n.screenKeyBackupDisableDescriptionPoint1)
                         .foregroundColor(.compound.textSecondary)

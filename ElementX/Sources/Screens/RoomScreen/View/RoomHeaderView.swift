@@ -31,7 +31,7 @@ struct RoomHeaderView: View {
         }
         // Leading align whilst using the principal toolbar position.
         .frame(maxWidth: .infinity, alignment: .leading)
-        // Using a button stops is from getting truncated in the navigation bar
+        // Using a button stops it from getting truncated in the navigation bar
         .onTapGesture {
             context.send(viewAction: .displayRoomDetails)
         }

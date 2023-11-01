@@ -34,23 +34,22 @@ struct MessageComposer: View {
     @FocusState private var focused: Bool
 
     @State private var composerTranslation: CGFloat = 0
+    private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
     
     var body: some View {
         VStack(spacing: 0) {
             if showResizeGrabber {
                 resizeGrabber
             }
-
-            let borderRadius: CGFloat = 21
+            
             mainContent
                 .padding(.horizontal, 12.0)
-                .clipShape(RoundedRectangle(cornerRadius: borderRadius))
+                .clipShape(composerShape)
                 .background {
-                    let roundedRectangle = RoundedRectangle(cornerRadius: borderRadius)
                     ZStack {
-                        roundedRectangle
+                        composerShape
                             .fill(Color.compound.bgSubtleSecondary)
-                        roundedRectangle
+                        composerShape
                             .stroke(Color.compound._borderTextFieldFocused, lineWidth: 0.5)
                     }
                 }
@@ -136,7 +135,7 @@ private struct MessageComposerReplyHeader: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(4.0)
             .background(Color.compound.bgCanvasDefault)
-            .cornerRadius(13.0)
+            .clipShape(RoundedRectangle(cornerRadius: 13, style: .circular))
             .overlay(alignment: .topTrailing) {
                 Button(action: action) {
                     CompoundIcon(\.close, size: .small, relativeTo: .compound.bodySMSemibold)

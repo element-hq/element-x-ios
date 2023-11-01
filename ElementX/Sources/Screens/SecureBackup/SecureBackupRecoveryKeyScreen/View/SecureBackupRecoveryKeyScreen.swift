@@ -98,7 +98,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     }
     
     private var generateRecoveryKeySection: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonRecoveryKey)
                 .foregroundColor(.compound.textPrimary)
                 .font(.compound.bodySM)
@@ -150,7 +150,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     @ViewBuilder
     private var confirmRecoveryKeySection: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonRecoveryKey)
                 .foregroundColor(.compound.textPrimary)
                 .font(.compound.bodySM)

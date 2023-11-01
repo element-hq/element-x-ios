@@ -83,10 +83,9 @@ struct TimelineItemDebugView: View {
         
         @ViewBuilder
         var disclosureGroupContent: some View {
-            VStack(alignment: .leading) {
-                Spacer()
-                
+            VStack(alignment: .leading, spacing: 8) {
                 Divider()
+                    .padding(.top, 8)
                 
                 Text(text)
                     .font(.compound.bodyXS.monospaced())
