@@ -59,7 +59,8 @@ class CreatePollScreenUITests: XCTestCase {
         if app.keyboards.count > 0 {
             app.typeText("\n")
         }
-        app.swipeUp()
+        app.swipeUp() // Dismiss the keyboard.
+        app.swipeUp() // Make sure we're right at the bottom.
         
         XCTAssertFalse(addOption.exists)
         XCTAssertFalse(createButton.isEnabled)

@@ -87,7 +87,7 @@ struct InvitesScreenCell: View {
     
     @ViewBuilder
     private var textualContent: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             Text(title)
                 .font(.compound.bodyLGSemibold)
                 .foregroundColor(.compound.textPrimary)
