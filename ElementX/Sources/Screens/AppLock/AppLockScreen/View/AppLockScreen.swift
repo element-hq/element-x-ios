@@ -49,10 +49,6 @@ struct AppLockScreen: View {
                     .accessibilityValue(L10n.a11yDigitsEntered(context.viewState.numberOfDigitsEntered))
                 
                 AppLockScreenPINKeypad(pinCode: $context.pinCode)
-                    .onChange(of: context.pinCode) { newValue in
-                        guard newValue.count == 4 else { return }
-                        context.send(viewAction: .submitPINCode)
-                    }
             }
         } bottomContent: {
             Button(L10n.screenAppLockForgotPin) {

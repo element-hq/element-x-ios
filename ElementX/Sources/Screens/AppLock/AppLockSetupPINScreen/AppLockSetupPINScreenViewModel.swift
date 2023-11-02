@@ -38,6 +38,16 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
         appLockService.numberOfPINAttempts
             .weakAssign(to: \.state.numberOfUnlockAttempts, on: self)
             .store(in: &cancellables)
+        
+        context.$viewState
+            .map(\.bindings.pinCode)
+            .removeDuplicates()
+            .debounce(for: 0.1, scheduler: DispatchQueue.main) // Show the last digit for long enough to be read.
+            .sink { [weak self] pinCode in
+                guard pinCode.count == 4 else { return }
+                self?.submit(pinCode)
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -46,8 +56,6 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .submitPINCode:
-            submitPINCode()
         case .cancel:
             actionsSubject.send(.cancel)
         }
@@ -56,7 +64,7 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
     // MARK: - Private
     
     /// Handle the entered PIN code.
-    private func submitPINCode() {
+    private func submit(_ pinCode: String) {
         switch state.mode {
         case .create:
             createPIN()

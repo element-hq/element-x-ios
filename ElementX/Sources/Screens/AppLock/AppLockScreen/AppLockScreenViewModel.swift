@@ -36,6 +36,16 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
             .weakAssign(to: \.state.numberOfPINAttempts, on: self)
             .store(in: &cancellables)
         
+        context.$viewState
+            .map(\.bindings.pinCode)
+            .removeDuplicates()
+            .debounce(for: 0.05, scheduler: DispatchQueue.main) // Allow the last digit to be briefly shown
+            .sink { [weak self] pinCode in
+                guard pinCode.count == 4 else { return }
+                self?.submit(pinCode)
+            }
+            .store(in: &cancellables)
+        
         showForceLogoutAlertIfNeeded()
     }
     
@@ -45,8 +55,6 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .submitPINCode:
-            submitPINCode()
         case .clearPINCode:
             state.bindings.pinCode = ""
         case .forgotPIN:
@@ -56,8 +64,8 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
     
     // MARK: - Private
     
-    private func submitPINCode() {
-        guard appLockService.unlock(with: state.bindings.pinCode) else {
+    private func submit(_ pinCode: String) {
+        guard appLockService.unlock(with: pinCode) else {
             handleInvalidPIN()
             return
         }

@@ -44,7 +44,6 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         // When entering an new PIN.
         let createDeferred = deferFulfillment(context.$viewState, message: "A valid PIN needs confirming.") { $0.mode == .confirm }
         context.pinCode = "2023"
-        context.send(viewAction: .submitPINCode)
         try await createDeferred.fulfill()
         
         // Then the screen should transition to the confirm mode.
@@ -53,7 +52,6 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         // When re-entering that PIN.
         let confirmDeferred = deferFulfillment(viewModel.actions, message: "The screen should be finished.") { $0 == .complete }
         context.pinCode = "2023"
-        context.send(viewAction: .submitPINCode)
         
         // Then the screen should signal it is complete.
         try await confirmDeferred.fulfill()
@@ -66,8 +64,9 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         XCTAssertNil(context.alertInfo, "There shouldn't be an alert to begin with.")
         
         // When entering a weak PIN on the blocklist.
+        let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
         context.pinCode = "0000"
-        context.send(viewAction: .submitPINCode)
+        try await deferred.fulfill()
         
         // Then the PIN should be rejected and the user alerted.
         XCTAssertEqual(context.alertInfo?.id, .weakPIN, "The weak PIN should be rejected.")
@@ -82,25 +81,29 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         
         let createDeferred = deferFulfillment(context.$viewState, message: "A valid PIN needs confirming.") { $0.mode == .confirm }
         context.pinCode = "2023"
-        context.send(viewAction: .submitPINCode)
         try await createDeferred.fulfill()
         XCTAssertEqual(context.viewState.mode, .confirm, "The mode should transition to confirmation.")
         XCTAssertEqual(context.viewState.numberOfConfirmAttempts, 0, "The mode should start with zero attempts.")
         XCTAssertNil(context.alertInfo, "There shouldn't be an alert after a valid initial PIN.")
         
         // When entering the new PIN incorrectly
+        var deferred = deferFulfillment(context.$viewState) { $0.numberOfConfirmAttempts == 1 }
         context.pinCode = "2024"
-        context.send(viewAction: .submitPINCode)
+        try await deferred.fulfill()
         
         // Then the user should be alerted.
         XCTAssertEqual(context.viewState.numberOfConfirmAttempts, 1, "The mismatch should be counted.")
         XCTAssertEqual(context.alertInfo?.id, .pinMismatch, "A PIN mismatch should be rejected.")
         
-        // When repeating this twice more.
+        // When dismissing the alert and repeating twice more.
+        context.alertInfo?.primaryButton.action?()
+        deferred = deferFulfillment(context.$viewState) { $0.numberOfConfirmAttempts == 2 }
         context.pinCode = "2024"
-        context.send(viewAction: .submitPINCode)
+        try await deferred.fulfill()
+        context.alertInfo?.primaryButton.action?()
+        deferred = deferFulfillment(context.$viewState) { $0.numberOfConfirmAttempts == 3 }
         context.pinCode = "2024"
-        context.send(viewAction: .submitPINCode)
+        try await deferred.fulfill()
         XCTAssertEqual(context.viewState.numberOfConfirmAttempts, 3, "All the mismatches should be counted.")
         XCTAssertEqual(context.alertInfo?.id, .pinMismatch, "A PIN mismatch should be rejected.")
         
@@ -120,7 +123,6 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         // When entering the configured PIN.
         let deferred = deferFulfillment(viewModel.actions, message: "The screen should be finished.") { $0 == .complete }
         context.pinCode = pinCode
-        context.send(viewAction: .submitPINCode)
         
         // Then the screen should signal it is complete.
         try await deferred.fulfill()
@@ -137,8 +139,10 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.isLoggingOut, "The view should not start disabled.")
         
         // When entering a different PIN.
+        var deferred = deferFulfillment(context.$viewState, keyPath: \.bindings.pinCode, transitionValues: ["", "2024", ""],
+                                        message: "The PIN should be entered and then cleared by the view model.")
         context.pinCode = "2024"
-        context.send(viewAction: .submitPINCode)
+        try await deferred.fulfill()
         
         // Then the PIN should be rejected and the user notified.
         XCTAssertEqual(context.viewState.numberOfUnlockAttempts, 1, "An invalid attempt should be counted.")
@@ -146,10 +150,14 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.isLoggingOut, "The view should still work.")
         
         // When entering the same incorrect PIN twice more
+        deferred = deferFulfillment(context.$viewState, keyPath: \.bindings.pinCode, transitionValues: ["", "2024", ""],
+                                    message: "The PIN should be entered and then cleared by the view model.")
         context.pinCode = "2024"
-        context.send(viewAction: .submitPINCode)
+        try await deferred.fulfill()
+        deferred = deferFulfillment(context.$viewState, keyPath: \.bindings.pinCode, transitionValues: ["", "2024", ""],
+                                    message: "The PIN should be entered and then cleared by the view model.")
         context.pinCode = "2024"
-        context.send(viewAction: .submitPINCode)
+        try await deferred.fulfill()
         
         // Then the user should be alerted that they're being signed out.
         XCTAssertEqual(context.viewState.numberOfUnlockAttempts, 3, "All invalid attempts should be counted.")
