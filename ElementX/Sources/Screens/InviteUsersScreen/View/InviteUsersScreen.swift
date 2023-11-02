@@ -33,7 +33,7 @@ struct InviteUsersScreen: View {
             .searchableConfiguration(hidesNavigationBar: false)
             .compoundSearchField()
             .alert(item: $context.alertInfo)
-            .background(ViewFrameReader(frame: $frame))
+            .readFrame($frame)
     }
     
     // MARK: - Private

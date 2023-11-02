@@ -17,6 +17,16 @@
 import Foundation
 import SwiftUI
 
+extension View {
+    /// Reads the frame of the view and store it in `frame` binding.
+    /// - Parameters:
+    ///   - frame: a `CGRect` binding
+    ///   - coordinateSpace: the coordinate space of the frame.
+    func readFrame(_ frame: Binding<CGRect>, in coordinateSpace: CoordinateSpace = .local) -> some View {
+        background(ViewFrameReader(frame: frame, coordinateSpace: coordinateSpace))
+    }
+}
+
 /// Used to calculate the frame of a view.
 ///
 /// Useful in situations as with `ZStack` where you might want to layout views using alignment guides.
@@ -26,7 +36,7 @@ import SwiftUI
 /// SomeView()
 ///    .background(ViewFrameReader(frame: $frame))
 /// ```
-struct ViewFrameReader: View {
+private struct ViewFrameReader: View {
     @Binding var frame: CGRect
     var coordinateSpace: CoordinateSpace = .local
     
@@ -43,8 +53,11 @@ struct ViewFrameReader: View {
     }
 }
 
-extension View {
-    func readFrame(_ frame: Binding<CGRect>, in coordinateSpace: CoordinateSpace = .local) -> some View {
-        background(ViewFrameReader(frame: frame, coordinateSpace: coordinateSpace))
+/// A SwiftUI `PreferenceKey` for `CGRect` values such as a view's frame.
+private struct FramePreferenceKey: PreferenceKey {
+    static var defaultValue: CGRect = .zero
+    
+    static func reduce(value: inout CGRect, nextValue: () -> CGRect) {
+        value = nextValue()
     }
 }

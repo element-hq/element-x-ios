@@ -46,9 +46,7 @@ struct ComposerToolbar: View {
         }
         .padding(.leading, 5)
         .padding(.trailing, 8)
-        .background {
-            ViewFrameReader(frame: $frame)
-        }
+        .readFrame($frame)
         .overlay(alignment: .bottom) {
             if verticalSizeClass != .compact, !context.composerExpanded {
                 suggestionView

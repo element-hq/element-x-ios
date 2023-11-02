@@ -71,7 +71,7 @@ struct MessageComposer: View {
             Color.clear
                 .overlay(alignment: .top) {
                     composerView
-                        .background(ViewFrameReader(frame: $composerFrame))
+                        .readFrame($composerFrame)
                 }
                 .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
                        alignment: .top)
