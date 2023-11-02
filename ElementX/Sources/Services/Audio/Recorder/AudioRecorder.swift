@@ -141,8 +141,10 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
                             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
             
             do {
-                try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default)
-                try AVAudioSession.sharedInstance().setActive(true)
+                let audioSession = AVAudioSession.sharedInstance()
+                try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
+                try audioSession.setCategory(.playAndRecord, mode: .default)
+                try audioSession.setActive(true)
                 let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
                 let audioRecorder = try AVAudioRecorder(url: url, settings: settings)
                 audioRecorder.delegate = self

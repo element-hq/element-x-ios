@@ -30,6 +30,8 @@ struct VoiceMessageRecordingButton: View {
     
     private let minimumRecordingDuration = 1.0
     private let tooltipDuration = 1.0
+    private let impactFeedbackGenerator = UIImpactFeedbackGenerator()
+    private let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
 
     var body: some View {
         Button { } label: {
@@ -45,14 +47,17 @@ struct VoiceMessageRecordingButton: View {
             if isPressing {
                 showTooltip = false
                 recordingStartTime = Date.now
+                impactFeedbackGenerator.impactOccurred()
                 startRecording?()
             } else {
                 if let recordingStartTime, Date.now.timeIntervalSince(recordingStartTime) < minimumRecordingDuration {
                     withElementAnimation {
                         showTooltip = true
                     }
+                    notificationFeedbackGenerator.notificationOccurred(.error)
                     stopRecording?(false)
                 } else {
+                    impactFeedbackGenerator.impactOccurred()
                     stopRecording?(true)
                 }
             }
