@@ -27,15 +27,6 @@ struct ComposerToolbar: View {
     @ScaledMetric private var sendButtonIconSize = 16
     @ScaledMetric(relativeTo: .title) private var spinnerSize = 44
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
-    
-    @State private var voiceMessageRecordingStartTime: Date?
-    @State private var showVoiceMessageRecordingTooltip = false
-    @ScaledMetric private var voiceMessageTooltipPointerHeight = 6
-    @State private var voiceMessageRecordingButtonFrame: CGRect = .zero
-    
-    private let voiceMessageMinimumRecordingDuration = 1.0
-    private let voiceMessageTooltipDuration = 1.0
-    
     @State private var frame: CGRect = .zero
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
@@ -64,12 +55,6 @@ struct ComposerToolbar: View {
                     .offset(y: -frame.height)
             }
         }
-        .overlay(alignment: .bottomTrailing) {
-            if showVoiceMessageRecordingTooltip {
-                voiceMessageRecordingButtonTooltipView
-                    .offset(y: -frame.height - voiceMessageTooltipPointerHeight)
-            }
-        }
         .alert(item: $context.alertInfo)
     }
     
@@ -84,7 +69,7 @@ struct ComposerToolbar: View {
     private var topBar: some View {
         topBarLayout {
             mainTopBarContent
-
+            
             if !context.composerActionsEnabled {
                 if context.viewState.isUploading {
                     ProgressView()
@@ -95,9 +80,6 @@ struct ComposerToolbar: View {
                         .padding(.leading, 3)
                 } else {
                     voiceMessageRecordingButton
-                        .background {
-                            ViewFrameReader(frame: $voiceMessageRecordingButtonFrame, coordinateSpace: .global)
-                        }
                         .padding(.leading, 4)
                 }
             }
@@ -121,7 +103,7 @@ struct ComposerToolbar: View {
     private var topBarLayout: some Layout {
         HStackLayout(alignment: .bottom, spacing: 5)
     }
-
+    
     @ViewBuilder
     private var mainTopBarContent: some View {
         ZStack(alignment: .bottom) {
@@ -139,13 +121,13 @@ struct ComposerToolbar: View {
                     .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
             }
             .opacity(context.viewState.isVoiceMessageModeActivated ? 0 : 1)
-
+            
             if context.viewState.isVoiceMessageModeActivated {
                 voiceMessageContent
             }
         }
     }
-
+    
     private var closeRTEButton: some View {
         Button {
             context.composerActionsEnabled = false
@@ -249,7 +231,7 @@ struct ComposerToolbar: View {
     }
     
     // MARK: - Voice message
-
+    
     @ViewBuilder
     private var voiceMessageContent: some View {
         // Display the voice message composer above to keep the focus and keep the keyboard open if it's already open.
@@ -270,22 +252,17 @@ struct ComposerToolbar: View {
     
     private var voiceMessageRecordingButton: some View {
         VoiceMessageRecordingButton {
-            showVoiceMessageRecordingTooltip = false
-            voiceMessageRecordingStartTime = Date.now
             context.send(viewAction: .startVoiceMessageRecording)
-        } stopRecording: {
-            if let voiceMessageRecordingStartTime, Date.now.timeIntervalSince(voiceMessageRecordingStartTime) < voiceMessageMinimumRecordingDuration {
-                context.send(viewAction: .cancelVoiceMessageRecording)
-                withElementAnimation {
-                    showVoiceMessageRecordingTooltip = true
-                }
-            } else {
+        } stopRecording: { minimumRecordTimeReached in
+            if minimumRecordTimeReached {
                 context.send(viewAction: .stopVoiceMessageRecording)
+            } else {
+                context.send(viewAction: .cancelVoiceMessageRecording)
             }
         }
         .padding(4)
     }
-        
+    
     private var voiceMessageTrashButton: some View {
         Button(role: .destructive) {
             context.send(viewAction: .deleteVoiceMessageRecording)
@@ -295,22 +272,6 @@ struct ComposerToolbar: View {
         }
         .buttonStyle(.compound(.plain))
         .accessibilityLabel(L10n.a11yDelete)
-    }
-    
-    private var voiceMessageRecordingButtonTooltipView: some View {
-        VoiceMessageRecordingButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip,
-                                               pointerHeight: voiceMessageTooltipPointerHeight,
-                                               pointerLocation: voiceMessageRecordingButtonFrame.midX,
-                                               pointerLocationCoordinateSpace: .global)
-            .allowsHitTesting(false)
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + voiceMessageTooltipDuration) {
-                    withElementAnimation {
-                        showVoiceMessageRecordingTooltip = false
-                    }
-                }
-            }
-            .padding(.horizontal, 8)
     }
     
     private func voiceMessagePreviewComposer(audioPlayerState: AudioPlayerState, waveform: WaveformSource) -> some View {
@@ -376,7 +337,7 @@ extension ComposerToolbar {
                                wysiwygViewModel: wysiwygViewModel,
                                keyCommandHandler: { _ in false })
     }
-
+    
     static func textWithVoiceMessage(focused: Bool = true) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         var composerViewModel: ComposerToolbarViewModel {

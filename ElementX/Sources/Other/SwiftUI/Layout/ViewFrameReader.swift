@@ -42,3 +42,9 @@ struct ViewFrameReader: View {
         }
     }
 }
+
+extension View {
+    func readFrame(_ frame: Binding<CGRect>, in coordinateSpace: CoordinateSpace = .local) -> some View {
+        background(ViewFrameReader(frame: frame, coordinateSpace: coordinateSpace))
+    }
+}
