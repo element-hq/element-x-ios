@@ -22,6 +22,7 @@ struct MentionBuilder: MentionBuilderProtocol {
         let attributes = attributedString.attributes(at: 0, longestEffectiveRange: nil, in: range)
         let font = attributes[.font] as? UIFont ?? .preferredFont(forTextStyle: .body)
         let blockquote = attributes[.MatrixBlockquote]
+        let foregroundColor = attributes[.foregroundColor] as? UIColor ?? .compound.textPrimary
         
         let attachmentData = PillTextAttachmentData(type: .user(userID: userID), font: font)
         guard let attachment = PillTextAttachment(attachmentData: attachmentData) else {
@@ -29,7 +30,7 @@ struct MentionBuilder: MentionBuilderProtocol {
             return
         }
         
-        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url, .MatrixUserID: userID, .font: font]
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url, .MatrixUserID: userID, .font: font, .foregroundColor: foregroundColor]
         if let blockquote {
             // mentions can be in blockquotes, so if the replaced string was in one, we keep the attribute
             attachmentAttributes[.MatrixBlockquote] = blockquote
@@ -43,13 +44,14 @@ struct MentionBuilder: MentionBuilderProtocol {
         let attributes = attributedString.attributes(at: 0, longestEffectiveRange: nil, in: range)
         let font = attributes[.font] as? UIFont ?? .preferredFont(forTextStyle: .body)
         let blockquote = attributes[.MatrixBlockquote]
+        let foregroundColor = attributes[.foregroundColor] as? UIColor ?? .compound.textPrimary
         
         let attachmentData = PillTextAttachmentData(type: .allUsers, font: font)
         guard let attachment = PillTextAttachment(attachmentData: attachmentData) else {
             return
         }
         
-        var attachmentAttributes: [NSAttributedString.Key: Any] = [.font: font, .MatrixAllUsersMention: true]
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [.font: font, .MatrixAllUsersMention: true, .foregroundColor: foregroundColor]
         if let blockquote {
             // mentions can be in blockquotes, so if the replaced string was in one, we keep the attribute
             attachmentAttributes[.MatrixBlockquote] = blockquote
