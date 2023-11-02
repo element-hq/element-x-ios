@@ -22,14 +22,14 @@ struct ComposerToolbar: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
     let wysiwygViewModel: WysiwygComposerViewModel
     let keyCommandHandler: KeyCommandHandler
-
+    
     @FocusState private var composerFocused: Bool
     @ScaledMetric private var sendButtonIconSize = 16
     @ScaledMetric(relativeTo: .title) private var spinnerSize = 44
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
     @State private var frame: CGRect = .zero
     @Environment(\.verticalSizeClass) private var verticalSizeClass
-
+    
     var body: some View {
         VStack(spacing: 8) {
             topBar
@@ -69,7 +69,7 @@ struct ComposerToolbar: View {
     private var topBar: some View {
         topBarLayout {
             mainTopBarContent
-
+            
             if !context.composerActionsEnabled {
                 if context.viewState.isUploading {
                     ProgressView()
@@ -103,7 +103,7 @@ struct ComposerToolbar: View {
     private var topBarLayout: some Layout {
         HStackLayout(alignment: .bottom, spacing: 5)
     }
-
+    
     @ViewBuilder
     private var mainTopBarContent: some View {
         ZStack(alignment: .bottom) {
@@ -121,13 +121,13 @@ struct ComposerToolbar: View {
                     .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
             }
             .opacity(context.viewState.isVoiceMessageModeActivated ? 0 : 1)
-
+            
             if context.viewState.isVoiceMessageModeActivated {
                 voiceMessageContent
             }
         }
     }
-
+    
     private var closeRTEButton: some View {
         Button {
             context.composerActionsEnabled = false
@@ -231,7 +231,7 @@ struct ComposerToolbar: View {
     }
     
     // MARK: - Voice message
-
+    
     @ViewBuilder
     private var voiceMessageContent: some View {
         // Display the voice message composer above to keep the focus and keep the keyboard open if it's already open.
@@ -262,7 +262,7 @@ struct ComposerToolbar: View {
         }
         .padding(4)
     }
-        
+    
     private var voiceMessageTrashButton: some View {
         Button(role: .destructive) {
             context.send(viewAction: .deleteVoiceMessageRecording)
@@ -337,7 +337,7 @@ extension ComposerToolbar {
                                wysiwygViewModel: wysiwygViewModel,
                                keyCommandHandler: { _ in false })
     }
-
+    
     static func textWithVoiceMessage(focused: Bool = true) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         var composerViewModel: ComposerToolbarViewModel {

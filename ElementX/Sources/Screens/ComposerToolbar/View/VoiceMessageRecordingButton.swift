@@ -20,9 +20,9 @@ import SwiftUI
 struct VoiceMessageRecordingButton: View {
     var startRecording: (() -> Void)?
     var stopRecording: ((_ minimumRecordTimeReached: Bool) -> Void)?
-
+    
     @ScaledMetric private var tooltipPointerHeight = 6
-
+    
     @State private var buttonPressed = false
     @State private var recordingStartTime: Date?
     @State private var showTooltip = false
@@ -32,7 +32,7 @@ struct VoiceMessageRecordingButton: View {
     private let tooltipDuration = 1.0
     private let impactFeedbackGenerator = UIImpactFeedbackGenerator()
     private let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
-
+    
     var body: some View {
         Button { } label: {
             CompoundIcon(buttonPressed ? \.micOnSolid : \.micOnOutline)
@@ -43,7 +43,7 @@ struct VoiceMessageRecordingButton: View {
         .accessibilityLabel(L10n.a11yVoiceMessageRecord)
         .onLongPressGesture { } onPressingChanged: { isPressing in
             buttonPressed = isPressing
-
+            
             if isPressing {
                 showTooltip = false
                 recordingStartTime = Date.now
@@ -69,7 +69,7 @@ struct VoiceMessageRecordingButton: View {
             }
         }
     }
-
+    
     private var tooltipView: some View {
         VoiceMessageRecordingButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip,
                                                pointerHeight: tooltipPointerHeight,
