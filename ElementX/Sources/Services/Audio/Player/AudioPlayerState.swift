@@ -186,11 +186,11 @@ class AudioPlayerState: ObservableObject, Identifiable {
             .map { state in
                 switch state {
                 case .loading:
-                    Just(state)
+                    return Just(state)
                         .delay(for: .seconds(2), scheduler: RunLoop.main)
                         .eraseToAnyPublisher()
                 case .playing, .stopped, .error, .readyToPlay:
-                    Just(state)
+                    return Just(state)
                         .eraseToAnyPublisher()
                 }
             }
