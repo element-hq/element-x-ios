@@ -182,7 +182,7 @@ final class AppSettings {
     #if DEBUG
     /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx") && !ProcessInfo.isRunningTests,
                                                         host: "https://posthog.element.dev",
                                                         apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
                                                         termsURL: "https://element.io/cookie-policy")
