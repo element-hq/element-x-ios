@@ -1,4 +1,4 @@
 test_configuration:
   - template_file_path: Tools/Prefire/PreviewTests.stencil
   - simulator_device: "iPhone14"
-  - required_os: 17
+  - required_os: 16
