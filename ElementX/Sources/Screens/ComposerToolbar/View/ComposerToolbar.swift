@@ -22,23 +22,14 @@ struct ComposerToolbar: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
     let wysiwygViewModel: WysiwygComposerViewModel
     let keyCommandHandler: KeyCommandHandler
-    
+
     @FocusState private var composerFocused: Bool
     @ScaledMetric private var sendButtonIconSize = 16
     @ScaledMetric(relativeTo: .title) private var spinnerSize = 44
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
-    
-    @State private var voiceMessageRecordingStartTime: Date?
-    @State private var showVoiceMessageRecordingTooltip = false
-    @ScaledMetric private var voiceMessageTooltipPointerHeight = 6
-    @State private var voiceMessageRecordingButtonFrame: CGRect = .zero
-    
-    private let voiceMessageMinimumRecordingDuration = 1.0
-    private let voiceMessageTooltipDuration = 1.0
-    
     @State private var frame: CGRect = .zero
     @Environment(\.verticalSizeClass) private var verticalSizeClass
-    
+
     var body: some View {
         VStack(spacing: 8) {
             topBar
@@ -62,12 +53,6 @@ struct ComposerToolbar: View {
             if verticalSizeClass != .compact, !context.composerExpanded {
                 suggestionView
                     .offset(y: -frame.height)
-            }
-        }
-        .overlay(alignment: .bottomTrailing) {
-            if showVoiceMessageRecordingTooltip {
-                voiceMessageRecordingButtonTooltipView
-                    .offset(y: -frame.height - voiceMessageTooltipPointerHeight)
             }
         }
         .alert(item: $context.alertInfo)
@@ -95,9 +80,6 @@ struct ComposerToolbar: View {
                         .padding(.leading, 3)
                 } else {
                     voiceMessageRecordingButton
-                        .background {
-                            ViewFrameReader(frame: $voiceMessageRecordingButtonFrame, coordinateSpace: .global)
-                        }
                         .padding(.leading, 4)
                 }
             }
@@ -270,17 +252,12 @@ struct ComposerToolbar: View {
     
     private var voiceMessageRecordingButton: some View {
         VoiceMessageRecordingButton {
-            showVoiceMessageRecordingTooltip = false
-            voiceMessageRecordingStartTime = Date.now
             context.send(viewAction: .startVoiceMessageRecording)
-        } stopRecording: {
-            if let voiceMessageRecordingStartTime, Date.now.timeIntervalSince(voiceMessageRecordingStartTime) < voiceMessageMinimumRecordingDuration {
-                context.send(viewAction: .cancelVoiceMessageRecording)
-                withElementAnimation {
-                    showVoiceMessageRecordingTooltip = true
-                }
-            } else {
+        } stopRecording: { minimumRecordTimeReached in
+            if minimumRecordTimeReached {
                 context.send(viewAction: .stopVoiceMessageRecording)
+            } else {
+                context.send(viewAction: .cancelVoiceMessageRecording)
             }
         }
         .padding(4)
@@ -295,22 +272,6 @@ struct ComposerToolbar: View {
         }
         .buttonStyle(.compound(.plain))
         .accessibilityLabel(L10n.a11yDelete)
-    }
-    
-    private var voiceMessageRecordingButtonTooltipView: some View {
-        VoiceMessageRecordingButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip,
-                                               pointerHeight: voiceMessageTooltipPointerHeight,
-                                               pointerLocation: voiceMessageRecordingButtonFrame.midX,
-                                               pointerLocationCoordinateSpace: .global)
-            .allowsHitTesting(false)
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + voiceMessageTooltipDuration) {
-                    withElementAnimation {
-                        showVoiceMessageRecordingTooltip = false
-                    }
-                }
-            }
-            .padding(.horizontal, 8)
     }
     
     private func voiceMessagePreviewComposer(audioPlayerState: AudioPlayerState, waveform: WaveformSource) -> some View {
