@@ -42,7 +42,7 @@ struct CompletionSuggestionView: View {
         } else {
             ZStack {
                 MentionSuggestionItemView(imageProvider: nil, item: .init(id: "", displayName: nil, avatarURL: nil))
-                    .background(ViewFrameReader(frame: $prototypeListItemFrame))
+                    .readFrame($prototypeListItemFrame)
                     .hidden()
                 if showBackgroundShadow {
                     BackgroundView {

@@ -32,6 +32,6 @@ struct AlignedScrollView<Content: View>: View {
                 .frame(minWidth: scrollViewFrame.width,
                        alignment: Alignment(horizontal: alignment, vertical: .center))
         }
-        .background(ViewFrameReader(frame: $scrollViewFrame))
+        .readFrame($scrollViewFrame)
     }
 }

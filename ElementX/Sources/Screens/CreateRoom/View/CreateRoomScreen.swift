@@ -41,7 +41,7 @@ struct CreateRoomScreen: View {
                 createButton
             }
         }
-        .background(ViewFrameReader(frame: $frame))
+        .readFrame($frame)
         .alert(item: $context.alertInfo)
     }
     
