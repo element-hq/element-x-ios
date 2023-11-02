@@ -20,37 +20,24 @@ import Foundation
 import UIKit
 
 class AudioRecorder: AudioRecorderProtocol {
-    private var audioEngine = AVAudioEngine()
+    private var audioEngine: AVAudioEngine!
     private var audioFile: AVAudioFile?
     private let audioSession = AVAudioSession.sharedInstance()
-    private var audioFormat: AVAudioFormat {
-        let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-                        AVSampleRateKey: 48000,
-                        AVEncoderBitRateKey: 128_000,
-                        AVNumberOfChannelsKey: 1,
-                        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
-        
-        guard let audioFormat = AVAudioFormat(settings: settings) else {
-            fatalError("Invalid audio settings.")
-        }
-        return audioFormat
-    }
+    private var audioSessionIsSuspended = false
     
     private var cancellables = Set<AnyCancellable>()
     private let actionsSubject: PassthroughSubject<AudioRecorderAction, Never> = .init()
     var actions: AnyPublisher<AudioRecorderAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     private let silenceThreshold: Float = -50.0
     private var meterLevel: Float = 0
 
     private(set) var audioFileUrl: URL?
-    
     var currentTime: TimeInterval = .zero
-    
     var isRecording: Bool {
-        audioEngine.isRunning
+        audioEngine?.isRunning ?? false
     }
         
     private let dispatchQueue = DispatchQueue(label: "io.element.elementx.audio_recorder", qos: .userInitiated)
@@ -97,36 +84,6 @@ class AudioRecorder: AudioRecorderProtocol {
     }
     
     // MARK: - Private
-        
-    private func addObservers() {
-        // Stop recording uppon UIApplication.didEnterBackgroundNotification notification
-        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                MXLog.warning("Application will resign active while recording.")
-                Task { await self.stopRecording() }
-            }
-            .store(in: &cancellables)
-        
-        // Stop recording if audio route changes
-        NotificationCenter.default.publisher(for: AVAudioSession.routeChangeNotification)
-            .sink { [weak self] notification in
-                guard let self else { return }
-                self.handleRouteChange(notification: notification)
-            }
-            .store(in: &cancellables)
-        
-        NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)
-            .sink { [weak self] notification in
-                guard let self else { return }
-                self.handleInterruption(notification: notification)
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func removeObservers() {
-        cancellables.removeAll()
-    }
     
     private func requestRecordPermission() async -> Bool {
         await withCheckedContinuation { continuation in
@@ -154,45 +111,25 @@ class AudioRecorder: AudioRecorderProtocol {
         removeObservers()
     }
     
-    func handleRouteChange(notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
-              let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else {
-            return
-        }
-        MXLog.info("Audio session route changed (\(reason)). route: \(audioSession.currentRoute), category: \(audioSession.category)")
-        audioEngine.pause()
-        do {
-            try audioEngine.start()
-        } catch {
-            MXLog.error("failed to resume audio engine after route change. \(error)")
-        }
-    }
-    
-    func handleInterruption(notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
-              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
-            return
-        }
-        
-        switch type {
-        case .began:
-            MXLog.warning("AudioSession was interrupted: \(notification)")
-            actionsSubject.send(.didFailWithError(error: .interrupted))
-        case .ended:
-            MXLog.debug("Interruption ended: \(notification)")
-        @unknown default:
-            break
-        }
-    }
-    
     private func startRecording(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
         await withCheckedContinuation { continuation in
             startRecording(with: recordID) { result in
                 continuation.resume(returning: result)
             }
         }
+    }
+    
+    private func createAudioFile(with recordID: AudioRecordingIdentifier) throws -> AVAudioFile {
+        let outputFormat = audioEngine.inputNode.outputFormat(forBus: 0)
+        let settings = [
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: Int(outputFormat.sampleRate),
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ]
+        MXLog.info("creating audio file with format: \(settings)")
+        let outputURL = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
+        return try AVAudioFile(forWriting: outputURL, settings: settings)
     }
     
     private func startRecording(with recordID: AudioRecordingIdentifier, completion: @escaping (Result<Void, AudioRecorderError>) -> Void) {
@@ -202,46 +139,18 @@ class AudioRecorder: AudioRecorderProtocol {
                 return
             }
             
-            MXLog.debug("setting up audio session")
             setupAudioSession()
-
-            let outputURL = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
-            audioFileUrl = outputURL
+            audioEngine = AVAudioEngine()
+            currentTime = 0
             do {
-                MXLog.debug("creating audio file")
-                let inputFormat = audioEngine.inputNode.inputFormat(forBus: 0)
-                let fileFormat = audioFormat
-
-                MXLog.debug("audio input format: \(inputFormat)")
-                MXLog.debug("audio file format: \(fileFormat)")
-                
-                try audioFile = AVAudioFile(forWriting: outputURL, settings: fileFormat.settings)
-                
-                MXLog.debug("install tap")
-                audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: inputFormat) { [weak self] buffer, time in
-                    guard let self else { return }
-                    
-                    // Update the recording duration
-                    self.currentTime += Double(buffer.frameLength) / buffer.format.sampleRate
-                    
-                    // Compute the sample value for the waveform
-                    updateMeterLevel(buffer)
-                    
-                    // Write the buffer into the audio file
-                    do {
-                        try audioFile?.write(from: buffer)
-                    } catch {
-                        MXLog.error("failed to write sample. \(error)")
-                    }
+                let audioFile = try createAudioFile(with: recordID)
+                self.audioFile = audioFile
+                audioFileUrl = audioFile.url
+                audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: audioEngine.inputNode.inputFormat(forBus: 0)) { [weak self] buffer, _ in
+                    self?.processAudioBuffer(buffer)
                 }
-                
-                MXLog.debug("preparing audio engine")
-                audioEngine.prepare()
-                MXLog.debug("starting audio engine")
                 try audioEngine.start()
-                MXLog.debug("audio engine started")
                 completion(.success(()))
-
             } catch {
                 MXLog.error("audio recording failed to start. \(error)")
                 releaseAudioSession()
@@ -261,7 +170,7 @@ class AudioRecorder: AudioRecorderProtocol {
             audioEngine.stop()
             audioFile = nil // this will close the file
             releaseAudioSession()
-            MXLog.debug("audio recorder stopped")
+            MXLog.info("audio recorder stopped")
             actionsSubject.send(.didStopRecording)
         }
     }
@@ -276,10 +185,107 @@ class AudioRecorder: AudioRecorderProtocol {
                 try? FileManager.default.removeItem(at: audioFileUrl)
             }
             audioFileUrl = nil
+            currentTime = 0
         }
     }
     
-    // MARK: Audio metering
+    // MARK: Audio Processing
+    
+    private func processAudioBuffer(_ buffer: AVAudioPCMBuffer) {
+        dispatchQueue.async { [weak self] in
+            guard let self else { return
+            }
+            // Compute the sample value for the waveform
+            updateMeterLevel(buffer)
+            
+            // Update the recording duration
+            currentTime += Double(buffer.frameLength) / buffer.format.sampleRate
+            
+            // Write the buffer into the audio file
+            do {
+                try audioFile?.write(from: buffer)
+            } catch {
+                MXLog.error("failed to write sample. \(error)")
+            }
+        }
+    }
+    
+    // MARK: Observers
+    
+    private func addObservers() {
+        removeObservers()
+        // Stop recording uppon UIApplication.didEnterBackgroundNotification notification
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                MXLog.warning("Application will resign active while recording.")
+                Task { await self.stopRecording() }
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: Notification.Name.AVAudioEngineConfigurationChange)
+            .sink { [weak self] notification in
+                guard let self else { return }
+                self.handleConfigurationChange(notification: notification)
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)
+            .sink { [weak self] notification in
+                guard let self else { return }
+                self.handleInterruption(notification: notification)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func removeObservers() {
+        cancellables.removeAll()
+    }
+    
+    func handleInterruption(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+            return
+        }
+        
+        switch type {
+        case .began:
+            MXLog.debug("Interruption started: \(notification)")
+            audioSessionIsSuspended = true
+        case .ended:
+            MXLog.debug("Interruption ended: \(notification)")
+
+            guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
+            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+            
+            audioSessionIsSuspended = false
+            
+            if options.contains(.shouldResume) {
+                do {
+                    try audioEngine.start()
+                } catch {
+                    MXLog.debug("Error restarting audio: \(error)")
+                    actionsSubject.send(.didFailWithError(error: .interrupted))
+                }
+            } else {
+                MXLog.warning("AudioSession was interrupted: \(notification)")
+                actionsSubject.send(.didFailWithError(error: .interrupted))
+            }
+            
+        @unknown default:
+            break
+        }
+    }
+    
+    func handleConfigurationChange(notification: Notification) {
+        MXLog.warning("Configuration changed: \(audioEngine.inputNode.inputFormat(forBus: 0))")
+        if !audioSessionIsSuspended {
+            Task { await stopRecording() }
+        }
+    }
+    
+    // MARK: Audio Metering
     
     // https://www.kodeco.com/21672160-avaudioengine-tutorial-for-ios-getting-started?page=2
 
