@@ -69,6 +69,26 @@ class AudioPlayerStateTests: XCTestCase {
         XCTAssertFalse(audioPlayerState.showProgressIndicator)
     }
     
+    func testDelayedState() async throws {
+        audioPlayerState.attachAudioPlayer(audioPlayerMock)
+        
+        XCTAssert(audioPlayerState.isAttached)
+        XCTAssertEqual(audioPlayerState.playbackState, .loading)
+        XCTAssertEqual(audioPlayerState.delayedLoaderPlaybackState, .stopped)
+        
+        let deferred = deferFulfillment(audioPlayerState.$delayedLoaderPlaybackState) { output in
+            switch output {
+            case .loading:
+                return true
+            default:
+                return false
+            }
+        }
+        try await deferred.fulfill()
+        
+        XCTAssertEqual(audioPlayerState.delayedLoaderPlaybackState, .loading)
+    }
+    
     func testReportError() async throws {
         XCTAssertEqual(audioPlayerState.playbackState, .stopped)
         audioPlayerState.reportError(AudioPlayerError.genericError)
