@@ -60,8 +60,6 @@ enum AppLockScreenAlertType {
 }
 
 enum AppLockScreenViewAction {
-    /// Attempt to unlock the app with the supplied PIN code.
-    case submitPINCode
     /// Clears the PIN code after a failure animation.
     case clearPINCode
     /// The user didn't heed the warnings and can't remember their PIN.

@@ -48,7 +48,6 @@ class AppLockScreenViewModelTests: XCTestCase {
         // When entering it on the lock screen.
         let deferred = deferFulfillment(viewModel.actions) { $0 == .appUnlocked }
         viewModel.context.pinCode = pinCode
-        context.send(viewAction: .submitPINCode)
         let result = try await deferred.fulfill()
         
         // The app should become unlocked.
@@ -76,8 +75,10 @@ class AppLockScreenViewModelTests: XCTestCase {
         XCTAssertNil(context.alertInfo, "No alert should be shown yet.")
         
         // When entering it on the lock screen.
+        var deferred = deferFulfillment(context.$viewState) { $0.numberOfPINAttempts == 1 }
         viewModel.context.pinCode = pinCode
-        context.send(viewAction: .submitPINCode)
+        try await deferred.fulfill()
+        context.send(viewAction: .clearPINCode) // Simulate the animation completion
         
         // Then a failed attempt should be shown.
         XCTAssertEqual(context.viewState.numberOfPINAttempts, 1, "A failed attempt should have been recorded.")
@@ -85,8 +86,14 @@ class AppLockScreenViewModelTests: XCTestCase {
         XCTAssertNil(context.alertInfo, "No alert should be shown yet.")
         
         // When entering twice more
-        context.send(viewAction: .submitPINCode)
-        context.send(viewAction: .submitPINCode)
+        deferred = deferFulfillment(context.$viewState) { $0.numberOfPINAttempts == 2 }
+        viewModel.context.pinCode = pinCode
+        try await deferred.fulfill()
+        context.send(viewAction: .clearPINCode) // Simulate the animation completion
+        deferred = deferFulfillment(context.$viewState) { $0.numberOfPINAttempts == 3 }
+        viewModel.context.pinCode = pinCode
+        try await deferred.fulfill()
+        context.send(viewAction: .clearPINCode) // Simulate the animation completion
         
         // Then an alert should be shown
         XCTAssertEqual(context.viewState.numberOfPINAttempts, 3, "All the attempts should have been recorded.")
@@ -94,14 +101,15 @@ class AppLockScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.alertInfo?.id, .forcedLogout, "An alert should now be shown.")
     }
     
-    func testForceQuitRequiresLogout() {
+    func testForceQuitRequiresLogout() async throws {
         // Given an app with a PIN set where the user attempted to unlock 3 times.
         keychainController.pinCodeReturnValue = "2023"
         keychainController.containsPINCodeBiometricStateReturnValue = false
         appSettings.appLockNumberOfPINAttempts = 2
         XCTAssertNil(context.alertInfo)
+        let deferred = deferFulfillment(context.$viewState) { $0.numberOfPINAttempts == 3 }
         viewModel.context.pinCode = "0000"
-        context.send(viewAction: .submitPINCode)
+        try await deferred.fulfill()
         XCTAssertEqual(appSettings.appLockNumberOfPINAttempts, 3, "The app should have 3 failed attempts before the force quit.")
         XCTAssertEqual(context.alertInfo?.id, .forcedLogout, "The app should be showing the alert before the force quit.")
         

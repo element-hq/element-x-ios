@@ -88,8 +88,6 @@ enum AppLockSetupPINScreenAlertType {
 }
 
 enum AppLockSetupPINScreenViewAction {
-    /// Confirm the entered PIN.
-    case submitPINCode
     /// Stop entering a PIN.
     case cancel
 }

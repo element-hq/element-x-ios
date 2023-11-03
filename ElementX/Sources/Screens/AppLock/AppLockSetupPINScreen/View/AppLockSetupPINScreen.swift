@@ -43,10 +43,6 @@ struct AppLockSetupPINScreen: View {
                 PINTextField(pinCode: $context.pinCode,
                              isSecure: context.viewState.mode == .unlock)
                     .focused($textFieldFocus)
-                    .onChange(of: context.pinCode) { newValue in
-                        guard newValue.count == 4 else { return }
-                        context.send(viewAction: .submitPINCode)
-                    }
             }
             .padding(.horizontal, 16)
             .padding(.top, UIConstants.iconTopPaddingToNavigationBar)
