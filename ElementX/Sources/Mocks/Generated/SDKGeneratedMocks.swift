@@ -575,13 +575,18 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var setDelegateDelegateReceivedDelegate: ClientDelegate?
     public var setDelegateDelegateReceivedInvocations: [ClientDelegate?] = []
-    public var setDelegateDelegateClosure: ((ClientDelegate?) -> Void)?
+    public var setDelegateDelegateReturnValue: TaskHandle?
+    public var setDelegateDelegateClosure: ((ClientDelegate?) -> TaskHandle?)?
 
-    public func setDelegate(delegate: ClientDelegate?) {
+    public func setDelegate(delegate: ClientDelegate?) -> TaskHandle? {
         setDelegateDelegateCallsCount += 1
         setDelegateDelegateReceivedDelegate = delegate
         setDelegateDelegateReceivedInvocations.append(delegate)
-        setDelegateDelegateClosure?(delegate)
+        if let setDelegateDelegateClosure = setDelegateDelegateClosure {
+            return setDelegateDelegateClosure(delegate)
+        } else {
+            return setDelegateDelegateReturnValue
+        }
     }
     //MARK: - setDisplayName
 

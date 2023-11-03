@@ -71,8 +71,10 @@ class ClientProxy: ClientProxyProtocol {
     private var hasEncounteredAuthError = false
     
     deinit {
-        stopSync()
-        delegateHandle?.cancel()
+        stopSync { [delegateHandle] in
+            // The delegate handle needs to be cancelled always after the sync stops
+            delegateHandle?.cancel()
+        }
     }
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
@@ -170,10 +172,17 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func stopSync() {
+        stopSync(completion: nil)
+    }
+    
+    private func stopSync(completion: (() -> Void)?) {
         MXLog.info("Stopping sync")
         
         Task {
             do {
+                defer {
+                    completion?()
+                }
                 try await syncService?.stop()
             } catch {
                 MXLog.error("Failed stopping the sync service with error: \(error)")

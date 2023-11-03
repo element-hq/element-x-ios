@@ -67,7 +67,8 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                                                                                  skipLobby: true,
                                                                                  confineToRoom: true,
                                                                                  font: nil,
-                                                                                 analyticsId: nil)) else {
+                                                                                 analyticsId: nil,
+                                                                                 encryption: .unencrypted)) else {
             return .failure(.failedBuildingWidgetSettings)
         }
         
