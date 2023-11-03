@@ -20,6 +20,7 @@ enum AnalyticsMessageType {
     case location(LocationType)
     case poll
     case text
+    case voiceMessage
 
     enum LocationType {
         case pin
@@ -36,6 +37,8 @@ extension AnalyticsEvent.Composer.MessageType {
             self = .Poll
         case .text:
             self = .Text
+        case .voiceMessage:
+            self = .VoiceMessage
         }
     }
 
