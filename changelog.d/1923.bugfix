@@ -1,0 +1,1 @@
+Fixed a memory leak that made the NSE crash.
