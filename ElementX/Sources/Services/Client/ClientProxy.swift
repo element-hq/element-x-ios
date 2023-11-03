@@ -36,6 +36,8 @@ class ClientProxy: ClientProxyProtocol {
     private var syncService: SyncService?
     private var syncServiceStateUpdateTaskHandle: TaskHandle?
     
+    private var delegateHandle: TaskHandle?
+    
     // These following summary providers both operate on the same allRooms() list but
     // can apply their own filtering and pagination
     private(set) var roomSummaryProvider: RoomSummaryProviderProtocol?
@@ -69,8 +71,10 @@ class ClientProxy: ClientProxyProtocol {
     private var hasEncounteredAuthError = false
     
     deinit {
-        client.setDelegate(delegate: nil)
-        stopSync()
+        stopSync { [delegateHandle] in
+            // The delegate handle needs to be cancelled always after the sync stops
+            delegateHandle?.cancel()
+        }
     }
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
@@ -98,7 +102,7 @@ class ClientProxy: ClientProxyProtocol {
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
 
-        client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
+        delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
             self?.callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
         })
@@ -168,10 +172,17 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func stopSync() {
+        stopSync(completion: nil)
+    }
+    
+    private func stopSync(completion: (() -> Void)?) {
         MXLog.info("Stopping sync")
         
         Task {
             do {
+                defer {
+                    completion?()
+                }
                 try await syncService?.stop()
             } catch {
                 MXLog.error("Failed stopping the sync service with error: \(error)")
