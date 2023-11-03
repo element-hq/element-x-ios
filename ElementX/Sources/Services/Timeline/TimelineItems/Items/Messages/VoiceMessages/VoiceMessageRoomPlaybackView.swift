@@ -43,7 +43,7 @@ struct VoiceMessageRoomPlaybackView: View {
     var body: some View {
         HStack {
             HStack {
-                VoiceMessageButton(state: .init(playerState.delayedLoaderPlaybackState),
+                VoiceMessageButton(state: .init(playerState.playerButtonPlaybackState),
                                    size: .medium,
                                    action: onPlayPause)
                 Text(timeLabelContent)

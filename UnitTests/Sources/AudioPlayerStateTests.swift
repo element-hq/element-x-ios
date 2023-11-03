@@ -74,9 +74,9 @@ class AudioPlayerStateTests: XCTestCase {
         
         XCTAssert(audioPlayerState.isAttached)
         XCTAssertEqual(audioPlayerState.playbackState, .loading)
-        XCTAssertEqual(audioPlayerState.delayedLoaderPlaybackState, .stopped)
+        XCTAssertEqual(audioPlayerState.playerButtonPlaybackState, .stopped)
         
-        let deferred = deferFulfillment(audioPlayerState.$delayedLoaderPlaybackState) { output in
+        let deferred = deferFulfillment(audioPlayerState.$playerButtonPlaybackState) { output in
             switch output {
             case .loading:
                 return true
@@ -86,15 +86,15 @@ class AudioPlayerStateTests: XCTestCase {
         }
         try await deferred.fulfill()
         
-        XCTAssertEqual(audioPlayerState.delayedLoaderPlaybackState, .loading)
+        XCTAssertEqual(audioPlayerState.playerButtonPlaybackState, .loading)
     }
     
     func testOtherActionsAreNotDelayed() async throws {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
         XCTAssertEqual(audioPlayerState.playbackState, .loading)
-        XCTAssertEqual(audioPlayerState.delayedLoaderPlaybackState, .stopped)
+        XCTAssertEqual(audioPlayerState.playerButtonPlaybackState, .stopped)
         
-        let deferred = deferFulfillment(audioPlayerState.$delayedLoaderPlaybackState) { output in
+        let deferred = deferFulfillment(audioPlayerState.$playerButtonPlaybackState) { output in
             switch output {
             case .playing:
                 return true
@@ -106,7 +106,7 @@ class AudioPlayerStateTests: XCTestCase {
         audioPlayerActionsSubject.send(.didStartPlaying)
         try await deferred.fulfill()
         XCTAssertEqual(audioPlayerState.playbackState, .playing)
-        XCTAssertEqual(audioPlayerState.delayedLoaderPlaybackState, .playing)
+        XCTAssertEqual(audioPlayerState.playerButtonPlaybackState, .playing)
     }
     
     func testReportError() async throws {

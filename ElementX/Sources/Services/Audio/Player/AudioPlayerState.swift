@@ -39,7 +39,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
     @Published private(set) var playbackState: AudioPlayerPlaybackState
     /// It's similar to `playbackState`, with the a difference: `.loading`
     /// updates are delayed by a fixed amount of time
-    @Published private(set) var delayedLoaderPlaybackState: AudioPlayerPlaybackState
+    @Published private(set) var playerButtonPlaybackState: AudioPlayerPlaybackState
     @Published private(set) var progress: Double
     @Published private(set) var showProgressIndicator: Bool
 
@@ -67,7 +67,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
         self.progress = progress
         showProgressIndicator = false
         playbackState = .stopped
-        delayedLoaderPlaybackState = .stopped
+        playerButtonPlaybackState = .stopped
         setupPlaybackStateSubscription()
     }
     
@@ -196,7 +196,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
             }
             .switchToLatest()
             .removeDuplicates()
-            .weakAssign(to: \.delayedLoaderPlaybackState, on: self)
+            .weakAssign(to: \.playerButtonPlaybackState, on: self)
     }
 }
 
