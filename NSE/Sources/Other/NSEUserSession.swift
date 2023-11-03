@@ -79,8 +79,4 @@ private class ClientDelegateWrapper: ClientDelegate {
     func didRefreshTokens() {
         MXLog.info("Delegating session updates to the ClientSessionDelegate.")
     }
-    
-    deinit {
-        MXLog.info("ClientDelegateWrapper deinit")
-    }
 }
