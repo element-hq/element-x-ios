@@ -56,6 +56,7 @@ struct VoiceMessageButton: View {
         .buttonStyle(VoiceMessageButtonStyle())
         .disabled(state == .loading)
         .background(Circle().foregroundColor(.compound.bgCanvasDefault))
+        .accessibilityLabel(accessibilityLabel)
     }
 
     @ViewBuilder
@@ -65,7 +66,6 @@ struct VoiceMessageButton: View {
             ProgressView()
         case .playing, .paused:
             let imageAsset = state == .playing ? Asset.Images.mediaPause : Asset.Images.mediaPlay
-            let accessibilityLabel = state == .playing ? L10n.a11yPause : L10n.a11yPlay
             let offset: CGFloat = state == .playing ? 0 : 2
 
             Image(asset: imageAsset)
@@ -73,7 +73,17 @@ struct VoiceMessageButton: View {
                 .scaledToFit()
                 .frame(width: imageWidth, height: imageHeight)
                 .offset(x: offset)
-                .accessibilityLabel(accessibilityLabel)
+        }
+    }
+    
+    private var accessibilityLabel: String {
+        switch state {
+        case .loading:
+            return ""
+        case .playing:
+            return L10n.a11yPause
+        case .paused:
+            return L10n.a11yPlay
         }
     }
 }
