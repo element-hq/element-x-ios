@@ -37,11 +37,15 @@ class AudioPlayerState: ObservableObject, Identifiable {
     let duration: Double
     let waveform: EstimatedWaveform
     @Published private(set) var playbackState: AudioPlayerPlaybackState
+    /// It's similar to `playbackState`, with the a difference: `.loading`
+    /// updates are delayed by a fixed amount of time
+    @Published private(set) var playerButtonPlaybackState: AudioPlayerPlaybackState
     @Published private(set) var progress: Double
     @Published private(set) var showProgressIndicator: Bool
 
     private weak var audioPlayer: AudioPlayerProtocol?
-    private var cancellables: Set<AnyCancellable> = []
+    private var audioPlayerSubscription: AnyCancellable?
+    private var playbackStateSubscription: AnyCancellable?
     private var displayLink: CADisplayLink?
 
     /// The file url that the last player attached to this object has loaded.
@@ -63,6 +67,8 @@ class AudioPlayerState: ObservableObject, Identifiable {
         self.progress = progress
         showProgressIndicator = false
         playbackState = .stopped
+        playerButtonPlaybackState = .stopped
+        setupPlaybackStateSubscription()
     }
     
     deinit {
@@ -99,7 +105,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
     func detachAudioPlayer() {
         audioPlayer?.stop()
         stopPublishProgress()
-        cancellables = []
+        audioPlayerSubscription = nil
         audioPlayer = nil
         playbackState = .stopped
         showProgressIndicator = false
@@ -112,7 +118,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
     // MARK: - Private
     
     private func subscribeToAudioPlayer(audioPlayer: AudioPlayerProtocol) {
-        audioPlayer.actions
+        audioPlayerSubscription = audioPlayer.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 guard let self else {
@@ -122,7 +128,6 @@ class AudioPlayerState: ObservableObject, Identifiable {
                     await self.handleAudioPlayerAction(action)
                 }
             }
-            .store(in: &cancellables)
     }
     
     private func handleAudioPlayerAction(_ action: AudioPlayerAction) async {
@@ -174,6 +179,24 @@ class AudioPlayerState: ObservableObject, Identifiable {
     
     private func restoreAudioPlayerState(audioPlayer: AudioPlayerProtocol) async {
         await audioPlayer.seek(to: progress)
+    }
+    
+    private func setupPlaybackStateSubscription() {
+        playbackStateSubscription = $playbackState
+            .map { state in
+                switch state {
+                case .loading:
+                    return Just(state)
+                        .delay(for: .seconds(2), scheduler: RunLoop.main)
+                        .eraseToAnyPublisher()
+                case .playing, .stopped, .error, .readyToPlay:
+                    return Just(state)
+                        .eraseToAnyPublisher()
+                }
+            }
+            .switchToLatest()
+            .removeDuplicates()
+            .weakAssign(to: \.playerButtonPlaybackState, on: self)
     }
 }
 

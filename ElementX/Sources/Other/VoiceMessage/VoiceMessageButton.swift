@@ -88,13 +88,13 @@ private struct VoiceMessageButtonStyle: ButtonStyle {
 }
 
 extension VoiceMessageButton.State {
-    init(state: AudioPlayerPlaybackState) {
+    init(_ state: AudioPlayerPlaybackState) {
         switch state {
         case .loading:
             self = .loading
         case .playing:
             self = .playing
-        default:
+        case .stopped, .error, .readyToPlay:
             self = .paused
         }
     }

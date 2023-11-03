@@ -409,8 +409,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                     guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(timelineItem.id)) else {
                         continue
                     }
-                    playerState.detachAudioPlayer()
-                    mediaPlayerProvider.unregister(audioPlayerState: playerState)
+                    Task { @MainActor in
+                        playerState.detachAudioPlayer()
+                        mediaPlayerProvider.unregister(audioPlayerState: playerState)
+                    }
                 }
 
                 newTimelineItems.append(timelineItem)

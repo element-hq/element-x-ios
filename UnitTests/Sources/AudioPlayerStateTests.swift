@@ -69,6 +69,46 @@ class AudioPlayerStateTests: XCTestCase {
         XCTAssertFalse(audioPlayerState.showProgressIndicator)
     }
     
+    func testDelayedState() async throws {
+        audioPlayerState.attachAudioPlayer(audioPlayerMock)
+        
+        XCTAssert(audioPlayerState.isAttached)
+        XCTAssertEqual(audioPlayerState.playbackState, .loading)
+        XCTAssertEqual(audioPlayerState.playerButtonPlaybackState, .stopped)
+        
+        let deferred = deferFulfillment(audioPlayerState.$playerButtonPlaybackState) { output in
+            switch output {
+            case .loading:
+                return true
+            default:
+                return false
+            }
+        }
+        try await deferred.fulfill()
+        
+        XCTAssertEqual(audioPlayerState.playerButtonPlaybackState, .loading)
+    }
+    
+    func testOtherActionsAreNotDelayed() async throws {
+        audioPlayerState.attachAudioPlayer(audioPlayerMock)
+        XCTAssertEqual(audioPlayerState.playbackState, .loading)
+        XCTAssertEqual(audioPlayerState.playerButtonPlaybackState, .stopped)
+        
+        let deferred = deferFulfillment(audioPlayerState.$playerButtonPlaybackState) { output in
+            switch output {
+            case .playing:
+                return true
+            default:
+                return false
+            }
+        }
+        
+        audioPlayerActionsSubject.send(.didStartPlaying)
+        try await deferred.fulfill()
+        XCTAssertEqual(audioPlayerState.playbackState, .playing)
+        XCTAssertEqual(audioPlayerState.playerButtonPlaybackState, .playing)
+    }
+    
     func testReportError() async throws {
         XCTAssertEqual(audioPlayerState.playbackState, .stopped)
         audioPlayerState.reportError(AudioPlayerError.genericError)
