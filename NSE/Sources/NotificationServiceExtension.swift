@@ -46,7 +46,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         handler = contentHandler
         modifiedContent = request.content.mutableCopy() as? UNMutableNotificationContent
 
-        NSELogger.configure()
+        NSELogger.configure(logLevel: settings.logLevel)
 
         NSELogger.logMemory(with: tag)
 

@@ -75,13 +75,13 @@ class NSELogger {
         return "\(formattedStr) MB"
     }
 
-    static func configure() {
+    static func configure(logLevel: TracingConfiguration.LogLevel) {
         guard !isConfigured else {
             return
         }
         isConfigured = true
 
-        MXLog.configure(target: "nse", logLevel: .info)
+        MXLog.configure(target: "nse", logLevel: logLevel)
     }
 
     static func logMemory(with tag: String) {
