@@ -105,7 +105,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         messageBubble
                     }
                 }
-                .accessibilityElement(children: .combine)
             
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(itemID: timelineItem.id,
