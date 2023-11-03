@@ -24,6 +24,7 @@ final class NSEUserSession {
     private(set) lazy var mediaProvider: MediaProviderProtocol = MediaProvider(mediaLoader: MediaLoader(client: baseClient),
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
+    private let delegateHandle: TaskHandle?
 
     init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate) throws {
         userID = credentials.userID
@@ -35,7 +36,7 @@ final class NSEUserSession {
                                            sessionDelegate: clientSessionDelegate)
             .build()
         
-        baseClient.setDelegate(delegate: ClientDelegateWrapper())
+        delegateHandle = baseClient.setDelegate(delegate: ClientDelegateWrapper())
         try baseClient.restoreSession(session: credentials.restorationToken.session)
         
         notificationClient = try baseClient
@@ -62,6 +63,10 @@ final class NSEUserSession {
             }
         }
     }
+    
+    deinit {
+        delegateHandle?.cancel()
+    }
 }
 
 private class ClientDelegateWrapper: ClientDelegate {
@@ -73,5 +78,9 @@ private class ClientDelegateWrapper: ClientDelegate {
     
     func didRefreshTokens() {
         MXLog.info("Delegating session updates to the ClientSessionDelegate.")
+    }
+    
+    deinit {
+        MXLog.info("ClientDelegateWrapper deinit")
     }
 }
