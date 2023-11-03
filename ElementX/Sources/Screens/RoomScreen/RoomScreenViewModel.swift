@@ -1001,6 +1001,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             displayError(.alert(L10n.errorFailedUploadingVoiceMessage))
             return
         }
+        
+        analytics.trackComposer(inThread: false,
+                                isEditing: false,
+                                isReply: false,
+                                messageType: .voiceMessage,
+                                startsThread: nil)
 
         actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: true))))
         await voiceMessageRecorder.stopPlayback()
