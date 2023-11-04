@@ -21,4 +21,8 @@ final class NSESettings {
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
+
+    /// The log level that should be used by `MXLog`.
+    @UserPreference(key: SharedUserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
+    var logLevel
 }

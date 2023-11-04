@@ -15,5 +15,5 @@
 //
 
 enum SharedUserDefaultsKeys: String {
-    case filterNotificationsByPushRulesEnabled
+    case logLevel
 }
