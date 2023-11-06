@@ -87,6 +87,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .lineLimit(1)
                     .padding(.vertical, senderNameVerticalPadding)
             }
+            // sender info are read inside the `TimelineAccessibilityModifier`
             .accessibilityHidden(true)
             .onTapGesture {
                 context.send(viewAction: .tappedOnUser(userID: timelineItem.sender.id))
@@ -99,14 +100,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         // Figma overlaps reactions by 3
         VStack(alignment: alignment, spacing: -3) {
             messageBubble
-                .accessibilityRepresentation {
-                    VStack(spacing: 0) {
-                        Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
-                            // Workaround: fixes VoiceOver frames offset when children accessibility element aren't combined
-                            .frame(height: 0)
-                        messageBubble
-                    }
-                }
                 .timelineAccessibility(timelineItem)
             
             if !timelineItem.properties.reactions.isEmpty {

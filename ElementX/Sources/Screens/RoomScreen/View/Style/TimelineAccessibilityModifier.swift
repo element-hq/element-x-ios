@@ -24,8 +24,18 @@ private struct TimelineAccessibilityModifier: ViewModifier {
         switch timelineItem {
         case is PollRoomTimelineItem, is VoiceMessageRoomTimelineItem:
             content
+        case let timelineItem as EventBasedTimelineItemProtocol:
+            content
+                .accessibilityRepresentation {
+                    VStack {
+                        Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
+                        content
+                    }
+                }
+                .accessibilityElement(children: .combine)
         default:
-            content.accessibilityElement(children: .combine)
+            content
+                .accessibilityElement(children: .combine)
         }
     }
 }

@@ -54,6 +54,7 @@ struct PollRoomTimelineView: View {
             Image(asset.name)
                 .resizable()
                 .frame(width: iconSize, height: iconSize)
+                .accessibilityHidden(true)
 
             Text(poll.question)
                 .multilineTextAlignment(.leading)
