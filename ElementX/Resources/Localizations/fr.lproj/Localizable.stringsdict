@@ -173,7 +173,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Dernière tentative pour déverrouiller</string>
+			<string>Il reste %1$d tentative pour déverrouiller</string>
 			<key>other</key>
 			<string>Il reste %1$d tentatives pour déverrouiller</string>
 		</dict>
@@ -189,7 +189,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Code PIN incorrect. Dernière tentative</string>
+			<string>Code PIN incorrect. Il reste %1$d tentative</string>
 			<key>other</key>
 			<string>Code PIN incorrect. Il reste %1$d tentatives</string>
 		</dict>

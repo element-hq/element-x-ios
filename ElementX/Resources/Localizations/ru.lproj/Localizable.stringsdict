@@ -13,9 +13,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d digit entered</string>
-			<key>other</key>
-			<string>%1$d digits entered</string>
+			<string>Введена цифра %1$d</string>
+			<key>few</key>
+			<string>Ведено %1$d цифр</string>
+			<key>many</key>
+			<string>Введено много цифр</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -191,9 +193,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
-			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>Вы попытались разблокировать %1$d раз</string>
+			<key>few</key>
+			<string>Вы попытались разблокировать %1$d раз</string>
+			<key>many</key>
+			<string>Вы попытались разблокировать много раз</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -207,9 +211,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Wrong PIN. You have %1$d more chance</string>
-			<key>other</key>
-			<string>Wrong PIN. You have %1$d more chances</string>
+			<string>Неверный PIN-код. У вас остался %1$d шанс</string>
+			<key>few</key>
+			<string>Неверный PIN-код. У вас остался %1$d шансов</string>
+			<key>many</key>
+			<string></string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>

@@ -13,9 +13,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d digit entered</string>
+			<string>zadána %1$d číslice</string>
+			<key>few</key>
+			<string>zadány %1$d číslice</string>
 			<key>other</key>
-			<string>%1$d digits entered</string>
+			<string>zadáno %1$d číslic</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -191,9 +193,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
+			<string>Máte %1$d pokus pro odemknutí</string>
+			<key>few</key>
+			<string>Máte %1$d pokusy pro odemknutí</string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>Máte %1$d pokusů pro odemknutí</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -207,9 +211,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Wrong PIN. You have %1$d more chance</string>
+			<string>Špatný PIN. Máte %1$d další pokus</string>
+			<key>few</key>
+			<string>Špatný PIN. Máte %1$d další pokusy</string>
 			<key>other</key>
-			<string>Wrong PIN. You have %1$d more chances</string>
+			<string>Špatný PIN. Máte %1$d dalších pokusů</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
