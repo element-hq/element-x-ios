@@ -160,6 +160,8 @@ struct SecureBackupRecoveryKeyScreen: View {
                 .padding()
                 .background(Color.compound.bgSubtleSecondaryLevel0)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
             
             Text(context.viewState.recoveryKeySubtitle)
                 .foregroundColor(.compound.textSecondary)
