@@ -100,11 +100,14 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         VStack(alignment: alignment, spacing: -3) {
             messageBubble
                 .accessibilityRepresentation {
-                    VStack {
+                    VStack(spacing: 0) {
                         Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
+                            // Workaround: fixes VoiceOver frames offset when children accessibility element aren't combined
+                            .frame(height: 0)
                         messageBubble
                     }
                 }
+                .timelineAccessibility(timelineItem)
             
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(itemID: timelineItem.id,
