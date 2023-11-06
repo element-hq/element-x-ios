@@ -27,7 +27,7 @@ struct SecureBackupRecoveryKeyScreen: View {
         ScrollView {
             ScrollViewReader { reader in
                 mainContent
-                    .padding()
+                    .padding(16)
                     .onChange(of: focused) { newValue in
                         guard newValue == true else { return }
                         reader.scrollTo(textFieldIdentifier)
@@ -36,7 +36,7 @@ struct SecureBackupRecoveryKeyScreen: View {
         }
         .safeAreaInset(edge: .bottom) {
             footer
-                .padding([.horizontal, .bottom])
+                .padding([.horizontal, .bottom], 16)
                 .padding(.top, 8)
                 .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         }
