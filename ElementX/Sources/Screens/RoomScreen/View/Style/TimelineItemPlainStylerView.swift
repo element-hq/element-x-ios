@@ -114,6 +114,8 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     .font(.compound.bodyXS)
             }
             .padding(.top, 16)
+            // sender info are read inside the `TimelineAccessibilityModifier`
+            .accessibilityHidden(true)
         }
     }
     
