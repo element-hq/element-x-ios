@@ -43,6 +43,7 @@ struct PlaceholderScreen: View {
             .background()
             .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
             .ignoresSafeArea(edges: .top)
+            .ignoresSafeArea(.keyboard)
     }
 }
 
