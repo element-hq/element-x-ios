@@ -144,6 +144,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
             waveformData = samples.map { UInt16(max(0, (1 - $0) * 1024)) }
         } catch {
             MXLog.error("Waveform analysis failed. \(error)")
+            return .failure(.waveformAnalysisError)
         }
         return .success(waveformData)
     }

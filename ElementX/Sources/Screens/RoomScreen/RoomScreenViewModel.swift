@@ -956,7 +956,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                              secondaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil))
             default:
                 MXLog.error("failed to start voice message recording. \(error)")
-                // TODO: display an error
                 actionsSubject.send(.composer(action: .setMode(mode: .default)))
             }
         }

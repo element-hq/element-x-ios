@@ -22,6 +22,7 @@ enum VoiceMessageRecorderError: Error {
     case missingRecordingFile
     case previewNotAvailable
     case audioRecorderError(AudioRecorderError)
+    case waveformAnalysisError
     case failedSendingVoiceMessage
 }
 

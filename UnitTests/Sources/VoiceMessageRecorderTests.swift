@@ -24,6 +24,11 @@ class VoiceMessageRecorderTests: XCTestCase {
     private var voiceMessageRecorder: VoiceMessageRecorder!
     
     private var audioRecorder: AudioRecorderMock!
+    private var audioRecorderActionsSubject: PassthroughSubject<AudioRecorderAction, Never> = .init()
+    private var audioRecorderActions: AnyPublisher<AudioRecorderAction, Never> {
+        audioRecorderActionsSubject.eraseToAnyPublisher()
+    }
+
     private var mediaPlayerProvider: MediaPlayerProviderMock!
     private var audioConverter: AudioConverterMock!
     private var voiceMessageCache: VoiceMessageCacheMock!
@@ -38,9 +43,10 @@ class VoiceMessageRecorderTests: XCTestCase {
     
     override func setUp() async throws {
         audioRecorder = AudioRecorderMock()
-        audioRecorder.recordWithReturnValue = .success(())
         audioRecorder.underlyingCurrentTime = 0
-        audioRecorder.averagePowerForChannelNumberReturnValue = 0
+        audioRecorder.averagePowerReturnValue = 0
+        audioRecorder.actions = audioRecorderActions
+        
         audioPlayer = AudioPlayerMock()
         audioPlayer.actions = audioPlayerActions
         audioPlayer.state = .stopped
@@ -57,56 +63,68 @@ class VoiceMessageRecorderTests: XCTestCase {
                                                     audioConverter: audioConverter,
                                                     voiceMessageCache: voiceMessageCache)
     }
-        
+    
+    func testRecordingURL() async throws {
+        audioRecorder.audioFileUrl = recordingURL
+        XCTAssertEqual(voiceMessageRecorder.recordingURL, recordingURL)
+    }
+    
+    func testRecordingDuration() async throws {
+        audioRecorder.currentTime = 10.3
+        XCTAssertEqual(voiceMessageRecorder.recordingDuration, 10.3)
+    }
+    
     func testStartRecording() async throws {
-        audioRecorder.url = recordingURL
         _ = await voiceMessageRecorder.startRecording()
         XCTAssert(audioRecorder.recordWithCalled)
-        XCTAssertEqual(voiceMessageRecorder.recordingURL, audioRecorder.url)
     }
     
     func testStopRecording() async throws {
-        audioRecorder.isRecording = true
-        audioRecorder.currentTime = 14.0
-        audioRecorder.url = recordingURL
-        
-        _ = await voiceMessageRecorder.startRecording()
         _ = await voiceMessageRecorder.stopRecording()
-        
         // Internal audio recorder must have been stopped
         XCTAssert(audioRecorder.stopRecordingCalled)
-        
-        // A preview player state must be available
-        let previewPlayerState = voiceMessageRecorder.previewAudioPlayerState
-        XCTAssertNotNil(previewPlayerState)
-        XCTAssertEqual(previewPlayerState?.duration, audioRecorder.currentTime)
     }
     
     func testCancelRecording() async throws {
-        audioRecorder.isRecording = true
-        
         await voiceMessageRecorder.cancelRecording()
-        
+        // Internal audio recorder must have been stopped
+        XCTAssert(audioRecorder.stopRecordingCalled)
         // The recording audio file must have been deleted
         XCTAssert(audioRecorder.deleteRecordingCalled)
     }
-    
+
     func testDeleteRecording() async throws {
         await voiceMessageRecorder.deleteRecording()
+        // The recording audio file must have been deleted
         XCTAssert(audioRecorder.deleteRecordingCalled)
+    }
+
+    func testStartPlaybackNoPreview() async throws {
+        guard case .failure(.previewNotAvailable) = await voiceMessageRecorder.startPlayback() else {
+            XCTFail("An error is expected")
+            return
+        }
     }
     
     func testStartPlayback() async throws {
-        audioRecorder.url = recordingURL
-        _ = await voiceMessageRecorder.startRecording()
-        _ = await voiceMessageRecorder.stopRecording()
+        audioRecorder.audioFileUrl = recordingURL
+        audioRecorderActionsSubject.send(.didStopRecording)
 
-        // if the player url doesn't match the recording url
+        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
+            switch action {
+            case .didStopRecording(_, let url) where url == self.recordingURL:
+                return true
+            default:
+                return false
+            }
+        }
+        try await deferred.fulfill()
+        
         guard case .success = await voiceMessageRecorder.startPlayback() else {
             XCTFail("Playback should start")
             return
         }
-        
+        XCTAssertEqual(voiceMessageRecorder.previewAudioPlayerState?.isAttached, true)
         XCTAssert(audioPlayer.loadMediaSourceUsingAutoplayCalled)
         XCTAssertEqual(audioPlayer.loadMediaSourceUsingAutoplayReceivedArguments?.url, recordingURL)
         XCTAssertEqual(audioPlayer.loadMediaSourceUsingAutoplayReceivedArguments?.mediaSource.mimeType, "audio/m4a")
@@ -115,40 +133,66 @@ class VoiceMessageRecorderTests: XCTestCase {
         XCTAssertFalse(audioPlayer.playCalled)
     }
     
-    func testResumePlayback() async throws {
-        audioRecorder.url = recordingURL
-        _ = await voiceMessageRecorder.startRecording()
-        _ = await voiceMessageRecorder.stopRecording()
-        
-        // if the player url matches the recording url
-        audioPlayer.url = recordingURL
-        guard case .success = await voiceMessageRecorder.startPlayback() else {
-            XCTFail("Playback should start")
-            return
-        }
-        
-        XCTAssertFalse(audioPlayer.loadMediaSourceUsingAutoplayCalled)
-        XCTAssert(audioPlayer.playCalled)
-    }
-    
     func testPausePlayback() async throws {
-        audioRecorder.url = recordingURL
-        switch await voiceMessageRecorder.startRecording() {
-        case .failure(let error):
-            XCTFail("Recording should start. \(error)")
-        case .success:
-            break
+        audioRecorder.audioFileUrl = recordingURL
+        audioRecorderActionsSubject.send(.didStopRecording)
+
+        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
+            switch action {
+            case .didStopRecording(_, let url) where url == self.recordingURL:
+                return true
+            default:
+                return false
+            }
         }
-        _ = await voiceMessageRecorder.stopRecording()
+        try await deferred.fulfill()
+        _ = await voiceMessageRecorder.startPlayback()
+        XCTAssertEqual(voiceMessageRecorder.previewAudioPlayerState?.isAttached, true)
 
         voiceMessageRecorder.pausePlayback()
         XCTAssert(audioPlayer.pauseCalled)
     }
     
+    func testResumePlayback() async throws {
+        audioRecorder.audioFileUrl = recordingURL
+        audioPlayer.url = recordingURL
+        audioRecorderActionsSubject.send(.didStopRecording)
+
+        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
+            switch action {
+            case .didStopRecording(_, let url) where url == self.recordingURL:
+                return true
+            default:
+                return false
+            }
+        }
+        try await deferred.fulfill()
+        
+        guard case .success = await voiceMessageRecorder.startPlayback() else {
+            XCTFail("Playback should start")
+            return
+        }
+        XCTAssertEqual(voiceMessageRecorder.previewAudioPlayerState?.isAttached, true)
+        // The media must not have been reloaded
+        XCTAssertFalse(audioPlayer.loadMediaSourceUsingAutoplayCalled)
+        XCTAssertTrue(audioPlayer.playCalled)
+    }
+
     func testStopPlayback() async throws {
-        audioRecorder.url = recordingURL
-        _ = await voiceMessageRecorder.startRecording()
-        _ = await voiceMessageRecorder.stopRecording()
+        audioRecorder.audioFileUrl = recordingURL
+        audioRecorderActionsSubject.send(.didStopRecording)
+
+        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
+            switch action {
+            case .didStopRecording(_, let url) where url == self.recordingURL:
+                return true
+            default:
+                return false
+            }
+        }
+        try await deferred.fulfill()
+        _ = await voiceMessageRecorder.startPlayback()
+        XCTAssertEqual(voiceMessageRecorder.previewAudioPlayerState?.isAttached, true)
         
         await voiceMessageRecorder.stopPlayback()
         XCTAssertEqual(voiceMessageRecorder.previewAudioPlayerState?.isAttached, false)
@@ -156,26 +200,38 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testSeekPlayback() async throws {
-        audioRecorder.url = recordingURL
-        // Calling stop will generate the preview player state needed to have an audio player
-        _ = await voiceMessageRecorder.startRecording()
-        _ = await voiceMessageRecorder.stopRecording()
-        voiceMessageRecorder.previewAudioPlayerState?.attachAudioPlayer(audioPlayer)
-        
+        audioRecorder.audioFileUrl = recordingURL
+        audioRecorderActionsSubject.send(.didStopRecording)
+
+        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
+            switch action {
+            case .didStopRecording(_, let url) where url == self.recordingURL:
+                return true
+            default:
+                return false
+            }
+        }
+        try await deferred.fulfill()
+        _ = await voiceMessageRecorder.startPlayback()
+        XCTAssertEqual(voiceMessageRecorder.previewAudioPlayerState?.isAttached, true)
+
         await voiceMessageRecorder.seekPlayback(to: 0.4)
-        XCTAssert(audioPlayer.seekToCalled)
         XCTAssertEqual(audioPlayer.seekToReceivedProgress, 0.4)
     }
     
     func testBuildRecordedWaveform() async throws {
+        // If there is no recording file, an error is expected
+        audioRecorder.audioFileUrl = nil
+        guard case .failure(.missingRecordingFile) = await voiceMessageRecorder.buildRecordingWaveform() else {
+            XCTFail("An error is expected")
+            return
+        }
+        
         guard let audioFileUrl = Bundle(for: Self.self).url(forResource: "test_audio", withExtension: "mp3") else {
             XCTFail("Test audio file is missing")
             return
         }
-        audioRecorder.url = audioFileUrl
-        _ = await voiceMessageRecorder.startRecording()
-        _ = await voiceMessageRecorder.stopRecording()
-        
+        audioRecorder.audioFileUrl = audioFileUrl
         guard case .success(let data) = await voiceMessageRecorder.buildRecordingWaveform() else {
             XCTFail("A waveform is expected")
             return
@@ -183,18 +239,99 @@ class VoiceMessageRecorderTests: XCTestCase {
         XCTAssert(!data.isEmpty)
     }
     
+    func testSendVoiceMessage_NoRecordingFile() async throws {
+        let roomProxy = RoomProxyMock()
+
+        // If there is no recording file, an error is expected
+        audioRecorder.audioFileUrl = nil
+        guard case .failure(.missingRecordingFile) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
+            XCTFail("An error is expected")
+            return
+        }
+    }
+    
+    func testSendVoiceMessage_ConversionError() async throws {
+        audioRecorder.audioFileUrl = recordingURL
+        // If the converter returns an error
+        audioConverter.convertToOpusOggSourceURLDestinationURLThrowableError = AudioConverterError.conversionFailed(nil)
+        
+        let roomProxy = RoomProxyMock()
+        guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
+            XCTFail("An error is expected")
+            return
+        }
+    }
+    
+    func testSendVoiceMessage_InvalidFile() async throws {
+        guard let audioFileUrl = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
+            XCTFail("Test audio file is missing")
+            return
+        }
+        audioRecorder.audioFileUrl = audioFileUrl
+        audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { _, destination in
+            try? FileManager.default.removeItem(at: destination)
+        }
+        
+        let roomProxy = RoomProxyMock()
+        roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
+        guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
+            XCTFail("An error is expected")
+            return
+        }
+    }
+    
+    func testSendVoiceMessage_WaveformAnlyseFailed() async throws {
+        guard let imageFileUrl = Bundle(for: Self.self).url(forResource: "test_image", withExtension: "png") else {
+            XCTFail("Test audio file is missing")
+            return
+        }
+        audioRecorder.audioFileUrl = imageFileUrl
+        audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { _, destination in
+            try? FileManager.default.removeItem(at: destination)
+            try? FileManager.default.copyItem(at: imageFileUrl, to: destination)
+        }
+        
+        let roomProxy = RoomProxyMock()
+        roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
+        guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
+            XCTFail("An error is expected")
+            return
+        }
+    }
+    
+    func testSendVoiceMessage_SendError() async throws {
+        guard let audioFileUrl = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
+            XCTFail("Test audio file is missing")
+            return
+        }
+        audioRecorder.audioFileUrl = audioFileUrl
+        audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { source, destination in
+            try? FileManager.default.removeItem(at: destination)
+            let internalConverter = AudioConverter()
+            try internalConverter.convertToOpusOgg(sourceURL: source, destinationURL: destination)
+        }
+        
+        // If the media upload fails
+        let roomProxy = RoomProxyMock()
+        roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
+        guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
+            XCTFail("An error is expected")
+            return
+        }
+    }
+    
     func testSendVoiceMessage() async throws {
         guard let audioFileUrl = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
             XCTFail("Test audio file is missing")
             return
         }
+        
+        let roomProxy = RoomProxyMock()
         audioRecorder.currentTime = 42
-        audioRecorder.url = audioFileUrl
+        audioRecorder.audioFileUrl = audioFileUrl
         _ = await voiceMessageRecorder.startRecording()
         _ = await voiceMessageRecorder.stopRecording()
         
-        let roomProxy = RoomProxyMock()
-        let audioConverter = AudioConverterMock()
         var convertedFileUrl: URL?
         var convertedFileSize: UInt64?
         
@@ -234,5 +371,48 @@ class VoiceMessageRecorderTests: XCTestCase {
         } else {
             XCTFail("converted file URL is missing")
         }
+    }
+    
+    func testAudioRecorderActionHandling_didStartRecording() async throws {
+        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
+            switch action {
+            case .didStartRecording:
+                return true
+            default:
+                return false
+            }
+        }
+        audioRecorderActionsSubject.send(.didStartRecording)
+        try await deferred.fulfill()
+    }
+    
+    func testAudioRecorderActionHandling_didStopRecording() async throws {
+        audioRecorder.audioFileUrl = recordingURL
+        
+        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
+            switch action {
+            case .didStopRecording(_, let url) where url == self.recordingURL:
+                return true
+            default:
+                return false
+            }
+        }
+        audioRecorderActionsSubject.send(.didStopRecording)
+        try await deferred.fulfill()
+    }
+    
+    func testAudioRecorderActionHandling_didFailed() async throws {
+        audioRecorder.audioFileUrl = recordingURL
+        
+        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
+            switch action {
+            case .didFailWithError:
+                return true
+            default:
+                return false
+            }
+        }
+        audioRecorderActionsSubject.send(.didFailWithError(error: .genericError))
+        try await deferred.fulfill()
     }
 }
