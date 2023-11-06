@@ -166,8 +166,8 @@ class AudioRecorder: AudioRecorderProtocol {
             }
             guard let self else { return }
             stopped = true
-            audioEngine.inputNode.removeTap(onBus: 0)
-            audioEngine.stop()
+            audioEngine?.inputNode.removeTap(onBus: 0)
+            audioEngine?.stop()
             audioFile = nil // this will close the file
             releaseAudioSession()
             MXLog.info("audio recorder stopped")
