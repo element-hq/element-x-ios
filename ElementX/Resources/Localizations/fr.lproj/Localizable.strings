@@ -294,7 +294,7 @@
 "screen_app_lock_settings_remove_pin_alert_title" = "Supprimer le code PIN?";
 "screen_app_lock_setup_biometric_unlock_allow_title" = "Autoriser %1$@";
 "screen_app_lock_setup_biometric_unlock_skip" = "Je préfère utiliser le code PIN";
-"screen_app_lock_setup_biometric_unlock_subtitle" = "Gagnez du temps et utiliser %1$@ pour déverrouiller l’application à chaque fois.";
+"screen_app_lock_setup_biometric_unlock_subtitle" = "Gagnez du temps en utilisant %1$@ pour déverrouiller l’application à chaque fois.";
 "screen_app_lock_setup_choose_pin" = "Choisissez un code PIN";
 "screen_app_lock_setup_confirm_pin" = "Confirmer le code PIN";
 "screen_app_lock_setup_pin_blacklisted_dialog_content" = "Vous ne pouvez pas choisir ce code PIN pour des raisons de sécurité";
@@ -417,7 +417,7 @@
 "screen_onboarding_welcome_title" = "Soyez dans votre Element";
 "screen_recovery_key_change_description" = "Obtenez une nouvelle clé de récupération dans le cas où vous avez oublié l’ancienne. Après le changement, l’ancienne clé ne sera plus utilisable.";
 "screen_recovery_key_change_generate_key" = "Générer une nouvelle clé";
-"screen_recovery_key_change_generate_key_description" = "Assurez-vous de sauvegarder la clé dans un endroit sûr.";
+"screen_recovery_key_change_generate_key_description" = "Assurez-vous de conserver la clé dans un endroit sûr.";
 "screen_recovery_key_change_success" = "Clé de récupération modifée";
 "screen_recovery_key_change_title" = "Changer la clé de récupération?";
 "screen_recovery_key_confirm_description" = "Saisissez votre clé de récupération pour accéder à l’historique de vos discussions.";
@@ -433,7 +433,7 @@
 "screen_recovery_key_save_title" = "Sauvegarder la clé";
 "screen_recovery_key_setup_confirmation_description" = "La clé ne pourra plus être affichée après cette étape.";
 "screen_recovery_key_setup_confirmation_title" = "Avez-vous sauvegardé votre clé de récupération?";
-"screen_recovery_key_setup_description" = "Votre sauvegarde est protégée par votre clé de récupération. Si vous ave besoin d’une nouvelle clé après la configuration, vous pourrez en créer une nouvelle en cliquant sur \"Changer la clé de récupération\"";
+"screen_recovery_key_setup_description" = "Votre sauvegarde est protégée par votre clé de récupération. Si vous avez besoin d’une nouvelle clé après la configuration, vous pourrez en créer une nouvelle en cliquant sur \"Changer la clé de récupération\"";
 "screen_recovery_key_setup_generate_key" = "Générer la clé de récupération";
 "screen_recovery_key_setup_generate_key_description" = "Assurez-vous de pouvoir enregistrer votre clé dans un endroit sécurisé.";
 "screen_recovery_key_setup_success" = "Sauvegarde mise en place avec succès";
@@ -539,7 +539,7 @@
 "screen_signout_in_progress_dialog_content" = "Déconnexion...";
 "screen_signout_key_backup_disabled_subtitle" = "Vous êtes en train de vous déconnecter de votre dernière session. Si vous vous déconnectez maintenant, vous perdrez l’accès à l’historique de vos discussions chiffrées.";
 "screen_signout_key_backup_disabled_title" = "Vous avez désactivé la sauvegarde";
-"screen_signout_key_backup_offline_subtitle" = "Vos clés étaient en cours de sauvegarde avant que vous ne perdiez le réseau. Il faudrait retrouver le réseau afin de terminer la sauvegarde avant de vous déconnecter.";
+"screen_signout_key_backup_offline_subtitle" = "Vos clés étaient en cours de sauvegarde lorsque vous avez perdu la connexion au réseau. Il faudrait rétablir cette connexion afin de pouvoir terminer la sauvegarde avant de vous déconnecter.";
 "screen_signout_key_backup_offline_title" = "Vos clés sont en cours de sauvegarde";
 "screen_signout_key_backup_ongoing_subtitle" = "Veuillez attendre que cela se termine avant de vous déconnecter.";
 "screen_signout_key_backup_ongoing_title" = "Vos clés sont en cours de sauvegarde";

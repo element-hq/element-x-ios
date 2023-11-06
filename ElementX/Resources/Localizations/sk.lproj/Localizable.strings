@@ -320,9 +320,9 @@
 "screen_change_account_provider_subtitle" = "Použite iného poskytovateľa účtu, ako napríklad vlastný súkromný server alebo pracovný účet.";
 "screen_change_account_provider_title" = "Zmeniť poskytovateľa účtu";
 "screen_change_server_error_invalid_homeserver" = "Nemohli sme sa spojiť s týmto domovským serverom. Skontrolujte prosím, či ste zadali URL adresu domovského servera správne. Ak je adresa URL správna, kontaktujte svoj domovský server pre ďalšiu pomoc.";
-"screen_change_server_error_no_sliding_sync_message" = "This server currently doesn’t support sliding sync.";
+"screen_change_server_error_no_sliding_sync_message" = "Tento server momentálne nepodporuje kĺzavú synchronizáciu.";
 "screen_change_server_form_header" = "Adresa URL domovského servera";
-"screen_change_server_form_notice" = "You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %1$@";
+"screen_change_server_form_notice" = "Môžete sa pripojiť iba k existujúcemu serveru, ktorý podporuje kĺzavú synchronizáciu. Správca domovského servera ju bude musieť nakonfigurovať. %1$@";
 "screen_change_server_subtitle" = "Aká je adresa vášho servera?";
 "screen_change_server_title" = "Vyberte svoj server";
 "screen_chat_backup_key_backup_action_disable" = "Vypnúť zálohovanie";
@@ -526,7 +526,7 @@
 "screen_share_location_title" = "Zdieľať polohu";
 "screen_share_my_location_action" = "Zdieľať moju polohu";
 "screen_share_open_apple_maps" = "Otvoriť v Apple Maps";
-"screen_share_open_google_maps" = "Open in Google Maps";
+"screen_share_open_google_maps" = "Otvoriť v Mapách Google";
 "screen_share_open_osm_maps" = "Otvoriť v OpenStreetMap";
 "screen_share_this_location_action" = "Zdieľajte túto polohu";
 "screen_signed_out_reason_1" = "Zmenili ste heslo pri inej relácii";

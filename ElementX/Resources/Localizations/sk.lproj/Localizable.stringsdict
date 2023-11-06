@@ -49,9 +49,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d vote</string>
+			<string>%d hlas</string>
+			<key>few</key>
+			<string>%d hlasy</string>
 			<key>other</key>
-			<string>%d votes</string>
+			<string>%d hlasov</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -191,9 +193,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
+			<string>Máte %1$d pokus na odomknutie</string>
+			<key>few</key>
+			<string>Máte %1$d pokusy na odomknutie</string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>Máte %1$d pokusov na odomknutie</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -225,9 +229,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d person</string>
+			<string>%1$d osoba</string>
+			<key>few</key>
+			<string>%1$d osoby</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d osôb</string>
 		</dict>
 	</dict>
 </dict>
