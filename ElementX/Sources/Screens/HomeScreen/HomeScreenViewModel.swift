@@ -98,19 +98,20 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
-        struct SearchBarState: Equatable {
-            let searchQuery: String
-            let isSearchFieldFocused: Bool
-        }
-        
-        context.$viewState
-            .map { SearchBarState(searchQuery: $0.bindings.searchQuery, isSearchFieldFocused: $0.bindings.isSearchFieldFocused) }
-            .removeDuplicates()
-            .sink { [weak self] _ in
+        let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
+        let searchQuery = context.$viewState.map(\.bindings.searchQuery)
+        isSearchFieldFocused
+            .combineLatest(searchQuery)
+            .removeDuplicates { $0 == $1 }
+            .map { _ in () }
+            .sink { [weak self] in
                 guard let self else { return }
                 // Don't capture the values here as combine behaves incorrectly and `isSearchFieldFocused` is sometimes
-                // turning to true after cancelling the search. Read them directly from the state in the updateFilter method instead.
-                updateFilter()
+                // turning to true after cancelling the search. Read them directly from the state in the updateFilter
+                // method instead on the next run loop to make sure they're up to date.
+                DispatchQueue.main.async {
+                    self.updateFilter()
+                }
             }
             .store(in: &cancellables)
         
