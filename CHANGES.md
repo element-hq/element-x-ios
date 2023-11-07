@@ -1,3 +1,18 @@
+## Changes in 1.4.1 (2023-11-07)
+
+🙌 Improvements
+
+- Set the App Lock grace period to 0. ([#2011](https://github.com/vector-im/element-x-ios/issues/2011))
+
+🐛 Bugfixes
+
+- Use the custom log level inside the NSE too. ([#2020](https://github.com/vector-im/element-x-ios/pull/2020))
+- Fixed a memory leak that made the NSE crash. ([#1923](https://github.com/vector-im/element-x-ios/issues/1923))
+- Fixed a bug that made the RTE color change when using mentions in dark mode. ([#2009](https://github.com/vector-im/element-x-ios/issues/2009))
+- Make sure the last digit is visible when entering a PIN. ([#2010](https://github.com/vector-im/element-x-ios/issues/2010))
+- Fix an inconsistency in the App Lock screen's background colour. ([#2029](https://github.com/vector-im/element-x-ios/issues/2029))
+- Don't allow the Placeholder Screen layout to be influenced by the keyboard. ([#2032](https://github.com/vector-im/element-x-ios/issues/2032))
+
 ## Changes in 1.4.0 (2023-10-31)
 
 ✨ Features
