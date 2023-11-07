@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Accelerate
 import AVFoundation
 import Combine
 import Foundation
@@ -373,17 +374,10 @@ class AudioRecorder: AudioRecorderProtocol {
             return
         }
         
-        // Convert to an array of Float
-        let channelDataValue = channelData.pointee
-        let channelDataValueArray = stride(from: 0,
-                                           to: Int(buffer.frameLength),
-                                           by: buffer.stride)
-            .map { channelDataValue[$0] }
-        
         // Compute RMS
-        let rms = sqrt(channelDataValueArray.map { $0 * $0 }
-            .reduce(0, +) / Float(buffer.frameLength))
-
+        var rms: Float = .nan
+        vDSP_rmsqv(channelData.pointee, buffer.stride, &rms, vDSP_Length(buffer.frameLength))
+        
         // Convert to decibels
         let avgPower = 20 * log10(rms)
         
