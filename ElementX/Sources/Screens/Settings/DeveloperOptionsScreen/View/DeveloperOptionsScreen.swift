@@ -53,10 +53,6 @@ struct DeveloperOptionsScreen: View {
                     Text("SwiftUI Timeline")
                     Text("Resets on reboot")
                 }
-                
-                Toggle(isOn: $context.elementCallEnabled) {
-                    Text("Element Call")
-                }
             }
             
             Section("Room creation") {

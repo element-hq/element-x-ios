@@ -162,21 +162,19 @@ struct RoomScreen: View {
     
     @ViewBuilder
     private var callButton: some View {
-        if context.viewState.showCallButton {
-            if context.viewState.isCallOngoing {
-                Button {
-                    context.send(viewAction: .presentCall)
-                } label: {
-                    Label(L10n.actionJoin, icon: \.videoCallSolid)
-                        .labelStyle(.titleAndIcon)
-                }
-                .buttonStyle(ElementCallButtonStyle())
-            } else {
-                Button {
-                    context.send(viewAction: .presentCall)
-                } label: {
-                    CompoundIcon(\.videoCallSolid)
-                }
+        if context.viewState.isCallOngoing {
+            Button {
+                context.send(viewAction: .presentCall)
+            } label: {
+                Label(L10n.actionJoin, icon: \.videoCallSolid)
+                    .labelStyle(.titleAndIcon)
+            }
+            .buttonStyle(ElementCallButtonStyle())
+        } else {
+            Button {
+                context.send(viewAction: .presentCall)
+            } label: {
+                CompoundIcon(\.videoCallSolid)
             }
         }
     }
