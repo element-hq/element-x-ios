@@ -370,8 +370,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         guard isLastSession, appSettings.chatBackupEnabled else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: L10n.screenSignoutRecoveryDisabledTitle,
-                                                                            message: L10n.screenSignoutRecoveryDisabledSubtitle,
+                                                                            title: L10n.screenSignoutConfirmationDialogTitle,
+                                                                            message: L10n.screenSignoutConfirmationDialogContent,
                                                                             primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
                                                                                 self?.actionsSubject.send(.logout)
                                                                             })

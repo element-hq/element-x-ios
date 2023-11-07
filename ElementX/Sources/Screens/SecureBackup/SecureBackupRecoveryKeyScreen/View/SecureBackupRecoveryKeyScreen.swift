@@ -20,15 +20,31 @@ import SwiftUI
 
 struct SecureBackupRecoveryKeyScreen: View {
     @ObservedObject var context: SecureBackupRecoveryKeyScreenViewModel.Context
+    @FocusState private var focused
+    private let textFieldIdentifier = "textFieldIdentifier"
     
     var body: some View {
-        mainContent
-            .padding()
-            .interactiveDismissDisabled()
-            .toolbar { toolbar }
-            .toolbar(.visible, for: .navigationBar)
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .alert(item: $context.alertInfo)
+        ScrollView {
+            ScrollViewReader { reader in
+                mainContent
+                    .padding(16)
+                    .onChange(of: focused) { newValue in
+                        guard newValue == true else { return }
+                        reader.scrollTo(textFieldIdentifier)
+                    }
+            }
+        }
+        .safeAreaInset(edge: .bottom) {
+            footer
+                .padding([.horizontal, .bottom], 16)
+                .padding(.top, 8)
+                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        }
+        .interactiveDismissDisabled()
+        .toolbar { toolbar }
+        .toolbar(.visible, for: .navigationBar)
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .alert(item: $context.alertInfo)
     }
     
     @ViewBuilder
@@ -37,11 +53,43 @@ struct SecureBackupRecoveryKeyScreen: View {
             switch context.viewState.mode {
             case .setupRecovery, .changeRecovery:
                 header
-                newRecoveryKeySection
+                generateRecoveryKeySection
             case .fixRecovery:
                 header
                 confirmRecoveryKeySection
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var footer: some View {
+        switch context.viewState.mode {
+        case .setupRecovery, .changeRecovery:
+            if let recoveryKey = context.viewState.recoveryKey {
+                ShareLink(item: recoveryKey) {
+                    Label(L10n.screenRecoveryKeySaveAction, icon: \.download)
+                }
+                .buttonStyle(.compound(.primary))
+                .simultaneousGesture(TapGesture().onEnded { _ in
+                    context.send(viewAction: .keySaved)
+                })
+            }
+            
+            Button {
+                context.send(viewAction: .done)
+            } label: {
+                Text(L10n.actionDone)
+            }
+            .buttonStyle(.compound(.primary))
+            .disabled(context.viewState.recoveryKey == nil || context.viewState.doneButtonEnabled == false)
+        case .fixRecovery:
+            Button {
+                context.send(viewAction: .confirmKey)
+            } label: {
+                Text(L10n.actionConfirm)
+            }
+            .buttonStyle(.compound(.primary))
+            .disabled(context.confirmationRecoveryKey.isEmpty)
         }
     }
     
@@ -70,31 +118,6 @@ struct SecureBackupRecoveryKeyScreen: View {
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
         }
-    }
-    
-    @ViewBuilder
-    private var newRecoveryKeySection: some View {
-        generateRecoveryKeySection
-        
-        Spacer()
-        
-        if let recoveryKey = context.viewState.recoveryKey {
-            ShareLink(item: recoveryKey) {
-                Label(L10n.screenRecoveryKeySaveAction, icon: \.download)
-            }
-            .buttonStyle(.compound(.primary))
-            .simultaneousGesture(TapGesture().onEnded { _ in
-                context.send(viewAction: .keySaved)
-            })
-        }
-        
-        Button {
-            context.send(viewAction: .done)
-        } label: {
-            Text(L10n.actionDone)
-        }
-        .buttonStyle(.compound(.primary))
-        .disabled(context.viewState.recoveryKey == nil || context.viewState.doneButtonEnabled == false)
     }
     
     private var generateRecoveryKeySection: some View {
@@ -155,25 +178,24 @@ struct SecureBackupRecoveryKeyScreen: View {
                 .foregroundColor(.compound.textPrimary)
                 .font(.compound.bodySM)
             
-            TextField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey, axis: .vertical)
+            TextField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey)
+                .textContentType(.password) // Not ideal but stops random suggestions
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.compound.bgSubtleSecondaryLevel0)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
+                .id(textFieldIdentifier)
+                .focused($focused)
+                .submitLabel(.done)
+                .onSubmit {
+                    context.send(viewAction: .confirmKey)
+                }
             
             Text(context.viewState.recoveryKeySubtitle)
                 .foregroundColor(.compound.textSecondary)
                 .font(.compound.bodySM)
-            
-            Spacer()
-            
-            Button {
-                context.send(viewAction: .confirmKey)
-            } label: {
-                Text(L10n.actionConfirm)
-            }
-            .buttonStyle(.compound(.primary))
-            .disabled(context.confirmationRecoveryKey.isEmpty)
         }
     }
 }
