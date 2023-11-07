@@ -162,15 +162,36 @@ class MockScreen: Identifiable {
             let appLockService = AppLockService(keychainController: KeychainControllerMock(), appSettings: ServiceLocator.shared.settings)
             let coordinator = AppLockScreenCoordinator(parameters: .init(appLockService: appLockService))
             return coordinator
-        case .appLockSetupFlow:
+        case .appLockSetupFlow, .appLockSetupFlowUnlock:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let keychainController = KeychainControllerMock()
-            keychainController.containsPINCodeReturnValue = false
-            let appLockService = AppLockService(keychainController: keychainController, appSettings: ServiceLocator.shared.settings)
+            // The flow expects an existing root coordinator, use the placeholder as a placeholder 😅
+            navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
+            
+            let keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+            keychainController.resetSecrets()
+            if id == .appLockSetupFlowUnlock {
+                do {
+                    try keychainController.setPINCode("2023")
+                } catch {
+                    fatalError("Failed to pre-set the PIN code")
+                }
+            }
+            
+            let context = LAContextMock()
+            context.biometryTypeValue = .faceID
+            context.evaluatePolicyReturnValue = true
+            context.evaluatedPolicyDomainStateValue = "😎".data(using: .utf8)
+            
+            let appLockService = AppLockService(keychainController: keychainController,
+                                                appSettings: ServiceLocator.shared.settings,
+                                                context: context)
+            
             let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .settings,
                                                           appLockService: appLockService,
                                                           navigationStackCoordinator: navigationStackCoordinator)
             coordinator.start()
+            retainedState.append(coordinator)
+            
             return navigationStackCoordinator
         case .home:
             let navigationStackCoordinator = NavigationStackCoordinator()

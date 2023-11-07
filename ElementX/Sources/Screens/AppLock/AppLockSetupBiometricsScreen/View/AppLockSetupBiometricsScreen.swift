@@ -66,6 +66,7 @@ struct AppLockSetupBiometricsScreen: View {
         VStack(spacing: 16) {
             Button(context.viewState.title) { context.send(viewAction: .allow) }
                 .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.appLockSetupBiometricsScreen.allow)
             
             Button { context.send(viewAction: .skip) } label: {
                 Text(L10n.screenAppLockSetupBiometricUnlockSkip)
