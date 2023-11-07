@@ -98,21 +98,19 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
-        context.$viewState
-            .map(\.bindings.searchQuery)
-            .removeDuplicates()
-            .sink { [weak self] searchQuery in
-                guard let self else { return }
-                updateFilter(isSearchFieldFocused: state.bindings.isSearchFieldFocused, searchQuery: searchQuery)
-            }
-            .store(in: &cancellables)
+        struct SearchBarState: Equatable {
+            let searchQuery: String
+            let isSearchFieldFocused: Bool
+        }
         
         context.$viewState
-            .map(\.bindings.isSearchFieldFocused)
+            .map { SearchBarState(searchQuery: $0.bindings.searchQuery, isSearchFieldFocused: $0.bindings.isSearchFieldFocused) }
             .removeDuplicates()
-            .sink { [weak self] isSearchFieldFocused in
+            .sink { [weak self] _ in
                 guard let self else { return }
-                updateFilter(isSearchFieldFocused: isSearchFieldFocused, searchQuery: state.bindings.searchQuery)
+                // Don't capture the values here as combine behaves incorrectly and `isSearchFieldFocused` is sometimes
+                // turning to true after cancelling the search. Read them directly from the state in the updateFilter method instead.
+                updateFilter()
             }
             .store(in: &cancellables)
         
@@ -170,13 +168,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Private
     
-    private func updateFilter(isSearchFieldFocused: Bool, searchQuery: String) {
-        if !isSearchFieldFocused {
+    private func updateFilter() {
+        if !state.bindings.isSearchFieldFocused {
             roomSummaryProvider?.setFilter(.all)
-        } else if searchQuery.isEmpty {
+        } else if state.bindings.searchQuery.isEmpty {
             roomSummaryProvider?.setFilter(.none)
         } else {
-            roomSummaryProvider?.setFilter(.normalizedMatchRoomName(searchQuery))
+            roomSummaryProvider?.setFilter(.normalizedMatchRoomName(state.bindings.searchQuery))
         }
     }
     
