@@ -37,12 +37,14 @@ final class AppSettings {
         case viewSourceEnabled
         case richTextEditorEnabled
         
+        case elementCallBaseURL
+        case elementCallEncryptionEnabled
+        
         // Feature flags
         case shouldCollapseRoomStateEvents
         case userSuggestionsEnabled
         case readReceiptsEnabled
         case swiftUITimelineEnabled
-        case elementCallEnabled
         case chatBackupEnabled
     }
     
@@ -215,7 +217,11 @@ final class AppSettings {
     
     // MARK: - Element Call
     
-    let elementCallBaseURL: URL = "https://call.element.dev"
+    @UserPreference(key: UserDefaultsKeys.elementCallBaseURL, defaultValue: "https://call.element.io", storageType: .userDefaults(store))
+    var elementCallBaseURL: URL
+    
+    @UserPreference(key: UserDefaultsKeys.elementCallEncryptionEnabled, defaultValue: true, storageType: .userDefaults(store))
+    var elementCallUseEncryption
     
     // MARK: - Notifications
 
@@ -266,9 +272,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.elementCallEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var elementCallEnabled
     
     @UserPreference(key: UserDefaultsKeys.chatBackupEnabled, defaultValue: false, storageType: .userDefaults(store))
     var chatBackupEnabled

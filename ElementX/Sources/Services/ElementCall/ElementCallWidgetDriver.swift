@@ -52,7 +52,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         self.room = room
     }
     
-    func start(baseURL: URL, clientID: String) async -> Result<URL, ElementCallWidgetDriverError> {
+    func start(baseURL: URL, clientID: String, useEncryption: Bool) async -> Result<URL, ElementCallWidgetDriverError> {
         guard let room = room as? Room else {
             return .failure(.roomInvalid)
         }
@@ -68,7 +68,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                                                                                  confineToRoom: true,
                                                                                  font: nil,
                                                                                  analyticsId: nil,
-                                                                                 encryption: .unencrypted)) else {
+                                                                                 encryption: useEncryption ? .perParticipantKeys : .unencrypted)) else {
             return .failure(.failedBuildingWidgetSettings)
         }
         

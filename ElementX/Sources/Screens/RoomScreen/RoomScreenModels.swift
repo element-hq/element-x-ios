@@ -116,7 +116,6 @@ struct RoomScreenViewState: BindableState {
 
     var ownUserID: String
     
-    var showCallButton = false
     var isCallOngoing = false
     
     var bindings: RoomScreenViewStateBindings
