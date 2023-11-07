@@ -207,7 +207,6 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     private func handleAudioRecorderAction(_ action: AudioRecorderAction) {
-        MXLog.debug("handleAudioRecorderAction(\(action))")
         switch action {
         case .didStartRecording:
             MXLog.info("audio recorder did start recording")

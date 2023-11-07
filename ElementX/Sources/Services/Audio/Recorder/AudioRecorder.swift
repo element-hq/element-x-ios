@@ -287,8 +287,6 @@ class AudioRecorder: AudioRecorderProtocol {
     
     // MARK: Audio Metering
     
-    // https://www.kodeco.com/21672160-avaudioengine-tutorial-for-ios-getting-started?page=2
-
     private func scaledPower(power: Float) -> Float {
         guard power.isFinite else {
             return 0.0
@@ -306,20 +304,25 @@ class AudioRecorder: AudioRecorderProtocol {
     }
     
     private func updateMeterLevel(_ buffer: AVAudioPCMBuffer) {
+        // Get an array of pointer to each sample's data
         guard let channelData = buffer.floatChannelData else {
             return
         }
         
+        // Convert to an array of Float
         let channelDataValue = channelData.pointee
         let channelDataValueArray = stride(from: 0,
                                            to: Int(buffer.frameLength),
                                            by: buffer.stride)
             .map { channelDataValue[$0] }
         
+        // Compute RMS
         let rms = sqrt(channelDataValueArray.map { $0 * $0 }
             .reduce(0, +) / Float(buffer.frameLength))
-        
+
+        // Convert to decibels
         let avgPower = 20 * log10(rms)
+        
         meterLevel = scaledPower(power: avgPower)
     }
 }
