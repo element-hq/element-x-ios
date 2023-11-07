@@ -64,6 +64,22 @@ class VoiceMessageRecorderTests: XCTestCase {
                                                     voiceMessageCache: voiceMessageCache)
     }
     
+    private func setRecordingComplete() async throws {
+        audioRecorder.audioFileUrl = recordingURL
+        audioRecorder.currentTime = 5
+
+        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
+            switch action {
+            case .didStopRecording(_, let url) where url == self.recordingURL:
+                return true
+            default:
+                return false
+            }
+        }
+        audioRecorderActionsSubject.send(.didStopRecording)
+        try await deferred.fulfill()
+    }
+    
     func testRecordingURL() async throws {
         audioRecorder.audioFileUrl = recordingURL
         XCTAssertEqual(voiceMessageRecorder.recordingURL, recordingURL)
@@ -107,18 +123,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testStartPlayback() async throws {
-        audioRecorder.audioFileUrl = recordingURL
-        audioRecorderActionsSubject.send(.didStopRecording)
-
-        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
-            switch action {
-            case .didStopRecording(_, let url) where url == self.recordingURL:
-                return true
-            default:
-                return false
-            }
-        }
-        try await deferred.fulfill()
+        try await setRecordingComplete()
         
         guard case .success = await voiceMessageRecorder.startPlayback() else {
             XCTFail("Playback should start")
@@ -134,18 +139,8 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testPausePlayback() async throws {
-        audioRecorder.audioFileUrl = recordingURL
-        audioRecorderActionsSubject.send(.didStopRecording)
+        try await setRecordingComplete()
 
-        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
-            switch action {
-            case .didStopRecording(_, let url) where url == self.recordingURL:
-                return true
-            default:
-                return false
-            }
-        }
-        try await deferred.fulfill()
         _ = await voiceMessageRecorder.startPlayback()
         XCTAssertEqual(voiceMessageRecorder.previewAudioPlayerState?.isAttached, true)
 
@@ -154,20 +149,9 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testResumePlayback() async throws {
-        audioRecorder.audioFileUrl = recordingURL
+        try await setRecordingComplete()
         audioPlayer.url = recordingURL
-        audioRecorderActionsSubject.send(.didStopRecording)
 
-        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
-            switch action {
-            case .didStopRecording(_, let url) where url == self.recordingURL:
-                return true
-            default:
-                return false
-            }
-        }
-        try await deferred.fulfill()
-        
         guard case .success = await voiceMessageRecorder.startPlayback() else {
             XCTFail("Playback should start")
             return
@@ -179,18 +163,8 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
 
     func testStopPlayback() async throws {
-        audioRecorder.audioFileUrl = recordingURL
-        audioRecorderActionsSubject.send(.didStopRecording)
+        try await setRecordingComplete()
 
-        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
-            switch action {
-            case .didStopRecording(_, let url) where url == self.recordingURL:
-                return true
-            default:
-                return false
-            }
-        }
-        try await deferred.fulfill()
         _ = await voiceMessageRecorder.startPlayback()
         XCTAssertEqual(voiceMessageRecorder.previewAudioPlayerState?.isAttached, true)
         
@@ -200,18 +174,8 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testSeekPlayback() async throws {
-        audioRecorder.audioFileUrl = recordingURL
-        audioRecorderActionsSubject.send(.didStopRecording)
+        try await setRecordingComplete()
 
-        let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
-            switch action {
-            case .didStopRecording(_, let url) where url == self.recordingURL:
-                return true
-            default:
-                return false
-            }
-        }
-        try await deferred.fulfill()
         _ = await voiceMessageRecorder.startPlayback()
         XCTAssertEqual(voiceMessageRecorder.previewAudioPlayerState?.isAttached, true)
 
@@ -388,7 +352,8 @@ class VoiceMessageRecorderTests: XCTestCase {
     
     func testAudioRecorderActionHandling_didStopRecording() async throws {
         audioRecorder.audioFileUrl = recordingURL
-        
+        audioRecorder.currentTime = 5
+
         let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
             switch action {
             case .didStopRecording(_, let url) where url == self.recordingURL:
@@ -412,7 +377,7 @@ class VoiceMessageRecorderTests: XCTestCase {
                 return false
             }
         }
-        audioRecorderActionsSubject.send(.didFailWithError(error: .genericError))
+        audioRecorderActionsSubject.send(.didFailWithError(error: .audioEngineFailure))
         try await deferred.fulfill()
     }
 }

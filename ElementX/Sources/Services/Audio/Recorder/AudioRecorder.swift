@@ -27,9 +27,10 @@ private enum InternalAudioRecorderState: Equatable {
 }
 
 class AudioRecorder: AudioRecorderProtocol {
-    private var audioEngine: AVAudioEngine!
+    private let audioSession: AudioSessionProtocol
+    private var audioEngine: AVAudioEngine?
+    private var mixer: AVAudioMixerNode?
     private var audioFile: AVAudioFile?
-    private let audioSession = AVAudioSession.sharedInstance()
     private var internalState = InternalAudioRecorderState.stopped
     
     private var cancellables = Set<AnyCancellable>()
@@ -46,10 +47,14 @@ class AudioRecorder: AudioRecorderProtocol {
     var isRecording: Bool {
         audioEngine?.isRunning ?? false
     }
-        
+    
     private let dispatchQueue = DispatchQueue(label: "io.element.elementx.audio_recorder", qos: .userInitiated)
     private var stopped = false
-        
+    
+    init(audioSession: AudioSessionProtocol = AVAudioSession.sharedInstance()) {
+        self.audioSession = audioSession
+    }
+    
     func record(with recordID: AudioRecordingIdentifier) async {
         stopped = false
         guard await requestRecordPermission() else {
@@ -126,14 +131,11 @@ class AudioRecorder: AudioRecorderProtocol {
         }
     }
     
-    private func createAudioFile(with recordID: AudioRecordingIdentifier) throws -> AVAudioFile {
-        let outputFormat = audioEngine.inputNode.outputFormat(forBus: 0)
-        let settings = [
-            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: Int(outputFormat.sampleRate),
-            AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-        ]
+    private func createAudioFile(with recordID: AudioRecordingIdentifier, sampleRate: Int) throws -> AVAudioFile {
+        let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+                        AVSampleRateKey: sampleRate,
+                        AVNumberOfChannelsKey: 1,
+                        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
         MXLog.info("creating audio file with format: \(settings)")
         let outputURL = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
         return try AVAudioFile(forWriting: outputURL, settings: settings)
@@ -147,11 +149,27 @@ class AudioRecorder: AudioRecorderProtocol {
             }
             
             setupAudioSession()
-            audioEngine = AVAudioEngine()
+            let audioEngine = AVAudioEngine()
+            self.audioEngine = audioEngine
+
+            // The sample rate must match the hardware sample rate for the audio engine to work.
+            let sampleRate = audioEngine.inputNode.inputFormat(forBus: 0).sampleRate
+            let recordingFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32,
+                                                sampleRate: sampleRate,
+                                                channels: 1,
+                                                interleaved: false)
+
+            // Make sure we have 1 channel at the end by using a mixer.
+            let mixer = AVAudioMixerNode()
+            self.mixer = mixer
+            audioEngine.attach(mixer)
+            audioEngine.connect(audioEngine.inputNode, to: mixer, format: recordingFormat)
+            
+            // Reset the recording duration
             currentTime = 0
             let audioFile: AVAudioFile
             do {
-                audioFile = try createAudioFile(with: recordID)
+                audioFile = try createAudioFile(with: recordID, sampleRate: Int(sampleRate))
                 self.audioFile = audioFile
                 audioFileUrl = audioFile.url
             } catch {
@@ -161,7 +179,7 @@ class AudioRecorder: AudioRecorderProtocol {
                 return
             }
             
-            audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: audioEngine.inputNode.inputFormat(forBus: 0)) { [weak self] buffer, _ in
+            mixer.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] buffer, _ in
                 self?.processAudioBuffer(buffer)
             }
 
@@ -170,8 +188,6 @@ class AudioRecorder: AudioRecorderProtocol {
                 completion(.success(()))
             } catch {
                 MXLog.error("audio recording failed to start. \(error)")
-                releaseAudioSession()
-                audioEngine.reset()
                 completion(.failure(.audioEngineFailure))
             }
         }
@@ -184,13 +200,23 @@ class AudioRecorder: AudioRecorderProtocol {
             }
             guard let self else { return }
             stopped = true
-            audioEngine?.inputNode.removeTap(onBus: 0)
-            audioEngine?.stop()
-            audioFile = nil // this will close the file
-            releaseAudioSession()
+            cleanupAudioEngine()
             MXLog.info("audio recorder stopped")
             setInternalState(.stopped)
         }
+    }
+    
+    private func cleanupAudioEngine() {
+        if let audioEngine {
+            audioEngine.stop()
+            if let mixer {
+                mixer.removeTap(onBus: 0)
+                audioEngine.detach(mixer)
+            }
+        }
+        audioFile = nil // this will close the file
+        audioEngine = nil
+        releaseAudioSession()
     }
     
     private func deleteRecording(completion: @escaping () -> Void) {
@@ -210,21 +236,17 @@ class AudioRecorder: AudioRecorderProtocol {
     // MARK: Audio Processing
     
     private func processAudioBuffer(_ buffer: AVAudioPCMBuffer) {
-        dispatchQueue.async { [weak self] in
-            guard let self else { return
-            }
+        // Write the buffer into the audio file
+        do {
+            try audioFile?.write(from: buffer)
+
             // Compute the sample value for the waveform
             updateMeterLevel(buffer)
             
-            // Update the recording duration
+            // Update the recording duration only if we succeed to write the buffer
             currentTime += Double(buffer.frameLength) / buffer.format.sampleRate
-            
-            // Write the buffer into the audio file
-            do {
-                try audioFile?.write(from: buffer)
-            } catch {
-                MXLog.error("failed to write sample. \(error)")
-            }
+        } catch {
+            MXLog.error("failed to write sample. \(error)")
         }
     }
     
@@ -279,7 +301,7 @@ class AudioRecorder: AudioRecorderProtocol {
                         
             if options.contains(.shouldResume) {
                 do {
-                    try audioEngine.start()
+                    try audioEngine?.start()
                     setInternalState(.recording)
                 } catch {
                     MXLog.debug("Error restarting audio: \(error)")
@@ -296,6 +318,7 @@ class AudioRecorder: AudioRecorderProtocol {
     }
     
     func handleConfigurationChange(notification: Notification) {
+        guard let audioEngine else { return }
         MXLog.warning("Configuration changed: \(audioEngine.inputNode.inputFormat(forBus: 0))")
         if internalState != .suspended {
             Task { await stopRecording() }
@@ -319,12 +342,7 @@ class AudioRecorder: AudioRecorderProtocol {
             case .stopped:
                 actionsSubject.send(.didStopRecording)
             case .error(let error):
-                if audioFile != nil {
-                    audioEngine?.inputNode.removeTap(onBus: 0)
-                    audioEngine?.stop()
-                    audioFile = nil // this will close the file
-                    releaseAudioSession()
-                }
+                cleanupAudioEngine()
 
                 actionsSubject.send(.didFailWithError(error: error))
             }
