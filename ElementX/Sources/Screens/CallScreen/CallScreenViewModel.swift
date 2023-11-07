@@ -46,7 +46,10 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     ///   - roomProxy: The room in which the call should be created
     ///   - callBaseURL: Which Element Call instance should be used
     ///   - clientID: Something to identify the current client on the Element Call side
-    init(roomProxy: RoomProxyProtocol, callBaseURL: URL, clientID: String) {
+    init(roomProxy: RoomProxyProtocol,
+         callBaseURL: URL,
+         clientID: String,
+         useEncryption: Bool) {
         self.roomProxy = roomProxy
         self.callBaseURL = callBaseURL
         self.clientID = clientID
@@ -99,7 +102,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             .store(in: &cancellables)
         
         Task {
-            switch await widgetDriver.start(baseURL: callBaseURL, clientID: clientID) {
+            switch await widgetDriver.start(baseURL: callBaseURL, clientID: clientID, useEncryption: useEncryption) {
             case .success(let url):
                 state.url = url
             case .failure(let error):

@@ -19,6 +19,7 @@ import SwiftUI
 struct DeveloperOptionsScreen: View {
     @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
     @State private var showConfetti = false
+    @State private var elementCallBaseURLString = ""
     
     var body: some View {
         Form {
@@ -61,6 +62,25 @@ struct DeveloperOptionsScreen: View {
             Section("Room creation") {
                 Toggle(isOn: $context.userSuggestionsEnabled) {
                     Text("User suggestions")
+                }
+            }
+            
+            Section("Element Call") {
+                TextField(context.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
+                    .submitLabel(.done)
+                    .onSubmit {
+                        guard let url = URL(string: elementCallBaseURLString) else {
+                            return
+                        }
+                        
+                        context.elementCallBaseURL = url
+                    }
+                    .autocorrectionDisabled(true)
+                    .autocapitalization(.none)
+                    .foregroundColor(URL(string: elementCallBaseURLString) == nil ? .red : .primary)
+                
+                Toggle(isOn: $context.elementCallUseEncryption) {
+                    Text("Use encryption")
                 }
             }
 

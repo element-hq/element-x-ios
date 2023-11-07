@@ -23,8 +23,6 @@ struct CallScreen: View {
     
     var body: some View {
         WebView(url: context.viewState.url, viewModelContext: context)
-            .navigationTitle("Call")
-            .navigationBarTitleDisplayMode(.inline)
             .ignoresSafeArea(edges: .bottom)
             .presentationDragIndicator(.visible)
             .environment(\.colorScheme, .dark)
@@ -164,13 +162,14 @@ struct CallScreen_Previews: PreviewProvider {
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
         widgetDriver.underlyingActions = PassthroughSubject<ElementCallWidgetDriverAction, Never>().eraseToAnyPublisher()
-        widgetDriver.startBaseURLClientIDReturnValue = .success(URL.userDirectory)
+        widgetDriver.startBaseURLClientIDUseEncryptionReturnValue = .success(URL.userDirectory)
         
         roomProxy.elementCallWidgetDriverReturnValue = widgetDriver
         
         return CallScreenViewModel(roomProxy: roomProxy,
                                    callBaseURL: "https://call.element.io",
-                                   clientID: "io.element.elementx")
+                                   clientID: "io.element.elementx",
+                                   useEncryption: false)
     }()
     
     static var previews: some View {

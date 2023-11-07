@@ -37,6 +37,9 @@ final class AppSettings {
         case viewSourceEnabled
         case richTextEditorEnabled
         
+        case elementCallBaseURL
+        case elementCallEncryptionEnabled
+        
         // Feature flags
         case shouldCollapseRoomStateEvents
         case userSuggestionsEnabled
@@ -215,7 +218,11 @@ final class AppSettings {
     
     // MARK: - Element Call
     
-    let elementCallBaseURL: URL = "https://call.element.dev"
+    @UserPreference(key: UserDefaultsKeys.elementCallBaseURL, defaultValue: "https://call.element.io", storageType: .userDefaults(store))
+    var elementCallBaseURL: URL
+    
+    @UserPreference(key: UserDefaultsKeys.elementCallEncryptionEnabled, defaultValue: true, storageType: .userDefaults(store))
+    var elementCallUseEncryption
     
     // MARK: - Notifications
 

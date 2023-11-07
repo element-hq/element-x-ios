@@ -51,6 +51,9 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var swiftUITimelineEnabled: Bool { get set }
     var elementCallEnabled: Bool { get set }
     var chatBackupEnabled: Bool { get set }
+    
+    var elementCallBaseURL: URL { get set }
+    var elementCallUseEncryption: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
