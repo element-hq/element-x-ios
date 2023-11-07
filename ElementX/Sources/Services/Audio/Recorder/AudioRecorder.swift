@@ -19,11 +19,18 @@ import Combine
 import Foundation
 import UIKit
 
+private enum InternalAudioRecorderState: Equatable {
+    case recording
+    case suspended
+    case stopped
+    case error(AudioRecorderError)
+}
+
 class AudioRecorder: AudioRecorderProtocol {
     private var audioEngine: AVAudioEngine!
     private var audioFile: AVAudioFile?
     private let audioSession = AVAudioSession.sharedInstance()
-    private var audioSessionIsSuspended = false
+    private var internalState = InternalAudioRecorderState.stopped
     
     private var cancellables = Set<AnyCancellable>()
     private let actionsSubject: PassthroughSubject<AudioRecorderAction, Never> = .init()
@@ -46,15 +53,15 @@ class AudioRecorder: AudioRecorderProtocol {
     func record(with recordID: AudioRecordingIdentifier) async {
         stopped = false
         guard await requestRecordPermission() else {
-            actionsSubject.send(.didFailWithError(error: .recordPermissionNotGranted))
+            setInternalState(.error(.recordPermissionNotGranted))
             return
         }
         let result = await startRecording(with: recordID)
         switch result {
         case .success:
-            actionsSubject.send(.didStartRecording)
+            setInternalState(.recording)
         case .failure(let error):
-            actionsSubject.send(.didFailWithError(error: error))
+            setInternalState(.error(error))
         }
     }
     
@@ -142,19 +149,30 @@ class AudioRecorder: AudioRecorderProtocol {
             setupAudioSession()
             audioEngine = AVAudioEngine()
             currentTime = 0
+            let audioFile: AVAudioFile
             do {
-                let audioFile = try createAudioFile(with: recordID)
+                audioFile = try createAudioFile(with: recordID)
                 self.audioFile = audioFile
                 audioFileUrl = audioFile.url
-                audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: audioEngine.inputNode.inputFormat(forBus: 0)) { [weak self] buffer, _ in
-                    self?.processAudioBuffer(buffer)
-                }
+            } catch {
+                MXLog.error("failed to create an audio file. \(error)")
+                completion(.failure(.audioFileCreationFailure))
+                releaseAudioSession()
+                return
+            }
+            
+            audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: audioEngine.inputNode.inputFormat(forBus: 0)) { [weak self] buffer, _ in
+                self?.processAudioBuffer(buffer)
+            }
+
+            do {
                 try audioEngine.start()
                 completion(.success(()))
             } catch {
                 MXLog.error("audio recording failed to start. \(error)")
                 releaseAudioSession()
-                completion(.failure(.internalError(error: error)))
+                audioEngine.reset()
+                completion(.failure(.audioEngineFailure))
             }
         }
     }
@@ -171,7 +189,7 @@ class AudioRecorder: AudioRecorderProtocol {
             audioFile = nil // this will close the file
             releaseAudioSession()
             MXLog.info("audio recorder stopped")
-            actionsSubject.send(.didStopRecording)
+            setInternalState(.stopped)
         }
     }
     
@@ -251,26 +269,25 @@ class AudioRecorder: AudioRecorderProtocol {
         
         switch type {
         case .began:
-            MXLog.debug("Interruption started: \(notification)")
-            audioSessionIsSuspended = true
+            MXLog.info("Interruption started: \(notification)")
+            setInternalState(.suspended)
         case .ended:
-            MXLog.debug("Interruption ended: \(notification)")
+            MXLog.info("Interruption ended: \(notification)")
 
             guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
             let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
-            
-            audioSessionIsSuspended = false
-            
+                        
             if options.contains(.shouldResume) {
                 do {
                     try audioEngine.start()
+                    setInternalState(.recording)
                 } catch {
                     MXLog.debug("Error restarting audio: \(error)")
-                    actionsSubject.send(.didFailWithError(error: .interrupted))
+                    setInternalState(.error(.interrupted))
                 }
             } else {
                 MXLog.warning("AudioSession was interrupted: \(notification)")
-                actionsSubject.send(.didFailWithError(error: .interrupted))
+                setInternalState(.error(.interrupted))
             }
             
         @unknown default:
@@ -280,8 +297,37 @@ class AudioRecorder: AudioRecorderProtocol {
     
     func handleConfigurationChange(notification: Notification) {
         MXLog.warning("Configuration changed: \(audioEngine.inputNode.inputFormat(forBus: 0))")
-        if !audioSessionIsSuspended {
+        if internalState != .suspended {
             Task { await stopRecording() }
+        }
+    }
+    
+    // MARK: Internal State
+    
+    private func setInternalState(_ state: InternalAudioRecorderState) {
+        dispatchQueue.async { [weak self] in
+            guard let self else { return }
+            guard internalState != state else { return }
+            MXLog.debug("internal state: \(internalState) -> \(state)")
+            internalState = state
+            
+            switch internalState {
+            case .recording:
+                actionsSubject.send(.didStartRecording)
+            case .suspended:
+                break
+            case .stopped:
+                actionsSubject.send(.didStopRecording)
+            case .error(let error):
+                if audioFile != nil {
+                    audioEngine?.inputNode.removeTap(onBus: 0)
+                    audioEngine?.stop()
+                    audioFile = nil // this will close the file
+                    releaseAudioSession()
+                }
+
+                actionsSubject.send(.didFailWithError(error: error))
+            }
         }
     }
     

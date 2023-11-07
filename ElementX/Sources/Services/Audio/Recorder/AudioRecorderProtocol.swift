@@ -30,13 +30,13 @@ extension AudioRecordingIdentifier {
     }
 }
 
-enum AudioRecorderError: Error {
-    case genericError
-    case internalError(error: Error)
-    case recordPermissionNotGranted
-    case recordingFailed
-    case recordingCancelled
+enum AudioRecorderError: Error, Equatable {
+    case audioEngineFailure
+    case audioFileCreationFailure
     case interrupted
+    case recordingCancelled
+    case recordingFailed
+    case recordPermissionNotGranted
 }
 
 enum AudioRecorderAction {
