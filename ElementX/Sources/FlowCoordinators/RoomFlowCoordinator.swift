@@ -332,8 +332,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let userID = userSession.clientProxy.userID
         
-        let mediaPlayerProvider = MediaPlayerProvider()
-        
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           mediaProvider: userSession.mediaProvider,
                                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL,
@@ -343,9 +341,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            timelineItemFactory: timelineItemFactory,
-                                                                                           mediaProvider: userSession.mediaProvider,
-                                                                                           mediaPlayerProvider: mediaPlayerProvider,
-                                                                                           voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                                            secureBackupController: userSession.clientProxy.secureBackupController)
         self.timelineController = timelineController
         
@@ -356,7 +351,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          timelineController: timelineController,
                                                          mediaProvider: userSession.mediaProvider,
-                                                         mediaPlayerProvider: mediaPlayerProvider,
+                                                         mediaPlayerProvider: MediaPlayerProvider(),
+                                                         voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                          emojiProvider: emojiProvider,
                                                          completionSuggestionService: completionSuggestionService,
                                                          appSettings: appSettings)

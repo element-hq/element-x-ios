@@ -25,8 +25,8 @@ class TracingConfigurationTests: XCTestCase {
         let filterComponents = configuration.filter.components(separatedBy: ",")
         XCTAssertEqual(filterComponents.first, "info")
         XCTAssertTrue(filterComponents.contains("matrix_sdk_base::sliding_sync=trace"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk::http_client=trace"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_crypto=trace"))
+        XCTAssertTrue(filterComponents.contains("matrix_sdk::http_client=debug"))
+        XCTAssertTrue(filterComponents.contains("matrix_sdk_crypto=debug"))
         XCTAssertTrue(filterComponents.contains("hyper=warn"))
     }
 }

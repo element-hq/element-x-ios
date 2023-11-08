@@ -280,6 +280,7 @@ class MockScreen: Identifiable {
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -292,6 +293,7 @@ class MockScreen: Identifiable {
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -306,6 +308,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -320,6 +323,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -335,6 +339,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -352,6 +357,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -369,6 +375,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -386,6 +393,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -404,6 +412,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -421,6 +430,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -438,6 +448,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -455,6 +466,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -472,6 +484,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)

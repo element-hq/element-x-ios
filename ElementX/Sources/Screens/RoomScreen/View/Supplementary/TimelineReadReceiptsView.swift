@@ -58,15 +58,16 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
         .mockMe
     ]
 
-    static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Test", members: members)),
+                                               timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
                                                mediaPlayerProvider: MediaPlayerProviderMock(),
-                                               roomProxy: RoomProxyMock(with: .init(displayName: "Test",
-                                                                                    members: members)),
-                                               appSettings: ServiceLocator.shared.settings,
-                                               analytics: ServiceLocator.shared.analytics,
+                                               voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               application: ApplicationMock.default)
+                                               application: ApplicationMock.default,
+                                               appSettings: ServiceLocator.shared.settings,
+                                               analyticsService: ServiceLocator.shared.analytics,
+                                               notificationCenter: NotificationCenterMock())
 
     static let singleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now")]
     static let doubleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now"),
