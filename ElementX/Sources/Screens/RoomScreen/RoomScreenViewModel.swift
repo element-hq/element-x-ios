@@ -29,20 +29,24 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
 
     private let timelineController: RoomTimelineControllerProtocol
+    private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let roomProxy: RoomProxyProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private let application: ApplicationProtocol
-    private unowned let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenterProtocol: NotificationCenterProtocol
-    private let voiceMessageRecorder: VoiceMessageRecorderProtocol
+    
+    private let roomScreenActionsHandler: RoomScreenActionsHandler
+    
     private let composerFocusedSubject = PassthroughSubject<Bool, Never>()
-    private let mediaPlayerProvider: MediaPlayerProviderProtocol
+    
     private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
-    private var canCurrentUserRedact = false
+    var actions: AnyPublisher<RoomScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
+    
     private var paginateBackwardsTask: Task<Void, Never>?
-    private var resumeVoiceMessagePlaybackAfterScrubbing = false
-    private var voiceMessageRecorderObserver: AnyCancellable?
 
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -53,15 +57,25 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          userIndicatorController: UserIndicatorControllerProtocol,
          application: ApplicationProtocol,
          notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
-        self.roomProxy = roomProxy
         self.timelineController = timelineController
+        self.mediaPlayerProvider = mediaPlayerProvider
+        self.roomProxy = roomProxy
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
-        self.notificationCenterProtocol = notificationCenterProtocol
-        self.mediaPlayerProvider = mediaPlayerProvider
         self.application = application
-        voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
+        self.notificationCenterProtocol = notificationCenterProtocol
+        
+        let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
+        
+        roomScreenActionsHandler = RoomScreenActionsHandler(roomProxy: roomProxy,
+                                                            timelineController: timelineController,
+                                                            mediaPlayerProvider: mediaPlayerProvider,
+                                                            voiceMessageRecorder: voiceMessageRecorder,
+                                                            userIndicatorController: userIndicatorController,
+                                                            application: application,
+                                                            appSettings: appSettings,
+                                                            analyticsService: analytics)
         
         super.init(initialViewState: RoomScreenViewState(roomID: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
@@ -76,13 +90,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         setupSubscriptions()
         setupDirectRoomSubscriptionsIfNeeded()
-
+        
         state.timelineItemMenuActionProvider = { [weak self] itemId -> TimelineItemMenuActions? in
             guard let self else {
                 return nil
             }
             
-            return self.timelineItemMenuActionsForItemId(itemId)
+            return self.roomScreenActionsHandler.timelineItemMenuActionsForItemId(itemId)
         }
 
         state.audioPlayerStateProvider = { [weak self] itemId -> AudioPlayerState? in
@@ -101,10 +115,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // MARK: - Public
-
-    var actions: AnyPublisher<RoomScreenViewModelAction, Never> {
-        actionsSubject.eraseToAnyPublisher()
-    }
     
     func stop() {
         // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
@@ -126,22 +136,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
         case .timelineItemMenu(let itemID):
-            Task {
-                if case let .success(value) = await roomProxy.canUserRedact(userID: roomProxy.ownUserID) {
-                    canCurrentUserRedact = value
-                } else {
-                    canCurrentUserRedact = false
-                }
-                showTimelineItemActionMenu(for: itemID)
-            }
+            roomScreenActionsHandler.showTimelineItemActionMenu(for: itemID)
         case .timelineItemMenuAction(let itemID, let action):
-            processTimelineItemMenuAction(action, itemID: itemID)
+            roomScreenActionsHandler.processTimelineItemMenuAction(action, itemID: itemID)
         case .handlePasteOrDrop(let provider):
-            handlePasteOrDrop(provider)
+            roomScreenActionsHandler.handlePasteOrDrop(provider)
         case .tappedOnUser(userID: let userID):
             Task { await handleTappedUser(userID: userID) }
         case .displayEmojiPicker(let itemID):
-            showEmojiPicker(for: itemID)
+            roomScreenActionsHandler.showEmojiPicker(for: itemID)
         case .reactionSummary(let itemID, let key):
             showReactionSummary(for: itemID, selectedKey: key)
         case .retrySend(let itemID):
@@ -155,7 +158,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 renderPendingTimelineItems()
             }
         case let .selectedPollOption(pollStartID, optionID):
-            sendPollResponse(pollStartID: pollStartID, optionID: optionID)
+            roomScreenActionsHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
         case .playPauseAudio(let itemID):
             Task { await timelineController.playPauseAudio(for: itemID) }
         case .seekAudio(let itemID, let progress):
@@ -165,7 +168,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          title: L10n.actionEndPoll,
                                                          message: L10n.commonPollEndConfirmation,
                                                          primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                                         secondaryButton: .init(title: L10n.actionOk, action: { self.endPoll(pollStartID: pollStartID) }))
+                                                         secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenActionsHandler.endPoll(pollStartID: pollStartID) }))
         case .presentCall:
             actionsSubject.send(.displayCallScreen)
         }
@@ -191,7 +194,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .displayPollForm:
             actionsSubject.send(.displayPollForm)
         case .handlePasteOrDrop(let provider):
-            handlePasteOrDrop(provider)
+            roomScreenActionsHandler.handlePasteOrDrop(provider)
         case .composerModeChanged(mode: let mode):
             trackComposerMode(mode)
         case .composerFocusedChanged(isFocused: let isFocused):
@@ -199,24 +202,24 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .startVoiceMessageRecording:
             Task {
                 await mediaPlayerProvider.detachAllStates(except: nil)
-                await startRecordingVoiceMessage()
+                await roomScreenActionsHandler.startRecordingVoiceMessage()
             }
         case .stopVoiceMessageRecording:
-            Task { await stopRecordingVoiceMessage() }
+            Task { await roomScreenActionsHandler.stopRecordingVoiceMessage() }
         case .cancelVoiceMessageRecording:
-            Task { await cancelRecordingVoiceMessage() }
+            Task { await roomScreenActionsHandler.cancelRecordingVoiceMessage() }
         case .deleteVoiceMessageRecording:
-            Task { await deleteCurrentVoiceMessage() }
+            Task { await roomScreenActionsHandler.deleteCurrentVoiceMessage() }
         case .sendVoiceMessage:
-            Task { await sendCurrentVoiceMessage() }
+            Task { await roomScreenActionsHandler.sendCurrentVoiceMessage() }
         case .startVoiceMessagePlayback:
-            Task { await startPlayingRecordedVoiceMessage() }
+            Task { await roomScreenActionsHandler.startPlayingRecordedVoiceMessage() }
         case .pauseVoiceMessagePlayback:
-            pausePlayingRecordedVoiceMessage()
+            roomScreenActionsHandler.pausePlayingRecordedVoiceMessage()
         case .seekVoiceMessagePlayback(let progress):
-            Task { await seekRecordedVoiceMessage(to: progress) }
+            Task { await roomScreenActionsHandler.seekRecordedVoiceMessage(to: progress) }
         case .scrubVoiceMessagePlayback(let scrubbing):
-            Task { await scrubVoiceMessagePlayback(scrubbing: scrubbing) }
+            Task { await roomScreenActionsHandler.scrubVoiceMessagePlayback(scrubbing: scrubbing) }
         }
     }
     
@@ -274,6 +277,34 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.members, on: self)
+            .store(in: &cancellables)
+        
+        roomScreenActionsHandler.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .composer(let action):
+                    actionsSubject.send(.composer(action: action))
+                case .displayError(let type):
+                    displayError(type)
+                case .displayEmojiPicker(let itemID, let selectedEmojis):
+                    actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+                case .displayMessageForwarding(let itemID):
+                    actionsSubject.send(.displayMessageForwarding(itemID: itemID))
+                case .displayReportContent(let itemID, let senderID):
+                    actionsSubject.send(.displayReportContent(itemID: itemID, senderID: senderID))
+                case .displayMediaUploadPreviewScreen(let url):
+                    actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
+                case .showActionMenu(let actionMenuInfo):
+                    state.bindings.actionMenuInfo = actionMenuInfo
+                case .showDebugInfo(let debugInfo):
+                    state.bindings.debugInfo = debugInfo
+                case .showConfirmationAlert(let alertInfo):
+                    state.bindings.confirmationAlertInfo = alertInfo
+                }
+            }
             .store(in: &cancellables)
     }
 
@@ -542,248 +573,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                                   iconName: "xmark"))
         }
     }
-    
-    // MARK: TimelineItemActionMenu
-    
-    private func showTimelineItemActionMenu(for itemID: TimelineItemIdentifier) {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
-              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
-            // Don't show a menu for non-event based items.
-            return
-        }
-
-        actionsSubject.send(.composer(action: .removeFocus))
-        state.bindings.actionMenuInfo = .init(item: eventTimelineItem)
-    }
-
-    // swiftlint:disable:next cyclomatic_complexity
-    private func timelineItemMenuActionsForItemId(_ itemID: TimelineItemIdentifier) -> TimelineItemMenuActions? {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
-              let item = timelineItem as? EventBasedTimelineItemProtocol else {
-            // Don't show a context menu for non-event based items.
-            return nil
-        }
-
-        if timelineItem is StateRoomTimelineItem {
-            // Don't show a context menu for state events.
-            return nil
-        }
-
-        var debugActions: [TimelineItemMenuAction] = []
-        if appSettings.canShowDeveloperOptions || appSettings.viewSourceEnabled {
-            debugActions.append(.viewSource)
-        }
-
-        if let encryptedItem = timelineItem as? EncryptedRoomTimelineItem {
-            switch encryptedItem.encryptionType {
-            case .megolmV1AesSha2(let sessionID):
-                debugActions.append(.retryDecryption(sessionID: sessionID))
-            default:
-                break
-            }
-            
-            return .init(actions: [.copyPermalink], debugActions: debugActions)
-        }
-        
-        var actions: [TimelineItemMenuAction] = []
-
-        if item.canBeRepliedTo {
-            if let messageItem = item as? EventBasedMessageTimelineItemProtocol {
-                actions.append(.reply(isThread: messageItem.isThreaded))
-            } else {
-                actions.append(.reply(isThread: false))
-            }
-        }
-        
-        if item.isForwardable {
-            actions.append(.forward(itemID: itemID))
-        }
-
-        if item.isEditable {
-            actions.append(.edit)
-        }
-
-        if item.isCopyable {
-            actions.append(.copy)
-        }
-        
-        actions.append(.copyPermalink)
-
-        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = itemID.eventID {
-            actions.append(.endPoll(pollStartID: eventID))
-        }
-        
-        if canRedactItem(item) {
-            actions.append(.redact)
-        }
-
-        if !item.isOutgoing {
-            actions.append(.report)
-        }
-
-        if item.hasFailedToSend {
-            actions = actions.filter(\.canAppearInFailedEcho)
-        }
-
-        if item.isRedacted {
-            actions = actions.filter(\.canAppearInRedacted)
-        }
-
-        return .init(actions: actions, debugActions: debugActions)
-    }
-
-    private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {
-        item.isOutgoing || (canCurrentUserRedact && !roomProxy.isDirect)
-    }
-    
-    private func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
-              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
-            return
-        }
-        
-        switch action {
-        case .copy:
-            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
-                return
-            }
-            
-            UIPasteboard.general.string = messageTimelineItem.body
-        case .edit:
-            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
-                return
-            }
-
-            let text: String
-            switch messageTimelineItem.contentType {
-            case .text(let textItem):
-                if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = textItem.formattedBodyHTMLString {
-                    text = formattedBodyHTMLString
-                } else {
-                    text = messageTimelineItem.body
-                }
-            case .emote(let emoteItem):
-                if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = emoteItem.formattedBodyHTMLString {
-                    text = "/me " + formattedBodyHTMLString
-                } else {
-                    text = "/me " + messageTimelineItem.body
-                }
-            default:
-                text = messageTimelineItem.body
-            }
-            
-            actionsSubject.send(.composer(action: .setText(text: text)))
-            actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
-        case .copyPermalink:
-            do {
-                guard let eventID = eventTimelineItem.id.eventID else {
-                    displayError(.alert(L10n.errorFailedCreatingThePermalink))
-                    break
-                }
-
-                let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventID, roomIdentifier: timelineController.roomID,
-                                                                 baseURL: appSettings.permalinkBaseURL)
-                UIPasteboard.general.url = permalink
-            } catch {
-                displayError(.alert(L10n.errorFailedCreatingThePermalink))
-            }
-        case .redact:
-            Task {
-                if eventTimelineItem.hasFailedToSend {
-                    await timelineController.cancelSend(itemID)
-                } else {
-                    await timelineController.redact(itemID)
-                }
-            }
-        case .reply:
-            let replyInfo = buildReplyInfo(for: eventTimelineItem)
-            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: replyInfo.type)
-
-            actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails, isThread: replyInfo.isThread))))
-        case .forward(let itemID):
-            actionsSubject.send(.displayMessageForwarding(itemID: itemID))
-        case .viewSource:
-            let debugInfo = timelineController.debugInfo(for: eventTimelineItem.id)
-            MXLog.info(debugInfo)
-            state.bindings.debugInfo = debugInfo
-        case .retryDecryption(let sessionID):
-            Task {
-                await timelineController.retryDecryption(for: sessionID)
-            }
-        case .report:
-            actionsSubject.send(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
-        case .react:
-            showEmojiPicker(for: itemID)
-        case .endPoll(let pollStartID):
-            endPoll(pollStartID: pollStartID)
-        }
-        
-        if action.switchToDefaultComposer {
-            actionsSubject.send(.composer(action: .setMode(mode: .default)))
-        }
-    }
-    
-    // Pasting and dropping
-    
-    private func handlePasteOrDrop(_ provider: NSItemProvider) {
-        guard let contentType = provider.preferredContentType,
-              let preferredExtension = contentType.preferredFilenameExtension else {
-            MXLog.error("Invalid NSItemProvider: \(provider)")
-            displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia))
-            return
-        }
-        
-        let providerSuggestedName = provider.suggestedName
-        let providerDescription = provider.description
-        
-        _ = provider.loadDataRepresentation(for: contentType) { data, error in
-            Task { @MainActor in
-                let loadingIndicatorIdentifier = UUID().uuidString
-                self.userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
-                defer {
-                    self.userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
-                }
-
-                if let error {
-                    self.displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia))
-                    MXLog.error("Failed processing NSItemProvider: \(providerDescription) with error: \(error)")
-                    return
-                }
-
-                guard let data else {
-                    self.displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia))
-                    MXLog.error("Invalid NSItemProvider data: \(providerDescription)")
-                    return
-                }
-
-                do {
-                    let url = try await Task.detached {
-                        if let filename = providerSuggestedName {
-                            let hasExtension = !(filename as NSString).pathExtension.isEmpty
-                            let filename = hasExtension ? filename : "\(filename).\(preferredExtension)"
-                            return try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
-                        } else {
-                            let filename = "\(UUID().uuidString).\(preferredExtension)"
-                            return try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
-                        }
-                    }.value
-
-                    self.actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
-                } catch {
-                    self.displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia))
-                    MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
-                }
-            }
-        }
-    }
-    
-    private func buildReplyInfo(for item: EventBasedTimelineItemProtocol) -> ReplyInfo {
-        guard let messageItem = item as? EventBasedMessageTimelineItemProtocol else {
-            return .init(type: .text(.init(body: item.body)), isThread: false)
-        }
-        
-        return .init(type: messageItem.contentType, isThread: messageItem.isThreaded)
-    }
 
     private func handleTappedUser(userID: String) async {
         // This is generally fast but it could take some time for rooms with thousands of users on first load
@@ -878,17 +667,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // MARK: - Reactions
-    
-    private func showEmojiPicker(for itemID: TimelineItemIdentifier) {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
-              timelineItem.isReactable,
-              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
-            return
-        }
-        let selectedEmojis = Set(eventTimelineItem.properties.reactions.compactMap { $0.isHighlighted ? $0.key : nil })
-        actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
-    }
-    
+        
     private func showReactionSummary(for itemID: TimelineItemIdentifier, selectedKey: String) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
@@ -897,156 +676,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         state.bindings.reactionSummaryInfo = .init(reactions: eventTimelineItem.properties.reactions, selectedKey: selectedKey)
     }
-
-    // MARK: - Polls
-
-    private func sendPollResponse(pollStartID: String, optionID: String) {
-        Task {
-            let sendPollResponseResult = await roomProxy.sendPollResponse(pollStartID: pollStartID, answers: [optionID])
-            analytics.trackPollVote()
-
-            switch sendPollResponseResult {
-            case .success:
-                break
-            case .failure:
-                displayError(.toast(L10n.errorUnknown))
-            }
-        }
-    }
-
-    private func endPoll(pollStartID: String) {
-        Task {
-            let endPollResult = await roomProxy.endPoll(pollStartID: pollStartID,
-                                                        text: "The poll with event id: \(pollStartID) has ended")
-            analytics.trackPollEnd()
-            switch endPollResult {
-            case .success:
-                break
-            case .failure:
-                displayError(.toast(L10n.errorUnknown))
-            }
-        }
-    }
     
     // MARK: - Audio
     
     private func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
         timelineController.audioPlayerState(for: itemID)
-    }
-    
-    // MARK: - Voice message
-    
-    private func handleVoiceMessageRecorderAction(_ action: VoiceMessageRecorderAction) {
-        MXLog.debug("handling voice recorder action: \(action) - (audio)")
-        switch action {
-        case .didStartRecording(let audioRecorder):
-            let audioRecordState = AudioRecorderState()
-            audioRecordState.attachAudioRecorder(audioRecorder)
-            actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
-        case .didStopRecording(let previewAudioPlayerState, let url):
-            actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: previewAudioPlayerState, waveform: .url(url), isUploading: false))))
-        case .didFailWithError(let error):
-            switch error {
-            case .audioRecorderError(.recordPermissionNotGranted):
-                MXLog.info("permission to record audio has not been granted.")
-                state.bindings.confirmationAlertInfo = .init(id: .init(),
-                                                             title: L10n.dialogPermissionMicrophoneTitleIos(InfoPlistReader.main.bundleDisplayName),
-                                                             message: L10n.dialogPermissionMicrophoneDescriptionIos,
-                                                             primaryButton: .init(title: L10n.commonSettings, action: { [weak self] in self?.openSystemSettings() }),
-                                                             secondaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil))
-            default:
-                MXLog.error("failed to start voice message recording. \(error)")
-                actionsSubject.send(.composer(action: .setMode(mode: .default)))
-            }
-        }
-    }
-    
-    private func startRecordingVoiceMessage() async {
-        voiceMessageRecorderObserver = voiceMessageRecorder.actions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                self?.handleVoiceMessageRecorderAction(action)
-            }
-        
-        await voiceMessageRecorder.startRecording()
-    }
-    
-    private func stopRecordingVoiceMessage() async {
-        await voiceMessageRecorder.stopRecording()
-    }
-    
-    private func cancelRecordingVoiceMessage() async {
-        await voiceMessageRecorder.cancelRecording()
-        voiceMessageRecorderObserver = nil
-        actionsSubject.send(.composer(action: .setMode(mode: .default)))
-    }
-    
-    private func deleteCurrentVoiceMessage() async {
-        await voiceMessageRecorder.deleteRecording()
-        voiceMessageRecorderObserver = nil
-        actionsSubject.send(.composer(action: .setMode(mode: .default)))
-    }
-    
-    private func sendCurrentVoiceMessage() async {
-        guard let audioPlayerState = voiceMessageRecorder.previewAudioPlayerState, let recordingURL = voiceMessageRecorder.recordingURL else {
-            displayError(.alert(L10n.errorFailedUploadingVoiceMessage))
-            return
-        }
-        
-        analytics.trackComposer(inThread: false,
-                                isEditing: false,
-                                isReply: false,
-                                messageType: .voiceMessage,
-                                startsThread: nil)
-
-        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: true))))
-        await voiceMessageRecorder.stopPlayback()
-        switch await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: AudioConverter()) {
-        case .success:
-            await deleteCurrentVoiceMessage()
-        case .failure(let error):
-            MXLog.error("failed to send the voice message. \(error)")
-            actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: false))))
-            displayError(.alert(L10n.errorFailedUploadingVoiceMessage))
-        }
-    }
-    
-    private func startPlayingRecordedVoiceMessage() async {
-        await mediaPlayerProvider.detachAllStates(except: voiceMessageRecorder.previewAudioPlayerState)
-        if case .failure(let error) = await voiceMessageRecorder.startPlayback() {
-            MXLog.error("failed to play recorded voice message. \(error)")
-        }
-    }
-    
-    private func pausePlayingRecordedVoiceMessage() {
-        voiceMessageRecorder.pausePlayback()
-    }
-    
-    private func seekRecordedVoiceMessage(to progress: Double) async {
-        await mediaPlayerProvider.detachAllStates(except: voiceMessageRecorder.previewAudioPlayerState)
-        await voiceMessageRecorder.seekPlayback(to: progress)
-    }
-    
-    private func scrubVoiceMessagePlayback(scrubbing: Bool) async {
-        guard let audioPlayerState = voiceMessageRecorder.previewAudioPlayerState else {
-            return
-        }
-        if scrubbing {
-            if audioPlayerState.playbackState == .playing {
-                resumeVoiceMessagePlaybackAfterScrubbing = true
-                pausePlayingRecordedVoiceMessage()
-            }
-        } else {
-            if resumeVoiceMessagePlaybackAfterScrubbing {
-                resumeVoiceMessagePlaybackAfterScrubbing = false
-                await startPlayingRecordedVoiceMessage()
-            }
-        }
-    }
-    
-    private func openSystemSettings() {
-        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-        application.open(url)
     }
 }
 
@@ -1081,11 +715,6 @@ extension RoomScreenViewModel {
                                           analytics: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           application: ApplicationMock.default)
-}
-
-private struct ReplyInfo {
-    let type: EventBasedMessageTimelineItemContentType
-    let isThread: Bool
 }
 
 private struct RoomContextKey: EnvironmentKey {
