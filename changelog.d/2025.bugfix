@@ -1,0 +1,1 @@
+Fix a bug where tapping a call link could open the call with a keyboard obscuring the sheet.
