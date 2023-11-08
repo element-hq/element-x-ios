@@ -87,9 +87,9 @@ struct TracingConfiguration {
         .hyper: .warn,
         .matrix_sdk_ffi: .info,
         .matrix_sdk_client: .trace,
-        .matrix_sdk_crypto: .info,
+        .matrix_sdk_crypto: .debug,
         .matrix_sdk_oidc: .trace,
-        .matrix_sdk_http_client: .info,
+        .matrix_sdk_http_client: .debug,
         .matrix_sdk_sliding_sync: .info,
         .matrix_sdk_base_sliding_sync: .info,
         .matrix_sdk_ui_timeline: .info
@@ -108,7 +108,13 @@ struct TracingConfiguration {
         
         let overrides = Self.targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
             // Keep the defaults here
-            let ignoredTargets: [Target] = [.common, .matrix_sdk_ffi, .hyper, .matrix_sdk_client, .matrix_sdk_oidc]
+            let ignoredTargets: [Target] = [.common,
+                                            .hyper,
+                                            .matrix_sdk_ffi,
+                                            .matrix_sdk_oidc,
+                                            .matrix_sdk_client,
+                                            .matrix_sdk_crypto,
+                                            .matrix_sdk_http_client]
             if ignoredTargets.contains(target) {
                 return
             }
