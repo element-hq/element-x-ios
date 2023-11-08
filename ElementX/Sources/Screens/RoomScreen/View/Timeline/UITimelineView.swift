@@ -89,7 +89,7 @@ struct UITimelineView_Previews: PreviewProvider, TestablePreview {
                                                application: ApplicationMock.default,
                                                appSettings: ServiceLocator.shared.settings,
                                                analyticsService: ServiceLocator.shared.analytics,
-                                               notificationCenter: NotificationCenter.default)
+                                               notificationCenter: NotificationCenterMock())
 
     static var previews: some View {
         NavigationStack {

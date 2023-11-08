@@ -49,14 +49,16 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = items
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "")),
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
         
         // Then the messages should be grouped together.
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
@@ -84,14 +86,16 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = items
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "")),
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
         
         // Then the messages should be grouped by sender.
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .single, "A message should not be grouped when the sender changes.")
@@ -117,14 +121,16 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = items
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "")),
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
         
         // Then the first message should not be grouped but the other two should.
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .single, "When the first message has reactions it should not be grouped.")
@@ -147,14 +153,16 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = items
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "")),
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
         
         // Then the first and second messages should be grouped and the last one should not.
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
@@ -177,14 +185,16 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = items
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "")),
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
         
         // Then the messages should be grouped together.
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
@@ -203,14 +213,16 @@ class RoomScreenViewModelTests: XCTestCase {
         roomMemberMock.userID = "bob"
         roomProxyMock.getMemberUserIDReturnValue = .success(roomMemberMock)
 
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: roomProxyMock,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
         viewModel.actions
             .sink { action in
                 switch action {
@@ -243,14 +255,16 @@ class RoomScreenViewModelTests: XCTestCase {
             .success(roomMemberMock)
         }
 
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: roomProxyMock,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
                                             
         viewModel.actions
             .sink { action in
@@ -284,14 +298,16 @@ class RoomScreenViewModelTests: XCTestCase {
             .failure(.failedRetrievingMember)
         }
 
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: roomProxyMock,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
         viewModel.actions
             .sink { _ in
                 XCTFail("Should not receive any action")
@@ -316,15 +332,18 @@ class RoomScreenViewModelTests: XCTestCase {
     func testRetrySend() async throws {
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        timelineController.roomProxy = roomProxyMock
 
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: roomProxyMock,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
 
         viewModel.context.send(viewAction: .retrySend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test retry send id")))
         
@@ -338,14 +357,16 @@ class RoomScreenViewModelTests: XCTestCase {
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
 
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: roomProxyMock,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
 
         viewModel.context.send(viewAction: .retrySend(itemID: .random))
         
@@ -357,15 +378,18 @@ class RoomScreenViewModelTests: XCTestCase {
     func testCancelSend() async {
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        timelineController.roomProxy = roomProxyMock
 
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: roomProxyMock,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
 
         viewModel.context.send(viewAction: .cancelSend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test cancel send id")))
         
@@ -379,14 +403,16 @@ class RoomScreenViewModelTests: XCTestCase {
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
 
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: roomProxyMock,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
 
         viewModel.context.send(viewAction: .cancelSend(itemID: .random))
 
@@ -517,15 +543,16 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         timelineController.roomProxy = roomProxy
 
-        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+        let viewModel = RoomScreenViewModel(roomProxy: roomProxy,
+                                            timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            roomProxy: roomProxy,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
                                             application: ApplicationMock.default,
-                                            notificationCenterProtocol: notificationCenter)
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: notificationCenter)
         
         return (viewModel, roomProxy, timelineController, notificationCenter)
     }

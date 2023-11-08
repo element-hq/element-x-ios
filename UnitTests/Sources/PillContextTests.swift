@@ -26,14 +26,16 @@ class PillContextTests: XCTestCase {
         let proxyMock = RoomProxyMock(with: .init(displayName: "Test"))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
         proxyMock.members = subject.asCurrentValuePublisher()
-        let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+        let mock = RoomScreenViewModel(roomProxy: proxyMock,
+                                       timelineController: MockRoomTimelineController(),
                                        mediaProvider: MockMediaProvider(),
                                        mediaPlayerProvider: MediaPlayerProviderMock(),
-                                       roomProxy: proxyMock,
-                                       appSettings: ServiceLocator.shared.settings,
-                                       analytics: ServiceLocator.shared.analytics,
+                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                       application: ApplicationMock.default)
+                                       application: ApplicationMock.default,
+                                       appSettings: ServiceLocator.shared.settings,
+                                       analyticsService: ServiceLocator.shared.analytics,
+                                       notificationCenter: NotificationCenterMock())
         let context = PillContext(roomContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertFalse(context.viewState.isOwnMention)
@@ -53,14 +55,16 @@ class PillContextTests: XCTestCase {
         let proxyMock = RoomProxyMock(with: .init(displayName: "Test", ownUserID: id))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
         proxyMock.members = subject.asCurrentValuePublisher()
-        let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+        let mock = RoomScreenViewModel(roomProxy: proxyMock,
+                                       timelineController: MockRoomTimelineController(),
                                        mediaProvider: MockMediaProvider(),
                                        mediaPlayerProvider: MediaPlayerProviderMock(),
-                                       roomProxy: proxyMock,
-                                       appSettings: ServiceLocator.shared.settings,
-                                       analytics: ServiceLocator.shared.analytics,
+                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                       application: ApplicationMock.default)
+                                       application: ApplicationMock.default,
+                                       appSettings: ServiceLocator.shared.settings,
+                                       analyticsService: ServiceLocator.shared.analytics,
+                                       notificationCenter: NotificationCenterMock())
         let context = PillContext(roomContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)
@@ -73,14 +77,16 @@ class PillContextTests: XCTestCase {
         let proxyMock = RoomProxyMock(with: .init(id: id, displayName: displayName, avatarURL: avatarURL))
         let mockController = MockRoomTimelineController()
         mockController.roomProxy = proxyMock
-        let mock = RoomScreenViewModel(timelineController: mockController,
+        let mock = RoomScreenViewModel(roomProxy: proxyMock,
+                                       timelineController: mockController,
                                        mediaProvider: MockMediaProvider(),
                                        mediaPlayerProvider: MediaPlayerProviderMock(),
-                                       roomProxy: proxyMock,
-                                       appSettings: ServiceLocator.shared.settings,
-                                       analytics: ServiceLocator.shared.analytics,
+                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                       application: ApplicationMock.default)
+                                       application: ApplicationMock.default,
+                                       appSettings: ServiceLocator.shared.settings,
+                                       analyticsService: ServiceLocator.shared.analytics,
+                                       notificationCenter: NotificationCenterMock())
         let context = PillContext(roomContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)

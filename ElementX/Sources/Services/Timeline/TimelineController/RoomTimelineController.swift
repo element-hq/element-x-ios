@@ -159,7 +159,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
            let item = timelineItem as? EventBasedTimelineItemProtocol,
            item.hasFailedToSend {
             MXLog.info("Editing a failed echo, will cancel and resend it as a new message")
-            await cancelSend(itemID)
+            await cancelSending(itemID: itemID)
             await sendMessage(newMessage, html: html, intentionalMentions: intentionalMentions)
         } else if let eventID = itemID.eventID {
             switch await roomProxy.editMessage(newMessage,
@@ -187,15 +187,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case .failure(let error):
             MXLog.error("Failed redacting message with error: \(error)")
         }
-    }
-
-    func cancelSend(_ itemID: TimelineItemIdentifier) async {
-        guard let transactionID = itemID.transactionID else {
-            MXLog.error("Failed cancelling send, missing transaction ID")
-            return
-        }
-        MXLog.info("Cancelling send in \(roomID)")
-        await roomProxy.cancelSend(transactionID: transactionID)
     }
     
     // Handle this parallel to the timeline items so we're not forced
@@ -225,6 +216,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
+        MXLog.info("Retry sending in \(roomID)")
         await roomProxy.retrySend(transactionID: transactionID)
     }
     
@@ -234,6 +226,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
+        MXLog.info("Cancelling send in \(roomID)")
         await roomProxy.cancelSend(transactionID: transactionID)
     }
     

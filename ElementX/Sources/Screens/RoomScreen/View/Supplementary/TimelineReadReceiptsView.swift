@@ -67,7 +67,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
                                                application: ApplicationMock.default,
                                                appSettings: ServiceLocator.shared.settings,
                                                analyticsService: ServiceLocator.shared.analytics,
-                                               notificationCenter: NotificationCenter.default)
+                                               notificationCenter: NotificationCenterMock())
 
     static let singleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now")]
     static let doubleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now"),

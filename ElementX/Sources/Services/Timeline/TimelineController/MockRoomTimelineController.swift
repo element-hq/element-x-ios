@@ -77,8 +77,6 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                      intentionalMentions: IntentionalMentions) async { }
     
     func redact(_ itemID: TimelineItemIdentifier) async { }
-
-    func cancelSend(_ itemID: TimelineItemIdentifier) async { }
     
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo {
         .init(model: "Mock debug description", originalJSON: nil, latestEditJSON: nil)
@@ -86,9 +84,21 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         
     func retryDecryption(for sessionID: String) async { }
     
-    func retrySending(itemID: TimelineItemIdentifier) async { }
+    func retrySending(itemID: TimelineItemIdentifier) async {
+        guard let transactionID = itemID.transactionID else {
+            return
+        }
+        
+        await roomProxy?.retrySend(transactionID: transactionID)
+    }
     
-    func cancelSending(itemID: TimelineItemIdentifier) async { }
+    func cancelSending(itemID: TimelineItemIdentifier) async {
+        guard let transactionID = itemID.transactionID else {
+            return
+        }
+        
+        await roomProxy?.cancelSend(transactionID: transactionID)
+    }
     
     // MARK: - UI Test signalling
     

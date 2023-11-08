@@ -225,7 +225,7 @@ class RoomScreenInteractionHandler {
         case .redact:
             Task {
                 if eventTimelineItem.hasFailedToSend {
-                    await timelineController.cancelSend(itemID)
+                    await timelineController.cancelSending(itemID: itemID)
                 } else {
                     await timelineController.redact(itemID)
                 }

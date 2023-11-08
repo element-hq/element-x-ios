@@ -62,8 +62,6 @@ protocol RoomTimelineControllerProtocol {
     func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async
 
     func redact(_ itemID: TimelineItemIdentifier) async
-
-    func cancelSend(_ itemID: TimelineItemIdentifier) async
     
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo
     

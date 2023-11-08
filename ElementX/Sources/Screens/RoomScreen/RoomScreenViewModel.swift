@@ -670,7 +670,7 @@ extension RoomScreenViewModel {
                                           application: ApplicationMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
-                                          notificationCenter: NotificationCenter.default)
+                                          notificationCenter: NotificationCenterMock())
 }
 
 private struct RoomContextKey: EnvironmentKey {
