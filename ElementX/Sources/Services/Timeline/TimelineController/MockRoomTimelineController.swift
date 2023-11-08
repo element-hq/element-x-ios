@@ -63,8 +63,6 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async { }
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async { }
-
-    func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction { .none }
     
     func sendMessage(_ message: String,
                      html: String?,
@@ -88,18 +86,9 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         
     func retryDecryption(for sessionID: String) async { }
     
-    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
-        AudioPlayerState(id: .timelineItemIdentifier(itemID),
-                         duration: 10.0,
-                         waveform: nil,
-                         progress: 0.0)
-    }
+    func retrySending(itemID: TimelineItemIdentifier) async { }
     
-    func playPauseAudio(for itemID: TimelineItemIdentifier) async { }
-    
-    func pauseAudio() { }
-    
-    func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async { }
+    func cancelSending(itemID: TimelineItemIdentifier) async { }
     
     // MARK: - UI Test signalling
     

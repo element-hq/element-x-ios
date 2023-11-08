@@ -153,9 +153,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .reactionSummary(let itemID, let key):
             showReactionSummary(for: itemID, selectedKey: key)
         case .retrySend(let itemID):
-            Task { await handleRetrySend(itemID: itemID) }
+            Task { await timelineController.retrySending(itemID: itemID) }
         case .cancelSend(let itemID):
-            Task { await handleCancelSend(itemID: itemID) }
+            Task { await timelineController.cancelSending(itemID: itemID) }
         case .paginateBackwards:
             paginateBackwards()
         case .scrolledToBottom:
@@ -472,24 +472,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             displayError(.alert(L10n.screenRoomErrorFailedRetrievingUserDetails))
             MXLog.error("Failed retrieving the user given the following id \(userID) with error: \(error)")
         }
-    }
-
-    private func handleRetrySend(itemID: TimelineItemIdentifier) async {
-        guard let transactionID = itemID.transactionID else {
-            MXLog.error("Failed Retry Send: missing transaction ID")
-            return
-        }
-
-        await roomProxy.retrySend(transactionID: transactionID)
-    }
-
-    private func handleCancelSend(itemID: TimelineItemIdentifier) async {
-        guard let transactionID = itemID.transactionID else {
-            MXLog.error("Failed Cancel Send: missing transaction ID")
-            return
-        }
-
-        await roomProxy.cancelSend(transactionID: transactionID)
     }
     
     private func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {

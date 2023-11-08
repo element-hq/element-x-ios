@@ -68,6 +68,10 @@ protocol RoomTimelineControllerProtocol {
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo
     
     func retryDecryption(for sessionID: String) async
+    
+    func retrySending(itemID: TimelineItemIdentifier) async
+    
+    func cancelSending(itemID: TimelineItemIdentifier) async
 }
 
 extension RoomTimelineControllerProtocol {

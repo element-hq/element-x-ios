@@ -219,6 +219,24 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         await roomProxy.retryDecryption(for: sessionID)
     }
     
+    func retrySending(itemID: TimelineItemIdentifier) async {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Failed Retry Send: missing transaction ID")
+            return
+        }
+        
+        await roomProxy.retrySend(transactionID: transactionID)
+    }
+    
+    func cancelSending(itemID: TimelineItemIdentifier) async {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Failed Cancel Send: missing transaction ID")
+            return
+        }
+        
+        await roomProxy.cancelSend(transactionID: transactionID)
+    }
+    
     // MARK: - Private
     
     @objc private func contentSizeCategoryDidChange() {
