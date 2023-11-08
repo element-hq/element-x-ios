@@ -39,7 +39,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let application: ApplicationProtocol
     private let notificationCenterProtocol: NotificationCenterProtocol
     
-    private let roomScreenActionsHandler: RoomScreenActionsHandler
+    private let roomScreenInteractionHandler: RoomScreenInteractionHandler
     
     private let composerFocusedSubject = PassthroughSubject<Bool, Never>()
     
@@ -73,14 +73,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
-        roomScreenActionsHandler = RoomScreenActionsHandler(roomProxy: roomProxy,
-                                                            timelineController: timelineController,
-                                                            mediaPlayerProvider: mediaPlayerProvider,
-                                                            voiceMessageRecorder: voiceMessageRecorder,
-                                                            userIndicatorController: userIndicatorController,
-                                                            application: application,
-                                                            appSettings: appSettings,
-                                                            analyticsService: analytics)
+        roomScreenInteractionHandler = RoomScreenInteractionHandler(roomProxy: roomProxy,
+                                                                    timelineController: timelineController,
+                                                                    mediaPlayerProvider: mediaPlayerProvider,
+                                                                    voiceMessageRecorder: voiceMessageRecorder,
+                                                                    userIndicatorController: userIndicatorController,
+                                                                    application: application,
+                                                                    appSettings: appSettings,
+                                                                    analyticsService: analytics)
         
         super.init(initialViewState: RoomScreenViewState(roomID: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
@@ -101,7 +101,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return nil
             }
             
-            return self.roomScreenActionsHandler.timelineItemMenuActionsForItemId(itemId)
+            return self.roomScreenInteractionHandler.timelineItemMenuActionsForItemId(itemId)
         }
 
         state.audioPlayerStateProvider = { [weak self] itemId -> AudioPlayerState? in
@@ -141,15 +141,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
         case .timelineItemMenu(let itemID):
-            roomScreenActionsHandler.showTimelineItemActionMenu(for: itemID)
+            roomScreenInteractionHandler.showTimelineItemActionMenu(for: itemID)
         case .timelineItemMenuAction(let itemID, let action):
-            roomScreenActionsHandler.processTimelineItemMenuAction(action, itemID: itemID)
+            roomScreenInteractionHandler.processTimelineItemMenuAction(action, itemID: itemID)
         case .handlePasteOrDrop(let provider):
-            roomScreenActionsHandler.handlePasteOrDrop(provider)
+            roomScreenInteractionHandler.handlePasteOrDrop(provider)
         case .tappedOnUser(userID: let userID):
             Task { await handleTappedUser(userID: userID) }
         case .displayEmojiPicker(let itemID):
-            roomScreenActionsHandler.showEmojiPicker(for: itemID)
+            roomScreenInteractionHandler.showEmojiPicker(for: itemID)
         case .reactionSummary(let itemID, let key):
             showReactionSummary(for: itemID, selectedKey: key)
         case .retrySend(let itemID):
@@ -163,7 +163,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 renderPendingTimelineItems()
             }
         case let .selectedPollOption(pollStartID, optionID):
-            roomScreenActionsHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
+            roomScreenInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
         case .playPauseAudio(let itemID):
             Task { await playPauseAudio(for: itemID) }
         case .seekAudio(let itemID, let progress):
@@ -173,7 +173,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          title: L10n.actionEndPoll,
                                                          message: L10n.commonPollEndConfirmation,
                                                          primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                                         secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenActionsHandler.endPoll(pollStartID: pollStartID) }))
+                                                         secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
         case .presentCall:
             actionsSubject.send(.displayCallScreen)
         }
@@ -199,7 +199,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .displayPollForm:
             actionsSubject.send(.displayPollForm)
         case .handlePasteOrDrop(let provider):
-            roomScreenActionsHandler.handlePasteOrDrop(provider)
+            roomScreenInteractionHandler.handlePasteOrDrop(provider)
         case .composerModeChanged(mode: let mode):
             trackComposerMode(mode)
         case .composerFocusedChanged(isFocused: let isFocused):
@@ -207,24 +207,24 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .startVoiceMessageRecording:
             Task {
                 await mediaPlayerProvider.detachAllStates(except: nil)
-                await roomScreenActionsHandler.startRecordingVoiceMessage()
+                await roomScreenInteractionHandler.startRecordingVoiceMessage()
             }
         case .stopVoiceMessageRecording:
-            Task { await roomScreenActionsHandler.stopRecordingVoiceMessage() }
+            Task { await roomScreenInteractionHandler.stopRecordingVoiceMessage() }
         case .cancelVoiceMessageRecording:
-            Task { await roomScreenActionsHandler.cancelRecordingVoiceMessage() }
+            Task { await roomScreenInteractionHandler.cancelRecordingVoiceMessage() }
         case .deleteVoiceMessageRecording:
-            Task { await roomScreenActionsHandler.deleteCurrentVoiceMessage() }
+            Task { await roomScreenInteractionHandler.deleteCurrentVoiceMessage() }
         case .sendVoiceMessage:
-            Task { await roomScreenActionsHandler.sendCurrentVoiceMessage() }
+            Task { await roomScreenInteractionHandler.sendCurrentVoiceMessage() }
         case .startVoiceMessagePlayback:
-            Task { await roomScreenActionsHandler.startPlayingRecordedVoiceMessage() }
+            Task { await roomScreenInteractionHandler.startPlayingRecordedVoiceMessage() }
         case .pauseVoiceMessagePlayback:
-            roomScreenActionsHandler.pausePlayingRecordedVoiceMessage()
+            roomScreenInteractionHandler.pausePlayingRecordedVoiceMessage()
         case .seekVoiceMessagePlayback(let progress):
-            Task { await roomScreenActionsHandler.seekRecordedVoiceMessage(to: progress) }
+            Task { await roomScreenInteractionHandler.seekRecordedVoiceMessage(to: progress) }
         case .scrubVoiceMessagePlayback(let scrubbing):
-            Task { await roomScreenActionsHandler.scrubVoiceMessagePlayback(scrubbing: scrubbing) }
+            Task { await roomScreenInteractionHandler.scrubVoiceMessagePlayback(scrubbing: scrubbing) }
         }
     }
     
@@ -284,7 +284,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .weakAssign(to: \.state.members, on: self)
             .store(in: &cancellables)
         
-        roomScreenActionsHandler.actions
+        roomScreenInteractionHandler.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 guard let self else { return }

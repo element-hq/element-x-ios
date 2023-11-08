@@ -17,7 +17,7 @@
 import Combine
 import UIKit
 
-enum RoomScreenActionsHandlerAction {
+enum RoomScreenInteractionHandlerAction {
     case composer(action: RoomScreenComposerAction)
     case displayError(RoomScreenErrorType)
     case displayEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
@@ -30,7 +30,7 @@ enum RoomScreenActionsHandlerAction {
 }
 
 @MainActor
-class RoomScreenActionsHandler {
+class RoomScreenInteractionHandler {
     private let roomProxy: RoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
@@ -40,8 +40,8 @@ class RoomScreenActionsHandler {
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     
-    private let actionsSubject: PassthroughSubject<RoomScreenActionsHandlerAction, Never> = .init()
-    var actions: AnyPublisher<RoomScreenActionsHandlerAction, Never> {
+    private let actionsSubject: PassthroughSubject<RoomScreenInteractionHandlerAction, Never> = .init()
+    var actions: AnyPublisher<RoomScreenInteractionHandlerAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
