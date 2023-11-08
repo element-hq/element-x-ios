@@ -30,30 +30,31 @@ extension AudioRecordingIdentifier {
     }
 }
 
-enum AudioRecorderError: Error {
-    case genericError
-    case internalError(error: Error)
-    case recordPermissionNotGranted
-    case recordingFailed
+enum AudioRecorderError: Error, Equatable {
+    case audioEngineFailure
+    case audioFileCreationFailure
+    case interrupted
     case recordingCancelled
+    case recordingFailed
+    case recordPermissionNotGranted
 }
 
 enum AudioRecorderAction {
     case didStartRecording
     case didStopRecording
-    case didFailWithError(error: Error)
+    case didFailWithError(error: AudioRecorderError)
 }
 
 protocol AudioRecorderProtocol: AnyObject {
     var actions: AnyPublisher<AudioRecorderAction, Never> { get }
     var currentTime: TimeInterval { get }
     var isRecording: Bool { get }
-    var url: URL? { get }
+    var audioFileUrl: URL? { get }
     
-    func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError>
+    func record(with recordID: AudioRecordingIdentifier) async
     func stopRecording() async
     func deleteRecording() async
-    func averagePowerForChannelNumber(_ channelNumber: Int) -> Float
+    func averagePower() -> Float
 }
 
 // sourcery: AutoMockable

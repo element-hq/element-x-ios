@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 
 enum VoiceMessageRecorderError: Error {
@@ -21,7 +22,14 @@ enum VoiceMessageRecorderError: Error {
     case missingRecordingFile
     case previewNotAvailable
     case audioRecorderError(AudioRecorderError)
+    case waveformAnalysisError
     case failedSendingVoiceMessage
+}
+
+enum VoiceMessageRecorderAction {
+    case didStartRecording(audioRecorder: AudioRecorderProtocol)
+    case didStopRecording(previewState: AudioPlayerState, url: URL)
+    case didFailWithError(error: VoiceMessageRecorderError)
 }
 
 protocol VoiceMessageRecorderProtocol {
@@ -29,9 +37,11 @@ protocol VoiceMessageRecorderProtocol {
     var previewAudioPlayerState: AudioPlayerState? { get }
     var recordingURL: URL? { get }
     var recordingDuration: TimeInterval { get }
-    
-    func startRecording() async -> Result<Void, VoiceMessageRecorderError>
-    func stopRecording() async -> Result<Void, VoiceMessageRecorderError>
+
+    var actions: AnyPublisher<VoiceMessageRecorderAction, Never> { get }
+
+    func startRecording() async
+    func stopRecording() async
     func cancelRecording() async
     func startPlayback() async -> Result<Void, VoiceMessageRecorderError>
     func pausePlayback()

@@ -14,15 +14,25 @@
 // limitations under the License.
 //
 
+import Accelerate
 import AVFoundation
 import Combine
 import Foundation
 import UIKit
 
-class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
-    private let silenceThreshold: Float = -50.0
-    
-    private var audioRecorder: AVAudioRecorder?
+private enum InternalAudioRecorderState: Equatable {
+    case recording
+    case suspended
+    case stopped
+    case error(AudioRecorderError)
+}
+
+class AudioRecorder: AudioRecorderProtocol {
+    private let audioSession: AudioSessionProtocol
+    private var audioEngine: AVAudioEngine?
+    private var mixer: AVAudioMixerNode?
+    private var audioFile: AVAudioFile?
+    private var internalState = InternalAudioRecorderState.stopped
     
     private var cancellables = Set<AnyCancellable>()
     private let actionsSubject: PassthroughSubject<AudioRecorderAction, Never> = .init()
@@ -30,34 +40,35 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    var url: URL? {
-        audioRecorder?.url
-    }
-    
-    var currentTime: TimeInterval {
-        audioRecorder?.currentTime ?? 0
-    }
-    
+    private let silenceThreshold: Float = -50.0
+    private var meterLevel: Float = 0
+
+    private(set) var audioFileUrl: URL?
+    var currentTime: TimeInterval = .zero
     var isRecording: Bool {
-        audioRecorder?.isRecording ?? false
+        audioEngine?.isRunning ?? false
     }
     
     private let dispatchQueue = DispatchQueue(label: "io.element.elementx.audio_recorder", qos: .userInitiated)
     private var stopped = false
     
-    func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
+    init(audioSession: AudioSessionProtocol = AVAudioSession.sharedInstance()) {
+        self.audioSession = audioSession
+    }
+    
+    func record(with recordID: AudioRecordingIdentifier) async {
         stopped = false
         guard await requestRecordPermission() else {
-            return .failure(.recordPermissionNotGranted)
+            setInternalState(.error(.recordPermissionNotGranted))
+            return
         }
         let result = await startRecording(with: recordID)
         switch result {
         case .success:
-            actionsSubject.send(.didStartRecording)
+            setInternalState(.recording)
         case .failure(let error):
-            actionsSubject.send(.didFailWithError(error: error))
+            setInternalState(.error(error))
         }
-        return result
     }
     
     func stopRecording() async {
@@ -68,6 +79,11 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         }
     }
     
+    func cancelRecording() async {
+        await stopRecording()
+        await deleteRecording()
+    }
+    
     func deleteRecording() async {
         await withCheckedContinuation { continuation in
             deleteRecording {
@@ -76,49 +92,37 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         }
     }
         
-    func peakPowerForChannelNumber(_ channelNumber: Int) -> Float {
-        guard isRecording, let audioRecorder else {
-            return 0.0
-        }
-        
-        audioRecorder.updateMeters()
-        return normalizedPowerLevelFromDecibels(audioRecorder.peakPower(forChannel: channelNumber))
-    }
-    
-    func averagePowerForChannelNumber(_ channelNumber: Int) -> Float {
-        guard isRecording, let audioRecorder else {
-            return 0.0
-        }
-        
-        audioRecorder.updateMeters()
-        return normalizedPowerLevelFromDecibels(audioRecorder.averagePower(forChannel: channelNumber))
+    func averagePower() -> Float {
+        meterLevel
     }
     
     // MARK: - Private
     
-    private func addObservers() {
-        // Stop recording uppon UIApplication.didEnterBackgroundNotification notification
-        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                Task { await self.stopRecording() }
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func removeObservers() {
-        cancellables.removeAll()
-    }
-    
     private func requestRecordPermission() async -> Bool {
         await withCheckedContinuation { continuation in
-            AVAudioSession.sharedInstance().requestRecordPermission { granted in
+            audioSession.requestRecordPermission { granted in
                 continuation.resume(returning: granted)
             }
         }
     }
     
-    // MARK: - Private
+    private func setupAudioSession() {
+        MXLog.info("setup audio session")
+        do {
+            try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.allowBluetooth])
+            try audioSession.setActive(true)
+        } catch {
+            MXLog.error("Could not redirect audio playback to speakers.")
+        }
+        addObservers()
+    }
+    
+    private func releaseAudioSession() {
+        MXLog.info("releasing audio session")
+        try? audioSession.setActive(false)
+        removeObservers()
+    }
     
     private func startRecording(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
         await withCheckedContinuation { continuation in
@@ -128,37 +132,64 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         }
     }
     
+    private func createAudioFile(with recordID: AudioRecordingIdentifier, sampleRate: Int) throws -> AVAudioFile {
+        let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+                        AVSampleRateKey: sampleRate,
+                        AVNumberOfChannelsKey: 1,
+                        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
+        MXLog.info("creating audio file with format: \(settings)")
+        let outputURL = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
+        return try AVAudioFile(forWriting: outputURL, settings: settings)
+    }
+    
     private func startRecording(with recordID: AudioRecordingIdentifier, completion: @escaping (Result<Void, AudioRecorderError>) -> Void) {
         dispatchQueue.async { [weak self] in
             guard let self, !self.stopped else {
                 completion(.failure(.recordingCancelled))
                 return
             }
-            let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-                            AVSampleRateKey: 48000,
-                            AVEncoderBitRateKey: 128_000,
-                            AVNumberOfChannelsKey: 1,
-                            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
             
+            setupAudioSession()
+            let audioEngine = AVAudioEngine()
+            self.audioEngine = audioEngine
+
+            // The sample rate must match the hardware sample rate for the audio engine to work.
+            let sampleRate = audioEngine.inputNode.inputFormat(forBus: 0).sampleRate
+            let recordingFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32,
+                                                sampleRate: sampleRate,
+                                                channels: 1,
+                                                interleaved: false)
+
+            // Make sure we have 1 channel at the end by using a mixer.
+            let mixer = AVAudioMixerNode()
+            self.mixer = mixer
+            audioEngine.attach(mixer)
+            audioEngine.connect(audioEngine.inputNode, to: mixer, format: recordingFormat)
+            
+            // Reset the recording duration
+            currentTime = 0
+            let audioFile: AVAudioFile
             do {
-                let audioSession = AVAudioSession.sharedInstance()
-                try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
-                try audioSession.setCategory(.playAndRecord, mode: .default)
-                try audioSession.setActive(true)
-                let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
-                let audioRecorder = try AVAudioRecorder(url: url, settings: settings)
-                audioRecorder.delegate = self
-                audioRecorder.isMeteringEnabled = true
-                if audioRecorder.record() {
-                    self.audioRecorder = audioRecorder
-                    completion(.success(()))
-                } else {
-                    MXLog.error("audio recording failed to start")
-                    completion(.failure(.recordingFailed))
-                }
+                audioFile = try createAudioFile(with: recordID, sampleRate: Int(sampleRate))
+                self.audioFile = audioFile
+                audioFileUrl = audioFile.url
+            } catch {
+                MXLog.error("failed to create an audio file. \(error)")
+                completion(.failure(.audioFileCreationFailure))
+                releaseAudioSession()
+                return
+            }
+            
+            mixer.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] buffer, _ in
+                self?.processAudioBuffer(buffer)
+            }
+
+            do {
+                try audioEngine.start()
+                completion(.success(()))
             } catch {
                 MXLog.error("audio recording failed to start. \(error)")
-                completion(.failure(.internalError(error: error)))
+                completion(.failure(.audioEngineFailure))
             }
         }
     }
@@ -170,11 +201,23 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
             }
             guard let self else { return }
             stopped = true
-            guard let audioRecorder, audioRecorder.isRecording else {
-                return
-            }
-            audioRecorder.stop()
+            cleanupAudioEngine()
+            MXLog.info("audio recorder stopped")
+            setInternalState(.stopped)
         }
+    }
+    
+    private func cleanupAudioEngine() {
+        if let audioEngine {
+            audioEngine.stop()
+            if let mixer {
+                mixer.removeTap(onBus: 0)
+                audioEngine.detach(mixer)
+            }
+        }
+        audioFile = nil // this will close the file
+        audioEngine = nil
+        releaseAudioSession()
     }
     
     private func deleteRecording(completion: @escaping () -> Void) {
@@ -183,29 +226,161 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
                 completion()
             }
             guard let self else { return }
-            audioRecorder?.deleteRecording()
+            if let audioFileUrl {
+                try? FileManager.default.removeItem(at: audioFileUrl)
+            }
+            audioFileUrl = nil
+            currentTime = 0
         }
     }
     
-    // MARK: - AVAudioRecorderDelegate
+    // MARK: Audio Processing
     
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully success: Bool) {
-        try? AVAudioSession.sharedInstance().setActive(false)
-        if success {
-            actionsSubject.send(.didStopRecording)
+    private func processAudioBuffer(_ buffer: AVAudioPCMBuffer) {
+        // Write the buffer into the audio file
+        do {
+            try audioFile?.write(from: buffer)
+
+            // Compute the sample value for the waveform
+            updateMeterLevel(buffer)
+            
+            // Update the recording duration only if we succeed to write the buffer
+            currentTime += Double(buffer.frameLength) / buffer.format.sampleRate
+        } catch {
+            MXLog.error("failed to write sample. \(error)")
+        }
+    }
+    
+    // MARK: Observers
+    
+    private func addObservers() {
+        removeObservers()
+        // Stop recording uppon UIApplication.didEnterBackgroundNotification notification
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                MXLog.warning("Application will resign active while recording.")
+                Task { await self.stopRecording() }
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: Notification.Name.AVAudioEngineConfigurationChange)
+            .sink { [weak self] notification in
+                guard let self else { return }
+                self.handleConfigurationChange(notification: notification)
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)
+            .sink { [weak self] notification in
+                guard let self else { return }
+                self.handleInterruption(notification: notification)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func removeObservers() {
+        cancellables.removeAll()
+    }
+    
+    func handleInterruption(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+            return
+        }
+        
+        switch type {
+        case .began:
+            MXLog.info("Interruption started: \(notification)")
+            setInternalState(.suspended)
+        case .ended:
+            MXLog.info("Interruption ended: \(notification)")
+
+            guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
+            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+                        
+            if options.contains(.shouldResume) {
+                do {
+                    try audioEngine?.start()
+                    setInternalState(.recording)
+                } catch {
+                    MXLog.debug("Error restarting audio: \(error)")
+                    setInternalState(.error(.interrupted))
+                }
+            } else {
+                MXLog.warning("AudioSession was interrupted: \(notification)")
+                setInternalState(.error(.interrupted))
+            }
+            
+        @unknown default:
+            break
+        }
+    }
+    
+    func handleConfigurationChange(notification: Notification) {
+        guard let audioEngine else { return }
+        MXLog.warning("Configuration changed: \(audioEngine.inputNode.inputFormat(forBus: 0))")
+        if internalState != .suspended {
+            Task { await stopRecording() }
+        }
+    }
+    
+    // MARK: Internal State
+    
+    private func setInternalState(_ state: InternalAudioRecorderState) {
+        dispatchQueue.async { [weak self] in
+            guard let self else { return }
+            guard internalState != state else { return }
+            MXLog.debug("internal state: \(internalState) -> \(state)")
+            internalState = state
+            
+            switch internalState {
+            case .recording:
+                actionsSubject.send(.didStartRecording)
+            case .suspended:
+                break
+            case .stopped:
+                actionsSubject.send(.didStopRecording)
+            case .error(let error):
+                cleanupAudioEngine()
+
+                actionsSubject.send(.didFailWithError(error: error))
+            }
+        }
+    }
+    
+    // MARK: Audio Metering
+    
+    private func scaledPower(power: Float) -> Float {
+        guard power.isFinite else {
+            return 0.0
+        }
+        
+        let minDb: Float = silenceThreshold
+        
+        if power < minDb {
+            return 0.0
+        } else if power >= 1.0 {
+            return 1.0
         } else {
-            MXLog.error("audio recorder did finish recording with an error.")
-            actionsSubject.send(.didFailWithError(error: AudioRecorderError.genericError))
+            return (abs(minDb) - abs(power)) / abs(minDb)
         }
     }
     
-    func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
-        try? AVAudioSession.sharedInstance().setActive(false)
-        MXLog.error("audio recorder encode error did occur. \(error?.localizedDescription ?? "")")
-        actionsSubject.send(.didFailWithError(error: error ?? AudioRecorderError.genericError))
-    }
-    
-    private func normalizedPowerLevelFromDecibels(_ decibels: Float) -> Float {
-        decibels / silenceThreshold
+    private func updateMeterLevel(_ buffer: AVAudioPCMBuffer) {
+        // Get an array of pointer to each sample's data
+        guard let channelData = buffer.floatChannelData else {
+            return
+        }
+        
+        // Compute RMS
+        var rms: Float = .nan
+        vDSP_rmsqv(channelData.pointee, buffer.stride, &rms, vDSP_Length(buffer.frameLength))
+        
+        // Convert to decibels
+        let avgPower = 20 * log10(rms)
+        
+        meterLevel = scaledPower(power: avgPower)
     }
 }
