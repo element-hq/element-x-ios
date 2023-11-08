@@ -77,7 +77,7 @@ struct ComposerToolbar: View {
                     sendButton
                         .padding(.leading, 3)
                 } else {
-                    voiceMessageRecordingButton
+                    voiceMessageRecordingButton(mode: context.viewState.isVoiceMessageModeActivated ? .recording : .standard)
                         .padding(.leading, 4)
                 }
             }
@@ -235,8 +235,10 @@ struct ComposerToolbar: View {
         // Display the voice message composer above to keep the focus and keep the keyboard open if it's already open.
         switch context.viewState.composerMode {
         case .recordVoiceMessage(let state):
-            VoiceMessageRecordingComposer(recorderState: state)
-                .padding(.leading, 12)
+            topBarLayout {
+                voiceMessageTrashButton
+                VoiceMessageRecordingComposer(recorderState: state)
+            }
         case .previewVoiceMessage(let state, let waveform, let isUploading):
             topBarLayout {
                 voiceMessageTrashButton
@@ -248,15 +250,11 @@ struct ComposerToolbar: View {
         }
     }
     
-    private var voiceMessageRecordingButton: some View {
-        VoiceMessageRecordingButton {
+    private func voiceMessageRecordingButton(mode: VoiceMessageRecordingButtonMode) -> some View {
+        VoiceMessageRecordingButton(mode: mode) {
             context.send(viewAction: .voiceMessage(.startRecording))
-        } stopRecording: { minimumRecordTimeReached in
-            if minimumRecordTimeReached {
-                context.send(viewAction: .voiceMessage(.stopRecording))
-            } else {
-                context.send(viewAction: .voiceMessage(.cancelRecording))
-            }
+        } stopRecording: {
+            context.send(viewAction: .voiceMessage(.stopRecording))
         }
         .padding(4)
     }

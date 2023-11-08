@@ -33,6 +33,10 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     private let mp4accMimeType = "audio/m4a"
     private let waveformSamplesCount = 100
     
+    var isRecording: Bool {
+        audioRecorder.isRecording
+    }
+    
     var recordingURL: URL? {
         audioRecorder.audioFileUrl
     }
@@ -66,6 +70,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     // MARK: - Recording
     
     func startRecording() async {
+        MXLog.info("Start recording.")
         await stopPlayback()
         recordingCancelled = false
         
@@ -73,11 +78,13 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     func stopRecording() async {
+        MXLog.info("Stop recording.")
         recordingCancelled = false
         await audioRecorder.stopRecording()
     }
     
     func cancelRecording() async {
+        MXLog.info("Cancel recording.")
         recordingCancelled = true
         await audioRecorder.stopRecording()
         await audioRecorder.deleteRecording()
@@ -85,6 +92,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     func deleteRecording() async {
+        MXLog.info("Delete recording.")
         await stopPlayback()
         await audioRecorder.deleteRecording()
         previewAudioPlayerState = nil
@@ -93,6 +101,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     // MARK: - Preview
     
     func startPlayback() async -> Result<Void, VoiceMessageRecorderError> {
+        MXLog.info("Start playback.")
         guard let previewAudioPlayerState, let url = audioRecorder.audioFileUrl else {
             return .failure(.previewNotAvailable)
         }
@@ -116,6 +125,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     func pausePlayback() {
+        MXLog.info("Pause playback.")
         previewAudioPlayer?.pause()
     }
     
@@ -123,6 +133,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         guard let previewAudioPlayerState else {
             return
         }
+        MXLog.info("Stop playback.")
         await previewAudioPlayerState.detachAudioPlayer()
         previewAudioPlayer?.stop()
     }

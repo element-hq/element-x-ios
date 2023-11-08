@@ -17,79 +17,60 @@
 import Compound
 import SwiftUI
 
+enum VoiceMessageRecordingButtonMode {
+    case standard
+    case recording
+}
+
 struct VoiceMessageRecordingButton: View {
+    var mode: VoiceMessageRecordingButtonMode
     var startRecording: (() -> Void)?
-    var stopRecording: ((_ minimumRecordTimeReached: Bool) -> Void)?
+    var stopRecording: (() -> Void)?
     
-    @ScaledMetric private var tooltipPointerHeight = 6
-    
-    @State private var buttonPressed = false
-    @State private var recordingStartTime: Date?
-    @State private var showTooltip = false
-    @State private var frame: CGRect = .zero
-    
-    private let minimumRecordingDuration = 1.0
-    private let tooltipDuration = 1.0
     private let impactFeedbackGenerator = UIImpactFeedbackGenerator()
-    private let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
     
     var body: some View {
-        Button { } label: {
-            CompoundIcon(buttonPressed ? \.micOnSolid : \.micOnOutline)
-                .foregroundColor(.compound.iconSecondary)
-                .padding(EdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6))
-        }
-        .readFrame($frame, in: .global)
-        .accessibilityLabel(L10n.a11yVoiceMessageRecord)
-        .onLongPressGesture { } onPressingChanged: { isPressing in
-            buttonPressed = isPressing
-            
-            if isPressing {
-                showTooltip = false
-                recordingStartTime = Date.now
-                impactFeedbackGenerator.impactOccurred()
+        Button {
+            impactFeedbackGenerator.impactOccurred()
+            switch mode {
+            case .standard:
                 startRecording?()
-            } else {
-                if let recordingStartTime, Date.now.timeIntervalSince(recordingStartTime) < minimumRecordingDuration {
-                    withElementAnimation {
-                        showTooltip = true
-                    }
-                    notificationFeedbackGenerator.notificationOccurred(.error)
-                    stopRecording?(false)
-                } else {
-                    impactFeedbackGenerator.impactOccurred()
-                    stopRecording?(true)
-                }
+            case .recording:
+                stopRecording?()
             }
-        }
-        .overlay(alignment: .bottomTrailing) {
-            if showTooltip {
-                tooltipView
-                    .offset(y: -frame.height - tooltipPointerHeight)
-            }
-        }
+        } label: { }
+            .accessibilityLabel(L10n.a11yVoiceMessageRecord)
+            .buttonStyle(VoiceMessageRecordingButtonStyle(mode: mode))
     }
+}
+
+private struct VoiceMessageRecordingButtonStyle: ButtonStyle {
+    let mode: VoiceMessageRecordingButtonMode
     
-    private var tooltipView: some View {
-        VoiceMessageRecordingButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip,
-                                               pointerHeight: tooltipPointerHeight,
-                                               pointerLocation: frame.midX,
-                                               pointerLocationCoordinateSpace: .global)
-            .allowsHitTesting(false)
-            .fixedSize()
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + tooltipDuration) {
-                    withElementAnimation {
-                        showTooltip = false
-                    }
-                }
+    func makeBody(configuration: Configuration) -> some View {
+        Group {
+            switch mode {
+            case .standard:
+                CompoundIcon(configuration.isPressed ? \.micOnSolid : \.micOnOutline)
+                    .foregroundColor(.compound.iconSecondary)
+                    .padding(EdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6))
+            case .recording:
+                Image(systemName: "stop.circle.fill")
+                    .resizable()
+                    .frame(width: 34, height: 34)
             }
+        }
     }
 }
 
 struct VoiceMessageRecordingButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VoiceMessageRecordingButton()
-            .fixedSize(horizontal: true, vertical: true)
+        HStack {
+            VoiceMessageRecordingButton(mode: .standard)
+                .fixedSize(horizontal: true, vertical: true)
+            
+            VoiceMessageRecordingButton(mode: .recording)
+                .fixedSize(horizontal: true, vertical: true)
+        }
     }
 }

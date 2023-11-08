@@ -3234,6 +3234,11 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     }
     var underlyingAudioRecorder: AudioRecorderProtocol!
     var previewAudioPlayerState: AudioPlayerState?
+    var isRecording: Bool {
+        get { return underlyingIsRecording }
+        set(value) { underlyingIsRecording = value }
+    }
+    var underlyingIsRecording: Bool!
     var recordingURL: URL?
     var recordingDuration: TimeInterval {
         get { return underlyingRecordingDuration }

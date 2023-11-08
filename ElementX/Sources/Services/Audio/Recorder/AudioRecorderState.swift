@@ -41,6 +41,7 @@ class AudioRecorderState: ObservableObject, Identifiable {
         self.audioRecorder = audioRecorder
         subscribeToAudioRecorder(audioRecorder)
         if audioRecorder.isRecording {
+            recordingState = .recording
             startPublishUpdates()
         }
     }

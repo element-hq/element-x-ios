@@ -40,6 +40,7 @@ class AudioRecorder: AudioRecorderProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private let maximumRecordingTime: TimeInterval = 1800 // 30 minutes
     private let silenceThreshold: Float = -50.0
     private var meterLevel: Float = 0
 
@@ -54,6 +55,14 @@ class AudioRecorder: AudioRecorderProtocol {
     
     init(audioSession: AudioSessionProtocol = AVAudioSession.sharedInstance()) {
         self.audioSession = audioSession
+    }
+    
+    deinit {
+        if isRecording {
+            // Cleanup
+            cleanupAudioEngine()
+            deleteRecordingFile()
+        }
     }
     
     func record(with recordID: AudioRecordingIdentifier) async {
@@ -208,6 +217,7 @@ class AudioRecorder: AudioRecorderProtocol {
     }
     
     private func cleanupAudioEngine() {
+        MXLog.info("cleaning up the audio engine")
         if let audioEngine {
             audioEngine.stop()
             if let mixer {
@@ -226,11 +236,19 @@ class AudioRecorder: AudioRecorderProtocol {
                 completion()
             }
             guard let self else { return }
-            if let audioFileUrl {
-                try? FileManager.default.removeItem(at: audioFileUrl)
-            }
+            deleteRecordingFile()
             audioFileUrl = nil
             currentTime = 0
+        }
+    }
+    
+    private func deleteRecordingFile() {
+        guard let audioFileUrl else { return }
+        do {
+            try FileManager.default.removeItem(at: audioFileUrl)
+            MXLog.info("recording file deleted.")
+        } catch {
+            MXLog.error("failed to delete recording file. \(error)")
         }
     }
     
@@ -246,6 +264,12 @@ class AudioRecorder: AudioRecorderProtocol {
             
             // Update the recording duration only if we succeed to write the buffer
             currentTime += Double(buffer.frameLength) / buffer.format.sampleRate
+            
+            // Limit the recording time
+            if currentTime >= maximumRecordingTime {
+                MXLog.info("Maximum recording time reach (\(maximumRecordingTime))")
+                Task { await stopRecording() }
+            }
         } catch {
             MXLog.error("failed to write sample. \(error)")
         }
