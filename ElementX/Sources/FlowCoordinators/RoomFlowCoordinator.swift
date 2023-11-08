@@ -341,7 +341,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            timelineItemFactory: timelineItemFactory,
-                                                                                           mediaProvider: userSession.mediaProvider,
                                                                                            secureBackupController: userSession.clientProxy.secureBackupController)
         self.timelineController = timelineController
         

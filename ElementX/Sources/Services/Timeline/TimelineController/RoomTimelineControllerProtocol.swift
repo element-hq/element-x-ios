@@ -44,8 +44,6 @@ protocol RoomTimelineControllerProtocol {
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async
-
-    func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError>
     

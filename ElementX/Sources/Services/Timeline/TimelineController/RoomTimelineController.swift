@@ -22,7 +22,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let roomProxy: RoomProxyProtocol
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
-    private let mediaProvider: MediaProviderProtocol
     private let appSettings: AppSettings
     private let secureBackupController: SecureBackupControllerProtocol
     private let serialDispatchQueue: DispatchQueue
@@ -44,13 +43,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     init(roomProxy: RoomProxyProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
-         mediaProvider: MediaProviderProtocol,
          appSettings: AppSettings,
          secureBackupController: SecureBackupControllerProtocol) {
         self.roomProxy = roomProxy
         timelineProvider = roomProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
-        self.mediaProvider = mediaProvider
         self.appSettings = appSettings
         self.secureBackupController = secureBackupController
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
@@ -111,20 +108,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) { }
-
-    func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {
-        guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
-            return .none
-        }
-        
-        switch timelineItem {
-        case let item as LocationRoomTimelineItem:
-            guard let geoURI = item.content.geoURI else { return .none }
-            return .displayLocation(body: item.content.body, geoURI: geoURI, description: item.content.description)
-        default:
-            return await displayMediaActionIfPossible(timelineItem: timelineItem)
-        }
-    }
     
     func sendMessage(_ message: String,
                      html: String?,
@@ -241,37 +224,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     @objc private func contentSizeCategoryDidChange() {
         // Recompute all attributed strings on content size changes -> DynamicType support
         updateTimelineItems()
-    }
-
-    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
-        var source: MediaSourceProxy?
-        var body: String
-
-        switch timelineItem {
-        case let item as ImageRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as VideoRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as FileRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as AudioRoomTimelineItem:
-            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
-            source = item.content.source
-            body = item.content.body
-        default:
-            return .none
-        }
-
-        guard let source else { return .none }
-        switch await mediaProvider.loadFileFromSource(source, body: body) {
-        case .success(let file):
-            return .displayMediaFile(file: file, title: body)
-        case .failure:
-            return .none
-        }
     }
     
     private func updateTimelineItems() {

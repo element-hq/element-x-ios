@@ -29,6 +29,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
 
     private let timelineController: RoomTimelineControllerProtocol
+    private let mediaProvider: MediaProviderProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     private let roomProxy: RoomProxyProtocol
@@ -60,6 +61,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          application: ApplicationProtocol,
          notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
         self.timelineController = timelineController
+        self.mediaProvider = mediaProvider
         self.mediaPlayerProvider = mediaPlayerProvider
         self.voiceMessageMediaManager = voiceMessageMediaManager
         self.roomProxy = roomProxy
@@ -400,7 +402,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private func itemTapped(with itemID: TimelineItemIdentifier) async {
         state.showLoading = true
-        let action = await timelineController.processItemTap(itemID)
+        let action = await processItemTap(itemID)
 
         switch action {
         case .displayMediaFile(let file, let title):
@@ -488,6 +490,51 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
 
         await roomProxy.cancelSend(transactionID: transactionID)
+    }
+    
+    private func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
+            return .none
+        }
+        
+        switch timelineItem {
+        case let item as LocationRoomTimelineItem:
+            guard let geoURI = item.content.geoURI else { return .none }
+            return .displayLocation(body: item.content.body, geoURI: geoURI, description: item.content.description)
+        default:
+            return await displayMediaActionIfPossible(timelineItem: timelineItem)
+        }
+    }
+    
+    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
+        var source: MediaSourceProxy?
+        var body: String
+
+        switch timelineItem {
+        case let item as ImageRoomTimelineItem:
+            source = item.content.source
+            body = item.content.body
+        case let item as VideoRoomTimelineItem:
+            source = item.content.source
+            body = item.content.body
+        case let item as FileRoomTimelineItem:
+            source = item.content.source
+            body = item.content.body
+        case let item as AudioRoomTimelineItem:
+            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
+            source = item.content.source
+            body = item.content.body
+        default:
+            return .none
+        }
+
+        guard let source else { return .none }
+        switch await mediaProvider.loadFileFromSource(source, body: body) {
+        case .success(let file):
+            return .displayMediaFile(file: file, title: body)
+        case .failure:
+            return .none
+        }
     }
     
     // MARK: - Timeline Item Building
