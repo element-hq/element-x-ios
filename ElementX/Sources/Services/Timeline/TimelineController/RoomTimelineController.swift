@@ -23,7 +23,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
-    private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let appSettings: AppSettings
     private let secureBackupController: SecureBackupControllerProtocol
     private let serialDispatchQueue: DispatchQueue
@@ -46,14 +45,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     init(roomProxy: RoomProxyProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
-         mediaPlayerProvider: MediaPlayerProviderProtocol,
          appSettings: AppSettings,
          secureBackupController: SecureBackupControllerProtocol) {
         self.roomProxy = roomProxy
         timelineProvider = roomProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
-        self.mediaPlayerProvider = mediaPlayerProvider
         self.appSettings = appSettings
         self.secureBackupController = secureBackupController
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
@@ -316,17 +313,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 
                 if timelineItem is EncryptedHistoryRoomTimelineItem {
                     lastEncryptedHistoryItemIndex = newTimelineItems.endIndex
-                }
-
-                // Stops the audio player when a voice message is redacted.
-                if timelineItem is RedactedRoomTimelineItem {
-                    guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(timelineItem.id)) else {
-                        continue
-                    }
-                    Task { @MainActor in
-                        playerState.detachAudioPlayer()
-                        mediaPlayerProvider.unregister(audioPlayerState: playerState)
-                    }
                 }
 
                 newTimelineItems.append(timelineItem)

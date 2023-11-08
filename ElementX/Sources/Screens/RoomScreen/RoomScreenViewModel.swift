@@ -494,6 +494,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func buildTimelineViews() {
         var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
+        
+        timelineController.timelineItems.filter { $0 is RedactedRoomTimelineItem }.forEach { timelineItem in
+            // Stops the audio player when a voice message is redacted.
+            guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(timelineItem.id)) else {
+                return
+            }
+            
+            Task { @MainActor in
+                playerState.detachAudioPlayer()
+                mediaPlayerProvider.unregister(audioPlayerState: playerState)
+            }
+        }
 
         let itemsGroupedByTimelineDisplayStyle = timelineController.timelineItems.chunked { current, next in
             canGroupItem(timelineItem: current, with: next)
