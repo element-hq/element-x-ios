@@ -226,89 +226,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
-            fatalError("TimelineItem \(itemID) not found")
-        }
-        
-        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
-            fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
-        }
-        
-        if let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) {
-            return playerState
-        }
-        
-        let playerState = AudioPlayerState(id: .timelineItemIdentifier(itemID),
-                                           duration: voiceMessageRoomTimelineItem.content.duration,
-                                           waveform: voiceMessageRoomTimelineItem.content.waveform)
-        mediaPlayerProvider.register(audioPlayerState: playerState)
-        return playerState
-    }
-    
-    func playPauseAudio(for itemID: TimelineItemIdentifier) async {
-        MXLog.info("Toggle play/pause audio for itemID \(itemID)")
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
-            fatalError("TimelineItem \(itemID) not found")
-        }
-        
-        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
-            fatalError("Invalid TimelineItem type for itemID \(itemID) (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
-        }
-        
-        guard let source = voiceMessageRoomTimelineItem.content.source else {
-            MXLog.error("Cannot start voice message playback, source is not defined for itemID \(itemID)")
-            return
-        }
-        
-        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: source), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
-            MXLog.error("Cannot play a voice message without an audio player")
-            return
-        }
-        
-        let audioPlayerState = audioPlayerState(for: itemID)
-        
-        // Ensure this one is attached
-        if !audioPlayerState.isAttached {
-            audioPlayerState.attachAudioPlayer(audioPlayer)
-        }
-
-        // Detach all other states
-        await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
-
-        guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
-            // Load content
-            do {
-                MXLog.info("Loading voice message audio content from source for itemID \(itemID)")
-                let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
-
-                // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
-                if audioPlayerState.isAttached {
-                    audioPlayer.load(mediaSource: source, using: url, autoplay: true)
-                }
-            } catch {
-                MXLog.error("Failed to load voice message: \(error)")
-                audioPlayerState.reportError(error)
-            }
-            
-            return
-        }
-        
-        if audioPlayer.state == .playing {
-            audioPlayer.pause()
-        } else {
-            audioPlayer.play()
-        }
-    }
-        
-    func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
-        guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) else {
-            return
-        }
-        await mediaPlayerProvider.detachAllStates(except: playerState)
-        await playerState.updateState(progress: progress)
-    }
-    
     // MARK: - Private
 
     private func setupSubscriptions() {
@@ -496,7 +413,85 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         state.showLoading = false
     }
+
+    private func sendCurrentMessage(_ message: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions) async {
+        guard !message.isEmpty else {
+            fatalError("This message should never be empty")
+        }
+
+        actionsSubject.send(.composer(action: .clear))
+
+        switch mode {
+        case .reply(let itemId, _, _):
+            await timelineController.sendMessage(message,
+                                                 html: html,
+                                                 inReplyTo: itemId,
+                                                 intentionalMentions: intentionalMentions)
+        case .edit(let originalItemId):
+            await timelineController.editMessage(message,
+                                                 html: html,
+                                                 original: originalItemId,
+                                                 intentionalMentions: intentionalMentions)
+        case .default:
+            await timelineController.sendMessage(message,
+                                                 html: html,
+                                                 intentionalMentions: intentionalMentions)
+        case .recordVoiceMessage, .previewVoiceMessage:
+            fatalError("invalid composer mode.")
+        }
+    }
         
+    private func trackComposerMode(_ mode: RoomScreenComposerMode) {
+        var isEdit = false
+        var isReply = false
+        switch mode {
+        case .edit:
+            isEdit = true
+        case .reply:
+            isReply = true
+        default:
+            break
+        }
+
+        analytics.trackComposer(inThread: false, isEditing: isEdit, isReply: isReply, startsThread: nil)
+    }
+
+    private func handleTappedUser(userID: String) async {
+        // This is generally fast but it could take some time for rooms with thousands of users on first load
+        // Show a loader only if it takes more than 0.1 seconds
+        showLoadingIndicator(with: .milliseconds(100))
+        let result = await roomProxy.getMember(userID: userID)
+        hideLoadingIndicator()
+        
+        switch result {
+        case .success(let member):
+            actionsSubject.send(.displayRoomMemberDetails(member: member))
+        case .failure(let error):
+            displayError(.alert(L10n.screenRoomErrorFailedRetrievingUserDetails))
+            MXLog.error("Failed retrieving the user given the following id \(userID) with error: \(error)")
+        }
+    }
+
+    private func handleRetrySend(itemID: TimelineItemIdentifier) async {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Failed Retry Send: missing transaction ID")
+            return
+        }
+
+        await roomProxy.retrySend(transactionID: transactionID)
+    }
+
+    private func handleCancelSend(itemID: TimelineItemIdentifier) async {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Failed Cancel Send: missing transaction ID")
+            return
+        }
+
+        await roomProxy.cancelSend(transactionID: transactionID)
+    }
+    
+    // MARK: - Timeline Item Building
+    
     private func buildTimelineViews() {
         var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
 
@@ -604,110 +599,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return eventTimelineItem.properties.reactions.isEmpty && eventTimelineItem.sender == otherEventTimelineItem.sender
     }
 
-    private func sendCurrentMessage(_ message: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions) async {
-        guard !message.isEmpty else {
-            fatalError("This message should never be empty")
-        }
-
-        actionsSubject.send(.composer(action: .clear))
-
-        switch mode {
-        case .reply(let itemId, _, _):
-            await timelineController.sendMessage(message,
-                                                 html: html,
-                                                 inReplyTo: itemId,
-                                                 intentionalMentions: intentionalMentions)
-        case .edit(let originalItemId):
-            await timelineController.editMessage(message,
-                                                 html: html,
-                                                 original: originalItemId,
-                                                 intentionalMentions: intentionalMentions)
-        case .default:
-            await timelineController.sendMessage(message,
-                                                 html: html,
-                                                 intentionalMentions: intentionalMentions)
-        case .recordVoiceMessage, .previewVoiceMessage:
-            fatalError("invalid composer mode.")
-        }
-    }
-        
-    private func trackComposerMode(_ mode: RoomScreenComposerMode) {
-        var isEdit = false
-        var isReply = false
-        switch mode {
-        case .edit:
-            isEdit = true
-        case .reply:
-            isReply = true
-        default:
-            break
-        }
-
-        analytics.trackComposer(inThread: false, isEditing: isEdit, isReply: isReply, startsThread: nil)
-    }
-    
-    private func displayError(_ type: RoomScreenErrorType) {
-        switch type {
-        case .alert(let message):
-            state.bindings.alertInfo = AlertInfo(id: type,
-                                                 title: L10n.commonError,
-                                                 message: message)
-        case .toast(let message):
-            userIndicatorController.submitIndicator(UserIndicator(id: Constants.toastErrorID,
-                                                                  type: .toast,
-                                                                  title: message,
-                                                                  iconName: "xmark"))
-        }
-    }
-
-    private func handleTappedUser(userID: String) async {
-        // This is generally fast but it could take some time for rooms with thousands of users on first load
-        // Show a loader only if it takes more than 0.1 seconds
-        showLoadingIndicator(with: .milliseconds(100))
-        let result = await roomProxy.getMember(userID: userID)
-        hideLoadingIndicator()
-        
-        switch result {
-        case .success(let member):
-            actionsSubject.send(.displayRoomMemberDetails(member: member))
-        case .failure(let error):
-            displayError(.alert(L10n.screenRoomErrorFailedRetrievingUserDetails))
-            MXLog.error("Failed retrieving the user given the following id \(userID) with error: \(error)")
-        }
-    }
-
-    private func handleRetrySend(itemID: TimelineItemIdentifier) async {
-        guard let transactionID = itemID.transactionID else {
-            MXLog.error("Failed Retry Send: missing transaction ID")
-            return
-        }
-
-        await roomProxy.retrySend(transactionID: transactionID)
-    }
-
-    private func handleCancelSend(itemID: TimelineItemIdentifier) async {
-        guard let transactionID = itemID.transactionID else {
-            MXLog.error("Failed Cancel Send: missing transaction ID")
-            return
-        }
-
-        await roomProxy.cancelSend(transactionID: transactionID)
-    }
-
-    private static let loadingIndicatorIdentifier = "RoomScreenLoadingIndicator"
-
-    private func showLoadingIndicator(with delay: Duration) {
-        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                              title: L10n.commonLoading,
-                                                              persistent: true),
-                                                delay: delay)
-    }
-
-    private func hideLoadingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
-    }
-
     // MARK: - Direct chats logics
 
     private func showInviteAlert() {
@@ -761,6 +652,121 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         state.bindings.reactionSummaryInfo = .init(reactions: eventTimelineItem.properties.reactions, selectedKey: selectedKey)
+    }
+    
+    // MARK: - Audio Playback
+    
+    private func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
+            fatalError("TimelineItem \(itemID) not found")
+        }
+        
+        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
+            fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+        }
+        
+        if let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) {
+            return playerState
+        }
+        
+        let playerState = AudioPlayerState(id: .timelineItemIdentifier(itemID),
+                                           duration: voiceMessageRoomTimelineItem.content.duration,
+                                           waveform: voiceMessageRoomTimelineItem.content.waveform)
+        mediaPlayerProvider.register(audioPlayerState: playerState)
+        return playerState
+    }
+    
+    private func playPauseAudio(for itemID: TimelineItemIdentifier) async {
+        MXLog.info("Toggle play/pause audio for itemID \(itemID)")
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
+            fatalError("TimelineItem \(itemID) not found")
+        }
+        
+        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
+            fatalError("Invalid TimelineItem type for itemID \(itemID) (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+        }
+        
+        guard let source = voiceMessageRoomTimelineItem.content.source else {
+            MXLog.error("Cannot start voice message playback, source is not defined for itemID \(itemID)")
+            return
+        }
+        
+        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: source), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
+            MXLog.error("Cannot play a voice message without an audio player")
+            return
+        }
+        
+        let audioPlayerState = audioPlayerState(for: itemID)
+        
+        // Ensure this one is attached
+        if !audioPlayerState.isAttached {
+            audioPlayerState.attachAudioPlayer(audioPlayer)
+        }
+
+        // Detach all other states
+        await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
+
+        guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
+            // Load content
+            do {
+                MXLog.info("Loading voice message audio content from source for itemID \(itemID)")
+                let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
+
+                // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
+                if audioPlayerState.isAttached {
+                    audioPlayer.load(mediaSource: source, using: url, autoplay: true)
+                }
+            } catch {
+                MXLog.error("Failed to load voice message: \(error)")
+                audioPlayerState.reportError(error)
+            }
+            
+            return
+        }
+        
+        if audioPlayer.state == .playing {
+            audioPlayer.pause()
+        } else {
+            audioPlayer.play()
+        }
+    }
+        
+    private func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
+        guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) else {
+            return
+        }
+        await mediaPlayerProvider.detachAllStates(except: playerState)
+        await playerState.updateState(progress: progress)
+    }
+    
+    // MARK: - User Indicators
+    
+    private static let loadingIndicatorIdentifier = "RoomScreenLoadingIndicator"
+
+    private func showLoadingIndicator(with delay: Duration) {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true),
+                                                delay: delay)
+    }
+
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+    
+    private func displayError(_ type: RoomScreenErrorType) {
+        switch type {
+        case .alert(let message):
+            state.bindings.alertInfo = AlertInfo(id: type,
+                                                 title: L10n.commonError,
+                                                 message: message)
+        case .toast(let message):
+            userIndicatorController.submitIndicator(UserIndicator(id: Constants.toastErrorID,
+                                                                  type: .toast,
+                                                                  title: message,
+                                                                  iconName: "xmark"))
+        }
     }
 }
 
