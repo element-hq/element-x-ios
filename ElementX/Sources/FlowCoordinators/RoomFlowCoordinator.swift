@@ -345,7 +345,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                            timelineItemFactory: timelineItemFactory,
                                                                                            mediaProvider: userSession.mediaProvider,
                                                                                            mediaPlayerProvider: mediaPlayerProvider,
-                                                                                           voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                                            secureBackupController: userSession.clientProxy.secureBackupController)
         self.timelineController = timelineController
         
@@ -357,6 +356,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          timelineController: timelineController,
                                                          mediaProvider: userSession.mediaProvider,
                                                          mediaPlayerProvider: mediaPlayerProvider,
+                                                         voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                          emojiProvider: emojiProvider,
                                                          completionSuggestionService: completionSuggestionService,
                                                          appSettings: appSettings)

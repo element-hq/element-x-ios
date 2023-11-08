@@ -30,6 +30,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private let timelineController: RoomTimelineControllerProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
+    private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     private let roomProxy: RoomProxyProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
@@ -51,6 +52,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
+         voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          roomProxy: RoomProxyProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
@@ -59,6 +61,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
         self.timelineController = timelineController
         self.mediaPlayerProvider = mediaPlayerProvider
+        self.voiceMessageMediaManager = voiceMessageMediaManager
         self.roomProxy = roomProxy
         self.appSettings = appSettings
         self.analytics = analytics
@@ -160,9 +163,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case let .selectedPollOption(pollStartID, optionID):
             roomScreenActionsHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
         case .playPauseAudio(let itemID):
-            Task { await timelineController.playPauseAudio(for: itemID) }
+            Task { await playPauseAudio(for: itemID) }
         case .seekAudio(let itemID, let progress):
-            Task { await timelineController.seekAudio(for: itemID, progress: progress) }
+            Task { await seekAudio(for: itemID, progress: progress) }
         case let .endPoll(pollStartID):
             state.bindings.confirmationAlertInfo = .init(id: .init(),
                                                          title: L10n.actionEndPoll,
@@ -221,6 +224,89 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .scrubVoiceMessagePlayback(let scrubbing):
             Task { await roomScreenActionsHandler.scrubVoiceMessagePlayback(scrubbing: scrubbing) }
         }
+    }
+    
+    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
+            fatalError("TimelineItem \(itemID) not found")
+        }
+        
+        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
+            fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+        }
+        
+        if let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) {
+            return playerState
+        }
+        
+        let playerState = AudioPlayerState(id: .timelineItemIdentifier(itemID),
+                                           duration: voiceMessageRoomTimelineItem.content.duration,
+                                           waveform: voiceMessageRoomTimelineItem.content.waveform)
+        mediaPlayerProvider.register(audioPlayerState: playerState)
+        return playerState
+    }
+    
+    func playPauseAudio(for itemID: TimelineItemIdentifier) async {
+        MXLog.info("Toggle play/pause audio for itemID \(itemID)")
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
+            fatalError("TimelineItem \(itemID) not found")
+        }
+        
+        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
+            fatalError("Invalid TimelineItem type for itemID \(itemID) (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+        }
+        
+        guard let source = voiceMessageRoomTimelineItem.content.source else {
+            MXLog.error("Cannot start voice message playback, source is not defined for itemID \(itemID)")
+            return
+        }
+        
+        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: source), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
+            MXLog.error("Cannot play a voice message without an audio player")
+            return
+        }
+        
+        let audioPlayerState = audioPlayerState(for: itemID)
+        
+        // Ensure this one is attached
+        if !audioPlayerState.isAttached {
+            audioPlayerState.attachAudioPlayer(audioPlayer)
+        }
+
+        // Detach all other states
+        await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
+
+        guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
+            // Load content
+            do {
+                MXLog.info("Loading voice message audio content from source for itemID \(itemID)")
+                let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
+
+                // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
+                if audioPlayerState.isAttached {
+                    audioPlayer.load(mediaSource: source, using: url, autoplay: true)
+                }
+            } catch {
+                MXLog.error("Failed to load voice message: \(error)")
+                audioPlayerState.reportError(error)
+            }
+            
+            return
+        }
+        
+        if audioPlayer.state == .playing {
+            audioPlayer.pause()
+        } else {
+            audioPlayer.play()
+        }
+    }
+        
+    func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
+        guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) else {
+            return
+        }
+        await mediaPlayerProvider.detachAllStates(except: playerState)
+        await playerState.updateState(progress: progress)
     }
     
     // MARK: - Private
@@ -676,12 +762,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         state.bindings.reactionSummaryInfo = .init(reactions: eventTimelineItem.properties.reactions, selectedKey: selectedKey)
     }
-    
-    // MARK: - Audio
-    
-    private func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
-        timelineController.audioPlayerState(for: itemID)
-    }
 }
 
 private extension RoomProxyProtocol {
@@ -697,6 +777,7 @@ extension RoomScreenViewModel {
     static let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                           appSettings: ServiceLocator.shared.settings,
                                           analytics: ServiceLocator.shared.analytics,

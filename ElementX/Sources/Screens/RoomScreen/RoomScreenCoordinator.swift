@@ -24,6 +24,7 @@ struct RoomScreenCoordinatorParameters {
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
+    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let emojiProvider: EmojiProviderProtocol
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let appSettings: AppSettings
@@ -62,6 +63,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,
                                         mediaPlayerProvider: parameters.mediaPlayerProvider,
+                                        voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                         roomProxy: parameters.roomProxy,
                                         appSettings: parameters.appSettings,
                                         analytics: ServiceLocator.shared.analytics,

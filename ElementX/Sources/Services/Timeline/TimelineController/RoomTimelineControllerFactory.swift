@@ -17,18 +17,15 @@
 import Foundation
 
 struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
-    // swiftlint:disable:next function_parameter_count
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                      mediaProvider: MediaProviderProtocol,
                                      mediaPlayerProvider: MediaPlayerProviderProtocol,
-                                     voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
                                      secureBackupController: SecureBackupControllerProtocol) -> RoomTimelineControllerProtocol {
         RoomTimelineController(roomProxy: roomProxy,
                                timelineItemFactory: timelineItemFactory,
                                mediaProvider: mediaProvider,
                                mediaPlayerProvider: mediaPlayerProvider,
-                               voiceMessageMediaManager: voiceMessageMediaManager,
                                appSettings: ServiceLocator.shared.settings,
                                secureBackupController: secureBackupController)
     }
