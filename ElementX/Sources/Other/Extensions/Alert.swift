@@ -129,11 +129,13 @@ extension View {
             Button(item.primaryButton.title, role: item.primaryButton.role) {
                 item.primaryButton.action?()
             }
+            .accessibilityIdentifier(A11yIdentifiers.alertInfo.primaryButton)
 
             if let secondaryButton = item.secondaryButton {
                 Button(secondaryButton.title, role: secondaryButton.role) {
                     secondaryButton.action?()
                 }
+                .accessibilityIdentifier(A11yIdentifiers.alertInfo.secondaryButton)
             }
         } message: { item in
             if let message = item.message {

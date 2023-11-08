@@ -25,10 +25,12 @@ struct AppLockSetupSettingsScreen: View {
             Section {
                 ListRow(label: .plain(title: L10n.screenAppLockSettingsChangePin),
                         kind: .button { context.send(viewAction: .changePINCode) })
+                    .accessibilityIdentifier(A11yIdentifiers.appLockSetupSettingsScreen.changePIN)
                 
                 if !context.viewState.isMandatory {
                     ListRow(label: .plain(title: L10n.screenAppLockSettingsRemovePin, role: .destructive),
                             kind: .button { context.send(viewAction: .disable) })
+                        .accessibilityIdentifier(A11yIdentifiers.appLockSetupSettingsScreen.removePIN)
                 }
             }
             

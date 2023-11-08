@@ -49,6 +49,7 @@ struct AppLockSetupBiometricsScreen: View {
                 .font(.system(size: 72))
                 .padding(.top, 58)
                 .padding(.bottom, 26)
+                .accessibilityHidden(true)
             
             Text(context.viewState.title)
                 .font(.compound.headingMDBold)
@@ -66,6 +67,7 @@ struct AppLockSetupBiometricsScreen: View {
         VStack(spacing: 16) {
             Button(context.viewState.title) { context.send(viewAction: .allow) }
                 .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.appLockSetupBiometricsScreen.allow)
             
             Button { context.send(viewAction: .skip) } label: {
                 Text(L10n.screenAppLockSetupBiometricUnlockSkip)

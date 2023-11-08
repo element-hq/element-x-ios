@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,26 @@
 // limitations under the License.
 //
 
-import ElementX
-import XCTest
+import SwiftUI
 
-@MainActor
-class AppLockSetupUITests: XCTestCase {
-    func testScreen() async throws {
-        let app = Application.launch(.appLockSetupFlow)
-        try await app.assertScreenshot(.appLockSetupFlow, step: 0)
+class BlankFormCoordinator: CoordinatorProtocol {
+    func toPresentable() -> AnyView {
+        AnyView(BlankForm())
+    }
+}
+
+/// An empty Form used for UI tests, behind a sheet.
+private struct BlankForm: View {
+    var body: some View {
+        Form {
+            Text("Nothing to see here.")
+        }
+        .compoundForm()
+    }
+}
+
+struct BlankForm_Previews: PreviewProvider {
+    static var previews: some View {
+        BlankForm()
     }
 }
