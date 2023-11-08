@@ -100,7 +100,7 @@ struct NotificationContentBuilder {
         var notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
         
         let senderDisplayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        notification.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: senderDisplayName, prefixWithSenderName: false).characters)
+        notification.body = (notificationItem.hasMention ? "\(senderDisplayName) mentioned you\n" : "") + String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: senderDisplayName, prefixWithSenderName: false).characters)
         
         switch messageType {
         case .image(content: let content):
@@ -130,7 +130,8 @@ struct NotificationContentBuilder {
 
     private func processCommonRoomMessage(notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         var notification = baseMutableContent(for: notificationItem)
-        notification.title = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
+        let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
+        notification.title = displayName
         if notification.title != notificationItem.roomDisplayName {
             notification.subtitle = notificationItem.roomDisplayName
         }
@@ -138,7 +139,7 @@ struct NotificationContentBuilder {
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: notificationItem.senderID,
-                                                            senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
+                                                            senderName: displayName,
                                                             icon: icon(for: notificationItem))
         return notification
     }

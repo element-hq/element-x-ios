@@ -17,6 +17,8 @@
 import Foundation
 
 final class NSESettings {
+    let permalinkBaseURL: URL = "https://matrix.to"
+
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
 
     /// UserDefaults to be used on reads and writes.

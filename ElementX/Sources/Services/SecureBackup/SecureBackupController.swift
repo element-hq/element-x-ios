@@ -195,8 +195,6 @@ extension BackupState {
             return .enabled
         case .disabling:
             return .disabling
-        case .disabled:
-            return .disabled
         }
     }
 }

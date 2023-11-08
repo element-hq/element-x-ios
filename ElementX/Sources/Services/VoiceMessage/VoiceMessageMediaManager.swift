@@ -18,6 +18,7 @@ import Foundation
 
 enum VoiceMessageMediaManagerError: Error {
     case unsupportedMimeTye
+    case missingURL
 }
 
 private final class VoiceMessageConversionRequest {
@@ -76,8 +77,11 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
             }
 
             // Convert from ogg
-            let convertedFileURL = URL.temporaryDirectory.appendingPathComponent(fileHandle.url.deletingPathExtension().lastPathComponent).appendingPathExtension(AudioConverterPreferredFileExtension.mpeg4aac.rawValue)
-            try audioConverter.convertToMPEG4AAC(sourceURL: fileHandle.url, destinationURL: convertedFileURL)
+            guard let url = fileHandle.url else {
+                throw VoiceMessageMediaManagerError.missingURL
+            }
+            let convertedFileURL = URL.temporaryDirectory.appendingPathComponent(url.deletingPathExtension().lastPathComponent).appendingPathExtension(AudioConverterPreferredFileExtension.mpeg4aac.rawValue)
+            try audioConverter.convertToMPEG4AAC(sourceURL: url, destinationURL: convertedFileURL)
 
             // Cache the file and return the url
             let result = voiceMessageCache.cache(mediaSource: source, using: convertedFileURL, move: true)
