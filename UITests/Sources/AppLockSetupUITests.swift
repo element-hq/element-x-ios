@@ -14,21 +14,29 @@
 // limitations under the License.
 //
 
-import ElementX
 import XCTest
+
+@testable import ElementX
 
 @MainActor
 class AppLockSetupUITests: XCTestCase {
     var app: XCUIApplication!
     
-    enum Step {
+    @MainActor enum Step {
         static let createPIN = 0
         static let confirmPIN = 1
         static let setupBiometrics = 2
         static let settings = 3
         
+        /// iPad shows the settings screen behind the modal, iPhone doesn't.
+        static let changePIN = isPhone ? createPIN : 4
+        /// iPad shows the settings screen behind the modal, iPhone doesn't.
+        static let confirmChangePIN = isPhone ? confirmPIN : 5
+        
         /// Not part of the flow, only to verify the stack is cleared.
         static let clearedStack = 99
+        
+        static var isPhone: Bool { UIDevice.current.userInterfaceIdiom == .phone }
     }
     
     func testCreateFlow() async throws {
@@ -55,12 +63,12 @@ class AppLockSetupUITests: XCTestCase {
         app.buttons[A11yIdentifiers.appLockSetupSettingsScreen.changePIN].tap()
         
         // Change PIN (create).
-        try await app.assertScreenshot(.appLockSetupFlow, step: Step.createPIN)
+        try await app.assertScreenshot(.appLockSetupFlow, step: Step.changePIN)
         
         enterDifferentPIN()
         
         // Change PIN (confirm).
-        try await app.assertScreenshot(.appLockSetupFlow, step: Step.confirmPIN)
+        try await app.assertScreenshot(.appLockSetupFlow, step: Step.confirmChangePIN)
         
         enterDifferentPIN()
         

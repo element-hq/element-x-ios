@@ -42,12 +42,12 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
     }
     
     func start() {
-        // disabling CA animations
+        // Fix the app tint colour.
         UIApplication.shared.connectedScenes.forEach { scene in
             guard let delegate = scene.delegate as? UIWindowSceneDelegate else {
                 return
             }
-            delegate.window??.layer.speed = 0
+            delegate.window??.tintColor = .compound.textActionPrimary
         }
         
         guard let screenID = ProcessInfo.testScreenID else { fatalError("Unable to launch with unknown screen.") }
@@ -178,7 +178,7 @@ class MockScreen: Identifiable {
             }
             
             let context = LAContextMock()
-            context.biometryTypeValue = .faceID
+            context.biometryTypeValue = UIDevice.current.isPhone ? .faceID : .touchID // (iPhone 14 & iPad 9th gen)
             context.evaluatePolicyReturnValue = true
             context.evaluatedPolicyDomainStateValue = "😎".data(using: .utf8)
             

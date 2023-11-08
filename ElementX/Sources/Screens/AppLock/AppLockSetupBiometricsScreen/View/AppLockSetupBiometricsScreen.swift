@@ -49,6 +49,7 @@ struct AppLockSetupBiometricsScreen: View {
                 .font(.system(size: 72))
                 .padding(.top, 58)
                 .padding(.bottom, 26)
+                .accessibilityHidden(true)
             
             Text(context.viewState.title)
                 .font(.compound.headingMDBold)
