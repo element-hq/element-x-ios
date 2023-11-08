@@ -162,7 +162,7 @@ class MockScreen: Identifiable {
             let appLockService = AppLockService(keychainController: KeychainControllerMock(), appSettings: ServiceLocator.shared.settings)
             let coordinator = AppLockScreenCoordinator(parameters: .init(appLockService: appLockService))
             return coordinator
-        case .appLockSetupFlow, .appLockSetupFlowUnlock:
+        case .appLockSetupFlow, .appLockSetupFlowUnlock, .appLockSetupFlowMandatory:
             let navigationStackCoordinator = NavigationStackCoordinator()
             // The flow expects an existing root coordinator, use the placeholder as a placeholder 😅
             navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
@@ -186,7 +186,8 @@ class MockScreen: Identifiable {
                                                 appSettings: ServiceLocator.shared.settings,
                                                 context: context)
             
-            let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .settings,
+            let flow: AppLockSetupFlowCoordinator.PresentationFlow = id == .appLockSetupFlowMandatory ? .onboarding : .settings
+            let coordinator = AppLockSetupFlowCoordinator(presentingFlow: flow,
                                                           appLockService: appLockService,
                                                           navigationStackCoordinator: navigationStackCoordinator)
             coordinator.start()

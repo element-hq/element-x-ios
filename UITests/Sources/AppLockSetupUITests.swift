@@ -82,6 +82,30 @@ class AppLockSetupUITests: XCTestCase {
         try await app.assertScreenshot(.appLockSetupFlow, step: Step.clearedStack)
     }
     
+    func testMandatoryCreateFlow() async throws {
+        app = Application.launch(.appLockSetupFlowMandatory)
+        
+        // Create PIN screen (non-modal and no cancellation button).
+        try await app.assertScreenshot(.appLockSetupFlowMandatory, step: Step.createPIN)
+        
+        enterPIN()
+        
+        // Confirm PIN screen (non-modal and no cancellation button).
+        try await app.assertScreenshot(.appLockSetupFlowMandatory, step: Step.confirmPIN)
+        
+        enterPIN()
+        
+        // Setup biometrics screen (non-modal).
+        try await app.assertScreenshot(.appLockSetupFlowMandatory, step: Step.setupBiometrics)
+        
+        let allowButton = app.buttons[A11yIdentifiers.appLockSetupBiometricsScreen.allow]
+        XCTAssertTrue(allowButton.exists, "The biometrics screen should be shown.")
+        allowButton.tap()
+        
+        // The stack should remain on biometrics for the presenting flow to take over navigation.
+        try await app.assertScreenshot(.appLockSetupFlowMandatory, step: Step.setupBiometrics)
+    }
+    
     func testUnlockFlow() async throws {
         app = Application.launch(.appLockSetupFlowUnlock)
         
