@@ -55,15 +55,16 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
 
     @ViewBuilder
     static var bodyPlain: some View {
-        let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name", avatarURL: URL.picturesDirectory)),
+                                            timelineController: MockRoomTimelineController(),
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name", avatarURL: URL.picturesDirectory)),
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenter.default)
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)
@@ -72,15 +73,16 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     
     @ViewBuilder
     static var bodyEncrypted: some View {
-        let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name")),
+                                            timelineController: MockRoomTimelineController(),
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name")),
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                            application: ApplicationMock.default)
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenter.default)
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)

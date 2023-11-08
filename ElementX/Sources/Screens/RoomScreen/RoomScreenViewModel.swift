@@ -28,16 +28,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         static let toastErrorID = "RoomScreenToastError"
     }
 
-    private let timelineController: RoomTimelineControllerProtocol
-    private let mediaProvider: MediaProviderProtocol
-    private let mediaPlayerProvider: MediaPlayerProviderProtocol
-    private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     private let roomProxy: RoomProxyProtocol
-    private let appSettings: AppSettings
-    private let analytics: AnalyticsService
+    private let timelineController: RoomTimelineControllerProtocol
+    private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let application: ApplicationProtocol
-    private let notificationCenterProtocol: NotificationCenterProtocol
+    private let appSettings: AppSettings
+    private let analyticsService: AnalyticsService
+    private let notificationCenter: NotificationCenterProtocol
     
     private let roomScreenInteractionHandler: RoomScreenInteractionHandler
     
@@ -50,37 +48,37 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private var paginateBackwardsTask: Task<Void, Never>?
 
-    init(timelineController: RoomTimelineControllerProtocol,
+    init(roomProxy: RoomProxyProtocol,
+         timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
-         roomProxy: RoomProxyProtocol,
-         appSettings: AppSettings,
-         analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          application: ApplicationProtocol,
-         notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
+         appSettings: AppSettings,
+         analyticsService: AnalyticsService,
+         notificationCenter: NotificationCenterProtocol) {
         self.timelineController = timelineController
-        self.mediaProvider = mediaProvider
         self.mediaPlayerProvider = mediaPlayerProvider
-        self.voiceMessageMediaManager = voiceMessageMediaManager
         self.roomProxy = roomProxy
         self.appSettings = appSettings
-        self.analytics = analytics
+        self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         self.application = application
-        self.notificationCenterProtocol = notificationCenterProtocol
+        self.notificationCenter = notificationCenter
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
         roomScreenInteractionHandler = RoomScreenInteractionHandler(roomProxy: roomProxy,
                                                                     timelineController: timelineController,
+                                                                    mediaProvider: mediaProvider,
                                                                     mediaPlayerProvider: mediaPlayerProvider,
+                                                                    voiceMessageMediaManager: voiceMessageMediaManager,
                                                                     voiceMessageRecorder: voiceMessageRecorder,
                                                                     userIndicatorController: userIndicatorController,
                                                                     application: application,
                                                                     appSettings: appSettings,
-                                                                    analyticsService: analytics)
+                                                                    analyticsService: analyticsService)
         
         super.init(initialViewState: RoomScreenViewState(roomID: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
@@ -109,7 +107,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return nil
             }
             
-            return self.audioPlayerState(for: itemId)
+            return self.roomScreenInteractionHandler.audioPlayerState(for: itemId)
         }
         
         buildTimelineViews()
@@ -135,7 +133,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .itemDisappeared(let id):
             Task { await timelineController.processItemDisappearance(id) }
         case .itemTapped(let id):
-            Task { await itemTapped(with: id) }
+            Task { await handleItemTapped(with: id) }
         case .toggleReaction(let emoji, let itemId):
             Task { await timelineController.toggleReaction(emoji, to: itemId) }
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
@@ -147,7 +145,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .handlePasteOrDrop(let provider):
             roomScreenInteractionHandler.handlePasteOrDrop(provider)
         case .tappedOnUser(userID: let userID):
-            Task { await handleTappedUser(userID: userID) }
+            Task { await roomScreenInteractionHandler.handleTappedUser(userID: userID) }
         case .displayEmojiPicker(let itemID):
             roomScreenInteractionHandler.showEmojiPicker(for: itemID)
         case .reactionSummary(let itemID, let key):
@@ -165,9 +163,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case let .selectedPollOption(pollStartID, optionID):
             roomScreenInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
         case .playPauseAudio(let itemID):
-            Task { await playPauseAudio(for: itemID) }
+            Task { await roomScreenInteractionHandler.playPauseAudio(for: itemID) }
         case .seekAudio(let itemID, let progress):
-            Task { await seekAudio(for: itemID, progress: progress) }
+            Task { await roomScreenInteractionHandler.seekAudio(for: itemID, progress: progress) }
         case let .endPoll(pollStartID):
             state.bindings.confirmationAlertInfo = .init(id: .init(),
                                                          title: L10n.actionEndPoll,
@@ -302,6 +300,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     actionsSubject.send(.displayReportContent(itemID: itemID, senderID: senderID))
                 case .displayMediaUploadPreviewScreen(let url):
                     actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
+                case .displayRoomMemberDetails(let member):
+                    actionsSubject.send(.displayRoomMemberDetails(member: member))
                 case .showActionMenu(let actionMenuInfo):
                     state.bindings.actionMenuInfo = actionMenuInfo
                 case .showDebugInfo(let debugInfo):
@@ -378,7 +378,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         // Clear any notifications from notification center.
         if lastVisibleItemID.timelineID == state.timelineViewState.timelineIDs.last {
-            notificationCenterProtocol.post(name: .roomMarkedAsRead, object: roomProxy.id)
+            notificationCenter.post(name: .roomMarkedAsRead, object: roomProxy.id)
         }
         
         switch await timelineController.sendReadReceipt(for: eventItemID) {
@@ -400,9 +400,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return nearestItemID
     }
 
-    private func itemTapped(with itemID: TimelineItemIdentifier) async {
+    private func handleItemTapped(with itemID: TimelineItemIdentifier) async {
         state.showLoading = true
-        let action = await processItemTap(itemID)
+        let action = await roomScreenInteractionHandler.processItemTap(itemID)
 
         switch action {
         case .displayMediaFile(let file, let title):
@@ -454,69 +454,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         default:
             break
         }
-
-        analytics.trackComposer(inThread: false, isEditing: isEdit, isReply: isReply, startsThread: nil)
-    }
-
-    private func handleTappedUser(userID: String) async {
-        // This is generally fast but it could take some time for rooms with thousands of users on first load
-        // Show a loader only if it takes more than 0.1 seconds
-        showLoadingIndicator(with: .milliseconds(100))
-        let result = await roomProxy.getMember(userID: userID)
-        hideLoadingIndicator()
         
-        switch result {
-        case .success(let member):
-            actionsSubject.send(.displayRoomMemberDetails(member: member))
-        case .failure(let error):
-            displayError(.alert(L10n.screenRoomErrorFailedRetrievingUserDetails))
-            MXLog.error("Failed retrieving the user given the following id \(userID) with error: \(error)")
-        }
-    }
-    
-    private func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
-            return .none
-        }
-        
-        switch timelineItem {
-        case let item as LocationRoomTimelineItem:
-            guard let geoURI = item.content.geoURI else { return .none }
-            return .displayLocation(body: item.content.body, geoURI: geoURI, description: item.content.description)
-        default:
-            return await displayMediaActionIfPossible(timelineItem: timelineItem)
-        }
-    }
-    
-    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
-        var source: MediaSourceProxy?
-        var body: String
-
-        switch timelineItem {
-        case let item as ImageRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as VideoRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as FileRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as AudioRoomTimelineItem:
-            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
-            source = item.content.source
-            body = item.content.body
-        default:
-            return .none
-        }
-
-        guard let source else { return .none }
-        switch await mediaProvider.loadFileFromSource(source, body: body) {
-        case .success(let file):
-            return .displayMediaFile(file: file, title: body)
-        case .failure:
-            return .none
-        }
+        analyticsService.trackComposer(inThread: false, isEditing: isEdit, isReply: isReply, startsThread: nil)
     }
     
     // MARK: - Timeline Item Building
@@ -695,106 +634,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.bindings.reactionSummaryInfo = .init(reactions: eventTimelineItem.properties.reactions, selectedKey: selectedKey)
     }
     
-    // MARK: - Audio Playback
-    
-    private func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
-            fatalError("TimelineItem \(itemID) not found")
-        }
-        
-        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
-            fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
-        }
-        
-        if let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) {
-            return playerState
-        }
-        
-        let playerState = AudioPlayerState(id: .timelineItemIdentifier(itemID),
-                                           duration: voiceMessageRoomTimelineItem.content.duration,
-                                           waveform: voiceMessageRoomTimelineItem.content.waveform)
-        mediaPlayerProvider.register(audioPlayerState: playerState)
-        return playerState
-    }
-    
-    private func playPauseAudio(for itemID: TimelineItemIdentifier) async {
-        MXLog.info("Toggle play/pause audio for itemID \(itemID)")
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
-            fatalError("TimelineItem \(itemID) not found")
-        }
-        
-        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
-            fatalError("Invalid TimelineItem type for itemID \(itemID) (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
-        }
-        
-        guard let source = voiceMessageRoomTimelineItem.content.source else {
-            MXLog.error("Cannot start voice message playback, source is not defined for itemID \(itemID)")
-            return
-        }
-        
-        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: source), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
-            MXLog.error("Cannot play a voice message without an audio player")
-            return
-        }
-        
-        let audioPlayerState = audioPlayerState(for: itemID)
-        
-        // Ensure this one is attached
-        if !audioPlayerState.isAttached {
-            audioPlayerState.attachAudioPlayer(audioPlayer)
-        }
-
-        // Detach all other states
-        await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
-
-        guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
-            // Load content
-            do {
-                MXLog.info("Loading voice message audio content from source for itemID \(itemID)")
-                let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
-
-                // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
-                if audioPlayerState.isAttached {
-                    audioPlayer.load(mediaSource: source, using: url, autoplay: true)
-                }
-            } catch {
-                MXLog.error("Failed to load voice message: \(error)")
-                audioPlayerState.reportError(error)
-            }
-            
-            return
-        }
-        
-        if audioPlayer.state == .playing {
-            audioPlayer.pause()
-        } else {
-            audioPlayer.play()
-        }
-    }
-        
-    private func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
-        guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) else {
-            return
-        }
-        await mediaPlayerProvider.detachAllStates(except: playerState)
-        await playerState.updateState(progress: progress)
-    }
-    
     // MARK: - User Indicators
-    
-    private static let loadingIndicatorIdentifier = "RoomScreenLoadingIndicator"
-
-    private func showLoadingIndicator(with delay: Duration) {
-        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                              title: L10n.commonLoading,
-                                                              persistent: true),
-                                                delay: delay)
-    }
-
-    private func hideLoadingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
-    }
     
     private func displayError(_ type: RoomScreenErrorType) {
         switch type {
@@ -821,15 +661,16 @@ private extension RoomProxyProtocol {
 // MARK: - Mocks
 
 extension RoomScreenViewModel {
-    static let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+    static let mock = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
+                                          timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                          roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
-                                          appSettings: ServiceLocator.shared.settings,
-                                          analytics: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          application: ApplicationMock.default)
+                                          application: ApplicationMock.default,
+                                          appSettings: ServiceLocator.shared.settings,
+                                          analyticsService: ServiceLocator.shared.analytics,
+                                          notificationCenter: NotificationCenter.default)
 }
 
 private struct RoomContextKey: EnvironmentKey {

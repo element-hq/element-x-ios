@@ -80,15 +80,16 @@ struct UITimelineView: UIViewControllerRepresentable {
 // MARK: - Previews
 
 struct UITimelineView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
+                                               timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
                                                mediaPlayerProvider: MediaPlayerProviderMock(),
                                                voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                               roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
-                                               appSettings: ServiceLocator.shared.settings,
-                                               analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               application: ApplicationMock.default)
+                                               application: ApplicationMock.default,
+                                               appSettings: ServiceLocator.shared.settings,
+                                               analyticsService: ServiceLocator.shared.analytics,
+                                               notificationCenter: NotificationCenter.default)
 
     static var previews: some View {
         NavigationStack {

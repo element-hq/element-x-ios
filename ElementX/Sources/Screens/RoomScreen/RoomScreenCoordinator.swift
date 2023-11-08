@@ -60,15 +60,16 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
+        viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
+                                        timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,
                                         mediaPlayerProvider: parameters.mediaPlayerProvider,
                                         voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                        roomProxy: parameters.roomProxy,
-                                        appSettings: parameters.appSettings,
-                                        analytics: ServiceLocator.shared.analytics,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                        application: UIApplication.shared)
+                                        application: UIApplication.shared,
+                                        appSettings: parameters.appSettings,
+                                        analyticsService: ServiceLocator.shared.analytics,
+                                        notificationCenter: NotificationCenter.default)
 
         wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
                                                     maxCompressedHeight: ComposerConstant.maxHeight,

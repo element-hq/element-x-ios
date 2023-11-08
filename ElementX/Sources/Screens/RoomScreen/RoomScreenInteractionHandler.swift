@@ -24,6 +24,7 @@ enum RoomScreenInteractionHandlerAction {
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayMediaUploadPreviewScreen(url: URL)
+    case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
     case showActionMenu(TimelineItemActionMenuInfo)
     case showDebugInfo(TimelineItemDebugInfo)
     case showConfirmationAlert(AlertInfo<UUID>)
@@ -33,8 +34,10 @@ enum RoomScreenInteractionHandlerAction {
 class RoomScreenInteractionHandler {
     private let roomProxy: RoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
+    private let mediaProvider: MediaProviderProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let voiceMessageRecorder: VoiceMessageRecorderProtocol
+    private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let application: ApplicationProtocol
     private let appSettings: AppSettings
@@ -51,7 +54,9 @@ class RoomScreenInteractionHandler {
     
     init(roomProxy: RoomProxyProtocol,
          timelineController: RoomTimelineControllerProtocol,
+         mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
+         voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          voiceMessageRecorder: VoiceMessageRecorderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          application: ApplicationProtocol,
@@ -59,13 +64,17 @@ class RoomScreenInteractionHandler {
          analyticsService: AnalyticsService) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
+        self.mediaProvider = mediaProvider
         self.mediaPlayerProvider = mediaPlayerProvider
+        self.voiceMessageMediaManager = voiceMessageMediaManager
         self.voiceMessageRecorder = voiceMessageRecorder
         self.userIndicatorController = userIndicatorController
         self.application = application
         self.appSettings = appSettings
         self.analyticsService = analyticsService
     }
+    
+    // MARK: Timeline Item Action Menu
     
     func showTimelineItemActionMenu(for itemID: TimelineItemIdentifier) {
         Task {
@@ -249,16 +258,6 @@ class RoomScreenInteractionHandler {
         }
     }
     
-    func showEmojiPicker(for itemID: TimelineItemIdentifier) {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
-              timelineItem.isReactable,
-              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
-            return
-        }
-        let selectedEmojis = Set(eventTimelineItem.properties.reactions.compactMap { $0.isHighlighted ? $0.key : nil })
-        actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
-    }
-    
     // MARK: Polls
 
     func sendPollResponse(pollStartID: String, optionID: String) {
@@ -289,7 +288,7 @@ class RoomScreenInteractionHandler {
         }
     }
     
-    // MARK: - Pasting and dropping
+    // MARK: Pasting and dropping
     
     func handlePasteOrDrop(_ provider: NSItemProvider) {
         guard let contentType = provider.preferredContentType,
@@ -343,7 +342,7 @@ class RoomScreenInteractionHandler {
         }
     }
     
-    // MARK: - Voice message
+    // MARK: Voice messages
     
     private func handleVoiceMessageRecorderAction(_ action: VoiceMessageRecorderAction) {
         MXLog.debug("handling voice recorder action: \(action) - (audio)")
@@ -453,6 +452,133 @@ class RoomScreenInteractionHandler {
         }
     }
     
+    // MARK: Audio Playback
+    
+    func playPauseAudio(for itemID: TimelineItemIdentifier) async {
+        MXLog.info("Toggle play/pause audio for itemID \(itemID)")
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
+            fatalError("TimelineItem \(itemID) not found")
+        }
+        
+        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
+            fatalError("Invalid TimelineItem type for itemID \(itemID) (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+        }
+        
+        guard let source = voiceMessageRoomTimelineItem.content.source else {
+            MXLog.error("Cannot start voice message playback, source is not defined for itemID \(itemID)")
+            return
+        }
+        
+        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: source), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
+            MXLog.error("Cannot play a voice message without an audio player")
+            return
+        }
+        
+        let audioPlayerState = audioPlayerState(for: itemID)
+        
+        // Ensure this one is attached
+        if !audioPlayerState.isAttached {
+            audioPlayerState.attachAudioPlayer(audioPlayer)
+        }
+
+        // Detach all other states
+        await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
+
+        guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
+            // Load content
+            do {
+                MXLog.info("Loading voice message audio content from source for itemID \(itemID)")
+                let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
+
+                // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
+                if audioPlayerState.isAttached {
+                    audioPlayer.load(mediaSource: source, using: url, autoplay: true)
+                }
+            } catch {
+                MXLog.error("Failed to load voice message: \(error)")
+                audioPlayerState.reportError(error)
+            }
+            
+            return
+        }
+        
+        if audioPlayer.state == .playing {
+            audioPlayer.pause()
+        } else {
+            audioPlayer.play()
+        }
+    }
+        
+    func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
+        guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) else {
+            return
+        }
+        await mediaPlayerProvider.detachAllStates(except: playerState)
+        await playerState.updateState(progress: progress)
+    }
+    
+    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
+            fatalError("TimelineItem \(itemID) not found")
+        }
+        
+        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
+            fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+        }
+        
+        if let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) {
+            return playerState
+        }
+        
+        let playerState = AudioPlayerState(id: .timelineItemIdentifier(itemID),
+                                           duration: voiceMessageRoomTimelineItem.content.duration,
+                                           waveform: voiceMessageRoomTimelineItem.content.waveform)
+        mediaPlayerProvider.register(audioPlayerState: playerState)
+        return playerState
+    }
+    
+    // MARK: Other
+    
+    func showEmojiPicker(for itemID: TimelineItemIdentifier) {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
+              timelineItem.isReactable,
+              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
+            return
+        }
+        let selectedEmojis = Set(eventTimelineItem.properties.reactions.compactMap { $0.isHighlighted ? $0.key : nil })
+        actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+    }
+    
+    func handleTappedUser(userID: String) async {
+        // This is generally fast but it could take some time for rooms with thousands of users on first load
+        // Show a loader only if it takes more than 0.1 seconds
+        showLoadingIndicator(with: .milliseconds(100))
+        let result = await roomProxy.getMember(userID: userID)
+        hideLoadingIndicator()
+        
+        switch result {
+        case .success(let member):
+            actionsSubject.send(.displayRoomMemberDetails(member: member))
+        case .failure(let error):
+            actionsSubject.send(.displayError(.alert(L10n.screenRoomErrorFailedRetrievingUserDetails)))
+            MXLog.error("Failed retrieving the user given the following id \(userID) with error: \(error)")
+        }
+    }
+    
+    func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
+            return .none
+        }
+        
+        switch timelineItem {
+        case let item as LocationRoomTimelineItem:
+            guard let geoURI = item.content.geoURI else { return .none }
+            return .displayLocation(body: item.content.body, geoURI: geoURI, description: item.content.description)
+        default:
+            return await displayMediaActionIfPossible(timelineItem: timelineItem)
+        }
+    }
+    
     // MARK: - Private
     
     private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {
@@ -467,13 +593,60 @@ class RoomScreenInteractionHandler {
         return .init(type: messageItem.contentType, isThread: messageItem.isThreaded)
     }
     
-    private struct ReplyInfo {
-        let type: EventBasedMessageTimelineItemContentType
-        let isThread: Bool
-    }
-    
     private func openSystemSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         application.open(url)
     }
+    
+    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
+        var source: MediaSourceProxy?
+        var body: String
+
+        switch timelineItem {
+        case let item as ImageRoomTimelineItem:
+            source = item.content.source
+            body = item.content.body
+        case let item as VideoRoomTimelineItem:
+            source = item.content.source
+            body = item.content.body
+        case let item as FileRoomTimelineItem:
+            source = item.content.source
+            body = item.content.body
+        case let item as AudioRoomTimelineItem:
+            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
+            source = item.content.source
+            body = item.content.body
+        default:
+            return .none
+        }
+
+        guard let source else { return .none }
+        switch await mediaProvider.loadFileFromSource(source, body: body) {
+        case .success(let file):
+            return .displayMediaFile(file: file, title: body)
+        case .failure:
+            return .none
+        }
+    }
+    
+    // MARK: User indicators
+    
+    private static let loadingIndicatorIdentifier = "RoomScreenLoadingIndicator"
+
+    private func showLoadingIndicator(with delay: Duration) {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true),
+                                                delay: delay)
+    }
+
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+}
+
+private struct ReplyInfo {
+    let type: EventBasedMessageTimelineItemContentType
+    let isThread: Bool
 }
