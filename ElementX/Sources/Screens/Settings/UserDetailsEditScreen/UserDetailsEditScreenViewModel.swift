@@ -22,7 +22,7 @@ typealias UserDetailsEditScreenViewModelType = StateStoreViewModel<UserDetailsEd
 class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDetailsEditScreenViewModelProtocol {
     private let actionsSubject: PassthroughSubject<UserDetailsEditScreenViewModelAction, Never> = .init()
     private let clientProxy: ClientProxyProtocol
-    private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private let mediaPreprocessor: MediaUploadingPreprocessor = .init()
     
     var actions: AnyPublisher<UserDetailsEditScreenViewModelAction, Never> {
@@ -31,7 +31,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
     
     init(clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol?) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
@@ -90,12 +90,12 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         Task {
             let userIndicatorID = UUID().uuidString
             defer {
-                userIndicatorController?.retractIndicatorWithId(userIndicatorID)
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
             }
-            userIndicatorController?.submitIndicator(UserIndicator(id: userIndicatorID,
-                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                                   title: L10n.commonLoading,
-                                                                   persistent: true))
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                                  title: L10n.commonLoading,
+                                                                  persistent: true))
             
             let mediaResult = await mediaPreprocessor.processMedia(at: url)
             
@@ -103,7 +103,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             case .success(.image):
                 state.localMedia = try? mediaResult.get()
             case .failure, .success:
-                userIndicatorController?.alertInfo = .init(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
+                userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
             }
         }
     }
@@ -114,12 +114,12 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         Task {
             let userIndicatorID = UUID().uuidString
             defer {
-                userIndicatorController?.retractIndicatorWithId(userIndicatorID)
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
             }
-            userIndicatorController?.submitIndicator(UserIndicator(id: userIndicatorID,
-                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                                   title: L10n.screenEditProfileUpdatingDetails,
-                                                                   persistent: true))
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                                  title: L10n.screenEditProfileUpdatingDetails,
+                                                                  persistent: true))
             
             do {
                 try await withThrowingTaskGroup(of: Void.self) { group in
@@ -142,9 +142,9 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
                     try await group.waitForAll()
                 }
             } catch {
-                userIndicatorController?.alertInfo = .init(id: .init(),
-                                                           title: L10n.screenEditProfileErrorTitle,
-                                                           message: L10n.screenEditProfileError)
+                userIndicatorController.alertInfo = .init(id: .init(),
+                                                          title: L10n.screenEditProfileErrorTitle,
+                                                          message: L10n.screenEditProfileError)
             }
         }
     }

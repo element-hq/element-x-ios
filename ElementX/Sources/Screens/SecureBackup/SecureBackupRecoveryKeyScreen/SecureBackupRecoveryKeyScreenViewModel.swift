@@ -21,14 +21,14 @@ typealias SecureBackupRecoveryKeyScreenViewModelType = StateStoreViewModel<Secur
 
 class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewModelType, SecureBackupRecoveryKeyScreenViewModelProtocol {
     private let secureBackupController: SecureBackupControllerProtocol
-    private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var actionsSubject: PassthroughSubject<SecureBackupRecoveryKeyScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<SecureBackupRecoveryKeyScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(secureBackupController: SecureBackupControllerProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
+    init(secureBackupController: SecureBackupControllerProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
         self.secureBackupController = secureBackupController
         self.userIndicatorController = userIndicatorController
         
@@ -66,7 +66,7 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
             }
         case .copyKey:
             UIPasteboard.general.string = state.recoveryKey
-            userIndicatorController?.submitIndicator(.init(title: "Copied recovery key"))
+            userIndicatorController.submitIndicator(.init(title: "Copied recovery key"))
             state.doneButtonEnabled = true
         case .keySaved:
             state.doneButtonEnabled = true

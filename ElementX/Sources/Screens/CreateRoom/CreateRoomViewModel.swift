@@ -23,7 +23,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     private let userSession: UserSessionProtocol
     private var createRoomParameters: CreateRoomFlowParameters
     private let analytics: AnalyticsService
-    private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var actionsSubject: PassthroughSubject<CreateRoomViewModelAction, Never> = .init()
     
@@ -35,7 +35,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
          createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>,
          selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol?) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         let parameters = createRoomParameters.value
         
         self.userSession = userSession
@@ -174,13 +174,13 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     private static let loadingIndicatorIdentifier = "CreateRoomLoading"
     
     private func showLoadingIndicator() {
-        userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                               title: L10n.commonLoading,
-                                                               persistent: true))
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
     }
     
     private func hideLoadingIndicator() {
-        userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

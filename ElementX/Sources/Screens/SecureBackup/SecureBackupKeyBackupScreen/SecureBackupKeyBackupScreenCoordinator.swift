@@ -19,7 +19,7 @@ import SwiftUI
 
 struct SecureBackupKeyBackupScreenCoordinatorParameters {
     let secureBackupController: SecureBackupControllerProtocol
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum SecureBackupKeyBackupScreenCoordinatorAction {

@@ -39,7 +39,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         viewModel = StartChatScreenViewModel(userSession: userSession,
                                              appSettings: ServiceLocator.shared.settings,
                                              analytics: ServiceLocator.shared.analytics,
-                                             userIndicatorController: nil,
+                                             userIndicatorController: UserIndicatorControllerMock(),
                                              userDiscoveryService: userDiscoveryService)
         
         AppSettings.reset()

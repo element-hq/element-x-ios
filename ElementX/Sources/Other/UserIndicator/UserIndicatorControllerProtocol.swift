@@ -14,13 +14,15 @@
 // limitations under the License.
 //
 
-import Foundation
+import UIKit
 
 // sourcery: AutoMockable
 protocol UserIndicatorControllerProtocol: CoordinatorProtocol {
     func submitIndicator(_ indicator: UserIndicator, delay: Duration?)
     func retractIndicatorWithId(_ id: String)
     func retractAllIndicators()
+    
+    var window: UIWindow? { get set }
     var alertInfo: AlertInfo<UUID>? { get set }
 }
 

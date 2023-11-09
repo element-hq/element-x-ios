@@ -28,7 +28,7 @@ enum MediaPickerScreenCoordinatorAction {
 }
 
 class MediaPickerScreenCoordinator: CoordinatorProtocol {
-    private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private let source: MediaPickerScreenSource
     private let callback: ((MediaPickerScreenCoordinatorAction) -> Void)?
     
@@ -92,6 +92,6 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
     }
     
     private func showError() {
-        userIndicatorController?.submitIndicator(UserIndicator(title: L10n.screenMediaPickerErrorFailedSelection))
+        userIndicatorController.submitIndicator(UserIndicator(title: L10n.screenMediaPickerErrorFailedSelection))
     }
 }

@@ -29,10 +29,10 @@ enum PhotoLibraryPickerError: Error {
 }
 
 struct PhotoLibraryPicker: UIViewControllerRepresentable {
-    private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private let callback: (PhotoLibraryPickerAction) -> Void
     
-    init(userIndicatorController: UserIndicatorControllerProtocol?, callback: @escaping (PhotoLibraryPickerAction) -> Void) {
+    init(userIndicatorController: UserIndicatorControllerProtocol, callback: @escaping (PhotoLibraryPickerAction) -> Void) {
         self.userIndicatorController = userIndicatorController
         self.callback = callback
     }
@@ -73,9 +73,9 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
             
             picker.delegate = nil
             
-            photoLibraryPicker.userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading))
+            photoLibraryPicker.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading))
             defer {
-                photoLibraryPicker.userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+                photoLibraryPicker.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
             }
             
             provider.loadFileRepresentation(forTypeIdentifier: contentType.identifier) { [weak self] url, error in
