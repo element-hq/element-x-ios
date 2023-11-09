@@ -150,7 +150,7 @@ struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
             }
             .previewDisplayName("Recovery incomplete")
         }
-        .snapshot(delay: 0.25)
+        .snapshot(delay: 0.5)
     }
     
     static func viewModel(keyBackupState: SecureBackupKeyBackupState,
@@ -160,7 +160,7 @@ struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
         backupController.underlyingRecoveryKeyState = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(recoveryKeyState).asCurrentValuePublisher()
         
         return SecureBackupScreenViewModel(secureBackupController: backupController,
-                                           userIndicatorController: nil,
+                                           userIndicatorController: UserIndicatorControllerMock(),
                                            chatBackupDetailsURL: .sharedPublicDirectory)
     }
 }

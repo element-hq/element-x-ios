@@ -103,7 +103,6 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     private func showServerSelectionScreen(isModallyPresented: Bool) {
         let navigationCoordinator = NavigationStackCoordinator()
-        let userIndicatorController: UserIndicatorControllerProtocol! = isModallyPresented ? UserIndicatorController(rootCoordinator: navigationCoordinator) : userIndicatorController
         
         let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                     userIndicatorController: userIndicatorController,
@@ -138,7 +137,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
         
         if isModallyPresented {
             navigationCoordinator.setRootCoordinator(coordinator)
-            navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
+            navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
         } else {
             navigationStackCoordinator.push(coordinator)
         }

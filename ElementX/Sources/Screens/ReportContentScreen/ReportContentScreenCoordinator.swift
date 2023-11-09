@@ -21,7 +21,7 @@ struct ReportContentScreenCoordinatorParameters {
     let eventID: String
     let senderID: String
     let roomProxy: RoomProxyProtocol
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum ReportContentScreenCoordinatorAction {
@@ -81,7 +81,7 @@ final class ReportContentScreenCoordinator: CoordinatorProtocol {
     private static let loadingIndicatorIdentifier = "ReportContentLoading"
 
     private func startLoading() {
-        parameters.userIndicatorController?.submitIndicator(
+        parameters.userIndicatorController.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
                           type: .modal,
                           title: L10n.commonSending,
@@ -90,10 +90,10 @@ final class ReportContentScreenCoordinator: CoordinatorProtocol {
     }
 
     private func stopLoading() {
-        parameters.userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        parameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
-
+    
     private func showError(description: String) {
-        parameters.userIndicatorController?.submitIndicator(UserIndicator(title: description))
+        parameters.userIndicatorController.submitIndicator(UserIndicator(title: description))
     }
 }

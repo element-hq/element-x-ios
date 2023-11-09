@@ -18,14 +18,11 @@ import SwiftUI
 
 struct UserIndicatorPresenter: View {
     @ObservedObject var userIndicatorController: UserIndicatorController
-    let rootView: AnyView
     
     var body: some View {
-        ZStack(alignment: .top) {
-            rootView
-            indicatorViewFor(indicator: userIndicatorController.activeIndicator)
-        }
-        .animation(.elementDefault, value: userIndicatorController.activeIndicator)
+        indicatorViewFor(indicator: userIndicatorController.activeIndicator)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .animation(.elementDefault, value: userIndicatorController.activeIndicator)
     }
     
     @ViewBuilder

@@ -27,7 +27,7 @@ struct BugReportScreenCoordinatorParameters {
     let userID: String
     let deviceID: String?
     
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let userIndicatorController: UserIndicatorControllerProtocol?
     let screenshot: UIImage?
     let isModallyPresented: Bool
 }

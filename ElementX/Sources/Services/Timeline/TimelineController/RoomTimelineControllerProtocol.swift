@@ -44,8 +44,6 @@ protocol RoomTimelineControllerProtocol {
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async
-
-    func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError>
     
@@ -64,18 +62,14 @@ protocol RoomTimelineControllerProtocol {
     func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async
 
     func redact(_ itemID: TimelineItemIdentifier) async
-
-    func cancelSend(_ itemID: TimelineItemIdentifier) async
     
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo
     
     func retryDecryption(for sessionID: String) async
     
-    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState
+    func retrySending(itemID: TimelineItemIdentifier) async
     
-    func playPauseAudio(for itemID: TimelineItemIdentifier) async
-        
-    func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async
+    func cancelSending(itemID: TimelineItemIdentifier) async
 }
 
 extension RoomTimelineControllerProtocol {

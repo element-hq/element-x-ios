@@ -19,7 +19,7 @@ import SwiftUI
 
 struct CreateRoomCoordinatorParameters {
     let userSession: UserSessionProtocol
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let userIndicatorController: UserIndicatorControllerProtocol
     let createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>
     let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>
 }

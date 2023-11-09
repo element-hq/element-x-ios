@@ -332,8 +332,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let userID = userSession.clientProxy.userID
         
-        let mediaPlayerProvider = MediaPlayerProvider()
-        
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           mediaProvider: userSession.mediaProvider,
                                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL,
@@ -343,9 +341,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            timelineItemFactory: timelineItemFactory,
-                                                                                           mediaProvider: userSession.mediaProvider,
-                                                                                           mediaPlayerProvider: mediaPlayerProvider,
-                                                                                           voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                                            secureBackupController: userSession.clientProxy.secureBackupController)
         self.timelineController = timelineController
         
@@ -356,7 +351,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          timelineController: timelineController,
                                                          mediaProvider: userSession.mediaProvider,
-                                                         mediaPlayerProvider: mediaPlayerProvider,
+                                                         mediaPlayerProvider: MediaPlayerProvider(),
+                                                         voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                          emojiProvider: emojiProvider,
                                                          completionSuggestionService: completionSuggestionService,
                                                          appSettings: appSettings)
@@ -490,8 +486,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             fatalError()
         }
         
-        let navigationCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationCoordinator)
+        let navigationStackCoordinator = NavigationStackCoordinator()
         let parameters = ReportContentScreenCoordinatorParameters(eventID: eventID,
                                                                   senderID: senderID,
                                                                   roomProxy: roomProxy,
@@ -513,15 +508,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        navigationCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissReportContent)
         }
     }
     
     private func presentMediaUploadPickerWithSource(_ source: MediaPickerScreenSource) {
         let stackCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: stackCoordinator)
 
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: userIndicatorController, source: source) { [weak self] action in
             switch action {
@@ -534,7 +528,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
         stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
 
-        navigationStackCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             if case .mediaUploadPicker = self?.stateMachine.state {
                 self?.stateMachine.tryEvent(.dismissMediaUploadPicker)
             }
@@ -547,7 +541,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         let stackCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: stackCoordinator)
 
         let parameters = MediaUploadPreviewScreenCoordinatorParameters(userIndicatorController: userIndicatorController,
                                                                        roomProxy: roomProxy,
@@ -569,8 +562,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
 
         stackCoordinator.setRootCoordinator(mediaUploadPreviewScreenCoordinator)
-
-        navigationStackCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
+        
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMediaUploadPreview)
         }
     }

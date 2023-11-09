@@ -2938,6 +2938,7 @@ class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
     }
 }
 class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
+    var window: UIWindow?
     var alertInfo: AlertInfo<UUID>?
 
     //MARK: - submitIndicator

@@ -27,10 +27,10 @@ enum DocumentPickerError: Error {
 }
 
 struct DocumentPicker: UIViewControllerRepresentable {
-    private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private let callback: (DocumentPickerAction) -> Void
     
-    init(userIndicatorController: UserIndicatorControllerProtocol?, callback: @escaping (DocumentPickerAction) -> Void) {
+    init(userIndicatorController: UserIndicatorControllerProtocol, callback: @escaping (DocumentPickerAction) -> Void) {
         self.userIndicatorController = userIndicatorController
         self.callback = callback
     }
@@ -72,9 +72,9 @@ struct DocumentPicker: UIViewControllerRepresentable {
             
             picker.delegate = nil
             
-            documentPicker.userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading))
+            documentPicker.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading))
             defer {
-                documentPicker.userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+                documentPicker.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
             }
             
             do {

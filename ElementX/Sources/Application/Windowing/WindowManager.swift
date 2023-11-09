@@ -47,6 +47,7 @@ class WindowManager {
         // touches through to the main window. If this changes, there's another solution here:
         // https://www.fivestars.blog/articles/swiftui-windows/
         overlayWindow.isUserInteractionEnabled = false
+        overlayWindow.isHidden = false
         
         alternateWindow = UIWindow(windowScene: windowScene)
         alternateWindow.tintColor = .compound.textActionPrimary
@@ -66,5 +67,10 @@ class WindowManager {
         alternateWindow.isHidden = false
         overlayWindow.isHidden = true
         mainWindow.isHidden = true
+        
+        // We don't know what route the app will use when returning back
+        // to the main window, so end any editing operation now to avoid
+        // e.g. the keyboard being displayed on top of a call sheet.
+        mainWindow.endEditing(true)
     }
 }

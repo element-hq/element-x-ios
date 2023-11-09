@@ -83,6 +83,7 @@ struct AppLockSetupPINScreen: View {
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
                 }
+                .accessibilityIdentifier(A11yIdentifiers.appLockSetupPINScreen.cancel)
             }
         }
     }

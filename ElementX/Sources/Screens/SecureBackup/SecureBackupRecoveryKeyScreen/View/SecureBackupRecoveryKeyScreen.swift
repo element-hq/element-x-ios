@@ -228,6 +228,6 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
         let backupController = SecureBackupControllerMock()
         backupController.underlyingRecoveryKeyState = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(recoveryKeyState).asCurrentValuePublisher()
         
-        return SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController, userIndicatorController: nil)
+        return SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController, userIndicatorController: UserIndicatorControllerMock())
     }
 }

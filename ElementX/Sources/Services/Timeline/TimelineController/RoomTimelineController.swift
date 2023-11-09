@@ -22,9 +22,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let roomProxy: RoomProxyProtocol
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
-    private let mediaProvider: MediaProviderProtocol
-    private let mediaPlayerProvider: MediaPlayerProviderProtocol
-    private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     private let appSettings: AppSettings
     private let secureBackupController: SecureBackupControllerProtocol
     private let serialDispatchQueue: DispatchQueue
@@ -46,17 +43,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     init(roomProxy: RoomProxyProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
-         mediaProvider: MediaProviderProtocol,
-         mediaPlayerProvider: MediaPlayerProviderProtocol,
-         voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          appSettings: AppSettings,
          secureBackupController: SecureBackupControllerProtocol) {
         self.roomProxy = roomProxy
         timelineProvider = roomProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
-        self.mediaProvider = mediaProvider
-        self.mediaPlayerProvider = mediaPlayerProvider
-        self.voiceMessageMediaManager = voiceMessageMediaManager
         self.appSettings = appSettings
         self.secureBackupController = secureBackupController
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
@@ -117,20 +108,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) { }
-
-    func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {
-        guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
-            return .none
-        }
-        
-        switch timelineItem {
-        case let item as LocationRoomTimelineItem:
-            guard let geoURI = item.content.geoURI else { return .none }
-            return .displayLocation(body: item.content.body, geoURI: geoURI, description: item.content.description)
-        default:
-            return await displayMediaActionIfPossible(timelineItem: timelineItem)
-        }
-    }
     
     func sendMessage(_ message: String,
                      html: String?,
@@ -182,7 +159,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
            let item = timelineItem as? EventBasedTimelineItemProtocol,
            item.hasFailedToSend {
             MXLog.info("Editing a failed echo, will cancel and resend it as a new message")
-            await cancelSend(itemID)
+            await cancelSending(itemID: itemID)
             await sendMessage(newMessage, html: html, intentionalMentions: intentionalMentions)
         } else if let eventID = itemID.eventID {
             switch await roomProxy.editMessage(newMessage,
@@ -211,15 +188,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             MXLog.error("Failed redacting message with error: \(error)")
         }
     }
-
-    func cancelSend(_ itemID: TimelineItemIdentifier) async {
-        guard let transactionID = itemID.transactionID else {
-            MXLog.error("Failed cancelling send, missing transaction ID")
-            return
-        }
-        MXLog.info("Cancelling send in \(roomID)")
-        await roomProxy.cancelSend(transactionID: transactionID)
-    }
     
     // Handle this parallel to the timeline items so we're not forced
     // to bundle the Rust side objects within them
@@ -242,87 +210,24 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         await roomProxy.retryDecryption(for: sessionID)
     }
     
-    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
-        guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
-            fatalError("TimelineItem \(itemID) not found")
+    func retrySending(itemID: TimelineItemIdentifier) async {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Failed Retry Send: missing transaction ID")
+            return
         }
         
-        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
-            fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
-        }
-        
-        if let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) {
-            return playerState
-        }
-        
-        let playerState = AudioPlayerState(id: .timelineItemIdentifier(itemID),
-                                           duration: voiceMessageRoomTimelineItem.content.duration,
-                                           waveform: voiceMessageRoomTimelineItem.content.waveform)
-        mediaPlayerProvider.register(audioPlayerState: playerState)
-        return playerState
+        MXLog.info("Retry sending in \(roomID)")
+        await roomProxy.retrySend(transactionID: transactionID)
     }
     
-    func playPauseAudio(for itemID: TimelineItemIdentifier) async {
-        MXLog.info("Toggle play/pause audio for itemID \(itemID)")
-        guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
-            fatalError("TimelineItem \(itemID) not found")
-        }
-        
-        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
-            fatalError("Invalid TimelineItem type for itemID \(itemID) (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
-        }
-        
-        guard let source = voiceMessageRoomTimelineItem.content.source else {
-            MXLog.error("Cannot start voice message playback, source is not defined for itemID \(itemID)")
+    func cancelSending(itemID: TimelineItemIdentifier) async {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Failed Cancel Send: missing transaction ID")
             return
         }
         
-        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: source), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
-            MXLog.error("Cannot play a voice message without an audio player")
-            return
-        }
-        
-        let audioPlayerState = audioPlayerState(for: itemID)
-        
-        // Ensure this one is attached
-        if !audioPlayerState.isAttached {
-            audioPlayerState.attachAudioPlayer(audioPlayer)
-        }
-
-        // Detach all other states
-        await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
-
-        guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
-            // Load content
-            do {
-                MXLog.info("Loading voice message audio content from source for itemID \(itemID)")
-                let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
-
-                // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
-                if audioPlayerState.isAttached {
-                    audioPlayer.load(mediaSource: source, using: url, autoplay: true)
-                }
-            } catch {
-                MXLog.error("Failed to load voice message: \(error)")
-                audioPlayerState.reportError(error)
-            }
-            
-            return
-        }
-        
-        if audioPlayer.state == .playing {
-            audioPlayer.pause()
-        } else {
-            audioPlayer.play()
-        }
-    }
-        
-    func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
-        guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) else {
-            return
-        }
-        await mediaPlayerProvider.detachAllStates(except: playerState)
-        await playerState.updateState(progress: progress)
+        MXLog.info("Cancelling send in \(roomID)")
+        await roomProxy.cancelSend(transactionID: transactionID)
     }
     
     // MARK: - Private
@@ -330,37 +235,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     @objc private func contentSizeCategoryDidChange() {
         // Recompute all attributed strings on content size changes -> DynamicType support
         updateTimelineItems()
-    }
-
-    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
-        var source: MediaSourceProxy?
-        var body: String
-
-        switch timelineItem {
-        case let item as ImageRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as VideoRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as FileRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as AudioRoomTimelineItem:
-            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
-            source = item.content.source
-            body = item.content.body
-        default:
-            return .none
-        }
-
-        guard let source else { return .none }
-        switch await mediaProvider.loadFileFromSource(source, body: body) {
-        case .success(let file):
-            return .displayMediaFile(file: file, title: body)
-        case .failure:
-            return .none
-        }
     }
     
     private func updateTimelineItems() {
@@ -402,17 +276,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 
                 if timelineItem is EncryptedHistoryRoomTimelineItem {
                     lastEncryptedHistoryItemIndex = newTimelineItems.endIndex
-                }
-
-                // Stops the audio player when a voice message is redacted.
-                if timelineItem is RedactedRoomTimelineItem {
-                    guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(timelineItem.id)) else {
-                        continue
-                    }
-                    Task { @MainActor in
-                        playerState.detachAudioPlayer()
-                        mediaPlayerProvider.unregister(audioPlayerState: playerState)
-                    }
                 }
 
                 newTimelineItems.append(timelineItem)

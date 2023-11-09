@@ -109,9 +109,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
-        let appLockFlowUserIndicatorController = UserIndicatorController(rootCoordinator: appLockNavigationCoordinator)
         appLockFlowCoordinator = AppLockFlowCoordinator(appLockService: appLockService,
-                                                        userIndicatorController: appLockFlowUserIndicatorController,
                                                         navigationCoordinator: appLockNavigationCoordinator)
         
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
@@ -167,7 +165,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     func toPresentable() -> AnyView {
         AnyView(
-            ServiceLocator.shared.userIndicatorController.toPresentable()
+            navigationRootCoordinator.toPresentable()
                 .environment(\.analyticsService, ServiceLocator.shared.analytics)
         )
     }
@@ -213,6 +211,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     func windowManagerDidConfigureWindows(_ windowManager: WindowManager) {
         windowManager.alternateWindow.rootViewController = UIHostingController(rootView: appLockFlowCoordinator.toPresentable())
+        ServiceLocator.shared.userIndicatorController.window = windowManager.overlayWindow
     }
     
     // MARK: - NotificationManagerDelegate
@@ -286,7 +285,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator, appSettings: AppSettings) {
-        ServiceLocator.shared.register(userIndicatorController: UserIndicatorController(rootCoordinator: navigationRootCoordinator))
+        ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         ServiceLocator.shared.register(appSettings: appSettings)
         ServiceLocator.shared.register(networkMonitor: NetworkMonitor())
         ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: appSettings.bugReportServiceBaseURL,

@@ -21,7 +21,7 @@ struct SecureBackupScreenCoordinatorParameters {
     let appSettings: AppSettings
     let secureBackupController: SecureBackupControllerProtocol
     weak var navigationStackCoordinator: NavigationStackCoordinator?
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum SecureBackupScreenCoordinatorAction { }
@@ -51,10 +51,9 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .recoveryKey:
                 let navigationStackCoordinator = NavigationStackCoordinator()
-                let userIndicatorController = UserIndicatorController(rootCoordinator: navigationStackCoordinator)
                 
                 let recoveryKeyCoordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: .init(secureBackupController: parameters.secureBackupController,
-                                                                                                        userIndicatorController: userIndicatorController))
+                                                                                                        userIndicatorController: parameters.userIndicatorController))
                 
                 recoveryKeyCoordinator.actions.sink { [weak self] action in
                     guard let self else { return }
@@ -76,13 +75,12 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
                 
                 navigationStackCoordinator.setRootCoordinator(recoveryKeyCoordinator, animated: true)
                 
-                parameters.navigationStackCoordinator?.setSheetCoordinator(userIndicatorController)
+                parameters.navigationStackCoordinator?.setSheetCoordinator(navigationStackCoordinator)
             case .keyBackup:
                 let navigationStackCoordinator = NavigationStackCoordinator()
-                let userIndicatorController = UserIndicatorController(rootCoordinator: navigationStackCoordinator)
                 
                 let keyBackupCoordinator = SecureBackupKeyBackupScreenCoordinator(parameters: .init(secureBackupController: parameters.secureBackupController,
-                                                                                                    userIndicatorController: userIndicatorController))
+                                                                                                    userIndicatorController: parameters.userIndicatorController))
                 
                 keyBackupCoordinator.actions.sink { [weak self] action in
                     switch action {
@@ -94,7 +92,7 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
                 
                 navigationStackCoordinator.setRootCoordinator(keyBackupCoordinator, animated: true)
                 
-                parameters.navigationStackCoordinator?.setSheetCoordinator(userIndicatorController)
+                parameters.navigationStackCoordinator?.setSheetCoordinator(navigationStackCoordinator)
             }
         }
         .store(in: &cancellables)
@@ -107,10 +105,10 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func showSuccessIndicator(title: String) {
-        parameters.userIndicatorController?.submitIndicator(.init(id: .init(),
-                                                                  type: .modal(progress: .none, interactiveDismissDisabled: false, allowsInteraction: false),
-                                                                  title: title,
-                                                                  iconName: "checkmark",
-                                                                  persistent: false))
+        parameters.userIndicatorController.submitIndicator(.init(id: .init(),
+                                                                 type: .modal(progress: .none, interactiveDismissDisabled: false, allowsInteraction: false),
+                                                                 title: title,
+                                                                 iconName: "checkmark",
+                                                                 persistent: false))
     }
 }

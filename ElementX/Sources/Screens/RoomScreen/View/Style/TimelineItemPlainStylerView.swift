@@ -129,9 +129,9 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             }
             
             if !timelineItem.properties.reactions.isEmpty {
-                TimelineReactionsView(itemID: timelineItem.id,
-                                      reactions: timelineItem.properties.reactions,
-                                      collapsed: context.reactionsCollapsedBinding(for: timelineItem.id))
+                TimelineReactionsView(context: context,
+                                      itemID: timelineItem.id,
+                                      reactions: timelineItem.properties.reactions)
                     // Workaround to stop the message long press stealing the touch from the reaction buttons
                     .onTapGesture { }
             }

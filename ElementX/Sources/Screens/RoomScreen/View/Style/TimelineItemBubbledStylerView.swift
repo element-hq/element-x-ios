@@ -103,10 +103,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .timelineAccessibility(timelineItem)
             
             if !timelineItem.properties.reactions.isEmpty {
-                TimelineReactionsView(itemID: timelineItem.id,
+                TimelineReactionsView(context: context,
+                                      itemID: timelineItem.id,
                                       reactions: timelineItem.properties.reactions,
-                                      isLayoutRTL: timelineItem.isOutgoing,
-                                      collapsed: context.reactionsCollapsedBinding(for: timelineItem.id))
+                                      isLayoutRTL: timelineItem.isOutgoing)
                     // Workaround to stop the message long press stealing the touch from the reaction buttons
                     .onTapGesture { }
             }

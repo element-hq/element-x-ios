@@ -21,7 +21,7 @@ struct UserDetailsEditScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     weak var navigationStackCoordinator: NavigationStackCoordinator?
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum UserDetailsEditScreenCoordinatorAction { }
@@ -67,9 +67,8 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
     
     private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
         let stackCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: stackCoordinator)
         
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: userIndicatorController, source: source) { [weak self] action in
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:
@@ -81,6 +80,6 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
         }
         
         stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
-        parameters.navigationStackCoordinator?.setSheetCoordinator(userIndicatorController)
+        parameters.navigationStackCoordinator?.setSheetCoordinator(stackCoordinator)
     }
 }

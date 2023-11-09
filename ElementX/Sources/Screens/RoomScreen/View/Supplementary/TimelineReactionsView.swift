@@ -16,17 +16,35 @@
 
 import SwiftUI
 
+@MainActor
 struct TimelineReactionsView: View {
     private static let horizontalSpacing: CGFloat = 4
     private static let verticalSpacing: CGFloat = 4
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.layoutDirection) private var layoutDirection: LayoutDirection
 
+    let context: RoomScreenViewModel.Context
     let itemID: TimelineItemIdentifier
     let reactions: [AggregatedReaction]
-    var isLayoutRTL = false
-    @Binding var collapsed: Bool
+    let isLayoutRTL: Bool
+    
+    private var collapsed: Binding<Bool>
+    
+    init(context: RoomScreenViewModel.Context,
+         itemID: TimelineItemIdentifier,
+         reactions: [AggregatedReaction],
+         isLayoutRTL: Bool = false) {
+        self.context = context
+        self.itemID = itemID
+        self.reactions = reactions
+        self.isLayoutRTL = isLayoutRTL
+        
+        collapsed = Binding(get: {
+            context.reactionsCollapsed[itemID] ?? true
+        }, set: {
+            context.reactionsCollapsed[itemID] = $0
+        })
+    }
     
     var reactionsLayoutDirection: LayoutDirection {
         guard isLayoutRTL else { return layoutDirection }
@@ -48,9 +66,9 @@ struct TimelineReactionsView: View {
             
             if isCollapsible {
                 Button {
-                    collapsed.toggle()
+                    collapsed.wrappedValue.toggle()
                 } label: {
-                    TimelineCollapseButtonLabel(collapsed: collapsed)
+                    TimelineCollapseButtonLabel(collapsed: collapsed.wrappedValue)
                         .transaction { $0.animation = nil }
                 }
                 .reactionLayoutItem(.expandCollapse)
@@ -79,7 +97,7 @@ struct TimelineReactionsView: View {
         if isCollapsible {
             return AnyLayout(CollapsibleReactionLayout(itemSpacing: 4,
                                                        rowSpacing: 4,
-                                                       collapsed: collapsed,
+                                                       collapsed: collapsed.wrappedValue,
                                                        rowsBeforeCollapsible: 2))
         }
         
@@ -188,21 +206,25 @@ struct TimelineReactionAddMoreButtonLabel: View {
 }
 
 struct TimelineReactionViewPreviewsContainer: View {
-    @State private var collapseState1 = false
-    @State private var collapseState2 = true
-
     var body: some View {
         VStack {
-            TimelineReactionsView(itemID: .init(timelineID: "1"),
+            TimelineReactionsView(context: RoomScreenViewModel.mock.context,
+                                  itemID: .init(timelineID: "1"),
                                   reactions: [AggregatedReaction.mockReactionWithLongText,
-                                              AggregatedReaction.mockReactionWithLongTextRTL],
-                                  collapsed: .constant(true))
+                                              AggregatedReaction.mockReactionWithLongTextRTL])
             Divider()
-            TimelineReactionsView(itemID: .init(timelineID: "2"), reactions: Array(AggregatedReaction.mockReactions.prefix(3)), collapsed: .constant(true))
+            TimelineReactionsView(context: RoomScreenViewModel.mock.context,
+                                  itemID: .init(timelineID: "2"),
+                                  reactions: Array(AggregatedReaction.mockReactions.prefix(3)))
             Divider()
-            TimelineReactionsView(itemID: .init(timelineID: "3"), reactions: AggregatedReaction.mockReactions, collapsed: $collapseState1)
+            TimelineReactionsView(context: RoomScreenViewModel.mock.context,
+                                  itemID: .init(timelineID: "3"),
+                                  reactions: AggregatedReaction.mockReactions)
             Divider()
-            TimelineReactionsView(itemID: .init(timelineID: "4"), reactions: AggregatedReaction.mockReactions, isLayoutRTL: true, collapsed: $collapseState2)
+            TimelineReactionsView(context: RoomScreenViewModel.mock.context,
+                                  itemID: .init(timelineID: "4"),
+                                  reactions: AggregatedReaction.mockReactions,
+                                  isLayoutRTL: true)
         }
         .background(Color.red)
         .frame(maxWidth: 250, alignment: .leading)

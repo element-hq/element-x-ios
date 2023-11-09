@@ -23,7 +23,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private let userSession: UserSessionProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
-    private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     
     private let actionsSubject: PassthroughSubject<StartChatScreenViewModelAction, Never> = .init()
@@ -35,7 +35,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     init(userSession: UserSessionProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol?,
+         userIndicatorController: UserIndicatorControllerProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
         self.appSettings = appSettings
@@ -162,13 +162,13 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private static let loadingIndicatorIdentifier = "StartChatLoading"
     
     private func showLoadingIndicator() {
-        userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                               title: L10n.commonLoading,
-                                                               persistent: true))
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
     }
     
     private func hideLoadingIndicator() {
-        userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

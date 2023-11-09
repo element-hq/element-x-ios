@@ -112,11 +112,11 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     
     private func presentInviteUsersScreen() {
         let inviteUsersStackCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: inviteUsersStackCoordinator)
         let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: .init(selectedUsers),
                                                                       roomType: .room(roomProxy: parameters.roomProxy),
                                                                       mediaProvider: parameters.mediaProvider,
-                                                                      userDiscoveryService: parameters.userDiscoveryService, userIndicatorController: userIndicatorController)
+                                                                      userDiscoveryService: parameters.userDiscoveryService,
+                                                                      userIndicatorController: parameters.userIndicatorController)
         
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         inviteUsersStackCoordinator.setRootCoordinator(coordinator)
@@ -137,20 +137,19 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator?.setSheetCoordinator(userIndicatorController) { [weak self] in
+        navigationStackCoordinator?.setSheetCoordinator(inviteUsersStackCoordinator) { [weak self] in
             self?.selectedUsers.value = []
         }
     }
     
     private func presentRoomDetailsEditScreen(accountOwner: RoomMemberProxyProtocol) {
         let navigationStackCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationStackCoordinator)
         
         let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner,
                                                                                    mediaProvider: parameters.mediaProvider,
                                                                                    navigationStackCoordinator: navigationStackCoordinator,
                                                                                    roomProxy: parameters.roomProxy,
-                                                                                   userIndicatorController: userIndicatorController)
+                                                                                   userIndicatorController: parameters.userIndicatorController)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
         roomDetailsEditCoordinator.actions.sink { [weak self] action in
@@ -163,7 +162,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         
         navigationStackCoordinator.setRootCoordinator(roomDetailsEditCoordinator)
         
-        self.navigationStackCoordinator?.setSheetCoordinator(userIndicatorController)
+        self.navigationStackCoordinator?.setSheetCoordinator(navigationStackCoordinator)
     }
     
     private func toggleUser(_ user: UserProfileProxy) {

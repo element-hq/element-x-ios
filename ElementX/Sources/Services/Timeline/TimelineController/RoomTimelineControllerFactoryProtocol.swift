@@ -18,11 +18,7 @@ import Foundation
 
 @MainActor
 protocol RoomTimelineControllerFactoryProtocol {
-    // swiftlint:disable:next function_parameter_count
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                     mediaProvider: MediaProviderProtocol,
-                                     mediaPlayerProvider: MediaPlayerProviderProtocol,
-                                     voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
                                      secureBackupController: SecureBackupControllerProtocol) -> RoomTimelineControllerProtocol
 }

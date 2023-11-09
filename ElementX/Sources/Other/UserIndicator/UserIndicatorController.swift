@@ -16,9 +16,7 @@
 
 import SwiftUI
 
-class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol, CustomStringConvertible {
-    private let rootCoordinator: CoordinatorProtocol
-    
+class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol {
     private var dismissalTimer: Timer?
     private var displayTimes = [String: Date]()
     private var delayedIndicators = Set<String>()
@@ -42,14 +40,12 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     
     @Published var alertInfo: AlertInfo<UUID>?
     
-    init(rootCoordinator: CoordinatorProtocol) {
-        self.rootCoordinator = rootCoordinator
-    }
-        
-    func toPresentable() -> AnyView {
-        AnyView(
-            UserIndicatorPresenter(userIndicatorController: self, rootView: rootCoordinator.toPresentable())
-        )
+    var window: UIWindow? {
+        didSet {
+            let hostingController = UIHostingController(rootView: UserIndicatorPresenter(userIndicatorController: self))
+            hostingController.view.backgroundColor = .clear
+            window?.rootViewController = hostingController
+        }
     }
     
     func submitIndicator(_ indicator: UserIndicator, delay: Duration?) {
@@ -95,12 +91,6 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
         }
     }
     
-    // MARK: - CustomStringConvertible
-    
-    var description: String {
-        "UserIndicatorController(\(String(describing: rootCoordinator)))"
-    }
-
     // MARK: - Private
 
     private func enqueue(indicator: UserIndicator) {

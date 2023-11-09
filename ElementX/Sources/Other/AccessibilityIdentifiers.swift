@@ -16,8 +16,12 @@
 
 import Foundation
 
-struct A11yIdentifiers {
+enum A11yIdentifiers {
+    static let alertInfo = AlertInfo()
     static let analyticsPromptScreen = AnalyticsPromptScreen()
+    static let appLockSetupBiometricsScreen = AppLockSetupBiometricsScreen()
+    static let appLockSetupPINScreen = AppLockSetupPINScreen()
+    static let appLockSetupSettingsScreen = AppLockSetupSettingsScreen()
     static let bugReportScreen = BugReportScreen()
     static let changeServerScreen = ChangeServer()
     static let homeScreen = HomeScreen()
@@ -41,6 +45,25 @@ struct A11yIdentifiers {
     static let notificationSettingsScreen = NotificationSettingsScreen()
     static let notificationSettingsEditScreen = NotificationSettingsEditScreen()
     static let createPollScreen = CreatePollScreen()
+    
+    struct AlertInfo {
+        let primaryButton = "alert_info-primary_button"
+        let secondaryButton = "alert_info-secondary_button"
+    }
+    
+    struct AppLockSetupBiometricsScreen {
+        let allow = "app_lock_setup_biometrics-allow"
+    }
+    
+    struct AppLockSetupPINScreen {
+        let cancel = "app_lock_setup_pin-cancel"
+    }
+    
+    struct AppLockSetupSettingsScreen {
+        let changePIN = "app_lock_setup_settings-change_pin"
+        let removePIN = "app_lock_setup_settings-remove_pin"
+        let removePINAlertYes = "app_lock_setup_settings-remove_pin_alert_yes"
+    }
 
     struct AnalyticsPromptScreen {
         let title = "analytics_prompt-title"

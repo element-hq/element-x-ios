@@ -29,7 +29,6 @@ enum AppLockFlowCoordinatorAction: Equatable {
 /// Coordinates the display of any screens shown when the app is locked.
 class AppLockFlowCoordinator: CoordinatorProtocol {
     let appLockService: AppLockServiceProtocol
-    let userIndicatorController: UserIndicatorController
     let navigationCoordinator: NavigationRootCoordinator
     
     /// A task used to await biometric unlock before showing the PIN screen.
@@ -41,18 +40,17 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(appLockService: AppLockServiceProtocol, userIndicatorController: UserIndicatorController, navigationCoordinator: NavigationRootCoordinator) {
+    init(appLockService: AppLockServiceProtocol, navigationCoordinator: NavigationRootCoordinator) {
         self.appLockService = appLockService
-        self.userIndicatorController = userIndicatorController
         self.navigationCoordinator = navigationCoordinator
         
         // Set the initial background state.
         showPlaceholder()
         
         appLockService.disabledPublisher
-            .sink { [weak self] _ in
+            .sink {
                 // When the service is disabled via a force logout, we need to remove the activity indicator.
-                self?.userIndicatorController.retractAllIndicators()
+                ServiceLocator.shared.userIndicatorController.retractAllIndicators()
             }
             .store(in: &cancellables)
         
@@ -70,7 +68,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(userIndicatorController.toPresentable())
+        AnyView(navigationCoordinator.toPresentable())
     }
     
     // MARK: - App unlock
@@ -131,7 +129,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             case .appUnlocked:
                 actionsSubject.send(.unlockApp)
             case .forceLogout:
-                userIndicatorController.submitIndicator(UserIndicator(type: .modal, title: L10n.commonSigningOut, persistent: true))
+                ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(type: .modal, title: L10n.commonSigningOut, persistent: true))
                 actionsSubject.send(.forceLogout)
             }
         }
