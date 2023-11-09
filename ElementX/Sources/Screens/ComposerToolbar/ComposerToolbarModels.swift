@@ -18,6 +18,18 @@ import SwiftUI
 import UIKit
 import WysiwygComposer
 
+enum ComposerToolbarVoiceMessageAction {
+    case startRecording
+    case stopRecording
+    case cancelRecording
+    case deleteRecording
+    case startPlayback
+    case pausePlayback
+    case scrubPlayback(scrubbing: Bool)
+    case seekPlayback(progress: Double)
+    case send
+}
+
 enum ComposerToolbarViewModelAction {
     case sendMessage(plain: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions)
     case displayCameraPicker
@@ -31,15 +43,7 @@ enum ComposerToolbarViewModelAction {
     case composerModeChanged(mode: RoomScreenComposerMode)
     case composerFocusedChanged(isFocused: Bool)
     
-    case startVoiceMessageRecording
-    case stopVoiceMessageRecording
-    case cancelVoiceMessageRecording
-    case deleteVoiceMessageRecording
-    case startVoiceMessagePlayback
-    case pauseVoiceMessagePlayback
-    case scrubVoiceMessagePlayback(scrubbing: Bool)
-    case seekVoiceMessagePlayback(progress: Double)
-    case sendVoiceMessage
+    case voiceMessage(ComposerToolbarVoiceMessageAction)
 }
 
 enum ComposerToolbarViewAction {
@@ -56,14 +60,8 @@ enum ComposerToolbarViewAction {
     case enableTextFormatting
     case composerAction(action: ComposerAction)
     case selectedSuggestion(_ suggestion: SuggestionItem)
-    case startVoiceMessageRecording
-    case stopVoiceMessageRecording
-    case cancelVoiceMessageRecording
-    case deleteVoiceMessageRecording
-    case startVoiceMessagePlayback
-    case pauseVoiceMessagePlayback
-    case scrubVoiceMessagePlayback(scrubbing: Bool)
-    case seekVoiceMessagePlayback(progress: Double)
+    
+    case voiceMessage(ComposerToolbarVoiceMessageAction)
 }
 
 struct ComposerToolbarViewState: BindableState {

@@ -66,7 +66,7 @@ struct PollRoomTimelineView: View {
         ForEach(poll.options, id: \.id) { option in
             Button {
                 guard let eventID, !option.isSelected else { return }
-                context.send(viewAction: .selectedPollOption(pollStartID: eventID, optionID: option.id))
+                context.send(viewAction: .poll(.selectOption(pollStartID: eventID, optionID: option.id)))
                 feedbackGenerator.impactOccurred()
             } label: {
                 PollOptionView(pollOption: option,
@@ -93,7 +93,7 @@ struct PollRoomTimelineView: View {
     private var toolbarView: some View {
         if !poll.hasEnded, poll.createdByAccountOwner, let eventID {
             Button {
-                context.send(viewAction: .endPoll(pollStartID: eventID))
+                context.send(viewAction: .poll(.end(pollStartID: eventID)))
             } label: {
                 Text(L10n.actionEndPoll)
                     .lineLimit(2, reservesSpace: false)
