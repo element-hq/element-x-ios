@@ -22,6 +22,10 @@ class VoiceMessageCache: VoiceMessageCacheProtocol {
         FileManager.default.temporaryDirectory.appendingPathComponent("media/voice-message")
     }
     
+    var urlForRecording: URL {
+        temporaryFilesFolderURL.appendingPathComponent("voice-message-recording").appendingPathExtension(preferredFileExtension)
+    }
+    
     func fileURL(for mediaSource: MediaSourceProxy) -> URL? {
         let url = cacheURL(for: mediaSource)
         return FileManager.default.fileExists(atPath: url.path()) ? url : nil
@@ -49,10 +53,6 @@ class VoiceMessageCache: VoiceMessageCacheProtocol {
                 MXLog.error("Failed clearing cached disk files. \(error)")
             }
         }
-    }
-    
-    func urlForRecording() -> URL {
-        temporaryFilesFolderURL.appendingPathComponent("voice-message-recording").appendingPathExtension(preferredFileExtension)
     }
     
     // MARK: - Private

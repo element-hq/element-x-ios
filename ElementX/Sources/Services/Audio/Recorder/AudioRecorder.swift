@@ -65,13 +65,13 @@ class AudioRecorder: AudioRecorderProtocol {
         }
     }
     
-    func record(with recordID: AudioRecordingIdentifier) async {
+    func record(audioFileUrl: URL) async {
         stopped = false
         guard await requestRecordPermission() else {
             setInternalState(.error(.recordPermissionNotGranted))
             return
         }
-        let result = await startRecording(with: recordID)
+        let result = await startRecording(audioFileUrl: audioFileUrl)
         switch result {
         case .success:
             setInternalState(.recording)
@@ -133,32 +133,25 @@ class AudioRecorder: AudioRecorderProtocol {
         removeObservers()
     }
     
-    private func startRecording(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
+    private func startRecording(audioFileUrl: URL) async -> Result<Void, AudioRecorderError> {
         await withCheckedContinuation { continuation in
-            startRecording(with: recordID) { result in
+            startRecording(audioFileUrl: audioFileUrl) { result in
                 continuation.resume(returning: result)
             }
         }
     }
     
-    private func createAudioFile(with recordID: AudioRecordingIdentifier, sampleRate: Int) throws -> AVAudioFile {
+    private func createAudioFile(at recordingUrl: URL, sampleRate: Int) throws -> AVAudioFile {
         let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
                         AVSampleRateKey: sampleRate,
                         AVNumberOfChannelsKey: 1,
                         AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
         MXLog.info("creating audio file with format: \(settings)")
-        let outputURL: URL
-        switch recordID {
-        case .uuid(let uuid):
-            outputURL = URL.temporaryDirectory.appendingPathComponent("voice-message-\(uuid.uuidString).m4a")
-        case .url(let url):
-            outputURL = url
-        }
-        try? FileManager.default.removeItem(at: outputURL)
-        return try AVAudioFile(forWriting: outputURL, settings: settings)
+        try? FileManager.default.removeItem(at: recordingUrl)
+        return try AVAudioFile(forWriting: recordingUrl, settings: settings)
     }
     
-    private func startRecording(with recordID: AudioRecordingIdentifier, completion: @escaping (Result<Void, AudioRecorderError>) -> Void) {
+    private func startRecording(audioFileUrl: URL, completion: @escaping (Result<Void, AudioRecorderError>) -> Void) {
         dispatchQueue.async { [weak self] in
             guard let self, !self.stopped else {
                 completion(.failure(.recordingCancelled))
@@ -186,9 +179,9 @@ class AudioRecorder: AudioRecorderProtocol {
             currentTime = 0
             let audioFile: AVAudioFile
             do {
-                audioFile = try createAudioFile(with: recordID, sampleRate: Int(sampleRate))
+                audioFile = try createAudioFile(at: audioFileUrl, sampleRate: Int(sampleRate))
                 self.audioFile = audioFile
-                audioFileUrl = audioFile.url
+                self.audioFileUrl = audioFile.url
             } catch {
                 MXLog.error("failed to create an audio file. \(error)")
                 completion(.failure(.audioFileCreationFailure))

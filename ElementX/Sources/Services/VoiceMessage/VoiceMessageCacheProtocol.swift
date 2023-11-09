@@ -22,14 +22,13 @@ enum VoiceMessageCacheError: Error {
 }
 
 protocol VoiceMessageCacheProtocol {
+    /// URL to use for recording
+    var urlForRecording: URL { get }
+    
     /// Returns the URL of the cached audio file for a given media source
     /// - Parameter mediaSource: the media source
     /// - Returns: the URL of the cached audio file or nil if the file doesn't exist
     func fileURL(for mediaSource: MediaSourceProxy) -> URL?
-    
-    /// Returns the URL to use for recording
-    /// - Returns: an URL
-    func urlForRecording() -> URL
     
     /// Adds a file in the cache
     /// - Parameters:

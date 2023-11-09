@@ -70,16 +70,13 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     // MARK: - Recording
     
     func startRecording() async {
-        MXLog.info("Start recording.")
         await stopPlayback()
         recordingCancelled = false
         
-        let recordingUrl = voiceMessageCache.urlForRecording()
-        await audioRecorder.record(with: .url(recordingUrl))
+        await audioRecorder.record(audioFileUrl: voiceMessageCache.urlForRecording)
     }
     
     func stopRecording() async {
-        MXLog.info("Stop recording.")
         recordingCancelled = false
         await audioRecorder.stopRecording()
     }
@@ -102,7 +99,6 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     // MARK: - Preview
     
     func startPlayback() async -> Result<Void, VoiceMessageRecorderError> {
-        MXLog.info("Start playback.")
         guard let previewAudioPlayerState, let url = audioRecorder.audioFileUrl else {
             return .failure(.previewNotAvailable)
         }
@@ -126,7 +122,6 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     func pausePlayback() {
-        MXLog.info("Pause playback.")
         previewAudioPlayer?.pause()
     }
     
@@ -134,7 +129,6 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         guard let previewAudioPlayerState else {
             return
         }
-        MXLog.info("Stop playback.")
         await previewAudioPlayerState.detachAudioPlayer()
         previewAudioPlayer?.stop()
     }

@@ -539,19 +539,19 @@ class AudioRecorderMock: AudioRecorderProtocol {
 
     //MARK: - record
 
-    var recordWithCallsCount = 0
-    var recordWithCalled: Bool {
-        return recordWithCallsCount > 0
+    var recordAudioFileUrlCallsCount = 0
+    var recordAudioFileUrlCalled: Bool {
+        return recordAudioFileUrlCallsCount > 0
     }
-    var recordWithReceivedRecordID: AudioRecordingIdentifier?
-    var recordWithReceivedInvocations: [AudioRecordingIdentifier] = []
-    var recordWithClosure: ((AudioRecordingIdentifier) async -> Void)?
+    var recordAudioFileUrlReceivedAudioFileUrl: URL?
+    var recordAudioFileUrlReceivedInvocations: [URL] = []
+    var recordAudioFileUrlClosure: ((URL) async -> Void)?
 
-    func record(with recordID: AudioRecordingIdentifier) async {
-        recordWithCallsCount += 1
-        recordWithReceivedRecordID = recordID
-        recordWithReceivedInvocations.append(recordID)
-        await recordWithClosure?(recordID)
+    func record(audioFileUrl: URL) async {
+        recordAudioFileUrlCallsCount += 1
+        recordAudioFileUrlReceivedAudioFileUrl = audioFileUrl
+        recordAudioFileUrlReceivedInvocations.append(audioFileUrl)
+        await recordAudioFileUrlClosure?(audioFileUrl)
     }
     //MARK: - stopRecording
 
@@ -3143,6 +3143,11 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol {
     }
 }
 class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
+    var urlForRecording: URL {
+        get { return underlyingUrlForRecording }
+        set(value) { underlyingUrlForRecording = value }
+    }
+    var underlyingUrlForRecording: URL!
 
     //MARK: - fileURL
 
@@ -3163,23 +3168,6 @@ class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
             return fileURLForClosure(mediaSource)
         } else {
             return fileURLForReturnValue
-        }
-    }
-    //MARK: - urlForRecording
-
-    var urlForRecordingCallsCount = 0
-    var urlForRecordingCalled: Bool {
-        return urlForRecordingCallsCount > 0
-    }
-    var urlForRecordingReturnValue: URL!
-    var urlForRecordingClosure: (() -> URL)?
-
-    func urlForRecording() -> URL {
-        urlForRecordingCallsCount += 1
-        if let urlForRecordingClosure = urlForRecordingClosure {
-            return urlForRecordingClosure()
-        } else {
-            return urlForRecordingReturnValue
         }
     }
     //MARK: - cache
