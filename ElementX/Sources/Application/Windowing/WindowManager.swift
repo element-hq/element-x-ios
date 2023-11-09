@@ -66,5 +66,10 @@ class WindowManager {
         alternateWindow.isHidden = false
         overlayWindow.isHidden = true
         mainWindow.isHidden = true
+        
+        // We don't know what route the app will use when returning back
+        // to the main window, so end any editing operation now to avoid
+        // e.g. the keyboard being displayed on top of a call sheet.
+        mainWindow.endEditing(true)
     }
 }
