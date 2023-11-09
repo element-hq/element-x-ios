@@ -48,10 +48,8 @@ class UITestsNotificationCenter: NotificationCenter {
     /// Handles any notification signals, and drops anything else received.
     private func handleSignal(_ signal: UITestsSignal) async throws {
         switch signal {
-        case .applicationDidEnterBackgroundNotification:
-            post(name: UIApplication.didEnterBackgroundNotification, object: nil)
-        case .applicationWillEnterForegroundNotification:
-            post(name: UIApplication.willEnterForegroundNotification, object: nil)
+        case .notification(let name):
+            post(name: name, object: nil)
         default:
             break
         }

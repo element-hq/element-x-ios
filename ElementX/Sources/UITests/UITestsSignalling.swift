@@ -18,15 +18,35 @@ import Combine
 import KZFileWatchers
 import SwiftUI
 
-enum UITestsSignal: String {
+enum UITestsSignal: Codable, Equatable, RawRepresentable {
     /// An internal signal used to indicate that one side of the connection is ready.
     case ready
+    /// The operation has completed successfully.
+    case success
+    
     /// Ask the app to back paginate.
     case paginate
     /// Ask the app to simulate an incoming message.
     case incomingMessage
-    /// The operation has completed successfully.
-    case success
+    
+    /// Posts a notification.
+    case notification(name: Notification.Name)
+    
+    var rawValue: String {
+        guard let data = try? JSONEncoder().encode(self),
+              let string = String(data: data, encoding: .utf8) else {
+            return "unknown"
+        }
+        return string
+    }
+    
+    init?(rawValue: String) {
+        guard let data = rawValue.data(using: .utf8),
+              let value = try? JSONDecoder().decode(Self.self, from: data) else {
+            return nil
+        }
+        self = value
+    }
 }
 
 enum UITestsSignalError: String, LocalizedError {

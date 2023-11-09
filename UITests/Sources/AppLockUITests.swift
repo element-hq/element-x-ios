@@ -37,13 +37,13 @@ class AppLockUITests: XCTestCase {
         try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
         
         // When backgrounding the app.
-        try client.send(.applicationDidEnterBackgroundNotification)
+        try client.send(.notification(name: UIApplication.didEnterBackgroundNotification))
         
         // Then the placeholder screen should obscure the content.
         try await app.assertScreenshot(.appLockFlow, step: Step.placeholder)
         
         // When foregrounding the app.
-        try client.send(.applicationWillEnterForegroundNotification)
+        try client.send(.notification(name: UIApplication.willEnterForegroundNotification))
         
         // Then the Lock Screen should be shown to enter a PIN.
         try await app.assertScreenshot(.appLockFlow, step: Step.lockScreen)
@@ -65,13 +65,13 @@ class AppLockUITests: XCTestCase {
         try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
         
         // When backgrounding the app.
-        try client.send(.applicationDidEnterBackgroundNotification)
+        try client.send(.notification(name: UIApplication.didEnterBackgroundNotification))
         
         // Then the app should remain unlocked.
         try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
         
         // When foregrounding the app.
-        try client.send(.applicationWillEnterForegroundNotification)
+        try client.send(.notification(name: UIApplication.willEnterForegroundNotification))
         
         // Then the app should still remain unlocked.
         try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
