@@ -265,7 +265,9 @@ struct ComposerToolbar: View {
             context.send(viewAction: .voiceMessage(.deleteRecording))
         } label: {
             CompoundIcon(\.delete)
-                .padding(10)
+                .scaledToFit()
+                .frame(width: deleteRecordingButtonSize, height: deleteRecordingButtonSize)
+                .padding(7)
         }
         .buttonStyle(.compound(.plain))
         .accessibilityLabel(L10n.a11yDelete)

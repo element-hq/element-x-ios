@@ -42,29 +42,34 @@ struct VoiceMessageRecordingButton: View {
         } label: {
             switch mode {
             case .idle:
-                CompoundIcon(\.micOnOutline)
-                    .scaledToFit()
-                    .padding(10)
+                CompoundIcon(\.micOnOutline, size: .medium, relativeTo: .title)
+                    .foregroundColor(.compound.iconSecondary)
+                    .frame(width: recordingImageSize, height: recordingImageSize)
+                    .padding(14)
             case .recording:
-                recordingImage
+                Image(systemName: "stop.fill")
+                    .resizable()
+                    .frame(width: recordingImageSize, height: recordingImageSize)
+                    .foregroundColor(.compound.iconOnSolidPrimary)
+                    .font(.compound.bodyLG)
+                    .padding(10)
+                    .background {
+                        Circle()
+                            .foregroundColor(.compound.iconPrimary)
+                    }
                     .padding(4)
+
             }
         }
-        .buttonStyle(.compound(.plain))
+        .buttonStyle(VoiceMessageRecordingButtonStyle())
         .accessibilityLabel(L10n.a11yVoiceMessageRecord)
     }
-    
-    private var recordingImage: some View {
-        Image(systemName: "stop.fill")
-            .resizable()
-            .frame(width: recordingImageSize, height: recordingImageSize)
-            .foregroundColor(.compound.iconOnSolidPrimary)
-            .font(.compound.bodyLG)
-            .padding(10)
-            .background {
-                Circle()
-                    .foregroundColor(.compound.iconPrimary)
-            }
+}
+
+private struct VoiceMessageRecordingButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.6 : 1)
     }
 }
 
