@@ -49,7 +49,8 @@ class AudioRecorderTests: XCTestCase {
                 return false
             }
         }
-        await audioRecorder.record(with: .uuid(UUID()))
+        let url = URL.temporaryDirectory.appendingPathComponent("test-voice-message").appendingPathExtension("m4a")
+        await audioRecorder.record(audioFileUrl: url)
         try await deferred.fulfill()
         XCTAssertFalse(audioRecorder.isRecording)
     }

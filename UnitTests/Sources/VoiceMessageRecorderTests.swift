@@ -57,7 +57,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
         audioConverter = AudioConverterMock()
         voiceMessageCache = VoiceMessageCacheMock()
-        voiceMessageCache.urlForRecordingReturnValue = FileManager.default.temporaryDirectory.appendingPathComponent("test-voice-message").appendingPathExtension("m4a")
+        voiceMessageCache.urlForRecording = FileManager.default.temporaryDirectory.appendingPathComponent("test-voice-message").appendingPathExtension("m4a")
         
         voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: audioRecorder,
                                                     mediaPlayerProvider: mediaPlayerProvider,
@@ -93,7 +93,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     
     func testStartRecording() async throws {
         _ = await voiceMessageRecorder.startRecording()
-        XCTAssert(audioRecorder.recordWithCalled)
+        XCTAssert(audioRecorder.recordAudioFileUrlCalled)
     }
     
     func testStopRecording() async throws {
