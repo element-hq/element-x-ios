@@ -99,8 +99,19 @@ struct NotificationContentBuilder {
     private func processRoomMessage(notificationItem: NotificationItemProxyProtocol, messageType: MessageType, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         var notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
         
-        let senderDisplayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        notification.body = (notificationItem.hasMention ? "\(senderDisplayName) mentioned you\n" : "") + String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: senderDisplayName, prefixWithSenderName: false).characters)
+        let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
+        let message = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName, prefixWithSenderName: false).characters)
+        let body: String
+        if notificationItem.hasMention {
+            if let senderDisplayName = notificationItem.senderDisplayName {
+                body = L10n.notificationMentionedYouBody(senderDisplayName, message)
+            } else {
+                body = L10n.notificationMentionedYouFallbackBody(message)
+            }
+        } else {
+            body = message
+        }
+        notification.body = body
         
         switch messageType {
         case .image(content: let content):
