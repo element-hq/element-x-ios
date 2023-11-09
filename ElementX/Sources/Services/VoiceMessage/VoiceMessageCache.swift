@@ -23,7 +23,9 @@ class VoiceMessageCache: VoiceMessageCacheProtocol {
     }
     
     var urlForRecording: URL {
-        temporaryFilesFolderURL.appendingPathComponent("voice-message-recording").appendingPathExtension(preferredFileExtension)
+        // Make sure the directory exist
+        setupTemporaryFilesFolder()
+        return temporaryFilesFolderURL.appendingPathComponent("voice-message-recording").appendingPathExtension(preferredFileExtension)
     }
     
     func fileURL(for mediaSource: MediaSourceProxy) -> URL? {
