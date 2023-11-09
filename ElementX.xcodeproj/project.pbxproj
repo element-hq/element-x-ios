@@ -55,6 +55,7 @@
 		0C797CD650DFD2876BEC5173 /* CollapsibleReactionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C6DDBB5D12F6EF6A3D6E1 /* CollapsibleReactionLayout.swift */; };
 		0C88044649BAEE6C49BFC43A /* SecureBackupControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C21A715237F2B6D6E80998C /* SecureBackupControllerProtocol.swift */; };
 		0C932A5158C1D0604DFC5750 /* ComposerToolbarViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA29952595B804DA221A0C1D /* ComposerToolbarViewModelTests.swift */; };
+		0D125D5AC4AA6BFB714CEF02 /* CommonConstantSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D11774B81B13179ED1149 /* CommonConstantSettings.swift */; };
 		0DC815CA24E1BD7F408F37D3 /* CollapsibleTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C4EA55DA62F9D0F984A2AE /* CollapsibleTimelineItem.swift */; };
 		0DCDF49AB95F75BFC8B1879C /* SwipeToReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E45C3DC740D3AB9A47FD32 /* SwipeToReplyView.swift */; };
 		0E08BB72B2258652CF501A8B /* Prefire in Frameworks */ = {isa = PBXBuildFile; productRef = 9B68DE8678BF67D4612BCC16 /* Prefire */; };
@@ -717,6 +718,7 @@
 		B93FA0DA1504B301CAEE141B /* NotificationSettingsProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5D66F158A6662F953733E /* NotificationSettingsProxy.swift */; };
 		B94368839BDB69172E28E245 /* MXLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111B698739E3410E2CDB7144 /* MXLog.swift */; };
 		B98A20A093A4FB785BFCCA53 /* BugReportScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FBD9C2B9A5479526920399 /* BugReportScreenCoordinator.swift */; };
+		B99C21F7793E9B6B39C0C58E /* CommonConstantSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D11774B81B13179ED1149 /* CommonConstantSettings.swift */; };
 		B9A8C34A00D03094C0CF56F3 /* MediaUploadPreviewScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FABD73FD8086EFAB699F42 /* MediaUploadPreviewScreenViewModelTests.swift */; };
 		B9CB30FED3E29D2036EA3FCC /* DeveloperOptionsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C4E7B46099462F12000C91 /* DeveloperOptionsScreenViewModelProtocol.swift */; };
 		BA0D3DDCEDD97502DAC4B6E9 /* ReportContentScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4132F882A984ED971338EE9D /* ReportContentScreenUITests.swift */; };
@@ -1333,6 +1335,7 @@
 		5445FCE0CE15E634FDC1A2E2 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		5484457C81B325660901B161 /* AppLockSetupSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockSetupSettingsScreen.swift; sourceTree = "<group>"; };
 		54C4E7B46099462F12000C91 /* DeveloperOptionsScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		558D11774B81B13179ED1149 /* CommonConstantSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonConstantSettings.swift; sourceTree = "<group>"; };
 		55AEEF8142DF1B59DB40FB93 /* TimelineItemSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemSender.swift; sourceTree = "<group>"; };
 		55F30E764BED111C81739844 /* SoftLogoutUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftLogoutUITests.swift; sourceTree = "<group>"; };
 		5644919DB2022397D9D5825A /* MockSoftLogoutScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSoftLogoutScreenState.swift; sourceTree = "<group>"; };
@@ -3929,6 +3932,7 @@
 				C75EF87651B00A176AB08E97 /* AppDelegate.swift */,
 				CA89A2DD51B6BBE1DA55E263 /* Application.swift */,
 				AC3F82523D6F48B926D6AF68 /* AppSettings.swift */,
+				558D11774B81B13179ED1149 /* CommonConstantSettings.swift */,
 				B251F5B4511D1CA0BA8361FE /* CoordinatorProtocol.swift */,
 				7B9FCA1CFD07B8CF9BD21266 /* FlowCoordinatorProtocol.swift */,
 				57F95CADD0A5DBD76B990FCB /* ServiceLocator.swift */,
@@ -5077,6 +5081,7 @@
 				EF7924005216B8189898F370 /* BackgroundTaskProtocol.swift in Sources */,
 				1B4B3E847BF944DB2C1C217F /* BackgroundTaskServiceProtocol.swift in Sources */,
 				9A3B0CDF097E3838FB1B9595 /* Bundle.swift in Sources */,
+				0D125D5AC4AA6BFB714CEF02 /* CommonConstantSettings.swift in Sources */,
 				B5618E3C948584E5C1F67033 /* DTHTMLElement+AttributedStringBuilder.swift in Sources */,
 				DFCA89C4EC2A5332ED6B441F /* DataProtectionManager.swift in Sources */,
 				24A75F72EEB7561B82D726FD /* Date.swift in Sources */,
@@ -5373,6 +5378,7 @@
 				9FAF6DA7E8E85C9699757764 /* CollapsibleRoomTimelineView.swift in Sources */,
 				0DC815CA24E1BD7F408F37D3 /* CollapsibleTimelineItem.swift in Sources */,
 				663E198678778F7426A9B27D /* Collection.swift in Sources */,
+				B99C21F7793E9B6B39C0C58E /* CommonConstantSettings.swift in Sources */,
 				24B7CD41342C143117ADA768 /* Comparable.swift in Sources */,
 				AFA1F2543DFF7B45DF68ACD6 /* CompletionSuggestionModels.swift in Sources */,
 				6213C897001F953E21D3CC16 /* CompletionSuggestionService.swift in Sources */,
@@ -6604,7 +6610,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = "0.0.1-november23";
+				version = "0.0.2-november23";
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {
