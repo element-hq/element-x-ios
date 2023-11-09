@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.1.2 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.1.1 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -2938,6 +2938,7 @@ class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
     }
 }
 class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
+    var window: UIWindow?
     var alertInfo: AlertInfo<UUID>?
 
     //MARK: - submitIndicator

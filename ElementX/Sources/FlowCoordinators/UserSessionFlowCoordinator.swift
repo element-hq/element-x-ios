@@ -86,7 +86,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             notificationSettings: userSession.clientProxy.notificationSettings,
                                                                             secureBackupController: userSession.clientProxy.secureBackupController,
                                                                             appSettings: appSettings,
-                                                                            navigationSplitCoordinator: navigationSplitCoordinator))
+                                                                            navigationSplitCoordinator: navigationSplitCoordinator,
+                                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController))
         
         setupStateMachine()
         
@@ -436,10 +437,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentStartChat(animated: Bool) {
         let startChatNavigationStackCoordinator = NavigationStackCoordinator()
-        
-        let userIndicatorController = UserIndicatorController(rootCoordinator: startChatNavigationStackCoordinator)
+
         let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
-        let parameters = StartChatScreenCoordinatorParameters(userSession: userSession, userIndicatorController: userIndicatorController, navigationStackCoordinator: startChatNavigationStackCoordinator, userDiscoveryService: userDiscoveryService)
+        let parameters = StartChatScreenCoordinatorParameters(userSession: userSession,
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                              navigationStackCoordinator: startChatNavigationStackCoordinator,
+                                                              userDiscoveryService: userDiscoveryService)
+        
         let coordinator = StartChatScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -454,8 +458,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
 
         startChatNavigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationSplitCoordinator.setSheetCoordinator(userIndicatorController, animated: animated) { [weak self] in
+
+        navigationSplitCoordinator.setSheetCoordinator(startChatNavigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedStartChatScreen)
         }
     }
@@ -465,22 +469,20 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func presentFeedbackScreen(animated: Bool, for image: UIImage? = nil) {
         let feedbackNavigationStackCoordinator = NavigationStackCoordinator()
         
-        let userIndicatorController = UserIndicatorController(rootCoordinator: feedbackNavigationStackCoordinator)
-        
         let parameters = BugReportScreenCoordinatorParameters(bugReportService: bugReportService,
                                                               userID: userSession.userID,
                                                               deviceID: userSession.deviceID,
-                                                              userIndicatorController: userIndicatorController,
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                               screenshot: image,
                                                               isModallyPresented: true)
         let coordinator = BugReportScreenCoordinator(parameters: parameters)
         coordinator.completion = { [weak self] _ in
             self?.navigationSplitCoordinator.setSheetCoordinator(nil)
         }
-
+        
         feedbackNavigationStackCoordinator.setRootCoordinator(coordinator)
         
-        navigationSplitCoordinator.setSheetCoordinator(userIndicatorController, animated: animated) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(feedbackNavigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedFeedbackScreen)
         }
     }

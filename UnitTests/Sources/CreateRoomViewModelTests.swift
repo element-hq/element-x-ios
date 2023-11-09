@@ -44,7 +44,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
                                             createRoomParameters: .init(parameters),
                                             selectedUsers: usersSubject.asCurrentValuePublisher(),
                                             analytics: ServiceLocator.shared.analytics,
-                                            userIndicatorController: nil)
+                                            userIndicatorController: UserIndicatorControllerMock())
         self.viewModel = viewModel
         
         viewModel.actions.sink { [weak self] action in

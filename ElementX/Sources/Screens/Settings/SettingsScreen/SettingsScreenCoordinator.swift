@@ -19,7 +19,7 @@ import SwiftUI
 
 struct SettingsScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let userIndicatorController: UserIndicatorControllerProtocol
     let userSession: UserSessionProtocol
     let appLockService: AppLockServiceProtocol
     let bugReportService: BugReportServiceProtocol
@@ -258,6 +258,6 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     }
 
     private func showSuccess(label: String) {
-        parameters.userIndicatorController?.submitIndicator(UserIndicator(title: label))
+        parameters.userIndicatorController.submitIndicator(UserIndicator(title: label))
     }
 }

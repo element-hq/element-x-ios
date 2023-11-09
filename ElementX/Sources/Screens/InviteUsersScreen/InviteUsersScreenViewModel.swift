@@ -25,7 +25,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let mediaProvider: MediaProviderProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let appSettings: AppSettings
-    private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
     
@@ -38,7 +38,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
          mediaProvider: MediaProviderProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol,
          appSettings: AppSettings,
-         userIndicatorController: UserIndicatorControllerProtocol?) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomType = roomType
         self.mediaProvider = mediaProvider
         self.userDiscoveryService = userDiscoveryService
@@ -169,11 +169,11 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let userIndicatorID = UUID().uuidString
     
     private func showLoader() {
-        userIndicatorController?.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
+        userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
     }
     
     private func hideLoader() {
-        userIndicatorController?.retractIndicatorWithId(userIndicatorID)
+        userIndicatorController.retractIndicatorWithId(userIndicatorID)
     }
 }
 

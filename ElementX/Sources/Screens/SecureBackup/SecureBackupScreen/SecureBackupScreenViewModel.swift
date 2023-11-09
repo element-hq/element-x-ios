@@ -21,7 +21,7 @@ typealias SecureBackupScreenViewModelType = StateStoreViewModel<SecureBackupScre
 
 class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackupScreenViewModelProtocol {
     private let secureBackupController: SecureBackupControllerProtocol
-    private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var actionsSubject: PassthroughSubject<SecureBackupScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<SecureBackupScreenViewModelAction, Never> {
@@ -29,7 +29,7 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
     }
 
     init(secureBackupController: SecureBackupControllerProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol?,
+         userIndicatorController: UserIndicatorControllerProtocol,
          chatBackupDetailsURL: URL) {
         self.secureBackupController = secureBackupController
         self.userIndicatorController = userIndicatorController
@@ -70,7 +70,7 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
     private func enableBackup() {
         Task {
             let loadingIndicatorIdentifier = "SecureBackupScreenLoading"
-            userIndicatorController?.submitIndicator(.init(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+            userIndicatorController.submitIndicator(.init(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
             switch await secureBackupController.enable() {
             case .success:
                 break
@@ -79,7 +79,7 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
                 state.bindings.alertInfo = .init(id: .init())
             }
             
-            userIndicatorController?.retractIndicatorWithId(loadingIndicatorIdentifier)
+            userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
         }
     }
 }

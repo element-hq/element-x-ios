@@ -160,7 +160,7 @@ struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
         backupController.underlyingRecoveryKeyState = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(recoveryKeyState).asCurrentValuePublisher()
         
         return SecureBackupScreenViewModel(secureBackupController: backupController,
-                                           userIndicatorController: nil,
+                                           userIndicatorController: UserIndicatorControllerMock(),
                                            chatBackupDetailsURL: .sharedPublicDirectory)
     }
 }

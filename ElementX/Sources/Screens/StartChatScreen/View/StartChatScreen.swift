@@ -145,7 +145,7 @@ struct StartChatScreen_Previews: PreviewProvider, TestablePreview {
         let viewModel = StartChatScreenViewModel(userSession: userSession,
                                                  appSettings: ServiceLocator.shared.settings,
                                                  analytics: ServiceLocator.shared.analytics,
-                                                 userIndicatorController: nil,
+                                                 userIndicatorController: UserIndicatorControllerMock(),
                                                  userDiscoveryService: userDiscoveryService)
         return viewModel
     }()

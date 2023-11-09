@@ -47,6 +47,7 @@ class WindowManager {
         // touches through to the main window. If this changes, there's another solution here:
         // https://www.fivestars.blog/articles/swiftui-windows/
         overlayWindow.isUserInteractionEnabled = false
+        overlayWindow.isHidden = false
         
         alternateWindow = UIWindow(windowScene: windowScene)
         alternateWindow.tintColor = .compound.textActionPrimary

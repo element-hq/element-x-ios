@@ -19,7 +19,7 @@ import SwiftUI
 
 struct StartChatScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let userIndicatorController: UserIndicatorControllerProtocol
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userDiscoveryService: UserDiscoveryServiceProtocol
 }
@@ -44,15 +44,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     private var selectedUsersPublisher: CurrentValuePublisher<[UserProfileProxy], Never> {
         selectedUsers.asCurrentValuePublisher()
     }
-    
-    private var navigationStackCoordinator: NavigationStackCoordinator? {
-        parameters.navigationStackCoordinator
-    }
-    
-    private var userIndicatorController: UserIndicatorControllerProtocol? {
-        parameters.userIndicatorController
-    }
-    
+        
     var actions: AnyPublisher<StartChatScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -95,7 +87,8 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: selectedUsersPublisher,
                                                                       roomType: .draft,
                                                                       mediaProvider: parameters.userSession.mediaProvider,
-                                                                      userDiscoveryService: parameters.userDiscoveryService)
+                                                                      userDiscoveryService: parameters.userDiscoveryService,
+                                                                      userIndicatorController: parameters.userIndicatorController)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -113,7 +106,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator?.push(coordinator) { [weak self] in
+        parameters.navigationStackCoordinator?.push(coordinator) { [weak self] in
             self?.createRoomParameters.send(.init())
             self?.selectedUsers.send([])
         }
@@ -121,7 +114,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     
     private func openCreateRoomScreen() {
         let createParameters = CreateRoomCoordinatorParameters(userSession: parameters.userSession,
-                                                               userIndicatorController: userIndicatorController,
+                                                               userIndicatorController: parameters.userIndicatorController,
                                                                createRoomParameters: createRoomParametersPublisher,
                                                                selectedUsers: selectedUsersPublisher)
         let coordinator = CreateRoomCoordinator(parameters: createParameters)
@@ -144,7 +137,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator?.push(coordinator)
+        parameters.navigationStackCoordinator?.push(coordinator)
     }
     
     // MARK: - Private
@@ -152,13 +145,12 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     let mediaUploadingPreprocessor = MediaUploadingPreprocessor()
     private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
         let stackCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: stackCoordinator)
         
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: userIndicatorController, source: source) { [weak self] action in
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:
-                navigationStackCoordinator?.setSheetCoordinator(nil)
+                parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
             case .selectMediaAtURL(let url):
                 processAvatar(from: url)
             }
@@ -166,11 +158,11 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         
         stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
         
-        navigationStackCoordinator?.setSheetCoordinator(userIndicatorController)
+        parameters.navigationStackCoordinator?.setSheetCoordinator(stackCoordinator)
     }
     
     private func processAvatar(from url: URL) {
-        navigationStackCoordinator?.setSheetCoordinator(nil)
+        parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
         showLoadingIndicator()
         Task { [weak self] in
             guard let self else { return }
@@ -180,7 +172,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
                 parameters.avatarImageMedia = media
                 createRoomParameters.send(parameters)
             } catch {
-                userIndicatorController?.alertInfo = AlertInfo(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
+                parameters.userIndicatorController.alertInfo = AlertInfo(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
             }
             hideLoadingIndicator()
         }
@@ -201,13 +193,13 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     private static let loadingIndicatorIdentifier = "StartChatCoordinatorLoading"
     
     private func showLoadingIndicator() {
-        userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                               type: .modal,
-                                                               title: L10n.commonLoading,
-                                                               persistent: true))
+        parameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                         type: .modal,
+                                                                         title: L10n.commonLoading,
+                                                                         persistent: true))
     }
     
     private func hideLoadingIndicator() {
-        userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        parameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

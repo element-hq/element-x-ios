@@ -34,13 +34,13 @@ struct SettingsFlowCoordinatorParameters {
     let secureBackupController: SecureBackupControllerProtocol
     let appSettings: AppSettings
     let navigationSplitCoordinator: NavigationSplitCoordinator
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private let parameters: SettingsFlowCoordinatorParameters
     
     private var navigationStackCoordinator: NavigationStackCoordinator!
-    private var userIndicatorController: UserIndicatorControllerProtocol!
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -79,10 +79,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSettingsScreen(animated: Bool) {
         navigationStackCoordinator = NavigationStackCoordinator()
         
-        userIndicatorController = UserIndicatorController(rootCoordinator: navigationStackCoordinator)
-        
         let parameters = SettingsScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
-                                                             userIndicatorController: userIndicatorController,
+                                                             userIndicatorController: parameters.userIndicatorController,
                                                              userSession: parameters.userSession,
                                                              appLockService: parameters.appLockService,
                                                              bugReportService: parameters.bugReportService,
@@ -117,11 +115,10 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator, animated: animated)
         
-        self.parameters.navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
+        self.parameters.navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
             guard let self else { return }
             
             navigationStackCoordinator = nil
-            userIndicatorController = nil
             actionsSubject.send(.dismissedSettings)
         }
         
@@ -132,7 +129,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = SecureBackupScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
                                                                           secureBackupController: parameters.userSession.clientProxy.secureBackupController,
                                                                           navigationStackCoordinator: navigationStackCoordinator,
-                                                                          userIndicatorController: userIndicatorController))
+                                                                          userIndicatorController: parameters.userIndicatorController))
         
         navigationStackCoordinator.push(coordinator, animated: animated)
     }

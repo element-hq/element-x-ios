@@ -25,7 +25,7 @@ class UserIndicatorControllerTests: XCTestCase {
     private var indicatorController: UserIndicatorController!
     
     override func setUp() {
-        indicatorController = UserIndicatorController(rootCoordinator: PlaceholderScreenCoordinator())
+        indicatorController = UserIndicatorController()
     }
     
     func testIndicatorQueueing() {

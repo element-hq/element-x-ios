@@ -21,7 +21,7 @@ import SwiftUI
 typealias MediaUploadPreviewScreenViewModelType = StateStoreViewModel<MediaUploadPreviewScreenViewState, MediaUploadPreviewScreenViewAction>
 
 class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, MediaUploadPreviewScreenViewModelProtocol {
-    private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private let roomProxy: RoomProxyProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let url: URL
@@ -37,7 +37,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(userIndicatorController: UserIndicatorControllerProtocol?,
+    init(userIndicatorController: UserIndicatorControllerProtocol,
          roomProxy: RoomProxyProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          title: String?,
@@ -105,7 +105,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private static let loadingIndicatorIdentifier = "MediaUploadPreviewLoading"
     
     private func startLoading(progressPublisher: CurrentValuePublisher<Double, Never>) {
-        userIndicatorController?.submitIndicator(
+        userIndicatorController.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
                           type: .modal(progress: .published(progressPublisher), interactiveDismissDisabled: false, allowsInteraction: true),
                           title: L10n.commonSending,
@@ -114,11 +114,11 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     }
     
     private func stopLoading() {
-        userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
         requestHandle = nil
     }
     
     private func showError(label: String) {
-        userIndicatorController?.submitIndicator(UserIndicator(title: label))
+        userIndicatorController.submitIndicator(UserIndicator(title: label))
     }
 }

@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 struct MediaUploadPreviewScreenCoordinatorParameters {
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let userIndicatorController: UserIndicatorControllerProtocol
     let roomProxy: RoomProxyProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let title: String?

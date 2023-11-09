@@ -22,7 +22,7 @@ struct InviteUsersScreenCoordinatorParameters {
     let roomType: InviteUsersScreenRoomType
     let mediaProvider: MediaProviderProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum InviteUsersScreenCoordinatorAction {
