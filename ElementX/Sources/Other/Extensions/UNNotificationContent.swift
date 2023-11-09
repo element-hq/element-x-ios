@@ -86,8 +86,12 @@ extension UNMutableNotificationContent {
         switch await mediaProvider.loadFileFromSource(mediaSource) {
         case .success(let file):
             do {
+                guard let url = file.url else {
+                    MXLog.error("Couldn't add media attachment: URL is nil")
+                    return self
+                }
                 let identifier = ProcessInfo.processInfo.globallyUniqueString
-                let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: file.url, with: "\(identifier).\(file.url.pathExtension)")
+                let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: url, with: "\(identifier).\(url.pathExtension)")
                 let attachment = try UNNotificationAttachment(identifier: identifier,
                                                               url: newURL,
                                                               options: nil)

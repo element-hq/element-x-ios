@@ -20,5 +20,7 @@ import Foundation
 struct PlainMentionBuilder: MentionBuilderProtocol {
     func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange) { }
     
-    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String) { }
+    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String) {
+        attributedString.insert(NSAttributedString(string: "@"), at: range.location)
+    }
 }

@@ -44,6 +44,8 @@ protocol NotificationItemProxyProtocol {
     var isRoomDirect: Bool { get }
 
     var isNoisy: Bool { get }
+
+    var hasMention: Bool { get }
 }
 
 extension NotificationItemProxyProtocol {

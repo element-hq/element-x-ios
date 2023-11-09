@@ -52,7 +52,7 @@ final class AppSettings {
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
-    
+        
     static func reset() {
         MXLog.warning("Resetting the AppSettings.")
         store.removePersistentDomain(forName: suiteName)
@@ -181,6 +181,7 @@ final class AppSettings {
     
     // MARK: - Analytics
     
+    #if !IS_NSE
     #if DEBUG
     /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
@@ -205,6 +206,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.timelineStyle, defaultValue: TimelineStyle.bubbles, storageType: .userDefaults(store))
     var timelineStyle
+    #endif
     
     @UserPreference(key: UserDefaultsKeys.shouldCollapseRoomStateEvents, defaultValue: true, storageType: .volatile)
     var shouldCollapseRoomStateEvents
@@ -234,9 +236,9 @@ final class AppSettings {
     /// Tag describing which set of device specific rules a pusher executes.
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
-        
-    // MARK: - Other
     
+    // MARK: - Other
+       
     let permalinkBaseURL: URL = "https://matrix.to"
     
     // MARK: - Logging

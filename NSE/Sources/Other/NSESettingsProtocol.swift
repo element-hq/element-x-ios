@@ -16,13 +16,10 @@
 
 import Foundation
 
-final class NSESettings {
-    private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
-
-    /// UserDefaults to be used on reads and writes.
-    private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
-
-    /// The log level that should be used by `MXLog`.
-    @UserPreference(key: SharedUserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
-    var logLevel
+protocol NSESettingsProtocol {
+    var permalinkBaseURL: URL { get }
+    
+    var logLevel: TracingConfiguration.LogLevel { get }
 }
+
+extension AppSettings: NSESettingsProtocol { }

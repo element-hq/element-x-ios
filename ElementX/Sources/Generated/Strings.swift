@@ -376,13 +376,15 @@ public enum L10n {
   public static var commonVerificationCancelled: String { return L10n.tr("Localizable", "common_verification_cancelled") }
   /// Verification complete
   public static var commonVerificationComplete: String { return L10n.tr("Localizable", "common_verification_complete") }
+  /// Verify device
+  public static var commonVerifyDevice: String { return L10n.tr("Localizable", "common_verify_device") }
   /// Video
   public static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
   /// Voice message
   public static var commonVoiceMessage: String { return L10n.tr("Localizable", "common_voice_message") }
   /// Waiting…
   public static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
-  /// Waiting for decryption key
+  /// Waiting for this message
   public static var commonWaitingForDecryptionKey: String { return L10n.tr("Localizable", "common_waiting_for_decryption_key") }
   /// Your chat backup is currently out of sync. You need to confirm your recovery key to maintain access to your chat backup.
   public static var confirmRecoveryKeyBannerMessage: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_message") }
@@ -506,6 +508,16 @@ public enum L10n {
   }
   /// Invited you to chat
   public static var notificationInviteBody: String { return L10n.tr("Localizable", "notification_invite_body") }
+  /// %1$@ mentioned you.
+  /// %2$@
+  public static func notificationMentionedYouBody(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "notification_mentioned_you_body", String(describing: p1), String(describing: p2))
+  }
+  /// You have been mentioned.
+  /// %1$@
+  public static func notificationMentionedYouFallbackBody(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "notification_mentioned_you_fallback_body", String(describing: p1))
+  }
   /// New Messages
   public static var notificationNewMessages: String { return L10n.tr("Localizable", "notification_new_messages") }
   /// Plural format key: "%#@COUNT@"
@@ -1020,6 +1032,10 @@ public enum L10n {
   public static var screenRecoveryKeyChangeTitle: String { return L10n.tr("Localizable", "screen_recovery_key_change_title") }
   /// Enter your recovery key to confirm access to your chat backup.
   public static var screenRecoveryKeyConfirmDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_description") }
+  /// Please try again to confirm access to your chat backup.
+  public static var screenRecoveryKeyConfirmErrorContent: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_content") }
+  /// Incorrect recovery key
+  public static var screenRecoveryKeyConfirmErrorTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_title") }
   /// Enter the 48 character code.
   public static var screenRecoveryKeyConfirmKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_description") }
   /// Enter...
@@ -1240,6 +1256,8 @@ public enum L10n {
   public static var screenSessionVerificationPositiveButtonInitial: String { return L10n.tr("Localizable", "screen_session_verification_positive_button_initial") }
   /// Waiting to match
   public static var screenSessionVerificationPositiveButtonVerifyingOngoing: String { return L10n.tr("Localizable", "screen_session_verification_positive_button_verifying_ongoing") }
+  /// Compare a unique set of emojis.
+  public static var screenSessionVerificationReadySubtitle: String { return L10n.tr("Localizable", "screen_session_verification_ready_subtitle") }
   /// Compare the unique emoji, ensuring they appear in the same order.
   public static var screenSessionVerificationRequestAcceptedSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_request_accepted_subtitle") }
   /// They don’t match
@@ -1546,6 +1564,11 @@ public enum L10n {
   public enum Action {
     /// Edit poll
     public static var editPoll: String { return L10n.tr("Localizable", "action.edit_poll") }
+  }
+
+  public enum Common {
+    /// Report a problem
+    public static var reportAProblem: String { return L10n.tr("Localizable", "common.report_a_problem") }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

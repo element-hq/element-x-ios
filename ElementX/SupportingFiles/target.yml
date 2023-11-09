@@ -123,6 +123,8 @@ targets:
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         PILLS_UT_TYPE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).pills
+        OTHER_SWIFT_FLAGS:
+        - "-DIS_MAIN_APP"
 
     preBuildScripts:
     - name: 🛠 SwiftGen

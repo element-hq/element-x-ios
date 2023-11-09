@@ -234,27 +234,27 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - getMediaFile
 
-    public var getMediaFileMediaSourceBodyMimeTypeTempDirThrowableError: Error?
-    public var getMediaFileMediaSourceBodyMimeTypeTempDirCallsCount = 0
-    public var getMediaFileMediaSourceBodyMimeTypeTempDirCalled: Bool {
-        return getMediaFileMediaSourceBodyMimeTypeTempDirCallsCount > 0
+    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirThrowableError: Error?
+    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCallsCount = 0
+    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCalled: Bool {
+        return getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCallsCount > 0
     }
-    public var getMediaFileMediaSourceBodyMimeTypeTempDirReceivedArguments: (mediaSource: MediaSource, body: String?, mimeType: String, tempDir: String?)?
-    public var getMediaFileMediaSourceBodyMimeTypeTempDirReceivedInvocations: [(mediaSource: MediaSource, body: String?, mimeType: String, tempDir: String?)] = []
-    public var getMediaFileMediaSourceBodyMimeTypeTempDirReturnValue: MediaFileHandle!
-    public var getMediaFileMediaSourceBodyMimeTypeTempDirClosure: ((MediaSource, String?, String, String?) throws -> MediaFileHandle)?
+    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedArguments: (mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?)?
+    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedInvocations: [(mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?)] = []
+    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReturnValue: MediaFileHandle!
+    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure: ((MediaSource, String?, String, Bool, String?) throws -> MediaFileHandle)?
 
-    public func getMediaFile(mediaSource: MediaSource, body: String?, mimeType: String, tempDir: String?) throws -> MediaFileHandle {
-        if let error = getMediaFileMediaSourceBodyMimeTypeTempDirThrowableError {
+    public func getMediaFile(mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?) throws -> MediaFileHandle {
+        if let error = getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirThrowableError {
             throw error
         }
-        getMediaFileMediaSourceBodyMimeTypeTempDirCallsCount += 1
-        getMediaFileMediaSourceBodyMimeTypeTempDirReceivedArguments = (mediaSource: mediaSource, body: body, mimeType: mimeType, tempDir: tempDir)
-        getMediaFileMediaSourceBodyMimeTypeTempDirReceivedInvocations.append((mediaSource: mediaSource, body: body, mimeType: mimeType, tempDir: tempDir))
-        if let getMediaFileMediaSourceBodyMimeTypeTempDirClosure = getMediaFileMediaSourceBodyMimeTypeTempDirClosure {
-            return try getMediaFileMediaSourceBodyMimeTypeTempDirClosure(mediaSource, body, mimeType, tempDir)
+        getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCallsCount += 1
+        getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedArguments = (mediaSource: mediaSource, body: body, mimeType: mimeType, useCache: useCache, tempDir: tempDir)
+        getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedInvocations.append((mediaSource: mediaSource, body: body, mimeType: mimeType, useCache: useCache, tempDir: tempDir))
+        if let getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure = getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure {
+            return try getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure(mediaSource, body, mimeType, useCache, tempDir)
         } else {
-            return getMediaFileMediaSourceBodyMimeTypeTempDirReturnValue
+            return getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReturnValue
         }
     }
     //MARK: - getMediaThumbnail

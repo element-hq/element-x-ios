@@ -40,8 +40,8 @@ import UserNotifications
 // We keep a global `environment` singleton to ensure that our app context,
 // database, logging, etc. are only ever setup once per *process*
 
-private let settings = NSESettings()
-private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .homeDirectory,
+private let settings: NSESettingsProtocol = AppSettings()
+private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: settings.permalinkBaseURL,
                                                                                                                                                                               mentionBuilder: PlainMentionBuilder())))
 private let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)

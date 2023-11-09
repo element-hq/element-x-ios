@@ -60,6 +60,10 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     var isNoisy: Bool {
         notificationItem.isNoisy ?? false
     }
+    
+    var hasMention: Bool {
+        notificationItem.hasMention ?? false
+    }
 
     var senderAvatarMediaSource: MediaSourceProxy? {
         if let senderAvatarURLString = notificationItem.senderInfo.avatarUrl,
@@ -114,4 +118,6 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     var notificationIdentifier: String { "" }
 
     var roomJoinedMembers: Int { 0 }
+    
+    var hasMention: Bool { false }
 }
