@@ -58,7 +58,6 @@ struct VoiceMessageRecordingButton: View {
                             .foregroundColor(.compound.iconPrimary)
                     }
                     .padding(4)
-
             }
         }
         .buttonStyle(VoiceMessageRecordingButtonStyle())

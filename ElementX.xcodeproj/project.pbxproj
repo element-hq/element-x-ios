@@ -527,7 +527,6 @@
 		8BC8EF6705A78946C1F22891 /* SoftLogoutScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A7D4DDEEE5D2CA0C8D63CD /* SoftLogoutScreen.swift */; };
 		8C050A8012E6078BEAEF5BC8 /* PillTextAttachmentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913C8E13B8B602C7B6C0C4AE /* PillTextAttachmentData.swift */; };
 		8C1A5ECAF895D4CAF8C4D461 /* AppActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F21ED7205048668BEB44A38 /* AppActivityView.swift */; };
-		8C27BEB00B903D953F31F962 /* VoiceMessageRecordingButtonTooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF449205DF1E9817115245C4 /* VoiceMessageRecordingButtonTooltipView.swift */; };
 		8C42B5B1642D189C362A5EDF /* SecureBackupScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91831D7042EADD0CC2B5EC36 /* SecureBackupScreenUITests.swift */; };
 		8C454500B8073E1201F801A9 /* MXLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34A814CBD56230BC74FFCF4 /* MXLogger.swift */; };
 		8C706DA7EAC0974CA2F8F1CD /* MentionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15748C254911E3654C93B0ED /* MentionBuilder.swift */; };
@@ -1918,7 +1917,6 @@
 		FE87C931165F5E201CACBB87 /* MediaPlayerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerProtocol.swift; sourceTree = "<group>"; };
 		FEC2E8E1B20BB2EA07B0B61E /* WelcomeScreenScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreenScreenViewModel.swift; sourceTree = "<group>"; };
 		FEFEEE93B82937B2E86F92EB /* AnalyticsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsScreen.swift; sourceTree = "<group>"; };
-		FF449205DF1E9817115245C4 /* VoiceMessageRecordingButtonTooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMessageRecordingButtonTooltipView.swift; sourceTree = "<group>"; };
 		FFECCE59967018204876D0A5 /* LocationMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMarkerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2827,7 +2825,6 @@
 				3E6A9B9DFEE964962C179DE3 /* RoomAttachmentPicker.swift */,
 				BFC9F57320EC80C7CE34FE4A /* VoiceMessagePreviewComposer.swift */,
 				D2E61DDB42C0DE429C0955D8 /* VoiceMessageRecordingButton.swift */,
-				FF449205DF1E9817115245C4 /* VoiceMessageRecordingButtonTooltipView.swift */,
 				CCB6F36CCE44A29A06FCAF1C /* VoiceMessageRecordingComposer.swift */,
 				0A634D8DD1E10D858CF7995D /* VoiceMessageRecordingView.swift */,
 			);
@@ -5909,7 +5906,6 @@
 				C2879369106A419A5071F1F8 /* VoiceMessageRecorder.swift in Sources */,
 				19DED23340D0855B59693ED2 /* VoiceMessageRecorderProtocol.swift in Sources */,
 				09EF4222EEBBA1A7B8F4071E /* VoiceMessageRecordingButton.swift in Sources */,
-				8C27BEB00B903D953F31F962 /* VoiceMessageRecordingButtonTooltipView.swift in Sources */,
 				CA5BFF0C2EF5A8EF40CA2D69 /* VoiceMessageRecordingComposer.swift in Sources */,
 				EBDB339A7C127F068B6E52E5 /* VoiceMessageRecordingView.swift in Sources */,
 				A9482B967FC85DA611514D35 /* VoiceMessageRoomPlaybackView.swift in Sources */,
