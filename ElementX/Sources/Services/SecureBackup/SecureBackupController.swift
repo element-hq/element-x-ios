@@ -182,7 +182,7 @@ extension BackupState {
     var keyBackupState: SecureBackupKeyBackupState {
         switch self {
         case .unknown:
-            return .unknown
+            return .disabled
         case .creating:
             return .enabling
         case .enabling:
