@@ -250,12 +250,12 @@ struct ComposerToolbar: View {
     
     private var voiceMessageRecordingButton: some View {
         VoiceMessageRecordingButton {
-            context.send(viewAction: .startVoiceMessageRecording)
+            context.send(viewAction: .voiceMessage(.startRecording))
         } stopRecording: { minimumRecordTimeReached in
             if minimumRecordTimeReached {
-                context.send(viewAction: .stopVoiceMessageRecording)
+                context.send(viewAction: .voiceMessage(.stopRecording))
             } else {
-                context.send(viewAction: .cancelVoiceMessageRecording)
+                context.send(viewAction: .voiceMessage(.cancelRecording))
             }
         }
         .padding(4)
@@ -263,7 +263,7 @@ struct ComposerToolbar: View {
     
     private var voiceMessageTrashButton: some View {
         Button(role: .destructive) {
-            context.send(viewAction: .deleteVoiceMessageRecording)
+            context.send(viewAction: .voiceMessage(.deleteRecording))
         } label: {
             CompoundIcon(\.delete)
                 .padding(EdgeInsets(top: 10, leading: 11, bottom: 10, trailing: 11))
@@ -274,13 +274,13 @@ struct ComposerToolbar: View {
     
     private func voiceMessagePreviewComposer(audioPlayerState: AudioPlayerState, waveform: WaveformSource) -> some View {
         VoiceMessagePreviewComposer(playerState: audioPlayerState, waveform: waveform) {
-            context.send(viewAction: .startVoiceMessagePlayback)
+            context.send(viewAction: .voiceMessage(.startPlayback))
         } onPause: {
-            context.send(viewAction: .pauseVoiceMessagePlayback)
+            context.send(viewAction: .voiceMessage(.pausePlayback))
         } onSeek: { progress in
-            context.send(viewAction: .seekVoiceMessagePlayback(progress: progress))
+            context.send(viewAction: .voiceMessage(.seekPlayback(progress: progress)))
         } onScrubbing: { isScrubbing in
-            context.send(viewAction: .scrubVoiceMessagePlayback(scrubbing: isScrubbing))
+            context.send(viewAction: .voiceMessage(.scrubPlayback(scrubbing: isScrubbing)))
         }
     }
 }

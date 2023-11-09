@@ -160,18 +160,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if state.swiftUITimelineEnabled {
                 renderPendingTimelineItems()
             }
-        case let .selectedPollOption(pollStartID, optionID):
-            roomScreenInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
-        case .playPauseAudio(let itemID):
-            Task { await roomScreenInteractionHandler.playPauseAudio(for: itemID) }
-        case .seekAudio(let itemID, let progress):
-            Task { await roomScreenInteractionHandler.seekAudio(for: itemID, progress: progress) }
-        case let .endPoll(pollStartID):
-            state.bindings.confirmationAlertInfo = .init(id: .init(),
-                                                         title: L10n.actionEndPoll,
-                                                         message: L10n.commonPollEndConfirmation,
-                                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                                         secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
+        case .poll(let pollAction):
+            processPollAction(pollAction)
+        case .audio(let audioAction):
+            processAudioAction(audioAction)
         case .presentCall:
             actionsSubject.send(.displayCallScreen)
         }
@@ -202,31 +194,60 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             trackComposerMode(mode)
         case .composerFocusedChanged(isFocused: let isFocused):
             composerFocusedSubject.send(isFocused)
-        case .startVoiceMessageRecording:
-            Task {
-                await mediaPlayerProvider.detachAllStates(except: nil)
-                await roomScreenInteractionHandler.startRecordingVoiceMessage()
-            }
-        case .stopVoiceMessageRecording:
-            Task { await roomScreenInteractionHandler.stopRecordingVoiceMessage() }
-        case .cancelVoiceMessageRecording:
-            Task { await roomScreenInteractionHandler.cancelRecordingVoiceMessage() }
-        case .deleteVoiceMessageRecording:
-            Task { await roomScreenInteractionHandler.deleteCurrentVoiceMessage() }
-        case .sendVoiceMessage:
-            Task { await roomScreenInteractionHandler.sendCurrentVoiceMessage() }
-        case .startVoiceMessagePlayback:
-            Task { await roomScreenInteractionHandler.startPlayingRecordedVoiceMessage() }
-        case .pauseVoiceMessagePlayback:
-            roomScreenInteractionHandler.pausePlayingRecordedVoiceMessage()
-        case .seekVoiceMessagePlayback(let progress):
-            Task { await roomScreenInteractionHandler.seekRecordedVoiceMessage(to: progress) }
-        case .scrubVoiceMessagePlayback(let scrubbing):
-            Task { await roomScreenInteractionHandler.scrubVoiceMessagePlayback(scrubbing: scrubbing) }
+        case .voiceMessage(let voiceMessageAction):
+            processVoiceMessageAction(voiceMessageAction)
         }
     }
     
     // MARK: - Private
+    
+    private func processPollAction(_ action: RoomScreenViewPollAction) {
+        switch action {
+        case let .selectOption(pollStartID, optionID):
+            roomScreenInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
+        case let .end(pollStartID):
+            state.bindings.confirmationAlertInfo = .init(id: .init(),
+                                                         title: L10n.actionEndPoll,
+                                                         message: L10n.commonPollEndConfirmation,
+                                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                                         secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
+        }
+    }
+    
+    private func processAudioAction(_ action: RoomScreenViewAudioAction) {
+        switch action {
+        case .playPause(let itemID):
+            Task { await roomScreenInteractionHandler.playPauseAudio(for: itemID) }
+        case .seek(let itemID, let progress):
+            Task { await roomScreenInteractionHandler.seekAudio(for: itemID, progress: progress) }
+        }
+    }
+    
+    private func processVoiceMessageAction(_ action: ComposerToolbarVoiceMessageAction) {
+        switch action {
+        case .startRecording:
+            Task {
+                await mediaPlayerProvider.detachAllStates(except: nil)
+                await roomScreenInteractionHandler.startRecordingVoiceMessage()
+            }
+        case .stopRecording:
+            Task { await roomScreenInteractionHandler.stopRecordingVoiceMessage() }
+        case .cancelRecording:
+            Task { await roomScreenInteractionHandler.cancelRecordingVoiceMessage() }
+        case .deleteRecording:
+            Task { await roomScreenInteractionHandler.deleteCurrentVoiceMessage() }
+        case .send:
+            Task { await roomScreenInteractionHandler.sendCurrentVoiceMessage() }
+        case .startPlayback:
+            Task { await roomScreenInteractionHandler.startPlayingRecordedVoiceMessage() }
+        case .pausePlayback:
+            roomScreenInteractionHandler.pausePlayingRecordedVoiceMessage()
+        case .seekPlayback(let progress):
+            Task { await roomScreenInteractionHandler.seekRecordedVoiceMessage(to: progress) }
+        case .scrubPlayback(let scrubbing):
+            Task { await roomScreenInteractionHandler.scrubVoiceMessagePlayback(scrubbing: scrubbing) }
+        }
+    }
 
     private func setupSubscriptions() {
         appSettings.$swiftUITimelineEnabled

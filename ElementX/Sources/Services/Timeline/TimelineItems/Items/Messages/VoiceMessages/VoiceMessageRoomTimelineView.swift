@@ -40,22 +40,22 @@ struct VoiceMessageRoomTimelineView: View {
     }
     
     private func onPlaybackPlayPause() {
-        context.send(viewAction: .playPauseAudio(itemID: timelineItem.id))
+        context.send(viewAction: .audio(.playPause(itemID: timelineItem.id)))
     }
     
     private func onPlaybackSeek(_ progress: Double) {
-        context.send(viewAction: .seekAudio(itemID: timelineItem.id, progress: progress))
+        context.send(viewAction: .audio(.seek(itemID: timelineItem.id, progress: progress)))
     }
     
     private func onPlaybackScrubbing(_ dragging: Bool) {
         if dragging {
             if playerState.playbackState == .playing {
                 resumePlaybackAfterScrubbing = true
-                context.send(viewAction: .playPauseAudio(itemID: timelineItem.id))
+                context.send(viewAction: .audio(.playPause(itemID: timelineItem.id)))
             }
         } else {
             if resumePlaybackAfterScrubbing {
-                context.send(viewAction: .playPauseAudio(itemID: timelineItem.id))
+                context.send(viewAction: .audio(.playPause(itemID: timelineItem.id)))
                 resumePlaybackAfterScrubbing = false
             }
         }

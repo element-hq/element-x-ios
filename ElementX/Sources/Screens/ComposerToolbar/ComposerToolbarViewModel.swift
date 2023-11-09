@@ -105,7 +105,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
             switch state.composerMode {
             case .previewVoiceMessage:
-                actionsSubject.send(.sendVoiceMessage)
+                actionsSubject.send(.voiceMessage(.send))
             default:
                 let sendHTML = ServiceLocator.shared.settings.richTextEditorEnabled
                 actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
@@ -143,23 +143,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
         case .selectedSuggestion(let suggestion):
             handleSuggestion(suggestion)
-        case .startVoiceMessageRecording:
-            state.bindings.composerActionsEnabled = false
-            actionsSubject.send(.startVoiceMessageRecording)
-        case .stopVoiceMessageRecording:
-            actionsSubject.send(.stopVoiceMessageRecording)
-        case .cancelVoiceMessageRecording:
-            actionsSubject.send(.cancelVoiceMessageRecording)
-        case .deleteVoiceMessageRecording:
-            actionsSubject.send(.deleteVoiceMessageRecording)
-        case .startVoiceMessagePlayback:
-            actionsSubject.send(.startVoiceMessagePlayback)
-        case .pauseVoiceMessagePlayback:
-            actionsSubject.send(.pauseVoiceMessagePlayback)
-        case .seekVoiceMessagePlayback(let progress):
-            actionsSubject.send(.seekVoiceMessagePlayback(progress: progress))
-        case .scrubVoiceMessagePlayback(let scrubbing):
-            actionsSubject.send(.scrubVoiceMessagePlayback(scrubbing: scrubbing))
+        case .voiceMessage(let voiceMessageAction):
+            processVoiceMessageAction(voiceMessageAction)
         }
     }
 
@@ -188,6 +173,30 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     // MARK: - Private
+    
+    private func processVoiceMessageAction(_ action: ComposerToolbarVoiceMessageAction) {
+        switch action {
+        case .startRecording:
+            state.bindings.composerActionsEnabled = false
+            actionsSubject.send(.voiceMessage(.startRecording))
+        case .stopRecording:
+            actionsSubject.send(.voiceMessage(.stopRecording))
+        case .cancelRecording:
+            actionsSubject.send(.voiceMessage(.cancelRecording))
+        case .deleteRecording:
+            actionsSubject.send(.voiceMessage(.deleteRecording))
+        case .startPlayback:
+            actionsSubject.send(.voiceMessage(.startPlayback))
+        case .pausePlayback:
+            actionsSubject.send(.voiceMessage(.pausePlayback))
+        case .scrubPlayback(let scrubbing):
+            actionsSubject.send(.voiceMessage(.scrubPlayback(scrubbing: scrubbing)))
+        case .seekPlayback(let progress):
+            actionsSubject.send(.voiceMessage(.seekPlayback(progress: progress)))
+        case .send:
+            break
+        }
+    }
     
     private func setupMentionsHandling(mentionDisplayHelper: MentionDisplayHelper) {
         wysiwygViewModel.textView.mentionDisplayHelper = mentionDisplayHelper

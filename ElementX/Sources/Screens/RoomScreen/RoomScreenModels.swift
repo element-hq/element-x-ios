@@ -63,6 +63,16 @@ enum RoomScreenComposerMode: Equatable {
     }
 }
 
+enum RoomScreenViewPollAction {
+    case selectOption(pollStartID: String, optionID: String)
+    case end(pollStartID: String)
+}
+
+enum RoomScreenViewAudioAction {
+    case playPause(itemID: TimelineItemIdentifier)
+    case seek(itemID: TimelineItemIdentifier, progress: Double)
+}
+
 enum RoomScreenViewAction {
     case displayRoomDetails
     case itemAppeared(itemID: TimelineItemIdentifier)
@@ -71,8 +81,6 @@ enum RoomScreenViewAction {
     case toggleReaction(key: String, itemID: TimelineItemIdentifier)
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards
-    case selectedPollOption(pollStartID: String, optionID: String)
-    case endPoll(pollStartID: String)
     
     case timelineItemMenu(itemID: TimelineItemIdentifier)
     case timelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
@@ -80,6 +88,7 @@ enum RoomScreenViewAction {
     case displayEmojiPicker(itemID: TimelineItemIdentifier)
     
     case handlePasteOrDrop(provider: NSItemProvider)
+    
     case tappedOnUser(userID: String)
     
     case reactionSummary(itemID: TimelineItemIdentifier, key: String)
@@ -89,8 +98,9 @@ enum RoomScreenViewAction {
     
     case scrolledToBottom
     
-    case playPauseAudio(itemID: TimelineItemIdentifier)
-    case seekAudio(itemID: TimelineItemIdentifier, progress: Double)
+    case poll(RoomScreenViewPollAction)
+    
+    case audio(RoomScreenViewAudioAction)
     
     case presentCall
 }
