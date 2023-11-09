@@ -147,7 +147,14 @@ class AudioRecorder: AudioRecorderProtocol {
                         AVNumberOfChannelsKey: 1,
                         AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
         MXLog.info("creating audio file with format: \(settings)")
-        let outputURL = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
+        let outputURL: URL
+        switch recordID {
+        case .uuid(let uuid):
+            outputURL = URL.temporaryDirectory.appendingPathComponent("voice-message-\(uuid.uuidString).m4a")
+        case .url(let url):
+            outputURL = url
+        }
+        try? FileManager.default.removeItem(at: outputURL)        
         return try AVAudioFile(forWriting: outputURL, settings: settings)
     }
     

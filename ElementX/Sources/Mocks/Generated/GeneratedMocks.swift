@@ -3165,6 +3165,23 @@ class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
             return fileURLForReturnValue
         }
     }
+    //MARK: - urlForRecording
+
+    var urlForRecordingCallsCount = 0
+    var urlForRecordingCalled: Bool {
+        return urlForRecordingCallsCount > 0
+    }
+    var urlForRecordingReturnValue: URL!
+    var urlForRecordingClosure: (() -> URL)?
+
+    func urlForRecording() -> URL {
+        urlForRecordingCallsCount += 1
+        if let urlForRecordingClosure = urlForRecordingClosure {
+            return urlForRecordingClosure()
+        } else {
+            return urlForRecordingReturnValue
+        }
+    }
     //MARK: - cache
 
     var cacheMediaSourceUsingMoveCallsCount = 0

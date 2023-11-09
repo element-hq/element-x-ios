@@ -51,6 +51,10 @@ class VoiceMessageCache: VoiceMessageCacheProtocol {
         }
     }
     
+    func urlForRecording() -> URL {
+        temporaryFilesFolderURL.appendingPathComponent("voice-message-recording").appendingPathExtension(preferredFileExtension)
+    }
+    
     // MARK: - Private
     
     private func setupTemporaryFilesFolder() {
@@ -69,6 +73,7 @@ class VoiceMessageCache: VoiceMessageCacheProtocol {
         } else {
             try FileManager.default.copyItem(at: source, to: destination)
         }
+        try (destination as NSURL).setResourceValue(URLFileProtection.complete, forKey: .fileProtectionKey)
     }
     
     private func cacheURL(for mediaSource: MediaSourceProxy) -> URL {

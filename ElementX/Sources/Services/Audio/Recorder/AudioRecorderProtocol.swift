@@ -19,6 +19,7 @@ import Foundation
 
 enum AudioRecordingIdentifier {
     case uuid(UUID)
+    case url(URL)
 }
 
 extension AudioRecordingIdentifier {
@@ -26,6 +27,8 @@ extension AudioRecordingIdentifier {
         switch self {
         case .uuid(let uuid):
             return uuid.uuidString
+        case .url(let url):
+            return url.path()
         }
     }
 }

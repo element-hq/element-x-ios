@@ -74,7 +74,8 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         await stopPlayback()
         recordingCancelled = false
         
-        await audioRecorder.record(with: .uuid(UUID()))
+        let recordingUrl = voiceMessageCache.urlForRecording()
+        await audioRecorder.record(with: .url(recordingUrl))
     }
     
     func stopRecording() async {
@@ -168,6 +169,11 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         // convert the file
         let sourceFilename = url.deletingPathExtension().lastPathComponent
         let oggFile = URL.temporaryDirectory.appendingPathComponent(sourceFilename).appendingPathExtension("ogg")
+        defer {
+            // delete the temporary file
+            try? FileManager.default.removeItem(at: oggFile)
+        }
+
         do {
             try audioConverter.convertToOpusOgg(sourceURL: url, destinationURL: oggFile)
         } catch {
@@ -191,8 +197,6 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
                                                       audioInfo: audioInfo,
                                                       waveform: waveform,
                                                       progressSubject: nil) { _ in }
-        // delete the temporary file
-        try? FileManager.default.removeItem(at: oggFile)
         
         if case .failure(let error) = result {
             MXLog.error("Failed to send the voice message. \(error)")
