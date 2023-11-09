@@ -141,8 +141,7 @@ struct NotificationContentBuilder {
 
     private func processCommonRoomMessage(notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         var notification = baseMutableContent(for: notificationItem)
-        let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        notification.title = displayName
+        notification.title = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         if notification.title != notificationItem.roomDisplayName {
             notification.subtitle = notificationItem.roomDisplayName
         }
@@ -150,7 +149,7 @@ struct NotificationContentBuilder {
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: notificationItem.senderID,
-                                                            senderName: displayName,
+                                                            senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
                                                             icon: icon(for: notificationItem))
         return notification
     }
