@@ -40,7 +40,9 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(appLockService: AppLockServiceProtocol, navigationCoordinator: NavigationRootCoordinator) {
+    init(appLockService: AppLockServiceProtocol,
+         navigationCoordinator: NavigationRootCoordinator,
+         notificationCenter: NotificationCenter = .default) {
         self.appLockService = appLockService
         self.navigationCoordinator = navigationCoordinator
         
@@ -54,13 +56,13 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+        notificationCenter.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
                 self?.applicationDidEnterBackground()
             }
             .store(in: &cancellables)
         
-        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+        notificationCenter.publisher(for: UIApplication.willEnterForegroundNotification)
             .sink { [weak self] _ in
                 self?.applicationWillEnterForeground()
             }

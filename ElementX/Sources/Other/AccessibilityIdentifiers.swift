@@ -19,6 +19,7 @@ import Foundation
 enum A11yIdentifiers {
     static let alertInfo = AlertInfo()
     static let analyticsPromptScreen = AnalyticsPromptScreen()
+    static let appLockScreen = AppLockScreen()
     static let appLockSetupBiometricsScreen = AppLockSetupBiometricsScreen()
     static let appLockSetupPINScreen = AppLockSetupPINScreen()
     static let appLockSetupSettingsScreen = AppLockSetupSettingsScreen()
@@ -49,6 +50,10 @@ enum A11yIdentifiers {
     struct AlertInfo {
         let primaryButton = "alert_info-primary_button"
         let secondaryButton = "alert_info-secondary_button"
+    }
+    
+    struct AppLockScreen {
+        func numpad(_ digit: Int) -> String { "app_lock-numpad_\(digit)" }
     }
     
     struct AppLockSetupBiometricsScreen {

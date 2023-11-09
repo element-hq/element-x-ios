@@ -19,16 +19,22 @@ import MatrixRustSDK
 import SwiftUI
 import UIKit
 
-class UITestsAppCoordinator: AppCoordinatorProtocol {
+class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     private let navigationRootCoordinator: NavigationRootCoordinator
     private var mockScreen: MockScreen?
+    private var appLockFlowCoordinator: AppLockFlowCoordinator?
+    private var appLockCancellable: AnyCancellable?
+    
     let notificationManager: NotificationManagerProtocol = NotificationManagerMock()
+    let windowManager = WindowManager()
     
     init() {
         // disabling View animations
         UIView.setAnimationsEnabled(false)
-
+        
         navigationRootCoordinator = NavigationRootCoordinator()
+        
+        windowManager.delegate = self
         
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorControllerMock.default)
         
@@ -42,14 +48,6 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
     }
     
     func start() {
-        // Fix the app tint colour.
-        UIApplication.shared.connectedScenes.forEach { scene in
-            guard let delegate = scene.delegate as? UIWindowSceneDelegate else {
-                return
-            }
-            delegate.window??.tintColor = .compound.textActionPrimary
-        }
-        
         guard let screenID = ProcessInfo.testScreenID else { fatalError("Unable to launch with unknown screen.") }
         
         let mockScreen = MockScreen(id: screenID)
@@ -63,6 +61,61 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
     
     func handleDeepLink(_ url: URL) -> Bool {
         fatalError("Not implemented.")
+    }
+    
+    func windowManagerDidConfigureWindows(_ windowManager: WindowManager) {
+        guard let screenID = ProcessInfo.testScreenID, screenID == .appLockFlow || screenID == .appLockFlowDisabled else { return }
+
+        let coordinator = setupAppLockFlow(disabled: screenID == .appLockFlowDisabled)
+        appLockCancellable = coordinator.actions
+            .sink { [weak self] action in
+                switch action {
+                case .lockApp:
+                    self?.windowManager.switchToAlternate()
+                case .unlockApp:
+                    self?.windowManager.switchToMain()
+                case .forceLogout:
+                    break
+                }
+            }
+        appLockFlowCoordinator = coordinator
+        windowManager.alternateWindow.rootViewController = UIHostingController(rootView: coordinator.toPresentable())
+    }
+    
+    private func setupAppLockFlow(disabled: Bool) -> AppLockFlowCoordinator {
+        let navigationCoordinator = NavigationRootCoordinator()
+        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationCoordinator)
+        
+        let keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+        keychainController.resetSecrets()
+        
+        let context = LAContextMock()
+        context.biometryTypeValue = UIDevice.current.isPhone ? .faceID : .touchID // (iPhone 14 & iPad 9th gen)
+        context.evaluatePolicyReturnValue = true
+        context.evaluatedPolicyDomainStateValue = "😎".data(using: .utf8)
+        
+        let appLockService = AppLockService(keychainController: keychainController,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            context: context)
+        
+        if !disabled {
+            guard case .success = appLockService.setupPINCode("2023") else {
+                fatalError("Failed to preset the PIN code.")
+            }
+        }
+        
+        let notificationCenter = UITestsNotificationCenter()
+        do {
+            try notificationCenter.startListening()
+        } catch {
+            fatalError("Failed to start listening for notifications.")
+        }
+        
+        let coordinator = AppLockFlowCoordinator(appLockService: appLockService,
+                                                 userIndicatorController: userIndicatorController,
+                                                 navigationCoordinator: navigationCoordinator,
+                                                 notificationCenter: notificationCenter)
+        return coordinator
     }
 }
 
@@ -158,24 +211,17 @@ class MockScreen: Identifiable {
             let coordinator = TemplateScreenCoordinator(parameters: .init())
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .appLockScreen:
-            let appLockService = AppLockService(keychainController: KeychainControllerMock(), appSettings: ServiceLocator.shared.settings)
-            let coordinator = AppLockScreenCoordinator(parameters: .init(appLockService: appLockService))
-            return coordinator
+        case .appLockFlow, .appLockFlowDisabled:
+            // The tested coordinator is setup externally.
+            // Return a blank form to snapshot when unlocked.
+            return BlankFormCoordinator()
         case .appLockSetupFlow, .appLockSetupFlowUnlock, .appLockSetupFlowMandatory:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            // The flow expects an existing root coordinator, use the placeholder as a placeholder 😅
+            // The flow expects an existing root coordinator, use a blank form as a placeholder.
             navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
             
             let keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
             keychainController.resetSecrets()
-            if id == .appLockSetupFlowUnlock {
-                do {
-                    try keychainController.setPINCode("2023")
-                } catch {
-                    fatalError("Failed to pre-set the PIN code")
-                }
-            }
             
             let context = LAContextMock()
             context.biometryTypeValue = UIDevice.current.isPhone ? .faceID : .touchID // (iPhone 14 & iPad 9th gen)
@@ -185,6 +231,9 @@ class MockScreen: Identifiable {
             let appLockService = AppLockService(keychainController: keychainController,
                                                 appSettings: ServiceLocator.shared.settings,
                                                 context: context)
+            if id == .appLockSetupFlowUnlock, case .failure = appLockService.setupPINCode("2023") {
+                fatalError("Failed to pre-set the PIN code")
+            }
             
             let flow: AppLockSetupFlowCoordinator.PresentationFlow = id == .appLockSetupFlowMandatory ? .onboarding : .settings
             let coordinator = AppLockSetupFlowCoordinator(presentingFlow: flow,

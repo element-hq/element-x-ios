@@ -29,10 +29,9 @@ struct Application: App {
         } else if ProcessInfo.isRunningUnitTests {
             appCoordinator = UnitTestsAppCoordinator()
         } else {
-            let coordinator = AppCoordinator(appDelegate: appDelegate)
-            SceneDelegate.windowManager = coordinator.windowManager
-            appCoordinator = coordinator
+            appCoordinator = AppCoordinator(appDelegate: appDelegate)
         }
+        SceneDelegate.windowManager = appCoordinator.windowManager
     }
 
     var body: some Scene {
