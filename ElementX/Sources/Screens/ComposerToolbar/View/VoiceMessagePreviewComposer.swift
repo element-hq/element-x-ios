@@ -72,8 +72,6 @@ struct VoiceMessagePreviewComposer: View {
                     .fill(Color.compound.bgSubtleSecondary)
             }
         }
-        .frame(minHeight: 42)
-        .fixedSize(horizontal: false, vertical: true)
     }
     
     @ViewBuilder

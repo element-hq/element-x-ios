@@ -27,6 +27,7 @@ struct ComposerToolbar: View {
     @ScaledMetric private var sendButtonIconSize = 16
     @ScaledMetric(relativeTo: .title) private var spinnerSize = 44
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
+    @ScaledMetric(relativeTo: .title) private var deleteRecordingButtonSize = 30
     @State private var frame: CGRect = .zero
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
@@ -53,6 +54,7 @@ struct ComposerToolbar: View {
                     .offset(y: -frame.height)
             }
         }
+        .fixedSize(horizontal: false, vertical: true)
         .alert(item: $context.alertInfo)
     }
     
@@ -77,8 +79,8 @@ struct ComposerToolbar: View {
                     sendButton
                         .padding(.leading, 3)
                 } else {
-                    voiceMessageRecordingButton(mode: context.viewState.isVoiceMessageModeActivated ? .recording : .standard)
-                        .padding(.leading, 4)
+                    voiceMessageRecordingButton(mode: context.viewState.isVoiceMessageModeActivated ? .recording : .idle)
+                        .padding(.leading, 3)
                 }
             }
         }
@@ -256,7 +258,6 @@ struct ComposerToolbar: View {
         } stopRecording: {
             context.send(viewAction: .voiceMessage(.stopRecording))
         }
-        .padding(4)
     }
     
     private var voiceMessageTrashButton: some View {
@@ -264,7 +265,9 @@ struct ComposerToolbar: View {
             context.send(viewAction: .voiceMessage(.deleteRecording))
         } label: {
             CompoundIcon(\.delete)
-                .padding(EdgeInsets(top: 10, leading: 11, bottom: 10, trailing: 11))
+                .scaledToFit()
+                .frame(width: deleteRecordingButtonSize, height: deleteRecordingButtonSize)
+                .padding(7)
         }
         .buttonStyle(.compound(.plain))
         .accessibilityLabel(L10n.a11yDelete)

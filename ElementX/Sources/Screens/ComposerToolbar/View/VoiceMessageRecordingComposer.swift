@@ -32,8 +32,6 @@ struct VoiceMessageRecordingComposer: View {
                         .fill(Color.compound.bgSubtleSecondary)
                 }
             }
-            .frame(minHeight: 42)
-            .fixedSize(horizontal: false, vertical: true)
     }
     
     private func onPlaybackPlayPause() { }

@@ -18,59 +18,63 @@ import Compound
 import SwiftUI
 
 enum VoiceMessageRecordingButtonMode {
-    case standard
+    case idle
     case recording
 }
 
 struct VoiceMessageRecordingButton: View {
-    var mode: VoiceMessageRecordingButtonMode
+    let mode: VoiceMessageRecordingButtonMode
     var startRecording: (() -> Void)?
     var stopRecording: (() -> Void)?
     
     private let impactFeedbackGenerator = UIImpactFeedbackGenerator()
+    @ScaledMetric private var recordingImageSize = 16
     
     var body: some View {
         Button {
             impactFeedbackGenerator.impactOccurred()
             switch mode {
-            case .standard:
+            case .idle:
                 startRecording?()
             case .recording:
                 stopRecording?()
             }
-        } label: { }
-            .accessibilityLabel(L10n.a11yVoiceMessageRecord)
-            .buttonStyle(VoiceMessageRecordingButtonStyle(mode: mode))
-    }
-}
-
-private struct VoiceMessageRecordingButtonStyle: ButtonStyle {
-    let mode: VoiceMessageRecordingButtonMode
-    
-    func makeBody(configuration: Configuration) -> some View {
-        Group {
+        } label: {
             switch mode {
-            case .standard:
-                CompoundIcon(configuration.isPressed ? \.micOnSolid : \.micOnOutline)
-                    .foregroundColor(.compound.iconSecondary)
-                    .padding(EdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6))
+            case .idle:
+                CompoundIcon(\.micOnOutline)
+                    .scaledToFit()
+                    .frame(width: recordingImageSize, height: recordingImageSize)
+                    .padding(14)
             case .recording:
-                Image(systemName: "stop.circle.fill")
-                    .resizable()
-                    .frame(width: 34, height: 34)
+                recordingImage
+                    .padding(4)
             }
         }
+        .buttonStyle(.compound(.plain))
+        .accessibilityLabel(L10n.a11yVoiceMessageRecord)
+    }
+    
+    private var recordingImage: some View {
+        Image(systemName: "stop.fill")
+            .resizable()
+            .frame(width: recordingImageSize, height: recordingImageSize)
+            .foregroundColor(.compound.iconOnSolidPrimary)
+            .font(.compound.bodyLG)
+            .padding(10)
+            .background {
+                Circle()
+                    .foregroundColor(.compound.iconPrimary)
+            }
     }
 }
 
 struct VoiceMessageRecordingButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         HStack {
-            VoiceMessageRecordingButton(mode: .standard)
-                .fixedSize(horizontal: true, vertical: true)
+            VoiceMessageRecordingButton(mode: .idle)
             
             VoiceMessageRecordingButton(mode: .recording)
-                .fixedSize(horizontal: true, vertical: true)
         }
     }
 }
