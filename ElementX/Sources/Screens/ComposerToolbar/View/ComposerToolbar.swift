@@ -54,7 +54,6 @@ struct ComposerToolbar: View {
                     .offset(y: -frame.height)
             }
         }
-        .fixedSize(horizontal: false, vertical: true)
         .alert(item: $context.alertInfo)
     }
     
@@ -124,6 +123,7 @@ struct ComposerToolbar: View {
             
             if context.viewState.isVoiceMessageModeActivated {
                 voiceMessageContent
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
     }
@@ -265,9 +265,7 @@ struct ComposerToolbar: View {
             context.send(viewAction: .voiceMessage(.deleteRecording))
         } label: {
             CompoundIcon(\.delete)
-                .scaledToFit()
-                .frame(width: deleteRecordingButtonSize, height: deleteRecordingButtonSize)
-                .padding(7)
+                .padding(10)
         }
         .buttonStyle(.compound(.plain))
         .accessibilityLabel(L10n.a11yDelete)

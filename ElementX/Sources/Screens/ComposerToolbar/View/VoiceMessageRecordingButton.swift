@@ -44,8 +44,7 @@ struct VoiceMessageRecordingButton: View {
             case .idle:
                 CompoundIcon(\.micOnOutline)
                     .scaledToFit()
-                    .frame(width: recordingImageSize, height: recordingImageSize)
-                    .padding(14)
+                    .padding(10)
             case .recording:
                 recordingImage
                     .padding(4)
