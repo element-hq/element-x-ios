@@ -27,7 +27,6 @@ protocol VoiceMessageCacheProtocol {
     /// - Returns: the URL of the cached audio file or nil if the file doesn't exist
     func fileURL(for mediaSource: MediaSourceProxy) -> URL?
     
-    
     /// Returns the URL to use for recording
     /// - Returns: an URL
     func urlForRecording() -> URL

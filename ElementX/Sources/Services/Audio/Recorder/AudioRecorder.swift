@@ -154,7 +154,7 @@ class AudioRecorder: AudioRecorderProtocol {
         case .url(let url):
             outputURL = url
         }
-        try? FileManager.default.removeItem(at: outputURL)        
+        try? FileManager.default.removeItem(at: outputURL)
         return try AVAudioFile(forWriting: outputURL, settings: settings)
     }
     

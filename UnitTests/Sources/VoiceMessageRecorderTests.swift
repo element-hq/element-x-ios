@@ -57,6 +57,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
         audioConverter = AudioConverterMock()
         voiceMessageCache = VoiceMessageCacheMock()
+        voiceMessageCache.urlForRecordingReturnValue = FileManager.default.temporaryDirectory.appendingPathComponent("test-voice-message").appendingPathExtension("m4a")
         
         voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: audioRecorder,
                                                     mediaPlayerProvider: mediaPlayerProvider,
