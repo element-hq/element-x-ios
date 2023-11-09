@@ -30,7 +30,9 @@ enum UITestsScreenIdentifier: String {
     case migration
     case templateScreen
     case appLockFlow
+    case appLockFlowAlternateWindow
     case appLockFlowDisabled
+    case appLockFlowDisabledAlternateWindow
     case appLockSetupFlow
     case appLockSetupFlowUnlock
     case appLockSetupFlowMandatory

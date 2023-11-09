@@ -22,7 +22,7 @@ import UIKit
 class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     private let navigationRootCoordinator: NavigationRootCoordinator
     private var mockScreen: MockScreen?
-    private var appLockFlowCoordinator: AppLockFlowCoordinator?
+    private var appLockMockScreen: MockScreen?
     private var appLockCancellable: AnyCancellable?
     
     let notificationManager: NotificationManagerProtocol = NotificationManagerMock()
@@ -65,8 +65,15 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     
     func windowManagerDidConfigureWindows(_ windowManager: WindowManager) {
         guard let screenID = ProcessInfo.testScreenID, screenID == .appLockFlow || screenID == .appLockFlowDisabled else { return }
-
-        let coordinator = setupAppLockFlow(disabled: screenID == .appLockFlowDisabled)
+        
+        let screen = MockScreen(id: screenID == .appLockFlow ? .appLockFlowAlternateWindow : .appLockFlowDisabledAlternateWindow)
+        appLockMockScreen = screen
+        windowManager.alternateWindow.rootViewController = UIHostingController(rootView: screen.coordinator.toPresentable())
+        
+        guard let coordinator = screen.coordinator as? AppLockFlowCoordinator else {
+            fatalError("Unexpected coordinator: \(type(of: screen.coordinator))")
+        }
+        
         appLockCancellable = coordinator.actions
             .sink { [weak self] action in
                 switch action {
@@ -78,44 +85,6 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
                     break
                 }
             }
-        appLockFlowCoordinator = coordinator
-        windowManager.alternateWindow.rootViewController = UIHostingController(rootView: coordinator.toPresentable())
-    }
-    
-    private func setupAppLockFlow(disabled: Bool) -> AppLockFlowCoordinator {
-        let navigationCoordinator = NavigationRootCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationCoordinator)
-        
-        let keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-        keychainController.resetSecrets()
-        
-        let context = LAContextMock()
-        context.biometryTypeValue = UIDevice.current.isPhone ? .faceID : .touchID // (iPhone 14 & iPad 9th gen)
-        context.evaluatePolicyReturnValue = true
-        context.evaluatedPolicyDomainStateValue = "😎".data(using: .utf8)
-        
-        let appLockService = AppLockService(keychainController: keychainController,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            context: context)
-        
-        if !disabled {
-            guard case .success = appLockService.setupPINCode("2023") else {
-                fatalError("Failed to preset the PIN code.")
-            }
-        }
-        
-        let notificationCenter = UITestsNotificationCenter()
-        do {
-            try notificationCenter.startListening()
-        } catch {
-            fatalError("Failed to start listening for notifications.")
-        }
-        
-        let coordinator = AppLockFlowCoordinator(appLockService: appLockService,
-                                                 userIndicatorController: userIndicatorController,
-                                                 navigationCoordinator: navigationCoordinator,
-                                                 notificationCenter: notificationCenter)
-        return coordinator
     }
 }
 
@@ -212,9 +181,43 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .appLockFlow, .appLockFlowDisabled:
-            // The tested coordinator is setup externally.
-            // Return a blank form to snapshot when unlocked.
+            // The tested coordinator is setup below in the alternate window.
+            // Here we just return a blank window to snapshot as an unlocked app.
             return BlankFormCoordinator()
+        case .appLockFlowAlternateWindow, .appLockFlowDisabledAlternateWindow:
+            let navigationCoordinator = NavigationRootCoordinator()
+            let userIndicatorController = UserIndicatorController(rootCoordinator: navigationCoordinator)
+            
+            let keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+            keychainController.resetSecrets()
+            
+            let context = LAContextMock()
+            context.biometryTypeValue = UIDevice.current.isPhone ? .faceID : .touchID // (iPhone 14 & iPad 9th gen)
+            context.evaluatePolicyReturnValue = true
+            context.evaluatedPolicyDomainStateValue = "😎".data(using: .utf8)
+            
+            let appLockService = AppLockService(keychainController: keychainController,
+                                                appSettings: ServiceLocator.shared.settings,
+                                                context: context)
+            
+            if id == .appLockFlowAlternateWindow {
+                guard case .success = appLockService.setupPINCode("2023") else {
+                    fatalError("Failed to preset the PIN code.")
+                }
+            }
+            
+            let notificationCenter = UITestsNotificationCenter()
+            do {
+                try notificationCenter.startListening()
+            } catch {
+                fatalError("Failed to start listening for notifications.")
+            }
+            
+            let coordinator = AppLockFlowCoordinator(appLockService: appLockService,
+                                                     userIndicatorController: userIndicatorController,
+                                                     navigationCoordinator: navigationCoordinator,
+                                                     notificationCenter: notificationCenter)
+            return coordinator
         case .appLockSetupFlow, .appLockSetupFlowUnlock, .appLockSetupFlowMandatory:
             let navigationStackCoordinator = NavigationStackCoordinator()
             // The flow expects an existing root coordinator, use a blank form as a placeholder.
