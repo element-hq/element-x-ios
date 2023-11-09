@@ -91,7 +91,6 @@ targets:
     - path: ../../ElementX/Sources/Other/Logging
     - path: ../../ElementX/Sources/Other/MatrixEntityRegex.swift
     - path: ../../ElementX/Sources/Other/PermalinkBuilder.swift
-    - path: ../../ElementX/Sources/Other/SharedUserDefaultsKeys.swift
     - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
     - path: ../../ElementX/Sources/Other/UserAgentBuilder.swift
     - path: ../../ElementX/Sources/Other/UserPreference.swift
@@ -107,4 +106,7 @@ targets:
     - path: ../../ElementX/Sources/Services/Notification/Proxy
     - path: ../../ElementX/Sources/Services/Room/RoomSummary/RoomMessageEventStringBuilder.swift
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
-    - path: ../../ElementX/Sources/Application/CommonConstantSettings.swift
+    - path: ../../ElementX/Sources/Application/AppSettings.swift
+    - path: ../../ElementX/Sources/Services/Analytics/AnalyticsConfiguration.swift
+    - path: ../../ElementX/Sources/Services/Analytics/AnalyticsConsentState.swift
+    - path: ../../ElementX/Sources/Screens/RoomScreen/View/Style/TimelineStyle.swift
