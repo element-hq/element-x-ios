@@ -53,6 +53,8 @@ final class AppSettings {
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
     
+    #if IS_MAIN_APP
+    
     static func reset() {
         MXLog.warning("Resetting the AppSettings.")
         store.removePersistentDomain(forName: suiteName)
@@ -235,14 +237,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
     
-    // MARK: - Other
-       
-    let permalinkBaseURL: URL = "https://matrix.to"
-    
     // MARK: - Logging
-    
-    @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
-    var logLevel
     
     @UserPreference(key: UserDefaultsKeys.otlpTracingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var otlpTracingEnabled
@@ -275,4 +270,13 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.chatBackupEnabled, defaultValue: false, storageType: .userDefaults(store))
     var chatBackupEnabled
+    
+    #endif
+    
+    // MARK: - Shared
+       
+    let permalinkBaseURL: URL = "https://matrix.to"
+    
+    @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
+    var logLevel
 }

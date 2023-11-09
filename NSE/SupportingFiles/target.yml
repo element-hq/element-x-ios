@@ -66,8 +66,8 @@ targets:
         DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
         CODE_SIGN_ENTITLEMENTS: NSE/SupportingFiles/NSE.entitlements
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
-      debug:
-      release:
+        OTHER_SWIFT_FLAGS:
+        - "-DIS_NSE"
 
     sources:
     - path: ../Sources
@@ -107,6 +107,3 @@ targets:
     - path: ../../ElementX/Sources/Services/Room/RoomSummary/RoomMessageEventStringBuilder.swift
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
     - path: ../../ElementX/Sources/Application/AppSettings.swift
-    - path: ../../ElementX/Sources/Services/Analytics/AnalyticsConfiguration.swift
-    - path: ../../ElementX/Sources/Services/Analytics/AnalyticsConsentState.swift
-    - path: ../../ElementX/Sources/Screens/RoomScreen/View/Style/TimelineStyle.swift
