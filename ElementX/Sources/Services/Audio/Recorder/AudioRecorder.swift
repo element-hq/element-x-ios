@@ -44,7 +44,7 @@ class AudioRecorder: AudioRecorderProtocol {
     private let silenceThreshold: Float = -50.0
     private var meterLevel: Float = 0
 
-    private(set) var audioFileUrl: URL?
+    private(set) var audioFileURL: URL?
     var currentTime: TimeInterval = .zero
     var isRecording: Bool {
         audioEngine?.isRunning ?? false
@@ -65,13 +65,13 @@ class AudioRecorder: AudioRecorderProtocol {
         }
     }
     
-    func record(audioFileUrl: URL) async {
+    func record(audioFileURL: URL) async {
         stopped = false
         guard await requestRecordPermission() else {
             setInternalState(.error(.recordPermissionNotGranted))
             return
         }
-        let result = await startRecording(audioFileUrl: audioFileUrl)
+        let result = await startRecording(audioFileURL: audioFileURL)
         switch result {
         case .success:
             setInternalState(.recording)
@@ -133,25 +133,25 @@ class AudioRecorder: AudioRecorderProtocol {
         removeObservers()
     }
     
-    private func startRecording(audioFileUrl: URL) async -> Result<Void, AudioRecorderError> {
+    private func startRecording(audioFileURL: URL) async -> Result<Void, AudioRecorderError> {
         await withCheckedContinuation { continuation in
-            startRecording(audioFileUrl: audioFileUrl) { result in
+            startRecording(audioFileURL: audioFileURL) { result in
                 continuation.resume(returning: result)
             }
         }
     }
     
-    private func createAudioFile(at recordingUrl: URL, sampleRate: Int) throws -> AVAudioFile {
+    private func createAudioFile(at recordingURL: URL, sampleRate: Int) throws -> AVAudioFile {
         let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
                         AVSampleRateKey: sampleRate,
                         AVNumberOfChannelsKey: 1,
                         AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
         MXLog.info("creating audio file with format: \(settings)")
-        try? FileManager.default.removeItem(at: recordingUrl)
-        return try AVAudioFile(forWriting: recordingUrl, settings: settings)
+        try? FileManager.default.removeItem(at: recordingURL)
+        return try AVAudioFile(forWriting: recordingURL, settings: settings)
     }
     
-    private func startRecording(audioFileUrl: URL, completion: @escaping (Result<Void, AudioRecorderError>) -> Void) {
+    private func startRecording(audioFileURL: URL, completion: @escaping (Result<Void, AudioRecorderError>) -> Void) {
         dispatchQueue.async { [weak self] in
             guard let self, !self.stopped else {
                 completion(.failure(.recordingCancelled))
@@ -179,9 +179,9 @@ class AudioRecorder: AudioRecorderProtocol {
             currentTime = 0
             let audioFile: AVAudioFile
             do {
-                audioFile = try createAudioFile(at: audioFileUrl, sampleRate: Int(sampleRate))
+                audioFile = try createAudioFile(at: audioFileURL, sampleRate: Int(sampleRate))
                 self.audioFile = audioFile
-                self.audioFileUrl = audioFile.url
+                self.audioFileURL = audioFile.url
             } catch {
                 MXLog.error("failed to create an audio file. \(error)")
                 completion(.failure(.audioFileCreationFailure))
@@ -237,15 +237,15 @@ class AudioRecorder: AudioRecorderProtocol {
             }
             guard let self else { return }
             deleteRecordingFile()
-            audioFileUrl = nil
+            audioFileURL = nil
             currentTime = 0
         }
     }
     
     private func deleteRecordingFile() {
-        guard let audioFileUrl else { return }
+        guard let audioFileURL else { return }
         do {
-            try FileManager.default.removeItem(at: audioFileUrl)
+            try FileManager.default.removeItem(at: audioFileURL)
             MXLog.info("recording file deleted.")
         } catch {
             MXLog.error("failed to delete recording file. \(error)")

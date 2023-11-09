@@ -38,7 +38,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     var recordingURL: URL? {
-        audioRecorder.audioFileUrl
+        audioRecorder.audioFileURL
     }
     
     var recordingDuration: TimeInterval {
@@ -73,7 +73,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         await stopPlayback()
         recordingCancelled = false
         
-        await audioRecorder.record(audioFileUrl: voiceMessageCache.urlForRecording)
+        await audioRecorder.record(audioFileURL: voiceMessageCache.urlForRecording)
     }
     
     func stopRecording() async {
@@ -99,7 +99,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     // MARK: - Preview
     
     func startPlayback() async -> Result<Void, VoiceMessageRecorderError> {
-        guard let previewAudioPlayerState, let url = audioRecorder.audioFileUrl else {
+        guard let previewAudioPlayerState, let url = audioRecorder.audioFileURL else {
             return .failure(.previewNotAvailable)
         }
         
@@ -138,7 +138,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     func buildRecordingWaveform() async -> Result<[UInt16], VoiceMessageRecorderError> {
-        guard let url = audioRecorder.audioFileUrl else {
+        guard let url = audioRecorder.audioFileURL else {
             return .failure(.missingRecordingFile)
         }
         // build the waveform
@@ -156,7 +156,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError> {
-        guard let url = audioRecorder.audioFileUrl else {
+        guard let url = audioRecorder.audioFileURL else {
             return .failure(VoiceMessageRecorderError.missingRecordingFile)
         }
         
@@ -228,7 +228,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
                         actionsSubject.send(.didFailWithError(error: VoiceMessageRecorderError.previewNotAvailable))
                         return
                     }
-                    guard let recordingURL = audioRecorder.audioFileUrl, let previewAudioPlayerState else {
+                    guard let recordingURL = audioRecorder.audioFileURL, let previewAudioPlayerState else {
                         actionsSubject.send(.didFailWithError(error: VoiceMessageRecorderError.previewNotAvailable))
                         return
                     }
@@ -244,7 +244,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     private func finalizeRecording() async -> Result<Void, VoiceMessageRecorderError> {
         MXLog.info("finalize audio recording")
-        guard let url = audioRecorder.audioFileUrl, audioRecorder.currentTime > 0 else {
+        guard let url = audioRecorder.audioFileURL, audioRecorder.currentTime > 0 else {
             return .failure(.previewNotAvailable)
         }
 

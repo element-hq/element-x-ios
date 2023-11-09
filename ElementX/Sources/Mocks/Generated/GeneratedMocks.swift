@@ -535,23 +535,23 @@ class AudioRecorderMock: AudioRecorderProtocol {
         set(value) { underlyingIsRecording = value }
     }
     var underlyingIsRecording: Bool!
-    var audioFileUrl: URL?
+    var audioFileURL: URL?
 
     //MARK: - record
 
-    var recordAudioFileUrlCallsCount = 0
-    var recordAudioFileUrlCalled: Bool {
-        return recordAudioFileUrlCallsCount > 0
+    var recordAudioFileURLCallsCount = 0
+    var recordAudioFileURLCalled: Bool {
+        return recordAudioFileURLCallsCount > 0
     }
-    var recordAudioFileUrlReceivedAudioFileUrl: URL?
-    var recordAudioFileUrlReceivedInvocations: [URL] = []
-    var recordAudioFileUrlClosure: ((URL) async -> Void)?
+    var recordAudioFileURLReceivedAudioFileURL: URL?
+    var recordAudioFileURLReceivedInvocations: [URL] = []
+    var recordAudioFileURLClosure: ((URL) async -> Void)?
 
-    func record(audioFileUrl: URL) async {
-        recordAudioFileUrlCallsCount += 1
-        recordAudioFileUrlReceivedAudioFileUrl = audioFileUrl
-        recordAudioFileUrlReceivedInvocations.append(audioFileUrl)
-        await recordAudioFileUrlClosure?(audioFileUrl)
+    func record(audioFileURL: URL) async {
+        recordAudioFileURLCallsCount += 1
+        recordAudioFileURLReceivedAudioFileURL = audioFileURL
+        recordAudioFileURLReceivedInvocations.append(audioFileURL)
+        await recordAudioFileURLClosure?(audioFileURL)
     }
     //MARK: - stopRecording
 
