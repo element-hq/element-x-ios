@@ -17,19 +17,6 @@
 import Combine
 import Foundation
 
-enum AudioRecordingIdentifier {
-    case uuid(UUID)
-}
-
-extension AudioRecordingIdentifier {
-    var identifier: String {
-        switch self {
-        case .uuid(let uuid):
-            return uuid.uuidString
-        }
-    }
-}
-
 enum AudioRecorderError: Error, Equatable {
     case audioEngineFailure
     case audioFileCreationFailure
@@ -49,9 +36,9 @@ protocol AudioRecorderProtocol: AnyObject {
     var actions: AnyPublisher<AudioRecorderAction, Never> { get }
     var currentTime: TimeInterval { get }
     var isRecording: Bool { get }
-    var audioFileUrl: URL? { get }
+    var audioFileURL: URL? { get }
     
-    func record(with recordID: AudioRecordingIdentifier) async
+    func record(audioFileURL: URL) async
     func stopRecording() async
     func deleteRecording() async
     func averagePower() -> Float

@@ -52,6 +52,7 @@ internal enum Asset {
     internal static let numberedList = ImageAsset(name: "images/numbered-list")
     internal static let quote = ImageAsset(name: "images/quote")
     internal static let sendMessage = ImageAsset(name: "images/send-message")
+    internal static let stopRecording = ImageAsset(name: "images/stop-recording")
     internal static let strikethrough = ImageAsset(name: "images/strikethrough")
     internal static let textFormat = ImageAsset(name: "images/text-format")
     internal static let underline = ImageAsset(name: "images/underline")

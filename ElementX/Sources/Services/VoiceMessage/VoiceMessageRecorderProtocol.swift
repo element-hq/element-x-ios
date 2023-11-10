@@ -35,6 +35,7 @@ enum VoiceMessageRecorderAction {
 protocol VoiceMessageRecorderProtocol {
     var audioRecorder: AudioRecorderProtocol { get }
     var previewAudioPlayerState: AudioPlayerState? { get }
+    var isRecording: Bool { get }
     var recordingURL: URL? { get }
     var recordingDuration: TimeInterval { get }
 

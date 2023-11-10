@@ -24,9 +24,13 @@ struct ComposerToolbar: View {
     let keyCommandHandler: KeyCommandHandler
     
     @FocusState private var composerFocused: Bool
-    @ScaledMetric private var sendButtonIconSize = 16
+    @ScaledMetric(relativeTo: .title) private var sendButtonIconSize = 16
+    @ScaledMetric(relativeTo: .title) private var sendButtonIconPadding = 10
+    @ScaledMetric(relativeTo: .title) private var sendButtonIconOffsetX = 1
+    
     @ScaledMetric(relativeTo: .title) private var spinnerSize = 44
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
+    @ScaledMetric(relativeTo: .title) private var deleteRecordingButtonSize = 30
     @State private var frame: CGRect = .zero
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
@@ -77,8 +81,8 @@ struct ComposerToolbar: View {
                     sendButton
                         .padding(.leading, 3)
                 } else {
-                    voiceMessageRecordingButton
-                        .padding(.leading, 4)
+                    voiceMessageRecordingButton(mode: context.viewState.isVoiceMessageModeActivated ? .recording : .idle)
+                        .padding(.leading, 3)
                 }
             }
         }
@@ -122,6 +126,7 @@ struct ComposerToolbar: View {
             
             if context.viewState.isVoiceMessageModeActivated {
                 voiceMessageContent
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
     }
@@ -214,8 +219,9 @@ struct ComposerToolbar: View {
                 .accessibilityHidden(!context.viewState.composerMode.isEdit)
             Image(asset: Asset.Images.sendMessage)
                 .resizable()
+                .offset(x: sendButtonIconOffsetX)
                 .frame(width: sendButtonIconSize, height: sendButtonIconSize)
-                .padding(EdgeInsets(top: 10, leading: 11, bottom: 10, trailing: 9))
+                .padding(sendButtonIconPadding)
                 .opacity(context.viewState.composerMode.isEdit ? 0 : 1)
                 .accessibilityLabel(L10n.actionSend)
                 .accessibilityHidden(context.viewState.composerMode.isEdit)
@@ -235,8 +241,10 @@ struct ComposerToolbar: View {
         // Display the voice message composer above to keep the focus and keep the keyboard open if it's already open.
         switch context.viewState.composerMode {
         case .recordVoiceMessage(let state):
-            VoiceMessageRecordingComposer(recorderState: state)
-                .padding(.leading, 12)
+            topBarLayout {
+                voiceMessageTrashButton
+                VoiceMessageRecordingComposer(recorderState: state)
+            }
         case .previewVoiceMessage(let state, let waveform, let isUploading):
             topBarLayout {
                 voiceMessageTrashButton
@@ -248,17 +256,12 @@ struct ComposerToolbar: View {
         }
     }
     
-    private var voiceMessageRecordingButton: some View {
-        VoiceMessageRecordingButton {
+    private func voiceMessageRecordingButton(mode: VoiceMessageRecordingButtonMode) -> some View {
+        VoiceMessageRecordingButton(mode: mode) {
             context.send(viewAction: .voiceMessage(.startRecording))
-        } stopRecording: { minimumRecordTimeReached in
-            if minimumRecordTimeReached {
-                context.send(viewAction: .voiceMessage(.stopRecording))
-            } else {
-                context.send(viewAction: .voiceMessage(.cancelRecording))
-            }
+        } stopRecording: {
+            context.send(viewAction: .voiceMessage(.stopRecording))
         }
-        .padding(4)
     }
     
     private var voiceMessageTrashButton: some View {
@@ -266,7 +269,9 @@ struct ComposerToolbar: View {
             context.send(viewAction: .voiceMessage(.deleteRecording))
         } label: {
             CompoundIcon(\.delete)
-                .padding(EdgeInsets(top: 10, leading: 11, bottom: 10, trailing: 11))
+                .scaledToFit()
+                .frame(width: deleteRecordingButtonSize, height: deleteRecordingButtonSize)
+                .padding(7)
         }
         .buttonStyle(.compound(.plain))
         .accessibilityLabel(L10n.a11yDelete)

@@ -40,8 +40,10 @@ public enum L10n {
   public static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
   /// User menu
   public static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
-  /// Record voice message. Double tap and hold to record. Release to end recording.
+  /// Record voice message.
   public static var a11yVoiceMessageRecord: String { return L10n.tr("Localizable", "a11y_voice_message_record") }
+  /// Stop recording
+  public static var a11yVoiceMessageStopRecording: String { return L10n.tr("Localizable", "a11y_voice_message_stop_recording") }
   /// Accept
   public static var actionAccept: String { return L10n.tr("Localizable", "action_accept") }
   /// Add to timeline

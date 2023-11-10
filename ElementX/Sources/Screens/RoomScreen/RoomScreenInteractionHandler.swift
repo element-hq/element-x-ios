@@ -390,7 +390,12 @@ class RoomScreenInteractionHandler {
     }
     
     func deleteCurrentVoiceMessage() async {
-        await voiceMessageRecorder.deleteRecording()
+        if voiceMessageRecorder.isRecording {
+            await voiceMessageRecorder.cancelRecording()
+        } else {
+            await voiceMessageRecorder.deleteRecording()
+        }
+        
         voiceMessageRecorderObserver = nil
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
@@ -473,7 +478,12 @@ class RoomScreenInteractionHandler {
             MXLog.error("Cannot play a voice message without an audio player")
             return
         }
-        
+
+        // Stop any recording in progress
+        if voiceMessageRecorder.isRecording {
+            await voiceMessageRecorder.stopRecording()
+        }
+
         let audioPlayerState = audioPlayerState(for: itemID)
         
         // Ensure this one is attached

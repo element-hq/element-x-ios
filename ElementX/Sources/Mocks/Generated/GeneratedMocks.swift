@@ -466,6 +466,18 @@ class AudioPlayerMock: AudioPlayerProtocol {
         loadMediaSourceUsingAutoplayReceivedInvocations.append((mediaSource: mediaSource, url: url, autoplay: autoplay))
         loadMediaSourceUsingAutoplayClosure?(mediaSource, url, autoplay)
     }
+    //MARK: - reset
+
+    var resetCallsCount = 0
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() -> Void)?
+
+    func reset() {
+        resetCallsCount += 1
+        resetClosure?()
+    }
     //MARK: - play
 
     var playCallsCount = 0
@@ -535,23 +547,23 @@ class AudioRecorderMock: AudioRecorderProtocol {
         set(value) { underlyingIsRecording = value }
     }
     var underlyingIsRecording: Bool!
-    var audioFileUrl: URL?
+    var audioFileURL: URL?
 
     //MARK: - record
 
-    var recordWithCallsCount = 0
-    var recordWithCalled: Bool {
-        return recordWithCallsCount > 0
+    var recordAudioFileURLCallsCount = 0
+    var recordAudioFileURLCalled: Bool {
+        return recordAudioFileURLCallsCount > 0
     }
-    var recordWithReceivedRecordID: AudioRecordingIdentifier?
-    var recordWithReceivedInvocations: [AudioRecordingIdentifier] = []
-    var recordWithClosure: ((AudioRecordingIdentifier) async -> Void)?
+    var recordAudioFileURLReceivedAudioFileURL: URL?
+    var recordAudioFileURLReceivedInvocations: [URL] = []
+    var recordAudioFileURLClosure: ((URL) async -> Void)?
 
-    func record(with recordID: AudioRecordingIdentifier) async {
-        recordWithCallsCount += 1
-        recordWithReceivedRecordID = recordID
-        recordWithReceivedInvocations.append(recordID)
-        await recordWithClosure?(recordID)
+    func record(audioFileURL: URL) async {
+        recordAudioFileURLCallsCount += 1
+        recordAudioFileURLReceivedAudioFileURL = audioFileURL
+        recordAudioFileURLReceivedInvocations.append(audioFileURL)
+        await recordAudioFileURLClosure?(audioFileURL)
     }
     //MARK: - stopRecording
 
@@ -1097,6 +1109,18 @@ class MediaPlayerMock: MediaPlayerProtocol {
         loadMediaSourceUsingAutoplayReceivedArguments = (mediaSource: mediaSource, url: url, autoplay: autoplay)
         loadMediaSourceUsingAutoplayReceivedInvocations.append((mediaSource: mediaSource, url: url, autoplay: autoplay))
         loadMediaSourceUsingAutoplayClosure?(mediaSource, url, autoplay)
+    }
+    //MARK: - reset
+
+    var resetCallsCount = 0
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() -> Void)?
+
+    func reset() {
+        resetCallsCount += 1
+        resetClosure?()
     }
     //MARK: - play
 
@@ -3143,6 +3167,11 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol {
     }
 }
 class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
+    var urlForRecording: URL {
+        get { return underlyingUrlForRecording }
+        set(value) { underlyingUrlForRecording = value }
+    }
+    var underlyingUrlForRecording: URL!
 
     //MARK: - fileURL
 
@@ -3234,6 +3263,11 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     }
     var underlyingAudioRecorder: AudioRecorderProtocol!
     var previewAudioPlayerState: AudioPlayerState?
+    var isRecording: Bool {
+        get { return underlyingIsRecording }
+        set(value) { underlyingIsRecording = value }
+    }
+    var underlyingIsRecording: Bool!
     var recordingURL: URL?
     var recordingDuration: TimeInterval {
         get { return underlyingRecordingDuration }

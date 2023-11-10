@@ -17,79 +17,71 @@
 import Compound
 import SwiftUI
 
+enum VoiceMessageRecordingButtonMode {
+    case idle
+    case recording
+}
+
 struct VoiceMessageRecordingButton: View {
+    let mode: VoiceMessageRecordingButtonMode
     var startRecording: (() -> Void)?
-    var stopRecording: ((_ minimumRecordTimeReached: Bool) -> Void)?
+    var stopRecording: (() -> Void)?
     
-    @ScaledMetric private var tooltipPointerHeight = 6
-    
-    @State private var buttonPressed = false
-    @State private var recordingStartTime: Date?
-    @State private var showTooltip = false
-    @State private var frame: CGRect = .zero
-    
-    private let minimumRecordingDuration = 1.0
-    private let tooltipDuration = 1.0
     private let impactFeedbackGenerator = UIImpactFeedbackGenerator()
-    private let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
+    @ScaledMetric(relativeTo: .title) private var idleImageSize = 16
+    @ScaledMetric(relativeTo: .title) private var idleImagePadding = 10
+    
+    @ScaledMetric(relativeTo: .title) private var recordingImageSize = 24
+    @ScaledMetric(relativeTo: .title) private var recordingImagePadding = 6
     
     var body: some View {
-        Button { } label: {
-            CompoundIcon(buttonPressed ? \.micOnSolid : \.micOnOutline)
-                .foregroundColor(.compound.iconSecondary)
-                .padding(EdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6))
-        }
-        .readFrame($frame, in: .global)
-        .accessibilityLabel(L10n.a11yVoiceMessageRecord)
-        .onLongPressGesture { } onPressingChanged: { isPressing in
-            buttonPressed = isPressing
-            
-            if isPressing {
-                showTooltip = false
-                recordingStartTime = Date.now
-                impactFeedbackGenerator.impactOccurred()
+        Button {
+            impactFeedbackGenerator.impactOccurred()
+            switch mode {
+            case .idle:
                 startRecording?()
-            } else {
-                if let recordingStartTime, Date.now.timeIntervalSince(recordingStartTime) < minimumRecordingDuration {
-                    withElementAnimation {
-                        showTooltip = true
-                    }
-                    notificationFeedbackGenerator.notificationOccurred(.error)
-                    stopRecording?(false)
-                } else {
-                    impactFeedbackGenerator.impactOccurred()
-                    stopRecording?(true)
-                }
+            case .recording:
+                stopRecording?()
+            }
+        } label: {
+            switch mode {
+            case .idle:
+                CompoundIcon(\.micOnOutline, size: .medium, relativeTo: .title)
+                    .foregroundColor(.compound.iconSecondary)
+                    .frame(width: idleImageSize, height: idleImageSize)
+                    .padding(idleImagePadding)
+                    .padding(4)
+            case .recording:
+                Asset.Images.stopRecording.swiftUIImage
+                    .resizable()
+                    .foregroundColor(.compound.iconOnSolidPrimary)
+                    .frame(width: recordingImageSize, height: recordingImageSize)
+                    .padding(recordingImagePadding)
+                    .background(
+                        Circle()
+                            .foregroundColor(.compound.bgActionPrimaryRest)
+                    )
+                    .padding(4)
             }
         }
-        .overlay(alignment: .bottomTrailing) {
-            if showTooltip {
-                tooltipView
-                    .offset(y: -frame.height - tooltipPointerHeight)
-            }
-        }
+        .buttonStyle(VoiceMessageRecordingButtonStyle())
+        .accessibilityLabel(mode == .idle ? L10n.a11yVoiceMessageRecord : L10n.a11yVoiceMessageStopRecording)
     }
-    
-    private var tooltipView: some View {
-        VoiceMessageRecordingButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip,
-                                               pointerHeight: tooltipPointerHeight,
-                                               pointerLocation: frame.midX,
-                                               pointerLocationCoordinateSpace: .global)
-            .allowsHitTesting(false)
-            .fixedSize()
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + tooltipDuration) {
-                    withElementAnimation {
-                        showTooltip = false
-                    }
-                }
-            }
+}
+
+private struct VoiceMessageRecordingButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.6 : 1)
     }
 }
 
 struct VoiceMessageRecordingButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VoiceMessageRecordingButton()
-            .fixedSize(horizontal: true, vertical: true)
+        HStack {
+            VoiceMessageRecordingButton(mode: .idle)
+            
+            VoiceMessageRecordingButton(mode: .recording)
+        }
     }
 }

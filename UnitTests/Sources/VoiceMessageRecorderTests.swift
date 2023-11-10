@@ -57,6 +57,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
         audioConverter = AudioConverterMock()
         voiceMessageCache = VoiceMessageCacheMock()
+        voiceMessageCache.urlForRecording = FileManager.default.temporaryDirectory.appendingPathComponent("test-voice-message").appendingPathExtension("m4a")
         
         voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: audioRecorder,
                                                     mediaPlayerProvider: mediaPlayerProvider,
@@ -65,7 +66,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     private func setRecordingComplete() async throws {
-        audioRecorder.audioFileUrl = recordingURL
+        audioRecorder.audioFileURL = recordingURL
         audioRecorder.currentTime = 5
 
         let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
@@ -81,7 +82,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testRecordingURL() async throws {
-        audioRecorder.audioFileUrl = recordingURL
+        audioRecorder.audioFileURL = recordingURL
         XCTAssertEqual(voiceMessageRecorder.recordingURL, recordingURL)
     }
     
@@ -92,7 +93,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     
     func testStartRecording() async throws {
         _ = await voiceMessageRecorder.startRecording()
-        XCTAssert(audioRecorder.recordWithCalled)
+        XCTAssert(audioRecorder.recordAudioFileURLCalled)
     }
     
     func testStopRecording() async throws {
@@ -185,17 +186,17 @@ class VoiceMessageRecorderTests: XCTestCase {
     
     func testBuildRecordedWaveform() async throws {
         // If there is no recording file, an error is expected
-        audioRecorder.audioFileUrl = nil
+        audioRecorder.audioFileURL = nil
         guard case .failure(.missingRecordingFile) = await voiceMessageRecorder.buildRecordingWaveform() else {
             XCTFail("An error is expected")
             return
         }
         
-        guard let audioFileUrl = Bundle(for: Self.self).url(forResource: "test_audio", withExtension: "mp3") else {
+        guard let audioFileURL = Bundle(for: Self.self).url(forResource: "test_audio", withExtension: "mp3") else {
             XCTFail("Test audio file is missing")
             return
         }
-        audioRecorder.audioFileUrl = audioFileUrl
+        audioRecorder.audioFileURL = audioFileURL
         guard case .success(let data) = await voiceMessageRecorder.buildRecordingWaveform() else {
             XCTFail("A waveform is expected")
             return
@@ -207,7 +208,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         let roomProxy = RoomProxyMock()
 
         // If there is no recording file, an error is expected
-        audioRecorder.audioFileUrl = nil
+        audioRecorder.audioFileURL = nil
         guard case .failure(.missingRecordingFile) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
             XCTFail("An error is expected")
             return
@@ -215,7 +216,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testSendVoiceMessage_ConversionError() async throws {
-        audioRecorder.audioFileUrl = recordingURL
+        audioRecorder.audioFileURL = recordingURL
         // If the converter returns an error
         audioConverter.convertToOpusOggSourceURLDestinationURLThrowableError = AudioConverterError.conversionFailed(nil)
         
@@ -227,11 +228,11 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testSendVoiceMessage_InvalidFile() async throws {
-        guard let audioFileUrl = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
+        guard let audioFileURL = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
             XCTFail("Test audio file is missing")
             return
         }
-        audioRecorder.audioFileUrl = audioFileUrl
+        audioRecorder.audioFileURL = audioFileURL
         audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { _, destination in
             try? FileManager.default.removeItem(at: destination)
         }
@@ -245,14 +246,14 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testSendVoiceMessage_WaveformAnlyseFailed() async throws {
-        guard let imageFileUrl = Bundle(for: Self.self).url(forResource: "test_image", withExtension: "png") else {
+        guard let imageFileURL = Bundle(for: Self.self).url(forResource: "test_image", withExtension: "png") else {
             XCTFail("Test audio file is missing")
             return
         }
-        audioRecorder.audioFileUrl = imageFileUrl
+        audioRecorder.audioFileURL = imageFileURL
         audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { _, destination in
             try? FileManager.default.removeItem(at: destination)
-            try? FileManager.default.copyItem(at: imageFileUrl, to: destination)
+            try? FileManager.default.copyItem(at: imageFileURL, to: destination)
         }
         
         let roomProxy = RoomProxyMock()
@@ -264,11 +265,11 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testSendVoiceMessage_SendError() async throws {
-        guard let audioFileUrl = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
+        guard let audioFileURL = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
             XCTFail("Test audio file is missing")
             return
         }
-        audioRecorder.audioFileUrl = audioFileUrl
+        audioRecorder.audioFileURL = audioFileURL
         audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { source, destination in
             try? FileManager.default.removeItem(at: destination)
             let internalConverter = AudioConverter()
@@ -285,34 +286,34 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testSendVoiceMessage() async throws {
-        guard let audioFileUrl = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
+        guard let imageFileURL = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
             XCTFail("Test audio file is missing")
             return
         }
         
         let roomProxy = RoomProxyMock()
         audioRecorder.currentTime = 42
-        audioRecorder.audioFileUrl = audioFileUrl
+        audioRecorder.audioFileURL = imageFileURL
         _ = await voiceMessageRecorder.startRecording()
         _ = await voiceMessageRecorder.stopRecording()
         
-        var convertedFileUrl: URL?
+        var convertedFileURL: URL?
         var convertedFileSize: UInt64?
         
         audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { source, destination in
-            convertedFileUrl = destination
+            convertedFileURL = destination
             try? FileManager.default.removeItem(at: destination)
             let internalConverter = AudioConverter()
             try internalConverter.convertToOpusOgg(sourceURL: source, destinationURL: destination)
             convertedFileSize = try? UInt64(FileManager.default.sizeForItem(at: destination))
             // the source URL must be the recorded file
-            XCTAssertEqual(source, audioFileUrl)
+            XCTAssertEqual(source, imageFileURL)
             // check the converted file extension
             XCTAssertEqual(destination.pathExtension, "ogg")
         }
         
         roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure = { url, audioInfo, waveform, _, _ in
-            XCTAssertEqual(url, convertedFileUrl)
+            XCTAssertEqual(url, convertedFileURL)
             XCTAssertEqual(audioInfo.duration, self.audioRecorder.currentTime)
             XCTAssertEqual(audioInfo.size, convertedFileSize)
             XCTAssertEqual(audioInfo.mimetype, "audio/ogg")
@@ -330,8 +331,8 @@ class VoiceMessageRecorderTests: XCTestCase {
         XCTAssert(roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled)
         
         // the converted file must have been deleted
-        if let convertedFileUrl {
-            XCTAssertFalse(FileManager.default.fileExists(atPath: convertedFileUrl.path()))
+        if let convertedFileURL {
+            XCTAssertFalse(FileManager.default.fileExists(atPath: convertedFileURL.path()))
         } else {
             XCTFail("converted file URL is missing")
         }
@@ -351,7 +352,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testAudioRecorderActionHandling_didStopRecording() async throws {
-        audioRecorder.audioFileUrl = recordingURL
+        audioRecorder.audioFileURL = recordingURL
         audioRecorder.currentTime = 5
 
         let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
@@ -367,7 +368,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testAudioRecorderActionHandling_didFailed() async throws {
-        audioRecorder.audioFileUrl = recordingURL
+        audioRecorder.audioFileURL = recordingURL
         
         let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
             switch action {

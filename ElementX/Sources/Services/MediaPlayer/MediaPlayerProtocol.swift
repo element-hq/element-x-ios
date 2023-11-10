@@ -32,6 +32,7 @@ protocol MediaPlayerProtocol: AnyObject {
     var state: MediaPlayerState { get }
     
     func load(mediaSource: MediaSourceProxy, using url: URL, autoplay: Bool)
+    func reset()
     func play()
     func pause()
     func stop()

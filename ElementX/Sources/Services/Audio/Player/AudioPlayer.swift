@@ -105,6 +105,11 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         addObservers()
     }
     
+    func reset() {
+        stop()
+        unloadContent()
+    }
+    
     func play() {
         isStopped = false
         setupAudioSession()
