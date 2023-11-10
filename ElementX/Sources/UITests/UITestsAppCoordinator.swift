@@ -22,8 +22,7 @@ import UIKit
 class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     private let navigationRootCoordinator: NavigationRootCoordinator
     private var mockScreen: MockScreen?
-    private var appLockMockScreen: MockScreen?
-    private var appLockCancellable: AnyCancellable?
+    private var alternateWindowMockScreen: MockScreen?
     
     let notificationManager: NotificationManagerProtocol = NotificationManagerMock()
     let windowManager = WindowManager()
@@ -68,7 +67,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
         
         let screen = MockScreen(id: screenID == .appLockFlow ? .appLockFlowAlternateWindow : .appLockFlowDisabledAlternateWindow, windowManager: windowManager)
         windowManager.alternateWindow.rootViewController = UIHostingController(rootView: screen.coordinator.toPresentable().statusBarHidden())
-        appLockMockScreen = screen
+        alternateWindowMockScreen = screen
     }
 }
 
@@ -168,7 +167,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .appLockFlow, .appLockFlowDisabled:
             // The tested coordinator is setup below in the alternate window.
-            // Here we just return a blank window to snapshot as an unlocked app.
+            // Here we just return a blank screen to snapshot as the unlocked app.
             return BlankFormCoordinator()
         case .appLockFlowAlternateWindow, .appLockFlowDisabledAlternateWindow:
             let navigationCoordinator = NavigationRootCoordinator()
@@ -205,7 +204,7 @@ class MockScreen: Identifiable {
             guard let windowManager else { fatalError("The window manager must be supplied.") }
             
             coordinator.actions
-                .sink { [weak self] action in
+                .sink { action in
                     switch action {
                     case .lockApp:
                         windowManager.switchToAlternate()

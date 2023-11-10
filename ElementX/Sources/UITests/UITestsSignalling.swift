@@ -119,9 +119,9 @@ enum UITestsSignalling {
         func send(_ signal: UITestsSignal) throws {
             guard isConnected else { throw UITestsSignalError.notConnected }
             
-            let rawSignal = rawMessage(signal)
-            try rawSignal.write(to: fileURL, atomically: false, encoding: .utf8)
-            NSLog("UITestsSignalling: Sent \(rawSignal)")
+            let rawMessage = rawMessage(signal)
+            try rawMessage.write(to: fileURL, atomically: false, encoding: .utf8)
+            NSLog("UITestsSignalling: Sent \(rawMessage)")
         }
         
         /// The signal formatted as a complete message string, including the identifier for this sender.
