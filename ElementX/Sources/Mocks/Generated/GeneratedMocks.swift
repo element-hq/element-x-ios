@@ -466,6 +466,18 @@ class AudioPlayerMock: AudioPlayerProtocol {
         loadMediaSourceUsingAutoplayReceivedInvocations.append((mediaSource: mediaSource, url: url, autoplay: autoplay))
         loadMediaSourceUsingAutoplayClosure?(mediaSource, url, autoplay)
     }
+    //MARK: - reset
+
+    var resetCallsCount = 0
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() -> Void)?
+
+    func reset() {
+        resetCallsCount += 1
+        resetClosure?()
+    }
     //MARK: - play
 
     var playCallsCount = 0
@@ -1097,6 +1109,18 @@ class MediaPlayerMock: MediaPlayerProtocol {
         loadMediaSourceUsingAutoplayReceivedArguments = (mediaSource: mediaSource, url: url, autoplay: autoplay)
         loadMediaSourceUsingAutoplayReceivedInvocations.append((mediaSource: mediaSource, url: url, autoplay: autoplay))
         loadMediaSourceUsingAutoplayClosure?(mediaSource, url, autoplay)
+    }
+    //MARK: - reset
+
+    var resetCallsCount = 0
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() -> Void)?
+
+    func reset() {
+        resetCallsCount += 1
+        resetClosure?()
     }
     //MARK: - play
 

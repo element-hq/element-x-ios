@@ -71,6 +71,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     func startRecording() async {
         await stopPlayback()
+        previewAudioPlayer?.reset()
         recordingCancelled = false
         
         await audioRecorder.record(audioFileURL: voiceMessageCache.urlForRecording)
@@ -87,12 +88,14 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         await audioRecorder.stopRecording()
         await audioRecorder.deleteRecording()
         previewAudioPlayerState = nil
+        previewAudioPlayer?.reset()
     }
     
     func deleteRecording() async {
         MXLog.info("Delete recording.")
         await stopPlayback()
         await audioRecorder.deleteRecording()
+        previewAudioPlayer?.reset()
         previewAudioPlayerState = nil
     }
 
