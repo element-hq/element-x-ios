@@ -254,6 +254,8 @@ public enum L10n {
   }
   /// Message
   public static var commonMessage: String { return L10n.tr("Localizable", "common_message") }
+  /// Message actions
+  public static var commonMessageActions: String { return L10n.tr("Localizable", "common_message_actions") }
   /// Message layout
   public static var commonMessageLayout: String { return L10n.tr("Localizable", "common_message_layout") }
   /// Message removed
@@ -1344,7 +1346,7 @@ public enum L10n {
   public static var screenWaitlistTitleSuccess: String { return L10n.tr("Localizable", "screen_waitlist_title_success") }
   /// Calls, polls, search and more will be added later this year.
   public static var screenWelcomeBullet1: String { return L10n.tr("Localizable", "screen_welcome_bullet_1") }
-  /// Message history for encrypted rooms won’t be available in this update.
+  /// Message history for encrypted rooms isn’t available yet.
   public static var screenWelcomeBullet2: String { return L10n.tr("Localizable", "screen_welcome_bullet_2") }
   /// We’d love to hear from you, let us know what you think via the settings page.
   public static var screenWelcomeBullet3: String { return L10n.tr("Localizable", "screen_welcome_bullet_3") }

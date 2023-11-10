@@ -114,6 +114,7 @@
 "common_link_copied_to_clipboard" = "Link copied to clipboard";
 "common_loading" = "Loading…";
 "common_message" = "Message";
+"common_message_actions" = "Message actions";
 "common_message_layout" = "Message layout";
 "common_message_removed" = "Message removed";
 "common_modern" = "Modern";
@@ -543,7 +544,6 @@
 "screen_signed_out_subtitle" = "You might have been signed out for one of the reasons listed below. Please sign in again to continue using %@.";
 "screen_signed_out_title" = "You’re signed out";
 "screen_signout_confirmation_dialog_content" = "Are you sure you want to sign out?";
-"screen_signout_confirmation_dialog_title" = "Sign out";
 "screen_signout_in_progress_dialog_content" = "Signing out…";
 "screen_signout_key_backup_disabled_subtitle" = "You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages.";
 "screen_signout_key_backup_disabled_title" = "You have turned off backup";
@@ -561,7 +561,7 @@
 "screen_waitlist_title" = "You’re almost there.";
 "screen_waitlist_title_success" = "You're in.";
 "screen_welcome_bullet_1" = "Calls, polls, search and more will be added later this year.";
-"screen_welcome_bullet_2" = "Message history for encrypted rooms won’t be available in this update.";
+"screen_welcome_bullet_2" = "Message history for encrypted rooms isn’t available yet.";
 "screen_welcome_bullet_3" = "We’d love to hear from you, let us know what you think via the settings page.";
 "screen_welcome_button" = "Let's go!";
 "screen_welcome_subtitle" = "Here’s what you need to know:";
@@ -651,5 +651,6 @@
 "screen_room_error_failed_processing_media" = "Failed processing media to upload, please try again.";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
 "screen_signout_confirmation_dialog_submit" = "Sign out";
+"screen_signout_confirmation_dialog_title" = "Sign out";
 "screen_signout_preference_item" = "Sign out";
 "screen_waitlist_message_success" = "Welcome to %1$@!";
