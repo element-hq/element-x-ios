@@ -25,6 +25,11 @@ private struct TimelineItemAccessibilityModifier: ViewModifier {
         switch timelineItem {
         case is PollRoomTimelineItem, is VoiceMessageRoomTimelineItem:
             content
+                .accessibilityActions {
+                    Button(L10n.commonMessageActions) {
+                        action()
+                    }
+                }
         case let timelineItem as EventBasedTimelineItemProtocol:
             content
                 .accessibilityRepresentation {
