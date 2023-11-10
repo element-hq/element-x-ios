@@ -66,37 +66,23 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     func windowManagerDidConfigureWindows(_ windowManager: WindowManager) {
         guard let screenID = ProcessInfo.testScreenID, screenID == .appLockFlow || screenID == .appLockFlowDisabled else { return }
         
-        let screen = MockScreen(id: screenID == .appLockFlow ? .appLockFlowAlternateWindow : .appLockFlowDisabledAlternateWindow)
-        appLockMockScreen = screen
+        let screen = MockScreen(id: screenID == .appLockFlow ? .appLockFlowAlternateWindow : .appLockFlowDisabledAlternateWindow, windowManager: windowManager)
         windowManager.alternateWindow.rootViewController = UIHostingController(rootView: screen.coordinator.toPresentable().statusBarHidden())
-        
-        guard let coordinator = screen.coordinator as? AppLockFlowCoordinator else {
-            fatalError("Unexpected coordinator: \(type(of: screen.coordinator))")
-        }
-        
-        appLockCancellable = coordinator.actions
-            .sink { [weak self] action in
-                switch action {
-                case .lockApp:
-                    self?.windowManager.switchToAlternate()
-                case .unlockApp:
-                    self?.windowManager.switchToMain()
-                case .forceLogout:
-                    break
-                }
-            }
+        appLockMockScreen = screen
     }
 }
 
 @MainActor
 class MockScreen: Identifiable {
     let id: UITestsScreenIdentifier
+    let windowManager: WindowManager?
     
     private var retainedState = [Any]()
     private var cancellables = Set<AnyCancellable>()
     
-    init(id: UITestsScreenIdentifier) {
+    init(id: UITestsScreenIdentifier, windowManager: WindowManager? = nil) {
         self.id = id
+        self.windowManager = windowManager
     }
     
     lazy var coordinator: CoordinatorProtocol = {
@@ -215,6 +201,22 @@ class MockScreen: Identifiable {
             let coordinator = AppLockFlowCoordinator(appLockService: appLockService,
                                                      navigationCoordinator: navigationCoordinator,
                                                      notificationCenter: notificationCenter)
+            
+            guard let windowManager else { fatalError("The window manager must be supplied.") }
+            
+            coordinator.actions
+                .sink { [weak self] action in
+                    switch action {
+                    case .lockApp:
+                        windowManager.switchToAlternate()
+                    case .unlockApp:
+                        windowManager.switchToMain()
+                    case .forceLogout:
+                        break
+                    }
+                }
+                .store(in: &cancellables)
+            
             return coordinator
         case .appLockSetupFlow, .appLockSetupFlowUnlock, .appLockSetupFlowMandatory:
             let navigationStackCoordinator = NavigationStackCoordinator()
