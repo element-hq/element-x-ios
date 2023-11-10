@@ -232,7 +232,8 @@ class LoggingTests: XCTestCase {
                                              unreadNotificationCount: 0,
                                              notificationMode: nil,
                                              canonicalAlias: nil,
-                                             inviter: nil)
+                                             inviter: nil,
+                                             hasOngoingCall: false)
         
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)

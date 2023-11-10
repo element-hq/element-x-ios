@@ -28,6 +28,7 @@ struct RoomSummaryDetails {
     let notificationMode: RoomNotificationModeProxy?
     let canonicalAlias: String?
     let inviter: RoomMemberProxyProtocol?
+    let hasOngoingCall: Bool
 }
 
 extension RoomSummaryDetails: CustomStringConvertible {

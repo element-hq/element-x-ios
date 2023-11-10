@@ -164,7 +164,7 @@ struct RoomScreen: View {
     
     @ViewBuilder
     private var callButton: some View {
-        if context.viewState.isCallOngoing {
+        if context.viewState.hasOngoingCall {
             Button {
                 context.send(viewAction: .presentCall)
             } label: {
@@ -189,7 +189,7 @@ struct RoomScreen: View {
 // MARK: - Previews
 
 struct RoomScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Preview room", isCallOngoing: true)),
+    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Preview room", hasOngoingCall: true)),
                                                timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
                                                mediaPlayerProvider: MediaPlayerProviderMock(),

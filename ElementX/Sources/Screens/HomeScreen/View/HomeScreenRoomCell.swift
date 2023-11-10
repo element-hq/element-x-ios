@@ -117,6 +117,11 @@ struct HomeScreenRoomCell: View {
             Spacer()
             
             HStack(spacing: 8) {
+                if room.hasOngoingCall {
+                    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                        .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+                }
+                
                 notificationModeIcon
                     .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
                 
@@ -125,15 +130,7 @@ struct HomeScreenRoomCell: View {
                         .frame(width: 12, height: 12)
                         .foregroundColor(.compound.iconAccentTertiary)
                 }
-                
-                if !room.hasDecoration {
-                    // Force extra padding between last message text and the right border of the screen if there is no unread dot
-                    Circle()
-                        .frame(width: 12, height: 12)
-                        .hidden()
-                }
             }
-            .padding(.leading, room.hasDecoration ? 12 : 0)
         }
     }
     
@@ -205,6 +202,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                       roomId: details.id,
                                       name: details.name,
                                       hasUnreads: details.unreadNotificationCount > 0,
+                                      hasOngoingCall: details.hasOngoingCall,
                                       timestamp: Date(timeIntervalSinceReferenceDate: 0).formattedMinimal(),
                                       lastMessage: details.lastMessage,
                                       notificationMode: details.notificationMode)
