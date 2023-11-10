@@ -52,6 +52,9 @@ targets:
         appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
         baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
         keychainAccessGroupIdentifier: $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
+        otlpTracingURL: ${OTLP_TRACING_URL}
+        otlpTracingUsername: ${OTLP_TRACING_USERNAME}
+        otlpTracingPassword: ${OTLP_TRACING_PASSWORD}
         NSExtension:
           NSExtensionPointIdentifier: com.apple.usernotifications.service
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).NotificationServiceExtension
