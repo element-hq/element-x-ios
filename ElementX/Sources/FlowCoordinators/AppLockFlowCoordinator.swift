@@ -49,12 +49,6 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         // Set the initial background state.
         showPlaceholder()
         
-        appLockService.disabledPublisher
-            .sink {
-                // When the service is disabled via a force logout, we need to remove the activity indicator.
-            }
-            .store(in: &cancellables)
-        
         notificationCenter.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
                 self?.applicationDidEnterBackground()

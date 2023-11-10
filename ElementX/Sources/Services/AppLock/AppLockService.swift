@@ -56,9 +56,6 @@ class AppLockService: AppLockServiceProtocol {
     
     var numberOfPINAttempts: AnyPublisher<Int, Never> { appSettings.$appLockNumberOfPINAttempts }
     
-    private var disabledSubject: PassthroughSubject<Void, Never> = .init()
-    var disabledPublisher: AnyPublisher<Void, Never> { disabledSubject.eraseToAnyPublisher() }
-    
     init(keychainController: KeychainControllerProtocol, appSettings: AppSettings, context: LAContext = .init()) {
         self.keychainController = keychainController
         self.appSettings = appSettings
@@ -108,7 +105,6 @@ class AppLockService: AppLockServiceProtocol {
         keychainController.removePINCode()
         keychainController.removePINCodeBiometricState()
         appSettings.appLockNumberOfPINAttempts = 0
-        disabledSubject.send()
     }
     
     func applicationDidEnterBackground() {
