@@ -355,7 +355,6 @@ class AudioRecorder: AudioRecorderProtocol {
     private func setInternalState(_ state: InternalAudioRecorderState) {
         dispatchQueue.async { [weak self] in
             guard let self else { return }
-            guard internalState != state else { return }
             MXLog.debug("internal state: \(internalState) -> \(state)")
             internalState = state
             
