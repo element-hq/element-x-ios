@@ -25,6 +25,7 @@ protocol WindowManagerDelegate: AnyObject {
 @MainActor
 /// A window manager that supports switching between a main app window with an overlay and
 /// an alternate window to switch contexts whilst also preserving the main view hierarchy.
+/// Heavily inspired by https://www.fivestars.blog/articles/swiftui-windows/
 class WindowManager {
     weak var delegate: WindowManagerDelegate?
     
@@ -40,13 +41,9 @@ class WindowManager {
         mainWindow = windowScene.keyWindow
         mainWindow.tintColor = .compound.textActionPrimary
         
-        overlayWindow = UIWindow(windowScene: windowScene)
+        overlayWindow = PassthroughWindow(windowScene: windowScene)
         overlayWindow.tintColor = .compound.textActionPrimary
         overlayWindow.backgroundColor = .clear
-        // We don't support user interaction on our indicators so disable interaction, to pass
-        // touches through to the main window. If this changes, there's another solution here:
-        // https://www.fivestars.blog/articles/swiftui-windows/
-        overlayWindow.isUserInteractionEnabled = false
         overlayWindow.isHidden = false
         
         alternateWindow = UIWindow(windowScene: windowScene)
@@ -72,5 +69,16 @@ class WindowManager {
         // to the main window, so end any editing operation now to avoid
         // e.g. the keyboard being displayed on top of a call sheet.
         mainWindow.endEditing(true)
+    }
+}
+
+private class PassthroughWindow: UIWindow {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard let hitView = super.hitTest(point, with: event) else {
+            return nil
+        }
+        
+        // If the returned view is the `UIHostingController`'s view, ignore.
+        return rootViewController?.view == hitView ? nil : hitView
     }
 }
