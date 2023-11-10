@@ -48,10 +48,12 @@ final class AppSettings {
         case chatBackupEnabled
     }
     
-    private static var suiteName: String = InfoPlistReader.app.appGroupIdentifier
+    private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
+    
+    #if IS_MAIN_APP
         
     static func reset() {
         MXLog.warning("Resetting the AppSettings.")
@@ -75,7 +77,7 @@ final class AppSettings {
         true
         #else
         let apps = ["io.element.elementx.nightly", "io.element.elementx.pr"]
-        return apps.contains(InfoPlistReader.app.baseBundleIdentifier)
+        return apps.contains(InfoPlistReader.main.baseBundleIdentifier)
         #endif
     }()
     
@@ -130,7 +132,7 @@ final class AppSettings {
     /// Any codes that the user isn't allowed to use for their PIN.
     let appLockPINCodeBlockList = ["0000", "1234"]
     /// The number of attempts the user has made to unlock the app with a PIN code (resets when unlocked).
-    @UserPreference(key: UserDefaultsKeys.appLockNumberOfPINAttempts, defaultValue: 0, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.mainLockNumberOfPINAttempts, defaultValue: 0, storageType: .userDefaults(store))
     var appLockNumberOfPINAttempts: Int
     
     // MARK: - Authentication
@@ -161,9 +163,9 @@ final class AppSettings {
     
     var pusherAppId: String {
         #if DEBUG
-        InfoPlistReader.app.baseBundleIdentifier + ".ios.dev"
+        InfoPlistReader.main.baseBundleIdentifier + ".ios.dev"
         #else
-        InfoPlistReader.app.baseBundleIdentifier + ".ios.prod"
+        InfoPlistReader.main.baseBundleIdentifier + ".ios.prod"
         #endif
     }
     
@@ -181,22 +183,20 @@ final class AppSettings {
     
     // MARK: - Analytics
     
-    #if !IS_NSE
     #if DEBUG
     /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.app.bundleIdentifier.starts(with: "io.element.elementx"),
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
                                                         host: "https://posthog.element.dev",
                                                         apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
                                                         termsURL: "https://element.io/cookie-policy")
     #else
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.app.bundleIdentifier.starts(with: "io.element.elementx"),
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
                                                         host: "https://posthog.element.io",
                                                         apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
                                                         termsURL: URL("https://element.io/cookie-policy"))
-    #endif
         
     /// Whether the user has opted in to send analytics.
     @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))
@@ -243,15 +243,12 @@ final class AppSettings {
     
     // MARK: - Logging
     
-    @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
-    var logLevel
-    
     @UserPreference(key: UserDefaultsKeys.otlpTracingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var otlpTracingEnabled
     
-    let otlpTracingURL = InfoPlistReader.app.otlpTracingURL
-    let otlpTracingUsername = InfoPlistReader.app.otlpTracingUsername
-    let otlpTracingPassword = InfoPlistReader.app.otlpTracingPassword
+    let otlpTracingURL = InfoPlistReader.main.otlpTracingURL
+    let otlpTracingUsername = InfoPlistReader.main.otlpTracingUsername
+    let otlpTracingPassword = InfoPlistReader.main.otlpTracingPassword
     
     // MARK: - Maps
     
@@ -259,7 +256,7 @@ final class AppSettings {
     let mapTilerBaseURL: URL = "https://api.maptiler.com/maps"
 
     // maptiler api key
-    let mapTilerApiKey = InfoPlistReader.app.mapLibreAPIKey
+    let mapTilerApiKey = InfoPlistReader.main.mapLibreAPIKey
     
     // maptiler geocoding url
     let geocodingURLFormatString = "https://api.maptiler.com/geocoding/%f,%f.json"
@@ -277,4 +274,13 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.chatBackupEnabled, defaultValue: false, storageType: .userDefaults(store))
     var chatBackupEnabled
+    
+    #endif
+    
+    // MARK: - Shared
+    
+    let permalinkBaseURL: URL = "https://matrix.to"
+        
+    @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
+    var logLevel
 }
