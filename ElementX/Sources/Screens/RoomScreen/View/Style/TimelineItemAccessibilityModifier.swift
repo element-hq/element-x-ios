@@ -16,14 +16,20 @@
 
 import SwiftUI
 
-private struct TimelineAccessibilityModifier: ViewModifier {
+private struct TimelineItemAccessibilityModifier: ViewModifier {
     let timelineItem: RoomTimelineItemProtocol
+    let action: () -> Void
     
     @ViewBuilder
     func body(content: Content) -> some View {
         switch timelineItem {
         case is PollRoomTimelineItem, is VoiceMessageRoomTimelineItem:
             content
+                .accessibilityActions {
+                    Button(L10n.commonMessageActions) {
+                        action()
+                    }
+                }
         case let timelineItem as EventBasedTimelineItemProtocol:
             content
                 .accessibilityRepresentation {
@@ -33,6 +39,11 @@ private struct TimelineAccessibilityModifier: ViewModifier {
                     }
                 }
                 .accessibilityElement(children: .combine)
+                .accessibilityActions {
+                    Button(L10n.commonMessageActions) {
+                        action()
+                    }
+                }
         default:
             content
                 .accessibilityElement(children: .combine)
@@ -41,7 +52,7 @@ private struct TimelineAccessibilityModifier: ViewModifier {
 }
 
 extension View {
-    func timelineAccessibility(_ timelineItem: RoomTimelineItemProtocol) -> some View {
-        modifier(TimelineAccessibilityModifier(timelineItem: timelineItem))
+    func timelineItemAccessibility(_ timelineItem: RoomTimelineItemProtocol, action: @escaping () -> Void) -> some View {
+        modifier(TimelineItemAccessibilityModifier(timelineItem: timelineItem, action: action))
     }
 }

@@ -100,7 +100,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         // Figma overlaps reactions by 3
         VStack(alignment: alignment, spacing: -3) {
             messageBubble
-                .timelineAccessibility(timelineItem)
+                .timelineItemAccessibility(timelineItem) {
+                    context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
+                }
             
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(context: context,

@@ -64,7 +64,9 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             
             content()
                 .layoutPriority(1)
-                .timelineAccessibility(timelineItem)
+                .timelineItemAccessibility(timelineItem) {
+                    context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
+                }
         }
         .onTapGesture(count: 2) {
             context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
