@@ -124,6 +124,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var hasUnreads = false
     
+    var hasOngoingCall = false
+    
     var timestamp: String?
     
     var lastMessage: AttributedString?
@@ -131,12 +133,6 @@ struct HomeScreenRoom: Identifiable, Equatable {
     var avatarURL: URL?
     
     var notificationMode: RoomNotificationModeProxy?
-    
-    var hasDecoration: Bool {
-        // notification setting is displayed only for .mentionsAndKeywords and .mute
-        let showNotificationSettings = notificationMode != nil
-        return hasUnreads || showNotificationSettings
-    }
     
     var isPlaceholder = false
     

@@ -85,7 +85,8 @@ extension Array where Element == RoomSummary {
                                             unreadNotificationCount: 4,
                                             notificationMode: .allMessages,
                                             canonicalAlias: nil,
-                                            inviter: RoomMemberProxyMock.mockCharlie)),
+                                            inviter: RoomMemberProxyMock.mockCharlie,
+                                            hasOngoingCall: true)),
         .filled(details: RoomSummaryDetails(id: "2",
                                             name: "Second room",
                                             isDirect: true,
@@ -95,7 +96,8 @@ extension Array where Element == RoomSummary {
                                             unreadNotificationCount: 1,
                                             notificationMode: .mentionsAndKeywordsOnly,
                                             canonicalAlias: nil,
-                                            inviter: RoomMemberProxyMock.mockCharlie)),
+                                            inviter: RoomMemberProxyMock.mockCharlie,
+                                            hasOngoingCall: false)),
         .filled(details: RoomSummaryDetails(id: "3",
                                             name: "Third room",
                                             isDirect: true,
@@ -105,7 +107,8 @@ extension Array where Element == RoomSummary {
                                             unreadNotificationCount: 0,
                                             notificationMode: .mute,
                                             canonicalAlias: nil,
-                                            inviter: RoomMemberProxyMock.mockCharlie)),
+                                            inviter: RoomMemberProxyMock.mockCharlie,
+                                            hasOngoingCall: false)),
         .empty
     ]
     
@@ -118,7 +121,8 @@ extension Array where Element == RoomSummary {
                                             unreadNotificationCount: 0,
                                             notificationMode: nil,
                                             canonicalAlias: "#footest:somewhere.org",
-                                            inviter: RoomMemberProxyMock.mockCharlie)),
+                                            inviter: RoomMemberProxyMock.mockCharlie,
+                                            hasOngoingCall: false)),
         .filled(details: RoomSummaryDetails(id: "someAwesomeRoomId2",
                                             name: "Second room",
                                             isDirect: true,
@@ -128,6 +132,7 @@ extension Array where Element == RoomSummary {
                                             unreadNotificationCount: 0,
                                             notificationMode: nil,
                                             canonicalAlias: nil,
-                                            inviter: RoomMemberProxyMock.mockCharlie))
+                                            inviter: RoomMemberProxyMock.mockCharlie,
+                                            hasOngoingCall: false))
     ]
 }

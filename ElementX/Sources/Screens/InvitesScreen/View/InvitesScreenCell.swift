@@ -191,7 +191,8 @@ private extension InvitesScreenRoomDetails {
                                         unreadNotificationCount: 0,
                                         notificationMode: nil,
                                         canonicalAlias: "#footest:somewhere.org",
-                                        inviter: inviter)
+                                        inviter: inviter,
+                                        hasOngoingCall: false)
         return .init(roomDetails: dmRoom, isUnread: false)
     }
     
@@ -210,7 +211,8 @@ private extension InvitesScreenRoomDetails {
                                         unreadNotificationCount: 0,
                                         notificationMode: nil,
                                         canonicalAlias: alias,
-                                        inviter: inviter)
+                                        inviter: inviter,
+                                        hasOngoingCall: false)
         return .init(roomDetails: dmRoom, isUnread: isUnread)
     }
 }

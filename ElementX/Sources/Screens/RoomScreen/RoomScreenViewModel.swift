@@ -87,7 +87,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                          ownUserID: roomProxy.ownUserID,
-                                                         isCallOngoing: roomProxy.isCallOngoing,
+                                                         hasOngoingCall: roomProxy.hasOngoingCall,
                                                          bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
         
@@ -281,7 +281,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 guard let self else { return }
                 self.state.roomTitle = roomProxy.roomTitle
                 self.state.roomAvatarURL = roomProxy.avatarURL
-                self.state.isCallOngoing = roomProxy.isCallOngoing
+                self.state.hasOngoingCall = roomProxy.hasOngoingCall
             }
             .store(in: &cancellables)
 

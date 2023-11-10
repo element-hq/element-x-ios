@@ -1861,11 +1861,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingIsTombstoned = value }
     }
     var underlyingIsTombstoned: Bool!
-    var isCallOngoing: Bool {
-        get { return underlyingIsCallOngoing }
-        set(value) { underlyingIsCallOngoing = value }
+    var hasOngoingCall: Bool {
+        get { return underlyingHasOngoingCall }
+        set(value) { underlyingHasOngoingCall = value }
     }
-    var underlyingIsCallOngoing: Bool!
+    var underlyingHasOngoingCall: Bool!
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var hasUnreadNotifications: Bool {

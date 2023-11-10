@@ -28,7 +28,7 @@ struct RoomProxyMockConfiguration {
     var isPublic = Bool.random()
     var isEncrypted = Bool.random()
     var isTombstoned = Bool.random()
-    var isCallOngoing = false
+    var hasOngoingCall = false
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var hasUnreadNotifications = Bool.random()
@@ -57,7 +57,7 @@ extension RoomProxyMock {
         isPublic = configuration.isPublic
         isEncrypted = configuration.isEncrypted
         isTombstoned = configuration.isTombstoned
-        isCallOngoing = configuration.isCallOngoing
+        hasOngoingCall = configuration.hasOngoingCall
         canonicalAlias = configuration.canonicalAlias
         alternativeAliases = configuration.alternativeAliases
         hasUnreadNotifications = configuration.hasUnreadNotifications

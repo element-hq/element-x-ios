@@ -24,6 +24,7 @@ struct SeparatorRoomTimelineView: View {
             .font(.compound.bodySMSemibold)
             .foregroundColor(.compound.textPrimary)
             .frame(maxWidth: .infinity)
+            .multilineTextAlignment(.center)
             .padding(.horizontal, 36.0)
             .padding(.vertical, 8.0)
     }

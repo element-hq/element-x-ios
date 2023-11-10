@@ -151,7 +151,7 @@ class RoomProxy: RoomProxyProtocol {
         room.isTombstoned()
     }
     
-    var isCallOngoing: Bool {
+    var hasOngoingCall: Bool {
         room.hasActiveRoomCall()
     }
     

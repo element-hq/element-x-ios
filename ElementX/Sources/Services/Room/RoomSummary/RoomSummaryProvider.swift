@@ -248,7 +248,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          unreadNotificationCount: UInt(roomInfo.notificationCount),
                                          notificationMode: notificationMode,
                                          canonicalAlias: roomInfo.canonicalAlias,
-                                         inviter: inviterProxy)
+                                         inviter: inviterProxy,
+                                         hasOngoingCall: roomInfo.hasRoomCall)
         
         return invalidated ? .invalidated(details: details) : .filled(details: details)
     }
