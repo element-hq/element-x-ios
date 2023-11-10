@@ -1,0 +1,1 @@
+Fix a regression where the forced logout indicator was presented on the hidden overlay window.
