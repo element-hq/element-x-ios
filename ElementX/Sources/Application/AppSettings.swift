@@ -237,10 +237,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
     
-    // MARK: - Other
-       
-    let permalinkBaseURL: URL = "https://matrix.to"
-    
     // MARK: - Logging
     
     @UserPreference(key: UserDefaultsKeys.otlpTracingEnabled, defaultValue: false, storageType: .userDefaults(store))
