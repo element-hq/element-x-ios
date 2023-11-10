@@ -52,6 +52,8 @@ final class AppSettings {
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
+    
+    #if IS_MAIN_APP
         
     static func reset() {
         MXLog.warning("Resetting the AppSettings.")
@@ -181,7 +183,6 @@ final class AppSettings {
     
     // MARK: - Analytics
     
-    #if !IS_NSE
     #if DEBUG
     /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
@@ -206,7 +207,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.timelineStyle, defaultValue: TimelineStyle.bubbles, storageType: .userDefaults(store))
     var timelineStyle
-    #endif
     
     @UserPreference(key: UserDefaultsKeys.shouldCollapseRoomStateEvents, defaultValue: true, storageType: .volatile)
     var shouldCollapseRoomStateEvents
@@ -237,14 +237,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
     
-    // MARK: - Other
-       
-    let permalinkBaseURL: URL = "https://matrix.to"
-    
     // MARK: - Logging
-    
-    @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
-    var logLevel
     
     @UserPreference(key: UserDefaultsKeys.otlpTracingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var otlpTracingEnabled
@@ -277,4 +270,13 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.chatBackupEnabled, defaultValue: false, storageType: .userDefaults(store))
     var chatBackupEnabled
+    
+    #endif
+    
+    // MARK: - Shared
+    
+    let permalinkBaseURL: URL = "https://matrix.to"
+        
+    @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
+    var logLevel
 }
