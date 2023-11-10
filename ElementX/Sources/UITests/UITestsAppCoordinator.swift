@@ -68,7 +68,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
         
         let screen = MockScreen(id: screenID == .appLockFlow ? .appLockFlowAlternateWindow : .appLockFlowDisabledAlternateWindow)
         appLockMockScreen = screen
-        windowManager.alternateWindow.rootViewController = UIHostingController(rootView: screen.coordinator.toPresentable())
+        windowManager.alternateWindow.rootViewController = UIHostingController(rootView: screen.coordinator.toPresentable().statusBarHidden())
         
         guard let coordinator = screen.coordinator as? AppLockFlowCoordinator else {
             fatalError("Unexpected coordinator: \(type(of: screen.coordinator))")
