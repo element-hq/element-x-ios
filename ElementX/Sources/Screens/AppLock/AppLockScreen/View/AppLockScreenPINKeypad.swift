@@ -27,12 +27,14 @@ struct AppLockScreenPINKeypad: View {
                     ForEach(1..<4) { column in
                         let digit = (3 * row) + column
                         Button("\(digit)") { press(digit) }
+                            .accessibilityIdentifier(A11yIdentifiers.appLockScreen.numpad(digit))
                     }
                 }
             }
             GridRow {
                 Button("") { }.hidden()
                 Button("0") { press(0) }
+                    .accessibilityIdentifier(A11yIdentifiers.appLockScreen.numpad(0))
                 Button(action: pressDelete) {
                     Image(systemSymbol: .deleteBackward)
                         .symbolVariant(.fill)

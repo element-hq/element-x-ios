@@ -16,8 +16,6 @@
 
 import XCTest
 
-@testable import ElementX
-
 @MainActor
 class AppLockSetupUITests: XCTestCase {
     var app: XCUIApplication!

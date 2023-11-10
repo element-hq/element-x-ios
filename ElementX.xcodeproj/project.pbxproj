@@ -206,6 +206,7 @@
 		37906355E207DB5703754675 /* AppLockSetupBiometricsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F893F4A111CB7BA5C96949 /* AppLockSetupBiometricsScreenViewModel.swift */; };
 		37D789F24199B32E3FD1AA7B /* FileRoomTimelineItemContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216F0DDC98F2A2C162D09C28 /* FileRoomTimelineItemContent.swift */; };
 		383055C6ABE5BE058CEE1DDB /* WelcomeScreenScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FE5EF0AFFE360C66420AAE /* WelcomeScreenScreenCoordinator.swift */; };
+		384D6B9A7DFD7260139D6852 /* UITestsNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEB8D9F4940E161B18FE4BC /* UITestsNotificationCenter.swift */; };
 		38546A6010A2CF240EC9AF73 /* BindableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1D2CBAEA5D0BD00B90D1B /* BindableState.swift */; };
 		386720B603F87D156DB01FB2 /* VoiceMessageMediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40076C770A5FB83325252973 /* VoiceMessageMediaManager.swift */; };
 		38896D54D6D675534E606195 /* RoomTimelineControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCC416A3BFE73DF7B3E6BF /* RoomTimelineControllerFactory.swift */; };
@@ -724,6 +725,7 @@
 		BA31448FBD9697F8CB9A83CD /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2245243369B99216C7D84E /* ImageCache.swift */; };
 		BA43D782BE85C7F5F20C624A /* AttributedStringBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F37B5DA798C9AE436F2C2C /* AttributedStringBuilderProtocol.swift */; };
 		BA4C9049BC96DED3A2F3B82E /* RoomNotificationSettingsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DD998E523D4EC93C7ED703 /* RoomNotificationSettingsScreenViewModelProtocol.swift */; };
+		BAC845780F17CCFBC5A9CA37 /* AppLockUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F733F135E6D67BBBEB76CC30 /* AppLockUITests.swift */; };
 		BB6BF528BC7F5B87E08C4F18 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A3B7637DDBD6AA97AC2545 /* CameraPicker.swift */; };
 		BB784A02BADB03C820617A46 /* TextRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A55430639712CFACA34F43 /* TextRoomTimelineItem.swift */; };
 		BB9B800C6094E34860E89DC5 /* AppLockSetupBiometricsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CCF9A924521DECA44778C4 /* AppLockSetupBiometricsScreen.swift */; };
@@ -918,7 +920,6 @@
 		EF5009AC03212227131C8AF2 /* RoomNotificationSettingsProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55B5EA766E89FF1F87C3ACB /* RoomNotificationSettingsProxyProtocol.swift */; };
 		EF7924005216B8189898F370 /* BackgroundTaskProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA028DCD4157F9A1F999827 /* BackgroundTaskProtocol.swift */; };
 		EF890DEF0479E66548F2BA23 /* AppLockTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490BEADEFB2D6B7C9F618AE8 /* AppLockTimer.swift */; };
-		F05516474DB42369FD976CEF /* AppLockScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349C633291427A0F29C28C54 /* AppLockScreenUITests.swift */; };
 		F0570F1ECD70C4C851FB2052 /* SecureBackupRecoveryKeyScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E7304F5ECB4CB11CB10E60 /* SecureBackupRecoveryKeyScreenViewModelProtocol.swift */; };
 		F06CE9132855E81EBB6DDC32 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 940C605265DD82DA0C655E23 /* Kingfisher */; };
 		F07D88421A9BC4D03D4A5055 /* VideoRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F348B5F2C12F9D4F4B4D3884 /* VideoRoomTimelineItem.swift */; };
@@ -1215,7 +1216,6 @@
 		33E49C5C6F802B4D94CA78D1 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		340179A0FC1AD4AEDA7FC134 /* CreateRoomViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomViewModelProtocol.swift; sourceTree = "<group>"; };
 		342BEBC3C5FC3F9943C41C4C /* TemplateScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateScreenViewModelProtocol.swift; sourceTree = "<group>"; };
-		349C633291427A0F29C28C54 /* AppLockScreenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockScreenUITests.swift; sourceTree = "<group>"; };
 		351E89CE2ED9B73C5CC47955 /* TimelineReactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineReactionsView.swift; sourceTree = "<group>"; };
 		3558A15CFB934F9229301527 /* RestorationToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorationToken.swift; sourceTree = "<group>"; };
 		35AFCF4C05DEED04E3DB1A16 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1855,6 +1855,7 @@
 		E9D059BFE329BE09B6D96A9F /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ro; path = ro.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		EB3B237387B8288A5A938F1B /* UserAgentBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentBuilderTests.swift; sourceTree = "<group>"; };
 		EBBC5E7C0F8337D2A46EB2DD /* MigrationScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		EBEB8D9F4940E161B18FE4BC /* UITestsNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestsNotificationCenter.swift; sourceTree = "<group>"; };
 		EC589E641AE46EFB2962534D /* RoomMemberDetailsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMemberDetailsViewModelTests.swift; sourceTree = "<group>"; };
 		ECB08484CD5D77C9BF97AA78 /* WaitlistScreenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistScreenUITests.swift; sourceTree = "<group>"; };
 		ECD5FCBA169B6A82F501CA1B /* AnalyticsSettingsScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsSettingsScreenViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -1892,6 +1893,7 @@
 		F5E23D8EE6CBACF32F1EC874 /* MediaPlayerProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerProviderProtocol.swift; sourceTree = "<group>"; };
 		F6D698BFD68B061350553930 /* WaitingDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingDialog.swift; sourceTree = "<group>"; };
 		F72EFC8C634469F9262659C7 /* NSItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSItemProvider.swift; sourceTree = "<group>"; };
+		F733F135E6D67BBBEB76CC30 /* AppLockUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockUITests.swift; sourceTree = "<group>"; };
 		F73FF1A33198F5FAE9D34B1F /* FormattedBodyText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedBodyText.swift; sourceTree = "<group>"; };
 		F7478623CECC9438014244BA /* ServerConfirmationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfirmationScreen.swift; sourceTree = "<group>"; };
 		F754E66A8970963B15B2A41E /* PermalinkBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermalinkBuilder.swift; sourceTree = "<group>"; };
@@ -2400,6 +2402,7 @@
 			children = (
 				8F94F70480243CAA65A2008C /* BlanckFormCoordinator.swift */,
 				46C208DA43CE25D13E670F40 /* UITestsAppCoordinator.swift */,
+				EBEB8D9F4940E161B18FE4BC /* UITestsNotificationCenter.swift */,
 				6CEBE5EA91E8691EDF364EC2 /* UITestsScreenIdentifier.swift */,
 				B7F0192CE2F891141A25B49F /* UITestsSignalling.swift */,
 			);
@@ -3694,8 +3697,8 @@
 				AF11DD57D9FACF2A757AB024 /* AnalyticsPromptUITests.swift */,
 				16037EE9E9A52AF37B7818E3 /* AnalyticsSettingsScreenUITests.swift */,
 				7D0CBC76C80E04345E11F2DB /* Application.swift */,
-				349C633291427A0F29C28C54 /* AppLockScreenUITests.swift */,
 				E8A1BBEF7318CA6B6ACCF4AE /* AppLockSetupUITests.swift */,
+				F733F135E6D67BBBEB76CC30 /* AppLockUITests.swift */,
 				5D2D0A6F1ABC99D29462FB84 /* AuthenticationCoordinatorUITests.swift */,
 				C6FEA87EA3752203065ECE27 /* BugReportUITests.swift */,
 				1D8866FE1CCCF10305FCACBC /* CallScreenUITests.swift */,
@@ -5854,6 +5857,7 @@
 				706F79A39BDB32F592B8C2C7 /* UIKitBackgroundTask.swift in Sources */,
 				3097A0A867D2B19CE32DAE58 /* UIKitBackgroundTaskService.swift in Sources */,
 				E96005321849DBD7C72A28F2 /* UITestsAppCoordinator.swift in Sources */,
+				384D6B9A7DFD7260139D6852 /* UITestsNotificationCenter.swift in Sources */,
 				22882C710BC99EC34A5024A0 /* UITestsScreenIdentifier.swift in Sources */,
 				706289B086B0A6B0C211763F /* UITestsSignalling.swift in Sources */,
 				245F7FE5961BD10C145A26E0 /* UITimelineView.swift in Sources */,
@@ -5936,8 +5940,8 @@
 				795A854F63301DC6B46217B9 /* AccessibilityIdentifiers.swift in Sources */,
 				8024BE37156FF0A95A7A3465 /* AnalyticsPromptUITests.swift in Sources */,
 				BF675964C9159F718589C36A /* AnalyticsSettingsScreenUITests.swift in Sources */,
-				F05516474DB42369FD976CEF /* AppLockScreenUITests.swift in Sources */,
 				44DA28B1E1F9C97C5795F7B3 /* AppLockSetupUITests.swift in Sources */,
+				BAC845780F17CCFBC5A9CA37 /* AppLockUITests.swift in Sources */,
 				7405B4824D45BA7C3D943E76 /* Application.swift in Sources */,
 				ACF094CF3BF02DBFA6DFDE60 /* AuthenticationCoordinatorUITests.swift in Sources */,
 				7756C4E90CABE6F14F7920A0 /* BugReportUITests.swift in Sources */,

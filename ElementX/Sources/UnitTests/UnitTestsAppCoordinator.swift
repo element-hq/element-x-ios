@@ -18,6 +18,7 @@ import SwiftUI
 
 class UnitTestsAppCoordinator: AppCoordinatorProtocol {
     let notificationManager: NotificationManagerProtocol = NotificationManagerMock()
+    let windowManager = WindowManager()
     
     init() {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorControllerMock.default)

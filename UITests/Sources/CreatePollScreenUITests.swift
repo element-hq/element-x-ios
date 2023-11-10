@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import ElementX
 import XCTest
 
 @MainActor

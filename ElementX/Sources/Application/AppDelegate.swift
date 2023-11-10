@@ -15,8 +15,7 @@
 //
 
 import Combine
-import Foundation
-import UIKit
+import SwiftUI
 
 enum AppDelegateCallback {
     case registeredNotifications(deviceToken: Data)

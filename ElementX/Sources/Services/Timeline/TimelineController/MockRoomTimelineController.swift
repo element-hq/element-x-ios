@@ -125,9 +125,9 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// Handles a UI test signal as necessary.
     private func handleSignal(_ signal: UITestsSignal) async throws {
         switch signal {
-        case .paginate:
+        case .timeline(.paginate):
             try await simulateBackPagination()
-        case .incomingMessage:
+        case .timeline(.incomingMessage):
             try await simulateIncomingItem()
         default:
             break
