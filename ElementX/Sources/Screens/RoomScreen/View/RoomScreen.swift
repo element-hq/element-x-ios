@@ -155,8 +155,10 @@ struct RoomScreen: View {
             RoomHeaderView(context: context)
         }
         
-        ToolbarItem(placement: .primaryAction) {
-            callButton
+        if !ProcessInfo.processInfo.isiOSAppOnMac {
+            ToolbarItem(placement: .primaryAction) {
+                callButton
+            }
         }
     }
     
