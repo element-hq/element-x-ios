@@ -48,7 +48,7 @@ final class AppSettings {
         case chatBackupEnabled
     }
     
-    private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
+    private static var suiteName: String = InfoPlistReader.app.appGroupIdentifier
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
@@ -75,7 +75,7 @@ final class AppSettings {
         true
         #else
         let apps = ["io.element.elementx.nightly", "io.element.elementx.pr"]
-        return apps.contains(InfoPlistReader.main.baseBundleIdentifier)
+        return apps.contains(InfoPlistReader.app.baseBundleIdentifier)
         #endif
     }()
     
@@ -161,9 +161,9 @@ final class AppSettings {
     
     var pusherAppId: String {
         #if DEBUG
-        InfoPlistReader.main.baseBundleIdentifier + ".ios.dev"
+        InfoPlistReader.app.baseBundleIdentifier + ".ios.dev"
         #else
-        InfoPlistReader.main.baseBundleIdentifier + ".ios.prod"
+        InfoPlistReader.app.baseBundleIdentifier + ".ios.prod"
         #endif
     }
     
@@ -185,14 +185,14 @@ final class AppSettings {
     #if DEBUG
     /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.app.bundleIdentifier.starts(with: "io.element.elementx"),
                                                         host: "https://posthog.element.dev",
                                                         apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
                                                         termsURL: "https://element.io/cookie-policy")
     #else
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.app.bundleIdentifier.starts(with: "io.element.elementx"),
                                                         host: "https://posthog.element.io",
                                                         apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
                                                         termsURL: URL("https://element.io/cookie-policy"))
@@ -249,9 +249,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.otlpTracingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var otlpTracingEnabled
     
-    let otlpTracingURL = InfoPlistReader.main.otlpTracingURL
-    let otlpTracingUsername = InfoPlistReader.main.otlpTracingUsername
-    let otlpTracingPassword = InfoPlistReader.main.otlpTracingPassword
+    let otlpTracingURL = InfoPlistReader.app.otlpTracingURL
+    let otlpTracingUsername = InfoPlistReader.app.otlpTracingUsername
+    let otlpTracingPassword = InfoPlistReader.app.otlpTracingPassword
     
     // MARK: - Maps
     
@@ -259,7 +259,7 @@ final class AppSettings {
     let mapTilerBaseURL: URL = "https://api.maptiler.com/maps"
 
     // maptiler api key
-    let mapTilerApiKey = InfoPlistReader.main.mapLibreAPIKey
+    let mapTilerApiKey = InfoPlistReader.app.mapLibreAPIKey
     
     // maptiler geocoding url
     let geocodingURLFormatString = "https://api.maptiler.com/geocoding/%f,%f.json"
