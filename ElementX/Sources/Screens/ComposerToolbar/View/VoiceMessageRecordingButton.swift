@@ -31,7 +31,8 @@ struct VoiceMessageRecordingButton: View {
     @ScaledMetric(relativeTo: .title) private var idleImageSize = 16
     @ScaledMetric(relativeTo: .title) private var idleImagePadding = 10
     
-    @ScaledMetric(relativeTo: .title) private var recordingImageSize = 36
+    @ScaledMetric(relativeTo: .title) private var recordingImageSize = 24
+    @ScaledMetric(relativeTo: .title) private var recordingImagePadding = 6
     
     var body: some View {
         Button {
@@ -55,6 +56,11 @@ struct VoiceMessageRecordingButton: View {
                     .resizable()
                     .foregroundColor(.compound.iconOnSolidPrimary)
                     .frame(width: recordingImageSize, height: recordingImageSize)
+                    .padding(recordingImagePadding)
+                    .background(
+                        Circle()
+                            .foregroundColor(.compound.bgActionPrimaryRest)
+                    )
                     .padding(4)
             }
         }
