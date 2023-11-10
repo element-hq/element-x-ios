@@ -59,7 +59,7 @@ struct VoiceMessageRecordingButton: View {
             }
         }
         .buttonStyle(VoiceMessageRecordingButtonStyle())
-        .accessibilityLabel(L10n.a11yVoiceMessageRecord)
+        .accessibilityLabel(mode == .idle ? L10n.a11yVoiceMessageRecord : L10n.a11yVoiceMessageStopRecording)
     }
 }
 
