@@ -24,7 +24,10 @@ struct ComposerToolbar: View {
     let keyCommandHandler: KeyCommandHandler
     
     @FocusState private var composerFocused: Bool
-    @ScaledMetric private var sendButtonIconSize = 16
+    @ScaledMetric(relativeTo: .title) private var sendButtonIconSize = 16
+    @ScaledMetric(relativeTo: .title) private var sendButtonIconPadding = 10
+    @ScaledMetric(relativeTo: .title) private var sendButtonIconOffsetX = 1
+    
     @ScaledMetric(relativeTo: .title) private var spinnerSize = 44
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
     @ScaledMetric(relativeTo: .title) private var deleteRecordingButtonSize = 30
@@ -216,8 +219,9 @@ struct ComposerToolbar: View {
                 .accessibilityHidden(!context.viewState.composerMode.isEdit)
             Image(asset: Asset.Images.sendMessage)
                 .resizable()
+                .offset(x: sendButtonIconOffsetX)
                 .frame(width: sendButtonIconSize, height: sendButtonIconSize)
-                .padding(EdgeInsets(top: 10, leading: 11, bottom: 10, trailing: 9))
+                .padding(sendButtonIconPadding)
                 .opacity(context.viewState.composerMode.isEdit ? 0 : 1)
                 .accessibilityLabel(L10n.actionSend)
                 .accessibilityHidden(context.viewState.composerMode.isEdit)
