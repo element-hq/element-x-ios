@@ -49,13 +49,6 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         // Set the initial background state.
         showPlaceholder()
         
-        appLockService.disabledPublisher
-            .sink {
-                // When the service is disabled via a force logout, we need to remove the activity indicator.
-                ServiceLocator.shared.userIndicatorController.retractAllIndicators()
-            }
-            .store(in: &cancellables)
-        
         notificationCenter.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
                 self?.applicationDidEnterBackground()
@@ -131,7 +124,6 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             case .appUnlocked:
                 actionsSubject.send(.unlockApp)
             case .forceLogout:
-                ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(type: .modal, title: L10n.commonSigningOut, persistent: true))
                 actionsSubject.send(.forceLogout)
             }
         }

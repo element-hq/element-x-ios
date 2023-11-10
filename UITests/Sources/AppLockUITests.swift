@@ -23,6 +23,9 @@ class AppLockUITests: XCTestCase {
     enum Step {
         static let placeholder = 0
         static let lockScreen = 1
+        static let failedUnlock = 2
+        static let logoutAlert = 3
+        static let forcedLogout = 4
         static let unlocked = 99
     }
     
@@ -76,6 +79,33 @@ class AppLockUITests: XCTestCase {
         try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
     }
     
+    func testWrongPIN() async throws {
+        // Given an app with screen lock enabled that is ready to unlock.
+        let client = try UITestsSignalling.Client(mode: .tests)
+        app = Application.launch(.appLockFlow)
+        await client.waitForApp()
+        
+        try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
+        try client.send(.notification(name: UIApplication.didEnterBackgroundNotification))
+        try client.send(.notification(name: UIApplication.willEnterForegroundNotification))
+        try await app.assertScreenshot(.appLockFlow, step: Step.lockScreen)
+        
+        // When entering an incorrect PIN
+        enterWrongPIN()
+        
+        // Then the app should remain locked with a warning.
+        try await app.assertScreenshot(.appLockFlow, step: Step.failedUnlock)
+        
+        // When entering it incorrectly twice more.
+        enterWrongPIN()
+        enterWrongPIN()
+        
+        // Then then the app should sign the user out.
+        try await app.assertScreenshot(.appLockFlow, step: Step.logoutAlert)
+        app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].tap()
+        try await app.assertScreenshot(.appLockFlow, step: Step.forcedLogout)
+    }
+    
     // MARK: - Helpers
     
     func enterPIN() {
@@ -83,5 +113,12 @@ class AppLockUITests: XCTestCase {
         app.buttons[A11yIdentifiers.appLockScreen.numpad(0)].tap()
         app.buttons[A11yIdentifiers.appLockScreen.numpad(2)].tap()
         app.buttons[A11yIdentifiers.appLockScreen.numpad(3)].tap()
+    }
+    
+    func enterWrongPIN() {
+        app.buttons[A11yIdentifiers.appLockScreen.numpad(0)].tap()
+        app.buttons[A11yIdentifiers.appLockScreen.numpad(0)].tap()
+        app.buttons[A11yIdentifiers.appLockScreen.numpad(0)].tap()
+        app.buttons[A11yIdentifiers.appLockScreen.numpad(0)].tap()
     }
 }

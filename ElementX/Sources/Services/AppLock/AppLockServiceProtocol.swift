@@ -45,9 +45,6 @@ protocol AppLockServiceProtocol: AnyObject {
     /// to re-enter their PIN code to re-enable the feature (i.e. to accept a new face or fingerprint).
     var biometricUnlockTrusted: Bool { get }
     
-    /// A publisher that advertises when the service has been disabled.
-    var disabledPublisher: AnyPublisher<Void, Never> { get }
-    
     /// Sets the user's PIN code used to unlock the app.
     func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError>
     /// Validates the supplied PIN code is long enough, only contains digits and isn't a weak choice.
