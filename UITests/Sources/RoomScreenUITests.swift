@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import ElementX
 import XCTest
 
 @MainActor
@@ -181,8 +180,8 @@ class RoomScreenUITests: XCTestCase {
 
     // MARK: - Helper Methods
     
-    private func performOperation(_ operation: UITestsSignal, using client: UITestsSignalling.Client) async throws {
-        try client.send(operation)
+    private func performOperation(_ operation: UITestsSignal.Timeline, using client: UITestsSignalling.Client) async throws {
+        try client.send(.timeline(operation))
         await _ = client.signals.values.first { $0 == .success }
         try await Task.sleep(for: .seconds(2)) // Allow the timeline to update
     }

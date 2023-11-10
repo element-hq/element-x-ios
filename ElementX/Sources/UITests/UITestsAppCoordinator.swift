@@ -186,7 +186,6 @@ class MockScreen: Identifiable {
             return BlankFormCoordinator()
         case .appLockFlowAlternateWindow, .appLockFlowDisabledAlternateWindow:
             let navigationCoordinator = NavigationRootCoordinator()
-            let userIndicatorController = UserIndicatorController(rootCoordinator: navigationCoordinator)
             
             let keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
             keychainController.resetSecrets()
@@ -214,7 +213,6 @@ class MockScreen: Identifiable {
             }
             
             let coordinator = AppLockFlowCoordinator(appLockService: appLockService,
-                                                     userIndicatorController: userIndicatorController,
                                                      navigationCoordinator: navigationCoordinator,
                                                      notificationCenter: notificationCenter)
             return coordinator

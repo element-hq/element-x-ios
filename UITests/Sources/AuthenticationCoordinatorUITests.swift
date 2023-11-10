@@ -16,8 +16,6 @@
 
 import XCTest
 
-@testable import ElementX
-
 @MainActor
 class AuthenticationCoordinatorUITests: XCTestCase {
     func testLoginWithPassword() async throws {

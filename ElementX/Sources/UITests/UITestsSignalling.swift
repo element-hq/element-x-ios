@@ -18,35 +18,24 @@ import Combine
 import KZFileWatchers
 import SwiftUI
 
-enum UITestsSignal: Codable, Equatable, RawRepresentable {
+extension Notification.Name: Codable { }
+
+enum UITestsSignal: Codable, Equatable {
     /// An internal signal used to indicate that one side of the connection is ready.
     case ready
     /// The operation has completed successfully.
     case success
     
-    /// Ask the app to back paginate.
-    case paginate
-    /// Ask the app to simulate an incoming message.
-    case incomingMessage
+    case timeline(Timeline)
+    enum Timeline: Codable {
+        /// Ask the app to back paginate.
+        case paginate
+        /// Ask the app to simulate an incoming message.
+        case incomingMessage
+    }
     
     /// Posts a notification.
     case notification(name: Notification.Name)
-    
-    var rawValue: String {
-        guard let data = try? JSONEncoder().encode(self),
-              let string = String(data: data, encoding: .utf8) else {
-            return "unknown"
-        }
-        return string
-    }
-    
-    init?(rawValue: String) {
-        guard let data = rawValue.data(using: .utf8),
-              let value = try? JSONDecoder().decode(Self.self, from: data) else {
-            return nil
-        }
-        self = value
-    }
 }
 
 enum UITestsSignalError: String, LocalizedError {
@@ -80,7 +69,7 @@ enum UITestsSignalling {
         }()
         
         /// A mode that defines the behaviour of the client.
-        enum Mode: String { case app, tests }
+        enum Mode: Codable { case app, tests }
         /// The mode that the client is using.
         let mode: Mode
         
@@ -98,10 +87,10 @@ enum UITestsSignalling {
             switch mode {
             case .tests:
                 // The tests client is started first and writes to the file saying it is ready.
-                try rawSignal(.ready).write(to: fileURL, atomically: false, encoding: .utf8)
+                try rawMessage(.ready).write(to: fileURL, atomically: false, encoding: .utf8)
             case .app:
                 // The app client is started second and checks that there is a ready signal from the tests.
-                guard try String(contentsOf: fileURL) == "\(Mode.tests):\(UITestsSignal.ready)" else { throw UITestsSignalError.testsClientNotReady }
+                guard try String(contentsOf: fileURL) == Message(mode: .tests, signal: .ready).rawValue else { throw UITestsSignalError.testsClientNotReady }
                 isConnected = true
                 // The app client then echoes back to the tests that it is now ready.
                 try send(.ready)
@@ -130,15 +119,42 @@ enum UITestsSignalling {
         func send(_ signal: UITestsSignal) throws {
             guard isConnected else { throw UITestsSignalError.notConnected }
             
-            let rawSignal = rawSignal(signal)
+            let rawSignal = rawMessage(signal)
             try rawSignal.write(to: fileURL, atomically: false, encoding: .utf8)
             NSLog("UITestsSignalling: Sent \(rawSignal)")
         }
         
-        /// The signal formatted as a string, prefixed with an identifier for the sender.
-        /// E.g. The tests client would produce `tests:ready` for the ready signal.
-        private func rawSignal(_ signal: UITestsSignal) -> String {
-            "\(mode.rawValue):\(signal.rawValue)"
+        /// The signal formatted as a complete message string, including the identifier for this sender.
+        private func rawMessage(_ signal: UITestsSignal) -> String {
+            Message(mode: mode, signal: signal).rawValue
+        }
+        
+        /// The complete data that is serialised to disk for signalling.
+        /// This consists of the signal along with an identifier for the sender.
+        private struct Message: Codable {
+            let mode: Mode
+            let signal: UITestsSignal
+            
+            init(mode: Mode, signal: UITestsSignal) {
+                self.mode = mode
+                self.signal = signal
+            }
+            
+            var rawValue: String {
+                guard let data = try? JSONEncoder().encode(self),
+                      let string = String(data: data, encoding: .utf8) else {
+                    return "unknown"
+                }
+                return string
+            }
+            
+            init?(rawValue: String) {
+                guard let data = rawValue.data(using: .utf8),
+                      let value = try? JSONDecoder().decode(Self.self, from: data) else {
+                    return nil
+                }
+                self = value
+            }
         }
         
         /// Handles a file refresh to receive a new signal.
@@ -154,22 +170,19 @@ enum UITestsSignalling {
         
         /// Processes string data from the file and publishes its signal.
         private func processFileData(_ data: Data) {
-            guard let message = String(data: data, encoding: .utf8) else { return }
+            guard let rawMessage = String(data: data, encoding: .utf8) else { return }
             
-            let components = message.components(separatedBy: ":")
-            
-            guard components.count == 2,
-                  components[0] != mode.rawValue, // Filter out messages sent by this client.
-                  let signal = UITestsSignal(rawValue: components[1])
+            guard let message = Message(rawValue: rawMessage),
+                  message.mode != mode // Filter out messages sent by this client.
             else { return }
             
-            if signal == .ready {
+            if message.signal == .ready {
                 isConnected = true
             }
             
-            signals.send(signal)
+            signals.send(message.signal)
             
-            NSLog("UITestsSignalling: Received \(message)")
+            NSLog("UITestsSignalling: Received \(rawMessage)")
         }
     }
 }
