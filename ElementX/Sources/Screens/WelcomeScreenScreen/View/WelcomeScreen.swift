@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct WelcomeScreen: View {
-    @ScaledMetric var iconSize = 20
     @ObservedObject var context: WelcomeScreenScreenViewModel.Context
     
     var body: some View {
@@ -32,35 +31,22 @@ struct WelcomeScreen: View {
             context.send(viewAction: .appeared)
         }
     }
-
-    @ViewBuilder
+    
     private var mainContent: some View {
-        VStack(spacing: 42) {
+        VStack(spacing: 80) {
             header
             list
         }
     }
-
-    @ViewBuilder
+    
     private var header: some View {
         VStack(spacing: 32) {
             OnboardingLogo(isOnGradient: true)
                 .scaleEffect(x: 0.75, y: 0.75)
                 .padding(.vertical, -20)
             
-            title
-        }
-    }
-
-    @ViewBuilder
-    private var title: some View {
-        VStack(spacing: 12) {
-            Text(context.viewState.title)
+            Text(L10n.screenWelcomeTitle(InfoPlistReader.main.bundleDisplayName))
                 .font(Font.compound.headingLGBold)
-                .foregroundColor(Color.compound.textPrimary)
-                .multilineTextAlignment(.center)
-            Text(context.viewState.subtitle)
-                .font(Font.compound.bodyMD)
                 .foregroundColor(Color.compound.textPrimary)
                 .multilineTextAlignment(.center)
         }
@@ -68,21 +54,19 @@ struct WelcomeScreen: View {
 
     private var list: some View {
         VStack(alignment: .leading, spacing: 4) {
-            RoundedLabelItem(title: context.viewState.bullet1, listPosition: .top) {
-                Image(systemName: "exclamationmark.transmission")
-                    .foregroundColor(.compound.iconSecondary)
-            }
-            RoundedLabelItem(title: context.viewState.bullet2, listPosition: .middle) {
+            RoundedLabelItem(title: L10n.screenWelcomeBullet2, listPosition: .top) {
                 Image(systemName: "lock")
-                    .foregroundColor(.compound.iconSecondary)
+                    .foregroundColor(.compound.iconSecondaryAlpha)
             }
-            RoundedLabelItem(title: context.viewState.bullet3, listPosition: .bottom) {
-                Image(systemName: "plus.bubble")
-                    .foregroundColor(.compound.iconSecondary)
+            RoundedLabelItem(title: L10n.screenWelcomeBullet3, listPosition: .bottom) {
+                Image(systemName: "exclamationmark.bubble")
+                    .padding(.horizontal, -3)
+                    .foregroundColor(.compound.iconSecondaryAlpha)
             }
         }
         .fixedSize(horizontal: false, vertical: true)
         .frame(maxWidth: .infinity)
+        .environment(\.backgroundStyle, AnyShapeStyle(.compound.bgCanvasDefaultLevel1))
     }
 
     @ViewBuilder
@@ -90,7 +74,7 @@ struct WelcomeScreen: View {
         Button {
             context.send(viewAction: .doneTapped)
         } label: {
-            Text(context.viewState.buttonTitle)
+            Text(L10n.screenWelcomeButton)
         }
         .buttonStyle(.compound(.primary))
         .accessibilityIdentifier(A11yIdentifiers.welcomeScreen.letsGo)
