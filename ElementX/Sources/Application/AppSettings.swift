@@ -132,7 +132,7 @@ final class AppSettings {
     /// Any codes that the user isn't allowed to use for their PIN.
     let appLockPINCodeBlockList = ["0000", "1234"]
     /// The number of attempts the user has made to unlock the app with a PIN code (resets when unlocked).
-    @UserPreference(key: UserDefaultsKeys.mainLockNumberOfPINAttempts, defaultValue: 0, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.appLockNumberOfPINAttempts, defaultValue: 0, storageType: .userDefaults(store))
     var appLockNumberOfPINAttempts: Int
     
     // MARK: - Authentication
