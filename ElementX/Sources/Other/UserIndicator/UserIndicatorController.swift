@@ -42,7 +42,7 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     
     var window: UIWindow? {
         didSet {
-            let hostingController = UIHostingController(rootView: UserIndicatorPresenter(userIndicatorController: self))
+            let hostingController = UIHostingController(rootView: UserIndicatorPresenter(userIndicatorController: self).statusBarHidden(ProcessInfo.isRunningUITests))
             hostingController.view.backgroundColor = .clear
             window?.rootViewController = hostingController
         }

@@ -35,7 +35,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
         
         windowManager.delegate = self
         
-        ServiceLocator.shared.register(userIndicatorController: UserIndicatorControllerMock.default)
+        ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         
         AppSettings.configureWithSuiteName("io.element.elementx.uitests")
         AppSettings.reset()
@@ -63,8 +63,10 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     }
     
     func windowManagerDidConfigureWindows(_ windowManager: WindowManager) {
-        guard let screenID = ProcessInfo.testScreenID, screenID == .appLockFlow || screenID == .appLockFlowDisabled else { return }
+        ServiceLocator.shared.userIndicatorController.window = windowManager.overlayWindow
         
+        // Set up the alternate window for the App Lock flow coordinator tests.
+        guard let screenID = ProcessInfo.testScreenID, screenID == .appLockFlow || screenID == .appLockFlowDisabled else { return }
         let screen = MockScreen(id: screenID == .appLockFlow ? .appLockFlowAlternateWindow : .appLockFlowDisabledAlternateWindow, windowManager: windowManager)
         windowManager.alternateWindow.rootViewController = UIHostingController(rootView: screen.coordinator.toPresentable().statusBarHidden())
         alternateWindowMockScreen = screen
