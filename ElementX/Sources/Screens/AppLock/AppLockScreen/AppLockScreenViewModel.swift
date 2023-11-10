@@ -76,7 +76,7 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
         state.bindings.alertInfo = .init(id: .confirmResetPIN,
                                          title: L10n.screenAppLockSignoutAlertTitle,
                                          message: L10n.screenAppLockSignoutAlertMessage,
-                                         primaryButton: .init(title: L10n.actionOk) { self.actionsSubject.send(.forceLogout) },
+                                         primaryButton: .init(title: L10n.actionOk) { self.forceLogout() },
                                          secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }
     
@@ -90,7 +90,12 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
             state.bindings.alertInfo = .init(id: .forcedLogout,
                                              title: L10n.screenAppLockSignoutAlertTitle,
                                              message: L10n.screenAppLockSignoutAlertMessage,
-                                             primaryButton: .init(title: L10n.actionOk) { self.actionsSubject.send(.forceLogout) })
+                                             primaryButton: .init(title: L10n.actionOk) { self.forceLogout() })
         }
+    }
+    
+    private func forceLogout() {
+        state.forcedLogoutIndicator = UserIndicator(type: .modal, title: L10n.commonSigningOut, persistent: true)
+        actionsSubject.send(.forceLogout)
     }
 }

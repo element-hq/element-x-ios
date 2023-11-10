@@ -52,7 +52,6 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         appLockService.disabledPublisher
             .sink {
                 // When the service is disabled via a force logout, we need to remove the activity indicator.
-                ServiceLocator.shared.userIndicatorController.retractAllIndicators()
             }
             .store(in: &cancellables)
         
@@ -131,7 +130,6 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             case .appUnlocked:
                 actionsSubject.send(.unlockApp)
             case .forceLogout:
-                ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(type: .modal, title: L10n.commonSigningOut, persistent: true))
                 actionsSubject.send(.forceLogout)
             }
         }

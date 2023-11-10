@@ -29,6 +29,8 @@ struct AppLockScreenViewState: BindableState {
     
     /// The number of times the user attempted to enter their PIN.
     var numberOfPINAttempts = 0
+    /// An overlay indicator shown when the user is being logged out.
+    var forcedLogoutIndicator: UserIndicator?
     
     var bindings: AppLockScreenViewStateBindings
     
