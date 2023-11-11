@@ -88,7 +88,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
         MXLog.warning("\(tag) serviceExtensionTimeWillExpire")
-        notify()
+        notify(unreadCount: nil)
     }
 
     private func run(with credentials: KeychainCredentials,
@@ -108,7 +108,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             
             guard let itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId) else {
                 MXLog.info("\(tag) no notification for the event, discard")
-                return discard()
+                return discard(unreadCount: unreadCount)
             }
             
             // After the first processing, update the modified content
@@ -118,7 +118,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 MXLog.info("\(tag) no media needed")
 
                 // We've processed the item and no media operations needed, so no need to go further
-                return notify()
+                return notify(unreadCount: unreadCount)
             }
 
             MXLog.info("\(tag) process with media")
@@ -130,34 +130,39 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             }
             // We still notify, but without the media attachment if it fails to load
             
-            // Finally update the app badge
-            if let unreadCount {
-                modifiedContent?.badge = NSNumber(value: unreadCount)
-            }
-            
-            return notify()
+            return notify(unreadCount: unreadCount)
         } catch {
             MXLog.error("NSE run error: \(error)")
-            return discard()
+            return discard(unreadCount: unreadCount)
         }
     }
     
-    private func notify() {
+    private func notify(unreadCount: Int?) {
         MXLog.info("\(tag) notify")
 
         guard let modifiedContent else {
             MXLog.info("\(tag) notify: no modified content")
-            return discard()
+            return discard(unreadCount: unreadCount)
+        }
+        
+        if let unreadCount {
+            modifiedContent.badge = NSNumber(value: unreadCount)
         }
 
         handler?(modifiedContent)
         cleanUp()
     }
 
-    private func discard() {
+    private func discard(unreadCount: Int?) {
         MXLog.info("\(tag) discard")
+        
+        let content = UNMutableNotificationContent()
+        
+        if let unreadCount {
+            content.badge = NSNumber(value: unreadCount)
+        }
 
-        handler?(UNMutableNotificationContent())
+        handler?(content)
         cleanUp()
     }
 
