@@ -74,6 +74,19 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         self.view = controller.view
         delegate?.registerPillView(controller.view)
     }
+    
+    // MARK: - NSSecureCoding
+    
+    // Fixes crashes when inserting mention pills in the composer on Mac
+    // https://github.com/vector-im/element-x-ios/issues/2070
+    
+    static var supportsSecureCoding = false
+    
+    func encode(with coder: NSCoder) { }
+    
+    init?(coder: NSCoder) {
+        fatalError("Not implemented")
+    }
 }
 
 final class ComposerMentionDisplayHelper: MentionDisplayHelper {
