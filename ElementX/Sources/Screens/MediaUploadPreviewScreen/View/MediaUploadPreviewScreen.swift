@@ -25,9 +25,7 @@ struct MediaUploadPreviewScreen: View {
     }
     
     var body: some View {
-        PreviewView(context: context,
-                    fileURL: context.viewState.url,
-                    title: context.viewState.title)
+        mainContent
             .id(UUID())
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
@@ -35,6 +33,19 @@ struct MediaUploadPreviewScreen: View {
             .ignoresSafeArea(edges: [.horizontal, .bottom])
             .toolbar { toolbar }
             .interactiveDismissDisabled()
+    }
+    
+    @ViewBuilder
+    private var mainContent: some View {
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            Text(title)
+                .font(.compound.headingMD)
+                .foregroundColor(.compound.textSecondary)
+        } else {
+            PreviewView(context: context,
+                        fileURL: context.viewState.url,
+                        title: context.viewState.title)
+        }
     }
     
     @ToolbarContentBuilder
@@ -117,10 +128,12 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock.default,
                                                              roomProxy: RoomProxyMock(),
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(),
-                                                             title: nil,
+                                                             title: "some random file name",
                                                              url: URL.picturesDirectory)
     static var previews: some View {
-        MediaUploadPreviewScreen(context: viewModel.context)
+        NavigationStack {
+            MediaUploadPreviewScreen(context: viewModel.context)
+        }
     }
 }
 
