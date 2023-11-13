@@ -34,9 +34,15 @@ enum ListPosition {
 }
 
 struct RoundedLabelItem<Icon: View>: View {
+    @Environment(\.backgroundStyle) private var backgroundStyle
+    
     let title: String
     let listPosition: ListPosition
     let iconContent: () -> Icon
+    
+    private var backgroundColor: AnyShapeStyle {
+        backgroundStyle ?? AnyShapeStyle(.compound.bgSubtleSecondary)
+    }
     
     var body: some View {
         Label { Text(title) } icon: {
@@ -46,7 +52,7 @@ struct RoundedLabelItem<Icon: View>: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.compound.bgSubtleSecondary, in: RoundedCornerShape(radius: 16, corners: listPosition.roundedCorners))
+        .background(backgroundColor, in: RoundedCornerShape(radius: 16, corners: listPosition.roundedCorners))
     }
 }
 

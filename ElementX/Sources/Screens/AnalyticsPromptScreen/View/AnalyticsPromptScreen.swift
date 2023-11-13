@@ -76,6 +76,7 @@ struct AnalyticsPromptScreen: View {
         }
         .fixedSize(horizontal: false, vertical: true)
         .frame(maxWidth: .infinity)
+        .environment(\.backgroundStyle, AnyShapeStyle(.compound.bgSubtleSecondary))
     }
 
     @ViewBuilder
