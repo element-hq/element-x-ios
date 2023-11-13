@@ -44,7 +44,7 @@ struct RoomAttachmentPicker: View {
                     context.showAttachmentPopover = false
                     context.send(viewAction: .displayMediaPicker)
                 } label: {
-                    Label(L10n.screenRoomAttachmentSourceGallery, iconAsset: Asset.Images.photosLibrary)
+                    Label(L10n.screenRoomAttachmentSourceGallery, icon: \.image)
                         .labelStyle(.menuSheet)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)

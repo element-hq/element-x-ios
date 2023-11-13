@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 enum TimelineReplyViewPlacement {
@@ -43,7 +44,7 @@ struct TimelineReplyView: View {
                     ReplyView(sender: sender,
                               plainBody: content.body,
                               formattedBody: nil,
-                              icon: .init(kind: .systemIcon("doc.text.fill"), cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .iconAsset(Asset.Images.document), cornerRadii: iconCornerRadii))
                 case .image(let content):
                     ReplyView(sender: sender,
                               plainBody: content.body,
@@ -66,12 +67,12 @@ struct TimelineReplyView: View {
                     ReplyView(sender: sender,
                               plainBody: L10n.commonVoiceMessage,
                               formattedBody: nil,
-                              icon: .init(kind: .icon(Asset.Images.microphone.name), cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .icon(\.micOnOutline), cornerRadii: iconCornerRadii))
                 case .location:
                     ReplyView(sender: sender,
                               plainBody: L10n.commonSharedLocation,
                               formattedBody: nil,
-                              icon: .init(kind: .icon(Asset.Images.locationMarker.name), cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .iconAsset(Asset.Images.addLocation), cornerRadii: iconCornerRadii))
                 }
             default:
                 LoadingReplyView()
@@ -100,7 +101,8 @@ struct TimelineReplyView: View {
             enum Kind {
                 case mediaSource(MediaSourceProxy)
                 case systemIcon(String)
-                case icon(String)
+                case iconAsset(ImageAsset)
+                case icon(KeyPath<CompoundIcons, Image>)
             }
 
             let kind: Kind
@@ -191,11 +193,13 @@ struct TimelineReplyView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .padding(8.0)
-                case .icon(let iconName):
-                    Image(iconName)
+                case .iconAsset(let asset):
+                    Image(asset: asset)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .padding(8.0)
+                case .icon(let keyPath):
+                    CompoundIcon(keyPath, size: .small, relativeTo: .body)
                 }
             }
         }

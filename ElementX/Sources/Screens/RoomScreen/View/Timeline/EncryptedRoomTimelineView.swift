@@ -54,12 +54,12 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static var body: some View {
         VStack(alignment: .leading, spacing: 20.0) {
-            EncryptedRoomTimelineView(timelineItem: itemWith(text: "Text",
+            EncryptedRoomTimelineView(timelineItem: itemWith(text: L10n.commonWaitingForDecryptionKey,
                                                              timestamp: "Now",
                                                              isOutgoing: false,
                                                              senderId: "Bob"))
             
-            EncryptedRoomTimelineView(timelineItem: itemWith(text: "Some other text",
+            EncryptedRoomTimelineView(timelineItem: itemWith(text: L10n.commonWaitingForDecryptionKey,
                                                              timestamp: "Later",
                                                              isOutgoing: true,
                                                              senderId: "Anne"))

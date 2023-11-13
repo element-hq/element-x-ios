@@ -14,7 +14,9 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
+
 struct TimelineDeliveryStatusView: View {
     enum Status {
         case sending
@@ -23,20 +25,18 @@ struct TimelineDeliveryStatusView: View {
 
     let deliveryStatus: Status
 
-    private var systemImageName: String {
+    private var icon: CompoundIcon {
         switch deliveryStatus {
         case .sending:
-            return "circle"
+            return CompoundIcon(customImage: Asset.Images.circle.swiftUIImage, size: .xSmall, relativeTo: .compound.bodyMD)
         case .sent:
-            return "checkmark.circle"
+            return CompoundIcon(\.checkCircle, size: .xSmall, relativeTo: .compound.bodyMD)
         }
     }
     
     var body: some View {
-        Image(systemName: systemImageName)
-            .resizable()
+        icon
             .foregroundColor(.compound.iconSecondary)
-            .frame(width: 16.0, height: 16.0)
     }
 }
 
