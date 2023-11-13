@@ -70,7 +70,7 @@ struct InvitesScreenCell: View {
     @ViewBuilder
     private var inviterView: some View {
         if let invitedText = attributedInviteText, let name = invite.roomDetails.inviter?.displayName {
-            HStack(alignment: .firstTextBaseline) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
                 LoadableAvatarImage(url: invite.roomDetails.inviter?.avatarURL,
                                     name: name,
                                     contentID: name,
@@ -85,7 +85,7 @@ struct InvitesScreenCell: View {
     
     @ViewBuilder
     private var textualContent: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             Text(title)
                 .font(.compound.bodyLGSemibold)
                 .foregroundColor(.compound.textPrimary)

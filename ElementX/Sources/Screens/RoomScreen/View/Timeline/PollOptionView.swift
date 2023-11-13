@@ -26,7 +26,7 @@ struct PollOptionView: View {
             FormRowAccessory(kind: .multipleSelection(isSelected: pollOption.isSelected))
 
             VStack(spacing: 10) {
-                HStack(alignment: .lastTextBaseline) {
+                HStack(alignment: .lastTextBaseline, spacing: 8) {
                     Text(pollOption.text)
                         .font(isFinalWinningOption ? .compound.bodyLGSemibold : .compound.bodyLG)
                         .multilineTextAlignment(.leading)

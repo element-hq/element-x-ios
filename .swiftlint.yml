@@ -50,13 +50,13 @@ nesting:
 
 custom_rules:
   vstack_spacing:
-    regex: "VStack((?!spacing:).)*\\s*\\{"
+    regex: "(?-s)VStack((?!spacing:).)*\\s*\\{"
     match_kinds: identifier
     message: "Please use explicit spacing in VStacks."
     severity: warning
 
   hstack_spacing:
-    regex: "HStack((?!spacing:).)*\\s*\\{"
+    regex: "(?-s)HStack((?!spacing:).)*\\s*\\{"
     match_kinds: identifier
     message: "Please use explicit spacing in HStacks."
     severity: warning

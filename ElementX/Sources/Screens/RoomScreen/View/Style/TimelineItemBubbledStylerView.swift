@@ -49,7 +49,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
 
                 VStack(alignment: alignment, spacing: 0) {
-                    HStack {
+                    HStack(spacing: 0) {
                         if timelineItem.isOutgoing {
                             Spacer()
                         }
@@ -520,7 +520,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     }
 
     static var replies: some View {
-        VStack {
+        VStack(spacing: 0) {
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,

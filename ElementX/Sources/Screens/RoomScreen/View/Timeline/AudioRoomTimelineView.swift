@@ -22,7 +22,7 @@ struct AudioRoomTimelineView: View {
 
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            HStack {
+            HStack(spacing: 8) {
                 Image(systemName: "waveform")
                     .foregroundColor(.compound.iconPrimary)
                 FormattedBodyText(text: timelineItem.content.body)

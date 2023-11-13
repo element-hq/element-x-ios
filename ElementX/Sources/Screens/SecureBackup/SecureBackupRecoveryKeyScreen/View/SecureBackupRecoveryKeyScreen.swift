@@ -121,19 +121,19 @@ struct SecureBackupRecoveryKeyScreen: View {
     }
     
     private var generateRecoveryKeySection: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonRecoveryKey)
                 .foregroundColor(.compound.textPrimary)
                 .font(.compound.bodySM)
-         
-            HStack {
+            
+            Group {
                 if context.viewState.recoveryKey == nil {
                     Button(generateButtonTitle) {
                         context.send(viewAction: .generateKey)
                     }
                     .font(.compound.bodyLGSemibold)
                 } else {
-                    HStack(alignment: .top) {
+                    HStack(alignment: .top, spacing: 8) {
                         Text(context.viewState.recoveryKey ?? "")
                             .foregroundColor(.compound.textPrimary)
                             .font(.compound.bodyLG)
@@ -155,15 +155,16 @@ struct SecureBackupRecoveryKeyScreen: View {
             .background(Color.compound.bgSubtleSecondaryLevel0)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             
-            HStack(alignment: .top) {
-                if context.viewState.recoveryKey == nil {
-                    CompoundIcon(\.infoSolid, size: .small, relativeTo: .compound.bodySM)
-                }
-                
+            Label {
                 Text(context.viewState.recoveryKeySubtitle)
                     .foregroundColor(.compound.textSecondary)
                     .font(.compound.bodySM)
+            } icon: {
+                if context.viewState.recoveryKey == nil {
+                    CompoundIcon(\.infoSolid, size: .small, relativeTo: .compound.bodySM)
+                }
             }
+            .labelStyle(.custom(spacing: 8, alignment: .top))
         }
     }
     
@@ -173,7 +174,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     @ViewBuilder
     private var confirmRecoveryKeySection: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonRecoveryKey)
                 .foregroundColor(.compound.textPrimary)
                 .font(.compound.bodySM)

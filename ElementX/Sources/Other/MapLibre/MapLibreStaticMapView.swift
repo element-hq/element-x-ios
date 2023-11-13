@@ -86,7 +86,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
         } label: {
             placeholderImage
                 .overlay {
-                    VStack {
+                    VStack(spacing: 0) {
                         Image(systemName: "arrow.clockwise")
                         Text(L10n.actionStaticMapLoad)
                     }

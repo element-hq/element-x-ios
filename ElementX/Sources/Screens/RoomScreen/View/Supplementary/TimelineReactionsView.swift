@@ -205,7 +205,7 @@ struct TimelineReactionAddMoreButtonLabel: View {
 
 struct TimelineReactionViewPreviewsContainer: View {
     var body: some View {
-        VStack {
+        VStack(spacing: 8) {
             TimelineReactionsView(context: RoomScreenViewModel.mock.context,
                                   itemID: .init(timelineID: "1"),
                                   reactions: [AggregatedReaction.mockReactionWithLongText,

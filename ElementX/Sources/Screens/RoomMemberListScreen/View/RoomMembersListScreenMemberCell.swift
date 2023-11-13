@@ -24,7 +24,7 @@ struct RoomMembersListScreenMemberCell: View {
         Button {
             context.send(viewAction: .selectMember(id: member.id))
         } label: {
-            HStack {
+            HStack(spacing: 8) {
                 LoadableAvatarImage(url: member.avatarURL,
                                     name: member.name ?? "",
                                     contentID: member.id,
@@ -36,9 +36,8 @@ struct RoomMembersListScreenMemberCell: View {
                     .font(.compound.bodyMDSemibold)
                     .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
-
-                Spacer()
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
         }
     }

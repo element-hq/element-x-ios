@@ -24,7 +24,7 @@ struct OnboardingScreen: View {
     
     var body: some View {
         GeometryReader { geometry in
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 Spacer()
                     .frame(height: UIConstants.spacerHeight(in: geometry))
                 
@@ -49,7 +49,7 @@ struct OnboardingScreen: View {
     }
     
     var content: some View {
-        VStack {
+        VStack(spacing: 0) {
             Spacer()
             
             if verticalSizeClass == .regular {

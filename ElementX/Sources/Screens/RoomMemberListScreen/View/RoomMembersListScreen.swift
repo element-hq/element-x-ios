@@ -24,7 +24,7 @@ struct RoomMembersListScreen: View {
     
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .leading) {
+            LazyVStack(alignment: .leading, spacing: 12) {
                 membersSection(data: context.viewState.visibleInvitedMembers, sectionTitle: L10n.screenRoomMemberListPendingHeaderTitle)
                 membersSection(data: context.viewState.visibleJoinedMembers, sectionTitle: L10n.screenRoomMemberListHeaderTitle(Int(context.viewState.joinedMembersCount)))
             }
@@ -54,7 +54,7 @@ struct RoomMembersListScreen: View {
                 Text(sectionTitle)
                     .foregroundColor(.compound.textSecondary)
                     .font(.compound.bodyLG)
-                    .padding(.vertical, 12)
+                    .padding(.top, 12)
             }
         }
         .padding(.horizontal)

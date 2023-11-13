@@ -24,7 +24,7 @@ struct TimelineItemDebugView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack {
+                VStack(spacing: 8) {
                     TimelineItemInfoDisclosureGroup(title: "Model", text: info.model, isInitiallyExpanded: true)
                     
                     if let originalJSONInfo = info.originalJSON {
@@ -83,10 +83,9 @@ struct TimelineItemDebugView: View {
         
         @ViewBuilder
         var disclosureGroupContent: some View {
-            VStack(alignment: .leading) {
-                Spacer()
-                
+            VStack(alignment: .leading, spacing: 0) {
                 Divider()
+                    .padding(.vertical, 8)
                 
                 Text(text)
                     .font(.compound.bodyXS.monospaced())

@@ -32,11 +32,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                 header
 
                 VStack(alignment: .leading, spacing: 4) {
-                    HStack(alignment: .firstTextBaseline) {
-                        contentWithReply
-
-                        Spacer()
-                    }
+                    contentWithReply
                     supplementaryViews
                 }
             }
@@ -47,7 +43,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     
     @ViewBuilder
     var contentWithReply: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 8) {
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
                 if messageTimelineItem.isThreaded {
                     ThreadDecorator()
@@ -98,8 +94,8 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     @ViewBuilder
     private var header: some View {
         if shouldShowSenderDetails {
-            HStack {
-                HStack {
+            HStack(spacing: 8) {
+                HStack(spacing: 8) {
                     TimelineSenderAvatarView(timelineItem: timelineItem)
                     Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                         .font(.subheadline)
@@ -123,7 +119,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     
     @ViewBuilder
     private var supplementaryViews: some View {
-        VStack {
+        VStack(spacing: 4) {
             if timelineItem.properties.isEdited {
                 Text(L10n.commonEditedSuffix)
                     .font(.compound.bodySM)

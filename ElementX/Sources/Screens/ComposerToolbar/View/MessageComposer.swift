@@ -154,7 +154,7 @@ private struct MessageComposerEditHeader: View {
     let action: () -> Void
     
     var body: some View {
-        HStack(alignment: .center) {
+        HStack(alignment: .center, spacing: 8) {
             Label(L10n.commonEditing,
                   iconAsset: Asset.Images.editing,
                   iconSize: .xSmall,
@@ -227,7 +227,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     }
 
     static var previews: some View {
-        VStack {
+        VStack(spacing: 8) {
             messageComposer(sendingDisabled: true)
 
             messageComposer("Some message",
@@ -240,7 +240,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         .padding(.horizontal)
 
         ScrollView {
-            VStack {
+            VStack(spacing: 8) {
                 ForEach(replyTypes, id: \.self) { replyDetails in
                     messageComposer(mode: .reply(itemID: .random,
                                                  replyDetails: replyDetails, isThread: false))
@@ -252,7 +252,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Replying")
         
         ScrollView {
-            VStack {
+            VStack(spacing: 8) {
                 ForEach(replyTypes, id: \.self) { replyDetails in
                     messageComposer(mode: .reply(itemID: .random,
                                                  replyDetails: replyDetails, isThread: true))
