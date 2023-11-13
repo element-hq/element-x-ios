@@ -21,7 +21,7 @@ import UIKit
 /// is called. The pool contains 3 files.
 ///
 /// `MXLogger` can track and log uncaught exceptions or crashes.
-class MXLogger {
+enum MXLogger {
     /// stderr so it can be restored.
     static var stderrSave: Int32 = 0
     

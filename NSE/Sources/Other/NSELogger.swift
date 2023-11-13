@@ -17,7 +17,7 @@
 import Foundation
 import MatrixRustSDK
 
-class NSELogger {
+enum NSELogger {
     private static var isConfigured = false
 
     /// Memory formatter, uses exact 2 fraction digits and no grouping

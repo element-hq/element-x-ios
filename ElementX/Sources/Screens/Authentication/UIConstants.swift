@@ -17,7 +17,7 @@
 import SwiftUI
 
 /// Standard constants used across the app's UI.
-struct UIConstants {
+enum UIConstants {
     static let maxContentHeight: CGFloat = 750
     
     /// The padding used between the top of the main content's icon and the navigation bar.
