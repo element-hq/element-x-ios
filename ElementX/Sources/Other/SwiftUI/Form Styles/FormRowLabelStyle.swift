@@ -49,7 +49,7 @@ struct FormRowLabelStyle: LabelStyle {
             configuration.icon
                 .foregroundColor(iconForegroundColor)
                 .padding(4)
-                .scaledFrame(width: 30, height: 30)
+                .scaledFrame(size: 30)
                 .background(iconBackgroundColor)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             configuration.title

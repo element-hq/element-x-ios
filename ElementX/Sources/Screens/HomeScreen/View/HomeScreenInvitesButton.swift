@@ -42,7 +42,7 @@ struct HomeScreenInvitesButton: View {
     
     private var badge: some View {
         Circle()
-            .scaledFrame(width: 12, height: 12)
+            .scaledFrame(size: 12)
             .foregroundColor(.compound.iconAccentTertiary)
     }
 }

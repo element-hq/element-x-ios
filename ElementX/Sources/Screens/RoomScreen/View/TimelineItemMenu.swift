@@ -227,7 +227,7 @@ public struct TimelineItemMenu: View {
             } label: {
                 Image(asset: Asset.Images.addReaction)
                     .resizable()
-                    .scaledFrame(width: 24, height: 24)
+                    .scaledFrame(size: 24)
                     .frame(maxHeight: .infinity, alignment: .center)
                     .foregroundColor(.compound.iconSecondary)
                     .padding(10)

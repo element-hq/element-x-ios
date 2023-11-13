@@ -112,7 +112,7 @@ struct StaticLocationScreen: View {
                 Image(asset: Asset.Images.locationMarker)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .scaledFrame(width: 28, height: 28)
+                    .scaledFrame(size: 28)
                 Text(context.viewState.isSharingUserLocation ? L10n.screenShareMyLocationAction : L10n.screenShareThisLocationAction)
             }
         }

@@ -31,7 +31,7 @@ struct RoomAttachmentPicker: View {
             Image(Asset.Images.composerAttachment.name)
                 .resizable()
                 .scaledToFit()
-                .scaledFrame(width: 30, height: 30, relativeTo: .title)
+                .scaledFrame(size: 30, relativeTo: .title)
                 .foregroundColor(.compound.textActionPrimary)
                 .scaledPadding(7, relativeTo: .title)
         }

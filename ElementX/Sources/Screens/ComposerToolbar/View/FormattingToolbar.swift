@@ -32,7 +32,7 @@ struct FormattingToolbar: View {
                         item.icon
                             .resizable()
                             .scaledToFit()
-                            .scaledFrame(width: 20, height: 20)
+                            .scaledFrame(size: 20)
                             .foregroundColor(item.foregroundColor)
                             .padding(8)
                             .background(item.backgroundColor)

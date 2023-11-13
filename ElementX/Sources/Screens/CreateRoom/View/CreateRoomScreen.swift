@@ -60,7 +60,7 @@ struct CreateRoomScreen: View {
                         } placeholder: {
                             ProgressView()
                         }
-                        .scaledFrame(width: 70, height: 70)
+                        .scaledFrame(size: 70)
                         .clipShape(Circle())
                     } else {
                         cameraImage
@@ -105,7 +105,7 @@ struct CreateRoomScreen: View {
         Image(systemName: "camera")
             .font(.system(size: 28, weight: .semibold))
             .foregroundColor(.compound.iconSecondary)
-            .scaledFrame(width: 70, height: 70)
+            .scaledFrame(size: 70)
             .background(Color.compound.bgSubtlePrimary)
             .clipShape(Circle())
     }

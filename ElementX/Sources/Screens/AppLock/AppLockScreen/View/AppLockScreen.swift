@@ -90,16 +90,16 @@ struct AppLockScreen: View {
             let pinDotSize: CGFloat = 14
             Circle()
                 .fill(context.viewState.numberOfDigitsEntered > 0 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
-                .scaledFrame(width: pinDotSize, height: pinDotSize)
+                .scaledFrame(size: pinDotSize)
             Circle()
                 .fill(context.viewState.numberOfDigitsEntered > 1 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
-                .scaledFrame(width: pinDotSize, height: pinDotSize)
+                .scaledFrame(size: pinDotSize)
             Circle()
                 .fill(context.viewState.numberOfDigitsEntered > 2 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
-                .scaledFrame(width: pinDotSize, height: pinDotSize)
+                .scaledFrame(size: pinDotSize)
             Circle()
                 .fill(context.viewState.numberOfDigitsEntered > 3 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
-                .scaledFrame(width: pinDotSize, height: pinDotSize)
+                .scaledFrame(size: pinDotSize)
         }
     }
     

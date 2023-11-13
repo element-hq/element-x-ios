@@ -17,6 +17,10 @@
 import SwiftUI
 
 extension View {
+    func scaledFrame(size: CGFloat, alignment: Alignment = .center, relativeTo textStyle: Font.TextStyle? = nil) -> some View {
+        scaledFrame(width: size, height: size, alignment: alignment, relativeTo: textStyle)
+    }
+    
     func scaledFrame(width: CGFloat, height: CGFloat, alignment: Alignment = .center, relativeTo textStyle: Font.TextStyle? = nil) -> some View {
         modifier(ScaledFrameModifier(width: width, height: height, alignment: alignment, relativeTo: textStyle))
     }

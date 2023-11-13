@@ -44,7 +44,7 @@ struct InviteUsersScreenSelectedItem: View {
                 Button(action: dismissAction) {
                     Image(systemName: "xmark.circle.fill")
                         .resizable()
-                        .scaledFrame(width: 20, height: 20)
+                        .scaledFrame(size: 20)
                         .symbolRenderingMode(.palette)
                         .foregroundStyle(Color.compound.iconOnSolidPrimary, Color.compound.iconPrimary)
                 }

@@ -51,7 +51,7 @@ struct PollRoomTimelineView: View {
 
             Image(asset.name)
                 .resizable()
-                .scaledFrame(width: 22, height: 22)
+                .scaledFrame(size: 22)
                 .accessibilityHidden(true)
 
             Text(poll.question)

@@ -68,7 +68,7 @@ struct ComposerToolbar: View {
             if !context.composerActionsEnabled {
                 if context.viewState.isUploading {
                     ProgressView()
-                        .scaledFrame(width: 44, height: 44, relativeTo: .title)
+                        .scaledFrame(size: 44, relativeTo: .title)
                         .padding(.leading, 3)
                 } else if context.viewState.showSendButton {
                     sendButton
@@ -132,7 +132,7 @@ struct ComposerToolbar: View {
             Image(Asset.Images.closeRte.name)
                 .resizable()
                 .scaledToFit()
-                .scaledFrame(width: 30, height: 30, relativeTo: .title)
+                .scaledFrame(size: 30, relativeTo: .title)
                 .scaledPadding(7, relativeTo: .title)
         }
         .accessibilityLabel(L10n.actionClose)
@@ -265,7 +265,7 @@ struct ComposerToolbar: View {
         } label: {
             CompoundIcon(\.delete)
                 .scaledToFit()
-                .scaledFrame(width: 30, height: 30, relativeTo: .title)
+                .scaledFrame(size: 30, relativeTo: .title)
                 .scaledPadding(7, relativeTo: .title)
         }
         .buttonStyle(.compound(.plain))

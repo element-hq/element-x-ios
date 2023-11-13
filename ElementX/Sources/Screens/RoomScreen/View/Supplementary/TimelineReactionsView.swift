@@ -195,7 +195,7 @@ struct TimelineReactionAddMoreButtonLabel: View {
         TimelineReactionButtonLabel {
             Image(asset: Asset.Images.addReaction)
                 .resizable()
-                .scaledFrame(width: 16, height: 16)
+                .scaledFrame(size: 16)
                 .padding(.vertical, 8)
                 .padding(.horizontal, 12)
                 .foregroundColor(.compound.iconSecondary)

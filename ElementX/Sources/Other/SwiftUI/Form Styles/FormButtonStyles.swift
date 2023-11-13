@@ -130,7 +130,7 @@ struct FormActionButtonStyle: ButtonStyle {
             configuration.label
                 .buttonStyle(.plain)
                 .foregroundColor(.compound.textPrimary)
-                .scaledFrame(width: 54, height: 54)
+                .scaledFrame(size: 54)
                 .background {
                     RoundedRectangle(cornerRadius: 16)
                         .fill(configuration.isPressed ? Color.compound.bgSubtlePrimary : .compound.bgCanvasDefaultLevel1)
