@@ -23,8 +23,6 @@ struct InvitesScreenCell: View {
     let acceptAction: () -> Void
     let declineAction: () -> Void
     
-    @ScaledMetric private var badgeSize = 12.0
-    
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
             LoadableAvatarImage(url: invite.roomDetails.avatarURL,
@@ -150,7 +148,7 @@ struct InvitesScreenCell: View {
     
     private var badge: some View {
         Circle()
-            .frame(width: badgeSize, height: badgeSize)
+            .scaledFrame(width: 12, height: 12)
             .foregroundColor(.compound.iconAccentTertiary)
     }
 }

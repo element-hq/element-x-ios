@@ -125,14 +125,12 @@ struct FormButtonStyle: PrimitiveButtonStyle {
 struct FormActionButtonStyle: ButtonStyle {
     let title: String
     
-    @ScaledMetric private var menuIconSize = 54.0
-    
     func makeBody(configuration: Configuration) -> some View {
         VStack {
             configuration.label
                 .buttonStyle(.plain)
                 .foregroundColor(.compound.textPrimary)
-                .frame(width: menuIconSize, height: menuIconSize)
+                .scaledFrame(width: 54, height: 54)
                 .background {
                     RoundedRectangle(cornerRadius: 16)
                         .fill(configuration.isPressed ? Color.compound.bgSubtlePrimary : .compound.bgCanvasDefaultLevel1)

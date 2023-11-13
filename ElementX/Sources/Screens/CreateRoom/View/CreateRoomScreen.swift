@@ -45,7 +45,6 @@ struct CreateRoomScreen: View {
         .alert(item: $context.alertInfo)
     }
     
-    @ScaledMetric private var roomIconSize: CGFloat = 70
     private var roomSection: some View {
         Section {
             HStack(alignment: .center, spacing: 16) {
@@ -61,7 +60,7 @@ struct CreateRoomScreen: View {
                         } placeholder: {
                             ProgressView()
                         }
-                        .frame(width: roomIconSize, height: roomIconSize)
+                        .scaledFrame(width: 70, height: 70)
                         .clipShape(Circle())
                     } else {
                         cameraImage
@@ -106,7 +105,7 @@ struct CreateRoomScreen: View {
         Image(systemName: "camera")
             .font(.system(size: 28, weight: .semibold))
             .foregroundColor(.compound.iconSecondary)
-            .frame(width: roomIconSize, height: roomIconSize)
+            .scaledFrame(width: 70, height: 70)
             .background(Color.compound.bgSubtlePrimary)
             .clipShape(Circle())
     }

@@ -17,8 +17,6 @@
 import SwiftUI
 
 struct HomeScreenInvitesButton: View {
-    @ScaledMetric private var badgeSize = 12.0
-    
     let title: String
     let hasBadge: Bool
     let action: () -> Void
@@ -44,7 +42,7 @@ struct HomeScreenInvitesButton: View {
     
     private var badge: some View {
         Circle()
-            .frame(width: badgeSize, height: badgeSize)
+            .scaledFrame(width: 12, height: 12)
             .foregroundColor(.compound.iconAccentTertiary)
     }
 }

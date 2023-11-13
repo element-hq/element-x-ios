@@ -191,13 +191,11 @@ struct TimelineReactionButton: View {
 }
 
 struct TimelineReactionAddMoreButtonLabel: View {
-    @ScaledMetric private var addMoreButtonIconSize = 16
-    
     var body: some View {
         TimelineReactionButtonLabel {
             Image(asset: Asset.Images.addReaction)
                 .resizable()
-                .frame(width: addMoreButtonIconSize, height: addMoreButtonIconSize)
+                .scaledFrame(width: 16, height: 16)
                 .padding(.vertical, 8)
                 .padding(.horizontal, 12)
                 .foregroundColor(.compound.iconSecondary)

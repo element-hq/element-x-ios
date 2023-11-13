@@ -18,8 +18,6 @@ import SwiftUI
 
 struct VoiceMessageButton: View {
     @ScaledMetric private var buttonSize: CGFloat
-    @ScaledMetric private var imageWidth: CGFloat = 12
-    @ScaledMetric private var imageHeight: CGFloat = 14
 
     enum State {
         case loading
@@ -71,7 +69,7 @@ struct VoiceMessageButton: View {
             Image(asset: imageAsset)
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageWidth, height: imageHeight)
+                .scaledFrame(width: 12, height: 14)
                 .offset(x: offset)
         }
     }

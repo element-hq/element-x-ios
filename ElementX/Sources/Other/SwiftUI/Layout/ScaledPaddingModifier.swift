@@ -17,7 +17,11 @@
 import SwiftUI
 
 extension View {
-    func scaledPadding(edges: Edge.Set = .all, _ length: CGFloat, relativeTo textStyle: Font.TextStyle = .body) -> some View {
+    func scaledPadding(_ length: CGFloat, relativeTo textStyle: Font.TextStyle = .body) -> some View {
+        scaledPadding(.all, length, relativeTo: textStyle)
+    }
+    
+    func scaledPadding(_ edges: Edge.Set, _ length: CGFloat, relativeTo textStyle: Font.TextStyle = .body) -> some View {
         modifier(ScaledFontModifier(edges: edges, length: length, textStyle: textStyle))
     }
 }

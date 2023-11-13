@@ -136,7 +136,6 @@ extension RoomTimelineItemProtocol {
 public struct TimelineItemMenu: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.dismiss) private var dismiss
-    @ScaledMetric private var addMoreButtonIconSize = 24
     
     let item: EventBasedTimelineItemProtocol
     let actions: TimelineItemMenuActions
@@ -228,7 +227,7 @@ public struct TimelineItemMenu: View {
             } label: {
                 Image(asset: Asset.Images.addReaction)
                     .resizable()
-                    .frame(width: addMoreButtonIconSize, height: addMoreButtonIconSize)
+                    .scaledFrame(width: 24, height: 24)
                     .frame(maxHeight: .infinity, alignment: .center)
                     .foregroundColor(.compound.iconSecondary)
                     .padding(10)
