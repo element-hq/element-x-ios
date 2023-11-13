@@ -22,17 +22,17 @@ extension View {
     }
     
     func scaledPadding(_ edges: Edge.Set, _ length: CGFloat, relativeTo textStyle: Font.TextStyle? = nil) -> some View {
-        modifier(ScaledFontModifier(edges: edges, length: length, textStyle: textStyle))
+        modifier(ScaledPaddingModifier(edges: edges, length: length, textStyle: textStyle))
     }
 }
 
-private struct ScaledFontModifier: ViewModifier {
+private struct ScaledPaddingModifier: ViewModifier {
     let edges: Edge.Set
     @ScaledMetric var length: CGFloat
     
     init(edges: Edge.Set, length: CGFloat, textStyle: Font.TextStyle?) {
         self.edges = edges
-        _length = textStyle.map { .init(wrappedValue: length, relativeTo: $0) } ?? .init(wrappedValue: length)
+        _length = ScaledMetric(wrappedValue: length, relativeTo: textStyle)
     }
     
     func body(content: Content) -> some View {

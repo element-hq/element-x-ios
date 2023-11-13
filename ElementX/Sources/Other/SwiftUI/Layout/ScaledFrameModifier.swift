@@ -17,7 +17,7 @@
 import SwiftUI
 
 extension View {
-    func scaledFrame(width: CGFloat, height: CGFloat, alignment: Alignment = .center, relativeTo textStyle: Font.TextStyle = .body) -> some View {
+    func scaledFrame(width: CGFloat, height: CGFloat, alignment: Alignment = .center, relativeTo textStyle: Font.TextStyle? = nil) -> some View {
         modifier(ScaledFrameModifier(width: width, height: height, alignment: alignment, relativeTo: textStyle))
     }
 }
@@ -27,7 +27,7 @@ private struct ScaledFrameModifier: ViewModifier {
     @ScaledMetric var height: CGFloat
     let alignment: Alignment
     
-    init(width: CGFloat, height: CGFloat, alignment: Alignment, relativeTo textStyle: Font.TextStyle) {
+    init(width: CGFloat, height: CGFloat, alignment: Alignment, relativeTo textStyle: Font.TextStyle?) {
         _width = ScaledMetric(wrappedValue: width, relativeTo: textStyle)
         _height = ScaledMetric(wrappedValue: height, relativeTo: textStyle)
         self.alignment = alignment
@@ -35,5 +35,11 @@ private struct ScaledFrameModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content.frame(width: width, height: height, alignment: alignment)
+    }
+}
+
+extension ScaledMetric {
+    init(wrappedValue: Value, relativeTo textStyle: Font.TextStyle?) {
+        self = textStyle.map { .init(wrappedValue: wrappedValue, relativeTo: $0) } ?? .init(wrappedValue: wrappedValue)
     }
 }
