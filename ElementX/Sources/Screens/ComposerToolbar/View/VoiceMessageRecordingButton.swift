@@ -45,10 +45,8 @@ struct VoiceMessageRecordingButton: View {
                     .foregroundColor(.compound.iconSecondary)
                     .scaledPadding(10, relativeTo: .title)
             case .recording:
-                Asset.Images.stopRecording.swiftUIImage
-                    .resizable()
+                CompoundIcon(customImage: Asset.Images.stopRecording.swiftUIImage, size: .medium, relativeTo: .title)
                     .foregroundColor(.compound.iconOnSolidPrimary)
-                    .scaledFrame(width: 24, height: 24, relativeTo: .title)
                     .scaledPadding(6, relativeTo: .title)
                     .background(
                         Circle()
