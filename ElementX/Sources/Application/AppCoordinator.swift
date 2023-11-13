@@ -527,10 +527,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             return
         }
         
-        // The user will log out, clear any existing notifications
+        // The user will log out, clear any existing notifications and unregister from receving new ones
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
         UIApplication.shared.applicationIconBadgeNumber = 0
+        
+        unregisterForRemoteNotifications()
         
         Task {
             // First log out from the server
