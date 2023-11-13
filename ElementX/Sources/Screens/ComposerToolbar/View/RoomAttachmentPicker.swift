@@ -21,7 +21,6 @@ import WysiwygComposer
 struct RoomAttachmentPicker: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
     @Environment(\.isPresented) var isPresented
-    @ScaledMetric(relativeTo: .title) private var attachmentButtonSize: CGFloat = 30
 
     @State private var sheetContentHeight = CGFloat(0)
     
@@ -32,9 +31,9 @@ struct RoomAttachmentPicker: View {
             Image(Asset.Images.composerAttachment.name)
                 .resizable()
                 .scaledToFit()
-                .frame(width: attachmentButtonSize, height: attachmentButtonSize)
+                .scaledFrame(width: 30, height: 30, relativeTo: .title)
                 .foregroundColor(.compound.textActionPrimary)
-                .padding(7)
+                .scaledPadding(7, relativeTo: .title)
         }
         .accessibilityLabel(L10n.actionAddToTimeline)
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
