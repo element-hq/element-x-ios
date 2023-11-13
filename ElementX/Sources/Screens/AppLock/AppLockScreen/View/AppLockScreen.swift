@@ -20,8 +20,6 @@ import SwiftUI
 struct AppLockScreen: View {
     @ObservedObject var context: AppLockScreenViewModel.Context
     
-    /// The size of each dot within the PIN input field.
-    @ScaledMetric private var pinDotSize = 14
     /// Used to animate the PIN input field on failure.
     @State private var pinInputFieldOffset = 0.0
     
@@ -88,18 +86,20 @@ struct AppLockScreen: View {
     /// The row of dots showing how many digits have been entered.
     var pinInputField: some View {
         HStack(spacing: 24) {
+            /// The size of each dot within the PIN input field.
+            let pinDotSize: CGFloat = 14
             Circle()
                 .fill(context.viewState.numberOfDigitsEntered > 0 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
-                .frame(width: pinDotSize, height: pinDotSize)
+                .scaledFrame(width: pinDotSize, height: pinDotSize)
             Circle()
                 .fill(context.viewState.numberOfDigitsEntered > 1 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
-                .frame(width: pinDotSize, height: pinDotSize)
+                .scaledFrame(width: pinDotSize, height: pinDotSize)
             Circle()
                 .fill(context.viewState.numberOfDigitsEntered > 2 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
-                .frame(width: pinDotSize, height: pinDotSize)
+                .scaledFrame(width: pinDotSize, height: pinDotSize)
             Circle()
                 .fill(context.viewState.numberOfDigitsEntered > 3 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
-                .frame(width: pinDotSize, height: pinDotSize)
+                .scaledFrame(width: pinDotSize, height: pinDotSize)
         }
     }
     
