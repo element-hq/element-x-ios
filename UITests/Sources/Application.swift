@@ -17,7 +17,7 @@
 import SnapshotTesting
 import XCTest
 
-struct Application {
+enum Application {
     static func launch(_ identifier: UITestsScreenIdentifier, disableTimelineAccessibility: Bool = true) -> XCUIApplication {
         let app = XCUIApplication()
         

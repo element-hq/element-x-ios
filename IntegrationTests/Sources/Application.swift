@@ -16,7 +16,7 @@
 
 import XCTest
 
-struct Application {
+enum Application {
     @discardableResult static func launch() -> XCUIApplication {
         let app = XCUIApplication()
         app.launch()
