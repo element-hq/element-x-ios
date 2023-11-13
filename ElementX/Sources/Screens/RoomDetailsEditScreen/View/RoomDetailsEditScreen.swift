@@ -122,15 +122,12 @@ struct RoomDetailsEditScreen: View {
     }
     
     private var avatarOverlayIcon: some View {
-        Image(systemName: "camera")
-            .font(.system(size: 14, weight: .semibold))
-            .padding(3)
-            .imageScale(.small)
+        CompoundIcon(customImage: Asset.Images.editing.swiftUIImage, size: .xSmall, relativeTo: .compound.bodyLG)
             .foregroundColor(.white)
+            .padding(3)
             .background {
                 Circle()
                     .foregroundColor(.black)
-                    .aspectRatio(1, contentMode: .fill)
             }
     }
     
