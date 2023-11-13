@@ -24,13 +24,6 @@ struct ComposerToolbar: View {
     let keyCommandHandler: KeyCommandHandler
     
     @FocusState private var composerFocused: Bool
-    @ScaledMetric(relativeTo: .title) private var sendButtonIconSize = 16
-    @ScaledMetric(relativeTo: .title) private var sendButtonIconPadding = 10
-    @ScaledMetric(relativeTo: .title) private var sendButtonIconOffsetX = 1
-    
-    @ScaledMetric(relativeTo: .title) private var spinnerSize = 44
-    @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
-    @ScaledMetric(relativeTo: .title) private var deleteRecordingButtonSize = 30
     @State private var frame: CGRect = .zero
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
@@ -75,7 +68,7 @@ struct ComposerToolbar: View {
             if !context.composerActionsEnabled {
                 if context.viewState.isUploading {
                     ProgressView()
-                        .frame(width: spinnerSize, height: spinnerSize)
+                        .scaledFrame(width: 44, height: 44, relativeTo: .title)
                         .padding(.leading, 3)
                 } else if context.viewState.showSendButton {
                     sendButton
@@ -139,8 +132,8 @@ struct ComposerToolbar: View {
             Image(Asset.Images.closeRte.name)
                 .resizable()
                 .scaledToFit()
-                .frame(width: closeRTEButtonSize, height: closeRTEButtonSize)
-                .padding(7)
+                .scaledFrame(width: 30, height: 30, relativeTo: .title)
+                .scaledPadding(7, relativeTo: .title)
         }
         .accessibilityLabel(L10n.actionClose)
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
@@ -158,7 +151,7 @@ struct ComposerToolbar: View {
                     Circle()
                         .foregroundColor(context.viewState.sendButtonDisabled ? .clear : .compound.iconAccentTertiary)
                 }
-                .padding(4)
+                .scaledPadding(4, relativeTo: .title)
         }
         .disabled(context.viewState.sendButtonDisabled)
         .animation(.linear(duration: 0.1).disabledDuringTests(), value: context.viewState.sendButtonDisabled)
@@ -217,11 +210,13 @@ struct ComposerToolbar: View {
                 .opacity(context.viewState.composerMode.isEdit ? 1 : 0)
                 .accessibilityLabel(L10n.actionConfirm)
                 .accessibilityHidden(!context.viewState.composerMode.isEdit)
+            
+            let sendImageOffset: CGFloat = 1
             Image(asset: Asset.Images.sendMessage)
                 .resizable()
-                .offset(x: sendButtonIconOffsetX)
-                .frame(width: sendButtonIconSize, height: sendButtonIconSize)
-                .padding(sendButtonIconPadding)
+                .scaledToFit()
+                .scaledFrame(width: 16 + sendImageOffset, height: 16, alignment: .trailing, relativeTo: .title)
+                .scaledPadding(10, relativeTo: .title)
                 .opacity(context.viewState.composerMode.isEdit ? 0 : 1)
                 .accessibilityLabel(L10n.actionSend)
                 .accessibilityHidden(context.viewState.composerMode.isEdit)
@@ -270,8 +265,8 @@ struct ComposerToolbar: View {
         } label: {
             CompoundIcon(\.delete)
                 .scaledToFit()
-                .frame(width: deleteRecordingButtonSize, height: deleteRecordingButtonSize)
-                .padding(7)
+                .scaledFrame(width: 30, height: 30, relativeTo: .title)
+                .scaledPadding(7, relativeTo: .title)
         }
         .buttonStyle(.compound(.plain))
         .accessibilityLabel(L10n.a11yDelete)
