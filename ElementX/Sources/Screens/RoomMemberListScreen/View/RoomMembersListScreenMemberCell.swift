@@ -45,17 +45,16 @@ struct RoomMembersListScreenMemberCell: View {
 }
 
 struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
+    static let members: [RoomMemberProxyMock] = [
+        .mockAlice,
+        .mockBob,
+        .mockCharlie
+    ]
+    static let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
+                                                          mediaProvider: MockMediaProvider(),
+                                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
     static var previews: some View {
-        let members: [RoomMemberProxyMock] = [
-            .mockAlice,
-            .mockBob,
-            .mockCharlie
-        ]
-        let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
-                                                       mediaProvider: MockMediaProvider(),
-                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController)
-        
-        return VStack {
+        VStack(spacing: 12) {
             ForEach(members, id: \.userID) { member in
                 RoomMembersListScreenMemberCell(member: .init(withProxy: member), context: viewModel.context)
             }

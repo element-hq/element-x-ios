@@ -60,7 +60,7 @@ private struct EncryptedHistoryLabelStyle: LabelStyle {
 
 struct EncryptedHistoryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VStack {
+        VStack(spacing: 8) {
             EncryptedHistoryRoomTimelineView(timelineItem: .init(id: .random, isSessionVerified: true))
             EncryptedHistoryRoomTimelineView(timelineItem: .init(id: .random, isSessionVerified: false))
         }

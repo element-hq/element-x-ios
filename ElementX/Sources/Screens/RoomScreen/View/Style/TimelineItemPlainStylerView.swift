@@ -27,7 +27,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     @State private var showItemActionMenu = false
 
     var body: some View {
-        VStack(alignment: .trailing) {
+        VStack(alignment: .trailing, spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
                 header
 
@@ -251,8 +251,9 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
             }
         }
         .environment(\.timelineStyle, .plain)
-        .previewLayout(.sizeThatFits)
         .environmentObject(viewModel.context)
+        .previewLayout(.sizeThatFits)
+        
         threads
             .padding()
             .environment(\.timelineStyle, .plain)

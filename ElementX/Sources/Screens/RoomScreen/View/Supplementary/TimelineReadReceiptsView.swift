@@ -92,7 +92,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
     }
 
     static var previews: some View {
-        VStack {
+        VStack(spacing: 8) {
             TimelineReadReceiptsView(timelineItem: mockTimelineItem(with: singleReceipt))
                 .environmentObject(viewModel.context)
             TimelineReadReceiptsView(timelineItem: mockTimelineItem(with: doubleReceipt))

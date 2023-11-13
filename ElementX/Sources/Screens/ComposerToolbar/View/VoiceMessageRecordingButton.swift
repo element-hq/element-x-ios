@@ -69,7 +69,7 @@ private struct VoiceMessageRecordingButtonStyle: ButtonStyle {
 
 struct VoiceMessageRecordingButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        HStack {
+        HStack(spacing: 8) {
             VoiceMessageRecordingButton(mode: .idle)
             
             VoiceMessageRecordingButton(mode: .recording)
