@@ -41,7 +41,9 @@ class AudioPlayerState: ObservableObject, Identifiable {
     /// updates are delayed by a fixed amount of time
     @Published private(set) var playerButtonPlaybackState: AudioPlayerPlaybackState
     @Published private(set) var progress: Double
-    @Published private(set) var showProgressIndicator: Bool
+    var showProgressIndicator: Bool {
+        progress > 0
+    }
 
     private weak var audioPlayer: AudioPlayerProtocol?
     private var audioPlayerSubscription: AnyCancellable?
@@ -65,7 +67,6 @@ class AudioPlayerState: ObservableObject, Identifiable {
         self.duration = duration
         self.waveform = waveform ?? EstimatedWaveform(data: [])
         self.progress = progress
-        showProgressIndicator = false
         playbackState = .stopped
         playerButtonPlaybackState = .stopped
         setupPlaybackStateSubscription()
@@ -79,7 +80,6 @@ class AudioPlayerState: ObservableObject, Identifiable {
     func updateState(progress: Double) async {
         let progress = max(0.0, min(progress, 1.0))
         self.progress = progress
-        showProgressIndicator = true
         if let audioPlayer {
             var shouldResumeProgressPublishing = false
             if audioPlayer.state == .playing {
@@ -108,7 +108,6 @@ class AudioPlayerState: ObservableObject, Identifiable {
         audioPlayerSubscription = nil
         audioPlayer = nil
         playbackState = .stopped
-        showProgressIndicator = false
     }
     
     func reportError(_ error: Error) {
@@ -143,13 +142,11 @@ class AudioPlayerState: ObservableObject, Identifiable {
             }
             startPublishProgress()
             playbackState = .playing
-            showProgressIndicator = true
         case .didPausePlaying, .didStopPlaying, .didFinishPlaying:
             stopPublishProgress()
             playbackState = .stopped
             if case .didFinishPlaying = action {
                 progress = 0.0
-                showProgressIndicator = false
             }
         case .didFailWithError:
             stopPublishProgress()

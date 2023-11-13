@@ -285,7 +285,7 @@ class AudioPlayerStateTests: XCTestCase {
         }
         audioPlayerActionsSubject.send(.didStartPlaying)
         try await deferredPlayingState.fulfill()
-        XCTAssertTrue(audioPlayerState.showProgressIndicator)
+        XCTAssertFalse(audioPlayerState.showProgressIndicator)
 
         let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
@@ -300,6 +300,6 @@ class AudioPlayerStateTests: XCTestCase {
         try await deferred.fulfill()
         XCTAssertEqual(audioPlayerState.playbackState, .error)
         XCTAssertFalse(audioPlayerState.isPublishingProgress)
-        XCTAssertTrue(audioPlayerState.showProgressIndicator)
+        XCTAssertFalse(audioPlayerState.showProgressIndicator)
     }
 }
