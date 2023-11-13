@@ -28,11 +28,6 @@ struct VoiceMessageRecordingButton: View {
     var stopRecording: (() -> Void)?
     
     private let impactFeedbackGenerator = UIImpactFeedbackGenerator()
-    @ScaledMetric(relativeTo: .title) private var idleImageSize = 16
-    @ScaledMetric(relativeTo: .title) private var idleImagePadding = 10
-    
-    @ScaledMetric(relativeTo: .title) private var recordingImageSize = 24
-    @ScaledMetric(relativeTo: .title) private var recordingImagePadding = 6
     
     var body: some View {
         Button {
@@ -48,20 +43,18 @@ struct VoiceMessageRecordingButton: View {
             case .idle:
                 CompoundIcon(\.micOnOutline, size: .medium, relativeTo: .title)
                     .foregroundColor(.compound.iconSecondary)
-                    .frame(width: idleImageSize, height: idleImageSize)
-                    .padding(idleImagePadding)
-                    .padding(4)
+                    .scaledPadding(10, relativeTo: .title)
             case .recording:
                 Asset.Images.stopRecording.swiftUIImage
                     .resizable()
                     .foregroundColor(.compound.iconOnSolidPrimary)
-                    .frame(width: recordingImageSize, height: recordingImageSize)
-                    .padding(recordingImagePadding)
+                    .scaledFrame(width: 24, height: 24, relativeTo: .title)
+                    .scaledPadding(6, relativeTo: .title)
                     .background(
                         Circle()
                             .foregroundColor(.compound.bgActionPrimaryRest)
                     )
-                    .padding(4)
+                    .scaledPadding(4, relativeTo: .title)
             }
         }
         .buttonStyle(VoiceMessageRecordingButtonStyle())
