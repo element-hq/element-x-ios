@@ -18,13 +18,14 @@ import XCTest
 
 @MainActor
 class UserSessionScreenTests: XCTestCase {
+    let firstRoomName = "Foundation 🔭🪐🌌"
+    
     func testUserSessionFlows() async throws {
-        let roomName = "First room"
         let app = Application.launch(.userSessionScreen)
         try await app.assertScreenshot(.userSessionScreen, step: 1)
 
-        app.buttons[A11yIdentifiers.homeScreen.roomName(roomName)].tap()
-        XCTAssert(app.staticTexts[roomName].waitForExistence(timeout: 5.0))
+        app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
+        XCTAssert(app.staticTexts[firstRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(.userSessionScreen, step: 2)
 
@@ -33,10 +34,9 @@ class UserSessionScreenTests: XCTestCase {
     }
 
     func testUserSessionReply() async throws {
-        let roomName = "First room"
         let app = Application.launch(.userSessionScreenReply, disableTimelineAccessibility: false)
-        app.buttons[A11yIdentifiers.homeScreen.roomName(roomName)].tap()
-        XCTAssert(app.staticTexts[roomName].waitForExistence(timeout: 5.0))
+        app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
+        XCTAssert(app.staticTexts[firstRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
 
         let cell = app.cells.firstMatch
@@ -46,11 +46,10 @@ class UserSessionScreenTests: XCTestCase {
     }
 
     func testUserSessionRTE() async throws {
-        let roomName = "First room"
         let app = Application.launch(.userSessionScreenRTE)
 
-        app.buttons[A11yIdentifiers.homeScreen.roomName(roomName)].tap()
-        XCTAssert(app.staticTexts[roomName].waitForExistence(timeout: 5.0))
+        app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
+        XCTAssert(app.staticTexts[firstRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
 
         app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tap()
