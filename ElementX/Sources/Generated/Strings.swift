@@ -310,6 +310,8 @@ public enum L10n {
   }
   /// Report a bug
   public static var commonReportABug: String { return L10n.tr("Localizable", "common_report_a_bug") }
+  /// Report a problem
+  public static var commonReportAProblem: String { return L10n.tr("Localizable", "common_report_a_problem") }
   /// Report submitted
   public static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
   /// Rich text editor
@@ -1568,11 +1570,6 @@ public enum L10n {
   public enum Action {
     /// Edit poll
     public static var editPoll: String { return L10n.tr("Localizable", "action.edit_poll") }
-  }
-
-  public enum Common {
-    /// Report a problem
-    public static var reportAProblem: String { return L10n.tr("Localizable", "common.report_a_problem") }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

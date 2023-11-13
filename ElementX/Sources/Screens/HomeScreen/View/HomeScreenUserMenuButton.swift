@@ -18,7 +18,7 @@ import Compound
 import SwiftUI
 
 struct HomeScreenUserMenuButton: View {
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) private var colorScheme
     
     @ObservedObject var context: HomeScreenViewModel.Context
     
@@ -42,19 +42,19 @@ struct HomeScreenUserMenuButton: View {
             }
             Section {
                 MatrixUserShareLink(userID: context.viewState.userID) {
-                    Label(L10n.actionInvite, systemImage: "square.and.arrow.up")
+                    Label(L10n.actionInvite, iconAsset: Asset.Images.shareIos)
                 }
                 Button {
                     context.send(viewAction: .userMenu(action: .feedback))
                 } label: {
-                    Label(L10n.commonReportABug, systemImage: "ladybug")
+                    Label(L10n.commonReportAProblem, icon: \.chatProblem)
                 }
             }
             Section {
                 Button(role: .destructive) {
                     context.send(viewAction: .userMenu(action: .logout))
                 } label: {
-                    Label(L10n.screenSignoutPreferenceItem, systemImage: "rectangle.portrait.and.arrow.right")
+                    Label(L10n.screenSignoutPreferenceItem, iconAsset: Asset.Images.signOut)
                 }
             }
         } label: {

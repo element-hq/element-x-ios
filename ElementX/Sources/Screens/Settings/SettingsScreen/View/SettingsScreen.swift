@@ -132,7 +132,7 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.screenLock)
             
-            ListRow(label: .default(title: L10n.commonReportABug,
+            ListRow(label: .default(title: L10n.commonReportAProblem,
                                     systemIcon: .ladybug),
                     kind: .navigationLink {
                         context.send(viewAction: .reportBug)

@@ -226,7 +226,7 @@ struct HomeScreen: View {
         Button {
             context.send(viewAction: .startChat)
         } label: {
-            CompoundIcon(customImage: Asset.Images.compose.swiftUIImage)
+            CompoundIcon(\.edit)
         }
         .accessibilityLabel(L10n.actionStartChat)
         .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)

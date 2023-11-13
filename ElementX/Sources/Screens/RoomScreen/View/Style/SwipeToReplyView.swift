@@ -14,13 +14,14 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct SwipeToReplyView: View {
     let timelineItem: RoomTimelineItemProtocol
     
     var body: some View {
-        Image(systemName: "arrowshape.turn.up.left")
+        CompoundIcon(customImage: Asset.Images.reply.swiftUIImage)
             .foregroundColor(.compound.iconPrimary)
             .accessibilityHidden(true)
     }

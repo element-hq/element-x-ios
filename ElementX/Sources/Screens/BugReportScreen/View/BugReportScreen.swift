@@ -35,7 +35,7 @@ struct BugReportScreen: View {
         .disabled(context.viewState.shouldDisableInteraction)
         .scrollDismissesKeyboard(.immediately)
         .compoundList()
-        .navigationTitle(L10n.commonReportABug)
+        .navigationTitle(L10n.commonReportAProblem)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .interactiveDismissDisabled()

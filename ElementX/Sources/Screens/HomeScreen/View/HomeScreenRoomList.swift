@@ -39,13 +39,13 @@ struct HomeScreenRoomList: View {
                         Button {
                             context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
                         } label: {
-                            Label(L10n.commonSettings, systemImage: "gearshape")
+                            Label(L10n.commonSettings, icon: \.settings)
                         }
                         
                         Button(role: .destructive) {
                             context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
                         } label: {
-                            Label(L10n.actionLeaveRoom, systemImage: "rectangle.portrait.and.arrow.right")
+                            Label(L10n.actionLeaveRoom, icon: \.leave)
                         }
                     }
             }
