@@ -143,11 +143,6 @@ class AppLockServiceMock: AppLockServiceProtocol {
         set(value) { underlyingBiometricUnlockTrusted = value }
     }
     var underlyingBiometricUnlockTrusted: Bool!
-    var disabledPublisher: AnyPublisher<Void, Never> {
-        get { return underlyingDisabledPublisher }
-        set(value) { underlyingDisabledPublisher = value }
-    }
-    var underlyingDisabledPublisher: AnyPublisher<Void, Never>!
     var numberOfPINAttempts: AnyPublisher<Int, Never> {
         get { return underlyingNumberOfPINAttempts }
         set(value) { underlyingNumberOfPINAttempts = value }
