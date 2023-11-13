@@ -216,10 +216,6 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
             
             HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
                 .redacted(reason: .placeholder)
-            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
-                .redacted(reason: .placeholder)
-            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
-                .redacted(reason: .placeholder)
         }
     }
 }
