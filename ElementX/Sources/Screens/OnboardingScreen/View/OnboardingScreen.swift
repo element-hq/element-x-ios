@@ -36,6 +36,7 @@ struct OnboardingScreen: View {
                     .frame(width: geometry.size.width)
                     .padding(.bottom, UIConstants.actionButtonBottomPadding)
                     .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
+                    .padding(.top, 8)
                 
                 Spacer()
                     .frame(height: UIConstants.spacerHeight(in: geometry))
