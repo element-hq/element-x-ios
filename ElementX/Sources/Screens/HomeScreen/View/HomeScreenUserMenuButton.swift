@@ -32,7 +32,7 @@ struct HomeScreenUserMenuButton: View {
                         Text(L10n.commonSettings)
                     } icon: {
                         if context.viewState.showSettingsMenuOptionBadge {
-                            CompoundIcon(customImage: Asset.Images.settingsIconWithBadge.swiftUIImage)
+                            CompoundIcon(asset: Asset.Images.settingsIconWithBadge)
                         } else {
                             CompoundIcon(\.settings)
                         }

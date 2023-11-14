@@ -110,7 +110,7 @@ struct RoomDetailsScreen: View {
                     toggleMuteButton
                 case .share(let permalink):
                     ShareLink(item: permalink) {
-                        CompoundIcon(customImage: Asset.Images.shareIos.swiftUIImage)
+                        CompoundIcon(asset: Asset.Images.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
                 }
@@ -142,7 +142,7 @@ struct RoomDetailsScreen: View {
     private var aboutSection: some View {
         Section {
             ListRow(label: .default(title: L10n.commonPeople,
-                                    icon: CompoundIcon(customImage: Asset.Images.user.swiftUIImage)),
+                                    icon: CompoundIcon(asset: Asset.Images.user)),
                     details: .title(String(context.viewState.joinedMembersCount)),
                     kind: .navigationLink {
                         context.send(viewAction: .processTapPeople)
@@ -151,7 +151,7 @@ struct RoomDetailsScreen: View {
             
             if context.viewState.canInviteUsers {
                 ListRow(label: .default(title: L10n.screenRoomDetailsInvitePeopleTitle,
-                                        icon: CompoundIcon(customImage: Asset.Images.userAdd.swiftUIImage)),
+                                        icon: CompoundIcon(asset: Asset.Images.userAdd)),
                         kind: .navigationLink {
                             context.send(viewAction: .processTapInvite)
                         })
@@ -196,7 +196,7 @@ struct RoomDetailsScreen: View {
             Section {
                 ListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
                                         description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
-                                        icon: CompoundIcon(customImage: Asset.Images.encryptionEnabled.swiftUIImage),
+                                        icon: CompoundIcon(asset: Asset.Images.encryptionEnabled),
                                         iconAlignment: .top),
                         kind: .label)
             } header: {
@@ -218,7 +218,7 @@ struct RoomDetailsScreen: View {
     private func ignoreUserSection(user: RoomMemberDetails) -> some View {
         Section {
             ListRow(label: .default(title: user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
-                                    icon: CompoundIcon(customImage: Asset.Images.block.swiftUIImage),
+                                    icon: CompoundIcon(asset: Asset.Images.block),
                                     role: user.isIgnored ? nil : .destructive),
                     details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
                     kind: .button {
