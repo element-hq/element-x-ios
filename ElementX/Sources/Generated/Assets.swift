@@ -33,6 +33,7 @@ internal enum Asset {
   internal enum Images {
     internal static let appLogo = ImageAsset(name: "images/app-logo")
     internal static let serverSelectionIcon = ImageAsset(name: "images/server-selection-icon")
+    internal static let block = ImageAsset(name: "images/block")
     internal static let circle = ImageAsset(name: "images/circle")
     internal static let closeCircle = ImageAsset(name: "images/close-circle")
     internal static let addLocation = ImageAsset(name: "images/add-location")
@@ -57,8 +58,10 @@ internal enum Asset {
     internal static let textFormat = ImageAsset(name: "images/text-format")
     internal static let underline = ImageAsset(name: "images/underline")
     internal static let unindent = ImageAsset(name: "images/unindent")
+    internal static let devices = ImageAsset(name: "images/devices")
     internal static let document = ImageAsset(name: "images/document")
     internal static let decryptionError = ImageAsset(name: "images/decryption-error")
+    internal static let encryptionEnabled = ImageAsset(name: "images/encryption-enabled")
     internal static let endedPoll = ImageAsset(name: "images/ended-poll")
     internal static let settingsIconWithBadge = ImageAsset(name: "images/settings-icon-with-badge")
     internal static let signOut = ImageAsset(name: "images/sign-out")
@@ -67,6 +70,7 @@ internal enum Asset {
     internal static let locationPin = ImageAsset(name: "images/location-pin")
     internal static let locationPointerFull = ImageAsset(name: "images/location-pointer-full")
     internal static let locationPointer = ImageAsset(name: "images/location-pointer")
+    internal static let lock = ImageAsset(name: "images/lock")
     internal static let mediaPause = ImageAsset(name: "images/media-pause")
     internal static let mediaPlay = ImageAsset(name: "images/media-play")
     internal static let secureBackupIcon = ImageAsset(name: "images/secure-backup-icon")
@@ -82,6 +86,8 @@ internal enum Asset {
     internal static let timelineEndedPoll = ImageAsset(name: "images/timeline-ended-poll")
     internal static let timelinePollAttachment = ImageAsset(name: "images/timeline-poll-attachment")
     internal static let timelinePoll = ImageAsset(name: "images/timeline-poll")
+    internal static let userAdd = ImageAsset(name: "images/user-add")
+    internal static let user = ImageAsset(name: "images/user")
     internal static let waitingGradient = ImageAsset(name: "images/waiting-gradient")
   }
 }

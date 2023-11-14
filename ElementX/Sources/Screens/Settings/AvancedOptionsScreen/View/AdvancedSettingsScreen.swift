@@ -23,15 +23,14 @@ struct AdvancedSettingsScreen: View {
     var body: some View {
         Form {
             Section {
-                ListRow(label: .default(title: L10n.commonMessageLayout,
-                                        systemIcon: .rectangleGrid1x2),
+                ListRow(label: .plain(title: L10n.commonMessageLayout),
                         kind: .picker(selection: $context.timelineStyle,
                                       items: TimelineStyle.allCases.map { (title: $0.name, tag: $0) }))
                 
-                ListRow(label: .default(title: L10n.commonRichTextEditor, icon: Image(asset: Asset.Images.textFormat)),
+                ListRow(label: .plain(title: L10n.commonRichTextEditor),
                         kind: .toggle($context.richTextEditorEnabled))
                 
-                ListRow(label: .default(title: L10n.actionViewSource, systemIcon: .mailAndTextMagnifyingglass),
+                ListRow(label: .plain(title: L10n.actionViewSource),
                         kind: .toggle($context.viewSourceEnabled))
             }
         }

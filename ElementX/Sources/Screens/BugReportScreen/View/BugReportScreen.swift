@@ -92,7 +92,7 @@ struct BugReportScreen: View {
                 PhotosPicker(selection: $selectedScreenshot,
                              matching: .screenshots,
                              photoLibrary: .shared()) {
-                    ListLabel.default(title: photosPickerTitle, systemIcon: .camera)
+                    ListLabel.plain(title: photosPickerTitle)
                 }
             })
             .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.attachScreenshot)

@@ -88,7 +88,7 @@ struct SettingsScreen: View {
             Section {
                 if !context.viewState.isSessionVerified {
                     ListRow(label: .default(title: L10n.actionCompleteVerification,
-                                            systemIcon: .checkmarkShield),
+                                            icon: \.checkCircle),
                             kind: .button { context.send(viewAction: .sessionVerification) })
                 } else if context.viewState.chatBackupEnabled {
                     ListRow(label: .default(title: L10n.commonChatBackup,
@@ -104,7 +104,8 @@ struct SettingsScreen: View {
     private var mainSection: some View {
         Section {
             if context.viewState.accountProfileURL != nil {
-                ListRow(label: .default(title: L10n.actionManageAccount, systemIcon: .person),
+                ListRow(label: .default(title: L10n.actionManageAccount,
+                                        icon: \.userProfile),
                         kind: .button {
                             context.send(viewAction: .accountProfile)
                         })
@@ -112,35 +113,35 @@ struct SettingsScreen: View {
             }
             
             ListRow(label: .default(title: L10n.screenNotificationSettingsTitle,
-                                    systemIcon: .bell),
+                                    icon: \.notifications),
                     kind: .navigationLink {
                         context.send(viewAction: .notifications)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
             
             ListRow(label: .default(title: L10n.commonAnalytics,
-                                    systemIcon: .chartBar),
+                                    icon: \.polls),
                     kind: .navigationLink {
                         context.send(viewAction: .analytics)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.analytics)
             
             ListRow(label: .default(title: L10n.commonScreenLock,
-                                    systemIcon: .lock),
+                                    icon: CompoundIcon(customImage: Asset.Images.lock.swiftUIImage)),
                     kind: .navigationLink {
                         context.send(viewAction: .appLock)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.screenLock)
             
             ListRow(label: .default(title: L10n.commonReportAProblem,
-                                    systemIcon: .ladybug),
+                                    icon: \.chatProblem),
                     kind: .navigationLink {
                         context.send(viewAction: .reportBug)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.reportBug)
             
             ListRow(label: .default(title: L10n.commonAbout,
-                                    systemIcon: .questionmarkCircle),
+                                    icon: \.info),
                     kind: .navigationLink {
                         context.send(viewAction: .about)
                     })
@@ -150,27 +151,18 @@ struct SettingsScreen: View {
     
     private var manageSessionsSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.actionManageDevices, systemIcon: deviceIcon),
+            ListRow(label: .default(title: L10n.actionManageDevices,
+                                    icon: CompoundIcon(customImage: Asset.Images.devices.swiftUIImage)),
                     kind: .button {
                         context.send(viewAction: .accountSessionsList)
                     })
         }
     }
     
-    private var deviceIcon: SFSymbol {
-        if ProcessInfo.processInfo.isiOSAppOnMac {
-            return .macbookAndIphone
-        } else if UIDevice.current.userInterfaceIdiom == .pad {
-            return .ipad
-        } else {
-            return .iphone
-        }
-    }
-    
     private var advancedOptionsSection: some View {
         Section {
             ListRow(label: .default(title: L10n.commonAdvancedSettings,
-                                    systemIcon: .gearshape2),
+                                    icon: \.settings),
                     kind: .navigationLink {
                         context.send(viewAction: .advancedSettings)
                     })
@@ -178,7 +170,7 @@ struct SettingsScreen: View {
             
             if context.viewState.showDeveloperOptions {
                 ListRow(label: .default(title: L10n.commonDeveloperOptions,
-                                        systemIcon: .hammerCircle),
+                                        icon: CompoundIcon(customImage: Asset.Images.codeBlock.swiftUIImage)),
                         kind: .navigationLink {
                             context.send(viewAction: .developerOptions)
                         })
@@ -189,8 +181,9 @@ struct SettingsScreen: View {
     
     private var signOutSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenSignoutPreferenceItem,
-                                    systemIcon: .rectanglePortraitAndArrowRight),
+            ListRow(label: .action(title: L10n.screenSignoutPreferenceItem,
+                                   icon: CompoundIcon(customImage: Asset.Images.signOut.swiftUIImage),
+                                   role: .destructive),
                     kind: .button {
                         context.send(viewAction: .logout)
                     })
