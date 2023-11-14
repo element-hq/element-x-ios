@@ -481,7 +481,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
         XCTAssertEqual(context.viewState.notificationShortcutButtonTitle, L10n.commonUnmute)
-        XCTAssertEqual(context.viewState.notificationShortcutButtonImage, Image(systemName: "bell.slash.fill"))
+        XCTAssertEqual(context.viewState.notificationShortcutButtonIcon, \.notificationsOff)
     }
     
     func testNotificationRoomNotMuted() async throws {
@@ -495,7 +495,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.notificationShortcutButtonTitle, L10n.commonMute)
-        XCTAssertEqual(context.viewState.notificationShortcutButtonImage, Image(systemName: "bell"))
+        XCTAssertEqual(context.viewState.notificationShortcutButtonIcon, \.notifications)
     }
     
     func testUnmuteTappedFailure() async throws {

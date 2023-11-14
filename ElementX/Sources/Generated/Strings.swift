@@ -768,9 +768,9 @@ public enum L10n {
   public static var screenBugReportContactMeTitle: String { return L10n.tr("Localizable", "screen_bug_report_contact_me_title") }
   /// Edit screenshot
   public static var screenBugReportEditScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_edit_screenshot") }
-  /// Please describe the bug. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.
+  /// Please describe the problem. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.
   public static var screenBugReportEditorDescription: String { return L10n.tr("Localizable", "screen_bug_report_editor_description") }
-  /// Describe the bug…
+  /// Describe the problem…
   public static var screenBugReportEditorPlaceholder: String { return L10n.tr("Localizable", "screen_bug_report_editor_placeholder") }
   /// If possible, please write the description in English.
   public static var screenBugReportEditorSupporting: String { return L10n.tr("Localizable", "screen_bug_report_editor_supporting") }
