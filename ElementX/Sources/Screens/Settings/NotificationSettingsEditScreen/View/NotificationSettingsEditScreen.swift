@@ -40,7 +40,8 @@ struct NotificationSettingsEditScreen: View {
     private var notificationModeSection: some View {
         Section {
             ForEach(context.viewState.availableDefaultModes, id: \.self) { mode in
-                ListRow(label: .plain(title: context.viewState.strings.string(for: mode)),
+                ListRow(label: .plain(title: context.viewState.strings.string(for: mode),
+                                      description: context.viewState.description(for: mode)),
                         details: (context.viewState.pendingMode == mode) ? .isWaiting(true) : nil,
                         kind: .selection(isSelected: context.viewState.isSelected(mode: mode)) {
                             context.send(viewAction: .setMode(mode))

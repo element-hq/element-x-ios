@@ -61,6 +61,15 @@ struct RoomNotificationSettingsScreenViewState: BindableState {
     var navigationTitle: String
     var customSettingsSectionHeader: String
     var deletingCustomSetting = false
+    var shouldDisplayMentionsOnlyDisclaimer = true
+    
+    func description(mode: RoomNotificationModeProxy) -> String? {
+        guard mode == .mentionsAndKeywordsOnly,
+              shouldDisplayMentionsOnlyDisclaimer else {
+            return nil
+        }
+        return L10n.screenRoomNotificationSettingsMentionsOnlyDisclaimer
+    }
     
     func isSelected(mode: RoomNotificationModeProxy) -> Bool {
         if case .loaded(let settings) = notificationSettingsState, settings.mode == mode, pendingCustomMode == nil {

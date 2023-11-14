@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.1.2 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.1.1 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -1714,6 +1714,23 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
             return try await getRoomsWithUserDefinedRulesClosure()
         } else {
             return getRoomsWithUserDefinedRulesReturnValue
+        }
+    }
+    //MARK: - canHomeserverPushEncryptedEventsToDevice
+
+    var canHomeserverPushEncryptedEventsToDeviceCallsCount = 0
+    var canHomeserverPushEncryptedEventsToDeviceCalled: Bool {
+        return canHomeserverPushEncryptedEventsToDeviceCallsCount > 0
+    }
+    var canHomeserverPushEncryptedEventsToDeviceReturnValue: Bool!
+    var canHomeserverPushEncryptedEventsToDeviceClosure: (() async -> Bool)?
+
+    func canHomeserverPushEncryptedEventsToDevice() async -> Bool {
+        canHomeserverPushEncryptedEventsToDeviceCallsCount += 1
+        if let canHomeserverPushEncryptedEventsToDeviceClosure = canHomeserverPushEncryptedEventsToDeviceClosure {
+            return await canHomeserverPushEncryptedEventsToDeviceClosure()
+        } else {
+            return canHomeserverPushEncryptedEventsToDeviceReturnValue
         }
     }
 }

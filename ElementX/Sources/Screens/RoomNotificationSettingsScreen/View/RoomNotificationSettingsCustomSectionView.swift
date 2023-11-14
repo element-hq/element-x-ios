@@ -23,7 +23,8 @@ struct RoomNotificationSettingsCustomSectionView: View {
     var body: some View {
         Section {
             ForEach(context.viewState.availableCustomRoomNotificationModes, id: \.self) { mode in
-                ListRow(label: .plain(title: context.viewState.strings.string(for: mode)),
+                ListRow(label: .plain(title: context.viewState.strings.string(for: mode),
+                                      description: context.viewState.description(mode: mode)),
                         details: (context.viewState.pendingCustomMode == mode) ? .isWaiting(true) : nil,
                         kind: .selection(isSelected: context.viewState.isSelected(mode: mode)) {
                             context.send(viewAction: .setCustomMode(mode))
@@ -40,7 +41,7 @@ struct RoomNotificationSettingsCustomSectionView: View {
 struct RoomNotificationSettingsCustomSectionView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .mentionsAndKeywordsOnly))
-
+        
         let roomProxy = RoomProxyMock(with: .init(displayName: "Room", isEncrypted: true, joinedMembersCount: 4))
         
         return RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
