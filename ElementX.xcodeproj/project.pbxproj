@@ -637,6 +637,7 @@
 		A5D551E5691749066E0E0C44 /* RoomDetailsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837B440C4705E4B899BCB899 /* RoomDetailsScreenViewModel.swift */; };
 		A64B52D9F73F9A6B95AF24FE /* UserDetailsEditScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CD503F5E0938FE53C7C6E7 /* UserDetailsEditScreenCoordinator.swift */; };
 		A680F54935A6ADEA4ED6C38F /* TimelineItemStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4C9547BBFEEF30AA11329B /* TimelineItemStatusView.swift */; };
+		A6B83EB78F025D21B6EBA90C /* CompoundIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044E501B8331B339874D1B96 /* CompoundIcon.swift */; };
 		A6D4C5EEA85A6A0ABA1559D6 /* RoomDetailsEditScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D09C79746BDCD9173EB3A7 /* RoomDetailsEditScreenModels.swift */; };
 		A6DEC1ADEC8FEEC206A0FA37 /* AttributedStringBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F37B5DA798C9AE436F2C2C /* AttributedStringBuilderProtocol.swift */; };
 		A722F426FD81FC67706BB1E0 /* CustomLayoutLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42236480CF0431535EBE8387 /* CustomLayoutLabelStyle.swift */; };
@@ -1044,6 +1045,7 @@
 		0392E3FDE372C9B56FEEED8B /* test_voice_message.m4a */ = {isa = PBXFileReference; path = test_voice_message.m4a; sourceTree = "<group>"; };
 		03DD998E523D4EC93C7ED703 /* RoomNotificationSettingsScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomNotificationSettingsScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		03FABD73FD8086EFAB699F42 /* MediaUploadPreviewScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaUploadPreviewScreenViewModelTests.swift; sourceTree = "<group>"; };
+		044E501B8331B339874D1B96 /* CompoundIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompoundIcon.swift; sourceTree = "<group>"; };
 		045253F9967A535EE5B16691 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		04BB8DDE245ED86C489BA983 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
 		04DF593C3F7AF4B2FBAEB05D /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
@@ -2731,6 +2733,7 @@
 				B6E89E530A8E92EC44301CA1 /* Bundle.swift */,
 				A9FAFE1C2149E6AC8156ED2B /* Collection.swift */,
 				E2B1CC9AA154F4D5435BF60A /* Comparable.swift */,
+				044E501B8331B339874D1B96 /* CompoundIcon.swift */,
 				B383DCD3DCB19E00FD478A5F /* ConfirmationDialog.swift */,
 				2141693488CE5446BB391964 /* Date.swift */,
 				BFDCAC6CAAD65A2C24EA9C4B /* Dictionary.swift */,
@@ -5395,6 +5398,7 @@
 				56BAB81A0D03C2EF09B86294 /* ComposerToolbarModels.swift in Sources */,
 				5995C63B1C61DE1373AA2BCE /* ComposerToolbarViewModel.swift in Sources */,
 				9BEA56957B3AF954E7321658 /* ComposerToolbarViewModelProtocol.swift in Sources */,
+				A6B83EB78F025D21B6EBA90C /* CompoundIcon.swift in Sources */,
 				EA6613B29BA671F39CE1B1D2 /* ConfirmationDialog.swift in Sources */,
 				AC7AA215D60FBC307F984028 /* Consumable.swift in Sources */,
 				C3522917C0C367C403429EEC /* CoordinatorProtocol.swift in Sources */,
@@ -6664,7 +6668,7 @@
 			repositoryURL = "https://github.com/vector-im/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = 849e5beaadfb449b53a28d41cc22cf303cc9045b;
+				revision = 7ae8b7ef4033861d0439427d5404538243afeffd;
 			};
 		};
 		9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
