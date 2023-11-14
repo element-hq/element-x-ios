@@ -103,7 +103,7 @@ struct HomeScreenRoomCell: View {
     
     @ViewBuilder
     private var footer: some View {
-        HStack(alignment: .firstTextBaseline) {
+        HStack(alignment: .firstTextBaseline, spacing: 0) {
             ZStack(alignment: .topLeading) {
                 // Hidden text with 2 lines to maintain consistent height, scaling with dynamic text.
                 Text(" \n ")

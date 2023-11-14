@@ -142,7 +142,7 @@ public struct TimelineItemMenu: View {
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
     public var body: some View {
-        VStack {
+        VStack(spacing: 8) {
             header
                 .frame(idealWidth: 300.0)
             
@@ -187,7 +187,7 @@ public struct TimelineItemMenu: View {
             
             Spacer(minLength: 8.0)
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 Text(item.sender.displayName ?? item.sender.id)
                     .font(.compound.bodySMSemibold)
                     .foregroundColor(.compound.textPrimary)
@@ -211,7 +211,7 @@ public struct TimelineItemMenu: View {
     }
     
     private var reactionsSection: some View {
-        HStack(alignment: .center) {
+        HStack(alignment: .center, spacing: 8) {
             reactionButton(for: "👍️")
             reactionButton(for: "👎️")
             reactionButton(for: "🔥")
@@ -286,12 +286,10 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
 
     static var previews: some View {
-        VStack {
-            if let item = RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol,
-               let actions = TimelineItemMenuActions(actions: [.copy, .edit, .reply(isThread: false), .redact], debugActions: [.viewSource]) {
-                TimelineItemMenu(item: item, actions: actions)
-            }
+        if let item = RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol,
+           let actions = TimelineItemMenuActions(actions: [.copy, .edit, .reply(isThread: false), .redact], debugActions: [.viewSource]) {
+            TimelineItemMenu(item: item, actions: actions)
+                .environmentObject(viewModel.context)
         }
-        .environmentObject(viewModel.context)
     }
 }

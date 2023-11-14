@@ -299,7 +299,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
         ComposerToolbar.mock(focused: true)
         
         // Putting them is VStack allows the completion suggestion preview to work properly in tests
-        VStack {
+        VStack(spacing: 8) {
             // The mock functon can't be used in this context because it does not hold a reference to the view model, losing the combine subscriptions
             ComposerToolbar(context: composerViewModel.context,
                             wysiwygViewModel: wysiwygViewModel,
@@ -307,7 +307,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("With Suggestions")
         
-        VStack {
+        VStack(spacing: 8) {
             ComposerToolbar.textWithVoiceMessage(focused: false)
             ComposerToolbar.textWithVoiceMessage(focused: true)
             ComposerToolbar.voiceMessageRecordingMock(recording: true)

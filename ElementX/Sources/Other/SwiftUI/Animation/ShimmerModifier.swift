@@ -87,7 +87,7 @@ struct ShimmerOverlay_Previews: PreviewProvider, TestablePreview {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
     
     static var previews: some View {
-        VStack {
+        VStack(spacing: 0) {
             ForEach(0...8, id: \.self) { _ in
                 HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
             }

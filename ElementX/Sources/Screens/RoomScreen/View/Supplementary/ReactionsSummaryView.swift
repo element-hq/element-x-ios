@@ -67,7 +67,7 @@ struct ReactionsSummaryView: View {
         TabView(selection: $selectedReactionKey) {
             ForEach(reactions, id: \.self) { reaction in
                 ScrollView {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 8) {
                         ForEach(reaction.senders, id: \.self) { sender in
                             ReactionSummarySenderView(sender: sender, member: members[sender.senderID], imageProvider: imageProvider)
                                 .padding(.horizontal, 16)
@@ -122,15 +122,15 @@ private struct ReactionSummarySenderView: View {
     }
     
     var body: some View {
-        HStack {
+        HStack(spacing: 8) {
             LoadableAvatarImage(url: member?.avatarURL,
                                 name: displayName,
                                 contentID: sender.senderID,
                                 avatarSize: .user(on: .timeline),
                                 imageProvider: imageProvider)
             
-            VStack(alignment: .leading) {
-                HStack {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(spacing: 8) {
                     Text(displayName)
                         .font(.compound.bodyMDSemibold)
                         .frame(maxWidth: .infinity, alignment: .leading)

@@ -42,7 +42,7 @@ struct VoiceMessageRecordingView: View {
     }
     
     var body: some View {
-        HStack {
+        HStack(spacing: 8) {
             VoiceMessageRecordingBadge()
                 .frame(width: recordingIndicatorSize, height: recordingIndicatorSize)
 

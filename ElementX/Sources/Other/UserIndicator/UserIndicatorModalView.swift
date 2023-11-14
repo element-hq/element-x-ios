@@ -30,7 +30,7 @@ struct UserIndicatorModalView: View {
                     ProgressView(value: progressFraction)
                 }
 
-                HStack {
+                HStack(spacing: 8) {
                     if let iconName = indicator.iconName {
                         Image(systemName: iconName)
                             .font(.compound.bodyLG)

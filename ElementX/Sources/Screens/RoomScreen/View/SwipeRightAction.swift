@@ -119,7 +119,7 @@ struct SwipeRightAction_Previews: PreviewProvider, TestablePreview {
         var body: some View {
             NavigationStack {
                 ScrollView {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 2) {
                         mockBubble("This is a message from somebody with a couple of lines of text.")
                             .swipeRightAction {
                                 Image(systemName: "flame")

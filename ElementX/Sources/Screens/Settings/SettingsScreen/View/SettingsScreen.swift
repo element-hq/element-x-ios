@@ -196,7 +196,7 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.logout)
         } footer: {
-            VStack {
+            VStack(spacing: 0) {
                 versionText
                     .frame(maxWidth: .infinity)
                 

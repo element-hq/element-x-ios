@@ -50,7 +50,7 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
     var standardLayout: some View {
         GeometryReader { geometry in
             ScrollView {
-                VStack {
+                VStack(spacing: 0) {
                     Spacer()
                         .frame(height: UIConstants.spacerHeight(in: geometry))
                     
@@ -62,7 +62,7 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
             }
             .scrollBounceBehavior(.basedOnSize)
             .safeAreaInset(edge: .bottom) {
-                VStack {
+                VStack(spacing: 0) {
                     bottomContent()
                         .readableFrame()
                         .padding(.horizontal, horizontalPadding)
@@ -81,7 +81,7 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
     var accessibilityLayout: some View {
         GeometryReader { geometry in
             ScrollView {
-                VStack {
+                VStack(spacing: 0) {
                     Spacer()
                         .frame(height: UIConstants.spacerHeight(in: geometry))
                     

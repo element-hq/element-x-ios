@@ -45,9 +45,7 @@ struct VoiceMessageRecordingComposer_Previews: PreviewProvider, TestablePreview 
     static let recorderState = AudioRecorderState()
     
     static var previews: some View {
-        VStack {
-            VoiceMessageRecordingComposer(recorderState: recorderState)
-                .fixedSize(horizontal: false, vertical: true)
-        }
+        VoiceMessageRecordingComposer(recorderState: recorderState)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }

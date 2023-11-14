@@ -72,7 +72,7 @@ struct LongPressWithFeedback_Previews: PreviewProvider, TestablePreview {
         var body: some View {
             NavigationStack {
                 ScrollView {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 8) {
                         mockBubble("This is a message from somebody with a couple of lines of text.")
                             .longPressWithFeedback { isPresentingSheet = true }
                         

@@ -41,18 +41,16 @@ struct VoiceMessageRoomPlaybackView: View {
     }
     
     var body: some View {
-        HStack {
-            HStack {
-                VoiceMessageButton(state: .init(playerState.playerButtonPlaybackState),
-                                   size: .medium,
-                                   action: onPlayPause)
-                Text(timeLabelContent)
-                    .lineLimit(1)
-                    .font(.compound.bodySMSemibold)
-                    .foregroundColor(.compound.textSecondary)
-                    .monospacedDigit()
-                    .fixedSize(horizontal: true, vertical: true)
-            }
+        HStack(spacing: 8) {
+            VoiceMessageButton(state: .init(playerState.playerButtonPlaybackState),
+                               size: .medium,
+                               action: onPlayPause)
+            Text(timeLabelContent)
+                .lineLimit(1)
+                .font(.compound.bodySMSemibold)
+                .foregroundColor(.compound.textSecondary)
+                .monospacedDigit()
+                .fixedSize(horizontal: true, vertical: true)
 
             waveformView
                 .waveformInteraction(isDragging: $isDragging,

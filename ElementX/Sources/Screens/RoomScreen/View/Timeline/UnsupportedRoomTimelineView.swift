@@ -22,7 +22,7 @@ struct UnsupportedRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             Label {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 0) {
                     Text("\(timelineItem.body): \(timelineItem.eventType)")
                         .fixedSize(horizontal: false, vertical: true)
                     

@@ -145,7 +145,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                                  content: .init(body: "באמת‏! -- house!"))
 
     static var testView: some View {
-        VStack {
+        VStack(spacing: 0) {
             TextRoomTimelineView(timelineItem: base)
             TextRoomTimelineView(timelineItem: sentNonLast)
             TextRoomTimelineView(timelineItem: sentLast)
@@ -156,7 +156,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
     }
 
     static var languagesTestView: some View {
-        VStack {
+        VStack(spacing: 0) {
             TextRoomTimelineView(timelineItem: ltrString)
             TextRoomTimelineView(timelineItem: rtlString)
             TextRoomTimelineView(timelineItem: ltrStringThatContainsRtl)

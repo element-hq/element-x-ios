@@ -97,7 +97,7 @@ struct FormButtonStyle: PrimitiveButtonStyle {
         var accessory: FormRowAccessory?
         
         func makeBody(configuration: Configuration) -> some View {
-            HStack {
+            HStack(spacing: 8) {
                 configuration.label
                     .labelStyle(FormRowLabelStyle(role: configuration.role))
                     .foregroundColor(.compound.textPrimary)
@@ -126,7 +126,7 @@ struct FormActionButtonStyle: ButtonStyle {
     let title: String
     
     func makeBody(configuration: Configuration) -> some View {
-        VStack {
+        VStack(spacing: 8) {
             configuration.label
                 .buttonStyle(.plain)
                 .foregroundColor(.compound.textPrimary)

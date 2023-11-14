@@ -61,7 +61,7 @@ struct FormRowLabelStyle: LabelStyle {
 
 struct FormRowLabelStyle_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 12) {
             Label("Person", systemImage: "person")
                 .labelStyle(FormRowLabelStyle())
             

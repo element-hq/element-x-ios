@@ -33,7 +33,7 @@ private struct TimelineItemAccessibilityModifier: ViewModifier {
         case let timelineItem as EventBasedTimelineItemProtocol:
             content
                 .accessibilityRepresentation {
-                    VStack {
+                    VStack(spacing: 8) {
                         Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                         content
                     }

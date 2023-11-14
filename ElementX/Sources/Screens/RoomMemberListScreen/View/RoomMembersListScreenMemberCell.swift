@@ -24,7 +24,7 @@ struct RoomMembersListScreenMemberCell: View {
         Button {
             context.send(viewAction: .selectMember(id: member.id))
         } label: {
-            HStack {
+            HStack(spacing: 8) {
                 LoadableAvatarImage(url: member.avatarURL,
                                     name: member.name ?? "",
                                     contentID: member.id,
@@ -36,26 +36,24 @@ struct RoomMembersListScreenMemberCell: View {
                     .font(.compound.bodyMDSemibold)
                     .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
-
-                Spacer()
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
         }
     }
 }
 
 struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
+    static let members: [RoomMemberProxyMock] = [
+        .mockAlice,
+        .mockBob,
+        .mockCharlie
+    ]
+    static let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
+                                                          mediaProvider: MockMediaProvider(),
+                                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
     static var previews: some View {
-        let members: [RoomMemberProxyMock] = [
-            .mockAlice,
-            .mockBob,
-            .mockCharlie
-        ]
-        let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
-                                                       mediaProvider: MockMediaProvider(),
-                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController)
-        
-        return VStack {
+        VStack(spacing: 12) {
             ForEach(members, id: \.userID) { member in
                 RoomMembersListScreenMemberCell(member: .init(withProxy: member), context: viewModel.context)
             }

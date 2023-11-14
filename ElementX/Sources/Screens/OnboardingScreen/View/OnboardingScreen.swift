@@ -24,7 +24,7 @@ struct OnboardingScreen: View {
     
     var body: some View {
         GeometryReader { geometry in
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 Spacer()
                     .frame(height: UIConstants.spacerHeight(in: geometry))
                 
@@ -36,6 +36,7 @@ struct OnboardingScreen: View {
                     .frame(width: geometry.size.width)
                     .padding(.bottom, UIConstants.actionButtonBottomPadding)
                     .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
+                    .padding(.top, 8)
                 
                 Spacer()
                     .frame(height: UIConstants.spacerHeight(in: geometry))
@@ -49,7 +50,7 @@ struct OnboardingScreen: View {
     }
     
     var content: some View {
-        VStack {
+        VStack(spacing: 0) {
             Spacer()
             
             if verticalSizeClass == .regular {

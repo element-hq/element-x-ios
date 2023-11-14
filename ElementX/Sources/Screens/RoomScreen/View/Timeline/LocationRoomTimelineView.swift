@@ -87,7 +87,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
 
     static var previews: some View {
         ScrollView {
-            VStack {
+            VStack(spacing: 8) {
                 states
                     .padding(.horizontal)
             }
@@ -96,7 +96,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Bubbles")
         
         ScrollView {
-            VStack {
+            VStack(spacing: 0) {
                 states
                     .padding(.horizontal)
             }

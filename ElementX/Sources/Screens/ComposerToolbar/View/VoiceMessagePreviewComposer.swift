@@ -41,18 +41,16 @@ struct VoiceMessagePreviewComposer: View {
     }
     
     var body: some View {
-        HStack {
-            HStack {
-                VoiceMessageButton(state: .init(playerState.playerButtonPlaybackState),
-                                   size: .small,
-                                   action: onPlayPause)
-                Text(timeLabelContent)
-                    .lineLimit(1)
-                    .font(.compound.bodySMSemibold)
-                    .foregroundColor(.compound.textSecondary)
-                    .monospacedDigit()
-                    .fixedSize(horizontal: true, vertical: true)
-            }
+        HStack(spacing: 8) {
+            VoiceMessageButton(state: .init(playerState.playerButtonPlaybackState),
+                               size: .small,
+                               action: onPlayPause)
+            Text(timeLabelContent)
+                .lineLimit(1)
+                .font(.compound.bodySMSemibold)
+                .foregroundColor(.compound.textSecondary)
+                .monospacedDigit()
+                .fixedSize(horizontal: true, vertical: true)
 
             waveformView
                 .waveformInteraction(isDragging: $isDragging,
@@ -130,9 +128,7 @@ struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {
     static let waveformData: [Float] = Array(repeating: 1.0, count: 1000)
     
     static var previews: some View {
-        VStack {
-            VoiceMessagePreviewComposer(playerState: playerState, waveform: .data(waveformData), onPlay: { }, onPause: { }, onSeek: { _ in }, onScrubbing: { _ in })
-                .fixedSize(horizontal: false, vertical: true)
-        }
+        VoiceMessagePreviewComposer(playerState: playerState, waveform: .data(waveformData), onPlay: { }, onPause: { }, onSeek: { _ in }, onScrubbing: { _ in })
+            .fixedSize(horizontal: false, vertical: true)
     }
 }

@@ -137,7 +137,7 @@ private struct CreatePollOptionView: View {
     let deleteAction: () -> Void
 
     var body: some View {
-        HStack {
+        HStack(spacing: 8) {
             if editMode?.wrappedValue == .active {
                 Button(role: .destructive, action: deleteAction) {
                     CompoundIcon(\.delete)

@@ -34,7 +34,7 @@ struct CollapsibleRoomTimelineView: View {
                     isExpanded.toggle()
                 }
             } label: {
-                HStack(alignment: .center) {
+                HStack(alignment: .center, spacing: 8) {
                     Text(L10n.roomTimelineStateChanges(timelineItem.items.count))
                     Text(Image(systemName: "chevron.forward"))
                         .rotationEffect(.degrees(isExpanded ? 90 : 0))

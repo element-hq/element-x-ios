@@ -102,7 +102,7 @@ private struct PINDigitField: View {
 
 struct PINTextField_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VStack {
+        VStack(spacing: 8) {
             PreviewWrapper(pinCode: "", isSecure: false)
             PreviewWrapper(pinCode: "12", isSecure: false)
             PreviewWrapper(pinCode: "1234", isSecure: false)

@@ -20,19 +20,15 @@ struct EmojiPickerScreenHeaderView: View {
     let title: String
     
     var body: some View {
-        HStack {
-            Text(title)
-                .font(.compound.bodyMD.bold())
-                .foregroundColor(.compound.textPrimary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
+        Text(title)
+            .font(.compound.bodyMD.bold())
+            .foregroundColor(.compound.textPrimary)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
 struct EmojiPickerScreenHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        Group {
-            EmojiPickerScreenHeaderView(title: "Title")
-        }
+        EmojiPickerScreenHeaderView(title: "Title")
     }
 }
