@@ -19,8 +19,7 @@ import SwiftUI
 
 struct TimelineSenderAvatarView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
-    @ScaledMetric private var avatarSize = AvatarSize.user(on: .timeline).value
-    
+
     let timelineItem: EventBasedTimelineItemProtocol
         
     var body: some View {

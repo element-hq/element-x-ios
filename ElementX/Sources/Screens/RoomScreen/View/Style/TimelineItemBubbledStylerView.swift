@@ -25,8 +25,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
-
-    @ScaledMetric private var senderNameVerticalPadding = 3
     
     @State private var showItemActionMenu = false
 
@@ -85,7 +83,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .font(.compound.bodySMSemibold)
                     .foregroundColor(.compound.avatarColor(for: timelineItem.sender.id).foreground)
                     .lineLimit(1)
-                    .padding(.vertical, senderNameVerticalPadding)
+                    .scaledPadding(.vertical, 3)
             }
             // sender info are read inside the `TimelineAccessibilityModifier`
             .accessibilityHidden(true)

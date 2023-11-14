@@ -20,8 +20,6 @@ struct PollRoomTimelineView: View {
     let timelineItem: PollRoomTimelineItem
     @Environment(\.timelineStyle) var timelineStyle
     @EnvironmentObject private var context: RoomScreenViewModel.Context
-    @ScaledMetric private var summaryPadding = 32
-    @ScaledMetric private var iconSize = 22
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
 
@@ -53,7 +51,7 @@ struct PollRoomTimelineView: View {
 
             Image(asset.name)
                 .resizable()
-                .frame(width: iconSize, height: iconSize)
+                .scaledFrame(size: 22)
                 .accessibilityHidden(true)
 
             Text(poll.question)
@@ -83,7 +81,7 @@ struct PollRoomTimelineView: View {
         if let summaryText = poll.summaryText {
             Text(summaryText)
                 .font(.compound.bodySM)
-                .padding(.leading, showVotes ? 0 : summaryPadding)
+                .scaledPadding(.leading, showVotes ? 0 : 32)
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, alignment: showVotes ? .trailing : .leading)
         }

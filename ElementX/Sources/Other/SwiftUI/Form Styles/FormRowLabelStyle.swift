@@ -17,8 +17,6 @@
 import SwiftUI
 
 struct FormRowLabelStyle: LabelStyle {
-    @ScaledMetric private var menuIconSize = 30.0
-    
     var alignment = VerticalAlignment.firstTextBaseline
     var role: ButtonRole?
 
@@ -51,7 +49,7 @@ struct FormRowLabelStyle: LabelStyle {
             configuration.icon
                 .foregroundColor(iconForegroundColor)
                 .padding(4)
-                .frame(width: menuIconSize, height: menuIconSize)
+                .scaledFrame(size: 30)
                 .background(iconBackgroundColor)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             configuration.title

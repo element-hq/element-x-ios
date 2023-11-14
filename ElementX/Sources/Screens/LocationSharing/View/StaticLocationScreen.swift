@@ -104,7 +104,6 @@ struct StaticLocationScreen: View {
         context.viewState.isLocationPickerMode ? .horizontal : [.horizontal, .bottom]
     }
     
-    @ScaledMetric private var shareMarkerSize: CGFloat = 28
     private var selectLocationButton: some View {
         Button {
             context.send(viewAction: .selectLocation)
@@ -113,7 +112,7 @@ struct StaticLocationScreen: View {
                 Image(asset: Asset.Images.locationMarker)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: shareMarkerSize, height: shareMarkerSize)
+                    .scaledFrame(size: 28)
                 Text(context.viewState.isSharingUserLocation ? L10n.screenShareMyLocationAction : L10n.screenShareThisLocationAction)
             }
         }

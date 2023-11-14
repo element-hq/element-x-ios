@@ -21,8 +21,6 @@ struct InviteUsersScreenSelectedItem: View {
     let imageProvider: ImageProviderProtocol?
     let dismissAction: () -> Void
     
-    @ScaledMetric private var buttonSize: CGFloat = 20
-    
     var body: some View {
         VStack(spacing: 0) {
             avatar
@@ -46,7 +44,7 @@ struct InviteUsersScreenSelectedItem: View {
                 Button(action: dismissAction) {
                     Image(systemName: "xmark.circle.fill")
                         .resizable()
-                        .frame(width: buttonSize, height: buttonSize)
+                        .scaledFrame(size: 20)
                         .symbolRenderingMode(.palette)
                         .foregroundStyle(Color.compound.iconOnSolidPrimary, Color.compound.iconPrimary)
                 }
