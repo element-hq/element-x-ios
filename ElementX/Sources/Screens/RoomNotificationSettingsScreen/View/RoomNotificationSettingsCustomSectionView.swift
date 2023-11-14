@@ -49,10 +49,27 @@ struct RoomNotificationSettingsCustomSectionView_Previews: PreviewProvider, Test
                                                        displayAsUserDefinedRoomSettings: false)
     }()
     
+    static let viewModelUnencrypted = {
+        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .mentionsAndKeywordsOnly))
+        
+        let roomProxy = RoomProxyMock(with: .init(displayName: "Room", isEncrypted: false, joinedMembersCount: 4))
+        
+        return RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
+                                                       roomProxy: roomProxy,
+                                                       displayAsUserDefinedRoomSettings: false)
+    }()
+    
     static var previews: some View {
         Form {
             RoomNotificationSettingsCustomSectionView(context: viewModel.context)
         }
         .compoundForm()
+        .previewDisplayName("Encrypted")
+        
+        Form {
+            RoomNotificationSettingsCustomSectionView(context: viewModelUnencrypted.context)
+        }
+        .compoundForm()
+        .previewDisplayName("Unencrypted")
     }
 }
