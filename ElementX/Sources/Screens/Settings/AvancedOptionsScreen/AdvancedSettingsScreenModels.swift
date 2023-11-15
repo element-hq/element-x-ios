@@ -42,6 +42,7 @@ protocol AdvancedSettingsProtocol: AnyObject {
     var timelineStyle: TimelineStyle { get set }
     var viewSourceEnabled: Bool { get set }
     var richTextEditorEnabled: Bool { get set }
+    var appAppearance: AppAppearance { get set }
 }
 
 extension AppSettings: AdvancedSettingsProtocol { }
