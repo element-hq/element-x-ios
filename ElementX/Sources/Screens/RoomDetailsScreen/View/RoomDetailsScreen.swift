@@ -196,7 +196,7 @@ struct RoomDetailsScreen: View {
             Section {
                 ListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
                                         description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
-                                        icon: CompoundIcon(asset: Asset.Images.encryptionEnabled),
+                                        icon: CompoundIcon(asset: Asset.Images.lock),
                                         iconAlignment: .top),
                         kind: .label)
             } header: {
