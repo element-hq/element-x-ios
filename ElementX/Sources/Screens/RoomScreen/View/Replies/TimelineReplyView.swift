@@ -31,7 +31,7 @@ struct TimelineReplyView: View {
             switch timelineItemReplyDetails {
             case .loaded(let sender, let content):
                 switch content {
-                case .messageBased(let content):
+                case .message(let content):
                     switch content {
                     case .audio(let content):
                         ReplyView(sender: sender,
@@ -239,60 +239,60 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                repliedEventContent: .messageBased(.text(.init(body: "This is a reply"))))),
+                                                                eventContent: .message(.text(.init(body: "This is a reply"))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                repliedEventContent: .messageBased(.emote(.init(body: "says hello"))))),
+                                                                eventContent: .message(.emote(.init(body: "says hello"))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
-                                                                repliedEventContent: .messageBased(.notice(.init(body: "Hello world"))))),
+                                                                eventContent: .message(.notice(.init(body: "Hello world"))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                repliedEventContent: .messageBased(.audio(.init(body: "Some audio",
-                                                                                                                duration: 0,
-                                                                                                                waveform: nil,
-                                                                                                                source: nil,
-                                                                                                                contentType: nil))))),
+                                                                eventContent: .message(.audio(.init(body: "Some audio",
+                                                                                                    duration: 0,
+                                                                                                    waveform: nil,
+                                                                                                    source: nil,
+                                                                                                    contentType: nil))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                repliedEventContent: .messageBased(.file(.init(body: "Some file",
-                                                                                                               source: nil,
-                                                                                                               thumbnailSource: nil,
-                                                                                                               contentType: nil))))),
+                                                                eventContent: .message(.file(.init(body: "Some file",
+                                                                                                   source: nil,
+                                                                                                   thumbnailSource: nil,
+                                                                                                   contentType: nil))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                repliedEventContent: .messageBased(.image(.init(body: "Some image",
-                                                                                                                source: imageSource,
-                                                                                                                thumbnailSource: imageSource))))),
+                                                                eventContent: .message(.image(.init(body: "Some image",
+                                                                                                    source: imageSource,
+                                                                                                    thumbnailSource: imageSource))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                repliedEventContent: .messageBased(.video(.init(body: "Some video",
-                                                                                                                duration: 0,
-                                                                                                                source: nil,
-                                                                                                                thumbnailSource: imageSource))))),
+                                                                eventContent: .message(.video(.init(body: "Some video",
+                                                                                                    duration: 0,
+                                                                                                    source: nil,
+                                                                                                    thumbnailSource: imageSource))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                repliedEventContent: .messageBased(.location(.init(body: ""))))),
+                                                                eventContent: .message(.location(.init(body: ""))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                repliedEventContent: .messageBased(.voice(.init(body: "Some voice message",
-                                                                                                                duration: 0,
-                                                                                                                waveform: nil,
-                                                                                                                source: nil,
-                                                                                                                contentType: nil))))),
+                                                                eventContent: .message(.voice(.init(body: "Some voice message",
+                                                                                                    duration: 0,
+                                                                                                    waveform: nil,
+                                                                                                    source: nil,
+                                                                                                    contentType: nil))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
-                                                                repliedEventContent: .messageBased(.notice(.init(body: "", formattedBody: attributedStringWithMention))))),
+                                                                eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithMention))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
-                                                                repliedEventContent: .messageBased(.notice(.init(body: "", formattedBody: attributedStringWithAtRoomMention)))))
+                                                                eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithAtRoomMention)))))
         ]
     }
     

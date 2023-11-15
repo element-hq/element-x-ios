@@ -232,8 +232,8 @@ class RoomScreenInteractionHandler {
             }
         case .reply:
             let replyInfo = buildReplyInfo(for: eventTimelineItem)
-            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, repliedEventContent: replyInfo.type)
-
+            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventContent: replyInfo.type)
+            
             actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails, isThread: replyInfo.isThread))))
         case .forward(let itemID):
             actionsSubject.send(.displayMessageForwarding(itemID: itemID))
@@ -598,11 +598,11 @@ class RoomScreenInteractionHandler {
     private func buildReplyInfo(for item: EventBasedTimelineItemProtocol) -> ReplyInfo {
         switch item {
         case let messageItem as EventBasedMessageTimelineItemProtocol:
-            return .init(type: .messageBased(messageItem.contentType), isThread: messageItem.isThreaded)
+            return .init(type: .message(messageItem.contentType), isThread: messageItem.isThreaded)
         case let pollItem as PollRoomTimelineItem:
             return .init(type: .poll(question: pollItem.poll.question), isThread: false)
         default:
-            return .init(type: .messageBased(.text(.init(body: item.body))), isThread: false)
+            return .init(type: .message(.text(.init(body: item.body))), isThread: false)
         }
     }
     
@@ -614,7 +614,7 @@ class RoomScreenInteractionHandler {
     private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
         var source: MediaSourceProxy?
         var body: String
-
+        
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
             source = item.content.source

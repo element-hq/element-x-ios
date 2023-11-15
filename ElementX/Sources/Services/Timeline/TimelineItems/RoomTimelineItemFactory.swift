@@ -629,19 +629,19 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             }
             
             let replyContent: TimelineEventContent
-
+            
             switch timelineItem.kind() {
             case .message:
                 return timelineItemReplyDetails(for: timelineItem.asMessage()?.msgtype(), sender: sender)
             case .poll(let question, _, _, _, _, _):
                 replyContent = .poll(question: question)
             case .sticker(let body, _, _):
-                replyContent = .messageBased(.text(.init(body: body)))
+                replyContent = .message(.text(.init(body: body)))
             default:
-                replyContent = .messageBased(.text(.init(body: L10n.commonUnsupportedEvent)))
+                replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
             }
             
-            return .loaded(sender: sender, repliedEventContent: replyContent)
+            return .loaded(sender: sender, eventContent: replyContent)
         case let .error(message):
             return .error(eventID: details.eventId, message: message)
         }
@@ -675,7 +675,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
         }
         
-        return .loaded(sender: sender, repliedEventContent: .messageBased(replyContent))
+        return .loaded(sender: sender, eventContent: .message(replyContent))
     }
 }
 

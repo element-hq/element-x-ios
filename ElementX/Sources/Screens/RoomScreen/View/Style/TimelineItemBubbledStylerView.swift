@@ -421,7 +421,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "A long message that should be on multiple lines."),
                                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                                                   repliedEventContent: .messageBased(.text(.init(body: "Short"))))),
+                                                                                                   eventContent: .message(.text(.init(body: "Short"))))),
                                                   groupStyle: .single))
 
             AudioRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
@@ -437,7 +437,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                      source: nil,
                                                                      contentType: nil),
                                                       replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                            repliedEventContent: .messageBased(.text(.init(body: "Short"))))))
+                                                                            eventContent: .message(.text(.init(body: "Short"))))))
             
             FileRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
                                                      timestamp: "10:42",
@@ -451,7 +451,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                     thumbnailSource: nil,
                                                                     contentType: nil),
                                                      replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                           repliedEventContent: .messageBased(.text(.init(body: "Short"))))))
+                                                                           eventContent: .message(.text(.init(body: "Short"))))))
             ImageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
                                                       timestamp: "10:42",
                                                       isOutgoing: true,
@@ -461,7 +461,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                       sender: .init(id: ""),
                                                       content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil),
                                                       replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                            repliedEventContent: .messageBased(.text(.init(body: "Short"))))))
+                                                                            eventContent: .message(.text(.init(body: "Short"))))))
             LocationRoomTimelineView(timelineItem: .init(id: .random,
                                                          timestamp: "Now",
                                                          isOutgoing: false,
@@ -474,7 +474,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                                       longitude: 12.496366),
                                                                         description: "Location description description description description description description description description"),
                                                          replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                               repliedEventContent: .messageBased(.text(.init(body: "Short"))))))
+                                                                               eventContent: .message(.text(.init(body: "Short"))))))
             LocationRoomTimelineView(timelineItem: .init(id: .random,
                                                          timestamp: "Now",
                                                          isOutgoing: false,
@@ -485,7 +485,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                          content: .init(body: "Fallback geo uri description",
                                                                         geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
                                                          replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                               repliedEventContent: .messageBased(.text(.init(body: "Short"))))))
+                                                                               eventContent: .message(.text(.init(body: "Short"))))))
             
             VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
                                                              timestamp: "10:42",
@@ -500,7 +500,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                             source: nil,
                                                                             contentType: nil),
                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                                   repliedEventContent: .messageBased(.text(.init(body: "Short"))))),
+                                                                                   eventContent: .message(.text(.init(body: "Short"))))),
                                          playerState: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 10, waveform: EstimatedWaveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
@@ -531,7 +531,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "A long message that should be on multiple lines."),
                                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                                                   repliedEventContent: .messageBased(.text(.init(body: "Short"))))),
+                                                                                                   eventContent: .message(.text(.init(body: "Short"))))),
                                                   groupStyle: .single))
 
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
@@ -543,7 +543,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "Short message"),
                                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                                                   repliedEventContent: .messageBased(.text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout."))))),
+                                                                                                   eventContent: .message(.text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout."))))),
                                                   groupStyle: .single))
         }
         .environmentObject(viewModel.context)
