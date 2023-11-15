@@ -232,8 +232,7 @@ class RoomScreenInteractionHandler {
             }
         case .reply:
             let replyInfo = buildReplyInfo(for: eventTimelineItem)
-            #warning("AG: fix me, the reply may have a different type")
-            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, repliedEventContent: .messageBased(replyInfo.type))
+            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, repliedEventContent: replyInfo.type)
 
             actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails, isThread: replyInfo.isThread))))
         case .forward(let itemID):
@@ -597,11 +596,14 @@ class RoomScreenInteractionHandler {
     }
     
     private func buildReplyInfo(for item: EventBasedTimelineItemProtocol) -> ReplyInfo {
-        guard let messageItem = item as? EventBasedMessageTimelineItemProtocol else {
-            return .init(type: .text(.init(body: item.body)), isThread: false)
+        switch item {
+        case let messageItem as EventBasedMessageTimelineItemProtocol:
+            return .init(type: .messageBased(messageItem.contentType), isThread: messageItem.isThreaded)
+        case let pollItem as PollRoomTimelineItem:
+            return .init(type: .poll(pollItem.poll), isThread: false)
+        default:
+            return .init(type: .messageBased(.text(.init(body: item.body))), isThread: false)
         }
-        
-        return .init(type: messageItem.contentType, isThread: messageItem.isThreaded)
     }
     
     private func openSystemSettings() {
@@ -658,6 +660,6 @@ class RoomScreenInteractionHandler {
 }
 
 private struct ReplyInfo {
-    let type: EventBasedMessageTimelineItemContentType
+    let type: TimelineEventContent
     let isThread: Bool
 }

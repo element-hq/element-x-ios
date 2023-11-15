@@ -77,8 +77,10 @@ struct TimelineReplyView: View {
                                   icon: .init(kind: .iconAsset(Asset.Images.addLocation), cornerRadii: iconCornerRadii))
                     }
                 case .poll(let poll):
-                    #warning("AG: fix me")
-                    EmptyView()
+                    ReplyView(sender: sender,
+                              plainBody: poll.question,
+                              formattedBody: nil,
+                              icon: .init(kind: .iconAsset(Asset.Images.timelinePoll), cornerRadii: iconCornerRadii))
                 }
             default:
                 LoadingReplyView()
