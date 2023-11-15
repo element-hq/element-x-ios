@@ -19,7 +19,7 @@ import SwiftUI
 
 struct TimelineItemStatusView: View {
     let timelineItem: EventBasedTimelineItemProtocol
-    var status: TimelineItemDeliveryStatus?
+    let deliveryStatus: TimelineItemDeliveryStatus?
     @Environment(\.timelineStyle) private var style
     @Environment(\.readReceiptsEnabled) private var readReceiptsEnabled
     @EnvironmentObject private var context: RoomScreenViewModel.Context
@@ -37,13 +37,13 @@ struct TimelineItemStatusView: View {
         if !timelineItem.properties.orderedReadReceipts.isEmpty, readReceiptsEnabled {
             readReceipts
         } else {
-            deliveryStatus
+            deliveryStatusBadge
         }
     }
 
     @ViewBuilder
-    var deliveryStatus: some View {
-        switch status {
+    var deliveryStatusBadge: some View {
+        switch deliveryStatus {
         case .sending:
             TimelineDeliveryStatusView(deliveryStatus: .sending)
         case .sent, .none:

@@ -22,7 +22,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
     let timelineItem: EventBasedTimelineItemProtocol
-    var status: TimelineItemDeliveryStatus?
+    let deliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
     
     @State private var showItemActionMenu = false
@@ -37,7 +37,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     supplementaryViews
                 }
             }
-            TimelineItemStatusView(timelineItem: timelineItem, status: status)
+            TimelineItemStatusView(timelineItem: timelineItem, deliveryStatus: deliveryStatus)
                 .environmentObject(context)
         }
     }

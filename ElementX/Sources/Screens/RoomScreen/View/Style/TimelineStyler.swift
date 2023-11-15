@@ -25,43 +25,45 @@ struct TimelineStyler<Content: View>: View {
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
     
-    @State private var status: TimelineItemDeliveryStatus?
+    @State private var deliveryStatus: TimelineItemDeliveryStatus?
     @State private var task: Task<Void, Never>?
+    
+    init(timelineItem: EventBasedTimelineItemProtocol, @ViewBuilder content: @escaping () -> Content) {
+        self.timelineItem = timelineItem
+        self.content = content
+        _deliveryStatus = State(initialValue: timelineItem.properties.deliveryStatus)
+    }
 
     var body: some View {
         mainContent
             .onChange(of: timelineItem.properties.deliveryStatus) { newStatus in
-                MXLog.info("Delivery status: \(newStatus)")
                 if newStatus == .sendingFailed {
                     guard task == nil else {
                         return
                     }
                     task = Task {
-                        // If there was no prior delivery state we show it as sending
-                        if status == nil {
-                            status = .sending
-                        }
                         try? await Task.sleep(for: .milliseconds(500))
                         if !Task.isCancelled {
-                            status = newStatus
+                            deliveryStatus = newStatus
                         }
                         task = nil
                     }
                 } else {
                     task?.cancel()
                     task = nil
-                    status = newStatus
+                    deliveryStatus = newStatus
                 }
             }
+            .animation(.elementDefault, value: deliveryStatus)
     }
     
     @ViewBuilder
     var mainContent: some View {
         switch style {
         case .plain:
-            TimelineItemPlainStylerView(timelineItem: timelineItem, status: status, content: content)
+            TimelineItemPlainStylerView(timelineItem: timelineItem, deliveryStatus: deliveryStatus, content: content)
         case .bubbles:
-            TimelineItemBubbledStylerView(timelineItem: timelineItem, status: status, content: content)
+            TimelineItemBubbledStylerView(timelineItem: timelineItem, deliveryStatus: deliveryStatus, content: content)
         }
     }
 }
