@@ -37,6 +37,7 @@ struct TimelineStyler<Content: View>: View {
                         return
                     }
                     task = Task {
+                        // If there was no prior delivery state we show it as sending
                         if status == nil {
                             status = .sending
                         }
