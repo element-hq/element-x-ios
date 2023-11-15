@@ -40,6 +40,11 @@ class WindowManager {
         [mainWindow, overlayWindow, alternateWindow]
     }
     
+    /// The task used to switch windows, so that we don't get stuck in the wrong state with a quick switch.
+    @CancellableTask private var switchTask: Task<Void, Error>?
+    /// A duration that allows window switching to wait a couple of frames to avoid a transition through black.
+    private let windowHideDelay = Duration.milliseconds(33)
+    
     /// Configures the window manager to operate on the supplied scene.
     func configure(with windowScene: UIWindowScene) {
         mainWindow = windowScene.keyWindow
@@ -58,21 +63,33 @@ class WindowManager {
     
     /// Shows the main and overlay window combo, hiding the alternate window.
     func switchToMain() {
-        mainWindow.isHidden = false
-        overlayWindow.isHidden = false
-        alternateWindow.isHidden = true
+        switchTask = Task {
+            mainWindow.isHidden = false
+            overlayWindow.isHidden = false
+            
+            // Delay hiding to make sure the main windows are visible.
+            try await Task.sleep(for: windowHideDelay)
+            
+            alternateWindow.isHidden = true
+        }
     }
     
     /// Shows the alternate window, hiding the main and overlay combo.
     func switchToAlternate() {
-        alternateWindow.isHidden = false
-        overlayWindow.isHidden = true
-        mainWindow.isHidden = true
-        
-        // We don't know what route the app will use when returning back
-        // to the main window, so end any editing operation now to avoid
-        // e.g. the keyboard being displayed on top of a call sheet.
-        mainWindow.endEditing(true)
+        switchTask = Task {
+            alternateWindow.isHidden = false
+            
+            // We don't know what route the app will use when returning back
+            // to the main window, so end any editing operation now to avoid
+            // e.g. the keyboard being displayed on top of a call sheet.
+            mainWindow.endEditing(true)
+            
+            // Delay hiding to make sure the alternate window is visible.
+            try await Task.sleep(for: windowHideDelay)
+            
+            overlayWindow.isHidden = true
+            mainWindow.isHidden = true
+        }
     }
 }
 

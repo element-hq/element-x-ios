@@ -45,7 +45,7 @@ class AppLockUITests: XCTestCase {
         try await app.assertScreenshot(.appLockFlow, step: Step.placeholder)
         
         // When foregrounding the app.
-        try client.send(.notification(name: UIApplication.willEnterForegroundNotification))
+        try client.send(.notification(name: UIApplication.didBecomeActiveNotification))
         
         // Then the Lock Screen should be shown to enter a PIN.
         try await app.assertScreenshot(.appLockFlow, step: Step.lockScreen)
@@ -73,7 +73,7 @@ class AppLockUITests: XCTestCase {
         try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
         
         // When foregrounding the app.
-        try client.send(.notification(name: UIApplication.willEnterForegroundNotification))
+        try client.send(.notification(name: UIApplication.didBecomeActiveNotification))
         
         // Then the app should still remain unlocked.
         try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
@@ -87,7 +87,7 @@ class AppLockUITests: XCTestCase {
         
         try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
         try client.send(.notification(name: UIApplication.didEnterBackgroundNotification))
-        try client.send(.notification(name: UIApplication.willEnterForegroundNotification))
+        try client.send(.notification(name: UIApplication.didBecomeActiveNotification))
         try await app.assertScreenshot(.appLockFlow, step: Step.lockScreen)
         
         // When entering an incorrect PIN
@@ -104,6 +104,28 @@ class AppLockUITests: XCTestCase {
         try await app.assertScreenshot(.appLockFlow, step: Step.logoutAlert)
         app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].tap()
         try await app.assertScreenshot(.appLockFlow, step: Step.forcedLogout)
+    }
+    
+    func testResignActive() async throws {
+        // Given an app with screen lock enabled.
+        let client = try UITestsSignalling.Client(mode: .tests)
+        app = Application.launch(.appLockFlow)
+        await client.waitForApp()
+        
+        // Blank form representing an unlocked app.
+        try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
+        
+        // When the app resigns active but doesn't enter the background.
+        try client.send(.notification(name: UIApplication.willResignActiveNotification))
+        
+        // Then the placeholder screen should obscure the content.
+        try await app.assertScreenshot(.appLockFlow, step: Step.placeholder)
+        
+        // When the app becomes active again.
+        try client.send(.notification(name: UIApplication.didBecomeActiveNotification))
+        
+        // Then the app should not have become unlock.
+        try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
     }
     
     // MARK: - Helpers

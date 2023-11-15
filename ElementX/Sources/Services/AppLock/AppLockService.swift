@@ -111,8 +111,8 @@ class AppLockService: AppLockServiceProtocol {
         timer.applicationDidEnterBackground()
     }
     
-    func computeNeedsUnlock(willEnterForegroundAt date: Date) -> Bool {
-        timer.computeLockState(willEnterForegroundAt: date)
+    func computeNeedsUnlock(didBecomeActiveAt date: Date) -> Bool {
+        timer.computeLockState(didBecomeActiveAt: date)
     }
     
     func unlock(with pinCode: String) -> Bool {
