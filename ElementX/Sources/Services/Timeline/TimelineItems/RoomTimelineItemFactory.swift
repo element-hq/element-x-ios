@@ -628,46 +628,54 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                             avatarURL: nil)
             }
             
-            let replyContent: EventBasedMessageTimelineItemContentType
+            let replyContent: TimelineEventContent
 
             switch timelineItem.kind() {
             case .message:
-                switch timelineItem.asMessage()?.msgtype() {
-                case .audio(let content):
-                    if content.voice != nil {
-                        replyContent = .voice(buildAudioTimelineItemContent(content))
-                    } else {
-                        replyContent = .audio(buildAudioTimelineItemContent(content))
-                    }
-                case .emote(let content):
-                    replyContent = .emote(buildEmoteTimelineItemContent(senderDisplayName: sender.displayName, senderID: sender.id, messageContent: content))
-                case .file(let content):
-                    replyContent = .file(buildFileTimelineItemContent(content))
-                case .image(let content):
-                    replyContent = .image(buildImageTimelineItemContent(content))
-                case .notice(let content):
-                    replyContent = .notice(buildNoticeTimelineItemContent(content))
-                case .text(let content):
-                    replyContent = .text(buildTextTimelineItemContent(content))
-                case .video(let content):
-                    replyContent = .video(buildVideoTimelineItemContent(content))
-                case .location(let content):
-                    replyContent = .location(buildLocationTimelineItemContent(content))
-                case .other, .none:
-                    replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
-                }
+                return timelineItemReplyDetails(for: timelineItem.asMessage()?.msgtype(), sender: sender)
             case .poll(let question, _, _, _, _, _):
-                replyContent = .text(.init(body: question))
+                replyContent = .poll(question: question)
             case .sticker(let body, _, _):
-                replyContent = .text(.init(body: body))
+                replyContent = .messageBased(.text(.init(body: body)))
             default:
-                replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
+                replyContent = .messageBased(.text(.init(body: L10n.commonUnsupportedEvent)))
             }
             
-            return .loaded(sender: sender, repliedEventContent: .messageBased(replyContent))
+            return .loaded(sender: sender, repliedEventContent: replyContent)
         case let .error(message):
             return .error(eventID: details.eventId, message: message)
         }
+    }
+    
+    private func timelineItemReplyDetails(for messageType: MessageType?, sender: TimelineItemSender) -> TimelineItemReplyDetails {
+        let replyContent: EventBasedMessageTimelineItemContentType
+        
+        switch messageType {
+        case .audio(let content):
+            if content.voice != nil {
+                replyContent = .voice(buildAudioTimelineItemContent(content))
+            } else {
+                replyContent = .audio(buildAudioTimelineItemContent(content))
+            }
+        case .emote(let content):
+            replyContent = .emote(buildEmoteTimelineItemContent(senderDisplayName: sender.displayName, senderID: sender.id, messageContent: content))
+        case .file(let content):
+            replyContent = .file(buildFileTimelineItemContent(content))
+        case .image(let content):
+            replyContent = .image(buildImageTimelineItemContent(content))
+        case .notice(let content):
+            replyContent = .notice(buildNoticeTimelineItemContent(content))
+        case .text(let content):
+            replyContent = .text(buildTextTimelineItemContent(content))
+        case .video(let content):
+            replyContent = .video(buildVideoTimelineItemContent(content))
+        case .location(let content):
+            replyContent = .location(buildLocationTimelineItemContent(content))
+        case .other, .none:
+            replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
+        }
+        
+        return .loaded(sender: sender, repliedEventContent: .messageBased(replyContent))
     }
 }
 

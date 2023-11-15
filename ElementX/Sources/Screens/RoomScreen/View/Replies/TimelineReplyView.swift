@@ -76,9 +76,9 @@ struct TimelineReplyView: View {
                                   formattedBody: nil,
                                   icon: .init(kind: .iconAsset(Asset.Images.addLocation), cornerRadii: iconCornerRadii))
                     }
-                case .poll(let poll):
+                case .poll(let question):
                     ReplyView(sender: sender,
-                              plainBody: poll.question,
+                              plainBody: question,
                               formattedBody: nil,
                               icon: .init(kind: .iconAsset(Asset.Images.timelinePoll), cornerRadii: iconCornerRadii))
                 }

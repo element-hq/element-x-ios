@@ -600,7 +600,7 @@ class RoomScreenInteractionHandler {
         case let messageItem as EventBasedMessageTimelineItemProtocol:
             return .init(type: .messageBased(messageItem.contentType), isThread: messageItem.isThreaded)
         case let pollItem as PollRoomTimelineItem:
-            return .init(type: .poll(pollItem.poll), isThread: false)
+            return .init(type: .poll(question: pollItem.poll.question), isThread: false)
         default:
             return .init(type: .messageBased(.text(.init(body: item.body))), isThread: false)
         }
