@@ -122,7 +122,7 @@ struct RoomDetailsEditScreen: View {
     }
     
     private var avatarOverlayIcon: some View {
-        CompoundIcon(customImage: Asset.Images.editing.swiftUIImage, size: .xSmall, relativeTo: .compound.bodyLG)
+        CompoundIcon(asset: Asset.Images.editing, size: .xSmall, relativeTo: .compound.bodyLG)
             .foregroundColor(.white)
             .padding(3)
             .background {

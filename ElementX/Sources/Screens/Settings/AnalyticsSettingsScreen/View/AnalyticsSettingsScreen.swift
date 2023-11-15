@@ -31,8 +31,7 @@ struct AnalyticsSettingsScreen: View {
     
     var analyticsSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenAnalyticsSettingsShareData,
-                                    systemIcon: .chartBar),
+            ListRow(label: .plain(title: L10n.screenAnalyticsSettingsShareData),
                     kind: .toggle($context.enableAnalytics))
                 .onChange(of: context.enableAnalytics) { _ in
                     context.send(viewAction: .toggleAnalytics)

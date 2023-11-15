@@ -14,9 +14,8 @@
 // limitations under the License.
 //
 
-import Foundation
+import Compound
 import SwiftUI
-import UIKit
 
 // MARK: - Coordinator
 
@@ -85,8 +84,8 @@ struct RoomDetailsScreenViewState: BindableState {
         areNotificationsMuted ? L10n.commonUnmute : L10n.commonMute
     }
     
-    var notificationShortcutButtonImage: Image {
-        areNotificationsMuted ? Image(systemName: "bell.slash.fill") : Image(systemName: "bell")
+    var notificationShortcutButtonIcon: KeyPath<CompoundIcons, Image> {
+        areNotificationsMuted ? \.notificationsOff : \.notifications
     }
 }
 

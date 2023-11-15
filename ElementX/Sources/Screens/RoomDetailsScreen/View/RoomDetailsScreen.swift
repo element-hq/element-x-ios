@@ -110,7 +110,7 @@ struct RoomDetailsScreen: View {
                     toggleMuteButton
                 case .share(let permalink):
                     ShareLink(item: permalink) {
-                        Image(systemName: "square.and.arrow.up")
+                        CompoundIcon(asset: Asset.Images.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
                 }
@@ -141,7 +141,8 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.commonPeople, systemIcon: .person),
+            ListRow(label: .default(title: L10n.commonPeople,
+                                    icon: CompoundIcon(asset: Asset.Images.user)),
                     details: .title(String(context.viewState.joinedMembersCount)),
                     kind: .navigationLink {
                         context.send(viewAction: .processTapPeople)
@@ -150,7 +151,7 @@ struct RoomDetailsScreen: View {
             
             if context.viewState.canInviteUsers {
                 ListRow(label: .default(title: L10n.screenRoomDetailsInvitePeopleTitle,
-                                        systemIcon: .personBadgePlus),
+                                        icon: CompoundIcon(asset: Asset.Images.userAdd)),
                         kind: .navigationLink {
                             context.send(viewAction: .processTapInvite)
                         })
@@ -159,11 +160,10 @@ struct RoomDetailsScreen: View {
         }
     }
     
-    @ViewBuilder
     private var notificationSection: some View {
         Section {
             ListRow(label: .default(title: L10n.screenRoomDetailsNotificationTitle,
-                                    systemIcon: .bell),
+                                    icon: \.notifications),
                     details: context.viewState.notificationSettingsState.isLoading ? .isWaiting(true)
                         : context.viewState.notificationSettingsState.isError ? .systemIcon(.exclamationmarkCircle)
                         : .title(context.viewState.notificationSettingsState.label),
@@ -176,7 +176,6 @@ struct RoomDetailsScreen: View {
         .disabled(context.viewState.notificationSettingsState.isLoading)
     }
     
-    @ViewBuilder
     private var toggleMuteButton: some View {
         Button {
             context.send(viewAction: .processToogleMuteNotifications)
@@ -184,20 +183,20 @@ struct RoomDetailsScreen: View {
             if context.viewState.isProcessingMuteToggleAction {
                 ProgressView()
             } else {
-                context.viewState.notificationShortcutButtonImage
+                CompoundIcon(context.viewState.notificationShortcutButtonIcon)
             }
         }
         .buttonStyle(FormActionButtonStyle(title: context.viewState.notificationShortcutButtonTitle))
         .disabled(context.viewState.isProcessingMuteToggleAction)
     }
-
+    
     @ViewBuilder
     private var securitySection: some View {
         if context.viewState.isEncrypted {
             Section {
                 ListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
                                         description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
-                                        systemIcon: .lockShield,
+                                        icon: CompoundIcon(asset: Asset.Images.lock),
                                         iconAlignment: .top),
                         kind: .label)
             } header: {
@@ -209,9 +208,9 @@ struct RoomDetailsScreen: View {
 
     private var leaveRoomSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.actionLeaveRoom,
-                                    systemIcon: .doorRightHandOpen,
-                                    role: .destructive),
+            ListRow(label: .action(title: L10n.actionLeaveRoom,
+                                   icon: \.leave,
+                                   role: .destructive),
                     kind: .button { context.send(viewAction: .processTapLeave) })
         }
     }
@@ -219,7 +218,7 @@ struct RoomDetailsScreen: View {
     private func ignoreUserSection(user: RoomMemberDetails) -> some View {
         Section {
             ListRow(label: .default(title: user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
-                                    systemIcon: .slashCircle,
+                                    icon: CompoundIcon(asset: Asset.Images.block),
                                     role: user.isIgnored ? nil : .destructive),
                     details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
                     kind: .button {
