@@ -246,23 +246,23 @@ class AppLockServiceMock: AppLockServiceProtocol {
     }
     //MARK: - computeNeedsUnlock
 
-    var computeNeedsUnlockWillEnterForegroundAtCallsCount = 0
-    var computeNeedsUnlockWillEnterForegroundAtCalled: Bool {
-        return computeNeedsUnlockWillEnterForegroundAtCallsCount > 0
+    var computeNeedsUnlockDidBecomeActiveAtCallsCount = 0
+    var computeNeedsUnlockDidBecomeActiveAtCalled: Bool {
+        return computeNeedsUnlockDidBecomeActiveAtCallsCount > 0
     }
-    var computeNeedsUnlockWillEnterForegroundAtReceivedDate: Date?
-    var computeNeedsUnlockWillEnterForegroundAtReceivedInvocations: [Date] = []
-    var computeNeedsUnlockWillEnterForegroundAtReturnValue: Bool!
-    var computeNeedsUnlockWillEnterForegroundAtClosure: ((Date) -> Bool)?
+    var computeNeedsUnlockDidBecomeActiveAtReceivedDate: Date?
+    var computeNeedsUnlockDidBecomeActiveAtReceivedInvocations: [Date] = []
+    var computeNeedsUnlockDidBecomeActiveAtReturnValue: Bool!
+    var computeNeedsUnlockDidBecomeActiveAtClosure: ((Date) -> Bool)?
 
-    func computeNeedsUnlock(willEnterForegroundAt date: Date) -> Bool {
-        computeNeedsUnlockWillEnterForegroundAtCallsCount += 1
-        computeNeedsUnlockWillEnterForegroundAtReceivedDate = date
-        computeNeedsUnlockWillEnterForegroundAtReceivedInvocations.append(date)
-        if let computeNeedsUnlockWillEnterForegroundAtClosure = computeNeedsUnlockWillEnterForegroundAtClosure {
-            return computeNeedsUnlockWillEnterForegroundAtClosure(date)
+    func computeNeedsUnlock(didBecomeActiveAt date: Date) -> Bool {
+        computeNeedsUnlockDidBecomeActiveAtCallsCount += 1
+        computeNeedsUnlockDidBecomeActiveAtReceivedDate = date
+        computeNeedsUnlockDidBecomeActiveAtReceivedInvocations.append(date)
+        if let computeNeedsUnlockDidBecomeActiveAtClosure = computeNeedsUnlockDidBecomeActiveAtClosure {
+            return computeNeedsUnlockDidBecomeActiveAtClosure(date)
         } else {
-            return computeNeedsUnlockWillEnterForegroundAtReturnValue
+            return computeNeedsUnlockDidBecomeActiveAtReturnValue
         }
     }
     //MARK: - unlock

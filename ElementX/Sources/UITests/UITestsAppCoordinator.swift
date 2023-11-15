@@ -187,7 +187,9 @@ class MockScreen: Identifiable {
                                                 context: context)
             
             if id == .appLockFlowAlternateWindow {
-                guard case .success = appLockService.setupPINCode("2023") else {
+                let pinCode = "2023"
+                guard case .success = appLockService.setupPINCode(pinCode),
+                      appLockService.unlock(with: pinCode) else {
                     fatalError("Failed to preset the PIN code.")
                 }
             }

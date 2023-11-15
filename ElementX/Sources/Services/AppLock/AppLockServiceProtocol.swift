@@ -59,7 +59,7 @@ protocol AppLockServiceProtocol: AnyObject {
     /// Informs the service that the app has entered the background.
     func applicationDidEnterBackground()
     /// Decides whether the app should be unlocked with a PIN code/biometrics on foregrounding.
-    func computeNeedsUnlock(willEnterForegroundAt date: Date) -> Bool
+    func computeNeedsUnlock(didBecomeActiveAt date: Date) -> Bool
     
     /// Attempt to unlock the app with the supplied PIN code.
     func unlock(with pinCode: String) -> Bool

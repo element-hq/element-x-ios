@@ -32,7 +32,7 @@ struct MessageComposer: View {
     let editCancellationAction: () -> Void
     let onAppearAction: () -> Void
     @FocusState private var focused: Bool
-
+    
     @State private var composerTranslation: CGFloat = 0
     
     var body: some View {
@@ -40,7 +40,7 @@ struct MessageComposer: View {
             if showResizeGrabber {
                 resizeGrabber
             }
-
+            
             let borderRadius: CGFloat = 21
             mainContent
                 .padding(.horizontal, 12.0)
@@ -60,11 +60,11 @@ struct MessageComposer: View {
         }
         .gesture(showResizeGrabber ? dragGesture : nil)
     }
-
+    
     // MARK: - Private
     
     @State private var composerFrame = CGRect.zero
-
+    
     private var mainContent: some View {
         VStack(alignment: .leading, spacing: -6) {
             header
@@ -187,34 +187,34 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static let replyTypes: [TimelineItemReplyDetails] = [
-        .loaded(sender: .init(id: "Dave"), contentType: .audio(.init(body: "Audio: Ride the lightning", duration: 100, waveform: nil, source: nil, contentType: nil))),
-        .loaded(sender: .init(id: "James"), contentType: .emote(.init(body: "Emote: James thinks he's the phantom lord"))),
-        .loaded(sender: .init(id: "Robert"), contentType: .file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil))),
-        .loaded(sender: .init(id: "Cliff"), contentType: .image(.init(body: "Image: Pushead",
-                                                                      source: .init(url: .picturesDirectory, mimeType: nil),
-                                                                      thumbnailSource: .init(url: .picturesDirectory, mimeType: nil)))),
-        .loaded(sender: .init(id: "Jason"), contentType: .notice(.init(body: "Notice: Too far gone?"))),
-        .loaded(sender: .init(id: "Kirk"), contentType: .text(.init(body: "Text: Where the wild things are"))),
-        .loaded(sender: .init(id: "Lars"), contentType: .video(.init(body: "Video: Through the never",
-                                                                     duration: 100,
-                                                                     source: nil,
-                                                                     thumbnailSource: .init(url: .picturesDirectory, mimeType: nil)))),
+        .loaded(sender: .init(id: "Dave"), eventContent: .message(.audio(.init(body: "Audio: Ride the lightning", duration: 100, waveform: nil, source: nil, contentType: nil)))),
+        .loaded(sender: .init(id: "James"), eventContent: .message(.emote(.init(body: "Emote: James thinks he's the phantom lord")))),
+        .loaded(sender: .init(id: "Robert"), eventContent: .message(.file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil)))),
+        .loaded(sender: .init(id: "Cliff"), eventContent: .message(.image(.init(body: "Image: Pushead",
+                                                                                source: .init(url: .picturesDirectory, mimeType: nil),
+                                                                                thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
+        .loaded(sender: .init(id: "Jason"), eventContent: .message(.notice(.init(body: "Notice: Too far gone?")))),
+        .loaded(sender: .init(id: "Kirk"), eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
+        .loaded(sender: .init(id: "Lars"), eventContent: .message(.video(.init(body: "Video: Through the never",
+                                                                               duration: 100,
+                                                                               source: nil,
+                                                                               thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
         .loading(eventID: "")
     ]
-
+    
     static func messageComposer(_ content: String = "",
                                 sendingDisabled: Bool = false,
                                 mode: RoomScreenComposerMode = .default) -> MessageComposer {
         let viewModel = WysiwygComposerViewModel(minHeight: 22,
                                                  maxExpandedHeight: 250)
         viewModel.setMarkdownContent(content)
-
+        
         let composerView = WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
                                                viewModel: viewModel,
                                                itemProviderHelper: nil,
                                                keyCommandHandler: nil,
                                                pasteHandler: nil)
-
+        
         return MessageComposer(composerView: composerView,
                                mode: mode,
                                showResizeGrabber: false,
@@ -225,20 +225,21 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                editCancellationAction: { },
                                onAppearAction: { viewModel.setup() })
     }
-
+    
     static var previews: some View {
         VStack(spacing: 8) {
             messageComposer(sendingDisabled: true)
-
+            
             messageComposer("Some message",
                             mode: .edit(originalItemId: .random))
-
+            
             messageComposer(mode: .reply(itemID: .random,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
-                                                               contentType: .text(.init(body: "Text: Where the wild things are"))), isThread: false))
+                                                               eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
+                                         isThread: false))
         }
         .padding(.horizontal)
-
+        
         ScrollView {
             VStack(spacing: 8) {
                 ForEach(replyTypes, id: \.self) { replyDetails in

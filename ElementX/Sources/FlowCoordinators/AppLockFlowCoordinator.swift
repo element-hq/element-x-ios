@@ -49,15 +49,21 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         // Set the initial background state.
         showPlaceholder()
         
+        notificationCenter.publisher(for: UIApplication.willResignActiveNotification)
+            .sink { [weak self] _ in
+                self?.applicationWillResignActive()
+            }
+            .store(in: &cancellables)
+        
         notificationCenter.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
                 self?.applicationDidEnterBackground()
             }
             .store(in: &cancellables)
         
-        notificationCenter.publisher(for: UIApplication.willEnterForegroundNotification)
+        notificationCenter.publisher(for: UIApplication.didBecomeActiveNotification)
             .sink { [weak self] _ in
-                self?.applicationWillEnterForeground()
+                self?.applicationDidBecomeActive()
             }
             .store(in: &cancellables)
     }
@@ -68,19 +74,23 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     
     // MARK: - App unlock
     
-    private func applicationDidEnterBackground() {
+    private func applicationWillResignActive() {
         unlockTask = nil
         
         guard appLockService.isEnabled else { return }
-        
-        appLockService.applicationDidEnterBackground()
         showPlaceholder()
     }
     
-    private func applicationWillEnterForeground() {
+    private func applicationDidEnterBackground() {
+        guard appLockService.isEnabled else { return }
+        appLockService.applicationDidEnterBackground()
+        showPlaceholder() // Double call but just to be safe
+    }
+    
+    private func applicationDidBecomeActive() {
         guard appLockService.isEnabled else { return }
         
-        guard appLockService.computeNeedsUnlock(willEnterForegroundAt: .now) else {
+        guard appLockService.computeNeedsUnlock(didBecomeActiveAt: .now) else {
             // Reveal the app again if within the grace period.
             actionsSubject.send(.unlockApp)
             return
