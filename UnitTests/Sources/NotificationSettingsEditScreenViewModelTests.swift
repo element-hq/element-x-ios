@@ -72,6 +72,49 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.defaultMode, .mentionsAndKeywordsOnly)
         XCTAssertNil(context.viewState.bindings.alertInfo)
+        XCTAssertFalse(context.viewState.canHomeServerPushEncryptedEvents)
+        XCTAssertNotNil(context.viewState.description(for: .mentionsAndKeywordsOnly))
+    }
+    
+    func testFetchSettingsWithCanPushEncryptedEvents() async throws {
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
+            switch (isEncrypted, isOneToOne) {
+            case (_, true):
+                return .allMessages
+            case (_, _):
+                return .mentionsAndKeywordsOnly
+            }
+        }
+        notificationSettingsProxy.canHomeserverPushEncryptedEventsToDeviceClosure = {
+            true
+        }
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
+                                                            userSession: userSession,
+                                                            notificationSettingsProxy: notificationSettingsProxy)
+
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.defaultMode != nil
+        }
+        
+        viewModel.fetchInitialContent()
+        
+        try await deferred.fulfill()
+        
+        // `getDefaultRoomNotificationModeIsEncryptedIsOneToOne` must have been called twice (for encrypted and unencrypted group chats)
+        let invocations = notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReceivedInvocations
+        
+        XCTAssertEqual(invocations.count, 2)
+        // First call for encrypted group chats
+        XCTAssertEqual(invocations[0].isEncrypted, true)
+        XCTAssertEqual(invocations[0].isOneToOne, false)
+        // Second call for unencrypted group chats
+        XCTAssertEqual(invocations[1].isEncrypted, false)
+        XCTAssertEqual(invocations[1].isOneToOne, false)
+        
+        XCTAssertEqual(context.viewState.defaultMode, .mentionsAndKeywordsOnly)
+        XCTAssertNil(context.viewState.bindings.alertInfo)
+        XCTAssertTrue(context.viewState.canHomeServerPushEncryptedEvents)
+        XCTAssertNil(context.viewState.description(for: .mentionsAndKeywordsOnly))
     }
     
     func testSetModeAllMessages() async throws {

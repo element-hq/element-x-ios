@@ -40,7 +40,8 @@ struct NotificationSettingsEditScreen: View {
     private var notificationModeSection: some View {
         Section {
             ForEach(context.viewState.availableDefaultModes, id: \.self) { mode in
-                ListRow(label: .plain(title: context.viewState.strings.string(for: mode)),
+                ListRow(label: .plain(title: context.viewState.strings.string(for: mode),
+                                      description: context.viewState.description(for: mode)),
                         details: (context.viewState.pendingMode == mode) ? .isWaiting(true) : nil,
                         kind: .selection(isSelected: context.viewState.isSelected(mode: mode)) {
                             context.send(viewAction: .setMode(mode))
@@ -114,6 +115,22 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
         return viewModel
     }()
     
+    static let viewModelGroupChatsWithouDisclaimer: NotificationSettingsEditScreenViewModel = {
+        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(canHomeserverPushEncryptedEvents: true))
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
+        
+        notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = [RoomSummary].mockRooms.compactMap(\.id)
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@alice:example.com",
+                                                                       roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms))),
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
+        var viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
+                                                                userSession: userSession,
+                                                                notificationSettingsProxy: notificationSettingsProxy)
+        viewModel.fetchInitialContent()
+        return viewModel
+    }()
+    
     static var previews: some View {
         NotificationSettingsEditScreen(context: viewModelGroupChats.context)
             .previewDisplayName("Group Chats")
@@ -121,5 +138,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
             .previewDisplayName("Direct Chats")
         NotificationSettingsEditScreen(context: viewModelDirectApplyingChange.context)
             .previewDisplayName("Applying change")
+        NotificationSettingsEditScreen(context: viewModelGroupChatsWithouDisclaimer.context)
+            .previewDisplayName("Group Chats Without Disclaimer")
     }
 }

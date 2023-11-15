@@ -32,8 +32,8 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
     }
     
-    func testInitialStateDefaultMode() async throws {
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", joinedMembersCount: 0))
+    func testInitialStateDefaultModeEncryptedRoom() async throws {
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isEncrypted: true, joinedMembersCount: 0))
         let notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: true))
@@ -50,6 +50,52 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
 
         XCTAssertFalse(viewModel.context.allowCustomSetting)
+        XCTAssertTrue(viewModel.context.viewState.shouldDisplayMentionsOnlyDisclaimer)
+        XCTAssertNotNil(viewModel.context.viewState.description(mode: .mentionsAndKeywordsOnly))
+    }
+    
+    func testInitialStateDefaultModeEncryptedRoomWithCanPushEncrypted() async throws {
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isEncrypted: true, joinedMembersCount: 0))
+        let notificationSettingsProxyMock = NotificationSettingsProxyMock(with: .init(canHomeserverPushEncryptedEvents: true))
+        
+        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: true))
+        
+        let viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
+                                                                roomProxy: roomProxyMock,
+                                                                displayAsUserDefinedRoomSettings: false)
+
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.notificationSettingsState.isLoaded
+        }
+        
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
+        try await deferred.fulfill()
+
+        XCTAssertFalse(viewModel.context.allowCustomSetting)
+        XCTAssertFalse(viewModel.context.viewState.shouldDisplayMentionsOnlyDisclaimer)
+        XCTAssertNil(viewModel.context.viewState.description(mode: .mentionsAndKeywordsOnly))
+    }
+    
+    func testInitialStateDefaultModeUnencryptedRoom() async throws {
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isEncrypted: false, joinedMembersCount: 0))
+        let notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
+        
+        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: true))
+        
+        let viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
+                                                                roomProxy: roomProxyMock,
+                                                                displayAsUserDefinedRoomSettings: false)
+
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.notificationSettingsState.isLoaded
+        }
+        
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
+        try await deferred.fulfill()
+
+        XCTAssertFalse(viewModel.context.allowCustomSetting)
+        XCTAssertFalse(viewModel.context.viewState.shouldDisplayMentionsOnlyDisclaimer)
+        XCTAssertNil(viewModel.context.viewState.description(mode: .mentionsAndKeywordsOnly))
     }
     
     func testInitialStateCustomMode() async throws {

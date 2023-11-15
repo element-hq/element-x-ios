@@ -1716,6 +1716,23 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
             return getRoomsWithUserDefinedRulesReturnValue
         }
     }
+    //MARK: - canHomeserverPushEncryptedEventsToDevice
+
+    var canHomeserverPushEncryptedEventsToDeviceCallsCount = 0
+    var canHomeserverPushEncryptedEventsToDeviceCalled: Bool {
+        return canHomeserverPushEncryptedEventsToDeviceCallsCount > 0
+    }
+    var canHomeserverPushEncryptedEventsToDeviceReturnValue: Bool!
+    var canHomeserverPushEncryptedEventsToDeviceClosure: (() async -> Bool)?
+
+    func canHomeserverPushEncryptedEventsToDevice() async -> Bool {
+        canHomeserverPushEncryptedEventsToDeviceCallsCount += 1
+        if let canHomeserverPushEncryptedEventsToDeviceClosure = canHomeserverPushEncryptedEventsToDeviceClosure {
+            return await canHomeserverPushEncryptedEventsToDeviceClosure()
+        } else {
+            return canHomeserverPushEncryptedEventsToDeviceReturnValue
+        }
+    }
 }
 class RoomMemberProxyMock: RoomMemberProxyProtocol {
     var userID: String {
