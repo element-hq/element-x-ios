@@ -24,6 +24,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
     let timelineItem: EventBasedTimelineItemProtocol
+    var status: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
     
     @State private var showItemActionMenu = false
@@ -62,7 +63,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         if !timelineItem.isOutgoing {
                             Spacer()
                         }
-                        TimelineItemStatusView(timelineItem: timelineItem)
+                        TimelineItemStatusView(timelineItem: timelineItem, status: status)
                             .environmentObject(context)
                             .padding(.top, 8)
                             .padding(.bottom, 3)
@@ -162,7 +163,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var interactiveLocalizedSendInfo: some View {
-        if timelineItem.hasFailedToSend {
+        if status == .sendingFailed {
             layoutedLocalizedSendInfo
                 .onTapGesture {
                     context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
@@ -203,12 +204,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 Text(timelineItem.timestamp)
             }
 
-            if timelineItem.hasFailedToSend {
+            if status == .sendingFailed {
                 CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyXS)
             }
         }
         .font(.compound.bodyXS)
-        .foregroundColor(timelineItem.hasFailedToSend ? .compound.textCriticalPrimary : .compound.textSecondary)
+        .foregroundColor(status == .sendingFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
     }
     
     @ViewBuilder

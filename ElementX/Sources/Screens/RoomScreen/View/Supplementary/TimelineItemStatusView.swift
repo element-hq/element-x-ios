@@ -19,6 +19,7 @@ import SwiftUI
 
 struct TimelineItemStatusView: View {
     let timelineItem: EventBasedTimelineItemProtocol
+    var status: TimelineItemDeliveryStatus?
     @Environment(\.timelineStyle) private var style
     @Environment(\.readReceiptsEnabled) private var readReceiptsEnabled
     @EnvironmentObject private var context: RoomScreenViewModel.Context
@@ -42,7 +43,7 @@ struct TimelineItemStatusView: View {
 
     @ViewBuilder
     var deliveryStatus: some View {
-        switch timelineItem.properties.deliveryStatus {
+        switch status {
         case .sending:
             TimelineDeliveryStatusView(deliveryStatus: .sending)
         case .sent, .none:

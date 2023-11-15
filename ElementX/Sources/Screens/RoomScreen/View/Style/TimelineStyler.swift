@@ -24,13 +24,43 @@ struct TimelineStyler<Content: View>: View {
 
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
+    
+    @State private var status: TimelineItemDeliveryStatus?
+    @State private var task: Task<Void, Never>?
 
     var body: some View {
+        mainContent
+            .onChange(of: timelineItem.properties.deliveryStatus) { newStatus in
+                MXLog.info("Delivery status: \(newStatus)")
+                if newStatus == .sendingFailed {
+                    guard task == nil else {
+                        return
+                    }
+                    task = Task {
+                        if status == nil {
+                            status = .sending
+                        }
+                        try? await Task.sleep(for: .milliseconds(500))
+                        if !Task.isCancelled {
+                            status = newStatus
+                        }
+                        task = nil
+                    }
+                } else {
+                    task?.cancel()
+                    task = nil
+                    status = newStatus
+                }
+            }
+    }
+    
+    @ViewBuilder
+    var mainContent: some View {
         switch style {
         case .plain:
-            TimelineItemPlainStylerView(timelineItem: timelineItem, content: content)
+            TimelineItemPlainStylerView(timelineItem: timelineItem, status: status, content: content)
         case .bubbles:
-            TimelineItemBubbledStylerView(timelineItem: timelineItem, content: content)
+            TimelineItemBubbledStylerView(timelineItem: timelineItem, status: status, content: content)
         }
     }
 }
