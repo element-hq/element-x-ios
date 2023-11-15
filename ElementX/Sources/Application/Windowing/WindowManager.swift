@@ -36,6 +36,10 @@ class WindowManager {
     /// A secondary window that can be presented instead of the main/overlay window combo.
     private(set) var alternateWindow: UIWindow!
     
+    var windows: [UIWindow] {
+        [mainWindow, overlayWindow, alternateWindow]
+    }
+    
     /// Configures the window manager to operate on the supplied scene.
     func configure(with windowScene: UIWindowScene) {
         mainWindow = windowScene.keyWindow

@@ -194,6 +194,8 @@ public enum L10n {
   public static var commonAdvancedSettings: String { return L10n.tr("Localizable", "common_advanced_settings") }
   /// Analytics
   public static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
+  /// Appearance
+  public static var commonAppearance: String { return L10n.tr("Localizable", "common_appearance") }
   /// Audio
   public static var commonAudio: String { return L10n.tr("Localizable", "common_audio") }
   /// Bubbles
@@ -206,6 +208,8 @@ public enum L10n {
   public static var commonCreatingRoom: String { return L10n.tr("Localizable", "common_creating_room") }
   /// Left room
   public static var commonCurrentUserLeftRoom: String { return L10n.tr("Localizable", "common_current_user_left_room") }
+  /// Dark
+  public static var commonDark: String { return L10n.tr("Localizable", "common_dark") }
   /// Decryption error
   public static var commonDecryptionError: String { return L10n.tr("Localizable", "common_decryption_error") }
   /// Developer options
@@ -244,6 +248,8 @@ public enum L10n {
   public static var commonInviteUnknownProfile: String { return L10n.tr("Localizable", "common_invite_unknown_profile") }
   /// Leaving room
   public static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
+  /// Light
+  public static var commonLight: String { return L10n.tr("Localizable", "common_light") }
   /// Link copied to clipboard
   public static var commonLinkCopiedToClipboard: String { return L10n.tr("Localizable", "common_link_copied_to_clipboard") }
   /// Loading…
@@ -352,6 +358,8 @@ public enum L10n {
   public static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
   /// Syncing
   public static var commonSyncing: String { return L10n.tr("Localizable", "common_syncing") }
+  /// System
+  public static var commonSystem: String { return L10n.tr("Localizable", "common_system") }
   /// Text
   public static var commonText: String { return L10n.tr("Localizable", "common_text") }
   /// Third-party notices
@@ -992,6 +1000,8 @@ public enum L10n {
   public static var screenNotificationSettingsFailedFixingConfiguration: String { return L10n.tr("Localizable", "screen_notification_settings_failed_fixing_configuration") }
   /// Group chats
   public static var screenNotificationSettingsGroupChats: String { return L10n.tr("Localizable", "screen_notification_settings_group_chats") }
+  /// Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms.
+  public static var screenNotificationSettingsMentionsOnlyDisclaimer: String { return L10n.tr("Localizable", "screen_notification_settings_mentions_only_disclaimer") }
   /// Mentions
   public static var screenNotificationSettingsMentionsSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_mentions_section_title") }
   /// All
@@ -1200,6 +1210,8 @@ public enum L10n {
   public static var screenRoomNotificationSettingsErrorRestoringDefault: String { return L10n.tr("Localizable", "screen_room_notification_settings_error_restoring_default") }
   /// Failed setting the mode, please try again.
   public static var screenRoomNotificationSettingsErrorSettingMode: String { return L10n.tr("Localizable", "screen_room_notification_settings_error_setting_mode") }
+  /// Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.
+  public static var screenRoomNotificationSettingsMentionsOnlyDisclaimer: String { return L10n.tr("Localizable", "screen_room_notification_settings_mentions_only_disclaimer") }
   /// All messages
   public static var screenRoomNotificationSettingsModeAllMessages: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_all_messages") }
   /// Mentions and Keywords only

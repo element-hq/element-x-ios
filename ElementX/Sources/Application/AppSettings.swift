@@ -36,6 +36,7 @@ final class AppSettings {
         case otlpTracingEnabled
         case viewSourceEnabled
         case richTextEditorEnabled
+        case appAppearance
         
         case elementCallBaseURL
         case elementCallEncryptionEnabled
@@ -122,6 +123,9 @@ final class AppSettings {
     let supportEmailAddress = "support@element.io"
     // A URL where users can go read more about the chat backup.
     let chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
+    
+    @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
+    var appAppearance: AppAppearance
     
     // MARK: - Security
     

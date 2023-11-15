@@ -167,6 +167,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         AnyView(
             navigationRootCoordinator.toPresentable()
                 .environment(\.analyticsService, ServiceLocator.shared.analytics)
+                .onReceive(appSettings.$appAppearance) { [weak self] appAppearance in
+                    guard let self else { return }
+                    
+                    windowManager.windows.forEach { window in
+                        // Unfortunately .preferredColorScheme doesn't propagate properly throughout the app when changed
+                        window.overrideUserInterfaceStyle = appAppearance.interfaceStyle
+                    }
+                }
         )
     }
     
