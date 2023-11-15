@@ -19,6 +19,11 @@ import Foundation
 enum TimelineItemReplyDetails: Hashable {
     case notLoaded(eventID: String)
     case loading(eventID: String)
-    case loaded(sender: TimelineItemSender, contentType: EventBasedMessageTimelineItemContentType)
+    case loaded(sender: TimelineItemSender, repliedEventContent: TimelineEventContent)
     case error(eventID: String, message: String)
+}
+
+enum TimelineEventContent: Hashable {
+    case messageBased(EventBasedMessageTimelineItemContentType)
+    case poll(Poll)
 }

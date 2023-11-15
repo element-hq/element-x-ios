@@ -187,18 +187,18 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static let replyTypes: [TimelineItemReplyDetails] = [
-        .loaded(sender: .init(id: "Dave"), contentType: .audio(.init(body: "Audio: Ride the lightning", duration: 100, waveform: nil, source: nil, contentType: nil))),
-        .loaded(sender: .init(id: "James"), contentType: .emote(.init(body: "Emote: James thinks he's the phantom lord"))),
-        .loaded(sender: .init(id: "Robert"), contentType: .file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil))),
-        .loaded(sender: .init(id: "Cliff"), contentType: .image(.init(body: "Image: Pushead",
-                                                                      source: .init(url: .picturesDirectory, mimeType: nil),
-                                                                      thumbnailSource: .init(url: .picturesDirectory, mimeType: nil)))),
-        .loaded(sender: .init(id: "Jason"), contentType: .notice(.init(body: "Notice: Too far gone?"))),
-        .loaded(sender: .init(id: "Kirk"), contentType: .text(.init(body: "Text: Where the wild things are"))),
-        .loaded(sender: .init(id: "Lars"), contentType: .video(.init(body: "Video: Through the never",
-                                                                     duration: 100,
-                                                                     source: nil,
-                                                                     thumbnailSource: .init(url: .picturesDirectory, mimeType: nil)))),
+        .loaded(sender: .init(id: "Dave"), repliedEventContent: .messageBased(.audio(.init(body: "Audio: Ride the lightning", duration: 100, waveform: nil, source: nil, contentType: nil)))),
+        .loaded(sender: .init(id: "James"), repliedEventContent: .messageBased(.emote(.init(body: "Emote: James thinks he's the phantom lord")))),
+        .loaded(sender: .init(id: "Robert"), repliedEventContent: .messageBased(.file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil)))),
+        .loaded(sender: .init(id: "Cliff"), repliedEventContent: .messageBased(.image(.init(body: "Image: Pushead",
+                                                                                            source: .init(url: .picturesDirectory, mimeType: nil),
+                                                                                            thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
+        .loaded(sender: .init(id: "Jason"), repliedEventContent: .messageBased(.notice(.init(body: "Notice: Too far gone?")))),
+        .loaded(sender: .init(id: "Kirk"), repliedEventContent: .messageBased(.text(.init(body: "Text: Where the wild things are")))),
+        .loaded(sender: .init(id: "Lars"), repliedEventContent: .messageBased(.video(.init(body: "Video: Through the never",
+                                                                                           duration: 100,
+                                                                                           source: nil,
+                                                                                           thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
         .loading(eventID: "")
     ]
 
@@ -229,13 +229,14 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 8) {
             messageComposer(sendingDisabled: true)
-
+            
             messageComposer("Some message",
                             mode: .edit(originalItemId: .random))
-
+            
             messageComposer(mode: .reply(itemID: .random,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
-                                                               contentType: .text(.init(body: "Text: Where the wild things are"))), isThread: false))
+                                                               repliedEventContent: .messageBased(.text(.init(body: "Text: Where the wild things are")))),
+                                         isThread: false))
         }
         .padding(.horizontal)
 

@@ -28,7 +28,7 @@ struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
     var properties: RoomTimelineItemProperties
 }
 
-struct Poll: Equatable {
+struct Poll: Hashable {
     let question: String
     let kind: Kind
     let maxSelections: Int
@@ -42,12 +42,12 @@ struct Poll: Equatable {
         endDate != nil
     }
 
-    enum Kind: Equatable {
+    enum Kind: Hashable {
         case disclosed
         case undisclosed
     }
 
-    struct Option: Equatable {
+    struct Option: Hashable {
         let id: String
         let text: String
         let votes: Int

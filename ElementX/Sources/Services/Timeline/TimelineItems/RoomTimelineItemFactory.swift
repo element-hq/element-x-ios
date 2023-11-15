@@ -664,7 +664,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
             }
             
-            return .loaded(sender: sender, contentType: replyContent)
+            return .loaded(sender: sender, repliedEventContent: .messageBased(replyContent))
         case let .error(message):
             return .error(eventID: details.eventId, message: message)
         }

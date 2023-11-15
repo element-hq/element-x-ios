@@ -232,7 +232,8 @@ class RoomScreenInteractionHandler {
             }
         case .reply:
             let replyInfo = buildReplyInfo(for: eventTimelineItem)
-            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: replyInfo.type)
+            #warning("AG: fix me, the reply may have a different type")
+            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, repliedEventContent: .messageBased(replyInfo.type))
 
             actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails, isThread: replyInfo.isThread))))
         case .forward(let itemID):
