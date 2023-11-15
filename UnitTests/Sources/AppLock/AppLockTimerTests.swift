@@ -176,6 +176,7 @@ class AppLockTimerTests: XCTestCase {
     
     /// Sets up the timer for testing.
     /// - Parameters:
+    ///   - gracePeriod: Set up the test with a custom grace period for the timer. Defaults to 3 minutes.
     ///   - unlocked: Whether the timer should consider itself unlocked or not.
     ///   - backgroundedDate: If not nil, the timer will consider the app to have been backgrounded at the specified date.
     private func setupTimer(gracePeriod: TimeInterval = 180, unlocked: Bool, backgroundedAt backgroundedDate: Date? = nil) {

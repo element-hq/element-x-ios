@@ -68,7 +68,7 @@ class WindowManager {
             overlayWindow.isHidden = false
             
             // Delay hiding to make sure the main windows are visible.
-            try await Task.sleep(for: .milliseconds(33))
+            try await Task.sleep(for: windowHideDelay)
             
             alternateWindow.isHidden = true
         }
@@ -85,7 +85,7 @@ class WindowManager {
             mainWindow.endEditing(true)
             
             // Delay hiding to make sure the alternate window is visible.
-            try await Task.sleep(for: .milliseconds(33))
+            try await Task.sleep(for: windowHideDelay)
             
             overlayWindow.isHidden = true
             mainWindow.isHidden = true
