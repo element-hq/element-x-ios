@@ -84,9 +84,9 @@ struct SettingsScreen: View {
     
     @ViewBuilder
     private var accountSecuritySection: some View {
-        if !context.viewState.isSessionVerified || context.viewState.chatBackupEnabled {
-            Section {
-                if !context.viewState.isSessionVerified {
+        Section {
+            if let isSessionVerified = context.viewState.isSessionVerified {
+                if !isSessionVerified {
                     ListRow(label: .default(title: L10n.actionCompleteVerification,
                                             icon: \.checkCircle),
                             kind: .button { context.send(viewAction: .sessionVerification) })
