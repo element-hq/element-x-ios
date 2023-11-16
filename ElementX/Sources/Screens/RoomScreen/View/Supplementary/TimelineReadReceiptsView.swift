@@ -58,13 +58,7 @@ struct TimelineReadReceiptsView: View {
             return L10n.a11yReadReceiptsSingle(getDisplayName(at: 0))
         } else if timelineItem.properties.orderedReadReceipts.count <= displayNumber {
             let limit = timelineItem.properties.orderedReadReceipts.count - 1
-            var list = ""
-            for index in 0..<limit {
-                list += "\(getDisplayName(at: index))"
-                if index != limit - 1 {
-                    list += ", "
-                }
-            }
+            (0..<limit).map { getDisplayName(at: $0) }.formatted(.list(type: .and, width: .narrow))
             let last = getDisplayName(at: limit)
             return L10n.a11ReadReceiptsMultiple(list, last)
         } else if timelineItem.properties.orderedReadReceipts.count > displayNumber {
