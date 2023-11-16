@@ -37,13 +37,10 @@ class StartChatScreenViewModelTests: XCTestCase {
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         viewModel = StartChatScreenViewModel(userSession: userSession,
-                                             appSettings: ServiceLocator.shared.settings,
+                                             userSuggestionsEnabled: true,
                                              analytics: ServiceLocator.shared.analytics,
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              userDiscoveryService: userDiscoveryService)
-        
-        AppSettings.reset()
-        ServiceLocator.shared.settings.userSuggestionsEnabled = true
     }
     
     func testQueryShowingNoResults() async throws {

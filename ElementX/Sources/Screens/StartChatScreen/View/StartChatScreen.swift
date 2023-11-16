@@ -28,16 +28,12 @@ struct StartChatScreen: View {
                 searchContent
             }
         }
-        .compoundForm()
+        .compoundList()
         .track(screen: .startChat)
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.actionStartChat)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                closeButton
-            }
-        }
+        .toolbar { toolbar }
         .disableInteractiveDismissOnSearch()
         .dismissSearchOnDisappear()
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
@@ -67,25 +63,23 @@ struct StartChatScreen: View {
     
     private var createRoomSection: some View {
         Section {
-            Button(action: createRoom) {
-                Label(L10n.screenCreateRoomActionCreateRoom, systemImage: "person.3")
-                    .imageScale(.small)
-            }
-            .buttonStyle(FormButtonStyle(accessory: .navigationLink))
-            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.createRoom)
+            ListRow(label: .default(title: L10n.screenCreateRoomActionCreateRoom,
+                                    icon: \.plus),
+                    kind: .navigationLink { context.send(viewAction: .createRoom) })
+                .accessibilityIdentifier(A11yIdentifiers.startChatScreen.createRoom)
         }
-        .compoundFormSection()
     }
     
     private var inviteFriendsSection: some View {
         Section {
-            MatrixUserShareLink(userID: context.viewState.userID) {
-                Label(L10n.actionInvitePeopleToApp(InfoPlistReader.main.bundleDisplayName), systemImage: "square.and.arrow.up")
-            }
-            .buttonStyle(FormButtonStyle())
+            ListRow(kind: .custom {
+                MatrixUserShareLink(userID: context.viewState.userID) {
+                    ListLabel.default(title: L10n.actionInvitePeopleToApp(InfoPlistReader.main.bundleDisplayName),
+                                      icon: CompoundIcon(asset: Asset.Images.shareIos))
+                }
+            })
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.inviteFriends)
         }
-        .compoundFormSection()
     }
     
     @ViewBuilder
@@ -93,17 +87,21 @@ struct StartChatScreen: View {
         if !context.viewState.usersSection.users.isEmpty {
             Section {
                 ForEach(context.viewState.usersSection.users, id: \.userID) { user in
-                    Button { context.send(viewAction: .selectUser(user)) } label: {
-                        UserProfileCell(user: user, membership: nil, imageProvider: context.imageProvider)
-                    }
-                    .buttonStyle(FormButtonStyle())
+                    ListRow(kind: .custom {
+                        Button { context.send(viewAction: .selectUser(user)) } label: {
+                            UserProfileCell(user: user, membership: nil, imageProvider: context.imageProvider)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                                .padding(.horizontal, ListRowPadding.horizontal)
+                                .padding(.vertical, 8)
+                        }
+                    })
                 }
             } header: {
                 if let title = context.viewState.usersSection.title {
                     Text(title)
+                        .compoundListSectionHeader()
                 }
             }
-            .compoundFormSection()
         } else {
             Section.empty
         }
@@ -118,17 +116,13 @@ struct StartChatScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
     }
     
-    private var closeButton: some View {
-        Button(L10n.actionCancel, action: close)
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(L10n.actionCancel) {
+                context.send(viewAction: .close)
+            }
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.closeStartChat)
-    }
-    
-    private func createRoom() {
-        context.send(viewAction: .createRoom)
-    }
-    
-    private func close() {
-        context.send(viewAction: .close)
+        }
     }
 }
 
@@ -143,7 +137,7 @@ struct StartChatScreen_Previews: PreviewProvider, TestablePreview {
         userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
         let viewModel = StartChatScreenViewModel(userSession: userSession,
-                                                 appSettings: ServiceLocator.shared.settings,
+                                                 userSuggestionsEnabled: true,
                                                  analytics: ServiceLocator.shared.analytics,
                                                  userIndicatorController: UserIndicatorControllerMock(),
                                                  userDiscoveryService: userDiscoveryService)

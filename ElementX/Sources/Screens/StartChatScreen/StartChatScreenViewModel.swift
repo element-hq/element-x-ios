@@ -21,7 +21,7 @@ typealias StartChatScreenViewModelType = StateStoreViewModel<StartChatScreenView
 
 class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let appSettings: AppSettings
+    private let userSuggestionsEnabled: Bool
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
@@ -33,12 +33,12 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     }
     
     init(userSession: UserSessionProtocol,
-         appSettings: AppSettings,
+         userSuggestionsEnabled: Bool,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
-        self.appSettings = appSettings
+        self.userSuggestionsEnabled = userSuggestionsEnabled
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.userDiscoveryService = userDiscoveryService
@@ -115,7 +115,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     }
     
     private func fetchSuggestions() {
-        guard appSettings.userSuggestionsEnabled else {
+        guard userSuggestionsEnabled else {
             state.usersSection = .init(type: .suggestions, users: [])
             return
         }
