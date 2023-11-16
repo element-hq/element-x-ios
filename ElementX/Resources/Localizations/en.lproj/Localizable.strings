@@ -82,6 +82,7 @@
 "action_start_verification" = "Start verification";
 "action_static_map_load" = "Tap to load map";
 "action_take_photo" = "Take photo";
+"action_tap_for_options" = "Tap for options";
 "action_try_again" = "Try again";
 "action_view_source" = "View source";
 "action_yes" = "Yes";
@@ -151,6 +152,8 @@
 "common_search_results" = "Search results";
 "common_security" = "Security";
 "common_sending" = "Sending…";
+"common_sending_failed" = "Sending failed";
+"common_sent" = "Sent";
 "common_server_not_supported" = "Server not supported";
 "common_server_url" = "Server URL";
 "common_settings" = "Settings";
@@ -181,6 +184,7 @@
 "common_voice_message" = "Voice message";
 "common_waiting" = "Waiting…";
 "common_waiting_for_decryption_key" = "Waiting for this message";
+"common.seen_by" = "Seen by";
 "common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";
 "common_verify_device" = "Verify device";

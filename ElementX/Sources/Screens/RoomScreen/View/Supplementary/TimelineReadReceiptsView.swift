@@ -59,7 +59,7 @@ struct TimelineReadReceiptsView: View {
         } else if timelineItem.properties.orderedReadReceipts.count <= displayNumber {
             let limit = timelineItem.properties.orderedReadReceipts.count - 1
             var list = ""
-            for index in 0 ..< limit {
+            for index in 0..<limit {
                 list += "\(getDisplayName(at: index))"
                 if index != limit - 1 {
                     list += ", "
@@ -75,9 +75,10 @@ struct TimelineReadReceiptsView: View {
                     list += ", "
                 }
             }
-            let x = L10n.tr("Localizable", "a11y_read_receipts_multiple_with_others", list, timelineItem.properties.orderedReadReceipts.count)
-            MXLog.info(x)
-            return x
+            
+            // Plurals with string arguments aren't generated correctly so we need to use this
+            // https://github.com/SwiftGen/SwiftGen/issues/1089
+            return L10n.tr("Localizable", "a11y_read_receipts_multiple_with_others", list, remaining)
         }
         return ""
     }

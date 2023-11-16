@@ -100,7 +100,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         VStack(alignment: alignment, spacing: -3) {
             messageBubble
                 .timelineItemAccessibility(timelineItem) {
-                    context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
+                    if adjustedDeliveryStatus == .sendingFailed {
+                        context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
+                    } else {
+                        context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
+                    }
                 }
             
             if !timelineItem.properties.reactions.isEmpty {
@@ -206,6 +210,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
             if adjustedDeliveryStatus == .sendingFailed {
                 CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyXS)
+                    .accessibilityLabel(L10n.commonSendingFailed)
             }
         }
         .font(.compound.bodyXS)

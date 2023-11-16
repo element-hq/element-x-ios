@@ -192,6 +192,8 @@ public enum L10n {
   public static var actionStaticMapLoad: String { return L10n.tr("Localizable", "action_static_map_load") }
   /// Take photo
   public static var actionTakePhoto: String { return L10n.tr("Localizable", "action_take_photo") }
+  /// Tap for options
+  public static var actionTapForOptions: String { return L10n.tr("Localizable", "action_tap_for_options") }
   /// Try again
   public static var actionTryAgain: String { return L10n.tr("Localizable", "action_try_again") }
   /// View source
@@ -350,6 +352,10 @@ public enum L10n {
   public static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
   /// Sending…
   public static var commonSending: String { return L10n.tr("Localizable", "common_sending") }
+  /// Sending failed
+  public static var commonSendingFailed: String { return L10n.tr("Localizable", "common_sending_failed") }
+  /// Sent
+  public static var commonSent: String { return L10n.tr("Localizable", "common_sent") }
   /// Server not supported
   public static var commonServerNotSupported: String { return L10n.tr("Localizable", "common_server_not_supported") }
   /// Server URL
@@ -1594,6 +1600,11 @@ public enum L10n {
   public enum Action {
     /// Edit poll
     public static var editPoll: String { return L10n.tr("Localizable", "action.edit_poll") }
+  }
+
+  public enum Common {
+    /// Seen by
+    public static var seenBy: String { return L10n.tr("Localizable", "common.seen_by") }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

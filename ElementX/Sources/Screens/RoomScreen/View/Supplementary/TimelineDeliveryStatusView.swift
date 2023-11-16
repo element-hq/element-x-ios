@@ -37,6 +37,16 @@ struct TimelineDeliveryStatusView: View {
     var body: some View {
         icon
             .foregroundColor(.compound.iconSecondary)
+            .accessibilityLabel(accessibilityLabel)
+    }
+    
+    private var accessibilityLabel: String {
+        switch deliveryStatus {
+        case .sending:
+            return L10n.commonSending
+        case .sent:
+            return L10n.commonSent
+        }
     }
 }
 

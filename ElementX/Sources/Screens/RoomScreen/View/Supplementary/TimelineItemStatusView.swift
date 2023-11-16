@@ -59,6 +59,8 @@ struct TimelineItemStatusView: View {
                     .onTapGesture {
                         context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
                     }
+                    .accessibilityLabel(L10n.commonSendingFailed)
+                    .accessibilityHint(L10n.actionTapForOptions)
             }
         }
     }
