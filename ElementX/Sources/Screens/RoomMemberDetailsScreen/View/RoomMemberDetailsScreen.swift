@@ -31,7 +31,7 @@ struct RoomMemberDetailsScreen: View {
         .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .alert(item: $context.alertInfo)
         .track(screen: .user)
-        .interactiveQuickLook(item: $context.mediaPreviewItem)
+        .interactiveQuickLook(item: $context.mediaPreviewItem, shouldHideControls: true)
     }
     
     // MARK: - Private
