@@ -40,9 +40,9 @@ struct HomeScreen: View {
                         ForEach(context.viewState.visibleRooms) { room in
                             HomeScreenRoomCell(room: room, context: context, isSelected: false)
                                 .redacted(reason: .placeholder)
+                                .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
                         }
                     }
-                    .shimmer()
                     .disabled(true)
                 case .empty:
                     HomeScreenEmptyStateLayout(minHeight: geometry.size.height) {
