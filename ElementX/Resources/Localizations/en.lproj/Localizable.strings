@@ -1,4 +1,5 @@
 "Notification" = "Notification";
+"a11_read_receipts_multiple" = "Read by %1$@ and %2$@";
 "a11y_delete" = "Delete";
 "a11y_hide_password" = "Hide password";
 "a11y_notifications_mentions_only" = "Mentions only";
@@ -8,6 +9,7 @@
 "a11y_play" = "Play";
 "a11y_poll" = "Poll";
 "a11y_poll_end" = "Ended poll";
+"a11y_read_receipts_single" = "Read by %1$@";
 "a11y_send_files" = "Send files";
 "a11y_show_password" = "Show password";
 "a11y_start_call" = "Start a call";
@@ -80,6 +82,7 @@
 "action_start_verification" = "Start verification";
 "action_static_map_load" = "Tap to load map";
 "action_take_photo" = "Take photo";
+"action_tap_for_options" = "Tap for options";
 "action_try_again" = "Try again";
 "action_view_source" = "View source";
 "action_yes" = "Yes";
@@ -149,6 +152,8 @@
 "common_search_results" = "Search results";
 "common_security" = "Security";
 "common_sending" = "Sending…";
+"common_sending_failed" = "Sending failed";
+"common_sent" = "Sent";
 "common_server_not_supported" = "Server not supported";
 "common_server_url" = "Server URL";
 "common_settings" = "Settings";

@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum L10n {
+  /// Read by %1$@ and %2$@
+  public static func a11ReadReceiptsMultiple(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "a11_read_receipts_multiple", String(describing: p1), String(describing: p2))
+  }
   /// Delete
   public static var a11yDelete: String { return L10n.tr("Localizable", "a11y_delete") }
   /// Plural format key: "%#@COUNT@"
@@ -32,6 +36,14 @@ public enum L10n {
   public static var a11yPoll: String { return L10n.tr("Localizable", "a11y_poll") }
   /// Ended poll
   public static var a11yPollEnd: String { return L10n.tr("Localizable", "a11y_poll_end") }
+  /// Plural format key: "%#@COUNT@"
+  public static func a11yReadReceiptsMultipleWithOthers(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "a11y_read_receipts_multiple_with_others", p1)
+  }
+  /// Read by %1$@
+  public static func a11yReadReceiptsSingle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "a11y_read_receipts_single", String(describing: p1))
+  }
   /// Send files
   public static var a11ySendFiles: String { return L10n.tr("Localizable", "a11y_send_files") }
   /// Show password
@@ -180,6 +192,8 @@ public enum L10n {
   public static var actionStaticMapLoad: String { return L10n.tr("Localizable", "action_static_map_load") }
   /// Take photo
   public static var actionTakePhoto: String { return L10n.tr("Localizable", "action_take_photo") }
+  /// Tap for options
+  public static var actionTapForOptions: String { return L10n.tr("Localizable", "action_tap_for_options") }
   /// Try again
   public static var actionTryAgain: String { return L10n.tr("Localizable", "action_try_again") }
   /// View source
@@ -338,6 +352,10 @@ public enum L10n {
   public static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
   /// Sending…
   public static var commonSending: String { return L10n.tr("Localizable", "common_sending") }
+  /// Sending failed
+  public static var commonSendingFailed: String { return L10n.tr("Localizable", "common_sending_failed") }
+  /// Sent
+  public static var commonSent: String { return L10n.tr("Localizable", "common_sent") }
   /// Server not supported
   public static var commonServerNotSupported: String { return L10n.tr("Localizable", "common_server_not_supported") }
   /// Server URL
