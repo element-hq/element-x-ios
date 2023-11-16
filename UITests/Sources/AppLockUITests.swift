@@ -87,6 +87,7 @@ class AppLockUITests: XCTestCase {
         
         try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
         try client.send(.notification(name: UIApplication.didEnterBackgroundNotification))
+        try await Task.sleep(for: .milliseconds(500)) // Don't overwrite the previous signal immediately.
         try client.send(.notification(name: UIApplication.didBecomeActiveNotification))
         try await app.assertScreenshot(.appLockFlow, step: Step.lockScreen)
         
