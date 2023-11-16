@@ -6664,7 +6664,7 @@
 			repositoryURL = "https://github.com/vector-im/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = 7ae8b7ef4033861d0439427d5404538243afeffd;
+				revision = 922c612875ca92214cc389c87f9e3e210b8d35e7;
 			};
 		};
 		9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
