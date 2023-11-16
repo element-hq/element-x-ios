@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct StaticLocationScreen: View {
@@ -109,10 +110,7 @@ struct StaticLocationScreen: View {
             context.send(viewAction: .selectLocation)
         } label: {
             HStack(spacing: 8) {
-                Image(asset: Asset.Images.locationMarker)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .scaledFrame(size: 28)
+                LocationMarkerView(mode: .button)
                 Text(context.viewState.isSharingUserLocation ? L10n.screenShareMyLocationAction : L10n.screenShareThisLocationAction)
             }
         }
@@ -122,8 +120,11 @@ struct StaticLocationScreen: View {
         Button {
             context.send(viewAction: .centerToUser)
         } label: {
-            Image(asset: context.viewState.isSharingUserLocation ? Asset.Images.locationPointerFull : Asset.Images.locationPointer)
+            CompoundIcon(asset: context.viewState.isSharingUserLocation ? Asset.Images.locationNavigatorCentred : Asset.Images.locationNavigator)
+                .padding(8)
+                .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 6))
         }
+        .dynamicTypeSize(.large)
         .padding(16)
     }
     

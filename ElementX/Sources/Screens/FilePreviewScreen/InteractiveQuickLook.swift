@@ -21,20 +21,23 @@ import SwiftUI
 extension View {
     /// Preview a media file using a QuickLook Preview Controller. The preview is interactive with
     /// the dismiss gesture working as expected if it was presented from UIKit.
-    func interactiveQuickLook(item: Binding<MediaPreviewItem?>) -> some View {
-        modifier(InteractiveQuickLookModifier(item: item))
+    func interactiveQuickLook(item: Binding<MediaPreviewItem?>, shouldHideControls: Bool = false) -> some View {
+        modifier(InteractiveQuickLookModifier(item: item, shouldHideControls: shouldHideControls))
     }
 }
 
 private struct InteractiveQuickLookModifier: ViewModifier {
     @Binding var item: MediaPreviewItem?
+    let shouldHideControls: Bool
     
     @State private var dismissalPublisher = PassthroughSubject<Void, Never>()
     
     func body(content: Content) -> some View {
         content.background {
             if let item {
-                MediaPreviewViewController(previewItem: item, dismissalPublisher: dismissalPublisher) { self.item = nil }
+                MediaPreviewViewController(previewItem: item,
+                                           shouldHideControls: shouldHideControls,
+                                           dismissalPublisher: dismissalPublisher) { self.item = nil }
             } else {
                 // Work around QLPreviewController dismissal issues, see below.
                 let _ = dismissalPublisher.send(())
@@ -45,11 +48,15 @@ private struct InteractiveQuickLookModifier: ViewModifier {
 
 private struct MediaPreviewViewController: UIViewControllerRepresentable {
     let previewItem: MediaPreviewItem
+    let shouldHideControls: Bool
     let dismissalPublisher: PassthroughSubject<Void, Never>
     let onDismiss: () -> Void
 
     func makeUIViewController(context: Context) -> PreviewHostingController {
-        PreviewHostingController(previewItem: previewItem, dismissalPublisher: dismissalPublisher, onDismiss: onDismiss)
+        PreviewHostingController(previewItem: previewItem,
+                                 shouldHideControls: shouldHideControls,
+                                 dismissalPublisher: dismissalPublisher,
+                                 onDismiss: onDismiss)
     }
 
     func updateUIViewController(_ uiViewController: PreviewHostingController, context: Context) { }
@@ -60,6 +67,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
     /// animations and interactions which don't work if you represent it directly to SwiftUI 🤷‍♂️
     class PreviewHostingController: UIViewController, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
         let previewItem: MediaPreviewItem
+        let shouldHideControls: Bool
         let dismissalPublisher: PassthroughSubject<Void, Never>
         let onDismiss: () -> Void
         
@@ -67,8 +75,12 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         
         var previewController: QLPreviewController?
 
-        init(previewItem: MediaPreviewItem, dismissalPublisher: PassthroughSubject<Void, Never>, onDismiss: @escaping () -> Void) {
+        init(previewItem: MediaPreviewItem,
+             shouldHideControls: Bool,
+             dismissalPublisher: PassthroughSubject<Void, Never>,
+             onDismiss: @escaping () -> Void) {
             self.previewItem = previewItem
+            self.shouldHideControls = shouldHideControls
             self.dismissalPublisher = dismissalPublisher
             self.onDismiss = onDismiss
 
@@ -96,7 +108,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
             
             guard self.previewController == nil else { return }
             
-            let previewController = QLPreviewController()
+            let previewController = (shouldHideControls ? NoControlsPreviewController() : QLPreviewController())
             previewController.dataSource = self
             previewController.delegate = self
             present(previewController, animated: true)
@@ -135,6 +147,28 @@ class MediaPreviewItem: NSObject, QLPreviewItem {
     }
 }
 
+private class NoControlsPreviewController: QLPreviewController {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard let navigationController = children.first as? UINavigationController else {
+            return
+        }
+        
+        // Remove top file details bar
+        navigationController.navigationBar.isHidden = true
+        
+        // Remove the toolbars and their buttons
+        navigationController.view.subviews.compactMap { $0 as? UIToolbar }.forEach { toolbar in
+            toolbar.subviews.forEach { item in
+                item.isHidden = true
+            }
+            
+            toolbar.isHidden = true
+        }
+    }
+}
+
 // MARK: - Previews
 
 struct PreviewView_Previews: PreviewProvider {
@@ -143,6 +177,8 @@ struct PreviewView_Previews: PreviewProvider {
                                               title: "Important Document")
     
     static var previews: some View {
-        MediaPreviewViewController(previewItem: previewItem, dismissalPublisher: .init()) { }
+        MediaPreviewViewController(previewItem: previewItem,
+                                   shouldHideControls: false,
+                                   dismissalPublisher: .init()) { }
     }
 }
