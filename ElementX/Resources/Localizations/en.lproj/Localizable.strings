@@ -184,7 +184,6 @@
 "common_voice_message" = "Voice message";
 "common_waiting" = "Waiting…";
 "common_waiting_for_decryption_key" = "Waiting for this message";
-"common.seen_by" = "Seen by";
 "common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";
 "common_verify_device" = "Verify device";

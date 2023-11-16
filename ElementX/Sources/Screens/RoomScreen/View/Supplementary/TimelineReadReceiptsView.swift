@@ -55,20 +55,14 @@ struct TimelineReadReceiptsView: View {
     
     private var accessibilityLabel: String {
         if timelineItem.properties.orderedReadReceipts.count == 1 {
-            return L10n.a11yReadReceiptsSingle(getDisplayName(at: 0))
+            return L10n.a11yReadReceiptsSingle(displayName(at: 0))
         } else if timelineItem.properties.orderedReadReceipts.count <= displayNumber {
             let limit = timelineItem.properties.orderedReadReceipts.count - 1
-            (0..<limit).map { getDisplayName(at: $0) }.formatted(.list(type: .and, width: .narrow))
-            let last = getDisplayName(at: limit)
+            let list = (0..<limit).map { displayName(at: $0) }.formatted(.list(type: .and, width: .narrow))
+            let last = displayName(at: limit)
             return L10n.a11ReadReceiptsMultiple(list, last)
         } else if timelineItem.properties.orderedReadReceipts.count > displayNumber {
-            var list = ""
-            for index in 0..<displayNumber {
-                list += "\(getDisplayName(at: index))"
-                if index != displayNumber - 1 {
-                    list += ", "
-                }
-            }
+            let list = (0..<displayNumber).map { displayName(at: $0) }.formatted(.list(type: .and, width: .narrow))
             
             // Plurals with string arguments aren't generated correctly so we need to use this
             // https://github.com/SwiftGen/SwiftGen/issues/1089
@@ -77,7 +71,7 @@ struct TimelineReadReceiptsView: View {
         return ""
     }
     
-    private func getDisplayName(at index: Int) -> String {
+    private func displayName(at index: Int) -> String {
         let userID = timelineItem.properties.orderedReadReceipts[index].userID
         return context.viewState.members[userID]?.displayName ?? userID
     }
