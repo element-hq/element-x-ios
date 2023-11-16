@@ -40,12 +40,51 @@ struct TimelineReadReceiptsView: View {
                 }
             }
             if timelineItem.properties.orderedReadReceipts.count > displayNumber {
-                let remaining = timelineItem.properties.orderedReadReceipts.count - displayNumber
                 Text("+\(remaining)")
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textPrimary)
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel)
+    }
+    
+    private var remaining: Int {
+        timelineItem.properties.orderedReadReceipts.count - displayNumber
+    }
+    
+    private var accessibilityLabel: String {
+        if timelineItem.properties.orderedReadReceipts.count == 1 {
+            return L10n.a11yReadReceiptsSingle(getDisplayName(at: 0))
+        } else if timelineItem.properties.orderedReadReceipts.count <= displayNumber {
+            let limit = timelineItem.properties.orderedReadReceipts.count - 1
+            var list = ""
+            for index in 0 ..< limit {
+                list += "\(getDisplayName(at: index))"
+                if index != limit - 1 {
+                    list += ", "
+                }
+            }
+            let last = getDisplayName(at: limit)
+            return L10n.a11ReadReceiptsMultiple(list, last)
+        } else if timelineItem.properties.orderedReadReceipts.count > displayNumber {
+            var list = ""
+            for index in 0..<displayNumber {
+                list += "\(getDisplayName(at: index))"
+                if index != displayNumber - 1 {
+                    list += ", "
+                }
+            }
+            let x = L10n.tr("Localizable", "a11y_read_receipts_multiple_with_others", list, timelineItem.properties.orderedReadReceipts.count)
+            MXLog.info(x)
+            return x
+        }
+        return ""
+    }
+    
+    private func getDisplayName(at index: Int) -> String {
+        let userID = timelineItem.properties.orderedReadReceipts[index].userID
+        return context.viewState.members[userID]?.displayName ?? userID
     }
 }
 
