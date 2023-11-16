@@ -130,7 +130,6 @@ struct StartChatScreen: View {
 
 struct StartChatScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
-        ServiceLocator.shared.settings.userSuggestionsEnabled = true
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
@@ -138,7 +137,7 @@ struct StartChatScreen_Previews: PreviewProvider, TestablePreview {
         userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
         let viewModel = StartChatScreenViewModel(userSession: userSession,
-                                                 appSettings: ServiceLocator.shared.settings,
+                                                 userSuggestionsEnabled: true,
                                                  analytics: ServiceLocator.shared.analytics,
                                                  userIndicatorController: UserIndicatorControllerMock(),
                                                  userDiscoveryService: userDiscoveryService)
