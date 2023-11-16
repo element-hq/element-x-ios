@@ -63,7 +63,6 @@ struct NotificationSettingsEditScreen: View {
             Text(L10n.screenNotificationSettingsEditCustomSettingsSectionTitle)
                 .compoundListSectionHeader()
         }
-        .compoundFormSection()
     }
 }
 
