@@ -24,13 +24,46 @@ struct TimelineStyler<Content: View>: View {
 
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
+    
+    @State private var adjustedDeliveryStatus: TimelineItemDeliveryStatus?
+    @State private var task: Task<Void, Never>?
+    
+    init(timelineItem: EventBasedTimelineItemProtocol, @ViewBuilder content: @escaping () -> Content) {
+        self.timelineItem = timelineItem
+        self.content = content
+        _adjustedDeliveryStatus = State(initialValue: timelineItem.properties.deliveryStatus)
+    }
 
     var body: some View {
+        mainContent
+            .onChange(of: timelineItem.properties.deliveryStatus) { newStatus in
+                if newStatus == .sendingFailed {
+                    guard task == nil else {
+                        return
+                    }
+                    task = Task {
+                        try? await Task.sleep(for: .milliseconds(700))
+                        if !Task.isCancelled {
+                            adjustedDeliveryStatus = newStatus
+                        }
+                        task = nil
+                    }
+                } else {
+                    task?.cancel()
+                    task = nil
+                    adjustedDeliveryStatus = newStatus
+                }
+            }
+            .animation(.elementDefault, value: adjustedDeliveryStatus)
+    }
+    
+    @ViewBuilder
+    var mainContent: some View {
         switch style {
         case .plain:
-            TimelineItemPlainStylerView(timelineItem: timelineItem, content: content)
+            TimelineItemPlainStylerView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, content: content)
         case .bubbles:
-            TimelineItemBubbledStylerView(timelineItem: timelineItem, content: content)
+            TimelineItemBubbledStylerView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, content: content)
         }
     }
 }
