@@ -24,7 +24,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
     let timelineItem: EventBasedTimelineItemProtocol
-    let deliveryStatus: TimelineItemDeliveryStatus?
+    let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
     
     @State private var showItemActionMenu = false
@@ -63,7 +63,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         if !timelineItem.isOutgoing {
                             Spacer()
                         }
-                        TimelineItemStatusView(timelineItem: timelineItem, deliveryStatus: deliveryStatus)
+                        TimelineItemStatusView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus)
                             .environmentObject(context)
                             .padding(.top, 8)
                             .padding(.bottom, 3)
@@ -163,7 +163,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var interactiveLocalizedSendInfo: some View {
-        if deliveryStatus == .sendingFailed {
+        if adjustedDeliveryStatus == .sendingFailed {
             layoutedLocalizedSendInfo
                 .onTapGesture {
                     context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
@@ -204,12 +204,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 Text(timelineItem.timestamp)
             }
 
-            if deliveryStatus == .sendingFailed {
+            if adjustedDeliveryStatus == .sendingFailed {
                 CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyXS)
             }
         }
         .font(.compound.bodyXS)
-        .foregroundColor(deliveryStatus == .sendingFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
+        .foregroundColor(adjustedDeliveryStatus == .sendingFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
     }
     
     @ViewBuilder
