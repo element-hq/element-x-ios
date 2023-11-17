@@ -100,6 +100,11 @@ struct HomeScreenViewState: BindableState {
             HomeScreenRoom.placeholder()
         }
     }
+    
+    // Used to hide all the rooms when the search field is focused and the query is empty
+    var shouldHideRoomList: Bool {
+        bindings.isSearchFieldFocused && bindings.searchQuery.isEmpty
+    }
 }
 
 struct HomeScreenViewStateBindings {

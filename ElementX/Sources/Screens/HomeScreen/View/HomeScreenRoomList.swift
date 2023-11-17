@@ -29,9 +29,9 @@ struct HomeScreenRoomList: View {
     @ViewBuilder
     private var filteredContent: some View {
         // Hide the room list when the search bar is focused but the query is empty
-        // This works hand in hand with the room list filtering and avoids glitches when
-        // focusing the search bar
-        if !(context.isSearchFieldFocused && context.searchQuery.isEmpty) {
+        // This works hand in hand with the room list service layer filtering and
+        // avoids glitches when focusing the search bar
+        if !context.viewState.shouldHideRoomList {
             content
         }
     }
