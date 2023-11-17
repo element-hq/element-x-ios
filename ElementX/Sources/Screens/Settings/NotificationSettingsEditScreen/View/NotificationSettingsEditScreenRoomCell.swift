@@ -50,7 +50,7 @@ struct NotificationSettingsEditScreenRoomCell: View {
     }
     
     @MainActor
-    var roomDetailsLabel: ListDetailsLabel<EmptyView>? {
+    var roomDetailsLabel: ListRowDetails<EmptyView>? {
         guard let mode = room.notificationMode else { return nil }
         return .label(title: context.viewState.strings.string(for: mode),
                       icon: EmptyView())
