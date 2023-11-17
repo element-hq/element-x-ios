@@ -72,6 +72,9 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
             state.doneButtonEnabled = true
         case .confirmKey:
             Task {
+                let loadingIndicatorIdentifier = "SecureBackupRecoveryKeyScreen"
+                userIndicatorController.submitIndicator(.init(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+                
                 switch await secureBackupController.confirmRecoveryKey(state.bindings.confirmationRecoveryKey) {
                 case .success:
                     actionsSubject.send(.done(mode: context.viewState.mode))
@@ -79,6 +82,8 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                     MXLog.error("Failed confirming recovery key with error: \(error)")
                     state.bindings.alertInfo = .init(id: .init())
                 }
+                
+                userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
             }
         case .cancel:
             actionsSubject.send(.cancel)
