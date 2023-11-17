@@ -92,7 +92,7 @@ struct RoomDetailsEditScreen: View {
                     .focused($focus, equals: .name)
             } else {
                 ListRow(kind: .custom {
-                    ListLabel.plain(title: context.viewState.nameRowTitle)
+                    ListRowLabel.plain(title: context.viewState.nameRowTitle)
                         .listRowBackground(Color.clear)
                 })
             }
@@ -111,7 +111,7 @@ struct RoomDetailsEditScreen: View {
                     .lineLimit(3...)
             } else {
                 ListRow(kind: .custom {
-                    ListLabel.plain(title: context.viewState.topicRowTitle)
+                    ListRowLabel.plain(title: context.viewState.topicRowTitle)
                         .listRowBackground(Color.clear)
                 })
             }

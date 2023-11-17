@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct CreateRoomScreen: View {
@@ -31,16 +32,12 @@ struct CreateRoomScreen: View {
             topicSection
             securitySection
         }
-        .compoundForm()
+        .compoundList()
         .track(screen: .createRoom)
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.screenCreateRoomTitle)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                createButton
-            }
-        }
+        .toolbar { toolbar }
         .readFrame($frame)
         .alert(item: $context.alertInfo)
     }
@@ -48,86 +45,82 @@ struct CreateRoomScreen: View {
     private var roomSection: some View {
         Section {
             HStack(alignment: .center, spacing: 16) {
-                Button {
-                    focus = nil
-                    context.showAttachmentConfirmationDialog = true
-                } label: {
-                    if let url = context.viewState.avatarURL {
-                        AsyncImage(url: url) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        } placeholder: {
-                            ProgressView()
-                        }
-                        .scaledFrame(size: 70)
-                        .clipShape(Circle())
-                    } else {
-                        cameraImage
-                    }
-                }
-                .buttonStyle(.plain)
-                .confirmationDialog("", isPresented: $context.showAttachmentConfirmationDialog) {
-                    Button(L10n.actionTakePhoto) {
-                        context.send(viewAction: .displayCameraPicker)
-                    }
-                    Button(L10n.actionChoosePhoto) {
-                        context.send(viewAction: .displayMediaPicker)
-                    }
-                    if context.viewState.avatarURL != nil {
-                        Button(L10n.actionRemove, role: .destructive) {
-                            context.send(viewAction: .removeImage)
-                        }
-                    }
-                }
+                roomAvatarButton
+                
                 VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
-                        .padding(.leading, FormRow.insets.leading)
-                        .compoundFormSectionHeader()
+                        .padding(.leading, ListRowPadding.horizontal)
+                        .compoundListSectionHeader()
+                    
                     TextField(L10n.screenCreateRoomRoomNameLabel,
                               text: $context.roomName,
                               prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textPlaceholder),
                               axis: .horizontal)
                         .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
-                        .padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
-                        .background(Color.compound.bgCanvasDefaultLevel1)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .padding(.horizontal, ListRowPadding.horizontal)
+                        .padding(.vertical, ListRowPadding.vertical)
+                        .background(.compound.bgCanvasDefaultLevel1, in: RoundedRectangle(cornerRadius: 12))
                 }
             }
             .listRowInsets(.init())
             .listRowBackground(Color.clear)
         }
-        .compoundFormSection()
     }
     
-    private var cameraImage: some View {
-        Image(systemName: "camera")
-            .font(.system(size: 28, weight: .semibold))
-            .foregroundColor(.compound.iconSecondary)
-            .scaledFrame(size: 70)
-            .background(Color.compound.bgSubtlePrimary)
-            .clipShape(Circle())
+    private var roomAvatarButton: some View {
+        Button {
+            focus = nil
+            context.showAttachmentConfirmationDialog = true
+        } label: {
+            if let url = context.viewState.avatarURL {
+                AsyncImage(url: url) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    ProgressView()
+                }
+                .scaledFrame(size: 70)
+                .clipShape(Circle())
+            } else {
+                CompoundIcon(asset: Asset.Images.takePhoto, size: .custom(36), relativeTo: .title)
+                    .foregroundColor(.compound.iconSecondary)
+                    .scaledFrame(size: 70, relativeTo: .title)
+                    .background(.compound.bgSubtlePrimary, in: Circle())
+            }
+        }
+        .buttonStyle(.plain)
+        .confirmationDialog("", isPresented: $context.showAttachmentConfirmationDialog) {
+            Button(L10n.actionTakePhoto) {
+                context.send(viewAction: .displayCameraPicker)
+            }
+            Button(L10n.actionChoosePhoto) {
+                context.send(viewAction: .displayMediaPicker)
+            }
+            if context.viewState.avatarURL != nil {
+                Button(L10n.actionRemove, role: .destructive) {
+                    context.send(viewAction: .removeImage)
+                }
+            }
+        }
     }
     
     private var topicSection: some View {
         Section {
-            TextField(L10n.screenCreateRoomTopicLabel,
-                      text: $context.roomTopic,
-                      prompt: Text(L10n.commonTopicPlaceholder).foregroundColor(.compound.textPlaceholder),
-                      axis: .vertical)
+            ListRow(label: .plain(title: L10n.commonTopicPlaceholder),
+                    kind: .textField(text: $context.roomTopic, axis: .vertical))
+                .lineLimit(3, reservesSpace: false)
                 .focused($focus, equals: .topic)
                 .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomTopic)
-                .lineLimit(3, reservesSpace: false)
         } header: {
             Text(L10n.screenCreateRoomTopicLabel)
-                .compoundFormSectionHeader()
+                .compoundListSectionHeader()
         } footer: {
             if !context.viewState.selectedUsers.isEmpty {
                 selectedUsersSection
             }
         }
-        .compoundFormSection()
     }
     
     @State private var frame: CGRect = .zero
@@ -143,61 +136,38 @@ struct CreateRoomScreen: View {
                     .frame(width: invitedUserCellWidth)
                 }
             }
-            .padding(.init(top: 22, leading: 20, bottom: 0, trailing: 32))
+            .padding(.horizontal, ListRowPadding.horizontal)
+            .padding(.vertical, 22)
         }
         .frame(width: frame.width)
     }
     
     private var securitySection: some View {
         Section {
-            Picker(L10n.commonSecurity, selection: $context.isRoomPrivate) {
-                Label {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(L10n.screenCreateRoomPrivateOptionTitle)
-                            .font(.compound.bodyLG)
-                        Text(L10n.screenCreateRoomPrivateOptionDescription)
-                            .font(.compound.bodyXS)
-                            .foregroundColor(.compound.textSecondary)
-                    }
-                } icon: {
-                    Image(systemName: "lock.shield")
-                }
-                .tag(true)
-                .labelStyle(FormRowLabelStyle(alignment: .top))
-                
-                Label {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(L10n.screenCreateRoomPublicOptionTitle)
-                            .font(.compound.bodyLG)
-                        Text(L10n.screenCreateRoomPublicOptionDescription)
-                            .font(.compound.bodyXS)
-                            .foregroundColor(.compound.textSecondary)
-                    }
-                } icon: {
-                    Image(systemName: "exclamationmark.shield")
-                }
-                .tag(false)
-                .labelStyle(FormRowLabelStyle(alignment: .top))
-            }
-            .labelsHidden()
-            .pickerStyle(.inline)
+            ListRow(label: .default(title: L10n.screenCreateRoomPrivateOptionTitle,
+                                    description: L10n.screenCreateRoomPrivateOptionDescription,
+                                    icon: CompoundIcon(asset: Asset.Images.lock),
+                                    iconAlignment: .top),
+                    kind: .selection(isSelected: context.isRoomPrivate) { context.isRoomPrivate = true })
+            ListRow(label: .default(title: L10n.screenCreateRoomPublicOptionTitle,
+                                    description: L10n.screenCreateRoomPublicOptionDescription,
+                                    icon: \.public,
+                                    iconAlignment: .top),
+                    kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
         } header: {
             Text(L10n.commonSecurity.uppercased())
-                .compoundFormSectionHeader()
-                .padding(.top, 40)
+                .compoundListSectionHeader()
         }
-        .listRowSeparatorTint(.compound.borderDisabled)
-        .listRowBackground(Color.compound.bgCanvasDefaultLevel1)
     }
     
-    private var createButton: some View {
-        Button {
-            focus = nil
-            context.send(viewAction: .createRoom)
-        } label: {
-            Text(L10n.actionCreate)
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            Button(L10n.actionCreate) {
+                focus = nil
+                context.send(viewAction: .createRoom)
+            }
+            .disabled(!context.viewState.canCreateRoom)
         }
-        .disabled(!context.viewState.canCreateRoom)
     }
 }
 

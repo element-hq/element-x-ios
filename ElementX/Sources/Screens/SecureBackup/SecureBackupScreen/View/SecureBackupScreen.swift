@@ -103,7 +103,7 @@ struct SecureBackupScreen: View {
             }
         } footer: {
             recoveryKeySectionFooter
-                .compoundFormSectionFooter()
+                .compoundListSectionFooter()
         }
     }
     

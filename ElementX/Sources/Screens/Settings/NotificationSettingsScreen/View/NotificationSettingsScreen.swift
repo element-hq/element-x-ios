@@ -98,7 +98,7 @@ struct NotificationSettingsScreen: View {
             // Group chats
             ListRow(label: .plain(title: L10n.screenNotificationSettingsGroupChats),
                     details: context.viewState.settings.map {
-                        ListDetailsLabel.title(context.viewState.strings.string(for: $0.groupChatsMode))
+                        .title(context.viewState.strings.string(for: $0.groupChatsMode))
                     } ?? .isWaiting(true),
                     kind: .navigationLink {
                         context.send(viewAction: .groupChatsTapped)
@@ -109,7 +109,7 @@ struct NotificationSettingsScreen: View {
             // Direct chats
             ListRow(label: .plain(title: L10n.screenNotificationSettingsDirectChats),
                     details: context.viewState.settings.map {
-                        ListDetailsLabel.title(context.viewState.strings.string(for: $0.directChatsMode))
+                        .title(context.viewState.strings.string(for: $0.directChatsMode))
                     } ?? .isWaiting(true),
                     kind: .navigationLink {
                         context.send(viewAction: .directChatsTapped)

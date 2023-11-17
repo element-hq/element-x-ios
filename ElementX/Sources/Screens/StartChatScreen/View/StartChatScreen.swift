@@ -74,8 +74,8 @@ struct StartChatScreen: View {
         Section {
             ListRow(kind: .custom {
                 MatrixUserShareLink(userID: context.viewState.userID) {
-                    ListLabel.default(title: L10n.actionInvitePeopleToApp(InfoPlistReader.main.bundleDisplayName),
-                                      icon: CompoundIcon(asset: Asset.Images.shareIos))
+                    ListRowLabel.default(title: L10n.actionInvitePeopleToApp(InfoPlistReader.main.bundleDisplayName),
+                                         icon: CompoundIcon(asset: Asset.Images.shareIos))
                 }
             })
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.inviteFriends)

@@ -26,7 +26,7 @@ struct RoomProxyMockConfiguration {
     var isDirect = Bool.random()
     var isSpace = Bool.random()
     var isPublic = Bool.random()
-    var isEncrypted = Bool.random()
+    var isEncrypted = true
     var isTombstoned = Bool.random()
     var hasOngoingCall = false
     var canonicalAlias: String?

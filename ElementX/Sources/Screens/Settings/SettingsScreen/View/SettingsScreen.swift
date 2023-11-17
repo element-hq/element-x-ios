@@ -71,9 +71,7 @@ struct SettingsScreen: View {
                         
                         Spacer()
                         
-                        CompoundIcon(\.chevronRight)
-                            .foregroundColor(.compound.iconTertiaryAlpha)
-                            .flipsForRightToLeftLayoutDirection(true)
+                        ListRowAccessory.navigationLink
                     }
                     .padding(.horizontal, ListRowPadding.horizontal)
                     .padding(.vertical, 8)

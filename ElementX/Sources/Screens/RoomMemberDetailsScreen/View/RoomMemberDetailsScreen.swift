@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct RoomMemberDetailsScreen: View {
@@ -27,7 +28,7 @@ struct RoomMemberDetailsScreen: View {
                 blockUserSection
             }
         }
-        .compoundForm()
+        .compoundList()
         .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .alert(item: $context.alertInfo)
         .track(screen: .user)
@@ -49,7 +50,7 @@ struct RoomMemberDetailsScreen: View {
             if let permalink = context.viewState.details.permalink {
                 HStack(spacing: 32) {
                     ShareLink(item: permalink) {
-                        Image(systemName: "square.and.arrow.up")
+                        CompoundIcon(asset: Asset.Images.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
                 }
@@ -60,16 +61,16 @@ struct RoomMemberDetailsScreen: View {
 
     private var blockUserSection: some View {
         Section {
-            Button(role: context.viewState.details.isIgnored ? nil : .destructive) {
-                context.send(viewAction: blockUserButtonAction)
-            } label: {
-                Label(blockUserButtonTitle, systemImage: "slash.circle")
-            }
-            .accessibilityIdentifier(blockUserButtonAccessibilityIdentifier)
-            .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
-            .disabled(context.viewState.isProcessingIgnoreRequest)
+            ListRow(label: .default(title: blockUserButtonTitle,
+                                    icon: CompoundIcon(asset: Asset.Images.block),
+                                    role: context.viewState.details.isIgnored ? nil : .destructive),
+                    details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
+                    kind: .button {
+                        context.send(viewAction: blockUserButtonAction)
+                    })
+                    .accessibilityIdentifier(blockUserButtonAccessibilityIdentifier)
+                    .disabled(context.viewState.isProcessingIgnoreRequest)
         }
-        .compoundFormSection()
     }
 
     private var blockUserButtonAction: RoomMemberDetailsScreenViewAction {
