@@ -32,6 +32,10 @@ public enum L10n {
   public static var a11yPoll: String { return L10n.tr("Localizable", "a11y_poll") }
   /// Ended poll
   public static var a11yPollEnd: String { return L10n.tr("Localizable", "a11y_poll_end") }
+  /// Read by %1$@ and %2$@
+  public static func a11yReadReceiptsMultiple(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "a11y_read_receipts_multiple", String(describing: p1), String(describing: p2))
+  }
   /// Plural format key: "%#@COUNT@"
   public static func a11yReadReceiptsMultipleWithOthers(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_read_receipts_multiple_with_others", p1)
@@ -1594,13 +1598,6 @@ public enum L10n {
   public static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   public static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
-
-  public enum A11y {
-    /// Read by %1$@ and %2$@
-    public static func readReceiptsMultiple(_ p1: Any, _ p2: Any) -> String {
-      return L10n.tr("Localizable", "a11y.read_receipts_multiple", String(describing: p1), String(describing: p2))
-    }
-  }
 
   public enum Action {
     /// Edit poll

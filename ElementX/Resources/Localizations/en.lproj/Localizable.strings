@@ -8,6 +8,7 @@
 "a11y_play" = "Play";
 "a11y_poll" = "Poll";
 "a11y_poll_end" = "Ended poll";
+"a11y_read_receipts_multiple" = "Read by %1$@ and %2$@";
 "a11y_read_receipts_single" = "Read by %1$@";
 "a11y_send_files" = "Send files";
 "a11y_show_password" = "Show password";
@@ -15,7 +16,6 @@
 "a11y_user_menu" = "User menu";
 "a11y_voice_message_record" = "Record voice message.";
 "a11y_voice_message_stop_recording" = "Stop recording";
-"a11y.read_receipts_multiple" = "Read by %1$@ and %2$@";
 "action_accept" = "Accept";
 "action_add_to_timeline" = "Add to timeline";
 "action_back" = "Back";
