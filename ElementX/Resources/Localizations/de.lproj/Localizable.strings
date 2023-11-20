@@ -8,11 +8,14 @@
 "a11y_play" = "Play";
 "a11y_poll" = "Umfrage";
 "a11y_poll_end" = "Umfrage beendet";
+"a11y_read_receipts_single" = "Read by %1$@";
 "a11y_send_files" = "Dateien senden";
 "a11y_show_password" = "Passwort anzeigen";
 "a11y_start_call" = "Start a call";
 "a11y_user_menu" = "Benutzermenü";
-"a11y_voice_message_record" = "Record voice message. Double tap and hold to record. Release to end recording.";
+"a11y_voice_message_record" = "Record voice message.";
+"a11y_voice_message_stop_recording" = "Stop recording";
+"a11y.read_receipts_multiple" = "Read by %1$@ and %2$@";
 "action_accept" = "Akzeptieren";
 "action_add_to_timeline" = "Zur Zeitleiste hinzufügen";
 "action_back" = "Zurück";
@@ -79,6 +82,7 @@
 "action_start_verification" = "Verifizierung starten";
 "action_static_map_load" = "Tippe, um die Karte zu laden";
 "action_take_photo" = "Foto machen";
+"action_tap_for_options" = "Tap for options";
 "action_try_again" = "Try again";
 "action_view_source" = "Quelle anzeigen";
 "action_yes" = "Ja";
@@ -87,12 +91,14 @@
 "common_acceptable_use_policy" = "Nutzungsrichtlinie";
 "common_advanced_settings" = "Erweiterte Einstellungen";
 "common_analytics" = "Analysedaten";
+"common_appearance" = "Appearance";
 "common_audio" = "Audio";
 "common_bubbles" = "Blasen";
 "common_chat_backup" = "Chat backup";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Raum wird erstellt...";
 "common_current_user_left_room" = "Raum verlassen";
+"common_dark" = "Dark";
 "common_decryption_error" = "Dekodierungsfehler";
 "common_developer_options" = "Entwickleroptionen";
 "common_edited_suffix" = "(bearbeitet)";
@@ -110,9 +116,11 @@
 "common_in_reply_to" = "Als Antwort auf %1$@";
 "common_invite_unknown_profile" = "Diese Matrix-ID kann nicht gefunden werden, daher wird die Einladung möglicherweise nicht empfangen.";
 "common_leaving_room" = "Raum verlassen";
+"common_light" = "Light";
 "common_link_copied_to_clipboard" = "Link in die Zwischenablage kopiert";
 "common_loading" = "Laden...";
 "common_message" = "Nachricht";
+"common_message_actions" = "Message actions";
 "common_message_layout" = "Nachrichtenlayout";
 "common_message_removed" = "Nachricht entfernt";
 "common_modern" = "Modern";
@@ -133,6 +141,7 @@
 "common_refreshing" = "Wird erneuert...";
 "common_replying_to" = "%1$@ antworten";
 "common_report_a_bug" = "Einen Fehler melden";
+"common_report_a_problem" = "Report a problem";
 "common_report_submitted" = "Bericht eingereicht";
 "common_rich_text_editor" = "Rich-Text-Editor";
 "common_room" = "Room";
@@ -142,7 +151,10 @@
 "common_search_for_someone" = "Nach jemandem suchen";
 "common_search_results" = "Suchergebnisse";
 "common_security" = "Sicherheit";
+"common_seen_by" = "Seen by";
 "common_sending" = "Wird gesendet...";
+"common_sending_failed" = "Sending failed";
+"common_sent" = "Sent";
 "common_server_not_supported" = "Server wird nicht unterstützt";
 "common_server_url" = "Server-URL";
 "common_settings" = "Einstellungen";
@@ -153,6 +165,7 @@
 "common_success" = "Erfolg";
 "common_suggestions" = "Vorschläge";
 "common_syncing" = "Synchronisieren";
+"common_system" = "System";
 "common_text" = "Text";
 "common_third_party_notices" = "Hinweise von Drittanbietern";
 "common_thread" = "Thread";
@@ -171,9 +184,10 @@
 "common_video" = "Video";
 "common_voice_message" = "Voice message";
 "common_waiting" = "Warten…";
-"common_waiting_for_decryption_key" = "Waiting for decryption key";
+"common_waiting_for_decryption_key" = "Waiting for this message";
 "common_poll_end_confirmation" = "Bist du sicher, dass du diese Umfrage beenden möchtest?";
 "common_poll_summary" = "Umfrage: %1$@";
+"common_verify_device" = "Verify device";
 "confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to confirm your recovery key to maintain access to your chat backup.";
 "confirm_recovery_key_banner_title" = "Confirm your recovery key";
 "crash_detection_dialog_content" = "%1$@ ist bei der letzten Nutzung abgestürzt. Möchtest du einen Absturzbericht mit uns teilen?";
@@ -217,6 +231,8 @@
 "notification_invitation_action_join" = "Beitreten";
 "notification_invitation_action_reject" = "Ablehnen";
 "notification_invite_body" = "Du wurdest zu einem Chat eingeladen";
+"notification_mentioned_you_body" = "%1$@ mentioned you.\n%2$@";
+"notification_mentioned_you_fallback_body" = "You have been mentioned.\n%1$@";
 "notification_new_messages" = "Neue Nachrichten";
 "notification_reaction_body" = "Reagiert mit %1$@";
 "notification_room_action_mark_as_read" = "Als gelesen markieren";
@@ -400,6 +416,7 @@
 "screen_notification_settings_enable_notifications" = "Benachrichtigungen auf diesem Gerät aktivieren";
 "screen_notification_settings_failed_fixing_configuration" = "Die Konfiguration wurde nicht korrigiert, bitte versuche es erneut.";
 "screen_notification_settings_group_chats" = "Gruppenchats";
+"screen_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms.";
 "screen_notification_settings_mentions_section_title" = "Erwähnungen";
 "screen_notification_settings_mode_all" = "Alle";
 "screen_notification_settings_mode_mentions" = "Erwähnungen";
@@ -421,6 +438,8 @@
 "screen_recovery_key_change_success" = "Recovery key changed";
 "screen_recovery_key_change_title" = "Change recovery key?";
 "screen_recovery_key_confirm_description" = "Enter your recovery key to confirm access to your chat backup.";
+"screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your chat backup.";
+"screen_recovery_key_confirm_error_title" = "Incorrect recovery key";
 "screen_recovery_key_confirm_key_description" = "Enter the 48 character code.";
 "screen_recovery_key_confirm_key_placeholder" = "Enter...";
 "screen_recovery_key_confirm_success" = "Recovery key confirmed";
@@ -490,6 +509,7 @@
 "screen_room_notification_settings_error_loading_settings" = "Beim Laden der Benachrichtigungseinstellungen ist ein Fehler aufgetreten.";
 "screen_room_notification_settings_error_restoring_default" = "Fehler beim Wiederherstellen des Standardmodus. Bitte versuche es erneut.";
 "screen_room_notification_settings_error_setting_mode" = "Fehler beim Einstellen des Modus. Bitte versuche es erneut.";
+"screen_room_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.";
 "screen_room_notification_settings_mode_all_messages" = "Alle Nachrichten";
 "screen_room_notification_settings_room_custom_settings_title" = "Benachrichtige mich in diesem Raum bei";
 "screen_room_reactions_show_less" = "Weniger anzeigen";
@@ -518,6 +538,7 @@
 "screen_session_verification_positive_button_canceled" = "Verifizierung wiederholen";
 "screen_session_verification_positive_button_initial" = "Ich bin bereit";
 "screen_session_verification_positive_button_verifying_ongoing" = "Warten auf eine Übereinstimmung";
+"screen_session_verification_ready_subtitle" = "Compare a unique set of emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Vergleiche die einzelnen Emojis und stelle sicher, dass sie in der gleichen Reihenfolge erscheinen.";
 "screen_session_verification_they_dont_match" = "Sie stimmen nicht überein";
 "screen_session_verification_they_match" = "Sie stimmen überein";
@@ -535,7 +556,6 @@
 "screen_signed_out_subtitle" = "You might have been signed out for one of the reasons listed below. Please sign in again to continue using %@.";
 "screen_signed_out_title" = "You’re signed out";
 "screen_signout_confirmation_dialog_content" = "Bist du sicher, dass du dich abmelden willst?";
-"screen_signout_confirmation_dialog_title" = "Abmelden";
 "screen_signout_in_progress_dialog_content" = "Abmelden...";
 "screen_signout_key_backup_disabled_subtitle" = "You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages.";
 "screen_signout_key_backup_disabled_title" = "You have turned off backup";
@@ -642,6 +662,7 @@
 "screen_room_details_topic_title" = "Thema";
 "screen_room_error_failed_processing_media" = "Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut.";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Nur Erwähnungen und Schlüsselwörter";
-"screen_signout_confirmation_dialog_submit" = "Abmelden";
-"screen_signout_preference_item" = "Abmelden";
+"screen_signout_confirmation_dialog_submit" = "Sign out";
+"screen_signout_confirmation_dialog_title" = "Sign out";
+"screen_signout_preference_item" = "Sign out";
 "screen_waitlist_message_success" = "Willkommen bei %1$@!";

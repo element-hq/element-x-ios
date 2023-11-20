@@ -8,11 +8,14 @@
 "a11y_play" = "Play";
 "a11y_poll" = "Poll";
 "a11y_poll_end" = "Ended poll";
+"a11y_read_receipts_single" = "Read by %1$@";
 "a11y_send_files" = "Enviar archivos";
 "a11y_show_password" = "Mostrar contraseña";
 "a11y_start_call" = "Start a call";
 "a11y_user_menu" = "Menú de usuario";
-"a11y_voice_message_record" = "Record voice message. Double tap and hold to record. Release to end recording.";
+"a11y_voice_message_record" = "Record voice message.";
+"a11y_voice_message_stop_recording" = "Stop recording";
+"a11y.read_receipts_multiple" = "Read by %1$@ and %2$@";
 "action_accept" = "Accept";
 "action_add_to_timeline" = "Add to timeline";
 "action_back" = "Atrás";
@@ -79,6 +82,7 @@
 "action_start_verification" = "Iniciar la verificación";
 "action_static_map_load" = "Tap to load map";
 "action_take_photo" = "Take photo";
+"action_tap_for_options" = "Tap for options";
 "action_try_again" = "Try again";
 "action_view_source" = "Ver Fuente";
 "action_yes" = "Sí";
@@ -87,12 +91,14 @@
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_advanced_settings" = "Advanced settings";
 "common_analytics" = "Analytics";
+"common_appearance" = "Appearance";
 "common_audio" = "Sonido";
 "common_bubbles" = "Burbujas";
 "common_chat_backup" = "Chat backup";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Creando sala…";
 "common_current_user_left_room" = "Saliste de la sala";
+"common_dark" = "Dark";
 "common_decryption_error" = "Error de descifrado";
 "common_developer_options" = "Opciones de desarrollador";
 "common_edited_suffix" = "(editado)";
@@ -110,9 +116,11 @@
 "common_in_reply_to" = "In reply to %1$@";
 "common_invite_unknown_profile" = "This Matrix ID can't be found, so the invite might not be received.";
 "common_leaving_room" = "Leaving room";
+"common_light" = "Light";
 "common_link_copied_to_clipboard" = "Enlace copiado al portapapeles";
 "common_loading" = "Cargando…";
 "common_message" = "Mensaje";
+"common_message_actions" = "Message actions";
 "common_message_layout" = "Diseño del mensaje";
 "common_message_removed" = "Mensaje eliminado";
 "common_modern" = "Moderno";
@@ -133,6 +141,7 @@
 "common_refreshing" = "Refreshing…";
 "common_replying_to" = "Respondiendo a %1$@";
 "common_report_a_bug" = "Informar de un error";
+"common_report_a_problem" = "Report a problem";
 "common_report_submitted" = "Informe enviado";
 "common_rich_text_editor" = "Rich text editor";
 "common_room" = "Room";
@@ -142,7 +151,10 @@
 "common_search_for_someone" = "Buscar a alguien";
 "common_search_results" = "Search results";
 "common_security" = "Seguridad";
+"common_seen_by" = "Seen by";
 "common_sending" = "Enviando…";
+"common_sending_failed" = "Sending failed";
+"common_sent" = "Sent";
 "common_server_not_supported" = "Servidor no compatible";
 "common_server_url" = "Dirección del servidor";
 "common_settings" = "Ajustes";
@@ -153,6 +165,7 @@
 "common_success" = "Terminado";
 "common_suggestions" = "Sugerencias";
 "common_syncing" = "Syncing";
+"common_system" = "System";
 "common_text" = "Text";
 "common_third_party_notices" = "Third-party notices";
 "common_thread" = "Thread";
@@ -171,9 +184,10 @@
 "common_video" = "Vídeo";
 "common_voice_message" = "Voice message";
 "common_waiting" = "Esperando…";
-"common_waiting_for_decryption_key" = "Waiting for decryption key";
+"common_waiting_for_decryption_key" = "Waiting for this message";
 "common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";
+"common_verify_device" = "Verify device";
 "confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to confirm your recovery key to maintain access to your chat backup.";
 "confirm_recovery_key_banner_title" = "Confirm your recovery key";
 "crash_detection_dialog_content" = "%1$@ se cerró inesperadamente la última vez que se lo usaste. ¿Quieres compartir un informe de error con nosotros?";
@@ -217,6 +231,8 @@
 "notification_invitation_action_join" = "Join";
 "notification_invitation_action_reject" = "Reject";
 "notification_invite_body" = "Invited you to chat";
+"notification_mentioned_you_body" = "%1$@ mentioned you.\n%2$@";
+"notification_mentioned_you_fallback_body" = "You have been mentioned.\n%1$@";
 "notification_new_messages" = "New Messages";
 "notification_reaction_body" = "Reacted with %1$@";
 "notification_room_action_mark_as_read" = "Mark as read";
@@ -400,6 +416,7 @@
 "screen_notification_settings_enable_notifications" = "Enable notifications on this device";
 "screen_notification_settings_failed_fixing_configuration" = "The configuration has not been corrected, please try again.";
 "screen_notification_settings_group_chats" = "Group chats";
+"screen_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms.";
 "screen_notification_settings_mentions_section_title" = "Mentions";
 "screen_notification_settings_mode_all" = "All";
 "screen_notification_settings_mode_mentions" = "Mentions";
@@ -421,6 +438,8 @@
 "screen_recovery_key_change_success" = "Recovery key changed";
 "screen_recovery_key_change_title" = "Change recovery key?";
 "screen_recovery_key_confirm_description" = "Enter your recovery key to confirm access to your chat backup.";
+"screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your chat backup.";
+"screen_recovery_key_confirm_error_title" = "Incorrect recovery key";
 "screen_recovery_key_confirm_key_description" = "Enter the 48 character code.";
 "screen_recovery_key_confirm_key_placeholder" = "Enter...";
 "screen_recovery_key_confirm_success" = "Recovery key confirmed";
@@ -490,6 +509,7 @@
 "screen_room_notification_settings_error_loading_settings" = "An error occurred while loading notification settings.";
 "screen_room_notification_settings_error_restoring_default" = "Failed restoring the default mode, please try again.";
 "screen_room_notification_settings_error_setting_mode" = "Failed setting the mode, please try again.";
+"screen_room_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.";
 "screen_room_notification_settings_mode_all_messages" = "All messages";
 "screen_room_notification_settings_room_custom_settings_title" = "In this room, notify me for";
 "screen_room_reactions_show_less" = "Show less";
@@ -518,6 +538,7 @@
 "screen_session_verification_positive_button_canceled" = "Reintentar la verificación";
 "screen_session_verification_positive_button_initial" = "Estoy listo";
 "screen_session_verification_positive_button_verifying_ongoing" = "Esperando a que coincida";
+"screen_session_verification_ready_subtitle" = "Compare a unique set of emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Compara los emoji, asegurándote de que aparecen en el mismo orden.";
 "screen_session_verification_they_dont_match" = "No coinciden";
 "screen_session_verification_they_match" = "Coinciden";
@@ -535,7 +556,6 @@
 "screen_signed_out_subtitle" = "You might have been signed out for one of the reasons listed below. Please sign in again to continue using %@.";
 "screen_signed_out_title" = "You’re signed out";
 "screen_signout_confirmation_dialog_content" = "¿Estás seguro de que quieres cerrar sesión?";
-"screen_signout_confirmation_dialog_title" = "Cerrar sesión";
 "screen_signout_in_progress_dialog_content" = "Cerrando sesión…";
 "screen_signout_key_backup_disabled_subtitle" = "You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages.";
 "screen_signout_key_backup_disabled_title" = "You have turned off backup";
@@ -553,7 +573,7 @@
 "screen_waitlist_title" = "You’re almost there.";
 "screen_waitlist_title_success" = "You're in.";
 "screen_welcome_bullet_1" = "Calls, polls, search and more will be added later this year.";
-"screen_welcome_bullet_2" = "Message history for encrypted rooms won’t be available in this update.";
+"screen_welcome_bullet_2" = "Message history for encrypted rooms isn’t available yet.";
 "screen_welcome_bullet_3" = "We’d love to hear from you, let us know what you think via the settings page.";
 "screen_welcome_button" = "Let's go!";
 "screen_welcome_subtitle" = "Here’s what you need to know:";
@@ -642,6 +662,7 @@
 "screen_room_details_topic_title" = "Tema";
 "screen_room_error_failed_processing_media" = "Failed processing media to upload, please try again.";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
-"screen_signout_confirmation_dialog_submit" = "Cerrar sesión";
-"screen_signout_preference_item" = "Cerrar sesión";
+"screen_signout_confirmation_dialog_submit" = "Sign out";
+"screen_signout_confirmation_dialog_title" = "Sign out";
+"screen_signout_preference_item" = "Sign out";
 "screen_waitlist_message_success" = "Welcome to %1$@!";
