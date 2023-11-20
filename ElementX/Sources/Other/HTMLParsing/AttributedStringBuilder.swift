@@ -92,7 +92,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             DTDefaultFontFamily: defaultFont.familyName,
             DTDefaultFontName: defaultFont.fontName,
             DTDefaultFontSize: defaultFont.pointSize,
-            DTDefaultStyleSheet: DTCSSStylesheet(styleBlock: defaultCSS) as Any
+            DTDefaultStyleSheet: DTCSSStylesheet(styleBlock: defaultCSS) as Any,
+            DTDefaultLinkDecoration: false
         ]
         
         guard let builder = DTHTMLAttributedStringBuilder(html: data, options: parsingOptions, documentAttributes: nil) else {

@@ -60,7 +60,7 @@ struct TimelineReadReceiptsView: View {
             let limit = timelineItem.properties.orderedReadReceipts.count - 1
             let list = (0..<limit).map { displayName(at: $0) }.formatted(.list(type: .and, width: .narrow))
             let last = displayName(at: limit)
-            return L10n.a11ReadReceiptsMultiple(list, last)
+            return L10n.a11yReadReceiptsMultiple(list, last)
         } else if timelineItem.properties.orderedReadReceipts.count > displayNumber {
             let list = (0..<displayNumber).map { displayName(at: $0) }.formatted(.list(type: .and, width: .narrow))
             

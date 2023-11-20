@@ -8,11 +8,14 @@
 "a11y_play" = "Přehrát";
 "a11y_poll" = "Hlasování";
 "a11y_poll_end" = "Hlasování ukončeno";
+"a11y_read_receipts_single" = "Read by %1$@";
 "a11y_send_files" = "Odeslat soubory";
 "a11y_show_password" = "Zobrazit heslo";
 "a11y_start_call" = "Zahájit hovor";
 "a11y_user_menu" = "Uživatelské menu";
-"a11y_voice_message_record" = "Nahrajte hlasovou zprávu. Dvojitě klepněte a podržte pro záznam. Uvolněním ukončíte nahrávání.";
+"a11y_voice_message_record" = "Nahrajte hlasovou zprávu.";
+"a11y_voice_message_stop_recording" = "Zastavit nahrávání";
+"a11y.read_receipts_multiple" = "Read by %1$@ and %2$@";
 "action_accept" = "Přijmout";
 "action_add_to_timeline" = "Přidat na časovou osu";
 "action_back" = "Zpět";
@@ -79,6 +82,7 @@
 "action_start_verification" = "Zahájit ověření";
 "action_static_map_load" = "Klepnutím načtete mapu";
 "action_take_photo" = "Vyfotit";
+"action_tap_for_options" = "Tap for options";
 "action_try_again" = "Zkusit znovu";
 "action_view_source" = "Zobrazit zdroj";
 "action_yes" = "Ano";
@@ -87,12 +91,14 @@
 "common_acceptable_use_policy" = "Zásady používání";
 "common_advanced_settings" = "Pokročilá nastavení";
 "common_analytics" = "Analytika";
+"common_appearance" = "Appearance";
 "common_audio" = "Zvuk";
 "common_bubbles" = "Bubliny";
 "common_chat_backup" = "Záloha chatu";
 "common_copyright" = "Autorská práva";
 "common_creating_room" = "Vytváření místnosti…";
 "common_current_user_left_room" = "Opustit místnost";
+"common_dark" = "Dark";
 "common_decryption_error" = "Chyba dešifrování";
 "common_developer_options" = "Možnosti pro vývojáře";
 "common_edited_suffix" = "(upraveno)";
@@ -110,9 +116,11 @@
 "common_in_reply_to" = "V odpovědi na %1$@";
 "common_invite_unknown_profile" = "Tento Matrix identifikátor nelze najít, takže pozvánka nemusí být přijata.";
 "common_leaving_room" = "Opuštění místnosti";
+"common_light" = "Light";
 "common_link_copied_to_clipboard" = "Odkaz zkopírován do schránky";
 "common_loading" = "Načítání…";
 "common_message" = "Zpráva";
+"common_message_actions" = "Akce zprávy";
 "common_message_layout" = "Rozložení zprávy";
 "common_message_removed" = "Zpráva byla odstraněna";
 "common_modern" = "Moderní";
@@ -133,6 +141,7 @@
 "common_refreshing" = "Obnovování...";
 "common_replying_to" = "Odpověď na %1$@";
 "common_report_a_bug" = "Nahlásit chybu";
+"common_report_a_problem" = "Nahlásit problém";
 "common_report_submitted" = "Zpráva odeslána";
 "common_rich_text_editor" = "Editor formátovaného textu";
 "common_room" = "Místnost";
@@ -142,7 +151,10 @@
 "common_search_for_someone" = "Hledat někoho";
 "common_search_results" = "Výsledky hledání";
 "common_security" = "Zabezpečení";
+"common_seen_by" = "Seen by";
 "common_sending" = "Odesílání…";
+"common_sending_failed" = "Sending failed";
+"common_sent" = "Sent";
 "common_server_not_supported" = "Server není podporován";
 "common_server_url" = "URL serveru";
 "common_settings" = "Nastavení";
@@ -153,6 +165,7 @@
 "common_success" = "Úspěch";
 "common_suggestions" = "Návrhy";
 "common_syncing" = "Synchronizace";
+"common_system" = "System";
 "common_text" = "Text";
 "common_third_party_notices" = "Oznámení třetích stran";
 "common_thread" = "Vlákno";
@@ -174,6 +187,7 @@
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
 "common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
 "common_poll_summary" = "Hlasování: %1$@";
+"common_verify_device" = "Ověřit zařízení";
 "confirm_recovery_key_banner_message" = "Vaše záloha chatu není aktuálně synchronizována. Abyste si zachovali přístup k záloze chatu, musíte potvrdit klíč pro obnovení.";
 "confirm_recovery_key_banner_title" = "Potvrďte klíč pro obnovení";
 "crash_detection_dialog_content" = "%1$@ havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?";
@@ -217,6 +231,8 @@
 "notification_invitation_action_join" = "Vstoupit";
 "notification_invitation_action_reject" = "Odmítnout";
 "notification_invite_body" = "Vás pozval(a) do chatu";
+"notification_mentioned_you_body" = "%1$@ vás zmínil(a).\n%2$@";
+"notification_mentioned_you_fallback_body" = "Byli jste zmíněni.\n%1$@";
 "notification_new_messages" = "Nové zprávy";
 "notification_reaction_body" = "Reagoval(a) s %1$@";
 "notification_room_action_mark_as_read" = "Označit jako přečtené";
@@ -400,6 +416,7 @@
 "screen_notification_settings_enable_notifications" = "Povolit oznámení na tomto zařízení";
 "screen_notification_settings_failed_fixing_configuration" = "Konfigurace nebyla opravena, zkuste to prosím znovu.";
 "screen_notification_settings_group_chats" = "Skupinové chaty";
+"screen_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms.";
 "screen_notification_settings_mentions_section_title" = "Zmínky";
 "screen_notification_settings_mode_all" = "Vše";
 "screen_notification_settings_mode_mentions" = "Zmínky";
@@ -421,6 +438,8 @@
 "screen_recovery_key_change_success" = "Klíč pro obnovení byl změněn";
 "screen_recovery_key_change_title" = "Změnit klíč pro obnovení?";
 "screen_recovery_key_confirm_description" = "Zadejte klíč pro obnovení a potvrďte přístup k záloze chatu.";
+"screen_recovery_key_confirm_error_content" = "Zkuste prosím znovu potvrdit přístup k záloze chatu.";
+"screen_recovery_key_confirm_error_title" = "Nesprávný klíč pro obnovení";
 "screen_recovery_key_confirm_key_description" = "Zadejte kód o délce 48 znaků.";
 "screen_recovery_key_confirm_key_placeholder" = "Zadejte...";
 "screen_recovery_key_confirm_success" = "Klíč pro obnovení potvrzen";
@@ -490,6 +509,7 @@
 "screen_room_notification_settings_error_loading_settings" = "Při načítání nastavení oznámení došlo k chybě.";
 "screen_room_notification_settings_error_restoring_default" = "Obnovení výchozího režimu se nezdařilo, zkuste to prosím znovu.";
 "screen_room_notification_settings_error_setting_mode" = "Nastavení režimu se nezdařilo, zkuste to prosím znovu.";
+"screen_room_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.";
 "screen_room_notification_settings_mode_all_messages" = "Všechny zprávy";
 "screen_room_notification_settings_room_custom_settings_title" = "V této místnosti mě upozornit na";
 "screen_room_reactions_show_less" = "Zobrazit méně";
@@ -518,6 +538,7 @@
 "screen_session_verification_positive_button_canceled" = "Opakovat ověření";
 "screen_session_verification_positive_button_initial" = "Jsem připraven";
 "screen_session_verification_positive_button_verifying_ongoing" = "Čekání na shodu";
+"screen_session_verification_ready_subtitle" = "Porovnejte jedinečnou sadu emotikonů.";
 "screen_session_verification_request_accepted_subtitle" = "Porovnejte jedinečné emotikony a ujistěte se, že jsou zobrazeny ve stejném pořadí.";
 "screen_session_verification_they_dont_match" = "Neshodují se";
 "screen_session_verification_they_match" = "Shodují se";
@@ -535,7 +556,6 @@
 "screen_signed_out_subtitle" = "Je možné, že jste byli odhlášeni z některého z níže uvedených důvodů. Chcete-li pokračovat v používání %@, přihlaste se znovu.";
 "screen_signed_out_title" = "Jste odhlášeni";
 "screen_signout_confirmation_dialog_content" = "Opravdu se chcete odhlásit?";
-"screen_signout_confirmation_dialog_title" = "Odhlásit se";
 "screen_signout_in_progress_dialog_content" = "Odhlašování…";
 "screen_signout_key_backup_disabled_subtitle" = "Chystáte se odhlásit z poslední relace. Pokud se nyní odhlásíte, ztratíte přístup ke svým šifrovaným zprávám.";
 "screen_signout_key_backup_disabled_title" = "Vypnuli jste zálohování";
@@ -643,5 +663,6 @@
 "screen_room_error_failed_processing_media" = "Nahrání média se nezdařilo, zkuste to prosím znovu.";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Pouze zmínky a klíčová slova";
 "screen_signout_confirmation_dialog_submit" = "Odhlásit se";
+"screen_signout_confirmation_dialog_title" = "Odhlásit se";
 "screen_signout_preference_item" = "Odhlásit se";
 "screen_waitlist_message_success" = "Vítá vás %1$@!";

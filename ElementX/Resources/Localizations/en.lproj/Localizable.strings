@@ -1,5 +1,4 @@
 "Notification" = "Notification";
-"a11_read_receipts_multiple" = "Read by %1$@ and %2$@";
 "a11y_delete" = "Delete";
 "a11y_hide_password" = "Hide password";
 "a11y_notifications_mentions_only" = "Mentions only";
@@ -9,6 +8,7 @@
 "a11y_play" = "Play";
 "a11y_poll" = "Poll";
 "a11y_poll_end" = "Ended poll";
+"a11y_read_receipts_multiple" = "Read by %1$@ and %2$@";
 "a11y_read_receipts_single" = "Read by %1$@";
 "a11y_send_files" = "Send files";
 "a11y_show_password" = "Show password";
@@ -151,6 +151,7 @@
 "common_search_for_someone" = "Search for someone";
 "common_search_results" = "Search results";
 "common_security" = "Security";
+"common_seen_by" = "Seen by";
 "common_sending" = "Sending…";
 "common_sending_failed" = "Sending failed";
 "common_sent" = "Sent";
