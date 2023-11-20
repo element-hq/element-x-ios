@@ -39,11 +39,18 @@ class SecureBackupController: SecureBackupControllerProtocol {
         self.encryption = encryption
         
         backupStateListenerTaskHandle = encryption.backupStateListener(listener: SecureBackupControllerBackupStateListener { [weak self] state in
-            self?.keyBackupStateSubject.send(state.keyBackupState)
+            guard let self else { return }
+            
+            keyBackupStateSubject.send(state.keyBackupState)
+            
+            if case .unknown = state {
+                updateBackupStateFromRemote()
+            }
         })
         
         recoveryStateListenerTaskHandle = encryption.recoveryStateListener(listener: SecureBackupRecoveryStateListener { [weak self] state in
             guard let self else { return }
+            
             switch state {
             case .unknown:
                 recoveryKeyStateSubject.send(.unknown)
@@ -55,6 +62,8 @@ class SecureBackupController: SecureBackupControllerProtocol {
                 recoveryKeyStateSubject.send(.incomplete)
             }
         })
+        
+        updateBackupStateFromRemote()
     }
     
     func enable() async -> Result<Void, SecureBackupControllerError> {
@@ -140,6 +149,26 @@ class SecureBackupController: SecureBackupControllerProtocol {
             return .failure(.failedUploadingForBackup)
         }
     }
+    
+    // MARK: - Private
+    
+    private func updateBackupStateFromRemote(retry: Bool = true) {
+        Task {
+            do {
+                let backupExists = try await self.encryption.backupExistsOnServer()
+                
+                if !backupExists {
+                    keyBackupStateSubject.send(.disabled)
+                }
+            } catch {
+                MXLog.error("Failed retrieving remote backup state with error: \(error)")
+                
+                if retry {
+                    updateBackupStateFromRemote(retry: false)
+                }
+            }
+        }
+    }
 }
 
 private final class SecureBackupControllerBackupStateListener: BackupStateListener {
@@ -182,7 +211,7 @@ extension BackupState {
     var keyBackupState: SecureBackupKeyBackupState {
         switch self {
         case .unknown:
-            return .disabled
+            return .unknown
         case .creating:
             return .enabling
         case .enabling:
