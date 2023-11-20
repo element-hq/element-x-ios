@@ -10,10 +10,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum L10n {
-  /// Read by %1$@ and %2$@
-  public static func a11ReadReceiptsMultiple(_ p1: Any, _ p2: Any) -> String {
-    return L10n.tr("Localizable", "a11_read_receipts_multiple", String(describing: p1), String(describing: p2))
-  }
   /// Delete
   public static var a11yDelete: String { return L10n.tr("Localizable", "a11y_delete") }
   /// Plural format key: "%#@COUNT@"
@@ -350,6 +346,8 @@ public enum L10n {
   public static var commonSearchResults: String { return L10n.tr("Localizable", "common_search_results") }
   /// Security
   public static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
+  /// Seen by
+  public static var commonSeenBy: String { return L10n.tr("Localizable", "common_seen_by") }
   /// Sending…
   public static var commonSending: String { return L10n.tr("Localizable", "common_sending") }
   /// Sending failed
@@ -1596,6 +1594,13 @@ public enum L10n {
   public static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   public static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
+
+  public enum A11y {
+    /// Read by %1$@ and %2$@
+    public static func readReceiptsMultiple(_ p1: Any, _ p2: Any) -> String {
+      return L10n.tr("Localizable", "a11y.read_receipts_multiple", String(describing: p1), String(describing: p2))
+    }
+  }
 
   public enum Action {
     /// Edit poll

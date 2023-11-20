@@ -20,6 +20,22 @@
 			<string>zadáno %1$d číslic</string>
 		</dict>
 	</dict>
+	<key>a11y_read_receipts_multiple_with_others</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Read by %1$@ and %2$d other</string>
+			<key>other</key>
+			<string>Read by %1$@ and %2$d others</string>
+		</dict>
+	</dict>
 	<key>common_member_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
