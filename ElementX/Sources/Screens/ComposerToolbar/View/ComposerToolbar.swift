@@ -20,7 +20,10 @@ import WysiwygComposer
 
 struct ComposerToolbar: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
-    let wysiwygViewModel: WysiwygComposerViewModel
+    
+    // Needs to be observable or the placeholder and the dictation state are not managed correctly.
+    @ObservedObject var wysiwygViewModel: WysiwygComposerViewModel
+    
     let keyCommandHandler: KeyCommandHandler
     
     @FocusState private var composerFocused: Bool
