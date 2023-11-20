@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct UnsupportedRoomTimelineView: View {
@@ -31,7 +32,7 @@ struct UnsupportedRoomTimelineView: View {
                         .font(.compound.bodySM)
                 }
             } icon: {
-                Image(systemName: "exclamationmark.triangle")
+                CompoundIcon(\.warning, size: .small, relativeTo: .compound.bodyLG)
             }
             .labelStyle(RoomTimelineViewLabelStyle())
         }

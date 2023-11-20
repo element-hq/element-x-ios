@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-import Foundation
+import Compound
 import SwiftUI
 
 struct NoticeRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
@@ -28,16 +28,17 @@ struct NoticeRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
             
             // Spacing: 6 = label spacing - formatted text padding
             
-            HStack(alignment: .firstTextBaseline, spacing: 6.0) {
-                Image(systemName: "info.bubble").padding(.top, 2.0)
-                    .foregroundColor(.compound.iconSecondary)
-                
+            Label {
                 if let attributedString = timelineItem.content.formattedBody {
                     FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
                 } else {
                     FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
                 }
+            } icon: {
+                CompoundIcon(\.info, size: .small, relativeTo: .compound.bodyLG)
+                    .foregroundColor(.compound.iconSecondary)
             }
+            .labelStyle(.custom(spacing: 6.0, alignment: .top))
             .padding(.leading, 4) // Trailing padding is provided by FormattedBodyText
         }
     }

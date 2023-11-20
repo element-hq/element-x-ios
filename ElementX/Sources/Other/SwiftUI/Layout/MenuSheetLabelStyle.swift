@@ -33,6 +33,7 @@ struct MenuSheetLabelStyle: LabelStyle {
         }
         .multilineTextAlignment(.leading)
         .frame(maxWidth: .infinity, alignment: .leading)
+        .fixedSize(horizontal: false, vertical: true)
         .padding(16)
     }
 }
