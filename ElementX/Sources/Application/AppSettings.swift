@@ -266,7 +266,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.userSuggestionsEnabled, defaultValue: false, storageType: .volatile)
     var userSuggestionsEnabled
 
-    @UserPreference(key: UserDefaultsKeys.readReceiptsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.readReceiptsEnabled, defaultValue: true, storageType: .userDefaults(store))
     var readReceiptsEnabled
     
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
