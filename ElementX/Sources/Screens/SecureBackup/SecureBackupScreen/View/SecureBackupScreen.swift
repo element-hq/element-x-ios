@@ -23,7 +23,7 @@ struct SecureBackupScreen: View {
     
     var body: some View {
         Form {
-            if context.viewState.keyBackupState != .enabled {
+            if context.viewState.keyBackupState == .disabled {
                 keyBackupSection
             } else {
                 keyBackupSection
