@@ -50,6 +50,7 @@ enum UserAvatarSizeOnScreen {
     case memberDetails
     case inviteUsers
     case readReceipt
+    case readReceiptSheet
     case editUserDetails
     case suggestions
 
@@ -57,6 +58,8 @@ enum UserAvatarSizeOnScreen {
         switch self {
         case .readReceipt:
             return 16
+        case .readReceiptSheet:
+            return 32
         case .timeline:
             return 32
         case .home:

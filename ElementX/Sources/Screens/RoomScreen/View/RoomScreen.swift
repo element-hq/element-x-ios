@@ -65,6 +65,10 @@ struct RoomScreen: View {
                 ReactionsSummaryView(reactions: $0.reactions, members: context.viewState.members, imageProvider: context.imageProvider, selectedReactionKey: $0.selectedKey)
                     .edgesIgnoringSafeArea([.bottom])
             }
+            .sheet(item: $context.readReceiptsSummaryInfo) {
+                ReadReceiptsSummaryView(orderedReadReceipts: $0.orderedReceipts)
+                    .environmentObject(context)
+            }
             .interactiveQuickLook(item: $context.mediaPreviewItem)
             .track(screen: .room)
             .onDrop(of: ["public.item", "public.file-url"], isTargeted: $dragOver) { providers -> Bool in
