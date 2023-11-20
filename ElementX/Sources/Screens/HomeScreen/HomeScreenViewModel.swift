@@ -85,7 +85,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .sink { [weak self] recoveryKeyState in
                 guard let self, appSettings.chatBackupEnabled else { return }
                 
-                let requiresSecureBackupSetup = recoveryKeyState == .unknown || recoveryKeyState == .disabled || recoveryKeyState == .incomplete
+                let requiresSecureBackupSetup = recoveryKeyState == .disabled || recoveryKeyState == .incomplete
                 
                 state.showUserMenuBadge = requiresSecureBackupSetup
                 state.showSettingsMenuOptionBadge = requiresSecureBackupSetup
