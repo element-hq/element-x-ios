@@ -556,10 +556,42 @@ class RoomScreenViewModelTests: XCTestCase {
         
         return (viewModel, roomProxy, timelineController, notificationCenter)
     }
+    
+    func testShowReadReceipts() async throws {
+        let receipts: [ReadReceipt] = [.init(userID: "@alice:matrix.org", formattedTimestamp: "12:00"),
+                                       .init(userID: "@charlie:matrix.org", formattedTimestamp: "11:00")]
+        // Given 3 messages from Bob where the middle message has a reaction.
+        let message = TextRoomTimelineItem(text: "Test",
+                                           sender: "bob",
+                                           addReadReceipts: receipts)
+        let id = message.id
+        
+        // When showing them in a timeline.
+        let timelineController = MockRoomTimelineController()
+        timelineController.timelineItems = [message]
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "",
+                                                                                 members: [RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])),
+                                            timelineController: timelineController,
+                                            mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
+                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                            userIndicatorController: userIndicatorControllerMock,
+                                            application: ApplicationMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenterMock())
+        
+        let deferred = deferFulfillment(viewModel.context.$viewState) { value in
+            value.bindings.readReceiptsSummaryInfo?.orderedReceipts == receipts
+        }
+        
+        viewModel.context.send(viewAction: .showReadReceipts(itemID: id))
+        try await deferred.fulfill()
+    }
 }
 
 private extension TextRoomTimelineItem {
-    init(text: String, sender: String, addReactions: Bool = false) {
+    init(text: String, sender: String, addReactions: Bool = false, addReadReceipts: [ReadReceipt] = []) {
         let reactions = addReactions ? [AggregatedReaction(accountOwnerID: "bob", key: "🦄", senders: [ReactionSender(senderID: sender, timestamp: Date())])] : []
         self.init(id: .random,
                   timestamp: "10:47 am",
@@ -569,7 +601,7 @@ private extension TextRoomTimelineItem {
                   isThreaded: false,
                   sender: .init(id: "@\(sender):server.com", displayName: sender),
                   content: .init(body: text),
-                  properties: RoomTimelineItemProperties(reactions: reactions))
+                  properties: RoomTimelineItemProperties(reactions: reactions, orderedReadReceipts: addReadReceipts))
     }
 }
 

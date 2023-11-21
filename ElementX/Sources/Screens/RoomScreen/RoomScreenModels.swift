@@ -96,6 +96,8 @@ enum RoomScreenViewAction {
     case retrySend(itemID: TimelineItemIdentifier)
     case cancelSend(itemID: TimelineItemIdentifier)
     
+    case showReadReceipts(itemID: TimelineItemIdentifier)
+    
     case scrolledToBottom
     
     case poll(RoomScreenViewPollAction)
@@ -160,6 +162,8 @@ struct RoomScreenViewStateBindings {
     var sendFailedConfirmationDialogInfo: SendFailedConfirmationDialogInfo?
     
     var reactionSummaryInfo: ReactionSummaryInfo?
+    
+    var readReceiptsSummaryInfo: ReadReceiptSummaryInfo?
 }
 
 struct TimelineItemActionMenuInfo: Equatable, Identifiable {
@@ -187,6 +191,11 @@ struct ReactionSummaryInfo: Identifiable {
     var id: String {
         selectedKey
     }
+}
+
+struct ReadReceiptSummaryInfo: Identifiable {
+    let orderedReceipts: [ReadReceipt]
+    let id: TimelineItemIdentifier
 }
 
 enum RoomScreenErrorType: Hashable {

@@ -45,8 +45,12 @@ struct TimelineReadReceiptsView: View {
                     .foregroundColor(.compound.textPrimary)
             }
         }
+        .onTapGesture {
+            context.send(viewAction: .showReadReceipts(itemID: timelineItem.id))
+        }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(L10n.a11yReadReceiptsTapToShowAll)
     }
     
     private var remaining: Int {

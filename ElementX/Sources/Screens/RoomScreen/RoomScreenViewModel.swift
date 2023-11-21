@@ -166,6 +166,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             processAudioAction(audioAction)
         case .presentCall:
             actionsSubject.send(.displayCallScreen)
+        case .showReadReceipts(itemID: let itemID):
+            showReadReceipts(for: itemID)
         }
     }
 
@@ -653,6 +655,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         state.bindings.reactionSummaryInfo = .init(reactions: eventTimelineItem.properties.reactions, selectedKey: selectedKey)
+    }
+    
+    // MARK: - Read Receipts
+
+    private func showReadReceipts(for itemID: TimelineItemIdentifier) {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
+              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
+            return
+        }
+        
+        state.bindings.readReceiptsSummaryInfo = .init(orderedReceipts: eventTimelineItem.properties.orderedReadReceipts, id: eventTimelineItem.id)
     }
     
     // MARK: - User Indicators
