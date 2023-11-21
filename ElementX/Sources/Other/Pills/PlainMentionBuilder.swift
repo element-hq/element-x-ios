@@ -21,6 +21,9 @@ struct PlainMentionBuilder: MentionBuilderProtocol {
     func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange) { }
     
     func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String) {
+        guard !attributedString.attributedSubstring(from: range).string.hasPrefix("@") else {
+            return
+        }
         attributedString.insert(NSAttributedString(string: "@"), at: range.location)
     }
 }
