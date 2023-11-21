@@ -17,7 +17,9 @@
 import Combine
 import SwiftUI
 
-struct CreatePollScreenCoordinatorParameters { }
+struct CreatePollScreenCoordinatorParameters {
+    let mode: CreatePollMode
+}
 
 enum CreatePollScreenCoordinatorAction {
     case cancel
@@ -37,7 +39,7 @@ final class CreatePollScreenCoordinator: CoordinatorProtocol {
     init(parameters: CreatePollScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = CreatePollScreenViewModel()
+        viewModel = CreatePollScreenViewModel(mode: parameters.mode)
     }
     
     func start() {

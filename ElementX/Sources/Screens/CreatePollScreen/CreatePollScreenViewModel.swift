@@ -26,8 +26,8 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init() {
-        super.init(initialViewState: .init())
+    init(mode: CreatePollMode) {
+        super.init(initialViewState: .init(mode: mode))
     }
     
     // MARK: - Public

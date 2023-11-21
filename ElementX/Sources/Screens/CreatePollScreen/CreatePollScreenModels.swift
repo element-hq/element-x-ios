@@ -22,8 +22,14 @@ enum CreatePollScreenViewModelAction {
 }
 
 struct CreatePollScreenViewState: BindableState {
+    let mode: CreatePollMode
     let maxNumberOfOptions = 20
     var bindings: CreatePollScreenViewStateBindings = .init()
+}
+
+enum CreatePollMode {
+    case new
+    case edit(eventID: String)
 }
 
 struct CreatePollScreenViewStateBindings {

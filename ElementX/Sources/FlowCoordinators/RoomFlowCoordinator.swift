@@ -633,7 +633,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
     private func presentCreatePollForm() {
         let navigationStackCoordinator = NavigationStackCoordinator()
-        let coordinator = CreatePollScreenCoordinator(parameters: .init())
+        let coordinator = CreatePollScreenCoordinator(parameters: .init(mode: .new))
         navigationStackCoordinator.setRootCoordinator(coordinator)
 
         coordinator.actions

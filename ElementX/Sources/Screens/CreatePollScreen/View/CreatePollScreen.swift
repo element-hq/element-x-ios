@@ -161,7 +161,7 @@ private struct CreatePollOptionView: View {
 // MARK: - Previews
 
 struct CreatePollScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = CreatePollScreenViewModel()
+    static let viewModel = CreatePollScreenViewModel(mode: .new)
     static var previews: some View {
         NavigationStack {
             CreatePollScreen(context: viewModel.context)
