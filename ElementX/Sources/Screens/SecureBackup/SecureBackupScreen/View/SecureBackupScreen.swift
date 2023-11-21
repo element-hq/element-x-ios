@@ -23,7 +23,7 @@ struct SecureBackupScreen: View {
     
     var body: some View {
         Form {
-            if context.viewState.keyBackupState != .enabled {
+            if context.viewState.keyBackupState == .disabled {
                 keyBackupSection
             } else {
                 keyBackupSection
@@ -77,10 +77,12 @@ struct SecureBackupScreen: View {
             ListRow(label: .plain(title: L10n.screenChatBackupKeyBackupActionDisable, role: .destructive), kind: .navigationLink {
                 context.send(viewAction: .keyBackup)
             })
-        case .disabled, .enabling, .unknown:
+        case .disabled, .enabling:
             ListRow(label: .plain(title: L10n.screenChatBackupKeyBackupActionEnable), kind: .navigationLink {
                 context.send(viewAction: .keyBackup)
             })
+        case .unknown:
+            EmptyView()
         }
     }
     
