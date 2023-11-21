@@ -139,8 +139,8 @@ struct CreatePollScreen: View {
         }
 
         ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.actionCreate) {
-                context.send(viewAction: .create)
+            Button(context.viewState.submitButtonTitle) {
+                context.send(viewAction: .submit)
             }
             .disabled(context.viewState.bindings.isCreateButtonDisabled)
             .accessibilityIdentifier(A11yIdentifiers.createPollScreen.create)

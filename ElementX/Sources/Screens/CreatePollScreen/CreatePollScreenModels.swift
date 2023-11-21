@@ -17,8 +17,7 @@
 import Foundation
 
 enum CreatePollScreenViewModelAction {
-    case create(question: String, options: [String], pollKind: Poll.Kind)
-    case edit(question: String, options: [String], pollKind: Poll.Kind)
+    case submit(question: String, options: [String], pollKind: Poll.Kind)
     case cancel
 }
 
@@ -47,6 +46,15 @@ struct CreatePollScreenViewState: BindableState {
         case .edit:
             #warning("AG: localise me")
             return "Edit poll"
+        }
+    }
+    
+    var submitButtonTitle: String {
+        switch mode {
+        case .new:
+            return L10n.actionCreate
+        case .edit:
+            return L10n.actionDone
         }
     }
 }
@@ -79,9 +87,8 @@ struct CreatePollScreenViewStateBindings {
 
 enum CreatePollScreenViewAction {
     case cancel
-    case create
+    case submit
     case delete
-    case edit
     case deleteOption(index: Int)
     case addOption
 }

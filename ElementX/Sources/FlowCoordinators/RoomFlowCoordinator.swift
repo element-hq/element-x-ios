@@ -647,29 +647,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .cancel:
                     break
-                case let .create(question, options, pollKind):
-                    Task {
-                        guard let roomProxy = self.roomProxy else {
-                            self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-                            return
-                        }
-
-                        let result = await roomProxy.createPoll(question: question, answers: options, pollKind: pollKind)
-
-                        self.analytics.trackComposer(inThread: false,
-                                                     isEditing: false,
-                                                     isReply: false,
-                                                     messageType: .poll,
-                                                     startsThread: nil)
-
-                        self.analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)
-                        
-                        switch result {
-                        case .success:
-                            break
-                        case .failure:
-                            self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-                        }
+                case let .submit(question, options, pollKind):
+                    switch mode {
+                    case .new:
+                        createPoll(question: question, options: options, pollKind: pollKind)
+                    case .edit(let eventID, let poll):
+                        #warning("AG: trigger edit poll")
                     }
                 }
             }
@@ -677,6 +660,32 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissCreatePollForm)
+        }
+    }
+    
+    private func createPoll(question: String, options: [String], pollKind: Poll.Kind) {
+        Task {
+            guard let roomProxy = self.roomProxy else {
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                return
+            }
+
+            let result = await roomProxy.createPoll(question: question, answers: options, pollKind: pollKind)
+
+            self.analytics.trackComposer(inThread: false,
+                                         isEditing: false,
+                                         isReply: false,
+                                         messageType: .poll,
+                                         startsThread: nil)
+
+            self.analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)
+            
+            switch result {
+            case .success:
+                break
+            case .failure:
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            }
         }
     }
 

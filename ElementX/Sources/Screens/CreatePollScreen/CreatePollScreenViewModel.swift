@@ -25,7 +25,7 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
     var actions: AnyPublisher<CreatePollScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(mode: CreatePollMode) {
         super.init(initialViewState: .init(mode: mode))
     }
@@ -34,14 +34,10 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
     
     override func process(viewAction: CreatePollScreenViewAction) {
         switch viewAction {
-        case .create:
-            actionsSubject.send(.create(question: state.bindings.question,
+        case .submit:
+            actionsSubject.send(.submit(question: state.bindings.question,
                                         options: state.bindings.options.map(\.text),
                                         pollKind: state.bindings.isUndisclosed ? .undisclosed : .disclosed))
-        case .edit:
-            actionsSubject.send(.edit(question: state.bindings.question,
-                                      options: state.bindings.options.map(\.text),
-                                      pollKind: state.bindings.isUndisclosed ? .undisclosed : .disclosed))
         case .delete:
             #warning("AG: fix me")
             actionsSubject.send(.cancel)

@@ -23,7 +23,7 @@ struct CreatePollScreenCoordinatorParameters {
 
 enum CreatePollScreenCoordinatorAction {
     case cancel
-    case create(question: String, options: [String], pollKind: Poll.Kind)
+    case submit(question: String, options: [String], pollKind: Poll.Kind)
 }
 
 final class CreatePollScreenCoordinator: CoordinatorProtocol {
@@ -48,11 +48,8 @@ final class CreatePollScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case let .create(question, options, pollKind):
-                self.actionsSubject.send(.create(question: question, options: options, pollKind: pollKind))
-            case .edit(question: let question, options: let options, pollKind: let pollKind):
-                #warning("AG: handle edit")
-                self.actionsSubject.send(.cancel)
+            case let .submit(question, options, pollKind):
+                self.actionsSubject.send(.submit(question: question, options: options, pollKind: pollKind))
             case .cancel:
                 self.actionsSubject.send(.cancel)
             }
