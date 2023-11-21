@@ -46,6 +46,7 @@ struct ReadReceiptCell: View {
                         .foregroundColor(.compound.textPrimary)
                         .lineLimit(1)
                     Spacer()
+                        .frame(minWidth: 12)
                     if let formattedTimestamp = readReceipt.formattedTimestamp {
                         Text(formattedTimestamp)
                             .font(.compound.bodyXS)

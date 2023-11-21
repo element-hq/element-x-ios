@@ -527,7 +527,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // Then the second call should be ignored.
         XCTAssertEqual(roomProxy.sendReadReceiptForCallsCount, 1)
     }
-        
+    
     // swiftlint:enable force_unwrapping
     // swiftlint:disable:next large_tuple
     private func readReceiptsConfiguration(with items: [RoomTimelineItemProtocol]) -> (RoomScreenViewModel,

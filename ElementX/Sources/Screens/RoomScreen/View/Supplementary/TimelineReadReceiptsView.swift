@@ -50,6 +50,7 @@ struct TimelineReadReceiptsView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(L10n.a11yReadReceiptsTapToShowAll)
     }
     
     private var remaining: Int {

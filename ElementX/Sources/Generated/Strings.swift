@@ -44,6 +44,8 @@ public enum L10n {
   public static func a11yReadReceiptsSingle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_read_receipts_single", String(describing: p1))
   }
+  /// Tap to show all
+  public static var a11yReadReceiptsTapToShowAll: String { return L10n.tr("Localizable", "a11y_read_receipts_tap_to_show_all") }
   /// Send files
   public static var a11ySendFiles: String { return L10n.tr("Localizable", "a11y_send_files") }
   /// Show password
