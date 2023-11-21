@@ -27,6 +27,9 @@ class SecureBackupController: SecureBackupControllerProtocol {
     private var backupStateListenerTaskHandle: TaskHandle?
     private var recoveryStateListenerTaskHandle: TaskHandle?
     
+    /// Used to dedupe remote backup state requests
+    @CancellableTask private var remoteBackupStateTask: Task<Void, Error>?
+    
     var recoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never> {
         recoveryKeyStateSubject.asCurrentValuePublisher()
     }
@@ -153,9 +156,13 @@ class SecureBackupController: SecureBackupControllerProtocol {
     // MARK: - Private
     
     private func updateBackupStateFromRemote(retry: Bool = true) {
-        Task {
+        remoteBackupStateTask = Task {
             do {
                 let backupExists = try await self.encryption.backupExistsOnServer()
+                
+                if Task.isCancelled {
+                    return
+                }
                 
                 if !backupExists {
                     keyBackupStateSubject.send(.disabled)
