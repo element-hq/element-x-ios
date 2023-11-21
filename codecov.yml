@@ -27,7 +27,7 @@ flag_management:
         type: project
         target: auto
         threshold: 1%
-  individual_flags_rules:
+  individual_flags:
     - name: unittests
       paths:
         - ".*"
