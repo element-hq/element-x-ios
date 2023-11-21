@@ -119,7 +119,7 @@ struct PollRoomTimelineView: View {
         if poll.hasVotes {
             context.send(viewAction: .poll(.end(pollStartID: eventID)))
         } else {
-            context.send(viewAction: .poll(.edit(pollStartID: eventID)))
+            context.send(viewAction: .poll(.edit(pollStartID: eventID, poll: poll)))
         }
     }
 

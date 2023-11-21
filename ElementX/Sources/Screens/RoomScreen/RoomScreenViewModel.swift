@@ -213,8 +213,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          message: L10n.commonPollEndConfirmation,
                                                          primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
                                                          secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
-        case .edit(pollStartID: let pollStartID):
-            actionsSubject.send(.displayPollForm(mode: .edit(eventID: pollStartID)))
+        case .edit(let pollStartID, let poll):
+            actionsSubject.send(.displayPollForm(mode: .edit(eventID: pollStartID, poll: poll)))
         }
     }
     

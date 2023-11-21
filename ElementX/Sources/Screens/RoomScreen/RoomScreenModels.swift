@@ -66,7 +66,7 @@ enum RoomScreenComposerMode: Equatable {
 enum RoomScreenViewPollAction {
     case selectOption(pollStartID: String, optionID: String)
     case end(pollStartID: String)
-    case edit(pollStartID: String)
+    case edit(pollStartID: String, poll: Poll)
 }
 
 enum RoomScreenViewAudioAction {
