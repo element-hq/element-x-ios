@@ -40,13 +40,12 @@ struct ReadReceiptCell: View {
                                 avatarSize: .user(on: .readReceiptSheet),
                                 imageProvider: imageProvider)
             VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 0) {
+                HStack(spacing: 12) {
                     Text(title)
                         .font(.compound.bodyMDSemibold)
                         .foregroundColor(.compound.textPrimary)
                         .lineLimit(1)
-                    Spacer()
-                        .frame(minWidth: 12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     if let formattedTimestamp = readReceipt.formattedTimestamp {
                         Text(formattedTimestamp)
                             .font(.compound.bodyXS)
