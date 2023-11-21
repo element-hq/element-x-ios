@@ -67,6 +67,21 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                         timestamp: "Later",
                                                         isOutgoing: true,
                                                         senderId: "Anne"))
+
+            TextRoomTimelineView(timelineItem: itemWith(text: "טקסט אחר",
+                                                        timestamp: "Later",
+                                                        isOutgoing: true,
+                                                        senderId: "Anne"))
+            
+            TextRoomTimelineView(timelineItem: itemWith(text: "Some other text -- טקסט אחר -- Some other text",
+                                                        timestamp: "Later",
+                                                        isOutgoing: true,
+                                                        senderId: "Anne"))
+
+            TextRoomTimelineView(timelineItem: itemWith(html: "<ol><li>First item</li><li>Second item</li><li>Third item</li></ol>",
+                                                        timestamp: "Later",
+                                                        isOutgoing: true,
+                                                        senderId: "Anne"))
         }
     }
     
@@ -79,5 +94,19 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                              isThreaded: false,
                              sender: .init(id: senderId),
                              content: .init(body: text))
+    }
+    
+    private static func itemWith(html: String, timestamp: String, isOutgoing: Bool, senderId: String) -> TextRoomTimelineItem {
+        let builder = AttributedStringBuilder(cacheKey: "preview", permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder())
+        let attributedString = builder.fromHTML(html)
+        
+        return TextRoomTimelineItem(id: .random,
+                                    timestamp: timestamp,
+                                    isOutgoing: isOutgoing,
+                                    isEditable: isOutgoing,
+                                    canBeRepliedTo: true,
+                                    isThreaded: false,
+                                    sender: .init(id: senderId),
+                                    content: .init(body: "", formattedBody: attributedString))
     }
 }
