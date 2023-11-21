@@ -202,7 +202,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     var localizedSendInfo: some View {
         HStack(spacing: 4) {
-            if let timelineItem = timelineItem as? TextBasedRoomTimelineItem {
+            if timelineItem is TextBasedRoomTimelineItem || timelineItem is PollRoomTimelineItem {
                 Text(timelineItem.localizedSendInfo)
             } else {
                 Text(timelineItem.timestamp)
