@@ -38,6 +38,13 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
             actionsSubject.send(.create(question: state.bindings.question,
                                         options: state.bindings.options.map(\.text),
                                         pollKind: state.bindings.isUndisclosed ? .undisclosed : .disclosed))
+        case .edit:
+            actionsSubject.send(.edit(question: state.bindings.question,
+                                      options: state.bindings.options.map(\.text),
+                                      pollKind: state.bindings.isUndisclosed ? .undisclosed : .disclosed))
+        case .delete:
+            #warning("AG: fix me")
+            actionsSubject.send(.cancel)
         case .cancel:
             if state.bindings.hasContent {
                 state.bindings.alertInfo = .init(id: .init(),

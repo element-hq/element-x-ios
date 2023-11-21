@@ -18,6 +18,7 @@ import Foundation
 
 enum CreatePollScreenViewModelAction {
     case create(question: String, options: [String], pollKind: Poll.Kind)
+    case edit(question: String, options: [String], pollKind: Poll.Kind)
     case cancel
 }
 
@@ -66,6 +67,8 @@ struct CreatePollScreenViewStateBindings {
 enum CreatePollScreenViewAction {
     case cancel
     case create
+    case delete
+    case edit
     case deleteOption(index: Int)
     case addOption
 }

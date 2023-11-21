@@ -31,6 +31,7 @@ struct CreatePollScreen: View {
             questionSection
             optionsSection
             showResultsSection
+            deletePollSection
         }
         .track(screen: .createPoll)
         .compoundForm()
@@ -109,6 +110,24 @@ struct CreatePollScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.createPollScreen.pollKind)
         }
         .compoundFormSection()
+    }
+    
+    @ViewBuilder
+    private var deletePollSection: some View {
+        switch context.viewState.mode {
+        case .edit:
+            Section {
+                Button(role: .destructive) {
+                    context.send(viewAction: .delete)
+                } label: {
+                    #warning("AG: localise me")
+                    Text("Delete poll")
+                }
+            }
+            .compoundFormSection()
+        case .new:
+            EmptyView()
+        }
     }
 
     @ToolbarContentBuilder

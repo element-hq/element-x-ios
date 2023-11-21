@@ -50,6 +50,9 @@ final class CreatePollScreenCoordinator: CoordinatorProtocol {
             switch action {
             case let .create(question, options, pollKind):
                 self.actionsSubject.send(.create(question: question, options: options, pollKind: pollKind))
+            case .edit(question: let question, options: let options, pollKind: let pollKind):
+                #warning("AG: handle edit")
+                self.actionsSubject.send(.cancel)
             case .cancel:
                 self.actionsSubject.send(.cancel)
             }
