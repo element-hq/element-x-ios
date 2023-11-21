@@ -25,9 +25,19 @@ struct CreatePollScreenViewState: BindableState {
     let mode: CreatePollMode
     let maxNumberOfOptions = 20
     var bindings: CreatePollScreenViewStateBindings = .init()
+    
+    var navigationTitle: String {
+        switch mode {
+        case .new:
+            return L10n.screenCreatePollTitle
+        case .edit(let eventID):
+            #warning("AG: localise me")
+            return "Edit poll"
+        }
+    }
 }
 
-enum CreatePollMode {
+enum CreatePollMode: Hashable {
     case new
     case edit(eventID: String)
 }

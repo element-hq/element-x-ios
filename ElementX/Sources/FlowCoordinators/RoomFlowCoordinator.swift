@@ -260,8 +260,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.notificationSettingsScreen, .dismissNotificationSettingsScreen, .roomDetails):
                 break
 
-            case (.room, .presentCreatePollForm, .createPollForm):
-                presentCreatePollForm()
+            case (.room, .presentCreatePollForm(let mode), .createPollForm):
+                presentCreatePollForm(mode: mode)
             case (.createPollForm, .dismissCreatePollForm, .room):
                 break
 
@@ -374,8 +374,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .presentLocationPicker:
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
-                case .presentPollForm:
-                    stateMachine.tryEvent(.presentCreatePollForm)
+                case .presentPollForm(let mode):
+                    stateMachine.tryEvent(.presentCreatePollForm(mode: mode))
                 case .presentLocationViewer(_, let geoURI, let description):
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)))
                 case .presentRoomMemberDetails(member: let member):
@@ -631,9 +631,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    private func presentCreatePollForm() {
+    private func presentCreatePollForm(mode: CreatePollMode) {
         let navigationStackCoordinator = NavigationStackCoordinator()
-        let coordinator = CreatePollScreenCoordinator(parameters: .init(mode: .new))
+        let coordinator = CreatePollScreenCoordinator(parameters: .init(mode: mode))
         navigationStackCoordinator.setRootCoordinator(coordinator)
 
         coordinator.actions
@@ -842,7 +842,7 @@ private extension RoomFlowCoordinator {
         case presentNotificationSettingsScreen
         case dismissNotificationSettingsScreen
 
-        case presentCreatePollForm
+        case presentCreatePollForm(mode: CreatePollMode)
         case dismissCreatePollForm
     }
 }

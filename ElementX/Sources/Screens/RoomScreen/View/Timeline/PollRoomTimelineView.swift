@@ -89,11 +89,13 @@ struct PollRoomTimelineView: View {
 
     @ViewBuilder
     private var toolbarView: some View {
-        if !poll.hasEnded, poll.createdByAccountOwner, let eventID {
+        if !poll.hasEnded, poll.createdByAccountOwner {
             Button {
-                context.send(viewAction: .poll(.end(pollStartID: eventID)))
+                toolbarAction()
             } label: {
-                Text(L10n.actionEndPoll)
+                #warning("AG: localise me")
+                let actionText = !poll.hasVotes ? "Edit Poll" : L10n.actionEndPoll
+                Text(actionText)
                     .lineLimit(2, reservesSpace: false)
                     .font(.compound.bodyLGSemibold)
                     .foregroundColor(.compound.textOnSolidPrimary)
@@ -106,6 +108,18 @@ struct PollRoomTimelineView: View {
                     }
             }
             .padding(.top, 8)
+        }
+    }
+    
+    private func toolbarAction() {
+        guard let eventID else {
+            return
+        }
+        
+        if poll.hasVotes {
+            context.send(viewAction: .poll(.end(pollStartID: eventID)))
+        } else {
+            context.send(viewAction: .poll(.edit(pollStartID: eventID)))
         }
     }
 

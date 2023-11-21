@@ -36,7 +36,7 @@ struct CreatePollScreen: View {
         .compoundForm()
         .scrollDismissesKeyboard(.immediately)
         .environment(\.editMode, .constant(.active))
-        .navigationTitle(L10n.screenCreatePollTitle)
+        .navigationTitle(context.viewState.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .animation(.elementDefault, value: context.options)
