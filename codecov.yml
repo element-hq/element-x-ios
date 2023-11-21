@@ -27,3 +27,6 @@ flag_management:
         type: project
         target: auto
         threshold: 1%
+  individual_flags:
+    name: integrationtests
+    carryforward: false
