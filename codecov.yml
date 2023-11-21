@@ -30,3 +30,7 @@ flag_management:
   individual_flags:
     name: integrationtests
     carryforward: false
+
+flags:
+  integrationtests:
+    carryforward: false
