@@ -21,6 +21,7 @@ import XCTest
 
 @MainActor
 class AudioPlayerStateTests: XCTestCase {
+    static let audioDuration = 10.0
     private var audioPlayerState: AudioPlayerState!
     private var audioPlayerMock: AudioPlayerMock!
     
@@ -48,8 +49,11 @@ class AudioPlayerStateTests: XCTestCase {
     override func setUp() async throws {
         audioPlayerActionsSubject = .init()
         audioPlayerSeekCallsSubject = .init()
-        audioPlayerState = AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 10.0)
+        audioPlayerState = AudioPlayerState(id: .timelineItemIdentifier(.random), duration: Self.audioDuration)
         audioPlayerMock = buildAudioPlayerMock()
+        audioPlayerMock.seekToClosure = { [weak self] progress in
+            self?.audioPlayerMock.currentTime = Self.audioDuration * progress
+        }
     }
     
     func testAttach() async throws {
