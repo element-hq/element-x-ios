@@ -33,9 +33,7 @@ struct CreatePollScreenViewState: BindableState {
         case .new:
             bindings = .init()
         case .edit(_, let poll):
-            bindings = .init(question: poll.question,
-                             options: poll.options.map { .init(text: $0.text) },
-                             isUndisclosed: poll.kind == .undisclosed)
+            bindings = .init(poll: poll)
         }
     }
     
@@ -57,6 +55,28 @@ struct CreatePollScreenViewState: BindableState {
             return L10n.actionDone
         }
     }
+    
+    var isSubmitButtonDisabled: Bool {
+        switch mode {
+        case .new:
+            return !bindings.hasValidContent
+        case .edit:
+            return !bindings.hasValidContent || !formContentHasChanged
+        }
+    }
+    
+    var formContentHasChanged: Bool {
+        let initialBindings: CreatePollScreenViewStateBindings
+        
+        switch mode {
+        case .new:
+            initialBindings = .init()
+        case .edit(_, let poll):
+            initialBindings = .init(poll: poll)
+        }
+
+        return bindings != initialBindings
+    }
 }
 
 enum CreatePollMode: Hashable {
@@ -64,7 +84,7 @@ enum CreatePollMode: Hashable {
     case edit(eventID: String, poll: Poll)
 }
 
-struct CreatePollScreenViewStateBindings {
+struct CreatePollScreenViewStateBindings: Equatable {
     var question = ""
     var options: [Option] = [.init(), .init()]
     var isUndisclosed = false
@@ -74,15 +94,23 @@ struct CreatePollScreenViewStateBindings {
         var text = ""
     }
 
-    var isCreateButtonDisabled: Bool {
-        question.isEmpty || options.count < 2 || options.contains { $0.text.isEmpty }
-    }
-
-    var hasContent: Bool {
-        !question.isEmpty || options.contains(where: { !$0.text.isEmpty }) || isUndisclosed
+    var hasValidContent: Bool {
+        !question.isEmpty && options.count >= 2 && options.allSatisfy { !$0.text.isEmpty }
     }
 
     var alertInfo: AlertInfo<UUID>?
+    
+    static func == (lhs: CreatePollScreenViewStateBindings, rhs: CreatePollScreenViewStateBindings) -> Bool {
+        lhs.question == rhs.question && lhs.options.map(\.text) == rhs.options.map(\.text) && lhs.isUndisclosed == rhs.isUndisclosed
+    }
+}
+
+extension CreatePollScreenViewStateBindings {
+    init(poll: Poll) {
+        self.init(question: poll.question,
+                  options: poll.options.map { .init(text: $0.text) },
+                  isUndisclosed: poll.kind == .undisclosed)
+    }
 }
 
 enum CreatePollScreenViewAction {

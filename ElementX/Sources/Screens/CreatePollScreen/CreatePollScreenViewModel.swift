@@ -42,7 +42,7 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
             #warning("AG: fix me")
             actionsSubject.send(.cancel)
         case .cancel:
-            if state.bindings.hasContent {
+            if state.formContentHasChanged {
                 state.bindings.alertInfo = .init(id: .init(),
                                                  title: L10n.screenCreatePollDiscardConfirmationTitle,
                                                  message: L10n.screenCreatePollDiscardConfirmation,

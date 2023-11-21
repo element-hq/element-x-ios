@@ -41,7 +41,7 @@ struct CreatePollScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .animation(.elementDefault, value: context.options)
-        .interactiveDismissDisabled(context.viewState.bindings.hasContent)
+        .interactiveDismissDisabled(context.viewState.formContentHasChanged)
         .alert(item: $context.alertInfo)
     }
 
@@ -142,7 +142,7 @@ struct CreatePollScreen: View {
             Button(context.viewState.submitButtonTitle) {
                 context.send(viewAction: .submit)
             }
-            .disabled(context.viewState.bindings.isCreateButtonDisabled)
+            .disabled(context.viewState.isSubmitButtonDisabled)
             .accessibilityIdentifier(A11yIdentifiers.createPollScreen.create)
         }
     }
