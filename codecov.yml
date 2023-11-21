@@ -21,9 +21,18 @@ ignore:
 
 flag_management:
   default_rules:
-    carryforward: true
+    carryforward: false
     statuses:
       - name_prefix: project-
         type: project
         target: auto
         threshold: 1%
+  individual_flags_rules:
+    - name: unittests
+      paths:
+        - ".*"
+      carryforward: true
+    - name: uitests
+      paths:
+        - ".*"
+      carryforward: true
