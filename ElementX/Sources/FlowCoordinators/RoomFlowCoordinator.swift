@@ -647,12 +647,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .cancel:
                     break
+                case .delete:
+                    deletePoll(mode: mode)
                 case let .submit(question, options, pollKind):
                     switch mode {
                     case .new:
                         createPoll(question: question, options: options, pollKind: pollKind)
-                    case .edit(let eventID, let poll):
-                        #warning("AG: trigger edit poll")
+                    case .edit(let eventID, _):
+                        editPoll(pollStartID: eventID, question: question, options: options, pollKind: pollKind)
                     }
                 }
             }
@@ -688,7 +690,43 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
     }
+    
+    private func editPoll(pollStartID: String, question: String, options: [String], pollKind: Poll.Kind) {
+        Task {
+            guard let roomProxy = self.roomProxy else {
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                return
+            }
 
+            let result = await roomProxy.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind)
+            
+            switch result {
+            case .success:
+                break
+            case .failure:
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            }
+        }
+    }
+    
+    private func deletePoll(mode: CreatePollMode) {
+        Task {
+            guard case .edit(let pollStartID, _) = mode, let roomProxy = self.roomProxy else {
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                return
+            }
+            
+            let result = await roomProxy.redact(pollStartID)
+            
+            switch result {
+            case .success(let success):
+                break
+            case .failure(let failure):
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            }
+        }
+    }
+    
     private func presentRoomMemberDetails(member: RoomMemberProxyProtocol) {
         guard let roomProxy else {
             fatalError()

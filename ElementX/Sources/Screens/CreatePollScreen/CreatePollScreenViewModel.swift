@@ -39,8 +39,7 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
                                         options: state.bindings.options.map(\.text),
                                         pollKind: state.bindings.isUndisclosed ? .undisclosed : .disclosed))
         case .delete:
-            #warning("AG: fix me")
-            actionsSubject.send(.cancel)
+            actionsSubject.send(.delete)
         case .cancel:
             if state.formContentHasChanged {
                 state.bindings.alertInfo = .init(id: .init(),

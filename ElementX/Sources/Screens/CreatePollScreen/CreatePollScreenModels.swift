@@ -17,8 +17,9 @@
 import Foundation
 
 enum CreatePollScreenViewModelAction {
-    case submit(question: String, options: [String], pollKind: Poll.Kind)
     case cancel
+    case delete
+    case submit(question: String, options: [String], pollKind: Poll.Kind)
 }
 
 struct CreatePollScreenViewState: BindableState {
