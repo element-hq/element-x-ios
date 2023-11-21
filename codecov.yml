@@ -27,10 +27,14 @@ flag_management:
         type: project
         target: auto
         threshold: 1%
-  individual_flags:
-    name: integrationtests
-    carryforward: false
+  individual_flags_rules:
+    - name: integrationtests
+      paths:
+        - ".*"
+      carryforward: false
 
 flags:
   integrationtests:
+    paths:
+      - ".*"
     carryforward: false
