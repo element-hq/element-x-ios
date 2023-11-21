@@ -1,1 +1,0 @@
-Added a small artificial delay when resending a failed message if it fails instantly, for better UX.

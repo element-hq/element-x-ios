@@ -1,1 +1,0 @@
-Added a disclaimer on the Mentions Only option for notifications, so that the user will know if it will work properly or not on their home server.

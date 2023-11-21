@@ -1,3 +1,40 @@
+## Changes in 1.4.2 (2023-11-21)
+
+✨ Features
+
+- Expose message actions to voice over rotor ([#660](https://github.com/vector-im/element-x-ios/issues/660))
+- Tapping on read receipts will open a detailed sheet of all the receipts. ([#1053](https://github.com/vector-im/element-x-ios/issues/1053))
+- Added a disclaimer on the Mentions Only option for notifications, so that the user will know if it will work properly or not on their home server. ([#2078](https://github.com/vector-im/element-x-ios/issues/2078))
+- Expose options for overriding the system appearance in the advanced settings menu ([#2083](https://github.com/vector-im/element-x-ios/issues/2083))
+- The voice message playback position indicator is displayed during playback or pause. ([#2190](https://github.com/vector-im/element-x-ios/issues/2190))
+
+🙌 Improvements
+
+- Add SwiftLint rule to enforce stack spacing. ([#2080](https://github.com/vector-im/element-x-ios/pull/2080))
+- Use Compound List in Start Chat and Room Member Details screens. ([#2099](https://github.com/vector-im/element-x-ios/pull/2099))
+- Read Receipts are enabled by default. ([#2123](https://github.com/vector-im/element-x-ios/pull/2123))
+- Use more Compound icons throughout the app. ([#2002](https://github.com/vector-im/element-x-ios/issues/2002))
+- Show the lock screen placeholder whenever the app resigns as active. ([#2026](https://github.com/vector-im/element-x-ios/issues/2026))
+- Update the Welcome Screen to the latest designs. ([#2053](https://github.com/vector-im/element-x-ios/issues/2053))
+
+🐛 Bugfixes
+
+- Fix a regression where the forced logout indicator was presented on the hidden overlay window. ([#2063](https://github.com/vector-im/element-x-ios/pull/2063))
+- Don't show the call button on macOS. ([#2064](https://github.com/vector-im/element-x-ios/pull/2064))
+- Fix for the status bar being visible during UI tests. ([#2065](https://github.com/vector-im/element-x-ios/pull/2065))
+- Fix room list search bar focus glitches ([#2112](https://github.com/vector-im/element-x-ios/pull/2112))
+- Added proper accessibility to read receipts. ([#1139](https://github.com/vector-im/element-x-ios/issues/1139))
+- Added a small artificial delay when resending a failed message if it fails instantly, for better UX. ([#1352](https://github.com/vector-im/element-x-ios/issues/1352))
+- Remove push notification registration on logout ([#1619](https://github.com/vector-im/element-x-ios/issues/1619))
+- Fix an animation glitch when signing in on iOS 16. ([#1807](https://github.com/vector-im/element-x-ios/issues/1807))
+- Long replies no longer overlay the replied message. ([#1832](https://github.com/vector-im/element-x-ios/issues/1832))
+- Fix a bug where tapping a call link could open the call with a keyboard obscuring the sheet. ([#2025](https://github.com/vector-im/element-x-ios/issues/2025))
+- Fix speech to text not working properly in RTE. ([#2030](https://github.com/vector-im/element-x-ios/issues/2030))
+- Prevent the room list from staying empty after cancelling a search ([#2040](https://github.com/vector-im/element-x-ios/issues/2040))
+- Prevent QuickLook from breaking media uploading on Mac, replace the preview with a plain filename label ([#2058](https://github.com/vector-im/element-x-ios/issues/2058))
+- Prevent crashes when inserting mention pills in the composers on Mac ([#2070](https://github.com/vector-im/element-x-ios/issues/2070))
+- Disable underlining for links defined in the html body ([#2117](https://github.com/vector-im/element-x-ios/issues/2117))
+
 ## Changes in 1.4.1 (2023-11-07)
 
 🙌 Improvements
