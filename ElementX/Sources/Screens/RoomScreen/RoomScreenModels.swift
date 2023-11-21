@@ -193,9 +193,14 @@ struct ReactionSummaryInfo: Identifiable {
     }
 }
 
-struct ReadReceiptSummaryInfo: Identifiable {
-    let orderedReceipts: [ReadReceipt]
+final class ReadReceiptSummaryInfo: Identifiable, ObservableObject {
+    @Published var orderedReceipts: [ReadReceipt]
     let id: TimelineItemIdentifier
+    
+    init(orderedReceipts: [ReadReceipt], id: TimelineItemIdentifier) {
+        self.orderedReceipts = orderedReceipts
+        self.id = id
+    }
 }
 
 enum RoomScreenErrorType: Hashable {

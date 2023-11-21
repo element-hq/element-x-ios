@@ -539,6 +539,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
 
     private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {
+        defer {
+            if state.bindings.readReceiptsSummaryInfo?.id == item.id,
+               let orderedReceipts = (item as? EventBasedTimelineItemProtocol)?.properties.orderedReadReceipts {
+                state.bindings.readReceiptsSummaryInfo?.orderedReceipts = orderedReceipts
+            }
+        }
         if let timelineItemViewState = state.timelineViewState.itemsDictionary[item.id.timelineID] {
             timelineItemViewState.groupStyle = groupStyle
             timelineItemViewState.type = .init(item: item)

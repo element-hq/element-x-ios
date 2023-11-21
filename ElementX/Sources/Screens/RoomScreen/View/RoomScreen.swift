@@ -66,7 +66,7 @@ struct RoomScreen: View {
                     .edgesIgnoringSafeArea([.bottom])
             }
             .sheet(item: $context.readReceiptsSummaryInfo) {
-                ReadReceiptsSummaryView(orderedReadReceipts: $0.orderedReceipts)
+                ReadReceiptsSummaryView(summary: $0)
                     .environmentObject(context)
             }
             .interactiveQuickLook(item: $context.mediaPreviewItem)

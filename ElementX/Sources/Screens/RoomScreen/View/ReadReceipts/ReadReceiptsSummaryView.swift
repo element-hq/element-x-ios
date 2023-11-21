@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct ReadReceiptsSummaryView: View {
-    let orderedReadReceipts: [ReadReceipt]
+    @ObservedObject var summary: ReadReceiptSummaryInfo
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     
     var body: some View {
@@ -28,7 +28,7 @@ struct ReadReceiptsSummaryView: View {
                 .padding(.horizontal, 16)
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(orderedReadReceipts) { receipt in
+                    ForEach(summary.orderedReceipts) { receipt in
                         ReadReceiptCell(readReceipt: receipt,
                                         memberState: context.viewState.members[receipt.userID],
                                         imageProvider: context.imageProvider)
@@ -40,6 +40,7 @@ struct ReadReceiptsSummaryView: View {
         .presentationDetents([.medium, .large])
         .presentationBackground(Color.compound.bgCanvasDefault)
         .presentationDragIndicator(.visible)
+        .animation(.elementDefault, value: summary.orderedReceipts)
     }
 }
 
@@ -74,7 +75,8 @@ struct ReadReceiptsSummaryView_Previews: PreviewProvider, TestablePreview {
     ]
     
     static var previews: some View {
-        ReadReceiptsSummaryView(orderedReadReceipts: orderedReadReceipts)
+        ReadReceiptsSummaryView(summary: .init(orderedReceipts: orderedReadReceipts,
+                                               id: .random))
             .environmentObject(viewModel.context)
     }
 }
