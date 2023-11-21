@@ -133,6 +133,7 @@ private struct MessageComposerReplyHeader: View {
     var body: some View {
         TimelineReplyView(placement: .composer, timelineItemReplyDetails: replyDetails)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .fixedSize(horizontal: false, vertical: true)
             .padding(4.0)
             .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 13, style: .circular))
             .overlay(alignment: .topTrailing) {
