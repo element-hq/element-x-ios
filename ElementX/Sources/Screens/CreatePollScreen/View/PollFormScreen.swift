@@ -58,7 +58,7 @@ struct PollFormScreen: View {
             }
             .textFieldStyle(.compoundForm)
             .focused($focus, equals: .question)
-            .accessibilityIdentifier(A11yIdentifiers.createPollScreen.question)
+            .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.question)
             .onSubmit {
                 focus = context.options.indices.first.map { .option(index: $0) }
             }
@@ -81,7 +81,7 @@ struct PollFormScreen: View {
                         context.send(viewAction: .deleteOption(index: index))
                     }
                     .focused($focus, equals: .option(index: index))
-                    .accessibilityIdentifier(A11yIdentifiers.createPollScreen.optionID(index))
+                    .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.optionID(index))
                     .onSubmit {
                         let nextOptionIndex = index == context.options.endIndex - 1 ? nil : index + 1
                         focus = nextOptionIndex.map { .option(index: $0) }
@@ -98,7 +98,7 @@ struct PollFormScreen: View {
                     context.send(viewAction: .addOption)
                     focus = context.options.indices.last.map { .option(index: $0) }
                 }
-                .accessibilityIdentifier(A11yIdentifiers.createPollScreen.addOption)
+                .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.addOption)
             }
         }
         .compoundFormSection()
@@ -107,7 +107,7 @@ struct PollFormScreen: View {
     private var showResultsSection: some View {
         Section {
             Toggle(L10n.screenCreatePollAnonymousDesc, isOn: $context.isUndisclosed)
-                .accessibilityIdentifier(A11yIdentifiers.createPollScreen.pollKind)
+                .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.pollKind)
         }
         .compoundFormSection()
     }
@@ -142,7 +142,7 @@ struct PollFormScreen: View {
                 context.send(viewAction: .submit)
             }
             .disabled(context.viewState.isSubmitButtonDisabled)
-            .accessibilityIdentifier(A11yIdentifiers.createPollScreen.create)
+            .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.create)
         }
     }
 }

@@ -45,7 +45,7 @@ enum A11yIdentifiers {
     static let migrationScreen = MigrationScreen()
     static let notificationSettingsScreen = NotificationSettingsScreen()
     static let notificationSettingsEditScreen = NotificationSettingsEditScreen()
-    static let createPollScreen = CreatePollScreen()
+    static let pollFormScreen = PollFormScreen()
     
     struct AlertInfo {
         let primaryButton = "alert_info-primary_button"
@@ -234,13 +234,13 @@ enum A11yIdentifiers {
         let roomTopic = "create_room-room_topic"
     }
 
-    struct CreatePollScreen {
-        let question = "create_poll-question"
-        let create = "create_poll-create"
-        let addOption = "create_poll-add_option"
-        let pollKind = "create_poll-kind"
+    struct PollFormScreen {
+        let question = "poll_form-question"
+        let create = "poll_form-create"
+        let addOption = "poll_form-add_option"
+        let pollKind = "poll_form-kind"
 
-        private let optionPrefix = "create_poll-option"
+        private let optionPrefix = "poll_form-option"
 
         func optionID(_ index: Int) -> String {
             "\(optionPrefix)-\(index)"

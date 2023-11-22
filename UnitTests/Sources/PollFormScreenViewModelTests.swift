@@ -19,7 +19,7 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class CreatePollScreenViewModelTests: XCTestCase {
+class PollFormScreenViewModelTests: XCTestCase {
     var viewModel: PollFormScreenViewModelProtocol!
     
     var context: PollFormScreenViewModelType.Context {
@@ -27,14 +27,14 @@ class CreatePollScreenViewModelTests: XCTestCase {
     }
     
     override func setUpWithError() throws {
-        viewModel = PollFormScreenViewModel()
+        viewModel = PollFormScreenViewModel(mode: .new)
     }
 
     func testInitialState() {
         XCTAssertEqual(context.options.count, 2)
         XCTAssertTrue(context.options.allSatisfy(\.text.isEmpty))
         XCTAssertTrue(context.question.isEmpty)
-        XCTAssertTrue(context.viewState.bindings.isCreateButtonDisabled)
+        XCTAssertTrue(context.viewState.isSubmitButtonDisabled)
         XCTAssertFalse(context.viewState.bindings.isUndisclosed)
     }
 
@@ -42,22 +42,22 @@ class CreatePollScreenViewModelTests: XCTestCase {
         context.question = "foo"
         context.options[0].text = "bla1"
         context.options[1].text = "bla2"
-        XCTAssertFalse(context.viewState.bindings.isCreateButtonDisabled)
+        XCTAssertFalse(context.viewState.isSubmitButtonDisabled)
 
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
-            case .create:
+            case .submit:
                 return true
             default:
                 return false
             }
         }
         
-        context.send(viewAction: .create)
+        context.send(viewAction: .submit)
         
         let action = try await deferred.fulfill()
 
-        guard case .create(let question, let options, let kind) = action else {
+        guard case .submit(let question, let options, let kind) = action else {
             XCTFail("Unexpected action")
             return
         }
@@ -73,6 +73,6 @@ class CreatePollScreenViewModelTests: XCTestCase {
         context.options[0].text = "bla"
         context.options[1].text = "bla"
         context.send(viewAction: .addOption)
-        XCTAssertTrue(context.viewState.bindings.isCreateButtonDisabled)
+        XCTAssertTrue(context.viewState.isSubmitButtonDisabled)
     }
 }
