@@ -235,13 +235,12 @@ enum A11yIdentifiers {
     }
 
     struct PollFormScreen {
-        let question = "poll_form-question"
-        let create = "poll_form-create"
         let addOption = "poll_form-add_option"
         let pollKind = "poll_form-kind"
+        let question = "poll_form-question"
+        let submit = "poll_form-submit"
 
         private let optionPrefix = "poll_form-option"
-
         func optionID(_ index: Int) -> String {
             "\(optionPrefix)-\(index)"
         }

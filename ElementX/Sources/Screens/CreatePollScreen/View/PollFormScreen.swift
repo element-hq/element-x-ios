@@ -142,7 +142,7 @@ struct PollFormScreen: View {
                 context.send(viewAction: .submit)
             }
             .disabled(context.viewState.isSubmitButtonDisabled)
-            .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.create)
+            .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.submit)
         }
     }
 }
