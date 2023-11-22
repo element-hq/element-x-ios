@@ -153,11 +153,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             switch appRoute {
             case .room, .roomDetails, .roomList, .roomMemberDetails:
                 self.roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-            case .invites:
-                if UIDevice.current.isPhone {
-                    self.roomFlowCoordinator.clearRoute(animated: animated)
+            case .invites(let roomID):
+                Task {
+                    await self.handleInviteRoute(roomID: roomID, animated: animated)
                 }
-                self.stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
             case .genericCallLink(let url):
                 self.navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
             case .oidcCallback:
@@ -165,6 +164,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .settings, .chatBackupSettings:
                 settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             }
+        }
+    }
+    
+    private func handleInviteRoute(roomID: String, animated: Bool) async {
+        if await userSession.clientProxy.roomForIdentifier(roomID)?.isJoined == true {
+            roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: animated)
+        } else {
+            if UIDevice.current.isPhone {
+                roomFlowCoordinator.clearRoute(animated: animated)
+            }
+            stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
         }
     }
 

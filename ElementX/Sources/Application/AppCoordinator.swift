@@ -257,7 +257,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         case NotificationConstants.Category.message:
             handleAppRoute(.room(roomID: roomID))
         case NotificationConstants.Category.invite:
-            handleAppRoute(.invites)
+            handleAppRoute(.invites(roomID: roomID))
         default:
             break
         }

@@ -22,7 +22,7 @@ enum AppRoute: Equatable {
     case room(roomID: String)
     case roomDetails(roomID: String)
     case roomMemberDetails(userID: String)
-    case invites
+    case invites(roomID: String)
     case genericCallLink(url: URL)
     case settings
     case chatBackupSettings
