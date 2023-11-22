@@ -17,15 +17,15 @@
 import Compound
 import SwiftUI
 
-struct CreatePollScreen: View {
-    @ObservedObject var context: CreatePollScreenViewModel.Context
+struct PollFormScreen: View {
+    @ObservedObject var context: PollFormScreenViewModel.Context
     @FocusState var focus: Focus?
-
+    
     enum Focus: Hashable {
         case question
         case option(index: Int)
     }
-
+    
     var body: some View {
         Form {
             questionSection
@@ -33,7 +33,7 @@ struct CreatePollScreen: View {
             showResultsSection
             deletePollSection
         }
-        .track(screen: .createPoll)
+        .trackAnalyticsIfNeeded(context: context)
         .compoundForm()
         .scrollDismissesKeyboard(.immediately)
         .environment(\.editMode, .constant(.active))
@@ -44,9 +44,9 @@ struct CreatePollScreen: View {
         .interactiveDismissDisabled(context.viewState.formContentHasChanged)
         .alert(item: $context.alertInfo)
     }
-
+    
     // MARK: - Private
-
+    
     private var questionSection: some View {
         Section(L10n.screenCreatePollQuestionDesc) {
             TextField(text: $context.question) {
@@ -66,18 +66,18 @@ struct CreatePollScreen: View {
         }
         .compoundFormSection()
     }
-
+    
     private var optionsSection: some View {
         Section {
             ForEach(context.options) { option in
                 if let index = context.options.firstIndex(of: option) {
-                    CreatePollOptionView(text: $context.options[index].text.limited(to: 240),
-                                         placeholder: L10n.screenCreatePollAnswerHint(index + 1),
-                                         canDeleteItem: context.options.count > 2) {
+                    PollFormOptionView(text: $context.options[index].text.limited(to: 240),
+                                       placeholder: L10n.screenCreatePollAnswerHint(index + 1),
+                                       canDeleteItem: context.options.count > 2) {
                         if case .option(let focusedIndex) = focus, focusedIndex == index {
                             focus = nil
                         }
-
+                        
                         context.send(viewAction: .deleteOption(index: index))
                     }
                     .focused($focus, equals: .option(index: index))
@@ -92,7 +92,7 @@ struct CreatePollScreen: View {
             .onMove { offsets, toOffset in
                 context.options.move(fromOffsets: offsets, toOffset: toOffset)
             }
-
+            
             if context.options.count < context.viewState.maxNumberOfOptions {
                 Button(L10n.screenCreatePollAddOptionBtn) {
                     context.send(viewAction: .addOption)
@@ -103,7 +103,7 @@ struct CreatePollScreen: View {
         }
         .compoundFormSection()
     }
-
+    
     private var showResultsSection: some View {
         Section {
             Toggle(L10n.screenCreatePollAnonymousDesc, isOn: $context.isUndisclosed)
@@ -128,7 +128,7 @@ struct CreatePollScreen: View {
             EmptyView()
         }
     }
-
+    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
@@ -136,7 +136,7 @@ struct CreatePollScreen: View {
                 context.send(viewAction: .cancel)
             }
         }
-
+        
         ToolbarItem(placement: .confirmationAction) {
             Button(context.viewState.submitButtonTitle) {
                 context.send(viewAction: .submit)
@@ -147,13 +147,25 @@ struct CreatePollScreen: View {
     }
 }
 
-private struct CreatePollOptionView: View {
+private extension View {
+    @MainActor @ViewBuilder
+    func trackAnalyticsIfNeeded(context: PollFormScreenViewModel.Context) -> some View {
+        switch context.viewState.mode {
+        case .edit:
+            self
+        case .new:
+            track(screen: .createPoll)
+        }
+    }
+}
+
+private struct PollFormOptionView: View {
     @Environment(\.editMode) var editMode
     @Binding var text: String
     let placeholder: String
     let canDeleteItem: Bool
     let deleteAction: () -> Void
-
+    
     var body: some View {
         HStack(spacing: 8) {
             if editMode?.wrappedValue == .active {
@@ -178,11 +190,11 @@ private struct CreatePollOptionView: View {
 
 // MARK: - Previews
 
-struct CreatePollScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = CreatePollScreenViewModel(mode: .new)
+struct PollFormScreen_Previews: PreviewProvider, TestablePreview {
+    static let viewModel = PollFormScreenViewModel(mode: .new)
     static var previews: some View {
         NavigationStack {
-            CreatePollScreen(context: viewModel.context)
+            PollFormScreen(context: viewModel.context)
         }
     }
 }

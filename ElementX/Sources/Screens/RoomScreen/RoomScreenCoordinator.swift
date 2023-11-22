@@ -36,7 +36,7 @@ enum RoomScreenCoordinatorAction {
     case presentMediaUploadPreviewScreen(URL)
     case presentRoomDetails
     case presentLocationPicker
-    case presentPollForm(mode: CreatePollMode)
+    case presentPollForm(mode: PollFormMode)
     case presentLocationViewer(body: String, geoURI: GeoURI, description: String?)
     case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case presentRoomMemberDetails(member: RoomMemberProxyProtocol)

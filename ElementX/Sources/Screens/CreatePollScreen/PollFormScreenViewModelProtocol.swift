@@ -17,7 +17,7 @@
 import Combine
 
 @MainActor
-protocol CreatePollScreenViewModelProtocol {
-    var actions: AnyPublisher<CreatePollScreenViewModelAction, Never> { get }
-    var context: CreatePollScreenViewModelType.Context { get }
+protocol PollFormScreenViewModelProtocol {
+    var actions: AnyPublisher<PollFormScreenViewModelAction, Never> { get }
+    var context: PollFormScreenViewModelType.Context { get }
 }

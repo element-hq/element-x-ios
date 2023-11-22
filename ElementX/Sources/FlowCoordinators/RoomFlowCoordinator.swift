@@ -182,9 +182,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.dismissNotificationSettingsScreen, .notificationSettingsScreen(let roomID)):
                 return .roomDetails(roomID: roomID, isRoot: false)
 
-            case (.presentCreatePollForm, .room(let roomID)):
-                return .createPollForm(roomID: roomID)
-            case (.dismissCreatePollForm, .createPollForm(let roomID)):
+            case (.presentPollForm, .room(let roomID)):
+                return .pollForm(roomID: roomID)
+            case (.dismissPollForm, .pollForm(let roomID)):
                 return .room(roomID: roomID)
 
             default:
@@ -260,9 +260,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.notificationSettingsScreen, .dismissNotificationSettingsScreen, .roomDetails):
                 break
 
-            case (.room, .presentCreatePollForm(let mode), .createPollForm):
-                presentCreatePollForm(mode: mode)
-            case (.createPollForm, .dismissCreatePollForm, .room):
+            case (.room, .presentPollForm(let mode), .pollForm):
+                presentPollForm(mode: mode)
+            case (.pollForm, .dismissPollForm, .room):
                 break
 
             default:
@@ -375,7 +375,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentLocationPicker:
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
                 case .presentPollForm(let mode):
-                    stateMachine.tryEvent(.presentCreatePollForm(mode: mode))
+                    stateMachine.tryEvent(.presentPollForm(mode: mode))
                 case .presentLocationViewer(_, let geoURI, let description):
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)))
                 case .presentRoomMemberDetails(member: let member):
@@ -631,9 +631,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    private func presentCreatePollForm(mode: CreatePollMode) {
+    private func presentPollForm(mode: PollFormMode) {
         let navigationStackCoordinator = NavigationStackCoordinator()
-        let coordinator = CreatePollScreenCoordinator(parameters: .init(mode: mode))
+        let coordinator = PollFormScreenCoordinator(parameters: .init(mode: mode))
         navigationStackCoordinator.setRootCoordinator(coordinator)
 
         coordinator.actions
@@ -661,7 +661,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
 
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissCreatePollForm)
+            self?.stateMachine.tryEvent(.dismissPollForm)
         }
     }
     
@@ -709,7 +709,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func deletePoll(mode: CreatePollMode) {
+    private func deletePoll(mode: PollFormMode) {
         Task {
             guard case .edit(let pollStartID, _) = mode, let roomProxy = self.roomProxy else {
                 self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
@@ -719,9 +719,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             let result = await roomProxy.redact(pollStartID)
             
             switch result {
-            case .success(let success):
+            case .success:
                 break
-            case .failure(let failure):
+            case .failure:
                 self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
             }
         }
@@ -850,7 +850,7 @@ private extension RoomFlowCoordinator {
         case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
         case messageForwarding(roomID: String, itemID: TimelineItemIdentifier)
         case notificationSettingsScreen(roomID: String)
-        case createPollForm(roomID: String)
+        case pollForm(roomID: String)
     }
     
     struct EventUserInfo {
@@ -889,8 +889,8 @@ private extension RoomFlowCoordinator {
         case presentNotificationSettingsScreen
         case dismissNotificationSettingsScreen
 
-        case presentCreatePollForm(mode: CreatePollMode)
-        case dismissCreatePollForm
+        case presentPollForm(mode: PollFormMode)
+        case dismissPollForm
     }
 }
 

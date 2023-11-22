@@ -17,30 +17,30 @@
 import Combine
 import SwiftUI
 
-struct CreatePollScreenCoordinatorParameters {
-    let mode: CreatePollMode
+struct PollFormScreenCoordinatorParameters {
+    let mode: PollFormMode
 }
 
-enum CreatePollScreenCoordinatorAction {
+enum PollFormScreenCoordinatorAction {
     case cancel
     case delete
     case submit(question: String, options: [String], pollKind: Poll.Kind)
 }
 
-final class CreatePollScreenCoordinator: CoordinatorProtocol {
-    private let parameters: CreatePollScreenCoordinatorParameters
-    private var viewModel: CreatePollScreenViewModelProtocol
-    private let actionsSubject: PassthroughSubject<CreatePollScreenCoordinatorAction, Never> = .init()
+final class PollFormScreenCoordinator: CoordinatorProtocol {
+    private let parameters: PollFormScreenCoordinatorParameters
+    private var viewModel: PollFormScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<PollFormScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
-    var actions: AnyPublisher<CreatePollScreenCoordinatorAction, Never> {
+    var actions: AnyPublisher<PollFormScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: CreatePollScreenCoordinatorParameters) {
+    init(parameters: PollFormScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = CreatePollScreenViewModel(mode: parameters.mode)
+        viewModel = PollFormScreenViewModel(mode: parameters.mode)
     }
     
     func start() {
@@ -61,6 +61,6 @@ final class CreatePollScreenCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(CreatePollScreen(context: viewModel.context))
+        AnyView(PollFormScreen(context: viewModel.context))
     }
 }

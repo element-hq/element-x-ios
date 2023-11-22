@@ -20,14 +20,14 @@ import XCTest
 
 @MainActor
 class CreatePollScreenViewModelTests: XCTestCase {
-    var viewModel: CreatePollScreenViewModelProtocol!
+    var viewModel: PollFormScreenViewModelProtocol!
     
-    var context: CreatePollScreenViewModelType.Context {
+    var context: PollFormScreenViewModelType.Context {
         viewModel.context
     }
     
     override func setUpWithError() throws {
-        viewModel = CreatePollScreenViewModel()
+        viewModel = PollFormScreenViewModel()
     }
 
     func testInitialState() {

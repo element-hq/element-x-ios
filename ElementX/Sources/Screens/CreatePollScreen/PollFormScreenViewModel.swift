@@ -17,22 +17,22 @@
 import Combine
 import SwiftUI
 
-typealias CreatePollScreenViewModelType = StateStoreViewModel<CreatePollScreenViewState, CreatePollScreenViewAction>
+typealias PollFormScreenViewModelType = StateStoreViewModel<PollFormScreenViewState, PollFormScreenViewAction>
 
-class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreenViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<CreatePollScreenViewModelAction, Never> = .init()
+class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewModelProtocol {
+    private var actionsSubject: PassthroughSubject<PollFormScreenViewModelAction, Never> = .init()
     
-    var actions: AnyPublisher<CreatePollScreenViewModelAction, Never> {
+    var actions: AnyPublisher<PollFormScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(mode: CreatePollMode) {
+    init(mode: PollFormMode) {
         super.init(initialViewState: .init(mode: mode))
     }
     
     // MARK: - Public
     
-    override func process(viewAction: CreatePollScreenViewAction) {
+    override func process(viewAction: PollFormScreenViewAction) {
         switch viewAction {
         case .submit:
             actionsSubject.send(.submit(question: state.bindings.question,

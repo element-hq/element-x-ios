@@ -16,18 +16,18 @@
 
 import Foundation
 
-enum CreatePollScreenViewModelAction {
+enum PollFormScreenViewModelAction {
     case cancel
     case delete
     case submit(question: String, options: [String], pollKind: Poll.Kind)
 }
 
-struct CreatePollScreenViewState: BindableState {
-    let mode: CreatePollMode
+struct PollFormScreenViewState: BindableState {
+    let mode: PollFormMode
     let maxNumberOfOptions = 20
-    var bindings: CreatePollScreenViewStateBindings = .init()
+    var bindings: PollFormScreenViewStateBindings = .init()
     
-    init(mode: CreatePollMode) {
+    init(mode: PollFormMode) {
         self.mode = mode
         
         switch mode {
@@ -66,7 +66,7 @@ struct CreatePollScreenViewState: BindableState {
     }
     
     var formContentHasChanged: Bool {
-        let initialBindings: CreatePollScreenViewStateBindings
+        let initialBindings: PollFormScreenViewStateBindings
         
         switch mode {
         case .new:
@@ -79,12 +79,12 @@ struct CreatePollScreenViewState: BindableState {
     }
 }
 
-enum CreatePollMode: Hashable {
+enum PollFormMode: Hashable {
     case new
     case edit(eventID: String, poll: Poll)
 }
 
-struct CreatePollScreenViewStateBindings: Equatable {
+struct PollFormScreenViewStateBindings: Equatable {
     var question = ""
     var options: [Option] = [.init(), .init()]
     var isUndisclosed = false
@@ -100,12 +100,12 @@ struct CreatePollScreenViewStateBindings: Equatable {
 
     var alertInfo: AlertInfo<UUID>?
     
-    static func == (lhs: CreatePollScreenViewStateBindings, rhs: CreatePollScreenViewStateBindings) -> Bool {
+    static func == (lhs: PollFormScreenViewStateBindings, rhs: PollFormScreenViewStateBindings) -> Bool {
         lhs.question == rhs.question && lhs.options.map(\.text) == rhs.options.map(\.text) && lhs.isUndisclosed == rhs.isUndisclosed
     }
 }
 
-extension CreatePollScreenViewStateBindings {
+extension PollFormScreenViewStateBindings {
     init(poll: Poll) {
         self.init(question: poll.question,
                   options: poll.options.map { .init(text: $0.text) },
@@ -113,7 +113,7 @@ extension CreatePollScreenViewStateBindings {
     }
 }
 
-enum CreatePollScreenViewAction {
+enum PollFormScreenViewAction {
     case cancel
     case submit
     case delete
