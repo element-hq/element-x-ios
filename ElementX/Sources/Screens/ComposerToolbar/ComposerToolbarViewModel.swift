@@ -109,7 +109,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             default:
                 let sendHTML = ServiceLocator.shared.settings.richTextEditorEnabled
                 actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
-                                                 html: sendHTML ? wysiwygViewModel.content.html : nil,
+                                                 html: wysiwygViewModel.content.html,
                                                  mode: state.composerMode,
                                                  intentionalMentions: wysiwygViewModel
                                                      .getMentionsState()
