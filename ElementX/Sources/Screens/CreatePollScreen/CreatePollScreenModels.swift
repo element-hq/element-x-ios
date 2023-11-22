@@ -43,8 +43,7 @@ struct CreatePollScreenViewState: BindableState {
         case .new:
             return L10n.screenCreatePollTitle
         case .edit:
-            #warning("AG: localise me")
-            return "Edit poll"
+            return L10n.screenEditPollTitle
         }
     }
     

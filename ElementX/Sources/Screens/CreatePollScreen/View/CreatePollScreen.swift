@@ -120,8 +120,7 @@ struct CreatePollScreen: View {
                 Button(role: .destructive) {
                     context.send(viewAction: .delete)
                 } label: {
-                    #warning("AG: localise me")
-                    Text("Delete poll")
+                    Text(L10n.actionDeletePoll)
                 }
             }
             .compoundFormSection()

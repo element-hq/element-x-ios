@@ -93,9 +93,7 @@ struct PollRoomTimelineView: View {
             Button {
                 toolbarAction()
             } label: {
-                #warning("AG: localise me")
-                let actionText = !poll.hasVotes ? "Edit Poll" : L10n.actionEndPoll
-                Text(actionText)
+                Text(poll.hasVotes ? L10n.actionEndPoll : L10n.actionEditPoll)
                     .lineLimit(2, reservesSpace: false)
                     .font(.compound.bodyLGSemibold)
                     .foregroundColor(.compound.textOnSolidPrimary)
