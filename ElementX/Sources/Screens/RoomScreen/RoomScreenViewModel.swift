@@ -188,7 +188,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.displayDocumentPicker)
         case .displayLocationPicker:
             actionsSubject.send(.displayLocationPicker)
-        case .displayPollForm:
+        case .displayNewPollForm:
             actionsSubject.send(.displayPollForm(mode: .new))
         case .handlePasteOrDrop(let provider):
             roomScreenInteractionHandler.handlePasteOrDrop(provider)
