@@ -31,7 +31,7 @@ enum ComposerToolbarVoiceMessageAction {
 }
 
 enum ComposerToolbarViewModelAction {
-    case sendMessage(plain: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions)
+    case sendMessage(plain: String, html: String, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions)
     case displayCameraPicker
     case displayMediaPicker
     case displayDocumentPicker

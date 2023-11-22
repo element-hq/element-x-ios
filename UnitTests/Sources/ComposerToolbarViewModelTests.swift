@@ -180,4 +180,26 @@ class ComposerToolbarViewModelTests: XCTestCase {
         
         try await deferred.fulfill()
     }
+    
+    func testMentionsWorkInMarkdownMode() async throws {
+        appSettings.richTextEditorEnabled = false
+        
+        let userID = "@test:matrix.org"
+        let expectedFormattedBody = "<a href=\"https://matrix.to/#/@test:matrix.org\">Test</a> "
+        let suggestion = SuggestionItem.user(item: .init(id: userID, displayName: "Test", avatarURL: nil))
+        viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case let .sendMessage(_, html, _, _):
+                XCTAssertEqual(html, expectedFormattedBody)
+                return html == expectedFormattedBody
+            default:
+                return false
+            }
+        }
+        viewModel.context.send(viewAction: .sendMessage)
+        
+        try await deferred.fulfill()
+    }
 }
