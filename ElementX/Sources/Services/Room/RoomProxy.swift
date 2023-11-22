@@ -131,6 +131,10 @@ class RoomProxy: RoomProxyProtocol {
         room.membership() == .joined
     }
     
+    var membership: Membership {
+        room.membership()
+    }
+    
     var isDirect: Bool {
         room.isDirect()
     }

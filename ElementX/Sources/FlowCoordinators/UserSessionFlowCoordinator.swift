@@ -151,13 +151,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch appRoute {
-            case .room, .roomDetails, .roomList, .roomMemberDetails:
-                self.roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-            case .invites:
-                if UIDevice.current.isPhone {
-                    self.roomFlowCoordinator.clearRoute(animated: animated)
+            case .room(let roomID):
+                Task {
+                    await self.handleRoomRoute(roomID: roomID, animated: animated)
                 }
-                self.stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
+            case .roomDetails, .roomList, .roomMemberDetails:
+                self.roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             case .genericCallLink(let url):
                 self.navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
             case .oidcCallback:
@@ -165,6 +164,21 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .settings, .chatBackupSettings:
                 settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             }
+        }
+    }
+    
+    private func handleRoomRoute(roomID: String, animated: Bool) async {
+        switch await userSession.clientProxy.roomForIdentifier(roomID)?.membership {
+        case .invited:
+            if UIDevice.current.isPhone {
+                roomFlowCoordinator.clearRoute(animated: animated)
+            }
+            stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
+        case .joined:
+            roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: animated)
+        case .left, .none:
+            // Do nothing but maybe we should ask design to have some kind of error state
+            break
         }
     }
 
