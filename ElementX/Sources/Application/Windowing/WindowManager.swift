@@ -63,10 +63,10 @@ class WindowManager {
     
     /// Shows the main and overlay window combo, hiding the alternate window.
     func switchToMain() {
+        mainWindow.isHidden = false
+        overlayWindow.isHidden = false
+        
         switchTask = Task {
-            mainWindow.isHidden = false
-            overlayWindow.isHidden = false
-            
             // Delay hiding to make sure the main windows are visible.
             try await Task.sleep(for: windowHideDelay)
             
@@ -76,14 +76,17 @@ class WindowManager {
     
     /// Shows the alternate window, hiding the main and overlay combo.
     func switchToAlternate() {
+        alternateWindow.isHidden = false
+        
+        // We don't know what route the app will use when returning back
+        // to the main window, so end any editing operation now to avoid
+        // e.g. the keyboard being displayed on top of a call sheet.
+        mainWindow.endEditing(true)
+        
+        // alternateWindow.isHidden = false cannot got inside the Task otherwise the timing
+        // is poor when you lock the phone - you briefly see the main window for a few
+        // frames after you've unlocked the phone and then the placeholder animates in.
         switchTask = Task {
-            alternateWindow.isHidden = false
-            
-            // We don't know what route the app will use when returning back
-            // to the main window, so end any editing operation now to avoid
-            // e.g. the keyboard being displayed on top of a call sheet.
-            mainWindow.endEditing(true)
-            
             // Delay hiding to make sure the alternate window is visible.
             try await Task.sleep(for: windowHideDelay)
             
