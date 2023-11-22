@@ -101,8 +101,17 @@ struct NotificationContentBuilder {
         
         let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         let message = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName, prefixWithSenderName: false).characters)
-        
-        notification.body = notificationItem.hasMention ? L10n.notificationMentionedYouBody(message) : message
+        let body: String
+        if notificationItem.hasMention {
+            if let senderDisplayName = notificationItem.senderDisplayName {
+                body = L10n.notificationMentionedYouBody(senderDisplayName, message)
+            } else {
+                body = L10n.notificationMentionedYouFallbackBody(message)
+            }
+        } else {
+            body = message
+        }
+        notification.body = body
         
         switch messageType {
         case .image(content: let content):

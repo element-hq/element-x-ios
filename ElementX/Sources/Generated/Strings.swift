@@ -18,16 +18,10 @@ public enum L10n {
   }
   /// Hide password
   public static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
-  /// Jump to bottom
-  public static var a11yJumpToBottom: String { return L10n.tr("Localizable", "a11y_jump_to_bottom") }
   /// Mentions only
   public static var a11yNotificationsMentionsOnly: String { return L10n.tr("Localizable", "a11y_notifications_mentions_only") }
   /// Muted
   public static var a11yNotificationsMuted: String { return L10n.tr("Localizable", "a11y_notifications_muted") }
-  /// Page %1$d
-  public static func a11yPageN(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "a11y_page_n", p1)
-  }
   /// Pause
   public static var a11yPause: String { return L10n.tr("Localizable", "a11y_pause") }
   /// PIN field
@@ -38,12 +32,6 @@ public enum L10n {
   public static var a11yPoll: String { return L10n.tr("Localizable", "a11y_poll") }
   /// Ended poll
   public static var a11yPollEnd: String { return L10n.tr("Localizable", "a11y_poll_end") }
-  /// React with %1$@
-  public static func a11yReactWith(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "a11y_react_with", String(describing: p1))
-  }
-  /// React with other emojis
-  public static var a11yReactWithOtherEmojis: String { return L10n.tr("Localizable", "a11y_react_with_other_emojis") }
   /// Read by %1$@ and %2$@
   public static func a11yReadReceiptsMultiple(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "a11y_read_receipts_multiple", String(describing: p1), String(describing: p2))
@@ -58,10 +46,6 @@ public enum L10n {
   }
   /// Tap to show all
   public static var a11yReadReceiptsTapToShowAll: String { return L10n.tr("Localizable", "a11y_read_receipts_tap_to_show_all") }
-  /// Remove reaction with %1$@
-  public static func a11yRemoveReactionWith(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "a11y_remove_reaction_with", String(describing: p1))
-  }
   /// Send files
   public static var a11ySendFiles: String { return L10n.tr("Localizable", "a11y_send_files") }
   /// Show password
@@ -106,16 +90,12 @@ public enum L10n {
   public static var actionCreateARoom: String { return L10n.tr("Localizable", "action_create_a_room") }
   /// Decline
   public static var actionDecline: String { return L10n.tr("Localizable", "action_decline") }
-  /// Delete Poll
-  public static var actionDeletePoll: String { return L10n.tr("Localizable", "action_delete_poll") }
   /// Disable
   public static var actionDisable: String { return L10n.tr("Localizable", "action_disable") }
   /// Done
   public static var actionDone: String { return L10n.tr("Localizable", "action_done") }
   /// Edit
   public static var actionEdit: String { return L10n.tr("Localizable", "action_edit") }
-  /// Edit poll
-  public static var actionEditPoll: String { return L10n.tr("Localizable", "action_edit_poll") }
   /// Enable
   public static var actionEnable: String { return L10n.tr("Localizable", "action_enable") }
   /// End poll
@@ -564,9 +544,15 @@ public enum L10n {
   }
   /// Invited you to chat
   public static var notificationInviteBody: String { return L10n.tr("Localizable", "notification_invite_body") }
-  /// Mentioned you: %1$@
-  public static func notificationMentionedYouBody(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "notification_mentioned_you_body", String(describing: p1))
+  /// %1$@ mentioned you.
+  /// %2$@
+  public static func notificationMentionedYouBody(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "notification_mentioned_you_body", String(describing: p1), String(describing: p2))
+  }
+  /// You have been mentioned.
+  /// %1$@
+  public static func notificationMentionedYouFallbackBody(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "notification_mentioned_you_fallback_body", String(describing: p1))
   }
   /// New Messages
   public static var notificationNewMessages: String { return L10n.tr("Localizable", "notification_new_messages") }
@@ -928,8 +914,6 @@ public enum L10n {
   public static var screenDmDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_description") }
   /// Unblock user
   public static var screenDmDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_dm_details_unblock_user") }
-  /// Edit poll
-  public static var screenEditPollTitle: String { return L10n.tr("Localizable", "screen_edit_poll_title") }
   /// Display name
   public static var screenEditProfileDisplayName: String { return L10n.tr("Localizable", "screen_edit_profile_display_name") }
   /// Your display name
@@ -1616,6 +1600,11 @@ public enum L10n {
   public static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   public static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
+
+  public enum Action {
+    /// Edit poll
+    public static var editPoll: String { return L10n.tr("Localizable", "action.edit_poll") }
+  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces
