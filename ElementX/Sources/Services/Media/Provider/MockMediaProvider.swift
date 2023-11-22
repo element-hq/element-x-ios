@@ -18,6 +18,10 @@ import Foundation
 import UIKit
 
 struct MockMediaProvider: MediaProviderProtocol {
+    func loadThumbnailForSource(source: MediaSourceProxy, size: CGSize) async -> Result<Data, MediaProviderError> {
+        fatalError("Not implemented")
+    }
+    
     func imageFromSource(_ source: MediaSourceProxy?, size: CGSize?) -> UIImage? {
         guard source != nil else {
             return nil
