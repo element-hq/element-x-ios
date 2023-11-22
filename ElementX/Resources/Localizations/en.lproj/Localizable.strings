@@ -360,8 +360,8 @@
 "screen_create_poll_anonymous_desc" = "Show results only after poll ends";
 "screen_create_poll_anonymous_headline" = "Hide votes";
 "screen_create_poll_answer_hint" = "Option %1$d";
-"screen_create_poll_discard_confirmation" = "Are you sure you want to discard this poll?";
-"screen_create_poll_discard_confirmation_title" = "Discard Poll";
+"screen_create_poll_discard_confirmation" = "Your changes won’t be saved";
+"screen_create_poll_discard_confirmation_title" = "Cancel Poll";
 "screen_create_poll_question_desc" = "Question or topic";
 "screen_create_poll_question_hint" = "What is the poll about?";
 "screen_create_poll_title" = "Create Poll";
@@ -375,6 +375,8 @@
 "screen_create_room_public_option_title" = "Public room (anyone)";
 "screen_create_room_room_name_label" = "Room name";
 "screen_create_room_topic_label" = "Topic (optional)";
+"screen_edit_poll_delete_confirmation" = "Are you sure you want to delete this poll?";
+"screen_edit_poll_delete_confirmation_title" = "Delete Poll";
 "screen_edit_poll_title" = "Edit poll";
 "screen_edit_profile_display_name" = "Display name";
 "screen_edit_profile_display_name_placeholder" = "Your display name";

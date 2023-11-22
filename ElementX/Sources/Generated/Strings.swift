@@ -884,9 +884,9 @@ public enum L10n {
   public static func screenCreatePollAnswerHint(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_create_poll_answer_hint", p1)
   }
-  /// Are you sure you want to discard this poll?
+  /// Your changes won’t be saved
   public static var screenCreatePollDiscardConfirmation: String { return L10n.tr("Localizable", "screen_create_poll_discard_confirmation") }
-  /// Discard Poll
+  /// Cancel Poll
   public static var screenCreatePollDiscardConfirmationTitle: String { return L10n.tr("Localizable", "screen_create_poll_discard_confirmation_title") }
   /// Question or topic
   public static var screenCreatePollQuestionDesc: String { return L10n.tr("Localizable", "screen_create_poll_question_desc") }
@@ -928,6 +928,10 @@ public enum L10n {
   public static var screenDmDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_description") }
   /// Unblock user
   public static var screenDmDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_dm_details_unblock_user") }
+  /// Are you sure you want to delete this poll?
+  public static var screenEditPollDeleteConfirmation: String { return L10n.tr("Localizable", "screen_edit_poll_delete_confirmation") }
+  /// Delete Poll
+  public static var screenEditPollDeleteConfirmationTitle: String { return L10n.tr("Localizable", "screen_edit_poll_delete_confirmation_title") }
   /// Edit poll
   public static var screenEditPollTitle: String { return L10n.tr("Localizable", "screen_edit_poll_title") }
   /// Display name
