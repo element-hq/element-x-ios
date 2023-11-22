@@ -107,7 +107,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             case .previewVoiceMessage:
                 actionsSubject.send(.voiceMessage(.send))
             default:
-                let sendHTML = ServiceLocator.shared.settings.richTextEditorEnabled
                 actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
                                                  html: wysiwygViewModel.content.html,
                                                  mode: state.composerMode,
