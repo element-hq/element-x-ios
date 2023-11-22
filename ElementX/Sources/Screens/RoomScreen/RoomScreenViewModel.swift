@@ -464,6 +464,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .recordVoiceMessage, .previewVoiceMessage:
             fatalError("invalid composer mode.")
         }
+        
+        state.timelineViewState.scrollToBottomPublisher.send(())
     }
         
     private func trackComposerMode(_ mode: RoomScreenComposerMode) {
