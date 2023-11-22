@@ -108,7 +108,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         if appLockService.biometricUnlockEnabled, appLockService.biometricUnlockTrusted {
             showPlaceholder() // For the unlock background.
             
-            if await appLockService.unlockWithBiometrics() {
+            if await appLockService.unlockWithBiometrics(), UIApplication.shared.applicationState == .active {
                 actionsSubject.send(.unlockApp)
                 return
             }
@@ -132,6 +132,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .appUnlocked:
+                guard UIApplication.shared.applicationState == .active else { return }
                 actionsSubject.send(.unlockApp)
             case .forceLogout:
                 actionsSubject.send(.forceLogout)
