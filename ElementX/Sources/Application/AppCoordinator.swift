@@ -252,15 +252,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         }
         
         // Handle here the account switching when available
-
-        switch content.categoryIdentifier {
-        case NotificationConstants.Category.message:
-            handleAppRoute(.room(roomID: roomID))
-        case NotificationConstants.Category.invite:
-            handleAppRoute(.invites(roomID: roomID))
-        default:
-            break
-        }
+        handleAppRoute(.room(roomID: roomID))
     }
     
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {

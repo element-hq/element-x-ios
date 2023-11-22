@@ -1878,11 +1878,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingIsTombstoned = value }
     }
     var underlyingIsTombstoned: Bool!
-    var isJoined: Bool {
-        get { return underlyingIsJoined }
-        set(value) { underlyingIsJoined = value }
+    var membership: Membership {
+        get { return underlyingMembership }
+        set(value) { underlyingMembership = value }
     }
-    var underlyingIsJoined: Bool!
+    var underlyingMembership: Membership!
     var hasOngoingCall: Bool {
         get { return underlyingHasOngoingCall }
         set(value) { underlyingHasOngoingCall = value }

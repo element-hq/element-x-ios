@@ -151,12 +151,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch appRoute {
-            case .room, .roomDetails, .roomList, .roomMemberDetails:
-                self.roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-            case .invites(let roomID):
+            case .room(let roomID):
                 Task {
-                    await self.handleInviteRoute(roomID: roomID, animated: animated)
+                    await self.handleRoomRoute(roomID: roomID, animated: animated)
                 }
+            case .roomDetails, .roomList, .roomMemberDetails:
+                self.roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             case .genericCallLink(let url):
                 self.navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
             case .oidcCallback:
@@ -167,14 +167,18 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func handleInviteRoute(roomID: String, animated: Bool) async {
-        if await userSession.clientProxy.roomForIdentifier(roomID)?.isJoined == true {
-            roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: animated)
-        } else {
+    private func handleRoomRoute(roomID: String, animated: Bool) async {
+        switch await userSession.clientProxy.roomForIdentifier(roomID)?.membership {
+        case .invited:
             if UIDevice.current.isPhone {
                 roomFlowCoordinator.clearRoute(animated: animated)
             }
             stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
+        case .joined:
+            roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: animated)
+        case .left, .none:
+            // Do nothing but maybe we should ask design to have some kind of error state
+            break
         }
     }
 
