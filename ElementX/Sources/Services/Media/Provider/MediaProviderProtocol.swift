@@ -21,10 +21,12 @@ enum MediaProviderError: Error {
     case failedRetrievingImage
     case failedRetrievingFile
     case invalidImageData
+    case failedRetrievingThumbnail
 }
 
 protocol MediaProviderProtocol: ImageProviderProtocol {
     func loadFileFromSource(_ source: MediaSourceProxy, body: String?) async -> Result<MediaFileHandleProxy, MediaProviderError>
+    func loadThumbnailForSource(source: MediaSourceProxy, size: CGSize) async -> Result<Data, MediaProviderError>
 }
 
 extension MediaProviderProtocol {

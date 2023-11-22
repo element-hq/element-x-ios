@@ -104,6 +104,18 @@ struct MediaProvider: MediaProviderProtocol {
         }
     }
     
+    // MARK: Thumbnail
+    
+    func loadThumbnailForSource(source: MediaSourceProxy, size: CGSize) async -> Result<Data, MediaProviderError> {
+        do {
+            let thumbnailData = try await mediaLoader.loadMediaThumbnailForSource(source, width: UInt(size.width), height: UInt(size.height))
+            return .success(thumbnailData)
+        } catch {
+            MXLog.error("Failed retrieving image with error: \(error)")
+            return .failure(.failedRetrievingThumbnail)
+        }
+    }
+    
     // MARK: - Private
     
     private func cacheKeyForURL(_ url: URL, size: CGSize?) -> String {

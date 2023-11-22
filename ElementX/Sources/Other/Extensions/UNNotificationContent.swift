@@ -117,7 +117,7 @@ extension UNMutableNotificationContent {
         var fetchedImage: INImage?
         let image: INImage
         if let mediaSource = icon.mediaSource {
-            switch await mediaProvider?.loadImageDataFromSource(mediaSource) {
+            switch await mediaProvider?.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
             case .success(let data):
                 fetchedImage = INImage(imageData: data)
             case .failure(let error):
