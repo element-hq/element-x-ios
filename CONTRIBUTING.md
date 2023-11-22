@@ -21,7 +21,7 @@ This will:
 
 ### Xcode
 
-We suggest using an Xcode version later than 13.2.1.
+We suggest using an Xcode version later than 15.0.1.
 
 The Xcode project can be directly compiled through the shared ElementX scheme which includes the main application as well as the unit and UI tests.
 
@@ -55,12 +55,13 @@ Git LFS is used to store UI test snapshots. `swift run tools setup-project` will
 
 ```
 git lfs install
+ln -s "$(which git-lfs)" "$(git --exec-path)/git-lfs"
 ```
 
 ### Snapshot Tests
 
 If you make changes to the UI you may cause existing UI Snapshot tests to fail. You can run the snapshot tests using `UITests` target. To update the reference snapshots, delete them from `element-x-ios/UITests/Sources/__Snapshots__/Application` and run the tests again. 
-These are the devices we store snapshots for that you will need to run against:
+These are the devices we store snapshots for that you will need to run against which need to use the iOS 16.4 simulator in en-US for consistency:
 - iPhone 14
 - iPad (9th generation)
 
