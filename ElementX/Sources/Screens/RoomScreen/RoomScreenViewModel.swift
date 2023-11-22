@@ -321,6 +321,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .displayMessageForwarding(let itemID):
                     actionsSubject.send(.displayMessageForwarding(itemID: itemID))
+                case .displayPollForm(let mode):
+                    actionsSubject.send(.displayPollForm(mode: mode))
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.displayReportContent(itemID: itemID, senderID: senderID))
                 case .displayMediaUploadPreviewScreen(let url):

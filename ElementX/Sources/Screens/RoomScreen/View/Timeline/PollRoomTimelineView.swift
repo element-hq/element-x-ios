@@ -93,7 +93,7 @@ struct PollRoomTimelineView: View {
             Button {
                 toolbarAction()
             } label: {
-                Text(poll.hasVotes ? L10n.actionEndPoll : L10n.actionEditPoll)
+                Text(timelineItem.isEditable ? L10n.actionEditPoll : L10n.actionEndPoll)
                     .lineLimit(2, reservesSpace: false)
                     .font(.compound.bodyLGSemibold)
                     .foregroundColor(.compound.textOnSolidPrimary)
@@ -114,10 +114,10 @@ struct PollRoomTimelineView: View {
             return
         }
         
-        if poll.hasVotes {
-            context.send(viewAction: .poll(.end(pollStartID: eventID)))
-        } else {
+        if timelineItem.isEditable {
             context.send(viewAction: .poll(.edit(pollStartID: eventID, poll: poll)))
+        } else {
+            context.send(viewAction: .poll(.end(pollStartID: eventID)))
         }
     }
 

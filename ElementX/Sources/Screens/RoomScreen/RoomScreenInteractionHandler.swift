@@ -24,6 +24,7 @@ enum RoomScreenInteractionHandlerAction {
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayMediaUploadPreviewScreen(url: URL)
+    case displayPollForm(mode: PollFormMode)
     case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
     case showActionMenu(TimelineItemActionMenuInfo)
     case showDebugInfo(TimelineItemDebugInfo)
@@ -185,30 +186,18 @@ class RoomScreenInteractionHandler {
             
             UIPasteboard.general.string = messageTimelineItem.body
         case .edit:
-            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
-                return
-            }
-
-            let text: String
-            switch messageTimelineItem.contentType {
-            case .text(let textItem):
-                if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = textItem.formattedBodyHTMLString {
-                    text = formattedBodyHTMLString
-                } else {
-                    text = messageTimelineItem.body
+            switch timelineItem {
+            case let messageTimelineItem as EventBasedMessageTimelineItemProtocol:
+                processEditMessageEvent(messageTimelineItem)
+            case let pollTimelineItem as PollRoomTimelineItem:
+                guard let eventID = pollTimelineItem.id.eventID else {
+                    MXLog.error("Cannot edit poll with id: \(timelineItem.id)")
+                    return
                 }
-            case .emote(let emoteItem):
-                if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = emoteItem.formattedBodyHTMLString {
-                    text = "/me " + formattedBodyHTMLString
-                } else {
-                    text = "/me " + messageTimelineItem.body
-                }
+                actionsSubject.send(.displayPollForm(mode: .edit(eventID: eventID, poll: pollTimelineItem.poll)))
             default:
-                text = messageTimelineItem.body
+                MXLog.error("Cannot edit item with id: \(timelineItem.id)")
             }
-            
-            actionsSubject.send(.composer(action: .setText(text: text)))
-            actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
         case .copyPermalink:
             do {
                 guard let eventID = eventTimelineItem.id.eventID else {
@@ -256,6 +245,29 @@ class RoomScreenInteractionHandler {
         if action.switchToDefaultComposer {
             actionsSubject.send(.composer(action: .setMode(mode: .default)))
         }
+    }
+    
+    private func processEditMessageEvent(_ messageTimelineItem: EventBasedMessageTimelineItemProtocol) {
+        let text: String
+        switch messageTimelineItem.contentType {
+        case .text(let textItem):
+            if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = textItem.formattedBodyHTMLString {
+                text = formattedBodyHTMLString
+            } else {
+                text = messageTimelineItem.body
+            }
+        case .emote(let emoteItem):
+            if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = emoteItem.formattedBodyHTMLString {
+                text = "/me " + formattedBodyHTMLString
+            } else {
+                text = "/me " + messageTimelineItem.body
+            }
+        default:
+            text = messageTimelineItem.body
+        }
+        
+        actionsSubject.send(.composer(action: .setText(text: text)))
+        actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
     }
     
     // MARK: Polls
