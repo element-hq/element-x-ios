@@ -202,12 +202,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     var localizedSendInfo: some View {
         HStack(spacing: 4) {
-            if timelineItem is TextBasedRoomTimelineItem || timelineItem is PollRoomTimelineItem {
-                Text(timelineItem.localizedSendInfo)
-            } else {
-                Text(timelineItem.timestamp)
-            }
-
+            Text(timelineItem.localizedSendInfo)
+            
             if adjustedDeliveryStatus == .sendingFailed {
                 CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyXS)
                     .accessibilityLabel(L10n.commonSendingFailed)
