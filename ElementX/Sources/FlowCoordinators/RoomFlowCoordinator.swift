@@ -410,8 +410,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func dismissRoom(animated: Bool) {
-        // Setting the detail coordinator to nil afirst allows the dismiss to work properly
-        // if followed immediately by another navigation on iPhone
         // DON'T CHANGE THE ORDER IN WHICH POP AND SET ARE DONE, IT CAN CAUSE A CRASH
         navigationStackCoordinator.popToRoot(animated: false)
         navigationSplitCoordinator.setDetailCoordinator(nil, animated: animated)
