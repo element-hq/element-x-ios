@@ -16,7 +16,7 @@
 
 import Foundation
 
-enum PollFormScreenViewModelAction {
+enum PollFormScreenViewModelAction: Equatable {
     case cancel
     case delete
     case submit(question: String, options: [String], pollKind: Poll.Kind)

@@ -206,5 +206,15 @@ struct PollRoomTimelineView_Previews: PreviewProvider, TestablePreview {
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)
             .previewDisplayName("Creator, disclosed, Plain")
+        
+        PollRoomTimelineView(timelineItem: .mock(poll: .emptyDisclosed, isEditable: true))
+            .environment(\.timelineStyle, .bubbles)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Creator, no votes, Bubble")
+        
+        PollRoomTimelineView(timelineItem: .mock(poll: .emptyDisclosed, isEditable: true))
+            .environment(\.timelineStyle, .plain)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Creator, no votes, Plain")
     }
 }
