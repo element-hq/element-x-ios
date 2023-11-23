@@ -45,6 +45,7 @@ enum RoomProxyError: Error, Equatable {
     case failedCreatingPoll
     case failedSendingPollResponse
     case failedEndingPoll
+    case failedEditingPoll
 }
 
 // sourcery: AutoMockable
@@ -186,6 +187,8 @@ protocol RoomProxyProtocol {
     func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
 
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError>
+   
+    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError>
 
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError>
 

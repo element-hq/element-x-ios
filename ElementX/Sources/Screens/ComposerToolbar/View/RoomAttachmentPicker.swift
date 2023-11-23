@@ -77,7 +77,7 @@ struct RoomAttachmentPicker: View {
 
                 Button {
                     context.showAttachmentPopover = false
-                    context.send(viewAction: .displayPollForm)
+                    context.send(viewAction: .displayNewPollForm)
                 } label: {
                     Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
                         .labelStyle(.menuSheet)

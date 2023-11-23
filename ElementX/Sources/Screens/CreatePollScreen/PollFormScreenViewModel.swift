@@ -17,29 +17,35 @@
 import Combine
 import SwiftUI
 
-typealias CreatePollScreenViewModelType = StateStoreViewModel<CreatePollScreenViewState, CreatePollScreenViewAction>
+typealias PollFormScreenViewModelType = StateStoreViewModel<PollFormScreenViewState, PollFormScreenViewAction>
 
-class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreenViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<CreatePollScreenViewModelAction, Never> = .init()
+class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewModelProtocol {
+    private var actionsSubject: PassthroughSubject<PollFormScreenViewModelAction, Never> = .init()
     
-    var actions: AnyPublisher<CreatePollScreenViewModelAction, Never> {
+    var actions: AnyPublisher<PollFormScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
-    init() {
-        super.init(initialViewState: .init())
+    
+    init(mode: PollFormMode) {
+        super.init(initialViewState: .init(mode: mode))
     }
     
     // MARK: - Public
     
-    override func process(viewAction: CreatePollScreenViewAction) {
+    override func process(viewAction: PollFormScreenViewAction) {
         switch viewAction {
-        case .create:
-            actionsSubject.send(.create(question: state.bindings.question,
+        case .submit:
+            actionsSubject.send(.submit(question: state.bindings.question,
                                         options: state.bindings.options.map(\.text),
                                         pollKind: state.bindings.isUndisclosed ? .undisclosed : .disclosed))
+        case .delete:
+            state.bindings.alertInfo = .init(id: .init(),
+                                             title: L10n.screenEditPollDeleteConfirmationTitle,
+                                             message: L10n.screenEditPollDeleteConfirmation,
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                             secondaryButton: .init(title: L10n.actionOk, action: { self.actionsSubject.send(.delete) }))
         case .cancel:
-            if state.bindings.hasContent {
+            if state.formContentHasChanged {
                 state.bindings.alertInfo = .init(id: .init(),
                                                  title: L10n.screenCreatePollDiscardConfirmationTitle,
                                                  message: L10n.screenCreatePollDiscardConfirmation,

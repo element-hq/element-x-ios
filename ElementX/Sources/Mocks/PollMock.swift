@@ -67,6 +67,15 @@ extension Poll {
                        .mock(text: "USA 🇺🇸", votes: 2, allVotes: 10)],
              ended: true)
     }
+    
+    static var emptyDisclosed: Self {
+        mock(question: "What country do you like most?",
+             pollKind: .disclosed,
+             options: [.mock(text: "Italy 🇮🇹", votes: 0, allVotes: 0),
+                       .mock(text: "China 🇨🇳", votes: 0, allVotes: 0),
+                       .mock(text: "USA 🇺🇸", votes: 0, allVotes: 0)],
+             createdByAccountOwner: true)
+    }
 }
 
 extension Poll.Option {
@@ -81,13 +90,13 @@ extension Poll.Option {
 }
 
 extension PollRoomTimelineItem {
-    static func mock(poll: Poll, isOutgoing: Bool = true) -> Self {
+    static func mock(poll: Poll, isOutgoing: Bool = true, isEditable: Bool = false) -> Self {
         .init(id: .init(timelineID: UUID().uuidString, eventID: UUID().uuidString),
               poll: poll,
               body: "poll",
               timestamp: "Now",
               isOutgoing: isOutgoing,
-              isEditable: false,
+              isEditable: isEditable,
               canBeRepliedTo: true,
               sender: .init(id: "userID"),
               properties: .init())

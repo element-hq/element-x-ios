@@ -182,9 +182,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.dismissNotificationSettingsScreen, .notificationSettingsScreen(let roomID)):
                 return .roomDetails(roomID: roomID, isRoot: false)
 
-            case (.presentCreatePollForm, .room(let roomID)):
-                return .createPollForm(roomID: roomID)
-            case (.dismissCreatePollForm, .createPollForm(let roomID)):
+            case (.presentPollForm, .room(let roomID)):
+                return .pollForm(roomID: roomID)
+            case (.dismissPollForm, .pollForm(let roomID)):
                 return .room(roomID: roomID)
 
             default:
@@ -260,9 +260,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.notificationSettingsScreen, .dismissNotificationSettingsScreen, .roomDetails):
                 break
 
-            case (.room, .presentCreatePollForm, .createPollForm):
-                presentCreatePollForm()
-            case (.createPollForm, .dismissCreatePollForm, .room):
+            case (.room, .presentPollForm(let mode), .pollForm):
+                presentPollForm(mode: mode)
+            case (.pollForm, .dismissPollForm, .room):
                 break
 
             default:
@@ -374,8 +374,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .presentLocationPicker:
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
-                case .presentPollForm:
-                    stateMachine.tryEvent(.presentCreatePollForm)
+                case .presentPollForm(let mode):
+                    stateMachine.tryEvent(.presentPollForm(mode: mode))
                 case .presentLocationViewer(_, let geoURI, let description):
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)))
                 case .presentRoomMemberDetails(member: let member):
@@ -631,9 +631,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    private func presentCreatePollForm() {
+    private func presentPollForm(mode: PollFormMode) {
         let navigationStackCoordinator = NavigationStackCoordinator()
-        let coordinator = CreatePollScreenCoordinator(parameters: .init())
+        let coordinator = PollFormScreenCoordinator(parameters: .init(mode: mode))
         navigationStackCoordinator.setRootCoordinator(coordinator)
 
         coordinator.actions
@@ -647,39 +647,86 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .cancel:
                     break
-                case let .create(question, options, pollKind):
-                    Task {
-                        guard let roomProxy = self.roomProxy else {
-                            self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-                            return
-                        }
-
-                        let result = await roomProxy.createPoll(question: question, answers: options, pollKind: pollKind)
-
-                        self.analytics.trackComposer(inThread: false,
-                                                     isEditing: false,
-                                                     isReply: false,
-                                                     messageType: .poll,
-                                                     startsThread: nil)
-
-                        self.analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)
-                        
-                        switch result {
-                        case .success:
-                            break
-                        case .failure:
-                            self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-                        }
+                case .delete:
+                    deletePoll(mode: mode)
+                case let .submit(question, options, pollKind):
+                    switch mode {
+                    case .new:
+                        createPoll(question: question, options: options, pollKind: pollKind)
+                    case .edit(let eventID, _):
+                        editPoll(pollStartID: eventID, question: question, options: options, pollKind: pollKind)
                     }
                 }
             }
             .store(in: &cancellables)
 
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissCreatePollForm)
+            self?.stateMachine.tryEvent(.dismissPollForm)
         }
     }
+    
+    private func createPoll(question: String, options: [String], pollKind: Poll.Kind) {
+        Task {
+            guard let roomProxy = self.roomProxy else {
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                return
+            }
 
+            let result = await roomProxy.createPoll(question: question, answers: options, pollKind: pollKind)
+
+            self.analytics.trackComposer(inThread: false,
+                                         isEditing: false,
+                                         isReply: false,
+                                         messageType: .poll,
+                                         startsThread: nil)
+
+            self.analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)
+            
+            switch result {
+            case .success:
+                break
+            case .failure:
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            }
+        }
+    }
+    
+    private func editPoll(pollStartID: String, question: String, options: [String], pollKind: Poll.Kind) {
+        Task {
+            guard let roomProxy = self.roomProxy else {
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                return
+            }
+
+            let result = await roomProxy.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind)
+            
+            switch result {
+            case .success:
+                break
+            case .failure:
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            }
+        }
+    }
+    
+    private func deletePoll(mode: PollFormMode) {
+        Task {
+            guard case .edit(let pollStartID, _) = mode, let roomProxy = self.roomProxy else {
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                return
+            }
+            
+            let result = await roomProxy.redact(pollStartID)
+            
+            switch result {
+            case .success:
+                break
+            case .failure:
+                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            }
+        }
+    }
+    
     private func presentRoomMemberDetails(member: RoomMemberProxyProtocol) {
         guard let roomProxy else {
             fatalError()
@@ -803,7 +850,7 @@ private extension RoomFlowCoordinator {
         case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
         case messageForwarding(roomID: String, itemID: TimelineItemIdentifier)
         case notificationSettingsScreen(roomID: String)
-        case createPollForm(roomID: String)
+        case pollForm(roomID: String)
     }
     
     struct EventUserInfo {
@@ -842,8 +889,8 @@ private extension RoomFlowCoordinator {
         case presentNotificationSettingsScreen
         case dismissNotificationSettingsScreen
 
-        case presentCreatePollForm
-        case dismissCreatePollForm
+        case presentPollForm(mode: PollFormMode)
+        case dismissPollForm
     }
 }
 
