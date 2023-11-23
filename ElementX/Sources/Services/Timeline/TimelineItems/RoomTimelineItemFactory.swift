@@ -412,7 +412,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                     isOutgoing: isOutgoing,
                                     // FIX ME: `eventItemProxy.isEditable` needs to be fixed on the rust side (now returns always false)
-                                    isEditable: eventItemProxy.isOwn && !poll.hasVotes,
+                                    isEditable: eventItemProxy.isOwn && !poll.hasVotes && !poll.hasEnded,
                                     canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                     sender: eventItemProxy.sender,
                                     properties: RoomTimelineItemProperties(isEdited: edited,
