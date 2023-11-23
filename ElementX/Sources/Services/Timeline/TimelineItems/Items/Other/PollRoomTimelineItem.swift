@@ -41,10 +41,6 @@ struct Poll: Hashable {
     var hasEnded: Bool {
         endDate != nil
     }
-    
-    var hasVotes: Bool {
-        votes.values.contains(where: { !$0.isEmpty })
-    }
 
     enum Kind: Hashable {
         case disclosed
