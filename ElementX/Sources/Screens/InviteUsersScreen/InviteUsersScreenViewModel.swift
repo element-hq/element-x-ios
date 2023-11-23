@@ -134,7 +134,13 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             fetchSuggestions()
             return
         }
+        
+        state.isSearching = true
         fetchUsersTask = Task {
+            defer {
+                state.isSearching = false
+            }
+            
             let result = await userDiscoveryService.searchProfiles(with: searchQuery)
             guard !Task.isCancelled else { return }
             handleResult(for: .searchResult, result: result)
@@ -146,7 +152,13 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             state.usersSection = .init(type: .suggestions, users: [])
             return
         }
+        
+        state.isSearching = true
         fetchUsersTask = Task {
+            defer {
+                state.isSearching = false
+            }
+            
             let result = await userDiscoveryService.fetchSuggestions()
             guard !Task.isCancelled else { return }
             handleResult(for: .suggestions, result: result)
