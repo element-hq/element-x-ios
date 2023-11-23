@@ -44,7 +44,7 @@ struct InviteUsersScreenViewState: BindableState {
     var isSearching = false
     
     var hasEmptySearchResults: Bool {
-        !bindings.searchQuery.isEmpty && usersSection.type == .searchResult && usersSection.users.isEmpty
+        !isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
     }
     
     var scrollToLastID: String?

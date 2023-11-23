@@ -137,10 +137,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         
         state.isSearching = true
         fetchUsersTask = Task {
-            defer {
-                state.isSearching = false
-            }
-            
             let result = await userDiscoveryService.searchProfiles(with: searchQuery)
             guard !Task.isCancelled else { return }
             handleResult(for: .searchResult, result: result)
@@ -155,10 +151,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         
         state.isSearching = true
         fetchUsersTask = Task {
-            defer {
-                state.isSearching = false
-            }
-            
             let result = await userDiscoveryService.fetchSuggestions()
             guard !Task.isCancelled else { return }
             handleResult(for: .suggestions, result: result)
@@ -166,6 +158,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func handleResult(for sectionType: UserDiscoverySectionType, result: Result<[UserProfileProxy], UserDiscoveryErrorType>) {
+        state.isSearching = false
+        
         switch result {
         case .success(let users):
             state.usersSection = .init(type: sectionType, users: users)
