@@ -40,15 +40,22 @@ struct InviteUsersScreen: View {
     
     private var mainContent: some View {
         Form {
-            if !context.viewState.selectedUsers.isEmpty {
-                // this is a fix for having the carousel not clipped, and inside the form, so when the search is dismissed, it wont break the design
-                Section {
-                    EmptyView()
-                } header: {
+            // this is a fix for having the carousel not clipped, and inside the form, so when the search is dismissed, it wont break the design
+            Section {
+                EmptyView()
+            } header: {
+                VStack(spacing: 8) {
                     selectedUsersSection
                         .textCase(.none)
+                    
+                    if context.viewState.isSearching {
+                        ProgressView()
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .listRowBackground(Color.clear)
+                    }
                 }
             }
+            
             if context.viewState.hasEmptySearchResults {
                 noResultsContent
             } else {

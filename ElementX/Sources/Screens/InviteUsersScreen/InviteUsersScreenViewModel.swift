@@ -134,6 +134,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             fetchSuggestions()
             return
         }
+        
+        state.isSearching = true
         fetchUsersTask = Task {
             let result = await userDiscoveryService.searchProfiles(with: searchQuery)
             guard !Task.isCancelled else { return }
@@ -146,6 +148,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             state.usersSection = .init(type: .suggestions, users: [])
             return
         }
+        
+        state.isSearching = true
         fetchUsersTask = Task {
             let result = await userDiscoveryService.fetchSuggestions()
             guard !Task.isCancelled else { return }
@@ -154,6 +158,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func handleResult(for sectionType: UserDiscoverySectionType, result: Result<[UserProfileProxy], UserDiscoveryErrorType>) {
+        state.isSearching = false
+        
         switch result {
         case .success(let users):
             state.usersSection = .init(type: sectionType, users: users)

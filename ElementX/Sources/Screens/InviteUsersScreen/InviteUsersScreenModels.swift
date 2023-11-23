@@ -41,12 +41,10 @@ struct InviteUsersScreenViewState: BindableState {
     var selectedUsers: [UserProfileProxy] = []
     var membershipState: [String: MembershipState] = .init()
     
-    var isSearching: Bool {
-        !bindings.searchQuery.isEmpty
-    }
+    var isSearching = false
     
     var hasEmptySearchResults: Bool {
-        isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
+        !isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
     }
     
     var scrollToLastID: String?
