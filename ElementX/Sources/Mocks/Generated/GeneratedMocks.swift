@@ -1878,6 +1878,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingIsTombstoned = value }
     }
     var underlyingIsTombstoned: Bool!
+    var membership: Membership {
+        get { return underlyingMembership }
+        set(value) { underlyingMembership = value }
+    }
+    var underlyingMembership: Membership!
     var hasOngoingCall: Bool {
         get { return underlyingHasOngoingCall }
         set(value) { underlyingHasOngoingCall = value }
@@ -2627,6 +2632,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return await createPollQuestionAnswersPollKindClosure(question, answers, pollKind)
         } else {
             return createPollQuestionAnswersPollKindReturnValue
+        }
+    }
+    //MARK: - editPoll
+
+    var editPollOriginalQuestionAnswersPollKindCallsCount = 0
+    var editPollOriginalQuestionAnswersPollKindCalled: Bool {
+        return editPollOriginalQuestionAnswersPollKindCallsCount > 0
+    }
+    var editPollOriginalQuestionAnswersPollKindReceivedArguments: (eventID: String, question: String, answers: [String], pollKind: Poll.Kind)?
+    var editPollOriginalQuestionAnswersPollKindReceivedInvocations: [(eventID: String, question: String, answers: [String], pollKind: Poll.Kind)] = []
+    var editPollOriginalQuestionAnswersPollKindReturnValue: Result<Void, RoomProxyError>!
+    var editPollOriginalQuestionAnswersPollKindClosure: ((String, String, [String], Poll.Kind) async -> Result<Void, RoomProxyError>)?
+
+    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
+        editPollOriginalQuestionAnswersPollKindCallsCount += 1
+        editPollOriginalQuestionAnswersPollKindReceivedArguments = (eventID: eventID, question: question, answers: answers, pollKind: pollKind)
+        editPollOriginalQuestionAnswersPollKindReceivedInvocations.append((eventID: eventID, question: question, answers: answers, pollKind: pollKind))
+        if let editPollOriginalQuestionAnswersPollKindClosure = editPollOriginalQuestionAnswersPollKindClosure {
+            return await editPollOriginalQuestionAnswersPollKindClosure(eventID, question, answers, pollKind)
+        } else {
+            return editPollOriginalQuestionAnswersPollKindReturnValue
         }
     }
     //MARK: - sendPollResponse

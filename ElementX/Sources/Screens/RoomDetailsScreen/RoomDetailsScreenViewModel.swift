@@ -254,7 +254,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
-            state.dmRecipient?.isIgnored = true
+            // Mutating the optional in place when built for Release crashes 🤷‍♂️
+            var dmRecipient = state.dmRecipient
+            dmRecipient?.isIgnored = true
+            state.dmRecipient = dmRecipient
         case .failure, .none:
             state.bindings.alertInfo = .init(id: .unknown)
         }
@@ -266,7 +269,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
-            state.dmRecipient?.isIgnored = false
+            // Mutating the optional in place when built for Release crashes 🤷‍♂️
+            var dmRecipient = state.dmRecipient
+            dmRecipient?.isIgnored = false
+            state.dmRecipient = dmRecipient
         case .failure, .none:
             state.bindings.alertInfo = .init(id: .unknown)
         }

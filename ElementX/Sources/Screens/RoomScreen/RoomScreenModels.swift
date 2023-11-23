@@ -28,7 +28,7 @@ enum RoomScreenViewModelAction {
     case displayMediaPicker
     case displayDocumentPicker
     case displayLocationPicker
-    case displayPollForm
+    case displayPollForm(mode: PollFormMode)
     case displayMediaUploadPreviewScreen(url: URL)
     case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
@@ -66,6 +66,7 @@ enum RoomScreenComposerMode: Equatable {
 enum RoomScreenViewPollAction {
     case selectOption(pollStartID: String, optionID: String)
     case end(pollStartID: String)
+    case edit(pollStartID: String, poll: Poll)
 }
 
 enum RoomScreenViewAudioAction {

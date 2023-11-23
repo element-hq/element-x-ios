@@ -89,11 +89,11 @@ struct PollRoomTimelineView: View {
 
     @ViewBuilder
     private var toolbarView: some View {
-        if !poll.hasEnded, poll.createdByAccountOwner, let eventID {
+        if !poll.hasEnded, poll.createdByAccountOwner {
             Button {
-                context.send(viewAction: .poll(.end(pollStartID: eventID)))
+                toolbarAction()
             } label: {
-                Text(L10n.actionEndPoll)
+                Text(timelineItem.isEditable ? L10n.actionEditPoll : L10n.actionEndPoll)
                     .lineLimit(2, reservesSpace: false)
                     .font(.compound.bodyLGSemibold)
                     .foregroundColor(.compound.textOnSolidPrimary)
@@ -106,6 +106,18 @@ struct PollRoomTimelineView: View {
                     }
             }
             .padding(.top, 8)
+        }
+    }
+    
+    private func toolbarAction() {
+        guard let eventID else {
+            return
+        }
+        
+        if timelineItem.isEditable {
+            context.send(viewAction: .poll(.edit(pollStartID: eventID, poll: poll)))
+        } else {
+            context.send(viewAction: .poll(.end(pollStartID: eventID)))
         }
     }
 
@@ -194,5 +206,15 @@ struct PollRoomTimelineView_Previews: PreviewProvider, TestablePreview {
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)
             .previewDisplayName("Creator, disclosed, Plain")
+        
+        PollRoomTimelineView(timelineItem: .mock(poll: .emptyDisclosed, isEditable: true))
+            .environment(\.timelineStyle, .bubbles)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Creator, no votes, Bubble")
+        
+        PollRoomTimelineView(timelineItem: .mock(poll: .emptyDisclosed, isEditable: true))
+            .environment(\.timelineStyle, .plain)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Creator, no votes, Plain")
     }
 }

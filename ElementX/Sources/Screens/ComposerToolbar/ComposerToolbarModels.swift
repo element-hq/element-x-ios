@@ -36,7 +36,7 @@ enum ComposerToolbarViewModelAction {
     case displayMediaPicker
     case displayDocumentPicker
     case displayLocationPicker
-    case displayPollForm
+    case displayNewPollForm
 
     case handlePasteOrDrop(provider: NSItemProvider)
 
@@ -55,7 +55,7 @@ enum ComposerToolbarViewAction {
     case displayMediaPicker
     case displayDocumentPicker
     case displayLocationPicker
-    case displayPollForm
+    case displayNewPollForm
     case handlePasteOrDrop(provider: NSItemProvider)
     case enableTextFormatting
     case composerAction(action: ComposerAction)

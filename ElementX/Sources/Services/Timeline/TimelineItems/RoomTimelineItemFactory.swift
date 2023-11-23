@@ -71,8 +71,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        avatarURLString: avatarUrl,
                                                        previousAvatarURLString: prevAvatarUrl,
                                                        isOutgoing: isOutgoing)
-        case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, votes: let votes, endTime: let endTime):
-            return buildPollTimelineItem(question, kind, maxSelections, answers, votes, endTime, eventItemProxy, isOutgoing)
+        case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, votes: let votes, endTime: let endTime, let edited):
+            return buildPollTimelineItem(question, kind, maxSelections, answers, votes, endTime, eventItemProxy, isOutgoing, edited)
         }
     }
     
@@ -379,7 +379,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                        _ votes: [String: [String]],
                                        _ endTime: UInt64?,
                                        _ eventItemProxy: EventTimelineItemProxy,
-                                       _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                       _ isOutgoing: Bool,
+                                       _ edited: Bool) -> RoomTimelineItemProtocol {
         let allVotes = votes.reduce(0) { count, pair in
             count + pair.value.count
         }
@@ -413,7 +414,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     isEditable: eventItemProxy.isEditable,
                                     canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                     sender: eventItemProxy.sender,
-                                    properties: RoomTimelineItemProperties(isEdited: false,
+                                    properties: RoomTimelineItemProperties(isEdited: edited,
                                                                            reactions: aggregateReactions(eventItemProxy.reactions),
                                                                            deliveryStatus: eventItemProxy.deliveryStatus,
                                                                            orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
@@ -633,7 +634,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             switch timelineItem.kind() {
             case .message:
                 return timelineItemReplyDetails(for: timelineItem.asMessage()?.msgtype(), sender: sender)
-            case .poll(let question, _, _, _, _, _):
+            case .poll(let question, _, _, _, _, _, _):
                 replyContent = .poll(question: question)
             case .sticker(let body, _, _):
                 replyContent = .message(.text(.init(body: body)))

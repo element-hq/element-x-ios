@@ -188,8 +188,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.displayDocumentPicker)
         case .displayLocationPicker:
             actionsSubject.send(.displayLocationPicker)
-        case .displayPollForm:
-            actionsSubject.send(.displayPollForm)
+        case .displayNewPollForm:
+            actionsSubject.send(.displayPollForm(mode: .new))
         case .handlePasteOrDrop(let provider):
             roomScreenInteractionHandler.handlePasteOrDrop(provider)
         case .composerModeChanged(mode: let mode):
@@ -213,6 +213,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          message: L10n.commonPollEndConfirmation,
                                                          primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
                                                          secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
+        case .edit(let pollStartID, let poll):
+            actionsSubject.send(.displayPollForm(mode: .edit(eventID: pollStartID, poll: poll)))
         }
     }
     
@@ -319,6 +321,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .displayMessageForwarding(let itemID):
                     actionsSubject.send(.displayMessageForwarding(itemID: itemID))
+                case .displayPollForm(let mode):
+                    actionsSubject.send(.displayPollForm(mode: mode))
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.displayReportContent(itemID: itemID, senderID: senderID))
                 case .displayMediaUploadPreviewScreen(let url):
@@ -464,6 +468,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .recordVoiceMessage, .previewVoiceMessage:
             fatalError("invalid composer mode.")
         }
+        
+        state.timelineViewState.scrollToBottomPublisher.send(())
     }
         
     private func trackComposerMode(_ mode: RoomScreenComposerMode) {

@@ -17,27 +17,30 @@
 import Combine
 import SwiftUI
 
-struct CreatePollScreenCoordinatorParameters { }
-
-enum CreatePollScreenCoordinatorAction {
-    case cancel
-    case create(question: String, options: [String], pollKind: Poll.Kind)
+struct PollFormScreenCoordinatorParameters {
+    let mode: PollFormMode
 }
 
-final class CreatePollScreenCoordinator: CoordinatorProtocol {
-    private let parameters: CreatePollScreenCoordinatorParameters
-    private var viewModel: CreatePollScreenViewModelProtocol
-    private let actionsSubject: PassthroughSubject<CreatePollScreenCoordinatorAction, Never> = .init()
+enum PollFormScreenCoordinatorAction {
+    case cancel
+    case delete
+    case submit(question: String, options: [String], pollKind: Poll.Kind)
+}
+
+final class PollFormScreenCoordinator: CoordinatorProtocol {
+    private let parameters: PollFormScreenCoordinatorParameters
+    private var viewModel: PollFormScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<PollFormScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
-    var actions: AnyPublisher<CreatePollScreenCoordinatorAction, Never> {
+    var actions: AnyPublisher<PollFormScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: CreatePollScreenCoordinatorParameters) {
+    init(parameters: PollFormScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = CreatePollScreenViewModel()
+        viewModel = PollFormScreenViewModel(mode: parameters.mode)
     }
     
     func start() {
@@ -46,16 +49,18 @@ final class CreatePollScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case let .create(question, options, pollKind):
-                self.actionsSubject.send(.create(question: question, options: options, pollKind: pollKind))
             case .cancel:
                 self.actionsSubject.send(.cancel)
+            case .delete:
+                self.actionsSubject.send(.delete)
+            case let .submit(question, options, pollKind):
+                self.actionsSubject.send(.submit(question: question, options: options, pollKind: pollKind))
             }
         }
         .store(in: &cancellables)
     }
         
     func toPresentable() -> AnyView {
-        AnyView(CreatePollScreen(context: viewModel.context))
+        AnyView(PollFormScreen(context: viewModel.context))
     }
 }

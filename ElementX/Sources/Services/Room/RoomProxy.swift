@@ -131,6 +131,10 @@ class RoomProxy: RoomProxyProtocol {
         room.membership() == .joined
     }
     
+    var membership: Membership {
+        room.membership()
+    }
+    
     var isDirect: Bool {
         room.isDirect()
     }
@@ -719,6 +723,21 @@ class RoomProxy: RoomProxyProtocol {
             } catch {
                 MXLog.error("Failed creating a poll: \(error)")
                 return .failure(.failedCreatingPoll)
+            }
+        }
+    }
+    
+    func editPoll(original eventID: String,
+                  question: String,
+                  answers: [String],
+                  pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                let originalEvent = try self.room.getEventTimelineItemByEventId(eventId: eventID)
+                return try .success(self.room.editPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind), editItem: originalEvent))
+            } catch {
+                MXLog.error("Failed editing the poll: \(error), eventID: \(eventID)")
+                return .failure(.failedEditingPoll)
             }
         }
     }
