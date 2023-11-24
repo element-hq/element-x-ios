@@ -90,14 +90,15 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(appLockService: AppLockServiceProtocol,
+    init(initialState: State = .initial,
+         appLockService: AppLockServiceProtocol,
          navigationCoordinator: NavigationRootCoordinator,
          notificationCenter: NotificationCenter = .default) {
         self.appLockService = appLockService
         self.navigationCoordinator = navigationCoordinator
         
-        // The app starts off in the background (with the placeholder screen in the flow.)
-        stateMachine = .init(state: .initial)
+        // Set the initial state and start with the placeholder screen as the root view.
+        stateMachine = .init(state: initialState)
         showPlaceholder()
         
         notificationCenter.publisher(for: UIApplication.willResignActiveNotification)

@@ -201,7 +201,8 @@ class MockScreen: Identifiable {
                 fatalError("Failed to start listening for notifications.")
             }
             
-            let coordinator = AppLockFlowCoordinator(appLockService: appLockService,
+            let coordinator = AppLockFlowCoordinator(initialState: .unlocked,
+                                                     appLockService: appLockService,
                                                      navigationCoordinator: navigationCoordinator,
                                                      notificationCenter: notificationCenter)
             

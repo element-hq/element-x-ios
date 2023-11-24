@@ -207,7 +207,7 @@ class AppLockServiceTests: XCTestCase {
         XCTAssertEqual(service.biometryType, .touchID, "The biometry type should not change.")
         XCTAssertTrue(service.biometricUnlockEnabled, "Biometric unlock should now be enabled.")
         XCTAssertTrue(service.biometricUnlockTrusted, "Biometric unlock should now be trusted.")
-        guard await service.unlockWithBiometrics() else {
+        guard await service.unlockWithBiometrics() == .unlocked else {
             XCTFail("The biometric unlock should work.")
             return
         }
