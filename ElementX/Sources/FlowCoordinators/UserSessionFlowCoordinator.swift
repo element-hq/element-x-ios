@@ -97,6 +97,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .presentedRoom(let roomID):
                 analytics.signpost.beginRoomFlow(roomID)
+                
+                let availableInvitesCount = userSession.clientProxy.inviteSummaryProvider?.roomListPublisher.value.count ?? 0
+                if case .invitesScreen = stateMachine.state, availableInvitesCount == 1 {
+                    dismissInvitesList(animated: true)
+                }
+                
                 stateMachine.processEvent(.selectRoom(roomID: roomID))
             case .dismissedRoom:
                 stateMachine.processEvent(.deselectRoom)
@@ -519,6 +525,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         sidebarNavigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedInvitesScreen)
         }
+    }
+    
+    private func dismissInvitesList(animated: Bool) {
+        guard case .invitesScreen = stateMachine.state else {
+            fatalError()
+        }
+        
+        sidebarNavigationStackCoordinator.pop(animated: animated)
     }
     
     // MARK: Calls
