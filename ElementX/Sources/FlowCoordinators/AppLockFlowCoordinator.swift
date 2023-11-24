@@ -149,7 +149,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
                 guard appLockService.computeNeedsUnlock(didBecomeActiveAt: .now) else { return .unlocked }
                 return biometricUnlockIsAvailable ? .biometricUnlock : .pinCodeUnlock
             case (.biometricUnlock, .biometricResult(let result)):
-                return .biometricUnlockDismissing(result)
+                return .biometricUnlockDismissing(result) // Transitional state until the app becomes active again.
             case (.biometricUnlockDismissing(let result), .didBecomeActive):
                 return switch result {
                 case .unlocked: .unlocked
