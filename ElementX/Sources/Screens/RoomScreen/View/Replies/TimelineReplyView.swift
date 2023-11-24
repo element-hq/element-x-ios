@@ -112,7 +112,7 @@ struct TimelineReplyView: View {
                 case iconAsset(ImageAsset)
                 case icon(KeyPath<CompoundIcons, Image>)
             }
-
+            
             let kind: Kind
             let cornerRadii: Double
         }
@@ -292,7 +292,10 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                 eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithMention))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
-                                                                eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithAtRoomMention)))))
+                                                                eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithAtRoomMention))))),
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                eventContent: .poll(question: "Do you like polls?")))
         ]
     }
     
