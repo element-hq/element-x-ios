@@ -56,7 +56,7 @@ class AppLockSetupBiometricsScreenViewModel: AppLockSetupBiometricsScreenViewMod
         
         // Attempt unlock to trigger Face ID permissions alert.
         if appLockService.biometryType == .faceID,
-           await !appLockService.unlockWithBiometrics() {
+           await appLockService.unlockWithBiometrics() != .unlocked {
             MXLog.info("Confirmation failed. Disabling biometric unlock.")
             appLockService.disableBiometricUnlock()
         }

@@ -30,12 +30,27 @@ enum AppLockServiceError: Error {
     case biometricUnlockNotSupported
 }
 
+/// The result of an attempt to unlock the app using Touch ID or Face ID.
+enum AppLockServiceBiometricResult {
+    /// Biometric lock was successful.
+    case unlocked
+    /// Biometric lock failed to authenticate the user. This represents any failure
+    /// other than the app being backgrounded during the authentication.
+    case failed
+    /// Biometric lock was interrupted by the system and did not complete. The expected
+    /// cause for this that the app was backgrounded whilst the request was in progress.
+    case interrupted
+}
+
 @MainActor
 protocol AppLockServiceProtocol: AnyObject {
     /// The use of a PIN code is mandatory for this device.
     var isMandatory: Bool { get }
     /// The app has been configured to automatically lock with a PIN code.
     var isEnabled: Bool { get }
+    
+    /// A publisher that advertises when the service has been enabled or disabled.
+    var isEnabledPublisher: AnyPublisher<Bool, Never> { get }
     
     /// The type of biometric authentication supported by the device.
     var biometryType: LABiometryType { get }
@@ -64,7 +79,7 @@ protocol AppLockServiceProtocol: AnyObject {
     /// Attempt to unlock the app with the supplied PIN code.
     func unlock(with pinCode: String) -> Bool
     /// Attempt to unlock the app using FaceID or TouchID.
-    func unlockWithBiometrics() async -> Bool
+    func unlockWithBiometrics() async -> AppLockServiceBiometricResult
     
     /// The number of attempts the user had made to unlock with a PIN code.
     ///

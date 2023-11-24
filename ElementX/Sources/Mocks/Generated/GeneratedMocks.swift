@@ -128,6 +128,11 @@ class AppLockServiceMock: AppLockServiceProtocol {
         set(value) { underlyingIsEnabled = value }
     }
     var underlyingIsEnabled: Bool!
+    var isEnabledPublisher: AnyPublisher<Bool, Never> {
+        get { return underlyingIsEnabledPublisher }
+        set(value) { underlyingIsEnabledPublisher = value }
+    }
+    var underlyingIsEnabledPublisher: AnyPublisher<Bool, Never>!
     var biometryType: LABiometryType {
         get { return underlyingBiometryType }
         set(value) { underlyingBiometryType = value }
@@ -292,10 +297,10 @@ class AppLockServiceMock: AppLockServiceProtocol {
     var unlockWithBiometricsCalled: Bool {
         return unlockWithBiometricsCallsCount > 0
     }
-    var unlockWithBiometricsReturnValue: Bool!
-    var unlockWithBiometricsClosure: (() async -> Bool)?
+    var unlockWithBiometricsReturnValue: AppLockServiceBiometricResult!
+    var unlockWithBiometricsClosure: (() async -> AppLockServiceBiometricResult)?
 
-    func unlockWithBiometrics() async -> Bool {
+    func unlockWithBiometrics() async -> AppLockServiceBiometricResult {
         unlockWithBiometricsCallsCount += 1
         if let unlockWithBiometricsClosure = unlockWithBiometricsClosure {
             return await unlockWithBiometricsClosure()
