@@ -19,6 +19,7 @@ import SwiftUI
 
 struct MessageForwardingScreenCoordinatorParameters {
     let roomSummaryProvider: RoomSummaryProviderProtocol
+    let mediaProvider: MediaProviderProtocol
     let sourceRoomID: String
 }
 
@@ -41,6 +42,7 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = MessageForwardingScreenViewModel(roomSummaryProvider: parameters.roomSummaryProvider,
+                                                     mediaProvider: parameters.mediaProvider,
                                                      sourceRoomID: parameters.sourceRoomID)
     }
     
