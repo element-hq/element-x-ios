@@ -47,8 +47,8 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
         case .cancel:
             if state.formContentHasChanged {
                 state.bindings.alertInfo = .init(id: .init(),
-                                                 title: L10n.screenCreatePollCancelConfirmationIosTitle,
-                                                 message: L10n.screenCreatePollCancelConfirmationIosContent,
+                                                 title: L10n.screenCreatePollCancelConfirmationTitleIos,
+                                                 message: L10n.screenCreatePollCancelConfirmationContentIos,
                                                  primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
                                                  secondaryButton: .init(title: L10n.actionOk, action: { self.actionsSubject.send(.cancel) }))
             } else {

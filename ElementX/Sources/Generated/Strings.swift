@@ -712,6 +712,8 @@ public enum L10n {
   public static var screenAdvancedSettingsElementCallBaseUrlValidationError: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url_validation_error") }
   /// Disable the rich text editor to type Markdown manually.
   public static var screenAdvancedSettingsRichTextEditorDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_rich_text_editor_description") }
+  /// Enable option to view message source in the timeline.
+  public static var screenAdvancedSettingsViewSourceDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_view_source_description") }
   /// We won't record or profile any personal data
   public static var screenAnalyticsPromptDataUsage: String { return L10n.tr("Localizable", "screen_analytics_prompt_data_usage") }
   /// Share anonymous usage data to help us identify issues.
@@ -884,12 +886,10 @@ public enum L10n {
   public static func screenCreatePollAnswerHint(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_create_poll_answer_hint", p1)
   }
-  /// Your changes have not been saved. Are you sure you want to go back?
-  public static var screenCreatePollCancelConfirmationAndroidContent: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_android_content") }
   /// Your changes won’t be saved
-  public static var screenCreatePollCancelConfirmationIosContent: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_ios_content") }
+  public static var screenCreatePollCancelConfirmationContentIos: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_content_ios") }
   /// Cancel Poll
-  public static var screenCreatePollCancelConfirmationIosTitle: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_ios_title") }
+  public static var screenCreatePollCancelConfirmationTitleIos: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_title_ios") }
   /// Question or topic
   public static var screenCreatePollQuestionDesc: String { return L10n.tr("Localizable", "screen_create_poll_question_desc") }
   /// What is the poll about?
