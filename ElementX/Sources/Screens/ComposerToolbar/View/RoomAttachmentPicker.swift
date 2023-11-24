@@ -79,7 +79,7 @@ struct RoomAttachmentPicker: View {
                     context.showAttachmentPopover = false
                     context.send(viewAction: .displayNewPollForm)
                 } label: {
-                    Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
+                    Label(L10n.screenRoomAttachmentSourcePoll, iconAsset: Asset.Images.polls)
                         .labelStyle(.menuSheet)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)

@@ -80,7 +80,7 @@ struct TimelineReplyView: View {
                     ReplyView(sender: sender,
                               plainBody: question,
                               formattedBody: nil,
-                              icon: .init(kind: .iconAsset(Asset.Images.timelinePoll), cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .iconAsset(Asset.Images.polls), cornerRadii: iconCornerRadii))
                 }
             default:
                 LoadingReplyView()
