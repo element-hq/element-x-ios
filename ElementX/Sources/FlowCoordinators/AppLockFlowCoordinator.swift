@@ -162,37 +162,22 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(String(describing: context.event))`.")
             
             switch (context.fromState, context.toState) {
-            case (.backgrounded, .obscuringApp):
+            case (_, .obscuringApp):
                 showPlaceholder()
-            case (.unlocked, .obscuringApp):
-                showPlaceholder()
-            case (.obscuringApp, .unlocked):
-                actionsSubject.send(.unlockApp)
             case (_, .backgrounded):
                 appLockService.applicationDidEnterBackground()
                 showPlaceholder() // Double call but just to be safe.
-            case (.backgrounded, .unlocked):
-                actionsSubject.send(.unlockApp)
-            case (.backgrounded, .biometricUnlock):
-                showPlaceholder() // For the unlock background.
+            case (_, .biometricUnlock):
+                showPlaceholder() // For the unlock background. Triple call but just to be safe.
                 Task { await self.attemptBiometricUnlock() }
-            case (.backgrounded, .pinCodeUnlock):
-                showUnlockScreen()
             case (.biometricUnlock, .biometricUnlockDismissing):
-                break // nothing to change in presentation here?
-            case (.biometricUnlockDismissing(.unlocked), .unlocked):
-                actionsSubject.send(.unlockApp)
-            case (.biometricUnlockDismissing(.failed), .pinCodeUnlock):
+                break // Transitional state, no need to do anything.
+            case (_, .pinCodeUnlock):
                 showUnlockScreen()
-            case (.biometricUnlockDismissing(.interrupted), .biometricUnlock):
-                // nothing to change in presentation here?
-                Task { await self.attemptBiometricUnlock() }
-            case (.pinCodeUnlock, .unlocked):
+            case (_, .unlocked):
                 actionsSubject.send(.unlockApp)
-            case (.pinCodeUnlock, .loggingOut):
+            case (_, .loggingOut):
                 actionsSubject.send(.forceLogout)
-            case (.loggingOut, .obscuringApp):
-                showPlaceholder()
             default:
                 fatalError("Unhandled transition.")
             }
