@@ -151,7 +151,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         case .none:
             _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .none)
         case .all:
-            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .all)
+            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .allNonLeft)
         case .normalizedMatchRoomName(let query):
             _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .normalizedMatchRoomName(pattern: query.lowercased()))
         }
