@@ -30,11 +30,12 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
     }
 
     init(roomSummaryProvider: RoomSummaryProviderProtocol,
+         mediaProvider: MediaProviderProtocol,
          sourceRoomID: String) {
         self.roomSummaryProvider = roomSummaryProvider
         self.sourceRoomID = sourceRoomID
         
-        super.init(initialViewState: MessageForwardingScreenViewState())
+        super.init(initialViewState: MessageForwardingScreenViewState(), imageProvider: mediaProvider)
         
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)

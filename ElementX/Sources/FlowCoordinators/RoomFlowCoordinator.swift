@@ -749,6 +749,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let messageForwardingNavigationStackCoordinator = NavigationStackCoordinator()
         
         let parameters = MessageForwardingScreenCoordinatorParameters(roomSummaryProvider: roomSummaryProvider,
+                                                                      mediaProvider: userSession.mediaProvider,
                                                                       sourceRoomID: roomProxy.id)
         let coordinator = MessageForwardingScreenCoordinator(parameters: parameters)
         
