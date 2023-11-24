@@ -884,10 +884,12 @@ public enum L10n {
   public static func screenCreatePollAnswerHint(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_create_poll_answer_hint", p1)
   }
+  /// Your changes have not been saved. Are you sure you want to go back?
+  public static var screenCreatePollCancelConfirmationAndroidContent: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_android_content") }
   /// Your changes won’t be saved
-  public static var screenCreatePollDiscardConfirmation: String { return L10n.tr("Localizable", "screen_create_poll_discard_confirmation") }
+  public static var screenCreatePollCancelConfirmationIosContent: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_ios_content") }
   /// Cancel Poll
-  public static var screenCreatePollDiscardConfirmationTitle: String { return L10n.tr("Localizable", "screen_create_poll_discard_confirmation_title") }
+  public static var screenCreatePollCancelConfirmationIosTitle: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_ios_title") }
   /// Question or topic
   public static var screenCreatePollQuestionDesc: String { return L10n.tr("Localizable", "screen_create_poll_question_desc") }
   /// What is the poll about?
