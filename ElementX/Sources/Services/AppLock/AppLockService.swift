@@ -128,30 +128,35 @@ class AppLockService: AppLockServiceProtocol {
             _ = enableBiometricUnlock()
         }
         
-        return completeUnlock()
+        completeUnlock()
+        return true
     }
     
-    func unlockWithBiometrics() async -> Bool {
+    func unlockWithBiometrics() async -> AppLockServiceBiometricResult {
         guard biometryType != .none, biometricUnlockEnabled else {
             MXLog.error("Biometric unlock not setup.")
-            return false
+            return .failed
         }
         
         guard biometricUnlockTrusted else {
             MXLog.error("Biometrics have changed. PIN should be shown.")
-            return false
+            return .failed
         }
         
         do {
             let context = unlockContext()
             guard try await context.evaluatePolicy(unlockPolicy, localizedReason: L10n.screenAppLockBiometricUnlockReasonIos) else {
                 MXLog.warning("\(context.biometryType) failed without error.")
-                return false
+                return .failed
             }
-            return completeUnlock()
+            completeUnlock()
+            return .unlocked
+        } catch LAError.systemCancel {
+            MXLog.error("\(context.biometryType) failed: The system cancelled.")
+            return .interrupted
         } catch {
             MXLog.error("\(context.biometryType) failed: \(error)")
-            return false
+            return .failed
         }
     }
     
@@ -180,9 +185,8 @@ class AppLockService: AppLockServiceProtocol {
     }
     
     /// Shared logic for completing an unlock via a PIN or biometrics.
-    private func completeUnlock() -> Bool {
+    private func completeUnlock() {
         timer.registerUnlock()
         appSettings.appLockNumberOfPINAttempts = 0
-        return true
     }
 }

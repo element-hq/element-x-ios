@@ -292,10 +292,10 @@ class AppLockServiceMock: AppLockServiceProtocol {
     var unlockWithBiometricsCalled: Bool {
         return unlockWithBiometricsCallsCount > 0
     }
-    var unlockWithBiometricsReturnValue: Bool!
-    var unlockWithBiometricsClosure: (() async -> Bool)?
+    var unlockWithBiometricsReturnValue: AppLockServiceBiometricResult!
+    var unlockWithBiometricsClosure: (() async -> AppLockServiceBiometricResult)?
 
-    func unlockWithBiometrics() async -> Bool {
+    func unlockWithBiometrics() async -> AppLockServiceBiometricResult {
         unlockWithBiometricsCallsCount += 1
         if let unlockWithBiometricsClosure = unlockWithBiometricsClosure {
             return await unlockWithBiometricsClosure()
