@@ -40,16 +40,16 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         case unlocked
         /// The app has resigned active but is not yet in the background. This state
         /// shows the placeholder, but doesn't require an unlock on becoming active.
-        case obscuringApp
+        case appObscured
         /// The app is in the background.
         case backgrounded
         /// The app is presenting biometric unlock to the user.
-        case biometricUnlock
+        case attemptingBiometricUnlock
         /// Biometric unlock has completed but the system UI is still the active input.
         /// Once the app becomes active again, it will trigger the next state.
-        case biometricUnlockDismissing(AppLockServiceBiometricResult)
+        case dismissingBiometricUnlock(AppLockServiceBiometricResult)
         /// The app is presenting the unlock screen for PIN code entry.
-        case pinCodeUnlock
+        case attemptingPINUnlock
         /// The user failed to unlock the app (or forgot their PIN) and is being logged out.
         case loggingOut
     }
@@ -63,9 +63,9 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         /// The app is in the foreground and has been given focus.
         case didBecomeActive
         /// Biometric unlock has completed with the following result.
-        case biometricResult(AppLockServiceBiometricResult)
+        case didFinishBiometricUnlock(AppLockServiceBiometricResult)
         /// The entered PIN code was accepted.
-        case pinSuccess
+        case didUnlockWithPIN
         /// The user failed to unlock the app (or forgot their PIN).
         case forceLogout
         /// The service has been enabled.
@@ -81,7 +81,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     private var cancellables: Set<AnyCancellable> = []
     
     /// Whether or not biometric unlock should be attempted instead of asking for a PIN.
-    private var biometricUnlockIsAvailable: Bool {
+    private var isBiometricUnlockAvailable: Bool {
         appLockService.biometricUnlockEnabled && appLockService.biometricUnlockTrusted
     }
     
@@ -140,25 +140,25 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             
             switch (fromState, event) {
             case (.unlocked, .willResignActive):
-                return .obscuringApp
-            case (.obscuringApp, .didBecomeActive):
+                return .appObscured
+            case (.appObscured, .didBecomeActive):
                 return .unlocked
             case (_, .didEnterBackground):
                 return .backgrounded
             case (.backgrounded, .didBecomeActive), (.initial, .didBecomeActive):
                 guard appLockService.computeNeedsUnlock(didBecomeActiveAt: .now) else { return .unlocked }
-                return biometricUnlockIsAvailable ? .biometricUnlock : .pinCodeUnlock
-            case (.biometricUnlock, .biometricResult(let result)):
-                return .biometricUnlockDismissing(result) // Transitional state until the app becomes active again.
-            case (.biometricUnlockDismissing(let result), .didBecomeActive):
+                return isBiometricUnlockAvailable ? .attemptingBiometricUnlock : .attemptingPINUnlock
+            case (.attemptingBiometricUnlock, .didFinishBiometricUnlock(let result)):
+                return .dismissingBiometricUnlock(result) // Transitional state until the app becomes active again.
+            case (.dismissingBiometricUnlock(let result), .didBecomeActive):
                 return switch result {
                 case .unlocked: .unlocked
-                case .failed: .pinCodeUnlock
-                case .interrupted: .biometricUnlock
+                case .failed: .attemptingPINUnlock
+                case .interrupted: .attemptingBiometricUnlock
                 }
-            case (.pinCodeUnlock, .pinSuccess):
+            case (.attemptingPINUnlock, .didUnlockWithPIN):
                 return .unlocked
-            case (.pinCodeUnlock, .forceLogout):
+            case (.attemptingPINUnlock, .forceLogout):
                 return .loggingOut
             
             // Transition to a valid state when enabling the service for the first time.
@@ -179,17 +179,17 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(String(describing: context.event))`.")
             
             switch (context.fromState, context.toState) {
-            case (_, .obscuringApp):
+            case (_, .appObscured):
                 showPlaceholder()
             case (_, .backgrounded):
                 appLockService.applicationDidEnterBackground()
                 showPlaceholder() // Double call but just to be safe.
-            case (_, .biometricUnlock):
+            case (_, .attemptingBiometricUnlock):
                 showPlaceholder() // For the unlock background. Triple call but just to be safe.
                 Task { await self.attemptBiometricUnlock() }
-            case (.biometricUnlock, .biometricUnlockDismissing):
+            case (.attemptingBiometricUnlock, .dismissingBiometricUnlock):
                 break // Transitional state, no need to do anything.
-            case (_, .pinCodeUnlock):
+            case (_, .attemptingPINUnlock):
                 showUnlockScreen()
             case (_, .unlocked):
                 actionsSubject.send(.unlockApp)
@@ -216,7 +216,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     /// Attempts to authenticate the user using Face ID, Touch ID or (possibly) Optic ID.
     private func attemptBiometricUnlock() async {
         let result = await appLockService.unlockWithBiometrics()
-        stateMachine.tryEvent(.biometricResult(result))
+        stateMachine.tryEvent(.didFinishBiometricUnlock(result))
     }
     
     /// Displays the unlock flow with the main unlock screen.
@@ -226,7 +226,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .appUnlocked:
-                stateMachine.tryEvent(.pinSuccess)
+                stateMachine.tryEvent(.didUnlockWithPIN)
             case .forceLogout:
                 stateMachine.tryEvent(.forceLogout)
             }
