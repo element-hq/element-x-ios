@@ -47,7 +47,7 @@ struct PollRoomTimelineView: View {
 
     private var questionView: some View {
         HStack(alignment: .top, spacing: 12) {
-            let asset = poll.hasEnded ? Asset.Images.timelineEndedPoll : Asset.Images.timelinePoll
+            let asset = poll.hasEnded ? Asset.Images.pollsEnd : Asset.Images.polls
 
             Image(asset.name)
                 .resizable()

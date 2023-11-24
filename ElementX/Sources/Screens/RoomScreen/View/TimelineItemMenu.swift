@@ -121,7 +121,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .react:
             Label(L10n.actionReact, iconAsset: Asset.Images.addReaction)
         case .endPoll:
-            Label(L10n.actionEndPoll, iconAsset: Asset.Images.endedPoll)
+            Label(L10n.actionEndPoll, iconAsset: Asset.Images.pollsEnd)
         }
     }
 }

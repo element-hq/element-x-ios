@@ -37,7 +37,7 @@ class PollFormScreenUITests: XCTestCase {
         option2TextField.tap()
         option2TextField.typeText("No\n")
 
-        let createButton = app.buttons[A11yIdentifiers.pollFormScreen.create]
+        let createButton = app.buttons[A11yIdentifiers.pollFormScreen.submit]
         XCTAssertTrue(createButton.isEnabled)
 
         try await app.assertScreenshot(.createPoll, step: 1)
@@ -45,7 +45,7 @@ class PollFormScreenUITests: XCTestCase {
 
     func testMaxOptions() async throws {
         let app = Application.launch(.createPoll)
-        let createButton = app.buttons[A11yIdentifiers.pollFormScreen.create]
+        let createButton = app.buttons[A11yIdentifiers.pollFormScreen.submit]
         let addOption = app.buttons[A11yIdentifiers.pollFormScreen.addOption]
 
         for _ in 1...18 {
