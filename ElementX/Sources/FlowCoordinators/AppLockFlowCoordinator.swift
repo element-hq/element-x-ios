@@ -34,6 +34,8 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     
     /// States the flow can find itself in
     enum State: StateType {
+        /// The initial state before the app has launched.
+        case initial
         /// The app is in the foreground and visible to the user.
         case unlocked
         /// The app has resigned active but is not yet in the background. This state
@@ -66,6 +68,10 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         case pinSuccess
         /// The user failed to unlock the app (or forgot their PIN).
         case forceLogout
+        /// The service has been enabled.
+        case serviceEnabled
+        /// The service has been disabled.
+        case serviceDisabled
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -91,7 +97,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         self.navigationCoordinator = navigationCoordinator
         
         // The app starts off in the background (with the placeholder screen in the flow.)
-        stateMachine = .init(state: .backgrounded)
+        stateMachine = .init(state: .initial)
         showPlaceholder()
         
         notificationCenter.publisher(for: UIApplication.willResignActiveNotification)
@@ -112,6 +118,12 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
         
+        appLockService.isEnabledPublisher
+            .sink { [weak self] isEnabled in
+                self?.stateMachine.tryEvent(isEnabled ? .serviceEnabled : .serviceDisabled)
+            }
+            .store(in: &cancellables)
+        
         configureStateMachine()
     }
     
@@ -126,15 +138,13 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             guard let self, appLockService.isEnabled else { return fromState }
             
             switch (fromState, event) {
-            case (.backgrounded, .willResignActive): // This is wrong, we should get a signal that its enabled and transition to unlocked.
-                return .obscuringApp
             case (.unlocked, .willResignActive):
                 return .obscuringApp
             case (.obscuringApp, .didBecomeActive):
                 return .unlocked
             case (_, .didEnterBackground):
                 return .backgrounded
-            case (.backgrounded, .didBecomeActive):
+            case (.backgrounded, .didBecomeActive), (.initial, .didBecomeActive):
                 guard appLockService.computeNeedsUnlock(didBecomeActiveAt: .now) else { return .unlocked }
                 return biometricUnlockIsAvailable ? .biometricUnlock : .pinCodeUnlock
             case (.biometricUnlock, .biometricResult(let result)):
@@ -149,8 +159,14 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
                 return .unlocked
             case (.pinCodeUnlock, .forceLogout):
                 return .loggingOut
-            case (.loggingOut, .willResignActive): // This state is wrong, it should go to unlocked when logout was successful.
-                return .obscuringApp
+            
+            // Transition to a valid state when enabling the service for the first time.
+            case (.initial, .serviceEnabled):
+                return .unlocked
+            // Transition to a valid state once the service is disabled following a forced logout.
+            case (.loggingOut, .serviceDisabled):
+                return .unlocked
+            
             default:
                 return fromState
             }

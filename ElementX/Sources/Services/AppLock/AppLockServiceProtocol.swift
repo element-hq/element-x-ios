@@ -49,6 +49,9 @@ protocol AppLockServiceProtocol: AnyObject {
     /// The app has been configured to automatically lock with a PIN code.
     var isEnabled: Bool { get }
     
+    /// A publisher that advertises when the service has been enabled or disabled.
+    var isEnabledPublisher: AnyPublisher<Bool, Never> { get }
+    
     /// The type of biometric authentication supported by the device.
     var biometryType: LABiometryType { get }
     /// Whether or not the user has enabled unlock via TouchID, FaceID or (possibly) OpticID.

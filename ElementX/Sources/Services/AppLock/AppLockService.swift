@@ -38,6 +38,9 @@ class AppLockService: AppLockServiceProtocol {
         }
     }
     
+    private var isEnabledSubject: PassthroughSubject<Bool, Never> = .init()
+    var isEnabledPublisher: AnyPublisher<Bool, Never> { isEnabledSubject.eraseToAnyPublisher() }
+    
     var biometryType: LABiometryType {
         updateBiometrics()
         guard context.evaluatedPolicyDomainState != nil else { return .none }
@@ -71,6 +74,7 @@ class AppLockService: AppLockServiceProtocol {
         
         do {
             try keychainController.setPINCode(pinCode)
+            isEnabledSubject.send(true)
             return .success(())
         } catch {
             MXLog.error("Keychain access error: \(error)")
@@ -105,6 +109,7 @@ class AppLockService: AppLockServiceProtocol {
         keychainController.removePINCode()
         keychainController.removePINCodeBiometricState()
         appSettings.appLockNumberOfPINAttempts = 0
+        isEnabledSubject.send(false)
     }
     
     func applicationDidEnterBackground() {

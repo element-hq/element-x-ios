@@ -128,6 +128,11 @@ class AppLockServiceMock: AppLockServiceProtocol {
         set(value) { underlyingIsEnabled = value }
     }
     var underlyingIsEnabled: Bool!
+    var isEnabledPublisher: AnyPublisher<Bool, Never> {
+        get { return underlyingIsEnabledPublisher }
+        set(value) { underlyingIsEnabledPublisher = value }
+    }
+    var underlyingIsEnabledPublisher: AnyPublisher<Bool, Never>!
     var biometryType: LABiometryType {
         get { return underlyingBiometryType }
         set(value) { underlyingBiometryType = value }
