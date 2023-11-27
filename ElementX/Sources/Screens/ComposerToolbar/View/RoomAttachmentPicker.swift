@@ -18,17 +18,6 @@ import Compound
 import SwiftUI
 import WysiwygComposer
 
-private struct RoomAttachmentPickerButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundStyle(configuration.isPressed ? .compound.bgActionPrimaryPressed : .compound.bgActionPrimaryRest)
-            // Disable animations to fix a bug when the system is in Light mode but the app in Dark mode. For some
-            // reason the animation causes a glitch with sheet's colour scheme when there are presentation detents.
-            // https://github.com/vector-im/element-x-ios/issues/2157
-            .animation(.noAnimation, value: configuration.isPressed)
-    }
-}
-
 struct RoomAttachmentPicker: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
     @Environment(\.isPresented) var isPresented
@@ -113,6 +102,17 @@ struct RoomAttachmentPicker: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
             }
         }
+    }
+}
+
+private struct RoomAttachmentPickerButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundStyle(configuration.isPressed ? .compound.bgActionPrimaryPressed : .compound.bgActionPrimaryRest)
+            // Disable animations to fix a bug when the system is in Light mode but the app in Dark mode. For some
+            // reason the animation causes a glitch with sheet's colour scheme when there are presentation detents.
+            // https://github.com/vector-im/element-x-ios/issues/2157
+            .animation(.noAnimation, value: configuration.isPressed)
     }
 }
 
