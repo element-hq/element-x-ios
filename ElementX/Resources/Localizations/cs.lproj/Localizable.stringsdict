@@ -31,9 +31,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Read by %1$@ and %2$d other</string>
+			<string>Přečetl(a) %1$@ a %2$d další</string>
+			<key>few</key>
+			<string>Přečetl(a) %1$@ a %2$d další</string>
 			<key>other</key>
-			<string>Read by %1$@ and %2$d others</string>
+			<string>Přečetl(a) %1$@ a %2$d dalších</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>

@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Read by %1$@ and %2$d other</string>
+			<string>Lu par %1$@ et %2$d autre</string>
 			<key>other</key>
-			<string>Read by %1$@ and %2$d others</string>
+			<string>Lu par %1$@ et %2$d autres</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
