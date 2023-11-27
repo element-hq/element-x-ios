@@ -28,6 +28,8 @@ protocol TimelineProxyProtocol {
                      original eventID: String,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
     
+    func fetchDetails(for eventID: String)
+    
     func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation?
     
     func retryDecryption(for sessionID: String) async

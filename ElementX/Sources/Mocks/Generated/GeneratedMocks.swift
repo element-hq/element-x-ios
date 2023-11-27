@@ -2163,22 +2163,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return acceptInvitationReturnValue
         }
     }
-    //MARK: - fetchDetails
-
-    var fetchDetailsForCallsCount = 0
-    var fetchDetailsForCalled: Bool {
-        return fetchDetailsForCallsCount > 0
-    }
-    var fetchDetailsForReceivedEventID: String?
-    var fetchDetailsForReceivedInvocations: [String] = []
-    var fetchDetailsForClosure: ((String) -> Void)?
-
-    func fetchDetails(for eventID: String) {
-        fetchDetailsForCallsCount += 1
-        fetchDetailsForReceivedEventID = eventID
-        fetchDetailsForReceivedInvocations.append(eventID)
-        fetchDetailsForClosure?(eventID)
-    }
     //MARK: - invite
 
     var inviteUserIDCallsCount = 0
@@ -2705,6 +2689,22 @@ class TimelineProxyMock: TimelineProxyProtocol {
         } else {
             return editMessageHtmlOriginalIntentionalMentionsReturnValue
         }
+    }
+    //MARK: - fetchDetails
+
+    var fetchDetailsForCallsCount = 0
+    var fetchDetailsForCalled: Bool {
+        return fetchDetailsForCallsCount > 0
+    }
+    var fetchDetailsForReceivedEventID: String?
+    var fetchDetailsForReceivedInvocations: [String] = []
+    var fetchDetailsForClosure: ((String) -> Void)?
+
+    func fetchDetails(for eventID: String) {
+        fetchDetailsForCallsCount += 1
+        fetchDetailsForReceivedEventID = eventID
+        fetchDetailsForReceivedInvocations.append(eventID)
+        fetchDetailsForClosure?(eventID)
     }
     //MARK: - messageEventContent
 

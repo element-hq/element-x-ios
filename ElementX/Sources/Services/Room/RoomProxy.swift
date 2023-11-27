@@ -348,19 +348,6 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func fetchDetails(for eventID: String) {
-        Task {
-            await Task.dispatch(on: .global()) {
-                do {
-                    MXLog.info("Fetching event details for \(eventID)")
-                    try self._timeline.fetchDetailsForEvent(eventId: eventID)
-                } catch {
-                    MXLog.error("Failed fetching event details for \(eventID) with error: \(error)")
-                }
-            }
-        }
-    }
-    
     func invite(userID: String) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {

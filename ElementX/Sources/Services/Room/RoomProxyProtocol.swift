@@ -103,8 +103,6 @@ protocol RoomProxyProtocol {
     
     func acceptInvitation() async -> Result<Void, RoomProxyError>
     
-    func fetchDetails(for eventID: String)
-    
     func invite(userID: String) async -> Result<Void, RoomProxyError>
     
     func setName(_ name: String) async -> Result<Void, RoomProxyError>

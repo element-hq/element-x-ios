@@ -71,6 +71,19 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
+    func fetchDetails(for eventID: String) {
+        Task {
+            await Task.dispatch(on: .global()) {
+                do {
+                    MXLog.info("Fetching event details for \(eventID)")
+                    try self.timeline.fetchDetailsForEvent(eventId: eventID)
+                } catch {
+                    MXLog.error("Failed fetching event details for \(eventID) with error: \(error)")
+                }
+            }
+        }
+    }
+    
     func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
         try? timeline.getTimelineEventContentByEventId(eventId: eventID)
     }

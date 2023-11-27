@@ -375,10 +375,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
 
         switch timelineItem.replyDetails {
         case .notLoaded:
-            roomProxy.fetchDetails(for: eventID)
+            roomProxy.timeline.fetchDetails(for: eventID)
         case .error:
             if refetchOnError {
-                roomProxy.fetchDetails(for: eventID)
+                roomProxy.timeline.fetchDetails(for: eventID)
             }
         default:
             break
