@@ -56,6 +56,8 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
 
     /// Events that can be triggered on the flow state machine
     enum Event: EventType {
+        /// Starts the flow while the app is launching in the background.
+        case start
         /// The app is resigning active (going into the app switcher, showing system UI like Face ID, permissions prompt etc).
         case willResignActive
         /// The app is now backgrounded and not visible to the user.
@@ -99,7 +101,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         
         // Set the initial state and start with the placeholder screen as the root view.
         stateMachine = .init(state: initialState)
-        showPlaceholder()
+        configureStateMachine()
         
         notificationCenter.publisher(for: UIApplication.willResignActiveNotification)
             .sink { [weak self] _ in
@@ -124,8 +126,6 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
                 self?.stateMachine.tryEvent(isEnabled ? .serviceEnabled : .serviceDisabled)
             }
             .store(in: &cancellables)
-        
-        configureStateMachine()
     }
     
     func toPresentable() -> AnyView {
@@ -139,13 +139,16 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             guard let self, appLockService.isEnabled else { return fromState }
             
             switch (fromState, event) {
+            case (.initial, .start):
+                return .backgrounded
+            
             case (.unlocked, .willResignActive):
                 return .appObscured
             case (.appObscured, .didBecomeActive):
                 return .unlocked
             case (_, .didEnterBackground):
                 return .backgrounded
-            case (.backgrounded, .didBecomeActive), (.initial, .didBecomeActive):
+            case (.backgrounded, .didBecomeActive):
                 guard appLockService.computeNeedsUnlock(didBecomeActiveAt: .now) else { return .unlocked }
                 return isBiometricUnlockAvailable ? .attemptingBiometricUnlock : .attemptingPINUnlock
             case (.attemptingBiometricUnlock, .didFinishBiometricUnlock(let result)):
@@ -183,7 +186,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
                 showPlaceholder()
             case (_, .backgrounded):
                 appLockService.applicationDidEnterBackground()
-                showPlaceholder() // Double call but just to be safe.
+                showPlaceholder() // Double call but just to be safe. Useful at app launch.
             case (_, .attemptingBiometricUnlock):
                 showPlaceholder() // For the unlock background. Triple call but just to be safe.
                 Task { await self.attemptBiometricUnlock() }
@@ -203,6 +206,8 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         stateMachine.addErrorHandler { context in
             fatalError("Unexpected transition from `\(context.fromState)` to `\(context.toState)` with event `\(String(describing: context.event))`.")
         }
+        
+        stateMachine.tryEvent(.start)
     }
     
     // MARK: - App unlock
