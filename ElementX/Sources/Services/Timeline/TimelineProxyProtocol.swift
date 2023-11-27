@@ -26,11 +26,13 @@ protocol TimelineProxyProtocol {
                      html: String?,
                      inReplyTo eventID: String?,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
+    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, TimelineProxyError>
 }
 
 enum TimelineProxyError: Error, Equatable {
     case failedPaginatingBackwards
     case failedSendingMessage
+    case failedSendingReaction
     case failedSendingReadReceipt
 }
 

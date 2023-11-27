@@ -139,7 +139,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
 
-        switch await roomProxy.toggleReaction(reaction, to: eventID) {
+        switch await roomProxy.timeline.toggleReaction(reaction, to: eventID) {
         case .success:
             MXLog.info("Finished toggling reaction")
         case .failure(let error):

@@ -1999,27 +1999,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadDisplayNameForUserIdReturnValue
         }
     }
-    //MARK: - toggleReaction
-
-    var toggleReactionToCallsCount = 0
-    var toggleReactionToCalled: Bool {
-        return toggleReactionToCallsCount > 0
-    }
-    var toggleReactionToReceivedArguments: (reaction: String, eventID: String)?
-    var toggleReactionToReceivedInvocations: [(reaction: String, eventID: String)] = []
-    var toggleReactionToReturnValue: Result<Void, RoomProxyError>!
-    var toggleReactionToClosure: ((String, String) async -> Result<Void, RoomProxyError>)?
-
-    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
-        toggleReactionToCallsCount += 1
-        toggleReactionToReceivedArguments = (reaction: reaction, eventID: eventID)
-        toggleReactionToReceivedInvocations.append((reaction: reaction, eventID: eventID))
-        if let toggleReactionToClosure = toggleReactionToClosure {
-            return await toggleReactionToClosure(reaction, eventID)
-        } else {
-            return toggleReactionToReturnValue
-        }
-    }
     //MARK: - sendImage
 
     var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount = 0
@@ -2968,6 +2947,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return await sendMessageHtmlInReplyToIntentionalMentionsClosure(message, html, eventID, intentionalMentions)
         } else {
             return sendMessageHtmlInReplyToIntentionalMentionsReturnValue
+        }
+    }
+    //MARK: - toggleReaction
+
+    var toggleReactionToCallsCount = 0
+    var toggleReactionToCalled: Bool {
+        return toggleReactionToCallsCount > 0
+    }
+    var toggleReactionToReceivedArguments: (reaction: String, eventID: String)?
+    var toggleReactionToReceivedInvocations: [(reaction: String, eventID: String)] = []
+    var toggleReactionToReturnValue: Result<Void, TimelineProxyError>!
+    var toggleReactionToClosure: ((String, String) async -> Result<Void, TimelineProxyError>)?
+
+    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, TimelineProxyError> {
+        toggleReactionToCallsCount += 1
+        toggleReactionToReceivedArguments = (reaction: reaction, eventID: eventID)
+        toggleReactionToReceivedInvocations.append((reaction: reaction, eventID: eventID))
+        if let toggleReactionToClosure = toggleReactionToClosure {
+            return await toggleReactionToClosure(reaction, eventID)
+        } else {
+            return toggleReactionToReturnValue
         }
     }
 }

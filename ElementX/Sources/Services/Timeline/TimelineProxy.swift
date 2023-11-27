@@ -21,10 +21,12 @@ final class TimelineProxy: TimelineProxyProtocol {
     private var timeline: Timeline
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     private let backgroundTaskService: BackgroundTaskServiceProtocol
+    
     #warning("AG: should we use a different task name for different TimelineProxies?")
     private let backgroundTaskName = "SendRoomEvent"
     private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.low_priority", qos: .utility)
     private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
+    private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
     
     init(timeline: Timeline, backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.timeline = timeline
@@ -99,6 +101,22 @@ final class TimelineProxy: TimelineProxyProtocol {
                 return .success(())
             } catch {
                 return .failure(.failedSendingReadReceipt)
+            }
+        }
+    }
+    
+    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, TimelineProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.timeline.toggleReaction(eventId: eventID, key: reaction)
+                return .success(())
+            } catch {
+                return .failure(.failedSendingReaction)
             }
         }
     }

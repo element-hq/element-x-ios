@@ -89,8 +89,6 @@ protocol RoomProxyProtocol {
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
-    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
-    
     func sendImage(url: URL,
                    thumbnailURL: URL,
                    imageInfo: ImageInfo,

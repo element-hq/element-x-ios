@@ -221,22 +221,6 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self._timeline.toggleReaction(eventId: eventID, key: reaction)
-                return .success(())
-            } catch {
-                return .failure(.failedSendingReaction)
-            }
-        }
-    }
-    
     func sendImage(url: URL,
                    thumbnailURL: URL,
                    imageInfo: ImageInfo,
