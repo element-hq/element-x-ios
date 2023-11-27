@@ -331,6 +331,56 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
+    // MARK: - Polls
+
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.timeline.createPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind)))
+            } catch {
+                MXLog.error("Failed creating a poll: \(error)")
+                return .failure(.failedCreatingPoll)
+            }
+        }
+    }
+    
+    func editPoll(original eventID: String,
+                  question: String,
+                  answers: [String],
+                  pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
+        do {
+            let originalEvent = try await Task.dispatch(on: .global()) {
+                try self.timeline.getEventTimelineItemByEventId(eventId: eventID)
+            }
+            return try await .success(timeline.editPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind), editItem: originalEvent))
+        } catch {
+            MXLog.error("Failed editing the poll: \(error), eventID: \(eventID)")
+            return .failure(.failedEditingPoll)
+        }
+    }
+    
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.timeline.endPoll(pollStartId: pollStartID, text: text))
+            } catch {
+                MXLog.error("Failed ending a poll: \(error), pollStartID: \(pollStartID)")
+                return .failure(.failedEndingPoll)
+            }
+        }
+    }
+
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.timeline.sendPollResponse(pollStartId: pollStartID, answers: answers))
+            } catch {
+                MXLog.error("Failed sending a poll vote: \(error), pollStartID: \(pollStartID)")
+                return .failure(.failedSendingPollResponse)
+            }
+        }
+    }
+    
     // MARK: - Private
     
     private func buildMessageContentFor(_ message: String,
@@ -377,6 +427,17 @@ private final class UploadProgressListener: ProgressWatcher {
     func transmissionProgress(progress: TransmissionProgress) {
         DispatchQueue.main.async { [weak self] in
             self?.onUpdateClosure(Double(progress.current) / Double(progress.total))
+        }
+    }
+}
+
+private extension MatrixRustSDK.PollKind {
+    init(pollKind: Poll.Kind) {
+        switch pollKind {
+        case .disclosed:
+            self = .disclosed
+        case .undisclosed:
+            self = .undisclosed
         }
     }
 }

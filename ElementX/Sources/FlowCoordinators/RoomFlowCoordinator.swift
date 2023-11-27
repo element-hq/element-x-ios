@@ -671,7 +671,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return
             }
 
-            let result = await roomProxy.createPoll(question: question, answers: options, pollKind: pollKind)
+            let result = await roomProxy.timeline.createPoll(question: question, answers: options, pollKind: pollKind)
 
             self.analytics.trackComposer(inThread: false,
                                          isEditing: false,
@@ -697,7 +697,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return
             }
 
-            let result = await roomProxy.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind)
+            let result = await roomProxy.timeline.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind)
             
             switch result {
             case .success:

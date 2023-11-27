@@ -2306,90 +2306,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return canUserTriggerRoomNotificationUserIDReturnValue
         }
     }
-    //MARK: - createPoll
-
-    var createPollQuestionAnswersPollKindCallsCount = 0
-    var createPollQuestionAnswersPollKindCalled: Bool {
-        return createPollQuestionAnswersPollKindCallsCount > 0
-    }
-    var createPollQuestionAnswersPollKindReceivedArguments: (question: String, answers: [String], pollKind: Poll.Kind)?
-    var createPollQuestionAnswersPollKindReceivedInvocations: [(question: String, answers: [String], pollKind: Poll.Kind)] = []
-    var createPollQuestionAnswersPollKindReturnValue: Result<Void, RoomProxyError>!
-    var createPollQuestionAnswersPollKindClosure: ((String, [String], Poll.Kind) async -> Result<Void, RoomProxyError>)?
-
-    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
-        createPollQuestionAnswersPollKindCallsCount += 1
-        createPollQuestionAnswersPollKindReceivedArguments = (question: question, answers: answers, pollKind: pollKind)
-        createPollQuestionAnswersPollKindReceivedInvocations.append((question: question, answers: answers, pollKind: pollKind))
-        if let createPollQuestionAnswersPollKindClosure = createPollQuestionAnswersPollKindClosure {
-            return await createPollQuestionAnswersPollKindClosure(question, answers, pollKind)
-        } else {
-            return createPollQuestionAnswersPollKindReturnValue
-        }
-    }
-    //MARK: - editPoll
-
-    var editPollOriginalQuestionAnswersPollKindCallsCount = 0
-    var editPollOriginalQuestionAnswersPollKindCalled: Bool {
-        return editPollOriginalQuestionAnswersPollKindCallsCount > 0
-    }
-    var editPollOriginalQuestionAnswersPollKindReceivedArguments: (eventID: String, question: String, answers: [String], pollKind: Poll.Kind)?
-    var editPollOriginalQuestionAnswersPollKindReceivedInvocations: [(eventID: String, question: String, answers: [String], pollKind: Poll.Kind)] = []
-    var editPollOriginalQuestionAnswersPollKindReturnValue: Result<Void, RoomProxyError>!
-    var editPollOriginalQuestionAnswersPollKindClosure: ((String, String, [String], Poll.Kind) async -> Result<Void, RoomProxyError>)?
-
-    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
-        editPollOriginalQuestionAnswersPollKindCallsCount += 1
-        editPollOriginalQuestionAnswersPollKindReceivedArguments = (eventID: eventID, question: question, answers: answers, pollKind: pollKind)
-        editPollOriginalQuestionAnswersPollKindReceivedInvocations.append((eventID: eventID, question: question, answers: answers, pollKind: pollKind))
-        if let editPollOriginalQuestionAnswersPollKindClosure = editPollOriginalQuestionAnswersPollKindClosure {
-            return await editPollOriginalQuestionAnswersPollKindClosure(eventID, question, answers, pollKind)
-        } else {
-            return editPollOriginalQuestionAnswersPollKindReturnValue
-        }
-    }
-    //MARK: - sendPollResponse
-
-    var sendPollResponsePollStartIDAnswersCallsCount = 0
-    var sendPollResponsePollStartIDAnswersCalled: Bool {
-        return sendPollResponsePollStartIDAnswersCallsCount > 0
-    }
-    var sendPollResponsePollStartIDAnswersReceivedArguments: (pollStartID: String, answers: [String])?
-    var sendPollResponsePollStartIDAnswersReceivedInvocations: [(pollStartID: String, answers: [String])] = []
-    var sendPollResponsePollStartIDAnswersReturnValue: Result<Void, RoomProxyError>!
-    var sendPollResponsePollStartIDAnswersClosure: ((String, [String]) async -> Result<Void, RoomProxyError>)?
-
-    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError> {
-        sendPollResponsePollStartIDAnswersCallsCount += 1
-        sendPollResponsePollStartIDAnswersReceivedArguments = (pollStartID: pollStartID, answers: answers)
-        sendPollResponsePollStartIDAnswersReceivedInvocations.append((pollStartID: pollStartID, answers: answers))
-        if let sendPollResponsePollStartIDAnswersClosure = sendPollResponsePollStartIDAnswersClosure {
-            return await sendPollResponsePollStartIDAnswersClosure(pollStartID, answers)
-        } else {
-            return sendPollResponsePollStartIDAnswersReturnValue
-        }
-    }
-    //MARK: - endPoll
-
-    var endPollPollStartIDTextCallsCount = 0
-    var endPollPollStartIDTextCalled: Bool {
-        return endPollPollStartIDTextCallsCount > 0
-    }
-    var endPollPollStartIDTextReceivedArguments: (pollStartID: String, text: String)?
-    var endPollPollStartIDTextReceivedInvocations: [(pollStartID: String, text: String)] = []
-    var endPollPollStartIDTextReturnValue: Result<Void, RoomProxyError>!
-    var endPollPollStartIDTextClosure: ((String, String) async -> Result<Void, RoomProxyError>)?
-
-    func endPoll(pollStartID: String, text: String) async -> Result<Void, RoomProxyError> {
-        endPollPollStartIDTextCallsCount += 1
-        endPollPollStartIDTextReceivedArguments = (pollStartID: pollStartID, text: text)
-        endPollPollStartIDTextReceivedInvocations.append((pollStartID: pollStartID, text: text))
-        if let endPollPollStartIDTextClosure = endPollPollStartIDTextClosure {
-            return await endPollPollStartIDTextClosure(pollStartID, text)
-        } else {
-            return endPollPollStartIDTextReturnValue
-        }
-    }
     //MARK: - elementCallWidgetDriver
 
     var elementCallWidgetDriverCallsCount = 0
@@ -2968,6 +2884,90 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return await toggleReactionToClosure(reaction, eventID)
         } else {
             return toggleReactionToReturnValue
+        }
+    }
+    //MARK: - createPoll
+
+    var createPollQuestionAnswersPollKindCallsCount = 0
+    var createPollQuestionAnswersPollKindCalled: Bool {
+        return createPollQuestionAnswersPollKindCallsCount > 0
+    }
+    var createPollQuestionAnswersPollKindReceivedArguments: (question: String, answers: [String], pollKind: Poll.Kind)?
+    var createPollQuestionAnswersPollKindReceivedInvocations: [(question: String, answers: [String], pollKind: Poll.Kind)] = []
+    var createPollQuestionAnswersPollKindReturnValue: Result<Void, TimelineProxyError>!
+    var createPollQuestionAnswersPollKindClosure: ((String, [String], Poll.Kind) async -> Result<Void, TimelineProxyError>)?
+
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
+        createPollQuestionAnswersPollKindCallsCount += 1
+        createPollQuestionAnswersPollKindReceivedArguments = (question: question, answers: answers, pollKind: pollKind)
+        createPollQuestionAnswersPollKindReceivedInvocations.append((question: question, answers: answers, pollKind: pollKind))
+        if let createPollQuestionAnswersPollKindClosure = createPollQuestionAnswersPollKindClosure {
+            return await createPollQuestionAnswersPollKindClosure(question, answers, pollKind)
+        } else {
+            return createPollQuestionAnswersPollKindReturnValue
+        }
+    }
+    //MARK: - editPoll
+
+    var editPollOriginalQuestionAnswersPollKindCallsCount = 0
+    var editPollOriginalQuestionAnswersPollKindCalled: Bool {
+        return editPollOriginalQuestionAnswersPollKindCallsCount > 0
+    }
+    var editPollOriginalQuestionAnswersPollKindReceivedArguments: (eventID: String, question: String, answers: [String], pollKind: Poll.Kind)?
+    var editPollOriginalQuestionAnswersPollKindReceivedInvocations: [(eventID: String, question: String, answers: [String], pollKind: Poll.Kind)] = []
+    var editPollOriginalQuestionAnswersPollKindReturnValue: Result<Void, TimelineProxyError>!
+    var editPollOriginalQuestionAnswersPollKindClosure: ((String, String, [String], Poll.Kind) async -> Result<Void, TimelineProxyError>)?
+
+    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
+        editPollOriginalQuestionAnswersPollKindCallsCount += 1
+        editPollOriginalQuestionAnswersPollKindReceivedArguments = (eventID: eventID, question: question, answers: answers, pollKind: pollKind)
+        editPollOriginalQuestionAnswersPollKindReceivedInvocations.append((eventID: eventID, question: question, answers: answers, pollKind: pollKind))
+        if let editPollOriginalQuestionAnswersPollKindClosure = editPollOriginalQuestionAnswersPollKindClosure {
+            return await editPollOriginalQuestionAnswersPollKindClosure(eventID, question, answers, pollKind)
+        } else {
+            return editPollOriginalQuestionAnswersPollKindReturnValue
+        }
+    }
+    //MARK: - endPoll
+
+    var endPollPollStartIDTextCallsCount = 0
+    var endPollPollStartIDTextCalled: Bool {
+        return endPollPollStartIDTextCallsCount > 0
+    }
+    var endPollPollStartIDTextReceivedArguments: (pollStartID: String, text: String)?
+    var endPollPollStartIDTextReceivedInvocations: [(pollStartID: String, text: String)] = []
+    var endPollPollStartIDTextReturnValue: Result<Void, TimelineProxyError>!
+    var endPollPollStartIDTextClosure: ((String, String) async -> Result<Void, TimelineProxyError>)?
+
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineProxyError> {
+        endPollPollStartIDTextCallsCount += 1
+        endPollPollStartIDTextReceivedArguments = (pollStartID: pollStartID, text: text)
+        endPollPollStartIDTextReceivedInvocations.append((pollStartID: pollStartID, text: text))
+        if let endPollPollStartIDTextClosure = endPollPollStartIDTextClosure {
+            return await endPollPollStartIDTextClosure(pollStartID, text)
+        } else {
+            return endPollPollStartIDTextReturnValue
+        }
+    }
+    //MARK: - sendPollResponse
+
+    var sendPollResponsePollStartIDAnswersCallsCount = 0
+    var sendPollResponsePollStartIDAnswersCalled: Bool {
+        return sendPollResponsePollStartIDAnswersCallsCount > 0
+    }
+    var sendPollResponsePollStartIDAnswersReceivedArguments: (pollStartID: String, answers: [String])?
+    var sendPollResponsePollStartIDAnswersReceivedInvocations: [(pollStartID: String, answers: [String])] = []
+    var sendPollResponsePollStartIDAnswersReturnValue: Result<Void, TimelineProxyError>!
+    var sendPollResponsePollStartIDAnswersClosure: ((String, [String]) async -> Result<Void, TimelineProxyError>)?
+
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineProxyError> {
+        sendPollResponsePollStartIDAnswersCallsCount += 1
+        sendPollResponsePollStartIDAnswersReceivedArguments = (pollStartID: pollStartID, answers: answers)
+        sendPollResponsePollStartIDAnswersReceivedInvocations.append((pollStartID: pollStartID, answers: answers))
+        if let sendPollResponsePollStartIDAnswersClosure = sendPollResponsePollStartIDAnswersClosure {
+            return await sendPollResponsePollStartIDAnswersClosure(pollStartID, answers)
+        } else {
+            return sendPollResponsePollStartIDAnswersReturnValue
         }
     }
 }

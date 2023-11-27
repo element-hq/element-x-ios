@@ -23,8 +23,6 @@ enum RoomProxyError: Error, Equatable {
     case failedRetrievingMemberDisplayName
     case failedRedactingEvent
     case failedReportingContent
-    case failedAddingTimelineListener
-    case failedRetrievingMembers
     case failedRetrievingMember
     case failedLeavingRoom
     case failedAcceptingInvite
@@ -35,10 +33,6 @@ enum RoomProxyError: Error, Equatable {
     case failedRemovingAvatar
     case failedUploadingAvatar
     case failedCheckingPermission
-    case failedCreatingPoll
-    case failedSendingPollResponse
-    case failedEndingPoll
-    case failedEditingPoll
 }
 
 // sourcery: AutoMockable
@@ -116,14 +110,6 @@ protocol RoomProxyProtocol {
     func canUserRedact(userID: String) async -> Result<Bool, RoomProxyError>
     
     func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
-
-    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError>
-   
-    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError>
-
-    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError>
-
-    func endPoll(pollStartID: String, text: String) async -> Result<Void, RoomProxyError>
     
     // MARK: - Element Call
     

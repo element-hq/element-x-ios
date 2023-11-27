@@ -83,6 +83,18 @@ protocol TimelineProxyProtocol {
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
     
     func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, TimelineProxyError>
+    
+    // Polls
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
+    
+    func editPoll(original eventID: String,
+                  question: String,
+                  answers: [String],
+                  pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
+    
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineProxyError>
+    
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineProxyError>
 }
 
 enum TimelineProxyError: Error, Equatable {
@@ -92,6 +104,12 @@ enum TimelineProxyError: Error, Equatable {
     case failedSendingReaction
     case failedSendingReadReceipt
     case failedSendingMedia
+    
+    // Polls
+    case failedCreatingPoll
+    case failedEditingPoll
+    case failedEndingPoll
+    case failedSendingPollResponse
 }
 
 extension TimelineProxyProtocol {
