@@ -1999,74 +1999,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadDisplayNameForUserIdReturnValue
         }
     }
-    //MARK: - sendImage
-
-    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount = 0
-    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCalled: Bool {
-        return sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount > 0
-    }
-    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleReturnValue: Result<Void, RoomProxyError>!
-    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure: ((URL, URL, ImageInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>)?
-
-    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount += 1
-        if let sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure = sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure {
-            return await sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure(url, thumbnailURL, imageInfo, progressSubject, requestHandle)
-        } else {
-            return sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleReturnValue
-        }
-    }
-    //MARK: - sendVideo
-
-    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount = 0
-    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCalled: Bool {
-        return sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount > 0
-    }
-    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleReturnValue: Result<Void, RoomProxyError>!
-    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure: ((URL, URL, VideoInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>)?
-
-    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount += 1
-        if let sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure = sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure {
-            return await sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure(url, thumbnailURL, videoInfo, progressSubject, requestHandle)
-        } else {
-            return sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleReturnValue
-        }
-    }
-    //MARK: - sendAudio
-
-    var sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount = 0
-    var sendAudioUrlAudioInfoProgressSubjectRequestHandleCalled: Bool {
-        return sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount > 0
-    }
-    var sendAudioUrlAudioInfoProgressSubjectRequestHandleReturnValue: Result<Void, RoomProxyError>!
-    var sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure: ((URL, AudioInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>)?
-
-    func sendAudio(url: URL, audioInfo: AudioInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount += 1
-        if let sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure = sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure {
-            return await sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure(url, audioInfo, progressSubject, requestHandle)
-        } else {
-            return sendAudioUrlAudioInfoProgressSubjectRequestHandleReturnValue
-        }
-    }
-    //MARK: - sendFile
-
-    var sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount = 0
-    var sendFileUrlFileInfoProgressSubjectRequestHandleCalled: Bool {
-        return sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount > 0
-    }
-    var sendFileUrlFileInfoProgressSubjectRequestHandleReturnValue: Result<Void, RoomProxyError>!
-    var sendFileUrlFileInfoProgressSubjectRequestHandleClosure: ((URL, FileInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>)?
-
-    func sendFile(url: URL, fileInfo: FileInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount += 1
-        if let sendFileUrlFileInfoProgressSubjectRequestHandleClosure = sendFileUrlFileInfoProgressSubjectRequestHandleClosure {
-            return await sendFileUrlFileInfoProgressSubjectRequestHandleClosure(url, fileInfo, progressSubject, requestHandle)
-        } else {
-            return sendFileUrlFileInfoProgressSubjectRequestHandleReturnValue
-        }
-    }
     //MARK: - sendLocation
 
     var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount = 0
@@ -2086,23 +2018,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return await sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure(body, geoURI, description, zoomLevel, assetType)
         } else {
             return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue
-        }
-    }
-    //MARK: - sendVoiceMessage
-
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount = 0
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled: Bool {
-        return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount > 0
-    }
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue: Result<Void, RoomProxyError>!
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure: ((URL, AudioInfo, [UInt16], CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>)?
-
-    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16], progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount += 1
-        if let sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure {
-            return await sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure(url, audioInfo, waveform, progressSubject, requestHandle)
-        } else {
-            return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue
         }
     }
     //MARK: - retrySend
@@ -2884,6 +2799,91 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return await paginateBackwardsRequestSizeUntilNumberOfItemsClosure(requestSize, untilNumberOfItems)
         } else {
             return paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue
+        }
+    }
+    //MARK: - sendAudio
+
+    var sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount = 0
+    var sendAudioUrlAudioInfoProgressSubjectRequestHandleCalled: Bool {
+        return sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount > 0
+    }
+    var sendAudioUrlAudioInfoProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>!
+    var sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure: ((URL, AudioInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+
+    func sendAudio(url: URL, audioInfo: AudioInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount += 1
+        if let sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure = sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure {
+            return await sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure(url, audioInfo, progressSubject, requestHandle)
+        } else {
+            return sendAudioUrlAudioInfoProgressSubjectRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendFile
+
+    var sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount = 0
+    var sendFileUrlFileInfoProgressSubjectRequestHandleCalled: Bool {
+        return sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount > 0
+    }
+    var sendFileUrlFileInfoProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>!
+    var sendFileUrlFileInfoProgressSubjectRequestHandleClosure: ((URL, FileInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+
+    func sendFile(url: URL, fileInfo: FileInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount += 1
+        if let sendFileUrlFileInfoProgressSubjectRequestHandleClosure = sendFileUrlFileInfoProgressSubjectRequestHandleClosure {
+            return await sendFileUrlFileInfoProgressSubjectRequestHandleClosure(url, fileInfo, progressSubject, requestHandle)
+        } else {
+            return sendFileUrlFileInfoProgressSubjectRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendImage
+
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount = 0
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCalled: Bool {
+        return sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount > 0
+    }
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>!
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure: ((URL, URL, ImageInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+
+    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount += 1
+        if let sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure = sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure {
+            return await sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure(url, thumbnailURL, imageInfo, progressSubject, requestHandle)
+        } else {
+            return sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendVideo
+
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount = 0
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCalled: Bool {
+        return sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount > 0
+    }
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>!
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure: ((URL, URL, VideoInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+
+    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount += 1
+        if let sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure = sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure {
+            return await sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure(url, thumbnailURL, videoInfo, progressSubject, requestHandle)
+        } else {
+            return sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendVoiceMessage
+
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount = 0
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled: Bool {
+        return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount > 0
+    }
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>!
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure: ((URL, AudioInfo, [UInt16], CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16], progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount += 1
+        if let sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure {
+            return await sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure(url, audioInfo, waveform, progressSubject, requestHandle)
+        } else {
+            return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue
         }
     }
     //MARK: - sendReadReceipt

@@ -88,40 +88,12 @@ protocol RoomProxyProtocol {
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
-    
-    func sendImage(url: URL,
-                   thumbnailURL: URL,
-                   imageInfo: ImageInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
-    
-    func sendVideo(url: URL,
-                   thumbnailURL: URL,
-                   videoInfo: VideoInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
-    
-    func sendAudio(url: URL,
-                   audioInfo: AudioInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
-
-    func sendFile(url: URL,
-                  fileInfo: FileInfo,
-                  progressSubject: CurrentValueSubject<Double, Never>?,
-                  requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
 
     func sendLocation(body: String,
                       geoURI: GeoURI,
                       description: String?,
                       zoomLevel: UInt8?,
                       assetType: AssetType?) async -> Result<Void, RoomProxyError>
-
-    func sendVoiceMessage(url: URL,
-                          audioInfo: AudioInfo,
-                          waveform: [UInt16],
-                          progressSubject: CurrentValueSubject<Double, Never>?,
-                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
 
     /// Retries sending a failed message given its transaction ID
     func retrySend(transactionID: String) async

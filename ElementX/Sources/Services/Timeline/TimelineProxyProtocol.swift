@@ -14,18 +14,53 @@
 // limitations under the License.
 //
 
+import Combine
+import Foundation
 import MatrixRustSDK
 
 // sourcery: AutoMockable
 protocol TimelineProxyProtocol {
     func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation?
+    
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError>
+    
+    func sendAudio(url: URL,
+                   audioInfo: AudioInfo,
+                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
+    
+    func sendFile(url: URL,
+                  fileInfo: FileInfo,
+                  progressSubject: CurrentValueSubject<Double, Never>?,
+                  requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
+    
+    func sendImage(url: URL,
+                   thumbnailURL: URL,
+                   imageInfo: ImageInfo,
+                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
+    
+    func sendVideo(url: URL,
+                   thumbnailURL: URL,
+                   videoInfo: VideoInfo,
+                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
+    
+    func sendVoiceMessage(url: URL,
+                          audioInfo: AudioInfo,
+                          waveform: [UInt16],
+                          progressSubject: CurrentValueSubject<Double, Never>?,
+                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
+    
     func sendReadReceipt(for eventID: String) async -> Result<Void, TimelineProxyError>
+    
     func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
+    
     func sendMessage(_ message: String,
                      html: String?,
                      inReplyTo eventID: String?,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
+    
     func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, TimelineProxyError>
 }
 
@@ -34,6 +69,7 @@ enum TimelineProxyError: Error, Equatable {
     case failedSendingMessage
     case failedSendingReaction
     case failedSendingReadReceipt
+    case failedSendingMedia
 }
 
 extension TimelineProxyProtocol {

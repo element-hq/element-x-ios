@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
 
@@ -47,6 +48,129 @@ final class TimelineProxy: TimelineProxyProtocol {
         } catch {
             return .failure(.failedPaginatingBackwards)
         }
+    }
+    
+    func sendAudio(url: URL,
+                   audioInfo: AudioInfo,
+                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        let handle = timeline.sendAudio(url: url.path(percentEncoded: false), audioInfo: audioInfo, progressWatcher: UploadProgressListener { progress in
+            progressSubject?.send(progress)
+        })
+        
+        await requestHandle(handle)
+        
+        do {
+            try await handle.join()
+        } catch {
+            return .failure(.failedSendingMedia)
+        }
+        
+        return .success(())
+    }
+    
+    func sendFile(url: URL,
+                  fileInfo: FileInfo,
+                  progressSubject: CurrentValueSubject<Double, Never>?,
+                  requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        let handle = timeline.sendFile(url: url.path(percentEncoded: false), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
+            progressSubject?.send(progress)
+        })
+        
+        await requestHandle(handle)
+        
+        do {
+            try await handle.join()
+        } catch {
+            return .failure(.failedSendingMedia)
+        }
+        
+        return .success(())
+    }
+    
+    func sendImage(url: URL,
+                   thumbnailURL: URL,
+                   imageInfo: ImageInfo,
+                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        let handle = timeline.sendImage(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), imageInfo: imageInfo, progressWatcher: UploadProgressListener { progress in
+            progressSubject?.send(progress)
+        })
+        
+        await requestHandle(handle)
+        
+        do {
+            try await handle.join()
+        } catch {
+            return .failure(.failedSendingMedia)
+        }
+        
+        return .success(())
+    }
+    
+    func sendVideo(url: URL,
+                   thumbnailURL: URL,
+                   videoInfo: VideoInfo,
+                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        let handle = timeline.sendVideo(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), videoInfo: videoInfo, progressWatcher: UploadProgressListener { progress in
+            progressSubject?.send(progress)
+        })
+        
+        await requestHandle(handle)
+        
+        do {
+            try await handle.join()
+        } catch {
+            return .failure(.failedSendingMedia)
+        }
+        
+        return .success(())
+    }
+
+    func sendVoiceMessage(url: URL,
+                          audioInfo: AudioInfo,
+                          waveform: [UInt16],
+                          progressSubject: CurrentValueSubject<Double, Never>?,
+                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        let handle = timeline.sendVoiceMessage(url: url.path(percentEncoded: false), audioInfo: audioInfo, waveform: waveform, progressWatcher: UploadProgressListener { progress in
+            progressSubject?.send(progress)
+        })
+        
+        await requestHandle(handle)
+        
+        do {
+            try await handle.join()
+        } catch {
+            return .failure(.failedSendingMedia)
+        }
+        
+        return .success(())
     }
     
     func sendMessage(_ message: String,
@@ -153,6 +277,20 @@ final class TimelineProxy: TimelineProxyProtocol {
             return messageEventContentFromHtmlAsEmote(body: message, htmlBody: html)
         } else {
             return messageEventContentFromMarkdownAsEmote(md: message)
+        }
+    }
+}
+
+private final class UploadProgressListener: ProgressWatcher {
+    private let onUpdateClosure: (Double) -> Void
+   
+    init(_ onUpdateClosure: @escaping (Double) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func transmissionProgress(progress: TransmissionProgress) {
+        DispatchQueue.main.async { [weak self] in
+            self?.onUpdateClosure(Double(progress.current) / Double(progress.total))
         }
     }
 }
