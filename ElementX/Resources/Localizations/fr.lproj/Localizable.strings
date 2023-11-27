@@ -238,6 +238,7 @@
 "notification_invitation_action_join" = "Rejoindre";
 "notification_invitation_action_reject" = "Rejeter";
 "notification_invite_body" = "Vous a invité(e) à discuter";
+"notification_mentioned_you_body" = "Mentioned you: %1$@";
 "notification_new_messages" = "Nouveaux messages";
 "notification_reaction_body" = "A réagi avec %1$@";
 "notification_room_action_mark_as_read" = "Marquer comme lu";

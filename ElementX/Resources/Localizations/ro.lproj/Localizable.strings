@@ -238,6 +238,7 @@
 "notification_invitation_action_join" = "Alăturați-vă";
 "notification_invitation_action_reject" = "Respingeți";
 "notification_invite_body" = "V-a invitat la o discuție";
+"notification_mentioned_you_body" = "Mentioned you: %1$@";
 "notification_new_messages" = "Mesaje noi";
 "notification_reaction_body" = "A reacționat cu %1$@";
 "notification_room_action_mark_as_read" = "Marcați ca citit";

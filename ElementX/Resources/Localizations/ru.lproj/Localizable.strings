@@ -238,6 +238,7 @@
 "notification_invitation_action_join" = "Присоединиться";
 "notification_invitation_action_reject" = "Отклонить";
 "notification_invite_body" = "Пригласил вас в чат";
+"notification_mentioned_you_body" = "Mentioned you: %1$@";
 "notification_new_messages" = "Новые сообщения";
 "notification_reaction_body" = "Отреагировал на %1$@";
 "notification_room_action_mark_as_read" = "Отметить как прочитанное";

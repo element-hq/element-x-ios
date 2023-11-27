@@ -238,6 +238,7 @@
 "notification_invitation_action_join" = "Beitreten";
 "notification_invitation_action_reject" = "Ablehnen";
 "notification_invite_body" = "Du wurdest zu einem Chat eingeladen";
+"notification_mentioned_you_body" = "Mentioned you: %1$@";
 "notification_new_messages" = "Neue Nachrichten";
 "notification_reaction_body" = "Reagiert mit %1$@";
 "notification_room_action_mark_as_read" = "Als gelesen markieren";

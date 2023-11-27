@@ -238,6 +238,7 @@
 "notification_invitation_action_join" = "Pripojiť sa";
 "notification_invitation_action_reject" = "Zamietnuť";
 "notification_invite_body" = "Vás pozval/a na konverzáciu";
+"notification_mentioned_you_body" = "Mentioned you: %1$@";
 "notification_new_messages" = "Nové správy";
 "notification_reaction_body" = "Reagoval/a s %1$@";
 "notification_room_action_mark_as_read" = "Označiť ako prečítané";

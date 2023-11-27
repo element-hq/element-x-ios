@@ -238,6 +238,7 @@
 "notification_invitation_action_join" = "加入";
 "notification_invitation_action_reject" = "拒絕";
 "notification_invite_body" = "邀請您聊天";
+"notification_mentioned_you_body" = "Mentioned you: %1$@";
 "notification_new_messages" = "新訊息";
 "notification_reaction_body" = "Reacted with %1$@";
 "notification_room_action_mark_as_read" = "標示為已讀";

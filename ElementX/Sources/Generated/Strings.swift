@@ -564,6 +564,10 @@ public enum L10n {
   }
   /// Invited you to chat
   public static var notificationInviteBody: String { return L10n.tr("Localizable", "notification_invite_body") }
+  /// Mentioned you: %1$@
+  public static func notificationMentionedYouBody(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "notification_mentioned_you_body", String(describing: p1))
+  }
   /// New Messages
   public static var notificationNewMessages: String { return L10n.tr("Localizable", "notification_new_messages") }
   /// Plural format key: "%#@COUNT@"
