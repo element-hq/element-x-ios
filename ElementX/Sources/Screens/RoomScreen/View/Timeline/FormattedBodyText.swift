@@ -33,7 +33,12 @@ struct FormattedBodyText: View {
     }()
         
     private var attributedComponents: [AttributedStringBuilderComponent] {
-        var adjustedAttributedString = AttributedString(layoutDirection.isolateLayoutUnicodeString) + attributedString + AttributedString(additionalWhitespacesSuffix)
+        var adjustedAttributedString = attributedString + AttributedString(additionalWhitespacesSuffix)
+        
+        // If this is not a list, force the writing direction by adding the correct unicode character.
+        if !String(attributedString.characters).starts(with: "\t") {
+            adjustedAttributedString = AttributedString(layoutDirection.isolateLayoutUnicodeString) + adjustedAttributedString
+        }
         
         // Required to allow the underlying TextView to use  body font when no font is specifie in the AttributedString.
         adjustedAttributedString.mergeAttributes(defaultAttributesContainer, mergePolicy: .keepCurrent)
@@ -198,7 +203,8 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             <p>Text</p>
             <code>Hello world</code>
             """,
-            "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n"
+            "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n",
+            "<ul><li>First item</li><li>Second item</li><li>Third item</li></ul>"
         ]
         
         let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder())
