@@ -22,9 +22,25 @@ protocol TimelineProxyProtocol {
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError>
     func sendReadReceipt(for eventID: String) async -> Result<Void, TimelineProxyError>
     func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
+    func sendMessage(_ message: String,
+                     html: String?,
+                     inReplyTo eventID: String?,
+                     intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
 }
 
 enum TimelineProxyError: Error, Equatable {
     case failedPaginatingBackwards
+    case failedSendingMessage
     case failedSendingReadReceipt
+}
+
+extension TimelineProxyProtocol {
+    func sendMessage(_ message: String,
+                     html: String?,
+                     intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        await sendMessage(message,
+                          html: html,
+                          inReplyTo: nil,
+                          intentionalMentions: intentionalMentions)
+    }
 }

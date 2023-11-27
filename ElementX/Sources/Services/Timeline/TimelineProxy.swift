@@ -47,6 +47,34 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
+    func sendMessage(_ message: String,
+                     html: String?,
+                     inReplyTo eventID: String? = nil,
+                     intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        let messageContent = buildMessageContentFor(message,
+                                                    html: html,
+                                                    intentionalMentions: intentionalMentions.toRustMentions())
+        
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
+            do {
+                if let eventID {
+                    let replyItem = try self.timeline.getEventTimelineItemByEventId(eventId: eventID)
+                    try self.timeline.sendReply(msg: messageContent, replyItem: replyItem)
+                } else {
+                    self.timeline.send(msg: messageContent)
+                }
+            } catch {
+                return .failure(.failedSendingMessage)
+            }
+            return .success(())
+        }
+    }
+    
     func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
@@ -72,6 +100,41 @@ final class TimelineProxy: TimelineProxyProtocol {
             } catch {
                 return .failure(.failedSendingReadReceipt)
             }
+        }
+    }
+    
+    // MARK: - Private
+
+    private func buildMessageContentFor(_ message: String,
+                                        html: String?,
+                                        intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation {
+        let emoteSlashCommand = "/me "
+        let isEmote: Bool = message.starts(with: emoteSlashCommand)
+        
+        let content: RoomMessageEventContentWithoutRelation
+        if isEmote {
+            let emoteMessage = String(message.dropFirst(emoteSlashCommand.count))
+            
+            var emoteHtml: String?
+            if let html {
+                emoteHtml = String(html.dropFirst(emoteSlashCommand.count))
+            }
+            content = buildEmoteMessageContentFor(emoteMessage, html: emoteHtml)
+        } else {
+            if let html {
+                content = messageEventContentFromHtml(body: message, htmlBody: html)
+            } else {
+                content = messageEventContentFromMarkdown(md: message)
+            }
+        }
+        return content.withMentions(mentions: intentionalMentions)
+    }
+    
+    private func buildEmoteMessageContentFor(_ message: String, html: String?) -> RoomMessageEventContentWithoutRelation {
+        if let html {
+            return messageEventContentFromHtmlAsEmote(body: message, htmlBody: html)
+        } else {
+            return messageEventContentFromMarkdownAsEmote(md: message)
         }
     }
 }

@@ -89,11 +89,6 @@ protocol RoomProxyProtocol {
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
-    func sendMessage(_ message: String,
-                     html: String?,
-                     inReplyTo eventID: String?,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError>
-    
     func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
     
     func sendImage(url: URL,
@@ -202,15 +197,6 @@ extension RoomProxyProtocol {
             MXLog.error("Failed to build permalink for Room: \(id)")
             return nil
         }
-    }
-    
-    func sendMessage(_ message: String,
-                     html: String?,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
-        await sendMessage(message,
-                          html: html,
-                          inReplyTo: nil,
-                          intentionalMentions: intentionalMentions)
     }
     
     // Avoids to duplicate the same logic around in the app

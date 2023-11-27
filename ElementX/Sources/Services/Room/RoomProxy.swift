@@ -221,34 +221,6 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendMessage(_ message: String,
-                     html: String?,
-                     inReplyTo eventID: String? = nil,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        let messageContent = buildMessageContentFor(message,
-                                                    html: html,
-                                                    intentionalMentions: intentionalMentions.toRustMentions())
-        
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            do {
-                if let eventID {
-                    let replyItem = try self._timeline.getEventTimelineItemByEventId(eventId: eventID)
-                    try self._timeline.sendReply(msg: messageContent, replyItem: replyItem)
-                } else {
-                    self._timeline.send(msg: messageContent)
-                }
-            } catch {
-                return .failure(.failedSendingMessage)
-            }
-            return .success(())
-        }
-    }
-    
     func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {

@@ -1999,27 +1999,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadDisplayNameForUserIdReturnValue
         }
     }
-    //MARK: - sendMessage
-
-    var sendMessageHtmlInReplyToIntentionalMentionsCallsCount = 0
-    var sendMessageHtmlInReplyToIntentionalMentionsCalled: Bool {
-        return sendMessageHtmlInReplyToIntentionalMentionsCallsCount > 0
-    }
-    var sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments: (message: String, html: String?, eventID: String?, intentionalMentions: IntentionalMentions)?
-    var sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations: [(message: String, html: String?, eventID: String?, intentionalMentions: IntentionalMentions)] = []
-    var sendMessageHtmlInReplyToIntentionalMentionsReturnValue: Result<Void, RoomProxyError>!
-    var sendMessageHtmlInReplyToIntentionalMentionsClosure: ((String, String?, String?, IntentionalMentions) async -> Result<Void, RoomProxyError>)?
-
-    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String?, intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
-        sendMessageHtmlInReplyToIntentionalMentionsCallsCount += 1
-        sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments = (message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
-        sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations.append((message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
-        if let sendMessageHtmlInReplyToIntentionalMentionsClosure = sendMessageHtmlInReplyToIntentionalMentionsClosure {
-            return await sendMessageHtmlInReplyToIntentionalMentionsClosure(message, html, eventID, intentionalMentions)
-        } else {
-            return sendMessageHtmlInReplyToIntentionalMentionsReturnValue
-        }
-    }
     //MARK: - toggleReaction
 
     var toggleReactionToCallsCount = 0
@@ -2968,6 +2947,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return await sendMessageEventContentClosure(messageContent)
         } else {
             return sendMessageEventContentReturnValue
+        }
+    }
+    //MARK: - sendMessage
+
+    var sendMessageHtmlInReplyToIntentionalMentionsCallsCount = 0
+    var sendMessageHtmlInReplyToIntentionalMentionsCalled: Bool {
+        return sendMessageHtmlInReplyToIntentionalMentionsCallsCount > 0
+    }
+    var sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments: (message: String, html: String?, eventID: String?, intentionalMentions: IntentionalMentions)?
+    var sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations: [(message: String, html: String?, eventID: String?, intentionalMentions: IntentionalMentions)] = []
+    var sendMessageHtmlInReplyToIntentionalMentionsReturnValue: Result<Void, TimelineProxyError>!
+    var sendMessageHtmlInReplyToIntentionalMentionsClosure: ((String, String?, String?, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
+
+    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String?, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        sendMessageHtmlInReplyToIntentionalMentionsCallsCount += 1
+        sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments = (message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
+        sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations.append((message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
+        if let sendMessageHtmlInReplyToIntentionalMentionsClosure = sendMessageHtmlInReplyToIntentionalMentionsClosure {
+            return await sendMessageHtmlInReplyToIntentionalMentionsClosure(message, html, eventID, intentionalMentions)
+        } else {
+            return sendMessageHtmlInReplyToIntentionalMentionsReturnValue
         }
     }
 }

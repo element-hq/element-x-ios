@@ -120,11 +120,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             MXLog.error("Send reply in \(roomID) failed: missing event ID")
             return
         }
-
-        switch await roomProxy.sendMessage(message,
-                                           html: html,
-                                           inReplyTo: inReplyTo,
-                                           intentionalMentions: intentionalMentions) {
+        
+        switch await roomProxy.timeline.sendMessage(message,
+                                                    html: html,
+                                                    inReplyTo: inReplyTo,
+                                                    intentionalMentions: intentionalMentions) {
         case .success:
             MXLog.info("Finished sending message")
         case .failure(let error):
