@@ -1934,6 +1934,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingStateUpdatesPublisher = value }
     }
     var underlyingStateUpdatesPublisher: AnyPublisher<Void, Never>!
+    var timeline: TimelineProxyProtocol {
+        get { return underlyingTimeline }
+        set(value) { underlyingTimeline = value }
+    }
+    var underlyingTimeline: TimelineProxyProtocol!
     var timelineProvider: RoomTimelineProviderProtocol {
         get { return underlyingTimelineProvider }
         set(value) { underlyingTimelineProvider = value }
@@ -1992,27 +1997,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return await loadDisplayNameForUserIdClosure(userId)
         } else {
             return loadDisplayNameForUserIdReturnValue
-        }
-    }
-    //MARK: - paginateBackwards
-
-    var paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount = 0
-    var paginateBackwardsRequestSizeUntilNumberOfItemsCalled: Bool {
-        return paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount > 0
-    }
-    var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments: (requestSize: UInt, untilNumberOfItems: UInt)?
-    var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations: [(requestSize: UInt, untilNumberOfItems: UInt)] = []
-    var paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue: Result<Void, RoomProxyError>!
-    var paginateBackwardsRequestSizeUntilNumberOfItemsClosure: ((UInt, UInt) async -> Result<Void, RoomProxyError>)?
-
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
-        paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount += 1
-        paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments = (requestSize: requestSize, untilNumberOfItems: untilNumberOfItems)
-        paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations.append((requestSize: requestSize, untilNumberOfItems: untilNumberOfItems))
-        if let paginateBackwardsRequestSizeUntilNumberOfItemsClosure = paginateBackwardsRequestSizeUntilNumberOfItemsClosure {
-            return await paginateBackwardsRequestSizeUntilNumberOfItemsClosure(requestSize, untilNumberOfItems)
-        } else {
-            return paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue
         }
     }
     //MARK: - sendReadReceipt
@@ -2960,6 +2944,30 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
             return await cancelVerificationClosure()
         } else {
             return cancelVerificationReturnValue
+        }
+    }
+}
+class TimelineProxyMock: TimelineProxyProtocol {
+
+    //MARK: - paginateBackwards
+
+    var paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount = 0
+    var paginateBackwardsRequestSizeUntilNumberOfItemsCalled: Bool {
+        return paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount > 0
+    }
+    var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments: (requestSize: UInt, untilNumberOfItems: UInt)?
+    var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations: [(requestSize: UInt, untilNumberOfItems: UInt)] = []
+    var paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue: Result<Void, TimelineProxyError>!
+    var paginateBackwardsRequestSizeUntilNumberOfItemsClosure: ((UInt, UInt) async -> Result<Void, TimelineProxyError>)?
+
+    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError> {
+        paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount += 1
+        paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments = (requestSize: requestSize, untilNumberOfItems: untilNumberOfItems)
+        paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations.append((requestSize: requestSize, untilNumberOfItems: untilNumberOfItems))
+        if let paginateBackwardsRequestSizeUntilNumberOfItemsClosure = paginateBackwardsRequestSizeUntilNumberOfItemsClosure {
+            return await paginateBackwardsRequestSizeUntilNumberOfItemsClosure(requestSize, untilNumberOfItems)
+        } else {
+            return paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue
         }
     }
 }

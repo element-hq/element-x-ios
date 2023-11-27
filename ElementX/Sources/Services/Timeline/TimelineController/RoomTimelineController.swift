@@ -71,12 +71,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
         MXLog.info("Started back pagination request")
-        switch await roomProxy.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
+        switch await roomProxy.timeline.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
         case .success:
             MXLog.info("Finished back pagination request")
-            return .success(())
-        case .failure(.noMoreMessagesToBackPaginate):
-            MXLog.warning("Back pagination requested when all messages have been loaded.")
             return .success(())
         case .failure(let error):
             MXLog.error("Failed back pagination request with error: \(error)")

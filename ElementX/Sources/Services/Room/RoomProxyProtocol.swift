@@ -19,8 +19,6 @@ import Foundation
 import MatrixRustSDK
 
 enum RoomProxyError: Error, Equatable {
-    case noMoreMessagesToBackPaginate
-    case failedPaginatingBackwards
     case failedRetrievingMemberAvatarURL
     case failedRetrievingMemberDisplayName
     case failedSendingReadReceipt
@@ -82,6 +80,8 @@ protocol RoomProxyProtocol {
     /// The thread on which this publisher sends the output isn't defined.
     var stateUpdatesPublisher: AnyPublisher<Void, Never> { get }
     
+    var timeline: TimelineProxyProtocol { get }
+    
     var timelineProvider: RoomTimelineProviderProtocol { get }
     
     func subscribeForUpdates() async
@@ -89,8 +89,6 @@ protocol RoomProxyProtocol {
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
-    
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError>
     
     func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError>
     
