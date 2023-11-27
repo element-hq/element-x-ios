@@ -1999,27 +1999,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadDisplayNameForUserIdReturnValue
         }
     }
-    //MARK: - sendLocation
-
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount = 0
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCalled: Bool {
-        return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount > 0
-    }
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments: (body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)?
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations: [(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)] = []
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue: Result<Void, RoomProxyError>!
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure: ((String, GeoURI, String?, UInt8?, AssetType?) async -> Result<Void, RoomProxyError>)?
-
-    func sendLocation(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?) async -> Result<Void, RoomProxyError> {
-        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount += 1
-        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments = (body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType)
-        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations.append((body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType))
-        if let sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure {
-            return await sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure(body, geoURI, description, zoomLevel, assetType)
-        } else {
-            return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue
-        }
-    }
     //MARK: - retrySend
 
     var retrySendTransactionIDCallsCount = 0
@@ -2850,6 +2829,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return await sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure(url, thumbnailURL, imageInfo, progressSubject, requestHandle)
         } else {
             return sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendLocation
+
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount = 0
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCalled: Bool {
+        return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount > 0
+    }
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments: (body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)?
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations: [(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)] = []
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue: Result<Void, TimelineProxyError>!
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure: ((String, GeoURI, String?, UInt8?, AssetType?) async -> Result<Void, TimelineProxyError>)?
+
+    func sendLocation(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?) async -> Result<Void, TimelineProxyError> {
+        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount += 1
+        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments = (body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType)
+        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations.append((body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType))
+        if let sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure {
+            return await sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure(body, geoURI, description, zoomLevel, assetType)
+        } else {
+            return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue
         }
     }
     //MARK: - sendVideo

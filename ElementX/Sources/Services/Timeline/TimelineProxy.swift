@@ -123,6 +123,25 @@ final class TimelineProxy: TimelineProxyProtocol {
         return .success(())
     }
     
+    func sendLocation(body: String,
+                      geoURI: GeoURI,
+                      description: String?,
+                      zoomLevel: UInt8?,
+                      assetType: AssetType?) async -> Result<Void, TimelineProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
+            .success(self.timeline.sendLocation(body: body,
+                                                geoUri: geoURI.string,
+                                                description: description,
+                                                zoomLevel: zoomLevel,
+                                                assetType: assetType))
+        }
+    }
+    
     func sendVideo(url: URL,
                    thumbnailURL: URL,
                    videoInfo: VideoInfo,
@@ -147,7 +166,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         return .success(())
     }
-
+    
     func sendVoiceMessage(url: URL,
                           audioInfo: AudioInfo,
                           waveform: [UInt16],
@@ -234,7 +253,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         defer {
             sendMessageBackgroundTask?.stop()
         }
-
+        
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
                 try self.timeline.toggleReaction(eventId: eventID, key: reaction)
@@ -246,7 +265,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     // MARK: - Private
-
+    
     private func buildMessageContentFor(_ message: String,
                                         html: String?,
                                         intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation {
@@ -283,7 +302,7 @@ final class TimelineProxy: TimelineProxyProtocol {
 
 private final class UploadProgressListener: ProgressWatcher {
     private let onUpdateClosure: (Double) -> Void
-   
+    
     init(_ onUpdateClosure: @escaping (Double) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }

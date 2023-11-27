@@ -595,20 +595,20 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
     private func presentMapNavigator(interactionMode: StaticLocationInteractionMode) {
         let locationPickerNavigationStackCoordinator = NavigationStackCoordinator()
-
+        
         let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
-
+        
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .selectedLocation(let geoURI, let isUserLocation):
                 Task {
-                    _ = await self.roomProxy?.sendLocation(body: geoURI.bodyMessage,
-                                                           geoURI: geoURI,
-                                                           description: nil,
-                                                           zoomLevel: 15,
-                                                           assetType: isUserLocation ? .sender : .pin)
+                    _ = await self.roomProxy?.timeline.sendLocation(body: geoURI.bodyMessage,
+                                                                    geoURI: geoURI,
+                                                                    description: nil,
+                                                                    zoomLevel: 15,
+                                                                    assetType: isUserLocation ? .sender : .pin)
                     self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
                 
@@ -622,9 +622,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
-
+        
         locationPickerNavigationStackCoordinator.setRootCoordinator(coordinator)
-
+        
         navigationStackCoordinator.setSheetCoordinator(locationPickerNavigationStackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMapNavigator)
         }

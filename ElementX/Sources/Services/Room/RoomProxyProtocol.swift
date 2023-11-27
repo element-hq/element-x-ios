@@ -89,12 +89,6 @@ protocol RoomProxyProtocol {
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
 
-    func sendLocation(body: String,
-                      geoURI: GeoURI,
-                      description: String?,
-                      zoomLevel: UInt8?,
-                      assetType: AssetType?) async -> Result<Void, RoomProxyError>
-
     /// Retries sending a failed message given its transaction ID
     func retrySend(transactionID: String) async
 
