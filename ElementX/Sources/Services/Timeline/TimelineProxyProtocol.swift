@@ -14,10 +14,14 @@
 // limitations under the License.
 //
 
+import MatrixRustSDK
+
 // sourcery: AutoMockable
 protocol TimelineProxyProtocol {
+    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation?
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError>
     func sendReadReceipt(for eventID: String) async -> Result<Void, TimelineProxyError>
+    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
 }
 
 enum TimelineProxyError: Error, Equatable {

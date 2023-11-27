@@ -89,10 +89,6 @@ protocol RoomProxyProtocol {
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
-    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation?
-    
-    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError>
-    
     func sendMessage(_ message: String,
                      html: String?,
                      inReplyTo eventID: String?,

@@ -1999,48 +1999,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadDisplayNameForUserIdReturnValue
         }
     }
-    //MARK: - messageEventContent
-
-    var messageEventContentForCallsCount = 0
-    var messageEventContentForCalled: Bool {
-        return messageEventContentForCallsCount > 0
-    }
-    var messageEventContentForReceivedEventID: String?
-    var messageEventContentForReceivedInvocations: [String] = []
-    var messageEventContentForReturnValue: RoomMessageEventContentWithoutRelation?
-    var messageEventContentForClosure: ((String) -> RoomMessageEventContentWithoutRelation?)?
-
-    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
-        messageEventContentForCallsCount += 1
-        messageEventContentForReceivedEventID = eventID
-        messageEventContentForReceivedInvocations.append(eventID)
-        if let messageEventContentForClosure = messageEventContentForClosure {
-            return messageEventContentForClosure(eventID)
-        } else {
-            return messageEventContentForReturnValue
-        }
-    }
-    //MARK: - sendMessageEventContent
-
-    var sendMessageEventContentCallsCount = 0
-    var sendMessageEventContentCalled: Bool {
-        return sendMessageEventContentCallsCount > 0
-    }
-    var sendMessageEventContentReceivedMessageContent: RoomMessageEventContentWithoutRelation?
-    var sendMessageEventContentReceivedInvocations: [RoomMessageEventContentWithoutRelation] = []
-    var sendMessageEventContentReturnValue: Result<Void, RoomProxyError>!
-    var sendMessageEventContentClosure: ((RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError>)?
-
-    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError> {
-        sendMessageEventContentCallsCount += 1
-        sendMessageEventContentReceivedMessageContent = messageContent
-        sendMessageEventContentReceivedInvocations.append(messageContent)
-        if let sendMessageEventContentClosure = sendMessageEventContentClosure {
-            return await sendMessageEventContentClosure(messageContent)
-        } else {
-            return sendMessageEventContentReturnValue
-        }
-    }
     //MARK: - sendMessage
 
     var sendMessageHtmlInReplyToIntentionalMentionsCallsCount = 0
@@ -2928,6 +2886,27 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
 }
 class TimelineProxyMock: TimelineProxyProtocol {
 
+    //MARK: - messageEventContent
+
+    var messageEventContentForCallsCount = 0
+    var messageEventContentForCalled: Bool {
+        return messageEventContentForCallsCount > 0
+    }
+    var messageEventContentForReceivedEventID: String?
+    var messageEventContentForReceivedInvocations: [String] = []
+    var messageEventContentForReturnValue: RoomMessageEventContentWithoutRelation?
+    var messageEventContentForClosure: ((String) -> RoomMessageEventContentWithoutRelation?)?
+
+    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
+        messageEventContentForCallsCount += 1
+        messageEventContentForReceivedEventID = eventID
+        messageEventContentForReceivedInvocations.append(eventID)
+        if let messageEventContentForClosure = messageEventContentForClosure {
+            return messageEventContentForClosure(eventID)
+        } else {
+            return messageEventContentForReturnValue
+        }
+    }
     //MARK: - paginateBackwards
 
     var paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount = 0
@@ -2968,6 +2947,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return await sendReadReceiptForClosure(eventID)
         } else {
             return sendReadReceiptForReturnValue
+        }
+    }
+    //MARK: - sendMessageEventContent
+
+    var sendMessageEventContentCallsCount = 0
+    var sendMessageEventContentCalled: Bool {
+        return sendMessageEventContentCallsCount > 0
+    }
+    var sendMessageEventContentReceivedMessageContent: RoomMessageEventContentWithoutRelation?
+    var sendMessageEventContentReceivedInvocations: [RoomMessageEventContentWithoutRelation] = []
+    var sendMessageEventContentReturnValue: Result<Void, TimelineProxyError>!
+    var sendMessageEventContentClosure: ((RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>)?
+
+    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
+        sendMessageEventContentCallsCount += 1
+        sendMessageEventContentReceivedMessageContent = messageContent
+        sendMessageEventContentReceivedInvocations.append(messageContent)
+        if let sendMessageEventContentClosure = sendMessageEventContentClosure {
+            return await sendMessageEventContentClosure(messageContent)
+        } else {
+            return sendMessageEventContentReturnValue
         }
     }
 }

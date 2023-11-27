@@ -220,22 +220,6 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.failedRetrievingMemberDisplayName)
         }
     }
-        
-    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
-        try? _timeline.getTimelineEventContentByEventId(eventId: eventID)
-    }
-    
-    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            self._timeline.send(msg: messageContent)
-            return .success(())
-        }
-    }
     
     func sendMessage(_ message: String,
                      html: String?,

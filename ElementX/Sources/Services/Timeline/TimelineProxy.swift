@@ -24,10 +24,15 @@ final class TimelineProxy: TimelineProxyProtocol {
     #warning("AG: should we use a different task name for different TimelineProxies?")
     private let backgroundTaskName = "SendRoomEvent"
     private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.low_priority", qos: .utility)
+    private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
     
     init(timeline: Timeline, backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.timeline = timeline
         self.backgroundTaskService = backgroundTaskService
+    }
+    
+    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
+        try? timeline.getTimelineEventContentByEventId(eventId: eventID)
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError> {
@@ -39,6 +44,18 @@ final class TimelineProxy: TimelineProxyProtocol {
             return .success(())
         } catch {
             return .failure(.failedPaginatingBackwards)
+        }
+    }
+    
+    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
+            self.timeline.send(msg: messageContent)
+            return .success(())
         }
     }
     
