@@ -220,28 +220,6 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.failedRetrievingMemberDisplayName)
         }
     }
-
-    func retrySend(transactionID: String) async {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            self._timeline.retrySend(txnId: transactionID)
-        }
-    }
-
-    func cancelSend(transactionID: String) async {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            self._timeline.cancelSend(txnId: transactionID)
-        }
-    }
     
     func editMessage(_ message: String,
                      html: String?,

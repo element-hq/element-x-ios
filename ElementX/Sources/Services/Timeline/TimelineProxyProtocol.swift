@@ -20,7 +20,13 @@ import MatrixRustSDK
 
 // sourcery: AutoMockable
 protocol TimelineProxyProtocol {
+    /// Cancels a failed message given its transaction ID from the timeline
+    func cancelSend(transactionID: String) async
+    
     func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation?
+    
+    /// Retries sending a failed message given its transaction ID
+    func retrySend(transactionID: String) async
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError>
     

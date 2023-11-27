@@ -214,7 +214,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         MXLog.info("Retry sending in \(roomID)")
-        await roomProxy.retrySend(transactionID: transactionID)
+        await roomProxy.timeline.retrySend(transactionID: transactionID)
     }
     
     func cancelSending(itemID: TimelineItemIdentifier) async {
@@ -224,7 +224,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         MXLog.info("Cancelling send in \(roomID)")
-        await roomProxy.cancelSend(transactionID: transactionID)
+        await roomProxy.timeline.cancelSend(transactionID: transactionID)
     }
     
     // MARK: - Private

@@ -19,12 +19,14 @@ import Foundation
 import MatrixRustSDK
 
 final class TimelineProxy: TimelineProxyProtocol {
-    private var timeline: Timeline
+    private let timeline: Timeline
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     #warning("AG: should we use a different task name for different TimelineProxies?")
     private let backgroundTaskName = "SendRoomEvent"
+    
+    #warning("AG: is it ok to use the same queues across different TimelineProxies?")
     private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.low_priority", qos: .utility)
     private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
     private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
@@ -32,6 +34,17 @@ final class TimelineProxy: TimelineProxyProtocol {
     init(timeline: Timeline, backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.timeline = timeline
         self.backgroundTaskService = backgroundTaskService
+    }
+    
+    func cancelSend(transactionID: String) async {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
+            self.timeline.cancelSend(txnId: transactionID)
+        }
     }
     
     func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
@@ -47,6 +60,17 @@ final class TimelineProxy: TimelineProxyProtocol {
             return .success(())
         } catch {
             return .failure(.failedPaginatingBackwards)
+        }
+    }
+    
+    func retrySend(transactionID: String) async {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
+            self.timeline.retrySend(txnId: transactionID)
         }
     }
     

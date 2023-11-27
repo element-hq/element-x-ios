@@ -89,7 +89,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        await roomProxy?.retrySend(transactionID: transactionID)
+        await roomProxy?.timeline.retrySend(transactionID: transactionID)
     }
     
     func cancelSending(itemID: TimelineItemIdentifier) async {
@@ -97,7 +97,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        await roomProxy?.cancelSend(transactionID: transactionID)
+        await roomProxy?.timeline.cancelSend(transactionID: transactionID)
     }
     
     // MARK: - UI Test signalling

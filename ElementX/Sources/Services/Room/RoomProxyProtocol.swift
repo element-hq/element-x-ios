@@ -89,12 +89,6 @@ protocol RoomProxyProtocol {
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
 
-    /// Retries sending a failed message given its transaction ID
-    func retrySend(transactionID: String) async
-
-    /// Cancels  a failed message given its transaction ID from the timeline
-    func cancelSend(transactionID: String) async
-
     func editMessage(_ newMessage: String,
                      html: String?,
                      original eventID: String,
