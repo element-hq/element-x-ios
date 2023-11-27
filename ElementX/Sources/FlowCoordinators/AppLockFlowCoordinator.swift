@@ -34,7 +34,8 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     
     /// States the flow can find itself in
     enum State: StateType {
-        /// The initial state before the app has launched.
+        /// The initial state before the app has launched. If the user hasn't enabled
+        /// App Lock, then the flow will continue to remain in this state after launch.
         case initial
         /// The app is in the foreground and visible to the user.
         case unlocked
