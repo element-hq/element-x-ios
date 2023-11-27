@@ -54,7 +54,7 @@ class RoomProxy: RoomProxyProtocol {
         stateUpdatesSubject.eraseToAnyPublisher()
     }
     
-    var innerTimelineProvider: RoomTimelineProviderProtocol!
+    private var innerTimelineProvider: RoomTimelineProviderProtocol!
     var timelineProvider: RoomTimelineProviderProtocol {
         innerTimelineProvider
     }
@@ -79,7 +79,10 @@ class RoomProxy: RoomProxyProtocol {
         timeline = TimelineProxy(timeline: _timeline, backgroundTaskService: backgroundTaskService)
         
         Task {
-            await fetchMembers()
+            /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
+            /// This should become automatic on the RustSDK side at some point
+            await room.timeline().fetchMembers()
+            
             await updateMembers()
         }
     }
@@ -461,12 +464,6 @@ class RoomProxy: RoomProxyProtocol {
         } else {
             return messageEventContentFromMarkdownAsEmote(md: message)
         }
-    }
-
-    /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
-    /// This should become automatic on the RustSDK side at some point
-    private func fetchMembers() async {
-        await _timeline.fetchMembers()
     }
         
     private func update(displayName: String) {
