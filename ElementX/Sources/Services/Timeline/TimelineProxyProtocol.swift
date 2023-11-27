@@ -17,8 +17,10 @@
 // sourcery: AutoMockable
 protocol TimelineProxyProtocol {
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError>
+    func sendReadReceipt(for eventID: String) async -> Result<Void, TimelineProxyError>
 }
 
 enum TimelineProxyError: Error, Equatable {
     case failedPaginatingBackwards
+    case failedSendingReadReceipt
 }

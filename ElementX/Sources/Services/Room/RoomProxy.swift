@@ -77,7 +77,7 @@ class RoomProxy: RoomProxyProtocol {
         self.room = room
         self.backgroundTaskService = backgroundTaskService
         _timeline = await room.timeline()
-        timeline = TimelineProxy(timeline: _timeline)
+        timeline = TimelineProxy(timeline: _timeline, backgroundTaskService: backgroundTaskService)
         
         Task {
             await fetchMembers()
@@ -218,22 +218,6 @@ class RoomProxy: RoomProxyProtocol {
             return .success(displayName)
         } catch {
             return .failure(.failedRetrievingMemberDisplayName)
-        }
-    }
-    
-    func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        return await Task.dispatch(on: lowPriorityDispatchQueue) {
-            do {
-                try self._timeline.sendReadReceipt(eventId: eventID)
-                return .success(())
-            } catch {
-                return .failure(.failedSendingReadReceipt)
-            }
         }
     }
         

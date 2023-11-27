@@ -52,7 +52,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError> {
         guard let roomProxy, let eventID = itemID.eventID else { return .failure(.generic) }
-        switch await roomProxy.sendReadReceipt(for: eventID) {
+        switch await roomProxy.timeline.sendReadReceipt(for: eventID) {
         case .success:
             return .success(())
         case .failure:

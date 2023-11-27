@@ -14,13 +14,20 @@
 // limitations under the License.
 //
 
+import Foundation
 import MatrixRustSDK
 
 final class TimelineProxy: TimelineProxyProtocol {
     private var timeline: Timeline
+    private var sendMessageBackgroundTask: BackgroundTaskProtocol?
+    private let backgroundTaskService: BackgroundTaskServiceProtocol
+    #warning("AG: should we use a different task name for different TimelineProxies?")
+    private let backgroundTaskName = "SendRoomEvent"
+    private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.low_priority", qos: .utility)
     
-    init(timeline: Timeline) {
+    init(timeline: Timeline, backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.timeline = timeline
+        self.backgroundTaskService = backgroundTaskService
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError> {
@@ -32,6 +39,22 @@ final class TimelineProxy: TimelineProxyProtocol {
             return .success(())
         } catch {
             return .failure(.failedPaginatingBackwards)
+        }
+    }
+    
+    func sendReadReceipt(for eventID: String) async -> Result<Void, TimelineProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        return await Task.dispatch(on: lowPriorityDispatchQueue) {
+            do {
+                try self.timeline.sendReadReceipt(eventId: eventID)
+                return .success(())
+            } catch {
+                return .failure(.failedSendingReadReceipt)
+            }
         }
     }
 }

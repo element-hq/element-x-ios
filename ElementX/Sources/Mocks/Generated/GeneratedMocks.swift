@@ -1999,27 +1999,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadDisplayNameForUserIdReturnValue
         }
     }
-    //MARK: - sendReadReceipt
-
-    var sendReadReceiptForCallsCount = 0
-    var sendReadReceiptForCalled: Bool {
-        return sendReadReceiptForCallsCount > 0
-    }
-    var sendReadReceiptForReceivedEventID: String?
-    var sendReadReceiptForReceivedInvocations: [String] = []
-    var sendReadReceiptForReturnValue: Result<Void, RoomProxyError>!
-    var sendReadReceiptForClosure: ((String) async -> Result<Void, RoomProxyError>)?
-
-    func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError> {
-        sendReadReceiptForCallsCount += 1
-        sendReadReceiptForReceivedEventID = eventID
-        sendReadReceiptForReceivedInvocations.append(eventID)
-        if let sendReadReceiptForClosure = sendReadReceiptForClosure {
-            return await sendReadReceiptForClosure(eventID)
-        } else {
-            return sendReadReceiptForReturnValue
-        }
-    }
     //MARK: - messageEventContent
 
     var messageEventContentForCallsCount = 0
@@ -2968,6 +2947,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return await paginateBackwardsRequestSizeUntilNumberOfItemsClosure(requestSize, untilNumberOfItems)
         } else {
             return paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue
+        }
+    }
+    //MARK: - sendReadReceipt
+
+    var sendReadReceiptForCallsCount = 0
+    var sendReadReceiptForCalled: Bool {
+        return sendReadReceiptForCallsCount > 0
+    }
+    var sendReadReceiptForReceivedEventID: String?
+    var sendReadReceiptForReceivedInvocations: [String] = []
+    var sendReadReceiptForReturnValue: Result<Void, TimelineProxyError>!
+    var sendReadReceiptForClosure: ((String) async -> Result<Void, TimelineProxyError>)?
+
+    func sendReadReceipt(for eventID: String) async -> Result<Void, TimelineProxyError> {
+        sendReadReceiptForCallsCount += 1
+        sendReadReceiptForReceivedEventID = eventID
+        sendReadReceiptForReceivedInvocations.append(eventID)
+        if let sendReadReceiptForClosure = sendReadReceiptForClosure {
+            return await sendReadReceiptForClosure(eventID)
+        } else {
+            return sendReadReceiptForReturnValue
         }
     }
 }
