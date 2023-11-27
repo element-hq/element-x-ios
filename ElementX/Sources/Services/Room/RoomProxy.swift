@@ -23,6 +23,7 @@ import MatrixRustSDK
 class RoomProxy: RoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
+    private let timeline: Timeline
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let backgroundTaskName = "SendRoomEvent"
     
@@ -74,6 +75,7 @@ class RoomProxy: RoomProxyProtocol {
         self.roomListItem = roomListItem
         self.room = room
         self.backgroundTaskService = backgroundTaskService
+        timeline = await room.timeline()
         
         Task {
             await fetchMembers()
@@ -105,7 +107,7 @@ class RoomProxy: RoomProxyProtocol {
         
         self.timelineListener = timelineListener
         
-        let result = await room.addTimelineListener(listener: timelineListener)
+        let result = await room.timeline().addListener(listener: timelineListener)
         roomTimelineObservationToken = result.itemsStream
         
         subscribeToBackpagination()
@@ -220,7 +222,7 @@ class RoomProxy: RoomProxyProtocol {
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
         do {
             try await Task.dispatch(on: .global()) {
-                try self.room.paginateBackwards(opts: .untilNumItems(eventLimit: UInt16(requestSize), items: UInt16(untilNumberOfItems), waitForToken: true))
+                try self.timeline.paginateBackwards(opts: .untilNumItems(eventLimit: UInt16(requestSize), items: UInt16(untilNumberOfItems), waitForToken: true))
             }
             
             return .success(())
@@ -237,7 +239,7 @@ class RoomProxy: RoomProxyProtocol {
         
         return await Task.dispatch(on: lowPriorityDispatchQueue) {
             do {
-                try self.room.sendReadReceipt(eventId: eventID)
+                try self.timeline.sendReadReceipt(eventId: eventID)
                 return .success(())
             } catch {
                 return .failure(.failedSendingReadReceipt)
@@ -246,7 +248,7 @@ class RoomProxy: RoomProxyProtocol {
     }
         
     func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
-        try? room.getTimelineEventContentByEventId(eventId: eventID)
+        try? timeline.getTimelineEventContentByEventId(eventId: eventID)
     }
     
     func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError> {
@@ -256,7 +258,7 @@ class RoomProxy: RoomProxyProtocol {
         }
         
         return await Task.dispatch(on: messageSendingDispatchQueue) {
-            self.room.send(msg: messageContent)
+            self.timeline.send(msg: messageContent)
             return .success(())
         }
     }
@@ -277,10 +279,10 @@ class RoomProxy: RoomProxyProtocol {
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 if let eventID {
-                    let replyItem = try self.room.getEventTimelineItemByEventId(eventId: eventID)
-                    try self.room.sendReply(msg: messageContent, replyItem: replyItem)
+                    let replyItem = try self.timeline.getEventTimelineItemByEventId(eventId: eventID)
+                    try self.timeline.sendReply(msg: messageContent, replyItem: replyItem)
                 } else {
-                    self.room.send(msg: messageContent)
+                    self.timeline.send(msg: messageContent)
                 }
             } catch {
                 return .failure(.failedSendingMessage)
@@ -297,7 +299,7 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
-                try self.room.toggleReaction(eventId: eventID, key: reaction)
+                try self.timeline.toggleReaction(eventId: eventID, key: reaction)
                 return .success(())
             } catch {
                 return .failure(.failedSendingReaction)
@@ -315,7 +317,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let handle = room.sendImage(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), imageInfo: imageInfo, progressWatcher: UploadProgressListener { progress in
+        let handle = timeline.sendImage(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), imageInfo: imageInfo, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -340,7 +342,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let handle = room.sendVideo(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), videoInfo: videoInfo, progressWatcher: UploadProgressListener { progress in
+        let handle = timeline.sendVideo(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), videoInfo: videoInfo, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -364,7 +366,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let handle = room.sendAudio(url: url.path(percentEncoded: false), audioInfo: audioInfo, progressWatcher: UploadProgressListener { progress in
+        let handle = timeline.sendAudio(url: url.path(percentEncoded: false), audioInfo: audioInfo, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -389,7 +391,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let handle = room.sendVoiceMessage(url: url.path(percentEncoded: false), audioInfo: audioInfo, waveform: waveform, progressWatcher: UploadProgressListener { progress in
+        let handle = timeline.sendVoiceMessage(url: url.path(percentEncoded: false), audioInfo: audioInfo, waveform: waveform, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -413,7 +415,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let handle = room.sendFile(url: url.path(percentEncoded: false), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
+        let handle = timeline.sendFile(url: url.path(percentEncoded: false), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -437,13 +439,13 @@ class RoomProxy: RoomProxyProtocol {
         defer {
             sendMessageBackgroundTask?.stop()
         }
-
+        
         return await Task.dispatch(on: messageSendingDispatchQueue) {
-            .success(self.room.sendLocation(body: body,
-                                            geoUri: geoURI.string,
-                                            description: description,
-                                            zoomLevel: zoomLevel,
-                                            assetType: assetType))
+            .success(self.timeline.sendLocation(body: body,
+                                                geoUri: geoURI.string,
+                                                description: description,
+                                                zoomLevel: zoomLevel,
+                                                assetType: assetType))
         }
     }
 
@@ -454,7 +456,7 @@ class RoomProxy: RoomProxyProtocol {
         }
 
         return await Task.dispatch(on: messageSendingDispatchQueue) {
-            self.room.retrySend(txnId: transactionID)
+            self.timeline.retrySend(txnId: transactionID)
         }
     }
 
@@ -465,7 +467,7 @@ class RoomProxy: RoomProxyProtocol {
         }
 
         return await Task.dispatch(on: messageSendingDispatchQueue) {
-            self.room.cancelSend(txnId: transactionID)
+            self.timeline.cancelSend(txnId: transactionID)
         }
     }
     
@@ -484,8 +486,8 @@ class RoomProxy: RoomProxyProtocol {
         
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
-                let originalEvent = try self.room.getEventTimelineItemByEventId(eventId: eventID)
-                try self.room.edit(newContent: messageContent, editItem: originalEvent)
+                let originalEvent = try self.timeline.getEventTimelineItemByEventId(eventId: eventID)
+                try self.timeline.edit(newContent: messageContent, editItem: originalEvent)
                 return .success(())
             } catch {
                 return .failure(.failedEditingMessage)
@@ -574,7 +576,7 @@ class RoomProxy: RoomProxyProtocol {
 
     func retryDecryption(for sessionID: String) async {
         await Task.dispatch(on: .global()) { [weak self] in
-            self?.room.retryDecryption(sessionIds: [sessionID])
+            self?.timeline.retryDecryption(sessionIds: [sessionID])
         }
     }
 
@@ -631,7 +633,7 @@ class RoomProxy: RoomProxyProtocol {
             await Task.dispatch(on: .global()) {
                 do {
                     MXLog.info("Fetching event details for \(eventID)")
-                    try self.room.fetchDetailsForEvent(eventId: eventID)
+                    try self.timeline.fetchDetailsForEvent(eventId: eventID)
                 } catch {
                     MXLog.error("Failed fetching event details for \(eventID) with error: \(error)")
                 }
@@ -719,7 +721,7 @@ class RoomProxy: RoomProxyProtocol {
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                return try .success(self.room.createPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind)))
+                return try .success(self.timeline.createPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind)))
             } catch {
                 MXLog.error("Failed creating a poll: \(error)")
                 return .failure(.failedCreatingPoll)
@@ -731,21 +733,21 @@ class RoomProxy: RoomProxyProtocol {
                   question: String,
                   answers: [String],
                   pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                let originalEvent = try self.room.getEventTimelineItemByEventId(eventId: eventID)
-                return try .success(self.room.editPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind), editItem: originalEvent))
-            } catch {
-                MXLog.error("Failed editing the poll: \(error), eventID: \(eventID)")
-                return .failure(.failedEditingPoll)
+        do {
+            let originalEvent = try await Task.dispatch(on: .global()) {
+                try self.timeline.getEventTimelineItemByEventId(eventId: eventID)
             }
+            return try await .success(timeline.editPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind), editItem: originalEvent))
+        } catch {
+            MXLog.error("Failed editing the poll: \(error), eventID: \(eventID)")
+            return .failure(.failedEditingPoll)
         }
     }
 
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                return try .success(self.room.sendPollResponse(pollStartId: pollStartID, answers: answers))
+                return try .success(self.timeline.sendPollResponse(pollStartId: pollStartID, answers: answers))
             } catch {
                 MXLog.error("Failed sending a poll vote: \(error), pollStartID: \(pollStartID)")
                 return .failure(.failedSendingPollResponse)
@@ -756,7 +758,7 @@ class RoomProxy: RoomProxyProtocol {
     func endPoll(pollStartID: String, text: String) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                return try .success(self.room.endPoll(pollStartId: pollStartID, text: text))
+                return try .success(self.timeline.endPoll(pollStartId: pollStartID, text: text))
             } catch {
                 MXLog.error("Failed ending a poll: \(error), pollStartID: \(pollStartID)")
                 return .failure(.failedEndingPoll)
@@ -808,11 +810,7 @@ class RoomProxy: RoomProxyProtocol {
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
     /// This should become automatic on the RustSDK side at some point
     private func fetchMembers() async {
-        do {
-            try await room.fetchMembers()
-        } catch {
-            MXLog.error("Failed fetching members: \(error)")
-        }
+        await timeline.fetchMembers()
     }
         
     private func update(displayName: String) {
@@ -824,7 +822,7 @@ class RoomProxy: RoomProxyProtocol {
             self?.backPaginationStateSubject.send(status)
         }
         do {
-            backPaginationStateObservationToken = try room.subscribeToBackPaginationStatus(listener: listener)
+            backPaginationStateObservationToken = try timeline.subscribeToBackPaginationStatus(listener: listener)
         } catch {
             MXLog.error("Failed to subscribe to back pagination state with error: \(error)")
         }
