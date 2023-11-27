@@ -204,7 +204,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func retryDecryption(for sessionID: String) async {
-        await roomProxy.retryDecryption(for: sessionID)
+        await roomProxy.timeline.retryDecryption(for: sessionID)
     }
     
     func retrySending(itemID: TimelineItemIdentifier) async {

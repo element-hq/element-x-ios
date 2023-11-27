@@ -87,6 +87,12 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
+    func retryDecryption(for sessionID: String) async {
+        await Task.dispatch(on: .global()) { [weak self] in
+            self?.timeline.retryDecryption(sessionIds: [sessionID])
+        }
+    }
+    
     func retrySend(transactionID: String) async {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {

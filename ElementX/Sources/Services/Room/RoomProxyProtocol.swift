@@ -90,8 +90,6 @@ protocol RoomProxyProtocol {
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
     
     func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError>
-    
-    func retryDecryption(for sessionID: String) async
 
     func leaveRoom() async -> Result<Void, RoomProxyError>
     

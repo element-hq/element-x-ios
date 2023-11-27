@@ -300,12 +300,6 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func retryDecryption(for sessionID: String) async {
-        await Task.dispatch(on: .global()) { [weak self] in
-            self?._timeline.retryDecryption(sessionIds: [sessionID])
-        }
-    }
-
     func leaveRoom() async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {

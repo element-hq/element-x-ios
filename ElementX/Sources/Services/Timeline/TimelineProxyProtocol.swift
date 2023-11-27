@@ -30,6 +30,8 @@ protocol TimelineProxyProtocol {
     
     func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation?
     
+    func retryDecryption(for sessionID: String) async
+    
     /// Retries sending a failed message given its transaction ID
     func retrySend(transactionID: String) async
     

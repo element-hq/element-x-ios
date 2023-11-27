@@ -2062,22 +2062,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return ignoreUserReturnValue
         }
     }
-    //MARK: - retryDecryption
-
-    var retryDecryptionForCallsCount = 0
-    var retryDecryptionForCalled: Bool {
-        return retryDecryptionForCallsCount > 0
-    }
-    var retryDecryptionForReceivedSessionID: String?
-    var retryDecryptionForReceivedInvocations: [String] = []
-    var retryDecryptionForClosure: ((String) async -> Void)?
-
-    func retryDecryption(for sessionID: String) async {
-        retryDecryptionForCallsCount += 1
-        retryDecryptionForReceivedSessionID = sessionID
-        retryDecryptionForReceivedInvocations.append(sessionID)
-        await retryDecryptionForClosure?(sessionID)
-    }
     //MARK: - leaveRoom
 
     var leaveRoomCallsCount = 0
@@ -2742,6 +2726,22 @@ class TimelineProxyMock: TimelineProxyProtocol {
         } else {
             return messageEventContentForReturnValue
         }
+    }
+    //MARK: - retryDecryption
+
+    var retryDecryptionForCallsCount = 0
+    var retryDecryptionForCalled: Bool {
+        return retryDecryptionForCallsCount > 0
+    }
+    var retryDecryptionForReceivedSessionID: String?
+    var retryDecryptionForReceivedInvocations: [String] = []
+    var retryDecryptionForClosure: ((String) async -> Void)?
+
+    func retryDecryption(for sessionID: String) async {
+        retryDecryptionForCallsCount += 1
+        retryDecryptionForReceivedSessionID = sessionID
+        retryDecryptionForReceivedInvocations.append(sessionID)
+        await retryDecryptionForClosure?(sessionID)
     }
     //MARK: - retrySend
 
