@@ -46,7 +46,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
          appSettings: AppSettings,
          secureBackupController: SecureBackupControllerProtocol) {
         self.roomProxy = roomProxy
-        timelineProvider = roomProxy.timelineProvider
+        timelineProvider = roomProxy.timeline.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.appSettings = appSettings
         self.secureBackupController = secureBackupController

@@ -1939,11 +1939,6 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingTimeline = value }
     }
     var underlyingTimeline: TimelineProxyProtocol!
-    var timelineProvider: RoomTimelineProviderProtocol {
-        get { return underlyingTimelineProvider }
-        set(value) { underlyingTimelineProvider = value }
-    }
-    var underlyingTimelineProvider: RoomTimelineProviderProtocol!
 
     //MARK: - subscribeForUpdates
 
@@ -2568,7 +2563,29 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
 }
 class TimelineProxyMock: TimelineProxyProtocol {
+    var timelineProvider: RoomTimelineProviderProtocol {
+        get { return underlyingTimelineProvider }
+        set(value) { underlyingTimelineProvider = value }
+    }
+    var underlyingTimelineProvider: RoomTimelineProviderProtocol!
+    var hasPendingUpdatesSubscription: Bool {
+        get { return underlyingHasPendingUpdatesSubscription }
+        set(value) { underlyingHasPendingUpdatesSubscription = value }
+    }
+    var underlyingHasPendingUpdatesSubscription: Bool!
 
+    //MARK: - subscribeForUpdates
+
+    var subscribeForUpdatesCallsCount = 0
+    var subscribeForUpdatesCalled: Bool {
+        return subscribeForUpdatesCallsCount > 0
+    }
+    var subscribeForUpdatesClosure: (() async -> Void)?
+
+    func subscribeForUpdates() async {
+        subscribeForUpdatesCallsCount += 1
+        await subscribeForUpdatesClosure?()
+    }
     //MARK: - cancelSend
 
     var cancelSendTransactionIDCallsCount = 0

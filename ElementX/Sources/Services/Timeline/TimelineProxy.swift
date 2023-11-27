@@ -36,6 +36,44 @@ final class TimelineProxy: TimelineProxyProtocol {
         self.backgroundTaskService = backgroundTaskService
     }
     
+    private var backPaginationStateObservationToken: TaskHandle?
+    private var roomTimelineObservationToken: TaskHandle?
+    private var timelineListener: RoomTimelineListener?
+   
+    private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
+    private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
+   
+    private var innerTimelineProvider: RoomTimelineProviderProtocol!
+    var timelineProvider: RoomTimelineProviderProtocol {
+        innerTimelineProvider
+    }
+    
+    var hasPendingUpdatesSubscription: Bool {
+        innerTimelineProvider != nil
+    }
+    
+    deinit {
+        backPaginationStateObservationToken?.cancel()
+        roomTimelineObservationToken?.cancel()
+    }
+    
+    func subscribeForUpdates() async {
+        let timelineListener = RoomTimelineListener { [weak self] timelineDiffs in
+            self?.timelineUpdatesSubject.send(timelineDiffs)
+        }
+        
+        self.timelineListener = timelineListener
+        
+        let result = await timeline.addListener(listener: timelineListener)
+        roomTimelineObservationToken = result.itemsStream
+        
+        subscribeToBackpagination()
+        
+        innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
+                                                           updatePublisher: timelineUpdatesSubject.eraseToAnyPublisher(),
+                                                           backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
+    }
+    
     func cancelSend(transactionID: String) async {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
@@ -414,6 +452,41 @@ final class TimelineProxy: TimelineProxyProtocol {
         } else {
             return messageEventContentFromMarkdownAsEmote(md: message)
         }
+    }
+    
+    private func subscribeToBackpagination() {
+        let listener = RoomBackpaginationStatusListener { [weak self] status in
+            self?.backPaginationStateSubject.send(status)
+        }
+        do {
+            backPaginationStateObservationToken = try timeline.subscribeToBackPaginationStatus(listener: listener)
+        } catch {
+            MXLog.error("Failed to subscribe to back pagination state with error: \(error)")
+        }
+    }
+}
+
+private final class RoomTimelineListener: TimelineListener {
+    private let onUpdateClosure: ([TimelineDiff]) -> Void
+   
+    init(_ onUpdateClosure: @escaping ([TimelineDiff]) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(diff: [TimelineDiff]) {
+        onUpdateClosure(diff)
+    }
+}
+
+private final class RoomBackpaginationStatusListener: BackPaginationStatusListener {
+    private let onUpdateClosure: (BackPaginationStatus) -> Void
+
+    init(_ onUpdateClosure: @escaping (BackPaginationStatus) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+
+    func onUpdate(status: BackPaginationStatus) {
+        onUpdateClosure(status)
     }
 }
 

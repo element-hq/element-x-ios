@@ -23,7 +23,6 @@ import MatrixRustSDK
 class RoomProxy: RoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
-    private let _timeline: Timeline
     let timeline: TimelineProxyProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let backgroundTaskName = "SendRoomEvent"
@@ -34,29 +33,17 @@ class RoomProxy: RoomProxyProtocol {
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
     private(set) var displayName: String?
-    
-    private var roomTimelineObservationToken: TaskHandle?
-    private var backPaginationStateObservationToken: TaskHandle?
     private var roomInfoObservationToken: TaskHandle?
 
-    private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.asCurrentValuePublisher()
     }
-    
-    private var timelineListener: RoomTimelineListener?
-    
-    private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
         
+    private var timelineProviderSubscription: AnyCancellable?
     private let stateUpdatesSubject = PassthroughSubject<Void, Never>()
     var stateUpdatesPublisher: AnyPublisher<Void, Never> {
         stateUpdatesSubject.eraseToAnyPublisher()
-    }
-    
-    private var innerTimelineProvider: RoomTimelineProviderProtocol!
-    var timelineProvider: RoomTimelineProviderProtocol {
-        innerTimelineProvider
     }
 
     var ownUserID: String {
@@ -64,8 +51,6 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     deinit {
-        roomTimelineObservationToken?.cancel()
-        backPaginationStateObservationToken?.cancel()
         roomListItem.unsubscribe()
     }
 
@@ -75,8 +60,7 @@ class RoomProxy: RoomProxyProtocol {
         self.roomListItem = roomListItem
         self.room = room
         self.backgroundTaskService = backgroundTaskService
-        _timeline = await room.timeline()
-        timeline = TimelineProxy(timeline: _timeline, backgroundTaskService: backgroundTaskService)
+        timeline = await TimelineProxy(timeline: room.timeline(), backgroundTaskService: backgroundTaskService)
         
         Task {
             /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
@@ -88,7 +72,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func subscribeForUpdates() async {
-        guard innerTimelineProvider == nil else {
+        guard !timeline.hasPendingUpdatesSubscription else {
             MXLog.warning("Room already subscribed for updates")
             return
         }
@@ -101,26 +85,18 @@ class RoomProxy: RoomProxyProtocol {
                                         timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit))
         roomListItem.subscribe(settings: settings)
         
-        let timelineListener = RoomTimelineListener { [weak self] timelineDiffs in
-            self?.timelineUpdatesSubject.send(timelineDiffs)
-            
-            // Workaround for subscribeToRoomStateUpdates creating problems in the timeline
-            // https://github.com/matrix-org/matrix-rust-sdk/issues/2488
-            self?.stateUpdatesSubject.send()
-        }
+        await timeline.subscribeForUpdates()
         
-        self.timelineListener = timelineListener
-        
-        let result = await room.timeline().addListener(listener: timelineListener)
-        roomTimelineObservationToken = result.itemsStream
-        
-        subscribeToBackpagination()
+        timelineProviderSubscription = await timeline
+            .timelineProvider
+            .updatePublisher
+            .sink { [weak self] _ in
+                // Workaround for subscribeToRoomStateUpdates creating problems in the timeline
+                // https://github.com/matrix-org/matrix-rust-sdk/issues/2488
+                self?.stateUpdatesSubject.send()
+            }
         
         // subscribeToRoomStateUpdates()
-        
-        innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
-                                                           updatePublisher: timelineUpdatesSubject.eraseToAnyPublisher(),
-                                                           backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
     }
 
     lazy var id: String = room.id()
@@ -469,47 +445,12 @@ class RoomProxy: RoomProxyProtocol {
     private func update(displayName: String) {
         self.displayName = displayName
     }
-
-    private func subscribeToBackpagination() {
-        let listener = RoomBackpaginationStatusListener { [weak self] status in
-            self?.backPaginationStateSubject.send(status)
-        }
-        do {
-            backPaginationStateObservationToken = try _timeline.subscribeToBackPaginationStatus(listener: listener)
-        } catch {
-            MXLog.error("Failed to subscribe to back pagination state with error: \(error)")
-        }
-    }
     
     private func subscribeToRoomStateUpdates() {
         roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] in
             MXLog.info("Received room info update")
             self?.stateUpdatesSubject.send(())
         })
-    }
-}
-
-private final class RoomTimelineListener: TimelineListener {
-    private let onUpdateClosure: ([TimelineDiff]) -> Void
-   
-    init(_ onUpdateClosure: @escaping ([TimelineDiff]) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(diff: [TimelineDiff]) {
-        onUpdateClosure(diff)
-    }
-}
-
-private final class RoomBackpaginationStatusListener: BackPaginationStatusListener {
-    private let onUpdateClosure: (BackPaginationStatus) -> Void
-
-    init(_ onUpdateClosure: @escaping (BackPaginationStatus) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-
-    func onUpdate(status: BackPaginationStatus) {
-        onUpdateClosure(status)
     }
 }
 
