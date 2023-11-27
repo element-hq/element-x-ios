@@ -7,7 +7,7 @@ setup_xcode_cloud_environment
 install_xcode_cloud_brew_dependencies
 
 if [ "$CI_WORKFLOW" = "Nightly" ]; then
-    bundle exec fastlane config_nightly
+    bundle exec fastlane config_nightly build_number:"$CI_BUILD_NUMBER"
 else
     bundle exec fastlane config_production
 fi
