@@ -22,15 +22,15 @@ struct AudioRoomTimelineView: View {
 
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            HStack(spacing: 8) {
-                Image(systemName: "waveform")
-                    .foregroundColor(.compound.iconPrimary)
-                FormattedBodyText(text: timelineItem.content.body)
-            }
-            .padding(.vertical, 12)
-            .padding(.horizontal, 6)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(L10n.commonAudio)
+            Label(title: { Text(timelineItem.body) },
+                  icon: { Image(systemName: "waveform")
+                      .foregroundColor(.compound.iconPrimary)
+                  })
+                  .labelStyle(RoomTimelineViewLabelStyle())
+                  .font(.compound.bodyLG)
+                  .padding(.vertical, 12)
+                  .padding(.horizontal, 6)
+                  .accessibilityLabel(L10n.commonAudio)
         }
     }
 }
