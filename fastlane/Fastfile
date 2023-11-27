@@ -176,7 +176,10 @@ lane :integration_tests do
   )
 end
 
-lane :config_nightly do
+lane :config_nightly do |options|
+  build_number = options[:build_number]
+  UI.user_error!("Invalid build number.") unless !build_number.to_s.empty?
+
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
   data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.nightly"
@@ -194,7 +197,7 @@ lane :config_nightly do
 
   release_version = get_version_number(target: "ElementX")
 
-  update_app_icon(caption_text: "Nightly #{release_version}", modulate: "100,20,100")
+  update_app_icon(caption_text: "#{release_version}(#{build_number})", modulate: "100,20,100")
 end
 
 lane :config_production do
@@ -449,7 +452,7 @@ private_lane :config_secrets do
   UI.user_error!("Invalid OTLP tracing username.") unless !otlp_tracing_username.to_s.empty?
 
   otlp_tracing_password = ENV["OTLP_TRACING_PASSWORD"]
-  UI.user_error!("Invalid OTLP tracing URL.") unless !otlp_tracing_password.to_s.empty?
+  UI.user_error!("Invalid OTLP tracing password.") unless !otlp_tracing_password.to_s.empty?
 
   set_xcconfig_value(
     path: './ElementX/SupportingFiles/secrets.xcconfig',
