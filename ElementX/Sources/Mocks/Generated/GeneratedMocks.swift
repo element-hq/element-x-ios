@@ -1999,27 +1999,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadDisplayNameForUserIdReturnValue
         }
     }
-    //MARK: - editMessage
-
-    var editMessageHtmlOriginalIntentionalMentionsCallsCount = 0
-    var editMessageHtmlOriginalIntentionalMentionsCalled: Bool {
-        return editMessageHtmlOriginalIntentionalMentionsCallsCount > 0
-    }
-    var editMessageHtmlOriginalIntentionalMentionsReceivedArguments: (newMessage: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)?
-    var editMessageHtmlOriginalIntentionalMentionsReceivedInvocations: [(newMessage: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)] = []
-    var editMessageHtmlOriginalIntentionalMentionsReturnValue: Result<Void, RoomProxyError>!
-    var editMessageHtmlOriginalIntentionalMentionsClosure: ((String, String?, String, IntentionalMentions) async -> Result<Void, RoomProxyError>)?
-
-    func editMessage(_ newMessage: String, html: String?, original eventID: String, intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
-        editMessageHtmlOriginalIntentionalMentionsCallsCount += 1
-        editMessageHtmlOriginalIntentionalMentionsReceivedArguments = (newMessage: newMessage, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
-        editMessageHtmlOriginalIntentionalMentionsReceivedInvocations.append((newMessage: newMessage, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
-        if let editMessageHtmlOriginalIntentionalMentionsClosure = editMessageHtmlOriginalIntentionalMentionsClosure {
-            return await editMessageHtmlOriginalIntentionalMentionsClosure(newMessage, html, eventID, intentionalMentions)
-        } else {
-            return editMessageHtmlOriginalIntentionalMentionsReturnValue
-        }
-    }
     //MARK: - redact
 
     var redactCallsCount = 0
@@ -2721,6 +2700,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
         cancelSendTransactionIDReceivedTransactionID = transactionID
         cancelSendTransactionIDReceivedInvocations.append(transactionID)
         await cancelSendTransactionIDClosure?(transactionID)
+    }
+    //MARK: - editMessage
+
+    var editMessageHtmlOriginalIntentionalMentionsCallsCount = 0
+    var editMessageHtmlOriginalIntentionalMentionsCalled: Bool {
+        return editMessageHtmlOriginalIntentionalMentionsCallsCount > 0
+    }
+    var editMessageHtmlOriginalIntentionalMentionsReceivedArguments: (message: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)?
+    var editMessageHtmlOriginalIntentionalMentionsReceivedInvocations: [(message: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)] = []
+    var editMessageHtmlOriginalIntentionalMentionsReturnValue: Result<Void, TimelineProxyError>!
+    var editMessageHtmlOriginalIntentionalMentionsClosure: ((String, String?, String, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
+
+    func editMessage(_ message: String, html: String?, original eventID: String, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        editMessageHtmlOriginalIntentionalMentionsCallsCount += 1
+        editMessageHtmlOriginalIntentionalMentionsReceivedArguments = (message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
+        editMessageHtmlOriginalIntentionalMentionsReceivedInvocations.append((message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
+        if let editMessageHtmlOriginalIntentionalMentionsClosure = editMessageHtmlOriginalIntentionalMentionsClosure {
+            return await editMessageHtmlOriginalIntentionalMentionsClosure(message, html, eventID, intentionalMentions)
+        } else {
+            return editMessageHtmlOriginalIntentionalMentionsReturnValue
+        }
     }
     //MARK: - messageEventContent
 

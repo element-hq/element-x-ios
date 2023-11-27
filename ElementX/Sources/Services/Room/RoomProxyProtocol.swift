@@ -21,10 +21,6 @@ import MatrixRustSDK
 enum RoomProxyError: Error, Equatable {
     case failedRetrievingMemberAvatarURL
     case failedRetrievingMemberDisplayName
-    case failedSendingMessage
-    case failedSendingReaction
-    case failedSendingMedia
-    case failedEditingMessage
     case failedRedactingEvent
     case failedReportingContent
     case failedAddingTimelineListener
@@ -88,11 +84,6 @@ protocol RoomProxyProtocol {
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
-
-    func editMessage(_ newMessage: String,
-                     html: String?,
-                     original eventID: String,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
     

@@ -159,10 +159,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             await cancelSending(itemID: itemID)
             await sendMessage(newMessage, html: html, intentionalMentions: intentionalMentions)
         } else if let eventID = itemID.eventID {
-            switch await roomProxy.editMessage(newMessage,
-                                               html: html,
-                                               original: eventID,
-                                               intentionalMentions: intentionalMentions) {
+            switch await roomProxy.timeline.editMessage(newMessage,
+                                                        html: html,
+                                                        original: eventID,
+                                                        intentionalMentions: intentionalMentions) {
             case .success:
                 MXLog.info("Finished editing message")
             case .failure(let error):

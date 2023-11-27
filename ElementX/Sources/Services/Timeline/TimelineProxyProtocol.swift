@@ -23,6 +23,11 @@ protocol TimelineProxyProtocol {
     /// Cancels a failed message given its transaction ID from the timeline
     func cancelSend(transactionID: String) async
     
+    func editMessage(_ message: String,
+                     html: String?,
+                     original eventID: String,
+                     intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
+    
     func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation?
     
     /// Retries sending a failed message given its transaction ID
@@ -77,6 +82,7 @@ protocol TimelineProxyProtocol {
 }
 
 enum TimelineProxyError: Error, Equatable {
+    case failedEditingMessage
     case failedPaginatingBackwards
     case failedSendingMessage
     case failedSendingReaction

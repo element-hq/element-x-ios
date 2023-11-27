@@ -221,30 +221,6 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func editMessage(_ message: String,
-                     html: String?,
-                     original eventID: String,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        let messageContent = buildMessageContentFor(message,
-                                                    html: html,
-                                                    intentionalMentions: intentionalMentions.toRustMentions())
-        
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            do {
-                let originalEvent = try self._timeline.getEventTimelineItemByEventId(eventId: eventID)
-                try self._timeline.edit(newContent: messageContent, editItem: originalEvent)
-                return .success(())
-            } catch {
-                return .failure(.failedEditingMessage)
-            }
-        }
-    }
-    
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {

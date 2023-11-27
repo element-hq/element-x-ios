@@ -47,6 +47,30 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
+    func editMessage(_ message: String,
+                     html: String?,
+                     original eventID: String,
+                     intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        let messageContent = buildMessageContentFor(message,
+                                                    html: html,
+                                                    intentionalMentions: intentionalMentions.toRustMentions())
+        
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
+            do {
+                let originalEvent = try self.timeline.getEventTimelineItemByEventId(eventId: eventID)
+                try self.timeline.edit(newContent: messageContent, editItem: originalEvent)
+                return .success(())
+            } catch {
+                return .failure(.failedEditingMessage)
+            }
+        }
+    }
+    
     func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
         try? timeline.getTimelineEventContentByEventId(eventId: eventID)
     }
