@@ -3,16 +3,6 @@
     {
       "filename" : "composer-attachment-light.svg",
       "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "composer-attachment-dark.svg",
-      "idiom" : "universal"
     }
   ],
   "info" : {
@@ -20,6 +10,7 @@
     "version" : 1
   },
   "properties" : {
-    "preserves-vector-representation" : true
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
   }
 }
