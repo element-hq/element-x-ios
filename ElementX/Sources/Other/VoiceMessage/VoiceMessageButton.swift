@@ -49,11 +49,11 @@ struct VoiceMessageButton: View {
         Button(action: action) {
             buttonLabel
                 .frame(width: buttonSize, height: buttonSize)
+                .background(Circle().foregroundColor(.compound.bgCanvasDefault))
         }
         .animation(nil, value: state)
         .buttonStyle(VoiceMessageButtonStyle())
         .disabled(state == .loading)
-        .background(Circle().foregroundColor(.compound.bgCanvasDefault))
         .accessibilityLabel(accessibilityLabel)
     }
 
