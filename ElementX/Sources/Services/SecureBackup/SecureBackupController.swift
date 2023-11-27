@@ -108,6 +108,9 @@ class SecureBackupController: SecureBackupControllerProtocol {
                     recoveryKeyStateSubject.send(.settingUp)
                 case .done:
                     recoveryKeyStateSubject.send(.enabled)
+                case .starting, .roomKeyUploadError:
+                    #warning("AG: fix me")
+                    return
                 }
             })
             
@@ -119,7 +122,8 @@ class SecureBackupController: SecureBackupControllerProtocol {
     
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
         do {
-            try await encryption.fixRecoveryIssues(recoveryKey: key)
+            #warning("AG: fix me")
+            // try await encryption.fixRecoveryIssues(recoveryKey: key)
             return .success(())
         } catch {
             return .failure(.failedConfirmingRecoveryKey)
@@ -143,7 +147,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             case .BackupDisabled:
                 MXLog.error("Key backup disabled, continuing logout.")
                 return .success(())
-            case .Connection, .Laged:
+            case .Connection, .Lagged:
                 MXLog.error("Key backup upload failure: \(error)")
                 return .failure(.failedUploadingForBackup)
             }
