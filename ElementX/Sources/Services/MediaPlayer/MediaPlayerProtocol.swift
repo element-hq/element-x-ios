@@ -26,7 +26,7 @@ enum MediaPlayerState {
 
 protocol MediaPlayerProtocol: AnyObject {
     var mediaSource: MediaSourceProxy? { get }
-    
+    var duration: TimeInterval { get }
     var currentTime: TimeInterval { get }
     var url: URL? { get }
     var state: MediaPlayerState { get }
