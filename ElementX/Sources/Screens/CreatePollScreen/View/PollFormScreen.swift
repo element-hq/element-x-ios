@@ -163,7 +163,7 @@ private struct PollFormOptionRow: View {
     
     var body: some View {
         ListRow(kind: .custom {
-            HStack(spacing: 8) {
+            HStack(spacing: 16) {
                 if editMode?.wrappedValue == .active {
                     Button(role: .destructive, action: deleteAction) {
                         CompoundIcon(\.delete)
