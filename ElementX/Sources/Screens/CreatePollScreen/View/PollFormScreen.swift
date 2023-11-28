@@ -172,6 +172,7 @@ private struct PollFormOptionRow: View {
                     .buttonStyle(.compound(.plain))
                     .accessibilityLabel(L10n.actionRemove)
                 }
+                
                 TextField(text: $text) {
                     Text(placeholder)
                         .compoundTextFieldPlaceholder()
@@ -180,6 +181,7 @@ private struct PollFormOptionRow: View {
                     textField.clearButtonMode = .whileEditing
                 }
                 .tint(.compound.iconAccentTertiary)
+                .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
             }
             .padding(.horizontal, ListRowPadding.horizontal)
             .padding(.vertical, ListRowPadding.vertical)
