@@ -100,15 +100,11 @@ class SecureBackupController: SecureBackupControllerProtocol {
                 guard let self else { return }
                 
                 switch state {
-                case .creatingBackup:
-                    recoveryKeyStateSubject.send(.settingUp)
-                case .creatingRecoveryKey:
-                    recoveryKeyStateSubject.send(.settingUp)
-                case .backingUp:
+                case .starting, .creatingBackup, .creatingRecoveryKey, .backingUp:
                     recoveryKeyStateSubject.send(.settingUp)
                 case .done:
                     recoveryKeyStateSubject.send(.enabled)
-                case .starting, .roomKeyUploadError:
+                case .roomKeyUploadError:
                     #warning("AG: fix me")
                     return
                 }
@@ -122,8 +118,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
     
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
         do {
-            #warning("AG: fix me")
-            // try await encryption.fixRecoveryIssues(recoveryKey: key)
+            try await encryption.recover(recoveryKey: key)
             return .success(())
         } catch {
             return .failure(.failedConfirmingRecoveryKey)
