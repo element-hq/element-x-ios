@@ -96,6 +96,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
                 return .success(key)
             }
             
+            var keyUploadErrored = false
             let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, progressListener: SecureBackupEnableRecoveryProgressListener { [weak self] state in
                 guard let self else { return }
                 
@@ -105,12 +106,11 @@ class SecureBackupController: SecureBackupControllerProtocol {
                 case .done:
                     recoveryKeyStateSubject.send(.enabled)
                 case .roomKeyUploadError:
-                    #warning("AG: fix me")
-                    return
+                    keyUploadErrored = true
                 }
             })
             
-            return .success(recoveryKey)
+            return keyUploadErrored ? .failure(.failedGeneratingRecoveryKey) : .success(recoveryKey)
         } catch {
             return .failure(.failedGeneratingRecoveryKey)
         }
