@@ -40,7 +40,6 @@ class RoomProxy: RoomProxyProtocol {
         membersSubject.asCurrentValuePublisher()
     }
         
-    private var timelineProviderSubscription: AnyCancellable?
     private let stateUpdatesSubject = PassthroughSubject<Void, Never>()
     var stateUpdatesPublisher: AnyPublisher<Void, Never> {
         stateUpdatesSubject.eraseToAnyPublisher()
@@ -87,16 +86,7 @@ class RoomProxy: RoomProxyProtocol {
         
         await timeline.subscribeForUpdates()
         
-        timelineProviderSubscription = await timeline
-            .timelineProvider
-            .updatePublisher
-            .sink { [weak self] _ in
-                // Workaround for subscribeToRoomStateUpdates creating problems in the timeline
-                // https://github.com/matrix-org/matrix-rust-sdk/issues/2488
-                self?.stateUpdatesSubject.send()
-            }
-        
-        // subscribeToRoomStateUpdates()
+        subscribeToRoomStateUpdates()
     }
 
     lazy var id: String = room.id()
