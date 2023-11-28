@@ -30,7 +30,7 @@ struct InviteUsersScreen: View {
             .disableInteractiveDismissOnSearch()
             .dismissSearchOnDisappear()
             .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
-            .searchableConfiguration(hidesNavigationBar: false)
+            .searchableConfiguration(hidesNavigationBar: false, showsCancelButton: false)
             .compoundSearchField()
             .alert(item: $context.alertInfo)
             .readFrame($frame)
