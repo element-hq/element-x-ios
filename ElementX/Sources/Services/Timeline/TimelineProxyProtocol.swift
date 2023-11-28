@@ -18,6 +18,21 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
+enum TimelineProxyError: Error, Equatable {
+    case failedEditingMessage
+    case failedPaginatingBackwards
+    case failedSendingMessage
+    case failedSendingReaction
+    case failedSendingReadReceipt
+    case failedSendingMedia
+    
+    // Polls
+    case failedCreatingPoll
+    case failedEditingPoll
+    case failedEndingPoll
+    case failedSendingPollResponse
+}
+
 // sourcery: AutoMockable
 protocol TimelineProxyProtocol {
     var timelineProvider: RoomTimelineProviderProtocol { get }
@@ -99,21 +114,6 @@ protocol TimelineProxyProtocol {
     func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineProxyError>
     
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineProxyError>
-}
-
-enum TimelineProxyError: Error, Equatable {
-    case failedEditingMessage
-    case failedPaginatingBackwards
-    case failedSendingMessage
-    case failedSendingReaction
-    case failedSendingReadReceipt
-    case failedSendingMedia
-    
-    // Polls
-    case failedCreatingPoll
-    case failedEditingPoll
-    case failedEndingPoll
-    case failedSendingPollResponse
 }
 
 extension TimelineProxyProtocol {
