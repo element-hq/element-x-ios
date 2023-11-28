@@ -71,6 +71,9 @@ protocol RoomProxyProtocol {
     
     var timeline: TimelineProxyProtocol { get }
     
+    /// A timeline providing just polls related events
+    var pollHistoryTimeline: TimelineProxyProtocol { get }
+    
     func subscribeForUpdates() async
 
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>

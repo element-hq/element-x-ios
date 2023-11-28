@@ -1939,6 +1939,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingTimeline = value }
     }
     var underlyingTimeline: TimelineProxyProtocol!
+    var pollHistoryTimeline: TimelineProxyProtocol {
+        get { return underlyingPollHistoryTimeline }
+        set(value) { underlyingPollHistoryTimeline = value }
+    }
+    var underlyingPollHistoryTimeline: TimelineProxyProtocol!
 
     //MARK: - subscribeForUpdates
 
