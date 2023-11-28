@@ -403,43 +403,6 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     // MARK: - Private
-
-    private func buildMessageContentFor(_ message: String,
-                                        html: String?,
-                                        intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation {
-        let emoteSlashCommand = "/me "
-        let isEmote: Bool = message.starts(with: emoteSlashCommand)
-        
-        let content: RoomMessageEventContentWithoutRelation
-        if isEmote {
-            let emoteMessage = String(message.dropFirst(emoteSlashCommand.count))
-            
-            var emoteHtml: String?
-            if let html {
-                emoteHtml = String(html.dropFirst(emoteSlashCommand.count))
-            }
-            content = buildEmoteMessageContentFor(emoteMessage, html: emoteHtml)
-        } else {
-            if let html {
-                content = messageEventContentFromHtml(body: message, htmlBody: html)
-            } else {
-                content = messageEventContentFromMarkdown(md: message)
-            }
-        }
-        return content.withMentions(mentions: intentionalMentions)
-    }
-    
-    private func buildEmoteMessageContentFor(_ message: String, html: String?) -> RoomMessageEventContentWithoutRelation {
-        if let html {
-            return messageEventContentFromHtmlAsEmote(body: message, htmlBody: html)
-        } else {
-            return messageEventContentFromMarkdownAsEmote(md: message)
-        }
-    }
-        
-    private func update(displayName: String) {
-        self.displayName = displayName
-    }
     
     private func subscribeToRoomStateUpdates() {
         roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] in
