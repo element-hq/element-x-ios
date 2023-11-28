@@ -43,7 +43,7 @@ struct ReportContentScreen: View {
     private var reasonSection: some View {
         Section {
             ListRow(label: .plain(title: L10n.reportContentHint),
-                    kind: .textField(text: $context.reasonText))
+                    kind: .textField(text: $context.reasonText, axis: .vertical))
                 .lineLimit(4, reservesSpace: true)
         } footer: {
             Text(L10n.reportContentExplanation)
