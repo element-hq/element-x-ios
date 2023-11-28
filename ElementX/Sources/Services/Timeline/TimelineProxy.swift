@@ -23,10 +23,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
-    #warning("AG: should we use a different task name for different TimelineProxies?")
     private let backgroundTaskName = "SendRoomEvent"
-    
-    #warning("AG: is it ok to use the same queues across different TimelineProxies?")
     private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.low_priority", qos: .utility)
     private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
     private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
