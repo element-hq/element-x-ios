@@ -63,8 +63,8 @@ class RoomProxy: RoomProxyProtocol {
         timeline = await TimelineProxy(timeline: room.timeline(), backgroundTaskService: backgroundTaskService)
         
         Task {
-            /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
-            /// This should become automatic on the RustSDK side at some point
+            // Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
+            // This should become automatic on the RustSDK side at some point
             await room.timeline().fetchMembers()
             
             await updateMembers()
