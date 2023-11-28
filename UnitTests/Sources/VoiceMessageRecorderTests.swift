@@ -237,8 +237,10 @@ class VoiceMessageRecorderTests: XCTestCase {
             try? FileManager.default.removeItem(at: destination)
         }
         
+        let timelineProxy = TimelineProxyMock()
         let roomProxy = RoomProxyMock()
-        roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
+        roomProxy.timeline = timelineProxy
+        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
             XCTFail("An error is expected")
             return
@@ -256,8 +258,10 @@ class VoiceMessageRecorderTests: XCTestCase {
             try? FileManager.default.copyItem(at: imageFileURL, to: destination)
         }
         
+        let timelineProxy = TimelineProxyMock()
         let roomProxy = RoomProxyMock()
-        roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
+        roomProxy.timeline = timelineProxy
+        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
             XCTFail("An error is expected")
             return
@@ -277,8 +281,10 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
         
         // If the media upload fails
+        let timelineProxy = TimelineProxyMock()
         let roomProxy = RoomProxyMock()
-        roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
+        roomProxy.timeline = timelineProxy
+        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
             XCTFail("An error is expected")
             return
@@ -291,7 +297,9 @@ class VoiceMessageRecorderTests: XCTestCase {
             return
         }
         
+        let timelineProxy = TimelineProxyMock()
         let roomProxy = RoomProxyMock()
+        roomProxy.timeline = timelineProxy
         audioRecorder.currentTime = 42
         audioRecorder.audioFileURL = imageFileURL
         _ = await voiceMessageRecorder.startRecording()
@@ -312,7 +320,7 @@ class VoiceMessageRecorderTests: XCTestCase {
             XCTAssertEqual(destination.pathExtension, "ogg")
         }
         
-        roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure = { url, audioInfo, waveform, _, _ in
+        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure = { url, audioInfo, waveform, _, _ in
             XCTAssertEqual(url, convertedFileURL)
             XCTAssertEqual(audioInfo.duration, self.audioRecorder.currentTime)
             XCTAssertEqual(audioInfo.size, convertedFileSize)
@@ -328,7 +336,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
         
         XCTAssert(audioConverter.convertToOpusOggSourceURLDestinationURLCalled)
-        XCTAssert(roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled)
+        XCTAssert(timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled)
         
         // the converted file must have been deleted
         if let convertedFileURL {
