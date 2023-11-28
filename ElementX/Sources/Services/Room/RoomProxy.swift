@@ -35,6 +35,7 @@ class RoomProxy: RoomProxyProtocol {
     
     private(set) var displayName: String?
     private var roomInfoObservationToken: TaskHandle?
+    private var subscribedForUpdates = false
 
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
@@ -73,11 +74,12 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func subscribeForUpdates() async {
-        guard !timeline.hasPendingUpdatesSubscription else {
+        guard !subscribedForUpdates else {
             MXLog.warning("Room already subscribed for updates")
             return
         }
         
+        subscribedForUpdates = true
         let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
                                                         RequiredState(key: "m.room.topic", value: ""),
                                                         RequiredState(key: "m.room.avatar", value: ""),
@@ -87,6 +89,7 @@ class RoomProxy: RoomProxyProtocol {
         roomListItem.subscribe(settings: settings)
         
         await timeline.subscribeForUpdates()
+        await pollHistoryTimeline.subscribeForUpdates()
         
         subscribeToRoomStateUpdates()
     }

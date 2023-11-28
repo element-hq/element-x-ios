@@ -2573,11 +2573,6 @@ class TimelineProxyMock: TimelineProxyProtocol {
         set(value) { underlyingTimelineProvider = value }
     }
     var underlyingTimelineProvider: RoomTimelineProviderProtocol!
-    var hasPendingUpdatesSubscription: Bool {
-        get { return underlyingHasPendingUpdatesSubscription }
-        set(value) { underlyingHasPendingUpdatesSubscription = value }
-    }
-    var underlyingHasPendingUpdatesSubscription: Bool!
 
     //MARK: - subscribeForUpdates
 

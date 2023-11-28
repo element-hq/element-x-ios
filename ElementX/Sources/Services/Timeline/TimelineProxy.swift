@@ -55,6 +55,11 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func subscribeForUpdates() async {
+        guard innerTimelineProvider == nil else {
+            MXLog.warning("Timeline already subscribed for updates")
+            return
+        }
+        
         let timelineListener = RoomTimelineListener { [weak self] timelineDiffs in
             self?.timelineUpdatesSubject.send(timelineDiffs)
         }
