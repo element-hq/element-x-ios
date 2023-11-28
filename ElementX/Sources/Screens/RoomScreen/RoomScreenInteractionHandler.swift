@@ -274,7 +274,7 @@ class RoomScreenInteractionHandler {
 
     func sendPollResponse(pollStartID: String, optionID: String) {
         Task {
-            let sendPollResponseResult = await roomProxy.sendPollResponse(pollStartID: pollStartID, answers: [optionID])
+            let sendPollResponseResult = await roomProxy.timeline.sendPollResponse(pollStartID: pollStartID, answers: [optionID])
             analyticsService.trackPollVote()
 
             switch sendPollResponseResult {
@@ -288,8 +288,8 @@ class RoomScreenInteractionHandler {
     
     func endPoll(pollStartID: String) {
         Task {
-            let endPollResult = await roomProxy.endPoll(pollStartID: pollStartID,
-                                                        text: "The poll with event id: \(pollStartID) has ended")
+            let endPollResult = await roomProxy.timeline.endPoll(pollStartID: pollStartID,
+                                                                 text: "The poll with event id: \(pollStartID) has ended")
             analyticsService.trackPollEnd()
             switch endPollResult {
             case .success:

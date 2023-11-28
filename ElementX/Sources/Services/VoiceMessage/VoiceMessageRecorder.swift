@@ -190,10 +190,10 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
             return .failure(.failedSendingVoiceMessage)
         }
         
-        let result = await roomProxy.sendVoiceMessage(url: oggFile,
-                                                      audioInfo: audioInfo,
-                                                      waveform: waveform,
-                                                      progressSubject: nil) { _ in }
+        let result = await roomProxy.timeline.sendVoiceMessage(url: oggFile,
+                                                               audioInfo: audioInfo,
+                                                               waveform: waveform,
+                                                               progressSubject: nil) { _ in }
         
         if case .failure(let error) = result {
             MXLog.error("Failed to send the voice message. \(error)")

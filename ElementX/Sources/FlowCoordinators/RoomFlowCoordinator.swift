@@ -595,20 +595,20 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
     private func presentMapNavigator(interactionMode: StaticLocationInteractionMode) {
         let locationPickerNavigationStackCoordinator = NavigationStackCoordinator()
-
+        
         let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
-
+        
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .selectedLocation(let geoURI, let isUserLocation):
                 Task {
-                    _ = await self.roomProxy?.sendLocation(body: geoURI.bodyMessage,
-                                                           geoURI: geoURI,
-                                                           description: nil,
-                                                           zoomLevel: 15,
-                                                           assetType: isUserLocation ? .sender : .pin)
+                    _ = await self.roomProxy?.timeline.sendLocation(body: geoURI.bodyMessage,
+                                                                    geoURI: geoURI,
+                                                                    description: nil,
+                                                                    zoomLevel: 15,
+                                                                    assetType: isUserLocation ? .sender : .pin)
                     self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
                 
@@ -622,9 +622,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
-
+        
         locationPickerNavigationStackCoordinator.setRootCoordinator(coordinator)
-
+        
         navigationStackCoordinator.setSheetCoordinator(locationPickerNavigationStackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMapNavigator)
         }
@@ -671,7 +671,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return
             }
 
-            let result = await roomProxy.createPoll(question: question, answers: options, pollKind: pollKind)
+            let result = await roomProxy.timeline.createPoll(question: question, answers: options, pollKind: pollKind)
 
             self.analytics.trackComposer(inThread: false,
                                          isEditing: false,
@@ -697,7 +697,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return
             }
 
-            let result = await roomProxy.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind)
+            let result = await roomProxy.timeline.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind)
             
             switch result {
             case .success:
@@ -781,7 +781,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        guard let messageEventContent = roomProxy.messageEventContent(for: eventID) else {
+        guard let messageEventContent = roomProxy.timeline.messageEventContent(for: eventID) else {
             MXLog.error("Failed retrieving forwarded message event content for eventID: \(eventID)")
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
             return
@@ -793,7 +793,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        if case .failure(let error) = await targetRoomProxy.sendMessageEventContent(messageEventContent) {
+        if case .failure(let error) = await targetRoomProxy.timeline.sendMessageEventContent(messageEventContent) {
             MXLog.error("Failed forwarding message with error: \(error)")
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
             return

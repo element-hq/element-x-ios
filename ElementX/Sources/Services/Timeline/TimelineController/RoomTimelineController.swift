@@ -46,7 +46,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
          appSettings: AppSettings,
          secureBackupController: SecureBackupControllerProtocol) {
         self.roomProxy = roomProxy
-        timelineProvider = roomProxy.timelineProvider
+        timelineProvider = roomProxy.timeline.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.appSettings = appSettings
         self.secureBackupController = secureBackupController
@@ -71,12 +71,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
         MXLog.info("Started back pagination request")
-        switch await roomProxy.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
+        switch await roomProxy.timeline.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
         case .success:
             MXLog.info("Finished back pagination request")
-            return .success(())
-        case .failure(.noMoreMessagesToBackPaginate):
-            MXLog.warning("Back pagination requested when all messages have been loaded.")
             return .success(())
         case .failure(let error):
             MXLog.error("Failed back pagination request with error: \(error)")
@@ -89,7 +86,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
               let eventID = itemID.eventID
         else { return .success(()) }
         
-        switch await roomProxy.sendReadReceipt(for: eventID) {
+        switch await roomProxy.timeline.sendReadReceipt(for: eventID) {
         case .success:
             return .success(())
         case .failure:
@@ -123,11 +120,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             MXLog.error("Send reply in \(roomID) failed: missing event ID")
             return
         }
-
-        switch await roomProxy.sendMessage(message,
-                                           html: html,
-                                           inReplyTo: inReplyTo,
-                                           intentionalMentions: intentionalMentions) {
+        
+        switch await roomProxy.timeline.sendMessage(message,
+                                                    html: html,
+                                                    inReplyTo: inReplyTo,
+                                                    intentionalMentions: intentionalMentions) {
         case .success:
             MXLog.info("Finished sending message")
         case .failure(let error):
@@ -142,7 +139,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
 
-        switch await roomProxy.toggleReaction(reaction, to: eventID) {
+        switch await roomProxy.timeline.toggleReaction(reaction, to: eventID) {
         case .success:
             MXLog.info("Finished toggling reaction")
         case .failure(let error):
@@ -162,10 +159,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             await cancelSending(itemID: itemID)
             await sendMessage(newMessage, html: html, intentionalMentions: intentionalMentions)
         } else if let eventID = itemID.eventID {
-            switch await roomProxy.editMessage(newMessage,
-                                               html: html,
-                                               original: eventID,
-                                               intentionalMentions: intentionalMentions) {
+            switch await roomProxy.timeline.editMessage(newMessage,
+                                                        html: html,
+                                                        original: eventID,
+                                                        intentionalMentions: intentionalMentions) {
             case .success:
                 MXLog.info("Finished editing message")
             case .failure(let error):
@@ -207,7 +204,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func retryDecryption(for sessionID: String) async {
-        await roomProxy.retryDecryption(for: sessionID)
+        await roomProxy.timeline.retryDecryption(for: sessionID)
     }
     
     func retrySending(itemID: TimelineItemIdentifier) async {
@@ -217,7 +214,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         MXLog.info("Retry sending in \(roomID)")
-        await roomProxy.retrySend(transactionID: transactionID)
+        await roomProxy.timeline.retrySend(transactionID: transactionID)
     }
     
     func cancelSending(itemID: TimelineItemIdentifier) async {
@@ -227,7 +224,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         MXLog.info("Cancelling send in \(roomID)")
-        await roomProxy.cancelSend(transactionID: transactionID)
+        await roomProxy.timeline.cancelSend(transactionID: transactionID)
     }
     
     // MARK: - Private
@@ -378,10 +375,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
 
         switch timelineItem.replyDetails {
         case .notLoaded:
-            roomProxy.fetchDetails(for: eventID)
+            roomProxy.timeline.fetchDetails(for: eventID)
         case .error:
             if refetchOnError {
-                roomProxy.fetchDetails(for: eventID)
+                roomProxy.timeline.fetchDetails(for: eventID)
             }
         default:
             break

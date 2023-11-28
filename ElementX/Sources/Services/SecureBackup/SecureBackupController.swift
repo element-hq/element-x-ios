@@ -96,22 +96,21 @@ class SecureBackupController: SecureBackupControllerProtocol {
                 return .success(key)
             }
             
+            var keyUploadErrored = false
             let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, progressListener: SecureBackupEnableRecoveryProgressListener { [weak self] state in
                 guard let self else { return }
                 
                 switch state {
-                case .creatingBackup:
-                    recoveryKeyStateSubject.send(.settingUp)
-                case .creatingRecoveryKey:
-                    recoveryKeyStateSubject.send(.settingUp)
-                case .backingUp:
+                case .starting, .creatingBackup, .creatingRecoveryKey, .backingUp:
                     recoveryKeyStateSubject.send(.settingUp)
                 case .done:
                     recoveryKeyStateSubject.send(.enabled)
+                case .roomKeyUploadError:
+                    keyUploadErrored = true
                 }
             })
             
-            return .success(recoveryKey)
+            return keyUploadErrored ? .failure(.failedGeneratingRecoveryKey) : .success(recoveryKey)
         } catch {
             return .failure(.failedGeneratingRecoveryKey)
         }
@@ -119,7 +118,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
     
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
         do {
-            try await encryption.fixRecoveryIssues(recoveryKey: key)
+            try await encryption.recover(recoveryKey: key)
             return .success(())
         } catch {
             return .failure(.failedConfirmingRecoveryKey)
@@ -143,7 +142,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             case .BackupDisabled:
                 MXLog.error("Key backup disabled, continuing logout.")
                 return .success(())
-            case .Connection, .Laged:
+            case .Connection, .Lagged:
                 MXLog.error("Key backup upload failure: \(error)")
                 return .failure(.failedUploadingForBackup)
             }

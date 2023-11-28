@@ -1934,11 +1934,16 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingStateUpdatesPublisher = value }
     }
     var underlyingStateUpdatesPublisher: AnyPublisher<Void, Never>!
-    var timelineProvider: RoomTimelineProviderProtocol {
-        get { return underlyingTimelineProvider }
-        set(value) { underlyingTimelineProvider = value }
+    var timeline: TimelineProxyProtocol {
+        get { return underlyingTimeline }
+        set(value) { underlyingTimeline = value }
     }
-    var underlyingTimelineProvider: RoomTimelineProviderProtocol!
+    var underlyingTimeline: TimelineProxyProtocol!
+    var pollHistoryTimeline: TimelineProxyProtocol {
+        get { return underlyingPollHistoryTimeline }
+        set(value) { underlyingPollHistoryTimeline = value }
+    }
+    var underlyingPollHistoryTimeline: TimelineProxyProtocol!
 
     //MARK: - subscribeForUpdates
 
@@ -1992,291 +1997,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return await loadDisplayNameForUserIdClosure(userId)
         } else {
             return loadDisplayNameForUserIdReturnValue
-        }
-    }
-    //MARK: - paginateBackwards
-
-    var paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount = 0
-    var paginateBackwardsRequestSizeUntilNumberOfItemsCalled: Bool {
-        return paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount > 0
-    }
-    var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments: (requestSize: UInt, untilNumberOfItems: UInt)?
-    var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations: [(requestSize: UInt, untilNumberOfItems: UInt)] = []
-    var paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue: Result<Void, RoomProxyError>!
-    var paginateBackwardsRequestSizeUntilNumberOfItemsClosure: ((UInt, UInt) async -> Result<Void, RoomProxyError>)?
-
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
-        paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount += 1
-        paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments = (requestSize: requestSize, untilNumberOfItems: untilNumberOfItems)
-        paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations.append((requestSize: requestSize, untilNumberOfItems: untilNumberOfItems))
-        if let paginateBackwardsRequestSizeUntilNumberOfItemsClosure = paginateBackwardsRequestSizeUntilNumberOfItemsClosure {
-            return await paginateBackwardsRequestSizeUntilNumberOfItemsClosure(requestSize, untilNumberOfItems)
-        } else {
-            return paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue
-        }
-    }
-    //MARK: - sendReadReceipt
-
-    var sendReadReceiptForCallsCount = 0
-    var sendReadReceiptForCalled: Bool {
-        return sendReadReceiptForCallsCount > 0
-    }
-    var sendReadReceiptForReceivedEventID: String?
-    var sendReadReceiptForReceivedInvocations: [String] = []
-    var sendReadReceiptForReturnValue: Result<Void, RoomProxyError>!
-    var sendReadReceiptForClosure: ((String) async -> Result<Void, RoomProxyError>)?
-
-    func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError> {
-        sendReadReceiptForCallsCount += 1
-        sendReadReceiptForReceivedEventID = eventID
-        sendReadReceiptForReceivedInvocations.append(eventID)
-        if let sendReadReceiptForClosure = sendReadReceiptForClosure {
-            return await sendReadReceiptForClosure(eventID)
-        } else {
-            return sendReadReceiptForReturnValue
-        }
-    }
-    //MARK: - messageEventContent
-
-    var messageEventContentForCallsCount = 0
-    var messageEventContentForCalled: Bool {
-        return messageEventContentForCallsCount > 0
-    }
-    var messageEventContentForReceivedEventID: String?
-    var messageEventContentForReceivedInvocations: [String] = []
-    var messageEventContentForReturnValue: RoomMessageEventContentWithoutRelation?
-    var messageEventContentForClosure: ((String) -> RoomMessageEventContentWithoutRelation?)?
-
-    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
-        messageEventContentForCallsCount += 1
-        messageEventContentForReceivedEventID = eventID
-        messageEventContentForReceivedInvocations.append(eventID)
-        if let messageEventContentForClosure = messageEventContentForClosure {
-            return messageEventContentForClosure(eventID)
-        } else {
-            return messageEventContentForReturnValue
-        }
-    }
-    //MARK: - sendMessageEventContent
-
-    var sendMessageEventContentCallsCount = 0
-    var sendMessageEventContentCalled: Bool {
-        return sendMessageEventContentCallsCount > 0
-    }
-    var sendMessageEventContentReceivedMessageContent: RoomMessageEventContentWithoutRelation?
-    var sendMessageEventContentReceivedInvocations: [RoomMessageEventContentWithoutRelation] = []
-    var sendMessageEventContentReturnValue: Result<Void, RoomProxyError>!
-    var sendMessageEventContentClosure: ((RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError>)?
-
-    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError> {
-        sendMessageEventContentCallsCount += 1
-        sendMessageEventContentReceivedMessageContent = messageContent
-        sendMessageEventContentReceivedInvocations.append(messageContent)
-        if let sendMessageEventContentClosure = sendMessageEventContentClosure {
-            return await sendMessageEventContentClosure(messageContent)
-        } else {
-            return sendMessageEventContentReturnValue
-        }
-    }
-    //MARK: - sendMessage
-
-    var sendMessageHtmlInReplyToIntentionalMentionsCallsCount = 0
-    var sendMessageHtmlInReplyToIntentionalMentionsCalled: Bool {
-        return sendMessageHtmlInReplyToIntentionalMentionsCallsCount > 0
-    }
-    var sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments: (message: String, html: String?, eventID: String?, intentionalMentions: IntentionalMentions)?
-    var sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations: [(message: String, html: String?, eventID: String?, intentionalMentions: IntentionalMentions)] = []
-    var sendMessageHtmlInReplyToIntentionalMentionsReturnValue: Result<Void, RoomProxyError>!
-    var sendMessageHtmlInReplyToIntentionalMentionsClosure: ((String, String?, String?, IntentionalMentions) async -> Result<Void, RoomProxyError>)?
-
-    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String?, intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
-        sendMessageHtmlInReplyToIntentionalMentionsCallsCount += 1
-        sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments = (message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
-        sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations.append((message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
-        if let sendMessageHtmlInReplyToIntentionalMentionsClosure = sendMessageHtmlInReplyToIntentionalMentionsClosure {
-            return await sendMessageHtmlInReplyToIntentionalMentionsClosure(message, html, eventID, intentionalMentions)
-        } else {
-            return sendMessageHtmlInReplyToIntentionalMentionsReturnValue
-        }
-    }
-    //MARK: - toggleReaction
-
-    var toggleReactionToCallsCount = 0
-    var toggleReactionToCalled: Bool {
-        return toggleReactionToCallsCount > 0
-    }
-    var toggleReactionToReceivedArguments: (reaction: String, eventID: String)?
-    var toggleReactionToReceivedInvocations: [(reaction: String, eventID: String)] = []
-    var toggleReactionToReturnValue: Result<Void, RoomProxyError>!
-    var toggleReactionToClosure: ((String, String) async -> Result<Void, RoomProxyError>)?
-
-    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
-        toggleReactionToCallsCount += 1
-        toggleReactionToReceivedArguments = (reaction: reaction, eventID: eventID)
-        toggleReactionToReceivedInvocations.append((reaction: reaction, eventID: eventID))
-        if let toggleReactionToClosure = toggleReactionToClosure {
-            return await toggleReactionToClosure(reaction, eventID)
-        } else {
-            return toggleReactionToReturnValue
-        }
-    }
-    //MARK: - sendImage
-
-    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount = 0
-    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCalled: Bool {
-        return sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount > 0
-    }
-    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleReturnValue: Result<Void, RoomProxyError>!
-    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure: ((URL, URL, ImageInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>)?
-
-    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount += 1
-        if let sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure = sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure {
-            return await sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure(url, thumbnailURL, imageInfo, progressSubject, requestHandle)
-        } else {
-            return sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleReturnValue
-        }
-    }
-    //MARK: - sendVideo
-
-    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount = 0
-    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCalled: Bool {
-        return sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount > 0
-    }
-    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleReturnValue: Result<Void, RoomProxyError>!
-    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure: ((URL, URL, VideoInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>)?
-
-    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount += 1
-        if let sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure = sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure {
-            return await sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure(url, thumbnailURL, videoInfo, progressSubject, requestHandle)
-        } else {
-            return sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleReturnValue
-        }
-    }
-    //MARK: - sendAudio
-
-    var sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount = 0
-    var sendAudioUrlAudioInfoProgressSubjectRequestHandleCalled: Bool {
-        return sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount > 0
-    }
-    var sendAudioUrlAudioInfoProgressSubjectRequestHandleReturnValue: Result<Void, RoomProxyError>!
-    var sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure: ((URL, AudioInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>)?
-
-    func sendAudio(url: URL, audioInfo: AudioInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount += 1
-        if let sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure = sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure {
-            return await sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure(url, audioInfo, progressSubject, requestHandle)
-        } else {
-            return sendAudioUrlAudioInfoProgressSubjectRequestHandleReturnValue
-        }
-    }
-    //MARK: - sendFile
-
-    var sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount = 0
-    var sendFileUrlFileInfoProgressSubjectRequestHandleCalled: Bool {
-        return sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount > 0
-    }
-    var sendFileUrlFileInfoProgressSubjectRequestHandleReturnValue: Result<Void, RoomProxyError>!
-    var sendFileUrlFileInfoProgressSubjectRequestHandleClosure: ((URL, FileInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>)?
-
-    func sendFile(url: URL, fileInfo: FileInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount += 1
-        if let sendFileUrlFileInfoProgressSubjectRequestHandleClosure = sendFileUrlFileInfoProgressSubjectRequestHandleClosure {
-            return await sendFileUrlFileInfoProgressSubjectRequestHandleClosure(url, fileInfo, progressSubject, requestHandle)
-        } else {
-            return sendFileUrlFileInfoProgressSubjectRequestHandleReturnValue
-        }
-    }
-    //MARK: - sendLocation
-
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount = 0
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCalled: Bool {
-        return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount > 0
-    }
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments: (body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)?
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations: [(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)] = []
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue: Result<Void, RoomProxyError>!
-    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure: ((String, GeoURI, String?, UInt8?, AssetType?) async -> Result<Void, RoomProxyError>)?
-
-    func sendLocation(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?) async -> Result<Void, RoomProxyError> {
-        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount += 1
-        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments = (body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType)
-        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations.append((body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType))
-        if let sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure {
-            return await sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure(body, geoURI, description, zoomLevel, assetType)
-        } else {
-            return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue
-        }
-    }
-    //MARK: - sendVoiceMessage
-
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount = 0
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled: Bool {
-        return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount > 0
-    }
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue: Result<Void, RoomProxyError>!
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure: ((URL, AudioInfo, [UInt16], CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>)?
-
-    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16], progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount += 1
-        if let sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure {
-            return await sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure(url, audioInfo, waveform, progressSubject, requestHandle)
-        } else {
-            return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue
-        }
-    }
-    //MARK: - retrySend
-
-    var retrySendTransactionIDCallsCount = 0
-    var retrySendTransactionIDCalled: Bool {
-        return retrySendTransactionIDCallsCount > 0
-    }
-    var retrySendTransactionIDReceivedTransactionID: String?
-    var retrySendTransactionIDReceivedInvocations: [String] = []
-    var retrySendTransactionIDClosure: ((String) async -> Void)?
-
-    func retrySend(transactionID: String) async {
-        retrySendTransactionIDCallsCount += 1
-        retrySendTransactionIDReceivedTransactionID = transactionID
-        retrySendTransactionIDReceivedInvocations.append(transactionID)
-        await retrySendTransactionIDClosure?(transactionID)
-    }
-    //MARK: - cancelSend
-
-    var cancelSendTransactionIDCallsCount = 0
-    var cancelSendTransactionIDCalled: Bool {
-        return cancelSendTransactionIDCallsCount > 0
-    }
-    var cancelSendTransactionIDReceivedTransactionID: String?
-    var cancelSendTransactionIDReceivedInvocations: [String] = []
-    var cancelSendTransactionIDClosure: ((String) async -> Void)?
-
-    func cancelSend(transactionID: String) async {
-        cancelSendTransactionIDCallsCount += 1
-        cancelSendTransactionIDReceivedTransactionID = transactionID
-        cancelSendTransactionIDReceivedInvocations.append(transactionID)
-        await cancelSendTransactionIDClosure?(transactionID)
-    }
-    //MARK: - editMessage
-
-    var editMessageHtmlOriginalIntentionalMentionsCallsCount = 0
-    var editMessageHtmlOriginalIntentionalMentionsCalled: Bool {
-        return editMessageHtmlOriginalIntentionalMentionsCallsCount > 0
-    }
-    var editMessageHtmlOriginalIntentionalMentionsReceivedArguments: (newMessage: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)?
-    var editMessageHtmlOriginalIntentionalMentionsReceivedInvocations: [(newMessage: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)] = []
-    var editMessageHtmlOriginalIntentionalMentionsReturnValue: Result<Void, RoomProxyError>!
-    var editMessageHtmlOriginalIntentionalMentionsClosure: ((String, String?, String, IntentionalMentions) async -> Result<Void, RoomProxyError>)?
-
-    func editMessage(_ newMessage: String, html: String?, original eventID: String, intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
-        editMessageHtmlOriginalIntentionalMentionsCallsCount += 1
-        editMessageHtmlOriginalIntentionalMentionsReceivedArguments = (newMessage: newMessage, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
-        editMessageHtmlOriginalIntentionalMentionsReceivedInvocations.append((newMessage: newMessage, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
-        if let editMessageHtmlOriginalIntentionalMentionsClosure = editMessageHtmlOriginalIntentionalMentionsClosure {
-            return await editMessageHtmlOriginalIntentionalMentionsClosure(newMessage, html, eventID, intentionalMentions)
-        } else {
-            return editMessageHtmlOriginalIntentionalMentionsReturnValue
         }
     }
     //MARK: - redact
@@ -2341,22 +2061,6 @@ class RoomProxyMock: RoomProxyProtocol {
         } else {
             return ignoreUserReturnValue
         }
-    }
-    //MARK: - retryDecryption
-
-    var retryDecryptionForCallsCount = 0
-    var retryDecryptionForCalled: Bool {
-        return retryDecryptionForCallsCount > 0
-    }
-    var retryDecryptionForReceivedSessionID: String?
-    var retryDecryptionForReceivedInvocations: [String] = []
-    var retryDecryptionForClosure: ((String) async -> Void)?
-
-    func retryDecryption(for sessionID: String) async {
-        retryDecryptionForCallsCount += 1
-        retryDecryptionForReceivedSessionID = sessionID
-        retryDecryptionForReceivedInvocations.append(sessionID)
-        await retryDecryptionForClosure?(sessionID)
     }
     //MARK: - leaveRoom
 
@@ -2458,22 +2162,6 @@ class RoomProxyMock: RoomProxyProtocol {
         } else {
             return acceptInvitationReturnValue
         }
-    }
-    //MARK: - fetchDetails
-
-    var fetchDetailsForCallsCount = 0
-    var fetchDetailsForCalled: Bool {
-        return fetchDetailsForCallsCount > 0
-    }
-    var fetchDetailsForReceivedEventID: String?
-    var fetchDetailsForReceivedInvocations: [String] = []
-    var fetchDetailsForClosure: ((String) -> Void)?
-
-    func fetchDetails(for eventID: String) {
-        fetchDetailsForCallsCount += 1
-        fetchDetailsForReceivedEventID = eventID
-        fetchDetailsForReceivedInvocations.append(eventID)
-        fetchDetailsForClosure?(eventID)
     }
     //MARK: - invite
 
@@ -2616,90 +2304,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return await canUserTriggerRoomNotificationUserIDClosure(userID)
         } else {
             return canUserTriggerRoomNotificationUserIDReturnValue
-        }
-    }
-    //MARK: - createPoll
-
-    var createPollQuestionAnswersPollKindCallsCount = 0
-    var createPollQuestionAnswersPollKindCalled: Bool {
-        return createPollQuestionAnswersPollKindCallsCount > 0
-    }
-    var createPollQuestionAnswersPollKindReceivedArguments: (question: String, answers: [String], pollKind: Poll.Kind)?
-    var createPollQuestionAnswersPollKindReceivedInvocations: [(question: String, answers: [String], pollKind: Poll.Kind)] = []
-    var createPollQuestionAnswersPollKindReturnValue: Result<Void, RoomProxyError>!
-    var createPollQuestionAnswersPollKindClosure: ((String, [String], Poll.Kind) async -> Result<Void, RoomProxyError>)?
-
-    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
-        createPollQuestionAnswersPollKindCallsCount += 1
-        createPollQuestionAnswersPollKindReceivedArguments = (question: question, answers: answers, pollKind: pollKind)
-        createPollQuestionAnswersPollKindReceivedInvocations.append((question: question, answers: answers, pollKind: pollKind))
-        if let createPollQuestionAnswersPollKindClosure = createPollQuestionAnswersPollKindClosure {
-            return await createPollQuestionAnswersPollKindClosure(question, answers, pollKind)
-        } else {
-            return createPollQuestionAnswersPollKindReturnValue
-        }
-    }
-    //MARK: - editPoll
-
-    var editPollOriginalQuestionAnswersPollKindCallsCount = 0
-    var editPollOriginalQuestionAnswersPollKindCalled: Bool {
-        return editPollOriginalQuestionAnswersPollKindCallsCount > 0
-    }
-    var editPollOriginalQuestionAnswersPollKindReceivedArguments: (eventID: String, question: String, answers: [String], pollKind: Poll.Kind)?
-    var editPollOriginalQuestionAnswersPollKindReceivedInvocations: [(eventID: String, question: String, answers: [String], pollKind: Poll.Kind)] = []
-    var editPollOriginalQuestionAnswersPollKindReturnValue: Result<Void, RoomProxyError>!
-    var editPollOriginalQuestionAnswersPollKindClosure: ((String, String, [String], Poll.Kind) async -> Result<Void, RoomProxyError>)?
-
-    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
-        editPollOriginalQuestionAnswersPollKindCallsCount += 1
-        editPollOriginalQuestionAnswersPollKindReceivedArguments = (eventID: eventID, question: question, answers: answers, pollKind: pollKind)
-        editPollOriginalQuestionAnswersPollKindReceivedInvocations.append((eventID: eventID, question: question, answers: answers, pollKind: pollKind))
-        if let editPollOriginalQuestionAnswersPollKindClosure = editPollOriginalQuestionAnswersPollKindClosure {
-            return await editPollOriginalQuestionAnswersPollKindClosure(eventID, question, answers, pollKind)
-        } else {
-            return editPollOriginalQuestionAnswersPollKindReturnValue
-        }
-    }
-    //MARK: - sendPollResponse
-
-    var sendPollResponsePollStartIDAnswersCallsCount = 0
-    var sendPollResponsePollStartIDAnswersCalled: Bool {
-        return sendPollResponsePollStartIDAnswersCallsCount > 0
-    }
-    var sendPollResponsePollStartIDAnswersReceivedArguments: (pollStartID: String, answers: [String])?
-    var sendPollResponsePollStartIDAnswersReceivedInvocations: [(pollStartID: String, answers: [String])] = []
-    var sendPollResponsePollStartIDAnswersReturnValue: Result<Void, RoomProxyError>!
-    var sendPollResponsePollStartIDAnswersClosure: ((String, [String]) async -> Result<Void, RoomProxyError>)?
-
-    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError> {
-        sendPollResponsePollStartIDAnswersCallsCount += 1
-        sendPollResponsePollStartIDAnswersReceivedArguments = (pollStartID: pollStartID, answers: answers)
-        sendPollResponsePollStartIDAnswersReceivedInvocations.append((pollStartID: pollStartID, answers: answers))
-        if let sendPollResponsePollStartIDAnswersClosure = sendPollResponsePollStartIDAnswersClosure {
-            return await sendPollResponsePollStartIDAnswersClosure(pollStartID, answers)
-        } else {
-            return sendPollResponsePollStartIDAnswersReturnValue
-        }
-    }
-    //MARK: - endPoll
-
-    var endPollPollStartIDTextCallsCount = 0
-    var endPollPollStartIDTextCalled: Bool {
-        return endPollPollStartIDTextCallsCount > 0
-    }
-    var endPollPollStartIDTextReceivedArguments: (pollStartID: String, text: String)?
-    var endPollPollStartIDTextReceivedInvocations: [(pollStartID: String, text: String)] = []
-    var endPollPollStartIDTextReturnValue: Result<Void, RoomProxyError>!
-    var endPollPollStartIDTextClosure: ((String, String) async -> Result<Void, RoomProxyError>)?
-
-    func endPoll(pollStartID: String, text: String) async -> Result<Void, RoomProxyError> {
-        endPollPollStartIDTextCallsCount += 1
-        endPollPollStartIDTextReceivedArguments = (pollStartID: pollStartID, text: text)
-        endPollPollStartIDTextReceivedInvocations.append((pollStartID: pollStartID, text: text))
-        if let endPollPollStartIDTextClosure = endPollPollStartIDTextClosure {
-            return await endPollPollStartIDTextClosure(pollStartID, text)
-        } else {
-            return endPollPollStartIDTextReturnValue
         }
     }
     //MARK: - elementCallWidgetDriver
@@ -2960,6 +2564,427 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
             return await cancelVerificationClosure()
         } else {
             return cancelVerificationReturnValue
+        }
+    }
+}
+class TimelineProxyMock: TimelineProxyProtocol {
+    var timelineProvider: RoomTimelineProviderProtocol {
+        get { return underlyingTimelineProvider }
+        set(value) { underlyingTimelineProvider = value }
+    }
+    var underlyingTimelineProvider: RoomTimelineProviderProtocol!
+
+    //MARK: - subscribeForUpdates
+
+    var subscribeForUpdatesCallsCount = 0
+    var subscribeForUpdatesCalled: Bool {
+        return subscribeForUpdatesCallsCount > 0
+    }
+    var subscribeForUpdatesClosure: (() async -> Void)?
+
+    func subscribeForUpdates() async {
+        subscribeForUpdatesCallsCount += 1
+        await subscribeForUpdatesClosure?()
+    }
+    //MARK: - cancelSend
+
+    var cancelSendTransactionIDCallsCount = 0
+    var cancelSendTransactionIDCalled: Bool {
+        return cancelSendTransactionIDCallsCount > 0
+    }
+    var cancelSendTransactionIDReceivedTransactionID: String?
+    var cancelSendTransactionIDReceivedInvocations: [String] = []
+    var cancelSendTransactionIDClosure: ((String) async -> Void)?
+
+    func cancelSend(transactionID: String) async {
+        cancelSendTransactionIDCallsCount += 1
+        cancelSendTransactionIDReceivedTransactionID = transactionID
+        cancelSendTransactionIDReceivedInvocations.append(transactionID)
+        await cancelSendTransactionIDClosure?(transactionID)
+    }
+    //MARK: - editMessage
+
+    var editMessageHtmlOriginalIntentionalMentionsCallsCount = 0
+    var editMessageHtmlOriginalIntentionalMentionsCalled: Bool {
+        return editMessageHtmlOriginalIntentionalMentionsCallsCount > 0
+    }
+    var editMessageHtmlOriginalIntentionalMentionsReceivedArguments: (message: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)?
+    var editMessageHtmlOriginalIntentionalMentionsReceivedInvocations: [(message: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)] = []
+    var editMessageHtmlOriginalIntentionalMentionsReturnValue: Result<Void, TimelineProxyError>!
+    var editMessageHtmlOriginalIntentionalMentionsClosure: ((String, String?, String, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
+
+    func editMessage(_ message: String, html: String?, original eventID: String, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        editMessageHtmlOriginalIntentionalMentionsCallsCount += 1
+        editMessageHtmlOriginalIntentionalMentionsReceivedArguments = (message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
+        editMessageHtmlOriginalIntentionalMentionsReceivedInvocations.append((message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
+        if let editMessageHtmlOriginalIntentionalMentionsClosure = editMessageHtmlOriginalIntentionalMentionsClosure {
+            return await editMessageHtmlOriginalIntentionalMentionsClosure(message, html, eventID, intentionalMentions)
+        } else {
+            return editMessageHtmlOriginalIntentionalMentionsReturnValue
+        }
+    }
+    //MARK: - fetchDetails
+
+    var fetchDetailsForCallsCount = 0
+    var fetchDetailsForCalled: Bool {
+        return fetchDetailsForCallsCount > 0
+    }
+    var fetchDetailsForReceivedEventID: String?
+    var fetchDetailsForReceivedInvocations: [String] = []
+    var fetchDetailsForClosure: ((String) -> Void)?
+
+    func fetchDetails(for eventID: String) {
+        fetchDetailsForCallsCount += 1
+        fetchDetailsForReceivedEventID = eventID
+        fetchDetailsForReceivedInvocations.append(eventID)
+        fetchDetailsForClosure?(eventID)
+    }
+    //MARK: - messageEventContent
+
+    var messageEventContentForCallsCount = 0
+    var messageEventContentForCalled: Bool {
+        return messageEventContentForCallsCount > 0
+    }
+    var messageEventContentForReceivedEventID: String?
+    var messageEventContentForReceivedInvocations: [String] = []
+    var messageEventContentForReturnValue: RoomMessageEventContentWithoutRelation?
+    var messageEventContentForClosure: ((String) -> RoomMessageEventContentWithoutRelation?)?
+
+    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
+        messageEventContentForCallsCount += 1
+        messageEventContentForReceivedEventID = eventID
+        messageEventContentForReceivedInvocations.append(eventID)
+        if let messageEventContentForClosure = messageEventContentForClosure {
+            return messageEventContentForClosure(eventID)
+        } else {
+            return messageEventContentForReturnValue
+        }
+    }
+    //MARK: - retryDecryption
+
+    var retryDecryptionForCallsCount = 0
+    var retryDecryptionForCalled: Bool {
+        return retryDecryptionForCallsCount > 0
+    }
+    var retryDecryptionForReceivedSessionID: String?
+    var retryDecryptionForReceivedInvocations: [String] = []
+    var retryDecryptionForClosure: ((String) async -> Void)?
+
+    func retryDecryption(for sessionID: String) async {
+        retryDecryptionForCallsCount += 1
+        retryDecryptionForReceivedSessionID = sessionID
+        retryDecryptionForReceivedInvocations.append(sessionID)
+        await retryDecryptionForClosure?(sessionID)
+    }
+    //MARK: - retrySend
+
+    var retrySendTransactionIDCallsCount = 0
+    var retrySendTransactionIDCalled: Bool {
+        return retrySendTransactionIDCallsCount > 0
+    }
+    var retrySendTransactionIDReceivedTransactionID: String?
+    var retrySendTransactionIDReceivedInvocations: [String] = []
+    var retrySendTransactionIDClosure: ((String) async -> Void)?
+
+    func retrySend(transactionID: String) async {
+        retrySendTransactionIDCallsCount += 1
+        retrySendTransactionIDReceivedTransactionID = transactionID
+        retrySendTransactionIDReceivedInvocations.append(transactionID)
+        await retrySendTransactionIDClosure?(transactionID)
+    }
+    //MARK: - paginateBackwards
+
+    var paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount = 0
+    var paginateBackwardsRequestSizeUntilNumberOfItemsCalled: Bool {
+        return paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount > 0
+    }
+    var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments: (requestSize: UInt, untilNumberOfItems: UInt)?
+    var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations: [(requestSize: UInt, untilNumberOfItems: UInt)] = []
+    var paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue: Result<Void, TimelineProxyError>!
+    var paginateBackwardsRequestSizeUntilNumberOfItemsClosure: ((UInt, UInt) async -> Result<Void, TimelineProxyError>)?
+
+    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError> {
+        paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount += 1
+        paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments = (requestSize: requestSize, untilNumberOfItems: untilNumberOfItems)
+        paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations.append((requestSize: requestSize, untilNumberOfItems: untilNumberOfItems))
+        if let paginateBackwardsRequestSizeUntilNumberOfItemsClosure = paginateBackwardsRequestSizeUntilNumberOfItemsClosure {
+            return await paginateBackwardsRequestSizeUntilNumberOfItemsClosure(requestSize, untilNumberOfItems)
+        } else {
+            return paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue
+        }
+    }
+    //MARK: - sendAudio
+
+    var sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount = 0
+    var sendAudioUrlAudioInfoProgressSubjectRequestHandleCalled: Bool {
+        return sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount > 0
+    }
+    var sendAudioUrlAudioInfoProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>!
+    var sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure: ((URL, AudioInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+
+    func sendAudio(url: URL, audioInfo: AudioInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendAudioUrlAudioInfoProgressSubjectRequestHandleCallsCount += 1
+        if let sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure = sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure {
+            return await sendAudioUrlAudioInfoProgressSubjectRequestHandleClosure(url, audioInfo, progressSubject, requestHandle)
+        } else {
+            return sendAudioUrlAudioInfoProgressSubjectRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendFile
+
+    var sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount = 0
+    var sendFileUrlFileInfoProgressSubjectRequestHandleCalled: Bool {
+        return sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount > 0
+    }
+    var sendFileUrlFileInfoProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>!
+    var sendFileUrlFileInfoProgressSubjectRequestHandleClosure: ((URL, FileInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+
+    func sendFile(url: URL, fileInfo: FileInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendFileUrlFileInfoProgressSubjectRequestHandleCallsCount += 1
+        if let sendFileUrlFileInfoProgressSubjectRequestHandleClosure = sendFileUrlFileInfoProgressSubjectRequestHandleClosure {
+            return await sendFileUrlFileInfoProgressSubjectRequestHandleClosure(url, fileInfo, progressSubject, requestHandle)
+        } else {
+            return sendFileUrlFileInfoProgressSubjectRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendImage
+
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount = 0
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCalled: Bool {
+        return sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount > 0
+    }
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>!
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure: ((URL, URL, ImageInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+
+    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleCallsCount += 1
+        if let sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure = sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure {
+            return await sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleClosure(url, thumbnailURL, imageInfo, progressSubject, requestHandle)
+        } else {
+            return sendImageUrlThumbnailURLImageInfoProgressSubjectRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendLocation
+
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount = 0
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCalled: Bool {
+        return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount > 0
+    }
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments: (body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)?
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations: [(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)] = []
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue: Result<Void, TimelineProxyError>!
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure: ((String, GeoURI, String?, UInt8?, AssetType?) async -> Result<Void, TimelineProxyError>)?
+
+    func sendLocation(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?) async -> Result<Void, TimelineProxyError> {
+        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount += 1
+        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments = (body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType)
+        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations.append((body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType))
+        if let sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure {
+            return await sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure(body, geoURI, description, zoomLevel, assetType)
+        } else {
+            return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue
+        }
+    }
+    //MARK: - sendVideo
+
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount = 0
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCalled: Bool {
+        return sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount > 0
+    }
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>!
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure: ((URL, URL, VideoInfo, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+
+    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleCallsCount += 1
+        if let sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure = sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure {
+            return await sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleClosure(url, thumbnailURL, videoInfo, progressSubject, requestHandle)
+        } else {
+            return sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendVoiceMessage
+
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount = 0
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled: Bool {
+        return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount > 0
+    }
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>!
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure: ((URL, AudioInfo, [UInt16], CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16], progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount += 1
+        if let sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure {
+            return await sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure(url, audioInfo, waveform, progressSubject, requestHandle)
+        } else {
+            return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendReadReceipt
+
+    var sendReadReceiptForCallsCount = 0
+    var sendReadReceiptForCalled: Bool {
+        return sendReadReceiptForCallsCount > 0
+    }
+    var sendReadReceiptForReceivedEventID: String?
+    var sendReadReceiptForReceivedInvocations: [String] = []
+    var sendReadReceiptForReturnValue: Result<Void, TimelineProxyError>!
+    var sendReadReceiptForClosure: ((String) async -> Result<Void, TimelineProxyError>)?
+
+    func sendReadReceipt(for eventID: String) async -> Result<Void, TimelineProxyError> {
+        sendReadReceiptForCallsCount += 1
+        sendReadReceiptForReceivedEventID = eventID
+        sendReadReceiptForReceivedInvocations.append(eventID)
+        if let sendReadReceiptForClosure = sendReadReceiptForClosure {
+            return await sendReadReceiptForClosure(eventID)
+        } else {
+            return sendReadReceiptForReturnValue
+        }
+    }
+    //MARK: - sendMessageEventContent
+
+    var sendMessageEventContentCallsCount = 0
+    var sendMessageEventContentCalled: Bool {
+        return sendMessageEventContentCallsCount > 0
+    }
+    var sendMessageEventContentReceivedMessageContent: RoomMessageEventContentWithoutRelation?
+    var sendMessageEventContentReceivedInvocations: [RoomMessageEventContentWithoutRelation] = []
+    var sendMessageEventContentReturnValue: Result<Void, TimelineProxyError>!
+    var sendMessageEventContentClosure: ((RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>)?
+
+    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
+        sendMessageEventContentCallsCount += 1
+        sendMessageEventContentReceivedMessageContent = messageContent
+        sendMessageEventContentReceivedInvocations.append(messageContent)
+        if let sendMessageEventContentClosure = sendMessageEventContentClosure {
+            return await sendMessageEventContentClosure(messageContent)
+        } else {
+            return sendMessageEventContentReturnValue
+        }
+    }
+    //MARK: - sendMessage
+
+    var sendMessageHtmlInReplyToIntentionalMentionsCallsCount = 0
+    var sendMessageHtmlInReplyToIntentionalMentionsCalled: Bool {
+        return sendMessageHtmlInReplyToIntentionalMentionsCallsCount > 0
+    }
+    var sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments: (message: String, html: String?, eventID: String?, intentionalMentions: IntentionalMentions)?
+    var sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations: [(message: String, html: String?, eventID: String?, intentionalMentions: IntentionalMentions)] = []
+    var sendMessageHtmlInReplyToIntentionalMentionsReturnValue: Result<Void, TimelineProxyError>!
+    var sendMessageHtmlInReplyToIntentionalMentionsClosure: ((String, String?, String?, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
+
+    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String?, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        sendMessageHtmlInReplyToIntentionalMentionsCallsCount += 1
+        sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments = (message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
+        sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations.append((message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
+        if let sendMessageHtmlInReplyToIntentionalMentionsClosure = sendMessageHtmlInReplyToIntentionalMentionsClosure {
+            return await sendMessageHtmlInReplyToIntentionalMentionsClosure(message, html, eventID, intentionalMentions)
+        } else {
+            return sendMessageHtmlInReplyToIntentionalMentionsReturnValue
+        }
+    }
+    //MARK: - toggleReaction
+
+    var toggleReactionToCallsCount = 0
+    var toggleReactionToCalled: Bool {
+        return toggleReactionToCallsCount > 0
+    }
+    var toggleReactionToReceivedArguments: (reaction: String, eventID: String)?
+    var toggleReactionToReceivedInvocations: [(reaction: String, eventID: String)] = []
+    var toggleReactionToReturnValue: Result<Void, TimelineProxyError>!
+    var toggleReactionToClosure: ((String, String) async -> Result<Void, TimelineProxyError>)?
+
+    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, TimelineProxyError> {
+        toggleReactionToCallsCount += 1
+        toggleReactionToReceivedArguments = (reaction: reaction, eventID: eventID)
+        toggleReactionToReceivedInvocations.append((reaction: reaction, eventID: eventID))
+        if let toggleReactionToClosure = toggleReactionToClosure {
+            return await toggleReactionToClosure(reaction, eventID)
+        } else {
+            return toggleReactionToReturnValue
+        }
+    }
+    //MARK: - createPoll
+
+    var createPollQuestionAnswersPollKindCallsCount = 0
+    var createPollQuestionAnswersPollKindCalled: Bool {
+        return createPollQuestionAnswersPollKindCallsCount > 0
+    }
+    var createPollQuestionAnswersPollKindReceivedArguments: (question: String, answers: [String], pollKind: Poll.Kind)?
+    var createPollQuestionAnswersPollKindReceivedInvocations: [(question: String, answers: [String], pollKind: Poll.Kind)] = []
+    var createPollQuestionAnswersPollKindReturnValue: Result<Void, TimelineProxyError>!
+    var createPollQuestionAnswersPollKindClosure: ((String, [String], Poll.Kind) async -> Result<Void, TimelineProxyError>)?
+
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
+        createPollQuestionAnswersPollKindCallsCount += 1
+        createPollQuestionAnswersPollKindReceivedArguments = (question: question, answers: answers, pollKind: pollKind)
+        createPollQuestionAnswersPollKindReceivedInvocations.append((question: question, answers: answers, pollKind: pollKind))
+        if let createPollQuestionAnswersPollKindClosure = createPollQuestionAnswersPollKindClosure {
+            return await createPollQuestionAnswersPollKindClosure(question, answers, pollKind)
+        } else {
+            return createPollQuestionAnswersPollKindReturnValue
+        }
+    }
+    //MARK: - editPoll
+
+    var editPollOriginalQuestionAnswersPollKindCallsCount = 0
+    var editPollOriginalQuestionAnswersPollKindCalled: Bool {
+        return editPollOriginalQuestionAnswersPollKindCallsCount > 0
+    }
+    var editPollOriginalQuestionAnswersPollKindReceivedArguments: (eventID: String, question: String, answers: [String], pollKind: Poll.Kind)?
+    var editPollOriginalQuestionAnswersPollKindReceivedInvocations: [(eventID: String, question: String, answers: [String], pollKind: Poll.Kind)] = []
+    var editPollOriginalQuestionAnswersPollKindReturnValue: Result<Void, TimelineProxyError>!
+    var editPollOriginalQuestionAnswersPollKindClosure: ((String, String, [String], Poll.Kind) async -> Result<Void, TimelineProxyError>)?
+
+    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
+        editPollOriginalQuestionAnswersPollKindCallsCount += 1
+        editPollOriginalQuestionAnswersPollKindReceivedArguments = (eventID: eventID, question: question, answers: answers, pollKind: pollKind)
+        editPollOriginalQuestionAnswersPollKindReceivedInvocations.append((eventID: eventID, question: question, answers: answers, pollKind: pollKind))
+        if let editPollOriginalQuestionAnswersPollKindClosure = editPollOriginalQuestionAnswersPollKindClosure {
+            return await editPollOriginalQuestionAnswersPollKindClosure(eventID, question, answers, pollKind)
+        } else {
+            return editPollOriginalQuestionAnswersPollKindReturnValue
+        }
+    }
+    //MARK: - endPoll
+
+    var endPollPollStartIDTextCallsCount = 0
+    var endPollPollStartIDTextCalled: Bool {
+        return endPollPollStartIDTextCallsCount > 0
+    }
+    var endPollPollStartIDTextReceivedArguments: (pollStartID: String, text: String)?
+    var endPollPollStartIDTextReceivedInvocations: [(pollStartID: String, text: String)] = []
+    var endPollPollStartIDTextReturnValue: Result<Void, TimelineProxyError>!
+    var endPollPollStartIDTextClosure: ((String, String) async -> Result<Void, TimelineProxyError>)?
+
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineProxyError> {
+        endPollPollStartIDTextCallsCount += 1
+        endPollPollStartIDTextReceivedArguments = (pollStartID: pollStartID, text: text)
+        endPollPollStartIDTextReceivedInvocations.append((pollStartID: pollStartID, text: text))
+        if let endPollPollStartIDTextClosure = endPollPollStartIDTextClosure {
+            return await endPollPollStartIDTextClosure(pollStartID, text)
+        } else {
+            return endPollPollStartIDTextReturnValue
+        }
+    }
+    //MARK: - sendPollResponse
+
+    var sendPollResponsePollStartIDAnswersCallsCount = 0
+    var sendPollResponsePollStartIDAnswersCalled: Bool {
+        return sendPollResponsePollStartIDAnswersCallsCount > 0
+    }
+    var sendPollResponsePollStartIDAnswersReceivedArguments: (pollStartID: String, answers: [String])?
+    var sendPollResponsePollStartIDAnswersReceivedInvocations: [(pollStartID: String, answers: [String])] = []
+    var sendPollResponsePollStartIDAnswersReturnValue: Result<Void, TimelineProxyError>!
+    var sendPollResponsePollStartIDAnswersClosure: ((String, [String]) async -> Result<Void, TimelineProxyError>)?
+
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineProxyError> {
+        sendPollResponsePollStartIDAnswersCallsCount += 1
+        sendPollResponsePollStartIDAnswersReceivedArguments = (pollStartID: pollStartID, answers: answers)
+        sendPollResponsePollStartIDAnswersReceivedInvocations.append((pollStartID: pollStartID, answers: answers))
+        if let sendPollResponsePollStartIDAnswersClosure = sendPollResponsePollStartIDAnswersClosure {
+            return await sendPollResponsePollStartIDAnswersClosure(pollStartID, answers)
+        } else {
+            return sendPollResponsePollStartIDAnswersReturnValue
         }
     }
 }

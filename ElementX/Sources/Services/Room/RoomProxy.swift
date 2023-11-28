@@ -23,39 +23,28 @@ import MatrixRustSDK
 class RoomProxy: RoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
+    let timeline: TimelineProxyProtocol
+    let pollHistoryTimeline: TimelineProxyProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let backgroundTaskName = "SendRoomEvent"
     
-    private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
     private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
     private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.low_priority", qos: .utility)
     
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
     private(set) var displayName: String?
-    
-    private var roomTimelineObservationToken: TaskHandle?
-    private var backPaginationStateObservationToken: TaskHandle?
     private var roomInfoObservationToken: TaskHandle?
+    private var subscribedForUpdates = false
 
-    private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.asCurrentValuePublisher()
     }
-    
-    private var timelineListener: RoomTimelineListener?
-    
-    private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
         
     private let stateUpdatesSubject = PassthroughSubject<Void, Never>()
     var stateUpdatesPublisher: AnyPublisher<Void, Never> {
         stateUpdatesSubject.eraseToAnyPublisher()
-    }
-    
-    var innerTimelineProvider: RoomTimelineProviderProtocol!
-    var timelineProvider: RoomTimelineProviderProtocol {
-        innerTimelineProvider
     }
 
     var ownUserID: String {
@@ -63,8 +52,6 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     deinit {
-        roomTimelineObservationToken?.cancel()
-        backPaginationStateObservationToken?.cancel()
         roomListItem.unsubscribe()
     }
 
@@ -74,19 +61,25 @@ class RoomProxy: RoomProxyProtocol {
         self.roomListItem = roomListItem
         self.room = room
         self.backgroundTaskService = backgroundTaskService
+        timeline = await TimelineProxy(timeline: room.timeline(), backgroundTaskService: backgroundTaskService)
+        pollHistoryTimeline = await TimelineProxy(timeline: room.pollHistory(), backgroundTaskService: backgroundTaskService)
         
         Task {
-            await fetchMembers()
+            // Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
+            // This should become automatic on the RustSDK side at some point
+            await room.timeline().fetchMembers()
+            
             await updateMembers()
         }
     }
     
     func subscribeForUpdates() async {
-        guard innerTimelineProvider == nil else {
+        guard !subscribedForUpdates else {
             MXLog.warning("Room already subscribed for updates")
             return
         }
         
+        subscribedForUpdates = true
         let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
                                                         RequiredState(key: "m.room.topic", value: ""),
                                                         RequiredState(key: "m.room.avatar", value: ""),
@@ -95,26 +88,10 @@ class RoomProxy: RoomProxyProtocol {
                                         timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit))
         roomListItem.subscribe(settings: settings)
         
-        let timelineListener = RoomTimelineListener { [weak self] timelineDiffs in
-            self?.timelineUpdatesSubject.send(timelineDiffs)
-            
-            // Workaround for subscribeToRoomStateUpdates creating problems in the timeline
-            // https://github.com/matrix-org/matrix-rust-sdk/issues/2488
-            self?.stateUpdatesSubject.send()
-        }
+        await timeline.subscribeForUpdates()
+        await pollHistoryTimeline.subscribeForUpdates()
         
-        self.timelineListener = timelineListener
-        
-        let result = await room.addTimelineListener(listener: timelineListener)
-        roomTimelineObservationToken = result.itemsStream
-        
-        subscribeToBackpagination()
-        
-        // subscribeToRoomStateUpdates()
-        
-        innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
-                                                           updatePublisher: timelineUpdatesSubject.eraseToAnyPublisher(),
-                                                           backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
+        subscribeToRoomStateUpdates()
     }
 
     lazy var id: String = room.id()
@@ -216,282 +193,6 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.failedRetrievingMemberDisplayName)
         }
     }
-        
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
-        do {
-            try await Task.dispatch(on: .global()) {
-                try self.room.paginateBackwards(opts: .untilNumItems(eventLimit: UInt16(requestSize), items: UInt16(untilNumberOfItems), waitForToken: true))
-            }
-            
-            return .success(())
-        } catch {
-            return .failure(.failedPaginatingBackwards)
-        }
-    }
-    
-    func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        return await Task.dispatch(on: lowPriorityDispatchQueue) {
-            do {
-                try self.room.sendReadReceipt(eventId: eventID)
-                return .success(())
-            } catch {
-                return .failure(.failedSendingReadReceipt)
-            }
-        }
-    }
-        
-    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
-        try? room.getTimelineEventContentByEventId(eventId: eventID)
-    }
-    
-    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            self.room.send(msg: messageContent)
-            return .success(())
-        }
-    }
-    
-    func sendMessage(_ message: String,
-                     html: String?,
-                     inReplyTo eventID: String? = nil,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        let messageContent = buildMessageContentFor(message,
-                                                    html: html,
-                                                    intentionalMentions: intentionalMentions.toRustMentions())
-        
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            do {
-                if let eventID {
-                    let replyItem = try self.room.getEventTimelineItemByEventId(eventId: eventID)
-                    try self.room.sendReply(msg: messageContent, replyItem: replyItem)
-                } else {
-                    self.room.send(msg: messageContent)
-                }
-            } catch {
-                return .failure(.failedSendingMessage)
-            }
-            return .success(())
-        }
-    }
-    
-    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self.room.toggleReaction(eventId: eventID, key: reaction)
-                return .success(())
-            } catch {
-                return .failure(.failedSendingReaction)
-            }
-        }
-    }
-    
-    func sendImage(url: URL,
-                   thumbnailURL: URL,
-                   imageInfo: ImageInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        let handle = room.sendImage(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), imageInfo: imageInfo, progressWatcher: UploadProgressListener { progress in
-            progressSubject?.send(progress)
-        })
-        
-        await requestHandle(handle)
-        
-        do {
-            try await handle.join()
-        } catch {
-            return .failure(.failedSendingMedia)
-        }
-        
-        return .success(())
-    }
-    
-    func sendVideo(url: URL,
-                   thumbnailURL: URL,
-                   videoInfo: VideoInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        let handle = room.sendVideo(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), videoInfo: videoInfo, progressWatcher: UploadProgressListener { progress in
-            progressSubject?.send(progress)
-        })
-        
-        await requestHandle(handle)
-        
-        do {
-            try await handle.join()
-        } catch {
-            return .failure(.failedSendingMedia)
-        }
-        
-        return .success(())
-    }
-    
-    func sendAudio(url: URL,
-                   audioInfo: AudioInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        let handle = room.sendAudio(url: url.path(percentEncoded: false), audioInfo: audioInfo, progressWatcher: UploadProgressListener { progress in
-            progressSubject?.send(progress)
-        })
-        
-        await requestHandle(handle)
-        
-        do {
-            try await handle.join()
-        } catch {
-            return .failure(.failedSendingMedia)
-        }
-        
-        return .success(())
-    }
-    
-    func sendVoiceMessage(url: URL,
-                          audioInfo: AudioInfo,
-                          waveform: [UInt16],
-                          progressSubject: CurrentValueSubject<Double, Never>?,
-                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        let handle = room.sendVoiceMessage(url: url.path(percentEncoded: false), audioInfo: audioInfo, waveform: waveform, progressWatcher: UploadProgressListener { progress in
-            progressSubject?.send(progress)
-        })
-        
-        await requestHandle(handle)
-        
-        do {
-            try await handle.join()
-        } catch {
-            return .failure(.failedSendingMedia)
-        }
-        
-        return .success(())
-    }
-    
-    func sendFile(url: URL,
-                  fileInfo: FileInfo,
-                  progressSubject: CurrentValueSubject<Double, Never>?,
-                  requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        let handle = room.sendFile(url: url.path(percentEncoded: false), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
-            progressSubject?.send(progress)
-        })
-        
-        await requestHandle(handle)
-        
-        do {
-            try await handle.join()
-        } catch {
-            return .failure(.failedSendingMedia)
-        }
-        
-        return .success(())
-    }
-
-    func sendLocation(body: String,
-                      geoURI: GeoURI,
-                      description: String?,
-                      zoomLevel: UInt8?,
-                      assetType: AssetType?) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            .success(self.room.sendLocation(body: body,
-                                            geoUri: geoURI.string,
-                                            description: description,
-                                            zoomLevel: zoomLevel,
-                                            assetType: assetType))
-        }
-    }
-
-    func retrySend(transactionID: String) async {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            self.room.retrySend(txnId: transactionID)
-        }
-    }
-
-    func cancelSend(transactionID: String) async {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            self.room.cancelSend(txnId: transactionID)
-        }
-    }
-    
-    func editMessage(_ message: String,
-                     html: String?,
-                     original eventID: String,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        let messageContent = buildMessageContentFor(message,
-                                                    html: html,
-                                                    intentionalMentions: intentionalMentions.toRustMentions())
-        
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            do {
-                let originalEvent = try self.room.getEventTimelineItemByEventId(eventId: eventID)
-                try self.room.edit(newContent: messageContent, editItem: originalEvent)
-                return .success(())
-            } catch {
-                return .failure(.failedEditingMessage)
-            }
-        }
-    }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
@@ -572,12 +273,6 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func retryDecryption(for sessionID: String) async {
-        await Task.dispatch(on: .global()) { [weak self] in
-            self?.room.retryDecryption(sessionIds: [sessionID])
-        }
-    }
-
     func leaveRoom() async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
@@ -622,19 +317,6 @@ class RoomProxy: RoomProxyProtocol {
                 return .success(())
             } catch {
                 return .failure(.failedAcceptingInvite)
-            }
-        }
-    }
-    
-    func fetchDetails(for eventID: String) {
-        Task {
-            await Task.dispatch(on: .global()) {
-                do {
-                    MXLog.info("Fetching event details for \(eventID)")
-                    try self.room.fetchDetailsForEvent(eventId: eventID)
-                } catch {
-                    MXLog.error("Failed fetching event details for \(eventID) with error: \(error)")
-                }
             }
         }
     }
@@ -713,56 +395,6 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.failedCheckingPermission)
         }
     }
-
-    // MARK: - Polls
-
-    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                return try .success(self.room.createPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind)))
-            } catch {
-                MXLog.error("Failed creating a poll: \(error)")
-                return .failure(.failedCreatingPoll)
-            }
-        }
-    }
-    
-    func editPoll(original eventID: String,
-                  question: String,
-                  answers: [String],
-                  pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                let originalEvent = try self.room.getEventTimelineItemByEventId(eventId: eventID)
-                return try .success(self.room.editPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind), editItem: originalEvent))
-            } catch {
-                MXLog.error("Failed editing the poll: \(error), eventID: \(eventID)")
-                return .failure(.failedEditingPoll)
-            }
-        }
-    }
-
-    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                return try .success(self.room.sendPollResponse(pollStartId: pollStartID, answers: answers))
-            } catch {
-                MXLog.error("Failed sending a poll vote: \(error), pollStartID: \(pollStartID)")
-                return .failure(.failedSendingPollResponse)
-            }
-        }
-    }
-
-    func endPoll(pollStartID: String, text: String) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                return try .success(self.room.endPoll(pollStartId: pollStartID, text: text))
-            } catch {
-                MXLog.error("Failed ending a poll: \(error), pollStartID: \(pollStartID)")
-                return .failure(.failedEndingPoll)
-            }
-        }
-    }
     
     // MARK: - Element Call
     
@@ -771,108 +403,12 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     // MARK: - Private
-
-    private func buildMessageContentFor(_ message: String,
-                                        html: String?,
-                                        intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation {
-        let emoteSlashCommand = "/me "
-        let isEmote: Bool = message.starts(with: emoteSlashCommand)
-        
-        let content: RoomMessageEventContentWithoutRelation
-        if isEmote {
-            let emoteMessage = String(message.dropFirst(emoteSlashCommand.count))
-            
-            var emoteHtml: String?
-            if let html {
-                emoteHtml = String(html.dropFirst(emoteSlashCommand.count))
-            }
-            content = buildEmoteMessageContentFor(emoteMessage, html: emoteHtml)
-        } else {
-            if let html {
-                content = messageEventContentFromHtml(body: message, htmlBody: html)
-            } else {
-                content = messageEventContentFromMarkdown(md: message)
-            }
-        }
-        return content.withMentions(mentions: intentionalMentions)
-    }
-    
-    private func buildEmoteMessageContentFor(_ message: String, html: String?) -> RoomMessageEventContentWithoutRelation {
-        if let html {
-            return messageEventContentFromHtmlAsEmote(body: message, htmlBody: html)
-        } else {
-            return messageEventContentFromMarkdownAsEmote(md: message)
-        }
-    }
-
-    /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
-    /// This should become automatic on the RustSDK side at some point
-    private func fetchMembers() async {
-        do {
-            try await room.fetchMembers()
-        } catch {
-            MXLog.error("Failed fetching members: \(error)")
-        }
-    }
-        
-    private func update(displayName: String) {
-        self.displayName = displayName
-    }
-
-    private func subscribeToBackpagination() {
-        let listener = RoomBackpaginationStatusListener { [weak self] status in
-            self?.backPaginationStateSubject.send(status)
-        }
-        do {
-            backPaginationStateObservationToken = try room.subscribeToBackPaginationStatus(listener: listener)
-        } catch {
-            MXLog.error("Failed to subscribe to back pagination state with error: \(error)")
-        }
-    }
     
     private func subscribeToRoomStateUpdates() {
         roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] in
             MXLog.info("Received room info update")
             self?.stateUpdatesSubject.send(())
         })
-    }
-}
-
-private final class RoomTimelineListener: TimelineListener {
-    private let onUpdateClosure: ([TimelineDiff]) -> Void
-   
-    init(_ onUpdateClosure: @escaping ([TimelineDiff]) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(diff: [TimelineDiff]) {
-        onUpdateClosure(diff)
-    }
-}
-
-private final class UploadProgressListener: ProgressWatcher {
-    private let onUpdateClosure: (Double) -> Void
-   
-    init(_ onUpdateClosure: @escaping (Double) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func transmissionProgress(progress: TransmissionProgress) {
-        DispatchQueue.main.async { [weak self] in
-            self?.onUpdateClosure(Double(progress.current) / Double(progress.total))
-        }
-    }
-}
-
-private final class RoomBackpaginationStatusListener: BackPaginationStatusListener {
-    private let onUpdateClosure: (BackPaginationStatus) -> Void
-
-    init(_ onUpdateClosure: @escaping (BackPaginationStatus) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-
-    func onUpdate(status: BackPaginationStatus) {
-        onUpdateClosure(status)
     }
 }
 
@@ -885,16 +421,5 @@ private final class RoomInfoUpdateListener: RoomInfoListener {
     
     func call(roomInfo: RoomInfo) {
         onUpdateClosure()
-    }
-}
-
-private extension MatrixRustSDK.PollKind {
-    init(pollKind: Poll.Kind) {
-        switch pollKind {
-        case .disclosed:
-            self = .disclosed
-        case .undisclosed:
-            self = .undisclosed
-        }
     }
 }

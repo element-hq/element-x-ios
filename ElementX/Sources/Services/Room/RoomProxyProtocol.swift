@@ -19,19 +19,10 @@ import Foundation
 import MatrixRustSDK
 
 enum RoomProxyError: Error, Equatable {
-    case noMoreMessagesToBackPaginate
-    case failedPaginatingBackwards
     case failedRetrievingMemberAvatarURL
     case failedRetrievingMemberDisplayName
-    case failedSendingReadReceipt
-    case failedSendingMessage
-    case failedSendingReaction
-    case failedSendingMedia
-    case failedEditingMessage
     case failedRedactingEvent
     case failedReportingContent
-    case failedAddingTimelineListener
-    case failedRetrievingMembers
     case failedRetrievingMember
     case failedLeavingRoom
     case failedAcceptingInvite
@@ -42,10 +33,6 @@ enum RoomProxyError: Error, Equatable {
     case failedRemovingAvatar
     case failedUploadingAvatar
     case failedCheckingPermission
-    case failedCreatingPoll
-    case failedSendingPollResponse
-    case failedEndingPoll
-    case failedEditingPoll
 }
 
 // sourcery: AutoMockable
@@ -82,7 +69,10 @@ protocol RoomProxyProtocol {
     /// The thread on which this publisher sends the output isn't defined.
     var stateUpdatesPublisher: AnyPublisher<Void, Never> { get }
     
-    var timelineProvider: RoomTimelineProviderProtocol { get }
+    var timeline: TimelineProxyProtocol { get }
+    
+    /// A timeline providing just polls related events
+    var pollHistoryTimeline: TimelineProxyProtocol { get }
     
     func subscribeForUpdates() async
 
@@ -90,73 +80,11 @@ protocol RoomProxyProtocol {
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError>
-    
-    func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError>
-    
-    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation?
-    
-    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError>
-    
-    func sendMessage(_ message: String,
-                     html: String?,
-                     inReplyTo eventID: String?,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError>
-    
-    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
-    
-    func sendImage(url: URL,
-                   thumbnailURL: URL,
-                   imageInfo: ImageInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
-    
-    func sendVideo(url: URL,
-                   thumbnailURL: URL,
-                   videoInfo: VideoInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
-    
-    func sendAudio(url: URL,
-                   audioInfo: AudioInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
-
-    func sendFile(url: URL,
-                  fileInfo: FileInfo,
-                  progressSubject: CurrentValueSubject<Double, Never>?,
-                  requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
-
-    func sendLocation(body: String,
-                      geoURI: GeoURI,
-                      description: String?,
-                      zoomLevel: UInt8?,
-                      assetType: AssetType?) async -> Result<Void, RoomProxyError>
-
-    func sendVoiceMessage(url: URL,
-                          audioInfo: AudioInfo,
-                          waveform: [UInt16],
-                          progressSubject: CurrentValueSubject<Double, Never>?,
-                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
-
-    /// Retries sending a failed message given its transaction ID
-    func retrySend(transactionID: String) async
-
-    /// Cancels  a failed message given its transaction ID from the timeline
-    func cancelSend(transactionID: String) async
-
-    func editMessage(_ newMessage: String,
-                     html: String?,
-                     original eventID: String,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError>
-    
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
     
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
     
     func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError>
-    
-    func retryDecryption(for sessionID: String) async
 
     func leaveRoom() async -> Result<Void, RoomProxyError>
     
@@ -169,8 +97,6 @@ protocol RoomProxyProtocol {
     func rejectInvitation() async -> Result<Void, RoomProxyError>
     
     func acceptInvitation() async -> Result<Void, RoomProxyError>
-    
-    func fetchDetails(for eventID: String)
     
     func invite(userID: String) async -> Result<Void, RoomProxyError>
     
@@ -185,14 +111,6 @@ protocol RoomProxyProtocol {
     func canUserRedact(userID: String) async -> Result<Bool, RoomProxyError>
     
     func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
-
-    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError>
-   
-    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError>
-
-    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError>
-
-    func endPoll(pollStartID: String, text: String) async -> Result<Void, RoomProxyError>
     
     // MARK: - Element Call
     
@@ -211,15 +129,6 @@ extension RoomProxyProtocol {
             MXLog.error("Failed to build permalink for Room: \(id)")
             return nil
         }
-    }
-    
-    func sendMessage(_ message: String,
-                     html: String?,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
-        await sendMessage(message,
-                          html: html,
-                          inReplyTo: nil,
-                          intentionalMentions: intentionalMentions)
     }
     
     // Avoids to duplicate the same logic around in the app

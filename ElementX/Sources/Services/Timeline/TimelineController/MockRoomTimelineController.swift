@@ -52,7 +52,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError> {
         guard let roomProxy, let eventID = itemID.eventID else { return .failure(.generic) }
-        switch await roomProxy.sendReadReceipt(for: eventID) {
+        switch await roomProxy.timeline.sendReadReceipt(for: eventID) {
         case .success:
             return .success(())
         case .failure:
@@ -89,7 +89,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        await roomProxy?.retrySend(transactionID: transactionID)
+        await roomProxy?.timeline.retrySend(transactionID: transactionID)
     }
     
     func cancelSending(itemID: TimelineItemIdentifier) async {
@@ -97,7 +97,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        await roomProxy?.cancelSend(transactionID: transactionID)
+        await roomProxy?.timeline.cancelSend(transactionID: transactionID)
     }
     
     // MARK: - UI Test signalling
