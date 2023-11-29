@@ -32,6 +32,7 @@ class AudioRecorder: AudioRecorderProtocol {
     private var audioEngine: AVAudioEngine?
     private var mixer: AVAudioMixerNode?
     private var audioFile: AVAudioFile?
+    private var audioConverter: AVAudioConverter?
     private var internalState = InternalAudioRecorderState.stopped
     
     private var cancellables = Set<AnyCancellable>()
@@ -40,6 +41,7 @@ class AudioRecorder: AudioRecorderProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private var recordingFormat: AVAudioFormat!
     private let maximumRecordingTime: TimeInterval = 1800 // 30 minutes
     private let silenceThreshold: Float = -50.0
     private var meterLevel: Float = 0
@@ -115,15 +117,12 @@ class AudioRecorder: AudioRecorderProtocol {
         }
     }
     
-    private func setupAudioSession() {
+    private func setupAudioSession() throws {
         MXLog.info("setup audio session")
-        do {
-            try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
-            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.allowBluetooth])
-            try audioSession.setActive(true)
-        } catch {
-            MXLog.error("Could not redirect audio playback to speakers.")
-        }
+        
+        try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
+        try audioSession.setCategory(.playAndRecord, mode: .default, options: [.allowBluetooth])
+        try audioSession.setActive(true)
         addObservers()
     }
     
@@ -141,9 +140,10 @@ class AudioRecorder: AudioRecorderProtocol {
         }
     }
     
-    private func createAudioFile(at recordingURL: URL, sampleRate: Int) throws -> AVAudioFile {
+    private func createAudioFile(at recordingURL: URL) throws -> AVAudioFile {
         let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-                        AVSampleRateKey: sampleRate,
+                        AVSampleRateKey: Int(recordingFormat.sampleRate),
+                        AVEncoderBitRateKey: 128_000,
                         AVNumberOfChannelsKey: 1,
                         AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
         MXLog.info("creating audio file with format: \(settings)")
@@ -158,28 +158,43 @@ class AudioRecorder: AudioRecorderProtocol {
                 return
             }
             
-            setupAudioSession()
+            do {
+                try setupAudioSession()
+            } catch {
+                MXLog.error("failed to setup audio session. \(error)")
+                completion(.failure(.audioSessionFailure))
+                return
+            }
+            
+            // Initialize a new audio engine
             let audioEngine = AVAudioEngine()
             self.audioEngine = audioEngine
 
-            // The sample rate must match the hardware sample rate for the audio engine to work.
-            let sampleRate = audioEngine.inputNode.inputFormat(forBus: 0).sampleRate
-            let recordingFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32,
-                                                sampleRate: sampleRate,
-                                                channels: 1,
-                                                interleaved: false)
-
+            let inputNode = audioEngine.inputNode
+            let inputFormat = inputNode.outputFormat(forBus: 0)
+            let hardwareSampleRate = audioEngine.inputNode.outputFormat(forBus: 0).sampleRate
+            
+            // Define a recording audio format. Force the sample rate to 48000 to ensure OGGEncoder won't crash
+            guard let recordingFormat = AVAudioFormat(standardFormatWithSampleRate: 48000, channels: 1) else {
+                completion(.failure(.unsupportedAudioFormat))
+                return
+            }
+            self.recordingFormat = recordingFormat
+            
             // Make sure we have 1 channel at the end by using a mixer.
+            // The sample rate must match the hardware sample rate.
+            let mixerFormat = AVAudioFormat(standardFormatWithSampleRate: hardwareSampleRate, channels: 1)
             let mixer = AVAudioMixerNode()
             self.mixer = mixer
             audioEngine.attach(mixer)
-            audioEngine.connect(audioEngine.inputNode, to: mixer, format: recordingFormat)
+            audioEngine.connect(audioEngine.inputNode, to: mixer, format: inputFormat)
             
             // Reset the recording duration
             currentTime = 0
+            // Create an audio file
             let audioFile: AVAudioFile
             do {
-                audioFile = try createAudioFile(at: audioFileURL, sampleRate: Int(sampleRate))
+                audioFile = try createAudioFile(at: audioFileURL)
                 self.audioFile = audioFile
                 self.audioFileURL = audioFile.url
             } catch {
@@ -189,7 +204,17 @@ class AudioRecorder: AudioRecorderProtocol {
                 return
             }
             
-            mixer.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] buffer, _ in
+            // Set up an audio converter if the hardware sample rate doesn't match the recording format.
+            // Note: Not all Apple devices have the same default sample rate.
+            if recordingFormat.sampleRate != hardwareSampleRate {
+                MXLog.info("Sample rate conversion is needed \(hardwareSampleRate) -> \(recordingFormat.sampleRate)")
+                audioConverter = AVAudioConverter(from: inputFormat, to: recordingFormat)
+            } else {
+                audioConverter = nil
+            }
+
+            // Install tap to process audio buffers coming from the mixer
+            mixer.installTap(onBus: 0, bufferSize: 1024, format: mixerFormat) { [weak self] buffer, _ in
                 self?.processAudioBuffer(buffer)
             }
 
@@ -255,15 +280,44 @@ class AudioRecorder: AudioRecorderProtocol {
     // MARK: Audio Processing
     
     private func processAudioBuffer(_ buffer: AVAudioPCMBuffer) {
+        guard let audioFile else {
+            return
+        }
+        
+        var inputBuffer = buffer
+        if let audioConverter {
+            // Create an AVAudioPCMBuffer instance for the converted buffer
+            let conversionRatio = buffer.format.sampleRate / recordingFormat.sampleRate
+            let frameCapacity = UInt32(Double(buffer.frameLength) / conversionRatio)
+            guard let convertedBuffer = AVAudioPCMBuffer(pcmFormat: recordingFormat, frameCapacity: frameCapacity) else {
+                MXLog.error("failed to initialize an output buffer")
+                return
+            }
+            
+            // Convert the buffer
+            let inputBlock: AVAudioConverterInputBlock = { _, outStatus in
+                outStatus.pointee = AVAudioConverterInputStatus.haveData
+                return buffer
+            }
+            
+            var conversionError: NSError?
+            audioConverter.convert(to: convertedBuffer, error: &conversionError, withInputFrom: inputBlock)
+            if let conversionError {
+                MXLog.info("audio conversion failed: \(conversionError)")
+                return
+            }
+            inputBuffer = convertedBuffer
+        }
+        
         // Write the buffer into the audio file
         do {
-            try audioFile?.write(from: buffer)
+            try audioFile.write(from: inputBuffer)
 
             // Compute the sample value for the waveform
-            updateMeterLevel(buffer)
+            updateMeterLevel(inputBuffer)
             
             // Update the recording duration only if we succeed to write the buffer
-            currentTime += Double(buffer.frameLength) / buffer.format.sampleRate
+            currentTime += Double(inputBuffer.frameLength) / inputBuffer.format.sampleRate
             
             // Limit the recording time
             if currentTime >= maximumRecordingTime {
