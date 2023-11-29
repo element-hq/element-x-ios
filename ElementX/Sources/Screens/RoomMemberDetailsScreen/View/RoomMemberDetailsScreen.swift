@@ -25,6 +25,7 @@ struct RoomMemberDetailsScreen: View {
             headerSection
 
             if !context.viewState.details.isAccountOwner {
+                directChatSection
                 blockUserSection
             }
         }
@@ -56,6 +57,17 @@ struct RoomMemberDetailsScreen: View {
                 }
                 .padding(.top, 32)
             }
+        }
+    }
+    
+    private var directChatSection: some View {
+        Section {
+            ListRow(label: .default(title: L10n.commonDirectChat,
+                                    icon: \.chat),
+                    kind: .button {
+                        context.send(viewAction: .openDirectChat)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
         }
     }
 

@@ -86,8 +86,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         switch appRoute {
         case .room(let roomID):
-            if case .room(let identifier) = stateMachine.state,
-               roomID == identifier {
+            if case .room(let roomID) = stateMachine.state,
+               roomID == roomID {
                 return
             }
             
@@ -853,6 +853,42 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                   mediaProvider: userSession.mediaProvider,
                                                                   userIndicatorController: userIndicatorController)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .openDirectChat:
+                let loadingIndicatorIdentifier = "OpenDirectChatLoadingIndicator"
+                
+                userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier,
+                                                                      type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                                      title: L10n.commonLoading,
+                                                                      persistent: true))
+                
+                Task { [weak self] in
+                    guard let self else { return }
+                    
+                    let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(member.userID)
+                    switch currentDirectRoom {
+                    case .success(.some(let roomID)):
+                        stateMachine.tryEvent(.presentRoom(roomID: roomID))
+                    case .success(nil):
+                        switch await userSession.clientProxy.createDirectRoom(with: member.userID, expectedRoomName: member.displayName) {
+                        case .success(let roomID):
+                            analytics.trackCreatedRoom(isDM: true)
+                            stateMachine.tryEvent(.presentRoom(roomID: roomID))
+                        case .failure:
+                            userIndicatorController.alertInfo = .init(id: UUID())
+                        }
+                    case .failure:
+                        userIndicatorController.alertInfo = .init(id: UUID())
+                    }
+                    
+                    userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+                }
+            }
+        }
+        .store(in: &cancellables)
 
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissRoomMemberDetails)

@@ -175,6 +175,7 @@ enum A11yIdentifiers {
     struct RoomMemberDetailsScreen {
         let ignore = "room_member_details-ignore"
         let unignore = "room_member_details-unignore"
+        let directChat = "room_member_details-direct_chat"
     }
     
     struct RoomNotificationSettingsScreen {
