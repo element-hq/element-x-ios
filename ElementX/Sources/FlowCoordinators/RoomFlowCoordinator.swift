@@ -86,8 +86,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         switch appRoute {
         case .room(let roomID):
-            if case .room(let roomID) = stateMachine.state,
-               roomID == roomID {
+            if case .room(let identifier) = stateMachine.state,
+               roomID == identifier {
                 return
             }
             
