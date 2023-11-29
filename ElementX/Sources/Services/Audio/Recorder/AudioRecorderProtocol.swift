@@ -18,6 +18,8 @@ import Combine
 import Foundation
 
 enum AudioRecorderError: Error, Equatable {
+    case unsupportedAudioFormat
+    case audioSessionFailure
     case audioEngineFailure
     case audioFileCreationFailure
     case interrupted
