@@ -38,6 +38,7 @@ enum RoomFlowCoordinatorAction: Equatable {
     }
 }
 
+// swiftlint:disable file_length
 class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
@@ -139,11 +140,40 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .room(roomID: roomID)
             case (.dismissRoom, .roomDetails):
                 return .initial
+                
+            case (.presentRoomDetailsEditScreen, .roomDetails(let roomID, _)):
+                return .roomDetailsEditScreen(roomID: roomID)
+            case (.dismissRoomDetailsEditScreen, .roomDetailsEditScreen(let roomID)):
+                return .roomDetails(roomID: roomID, isRoot: false)
+                
+            case (.presentNotificationSettingsScreen, .roomDetails(let roomID, _)):
+                return .notificationSettings(roomID: roomID)
+            case (.dismissNotificationSettingsScreen, .notificationSettings(let roomID)):
+                return .roomDetails(roomID: roomID, isRoot: false)
+                
+            case (.presentGlobalNotificationSettingsScreen, .notificationSettings(let roomID)):
+                return .globalNotificationSettings(roomID: roomID)
+            case (.dismissGlobalNotificationSettingsScreen, .globalNotificationSettings(let roomID)):
+                return .notificationSettings(roomID: roomID)
+                
+            case (.presentRoomMembersList, .roomDetails(let roomID, _)):
+                return .roomMembersList(roomID: roomID)
+            case (.dismissRoomMembersList, .roomMembersList(let roomID)):
+                return .roomDetails(roomID: roomID, isRoot: false)
 
             case (.presentRoomMemberDetails(let member), .room(let roomID)):
-                return .roomMemberDetails(roomID: roomID, member: member)
-            case (.dismissRoomMemberDetails, .roomMemberDetails(let roomID, _)):
-                return .room(roomID: roomID)
+                return .roomMemberDetails(roomID: roomID, member: member, fromRoomMembersList: false)
+            case (.presentRoomMemberDetails(let member), .roomMembersList(let roomID)):
+                return .roomMemberDetails(roomID: roomID, member: member, fromRoomMembersList: true)
+            case (.dismissRoomMemberDetails, .roomMemberDetails(let roomID, _, let fromRoomMembersList)):
+                return fromRoomMembersList ? .roomMembersList(roomID: roomID) : .room(roomID: roomID)
+                
+            case (.presentInviteUsersScreen, .roomDetails(let roomID, _)):
+                return .inviteUsersScreen(roomID: roomID, fromRoomMembersList: false)
+            case (.presentInviteUsersScreen, .roomMembersList(let roomID)):
+                return .inviteUsersScreen(roomID: roomID, fromRoomMembersList: true)
+            case (.dismissInviteUsersScreen, .inviteUsersScreen(let roomID, let fromRoomMembersList)):
+                return fromRoomMembersList ? .roomMembersList(roomID: roomID) : .roomDetails(roomID: roomID, isRoot: false)
                 
             case (.presentReportContent(let itemID, let senderID), .room(let roomID)):
                 return .reportContent(roomID: roomID, itemID: itemID, senderID: senderID)
@@ -176,11 +206,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .mapNavigator(roomID: roomID)
             case (.dismissMapNavigator, .mapNavigator(let roomID)):
                 return .room(roomID: roomID)
-            
-            case (.presentNotificationSettingsScreen, .roomDetails(let roomID, _)):
-                return .notificationSettingsScreen(roomID: roomID)
-            case (.dismissNotificationSettingsScreen, .notificationSettingsScreen(let roomID)):
-                return .roomDetails(roomID: roomID, isRoot: false)
 
             case (.presentPollForm, .room(let roomID)):
                 return .pollForm(roomID: roomID)
@@ -218,6 +243,46 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .dismissRoom, .initial):
                 dismissRoom(animated: animated)
                 
+            case (.roomDetails, .presentRoomDetailsEditScreen(let accountOwner), .roomDetailsEditScreen):
+                presentRoomDetailsEditScreen(accountOwner: accountOwner.value)
+            case (.roomDetailsEditScreen, .dismissRoomDetailsEditScreen, .roomDetails):
+                break
+                
+            case (.roomDetails, .presentNotificationSettingsScreen, .notificationSettings):
+                presentNotificationSettingsScreen()
+            case (.notificationSettings, .dismissNotificationSettingsScreen, .roomDetails):
+                break
+                
+            case (.notificationSettings, .presentGlobalNotificationSettingsScreen, .globalNotificationSettings):
+                presentGlobalNotificationSettingsScreen(animated: animated)
+            case (.globalNotificationSettings, .dismissGlobalNotificationSettingsScreen, .notificationSettings):
+                break
+                
+            case (.roomDetails, .presentRoomMembersList, .roomMembersList):
+                presentRoomMembersList()
+            case (.roomMembersList, .dismissRoomMembersList, .roomDetails):
+                break
+                
+            case (.room, .presentRoomMemberDetails, .roomMemberDetails(_, let member, _)):
+                presentRoomMemberDetails(member: member.value)
+            case (.roomMemberDetails, .dismissRoomMemberDetails, .room):
+                break
+                
+            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(_, let member, _)):
+                presentRoomMemberDetails(member: member.value)
+            case (.roomMemberDetails, .dismissRoomMemberDetails, .roomMembersList):
+                break
+                
+            case (.roomDetails, .presentInviteUsersScreen, .inviteUsersScreen):
+                presentInviteUsersScreen()
+            case (.inviteUsersScreen, .dismissInviteUsersScreen, .roomDetails):
+                break
+                
+            case (.roomMembersList, .presentInviteUsersScreen, .inviteUsersScreen):
+                presentInviteUsersScreen()
+            case (.inviteUsersScreen, .dismissInviteUsersScreen, .roomMembersList):
+                break
+                
             case (.room, .presentReportContent, .reportContent(_, let itemID, let senderID)):
                 presentReportContent(for: itemID, from: senderID)
             case (.reportContent, .dismissReportContent, .room):
@@ -239,11 +304,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentEmojiPicker(for: itemID, selectedEmoji: selectedEmoji)
             case (.emojiPicker, .dismissEmojiPicker, .room):
                 break
-
-            case (.room, .presentRoomMemberDetails, .roomMemberDetails(_, let member)):
-                presentRoomMemberDetails(member: member.value)
-            case (.roomMemberDetails, .dismissRoomMemberDetails, .room):
-                break
                 
             case (.room, .presentMessageForwarding(let itemID), .messageForwarding):
                 presentMessageForwarding(for: itemID)
@@ -253,11 +313,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.room, .presentMapNavigator(let mode), .mapNavigator):
                 presentMapNavigator(interactionMode: mode)
             case (.mapNavigator, .dismissMapNavigator, .room):
-                break
-            
-            case (.roomDetails, .presentNotificationSettingsScreen, .notificationSettingsScreen):
-                presentNotificationSettingsScreen(animated: animated)
-            case (.notificationSettingsScreen, .dismissNotificationSettingsScreen, .roomDetails):
                 break
 
             case (.room, .presentPollForm(let mode), .pollForm):
@@ -440,19 +495,25 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         let params = RoomDetailsScreenCoordinatorParameters(accountUserID: userSession.userID,
-                                                            navigationStackCoordinator: navigationStackCoordinator,
                                                             roomProxy: roomProxy,
                                                             mediaProvider: userSession.mediaProvider,
-                                                            userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
                                                             userIndicatorController: userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings)
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
             switch action {
             case .leftRoom:
-                self?.dismissRoom(animated: animated)
+                dismissRoom(animated: animated)
+            case .presentRoomMembersList:
+                stateMachine.tryEvent(.presentRoomMembersList)
+            case .presentRoomDetailsEditScreen(let accountOwner):
+                stateMachine.tryEvent(.presentRoomDetailsEditScreen(accountOwner: .init(value: accountOwner)))
             case .presentNotificationSettingsScreen:
-                self?.stateMachine.tryEvent(.presentNotificationSettingsScreen)
+                stateMachine.tryEvent(.presentNotificationSettingsScreen)
+            case .presentInviteUsersScreen:
+                stateMachine.tryEvent(.presentInviteUsersScreen)
             }
         }
         .store(in: &cancellables)
@@ -477,6 +538,62 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.dismissRoomDetails)
                 }
             }
+        }
+    }
+    
+    private func presentRoomMembersList() {
+        guard let roomProxy else {
+            fatalError()
+        }
+        
+        let params = RoomMembersListScreenCoordinatorParameters(mediaProvider: userSession.mediaProvider,
+                                                                roomProxy: roomProxy)
+        let coordinator = RoomMembersListScreenCoordinator(parameters: params)
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .invite:
+                    stateMachine.tryEvent(.presentInviteUsersScreen)
+                case .selectedMember(let member):
+                    stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissRoomMembersList)
+        }
+    }
+    
+    private func presentRoomDetailsEditScreen(accountOwner: RoomMemberProxyProtocol) {
+        guard let roomProxy else {
+            fatalError()
+        }
+        
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        
+        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner,
+                                                                                   mediaProvider: userSession.mediaProvider,
+                                                                                   navigationStackCoordinator: navigationStackCoordinator,
+                                                                                   roomProxy: roomProxy,
+                                                                                   userIndicatorController: userIndicatorController)
+        let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
+        
+        roomDetailsEditCoordinator.actions.sink { [weak self] action in
+            switch action {
+            case .dismiss:
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.setRootCoordinator(roomDetailsEditCoordinator)
+        
+        self.navigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissRoomDetailsEditScreen)
         }
     }
     
@@ -730,6 +847,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         guard let roomProxy else {
             fatalError()
         }
+        
         let params = RoomMemberDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
                                                                   roomMemberProxy: member,
                                                                   mediaProvider: userSession.mediaProvider,
@@ -802,7 +920,30 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.tryEvent(.presentRoom(roomID: roomID), userInfo: EventUserInfo(animated: true, destinationRoomProxy: targetRoomProxy))
     }
     
-    private func presentNotificationSettingsScreen(animated: Bool) {
+    private func presentNotificationSettingsScreen() {
+        guard let roomProxy else {
+            fatalError()
+        }
+        
+        let parameters = RoomNotificationSettingsScreenCoordinatorParameters(notificationSettingsProxy: userSession.clientProxy.notificationSettings,
+                                                                             roomProxy: roomProxy,
+                                                                             displayAsUserDefinedRoomSettings: false)
+        
+        let coordinator = RoomNotificationSettingsScreenCoordinator(parameters: parameters)
+        coordinator.actions.sink { [weak self] actions in
+            switch actions {
+            case .presentGlobalNotificationSettingsScreen:
+                self?.stateMachine.tryEvent(.presentGlobalNotificationSettingsScreen)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissNotificationSettingsScreen)
+        }
+    }
+    
+    private func presentGlobalNotificationSettingsScreen(animated: Bool) {
         let navigationCoordinator = NavigationStackCoordinator()
         let parameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: navigationCoordinator,
                                                                          userSession: userSession,
@@ -820,7 +961,79 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationCoordinator.setRootCoordinator(coordinator)
         navigationStackCoordinator.setSheetCoordinator(navigationCoordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissNotificationSettingsScreen)
+            self?.stateMachine.tryEvent(.dismissGlobalNotificationSettingsScreen)
+        }
+    }
+    
+    private func presentInviteUsersScreen() {
+        guard let roomProxy else {
+            fatalError()
+        }
+        
+        let selectedUsersSubject: CurrentValueSubject<[UserProfileProxy], Never> = .init([])
+        
+        let inviteUsersStackCoordinator = NavigationStackCoordinator()
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: .init(selectedUsersSubject),
+                                                                      roomType: .room(roomProxy: roomProxy),
+                                                                      mediaProvider: userSession.mediaProvider,
+                                                                      userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
+                                                                      userIndicatorController: userIndicatorController)
+        
+        let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
+        inviteUsersStackCoordinator.setRootCoordinator(coordinator)
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .cancel:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            case .proceed:
+                break
+            case .invite(let users):
+                self.inviteUsers(users, in: roomProxy)
+            case .toggleUser(let user):
+                var selectedUsers = selectedUsersSubject.value
+                
+                if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
+                    selectedUsers.remove(at: index)
+                } else {
+                    selectedUsers.append(user)
+                }
+                
+                selectedUsersSubject.send(selectedUsers)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.setSheetCoordinator(inviteUsersStackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissInviteUsersScreen)
+        }
+    }
+    
+    private func inviteUsers(_ users: [String], in room: RoomProxyProtocol) {
+        navigationStackCoordinator.setSheetCoordinator(nil)
+        
+        Task {
+            let result: Result<Void, RoomProxyError> = await withTaskGroup(of: Result<Void, RoomProxyError>.self) { group in
+                for user in users {
+                    group.addTask {
+                        await room.invite(userID: user)
+                    }
+                }
+                
+                return await group.first { inviteResult in
+                    inviteResult.isFailure
+                } ?? .success(())
+            }
+            
+            guard case .failure = result else {
+                return
+            }
+            
+            userIndicatorController.alertInfo = .init(id: .init(),
+                                                      title: L10n.commonUnableToInviteTitle,
+                                                      message: L10n.commonUnableToInviteMessage)
         }
     }
 }
@@ -841,15 +1054,19 @@ private extension RoomFlowCoordinator {
     enum State: StateType {
         case initial
         case room(roomID: String)
-        case reportContent(roomID: String, itemID: TimelineItemIdentifier, senderID: String)
         case roomDetails(roomID: String, isRoot: Bool)
+        case roomDetailsEditScreen(roomID: String)
+        case notificationSettings(roomID: String)
+        case globalNotificationSettings(roomID: String)
+        case roomMembersList(roomID: String)
+        case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper, fromRoomMembersList: Bool)
+        case inviteUsersScreen(roomID: String, fromRoomMembersList: Bool)
         case mediaUploadPicker(roomID: String, source: MediaPickerScreenSource)
         case mediaUploadPreview(roomID: String, fileURL: URL)
         case emojiPicker(roomID: String, itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
         case mapNavigator(roomID: String)
-        case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
         case messageForwarding(roomID: String, itemID: TimelineItemIdentifier)
-        case notificationSettingsScreen(roomID: String)
+        case reportContent(roomID: String, itemID: TimelineItemIdentifier, senderID: String)
         case pollForm(roomID: String)
     }
     
@@ -867,6 +1084,24 @@ private extension RoomFlowCoordinator {
         
         case presentRoomDetails(roomID: String)
         case dismissRoomDetails
+        
+        case presentRoomDetailsEditScreen(accountOwner: HashableRoomMemberWrapper)
+        case dismissRoomDetailsEditScreen
+        
+        case presentNotificationSettingsScreen
+        case dismissNotificationSettingsScreen
+        
+        case presentGlobalNotificationSettingsScreen
+        case dismissGlobalNotificationSettingsScreen
+        
+        case presentRoomMembersList
+        case dismissRoomMembersList
+        
+        case presentRoomMemberDetails(member: HashableRoomMemberWrapper)
+        case dismissRoomMemberDetails
+        
+        case presentInviteUsersScreen
+        case dismissInviteUsersScreen
                 
         case presentMediaUploadPicker(source: MediaPickerScreenSource)
         case dismissMediaUploadPicker
@@ -880,14 +1115,8 @@ private extension RoomFlowCoordinator {
         case presentMapNavigator(interactionMode: StaticLocationInteractionMode)
         case dismissMapNavigator
         
-        case presentRoomMemberDetails(member: HashableRoomMemberWrapper)
-        case dismissRoomMemberDetails
-        
         case presentMessageForwarding(itemID: TimelineItemIdentifier)
         case dismissMessageForwarding
-        
-        case presentNotificationSettingsScreen
-        case dismissNotificationSettingsScreen
 
         case presentPollForm(mode: PollFormMode)
         case dismissPollForm
@@ -897,5 +1126,16 @@ private extension RoomFlowCoordinator {
 private extension GeoURI {
     var bodyMessage: String {
         "Location was shared at \(string)"
+    }
+}
+
+private extension Result {
+    var isFailure: Bool {
+        switch self {
+        case .success:
+            return false
+        case .failure:
+            return true
+        }
     }
 }

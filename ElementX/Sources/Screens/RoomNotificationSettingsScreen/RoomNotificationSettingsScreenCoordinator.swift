@@ -25,7 +25,7 @@ struct RoomNotificationSettingsScreenCoordinatorParameters {
 }
 
 enum RoomNotificationSettingsScreenCoordinatorAction {
-    case presentNotificationSettingsScreen
+    case presentGlobalNotificationSettingsScreen
 }
 
 final class RoomNotificationSettingsScreenCoordinator: CoordinatorProtocol {
@@ -54,7 +54,7 @@ final class RoomNotificationSettingsScreenCoordinator: CoordinatorProtocol {
         viewModel.actions.sink { [weak self] action in
             switch action {
             case .openGlobalSettings:
-                self?.actionsSubject.send(.presentNotificationSettingsScreen)
+                self?.actionsSubject.send(.presentGlobalNotificationSettingsScreen)
             case .dismiss:
                 self?.parameters.navigationStackCoordinator?.pop(animated: true)
             }
