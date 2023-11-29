@@ -115,6 +115,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         // Note: beware if we get to e.g. restore a reply / edit,
         // maybe we are tracking a non-needed first initial state
         trackComposerMode(.default)
+        
+        Task {
+            let userID = roomProxy.ownUserID
+            if case let .success(permission) = await roomProxy.canUserJoinCall(userID: userID) {
+                state.canJoinCall = permission
+            }
+        }
     }
     
     // MARK: - Public

@@ -114,6 +114,8 @@ protocol RoomProxyProtocol {
     
     func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
     
+    func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError>
+    
     // MARK: - Element Call
     
     func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol

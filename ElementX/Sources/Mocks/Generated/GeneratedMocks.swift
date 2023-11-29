@@ -2316,6 +2316,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return canUserTriggerRoomNotificationUserIDReturnValue
         }
     }
+    //MARK: - canUserJoinCall
+
+    var canUserJoinCallUserIDCallsCount = 0
+    var canUserJoinCallUserIDCalled: Bool {
+        return canUserJoinCallUserIDCallsCount > 0
+    }
+    var canUserJoinCallUserIDReceivedUserID: String?
+    var canUserJoinCallUserIDReceivedInvocations: [String] = []
+    var canUserJoinCallUserIDReturnValue: Result<Bool, RoomProxyError>!
+    var canUserJoinCallUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+
+    func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError> {
+        canUserJoinCallUserIDCallsCount += 1
+        canUserJoinCallUserIDReceivedUserID = userID
+        canUserJoinCallUserIDReceivedInvocations.append(userID)
+        if let canUserJoinCallUserIDClosure = canUserJoinCallUserIDClosure {
+            return await canUserJoinCallUserIDClosure(userID)
+        } else {
+            return canUserJoinCallUserIDReturnValue
+        }
+    }
     //MARK: - elementCallWidgetDriver
 
     var elementCallWidgetDriverCallsCount = 0
