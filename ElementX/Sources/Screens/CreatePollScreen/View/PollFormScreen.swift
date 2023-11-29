@@ -34,7 +34,7 @@ struct PollFormScreen: View {
             deletePollSection
         }
         .trackAnalyticsIfNeeded(context: context)
-        .compoundForm()
+        .compoundList()
         .scrollDismissesKeyboard(.immediately)
         .environment(\.editMode, .constant(.active))
         .navigationTitle(context.viewState.navigationTitle)
@@ -48,32 +48,31 @@ struct PollFormScreen: View {
     // MARK: - Private
     
     private var questionSection: some View {
-        Section(L10n.screenCreatePollQuestionDesc) {
-            TextField(text: $context.question) {
-                Text(L10n.screenCreatePollQuestionHint)
-                    .compoundFormTextFieldPlaceholder()
-            }
-            .introspect(.textField, on: .supportedVersions) { textField in
-                textField.clearButtonMode = .whileEditing
-            }
-            .textFieldStyle(.compoundForm)
-            .focused($focus, equals: .question)
-            .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.question)
-            .onSubmit {
-                focus = context.options.indices.first.map { .option(index: $0) }
-            }
-            .submitLabel(.next)
+        Section {
+            ListRow(label: .plain(title: L10n.screenCreatePollQuestionHint),
+                    kind: .textField(text: $context.question))
+                .introspect(.textField, on: .supportedVersions) { textField in
+                    textField.clearButtonMode = .whileEditing
+                }
+                .focused($focus, equals: .question)
+                .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.question)
+                .onSubmit {
+                    focus = context.options.indices.first.map { .option(index: $0) }
+                }
+                .submitLabel(.next)
+        } header: {
+            Text(L10n.screenCreatePollQuestionDesc)
+                .compoundListSectionHeader()
         }
-        .compoundFormSection()
     }
     
     private var optionsSection: some View {
         Section {
             ForEach(context.options) { option in
                 if let index = context.options.firstIndex(of: option) {
-                    PollFormOptionView(text: $context.options[index].text.limited(to: 240),
-                                       placeholder: L10n.screenCreatePollAnswerHint(index + 1),
-                                       canDeleteItem: context.options.count > 2) {
+                    PollFormOptionRow(text: $context.options[index].text.limited(to: 240),
+                                      placeholder: L10n.screenCreatePollAnswerHint(index + 1),
+                                      canDeleteItem: context.options.count > 2) {
                         if case .option(let focusedIndex) = focus, focusedIndex == index {
                             focus = nil
                         }
@@ -94,22 +93,22 @@ struct PollFormScreen: View {
             }
             
             if context.options.count < context.viewState.maxNumberOfOptions {
-                Button(L10n.screenCreatePollAddOptionBtn) {
-                    context.send(viewAction: .addOption)
-                    focus = context.options.indices.last.map { .option(index: $0) }
-                }
-                .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.addOption)
+                ListRow(label: .plain(title: L10n.screenCreatePollAddOptionBtn),
+                        kind: .button {
+                            context.send(viewAction: .addOption)
+                            focus = context.options.indices.last.map { .option(index: $0) }
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.addOption)
             }
         }
-        .compoundFormSection()
     }
     
     private var showResultsSection: some View {
         Section {
-            Toggle(L10n.screenCreatePollAnonymousDesc, isOn: $context.isUndisclosed)
+            ListRow(label: .plain(title: L10n.screenCreatePollAnonymousDesc),
+                    kind: .toggle($context.isUndisclosed))
                 .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.pollKind)
         }
-        .compoundFormSection()
     }
     
     @ViewBuilder
@@ -117,13 +116,9 @@ struct PollFormScreen: View {
         switch context.viewState.mode {
         case .edit:
             Section {
-                Button(role: .destructive) {
-                    context.send(viewAction: .delete)
-                } label: {
-                    Text(L10n.actionDeletePoll)
-                }
+                ListRow(label: .plain(title: L10n.actionDeletePoll, role: .destructive),
+                        kind: .button { context.send(viewAction: .delete) })
             }
-            .compoundFormSection()
         case .new:
             EmptyView()
         }
@@ -159,7 +154,7 @@ private extension View {
     }
 }
 
-private struct PollFormOptionView: View {
+private struct PollFormOptionRow: View {
     @Environment(\.editMode) var editMode
     @Binding var text: String
     let placeholder: String
@@ -167,24 +162,30 @@ private struct PollFormOptionView: View {
     let deleteAction: () -> Void
     
     var body: some View {
-        HStack(spacing: 8) {
-            if editMode?.wrappedValue == .active {
-                Button(role: .destructive, action: deleteAction) {
-                    CompoundIcon(\.delete)
+        ListRow(kind: .custom {
+            HStack(spacing: 16) {
+                if editMode?.wrappedValue == .active {
+                    Button(role: .destructive, action: deleteAction) {
+                        CompoundIcon(\.delete)
+                    }
+                    .disabled(!canDeleteItem)
+                    .buttonStyle(.compound(.plain))
+                    .accessibilityLabel(L10n.actionRemove)
                 }
-                .disabled(!canDeleteItem)
-                .buttonStyle(.compound(.plain))
-                .accessibilityLabel(L10n.actionRemove)
+                
+                TextField(text: $text) {
+                    Text(placeholder)
+                        .compoundTextFieldPlaceholder()
+                }
+                .introspect(.textField, on: .supportedVersions) { textField in
+                    textField.clearButtonMode = .whileEditing
+                }
+                .tint(.compound.iconAccentTertiary)
+                .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
             }
-            TextField(text: $text) {
-                Text(placeholder)
-                    .compoundFormTextFieldPlaceholder()
-            }
-            .introspect(.textField, on: .supportedVersions) { textField in
-                textField.clearButtonMode = .whileEditing
-            }
-            .textFieldStyle(.compoundForm)
-        }
+            .padding(.horizontal, ListRowPadding.horizontal)
+            .padding(.vertical, ListRowPadding.vertical)
+        })
     }
 }
 
@@ -192,10 +193,29 @@ private struct PollFormOptionView: View {
 
 struct PollFormScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = PollFormScreenViewModel(mode: .new)
+    static let editViewModel = PollFormScreenViewModel(mode: .edit(eventID: "1234", poll: poll))
+    static let poll = Poll(question: "Cats or Dogs?",
+                           kind: .disclosed,
+                           maxSelections: 1,
+                           options: [
+                               .init(id: "0", text: "Cats", votes: 0, allVotes: 0, isSelected: false, isWinning: false),
+                               .init(id: "0", text: "Dogs", votes: 0, allVotes: 0, isSelected: false, isWinning: false),
+                               .init(id: "0", text: "Fish", votes: 0, allVotes: 0, isSelected: false, isWinning: false)
+                           ],
+                           votes: [:],
+                           endDate: nil,
+                           createdByAccountOwner: true)
+    
     static var previews: some View {
         NavigationStack {
             PollFormScreen(context: viewModel.context)
         }
+        .previewDisplayName("New")
+        
+        NavigationStack {
+            PollFormScreen(context: editViewModel.context)
+        }
+        .previewDisplayName("Edit")
     }
 }
 
