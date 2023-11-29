@@ -18,21 +18,18 @@ import Combine
 import SwiftUI
 
 struct RoomMembersListScreenCoordinatorParameters {
-    weak var navigationStackCoordinator: NavigationStackCoordinator?
     let mediaProvider: MediaProviderProtocol
     let roomProxy: RoomProxyProtocol
 }
 
 enum RoomMembersListScreenCoordinatorAction {
     case invite
+    case selectedMember(RoomMemberProxyProtocol)
 }
 
 final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomMembersListScreenCoordinatorParameters
     private var viewModel: RoomMembersListScreenViewModelProtocol
-    private var navigationStackCoordinator: NavigationStackCoordinator? {
-        parameters.navigationStackCoordinator
-    }
     
     private let actionsSubject: PassthroughSubject<RoomMembersListScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -56,7 +53,7 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
                 
                 switch action {
                 case let .selectMember(member):
-                    selectMember(member)
+                    actionsSubject.send(.selectedMember(member))
                 case .invite:
                     actionsSubject.send(.invite)
                 }
@@ -66,17 +63,5 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
         
     func toPresentable() -> AnyView {
         AnyView(RoomMembersListScreen(context: viewModel.context))
-    }
-
-    // MARK: - Private
-
-    private func selectMember(_ member: RoomMemberProxyProtocol) {
-        let parameters = RoomMemberDetailsScreenCoordinatorParameters(roomProxy: parameters.roomProxy,
-                                                                      roomMemberProxy: member,
-                                                                      mediaProvider: parameters.mediaProvider,
-                                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
-        let coordinator = RoomMemberDetailsScreenCoordinator(parameters: parameters)
-
-        navigationStackCoordinator?.push(coordinator)
     }
 }
