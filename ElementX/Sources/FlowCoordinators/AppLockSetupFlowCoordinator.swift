@@ -111,17 +111,17 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRouteMapping { [weak self] event, fromState, _ in
             guard let self else { return nil }
             
-            switch (event, fromState) {
-            case (.start, .initial):
+            switch (fromState, event) {
+            case (.initial, .start):
                 if presentingFlow == .onboarding { return .createPIN(replacingExitingPIN: false) }
                 return appLockService.isEnabled ? .unlock : .createPIN(replacingExitingPIN: false)
-            case (.pinEntered, .unlock):
+            case (.unlock, .pinEntered):
                 return .settings
-            case (.cancel, .unlock):
+            case (.unlock, .cancel):
                 return .complete
-            case (.forceLogout, .unlock):
+            case (.unlock, .forceLogout):
                 return .loggingOut
-            case (.pinEntered, .createPIN(let replacingExitingPIN)):
+            case (.createPIN(let replacingExitingPIN), .pinEntered):
                 if presentingFlow == .onboarding {
                     return appLockService.biometryType != .none ? .biometricsPrompt : .complete
                 } else if !replacingExitingPIN {
@@ -129,13 +129,13 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
                 } else {
                     return .settings
                 }
-            case (.cancel, .createPIN(let replacingExitingPIN)):
+            case (.createPIN(let replacingExitingPIN), .cancel):
                 return replacingExitingPIN ? .settings : .complete
-            case (.biometricsSet, .biometricsPrompt):
+            case (.biometricsPrompt, .biometricsSet):
                 return presentingFlow == .settings ? .settings : .complete
-            case (.changePIN, .settings):
+            case (.settings, .changePIN):
                 return .createPIN(replacingExitingPIN: true)
-            case (.appLockDisabled, .settings):
+            case (.settings, .appLockDisabled):
                 return .complete
             default:
                 return nil

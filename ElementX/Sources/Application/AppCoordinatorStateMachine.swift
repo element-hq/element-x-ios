@@ -104,8 +104,8 @@ class AppCoordinatorStateMachine {
 
         // Transitions with associated values need to be handled through `addRouteMapping`
         stateMachine.addRouteMapping { event, fromState, _ in
-            switch (event, fromState) {
-            case (.signOut(let isSoft, let disableAppLock), _):
+            switch (fromState, event) {
+            case (_, .signOut(let isSoft, let disableAppLock)):
                 return .signingOut(isSoft: isSoft, disableAppLock: disableAppLock)
             default:
                 return nil
