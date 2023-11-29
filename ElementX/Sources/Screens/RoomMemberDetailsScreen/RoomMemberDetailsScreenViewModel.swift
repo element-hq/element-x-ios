@@ -65,6 +65,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             Task { await unignoreUser() }
         case .displayAvatar:
             displayFullScreenAvatar()
+        case .openDirectChat:
+            actionsSubject.send(.openDirectChat)
         }
     }
 

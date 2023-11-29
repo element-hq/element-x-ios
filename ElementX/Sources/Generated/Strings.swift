@@ -250,6 +250,8 @@ public enum L10n {
   public static var commonDecryptionError: String { return L10n.tr("Localizable", "common_decryption_error") }
   /// Developer options
   public static var commonDeveloperOptions: String { return L10n.tr("Localizable", "common_developer_options") }
+  /// Direct chat
+  public static var commonDirectChat: String { return L10n.tr("Localizable", "common_direct_chat") }
   /// (edited)
   public static var commonEditedSuffix: String { return L10n.tr("Localizable", "common_edited_suffix") }
   /// Editing

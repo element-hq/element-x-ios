@@ -108,6 +108,7 @@
 "common_dark" = "Dark";
 "common_decryption_error" = "Decryption error";
 "common_developer_options" = "Developer options";
+"common_direct_chat" = "Direct chat";
 "common_edited_suffix" = "(edited)";
 "common_editing" = "Editing";
 "common_emote" = "* %1$@ %2$@";

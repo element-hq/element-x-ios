@@ -16,7 +16,9 @@
 
 import Foundation
 
-enum RoomMemberDetailsScreenViewModelAction { }
+enum RoomMemberDetailsScreenViewModelAction {
+    case openDirectChat
+}
 
 struct RoomMemberDetailsScreenViewState: BindableState {
     var details: RoomMemberDetails
@@ -77,6 +79,7 @@ enum RoomMemberDetailsScreenViewAction {
     case ignoreConfirmed
     case unignoreConfirmed
     case displayAvatar
+    case openDirectChat
 }
 
 enum RoomMemberDetailsScreenError: Hashable {

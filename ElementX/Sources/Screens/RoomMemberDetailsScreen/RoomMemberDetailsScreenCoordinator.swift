@@ -24,7 +24,9 @@ struct RoomMemberDetailsScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
-enum RoomMemberDetailsScreenCoordinatorAction { }
+enum RoomMemberDetailsScreenCoordinatorAction {
+    case openDirectChat
+}
 
 final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomMemberDetailsScreenCoordinatorParameters
@@ -45,8 +47,18 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
                                                      mediaProvider: parameters.mediaProvider,
                                                      userIndicatorController: parameters.userIndicatorController)
     }
-
-    func start() { }
+    
+    func start() {
+        viewModel.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .openDirectChat:
+                actionsSubject.send(.openDirectChat)
+            }
+        }
+        .store(in: &cancellables)
+    }
     
     func stop() { viewModel.stop() }
 
