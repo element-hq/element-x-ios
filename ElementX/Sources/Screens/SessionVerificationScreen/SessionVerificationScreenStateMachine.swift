@@ -92,28 +92,28 @@ class SessionVerificationScreenStateMachine {
         
         // Transitions with associated values need to be handled through `addRouteMapping`
         stateMachine.addRouteMapping { event, fromState, _ in
-            switch (event, fromState) {
-            case (.didStartSasVerification, _):
+            switch (fromState, event) {
+            case (_, .didStartSasVerification):
                 return .sasVerificationStarted
                 
-            case (.didReceiveChallenge(let emojis), .sasVerificationStarted):
+            case (.sasVerificationStarted, .didReceiveChallenge(let emojis)):
                 return .showingChallenge(emojis: emojis)
-            case (.acceptChallenge, .showingChallenge(let emojis)):
+            case (.showingChallenge(let emojis), .acceptChallenge):
                 return .acceptingChallenge(emojis: emojis)
-            case (.didFail, .acceptingChallenge(let emojis)):
+            case (.acceptingChallenge(let emojis), .didFail):
                 return .showingChallenge(emojis: emojis)
                 
-            case (.didAcceptChallenge, .acceptingChallenge):
+            case (.acceptingChallenge, .didAcceptChallenge):
                 return .verified
                 
-            case (.declineChallenge, .showingChallenge(let emojis)):
+            case (.showingChallenge(let emojis), .declineChallenge):
                 return .decliningChallenge(emojis: emojis)
-            case (.didFail, .decliningChallenge(let emojis)):
+            case (.decliningChallenge(let emojis), .didFail):
                 return .showingChallenge(emojis: emojis)
                 
-            case (.cancel, _):
+            case (_, .cancel):
                 return .cancelling
-            case (.didCancel, _):
+            case (_, .didCancel):
                 return .cancelled
                 
             default:

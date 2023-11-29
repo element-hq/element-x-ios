@@ -130,50 +130,50 @@ class UserSessionFlowCoordinatorStateMachine {
         stateMachine.addRoutes(event: .dismissedWelcomeScreen, transitions: [.welcomeScreen => .roomList(selectedRoomID: nil)])
 
         stateMachine.addRouteMapping { event, fromState, _ in
-            switch (event, fromState) {
-            case (.selectRoom(let roomID), .roomList):
+            switch (fromState, event) {
+            case (.roomList, .selectRoom(let roomID)):
                 return .roomList(selectedRoomID: roomID)
-            case (.selectRoom(let roomID), .invitesScreen):
+            case (.invitesScreen, .selectRoom(let roomID)):
                 return .invitesScreen(selectedRoomID: roomID)
-            case (.deselectRoom, .roomList):
+            case (.roomList, .deselectRoom):
                 return .roomList(selectedRoomID: nil)
-            case (.deselectRoom, .invitesScreen):
+            case (.invitesScreen, .deselectRoom):
                 return .invitesScreen(selectedRoomID: nil)
 
-            case (.showSettingsScreen, .roomList(let selectedRoomID)):
+            case (.roomList(let selectedRoomID), .showSettingsScreen):
                 return .settingsScreen(selectedRoomID: selectedRoomID)
-            case (.dismissedSettingsScreen, .settingsScreen(let selectedRoomID)):
+            case (.settingsScreen(let selectedRoomID), .dismissedSettingsScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
                 
-            case (.feedbackScreen, .roomList(let selectedRoomID)):
+            case (.roomList(let selectedRoomID), .feedbackScreen):
                 return .feedbackScreen(selectedRoomID: selectedRoomID)
-            case (.dismissedFeedbackScreen, .feedbackScreen(let selectedRoomID)):
+            case (.feedbackScreen(let selectedRoomID), .dismissedFeedbackScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
                 
-            case (.showSessionVerificationScreen, .roomList(let selectedRoomID)):
+            case (.roomList(let selectedRoomID), .showSessionVerificationScreen):
                 return .sessionVerificationScreen(selectedRoomID: selectedRoomID)
-            case (.dismissedSessionVerificationScreen, .sessionVerificationScreen(let selectedRoomID)):
+            case (.sessionVerificationScreen(let selectedRoomID), .dismissedSessionVerificationScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
                 
-            case (.showStartChatScreen, .roomList(let selectedRoomID)):
+            case (.roomList(let selectedRoomID), .showStartChatScreen):
                 return .startChatScreen(selectedRoomID: selectedRoomID)
-            case (.dismissedStartChatScreen, .startChatScreen(let selectedRoomID)):
+            case (.startChatScreen(let selectedRoomID), .dismissedStartChatScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
             
-            case (.showInvitesScreen, .roomList(let selectedRoomID)):
+            case (.roomList(let selectedRoomID), .showInvitesScreen):
                 return .invitesScreen(selectedRoomID: selectedRoomID)
-            case (.showInvitesScreen, .invitesScreen(let selectedRoomID)):
+            case (.invitesScreen(let selectedRoomID), .showInvitesScreen):
                 return .invitesScreen(selectedRoomID: selectedRoomID)
 
-            case (.dismissedInvitesScreen, .invitesScreen(let selectedRoomID)):
+            case (.invitesScreen(let selectedRoomID), .dismissedInvitesScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
 
-            case (.presentWelcomeScreen, .roomList):
+            case (.roomList, .presentWelcomeScreen):
                 return .welcomeScreen
                 
-            case (.showLogoutConfirmationScreen, .roomList(let selectedRoomID)):
+            case (.roomList(let selectedRoomID), .showLogoutConfirmationScreen):
                 return .logoutConfirmationScreen(selectedRoomID: selectedRoomID)
-            case (.dismissedLogoutConfirmationScreen, .logoutConfirmationScreen(let selectedRoomID)):
+            case (.logoutConfirmationScreen(let selectedRoomID), .dismissedLogoutConfirmationScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
                 
             default:

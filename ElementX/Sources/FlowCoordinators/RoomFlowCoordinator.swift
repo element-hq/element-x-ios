@@ -124,92 +124,92 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     // swiftlint:disable:next function_body_length
     private func setupStateMachine() {
         stateMachine.addRouteMapping { event, fromState, _ in
-            switch (event, fromState) {
-            case (.presentRoom(let roomID), _):
+            switch (fromState, event) {
+            case (_, .presentRoom(let roomID)):
                 return .room(roomID: roomID)
-            case (.dismissRoom, .room):
+            case (.room, .dismissRoom):
                 return .initial
                 
-            case (.presentRoomDetails(let roomID), .initial):
+            case (.initial, .presentRoomDetails(let roomID)):
                 return .roomDetails(roomID: roomID, isRoot: true)
-            case (.presentRoomDetails(let roomID), .room(let currentRoomID)):
+            case (.room(let currentRoomID), .presentRoomDetails(let roomID)):
                 return .roomDetails(roomID: roomID, isRoot: roomID != currentRoomID)
-            case (.presentRoomDetails(let roomID), .roomDetails(let currentRoomID, _)):
+            case (.roomDetails(let currentRoomID, _), .presentRoomDetails(let roomID)):
                 return .roomDetails(roomID: roomID, isRoot: roomID != currentRoomID)
-            case (.dismissRoomDetails, .roomDetails(let roomID, _)):
+            case (.roomDetails(let roomID, _), .dismissRoomDetails):
                 return .room(roomID: roomID)
-            case (.dismissRoom, .roomDetails):
+            case (.roomDetails, .dismissRoom):
                 return .initial
                 
-            case (.presentRoomDetailsEditScreen, .roomDetails(let roomID, _)):
+            case (.roomDetails(let roomID, _), .presentRoomDetailsEditScreen):
                 return .roomDetailsEditScreen(roomID: roomID)
-            case (.dismissRoomDetailsEditScreen, .roomDetailsEditScreen(let roomID)):
+            case (.roomDetailsEditScreen(let roomID), .dismissRoomDetailsEditScreen):
                 return .roomDetails(roomID: roomID, isRoot: false)
                 
-            case (.presentNotificationSettingsScreen, .roomDetails(let roomID, _)):
+            case (.roomDetails(let roomID, _), .presentNotificationSettingsScreen):
                 return .notificationSettings(roomID: roomID)
-            case (.dismissNotificationSettingsScreen, .notificationSettings(let roomID)):
+            case (.notificationSettings(let roomID), .dismissNotificationSettingsScreen):
                 return .roomDetails(roomID: roomID, isRoot: false)
                 
-            case (.presentGlobalNotificationSettingsScreen, .notificationSettings(let roomID)):
+            case (.notificationSettings(let roomID), .presentGlobalNotificationSettingsScreen):
                 return .globalNotificationSettings(roomID: roomID)
-            case (.dismissGlobalNotificationSettingsScreen, .globalNotificationSettings(let roomID)):
+            case (.globalNotificationSettings(let roomID), .dismissGlobalNotificationSettingsScreen):
                 return .notificationSettings(roomID: roomID)
                 
-            case (.presentRoomMembersList, .roomDetails(let roomID, _)):
+            case (.roomDetails(let roomID, _), .presentRoomMembersList):
                 return .roomMembersList(roomID: roomID)
-            case (.dismissRoomMembersList, .roomMembersList(let roomID)):
+            case (.roomMembersList(let roomID), .dismissRoomMembersList):
                 return .roomDetails(roomID: roomID, isRoot: false)
 
-            case (.presentRoomMemberDetails(let member), .room(let roomID)):
+            case (.room(let roomID), .presentRoomMemberDetails(let member)):
                 return .roomMemberDetails(roomID: roomID, member: member, fromRoomMembersList: false)
-            case (.presentRoomMemberDetails(let member), .roomMembersList(let roomID)):
+            case (.roomMembersList(let roomID), .presentRoomMemberDetails(let member)):
                 return .roomMemberDetails(roomID: roomID, member: member, fromRoomMembersList: true)
-            case (.dismissRoomMemberDetails, .roomMemberDetails(let roomID, _, let fromRoomMembersList)):
+            case (.roomMemberDetails(let roomID, _, let fromRoomMembersList), .dismissRoomMemberDetails):
                 return fromRoomMembersList ? .roomMembersList(roomID: roomID) : .room(roomID: roomID)
                 
-            case (.presentInviteUsersScreen, .roomDetails(let roomID, _)):
+            case (.roomDetails(let roomID, _), .presentInviteUsersScreen):
                 return .inviteUsersScreen(roomID: roomID, fromRoomMembersList: false)
-            case (.presentInviteUsersScreen, .roomMembersList(let roomID)):
+            case (.roomMembersList(let roomID), .presentInviteUsersScreen):
                 return .inviteUsersScreen(roomID: roomID, fromRoomMembersList: true)
-            case (.dismissInviteUsersScreen, .inviteUsersScreen(let roomID, let fromRoomMembersList)):
+            case (.inviteUsersScreen(let roomID, let fromRoomMembersList), .dismissInviteUsersScreen):
                 return fromRoomMembersList ? .roomMembersList(roomID: roomID) : .roomDetails(roomID: roomID, isRoot: false)
                 
-            case (.presentReportContent(let itemID, let senderID), .room(let roomID)):
+            case (.room(let roomID), .presentReportContent(let itemID, let senderID)):
                 return .reportContent(roomID: roomID, itemID: itemID, senderID: senderID)
-            case (.dismissReportContent, .reportContent(let roomID, _, _)):
+            case (.reportContent(let roomID, _, _), .dismissReportContent):
                 return .room(roomID: roomID)
                 
-            case (.presentMediaUploadPicker(let source), .room(let roomID)):
+            case (.room(let roomID), .presentMediaUploadPicker(let source)):
                 return .mediaUploadPicker(roomID: roomID, source: source)
-            case (.dismissMediaUploadPicker, .mediaUploadPicker(let roomID, _)):
+            case (.mediaUploadPicker(let roomID, _), .dismissMediaUploadPicker):
                 return .room(roomID: roomID)
                 
-            case (.presentMediaUploadPreview(let fileURL), .mediaUploadPicker(let roomID, _)):
+            case (.mediaUploadPicker(let roomID, _), .presentMediaUploadPreview(let fileURL)):
                 return .mediaUploadPreview(roomID: roomID, fileURL: fileURL)
-            case (.presentMediaUploadPreview(let fileURL), .room(let roomID)):
+            case (.room(let roomID), .presentMediaUploadPreview(let fileURL)):
                 return .mediaUploadPreview(roomID: roomID, fileURL: fileURL)
-            case (.dismissMediaUploadPreview, .mediaUploadPreview(let roomID, _)):
+            case (.mediaUploadPreview(let roomID, _), .dismissMediaUploadPreview):
                 return .room(roomID: roomID)
                 
-            case (.presentEmojiPicker(let itemID, let selectedEmoji), .room(let roomID)):
+            case (.room(let roomID), .presentEmojiPicker(let itemID, let selectedEmoji)):
                 return .emojiPicker(roomID: roomID, itemID: itemID, selectedEmojis: selectedEmoji)
-            case (.dismissEmojiPicker, .emojiPicker(let roomID, _, _)):
+            case (.emojiPicker(let roomID, _, _), .dismissEmojiPicker):
                 return .room(roomID: roomID)
 
-            case (.presentMessageForwarding(let itemID), .room(let roomID)):
+            case (.room(let roomID), .presentMessageForwarding(let itemID)):
                 return .messageForwarding(roomID: roomID, itemID: itemID)
-            case (.dismissMessageForwarding, .messageForwarding(let roomID, _)):
+            case (.messageForwarding(let roomID, _), .dismissMessageForwarding):
                 return .room(roomID: roomID)
 
-            case (.presentMapNavigator, .room(let roomID)):
+            case (.room(let roomID), .presentMapNavigator):
                 return .mapNavigator(roomID: roomID)
-            case (.dismissMapNavigator, .mapNavigator(let roomID)):
+            case (.mapNavigator(let roomID), .dismissMapNavigator):
                 return .room(roomID: roomID)
 
-            case (.presentPollForm, .room(let roomID)):
+            case (.room(let roomID), .presentPollForm):
                 return .pollForm(roomID: roomID)
-            case (.dismissPollForm, .pollForm(let roomID)):
+            case (.pollForm(let roomID), .dismissPollForm):
                 return .room(roomID: roomID)
 
             default:
