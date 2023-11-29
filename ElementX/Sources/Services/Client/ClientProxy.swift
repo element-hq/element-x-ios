@@ -208,7 +208,15 @@ class ClientProxy: ClientProxyProtocol {
     func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError> {
         let result: Result<String, ClientProxyError> = await Task.dispatch(on: clientQueue) {
             do {
-                let parameters = CreateRoomParameters(name: nil, topic: nil, isEncrypted: true, isDirect: true, visibility: .private, preset: .trustedPrivateChat, invite: [userID], avatar: nil)
+                let parameters = CreateRoomParameters(name: nil,
+                                                      topic: nil,
+                                                      isEncrypted: true,
+                                                      isDirect: true,
+                                                      visibility: .private,
+                                                      preset: .trustedPrivateChat,
+                                                      invite: [userID],
+                                                      avatar: nil,
+                                                      powerLevelContentOverride: Self.defaultRoomCreationPowerLevels)
                 let result = try self.client.createRoom(request: parameters)
                 return .success(result)
             } catch {
@@ -229,7 +237,8 @@ class ClientProxy: ClientProxyProtocol {
                                                       visibility: isRoomPrivate ? .private : .public,
                                                       preset: isRoomPrivate ? .privateChat : .publicChat,
                                                       invite: userIDs,
-                                                      avatar: avatarURL?.absoluteString)
+                                                      avatar: avatarURL?.absoluteString,
+                                                      powerLevelContentOverride: Self.defaultRoomCreationPowerLevels)
                 let roomID = try self.client.createRoom(request: parameters)
                 return .success(roomID)
             } catch {
@@ -574,6 +583,22 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed retrieving room with identifier: \(identifier)")
             return (nil, nil)
         }
+    }
+    
+    private static var defaultRoomCreationPowerLevels: PowerLevels {
+        .init(usersDefault: nil,
+              eventsDefault: nil,
+              stateDefault: nil,
+              ban: nil,
+              kick: nil,
+              redact: nil,
+              invite: nil,
+              notifications: nil,
+              users: [:],
+              events: [
+                  "m.call.member": Int32(0),
+                  "org.matrix.msc3401.call.member": Int32(0)
+              ])
     }
 }
 
