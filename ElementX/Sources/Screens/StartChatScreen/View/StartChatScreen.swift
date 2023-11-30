@@ -88,14 +88,12 @@ struct StartChatScreen: View {
         if !context.viewState.usersSection.users.isEmpty {
             Section {
                 ForEach(context.viewState.usersSection.users, id: \.userID) { user in
-                    ListRow(kind: .custom {
-                        Button { context.send(viewAction: .selectUser(user)) } label: {
-                            UserProfileCell(user: user, membership: nil, imageProvider: context.imageProvider)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                                .padding(.horizontal, ListRowPadding.horizontal)
-                                .padding(.vertical, 8)
-                        }
-                    })
+                    UserProfileListRow(user: user,
+                                       membership: nil,
+                                       imageProvider: context.imageProvider,
+                                       kind: .button {
+                                           context.send(viewAction: .selectUser(user))
+                                       })
                 }
             } header: {
                 if let title = context.viewState.usersSection.title {

@@ -22,7 +22,7 @@ struct InviteUsersScreen: View {
     
     var body: some View {
         mainContent
-            .compoundForm()
+            .compoundList()
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle(L10n.screenCreateRoomAddPeopleTitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -80,20 +80,19 @@ struct InviteUsersScreen: View {
         if !context.viewState.usersSection.users.isEmpty {
             Section {
                 ForEach(context.viewState.usersSection.users, id: \.userID) { user in
-                    Button { context.send(viewAction: .toggleUser(user)) } label: {
-                        UserProfileCell(user: user,
-                                        membership: context.viewState.membershipState(user),
-                                        imageProvider: context.imageProvider)
-                    }
-                    .disabled(context.viewState.isUserDisabled(user))
-                    .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: context.viewState.isUserSelected(user))))
+                    UserProfileListRow(user: user,
+                                       membership: context.viewState.membershipState(user),
+                                       imageProvider: context.imageProvider,
+                                       kind: .multiSelection(isSelected: context.viewState.isUserSelected(user)) {
+                                           context.send(viewAction: .toggleUser(user))
+                                       })
+                                       .disabled(context.viewState.isUserDisabled(user))
                 }
             } header: {
                 if let title = context.viewState.usersSection.title {
                     Text(title)
                 }
             }
-            .compoundFormSection()
         } else {
             Section.empty
         }
