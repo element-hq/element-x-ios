@@ -33,33 +33,35 @@ struct InviteUsersScreen: View {
             .searchableConfiguration(hidesNavigationBar: false)
             .compoundSearchField()
             .alert(item: $context.alertInfo)
-            .readFrame($frame)
     }
     
     // MARK: - Private
     
     private var mainContent: some View {
-        Form {
-            // this is a fix for having the carousel not clipped, and inside the form, so when the search is dismissed, it wont break the design
-            Section {
-                EmptyView()
-            } header: {
-                VStack(spacing: 8) {
-                    selectedUsersSection
-                        .textCase(.none)
-                    
-                    if context.viewState.isSearching {
-                        ProgressView()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .listRowBackground(Color.clear)
+        GeometryReader { proxy in
+            Form {
+                // this is a fix for having the carousel not clipped, and inside the form, so when the search is dismissed, it wont break the design
+                Section {
+                    EmptyView()
+                } header: {
+                    VStack(spacing: 8) {
+                        selectedUsersSection
+                            .textCase(.none)
+                            .frame(width: proxy.size.width)
+                        
+                        if context.viewState.isSearching {
+                            ProgressView()
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .listRowBackground(Color.clear)
+                        }
                     }
                 }
-            }
-            
-            if context.viewState.hasEmptySearchResults {
-                noResultsContent
-            } else {
-                usersSection
+                
+                if context.viewState.hasEmptySearchResults {
+                    noResultsContent
+                } else {
+                    usersSection
+                }
             }
         }
     }
@@ -97,7 +99,6 @@ struct InviteUsersScreen: View {
         }
     }
     
-    @State private var frame: CGRect = .zero
     @ScaledMetric private var cellWidth: CGFloat = 72
 
     private var selectedUsersSection: some View {
@@ -120,7 +121,6 @@ struct InviteUsersScreen: View {
                 .padding(.horizontal, 14)
             }
         }
-        .frame(width: frame.width)
     }
     
     @ToolbarContentBuilder
