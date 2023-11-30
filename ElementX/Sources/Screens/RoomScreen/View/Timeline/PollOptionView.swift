@@ -17,13 +17,18 @@
 import SwiftUI
 
 struct PollOptionView: View {
+    @Environment(\.isEnabled) private var isEnabled
+    
     let pollOption: Poll.Option
     let showVotes: Bool
     let isFinalResult: Bool
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
-            FormRowAccessory(kind: .multipleSelection(isSelected: pollOption.isSelected))
+            Image(systemSymbol: pollOption.isSelected ? .checkmarkCircleFill : .circle)
+                .font(.compound.bodyLG)
+                .foregroundColor(pollOption.isSelected && isEnabled ? .compound.iconPrimary : .compound.iconTertiary)
+                .accessibilityAddTraits(pollOption.isSelected ? .isSelected : [])
 
             VStack(spacing: 10) {
                 HStack(alignment: .lastTextBaseline, spacing: 8) {

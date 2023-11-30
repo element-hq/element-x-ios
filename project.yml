@@ -49,7 +49,7 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/vector-im/compound-ios
-    revision: 8774e358ac6927f041400733ac681456f0910c10
+    revision: 56456508d27b7defef647da15d1bd854d6f88a2d
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 class BlankFormCoordinator: CoordinatorProtocol {
@@ -28,7 +29,7 @@ private struct BlankForm: View {
         Form {
             Text("Nothing to see here.")
         }
-        .compoundForm()
+        .compoundList()
     }
 }
 
