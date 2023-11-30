@@ -52,6 +52,29 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         }
     }
     
+    func testLoadVoiceMessageFromSourceMimeTypeWithParameters() async throws {
+        // URL representing the file loaded by the media provider
+        let loadedFile = URL("/some/url/loaded_file.ogg")
+        // URL representing the final cached file
+        let cachedConvertedFileURL = URL("/some/url/cached_converted_file.m4a")
+        
+        voiceMessageCache.fileURLForReturnValue = nil
+        let mediaSource = MediaSourceProxy(url: someURL, mimeType: "audio/ogg; codecs=opus")
+        mediaProvider.loadFileFromSourceReturnValue = MediaFileHandleProxy.unmanaged(url: loadedFile)
+        voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
+        
+        voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
+                                                            voiceMessageCache: voiceMessageCache,
+                                                            audioConverter: AudioConverterMock(),
+                                                            backgroundTaskService: MockBackgroundTaskService())
+        
+        do {
+            _ = try await voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
+        } catch {
+            XCTFail("An unexpected error has occured: \(error)")
+        }
+    }
+    
     func testLoadVoiceMessageFromSourceAlreadyCached() async throws {
         // Check if the file is already present in cache
         voiceMessageCache.fileURLForReturnValue = URL("/converted_file/url")
