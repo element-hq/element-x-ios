@@ -438,6 +438,11 @@ class AudioPlayerMock: AudioPlayerProtocol {
     }
     var underlyingActions: AnyPublisher<AudioPlayerAction, Never>!
     var mediaSource: MediaSourceProxy?
+    var duration: TimeInterval {
+        get { return underlyingDuration }
+        set(value) { underlyingDuration = value }
+    }
+    var underlyingDuration: TimeInterval!
     var currentTime: TimeInterval {
         get { return underlyingCurrentTime }
         set(value) { underlyingCurrentTime = value }
@@ -1082,6 +1087,11 @@ class KeychainControllerMock: KeychainControllerProtocol {
 }
 class MediaPlayerMock: MediaPlayerProtocol {
     var mediaSource: MediaSourceProxy?
+    var duration: TimeInterval {
+        get { return underlyingDuration }
+        set(value) { underlyingDuration = value }
+    }
+    var underlyingDuration: TimeInterval!
     var currentTime: TimeInterval {
         get { return underlyingCurrentTime }
         set(value) { underlyingCurrentTime = value }

@@ -56,7 +56,7 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
         let loadFileBgTask = await backgroundTaskService?.startBackgroundTask(withName: "LoadFile: \(source.url.hashValue)")
         defer { loadFileBgTask?.stop() }
 
-        guard let mimeType = source.mimeType, mimeType == supportedVoiceMessageMimeType else {
+        guard let mimeType = source.mimeType, mimeType.starts(with: supportedVoiceMessageMimeType) else {
             throw VoiceMessageMediaManagerError.unsupportedMimeTye
         }
         

@@ -171,8 +171,9 @@ class AudioPlayerStateTests: XCTestCase {
     }
 
     func testHandlingAudioPlayerActionDidFinishLoading() async throws {
-        let originalStateProgress = 0.4
-        await audioPlayerState.updateState(progress: originalStateProgress)
+        audioPlayerMock.duration = 10.0
+        
+        audioPlayerState = AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 0)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 
         let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
@@ -189,6 +190,8 @@ class AudioPlayerStateTests: XCTestCase {
         
         // The state is expected to be .readyToPlay
         XCTAssertEqual(audioPlayerState.playbackState, .readyToPlay)
+        // The duration should have been updated with the player's duration
+        XCTAssertEqual(audioPlayerState.duration, audioPlayerMock.duration)
     }
     
     func testHandlingAudioPlayerActionDidStartPlaying() async throws {
