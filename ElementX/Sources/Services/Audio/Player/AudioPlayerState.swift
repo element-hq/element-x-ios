@@ -34,7 +34,7 @@ enum AudioPlayerStateIdentifier {
 @MainActor
 class AudioPlayerState: ObservableObject, Identifiable {
     let id: AudioPlayerStateIdentifier
-    let duration: Double
+    private(set) var duration: Double
     let waveform: EstimatedWaveform
     @Published private(set) var playbackState: AudioPlayerPlaybackState
     /// It's similar to `playbackState`, with the a difference: `.loading`
@@ -134,8 +134,12 @@ class AudioPlayerState: ObservableObject, Identifiable {
         case .didStartLoading:
             playbackState = .loading
         case .didFinishLoading:
-            playbackState = .readyToPlay
+            if let audioPlayerDuration = audioPlayer?.duration, audioPlayerDuration != duration {
+                MXLog.info("updating duration: \(duration) -> \(audioPlayerDuration)")
+                duration = audioPlayerDuration
+            }
             fileURL = audioPlayer?.url
+            playbackState = .readyToPlay
         case .didStartPlaying:
             if let audioPlayer {
                 await restoreAudioPlayerState(audioPlayer: audioPlayer)
