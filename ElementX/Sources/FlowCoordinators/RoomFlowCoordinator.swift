@@ -211,6 +211,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .pollForm(roomID: roomID)
             case (.pollForm(let roomID), .dismissPollForm):
                 return .room(roomID: roomID)
+                
+            case (.roomDetails(let roomID, let isRoot), .presentPollsHistory):
+                return .pollsHistory(roomID: roomID, isRoot: isRoot)
+            case (.pollsHistory(let roomID, let isRoot), .dismissPollsHistory):
+                return .roomDetails(roomID: roomID, isRoot: isRoot)
 
             default:
                 return nil
@@ -320,6 +325,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.pollForm, .dismissPollForm, .room):
                 break
 
+            case (.roomDetails, .presentPollsHistory, .pollsHistory):
+                presentPollsHistory()
+            case (.pollsHistory, .dismissPollsHistory, .roomDetails):
+                break
+                
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -515,6 +525,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentNotificationSettingsScreen)
             case .presentInviteUsersScreen:
                 stateMachine.tryEvent(.presentInviteUsersScreen)
+            case .presentPollsHistory:
+                stateMachine.tryEvent(.presentPollsHistory)
             }
         }
         .store(in: &cancellables)
@@ -844,6 +856,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    private func presentPollsHistory() {
+        // TODO: present PollsHistoryScreen
+    }
+    
     private func presentRoomMemberDetails(member: RoomMemberProxyProtocol) {
         guard let roomProxy else {
             fatalError()
@@ -1105,6 +1121,7 @@ private extension RoomFlowCoordinator {
         case messageForwarding(roomID: String, itemID: TimelineItemIdentifier)
         case reportContent(roomID: String, itemID: TimelineItemIdentifier, senderID: String)
         case pollForm(roomID: String)
+        case pollsHistory(roomID: String, isRoot: Bool)
     }
     
     struct EventUserInfo {
@@ -1157,6 +1174,9 @@ private extension RoomFlowCoordinator {
 
         case presentPollForm(mode: PollFormMode)
         case dismissPollForm
+        
+        case presentPollsHistory
+        case dismissPollsHistory
     }
 }
 

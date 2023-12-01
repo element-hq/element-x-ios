@@ -32,6 +32,7 @@ enum RoomDetailsScreenCoordinatorAction {
     case presentRoomDetailsEditScreen(accountOwner: RoomMemberProxyProtocol)
     case presentNotificationSettingsScreen
     case presentInviteUsersScreen
+    case presentPollsHistory
 }
 
 final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
@@ -74,6 +75,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentRoomDetailsEditScreen(accountOwner: accountOwner))
                 case .requestNotificationSettingsPresentation:
                     actionsSubject.send(.presentNotificationSettingsScreen)
+                case .requestPollsHistoryPresentation:
+                    actionsSubject.send(.presentPollsHistory)
                 }
             }
             .store(in: &cancellables)

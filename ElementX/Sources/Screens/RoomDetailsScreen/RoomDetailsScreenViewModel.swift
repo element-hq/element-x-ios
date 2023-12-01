@@ -123,8 +123,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .displayAvatar:
             displayFullScreenAvatar()
         case .processTapPolls:
-            // TODO: open polls history screen
-            break
+            actionsSubject.send(.requestPollsHistoryPresentation)
         }
     }
     
