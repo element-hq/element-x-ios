@@ -79,6 +79,12 @@ struct DeveloperOptionsScreen: View {
                     Text("Use encryption")
                 }
             }
+            
+            Section("Polls") {
+                Toggle(isOn: $context.pollsHistoryEnabled) {
+                    Text("Show history")
+                }
+            }
 
             Section {
                 Button {

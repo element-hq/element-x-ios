@@ -47,6 +47,7 @@ final class AppSettings {
         case readReceiptsEnabled
         case swiftUITimelineEnabled
         case chatBackupEnabled
+        case pollsHistoryEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -274,6 +275,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.chatBackupEnabled, defaultValue: false, storageType: .userDefaults(store))
     var chatBackupEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.pollsHistoryEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var pollsHistoryEnabled
     
     #endif
     
