@@ -86,6 +86,8 @@ enum UITestsScreenIdentifier: String {
     case createRoom
     case createRoomNoUsers
     case createPoll
+    case roomPollsHistoryEmptyLoadMore
+    case roomPollsHistoryLoadMore
 }
 
 extension UITestsScreenIdentifier: CustomStringConvertible {

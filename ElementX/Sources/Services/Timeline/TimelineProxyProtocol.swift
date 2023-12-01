@@ -62,6 +62,8 @@ protocol TimelineProxyProtocol {
     /// Retries sending a failed message given its transaction ID
     func retrySend(transactionID: String) async
     
+    func paginateBackwards(requestSize: UInt) async -> Result<Void, TimelineProxyError>
+    
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError>
     
     func sendAudio(url: URL,

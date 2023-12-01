@@ -43,6 +43,7 @@ class RoomScreenInteractionHandler {
     private let application: ApplicationProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
+    private let pollInteractionHandler: PollInteractionHandlerProtocol
     
     private let actionsSubject: PassthroughSubject<RoomScreenInteractionHandlerAction, Never> = .init()
     var actions: AnyPublisher<RoomScreenInteractionHandlerAction, Never> {
@@ -73,6 +74,7 @@ class RoomScreenInteractionHandler {
         self.application = application
         self.appSettings = appSettings
         self.analyticsService = analyticsService
+        pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService, roomProxy: roomProxy)
     }
     
     // MARK: Timeline Item Action Menu
@@ -274,9 +276,8 @@ class RoomScreenInteractionHandler {
 
     func sendPollResponse(pollStartID: String, optionID: String) {
         Task {
-            let sendPollResponseResult = await roomProxy.timeline.sendPollResponse(pollStartID: pollStartID, answers: [optionID])
-            analyticsService.trackPollVote()
-
+            let sendPollResponseResult = await pollInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
+            
             switch sendPollResponseResult {
             case .success:
                 break
@@ -288,9 +289,8 @@ class RoomScreenInteractionHandler {
     
     func endPoll(pollStartID: String) {
         Task {
-            let endPollResult = await roomProxy.timeline.endPoll(pollStartID: pollStartID,
-                                                                 text: "The poll with event id: \(pollStartID) has ended")
-            analyticsService.trackPollEnd()
+            let endPollResult = await pollInteractionHandler.endPoll(pollStartID: pollStartID)
+            
             switch endPollResult {
             case .success:
                 break

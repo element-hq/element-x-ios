@@ -69,6 +69,18 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
     
+    func paginateBackwards(requestSize: UInt) async -> Result<Void, RoomTimelineControllerError> {
+        MXLog.info("Started back pagination request")
+        switch await roomProxy.timeline.paginateBackwards(requestSize: requestSize) {
+        case .success:
+            MXLog.info("Finished back pagination request")
+            return .success(())
+        case .failure(let error):
+            MXLog.error("Failed back pagination request with error: \(error)")
+            return .failure(.generic)
+        }
+    }
+    
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
         MXLog.info("Started back pagination request")
         switch await roomProxy.timeline.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
@@ -299,7 +311,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 break
             }
         }
-
+        
         timelineItems = newTimelineItems
         
         callbacks.send(.updatedTimelineItems)
@@ -383,5 +395,21 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         default:
             break
         }
+    }
+    
+    func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
+        for itemProxy in roomProxy.timeline.timelineProvider.itemProxies {
+            switch itemProxy {
+            case .event(let eventTimelineItemProxy):
+                if eventTimelineItemProxy.id == itemID {
+                    return eventTimelineItemProxy.timestamp
+                }
+            case .virtual:
+                break
+            case .unknown:
+                break
+            }
+        }
+        return nil
     }
 }

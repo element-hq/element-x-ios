@@ -34,9 +34,7 @@ struct RoomDetailsScreen: View {
             
             notificationSection
 
-            if context.viewState.dmRecipient == nil {
-                aboutSection
-            }
+            aboutSection
 
             securitySection
 
@@ -150,22 +148,30 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.commonPeople,
-                                    icon: CompoundIcon(asset: Asset.Images.user)),
-                    details: .title(String(context.viewState.joinedMembersCount)),
-                    kind: .navigationLink {
-                        context.send(viewAction: .processTapPeople)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-            
-            if context.viewState.canInviteUsers {
-                ListRow(label: .default(title: L10n.screenRoomDetailsInvitePeopleTitle,
-                                        icon: CompoundIcon(asset: Asset.Images.userAdd)),
+            if context.viewState.dmRecipient == nil {
+                ListRow(label: .default(title: L10n.commonPeople,
+                                        icon: CompoundIcon(asset: Asset.Images.user)),
+                        details: .title(String(context.viewState.joinedMembersCount)),
                         kind: .navigationLink {
-                            context.send(viewAction: .processTapInvite)
+                            context.send(viewAction: .processTapPeople)
                         })
-                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+                
+                if context.viewState.canInviteUsers {
+                    ListRow(label: .default(title: L10n.screenRoomDetailsInvitePeopleTitle,
+                                            icon: CompoundIcon(asset: Asset.Images.userAdd)),
+                            kind: .navigationLink {
+                                context.send(viewAction: .processTapInvite)
+                            })
+                            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
+                }
             }
+            ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
+                                    icon: CompoundIcon(asset: Asset.Images.polls)),
+                    kind: .navigationLink {
+                        context.send(viewAction: .processTapPolls)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
         }
     }
     

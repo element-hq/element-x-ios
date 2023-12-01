@@ -877,6 +877,38 @@ class MockScreen: Identifiable {
             let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .roomPollsHistoryEmptyLoadMore:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let roomProxy = RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: nil))
+            let interactionHandler = PollInteractionHandlerMock()
+            let roomTimelineController = MockRoomTimelineController()
+            roomTimelineController.backPaginationResponses = [
+                [],
+                []
+            ]
+            let parameters = RoomPollsHistoryScreenCoordinatorParameters(roomProxy: RoomProxyMock(),
+                                                                         pollInteractionHandler: interactionHandler,
+                                                                         roomTimelineController: roomTimelineController)
+            let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomPollsHistoryLoadMore:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let roomProxy = RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: nil))
+            let interactionHandler = PollInteractionHandlerMock()
+            let roomTimelineController = MockRoomTimelineController()
+
+            let poll = PollRoomTimelineItem.mock(poll: .emptyDisclosed, isEditable: true)
+            roomTimelineController.timelineItems = [poll]
+            let date: Date! = DateComponents(calendar: .current, timeZone: .gmt, year: 2023, month: 12, day: 1, hour: 12).date
+            roomTimelineController.timelineItemsTimestamp = [poll.id: date]
+            
+            let parameters = RoomPollsHistoryScreenCoordinatorParameters(roomProxy: RoomProxyMock(),
+                                                                         pollInteractionHandler: interactionHandler,
+                                                                         roomTimelineController: roomTimelineController)
+            let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         }
     }()
 }

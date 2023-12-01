@@ -74,7 +74,7 @@ struct DeveloperOptionsScreen: View {
                     Text("Use encryption")
                 }
             }
-
+            
             Section {
                 Button {
                     showConfetti = true

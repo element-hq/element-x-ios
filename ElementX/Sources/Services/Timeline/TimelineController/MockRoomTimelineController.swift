@@ -31,6 +31,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
+    var timelineItemsTimestamp: [TimelineItemIdentifier: Date] = [:]
     
     private var client: UITestsSignalling.Client?
     
@@ -43,7 +44,12 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
             fatalError("Failure setting up signalling: \(error)")
         }
     }
-    
+
+    func paginateBackwards(requestSize: UInt) async -> Result<Void, RoomTimelineControllerError> {
+        try? await simulateBackPagination()
+        return .success(())
+    }
+
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
         callbacks.send(.canBackPaginate(false))
         return .success(())
@@ -97,6 +103,10 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         await roomProxy?.timeline.cancelSend(transactionID: transactionID)
+    }
+    
+    func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
+        timelineItemsTimestamp[itemID] ?? .now
     }
     
     // MARK: - UI Test signalling
@@ -153,6 +163,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         timelineItems.insert(contentsOf: newItems, at: 0)
         callbacks.send(.updatedTimelineItems)
         callbacks.send(.isBackPaginating(false))
+        callbacks.send(.canBackPaginate(!backPaginationResponses.isEmpty))
         
         try client?.send(.success)
     }

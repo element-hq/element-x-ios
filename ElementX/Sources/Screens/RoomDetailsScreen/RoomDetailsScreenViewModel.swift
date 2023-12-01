@@ -67,7 +67,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            notificationSettingsState: .loading,
                                            bindings: .init()),
                    imageProvider: mediaProvider)
-        
+                
         setupRoomSubscription()
         fetchMembers()
         
@@ -120,6 +120,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             Task { await toggleMuteNotifications() }
         case .displayAvatar:
             displayFullScreenAvatar()
+        case .processTapPolls:
+            actionsSubject.send(.requestPollsHistoryPresentation)
         }
     }
     
