@@ -157,6 +157,15 @@ struct RoomDetailsScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
             }
+            if context.viewState.pollsHistoryEnabled {
+                ListRow(label: .default(title: UntranslatedL10n.screenPollsHistoryTitle,
+                                        icon: CompoundIcon(asset: Asset.Images.polls)),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapPolls)
+                        })
+                // TODO: .accessibilityIdentifier
+//                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
+            }
         }
     }
     
@@ -279,7 +288,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy)
+                                          notificationSettingsProxy: notificationSettingsProxy,
+                                          appSettings: AppSettings())
     }()
     
     static let dmRoomViewModel = {
@@ -302,7 +312,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy)
+                                          notificationSettingsProxy: notificationSettingsProxy,
+                                          appSettings: AppSettings())
     }()
     
     static let simpleRoomViewModel = {
@@ -322,7 +333,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy)
+                                          notificationSettingsProxy: notificationSettingsProxy,
+                                          appSettings: AppSettings())
     }()
     
     static var previews: some View {

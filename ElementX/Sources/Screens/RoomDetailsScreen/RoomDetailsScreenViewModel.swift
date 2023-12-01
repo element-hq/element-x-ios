@@ -25,6 +25,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
+    private let appSettings: AppSettings
 
     private var accountOwner: RoomMemberProxyProtocol? {
         didSet { updatePowerLevelPermissions() }
@@ -42,12 +43,14 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
          roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         notificationSettingsProxy: NotificationSettingsProxyProtocol) {
+         notificationSettingsProxy: NotificationSettingsProxyProtocol,
+         appSettings: AppSettings) {
         self.accountUserID = accountUserID
         self.roomProxy = roomProxy
         self.mediaProvider = mediaProvider
         self.userIndicatorController = userIndicatorController
         self.notificationSettingsProxy = notificationSettingsProxy
+        self.appSettings = appSettings
         
         super.init(initialViewState: .init(roomId: roomProxy.id,
                                            canonicalAlias: roomProxy.canonicalAlias,
@@ -59,8 +62,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            avatarURL: roomProxy.avatarURL,
                                            joinedMembersCount: roomProxy.joinedMembersCount,
                                            notificationSettingsState: .loading,
+                                           pollsHistoryEnabled: appSettings.pollsHistoryEnabled,
                                            bindings: .init()),
                    imageProvider: mediaProvider)
+        
+        appSettings.$pollsHistoryEnabled
+            .weakAssign(to: \.state.pollsHistoryEnabled, on: self)
+            .store(in: &cancellables)
         
         setupRoomSubscription()
         fetchMembers()
@@ -114,6 +122,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             Task { await toggleMuteNotifications() }
         case .displayAvatar:
             displayFullScreenAvatar()
+        case .processTapPolls:
+            // TODO: open polls history screen
+            break
         }
     }
     

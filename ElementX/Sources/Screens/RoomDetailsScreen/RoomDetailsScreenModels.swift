@@ -49,6 +49,8 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRoomAvatar = false
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     
+    var pollsHistoryEnabled: Bool
+    
     var canEdit: Bool {
         !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
     }
@@ -173,6 +175,7 @@ enum RoomDetailsScreenViewAction {
     case processTapNotifications
     case processToogleMuteNotifications
     case displayAvatar
+    case processTapPolls
 }
 
 enum RoomDetailsScreenViewShortcut {
