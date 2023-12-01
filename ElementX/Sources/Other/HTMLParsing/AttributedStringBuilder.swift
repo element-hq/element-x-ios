@@ -172,6 +172,17 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         while (attributedString.string as NSString).hasSuffixCharacter(from: .whitespacesAndNewlines) {
             attributedString.deleteCharacters(in: .init(location: attributedString.length - 1, length: 1))
         }
+        
+        attributedString.enumerateAttribute(.paragraphStyle, in: .init(location: 0, length: attributedString.length)) { value, range, _ in
+            guard let value = value as? NSParagraphStyle,
+                  let newValue = value.mutableCopy() as? NSMutableParagraphStyle else {
+                return
+            }
+            // Paragraph spacing is not applied to the first line, so we use paragraph spacing before instead, and set the paragraph spacing to 0
+            newValue.paragraphSpacingBefore = newValue.paragraphSpacing
+            newValue.paragraphSpacing = 0
+            attributedString.addAttribute(.paragraphStyle, value: newValue, range: range)
+        }
     }
     
     private func addLinksAndMentions(_ attributedString: NSMutableAttributedString) {
