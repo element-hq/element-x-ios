@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct MessageForwardingScreen: View {
@@ -23,8 +24,9 @@ struct MessageForwardingScreen: View {
         Form {
             Section {
                 ForEach(context.viewState.rooms) { room in
-                    MessageForwardingRoomCell(room: room, context: context)
-                        .buttonStyle(FormButtonStyle(accessory: .singleSelection(isSelected: context.viewState.selectedRoomID == room.id)))
+                    MessageForwardingListRow(room: room,
+                                             isSelected: context.viewState.selectedRoomID == room.id,
+                                             context: context)
                 }
                 // Replace these with ScrollView's `scrollPosition` when dropping iOS 16.
             } header: {
@@ -38,9 +40,8 @@ struct MessageForwardingScreen: View {
                         context.send(viewAction: .reachedBottom)
                     }
             }
-            .compoundFormSection()
         }
-        .compoundForm()
+        .compoundList()
         .navigationTitle(L10n.commonForwardMessage)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -69,32 +70,20 @@ struct MessageForwardingScreen: View {
     }
 }
 
-private struct MessageForwardingRoomCell: View {
+private struct MessageForwardingListRow: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
     let room: MessageForwardingRoom
+    let isSelected: Bool
     let context: MessageForwardingScreenViewModel.Context
     
     var body: some View {
-        Button {
-            context.send(viewAction: .selectRoom(roomID: room.id))
-        } label: {
-            HStack(spacing: 16.0) {
-                avatar
-                
-                VStack(alignment: .leading, spacing: 2.0) {
-                    Text(room.name)
-                        .font(.compound.bodyMD)
-                        .foregroundColor(.compound.textPrimary)
-                        .lineLimit(1)
-                    Text(room.alias ?? room.id)
-                        .font(.compound.bodySM)
-                        .foregroundColor(.compound.textSecondary)
-                        .lineLimit(1)
-                }
-            }
-            .accessibilityElement(children: .combine)
-        }
+        ListRow(label: .avatar(title: room.name,
+                               description: room.alias ?? room.id,
+                               icon: avatar),
+                kind: .selection(isSelected: isSelected) {
+                    context.send(viewAction: .selectRoom(roomID: room.id))
+                })
     }
     
     @ViewBuilder @MainActor

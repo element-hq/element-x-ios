@@ -114,6 +114,7 @@ enum A11yIdentifiers {
 
     struct InviteUsersScreen {
         let proceed = "invite_users-proceed"
+        let userProfile = "invite_users-user_profile"
     }
     
     struct LoginScreen {

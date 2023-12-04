@@ -20,9 +20,13 @@ import SwiftUI
 struct InviteUsersScreen: View {
     @ObservedObject var context: InviteUsersScreenViewModel.Context
     
+    var showTopSection: Bool {
+        !context.viewState.selectedUsers.isEmpty || context.viewState.isSearching
+    }
+    
     var body: some View {
         mainContent
-            .compoundForm()
+            .compoundList()
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle(L10n.screenCreateRoomAddPeopleTitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -40,19 +44,21 @@ struct InviteUsersScreen: View {
     private var mainContent: some View {
         GeometryReader { proxy in
             Form {
-                // this is a fix for having the carousel not clipped, and inside the form, so when the search is dismissed, it wont break the design
-                Section {
-                    EmptyView()
-                } header: {
-                    VStack(spacing: 8) {
-                        selectedUsersSection
-                            .textCase(.none)
-                            .frame(width: proxy.size.width)
-                        
-                        if context.viewState.isSearching {
-                            ProgressView()
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .listRowBackground(Color.clear)
+                if showTopSection {
+                    // this is a fix for having the carousel not clipped, and inside the form, so when the search is dismissed, it wont break the design
+                    Section {
+                        EmptyView()
+                    } header: {
+                        VStack(spacing: 16) {
+                            selectedUsersSection
+                                .textCase(.none)
+                                .frame(width: proxy.size.width)
+                            
+                            if context.viewState.isSearching {
+                                ProgressView()
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .listRowBackground(Color.clear)
+                            }
                         }
                     }
                 }
@@ -80,20 +86,21 @@ struct InviteUsersScreen: View {
         if !context.viewState.usersSection.users.isEmpty {
             Section {
                 ForEach(context.viewState.usersSection.users, id: \.userID) { user in
-                    Button { context.send(viewAction: .toggleUser(user)) } label: {
-                        UserProfileCell(user: user,
-                                        membership: context.viewState.membershipState(user),
-                                        imageProvider: context.imageProvider)
-                    }
-                    .disabled(context.viewState.isUserDisabled(user))
-                    .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: context.viewState.isUserSelected(user))))
+                    UserProfileListRow(user: user,
+                                       membership: context.viewState.membershipState(user),
+                                       imageProvider: context.imageProvider,
+                                       kind: .multiSelection(isSelected: context.viewState.isUserSelected(user)) {
+                                           context.send(viewAction: .toggleUser(user))
+                                       })
+                                       .disabled(context.viewState.isUserDisabled(user))
+                                       .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.userProfile)
                 }
             } header: {
                 if let title = context.viewState.usersSection.title {
                     Text(title)
+                        .compoundListSectionHeader()
                 }
             }
-            .compoundFormSection()
         } else {
             Section.empty
         }

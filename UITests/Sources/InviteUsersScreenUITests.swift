@@ -25,19 +25,19 @@ class InviteUsersScreenUITests: XCTestCase {
 
     func testSelectedUsers() async throws {
         let app = Application.launch(.inviteUsers)
-        app.collectionViews.firstMatch.cells.element(boundBy: 1).tap()
+        app.buttons[A11yIdentifiers.inviteUsersScreen.userProfile].firstMatch.tap()
         try await app.assertScreenshot(.inviteUsers, step: 1)
     }
     
     func testInviteUsers() async throws {
         let app = Application.launch(.inviteUsersInRoom)
-        app.collectionViews.firstMatch.cells.element(boundBy: 1).tap()
+        app.buttons[A11yIdentifiers.inviteUsersScreen.userProfile].firstMatch.tap()
         try await app.assertScreenshot(.inviteUsersInRoom, step: 1)
     }
     
     func testInviteUserExistingMembers() async throws {
         let app = Application.launch(.inviteUsersInRoomExistingMembers)
-        app.collectionViews.firstMatch.cells.element(boundBy: 1).tap()
+        app.buttons[A11yIdentifiers.inviteUsersScreen.userProfile].firstMatch.tap()
         try await app.assertScreenshot(.inviteUsersInRoomExistingMembers, step: 1)
     }
 }
