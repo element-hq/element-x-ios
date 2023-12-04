@@ -1939,11 +1939,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingActiveMembersCount = value }
     }
     var underlyingActiveMembersCount: Int!
-    var stateUpdatesPublisher: AnyPublisher<Void, Never> {
-        get { return underlyingStateUpdatesPublisher }
-        set(value) { underlyingStateUpdatesPublisher = value }
+    var actions: AnyPublisher<RoomProxyAction, Never> {
+        get { return underlyingActions }
+        set(value) { underlyingActions = value }
     }
-    var underlyingStateUpdatesPublisher: AnyPublisher<Void, Never>!
+    var underlyingActions: AnyPublisher<RoomProxyAction, Never>!
     var timeline: TimelineProxyProtocol {
         get { return underlyingTimeline }
         set(value) { underlyingTimeline = value }
@@ -2578,6 +2578,11 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
 }
 class TimelineProxyMock: TimelineProxyProtocol {
+    var actions: AnyPublisher<TimelineProxyAction, Never> {
+        get { return underlyingActions }
+        set(value) { underlyingActions = value }
+    }
+    var underlyingActions: AnyPublisher<TimelineProxyAction, Never>!
     var timelineProvider: RoomTimelineProviderProtocol {
         get { return underlyingTimelineProvider }
         set(value) { underlyingTimelineProvider = value }

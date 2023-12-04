@@ -279,13 +279,22 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .store(in: &cancellables)
 
         roomProxy
-            .stateUpdatesPublisher
+            .actions
+            .filter { $0 == .stateUpdate }
             .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.state.roomTitle = roomProxy.roomTitle
                 self.state.roomAvatarURL = roomProxy.avatarURL
                 self.state.hasOngoingCall = roomProxy.hasOngoingCall
+            }
+            .store(in: &cancellables)
+        
+        roomProxy.timeline.actions
+            .filter { $0 == .sentMessage }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.state.timelineViewState.scrollToBottomPublisher.send(())
             }
             .store(in: &cancellables)
 
@@ -468,8 +477,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .recordVoiceMessage, .previewVoiceMessage:
             fatalError("invalid composer mode.")
         }
-        
-        state.timelineViewState.scrollToBottomPublisher.send(())
     }
         
     private func trackComposerMode(_ mode: RoomScreenComposerMode) {

@@ -42,9 +42,9 @@ class RoomProxy: RoomProxyProtocol {
         membersSubject.asCurrentValuePublisher()
     }
         
-    private let stateUpdatesSubject = PassthroughSubject<Void, Never>()
-    var stateUpdatesPublisher: AnyPublisher<Void, Never> {
-        stateUpdatesSubject.eraseToAnyPublisher()
+    private let actionsSubject = PassthroughSubject<RoomProxyAction, Never>()
+    var actions: AnyPublisher<RoomProxyAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
     }
 
     var ownUserID: String {
@@ -407,7 +407,7 @@ class RoomProxy: RoomProxyProtocol {
     private func subscribeToRoomStateUpdates() {
         roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] in
             MXLog.info("Received room info update")
-            self?.stateUpdatesSubject.send(())
+            self?.actionsSubject.send(.stateUpdate)
         })
     }
 }

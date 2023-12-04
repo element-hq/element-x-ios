@@ -28,17 +28,17 @@ final class TimelineProxy: TimelineProxyProtocol {
     private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
     private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
     
-    init(timeline: Timeline, backgroundTaskService: BackgroundTaskServiceProtocol) {
-        self.timeline = timeline
-        self.backgroundTaskService = backgroundTaskService
-    }
-    
     private var backPaginationStateObservationToken: TaskHandle?
     private var roomTimelineObservationToken: TaskHandle?
     private var timelineListener: RoomTimelineListener?
    
     private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
     private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
+    
+    private let actionsSubject = PassthroughSubject<TimelineProxyAction, Never>()
+    var actions: AnyPublisher<TimelineProxyAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
    
     private var innerTimelineProvider: RoomTimelineProviderProtocol!
     var timelineProvider: RoomTimelineProviderProtocol {
@@ -52,6 +52,11 @@ final class TimelineProxy: TimelineProxyProtocol {
     deinit {
         backPaginationStateObservationToken?.cancel()
         roomTimelineObservationToken?.cancel()
+    }
+    
+    init(timeline: Timeline, backgroundTaskService: BackgroundTaskServiceProtocol) {
+        self.timeline = timeline
+        self.backgroundTaskService = backgroundTaskService
     }
     
     func subscribeForUpdates() async {
@@ -104,6 +109,7 @@ final class TimelineProxy: TimelineProxyProtocol {
             do {
                 let originalEvent = try self.timeline.getEventTimelineItemByEventId(eventId: eventID)
                 try self.timeline.edit(newContent: messageContent, editItem: originalEvent)
+                
                 return .success(())
             } catch {
                 return .failure(.failedEditingMessage)
@@ -178,6 +184,8 @@ final class TimelineProxy: TimelineProxyProtocol {
             return .failure(.failedSendingMedia)
         }
         
+        actionsSubject.send(.sentMessage)
+        
         return .success(())
     }
     
@@ -201,6 +209,8 @@ final class TimelineProxy: TimelineProxyProtocol {
         } catch {
             return .failure(.failedSendingMedia)
         }
+        
+        actionsSubject.send(.sentMessage)
         
         return .success(())
     }
@@ -227,6 +237,8 @@ final class TimelineProxy: TimelineProxyProtocol {
             return .failure(.failedSendingMedia)
         }
         
+        actionsSubject.send(.sentMessage)
+        
         return .success(())
     }
     
@@ -241,11 +253,15 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
         
         return await Task.dispatch(on: messageSendingDispatchQueue) {
-            .success(self.timeline.sendLocation(body: body,
-                                                geoUri: geoURI.string,
-                                                description: description,
-                                                zoomLevel: zoomLevel,
-                                                assetType: assetType))
+            self.timeline.sendLocation(body: body,
+                                       geoUri: geoURI.string,
+                                       description: description,
+                                       zoomLevel: zoomLevel,
+                                       assetType: assetType)
+            
+            self.actionsSubject.send(.sentMessage)
+            
+            return .success(())
         }
     }
     
@@ -271,6 +287,8 @@ final class TimelineProxy: TimelineProxyProtocol {
             return .failure(.failedSendingMedia)
         }
         
+        actionsSubject.send(.sentMessage)
+        
         return .success(())
     }
     
@@ -295,6 +313,8 @@ final class TimelineProxy: TimelineProxyProtocol {
         } catch {
             return .failure(.failedSendingMedia)
         }
+        
+        actionsSubject.send(.sentMessage)
         
         return .success(())
     }
@@ -323,6 +343,9 @@ final class TimelineProxy: TimelineProxyProtocol {
             } catch {
                 return .failure(.failedSendingMessage)
             }
+            
+            self.actionsSubject.send(.sentMessage)
+            
             return .success(())
         }
     }
@@ -335,6 +358,9 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.timeline.send(msg: messageContent)
+            
+            self.actionsSubject.send(.sentMessage)
+            
             return .success(())
         }
     }
@@ -376,7 +402,11 @@ final class TimelineProxy: TimelineProxyProtocol {
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                return try .success(self.timeline.createPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind)))
+                try self.timeline.createPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind))
+                
+                self.actionsSubject.send(.sentMessage)
+                
+                return .success(())
             } catch {
                 MXLog.error("Failed creating a poll: \(error)")
                 return .failure(.failedCreatingPoll)

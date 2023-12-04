@@ -33,9 +33,16 @@ enum TimelineProxyError: Error, Equatable {
     case failedSendingPollResponse
 }
 
+enum TimelineProxyAction {
+    case sentMessage
+}
+
 // sourcery: AutoMockable
 protocol TimelineProxyProtocol {
+    var actions: AnyPublisher<TimelineProxyAction, Never> { get }
+    
     var timelineProvider: RoomTimelineProviderProtocol { get }
+    
     func subscribeForUpdates() async
     
     /// Cancels a failed message given its transaction ID from the timeline

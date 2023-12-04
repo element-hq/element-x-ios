@@ -32,12 +32,19 @@ struct RoomProxyMockConfiguration {
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var hasUnreadNotifications = Bool.random()
+    var canUserTriggerRoomNotification = false
+    
+    var timeline = {
+        let mock = TimelineProxyMock()
+        mock.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
+        return mock
+    }()
+    
     var members: [RoomMemberProxyProtocol]?
     var inviter: RoomMemberProxyMock?
     var memberForID: RoomMemberProxyMock = .mockMe
     var ownUserID = "@alice:somewhere.org"
-    var canUserTriggerRoomNotification = false
-    
+
     var invitedMembersCount = 100
     var joinedMembersCount = 50
     var activeMembersCount = 25
@@ -62,6 +69,8 @@ extension RoomProxyMock {
         alternativeAliases = configuration.alternativeAliases
         hasUnreadNotifications = configuration.hasUnreadNotifications
         
+        timeline = configuration.timeline
+        
         invitedMembersCount = configuration.invitedMembersCount
         joinedMembersCount = configuration.joinedMembersCount
         activeMembersCount = configuration.activeMembersCount
@@ -79,7 +88,7 @@ extension RoomProxyMock {
 
         updateMembersClosure = { }
         acceptInvitationClosure = { .success(()) }
-        underlyingStateUpdatesPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
+        underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }
         getMemberUserIDReturnValue = .success(configuration.memberForID)
