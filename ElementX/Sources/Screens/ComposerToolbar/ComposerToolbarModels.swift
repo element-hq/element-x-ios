@@ -32,11 +32,7 @@ enum ComposerToolbarVoiceMessageAction {
 
 enum ComposerToolbarViewModelAction {
     case sendMessage(plain: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions)
-    case displayCameraPicker
-    case displayMediaPicker
-    case displayDocumentPicker
-    case displayLocationPicker
-    case displayNewPollForm
+    case attach(ComposerAttachmentType)
 
     case handlePasteOrDrop(provider: NSItemProvider)
 
@@ -51,17 +47,21 @@ enum ComposerToolbarViewAction {
     case sendMessage
     case cancelReply
     case cancelEdit
-    case displayCameraPicker
-    case displayMediaPicker
-    case displayDocumentPicker
-    case displayLocationPicker
-    case displayNewPollForm
+    case attach(ComposerAttachmentType)
     case handlePasteOrDrop(provider: NSItemProvider)
     case enableTextFormatting
     case composerAction(action: ComposerAction)
     case selectedSuggestion(_ suggestion: SuggestionItem)
     
     case voiceMessage(ComposerToolbarVoiceMessageAction)
+}
+
+enum ComposerAttachmentType {
+    case camera
+    case photoLibrary
+    case file
+    case location
+    case poll
 }
 
 struct ComposerToolbarViewState: BindableState {
@@ -116,14 +116,6 @@ struct ComposerToolbarViewStateBindings {
     var composerExpanded = false
     var formatItems: [FormatItem] = .init()
     var alertInfo: AlertInfo<UUID>?
-
-    var showAttachmentPopover = false {
-        didSet {
-            if showAttachmentPopover {
-                composerFocused = false
-            }
-        }
-    }
 }
 
 /// An item in the toolbar

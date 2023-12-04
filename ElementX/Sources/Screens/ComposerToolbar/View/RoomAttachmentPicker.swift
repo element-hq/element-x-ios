@@ -25,8 +25,10 @@ struct RoomAttachmentPicker: View {
     @State private var sheetContentFrame: CGRect = .zero
     
     var body: some View {
-        Button {
-            context.showAttachmentPopover = true
+        // Use a menu instead of the popover/sheet shown in Figma because overriding the colour scheme
+        // results in a rendering bug on 17.1: https://github.com/vector-im/element-x-ios/issues/2157
+        Menu {
+            menuContent
         } label: {
             CompoundIcon(asset: Asset.Images.composerAttachment, size: .custom(30), relativeTo: .title)
                 .scaledPadding(7, relativeTo: .title)
@@ -34,21 +36,12 @@ struct RoomAttachmentPicker: View {
         .buttonStyle(RoomAttachmentPickerButtonStyle())
         .accessibilityLabel(L10n.actionAddToTimeline)
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
-        .popover(isPresented: $context.showAttachmentPopover) {
-            menuContent
-                .padding(.top, isPresented ? 20 : 0)
-                .readFrame($sheetContentFrame)
-                .presentationDetents([.height(sheetContentFrame.height)])
-                .presentationBackground(.compound.bgCanvasDefault)
-                .presentationDragIndicator(.visible)
-        }
     }
     
     var menuContent: some View {
         VStack(alignment: .leading, spacing: 0.0) {
             Button {
-                context.showAttachmentPopover = false
-                context.send(viewAction: .displayMediaPicker)
+                context.send(viewAction: .attach(.photoLibrary))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceGallery, icon: \.image)
                     .labelStyle(.menuSheet)
@@ -56,8 +49,7 @@ struct RoomAttachmentPicker: View {
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
             
             Button {
-                context.showAttachmentPopover = false
-                context.send(viewAction: .displayDocumentPicker)
+                context.send(viewAction: .attach(.file))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceFiles, iconAsset: Asset.Images.attachment)
                     .labelStyle(.menuSheet)
@@ -65,8 +57,7 @@ struct RoomAttachmentPicker: View {
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
             
             Button {
-                context.showAttachmentPopover = false
-                context.send(viewAction: .displayCameraPicker)
+                context.send(viewAction: .attach(.camera))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceCamera, iconAsset: Asset.Images.takePhoto)
                     .labelStyle(.menuSheet)
@@ -74,8 +65,7 @@ struct RoomAttachmentPicker: View {
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerCamera)
 
             Button {
-                context.showAttachmentPopover = false
-                context.send(viewAction: .displayLocationPicker)
+                context.send(viewAction: .attach(.location))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceLocation, iconAsset: Asset.Images.addLocation)
                     .labelStyle(.menuSheet)
@@ -83,8 +73,7 @@ struct RoomAttachmentPicker: View {
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
 
             Button {
-                context.showAttachmentPopover = false
-                context.send(viewAction: .displayNewPollForm)
+                context.send(viewAction: .attach(.poll))
             } label: {
                 Label(L10n.screenRoomAttachmentSourcePoll, iconAsset: Asset.Images.polls)
                     .labelStyle(.menuSheet)
@@ -93,7 +82,6 @@ struct RoomAttachmentPicker: View {
 
             if ServiceLocator.shared.settings.richTextEditorEnabled {
                 Button {
-                    context.showAttachmentPopover = false
                     context.send(viewAction: .enableTextFormatting)
                 } label: {
                     Label(L10n.screenRoomAttachmentTextFormatting, iconAsset: Asset.Images.textFormat)
@@ -109,10 +97,6 @@ private struct RoomAttachmentPickerButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundStyle(configuration.isPressed ? .compound.bgActionPrimaryPressed : .compound.bgActionPrimaryRest)
-            // Disable animations to fix a bug when the system is in Light mode but the app in Dark mode. For some
-            // reason the animation causes a glitch with sheet's colour scheme when there are presentation detents.
-            // https://github.com/vector-im/element-x-ios/issues/2157
-            .animation(.noAnimation, value: configuration.isPressed)
     }
 }
 
