@@ -35,6 +35,10 @@ enum RoomProxyError: Error, Equatable {
     case failedCheckingPermission
 }
 
+enum RoomProxyAction {
+    case stateUpdate
+}
+
 // sourcery: AutoMockable
 protocol RoomProxyProtocol {
     var id: String { get }
@@ -65,9 +69,7 @@ protocol RoomProxyProtocol {
     
     var activeMembersCount: Int { get }
     
-    /// Publishes room state updates
-    /// The thread on which this publisher sends the output isn't defined.
-    var stateUpdatesPublisher: AnyPublisher<Void, Never> { get }
+    var actions: AnyPublisher<RoomProxyAction, Never> { get }
     
     var timeline: TimelineProxyProtocol { get }
     

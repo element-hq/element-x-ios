@@ -120,7 +120,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     // MARK: - Private
 
     private func setupRoomSubscription() {
-        roomProxy.stateUpdatesPublisher
+        roomProxy.actions
+            .filter { $0 == .stateUpdate }
             .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
                 guard let self else { return }
