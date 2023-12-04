@@ -44,6 +44,8 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         case appObscured
         /// The app is in the background.
         case backgrounded
+        /// The app is returning to the foreground.
+        case launching
         /// The app is presenting biometric unlock to the user.
         case attemptingBiometricUnlock
         /// Biometric unlock has completed but the system UI is still the active input.
@@ -63,6 +65,8 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         case willResignActive
         /// The app is now backgrounded and not visible to the user.
         case didEnterBackground
+        /// The app is in the background and has just been launched by the user.
+        case willEnterForeground
         /// The app is in the foreground and has been given focus.
         case didBecomeActive
         /// Biometric unlock has completed with the following result.
@@ -116,6 +120,12 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
         
+        notificationCenter.publisher(for: UIApplication.willEnterForegroundNotification)
+            .sink { [weak self] _ in
+                self?.stateMachine.tryEvent(.willEnterForeground)
+            }
+            .store(in: &cancellables)
+        
         notificationCenter.publisher(for: UIApplication.didBecomeActiveNotification)
             .sink { [weak self] _ in
                 self?.stateMachine.tryEvent(.didBecomeActive)
@@ -149,7 +159,9 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
                 return .unlocked
             case (_, .didEnterBackground):
                 return .backgrounded
-            case (.backgrounded, .didBecomeActive):
+            case (_, .willEnterForeground):
+                return .launching
+            case (.launching, .didBecomeActive):
                 guard appLockService.computeNeedsUnlock(didBecomeActiveAt: .now) else { return .unlocked }
                 return isBiometricUnlockAvailable ? .attemptingBiometricUnlock : .attemptingPINUnlock
             case (.attemptingBiometricUnlock, .didFinishBiometricUnlock(let result)):
@@ -188,8 +200,10 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             case (_, .backgrounded):
                 appLockService.applicationDidEnterBackground()
                 showPlaceholder() // Double call but just to be safe. Useful at app launch.
+            case (_, .launching):
+                showPlaceholder() // Triple call but necessary after being suspended.
             case (_, .attemptingBiometricUnlock):
-                showPlaceholder() // For the unlock background. Triple call but just to be safe.
+                showPlaceholder() // For the unlock background. Quadruple call but just to be safe.
                 Task { await self.attemptBiometricUnlock() }
             case (.attemptingBiometricUnlock, .dismissingBiometricUnlock):
                 break // Transitional state, no need to do anything.
