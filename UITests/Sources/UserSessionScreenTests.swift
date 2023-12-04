@@ -29,7 +29,7 @@ class UserSessionScreenTests: XCTestCase {
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(.userSessionScreen, step: 2)
 
-        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tap()
+        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].forceTap()
         try await app.assertScreenshot(.userSessionScreen, step: 3)
     }
 
@@ -52,7 +52,7 @@ class UserSessionScreenTests: XCTestCase {
         XCTAssert(app.staticTexts[firstRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
 
-        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tap()
+        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].forceTap()
         try await app.assertScreenshot(.userSessionScreenRTE, step: 1)
 
         app.buttons[A11yIdentifiers.roomScreen.attachmentPickerTextFormatting].tap()

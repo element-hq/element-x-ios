@@ -20,9 +20,6 @@ import WysiwygComposer
 
 struct RoomAttachmentPicker: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
-    @Environment(\.isPresented) var isPresented
-
-    @State private var sheetContentFrame: CGRect = .zero
     
     var body: some View {
         // Use a menu instead of the popover/sheet shown in Figma because overriding the colour scheme
