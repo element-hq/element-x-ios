@@ -99,6 +99,7 @@ struct SecureBackupScreen: View {
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
             case .incomplete:
                 ListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionConfirm),
+                        details: .icon(BadgeView(size: 10)),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
             default:
                 ListRow(label: .plain(title: L10n.commonLoading), details: .isWaiting(true), kind: .label)
