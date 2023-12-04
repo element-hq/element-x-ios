@@ -59,7 +59,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .sink { [weak self] state in
                 guard let self else { return }
                 
-                self.state.showSecureBackupBadge = (state == .unknown || state == .disabled) && appSettings.chatBackupEnabled
+                self.state.showSecureBackupBadge = (state == .incomplete || state == .disabled) && appSettings.chatBackupEnabled
             }
             .store(in: &cancellables)
         
