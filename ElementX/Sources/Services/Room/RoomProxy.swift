@@ -398,7 +398,7 @@ class RoomProxy: RoomProxyProtocol {
     
     func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError> {
         do {
-            return try await .success(room.canUserSendState(userId: userID, stateEvent: .roomMemberEvent))
+            return try await .success(room.canUserSendState(userId: userID, stateEvent: .callMember))
         } catch {
             MXLog.error("Failed checking if the user can trigger room notification with error: \(error)")
             return .failure(.failedCheckingPermission)
