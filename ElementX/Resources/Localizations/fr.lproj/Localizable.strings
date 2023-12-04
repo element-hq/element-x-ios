@@ -1,7 +1,7 @@
 "Notification" = "Notification";
 "a11y_delete" = "Supprimer";
 "a11y_hide_password" = "Masquer le mot de passe";
-"a11y_jump_to_bottom" = "Jump to bottom";
+"a11y_jump_to_bottom" = "Retourner à la fin de la conversation";
 "a11y_notifications_mentions_only" = "Mentions uniquement";
 "a11y_notifications_muted" = "En sourdine";
 "a11y_page_n" = "Page %1$d";
@@ -10,12 +10,12 @@
 "a11y_play" = "Lecture";
 "a11y_poll" = "Sondage";
 "a11y_poll_end" = "Sondage terminé";
-"a11y_react_with" = "React with %1$@";
-"a11y_react_with_other_emojis" = "React with other emojis";
+"a11y_react_with" = "Réagir avec %1$@";
+"a11y_react_with_other_emojis" = "Réagir avec d’autres emojis";
 "a11y_read_receipts_multiple" = "Lu par %1$@ et %2$@";
 "a11y_read_receipts_single" = "Lu par %1$@";
-"a11y_read_receipts_tap_to_show_all" = "Tap to show all";
-"a11y_remove_reaction_with" = "Remove reaction with %1$@";
+"a11y_read_receipts_tap_to_show_all" = "Taper pour voir toute la liste";
+"a11y_remove_reaction_with" = "Supprimer la réaction avec %1$@";
 "a11y_send_files" = "Envoyer des fichiers";
 "a11y_show_password" = "Afficher le mot de passe";
 "a11y_start_call" = "Démarrer un appel";
@@ -38,7 +38,7 @@
 "action_create" = "Créer";
 "action_create_a_room" = "Créer un salon";
 "action_decline" = "Refuser";
-"action_delete_poll" = "Delete Poll";
+"action_delete_poll" = "Supprimer le sondage";
 "action_disable" = "Désactiver";
 "action_done" = "Terminé";
 "action_edit" = "Modifier";
@@ -108,6 +108,7 @@
 "common_dark" = "Sombre";
 "common_decryption_error" = "Erreur de déchiffrement";
 "common_developer_options" = "Options pour les développeurs";
+"common_direct_chat" = "Discussion à deux";
 "common_edited_suffix" = "(modifié)";
 "common_editing" = "Édition";
 "common_emote" = "* %1$@ %2$@";
@@ -238,7 +239,7 @@
 "notification_invitation_action_join" = "Rejoindre";
 "notification_invitation_action_reject" = "Rejeter";
 "notification_invite_body" = "Vous a invité(e) à discuter";
-"notification_mentioned_you_body" = "Mentioned you: %1$@";
+"notification_mentioned_you_body" = "Mentionné(e): %1$@";
 "notification_new_messages" = "Nouveaux messages";
 "notification_reaction_body" = "A réagi avec %1$@";
 "notification_room_action_mark_as_read" = "Marquer comme lu";
@@ -294,7 +295,7 @@
 "screen_advanced_settings_developer_mode" = "Mode développeur";
 "screen_advanced_settings_developer_mode_description" = "Activer pour pouvoir accéder aux fonctionnalités destinées aux développeurs.";
 "screen_advanced_settings_rich_text_editor_description" = "Désactivez l’éditeur de texte enrichi pour saisir manuellement du Markdown.";
-"screen_advanced_settings_view_source_description" = "Enable option to view message source in the timeline.";
+"screen_advanced_settings_view_source_description" = "Activer cette option pour pouvoir voir la source des messages dans la discussion.";
 "screen_analytics_prompt_data_usage" = "Nous n’enregistrerons ni ne profilerons aucune donnée personnelle";
 "screen_analytics_prompt_help_us_improve" = "Partagez des données d’utilisation anonymes pour nous aider à identifier les problèmes.";
 "screen_analytics_prompt_read_terms" = "Vous pouvez lire toutes nos conditions %1$@.";
@@ -361,8 +362,8 @@
 "screen_create_poll_anonymous_desc" = "Afficher les résultats uniquement après la fin du sondage";
 "screen_create_poll_anonymous_headline" = "Masquer les votes";
 "screen_create_poll_answer_hint" = "Option %1$d";
-"screen_create_poll_cancel_confirmation_content_ios" = "Êtes-vous sûr de vouloir supprimer ce sondage ?";
-"screen_create_poll_cancel_confirmation_title_ios" = "Supprimer le sondage";
+"screen_create_poll_cancel_confirmation_content_ios" = "Vos modifications ne seront pas enregistrées";
+"screen_create_poll_cancel_confirmation_title_ios" = "Annuler le sondage";
 "screen_create_poll_question_desc" = "Question ou sujet";
 "screen_create_poll_question_hint" = "Quel est le sujet du sondage ?";
 "screen_create_poll_title" = "Créer un sondage";
@@ -376,9 +377,9 @@
 "screen_create_room_public_option_title" = "Salon public (tout le monde)";
 "screen_create_room_room_name_label" = "Nom du salon";
 "screen_create_room_topic_label" = "Sujet (facultatif)";
-"screen_edit_poll_delete_confirmation" = "Are you sure you want to delete this poll?";
-"screen_edit_poll_delete_confirmation_title" = "Delete Poll";
-"screen_edit_poll_title" = "Edit poll";
+"screen_edit_poll_delete_confirmation" = "Êtes-vous certain de vouloir supprimer ce sondage?";
+"screen_edit_poll_delete_confirmation_title" = "Supprimer le sondage";
+"screen_edit_poll_title" = "Modifier le sondage";
 "screen_edit_profile_display_name" = "Pseudonyme";
 "screen_edit_profile_display_name_placeholder" = "Votre pseudonyme";
 "screen_edit_profile_error" = "Une erreur inconnue s’est produite et les informations n’ont pas pu être modifiées.";
@@ -426,6 +427,7 @@
 "screen_notification_settings_enable_notifications" = "Activer les notifications sur cet appareil";
 "screen_notification_settings_failed_fixing_configuration" = "La configuration n’a pas été corrigée, veuillez réessayer.";
 "screen_notification_settings_group_chats" = "Discussions de groupe";
+"screen_notification_settings_invite_for_me_label" = "Invitations";
 "screen_notification_settings_mentions_only_disclaimer" = "Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons.";
 "screen_notification_settings_mentions_section_title" = "Mentions";
 "screen_notification_settings_mode_all" = "Tous";

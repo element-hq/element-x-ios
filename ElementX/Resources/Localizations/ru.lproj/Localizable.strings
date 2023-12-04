@@ -108,6 +108,7 @@
 "common_dark" = "Темная";
 "common_decryption_error" = "Ошибка расшифровки";
 "common_developer_options" = "Для разработчика";
+"common_direct_chat" = "Прямой чат";
 "common_edited_suffix" = "(изменено)";
 "common_editing" = "Редактирование";
 "common_emote" = "%1$@%2$@";
@@ -128,7 +129,7 @@
 "common_loading" = "Загрузка…";
 "common_message" = "Сообщение";
 "common_message_actions" = "Действия с сообщением";
-"common_message_layout" = "Оформление сообщений";
+"common_message_layout" = "Оформление сообщения";
 "common_message_removed" = "Сообщение удалено";
 "common_modern" = "Современный";
 "common_mute" = "Без звука";
@@ -238,7 +239,7 @@
 "notification_invitation_action_join" = "Присоединиться";
 "notification_invitation_action_reject" = "Отклонить";
 "notification_invite_body" = "Пригласил вас в чат";
-"notification_mentioned_you_body" = "Mentioned you: %1$@";
+"notification_mentioned_you_body" = "Упомянул вас: %1$@";
 "notification_new_messages" = "Новые сообщения";
 "notification_reaction_body" = "Отреагировал на %1$@";
 "notification_room_action_mark_as_read" = "Отметить как прочитанное";
@@ -426,6 +427,7 @@
 "screen_notification_settings_enable_notifications" = "Включить уведомления на данном устройстве";
 "screen_notification_settings_failed_fixing_configuration" = "Конфигурация не была исправлена, попробуйте еще раз.";
 "screen_notification_settings_group_chats" = "Групповые чаты";
+"screen_notification_settings_invite_for_me_label" = "Invitations";
 "screen_notification_settings_mentions_only_disclaimer" = "Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, в некоторых комнатах вы можете не получать уведомления.";
 "screen_notification_settings_mentions_section_title" = "Упоминания";
 "screen_notification_settings_mode_all" = "Все";

@@ -108,6 +108,7 @@
 "common_dark" = "Dark";
 "common_decryption_error" = "Eroare de decriptare";
 "common_developer_options" = "Opțiuni programator";
+"common_direct_chat" = "Direct chat";
 "common_edited_suffix" = "(editat)";
 "common_editing" = "Editare";
 "common_emote" = "* %1$@ %2$@";
@@ -426,6 +427,7 @@
 "screen_notification_settings_enable_notifications" = "Activați notificările pe acest dispozitiv";
 "screen_notification_settings_failed_fixing_configuration" = "Configurația nu a fost corectată, vă rugăm să încercați din nou.";
 "screen_notification_settings_group_chats" = "Discuții de grup";
+"screen_notification_settings_invite_for_me_label" = "Invitations";
 "screen_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms.";
 "screen_notification_settings_mentions_section_title" = "Mențiuni";
 "screen_notification_settings_mode_all" = "Toate";
