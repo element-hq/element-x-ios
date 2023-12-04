@@ -332,8 +332,11 @@ class RoomScreenViewModelTests: XCTestCase {
     func testRetrySend() async throws {
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        
         let timelineProxy = TimelineProxyMock()
-        roomProxyMock.timeline = timelineProxy
+        timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
+        
+        roomProxyMock.underlyingTimeline = timelineProxy
         timelineController.roomProxy = roomProxyMock
 
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
@@ -358,8 +361,11 @@ class RoomScreenViewModelTests: XCTestCase {
     func testRetrySendNoTransactionID() async {
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        
         let timelineProxy = TimelineProxyMock()
-        roomProxyMock.timeline = timelineProxy
+        timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
+        
+        roomProxyMock.underlyingTimeline = timelineProxy
 
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
                                             timelineController: timelineController,
@@ -382,8 +388,11 @@ class RoomScreenViewModelTests: XCTestCase {
     func testCancelSend() async {
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        
         let timelineProxy = TimelineProxyMock()
-        roomProxyMock.timeline = timelineProxy
+        timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
+        
+        roomProxyMock.underlyingTimeline = timelineProxy
         timelineController.roomProxy = roomProxyMock
 
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
@@ -408,8 +417,11 @@ class RoomScreenViewModelTests: XCTestCase {
     func testCancelSendNoTransactionID() async {
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        
         let timelineProxy = TimelineProxyMock()
-        roomProxyMock.timeline = timelineProxy
+        timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
+        
+        roomProxyMock.underlyingTimeline = timelineProxy
 
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
                                             timelineController: timelineController,
@@ -545,11 +557,15 @@ class RoomScreenViewModelTests: XCTestCase {
                                                                                        NotificationCenterMock) {
         let notificationCenter = NotificationCenterMock()
         let roomProxy = RoomProxyMock(with: .init(displayName: ""))
+        
         let timelineProxy = TimelineProxyMock()
+        timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
+        
         roomProxy.timeline = timelineProxy
         let timelineController = MockRoomTimelineController()
         
         timelineProxy.sendReadReceiptForReturnValue = .success(())
+        
         roomProxy.underlyingHasUnreadNotifications = true
         timelineController.timelineItems = items
         timelineController.roomProxy = roomProxy
