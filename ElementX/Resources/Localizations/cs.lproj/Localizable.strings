@@ -108,6 +108,7 @@
 "common_dark" = "Tmavé";
 "common_decryption_error" = "Chyba dešifrování";
 "common_developer_options" = "Možnosti pro vývojáře";
+"common_direct_chat" = "Přímý chat";
 "common_edited_suffix" = "(upraveno)";
 "common_editing" = "Úpravy";
 "common_emote" = "* %1$@ %2$@";
@@ -128,7 +129,7 @@
 "common_loading" = "Načítání…";
 "common_message" = "Zpráva";
 "common_message_actions" = "Akce zprávy";
-"common_message_layout" = "Rozložení zprávy";
+"common_message_layout" = "Zobrazení zpráv";
 "common_message_removed" = "Zpráva byla odstraněna";
 "common_modern" = "Moderní";
 "common_mute" = "Ztlumit";
@@ -238,7 +239,7 @@
 "notification_invitation_action_join" = "Vstoupit";
 "notification_invitation_action_reject" = "Odmítnout";
 "notification_invite_body" = "Vás pozval(a) do chatu";
-"notification_mentioned_you_body" = "Mentioned you: %1$@";
+"notification_mentioned_you_body" = "Zmínili vás: %1$@";
 "notification_new_messages" = "Nové zprávy";
 "notification_reaction_body" = "Reagoval(a) s %1$@";
 "notification_room_action_mark_as_read" = "Označit jako přečtené";
@@ -426,6 +427,7 @@
 "screen_notification_settings_enable_notifications" = "Povolit oznámení na tomto zařízení";
 "screen_notification_settings_failed_fixing_configuration" = "Konfigurace nebyla opravena, zkuste to prosím znovu.";
 "screen_notification_settings_group_chats" = "Skupinové chaty";
+"screen_notification_settings_invite_for_me_label" = "Invitations";
 "screen_notification_settings_mentions_only_disclaimer" = "Váš domovský server tuto možnost v zašifrovaných místnostech nepodporuje, v některých místnostech nemusíte být upozorněni.";
 "screen_notification_settings_mentions_section_title" = "Zmínky";
 "screen_notification_settings_mode_all" = "Vše";
