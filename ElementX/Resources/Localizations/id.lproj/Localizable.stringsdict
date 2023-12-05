@@ -12,10 +12,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d eingegebene Ziffer</string>
 			<key>other</key>
-			<string>%1$d eingegebene Ziffern</string>
+			<string>%1$d digit dimasukkan</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -28,10 +26,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Gelesen von %1$@ und %2$d anderen</string>
 			<key>other</key>
-			<string>Gelesen von %1$@ und %2$d anderen</string>
+			<string>Dibaca oleh %1$@ dan %2$d lainnya</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -44,10 +40,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Mitglied</string>
 			<key>other</key>
-			<string>%1$d Mitglieder</string>
+			<string>%1$d anggota</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -60,10 +54,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d Stimme</string>
 			<key>other</key>
-			<string>%d Stimmen</string>
+			<string>%d suara</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -76,10 +68,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@: %2$d Nachricht</string>
 			<key>other</key>
-			<string>%1$@: %2$d Nachrichten</string>
+			<string>%1$@: %2$d pesan</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -92,10 +82,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d Mitteilung</string>
 			<key>other</key>
-			<string>%d Mitteilungen</string>
+			<string>%d pemberitahuan</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -108,10 +96,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d Einladung</string>
 			<key>other</key>
-			<string>%d Einladungen</string>
+			<string>%d undangan</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -124,10 +110,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d neue Nachricht</string>
 			<key>other</key>
-			<string>%d neue Nachrichten</string>
+			<string>%d pesan baru</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -140,10 +124,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d ungelesene gemeldete Nachricht</string>
 			<key>other</key>
-			<string>%d ungelesene gemeldete Nachrichten</string>
+			<string>%d pesan pemberitahuan yang belum dibaca</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -156,10 +138,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d Raum</string>
 			<key>other</key>
-			<string>%d Räume</string>
+			<string>%d ruangan</string>
 		</dict>
 	</dict>
 	<key>room_timeline_state_changes</key>
@@ -172,10 +152,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Raumänderung</string>
 			<key>other</key>
-			<string>%1$d Raumänderungen</string>
+			<string>%1$d perubahan ruangan</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -188,10 +166,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Du hast %1$d Versuch zu entsperren</string>
 			<key>other</key>
-			<string>Du hast %1$d Versuche zum Entsperren</string>
+			<string>Anda memiliki %1$d percobaan lagi untuk membuka kunci</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -204,10 +180,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Falsche PIN. Du hast %1$d weitere Chance</string>
 			<key>other</key>
-			<string>Falsche PIN. Du hast %1$d weitere Chancen</string>
+			<string>PIN salah. Anda memiliki %1$d percobaan lagi</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -220,10 +194,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Person</string>
 			<key>other</key>
-			<string>%1$d Personen</string>
+			<string>%1$d orang</string>
 		</dict>
 	</dict>
 </dict>

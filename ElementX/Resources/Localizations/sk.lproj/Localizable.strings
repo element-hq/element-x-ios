@@ -108,6 +108,7 @@
 "common_dark" = "Tmavý";
 "common_decryption_error" = "Chyba dešifrovania";
 "common_developer_options" = "Možnosti pre vývojárov";
+"common_direct_chat" = "Priama konverzácia";
 "common_edited_suffix" = "(upravené)";
 "common_editing" = "Upravuje sa";
 "common_emote" = "* %1$@ %2$@";
@@ -238,7 +239,7 @@
 "notification_invitation_action_join" = "Pripojiť sa";
 "notification_invitation_action_reject" = "Zamietnuť";
 "notification_invite_body" = "Vás pozval/a na konverzáciu";
-"notification_mentioned_you_body" = "Mentioned you: %1$@";
+"notification_mentioned_you_body" = "Spomenul/a vás: %1$@";
 "notification_new_messages" = "Nové správy";
 "notification_reaction_body" = "Reagoval/a s %1$@";
 "notification_room_action_mark_as_read" = "Označiť ako prečítané";
@@ -294,7 +295,7 @@
 "screen_advanced_settings_developer_mode" = "Vývojársky režim";
 "screen_advanced_settings_developer_mode_description" = "Umožniť prístup k možnostiam a funkciám pre vývojárov.";
 "screen_advanced_settings_rich_text_editor_description" = "Vypnite rozšírený textový editor na ručné písanie Markdown.";
-"screen_advanced_settings_view_source_description" = "Enable option to view message source in the timeline.";
+"screen_advanced_settings_view_source_description" = "Povoliť možnosť zobrazenia zdroja správy na časovej osi.";
 "screen_analytics_prompt_data_usage" = "Nezaznamenávame ani neprofilujeme žiadne osobné údaje";
 "screen_analytics_prompt_help_us_improve" = "Zdieľajte anonymné údaje o používaní, aby sme mohli identifikovať problémy.";
 "screen_analytics_prompt_read_terms" = "Môžete si prečítať všetky naše podmienky %1$@.";
@@ -426,6 +427,7 @@
 "screen_notification_settings_enable_notifications" = "Povoliť oznámenia na tomto zariadení";
 "screen_notification_settings_failed_fixing_configuration" = "Konfigurácia nebola opravená, skúste to prosím znova.";
 "screen_notification_settings_group_chats" = "Skupinové rozhovory";
+"screen_notification_settings_invite_for_me_label" = "Invitations";
 "screen_notification_settings_mentions_only_disclaimer" = "Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v niektorých miestnostiach nemusíte dostať upozornenie.";
 "screen_notification_settings_mentions_section_title" = "Zmienky";
 "screen_notification_settings_mode_all" = "Všetky";
