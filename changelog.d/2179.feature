@@ -1,1 +1,0 @@
-Open direct chat directly from the room member details screen

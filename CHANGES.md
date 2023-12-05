@@ -1,3 +1,39 @@
+## Changes in 1.4.3 (2023-12-05)
+
+✨ Features
+
+- Open direct chat directly from the room member details screen ([#2179](https://github.com/vector-im/element-x-ios/issues/2179))
+
+🙌 Improvements
+
+- Automatically pop the invites list when acting on the last one. Coming back from the room will go directly back to the room list ([#2165](https://github.com/vector-im/element-x-ios/pull/2165))
+- Use the Compound List component on PollFormScreen. ([#2183](https://github.com/vector-im/element-x-ios/pull/2183))
+- Show a loading indicator while searching for people to invite ([#1950](https://github.com/vector-im/element-x-ios/issues/1950))
+- Mentioned notifications have a new less verbose copy. ([#2139](https://github.com/vector-im/element-x-ios/issues/2139))
+- Hide pin code in lock screen setup mode ([#2145](https://github.com/vector-im/element-x-ios/issues/2145))
+- Automatically scroll the timeline to the bottom when sending a message ([#2147](https://github.com/vector-im/element-x-ios/issues/2147))
+
+🐛 Bugfixes
+
+- Fixed a crash that happened when leaving a room through the details screen. ([#2160](https://github.com/vector-im/element-x-ios/pull/2160))
+- Fix room avatars not showing up on the message forwarding screen ([#2168](https://github.com/vector-im/element-x-ios/pull/2168))
+- Fixed an issue where the text cursor was not positioned correctly. ([#1674](https://github.com/vector-im/element-x-ios/issues/1674))
+- Improved the wrapping of the text for File and Audio timeline items. ([#1810](https://github.com/vector-im/element-x-ios/issues/1810))
+- Lists at the beginning of messages were displayed incorrectly. ([#1915](https://github.com/vector-im/element-x-ios/issues/1915))
+- Remove rooms from the room list after leaving them ([#2005](https://github.com/vector-im/element-x-ios/issues/2005))
+- Fixed some issues with voice messages when sent from a bridge. ([#2006](https://github.com/vector-im/element-x-ios/issues/2006))
+- Fix the touch area size for the voice message button. ([#2038](https://github.com/vector-im/element-x-ios/issues/2038))
+- Fix a bug where cancelling Face ID unlock would loop back round and present Face ID again. ([#2134](https://github.com/vector-im/element-x-ios/issues/2134))
+- Fixed a bug that made iOS 17 render avatars sideways in notifications. ([#2136](https://github.com/vector-im/element-x-ios/issues/2136))
+- Fix a crash when blocking/unblocking a user from the DM details screen. ([#2140](https://github.com/vector-im/element-x-ios/issues/2140))
+- If an invite notification has already been accepted tapping on it will bring you to the invite screen. ([#2150](https://github.com/vector-im/element-x-ios/issues/2150))
+- Fix the room attachment popover label colour when using the in-app appearance override. ([#2157](https://github.com/vector-im/element-x-ios/issues/2157))
+- Fixed a crash when sending voice messages on some Apple devices. ([#2184](https://github.com/vector-im/element-x-ios/issues/2184))
+
+🧱 Build
+
+- Adopt Xcode 15 (sticking with iOS 16 simulator on CI). ([#2007](https://github.com/vector-im/element-x-ios/pull/2007))
+
 ## Changes in 1.4.2 (2023-11-21)
 
 ✨ Features
