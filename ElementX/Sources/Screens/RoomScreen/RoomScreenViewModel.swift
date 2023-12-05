@@ -180,16 +180,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                          mode: mode,
                                          intentionalMentions: intentionalMentions)
             }
-        case .displayCameraPicker:
-            actionsSubject.send(.displayCameraPicker)
-        case .displayMediaPicker:
-            actionsSubject.send(.displayMediaPicker)
-        case .displayDocumentPicker:
-            actionsSubject.send(.displayDocumentPicker)
-        case .displayLocationPicker:
-            actionsSubject.send(.displayLocationPicker)
-        case .displayNewPollForm:
-            actionsSubject.send(.displayPollForm(mode: .new))
+        case .attach(let attachment):
+            attach(attachment)
         case .handlePasteOrDrop(let provider):
             roomScreenInteractionHandler.handlePasteOrDrop(provider)
         case .composerModeChanged(mode: let mode):
@@ -202,6 +194,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    private func attach(_ attachment: ComposerAttachmentType) {
+        switch attachment {
+        case .camera:
+            actionsSubject.send(.displayCameraPicker)
+        case .photoLibrary:
+            actionsSubject.send(.displayMediaPicker)
+        case .file:
+            actionsSubject.send(.displayDocumentPicker)
+        case .location:
+            actionsSubject.send(.displayLocationPicker)
+        case .poll:
+            actionsSubject.send(.displayPollForm(mode: .new))
+        }
+    }
     
     private func processPollAction(_ action: RoomScreenViewPollAction) {
         switch action {

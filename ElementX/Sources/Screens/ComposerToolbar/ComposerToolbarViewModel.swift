@@ -120,16 +120,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .cancelEdit:
             set(mode: .default)
             set(text: "")
-        case .displayCameraPicker:
-            actionsSubject.send(.displayCameraPicker)
-        case .displayMediaPicker:
-            actionsSubject.send(.displayMediaPicker)
-        case .displayDocumentPicker:
-            actionsSubject.send(.displayDocumentPicker)
-        case .displayLocationPicker:
-            actionsSubject.send(.displayLocationPicker)
-        case .displayNewPollForm:
-            actionsSubject.send(.displayNewPollForm)
+        case .attach(let attachment):
+            state.bindings.composerFocused = false
+            actionsSubject.send(.attach(attachment))
         case .handlePasteOrDrop(let provider):
             actionsSubject.send(.handlePasteOrDrop(provider: provider))
         case .enableTextFormatting:
