@@ -25,7 +25,7 @@ struct TimelineItemDebugView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 8) {
-                    TimelineItemInfoDisclosureGroup(title: "Model", text: info.model, isInitiallyExpanded: true)
+                    TimelineItemInfoDisclosureGroup(title: "Model", text: info.model)
                     
                     if let originalJSONInfo = info.originalJSON {
                         TimelineItemInfoDisclosureGroup(title: "Original JSON", text: originalJSONInfo)
@@ -58,16 +58,10 @@ struct TimelineItemDebugView: View {
     // MARK: - Private
     
     private struct TimelineItemInfoDisclosureGroup: View {
-        @State private var isExpanded: Bool
+        @State private var isExpanded = true
         
         let title: String
         let text: String
-        
-        init(title: String, text: String, isInitiallyExpanded: Bool = false) {
-            self.title = title
-            self.text = text
-            isExpanded = isInitiallyExpanded
-        }
         
         var body: some View {
             VStack(spacing: 0.0) {

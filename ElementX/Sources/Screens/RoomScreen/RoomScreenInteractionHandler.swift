@@ -228,7 +228,7 @@ class RoomScreenInteractionHandler {
             actionsSubject.send(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
             let debugInfo = timelineController.debugInfo(for: eventTimelineItem.id)
-            MXLog.info(debugInfo)
+            MXLog.info("Showing debug info for \(eventTimelineItem.id)")
             actionsSubject.send(.showDebugInfo(debugInfo))
         case .retryDecryption(let sessionID):
             Task {
