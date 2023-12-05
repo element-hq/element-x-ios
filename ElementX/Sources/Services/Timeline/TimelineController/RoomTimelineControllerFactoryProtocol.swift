@@ -21,4 +21,8 @@ protocol RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                      secureBackupController: SecureBackupControllerProtocol) -> RoomTimelineControllerProtocol
+    
+    func buildRoomPollsHistoryTimelineController(roomProxy: RoomProxyProtocol,
+                                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                 secureBackupController: SecureBackupControllerProtocol) -> RoomPollsHistoryTimelineControllerProtocol
 }

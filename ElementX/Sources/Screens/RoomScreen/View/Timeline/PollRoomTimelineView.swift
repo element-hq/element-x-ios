@@ -20,136 +20,35 @@ struct PollRoomTimelineView: View {
     let timelineItem: PollRoomTimelineItem
     @Environment(\.timelineStyle) var timelineStyle
     @EnvironmentObject private var context: RoomScreenViewModel.Context
-
+    
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
-
+    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            VStack(alignment: .leading, spacing: 16) {
-                questionView
-                optionsView
-                summaryView
-                toolbarView
+            PollView(poll: poll, editable: timelineItem.isEditable) { action in
+                switch action {
+                case .selectOption(let optionID):
+                    guard let eventID, let option = poll.options.first(where: { $0.id == optionID }), !option.isSelected else { return }
+                    context.send(viewAction: .poll(.selectOption(pollStartID: eventID, optionID: option.id)))
+                case .edit:
+                    guard let eventID else { return }
+                    context.send(viewAction: .poll(.edit(pollStartID: eventID, poll: poll)))
+                case .end:
+                    guard let eventID else { return }
+                    context.send(viewAction: .poll(.end(pollStartID: eventID)))
+                }
             }
-            .frame(maxWidth: 450)
-        }
-    }
-
-    // MARK: - Private
-
-    private var poll: Poll {
-        timelineItem.poll
-    }
-
-    private var eventID: String? {
-        timelineItem.id.eventID
-    }
-
-    private var questionView: some View {
-        HStack(alignment: .top, spacing: 12) {
-            let asset = poll.hasEnded ? Asset.Images.pollsEnd : Asset.Images.polls
-
-            Image(asset.name)
-                .resizable()
-                .scaledFrame(size: 22)
-                .accessibilityHidden(true)
-
-            Text(poll.question)
-                .multilineTextAlignment(.leading)
-                .font(.compound.bodyLGSemibold)
-        }
-    }
-
-    private var optionsView: some View {
-        ForEach(poll.options, id: \.id) { option in
-            Button {
-                guard let eventID, !option.isSelected else { return }
-                context.send(viewAction: .poll(.selectOption(pollStartID: eventID, optionID: option.id)))
-                feedbackGenerator.impactOccurred()
-            } label: {
-                PollOptionView(pollOption: option,
-                               showVotes: showVotes,
-                               isFinalResult: poll.hasEnded)
-                    .foregroundColor(progressBarColor(for: option))
-            }
-            .disabled(poll.hasEnded || eventID == nil)
-        }
-    }
-
-    @ViewBuilder
-    private var summaryView: some View {
-        if let summaryText = poll.summaryText {
-            Text(summaryText)
-                .font(.compound.bodySM)
-                .scaledPadding(.leading, showVotes ? 0 : 32)
-                .foregroundColor(.compound.textSecondary)
-                .frame(maxWidth: .infinity, alignment: showVotes ? .trailing : .leading)
-        }
-    }
-
-    @ViewBuilder
-    private var toolbarView: some View {
-        if !poll.hasEnded, poll.createdByAccountOwner {
-            Button {
-                toolbarAction()
-            } label: {
-                Text(timelineItem.isEditable ? L10n.actionEditPoll : L10n.actionEndPoll)
-                    .lineLimit(2, reservesSpace: false)
-                    .font(.compound.bodyLGSemibold)
-                    .foregroundColor(.compound.textOnSolidPrimary)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 10)
-                    .frame(maxWidth: .infinity)
-                    .background {
-                        Capsule()
-                            .foregroundColor(.compound.bgActionPrimaryRest)
-                    }
-            }
-            .padding(.top, 8)
         }
     }
     
-    private func toolbarAction() {
-        guard let eventID else {
-            return
-        }
-        
-        if timelineItem.isEditable {
-            context.send(viewAction: .poll(.edit(pollStartID: eventID, poll: poll)))
-        } else {
-            context.send(viewAction: .poll(.end(pollStartID: eventID)))
-        }
+    // MARK: - Private
+    
+    private var poll: Poll {
+        timelineItem.poll
     }
-
-    private func progressBarColor(for option: Poll.Option) -> Color {
-        if poll.hasEnded {
-            return option.isWinning ? .compound.textActionAccent : .compound.textDisabled
-        } else {
-            return .compound.textPrimary
-        }
-    }
-
-    private var showVotes: Bool {
-        poll.hasEnded || poll.kind == .disclosed
-    }
-}
-
-private extension Poll {
-    var summaryText: String? {
-        guard !hasEnded else {
-            return options.first.map {
-                L10n.commonPollTotalVotes($0.allVotes)
-            }
-        }
-
-        switch kind {
-        case .disclosed:
-            return options.first.map {
-                L10n.commonPollTotalVotes($0.allVotes)
-            }
-        case .undisclosed:
-            return L10n.commonPollUndisclosedText
-        }
+    
+    private var eventID: String? {
+        timelineItem.id.eventID
     }
 }
 

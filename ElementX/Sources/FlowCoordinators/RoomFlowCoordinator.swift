@@ -206,17 +206,22 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .mapNavigator(roomID: roomID)
             case (.mapNavigator(let roomID), .dismissMapNavigator):
                 return .room(roomID: roomID)
-
+            
             case (.room(let roomID), .presentPollForm):
                 return .pollForm(roomID: roomID)
             case (.pollForm(let roomID), .dismissPollForm):
                 return .room(roomID: roomID)
-                
-            case (.roomDetails(let roomID, let isRoot), .presentPollsHistory):
-                return .pollsHistory(roomID: roomID, isRoot: isRoot)
-            case (.pollsHistory(let roomID, let isRoot), .dismissPollsHistory):
-                return .roomDetails(roomID: roomID, isRoot: isRoot)
-
+            
+            case (.roomDetails(let roomID, _), .presentPollsHistory):
+                return .pollsHistory(roomID: roomID)
+            case (.pollsHistory(let roomID), .dismissPollsHistory):
+                return .roomDetails(roomID: roomID, isRoot: false)
+            
+            case (.pollsHistory(let roomID), .presentPollForm):
+                return .pollsHistoryForm(roomID: roomID)
+            case (.pollsHistoryForm(let roomID), .dismissPollForm):
+                return .pollsHistory(roomID: roomID)
+            
             default:
                 return nil
             }
@@ -325,11 +330,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.pollForm, .dismissPollForm, .room):
                 break
 
-            case (.roomDetails, .presentPollsHistory, .pollsHistory):
-                presentPollsHistory()
+            case (.roomDetails(let roomID, _), .presentPollsHistory, .pollsHistory):
+                presentPollsHistory(roomID: roomID)
             case (.pollsHistory, .dismissPollsHistory, .roomDetails):
                 break
-                
+        
+            case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
+                presentPollForm(mode: mode)
+            case (.pollsHistoryForm, .dismissPollForm, .pollsHistory):
+                break
+            
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -856,8 +866,60 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentPollsHistory() {
-        // TODO: present PollsHistoryScreen
+    private func presentPollsHistory(roomID: String) {
+        Task {
+            await asyncPresentRoomPollsHistory(roomID: roomID)
+        }
+    }
+    
+    private func asyncPresentRoomPollsHistory(roomID: String) async {
+        // If any sheets are presented dismiss them, rely on their dismissal callbacks to transition the state machine
+        // through the correct states before presenting the room
+        navigationStackCoordinator.setSheetCoordinator(nil)
+        
+        let roomProxy: RoomProxyProtocol
+        
+        guard let proxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            MXLog.error("Invalid room identifier: \(roomID)")
+            stateMachine.tryEvent(.dismissPollsHistory)
+            return
+        }
+        
+        roomProxy = proxy
+        
+        await roomProxy.subscribeForUpdates()
+                
+        let userID = userSession.clientProxy.userID
+        
+        let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
+                                                          mediaProvider: userSession.mediaProvider,
+                                                          attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL,
+                                                                                                           mentionBuilder: MentionBuilder()),
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
+                                                          appSettings: appSettings)
+                
+        let roomPollsHistoryTimelineController = roomTimelineControllerFactory.buildRoomPollsHistoryTimelineController(roomProxy: roomProxy,
+                                                                                                                       timelineItemFactory: timelineItemFactory,
+                                                                                                                       secureBackupController: userSession.clientProxy.secureBackupController)
+                
+        let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: PollInteractionHandler(analyticsService: analytics, roomProxy: roomProxy),
+                                                                     roomPollsHistoryTimelineController: roomPollsHistoryTimelineController,
+                                                                     appSettings: appSettings)
+        let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .editPoll(let pollStartID, let poll):
+                    stateMachine.tryEvent(.presentPollForm(mode: .edit(eventID: pollStartID, poll: poll)))
+                }
+            }
+            .store(in: &cancellables)
+
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissPollsHistory)
+        }
     }
     
     private func presentRoomMemberDetails(member: RoomMemberProxyProtocol) {
@@ -1121,7 +1183,8 @@ private extension RoomFlowCoordinator {
         case messageForwarding(roomID: String, itemID: TimelineItemIdentifier)
         case reportContent(roomID: String, itemID: TimelineItemIdentifier, senderID: String)
         case pollForm(roomID: String)
-        case pollsHistory(roomID: String, isRoot: Bool)
+        case pollsHistory(roomID: String)
+        case pollsHistoryForm(roomID: String)
     }
     
     struct EventUserInfo {

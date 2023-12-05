@@ -24,4 +24,12 @@ struct MockRoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol 
         timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
         return timelineController
     }
+    
+    func buildRoomPollsHistoryTimelineController(roomProxy: RoomProxyProtocol,
+                                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                 secureBackupController: SecureBackupControllerProtocol) -> RoomPollsHistoryTimelineControllerProtocol {
+        let timelineController = MockRoomPollsHistoryTimelineController()
+        timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
+        return timelineController
+    }
 }

@@ -25,4 +25,13 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                appSettings: ServiceLocator.shared.settings,
                                secureBackupController: secureBackupController)
     }
+    
+    func buildRoomPollsHistoryTimelineController(roomProxy: RoomProxyProtocol,
+                                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                 secureBackupController: SecureBackupControllerProtocol) -> RoomPollsHistoryTimelineControllerProtocol {
+        RoomPollsHistoryTimelineController(roomProxy: roomProxy,
+                                           timelineItemFactory: timelineItemFactory,
+                                           appSettings: ServiceLocator.shared.settings,
+                                           secureBackupController: secureBackupController)
+    }
 }

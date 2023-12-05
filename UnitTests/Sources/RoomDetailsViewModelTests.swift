@@ -37,7 +37,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: notificationSettingsProxyMock)
+                                               notificationSettingsProxy: notificationSettingsProxyMock,
+                                               appSettings: AppSettings())
         
         AppSettings.reset()
     }
@@ -49,7 +50,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         let deferred = deferFulfillment(context.$viewState) { state in
             state.bindings.leaveRoomAlertItem != nil
         }
@@ -68,7 +70,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         let deferred = deferFulfillment(context.$viewState) { state in
             state.bindings.leaveRoomAlertItem != nil
         }
@@ -130,7 +133,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.dmRecipient != nil
@@ -154,7 +158,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.dmRecipient != nil
@@ -187,7 +192,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.dmRecipient != nil
@@ -221,7 +227,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.dmRecipient != nil
@@ -254,7 +261,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.dmRecipient != nil
@@ -287,7 +295,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -301,7 +310,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -332,7 +342,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -350,7 +361,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -368,7 +380,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -386,7 +399,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -403,7 +417,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               appSettings: AppSettings())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -418,7 +433,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               notificationSettingsProxy: notificationSettingsProxyMock)
+                                               notificationSettingsProxy: notificationSettingsProxyMock,
+                                               appSettings: AppSettings())
         
         var deferred = deferFulfillment(context.$viewState) { state in
             state.notificationSettingsState.isError

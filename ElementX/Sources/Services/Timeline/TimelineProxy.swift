@@ -134,6 +134,18 @@ final class TimelineProxy: TimelineProxyProtocol {
         try? timeline.getTimelineEventContentByEventId(eventId: eventID)
     }
     
+    func paginateBackwards(requestSize: UInt) async -> Result<Void, TimelineProxyError> {
+        do {
+            try await Task.dispatch(on: .global()) {
+                try self.timeline.paginateBackwards(opts: .simpleRequest(eventLimit: UInt16(requestSize), waitForToken: true))
+            }
+            
+            return .success(())
+        } catch {
+            return .failure(.failedPaginatingBackwards)
+        }
+    }
+    
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError> {
         do {
             try await Task.dispatch(on: .global()) {

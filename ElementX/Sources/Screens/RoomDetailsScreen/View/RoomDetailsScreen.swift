@@ -164,7 +164,7 @@ struct RoomDetailsScreen: View {
                             context.send(viewAction: .processTapPolls)
                         })
                 // TODO: .accessibilityIdentifier
-//                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
+//                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
             }
         }
     }
