@@ -34,9 +34,10 @@ struct StartChatScreen: View {
         .navigationTitle(L10n.actionStartChat)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-        .disableInteractiveDismissOnSearch()
-        .dismissSearchOnDisappear()
-        .searchController(query: $context.searchQuery, placeholder: L10n.commonSearchForSomeone, automaticallyShowsCancelButton: false)
+        .searchController(query: $context.searchQuery,
+                          placeholder: L10n.commonSearchForSomeone,
+                          automaticallyShowsCancelButton: false,
+                          disablesInteractiveDismiss: true)
         .compoundSearchField()
         .alert(item: $context.alertInfo)
     }

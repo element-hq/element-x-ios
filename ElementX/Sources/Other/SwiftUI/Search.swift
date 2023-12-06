@@ -18,18 +18,6 @@ import SwiftUI
 import SwiftUIIntrospect
 
 extension View {
-    /// Disable the interactive dismiss while the search is on.
-    /// - Note: the modifier needs to be called before the `searchable` modifier to work properly
-    func disableInteractiveDismissOnSearch() -> some View {
-        modifier(InteractiveDismissSearchModifier())
-    }
-    
-    /// Dismiss search when the view is disappearing. It helps to restore correct state on pop into a NavigationStack
-    /// - Note: the modifier needs to be called before the `searchable` modifier to work properly
-    func dismissSearchOnDisappear() -> some View {
-        modifier(DismissSearchOnDisappear())
-    }
-    
     /// A custom replacement for searchable that allows more precise configuration of the underlying search controller.
     ///
     /// Whilst we originally used introspect to configure parameters such as preventing the navigation bar from hiding
@@ -40,37 +28,46 @@ extension View {
     ///   - placeholder: The string to display when there’s no other text in the text field.
     ///   - hidesNavigationBarDuringPresentation: A Boolean indicating whether to hide the navigation bar when searching.
     ///   - automaticallyShowsCancelButton: A Boolean indicating whether the search controller manages the visibility of the search bar’s cancel button.
+    ///   - disablesInteractiveDismiss: Whether or not interactive dismiss is disabled whilst the user is searching.
     func searchController(query: Binding<String>,
                           placeholder: String? = nil,
                           hidesNavigationBarDuringPresentation: Bool = false,
-                          automaticallyShowsCancelButton: Bool = true) -> some View {
-        background {
-            SearchController(searchQuery: query,
-                             placeholder: placeholder,
-                             hidesNavigationBarDuringPresentation: hidesNavigationBarDuringPresentation,
-                             automaticallyShowsCancelButton: automaticallyShowsCancelButton)
-        }
+                          automaticallyShowsCancelButton: Bool = true,
+                          disablesInteractiveDismiss: Bool = false) -> some View {
+        modifier(SearchControllerModifier(searchQuery: query,
+                                          placeholder: placeholder,
+                                          hidesNavigationBarDuringPresentation: hidesNavigationBarDuringPresentation,
+                                          automaticallyShowsCancelButton: automaticallyShowsCancelButton,
+                                          disablesInteractiveDismiss: disablesInteractiveDismiss))
     }
 }
 
-private struct InteractiveDismissSearchModifier: ViewModifier {
-    @Environment(\.isSearching) private var isSearching
+private struct SearchControllerModifier: ViewModifier {
+    @Binding var searchQuery: String
+    
+    let placeholder: String?
+    let hidesNavigationBarDuringPresentation: Bool
+    let automaticallyShowsCancelButton: Bool
+    let disablesInteractiveDismiss: Bool
+    
+    /// Whether or not the user is currently searching. When ``automaticallyShowsCancelButton``
+    /// is `false`, checking if this value is `false` is pretty much meaningless.
+    @State private var isSearching = false
     
     func body(content: Content) -> some View {
         content
-            .interactiveDismissDisabled(isSearching)
-    }
-}
-
-private struct DismissSearchOnDisappear: ViewModifier {
-    @Environment(\.isSearching) private var isSearching
-    @Environment(\.dismissSearch) private var dismissSearch
-    
-    func body(content: Content) -> some View {
-        content
+            .interactiveDismissDisabled(!searchQuery.isEmpty && disablesInteractiveDismiss)
+            .background {
+                SearchController(searchQuery: $searchQuery,
+                                 placeholder: placeholder,
+                                 hidesNavigationBarDuringPresentation: hidesNavigationBarDuringPresentation,
+                                 automaticallyShowsCancelButton: automaticallyShowsCancelButton,
+                                 isSearching: $isSearching)
+            }
             .onDisappear {
+                // Dismiss search when the view disappears to tidy up appearance when popping back to the view.
                 if isSearching {
-                    dismissSearch()
+                    isSearching = false
                 }
             }
     }
@@ -84,6 +81,8 @@ private struct SearchController: UIViewControllerRepresentable {
     var automaticallyShowsCancelButton = true
     var hidesSearchBarWhenScrolling = false
     
+    @Binding var isSearching: Bool
+    
     func makeUIViewController(context: Context) -> SearchInjectionViewController {
         SearchInjectionViewController(searchController: context.coordinator.searchController,
                                       hidesSearchBarWhenScrolling: hidesSearchBarWhenScrolling)
@@ -95,6 +94,12 @@ private struct SearchController: UIViewControllerRepresentable {
         searchController.hidesNavigationBarDuringPresentation = hidesNavigationBarDuringPresentation
         searchController.automaticallyShowsCancelButton = automaticallyShowsCancelButton
         
+        if searchController.isActive, !isSearching {
+            DispatchQueue.main.async { searchController.isActive = isSearching }
+        } else if !searchController.isActive, isSearching {
+            DispatchQueue.main.async { searchController.isActive = true }
+        }
+        
         if let placeholder { // Blindly setting nil clears the default placeholder.
             searchController.searchBar.placeholder = placeholder
         }
@@ -103,15 +108,17 @@ private struct SearchController: UIViewControllerRepresentable {
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(searchQuery: $searchQuery)
+        Coordinator(searchQuery: $searchQuery, isSearching: $isSearching)
     }
     
     class Coordinator: NSObject, UISearchBarDelegate, UISearchControllerDelegate {
         let searchController = UISearchController()
         private let searchQuery: Binding<String>
+        private let isSearching: Binding<Bool>
         
-        init(searchQuery: Binding<String>) {
+        init(searchQuery: Binding<String>, isSearching: Binding<Bool>) {
             self.searchQuery = searchQuery
+            self.isSearching = isSearching
             
             super.init()
             
@@ -123,9 +130,17 @@ private struct SearchController: UIViewControllerRepresentable {
             searchQuery.wrappedValue = searchText
         }
         
+        func didPresentSearchController(_ searchController: UISearchController) {
+            isSearching.wrappedValue = true
+        }
+        
         func willDismissSearchController(_ searchController: UISearchController) {
             // Clear any search results when the user taps cancel.
             searchQuery.wrappedValue = ""
+        }
+        
+        func didDismissSearchController(_ searchController: UISearchController) {
+            isSearching.wrappedValue = false
         }
     }
     
@@ -136,7 +151,10 @@ private struct SearchController: UIViewControllerRepresentable {
         init(searchController: UISearchController, hidesSearchBarWhenScrolling: Bool) {
             self.searchController = searchController
             self.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
+            
             super.init(nibName: nil, bundle: nil)
+            
+            view.alpha = 0
         }
         
         @available(*, unavailable)

@@ -31,9 +31,9 @@ struct InviteUsersScreen: View {
             .navigationTitle(L10n.screenCreateRoomAddPeopleTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
-            .disableInteractiveDismissOnSearch()
-            .dismissSearchOnDisappear()
-            .searchController(query: $context.searchQuery, automaticallyShowsCancelButton: false)
+            .searchController(query: $context.searchQuery,
+                              automaticallyShowsCancelButton: false,
+                              disablesInteractiveDismiss: true)
             .compoundSearchField()
             .alert(item: $context.alertInfo)
     }
