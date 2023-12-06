@@ -21,6 +21,7 @@ typealias SecureBackupKeyBackupScreenViewModelType = StateStoreViewModel<SecureB
 
 class SecureBackupKeyBackupScreenViewModel: SecureBackupKeyBackupScreenViewModelType, SecureBackupKeyBackupScreenViewModelProtocol {
     private let secureBackupController: SecureBackupControllerProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol?
     
     private var actionsSubject: PassthroughSubject<SecureBackupKeyBackupScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<SecureBackupKeyBackupScreenViewModelAction, Never> {
@@ -29,18 +30,18 @@ class SecureBackupKeyBackupScreenViewModel: SecureBackupKeyBackupScreenViewModel
 
     init(secureBackupController: SecureBackupControllerProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
         self.secureBackupController = secureBackupController
+        self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(mode: secureBackupController.keyBackupState.value.viewMode))
         
         secureBackupController.keyBackupState
             .receive(on: DispatchQueue.main)
-            .sink { [weak userIndicatorController] state in
-                let loadingIndicatorIdentifier = "SecureBackupKeyBackupScreenLoading"
+            .sink { [weak self] state in
                 switch state {
                 case .disabling, .enabling, .unknown:
-                    userIndicatorController?.submitIndicator(.init(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+                    self?.showLoadingIndicator()
                 default:
-                    userIndicatorController?.retractIndicatorWithId(loadingIndicatorIdentifier)
+                    self?.dismissLoadingIndicator()
                 }
             }
             .store(in: &cancellables)
@@ -80,7 +81,19 @@ class SecureBackupKeyBackupScreenViewModel: SecureBackupKeyBackupScreenViewModel
                 MXLog.error("Failed disabling key backup with error: \(error)")
                 state.bindings.alertInfo = .init(id: .init())
             }
+            
+            dismissLoadingIndicator()
         }
+    }
+    
+    private static let loadingIndicatorIdentifier = "SecureBackupKeyBackupScreenLoading"
+    
+    private func showLoadingIndicator() {
+        userIndicatorController?.submitIndicator(.init(id: Self.loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+    }
+    
+    private func dismissLoadingIndicator() {
+        userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }
 
