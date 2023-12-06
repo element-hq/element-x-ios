@@ -44,6 +44,7 @@ struct NotificationSettingsScreenViewStateBindings {
     var enableNotifications = false
     var roomMentionsEnabled = false
     var callsEnabled = false
+    var invitationsEnabled = false
     var alertInfo: AlertInfo<NotificationSettingsScreenErrorType>?
 }
 
@@ -52,6 +53,7 @@ struct NotificationSettingsScreenSettings {
     let directChatsMode: RoomNotificationModeProxy
     let roomMentionsEnabled: Bool?
     let callsEnabled: Bool?
+    let invitationsEnabled: Bool?
     // Old clients were having specific settings for encrypted and unencrypted rooms,
     // so it's possible for `group chats` and `direct chats` settings to be inconsistent (e.g. encrypted `direct chats` can have a different mode that unencrypted `direct chats`)
     let inconsistentSettings: [NotificationSettingsScreenInvalidSetting]
@@ -93,6 +95,7 @@ enum NotificationSettingsScreenViewAction {
     case directChatsTapped
     case roomMentionChanged
     case callsChanged
+    case invitationsChanged
     case close
     case fixConfigurationMismatchTapped
 }

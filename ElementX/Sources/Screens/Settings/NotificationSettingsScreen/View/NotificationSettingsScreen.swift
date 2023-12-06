@@ -37,6 +37,9 @@ struct NotificationSettingsScreen: View {
                     if context.viewState.showCallsSettings, context.viewState.settings?.callsEnabled != nil {
                         callsSection
                     }
+                    if context.viewState.settings?.invitationsEnabled != nil {
+                        additionalSettingsSection
+                    }
                 }
             }
         }
@@ -153,6 +156,21 @@ struct NotificationSettingsScreen: View {
         }
     }
     
+    private var additionalSettingsSection: some View {
+        Section {
+            ListRow(label: .plain(title: L10n.screenNotificationSettingsInviteForMeLabel),
+                    kind: .toggle($context.invitationsEnabled))
+                .disabled(context.viewState.settings?.invitationsEnabled == nil)
+                .allowsHitTesting(!context.viewState.applyingChange)
+                .onChange(of: context.invitationsEnabled) { _ in
+                    context.send(viewAction: .invitationsChanged)
+                }
+        } header: {
+            Text(L10n.screenNotificationSettingsAdditionalSettingsSectionTitle)
+                .compoundListSectionHeader()
+        }
+    }
+    
     private var configurationMismatchSection: some View {
         Section {
             ListRow(kind: .custom {
@@ -242,7 +260,9 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
 
     static var previews: some View {
         NotificationSettingsScreen(context: viewModel.context)
+            .snapshot(delay: 0.1)
         NotificationSettingsScreen(context: viewModelConfigurationMismatch.context)
+            .snapshot(delay: 0.1)
             .previewDisplayName("Configuration mismatch")
     }
 }

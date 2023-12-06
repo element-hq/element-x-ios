@@ -42,6 +42,7 @@ extension NotificationSettingsProxyMock {
         getRoomsWithUserDefinedRulesReturnValue = []
         isRoomMentionEnabledReturnValue = true
         isCallEnabledReturnValue = true
+        isInviteForMeEnabledReturnValue = true
         
         setNotificationModeRoomIdModeClosure = { [weak self] _, mode in
             guard let self else { return }
@@ -78,6 +79,14 @@ extension NotificationSettingsProxyMock {
         setCallEnabledEnabledClosure = { [weak self] enabled in
             guard let self else { return }
             self.isCallEnabledReturnValue = enabled
+            Task {
+                self.callbacks.send(.settingsDidChange)
+            }
+        }
+        
+        setInviteForMeEnabledEnabledClosure = { [weak self] enabled in
+            guard let self else { return }
+            self.isInviteForMeEnabledReturnValue = enabled
             Task {
                 self.callbacks.send(.settingsDidChange)
             }

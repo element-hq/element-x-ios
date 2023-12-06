@@ -388,4 +388,84 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         
         XCTAssertNotNil(context.alertInfo)
     }
+    
+    func testToggleInvitationsOff() async throws {
+        notificationSettingsProxy.isInviteForMeEnabledReturnValue = true
+        
+        let deferredInitialFetch = deferFulfillment(viewModel.context.$viewState) { state in
+            state.settings != nil
+        }
+        
+        viewModel.fetchInitialContent()
+        
+        try await deferredInitialFetch.fulfill()
+
+        context.invitationsEnabled = false
+        let deferred = deferFulfillment(notificationSettingsProxy.callbacks) { callback in
+            callback == .settingsDidChange
+        }
+        
+        context.send(viewAction: .invitationsChanged)
+        
+        try await deferred.fulfill()
+
+        XCTAssert(notificationSettingsProxy.setInviteForMeEnabledEnabledCalled)
+        XCTAssertEqual(notificationSettingsProxy.setInviteForMeEnabledEnabledReceivedEnabled, false)
+    }
+
+    func testToggleInvitationsOn() async throws {
+        notificationSettingsProxy.isInviteForMeEnabledReturnValue = false
+        
+        let deferredInitialFetch = deferFulfillment(viewModel.context.$viewState) { state in
+            state.settings != nil
+        }
+        
+        viewModel.fetchInitialContent()
+        
+        try await deferredInitialFetch.fulfill()
+
+        context.invitationsEnabled = true
+        
+        let deferred = deferFulfillment(notificationSettingsProxy.callbacks) { callback in
+            callback == .settingsDidChange
+        }
+        
+        context.send(viewAction: .invitationsChanged)
+        
+        try await deferred.fulfill()
+
+        XCTAssert(notificationSettingsProxy.setInviteForMeEnabledEnabledCalled)
+        XCTAssertEqual(notificationSettingsProxy.setInviteForMeEnabledEnabledReceivedEnabled, true)
+    }
+
+    func testToggleInvitesFailure() async throws {
+        notificationSettingsProxy.setInviteForMeEnabledEnabledThrowableError = NotificationSettingsError.Generic(msg: "error")
+        notificationSettingsProxy.isInviteForMeEnabledReturnValue = false
+        
+        let deferredInitialFetch = deferFulfillment(viewModel.context.$viewState) { state in
+            state.settings != nil
+        }
+        
+        viewModel.fetchInitialContent()
+        
+        try await deferredInitialFetch.fulfill()
+
+        context.invitationsEnabled = true
+        
+        var deferred = deferFulfillment(context.$viewState) { state in
+            state.applyingChange == true
+        }
+        
+        context.send(viewAction: .invitationsChanged)
+        
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(context.$viewState) { state in
+            state.applyingChange == false
+        }
+        
+        try await deferred.fulfill()
+        
+        XCTAssertNotNil(context.alertInfo)
+    }
 }
