@@ -36,7 +36,7 @@ struct StartChatScreen: View {
         .toolbar { toolbar }
         .searchController(query: $context.searchQuery,
                           placeholder: L10n.commonSearchForSomeone,
-                          automaticallyShowsCancelButton: false,
+                          showsCancelButton: false,
                           disablesInteractiveDismiss: true)
         .compoundSearchField()
         .alert(item: $context.alertInfo)

@@ -57,7 +57,7 @@ struct MessageForwardingScreen: View {
                 .disabled(context.viewState.selectedRoomID == nil)
             }
         }
-        .searchController(query: $context.searchQuery, automaticallyShowsCancelButton: false)
+        .searchController(query: $context.searchQuery, showsCancelButton: false)
         .compoundSearchField()
         .disableAutocorrection(true)
     }

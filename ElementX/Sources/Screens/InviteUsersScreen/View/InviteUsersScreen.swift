@@ -32,7 +32,7 @@ struct InviteUsersScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .searchController(query: $context.searchQuery,
-                              automaticallyShowsCancelButton: false,
+                              showsCancelButton: false,
                               disablesInteractiveDismiss: true)
             .compoundSearchField()
             .alert(item: $context.alertInfo)

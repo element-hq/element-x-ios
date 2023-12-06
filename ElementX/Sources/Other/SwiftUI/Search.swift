@@ -26,18 +26,18 @@ extension View {
     /// - Parameters:
     ///   - query: The current or starting search text.
     ///   - placeholder: The string to display when there’s no other text in the text field.
-    ///   - hidesNavigationBarDuringPresentation: A Boolean indicating whether to hide the navigation bar when searching.
-    ///   - automaticallyShowsCancelButton: A Boolean indicating whether the search controller manages the visibility of the search bar’s cancel button.
+    ///   - hidesNavigationBar: A Boolean indicating whether to hide the navigation bar when searching.
+    ///   - showsCancelButton: A Boolean indicating whether the search controller manages the visibility of the search bar’s cancel button.
     ///   - disablesInteractiveDismiss: Whether or not interactive dismiss is disabled whilst the user is searching.
     func searchController(query: Binding<String>,
                           placeholder: String? = nil,
-                          hidesNavigationBarDuringPresentation: Bool = false,
-                          automaticallyShowsCancelButton: Bool = true,
+                          hidesNavigationBar: Bool = false,
+                          showsCancelButton: Bool = true,
                           disablesInteractiveDismiss: Bool = false) -> some View {
         modifier(SearchControllerModifier(searchQuery: query,
                                           placeholder: placeholder,
-                                          hidesNavigationBarDuringPresentation: hidesNavigationBarDuringPresentation,
-                                          automaticallyShowsCancelButton: automaticallyShowsCancelButton,
+                                          hidesNavigationBar: hidesNavigationBar,
+                                          showsCancelButton: showsCancelButton,
                                           disablesInteractiveDismiss: disablesInteractiveDismiss))
     }
 }
@@ -46,8 +46,8 @@ private struct SearchControllerModifier: ViewModifier {
     @Binding var searchQuery: String
     
     let placeholder: String?
-    let hidesNavigationBarDuringPresentation: Bool
-    let automaticallyShowsCancelButton: Bool
+    let hidesNavigationBar: Bool
+    let showsCancelButton: Bool
     let disablesInteractiveDismiss: Bool
     
     /// Whether or not the user is currently searching. When ``automaticallyShowsCancelButton``
@@ -60,8 +60,9 @@ private struct SearchControllerModifier: ViewModifier {
             .background {
                 SearchController(searchQuery: $searchQuery,
                                  placeholder: placeholder,
-                                 hidesNavigationBarDuringPresentation: hidesNavigationBarDuringPresentation,
-                                 automaticallyShowsCancelButton: automaticallyShowsCancelButton,
+                                 hidesNavigationBar: hidesNavigationBar,
+                                 showsCancelButton: showsCancelButton,
+                                 hidesSearchBarWhenScrolling: false,
                                  isSearching: $isSearching)
             }
             .onDisappear {
@@ -76,10 +77,10 @@ private struct SearchControllerModifier: ViewModifier {
 private struct SearchController: UIViewControllerRepresentable {
     @Binding var searchQuery: String
     
-    var placeholder: String?
-    var hidesNavigationBarDuringPresentation = false
-    var automaticallyShowsCancelButton = true
-    var hidesSearchBarWhenScrolling = false
+    let placeholder: String?
+    let hidesNavigationBar: Bool
+    let showsCancelButton: Bool
+    let hidesSearchBarWhenScrolling: Bool
     
     @Binding var isSearching: Bool
     
@@ -91,11 +92,11 @@ private struct SearchController: UIViewControllerRepresentable {
     func updateUIViewController(_ viewController: SearchInjectionViewController, context: Context) {
         let searchController = viewController.searchController
         searchController.searchBar.text = searchQuery
-        searchController.hidesNavigationBarDuringPresentation = hidesNavigationBarDuringPresentation
-        searchController.automaticallyShowsCancelButton = automaticallyShowsCancelButton
+        searchController.hidesNavigationBarDuringPresentation = hidesNavigationBar
+        searchController.automaticallyShowsCancelButton = showsCancelButton
         
         if searchController.isActive, !isSearching {
-            DispatchQueue.main.async { searchController.isActive = isSearching }
+            DispatchQueue.main.async { searchController.isActive = false }
         } else if !searchController.isActive, isSearching {
             DispatchQueue.main.async { searchController.isActive = true }
         }
