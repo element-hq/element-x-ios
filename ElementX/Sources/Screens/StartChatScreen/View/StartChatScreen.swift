@@ -36,8 +36,7 @@ struct StartChatScreen: View {
         .toolbar { toolbar }
         .disableInteractiveDismissOnSearch()
         .dismissSearchOnDisappear()
-        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
-        .searchableConfiguration(hidesNavigationBar: false)
+        .searchController(query: $context.searchQuery, placeholder: L10n.commonSearchForSomeone, automaticallyShowsCancelButton: false)
         .compoundSearchField()
         .alert(item: $context.alertInfo)
     }

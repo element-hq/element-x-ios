@@ -57,8 +57,7 @@ struct MessageForwardingScreen: View {
                 .disabled(context.viewState.selectedRoomID == nil)
             }
         }
-        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
-        .searchableConfiguration(hidesNavigationBar: false)
+        .searchController(query: $context.searchQuery, automaticallyShowsCancelButton: false)
         .compoundSearchField()
         .disableAutocorrection(true)
     }

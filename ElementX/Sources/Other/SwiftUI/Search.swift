@@ -30,18 +30,25 @@ extension View {
         modifier(DismissSearchOnDisappear())
     }
     
-    /// Configures a searchable's underlying search controller.
-    /// - Parameters:
-    ///   - hidesNavigationBar: A Boolean indicating whether to hide the navigation bar when searching.
-    ///   - showsCancelButton: A Boolean indicating whether the search controller manages the visibility of the search bar’s cancel button.
+    /// A custom replacement for searchable that allows more precise configuration of the underlying search controller.
     ///
-    ///   This modifier may be moved into Compound once styles for the various configuration options have been defined.
-    func searchableConfiguration(hidesNavigationBar: Bool = true,
-                                 showsCancelButton: Bool = true) -> some View {
-        introspect(.navigationStack, on: .supportedVersions, scope: .ancestor) { navigationController in
-            guard let searchController = navigationController.navigationBar.topItem?.searchController else { return }
-            searchController.hidesNavigationBarDuringPresentation = hidesNavigationBar
-            searchController.automaticallyShowsCancelButton = showsCancelButton
+    /// Whilst we originally used introspect to configure parameters such as preventing the navigation bar from hiding
+    /// during a search, this proved unreliable from iOS 17.1 onwards. This implementation avoids all of those shenanigans.
+    ///
+    /// - Parameters:
+    ///   - query: The current or starting search text.
+    ///   - placeholder: The string to display when there’s no other text in the text field.
+    ///   - hidesNavigationBarDuringPresentation: A Boolean indicating whether to hide the navigation bar when searching.
+    ///   - automaticallyShowsCancelButton: A Boolean indicating whether the search controller manages the visibility of the search bar’s cancel button.
+    func searchController(query: Binding<String>,
+                          placeholder: String? = nil,
+                          hidesNavigationBarDuringPresentation: Bool = false,
+                          automaticallyShowsCancelButton: Bool = true) -> some View {
+        background {
+            SearchController(searchQuery: query,
+                             placeholder: placeholder,
+                             hidesNavigationBarDuringPresentation: hidesNavigationBarDuringPresentation,
+                             automaticallyShowsCancelButton: automaticallyShowsCancelButton)
         }
     }
 }
@@ -66,5 +73,78 @@ private struct DismissSearchOnDisappear: ViewModifier {
                     dismissSearch()
                 }
             }
+    }
+}
+
+private struct SearchController: UIViewControllerRepresentable {
+    @Binding var searchQuery: String
+    
+    var placeholder: String?
+    var hidesNavigationBarDuringPresentation = false
+    var automaticallyShowsCancelButton = true
+    var hidesSearchBarWhenScrolling = false
+    
+    func makeUIViewController(context: Context) -> SearchInjectionViewController {
+        SearchInjectionViewController(searchController: context.coordinator.searchController,
+                                      hidesSearchBarWhenScrolling: hidesSearchBarWhenScrolling)
+    }
+    
+    func updateUIViewController(_ viewController: SearchInjectionViewController, context: Context) {
+        let searchController = viewController.searchController
+        searchController.searchBar.text = searchQuery
+        searchController.hidesNavigationBarDuringPresentation = hidesNavigationBarDuringPresentation
+        searchController.automaticallyShowsCancelButton = automaticallyShowsCancelButton
+        
+        if let placeholder { // Blindly setting nil clears the default placeholder.
+            searchController.searchBar.placeholder = placeholder
+        }
+        
+        viewController.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(searchQuery: $searchQuery)
+    }
+    
+    class Coordinator: NSObject, UISearchBarDelegate, UISearchControllerDelegate {
+        let searchController = UISearchController()
+        private let searchQuery: Binding<String>
+        
+        init(searchQuery: Binding<String>) {
+            self.searchQuery = searchQuery
+            
+            super.init()
+            
+            searchController.delegate = self
+            searchController.searchBar.delegate = self
+        }
+        
+        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+            searchQuery.wrappedValue = searchText
+        }
+        
+        func willDismissSearchController(_ searchController: UISearchController) {
+            // Clear any search results when the user taps cancel.
+            searchQuery.wrappedValue = ""
+        }
+    }
+    
+    class SearchInjectionViewController: UIViewController {
+        let searchController: UISearchController
+        var hidesSearchBarWhenScrolling: Bool
+        
+        init(searchController: UISearchController, hidesSearchBarWhenScrolling: Bool) {
+            self.searchController = searchController
+            self.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
+            super.init(nibName: nil, bundle: nil)
+        }
+        
+        @available(*, unavailable)
+        required init?(coder: NSCoder) { fatalError() }
+        
+        override func willMove(toParent parent: UIViewController?) {
+            parent?.navigationItem.searchController = searchController
+            parent?.navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
+        }
     }
 }
