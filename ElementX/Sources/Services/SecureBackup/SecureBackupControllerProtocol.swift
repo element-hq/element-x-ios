@@ -34,7 +34,6 @@ enum SecureBackupKeyBackupState {
     case enabling
     case enabled
     case disabling
-    case disabled
 }
 
 enum SecureBackupControllerError: Error {

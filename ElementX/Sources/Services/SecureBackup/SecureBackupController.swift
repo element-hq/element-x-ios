@@ -164,7 +164,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
                 }
                 
                 if !backupExists {
-                    keyBackupStateSubject.send(.disabled)
+                    keyBackupStateSubject.send(.unknown)
                 }
             } catch {
                 MXLog.error("Failed retrieving remote backup state with error: \(error)")
