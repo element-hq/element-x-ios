@@ -141,6 +141,18 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         await updatedSettings()
     }
     
+    func isInviteForMeEnabled() async throws -> Bool {
+        try await notificationSettings.isInviteForMeEnabled()
+    }
+    
+    func setInviteForMeEnabled(enabled: Bool) async throws {
+        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setInviteForMeEnabled")
+        defer { backgroundTask?.stop() }
+
+        try await notificationSettings.setInviteForMeEnabled(enabled: enabled)
+        await updatedSettings()
+    }
+    
     func getRoomsWithUserDefinedRules() async throws -> [String] {
         await notificationSettings.getRoomsWithUserDefinedRules(enabled: true)
     }

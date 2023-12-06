@@ -1710,6 +1710,47 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
         setCallEnabledEnabledReceivedInvocations.append(enabled)
         try await setCallEnabledEnabledClosure?(enabled)
     }
+    //MARK: - isInviteForMeEnabled
+
+    var isInviteForMeEnabledThrowableError: Error?
+    var isInviteForMeEnabledCallsCount = 0
+    var isInviteForMeEnabledCalled: Bool {
+        return isInviteForMeEnabledCallsCount > 0
+    }
+    var isInviteForMeEnabledReturnValue: Bool!
+    var isInviteForMeEnabledClosure: (() async throws -> Bool)?
+
+    func isInviteForMeEnabled() async throws -> Bool {
+        if let error = isInviteForMeEnabledThrowableError {
+            throw error
+        }
+        isInviteForMeEnabledCallsCount += 1
+        if let isInviteForMeEnabledClosure = isInviteForMeEnabledClosure {
+            return try await isInviteForMeEnabledClosure()
+        } else {
+            return isInviteForMeEnabledReturnValue
+        }
+    }
+    //MARK: - setInviteForMeEnabled
+
+    var setInviteForMeEnabledEnabledThrowableError: Error?
+    var setInviteForMeEnabledEnabledCallsCount = 0
+    var setInviteForMeEnabledEnabledCalled: Bool {
+        return setInviteForMeEnabledEnabledCallsCount > 0
+    }
+    var setInviteForMeEnabledEnabledReceivedEnabled: Bool?
+    var setInviteForMeEnabledEnabledReceivedInvocations: [Bool] = []
+    var setInviteForMeEnabledEnabledClosure: ((Bool) async throws -> Void)?
+
+    func setInviteForMeEnabled(enabled: Bool) async throws {
+        if let error = setInviteForMeEnabledEnabledThrowableError {
+            throw error
+        }
+        setInviteForMeEnabledEnabledCallsCount += 1
+        setInviteForMeEnabledEnabledReceivedEnabled = enabled
+        setInviteForMeEnabledEnabledReceivedInvocations.append(enabled)
+        try await setInviteForMeEnabledEnabledClosure?(enabled)
+    }
     //MARK: - getRoomsWithUserDefinedRules
 
     var getRoomsWithUserDefinedRulesThrowableError: Error?

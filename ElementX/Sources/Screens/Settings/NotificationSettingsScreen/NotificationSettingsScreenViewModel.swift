@@ -73,6 +73,11 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                 return
             }
             Task { await enableCalls(state.bindings.callsEnabled) }
+        case .invitationsChanged:
+            guard let settings = state.settings, settings.invitationsEnabled != state.bindings.invitationsEnabled else {
+                return
+            }
+            Task { await enableInvitations(state.bindings.invitationsEnabled) }
         case .close:
             actionsSubject.send(.close)
         case .fixConfigurationMismatchTapped:
@@ -146,6 +151,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             // The following calls may fail if the associated push rule doesn't exist
             let roomMentionsEnabled = try? await notificationSettingsProxy.isRoomMentionEnabled()
             let callEnabled = try? await notificationSettingsProxy.isCallEnabled()
+            let invitationsEnabled = try? await notificationSettingsProxy.isInviteForMeEnabled()
                         
             guard !Task.isCancelled else { return }
 
@@ -153,11 +159,13 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                                                                           directChatsMode: directChatsMode,
                                                                           roomMentionsEnabled: roomMentionsEnabled,
                                                                           callsEnabled: callEnabled,
+                                                                          invitationsEnabled: invitationsEnabled,
                                                                           inconsistentSettings: inconsistentSettings)
 
             state.settings = notificationSettings
             state.bindings.roomMentionsEnabled = notificationSettings.roomMentionsEnabled ?? false
             state.bindings.callsEnabled = notificationSettings.callsEnabled ?? false
+            state.bindings.invitationsEnabled = notificationSettings.invitationsEnabled ?? false
         }
     }
     
@@ -187,7 +195,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         guard let notificationSettings = state.settings else { return }
         do {
             state.applyingChange = true
-            MXLog.info("[NotificationSettingsScreenViewMode] setRoomMentionEnabled(\(enable))")
+            MXLog.info("setRoomMentionEnabled(\(enable))")
             try await notificationSettingsProxy.setRoomMentionEnabled(enabled: enable)
         } catch {
             state.bindings.alertInfo = AlertInfo(id: .alert)
@@ -200,11 +208,24 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         guard let notificationSettings = state.settings else { return }
         do {
             state.applyingChange = true
-            MXLog.info("[NotificationSettingsScreenViewMode] setCallEnabled(\(enable))")
+            MXLog.info("setCallEnabled(\(enable))")
             try await notificationSettingsProxy.setCallEnabled(enabled: enable)
         } catch {
             state.bindings.alertInfo = AlertInfo(id: .alert)
             state.bindings.callsEnabled = notificationSettings.callsEnabled ?? false
+        }
+        state.applyingChange = false
+    }
+    
+    func enableInvitations(_ enable: Bool) async {
+        guard let notificationSettings = state.settings else { return }
+        do {
+            state.applyingChange = true
+            MXLog.info("setInviteForMeEnabled(\(enable))")
+            try await notificationSettingsProxy.setInviteForMeEnabled(enabled: enable)
+        } catch {
+            state.bindings.alertInfo = AlertInfo(id: .alert)
+            state.bindings.callsEnabled = notificationSettings.invitationsEnabled ?? false
         }
         state.applyingChange = false
     }
