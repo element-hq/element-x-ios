@@ -22,6 +22,7 @@ extension View {
     ///
     /// Whilst we originally used introspect to configure parameters such as preventing the navigation bar from hiding
     /// during a search, this proved unreliable from iOS 17.1 onwards. This implementation avoids all of those shenanigans.
+    /// **Note:** For some reason the font size is incorrect in the PreviewTests, buts its fine in UI tests and within the app.
     ///
     /// - Parameters:
     ///   - query: The current or starting search text.

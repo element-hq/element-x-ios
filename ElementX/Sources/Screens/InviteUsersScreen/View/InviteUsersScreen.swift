@@ -32,6 +32,7 @@ struct InviteUsersScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .searchController(query: $context.searchQuery,
+                              placeholder: L10n.commonSearchForSomeone,
                               showsCancelButton: false,
                               disablesInteractiveDismiss: true)
             .compoundSearchField()
