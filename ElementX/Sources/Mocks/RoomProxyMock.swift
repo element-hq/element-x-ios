@@ -32,7 +32,6 @@ struct RoomProxyMockConfiguration {
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var hasUnreadNotifications = Bool.random()
-    var canUserTriggerRoomNotification = false
     
     var timeline = {
         let mock = TimelineProxyMock()
@@ -45,6 +44,9 @@ struct RoomProxyMockConfiguration {
     var memberForID: RoomMemberProxyMock = .mockMe
     var ownUserID = "@alice:somewhere.org"
 
+    var canUserTriggerRoomNotification = false
+    var canUserJoinCall = false
+    
     var invitedMembersCount = 100
     var joinedMembersCount = 50
     var activeMembersCount = 25
@@ -94,5 +96,6 @@ extension RoomProxyMock {
         getMemberUserIDReturnValue = .success(configuration.memberForID)
         canUserRedactUserIDReturnValue = .success(false)
         canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
+        canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
     }
 }

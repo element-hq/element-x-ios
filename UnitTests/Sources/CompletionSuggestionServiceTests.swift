@@ -66,7 +66,7 @@ final class CompletionSuggestionServiceTests: XCTestCase {
     func testUserSuggestonsIncludingAllUsers() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: "test", canUserTriggerRoomNotification: true, members: members))
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: "test", members: members, canUserTriggerRoomNotification: true))
         let service = CompletionSuggestionService(roomProxy: roomProxyMock)
                 
         var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
@@ -92,7 +92,7 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let alice: RoomMemberProxyMock = .mockAlice
         let bob: RoomMemberProxyMock = .mockBob
         let members: [RoomMemberProxyMock] = [alice, bob, .mockMe]
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: "test", canUserTriggerRoomNotification: true, members: members))
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: "test", members: members, canUserTriggerRoomNotification: true))
         let service = CompletionSuggestionService(roomProxy: roomProxyMock)
                 
         var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
