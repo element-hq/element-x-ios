@@ -11,7 +11,7 @@ on:
 jobs:
   tests:
     name: Tests
-    runs-on: flyci-macos-xlarge
+    runs-on: flyci-macos-xlarge-latest-m2
 
     concurrency:
       # When running on develop, use the sha to allow all runs of this workflow to run concurrently.

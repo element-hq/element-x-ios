@@ -7,7 +7,7 @@ on:
 
 jobs:
   open-translations-pr:
-    runs-on: flyci-macos-xlarge
+    runs-on: flyci-macos-xlarge-latest-m2
     # Skip in forks
     if: github.repository == 'vector-im/element-x-ios'
     steps:
