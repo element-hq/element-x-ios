@@ -23,7 +23,7 @@ struct SecureBackupScreen: View {
     
     var body: some View {
         Form {
-            if context.viewState.keyBackupState == .disabled {
+            if context.viewState.keyBackupState == .unknown {
                 keyBackupSection
             } else {
                 keyBackupSection
@@ -77,12 +77,10 @@ struct SecureBackupScreen: View {
             ListRow(label: .plain(title: L10n.screenChatBackupKeyBackupActionDisable, role: .destructive), kind: .navigationLink {
                 context.send(viewAction: .keyBackup)
             })
-        case .disabled, .enabling:
+        case .unknown, .enabling:
             ListRow(label: .plain(title: L10n.screenChatBackupKeyBackupActionEnable), kind: .navigationLink {
                 context.send(viewAction: .keyBackup)
             })
-        case .unknown:
-            EmptyView()
         }
     }
     
@@ -128,7 +126,7 @@ struct SecureBackupScreen: View {
 struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
     static let bothSetupViewModel = viewModel(keyBackupState: .enabled, recoveryKeyState: .enabled)
     static let onlyKeyBackupSetUpViewModel = viewModel(keyBackupState: .enabled, recoveryKeyState: .disabled)
-    static let keyBackupDisabledViewModel = viewModel(keyBackupState: .disabled, recoveryKeyState: .disabled)
+    static let keyBackupDisabledViewModel = viewModel(keyBackupState: .unknown, recoveryKeyState: .disabled)
     static let recoveryIncompleteViewModel = viewModel(keyBackupState: .enabled, recoveryKeyState: .incomplete)
     
     static var previews: some View {
