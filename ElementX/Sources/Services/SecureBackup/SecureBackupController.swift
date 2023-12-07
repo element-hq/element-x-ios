@@ -44,7 +44,24 @@ class SecureBackupController: SecureBackupControllerProtocol {
         backupStateListenerTaskHandle = encryption.backupStateListener(listener: SecureBackupControllerBackupStateListener { [weak self] state in
             guard let self else { return }
             
-            keyBackupStateSubject.send(state.keyBackupState)
+            switch state {
+            case .unknown:
+                keyBackupStateSubject.send(.unknown)
+            case .creating:
+                keyBackupStateSubject.send(.enabling)
+            case .enabling:
+                keyBackupStateSubject.send(.enabling)
+            case .resuming:
+                keyBackupStateSubject.send(.enabled)
+            case .enabled:
+                keyBackupStateSubject.send(.enabled)
+            case .downloading:
+                keyBackupStateSubject.send(.enabled)
+            case .disabling:
+                keyBackupStateSubject.send(.disabling)
+            }
+            
+            MXLog.info("Key backup state changed to: \(state), setting local state to \(keyBackupStateSubject.value)")
             
             if case .unknown = state {
                 updateBackupStateFromRemote()
@@ -64,15 +81,21 @@ class SecureBackupController: SecureBackupControllerProtocol {
             case .incomplete:
                 recoveryKeyStateSubject.send(.incomplete)
             }
+            
+            MXLog.info("Recovery state changed to: \(state), setting local state to \(recoveryKeyStateSubject.value)")
         })
         
         updateBackupStateFromRemote()
     }
     
     func enable() async -> Result<Void, SecureBackupControllerError> {
+        MXLog.info("Enabling secure backup")
+        
         do {
             try await encryption.enableBackups()
         } catch {
+            MXLog.error("Failed enabling secure backup with error: \(error)")
+            
             return .failure(.failedEnablingBackup)
         }
         
@@ -80,9 +103,12 @@ class SecureBackupController: SecureBackupControllerProtocol {
     }
     
     func disable() async -> Result<Void, SecureBackupControllerError> {
+        MXLog.info("Disabling secure backup")
+        
         do {
             try await encryption.disableRecovery()
         } catch {
+            MXLog.error("Failed disabling secure backup with error: \(error)")
             return .failure(.failedDisablingBackup)
         }
         
@@ -92,9 +118,13 @@ class SecureBackupController: SecureBackupControllerProtocol {
     func generateRecoveryKey() async -> Result<String, SecureBackupControllerError> {
         do {
             guard recoveryKeyState.value == .disabled else {
+                MXLog.info("Resetting recovery key")
+                
                 let key = try await encryption.resetRecoveryKey()
                 return .success(key)
             }
+            
+            MXLog.info("Enabling recovery")
             
             var keyUploadErrored = false
             let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, progressListener: SecureBackupEnableRecoveryProgressListener { [weak self] state in
@@ -106,38 +136,48 @@ class SecureBackupController: SecureBackupControllerProtocol {
                 case .done:
                     recoveryKeyStateSubject.send(.enabled)
                 case .roomKeyUploadError:
+                    MXLog.error("Failed enabling recovery: room key upload error")
                     keyUploadErrored = true
                 }
             })
             
             return keyUploadErrored ? .failure(.failedGeneratingRecoveryKey) : .success(recoveryKey)
         } catch {
+            MXLog.error("Failed generating recovery key with error: \(error)")
+            
             return .failure(.failedGeneratingRecoveryKey)
         }
     }
     
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
         do {
+            MXLog.info("Confirming recovery key")
             try await encryption.recover(recoveryKey: key)
             return .success(())
         } catch {
+            MXLog.info("Failed confirming recovery key with error: \(error)")
             return .failure(.failedConfirmingRecoveryKey)
         }
     }
     
     func isLastSession() async -> Result<Bool, SecureBackupControllerError> {
         do {
+            MXLog.info("Checking if last session")
             return try await .success(encryption.isLastDevice())
         } catch {
+            MXLog.error("Failed checking if last session with error: \(error)")
             return .failure(.failedFetchingSessionState)
         }
     }
     
     func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError> {
         do {
+            MXLog.info("Waiting for backup upload steady state")
             try await encryption.waitForBackupUploadSteadyState(progressListener: nil)
             return .success(())
         } catch let error as SteadyStateError {
+            MXLog.error("Failed waiting for backup upload steady state with error: \(error)")
+            
             switch error {
             case .BackupDisabled:
                 MXLog.error("Key backup disabled, continuing logout.")
@@ -157,6 +197,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
     private func updateBackupStateFromRemote(retry: Bool = true) {
         remoteBackupStateTask = Task {
             do {
+                MXLog.info("Checking if backup exists on the server")
                 let backupExists = try await self.encryption.backupExistsOnServer()
                 
                 if Task.isCancelled {
@@ -210,26 +251,5 @@ private final class SecureBackupEnableRecoveryProgressListener: EnableRecoveryPr
     
     func onUpdate(status: EnableRecoveryProgress) {
         onUpdateClosure(status)
-    }
-}
-
-extension BackupState {
-    var keyBackupState: SecureBackupKeyBackupState {
-        switch self {
-        case .unknown:
-            return .unknown
-        case .creating:
-            return .enabling
-        case .enabling:
-            return .enabling
-        case .resuming:
-            return .enabled
-        case .enabled:
-            return .enabled
-        case .downloading:
-            return .enabled
-        case .disabling:
-            return .disabling
-        }
     }
 }
