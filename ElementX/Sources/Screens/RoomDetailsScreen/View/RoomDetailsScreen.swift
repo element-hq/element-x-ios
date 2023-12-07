@@ -131,10 +131,11 @@ struct RoomDetailsScreen: View {
                             .lineLimit(isTopicExpanded ? nil : 3)
                             .accentColor(.compound.textLinkExternal)
                             .padding(ListRowPadding.insets)
-                            .onTapGesture {
-                                isTopicExpanded.toggle()
-                            }
+                            .textSelection(.enabled)
                     })
+                    .onTapGesture {
+                        isTopicExpanded.toggle()
+                    }
                 } else {
                     ListRow(label: .plain(title: L10n.screenRoomDetailsAddTopicTitle),
                             kind: .button { context.send(viewAction: .processTapAddTopic) })
@@ -306,14 +307,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         ]
         
         let roomProxy = RoomProxyMock(with: .init(id: "dm_room_id", displayName: "DM Room",
-                                                  topic: """
-                                                  Discussions about Element X iOS | https://github.com/vector-im/element-x-ios
-                                                  
-                                                  Feature Status: https://github.com/vector-im/element-x-ios/issues/1225
-                                                  
-                                                  App Store: https://apple.co/3r6LJHZ
-                                                  TestFlight: https://testflight.apple.com/join/uZbeZCOi
-                                                  """,
+                                                  topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                                                   isDirect: true,
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",

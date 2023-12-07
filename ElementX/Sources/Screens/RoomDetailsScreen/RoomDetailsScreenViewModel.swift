@@ -61,7 +61,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            permalink: roomProxy.permalink,
                                            title: roomProxy.roomTitle,
                                            topic: topic,
-                                           topicSummary: topic?.replacingNewlinesWithSpaces(),
+                                           topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
                                            avatarURL: roomProxy.avatarURL,
                                            joinedMembersCount: roomProxy.joinedMembersCount,
                                            notificationSettingsState: .loading,
@@ -135,7 +135,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 
                 let topic = attributedStringBuilder.fromPlain(self.roomProxy.topic)
                 self.state.topic = topic
-                self.state.topicSummary = topic?.replacingNewlinesWithSpaces()
+                self.state.topicSummary = topic?.unattributedStringByReplacingNewlinesWithSpaces()
                 self.state.avatarURL = self.roomProxy.avatarURL
                 self.state.joinedMembersCount = self.roomProxy.joinedMembersCount
             }
@@ -306,5 +306,12 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomProxy.roomTitle)
             }
         }
+    }
+}
+
+private extension AttributedString {
+    /// Returns a new string without attributes and in which newlines are replaced with spaces
+    func unattributedStringByReplacingNewlinesWithSpaces() -> AttributedString {
+        AttributedString(characters.map { $0.isNewline ? " " : $0 })
     }
 }

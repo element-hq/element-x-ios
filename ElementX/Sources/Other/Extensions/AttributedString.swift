@@ -80,11 +80,4 @@ extension AttributedString {
     mutating func bold() {
         self[startIndex..<endIndex].inlinePresentationIntent = .stronglyEmphasized
     }
-    
-    /// Returns a new string in which newlines are replaced with spaces
-    func replacingNewlinesWithSpaces() -> AttributedString {
-        var mutableString = self
-        mutableString = AttributedString(mutableString.characters.map { $0.isNewline ? " " : $0 })
-        return mutableString
-    }
 }
