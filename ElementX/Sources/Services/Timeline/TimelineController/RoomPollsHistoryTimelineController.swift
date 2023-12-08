@@ -151,9 +151,9 @@ class RoomPollsHistoryTimelineController: RoomPollsHistoryTimelineControllerProt
         timelineItems = newTimelineItems
         timelineItemsTimestamp = newTimelineItemsTimestamp
         
-        callbacks.send(.updatedTimelineItems)
         callbacks.send(.canBackPaginate(canBackPaginate))
         callbacks.send(.isBackPaginating(isBackPaginating))
+        callbacks.send(.updatedTimelineItems)
     }
     
     private func buildTimelineItem(for itemProxy: TimelineItemProxy) -> (roomTimelineItem: RoomTimelineItemProtocol, timestamp: Date)? {

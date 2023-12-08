@@ -18,12 +18,15 @@ import XCTest
 
 @MainActor
 class RoomPollsHistoryScreenUITests: XCTestCase {
-    func testScreen() async throws {
-        let app = Application.launch(.roomPollsHistoryScreen)
+    func testEmptyPollsHistory() async throws {
+        let app = Application.launch(.roomPollsHistoryEmptyLoadMore)
         
-        let title = app.staticTexts["RoomPollsHistory title"]
-        XCTAssert(title.exists)
-
-        try await app.assertScreenshot(.roomPollsHistoryScreen)
+        try await app.assertScreenshot(.roomPollsHistoryEmptyLoadMore)
+    }
+    
+    func testPollsHistory() async throws {
+        let app = Application.launch(.roomPollsHistoryLoadMore)
+        
+        try await app.assertScreenshot(.roomPollsHistoryLoadMore)
     }
 }

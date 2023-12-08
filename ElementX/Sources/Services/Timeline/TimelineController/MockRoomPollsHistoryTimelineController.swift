@@ -48,7 +48,7 @@ class MockRoomPollsHistoryTimelineController: RoomPollsHistoryTimelineController
     }
     
     func paginateBackwards(requestSize: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        callbacks.send(.canBackPaginate(false))
+        try? await simulateBackPagination()
         return .success(())
     }
        
@@ -116,6 +116,7 @@ class MockRoomPollsHistoryTimelineController: RoomPollsHistoryTimelineController
         timelineItems.insert(contentsOf: newItems, at: 0)
         callbacks.send(.updatedTimelineItems)
         callbacks.send(.isBackPaginating(false))
+        callbacks.send(.canBackPaginate(!backPaginationResponses.isEmpty))
         
         try client?.send(.success)
     }

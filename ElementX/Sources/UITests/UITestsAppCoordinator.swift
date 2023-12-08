@@ -873,6 +873,34 @@ class MockScreen: Identifiable {
             let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .roomPollsHistoryEmptyLoadMore:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let roomProxy = RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: nil))
+            let interactionHandler = PollInteractionHandlerMock()
+            let roomPollsHistoryTimelineController = MockRoomPollsHistoryTimelineController()
+            roomPollsHistoryTimelineController.backPaginationResponses = [
+                [],
+                []
+            ]
+            let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: interactionHandler,
+                                                                         roomPollsHistoryTimelineController: roomPollsHistoryTimelineController)
+            let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomPollsHistoryLoadMore:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let roomProxy = RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: nil))
+            let interactionHandler = PollInteractionHandlerMock()
+            let roomPollsHistoryTimelineController = MockRoomPollsHistoryTimelineController()
+            roomPollsHistoryTimelineController.backPaginationResponses = [
+                [PollRoomTimelineItem.mock(poll: .emptyDisclosed, isEditable: true)],
+                []
+            ]
+            let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: interactionHandler,
+                                                                         roomPollsHistoryTimelineController: roomPollsHistoryTimelineController)
+            let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         }
     }()
 }

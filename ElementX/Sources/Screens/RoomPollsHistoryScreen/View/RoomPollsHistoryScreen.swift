@@ -20,22 +20,27 @@ import SwiftUI
 struct RoomPollsHistoryScreen: View {
     @Environment(\.timelineStyle) var timelineStyle
     @ObservedObject var context: RoomPollsHistoryScreenViewModel.Context
-        
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .center, spacing: 16) {
                 modePicker
-
+                
                 polls
 
                 if !context.viewState.isInitializing {
                     if context.viewState.pollTimelineItems.isEmpty {
                         Spacer(minLength: 32)
                     }
-                    
-                    searchStateMessage
+
+                    if context.viewState.pollTimelineItems.isEmpty {
+                        searchStateMessage
+                    }
                     
                     if context.viewState.canBackPaginate {
+                        if !context.viewState.pollTimelineItems.isEmpty {
+                            Spacer(minLength: 16)
+                        }
                         loadMoreButton
                     }
                 }
@@ -47,7 +52,6 @@ struct RoomPollsHistoryScreen: View {
         .background(.compound.bgSubtleSecondaryLevel0)
         .navigationTitle(context.viewState.title)
         .navigationBarTitleDisplayMode(.inline)
-//        .track(screen: .pollsHistory)
     }
     
     // MARK: - Private
@@ -123,42 +127,46 @@ private extension DateFormatter {
 // MARK: - Previews
 
 struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
-    static let roomProxy = RoomProxyMock(with: .init(displayName: "Preview room", hasOngoingCall: true))
-    static let roomPollsHistoryTimelineController = MockRoomPollsHistoryTimelineController()
-    
     static let viewModelEmpty: RoomPollsHistoryScreenViewModel = {
+        let roomPollsHistoryTimelineController = MockRoomPollsHistoryTimelineController()
+        roomPollsHistoryTimelineController.backPaginationResponses = [
+            [],
+            []
+        ]
+
         let viewModel = RoomPollsHistoryScreenViewModel(pollInteractionHandler: PollInteractionHandlerMock(),
                                                         roomPollsHistoryTimelineController: roomPollsHistoryTimelineController,
-                                                        userIndicatorController: UserIndicatorControllerMock(),
-                                                        appSettings: ServiceLocator.shared.settings)
-        viewModel.state.loadedDays = 30
-        viewModel.state.canBackPaginate = true
-        viewModel.state.isBackPaginating = false
+                                                        userIndicatorController: UserIndicatorControllerMock())
         return viewModel
     }()
 
     static let viewModel: RoomPollsHistoryScreenViewModel = {
+        let roomPollsHistoryTimelineController = MockRoomPollsHistoryTimelineController()
+        roomPollsHistoryTimelineController.backPaginationResponses = [
+            [PollRoomTimelineItem.mock(poll: .emptyDisclosed, isEditable: true),
+             PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: true)),
+             PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: false))],
+            []
+        ]
+
         let viewModel = RoomPollsHistoryScreenViewModel(pollInteractionHandler: PollInteractionHandlerMock(),
                                                         roomPollsHistoryTimelineController: roomPollsHistoryTimelineController,
-                                                        userIndicatorController: UserIndicatorControllerMock(),
-                                                        appSettings: ServiceLocator.shared.settings)
-
-        viewModel.state.loadedDays = 30
-        viewModel.state.pollTimelineItems = [
-            .init(timestamp: Date.now, item: PollRoomTimelineItem.mock(poll: .emptyDisclosed, isEditable: true)),
-            .init(timestamp: Date.now, item: PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: true))),
-            .init(timestamp: Date.now, item: PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: false)))
-        ]
+                                                        userIndicatorController: UserIndicatorControllerMock())
+        
         return viewModel
     }()
 
     static var previews: some View {
-        RoomPollsHistoryScreen(context: viewModelEmpty.context)
-            .environment(\.timelineStyle, .bubbles)
-            .previewDisplayName("No polls")
+        NavigationStack {
+            RoomPollsHistoryScreen(context: viewModelEmpty.context)
+                .environment(\.timelineStyle, .bubbles)
+        }
+        .previewDisplayName("No polls")
 
-        RoomPollsHistoryScreen(context: viewModel.context)
-            .environment(\.timelineStyle, .bubbles)
-            .previewDisplayName("polls")
+        NavigationStack {
+            RoomPollsHistoryScreen(context: viewModel.context)
+                .environment(\.timelineStyle, .bubbles)
+        }
+        .previewDisplayName("polls")
     }
 }

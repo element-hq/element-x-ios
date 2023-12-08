@@ -903,8 +903,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                                                        secureBackupController: userSession.clientProxy.secureBackupController)
                 
         let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: PollInteractionHandler(analyticsService: analytics, roomProxy: roomProxy),
-                                                                     roomPollsHistoryTimelineController: roomPollsHistoryTimelineController,
-                                                                     appSettings: appSettings)
+                                                                     roomPollsHistoryTimelineController: roomPollsHistoryTimelineController)
         let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
         coordinator.actions
             .sink { [weak self] action in

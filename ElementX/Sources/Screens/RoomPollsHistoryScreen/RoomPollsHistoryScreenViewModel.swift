@@ -24,13 +24,11 @@ typealias RoomPollsHistoryScreenViewModelType = StateStoreViewModel<RoomPollsHis
 class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, RoomPollsHistoryScreenViewModelProtocol {
     private enum Constants {
         static let backPaginationEventLimit: UInt = 200
-        static let toastErrorID = "RoomPollsHistoryScreenToastError"
     }
     
     private let pollInteractionHandler: PollInteractionHandlerProtocol
     private let roomPollsHistoryTimelineController: RoomPollsHistoryTimelineControllerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let appSettings: AppSettings
     
     private var paginateBackwardsTask: Task<Void, Never>?
     private let isPaginatingIndicatorID = UUID().uuidString
@@ -43,12 +41,10 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
 
     init(pollInteractionHandler: PollInteractionHandlerProtocol,
          roomPollsHistoryTimelineController: RoomPollsHistoryTimelineControllerProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         appSettings: AppSettings) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.pollInteractionHandler = pollInteractionHandler
         self.roomPollsHistoryTimelineController = roomPollsHistoryTimelineController
         self.userIndicatorController = userIndicatorController
-        self.appSettings = appSettings
         
         super.init(initialViewState: RoomPollsHistoryScreenViewState(title: UntranslatedL10n.screenPollsHistoryTitle,
                                                                      canBackPaginate: false,
@@ -94,7 +90,7 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
                     }
                 case .isBackPaginating(let isBackPaginating):
                     if self.state.isBackPaginating != isBackPaginating {
-                        self.state.isBackPaginating = isBackPaginating
+                        updateBackPaginatingState(isBackPaginating)
                     }
                 }
             }
@@ -157,12 +153,6 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
         }
         .compactMap { $0 }
         .sorted { $0.timestamp > $1.timestamp }
-
-        // Update the number of loaded days
-        if let firstItemDate = roomPollsHistoryTimelineController.firstTimelineEventDate {
-            let dateComponents = Calendar.current.dateComponents([.day], from: firstItemDate, to: .now)
-            state.loadedDays = (dateComponents.day ?? 0) + 1
-        }
     }
     
     private func paginateBackwards() {
@@ -172,23 +162,27 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
 
         userIndicatorController.submitIndicator(.init(id: isPaginatingIndicatorID, type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false), title: L10n.commonLoading))
         paginateBackwardsTask = Task { [weak self] in
-            defer {
-                self?.state.isInitializing = false
-                userIndicatorController.retractIndicatorWithId(isPaginatingIndicatorID)
-            }
             guard let self else {
                 return
             }
 
-            state.isBackPaginating = true
+            updateBackPaginatingState(true)
             switch await roomPollsHistoryTimelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit) {
             case .failure(let error):
                 MXLog.error("failed to back paginate. \(error)")
-                state.isBackPaginating = false
+                updateBackPaginatingState(false)
             default:
                 break
             }
             paginateBackwardsTask = nil
+        }
+    }
+    
+    private func updateBackPaginatingState(_ value: Bool) {
+        state.isBackPaginating = value
+        if !value {
+            userIndicatorController.retractIndicatorWithId(isPaginatingIndicatorID)
+            state.isInitializing = false
         }
     }
 }
@@ -198,6 +192,5 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
 extension RoomPollsHistoryScreenViewModel {
     static let mock = RoomPollsHistoryScreenViewModel(pollInteractionHandler: PollInteractionHandlerMock(),
                                                       roomPollsHistoryTimelineController: MockRoomPollsHistoryTimelineController(),
-                                                      userIndicatorController: UserIndicatorControllerMock(),
-                                                      appSettings: ServiceLocator.shared.settings)
+                                                      userIndicatorController: UserIndicatorControllerMock())
 }
