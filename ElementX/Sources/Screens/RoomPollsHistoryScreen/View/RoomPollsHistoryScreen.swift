@@ -110,6 +110,7 @@ struct RoomPollsHistoryScreen: View {
                 .font(.compound.bodyLGSemibold)
                 .padding(.horizontal, 12)
         }
+        .accessibilityIdentifier(A11yIdentifiers.roomPollsHistoryScreen.loadMore)
         .buttonStyle(.compound(.secondary))
         .fixedSize()
         .disabled(context.viewState.isBackPaginating)

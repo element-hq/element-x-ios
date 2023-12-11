@@ -21,12 +21,16 @@ class RoomPollsHistoryScreenUITests: XCTestCase {
     func testEmptyPollsHistory() async throws {
         let app = Application.launch(.roomPollsHistoryEmptyLoadMore)
         
+        XCTAssert(app.buttons[A11yIdentifiers.roomPollsHistoryScreen.loadMore].waitForExistence(timeout: 1))
+        
         try await app.assertScreenshot(.roomPollsHistoryEmptyLoadMore)
     }
     
     func testPollsHistory() async throws {
         let app = Application.launch(.roomPollsHistoryLoadMore)
         
+        XCTAssert(app.buttons[A11yIdentifiers.roomPollsHistoryScreen.loadMore].waitForExistence(timeout: 1))
+
         try await app.assertScreenshot(.roomPollsHistoryLoadMore)
     }
 }

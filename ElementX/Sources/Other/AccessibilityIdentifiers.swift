@@ -46,6 +46,7 @@ enum A11yIdentifiers {
     static let notificationSettingsScreen = NotificationSettingsScreen()
     static let notificationSettingsEditScreen = NotificationSettingsEditScreen()
     static let pollFormScreen = PollFormScreen()
+    static let roomPollsHistoryScreen = RoomPollsHistoryScreen()
     
     struct AlertInfo {
         let primaryButton = "alert_info-primary_button"
@@ -266,5 +267,9 @@ enum A11yIdentifiers {
         func roomName(_ name: String) -> String {
             "\(roomNamePrefix):\(name)"
         }
+    }
+    
+    struct RoomPollsHistoryScreen {
+        let loadMore = "room_polls_history_screen-load_more"
     }
 }
