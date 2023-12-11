@@ -45,6 +45,8 @@ class AppLockUITests: XCTestCase {
         try await app.assertScreenshot(.appLockFlow, step: Step.placeholder)
         
         // When foregrounding the app.
+        try client.send(.notification(name: UIApplication.willEnterForegroundNotification))
+        try? await Task.sleep(for: .milliseconds(100))
         try client.send(.notification(name: UIApplication.didBecomeActiveNotification))
         
         // Then the Lock Screen should be shown to enter a PIN.
@@ -73,6 +75,8 @@ class AppLockUITests: XCTestCase {
         try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
         
         // When foregrounding the app.
+        try client.send(.notification(name: UIApplication.willEnterForegroundNotification))
+        try? await Task.sleep(for: .milliseconds(100))
         try client.send(.notification(name: UIApplication.didBecomeActiveNotification))
         
         // Then the app should still remain unlocked.
@@ -88,7 +92,11 @@ class AppLockUITests: XCTestCase {
         try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
         try client.send(.notification(name: UIApplication.didEnterBackgroundNotification))
         try await Task.sleep(for: .milliseconds(500)) // Don't overwrite the previous signal immediately.
+        
+        try client.send(.notification(name: UIApplication.willEnterForegroundNotification))
+        try? await Task.sleep(for: .milliseconds(100))
         try client.send(.notification(name: UIApplication.didBecomeActiveNotification))
+        
         try await app.assertScreenshot(.appLockFlow, step: Step.lockScreen)
         
         // When entering an incorrect PIN
@@ -123,6 +131,8 @@ class AppLockUITests: XCTestCase {
         try await app.assertScreenshot(.appLockFlow, step: Step.placeholder)
         
         // When the app becomes active again.
+        try client.send(.notification(name: UIApplication.willEnterForegroundNotification))
+        try? await Task.sleep(for: .milliseconds(100))
         try client.send(.notification(name: UIApplication.didBecomeActiveNotification))
         
         // Then the app should not have become unlock.
