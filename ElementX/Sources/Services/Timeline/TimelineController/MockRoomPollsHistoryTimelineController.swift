@@ -35,8 +35,8 @@ class MockRoomPollsHistoryTimelineController: RoomPollsHistoryTimelineController
     
     private var client: UITestsSignalling.Client?
     
-    var firstTimelineEventDate: Date? = Date.now
-    
+    var pollTimestamps: [Date] = []
+
     init(listenForSignals: Bool = false) {
         guard listenForSignals else { return }
         
@@ -57,9 +57,12 @@ class MockRoomPollsHistoryTimelineController: RoomPollsHistoryTimelineController
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async { }
     
     func retryDecryption(for sessionID: String) async { }
-    
+        
     func timestamp(for itemID: TimelineItemIdentifier) -> Date? {
-        Date.now
+        guard !pollTimestamps.isEmpty else {
+            return Date.now
+        }
+        return pollTimestamps.removeFirst()
     }
     
     // MARK: - UI Test signalling

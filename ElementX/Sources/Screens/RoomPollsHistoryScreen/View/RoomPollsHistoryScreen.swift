@@ -149,6 +149,11 @@ struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
              PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: false))],
             []
         ]
+        roomPollsHistoryTimelineController.pollTimestamps = [
+            DateComponents(calendar: .current, timeZone: .gmt, year: 2023, month: 12, day: 3, hour: 12).date,
+            DateComponents(calendar: .current, timeZone: .gmt, year: 2023, month: 12, day: 2, hour: 12).date,
+            DateComponents(calendar: .current, timeZone: .gmt, year: 2023, month: 12, day: 1, hour: 12).date
+        ].compactMap { $0 }
 
         let viewModel = RoomPollsHistoryScreenViewModel(pollInteractionHandler: PollInteractionHandlerMock(),
                                                         roomPollsHistoryTimelineController: roomPollsHistoryTimelineController,
