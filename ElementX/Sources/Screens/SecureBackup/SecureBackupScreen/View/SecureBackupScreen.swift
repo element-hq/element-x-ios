@@ -23,11 +23,17 @@ struct SecureBackupScreen: View {
     
     var body: some View {
         Form {
-            if context.viewState.keyBackupState == .unknown {
-                keyBackupSection
+            // Show recovery options for confirming the recovery key and
+            // getting access to secrets and implicitly the key backup
+            if context.viewState.recoveryKeyState == .incomplete {
+                recoveryKeySection
             } else {
                 keyBackupSection
-                recoveryKeySection
+                
+                // Don't show recovery options until key backup is enabled
+                if context.viewState.keyBackupState != .unknown {
+                    recoveryKeySection
+                }
             }
         }
         .compoundList()
