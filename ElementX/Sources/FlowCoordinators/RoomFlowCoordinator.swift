@@ -873,10 +873,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func asyncPresentRoomPollsHistory(roomID: String) async {
-        // If any sheets are presented dismiss them, rely on their dismissal callbacks to transition the state machine
-        // through the correct states before presenting the room
-        navigationStackCoordinator.setSheetCoordinator(nil)
-        
         let roomProxy: RoomProxyProtocol
         
         guard let proxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
@@ -915,7 +911,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
-
+        
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissPollsHistory)
         }
