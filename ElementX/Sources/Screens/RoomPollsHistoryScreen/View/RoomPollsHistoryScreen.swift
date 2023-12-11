@@ -162,11 +162,13 @@ struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
                 .environment(\.timelineStyle, .bubbles)
         }
         .previewDisplayName("No polls")
+        .snapshot(delay: 1.0)
 
         NavigationStack {
             RoomPollsHistoryScreen(context: viewModel.context)
                 .environment(\.timelineStyle, .bubbles)
         }
         .previewDisplayName("polls")
+        .snapshot(delay: 1.0)
     }
 }
