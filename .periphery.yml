@@ -15,3 +15,4 @@ targets:
 index_exclude:
   - ElementX/Sources/Other/TestablePreview.swift
 verbose: true
+retain_swift_ui_previews: true
