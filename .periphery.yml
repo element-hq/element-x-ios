@@ -1,0 +1,17 @@
+project: ElementX.xcodeproj
+retain_objc_accessible: true
+schemes:
+- ElementX
+- IntegrationTests
+- UITests
+- UnitTests
+targets:
+- ElementX
+- IntegrationTests
+- NCE
+- NSE
+- UITests
+- UnitTests
+index_exclude:
+  - ElementX/Sources/Other/TestablePreview.swift
+verbose: true

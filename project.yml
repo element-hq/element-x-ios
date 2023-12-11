@@ -32,6 +32,7 @@ settings:
   MARKETING_VERSION: 1.4.4
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
+  SUPPORTS_MACCATALYST: NO
 
 include:
   - path: ElementX/SupportingFiles/target.yml
@@ -120,3 +121,12 @@ packages:
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
     exactVersion: 14.1.1
+
+aggregateTargets:
+  Periphery:
+    buildScripts:
+      - name: "Scan"
+        script: |
+          export PATH="$PATH:/opt/homebrew/bin"
+          periphery scan --format xcode
+        basedOnDependencyAnalysis: false
