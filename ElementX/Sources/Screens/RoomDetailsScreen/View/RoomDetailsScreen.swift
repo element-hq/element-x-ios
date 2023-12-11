@@ -34,9 +34,7 @@ struct RoomDetailsScreen: View {
             
             notificationSection
 
-            if context.viewState.dmRecipient == nil {
-                aboutSection
-            }
+            aboutSection
 
             securitySection
 
@@ -141,30 +139,30 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.commonPeople,
-                                    icon: CompoundIcon(asset: Asset.Images.user)),
-                    details: .title(String(context.viewState.joinedMembersCount)),
+            if context.viewState.dmRecipient == nil {
+                ListRow(label: .default(title: L10n.commonPeople,
+                                        icon: CompoundIcon(asset: Asset.Images.user)),
+                        details: .title(String(context.viewState.joinedMembersCount)),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapPeople)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+                
+                if context.viewState.canInviteUsers {
+                    ListRow(label: .default(title: L10n.screenRoomDetailsInvitePeopleTitle,
+                                            icon: CompoundIcon(asset: Asset.Images.userAdd)),
+                            kind: .navigationLink {
+                                context.send(viewAction: .processTapInvite)
+                            })
+                            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
+                }
+            }
+            ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
+                                    icon: CompoundIcon(asset: Asset.Images.polls)),
                     kind: .navigationLink {
-                        context.send(viewAction: .processTapPeople)
+                        context.send(viewAction: .processTapPolls)
                     })
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-            
-            if context.viewState.canInviteUsers {
-                ListRow(label: .default(title: L10n.screenRoomDetailsInvitePeopleTitle,
-                                        icon: CompoundIcon(asset: Asset.Images.userAdd)),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapInvite)
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
-            }
-            if context.viewState.pollsHistoryEnabled {
-                ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
-                                        icon: CompoundIcon(asset: Asset.Images.polls)),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapPolls)
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
-            }
+                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
         }
     }
     
@@ -287,8 +285,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy,
-                                          appSettings: AppSettings())
+                                          notificationSettingsProxy: notificationSettingsProxy)
     }()
     
     static let dmRoomViewModel = {
@@ -311,8 +308,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy,
-                                          appSettings: AppSettings())
+                                          notificationSettingsProxy: notificationSettingsProxy)
     }()
     
     static let simpleRoomViewModel = {
@@ -332,8 +328,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy,
-                                          appSettings: AppSettings())
+                                          notificationSettingsProxy: notificationSettingsProxy)
     }()
     
     static var previews: some View {

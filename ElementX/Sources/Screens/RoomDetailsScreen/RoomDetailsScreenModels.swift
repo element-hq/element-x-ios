@@ -50,8 +50,6 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRoomAvatar = false
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     
-    var pollsHistoryEnabled: Bool
-    
     var canEdit: Bool {
         !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
     }

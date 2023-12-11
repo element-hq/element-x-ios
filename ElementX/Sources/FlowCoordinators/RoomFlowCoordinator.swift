@@ -518,8 +518,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                             roomProxy: roomProxy,
                                                             mediaProvider: userSession.mediaProvider,
                                                             userIndicatorController: userIndicatorController,
-                                                            notificationSettings: userSession.clientProxy.notificationSettings,
-                                                            appSettings: appSettings)
+                                                            notificationSettings: userSession.clientProxy.notificationSettings)
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }

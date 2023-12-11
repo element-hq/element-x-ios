@@ -80,12 +80,6 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Polls") {
-                Toggle(isOn: $context.pollsHistoryEnabled) {
-                    Text("Show history")
-                }
-            }
-
             Section {
                 Button {
                     showConfetti = true

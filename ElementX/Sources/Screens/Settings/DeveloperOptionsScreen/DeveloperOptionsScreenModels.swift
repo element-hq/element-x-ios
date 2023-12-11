@@ -50,7 +50,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var readReceiptsEnabled: Bool { get set }
     var swiftUITimelineEnabled: Bool { get set }
     var chatBackupEnabled: Bool { get set }
-    var pollsHistoryEnabled: Bool { get set }
     
     var elementCallBaseURL: URL { get set }
     var elementCallUseEncryption: Bool { get set }
