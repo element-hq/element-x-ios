@@ -73,7 +73,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     // that could happen with the default HTML renderer of NSAttributedString which is a
     // webview.
     func fromHTML(_ htmlString: String?) -> AttributedString? {
-        guard let htmlString else {
+        guard let htmlString = htmlString?.replacingHtmlBreaksOccurrences() else {
             return nil
         }
         
