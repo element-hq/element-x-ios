@@ -46,7 +46,7 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
         self.roomPollsHistoryTimelineController = roomPollsHistoryTimelineController
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: RoomPollsHistoryScreenViewState(title: UntranslatedL10n.screenPollsHistoryTitle,
+        super.init(initialViewState: RoomPollsHistoryScreenViewState(title: L10n.screenPollsHistoryTitle,
                                                                      canBackPaginate: false,
                                                                      isInitializing: true,
                                                                      bindings: .init(filter: .ongoing)))

@@ -34,7 +34,7 @@ struct RoomPollsHistoryScreen: View {
                     }
 
                     if context.viewState.pollTimelineItems.isEmpty {
-                        searchStateMessage
+                        emptyStateMessage
                     }
                     
                     if context.viewState.canBackPaginate {
@@ -94,8 +94,8 @@ struct RoomPollsHistoryScreen: View {
         }
     }
     
-    private var searchStateMessage: some View {
-        Text(context.viewState.searchStateMessage)
+    private var emptyStateMessage: some View {
+        Text(context.viewState.emptyStateMessage)
             .font(.compound.bodyLG)
             .foregroundColor(.compound.textSecondary)
             .multilineTextAlignment(.center)
@@ -106,7 +106,7 @@ struct RoomPollsHistoryScreen: View {
         Button {
             context.send(viewAction: .loadMore)
         } label: {
-            Text(UntranslatedL10n.screenPollsHistoryLoadMoreAction)
+            Text(L10n.Action.loadMore)
                 .font(.compound.bodyLGSemibold)
                 .padding(.horizontal, 12)
         }

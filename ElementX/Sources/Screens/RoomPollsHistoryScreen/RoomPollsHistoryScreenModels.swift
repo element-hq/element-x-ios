@@ -29,12 +29,12 @@ struct RoomPollsHistoryScreenViewState: BindableState {
     var isBackPaginating = false
     var bindings: RoomPollsHistoryScreenViewStateBindings
     
-    var searchStateMessage: String {
+    var emptyStateMessage: String {
         switch bindings.filter {
         case .ongoing:
-            UntranslatedL10n.screenPollsHistoryNoOngoingPollsFound
+            L10n.screenPollsHistoryEmptyOngoing
         case .past:
-            UntranslatedL10n.screenPollsHistoryNoPastPollsFound
+            L10n.screenPollsHistoryEmptyPast
         }
     }
 }
@@ -69,9 +69,9 @@ extension RoomPollsHistoryFilter: CustomStringConvertible {
     var description: String {
         switch self {
         case .ongoing:
-            UntranslatedL10n.screenPollsHistoryFilterOngoing
+            L10n.screenPollsHistoryFilterOngoing
         case .past:
-            UntranslatedL10n.screenPollsHistoryFilterPast
+            L10n.screenPollsHistoryFilterPast
         }
     }
 }

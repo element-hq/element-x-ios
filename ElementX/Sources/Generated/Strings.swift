@@ -1084,6 +1084,16 @@ public enum L10n {
   }
   /// Be in your element
   public static var screenOnboardingWelcomeTitle: String { return L10n.tr("Localizable", "screen_onboarding_welcome_title") }
+  /// Can't find any ongoing polls.
+  public static var screenPollsHistoryEmptyOngoing: String { return L10n.tr("Localizable", "screen_polls_history_empty_ongoing") }
+  /// Can't find any past polls.
+  public static var screenPollsHistoryEmptyPast: String { return L10n.tr("Localizable", "screen_polls_history_empty_past") }
+  /// Ongoing
+  public static var screenPollsHistoryFilterOngoing: String { return L10n.tr("Localizable", "screen_polls_history_filter_ongoing") }
+  /// Past
+  public static var screenPollsHistoryFilterPast: String { return L10n.tr("Localizable", "screen_polls_history_filter_past") }
+  /// Polls
+  public static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
   /// Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.
   public static var screenRecoveryKeyChangeDescription: String { return L10n.tr("Localizable", "screen_recovery_key_change_description") }
   /// Generate a new recovery key
@@ -1626,6 +1636,11 @@ public enum L10n {
   public static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   public static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
+
+  public enum Action {
+    /// Load more
+    public static var loadMore: String { return L10n.tr("Localizable", "action.load_more") }
+  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

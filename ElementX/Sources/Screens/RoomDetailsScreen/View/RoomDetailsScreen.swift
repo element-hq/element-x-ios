@@ -158,13 +158,12 @@ struct RoomDetailsScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
             }
             if context.viewState.pollsHistoryEnabled {
-                ListRow(label: .default(title: UntranslatedL10n.screenPollsHistoryTitle,
+                ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
                                         icon: CompoundIcon(asset: Asset.Images.polls)),
                         kind: .navigationLink {
                             context.send(viewAction: .processTapPolls)
                         })
-                // TODO: .accessibilityIdentifier
-//                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
             }
         }
     }
