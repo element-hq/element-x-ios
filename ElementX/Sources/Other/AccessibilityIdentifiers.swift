@@ -67,7 +67,6 @@ enum A11yIdentifiers {
     struct AppLockSetupSettingsScreen {
         let changePIN = "app_lock_setup_settings-change_pin"
         let removePIN = "app_lock_setup_settings-remove_pin"
-        let removePINAlertYes = "app_lock_setup_settings-remove_pin_alert_yes"
     }
 
     struct AnalyticsPromptScreen {

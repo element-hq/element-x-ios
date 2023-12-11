@@ -16,8 +16,6 @@
 
 import Foundation
 
-enum AdvancedSettingsScreenViewModelAction { }
-
 struct AdvancedSettingsScreenViewState: BindableState {
     var bindings: AdvancedSettingsScreenViewStateBindings
 }
