@@ -34,18 +34,6 @@ extension AggregatedReaction {
     private static var alice: String {
         RoomMemberProxyMock.mockAlice.userID
     }
-    
-    static var mockThumbsUpHighlighted: AggregatedReaction {
-        mockReaction(key: "👍", senderIDs: [alice] + mockIds(4))
-    }
-    
-    static var mockClap: AggregatedReaction {
-        mockReaction(key: "👏", senderIDs: mockIds(1))
-    }
-    
-    static var mockParty: AggregatedReaction {
-        mockReaction(key: "🎉", senderIDs: mockIds(20))
-    }
 
     static var mockReactions: [AggregatedReaction] {
         [
