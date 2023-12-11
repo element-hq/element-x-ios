@@ -20,13 +20,10 @@ import UIKit
 
 @MainActor
 protocol RoomPollsHistoryTimelineControllerProtocol {
-    var firstTimelineEventDate: Date? { get }
-    
     var timelineItems: [RoomTimelineItemProtocol] { get }
     var callbacks: PassthroughSubject<RoomTimelineControllerCallback, Never> { get }
         
     func paginateBackwards(requestSize: UInt) async -> Result<Void, RoomTimelineControllerError>
-    
     func timestamp(for itemID: TimelineItemIdentifier) -> Date?
 }
 
@@ -50,7 +47,6 @@ class RoomPollsHistoryTimelineController: RoomPollsHistoryTimelineControllerProt
     
     private(set) var timelineItems: [RoomTimelineItemProtocol] = []
     private(set) var timelineItemsTimestamp: [TimelineItemIdentifier: Date] = [:]
-    private(set) var firstTimelineEventDate: Date?
     
     init(roomProxy: RoomProxyProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
@@ -109,24 +105,6 @@ class RoomPollsHistoryTimelineController: RoomPollsHistoryTimelineControllerProt
         var canBackPaginate = true
         var isBackPaginating = false
 
-        let firstTimelineEvent = timelineProvider.itemProxies.first(where: {
-            switch $0 {
-            case .event:
-                true
-            default:
-                false
-            }
-        })
-
-        if case .event(let firstEvent) = firstTimelineEvent {
-            firstTimelineEventDate = firstEvent.timestamp
-            
-            let age = Date.now.timeIntervalSince(firstEvent.timestamp)
-            let dateComponents = Calendar.current.dateComponents([.day], from: firstEvent.timestamp, to: .now)
-            let days = (dateComponents.day ?? 0) + 1
-            MXLog.info("first timeline item age: \(age) [\(days) days]")
-        }
-
         for item in timelineProvider.itemProxies {
             if let timelineItem = buildTimelineItem(for: item) {
                 if timelineItem.roomTimelineItem is EncryptedHistoryRoomTimelineItem {
@@ -169,7 +147,6 @@ class RoomPollsHistoryTimelineController: RoomPollsHistoryTimelineControllerProt
                         timestamp: eventTimelineItem.timestamp)
             }
             
-            // We only returns PollRoomTimelineItem
             return (roomTimelineItem: timelineItem, timestamp: eventTimelineItem.timestamp)
         case .virtual:
             return nil

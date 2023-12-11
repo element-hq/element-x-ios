@@ -100,7 +100,7 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
     private func displayError(message: String) {
         state.bindings.alertInfo = .init(id: .alert, title: message)
     }
-    
+
     // MARK: - Poll Interaction Handler
     
     private func endPoll(pollStartID: String) {
@@ -125,7 +125,7 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
         }
     }
     
-    // MARK: - Timeline Item Building
+    // MARK: - Timeline
     
     private func updatePollsList(filter: RoomPollsHistoryFilter) {
         // Get the poll timeline items to display
@@ -160,12 +160,10 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
             return
         }
 
-        userIndicatorController.submitIndicator(.init(id: isPaginatingIndicatorID, type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false), title: L10n.commonLoading))
         paginateBackwardsTask = Task { [weak self] in
             guard let self else {
                 return
             }
-
             updateBackPaginatingState(true)
             switch await roomPollsHistoryTimelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit) {
             case .failure(let error):
@@ -180,7 +178,9 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
     
     private func updateBackPaginatingState(_ value: Bool) {
         state.isBackPaginating = value
-        if !value {
+        if value {
+            userIndicatorController.submitIndicator(.init(id: isPaginatingIndicatorID, type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false), title: L10n.commonLoading))
+        } else {
             userIndicatorController.retractIndicatorWithId(isPaginatingIndicatorID)
             state.isInitializing = false
         }
