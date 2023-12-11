@@ -50,7 +50,7 @@ struct PollFormScreen: View {
     private var questionSection: some View {
         Section {
             ListRow(label: .plain(title: L10n.screenCreatePollQuestionHint),
-                    kind: .textField(text: $context.question))
+                    kind: .textField(text: $context.question, axis: .vertical))
                 .introspect(.textField, on: .supportedVersions) { textField in
                     textField.clearButtonMode = .whileEditing
                 }
