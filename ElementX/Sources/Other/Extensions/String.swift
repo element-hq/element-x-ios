@@ -87,3 +87,27 @@ extension String {
         return "\(prefix(length))…"
     }
 }
+
+extension String {
+    func replacingHtmlBreaksOccurrences() -> String {
+        var result = self
+        let pattern = #"</p>(\n+)<p>"#
+        
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            return result
+        }
+        let matches = regex.matches(in: self, options: [], range: NSRange(location: 0, length: utf16.count))
+        
+        for match in matches.reversed() {
+            guard let range = Range(match.range, in: self),
+                  let innerMatchRange = Range(match.range(at: 1), in: self) else {
+                continue
+            }
+            let numberOfBreaks = (self[innerMatchRange].components(separatedBy: "\n").count - 1)
+            let replacement = "<br>" + String(repeating: "<br>", count: numberOfBreaks)
+            result.replaceSubrange(range, with: replacement)
+        }
+        
+        return result
+    }
+}

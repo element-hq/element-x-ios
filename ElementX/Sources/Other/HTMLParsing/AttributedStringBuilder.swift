@@ -73,13 +73,15 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     // that could happen with the default HTML renderer of NSAttributedString which is a
     // webview.
     func fromHTML(_ htmlString: String?) -> AttributedString? {
-        guard let htmlString else {
+        guard var originalHTMLString = htmlString else {
             return nil
         }
         
-        if let cached = Self.caches[cacheKey]?.value(forKey: htmlString) {
+        if let cached = Self.caches[cacheKey]?.value(forKey: originalHTMLString) {
             return cached
         }
+        
+        let htmlString = originalHTMLString.replacingHtmlBreaksOccurrences()
         
         guard let data = htmlString.data(using: .utf8) else {
             return nil

@@ -88,4 +88,27 @@ class StringTests: XCTestCase {
     func testEllipsizeNotNeeded() {
         XCTAssertEqual("ellipsize".ellipsize(length: 15), "ellipsize")
     }
+    
+    func testReplaceBreakOccurrences() {
+        let input0 = "</p><p>"
+        let input1 = "</p>\n<p>"
+        let input2 = "</p>\n\n<p>"
+        let input3 = "</p>\n\n\n\n<p>"
+        let input4 = "<p>a</p>\n<p>b</p>"
+        let input5 = "empty"
+        
+        let expectedOutput0 = input0
+        let expectedOutput1 = "<br><br>"
+        let expectedOutput2 = "<br><br><br>"
+        let expectedOutput3 = "<br><br><br><br><br>"
+        let expectedOutput4 = "<p>a<br><br>b</p>"
+        let expectedOutput5 = input5
+        
+        XCTAssertEqual(input0.replacingHtmlBreaksOccurrences(), expectedOutput0)
+        XCTAssertEqual(input1.replacingHtmlBreaksOccurrences(), expectedOutput1)
+        XCTAssertEqual(input2.replacingHtmlBreaksOccurrences(), expectedOutput2)
+        XCTAssertEqual(input3.replacingHtmlBreaksOccurrences(), expectedOutput3)
+        XCTAssertEqual(input4.replacingHtmlBreaksOccurrences(), expectedOutput4)
+        XCTAssertEqual(input5.replacingHtmlBreaksOccurrences(), expectedOutput5)
+    }
 }
