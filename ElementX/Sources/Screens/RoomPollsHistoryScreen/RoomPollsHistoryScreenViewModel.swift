@@ -23,7 +23,7 @@ typealias RoomPollsHistoryScreenViewModelType = StateStoreViewModel<RoomPollsHis
 
 class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, RoomPollsHistoryScreenViewModelProtocol {
     private enum Constants {
-        static let backPaginationEventLimit: UInt = 200
+        static let backPaginationEventLimit: UInt = 250
     }
     
     private let pollInteractionHandler: PollInteractionHandlerProtocol
