@@ -39,7 +39,8 @@ struct RoomDetailsScreenViewState: BindableState {
     let permalink: URL?
 
     var title = ""
-    var topic: String?
+    var topic: AttributedString?
+    var topicSummary: AttributedString?
     var avatarURL: URL?
     var joinedMembersCount: Int
     var isProcessingIgnoreRequest = false

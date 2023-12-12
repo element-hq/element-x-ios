@@ -123,10 +123,19 @@ struct RoomDetailsScreen: View {
     private var topicSection: some View {
         if context.viewState.hasTopicSection {
             Section {
-                if let topic = context.viewState.topic, !topic.isEmpty {
-                    ListRow(label: .description(topic), kind: .label)
-                        .lineLimit(isTopicExpanded ? nil : 3)
-                        .onTapGesture { isTopicExpanded.toggle() }
+                if let topic = context.viewState.topic, !topic.characters.isEmpty, let topicSummary = context.viewState.topicSummary {
+                    ListRow(kind: .custom {
+                        Text(isTopicExpanded ? topic : topicSummary)
+                            .font(.compound.bodySM)
+                            .foregroundColor(.compound.textSecondary)
+                            .lineLimit(isTopicExpanded ? nil : 3)
+                            .accentColor(.compound.textLinkExternal)
+                            .padding(ListRowPadding.insets)
+                            .textSelection(.enabled)
+                    })
+                    .onTapGesture {
+                        isTopicExpanded.toggle()
+                    }
                 } else {
                     ListRow(label: .plain(title: L10n.screenRoomDetailsAddTopicTitle),
                             kind: .button { context.send(viewAction: .processTapAddTopic) })
@@ -264,7 +273,14 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
             .mockCharlie
         ]
         let roomProxy = RoomProxyMock(with: .init(id: "room_a_id", displayName: "Room A",
-                                                  topic: "Bacon ipsum dolor amet short ribs buffalo pork loin cupim frankfurter. Burgdoggen pig shankle biltong flank ham jowl sirloin bacon cow. T-bone alcatra boudin beef spare ribs pig fatback jerky swine short ribs shankle chislic frankfurter pork loin. Chicken tri-tip bresaola t-bone pastrami brisket.", // swiftlint:disable:this line_length
+                                                  topic: """
+                                                  Discussions about Element X iOS | https://github.com/vector-im/element-x-ios
+                                                  
+                                                  Feature Status: https://github.com/vector-im/element-x-ios/issues/1225
+                                                  
+                                                  App Store: https://apple.co/3r6LJHZ
+                                                  TestFlight: https://testflight.apple.com/join/uZbeZCOi
+                                                  """,
                                                   isDirect: false,
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",
@@ -279,7 +295,9 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy)
+                                          notificationSettingsProxy: notificationSettingsProxy,
+                                          attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
+                                                                                           mentionBuilder: MentionBuilder()))
     }()
     
     static let dmRoomViewModel = {
@@ -302,7 +320,9 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy)
+                                          notificationSettingsProxy: notificationSettingsProxy,
+                                          attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
+                                                                                           mentionBuilder: MentionBuilder()))
     }()
     
     static let simpleRoomViewModel = {
@@ -322,7 +342,9 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy)
+                                          notificationSettingsProxy: notificationSettingsProxy,
+                                          attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
+                                                                                           mentionBuilder: MentionBuilder()))
     }()
     
     static var previews: some View {

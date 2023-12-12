@@ -25,6 +25,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
+    private let attributedStringBuilder: AttributedStringBuilderProtocol
 
     private var accountOwner: RoomMemberProxyProtocol? {
         didSet { updatePowerLevelPermissions() }
@@ -42,12 +43,16 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
          roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         notificationSettingsProxy: NotificationSettingsProxyProtocol) {
+         notificationSettingsProxy: NotificationSettingsProxyProtocol,
+         attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.accountUserID = accountUserID
         self.roomProxy = roomProxy
         self.mediaProvider = mediaProvider
         self.userIndicatorController = userIndicatorController
         self.notificationSettingsProxy = notificationSettingsProxy
+        self.attributedStringBuilder = attributedStringBuilder
+        
+        let topic = attributedStringBuilder.fromPlain(roomProxy.topic)
         
         super.init(initialViewState: .init(roomId: roomProxy.id,
                                            canonicalAlias: roomProxy.canonicalAlias,
@@ -55,7 +60,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            isDirect: roomProxy.isDirect,
                                            permalink: roomProxy.permalink,
                                            title: roomProxy.roomTitle,
-                                           topic: roomProxy.topic,
+                                           topic: topic,
+                                           topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
                                            avatarURL: roomProxy.avatarURL,
                                            joinedMembersCount: roomProxy.joinedMembersCount,
                                            notificationSettingsState: .loading,
@@ -126,7 +132,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.state.title = self.roomProxy.roomTitle
-                self.state.topic = self.roomProxy.topic
+                
+                let topic = attributedStringBuilder.fromPlain(self.roomProxy.topic)
+                self.state.topic = topic
+                self.state.topicSummary = topic?.unattributedStringByReplacingNewlinesWithSpaces()
                 self.state.avatarURL = self.roomProxy.avatarURL
                 self.state.joinedMembersCount = self.roomProxy.joinedMembersCount
             }
@@ -297,5 +306,12 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomProxy.roomTitle)
             }
         }
+    }
+}
+
+private extension AttributedString {
+    /// Returns a new string without attributes and in which newlines are replaced with spaces
+    func unattributedStringByReplacingNewlinesWithSpaces() -> AttributedString {
+        AttributedString(characters.map { $0.isNewline ? " " : $0 })
     }
 }
