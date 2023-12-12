@@ -49,8 +49,8 @@ packages:
     exactVersion: 1.1.28
     # path: ../matrix-rust-sdk
   Compound:
-    url: https://github.com/vector-im/compound-ios
-    revision: 56456508d27b7defef647da15d1bd854d6f88a2d
+    url: https://github.com/element-hq/compound-ios
+    revision: e9cfcebf02f7f5cd204159f6f6ab1d07840e656c
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
@@ -58,6 +58,13 @@ packages:
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     minorVersion: 1.0.0
+  SwiftOGG:
+    url: https://github.com/element-hq/swift-ogg
+    branch: 0.0.1
+  WysiwygComposer:
+    url: https://github.com/matrix-org/matrix-wysiwyg-composer-swift
+    exactVersion: 2.19.0
+    # path: ../matrix-wysiwyg/platforms/ios/lib/WysiwygComposer
   
   # External dependencies
   Algorithms:
@@ -69,6 +76,9 @@ packages:
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
     minorVersion: 5.0.0
+  DSWaveformImage:
+    url: https://github.com/dmrschmidt/DSWaveformImage
+    exactVersion: 14.1.1
   DTCoreText:
     url: https://github.com/Cocoanetics/DTCoreText
     exactVersion: 1.6.26
@@ -111,16 +121,6 @@ packages:
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.0.0
-  WysiwygComposer:
-    url: https://github.com/matrix-org/matrix-wysiwyg-composer-swift
-    exactVersion: 2.19.0
-#    path: ../matrix-wysiwyg/platforms/ios/lib/WysiwygComposer
-  SwiftOGG:
-    url: https://github.com/vector-im/swift-ogg
-    branch: 0.0.1
-  DSWaveformImage:
-    url: https://github.com/dmrschmidt/DSWaveformImage
-    exactVersion: 14.1.1
 
 aggregateTargets:
   Periphery:

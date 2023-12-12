@@ -26,7 +26,7 @@ if editedFiles.count > 0, changelogFiles.isEmpty {
 // Check for a ticket number
 if let ticketNumberRegex = try? NSRegularExpression(pattern: "#\\d+") {
     let missingTicketNumber = !danger.git.commits.filter {
-        !$0.message.contains("vector-im/element-x-ios/issues/") &&
+        !$0.message.contains("element-hq/element-x-ios/issues/") &&
             ticketNumberRegex.firstMatch(in: $0.message, options: [], range: .init(location: 0, length: $0.message.utf16.count)) == nil
     }.isEmpty
     

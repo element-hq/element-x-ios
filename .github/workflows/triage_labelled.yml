@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/add-to-project@main
         with:
-          project-url: https://github.com/orgs/vector-im/projects/73
+          project-url: https://github.com/orgs/element-hq/projects/73
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   verticals_feature:
@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/add-to-project@main
         with:
-          project-url: https://github.com/orgs/vector-im/projects/57
+          project-url: https://github.com/orgs/element-hq/projects/57
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   platform:
@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/add-to-project@main
         with:
-          project-url: https://github.com/orgs/vector-im/projects/43
+          project-url: https://github.com/orgs/element-hq/projects/43
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   qa:
@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: actions/add-to-project@main
         with:
-          project-url: https://github.com/orgs/vector-im/projects/69
+          project-url: https://github.com/orgs/element-hq/projects/69
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   signoff:
@@ -58,5 +58,5 @@ jobs:
     steps:
       - uses: actions/add-to-project@main
         with:
-          project-url: https://github.com/orgs/vector-im/projects/89
+          project-url: https://github.com/orgs/element-hq/projects/89
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

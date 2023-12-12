@@ -63,7 +63,7 @@ struct Application: App {
         ProcessInfo.isRunningUITests
     }
     
-    /// https://github.com/vector-im/element-x-ios/issues/1824
+    /// https://github.com/element-hq/element-x-ios/issues/1824
     /// Avoid opening universal links in other app variants and infinite loops between them
     private func openURLInSystemBrowser(_ originalURL: URL) {
         guard var urlComponents = URLComponents(url: originalURL, resolvingAgainstBaseURL: true) else {

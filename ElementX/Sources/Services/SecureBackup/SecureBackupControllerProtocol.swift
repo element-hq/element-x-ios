@@ -22,7 +22,7 @@ enum SecureBackupRecoveryKeyState {
     case disabled
     case enabled
     /// Recovery is not set up properly, the user will need to re-enter it so we can cleanup
-    /// https://github.com/vector-im/element-meta/issues/2107
+    /// https://github.com/element-hq/element-meta/issues/2107
     case incomplete
     case settingUp
 }
