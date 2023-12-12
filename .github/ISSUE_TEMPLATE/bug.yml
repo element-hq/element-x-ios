@@ -1,5 +1,5 @@
 name: Bug report for the Element X iOS app
-description: Report any issues that you have found with the Element X app. Please [check open issues](https://github.com/vector-im/element-x-ios/issues) first, in case it has already been reported.
+description: Report any issues that you have found with the Element X app. Please [check open issues](https://github.com/element-hq/element-x-ios/issues) first, in case it has already been reported.
 labels: [T-Defect]
 body:
   - type: markdown

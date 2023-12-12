@@ -1,8 +1,8 @@
 [![Element iOS Matrix room #element-x-ios:matrix.org](https://img.shields.io/matrix/element-x-ios:matrix.org.svg?label=%23element-x-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-ios:matrix.org)
-![GitHub](https://img.shields.io/github/license/vector-im/element-x-ios)
+![GitHub](https://img.shields.io/github/license/element-hq/element-x-ios)
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/vector-im/element-x-ios/unit_tests.yml?style=flat-square)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/vector-im/element-x-ios)
+![Build Status](https://img.shields.io/github/actions/workflow/status/element-hq/element-x-ios/unit_tests.yml?style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/element-hq/element-x-ios)
 
 [![codecov](https://codecov.io/gh/vector-im/element-x-ios/branch/develop/graph/badge.svg?token=AVIJB2MJU2)](https://codecov.io/gh/vector-im/element-x-ios)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vector-im_element-x-ios&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=vector-im_element-x-ios)
@@ -13,7 +13,7 @@
 
 ElementX iOS is a [Matrix](https://matrix.org/) iOS Client provided by [Element](https://element.io/).
 
-The application is a total rewrite of [Element-iOS](https://github.com/vector-im/element-ios) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targetting devices running iOS 16+.
+The application is a total rewrite of [Element-iOS](https://github.com/element-hq/element-ios) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targetting devices running iOS 16+.
 
 ## Rust SDK
 
@@ -37,7 +37,7 @@ Please refer to the [setting up a development environment](CONTRIBUTING.md#setti
 
 ## Support
 
-When you are experiencing an issue on ElementX iOS, please first search in [GitHub issues](https://github.com/vector-im/element-x-ios/issues)
+When you are experiencing an issue on ElementX iOS, please first search in [GitHub issues](https://github.com/element-hq/element-x-ios/issues)
 and then in [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org).
 If after your research you still have a question, ask at [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting (Rageshake) from the Element application by shaking your phone or going to the application settings. This is especially recommended when you encounter a crash.
 

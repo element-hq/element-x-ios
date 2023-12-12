@@ -9,7 +9,7 @@ jobs:
   open-translations-pr:
     runs-on: macos-13
     # Skip in forks
-    if: github.repository == 'vector-im/element-x-ios'
+    if: github.repository == 'element-hq/element-x-ios'
     steps:
       - name: Checkout
         uses: actions/checkout@v3

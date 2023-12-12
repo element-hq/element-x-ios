@@ -78,7 +78,7 @@ git config core.hooksPath .githooks
 
 The project uses Localazy and is sharing its translations with the ElementX Android project: https://localazy.com/p/element 
 
-Please read the [Android docs](https://github.com/vector-im/element-x-android/blob/develop/tools/localazy/README.md) for more information about how this works. Note: On iOS we don't have the additional step of filtering strings per module.
+Please read the [Android docs](https://github.com/element-hq/element-x-android/blob/develop/tools/localazy/README.md) for more information about how this works. Note: On iOS we don't have the additional step of filtering strings per module.
 
 ### Continuous Integration
 
@@ -92,7 +92,7 @@ It's possible to debug the app's network traffic with a proxy server by setting 
 
 ## Pull requests
 
-Please see our [pull request guide](https://github.com/vector-im/element-android/blob/develop/docs/pull_request.md).
+Please see our [pull request guide](https://github.com/element-hq/element-android/blob/develop/docs/pull_request.md).
 
 ## Implementing a new screen
 
