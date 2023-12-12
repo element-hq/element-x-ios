@@ -27,6 +27,9 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     private let widgetDriver: ElementCallWidgetDriverProtocol
     
     private let callController = CXCallController()
+    // periphery: ignore - call kit magic do not remove
+    private let callProvider = CXProvider(configuration: .init())
+    
     private let callID = UUID()
     
     private let actionsSubject: PassthroughSubject<CallScreenViewModelAction, Never> = .init()
@@ -125,6 +128,20 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
     }
     
+    // MARK: - CXCallObserverDelegate
+    
+    // periphery: ignore - call kit magic do not remove
+    func callObserver(_ callObserver: CXCallObserver, callChanged call: CXCall) {
+        MXLog.info("Call changed: \(call)")
+    }
+    
+    // MARK: - CXProviderDelegate
+    
+    // periphery: ignore - call kit magic do not remove
+    func providerDidReset(_ provider: CXProvider) {
+        MXLog.info("Call provider did reset: \(provider)")
+    }
+    
     // MARK: - Private
 
     private static let eventHandlerName = "elementx"
@@ -145,6 +162,19 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             false,
           );
         """
+    }
+    
+    private func evaluateJavaScript(_ script: String) async -> String? {
+        guard let evaluator = state.bindings.javaScriptEvaluator else {
+            fatalError("Invalid javaScriptEvaluator")
+        }
+        
+        do {
+            return try await evaluator(script) as? String
+        } catch {
+            MXLog.error("Failed evaluating javaScript with error: \(error)")
+            return nil
+        }
     }
     
     private func setupVoIPSession(callID: UUID) async throws {

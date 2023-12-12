@@ -31,6 +31,18 @@ extension View {
         })
         return alert(item.wrappedValue?.title ?? "", isPresented: binding, presenting: item.wrappedValue, actions: actions, message: message)
     }
+
+    // periphery: ignore - not used yet but might be useful
+    func alert<Item, Actions>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions) -> some View where Item: AlertProtocol, Actions: View {
+        let binding = Binding<Bool>(get: {
+            item.wrappedValue != nil
+        }, set: { newValue in
+            if !newValue {
+                item.wrappedValue = nil
+            }
+        })
+        return alert(item.wrappedValue?.title ?? "", isPresented: binding, presenting: item.wrappedValue, actions: actions)
+    }
 }
 
 /// A type that describes an alert to be shown to the user.
@@ -81,6 +93,16 @@ extension AlertInfo {
         self.id = id
         title = L10n.commonError
         message = L10n.errorUnknown
+    }
+
+    /// Initialises the type with the title from an `Error`'s localised description along with the default Ok button.
+    ///
+    /// Currently this initialiser creates an alert for every error, however in the future it may be updated to filter
+    /// out some specific errors such as cancellation and networking issues that create too much noise or are
+    /// indicated to the user using other mechanisms.
+    init(error: Error) where T == String {
+        self.init(id: error.localizedDescription,
+                  title: error.localizedDescription)
     }
 }
 

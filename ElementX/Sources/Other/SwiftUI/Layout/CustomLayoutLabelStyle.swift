@@ -29,6 +29,7 @@ struct CustomLayoutLabelStyle: LabelStyle {
     
     enum IconLayout {
         case leading
+        case trailing
     }
     
     var iconLayout: IconLayout
@@ -41,10 +42,11 @@ struct CustomLayoutLabelStyle: LabelStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         HStack(alignment: alignment, spacing: spacing) {
-            if iconLayout == .leading {
+            switch iconLayout {
+            case .leading:
                 configuration.icon
                 configuration.title
-            } else {
+            case .trailing:
                 configuration.title
                 configuration.icon
             }
