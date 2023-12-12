@@ -24,6 +24,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     private let userID: String
     private let deviceID: String?
     private let actionsSubject: PassthroughSubject<BugReportScreenViewModelAction, Never> = .init()
+    // periphery:ignore - when set to nil this is automatically cancelled
     @CancellableTask private var uploadTask: Task<Void, Never>?
 
     var actions: AnyPublisher<BugReportScreenViewModelAction, Never> {

@@ -26,7 +26,6 @@ enum AppLockSetupBiometricsScreenCoordinatorAction {
 }
 
 final class AppLockSetupBiometricsScreenCoordinator: CoordinatorProtocol {
-    private let parameters: AppLockSetupBiometricsScreenCoordinatorParameters
     private var viewModel: AppLockSetupBiometricsScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<AppLockSetupBiometricsScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -36,8 +35,6 @@ final class AppLockSetupBiometricsScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: AppLockSetupBiometricsScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = AppLockSetupBiometricsScreenViewModel(appLockService: parameters.appLockService)
     }
     

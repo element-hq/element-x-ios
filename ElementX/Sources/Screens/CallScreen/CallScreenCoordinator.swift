@@ -32,7 +32,6 @@ enum CallScreenCoordinatorAction {
 }
 
 final class CallScreenCoordinator: CoordinatorProtocol {
-    private let parameters: CallScreenCoordinatorParameters
     private var viewModel: CallScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<CallScreenCoordinatorAction, Never> = .init()
     
@@ -42,8 +41,6 @@ final class CallScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: CallScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = CallScreenViewModel(roomProxy: parameters.roomProxy,
                                         callBaseURL: parameters.callBaseURL,
                                         clientID: parameters.clientID,

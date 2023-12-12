@@ -73,13 +73,3 @@ extension Array where Element == RoomTimelineItemProtocol {
         first { $0.id.timelineID == id.timelineID }
     }
 }
-
-extension Array {
-    func appending(_ element: Element) -> [Element] {
-        self + [element]
-    }
-    
-    func appending(_ elements: [Element]) -> [Element] {
-        self + elements
-    }
-}

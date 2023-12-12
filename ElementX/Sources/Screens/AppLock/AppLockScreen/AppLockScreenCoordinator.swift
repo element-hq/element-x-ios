@@ -30,7 +30,6 @@ enum AppLockScreenCoordinatorAction {
 }
 
 final class AppLockScreenCoordinator: CoordinatorProtocol {
-    private let parameters: AppLockScreenCoordinatorParameters
     private var viewModel: AppLockScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<AppLockScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -40,8 +39,6 @@ final class AppLockScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: AppLockScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = AppLockScreenViewModel(appLockService: parameters.appLockService)
     }
     

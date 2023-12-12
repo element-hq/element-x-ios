@@ -24,10 +24,6 @@ protocol AudioSessionProtocol: AnyObject {
 }
 
 extension AudioSessionProtocol {
-    func setCategory(_ category: AVAudioSession.Category, mode: AVAudioSession.Mode) throws {
-        try setCategory(category, mode: mode, options: [])
-    }
-    
     func setActive(_ active: Bool) throws {
         try setActive(active, options: [])
     }

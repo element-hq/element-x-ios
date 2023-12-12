@@ -86,8 +86,6 @@ final class AppSettings {
     /// deleted between runs so should clear data in the shared container and keychain.
     @UserPreference(key: UserDefaultsKeys.lastVersionLaunched, storageType: .userDefaults(store))
     var lastVersionLaunched: String?
-
-    let lastLaunchDate = Date()
     
     /// The Set of room identifiers of invites that the user already saw in the invites list.
     /// This Set is being used to implement badges for unread invites.
@@ -180,7 +178,6 @@ final class AppSettings {
     let bugReportSentryURL: URL = "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44"
     // Use the name allocated by the bug report server
     let bugReportApplicationId = "element-x-ios"
-    let bugReportUISIId = "element-auto-uisi"
     /// The maximum size of the upload request. Default value is just below CloudFlare's max request size.
     let bugReportMaxUploadSize = 50 * 1024 * 1024
     
@@ -256,9 +253,6 @@ final class AppSettings {
 
     // maptiler api key
     let mapTilerApiKey = InfoPlistReader.main.mapLibreAPIKey
-    
-    // maptiler geocoding url
-    let geocodingURLFormatString = "https://api.maptiler.com/geocoding/%f,%f.json"
     
     // MARK: - Feature Flags
     

@@ -23,13 +23,10 @@ typealias CallScreenViewModelType = StateStoreViewModel<CallScreenViewState, Cal
 
 class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
-    private let callBaseURL: URL
-    private let clientID: String
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
     
     private let callController = CXCallController()
-    private let callProvider = CXProvider(configuration: .init())
     private let callID = UUID()
     
     private let actionsSubject: PassthroughSubject<CallScreenViewModelAction, Never> = .init()
@@ -51,8 +48,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
          clientID: String,
          useEncryption: Bool) {
         self.roomProxy = roomProxy
-        self.callBaseURL = callBaseURL
-        self.clientID = clientID
         
         widgetDriver = roomProxy.elementCallWidgetDriver()
         

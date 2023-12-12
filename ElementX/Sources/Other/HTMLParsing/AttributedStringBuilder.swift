@@ -22,7 +22,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let cacheKey: String
     private let temporaryBlockquoteMarkingColor = UIColor.magenta
     private let temporaryCodeBlockMarkingColor = UIColor.cyan
-    private let linkColor = UIColor.blue
     private let permalinkBaseURL: URL
     private let mentionBuilder: MentionBuilderProtocol
     
@@ -31,10 +30,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
 
     static func invalidateCaches() {
         caches.removeAll()
-    }
-    
-    static func invalidateCache(for key: String = defaultKey) {
-        caches[key]?.removeAllValues()
     }
     
     init(cacheKey: String = defaultKey, permalinkBaseURL: URL, mentionBuilder: MentionBuilderProtocol) {

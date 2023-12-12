@@ -45,7 +45,7 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
             .debounce(for: 0.1, scheduler: DispatchQueue.main) // Show the last digit for long enough to be read.
             .sink { [weak self] pinCode in
                 guard pinCode.count == 4 else { return }
-                self?.submit(pinCode)
+                self?.submit()
             }
             .store(in: &cancellables)
     }
@@ -64,7 +64,7 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
     // MARK: - Private
     
     /// Handle the entered PIN code.
-    private func submit(_ pinCode: String) {
+    private func submit() {
         switch state.mode {
         case .create:
             createPIN()

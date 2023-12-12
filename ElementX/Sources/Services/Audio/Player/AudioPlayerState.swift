@@ -110,7 +110,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
         playbackState = .stopped
     }
     
-    func reportError(_ error: Error) {
+    func reportError() {
         playbackState = .error
     }
     
@@ -167,7 +167,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
         displayLink?.add(to: .current, forMode: .common)
     }
     
-    @objc private func updateProgress(displayLink: CADisplayLink) {
+    @objc private func updateProgress() {
         if let currentTime = audioPlayer?.currentTime, duration > 0 {
             progress = currentTime / duration
         }

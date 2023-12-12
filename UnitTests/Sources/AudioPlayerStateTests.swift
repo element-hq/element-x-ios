@@ -31,9 +31,6 @@ class AudioPlayerStateTests: XCTestCase {
     }
     
     private var audioPlayerSeekCallsSubject: PassthroughSubject<Double, Never>!
-    private var audioPlayerSeekCalls: AnyPublisher<Double, Never> {
-        audioPlayerSeekCallsSubject.eraseToAnyPublisher()
-    }
     
     private func buildAudioPlayerMock() -> AudioPlayerMock {
         let audioPlayerMock = AudioPlayerMock()
@@ -115,7 +112,7 @@ class AudioPlayerStateTests: XCTestCase {
     
     func testReportError() async throws {
         XCTAssertEqual(audioPlayerState.playbackState, .stopped)
-        audioPlayerState.reportError(AudioPlayerError.genericError)
+        audioPlayerState.reportError()
         XCTAssertEqual(audioPlayerState.playbackState, .error)
     }
     

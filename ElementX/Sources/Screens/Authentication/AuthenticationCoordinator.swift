@@ -19,8 +19,7 @@ import SwiftUI
 
 @MainActor
 protocol AuthenticationCoordinatorDelegate: AnyObject {
-    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator,
-                                   didLoginWithSession userSession: UserSessionProtocol)
+    func authenticationCoordinator(didLoginWithSession userSession: UserSessionProtocol)
 }
 
 class AuthenticationCoordinator: CoordinatorProtocol {
@@ -34,6 +33,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     private var oidcPresenter: OIDCAuthenticationPresenter?
+    // periphery: ignore - used to store the coordinator to avoid deallocation
     private var appLockFlowCoordinator: AppLockSetupFlowCoordinator?
     
     weak var delegate: AuthenticationCoordinatorDelegate?
@@ -245,7 +245,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
         } else if analytics.shouldShowAnalyticsPrompt {
             showAnalyticsPrompt(userSession: userSession)
         } else {
-            delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
+            delegate?.authenticationCoordinator(didLoginWithSession: userSession)
         }
     }
     
@@ -261,7 +261,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
                 if analytics.shouldShowAnalyticsPrompt {
                     showAnalyticsPrompt(userSession: userSession)
                 } else {
-                    delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
+                    delegate?.authenticationCoordinator(didLoginWithSession: userSession)
                 }
             case .forceLogout:
                 fatalError("The PIN creation flow should not fail.")
@@ -281,7 +281,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .done:
-                    delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
+                    delegate?.authenticationCoordinator(didLoginWithSession: userSession)
                 }
             }
             .store(in: &cancellables)

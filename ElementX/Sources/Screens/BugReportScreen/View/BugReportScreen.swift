@@ -140,12 +140,6 @@ struct BugReportScreen: View {
 // MARK: - Previews
 
 struct BugReport_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
-                                                    userID: "@mock.client.com",
-                                                    deviceID: nil,
-                                                    screenshot: nil,
-                                                    isModallyPresented: false)
-    
     static var previews: some View {
         NavigationStack {
             BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(),

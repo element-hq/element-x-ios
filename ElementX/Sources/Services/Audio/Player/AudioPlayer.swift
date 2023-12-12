@@ -46,12 +46,13 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     
     private var statusObserver: NSKeyValueObservation?
     private var rateObserver: NSKeyValueObservation?
-    private var playToEndObserver: NSObjectProtocol?
-    private var appBackgroundObserver: NSObjectProtocol?
     private var autoplay = false
     
     private let audioSession = AVAudioSession.sharedInstance()
+    
+    // periphery:ignore - when set to nil is automatically cancelled
     @CancellableTask private var releaseAudioSessionTask: Task<Void, Never>?
+    
     private let releaseAudioSessionTimeoutInterval = 5.0
     
     private(set) var url: URL?

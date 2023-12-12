@@ -19,8 +19,6 @@ import UIKit
 
 // sourcery: AutoMockable
 protocol ApplicationProtocol {
-    func beginBackgroundTask(expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier
-
     func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier
 
     func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier)

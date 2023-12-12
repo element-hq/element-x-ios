@@ -57,7 +57,7 @@ class AudioRecorderState: ObservableObject, Identifiable {
         recordingState = .stopped
     }
     
-    func reportError(_ error: Error) {
+    func reportError() {
         recordingState = .error
     }
     
@@ -98,7 +98,7 @@ class AudioRecorderState: ObservableObject, Identifiable {
         displayLink?.add(to: .current, forMode: .common)
     }
     
-    @objc private func publishUpdate(displayLink: CADisplayLink) {
+    @objc private func publishUpdate() {
         if let currentTime = audioRecorder?.currentTime {
             duration = currentTime
         }

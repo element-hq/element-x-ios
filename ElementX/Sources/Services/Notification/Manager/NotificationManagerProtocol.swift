@@ -18,10 +18,8 @@ import Foundation
 import UserNotifications
 
 protocol NotificationManagerDelegate: AnyObject {
-    func shouldDisplayInAppNotification(_ service: NotificationManagerProtocol,
-                                        content: UNNotificationContent) -> Bool
-    func notificationTapped(_ service: NotificationManagerProtocol,
-                            content: UNNotificationContent) async
+    func shouldDisplayInAppNotification(content: UNNotificationContent) -> Bool
+    func notificationTapped(content: UNNotificationContent) async
     func handleInlineReply(_ service: NotificationManagerProtocol,
                            content: UNNotificationContent,
                            replyText: String) async

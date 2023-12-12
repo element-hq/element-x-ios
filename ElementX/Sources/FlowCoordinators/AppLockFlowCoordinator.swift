@@ -83,8 +83,6 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     
     private let stateMachine: StateMachine<State, Event>
     
-    /// A task used to await biometric unlock before showing the PIN screen.
-    @CancellableTask private var unlockTask: Task<Void, Never>?
     private var cancellables: Set<AnyCancellable> = []
     
     /// Whether or not biometric unlock should be attempted instead of asking for a PIN.

@@ -45,6 +45,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     private var authenticationCoordinator: AuthenticationCoordinator?
     private let appLockFlowCoordinator: AppLockFlowCoordinator
+    // periphery:ignore - used to avoid deallocation
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
@@ -90,7 +91,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         navigationRootCoordinator = NavigationRootCoordinator()
         
-        Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator, appSettings: appSettings)
+        Self.setupServiceLocator(appSettings: appSettings)
         
         ServiceLocator.shared.analytics.startIfEnabled()
 
@@ -209,9 +210,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     // MARK: - AuthenticationCoordinatorDelegate
     
-    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
+    func authenticationCoordinator(didLoginWithSession userSession: UserSessionProtocol) {
         self.userSession = userSession
-        self.authenticationCoordinator = nil
+        authenticationCoordinator = nil
         stateMachine.processEvent(.createdUserSession)
     }
     
@@ -232,7 +233,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         UIApplication.shared.unregisterForRemoteNotifications()
     }
         
-    func shouldDisplayInAppNotification(_ service: NotificationManagerProtocol, content: UNNotificationContent) -> Bool {
+    func shouldDisplayInAppNotification(content: UNNotificationContent) -> Bool {
         guard let roomID = content.roomID else {
             return true
         }
@@ -243,7 +244,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID)
     }
     
-    func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent) async {
+    func notificationTapped(content: UNNotificationContent) async {
         MXLog.info("[AppCoordinator] tappedNotification")
         
         guard let roomID = content.roomID,
@@ -284,7 +285,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         setenv("RUST_BACKTRACE", "1", 1)
     }
     
-    private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator, appSettings: AppSettings) {
+    private static func setupServiceLocator(appSettings: AppSettings) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         ServiceLocator.shared.register(appSettings: appSettings)
         ServiceLocator.shared.register(networkMonitor: NetworkMonitor())

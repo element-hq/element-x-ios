@@ -624,7 +624,7 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTFail("Couldn't find expected value.")
     }
     
-    private func checkAttachment(attributedString: AttributedString?, expectedRuns: Int, expectedAttachments: Int = 1) {
+    private func checkAttachment(attributedString: AttributedString?, expectedRuns: Int) {
         guard let attributedString else {
             XCTFail("Could not build the attributed string")
             return

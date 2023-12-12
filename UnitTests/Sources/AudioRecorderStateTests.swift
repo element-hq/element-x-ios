@@ -59,7 +59,7 @@ class AudioRecorderStateTests: XCTestCase {
     
     func testReportError() async throws {
         XCTAssertEqual(audioRecorderState.recordingState, .stopped)
-        audioRecorderState.reportError(AudioRecorderError.audioEngineFailure)
+        audioRecorderState.reportError()
         XCTAssertEqual(audioRecorderState.recordingState, .error)
     }
     

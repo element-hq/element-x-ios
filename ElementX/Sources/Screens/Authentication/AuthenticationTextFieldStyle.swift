@@ -44,7 +44,6 @@ public extension TextFieldStyle where Self == AuthenticationTextFieldStyle {
 /// The text field style used in authentication screens.
 public struct AuthenticationTextFieldStyle: TextFieldStyle {
     @Environment(\.isEnabled) private var isEnabled
-    @Environment(\.colorScheme) private var colorScheme
     
     @FocusState private var isFocused: Bool
     public let labelText: Text?
