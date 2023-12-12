@@ -385,7 +385,7 @@ private struct NavigationSplitCoordinatorView: View {
             module.coordinator?.toPresentable()
         }
         // Handle `horizontalSizeClass` changes breaking the navigation bar
-        // https://github.com/vector-im/element-x-ios/issues/617
+        // https://github.com/element-hq/element-x-ios/issues/617
         .onChange(of: horizontalSizeClass) { value in
             guard scenePhase != .background else {
                 return

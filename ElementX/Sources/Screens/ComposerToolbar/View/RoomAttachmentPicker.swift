@@ -23,7 +23,7 @@ struct RoomAttachmentPicker: View {
     
     var body: some View {
         // Use a menu instead of the popover/sheet shown in Figma because overriding the colour scheme
-        // results in a rendering bug on 17.1: https://github.com/vector-im/element-x-ios/issues/2157
+        // results in a rendering bug on 17.1: https://github.com/element-hq/element-x-ios/issues/2157
         Menu {
             menuContent
         } label: {

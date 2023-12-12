@@ -258,7 +258,7 @@ lane :release_to_github do
   end
 
   github_release = set_github_release(
-    repository_name: "vector-im/element-x-ios",
+    repository_name: "element-hq/element-x-ios",
     api_token: api_token,
     name: release_version,
     tag_name: release_version,

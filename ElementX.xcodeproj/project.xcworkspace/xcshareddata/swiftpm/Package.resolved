@@ -3,7 +3,7 @@
     {
       "identity" : "compound-design-tokens",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vector-im/compound-design-tokens.git",
+      "location" : "https://github.com/element-hq/compound-design-tokens.git",
       "state" : {
         "revision" : "b603371c5e4ac798f4613a7388d2305100b31911",
         "version" : "0.0.7"
@@ -12,9 +12,9 @@
     {
       "identity" : "compound-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vector-im/compound-ios",
+      "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "56456508d27b7defef647da15d1bd854d6f88a2d"
+        "revision" : "e9cfcebf02f7f5cd204159f6f6ab1d07840e656c"
       }
     },
     {
@@ -227,7 +227,7 @@
     {
       "identity" : "swift-ogg",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vector-im/swift-ogg",
+      "location" : "https://github.com/element-hq/swift-ogg",
       "state" : {
         "branch" : "0.0.1",
         "revision" : "e9a9e7601da662fd8b97d93781ff5c60b4becf88"
