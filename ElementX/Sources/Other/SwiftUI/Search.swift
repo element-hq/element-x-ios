@@ -164,6 +164,7 @@ private struct SearchController: UIViewControllerRepresentable {
         
         override func willMove(toParent parent: UIViewController?) {
             parent?.navigationItem.searchController = searchController
+            parent?.navigationItem.preferredSearchBarPlacement = .stacked
             parent?.navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
         }
     }
