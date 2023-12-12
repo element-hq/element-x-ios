@@ -67,7 +67,6 @@ enum A11yIdentifiers {
     struct AppLockSetupSettingsScreen {
         let changePIN = "app_lock_setup_settings-change_pin"
         let removePIN = "app_lock_setup_settings-remove_pin"
-        let removePINAlertYes = "app_lock_setup_settings-remove_pin_alert_yes"
     }
 
     struct AnalyticsPromptScreen {
@@ -94,7 +93,6 @@ enum A11yIdentifiers {
     struct HomeScreen {
         let userAvatar = "home_screen-user_avatar"
         let settings = "home_screen-settings"
-        let signOut = "home_screen-sign_out"
         let verificationBannerContinue = "home_screen-verification_continue"
         let recoveryKeyConfirmationBannerContinue = "home_screen-recovery_key_confirmation_continue"
         let invites = "home_screen-invites"
@@ -218,7 +216,6 @@ enum A11yIdentifiers {
         let password = "soft_logout-password"
         let forgotPassword = "soft_logout-forgot_password"
         let next = "soft_logout-next"
-        let unsupportedServer = "soft_logout-unsupported_server"
         let clearDataTitle = "soft_logout-clear_data_title"
         let clearDataMessage = "soft_logout-clear_data_message"
         let clearData = "soft_logout-clear_data"

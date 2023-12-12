@@ -17,19 +17,8 @@
 import Combine
 import SwiftUI
 
-enum AdvancedSettingsScreenCoordinatorAction {
-    case clearCache
-}
-
 final class AdvancedSettingsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: AdvancedSettingsScreenViewModelProtocol
-    
-    private let actionsSubject: PassthroughSubject<AdvancedSettingsScreenCoordinatorAction, Never> = .init()
-    private var cancellables = Set<AnyCancellable>()
-    
-    var actions: AnyPublisher<AdvancedSettingsScreenCoordinatorAction, Never> {
-        actionsSubject.eraseToAnyPublisher()
-    }
     
     init() {
         viewModel = AdvancedSettingsScreenViewModel(advancedSettings: ServiceLocator.shared.settings)

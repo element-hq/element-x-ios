@@ -20,12 +20,6 @@ import SwiftUI
 typealias AdvancedSettingsScreenViewModelType = StateStoreViewModel<AdvancedSettingsScreenViewState, AdvancedSettingsScreenViewAction>
 
 class AdvancedSettingsScreenViewModel: AdvancedSettingsScreenViewModelType, AdvancedSettingsScreenViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<AdvancedSettingsScreenViewModelAction, Never> = .init()
-    
-    var actions: AnyPublisher<AdvancedSettingsScreenViewModelAction, Never> {
-        actionsSubject.eraseToAnyPublisher()
-    }
-    
     init(advancedSettings: AdvancedSettingsProtocol) {
         let bindings = AdvancedSettingsScreenViewStateBindings(advancedSettings: advancedSettings)
         let state = AdvancedSettingsScreenViewState(bindings: bindings)

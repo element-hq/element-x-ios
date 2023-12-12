@@ -145,7 +145,7 @@ public struct AuthenticationTextFieldStyle: TextFieldStyle {
 }
 
 struct ElementTextFieldStyle_Previews: PreviewProvider {
-    public static var previews: some View {
+    static var previews: some View {
         ScrollView {
             VStack(spacing: 20) {
                 // Plain text field.

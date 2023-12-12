@@ -1,0 +1,18 @@
+project: ElementX.xcodeproj
+schemes:
+- ElementX
+- IntegrationTests
+- UITests
+- UnitTests
+targets:
+- ElementX
+- IntegrationTests
+- NCE
+- NSE
+- UITests
+- UnitTests
+report_exclude:
+  # includes subscript which is not detectable: https://github.com/apple/swift/issues/56541
+  - ElementX/Sources/Screens/Settings/AvancedOptionsScreen/AdvancedSettingsScreenModels.swift
+verbose: true
+retain_swift_ui_previews: true
