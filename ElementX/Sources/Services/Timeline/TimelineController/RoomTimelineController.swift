@@ -299,21 +299,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 break
             }
         }
-
-        let firstTimelineItem = roomProxy.timeline.timelineProvider.itemProxies.first(where: {
-            switch $0 {
-            case .event:
-                true
-            default:
-                false
-            }
-        })
-        if case .event(let eventTimelineItemProxy) = firstTimelineItem {
-            let age = Date.now.timeIntervalSince(eventTimelineItemProxy.timestamp)
-            let dateComponents = Calendar.current.dateComponents([.day], from: eventTimelineItemProxy.timestamp, to: .now)
-            let days = (dateComponents.day ?? 0) + 1
-            MXLog.info("first timeline item age: \(age) [\(days) days]")
-        }
         
         timelineItems = newTimelineItems
         

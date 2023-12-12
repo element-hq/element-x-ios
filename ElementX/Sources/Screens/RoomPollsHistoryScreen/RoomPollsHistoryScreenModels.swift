@@ -21,10 +21,10 @@ enum RoomPollsHistoryScreenViewModelAction {
 }
 
 struct RoomPollsHistoryScreenViewState: BindableState {
-    var title: String
-    var filters: [RoomPollsHistoryFilter] = [.ongoing, .past]
+    let title: String
+    let filters: [RoomPollsHistoryFilter] = [.ongoing, .past]
     var pollTimelineItems: [RoomPollsHistoryPollDetails] = []
-    var canBackPaginate = true
+    var canBackPaginate = false
     var isInitializing = false
     var isBackPaginating = false
     var bindings: RoomPollsHistoryScreenViewStateBindings

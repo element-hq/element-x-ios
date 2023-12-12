@@ -18,7 +18,6 @@ import Compound
 import SwiftUI
 
 struct RoomPollsHistoryScreen: View {
-    @Environment(\.timelineStyle) var timelineStyle
     @ObservedObject var context: RoomPollsHistoryScreenViewModel.Context
     
     var body: some View {
@@ -28,21 +27,14 @@ struct RoomPollsHistoryScreen: View {
                 
                 polls
 
-                if !context.viewState.isInitializing {
-                    if context.viewState.pollTimelineItems.isEmpty {
-                        Spacer(minLength: 32)
-                    }
-
-                    if context.viewState.pollTimelineItems.isEmpty {
-                        emptyStateMessage
-                    }
-                    
-                    if context.viewState.canBackPaginate {
-                        if !context.viewState.pollTimelineItems.isEmpty {
-                            Spacer(minLength: 16)
-                        }
-                        loadMoreButton
-                    }
+                if context.viewState.pollTimelineItems.isEmpty {
+                    emptyStateMessage
+                        .padding(.top, 48)
+                }
+                                
+                if context.viewState.canBackPaginate {
+                    loadMoreButton
+                        .padding(.top, context.viewState.pollTimelineItems.isEmpty ? 0 : 16)
                 }
             }
             .padding()
@@ -166,14 +158,12 @@ struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         NavigationStack {
             RoomPollsHistoryScreen(context: viewModelEmpty.context)
-                .environment(\.timelineStyle, .bubbles)
         }
         .previewDisplayName("No polls")
         .snapshot(delay: 1.0)
 
         NavigationStack {
             RoomPollsHistoryScreen(context: viewModel.context)
-                .environment(\.timelineStyle, .bubbles)
         }
         .previewDisplayName("polls")
         .snapshot(delay: 1.0)
