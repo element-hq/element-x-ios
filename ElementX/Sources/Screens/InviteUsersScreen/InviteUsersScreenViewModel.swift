@@ -22,7 +22,6 @@ typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreen
 
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
     private let roomType: InviteUsersScreenRoomType
-    private let mediaProvider: MediaProviderProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -40,7 +39,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
          appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomType = roomType
-        self.mediaProvider = mediaProvider
         self.userDiscoveryService = userDiscoveryService
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
@@ -89,6 +87,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         }
     }
     
+    // periphery:ignore - automatically cancelled when set to nil
     @CancellableTask
     private var fetchUsersTask: Task<Void, Never>?
     

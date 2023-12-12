@@ -21,6 +21,4 @@ protocol HomeScreenViewModelProtocol {
     var actions: AnyPublisher<HomeScreenViewModelAction, Never> { get }
     
     var context: HomeScreenViewModelType.Context { get }
-    
-    func presentCrashedLastRunAlert()
 }
