@@ -122,7 +122,6 @@ struct RoomScreenViewState: BindableState {
     var members: [String: RoomMemberState] = [:]
     var showLoading = false
     var timelineStyle: TimelineStyle
-    var readReceiptsEnabled: Bool
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this
     var swiftUITimelineEnabled = false

@@ -43,11 +43,6 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
                     Text("Collapse room state events")
                 }
-                
-                Toggle(isOn: $context.readReceiptsEnabled) {
-                    Text("Show read receipts")
-                    Text("Requires app reboot")
-                }
 
                 Toggle(isOn: $context.swiftUITimelineEnabled) {
                     Text("SwiftUI Timeline")

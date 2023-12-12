@@ -21,7 +21,6 @@ struct TimelineItemStatusView: View {
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @Environment(\.timelineStyle) private var style
-    @Environment(\.readReceiptsEnabled) private var readReceiptsEnabled
     @EnvironmentObject private var context: RoomScreenViewModel.Context
 
     private var isLastOutgoingMessage: Bool {
@@ -34,7 +33,7 @@ struct TimelineItemStatusView: View {
 
     @ViewBuilder
     private var mainContent: some View {
-        if !timelineItem.properties.orderedReadReceipts.isEmpty, readReceiptsEnabled {
+        if !timelineItem.properties.orderedReadReceipts.isEmpty {
             readReceipts
         } else {
             deliveryStatusBadge

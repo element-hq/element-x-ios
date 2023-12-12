@@ -84,7 +84,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomTitle: roomProxy.roomTitle,
                                                          roomAvatarURL: roomProxy.avatarURL,
                                                          timelineStyle: appSettings.timelineStyle,
-                                                         readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                          ownUserID: roomProxy.ownUserID,
                                                          hasOngoingCall: roomProxy.hasOngoingCall,
@@ -314,10 +313,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         appSettings.$timelineStyle
             .weakAssign(to: \.state.timelineStyle, on: self)
-            .store(in: &cancellables)
-
-        appSettings.$readReceiptsEnabled
-            .weakAssign(to: \.state.readReceiptsEnabled, on: self)
             .store(in: &cancellables)
                 
         roomProxy.members

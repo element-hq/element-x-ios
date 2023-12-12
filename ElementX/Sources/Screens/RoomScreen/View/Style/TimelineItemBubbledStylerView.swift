@@ -400,9 +400,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         mockTimeline
             .previewDisplayName("Mock Timeline")
         mockTimeline
-            .environment(\.readReceiptsEnabled, true)
-            .previewDisplayName("Mock Timeline with read receipts")
-        mockTimeline
             .environment(\.layoutDirection, .rightToLeft)
             .previewDisplayName("Mock Timeline RTL")
         replies
