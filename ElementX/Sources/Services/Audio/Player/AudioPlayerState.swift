@@ -167,7 +167,8 @@ class AudioPlayerState: ObservableObject, Identifiable {
         displayLink?.add(to: .current, forMode: .common)
     }
     
-    @objc private func updateProgress() {
+    // periphery:ignore:parameters displayLink - required for objc selector
+    @objc private func updateProgress(displayLink: CADisplayLink) {
         if let currentTime = audioPlayer?.currentTime, duration > 0 {
             progress = currentTime / duration
         }

@@ -98,7 +98,8 @@ class AudioRecorderState: ObservableObject, Identifiable {
         displayLink?.add(to: .current, forMode: .common)
     }
     
-    @objc private func publishUpdate() {
+    // periphery:ignore:parameters displayLink - required for objc selector
+    @objc private func publishUpdate(displayLink: CADisplayLink) {
         if let currentTime = audioRecorder?.currentTime {
             duration = currentTime
         }
