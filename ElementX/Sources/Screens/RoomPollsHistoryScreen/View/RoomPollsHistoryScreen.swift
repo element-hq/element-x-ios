@@ -63,6 +63,7 @@ struct RoomPollsHistoryScreen: View {
             }
         }
         .pickerStyle(.segmented)
+        .readableFrame(maxWidth: 475)
         .onChange(of: context.filter) { value in
             context.send(viewAction: .filter(value))
         }
