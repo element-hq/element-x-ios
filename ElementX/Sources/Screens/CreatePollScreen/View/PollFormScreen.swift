@@ -51,9 +51,6 @@ struct PollFormScreen: View {
         Section {
             ListRow(label: .plain(title: L10n.screenCreatePollQuestionHint),
                     kind: .textField(text: $context.question, axis: .vertical))
-                .introspect(.textField, on: .supportedVersions) { textField in
-                    textField.clearButtonMode = .whileEditing
-                }
                 .focused($focus, equals: .question)
                 .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.question)
                 .onSubmit {
