@@ -68,7 +68,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     // that could happen with the default HTML renderer of NSAttributedString which is a
     // webview.
     func fromHTML(_ htmlString: String?) -> AttributedString? {
-        guard var originalHTMLString = htmlString else {
+        guard let originalHTMLString = htmlString else {
             return nil
         }
         

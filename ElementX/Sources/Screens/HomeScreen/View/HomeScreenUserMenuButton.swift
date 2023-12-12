@@ -18,8 +18,6 @@ import Compound
 import SwiftUI
 
 struct HomeScreenUserMenuButton: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
     @ObservedObject var context: HomeScreenViewModel.Context
     
     var body: some View {

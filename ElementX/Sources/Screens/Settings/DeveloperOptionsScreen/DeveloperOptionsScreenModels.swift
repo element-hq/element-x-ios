@@ -24,6 +24,7 @@ struct DeveloperOptionsScreenViewState: BindableState {
     var bindings: DeveloperOptionsScreenViewStateBindings
 }
 
+// periphery: ignore - subscripts are seen as false positive
 @dynamicMemberLookup
 struct DeveloperOptionsScreenViewStateBindings {
     private let developerOptions: DeveloperOptionsProtocol

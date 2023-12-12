@@ -45,6 +45,6 @@ public extension Animation {
 /// - Parameters:
 ///   - animation: Animation
 ///   - body: operations to be animated
-public func withElementAnimation<Result>(_ animation: Animation? = .default, _ body: () throws -> Result) rethrows -> Result {
+func withElementAnimation<Result>(_ animation: Animation? = .default, _ body: () throws -> Result) rethrows -> Result {
     try withAnimation(animation?.disabledDuringTests(), body)
 }

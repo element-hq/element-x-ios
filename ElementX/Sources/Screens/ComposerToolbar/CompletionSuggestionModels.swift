@@ -30,15 +30,6 @@ enum SuggestionItem: Identifiable, Equatable {
             return PillConstants.atRoom
         }
     }
-    
-    var name: String? {
-        switch self {
-        case .user(let user):
-            return user.displayName
-        case .allUsers:
-            return PillConstants.everyone
-        }
-    }
 }
 
 struct MentionSuggestionItem: Identifiable, Equatable {

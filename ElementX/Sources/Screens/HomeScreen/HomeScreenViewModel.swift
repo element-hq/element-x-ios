@@ -21,9 +21,7 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, Hom
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let attributedStringBuilder: AttributedStringBuilderProtocol
     private let appSettings: AppSettings
-    private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
@@ -39,15 +37,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     init(userSession: UserSessionProtocol,
-         attributedStringBuilder: AttributedStringBuilderProtocol,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          appSettings: AppSettings,
-         analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
-        self.attributedStringBuilder = attributedStringBuilder
         self.appSettings = appSettings
-        self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider

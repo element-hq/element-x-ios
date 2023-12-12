@@ -18,27 +18,27 @@ import Foundation
 
 enum BlockquoteAttribute: AttributedStringKey {
     typealias Value = Bool
-    public static var name = "MXBlockquoteAttribute"
+    static var name = "MXBlockquoteAttribute"
 }
 
 enum UserIDAttribute: AttributedStringKey {
     typealias Value = String
-    public static var name = "MXUserIDAttribute"
+    static var name = "MXUserIDAttribute"
 }
 
 enum RoomIDAttribute: AttributedStringKey {
     typealias Value = String
-    public static var name = "MXRoomIDAttribute"
+    static var name = "MXRoomIDAttribute"
 }
 
 enum RoomAliasAttribute: AttributedStringKey {
     typealias Value = String
-    public static var name = "MXRoomAliasAttribute"
+    static var name = "MXRoomAliasAttribute"
 }
 
 enum AllUsersMentionAttribute: AttributedStringKey {
     typealias Value = Bool
-    public static var name = "MXAllUsersMentionAttribute"
+    static var name = "MXAllUsersMentionAttribute"
 }
 
 struct EventIDAttributeValue: Hashable {
@@ -48,9 +48,10 @@ struct EventIDAttributeValue: Hashable {
 
 enum EventIDAttribute: AttributedStringKey {
     typealias Value = EventIDAttributeValue
-    public static var name = "MXEventIDAttribute"
+    static var name = "MXEventIDAttribute"
 }
 
+// periphery: ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
 extension AttributeScopes {
     struct ElementXAttributes: AttributeScope {
         let blockquote: BlockquoteAttribute
@@ -69,6 +70,7 @@ extension AttributeScopes {
     var elementX: ElementXAttributes.Type { ElementXAttributes.self }
 }
 
+// periphery: ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
 extension AttributeDynamicLookup {
     subscript<T: AttributedStringKey>(dynamicMember keyPath: KeyPath<AttributeScopes.ElementXAttributes, T>) -> T {
         self[T.self]

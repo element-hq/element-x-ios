@@ -694,18 +694,6 @@ class BugReportServiceMock: BugReportServiceProtocol {
         resetCallsCount += 1
         resetClosure?()
     }
-    //MARK: - crash
-
-    var crashCallsCount = 0
-    var crashCalled: Bool {
-        return crashCallsCount > 0
-    }
-    var crashClosure: (() -> Void)?
-
-    func crash() {
-        crashCallsCount += 1
-        crashClosure?()
-    }
     //MARK: - submitBugReport
 
     var submitBugReportProgressListenerCallsCount = 0

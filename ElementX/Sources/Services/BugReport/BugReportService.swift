@@ -115,10 +115,6 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         lastCrashEventId = nil
         MXLog.info("Reset.")
     }
-    
-    func crash() {
-        SentrySDK.crash()
-    }
 
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {

@@ -57,7 +57,6 @@ struct EstimatedWaveformView: View {
     var lineWidth: CGFloat = 2
     var linePadding: CGFloat = 2
     var waveform: EstimatedWaveform
-    private let minimumGraphAmplitude: CGFloat = 1
     var progress: CGFloat = 0.0
     
     @State private var normalizedWaveformData: [Float] = []

@@ -97,6 +97,5 @@ extension EmojiItem {
         label = emojibase.label
         shortcodes = emojibase.shortcodes
         keywords = emojibase.tags ?? []
-        skins = emojibase.skins?.map(\.unicode) ?? []
     }
 }

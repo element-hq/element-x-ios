@@ -42,8 +42,6 @@ enum ClientProxyError: Error {
     case failedRetrievingUserDisplayName
     case failedRetrievingUserAvatarURL
     case failedSettingUserDisplayName
-    case failedRetrievingAccountData
-    case failedSettingAccountData
     case failedRetrievingSessionVerificationController
     case failedLoadingMedia
     case mediaFileError
@@ -122,11 +120,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError>
     
     func removeUserAvatar() async -> Result<Void, ClientProxyError>
-
-    func accountDataEvent<Content: Decodable>(type: String) async -> Result<Content?, ClientProxyError>
-    
-    func setAccountData<Content: Encodable>(content: Content, type: String) async -> Result<Void, ClientProxyError>
-    
+        
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
 
     func logout() async -> URL?

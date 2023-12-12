@@ -52,6 +52,7 @@ enum BugReportServiceError: LocalizedError {
 
 // sourcery: AutoMockable
 protocol BugReportServiceProtocol {
+    // periphery: ignore
     var isRunning: Bool { get }
     
     var crashedLastRun: Bool { get }
@@ -61,8 +62,6 @@ protocol BugReportServiceProtocol {
     func stop()
     
     func reset()
-
-    func crash()
     
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>

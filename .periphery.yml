@@ -11,5 +11,8 @@ targets:
 - NSE
 - UITests
 - UnitTests
+report_exclude:
+  - ElementX/Sources/Mocks/Generated/GeneratedMocks.swift
+  - ElementX/Sources/Mocks/Generated/SDKGeneratedMocks.swift
 verbose: true
 retain_swift_ui_previews: true
