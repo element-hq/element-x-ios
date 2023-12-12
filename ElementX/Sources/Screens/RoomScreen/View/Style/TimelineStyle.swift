@@ -82,9 +82,4 @@ extension EnvironmentValues {
         get { self[TimelineGroupStyleKey.self] }
         set { self[TimelineGroupStyleKey.self] = newValue }
     }
-
-    var readReceiptsEnabled: Bool {
-        get { self[ReadReceiptsEnabledKey.self] }
-        set { self[ReadReceiptsEnabledKey.self] = newValue }
-    }
 }

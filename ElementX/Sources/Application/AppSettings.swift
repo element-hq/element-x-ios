@@ -44,7 +44,6 @@ final class AppSettings {
         // Feature flags
         case shouldCollapseRoomStateEvents
         case userSuggestionsEnabled
-        case readReceiptsEnabled
         case swiftUITimelineEnabled
         case chatBackupEnabled
     }
@@ -265,9 +264,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.userSuggestionsEnabled, defaultValue: false, storageType: .volatile)
     var userSuggestionsEnabled
-
-    @UserPreference(key: UserDefaultsKeys.readReceiptsEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var readReceiptsEnabled
     
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled

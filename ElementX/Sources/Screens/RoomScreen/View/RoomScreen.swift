@@ -100,7 +100,6 @@ struct RoomScreen: View {
             .id(context.viewState.roomID)
             .environmentObject(context)
             .environment(\.timelineStyle, context.viewState.timelineStyle)
-            .environment(\.readReceiptsEnabled, context.viewState.readReceiptsEnabled)
     }
 
     @ViewBuilder
