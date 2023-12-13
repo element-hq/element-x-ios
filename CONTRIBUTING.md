@@ -157,7 +157,7 @@ Otherwise please have a look to [Apple Swift conventions](https://swift.org/docu
 
 We enforce the coding style by running checks on the CI for every PR through [Danger](Dangerfile.swift), [SwiftLint](.swiftlint.yml), [SwiftFormat](.swiftformat) and [SonarCloud](https://sonarcloud.io/project/overview?id=vector-im_element-x-ios)
 
-We also gather coverage reports on every PR through [Codecov](https://app.codecov.io/gh/vector-im/element-x-ios) and will eventually start enforcing minimums.
+We also gather coverage reports on every PR through [Codecov](https://app.codecov.io/gh/element-hq/element-x-ios) and will eventually start enforcing minimums.
 
 ## Thanks
 
