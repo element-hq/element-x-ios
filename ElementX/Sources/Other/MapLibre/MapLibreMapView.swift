@@ -49,16 +49,12 @@ struct MapLibreMapView: UIViewRepresentable {
     
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
     @Binding var showsUserLocationMode: ShowUserLocationMode
-    
     /// Bind view errors if any
     @Binding var error: MapLibreError?
-    
     /// Coordinate of the center of the map
     @Binding var mapCenterCoordinate: CLLocationCoordinate2D?
-
     @Binding var isLocationAuthorized: Bool?
-
-    // The radius of uncertainty for the location, measured in meters.
+    /// The radius of uncertainty for the location, measured in meters.
     @Binding var geolocationUncertainty: CLLocationAccuracy?
     
     /// Called when the user pan on the map
@@ -74,7 +70,14 @@ struct MapLibreMapView: UIViewRepresentable {
     }
     
     func updateUIView(_ mapView: MGLMapView, context: Context) {
-        mapView.styleURL = builder.dynamicMapURL(for: .init(colorScheme))
+        // Don't set the same value twice. Otherwise, if there is an error loading the map, a loop
+        // is caused as the `error` binding being set, which triggers this update, which sets a
+        // new URL, which causes another error, and so it goes on round and round in a circle.
+        let dynamicMapURL = builder.dynamicMapURL(for: .init(colorScheme))
+        if mapView.styleURL != dynamicMapURL {
+            mapView.styleURL = dynamicMapURL
+        }
+        
         showUserLocation(in: mapView)
     }
     
@@ -106,10 +109,9 @@ struct MapLibreMapView: UIViewRepresentable {
         case (.showAndFollow, _):
             mapView.userTrackingMode = .follow
         case (.show, let annotations) where !annotations.isEmpty:
-            /** in the show mode, if there are annotations, we check the authorizationStatus,
-             if it's not determined, we wont prompt the user with a request for permissions,
-             because he should be able to see the annotations without sharing his location informations
-             **/
+            // In the show mode, if there are annotations, we check the authorizationStatus,
+            // if it's not determined, we wont prompt the user with a request for permissions,
+            // because they should be able to see the annotations without sharing their location information.
             guard mapView.locationManager.authorizationStatus != .notDetermined else { return }
             fallthrough
         case (.show, _):
@@ -148,7 +150,9 @@ extension MapLibreMapView {
         }
         
         func mapViewDidFailLoadingMap(_ mapView: MGLMapView, withError error: Error) {
-            mapLibreView.error = .failedLoadingMap
+            if mapLibreView.error != .failedLoadingMap {
+                mapLibreView.error = .failedLoadingMap
+            }
         }
         
         func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) {
