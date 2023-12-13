@@ -4,7 +4,7 @@
 ![Build Status](https://img.shields.io/github/actions/workflow/status/element-hq/element-x-ios/unit_tests.yml?style=flat-square)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/element-hq/element-x-ios)
 
-[![codecov](https://codecov.io/gh/vector-im/element-x-ios/branch/develop/graph/badge.svg?token=AVIJB2MJU2)](https://codecov.io/gh/vector-im/element-x-ios)
+[![codecov](https://codecov.io/gh/element-hq/element-x-ios/branch/develop/graph/badge.svg?token=AVIJB2MJU2)](https://codecov.io/gh/element-hq/element-x-ios)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vector-im_element-x-ios&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=vector-im_element-x-ios)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=vector-im_element-x-ios&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=vector-im_element-x-ios)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vector-im_element-x-ios&metric=bugs)](https://sonarcloud.io/summary/new_code?id=vector-im_element-x-ios)
