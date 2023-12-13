@@ -343,9 +343,9 @@ class AudioRecorder: AudioRecorderProtocol {
             .store(in: &cancellables)
         
         NotificationCenter.default.publisher(for: Notification.Name.AVAudioEngineConfigurationChange)
-            .sink { [weak self] notification in
+            .sink { [weak self] _ in
                 guard let self else { return }
-                self.handleConfigurationChange(notification: notification)
+                self.handleConfigurationChange()
             }
             .store(in: &cancellables)
         
@@ -396,7 +396,7 @@ class AudioRecorder: AudioRecorderProtocol {
         }
     }
     
-    func handleConfigurationChange(notification: Notification) {
+    func handleConfigurationChange() {
         guard let audioEngine else { return }
         MXLog.warning("Configuration changed: \(audioEngine.inputNode.inputFormat(forBus: 0))")
         if internalState != .suspended {

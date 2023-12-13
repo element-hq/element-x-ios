@@ -117,14 +117,6 @@ class MockClientProxy: ClientProxyProtocol {
         .failure(.failedSettingUserAvatar)
     }
     
-    func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
-        .failure(.failedRetrievingAccountData)
-    }
-    
-    func setAccountData<Content>(content: Content, type: String) async -> Result<Void, ClientProxyError> where Content: Encodable {
-        .failure(.failedSettingAccountData)
-    }
-    
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
         throw ClientProxyError.failedLoadingMedia
     }

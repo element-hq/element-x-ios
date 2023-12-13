@@ -105,13 +105,6 @@ class AnalyticsService {
         appSettings.analyticsConsentState = .unknown
     }
     
-    /// Flushes the event queue in the analytics client, uploading all pending events.
-    /// Normally events are sent in batches. Call this method when you need an event
-    /// to be sent immediately.
-    func forceUpload() {
-        client.flush()
-    }
-    
     // MARK: - Private
     
     /// Capture an event in the `client`.

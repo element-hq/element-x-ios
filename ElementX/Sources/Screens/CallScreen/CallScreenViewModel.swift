@@ -23,13 +23,13 @@ typealias CallScreenViewModelType = StateStoreViewModel<CallScreenViewState, Cal
 
 class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
-    private let callBaseURL: URL
-    private let clientID: String
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
     
     private let callController = CXCallController()
+    // periphery: ignore - call kit magic do not remove
     private let callProvider = CXProvider(configuration: .init())
+    
     private let callID = UUID()
     
     private let actionsSubject: PassthroughSubject<CallScreenViewModelAction, Never> = .init()
@@ -51,8 +51,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
          clientID: String,
          useEncryption: Bool) {
         self.roomProxy = roomProxy
-        self.callBaseURL = callBaseURL
-        self.clientID = clientID
         
         widgetDriver = roomProxy.elementCallWidgetDriver()
         
@@ -132,12 +130,14 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     // MARK: - CXCallObserverDelegate
     
+    // periphery: ignore - call kit magic do not remove
     func callObserver(_ callObserver: CXCallObserver, callChanged call: CXCall) {
         MXLog.info("Call changed: \(call)")
     }
     
     // MARK: - CXProviderDelegate
     
+    // periphery: ignore - call kit magic do not remove
     func providerDidReset(_ provider: CXProvider) {
         MXLog.info("Call provider did reset: \(provider)")
     }

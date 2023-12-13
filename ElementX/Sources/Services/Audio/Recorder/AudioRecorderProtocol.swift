@@ -24,7 +24,6 @@ enum AudioRecorderError: Error, Equatable {
     case audioFileCreationFailure
     case interrupted
     case recordingCancelled
-    case recordingFailed
     case recordPermissionNotGranted
 }
 

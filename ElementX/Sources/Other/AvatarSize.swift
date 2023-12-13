@@ -106,10 +106,6 @@ enum RoomAvatarSizeOnScreen {
 }
 
 extension AvatarSize {
-    var size: CGSize {
-        CGSize(width: value, height: value)
-    }
-
     var scaledSize: CGSize {
         CGSize(width: scaledValue, height: scaledValue)
     }

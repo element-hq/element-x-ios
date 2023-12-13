@@ -25,15 +25,17 @@ class ClientProxy: ClientProxyProtocol {
     private let appSettings: AppSettings
     private let networkMonitor: NetworkMonitorProtocol
     
-    private var sessionVerificationControllerProxy: SessionVerificationControllerProxy?
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
         
     private var roomListService: RoomListService?
+    // periphery: ignore - only for retain
     private var roomListStateUpdateTaskHandle: TaskHandle?
+    // periphery: ignore - only for retain
     private var roomListStateLoadingStateUpdateTaskHandle: TaskHandle?
 
     private var syncService: SyncService?
+    // periphery: ignore - only for retain
     private var syncServiceStateUpdateTaskHandle: TaskHandle?
     
     private var delegateHandle: TaskHandle?
@@ -48,8 +50,6 @@ class ClientProxy: ClientProxyProtocol {
     let notificationSettings: NotificationSettingsProxyProtocol
 
     let secureBackupController: SecureBackupControllerProtocol
-
-    private let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
     
     private static var roomCreationPowerLevelOverrides: PowerLevels {
         .init(usersDefault: nil,
@@ -79,7 +79,6 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private var cancellables = Set<AnyCancellable>()
-    private var visibleRoomsListProxyStateObservationToken: AnyCancellable?
     
     /// Will be `true` whilst the app cleans up and forces a logout. Prevents the sync service from restarting
     /// before the client is released which ends up running in a loop. This is a workaround until the sync service
@@ -410,18 +409,6 @@ class ClientProxy: ClientProxyProtocol {
             } catch {
                 return .failure(.failedSettingUserAvatar)
             }
-        }
-    }
-
-    func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
-        await Task.dispatch(on: clientQueue) {
-            .failure(.failedRetrievingAccountData)
-        }
-    }
-    
-    func setAccountData<Content: Encodable>(content: Content, type: String) async -> Result<Void, ClientProxyError> {
-        await Task.dispatch(on: clientQueue) {
-            .failure(.failedSettingAccountData)
         }
     }
 

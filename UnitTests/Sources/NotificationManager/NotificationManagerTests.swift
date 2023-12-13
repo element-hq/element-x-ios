@@ -246,11 +246,11 @@ extension NotificationManagerTests: NotificationManagerDelegate {
         authorizationStatusWasGranted = false
     }
     
-    func shouldDisplayInAppNotification(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent) -> Bool {
+    func shouldDisplayInAppNotification(content: UNNotificationContent) -> Bool {
         shouldDisplayInAppNotificationReturnValue
     }
     
-    func notificationTapped(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent) async {
+    func notificationTapped(content: UNNotificationContent) async {
         notificationTappedDelegateCalled = true
     }
     

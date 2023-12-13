@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+// periphery: ignore - markdown protocol
 protocol TextBasedRoomTimelineViewProtocol {
     associatedtype TimelineItemType: TextBasedRoomTimelineItem
 

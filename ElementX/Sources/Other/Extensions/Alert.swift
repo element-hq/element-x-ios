@@ -31,6 +31,18 @@ extension View {
         })
         return alert(item.wrappedValue?.title ?? "", isPresented: binding, presenting: item.wrappedValue, actions: actions, message: message)
     }
+
+    // periphery: ignore - not used yet but might be useful
+    func alert<Item, Actions>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions) -> some View where Item: AlertProtocol, Actions: View {
+        let binding = Binding<Bool>(get: {
+            item.wrappedValue != nil
+        }, set: { newValue in
+            if !newValue {
+                item.wrappedValue = nil
+            }
+        })
+        return alert(item.wrappedValue?.title ?? "", isPresented: binding, presenting: item.wrappedValue, actions: actions)
+    }
 }
 
 /// A type that describes an alert to be shown to the user.

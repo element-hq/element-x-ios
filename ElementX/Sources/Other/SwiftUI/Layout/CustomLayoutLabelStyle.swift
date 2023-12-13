@@ -27,7 +27,11 @@ struct CustomLayoutLabelStyle: LabelStyle {
     let spacing: CGFloat
     var alignment: VerticalAlignment
     
-    enum IconLayout { case leading, trailing }
+    enum IconLayout {
+        case leading
+        case trailing
+    }
+    
     var iconLayout: IconLayout
     
     fileprivate init(spacing: CGFloat, alignment: VerticalAlignment, iconLayout: IconLayout) {
@@ -38,10 +42,11 @@ struct CustomLayoutLabelStyle: LabelStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         HStack(alignment: alignment, spacing: spacing) {
-            if iconLayout == .leading {
+            switch iconLayout {
+            case .leading:
                 configuration.icon
                 configuration.title
-            } else {
+            case .trailing:
                 configuration.title
                 configuration.icon
             }

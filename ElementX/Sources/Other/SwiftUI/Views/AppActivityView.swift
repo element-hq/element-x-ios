@@ -26,11 +26,11 @@ struct AppActivityView: UIViewControllerRepresentable {
     private var onCancel: (() -> Void)?
     private var onComplete: CompletionType?
 
-    public init(activityItems: [Any],
-                applicationActivities: [UIActivity]? = nil,
-                excludedActivityTypes: [UIActivity.ActivityType] = [],
-                onCancel: (() -> Void)? = nil,
-                onComplete: CompletionType? = nil) {
+    init(activityItems: [Any],
+         applicationActivities: [UIActivity]? = nil,
+         excludedActivityTypes: [UIActivity.ActivityType] = [],
+         onCancel: (() -> Void)? = nil,
+         onComplete: CompletionType? = nil) {
         self.activityItems = activityItems
         self.applicationActivities = applicationActivities
         self.excludedActivityTypes = excludedActivityTypes
@@ -38,7 +38,7 @@ struct AppActivityView: UIViewControllerRepresentable {
         self.onComplete = onComplete
     }
 
-    public func makeUIViewController(context: Context) -> UIViewControllerType {
+    func makeUIViewController(context: Context) -> UIViewControllerType {
         let viewController = UIViewControllerType(activityItems: activityItems, applicationActivities: applicationActivities)
         viewController.excludedActivityTypes = excludedActivityTypes
 
@@ -57,9 +57,9 @@ struct AppActivityView: UIViewControllerRepresentable {
         return viewController
     }
 
-    public func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
 
-    public static func dismantleUIViewController(_ uiViewController: UIViewControllerType, coordinator: Coordinator) {
+    static func dismantleUIViewController(_ uiViewController: UIViewControllerType, coordinator: Coordinator) {
         uiViewController.completionWithItemsHandler = nil
     }
 }

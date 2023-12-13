@@ -226,7 +226,7 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
             return [.badge, .sound, .list, .banner]
         }
 
-        guard delegate.shouldDisplayInAppNotification(self, content: notification.request.content) else {
+        guard delegate.shouldDisplayInAppNotification(content: notification.request.content) else {
             return []
         }
 
@@ -245,8 +245,7 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
                                               content: response.notification.request.content,
                                               replyText: response.userText)
         case UNNotificationDefaultActionIdentifier:
-            await delegate?.notificationTapped(self,
-                                               content: response.notification.request.content)
+            await delegate?.notificationTapped(content: response.notification.request.content)
         default:
             break
         }

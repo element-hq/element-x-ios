@@ -21,7 +21,7 @@ import XCTest
 @MainActor
 final class EmojiProviderTests: XCTestCase {
     func testWhenEmojisLoadedCategoriesAreLoadedFromLoader() async throws {
-        let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"], skins: ["🙂"])
+        let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])
         let category = EmojiCategory(id: "test", emojis: [item])
         
         let emojiLoaderMock = EmojiLoaderMock()
@@ -34,7 +34,7 @@ final class EmojiProviderTests: XCTestCase {
     }
 
     func testWhenEmojisLoadedAndSearchStringEmptyAllCategoriesReturned() async throws {
-        let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"], skins: ["🙂"])
+        let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])
         let category = EmojiCategory(id: "test", emojis: [item])
         
         let emojiLoaderMock = EmojiLoaderMock()
@@ -47,8 +47,8 @@ final class EmojiProviderTests: XCTestCase {
     }
 
     func testWhenEmojisLoadedSecondTimeCachedValuesAreUsed() async throws {
-        let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"], skins: ["🙂"])
-        let item2 = EmojiItem(label: "test2", unicode: "test2", keywords: ["3", "4"], shortcodes: ["3", "4"], skins: ["🙂"])
+        let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])
+        let item2 = EmojiItem(label: "test2", unicode: "test2", keywords: ["3", "4"], shortcodes: ["3", "4"])
         let categoriesForFirstLoad = [EmojiCategory(id: "test",
                                                     emojis: [item])]
         let categoriesForSecondLoad = [EmojiCategory(id: "test2",
@@ -69,12 +69,12 @@ final class EmojiProviderTests: XCTestCase {
     func testWhenEmojisSearchedCorrectNumberOfCategoriesReturned() async throws {
         let searchString = "smile"
         var categories = [EmojiCategory]()
-        let item0WithSearchString = EmojiItem(label: "emoji0", unicode: "\(searchString)_123", keywords: ["key1", "key1"], shortcodes: ["key1", "key1"], skins: ["🙂"])
-        let item1WithSearchString = EmojiItem(label: searchString, unicode: "emoji1", keywords: ["key1", "key1"], shortcodes: ["key1", "key1"], skins: ["🙂"])
-        let item2WithSearchString = EmojiItem(label: "emoji_2", unicode: "emoji_2", keywords: ["key1", "\(searchString)_123"], shortcodes: ["key1", "key2"], skins: ["🙂"])
-        let item3WithSearchString = EmojiItem(label: "emoji_2", unicode: "emoji_2", keywords: ["key1", "key1"], shortcodes: ["key1", "\(searchString)_123"], skins: ["🙂"])
-        let item4WithoutSearchString = EmojiItem(label: "emoji_3", unicode: "emoji_3", keywords: ["key1", "key1"], shortcodes: ["key1", "key1"], skins: ["🙂"])
-        let item5WithSearchString = EmojiItem(label: "emoji0", unicode: "\(searchString)_123", keywords: ["key1", "key1"], shortcodes: ["key1", "key1"], skins: ["🙂"])
+        let item0WithSearchString = EmojiItem(label: "emoji0", unicode: "\(searchString)_123", keywords: ["key1", "key1"], shortcodes: ["key1", "key1"])
+        let item1WithSearchString = EmojiItem(label: searchString, unicode: "emoji1", keywords: ["key1", "key1"], shortcodes: ["key1", "key1"])
+        let item2WithSearchString = EmojiItem(label: "emoji_2", unicode: "emoji_2", keywords: ["key1", "\(searchString)_123"], shortcodes: ["key1", "key2"])
+        let item3WithSearchString = EmojiItem(label: "emoji_2", unicode: "emoji_2", keywords: ["key1", "key1"], shortcodes: ["key1", "\(searchString)_123"])
+        let item4WithoutSearchString = EmojiItem(label: "emoji_3", unicode: "emoji_3", keywords: ["key1", "key1"], shortcodes: ["key1", "key1"])
+        let item5WithSearchString = EmojiItem(label: "emoji0", unicode: "\(searchString)_123", keywords: ["key1", "key1"], shortcodes: ["key1", "key1"])
         categories.append(EmojiCategory(id: "test",
                                         emojis: [item0WithSearchString,
                                                  item1WithSearchString,

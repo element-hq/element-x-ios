@@ -45,18 +45,6 @@ extension ApplicationMock {
         underlyingApplicationState = applicationState
         underlyingBackgroundTimeRemaining = backgroundTimeRemaining
         
-        beginBackgroundTaskExpirationHandlerClosure = { [weak self] handler in
-            guard let self else {
-                return .invalid
-            }
-            
-            guard allowTasks else {
-                return .invalid
-            }
-            
-            return beginBackgroundTask(withName: nil, expirationHandler: handler)
-        }
-        
         beginBackgroundTaskWithNameExpirationHandlerClosure = { _, handler in
             guard allowTasks else {
                 return .invalid

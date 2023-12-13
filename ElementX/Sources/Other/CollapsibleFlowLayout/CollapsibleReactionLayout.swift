@@ -47,18 +47,18 @@ struct CollapsibleReactionLayout: Layout {
                                                                                     rows: collapsedRows,
                                                                                     collapseButton: subviewsByType.collapseButton,
                                                                                     addMoreButton: subviewsByType.addMoreButton)
-                let size = sizeThatFits(proposal: proposal, rows: collapsedRowsWithButtons)
+                let size = sizeThatFits(rows: collapsedRowsWithButtons)
                 return size
             } else {
                 // Show all subviews with the button at the end
                 var rowsWithButtons = calculateRows(proposal: proposal, subviews: Array(subviews))
                 ensureCollapseAndAddMoreButtonsAreOnTheSameRow(&rowsWithButtons)
-                let size = sizeThatFits(proposal: proposal, rows: rowsWithButtons)
+                let size = sizeThatFits(rows: rowsWithButtons)
                 return size
             }
         } else {
             // Otherwise we are just calculating the size of all items without the button
-            return sizeThatFits(proposal: proposal, rows: reactionsAndAddMore)
+            return sizeThatFits(rows: reactionsAndAddMore)
         }
     }
     
@@ -140,7 +140,7 @@ struct CollapsibleReactionLayout: Layout {
     ///   - proposal: The proposed size
     ///   - rows: The list of rows
     /// - Returns: The size render the rows
-    private func sizeThatFits(proposal: ProposedViewSize, rows: [[FlowLayoutSubview]]) -> CGSize {
+    private func sizeThatFits(rows: [[FlowLayoutSubview]]) -> CGSize {
         let sizes = rows.map { row in
             row.map { subview in
                 subview.sizeThatFits(.unspecified)

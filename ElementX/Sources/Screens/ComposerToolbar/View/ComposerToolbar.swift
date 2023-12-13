@@ -313,8 +313,8 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 8) {
             ComposerToolbar.textWithVoiceMessage(focused: false)
             ComposerToolbar.textWithVoiceMessage(focused: true)
-            ComposerToolbar.voiceMessageRecordingMock(recording: true)
-            ComposerToolbar.voiceMessagePreviewMock(recording: false, uploading: false)
+            ComposerToolbar.voiceMessageRecordingMock()
+            ComposerToolbar.voiceMessagePreviewMock(uploading: false)
         }
         .previewDisplayName("Voice Message")
     }
@@ -355,7 +355,7 @@ extension ComposerToolbar {
                                keyCommandHandler: { _ in false })
     }
     
-    static func voiceMessageRecordingMock(recording: Bool) -> ComposerToolbar {
+    static func voiceMessageRecordingMock() -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         var composerViewModel: ComposerToolbarViewModel {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
@@ -371,7 +371,7 @@ extension ComposerToolbar {
                                keyCommandHandler: { _ in false })
     }
     
-    static func voiceMessagePreviewMock(recording: Bool, uploading: Bool) -> ComposerToolbar {
+    static func voiceMessagePreviewMock(uploading: Bool) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         let waveformData: [Float] = Array(repeating: 1.0, count: 1000)
         var composerViewModel: ComposerToolbarViewModel {

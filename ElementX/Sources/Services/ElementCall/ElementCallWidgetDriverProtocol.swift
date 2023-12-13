@@ -28,7 +28,6 @@ enum ElementCallWidgetDriverError: Error {
 
 enum ElementCallWidgetDriverAction {
     case callEnded
-    case errorReceived(ElementCallWidgetDriverError)
 }
 
 // sourcery: AutoMockable

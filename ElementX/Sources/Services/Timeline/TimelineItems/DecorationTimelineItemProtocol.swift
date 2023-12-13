@@ -16,4 +16,5 @@
 
 import Foundation
 
+// periphery: ignore - markdown protocol
 protocol DecorationTimelineItemProtocol: RoomTimelineItemProtocol { }

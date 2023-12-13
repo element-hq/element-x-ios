@@ -315,7 +315,6 @@
 		50539366B408780B232C1910 /* EstimatedWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0FF64B0E6470F66F42E182 /* EstimatedWaveformView.swift */; };
 		50C90117FE25390BFBD40173 /* RustTracing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542D4F49FABA056DEEEB3400 /* RustTracing.swift */; };
 		5100F53E6884A15F9BA07CC3 /* AttributedStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CA26F55123E36B50DB0B3A /* AttributedStringTests.swift */; };
-		516534FC5C893D57F169D5A8 /* MapTilerGeocoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33720F7AD25E85E4A84669E8 /* MapTilerGeocoding.swift */; };
 		518C93DC6516D3D018DE065F /* UNNotificationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E751D7EDB6043238111D90 /* UNNotificationRequest.swift */; };
 		51C240F4660F7269203A9B3A /* MigrationScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75910F5A36EA8FF9BAD08D18 /* MigrationScreenUITests.swift */; };
 		520EEDAFBC778AB0B41F2F53 /* ClientMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE6170EFE6A161B0A68AB61 /* ClientMock.swift */; };
@@ -852,7 +851,6 @@
 		D8385A51A3D0FA9283556281 /* RoundedLabelItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745323FCF9AF21A117252C53 /* RoundedLabelItem.swift */; };
 		D871C8CF46950F959C9A62C3 /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54464351F170D570110AFCA /* WelcomeScreen.swift */; };
 		D876EC0FED3B6D46C806912A /* AvatarSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24B88AD3D1599E8CB1376E0 /* AvatarSize.swift */; };
-		D8CFF02C2730EE5BC4F17ABF /* ElementToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0960A7F5C1B0B6679BDF26F9 /* ElementToggleStyle.swift */; };
 		D9473FC9B077A6EDB7A12001 /* LocationRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772334731A8BF8E6D90B194D /* LocationRoomTimelineView.swift */; };
 		D98B5EE8C4F5A2CE84687AE8 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897DF5E9A70CE05A632FC8AF /* UTType.swift */; };
 		D9F80CE61BF8FF627FDB0543 /* LoadableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C352359663A0E52BA20761EE /* LoadableImage.swift */; };
@@ -1088,7 +1086,6 @@
 		086B997409328F091EBA43CE /* RoomScreenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScreenUITests.swift; sourceTree = "<group>"; };
 		086C19086DD16E9B38E25954 /* ReportContentViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportContentViewModelTests.swift; sourceTree = "<group>"; };
 		095AED4CF56DFF3EB7BB84C8 /* RoomTimelineProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineProviderProtocol.swift; sourceTree = "<group>"; };
-		0960A7F5C1B0B6679BDF26F9 /* ElementToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementToggleStyle.swift; sourceTree = "<group>"; };
 		099F2D36C141D845A445B1E6 /* EmojiProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiProviderTests.swift; sourceTree = "<group>"; };
 		09CE2B7AD979BDEE09FEDB08 /* WaitlistScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistScreenModels.swift; sourceTree = "<group>"; };
 		0A3E77399BD262D301451BF2 /* RoomDetailsEditScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsEditScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -1243,7 +1240,6 @@
 		32C5DAA1773F57653BF1C4F9 /* SoftLogoutViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftLogoutViewModelTests.swift; sourceTree = "<group>"; };
 		33649299575BADC34924ABC6 /* InvitesScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitesScreenCoordinator.swift; sourceTree = "<group>"; };
 		3368395F06AA180138E185B6 /* PollFormScreenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollFormScreenUITests.swift; sourceTree = "<group>"; };
-		33720F7AD25E85E4A84669E8 /* MapTilerGeocoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerGeocoding.swift; sourceTree = "<group>"; };
 		33E49C5C6F802B4D94CA78D1 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		340179A0FC1AD4AEDA7FC134 /* CreateRoomViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomViewModelProtocol.swift; sourceTree = "<group>"; };
 		342BEBC3C5FC3F9943C41C4C /* TemplateScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateScreenViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -2511,7 +2507,6 @@
 				CC743C7A85E3171BCBF0A653 /* AvatarHeaderView.swift */,
 				C1FA515B3B0D61EF1E907D2D /* BadgeView.swift */,
 				8CC23C63849452BC86EA2852 /* ButtonStyle.swift */,
-				0960A7F5C1B0B6679BDF26F9 /* ElementToggleStyle.swift */,
 				7EC2F1622C5BBABED6012E12 /* HeroImage.swift */,
 				B590BD4507D4F0A377FDE01A /* LoadableAvatarImage.swift */,
 				C352359663A0E52BA20761EE /* LoadableImage.swift */,
@@ -4267,7 +4262,6 @@
 				B81B6170DB690013CEB646F4 /* MapLibreModels.swift */,
 				592A35163B0749C66BFD6186 /* MapLibreStaticMapView.swift */,
 				E062C1750EFC8627DE4CAB8E /* MapTilerAuthorization.swift */,
-				33720F7AD25E85E4A84669E8 /* MapTilerGeocoding.swift */,
 				C23B3FAD8B23C421BC0D1B1E /* MapTilerGeoCodingServiceProtocol.swift */,
 				1A4D29F2683F5772AC72406F /* MapTilerStaticMap.swift */,
 				20872C3887F835958CE2F1D0 /* MapTilerStaticMapProtocol.swift */,
@@ -5490,7 +5484,6 @@
 				FE4593FC2A02AAF92E089565 /* ElementAnimations.swift in Sources */,
 				07CC13C5729C24255348CBBD /* ElementCallWidgetDriver.swift in Sources */,
 				370AF5BFCD4384DD455479B6 /* ElementCallWidgetDriverProtocol.swift in Sources */,
-				D8CFF02C2730EE5BC4F17ABF /* ElementToggleStyle.swift in Sources */,
 				7C1A7B594B2F8143F0DD0005 /* ElementXAttributeScope.swift in Sources */,
 				7361B011A79BF723D8C9782B /* EmojiCategory.swift in Sources */,
 				E45C9FA22BC13B477FD3B4AC /* EmojiDetection.swift in Sources */,
@@ -5598,7 +5591,6 @@
 				D181AC8FF236B7F91C0A8C28 /* MapTiler.swift in Sources */,
 				FCDA202B246F75BA28E10C5F /* MapTilerAuthorization.swift in Sources */,
 				7ABAB3A1D52B86FACF2F74CF /* MapTilerGeoCodingServiceProtocol.swift in Sources */,
-				516534FC5C893D57F169D5A8 /* MapTilerGeocoding.swift in Sources */,
 				D6661A94DBD97658B2ADBD6A /* MapTilerStaticMap.swift in Sources */,
 				7B5DAB915357BE596529BF25 /* MapTilerStaticMapProtocol.swift in Sources */,
 				83A4DAB181C56987C3E804FF /* MapTilerStyle.swift in Sources */,

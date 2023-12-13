@@ -33,7 +33,6 @@ enum CreateRoomCoordinatorAction {
 }
 
 final class CreateRoomCoordinator: CoordinatorProtocol {
-    private let parameters: CreateRoomCoordinatorParameters
     private var viewModel: CreateRoomViewModelProtocol
     private let actionsSubject: PassthroughSubject<CreateRoomCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -43,7 +42,6 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: CreateRoomCoordinatorParameters) {
-        self.parameters = parameters
         viewModel = CreateRoomViewModel(userSession: parameters.userSession,
                                         createRoomParameters: parameters.createRoomParameters,
                                         selectedUsers: parameters.selectedUsers,

@@ -186,11 +186,8 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 
         let viewModel = HomeScreenViewModel(userSession: userSession,
-                                            attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                             mentionBuilder: MentionBuilder()),
                                             selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                             appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         let rooms: [HomeScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary -> HomeScreenRoom? in

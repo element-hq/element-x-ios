@@ -518,7 +518,7 @@ class RoomScreenInteractionHandler {
                 }
             } catch {
                 MXLog.error("Failed to load voice message: \(error)")
-                audioPlayerState.reportError(error)
+                audioPlayerState.reportError()
             }
             
             return

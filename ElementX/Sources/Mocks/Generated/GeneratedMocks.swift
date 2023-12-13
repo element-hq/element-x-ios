@@ -56,18 +56,6 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
         stopCallsCount += 1
         stopClosure?()
     }
-    //MARK: - flush
-
-    var flushCallsCount = 0
-    var flushCalled: Bool {
-        return flushCallsCount > 0
-    }
-    var flushClosure: (() -> Void)?
-
-    func flush() {
-        flushCallsCount += 1
-        flushClosure?()
-    }
     //MARK: - capture
 
     var captureCallsCount = 0
@@ -99,22 +87,6 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
         screenReceivedEvent = event
         screenReceivedInvocations.append(event)
         screenClosure?(event)
-    }
-    //MARK: - updateUserProperties
-
-    var updateUserPropertiesCallsCount = 0
-    var updateUserPropertiesCalled: Bool {
-        return updateUserPropertiesCallsCount > 0
-    }
-    var updateUserPropertiesReceivedUserProperties: AnalyticsEvent.UserProperties?
-    var updateUserPropertiesReceivedInvocations: [AnalyticsEvent.UserProperties] = []
-    var updateUserPropertiesClosure: ((AnalyticsEvent.UserProperties) -> Void)?
-
-    func updateUserProperties(_ userProperties: AnalyticsEvent.UserProperties) {
-        updateUserPropertiesCallsCount += 1
-        updateUserPropertiesReceivedUserProperties = userProperties
-        updateUserPropertiesReceivedInvocations.append(userProperties)
-        updateUserPropertiesClosure?(userProperties)
     }
 }
 class AppLockServiceMock: AppLockServiceProtocol {
@@ -321,23 +293,6 @@ class ApplicationMock: ApplicationProtocol {
     }
     var underlyingApplicationState: UIApplication.State!
 
-    //MARK: - beginBackgroundTask
-
-    var beginBackgroundTaskExpirationHandlerCallsCount = 0
-    var beginBackgroundTaskExpirationHandlerCalled: Bool {
-        return beginBackgroundTaskExpirationHandlerCallsCount > 0
-    }
-    var beginBackgroundTaskExpirationHandlerReturnValue: UIBackgroundTaskIdentifier!
-    var beginBackgroundTaskExpirationHandlerClosure: (((() -> Void)?) -> UIBackgroundTaskIdentifier)?
-
-    func beginBackgroundTask(expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
-        beginBackgroundTaskExpirationHandlerCallsCount += 1
-        if let beginBackgroundTaskExpirationHandlerClosure = beginBackgroundTaskExpirationHandlerClosure {
-            return beginBackgroundTaskExpirationHandlerClosure(handler)
-        } else {
-            return beginBackgroundTaskExpirationHandlerReturnValue
-        }
-    }
     //MARK: - beginBackgroundTask
 
     var beginBackgroundTaskWithNameExpirationHandlerCallsCount = 0
@@ -738,18 +693,6 @@ class BugReportServiceMock: BugReportServiceProtocol {
     func reset() {
         resetCallsCount += 1
         resetClosure?()
-    }
-    //MARK: - crash
-
-    var crashCallsCount = 0
-    var crashCalled: Bool {
-        return crashCallsCount > 0
-    }
-    var crashClosure: (() -> Void)?
-
-    func crash() {
-        crashCallsCount += 1
-        crashClosure?()
     }
     //MARK: - submitBugReport
 

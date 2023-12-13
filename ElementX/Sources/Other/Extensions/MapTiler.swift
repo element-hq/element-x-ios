@@ -21,9 +21,3 @@ extension MapTilerStyleBuilder {
         self.init(baseURL: appSettings.mapTilerBaseURL, key: appSettings.mapTilerApiKey)
     }
 }
-
-extension MapTilerGeoCodingService {
-    init(session: URLSession = .shared, appSettings: AppSettings) {
-        self.init(session: session, key: appSettings.mapTilerApiKey, geocodingURL: appSettings.geocodingURLFormatString)
-    }
-}

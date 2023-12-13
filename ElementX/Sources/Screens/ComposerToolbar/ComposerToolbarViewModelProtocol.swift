@@ -25,6 +25,7 @@ struct SuggestionPattern: Equatable {
     let text: String
 }
 
+// periphery: ignore - markdown protocol
 protocol ComposerToolbarViewModelProtocol {
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> { get }
     var context: ComposerToolbarViewModelType.Context { get }

@@ -36,7 +36,6 @@ enum AppLockSetupPINScreenCoordinatorAction {
 }
 
 final class AppLockSetupPINScreenCoordinator: CoordinatorProtocol {
-    private let parameters: AppLockSetupPINScreenCoordinatorParameters
     private var viewModel: AppLockSetupPINScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<AppLockSetupPINScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -48,7 +47,6 @@ final class AppLockSetupPINScreenCoordinator: CoordinatorProtocol {
     init(parameters: AppLockSetupPINScreenCoordinatorParameters) {
         guard parameters.initialMode != .confirm else { fatalError(".confirm is an invalid initial mode") }
         
-        self.parameters = parameters
         viewModel = AppLockSetupPINScreenViewModel(initialMode: parameters.initialMode,
                                                    isMandatory: parameters.isMandatory,
                                                    appLockService: parameters.appLockService)

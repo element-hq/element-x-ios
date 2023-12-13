@@ -38,13 +38,4 @@ class CreateRoomScreenUITests: XCTestCase {
         app.textFields[A11yIdentifiers.createRoomScreen.roomName].typeText("\n")
         try await app.assertScreenshot(.createRoom, step: 1)
     }
-    
-    // Disabled because tapping on the textView doesn't work
-    func disabled_testLongInputTopicText() async throws {
-        let app = Application.launch(.createRoom)
-        let textView = app.textViews[A11yIdentifiers.createRoomScreen.roomTopic]
-        textView.tap()
-        textView.typeText(.init(repeating: "Topic\n", count: 3))
-        try await app.assertScreenshot(.createRoom, step: 2)
-    }
 }

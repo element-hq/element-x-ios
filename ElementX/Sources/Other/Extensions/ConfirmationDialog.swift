@@ -34,6 +34,7 @@ extension View {
         return confirmationDialog(item.wrappedValue?.title ?? "", isPresented: binding, titleVisibility: titleVisibility, presenting: item.wrappedValue, actions: actions)
     }
 
+    // periphery: ignore - not used yet but might be useful
     func confirmationDialog<Item, Actions, Message>(item: Binding<Item?>,
                                                     titleVisibility: Visibility = .automatic,
                                                     @ViewBuilder actions: (Item) -> Actions,

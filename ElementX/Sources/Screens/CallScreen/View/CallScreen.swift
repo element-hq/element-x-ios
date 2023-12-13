@@ -53,7 +53,6 @@ private struct WebView: UIViewRepresentable {
     @MainActor
     class Coordinator: NSObject, WKScriptMessageHandler, WKUIDelegate, WKNavigationDelegate {
         private let viewModelContext: CallScreenViewModel.Context
-        private var webViewURLObservation: NSKeyValueObservation?
         
         private(set) var webView: WKWebView!
         

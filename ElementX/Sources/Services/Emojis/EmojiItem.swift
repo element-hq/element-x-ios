@@ -25,5 +25,4 @@ struct EmojiItem: Equatable, Identifiable {
     let unicode: String
     let keywords: [String]
     let shortcodes: [String]
-    let skins: [String]
 }

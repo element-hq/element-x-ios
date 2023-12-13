@@ -79,11 +79,8 @@ struct ShimmerOverlay_Previews: PreviewProvider, TestablePreview {
     static let viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: MockClientProxy(userID: ""),
                                                                             mediaProvider: MockMediaProvider(),
                                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
-                                               attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()),
                                                selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                                appSettings: ServiceLocator.shared.settings,
-                                               analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
     
     static var previews: some View {

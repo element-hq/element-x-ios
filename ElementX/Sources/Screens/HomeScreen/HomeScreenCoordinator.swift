@@ -39,7 +39,6 @@ enum HomeScreenCoordinatorAction {
 }
 
 final class HomeScreenCoordinator: CoordinatorProtocol {
-    private let parameters: HomeScreenCoordinatorParameters
     private var viewModel: HomeScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<HomeScreenCoordinatorAction, Never> = .init()
@@ -50,13 +49,9 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: HomeScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = HomeScreenViewModel(userSession: parameters.userSession,
-                                        attributedStringBuilder: parameters.attributedStringBuilder,
                                         selectedRoomPublisher: parameters.selectedRoomPublisher,
                                         appSettings: ServiceLocator.shared.settings,
-                                        analytics: ServiceLocator.shared.analytics,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         viewModel.actions

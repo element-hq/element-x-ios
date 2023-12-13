@@ -39,7 +39,6 @@ internal enum Asset {
     internal static let addLocation = ImageAsset(name: "images/add-location")
     internal static let attachment = ImageAsset(name: "images/attachment")
     internal static let takePhoto = ImageAsset(name: "images/take-photo")
-    internal static let textFormatting = ImageAsset(name: "images/text-formatting")
     internal static let bold = ImageAsset(name: "images/bold")
     internal static let bulletList = ImageAsset(name: "images/bullet-list")
     internal static let closeRte = ImageAsset(name: "images/close-rte")

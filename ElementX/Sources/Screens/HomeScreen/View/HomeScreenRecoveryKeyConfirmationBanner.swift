@@ -72,14 +72,9 @@ struct HomeScreenRecoveryKeyConfirmationBanner_Previews: PreviewProvider, Testab
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         
-        let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                              mentionBuilder: MentionBuilder())
-        
         return HomeScreenViewModel(userSession: userSession,
-                                   attributedStringBuilder: attributedStringBuilder,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: ServiceLocator.shared.settings,
-                                   analytics: ServiceLocator.shared.analytics,
                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }
