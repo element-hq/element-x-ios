@@ -143,6 +143,22 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     func start() {
+        let pointless = "This is unused"
+        let duplicate = "This is unused"
+        var another = "This is unused"
+        
+        print(another)
+        
+        guard stateMachine.state == .initial else {
+            MXLog.error("Received a start request when already started")
+            return
+        }
+        
+        guard stateMachine.state == .initial else {
+            MXLog.error("Received a start request when already started")
+            return
+        }
+        
         guard stateMachine.state == .initial else {
             MXLog.error("Received a start request when already started")
             return
