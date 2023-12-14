@@ -28,7 +28,6 @@ enum RoomPollsHistoryScreenCoordinatorAction {
 }
 
 final class RoomPollsHistoryScreenCoordinator: CoordinatorProtocol {
-    private let parameters: RoomPollsHistoryScreenCoordinatorParameters
     private var viewModel: RoomPollsHistoryScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<RoomPollsHistoryScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -38,8 +37,6 @@ final class RoomPollsHistoryScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomPollsHistoryScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = RoomPollsHistoryScreenViewModel(roomProxy: parameters.roomProxy,
                                                     pollInteractionHandler: parameters.pollInteractionHandler,
                                                     roomTimelineController: parameters.roomTimelineController,

@@ -94,6 +94,20 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
                 }
             }
             .store(in: &cancellables)
+        
+        context.$viewState
+            .map(\.isBackPaginating)
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isBackPaginating in
+                guard let self else { return }
+                if isBackPaginating {
+                    userIndicatorController.submitIndicator(.init(id: isPaginatingIndicatorID, type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false), title: L10n.commonLoading))
+                } else {
+                    userIndicatorController.retractIndicatorWithId(isPaginatingIndicatorID)
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func displayError(message: String) {
@@ -163,7 +177,7 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
             guard let self else {
                 return
             }
-            updateBackPaginatingState(true)
+            state.isBackPaginating = true
             switch await roomTimelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit) {
             case .failure(let error):
                 MXLog.error("failed to back paginate. \(error)")
@@ -171,16 +185,7 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
                 break
             }
             paginateBackwardsTask = nil
-            updateBackPaginatingState(false)
-        }
-    }
-    
-    private func updateBackPaginatingState(_ value: Bool) {
-        state.isBackPaginating = value
-        if value {
-            userIndicatorController.submitIndicator(.init(id: isPaginatingIndicatorID, type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false), title: L10n.commonLoading))
-        } else {
-            userIndicatorController.retractIndicatorWithId(isPaginatingIndicatorID)
+            state.isBackPaginating = false
         }
     }
 }

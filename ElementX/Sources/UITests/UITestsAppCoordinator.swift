@@ -879,7 +879,6 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .roomPollsHistoryEmptyLoadMore:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let roomProxy = RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: nil))
             let interactionHandler = PollInteractionHandlerMock()
             let roomTimelineController = MockRoomTimelineController()
             roomTimelineController.backPaginationResponses = [
@@ -894,7 +893,6 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .roomPollsHistoryLoadMore:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let roomProxy = RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: nil))
             let interactionHandler = PollInteractionHandlerMock()
             let roomTimelineController = MockRoomTimelineController()
 
