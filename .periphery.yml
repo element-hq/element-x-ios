@@ -8,6 +8,7 @@ targets:
 - ElementX
 - IntegrationTests
 - NSE
+# - NCE
 - UITests
 - UnitTests
 report_exclude:
