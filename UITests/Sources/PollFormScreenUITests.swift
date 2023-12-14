@@ -25,8 +25,8 @@ class PollFormScreenUITests: XCTestCase {
 
     func testFilledPoll() async throws {
         let app = Application.launch(.createPoll)
-        let questionTextField = app.textFields[A11yIdentifiers.pollFormScreen.question]
-        questionTextField.tap()
+        let questionTextField = app.textViews[A11yIdentifiers.pollFormScreen.question]
+        questionTextField.coordinate(withNormalizedOffset: .init(dx: 0.5, dy: 0.5)).tap() // Tap isn't registered without the offset.
         questionTextField.typeText("Do you like polls?")
 
         let option1TextField = app.textFields[A11yIdentifiers.pollFormScreen.optionID(0)]
@@ -54,12 +54,9 @@ class PollFormScreenUITests: XCTestCase {
                 app.swipeUp()
             }
             addOption.tap()
+            app.typeText("\n") // Dismiss the keyboard so the Add button is always visible.
         }
-
-        if app.keyboards.count > 0 {
-            app.typeText("\n")
-        }
-        app.swipeUp() // Dismisses the keyboard.
+        
         app.swipeUp() // Ensures that the bottom is shown.
         
         XCTAssertFalse(addOption.exists)
