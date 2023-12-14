@@ -13,8 +13,8 @@ struct DownloadStrings: ParsableCommand {
     }
 
     private func localazyDownload() throws {
-        let json = allLanguages ? "localazy-all.json" : "localazy-en.json"
-        try Utilities.zsh("localazy download --config \(json)")
+        let arguments = allLanguages ? " all" : ""
+        try Utilities.zsh("localazy download\(arguments)")
     }
 
     private func swiftgen() throws {
