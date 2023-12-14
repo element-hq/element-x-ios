@@ -7,7 +7,6 @@ schemes:
 targets:
 - ElementX
 - IntegrationTests
-- NCE
 - NSE
 - UITests
 - UnitTests
