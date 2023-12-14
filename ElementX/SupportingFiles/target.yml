@@ -176,7 +176,8 @@ targets:
 
     dependencies:
     - target: NSE
-    - target: NCE
+    # not used yet
+    # - target: NCE
     - package: MatrixRustSDK
     - package: Compound
     - package: Algorithms
