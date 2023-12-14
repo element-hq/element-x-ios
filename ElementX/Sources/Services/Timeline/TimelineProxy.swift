@@ -93,7 +93,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func editMessage(_ message: String,
-                     html: String?,
+                     html: String,
                      original eventID: String,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
@@ -320,7 +320,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func sendMessage(_ message: String,
-                     html: String?,
+                     html: String,
                      inReplyTo eventID: String? = nil,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
@@ -454,7 +454,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     // MARK: - Private
     
     private func buildMessageContentFor(_ message: String,
-                                        html: String?,
+                                        html: String,
                                         intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation {
         let emoteSlashCommand = "/me "
         let isEmote: Bool = message.starts(with: emoteSlashCommand)
@@ -462,18 +462,10 @@ final class TimelineProxy: TimelineProxyProtocol {
         let content: RoomMessageEventContentWithoutRelation
         if isEmote {
             let emoteMessage = String(message.dropFirst(emoteSlashCommand.count))
-            
-            var emoteHtml: String?
-            if let html {
-                emoteHtml = String(html.dropFirst(emoteSlashCommand.count))
-            }
+            let emoteHtml = String(html.dropFirst(emoteSlashCommand.count))
             content = buildEmoteMessageContentFor(emoteMessage, html: emoteHtml)
         } else {
-            if let html {
-                content = messageEventContentFromHtml(body: message, htmlBody: html)
-            } else {
-                content = messageEventContentFromMarkdown(md: message)
-            }
+            content = messageEventContentFromHtml(body: message, htmlBody: html)
         }
         return content.withMentions(mentions: intentionalMentions)
     }

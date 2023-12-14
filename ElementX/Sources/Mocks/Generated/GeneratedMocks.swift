@@ -2628,12 +2628,12 @@ class TimelineProxyMock: TimelineProxyProtocol {
     var editMessageHtmlOriginalIntentionalMentionsCalled: Bool {
         return editMessageHtmlOriginalIntentionalMentionsCallsCount > 0
     }
-    var editMessageHtmlOriginalIntentionalMentionsReceivedArguments: (message: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)?
-    var editMessageHtmlOriginalIntentionalMentionsReceivedInvocations: [(message: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)] = []
+    var editMessageHtmlOriginalIntentionalMentionsReceivedArguments: (message: String, html: String, eventID: String, intentionalMentions: IntentionalMentions)?
+    var editMessageHtmlOriginalIntentionalMentionsReceivedInvocations: [(message: String, html: String, eventID: String, intentionalMentions: IntentionalMentions)] = []
     var editMessageHtmlOriginalIntentionalMentionsReturnValue: Result<Void, TimelineProxyError>!
-    var editMessageHtmlOriginalIntentionalMentionsClosure: ((String, String?, String, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
+    var editMessageHtmlOriginalIntentionalMentionsClosure: ((String, String, String, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
 
-    func editMessage(_ message: String, html: String?, original eventID: String, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+    func editMessage(_ message: String, html: String, original eventID: String, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         editMessageHtmlOriginalIntentionalMentionsCallsCount += 1
         editMessageHtmlOriginalIntentionalMentionsReceivedArguments = (message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
         editMessageHtmlOriginalIntentionalMentionsReceivedInvocations.append((message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
@@ -2887,12 +2887,12 @@ class TimelineProxyMock: TimelineProxyProtocol {
     var sendMessageHtmlInReplyToIntentionalMentionsCalled: Bool {
         return sendMessageHtmlInReplyToIntentionalMentionsCallsCount > 0
     }
-    var sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments: (message: String, html: String?, eventID: String?, intentionalMentions: IntentionalMentions)?
-    var sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations: [(message: String, html: String?, eventID: String?, intentionalMentions: IntentionalMentions)] = []
+    var sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments: (message: String, html: String, eventID: String?, intentionalMentions: IntentionalMentions)?
+    var sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations: [(message: String, html: String, eventID: String?, intentionalMentions: IntentionalMentions)] = []
     var sendMessageHtmlInReplyToIntentionalMentionsReturnValue: Result<Void, TimelineProxyError>!
-    var sendMessageHtmlInReplyToIntentionalMentionsClosure: ((String, String?, String?, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
+    var sendMessageHtmlInReplyToIntentionalMentionsClosure: ((String, String, String?, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
 
-    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String?, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+    func sendMessage(_ message: String, html: String, inReplyTo eventID: String?, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         sendMessageHtmlInReplyToIntentionalMentionsCallsCount += 1
         sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments = (message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
         sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations.append((message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
