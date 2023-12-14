@@ -53,10 +53,6 @@ struct PollFormScreen: View {
                     kind: .textField(text: $context.question, axis: .vertical))
                 .focused($focus, equals: .question)
                 .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.question)
-                .onSubmit {
-                    focus = context.options.indices.first.map { .option(index: $0) }
-                }
-                .submitLabel(.next)
         } header: {
             Text(L10n.screenCreatePollQuestionDesc)
                 .compoundListSectionHeader()

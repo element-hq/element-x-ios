@@ -40,6 +40,8 @@ enum HomeScreenCoordinatorAction {
 
 final class HomeScreenCoordinator: CoordinatorProtocol {
     private var viewModel: HomeScreenViewModelProtocol
+    // periphery:ignore - only used in release builds
+    private let bugReportService: BugReportServiceProtocol
     
     private let actionsSubject: PassthroughSubject<HomeScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -53,6 +55,7 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                                         selectedRoomPublisher: parameters.selectedRoomPublisher,
                                         appSettings: ServiceLocator.shared.settings,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        bugReportService = parameters.bugReportService
         
         viewModel.actions
             .sink { [weak self] action in
@@ -88,7 +91,7 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     
     func start() {
         #if !DEBUG
-        if parameters.bugReportService.crashedLastRun {
+        if bugReportService.crashedLastRun {
             viewModel.presentCrashedLastRunAlert()
         }
         #endif
