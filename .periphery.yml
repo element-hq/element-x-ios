@@ -7,8 +7,8 @@ schemes:
 targets:
 - ElementX
 - IntegrationTests
-- NCE
 - NSE
+# - NCE
 - UITests
 - UnitTests
 report_exclude:
