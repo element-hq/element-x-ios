@@ -87,6 +87,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
             .store(in: &cancellables)
         
+        appSettings.$richTextEditorEnabled
+            .map { !$0 }
+            .assign(to: &wysiwygViewModel.$plainTextMode)
+        
         completionSuggestionService.suggestionsPublisher
             .weakAssign(to: \.state.suggestions, on: self)
             .store(in: &cancellables)
@@ -107,9 +111,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             case .previewVoiceMessage:
                 actionsSubject.send(.voiceMessage(.send))
             default:
-                let sendHTML = ServiceLocator.shared.settings.richTextEditorEnabled
                 actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
-                                                 html: sendHTML ? wysiwygViewModel.content.html : nil,
+                                                 html: wysiwygViewModel.content.html,
                                                  mode: state.composerMode,
                                                  intentionalMentions: wysiwygViewModel
                                                      .getMentionsState()
@@ -154,15 +157,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             set(text: "")
         }
     }
-
-    func handleKeyCommand(_ keyCommand: WysiwygKeyCommand) -> Bool {
-        switch keyCommand {
-        case .enter:
-            process(viewAction: .sendMessage)
-            return true
-        case .shiftEnter:
-            return false
-        }
+    
+    var keyCommands: [WysiwygKeyCommand] {
+        [
+            .enter { [weak self] in
+                self?.process(viewAction: .sendMessage)
+            }
+        ]
     }
 
     // MARK: - Private

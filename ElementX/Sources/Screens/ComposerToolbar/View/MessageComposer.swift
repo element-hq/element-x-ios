@@ -212,7 +212,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         let composerView = WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
                                                viewModel: viewModel,
                                                itemProviderHelper: nil,
-                                               keyCommandHandler: nil,
+                                               keyCommands: nil,
                                                pasteHandler: nil)
         
         return MessageComposer(composerView: composerView,

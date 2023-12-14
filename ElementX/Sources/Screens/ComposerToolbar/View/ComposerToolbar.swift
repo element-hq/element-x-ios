@@ -24,7 +24,7 @@ struct ComposerToolbar: View {
     // Needs to be observable or the placeholder and the dictation state are not managed correctly.
     @ObservedObject var wysiwygViewModel: WysiwygComposerViewModel
     
-    let keyCommandHandler: KeyCommandHandler
+    let keyCommands: [WysiwygKeyCommand]
     
     @FocusState private var composerFocused: Bool
     @State private var frame: CGRect = .zero
@@ -201,7 +201,7 @@ struct ComposerToolbar: View {
                             placeholderColor: .compound.textSecondary,
                             viewModel: wysiwygViewModel,
                             itemProviderHelper: ItemProviderHelper(),
-                            keyCommandHandler: keyCommandHandler) { provider in
+                            keyCommands: keyCommands) { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
         }
     }
@@ -306,7 +306,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
             // The mock functon can't be used in this context because it does not hold a reference to the view model, losing the combine subscriptions
             ComposerToolbar(context: composerViewModel.context,
                             wysiwygViewModel: wysiwygViewModel,
-                            keyCommandHandler: { _ in false })
+                            keyCommands: [])
         }
         .previewDisplayName("With Suggestions")
         
@@ -336,7 +336,7 @@ extension ComposerToolbar {
         }
         return ComposerToolbar(context: composerViewModel.context,
                                wysiwygViewModel: wysiwygViewModel,
-                               keyCommandHandler: { _ in false })
+                               keyCommands: [])
     }
     
     static func textWithVoiceMessage(focused: Bool = true) -> ComposerToolbar {
@@ -352,7 +352,7 @@ extension ComposerToolbar {
         }
         return ComposerToolbar(context: composerViewModel.context,
                                wysiwygViewModel: wysiwygViewModel,
-                               keyCommandHandler: { _ in false })
+                               keyCommands: [])
     }
     
     static func voiceMessageRecordingMock() -> ComposerToolbar {
@@ -368,7 +368,7 @@ extension ComposerToolbar {
         }
         return ComposerToolbar(context: composerViewModel.context,
                                wysiwygViewModel: wysiwygViewModel,
-                               keyCommandHandler: { _ in false })
+                               keyCommands: [])
     }
     
     static func voiceMessagePreviewMock(uploading: Bool) -> ComposerToolbar {
@@ -385,6 +385,6 @@ extension ComposerToolbar {
         }
         return ComposerToolbar(context: composerViewModel.context,
                                wysiwygViewModel: wysiwygViewModel,
-                               keyCommandHandler: { _ in false })
+                               keyCommands: [])
     }
 }
