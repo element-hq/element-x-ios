@@ -1,0 +1,94 @@
+{
+  "readKey": "a7876306080832595063-aa37154bb3772f6146890fca868d155b2228b492c56c91f67abdcdfb74d6142d",
+  
+  "conversion": {
+    "actions": [
+      {
+        "type": "ios-strings",
+        "output": "ElementX/Resources/Localizations/${iosLprojFolder}/Localizable.strings",
+        "excludeKeys": ["REGEX:.*_android"],
+        "conditions": [
+          "equals: ${languageCode}, en | equals: ${file}, content.json"
+        ],
+        "filterPlurals": true,
+        "replacements": {
+          "%s": "%@",
+          "$s": "$@"
+        },
+        "params": {
+          "flatten_keys": "underscore"
+        }
+      },
+      {
+        "type": "ios-stringsdict",
+        "output": "ElementX/Resources/Localizations/${iosLprojFolder}/Localizable.stringsdict",
+        "excludeKeys": ["REGEX:.*_android"],
+        "conditions": [
+          "equals: ${languageCode}, en | equals: ${file}, content.json"
+        ],
+        "replacements": {
+          "%s": "%@",
+          "$s": "$@"
+        },
+        "params": {
+          "variable": "COUNT",
+          "flatten_keys": "underscore"
+        }
+      },
+      {
+        "type": "ios-strings",
+        "changeExtension": "strings",
+        "output": "ElementX/Resources/Localizations/${iosLprojFolder}/${file}",
+        "conditions": [
+          "equals: ${languageCode}, en | equals: ${file}, InfoPlist.json"
+        ]
+      },
+
+
+
+      {
+        "group": "all",
+        "type": "ios-strings",
+        "output": "ElementX/Resources/Localizations/${iosLprojFolder}/Localizable.strings",
+        "excludeKeys": ["REGEX:.*_android"],
+        "conditions": [
+          "!equals: ${languageCode}, en | equals: ${file}, content.json"
+        ],
+        "filterPlurals": true,
+        "replacements": {
+          "%s": "%@",
+          "$s": "$@"
+        },
+        "params": {
+          "flatten_keys": "underscore"
+        }
+      },
+      {
+        "group": "all",
+        "type": "ios-stringsdict",
+        "output": "ElementX/Resources/Localizations/${iosLprojFolder}/Localizable.stringsdict",
+        "excludeKeys": ["REGEX:.*_android"],
+        "conditions": [
+          "!equals: ${languageCode}, en | equals: ${file}, content.json"
+        ],
+        "replacements": {
+          "%s": "%@",
+          "$s": "$@"
+        },
+        "params": {
+          "variable": "COUNT",
+          "flatten_keys": "underscore"
+        }
+      },
+      {
+        "group": "all",
+        "type": "ios-strings",
+        "changeExtension": "strings",
+        "output": "ElementX/Resources/Localizations/${iosLprojFolder}/${file}",
+        "conditions": [
+          "!equals: ${languageCode}, en | equals: ${file}, InfoPlist.json"
+        ]
+      }
+    ]
+  }
+}
