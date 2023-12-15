@@ -49,14 +49,15 @@ class PollFormScreenUITests: XCTestCase {
         let addOption = app.buttons[A11yIdentifiers.pollFormScreen.addOption]
 
         for _ in 1...18 {
-            // Use the frame as a fallback to fix the button being obscured by the home indicator.
-            if !addOption.isHittable || addOption.frame.maxY > (app.frame.maxY - 20) {
-                app.swipeUp()
-            }
+            // Make sure the button is tappable and than the keyboard is dismissed. This
+            // is very slow but seemingly everything else fails in some subtle way across
+            // the various configurations that get run on CI.
+            app.swipeUp()
+            
             addOption.tap()
-            app.typeText("\n") // Dismiss the keyboard so the Add button is always visible.
         }
         
+        app.swipeUp() // Dismisses the keyboard.
         app.swipeUp() // Ensures that the bottom is shown.
         
         XCTAssertFalse(addOption.exists)
