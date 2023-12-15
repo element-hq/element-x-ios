@@ -23,8 +23,6 @@ enum NetworkMonitorReachability {
 
 protocol NetworkMonitorProtocol {
     var reachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> { get }
-    var isCurrentConnectionExpensive: Bool { get }
-    var isCurrentConnectionConstrained: Bool { get }
 }
 
 // sourcery: AutoMockable

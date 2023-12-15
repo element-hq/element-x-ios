@@ -50,11 +50,6 @@ struct LayoutSubviewsMock: Equatable, RandomAccessCollection {
     subscript(bounds: Range<Int>) -> LayoutSubviewsMock {
         LayoutSubviewsMock(subviews: Array(subviews[bounds]))
     }
-    
-    /// Gets the subview proxies with the specified indicies.
-    subscript<S>(indices: S) -> LayoutSubviewsMock where S: Sequence, S.Element == Int {
-        LayoutSubviewsMock(subviews: Array(indices.map { subviews[$0] }))
-    }
 }
 
 /// A mock of the SwiftUI `LayoutSubview` struct

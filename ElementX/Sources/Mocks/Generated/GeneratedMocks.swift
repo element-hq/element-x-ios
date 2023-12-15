@@ -813,27 +813,6 @@ class KeychainControllerMock: KeychainControllerProtocol {
         setRestorationTokenForUsernameReceivedInvocations.append((restorationToken: restorationToken, forUsername: forUsername))
         setRestorationTokenForUsernameClosure?(restorationToken, forUsername)
     }
-    //MARK: - restorationTokenForUsername
-
-    var restorationTokenForUsernameCallsCount = 0
-    var restorationTokenForUsernameCalled: Bool {
-        return restorationTokenForUsernameCallsCount > 0
-    }
-    var restorationTokenForUsernameReceivedUsername: String?
-    var restorationTokenForUsernameReceivedInvocations: [String] = []
-    var restorationTokenForUsernameReturnValue: RestorationToken?
-    var restorationTokenForUsernameClosure: ((String) -> RestorationToken?)?
-
-    func restorationTokenForUsername(_ username: String) -> RestorationToken? {
-        restorationTokenForUsernameCallsCount += 1
-        restorationTokenForUsernameReceivedUsername = username
-        restorationTokenForUsernameReceivedInvocations.append(username)
-        if let restorationTokenForUsernameClosure = restorationTokenForUsernameClosure {
-            return restorationTokenForUsernameClosure(username)
-        } else {
-            return restorationTokenForUsernameReturnValue
-        }
-    }
     //MARK: - restorationTokens
 
     var restorationTokensCallsCount = 0
@@ -878,18 +857,6 @@ class KeychainControllerMock: KeychainControllerProtocol {
     func removeAllRestorationTokens() {
         removeAllRestorationTokensCallsCount += 1
         removeAllRestorationTokensClosure?()
-    }
-    //MARK: - resetSecrets
-
-    var resetSecretsCallsCount = 0
-    var resetSecretsCalled: Bool {
-        return resetSecretsCallsCount > 0
-    }
-    var resetSecretsClosure: (() -> Void)?
-
-    func resetSecrets() {
-        resetSecretsCallsCount += 1
-        resetSecretsClosure?()
     }
     //MARK: - containsPINCode
 
@@ -1227,16 +1194,6 @@ class NetworkMonitorMock: NetworkMonitorProtocol {
         set(value) { underlyingReachabilityPublisher = value }
     }
     var underlyingReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
-    var isCurrentConnectionExpensive: Bool {
-        get { return underlyingIsCurrentConnectionExpensive }
-        set(value) { underlyingIsCurrentConnectionExpensive = value }
-    }
-    var underlyingIsCurrentConnectionExpensive: Bool!
-    var isCurrentConnectionConstrained: Bool {
-        get { return underlyingIsCurrentConnectionConstrained }
-        set(value) { underlyingIsCurrentConnectionConstrained = value }
-    }
-    var underlyingIsCurrentConnectionConstrained: Bool!
 
 }
 class NotificationCenterMock: NotificationCenterProtocol {

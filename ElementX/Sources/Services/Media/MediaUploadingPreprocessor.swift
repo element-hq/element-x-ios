@@ -25,7 +25,6 @@ indirect enum MediaUploadingPreprocessorError: Error {
     case failedProcessingImage(MediaUploadingPreprocessorError)
     case failedProcessingVideo(MediaUploadingPreprocessorError)
     case failedProcessingAudio
-    case failedProcessingFile
     
     case failedGeneratingVideoThumbnail(Error?)
     case failedGeneratingImageThumbnail(Error?)

@@ -94,6 +94,17 @@ extension AlertInfo {
         title = L10n.commonError
         message = L10n.errorUnknown
     }
+
+    // periphery: ignore - might be useful in the future
+    /// Initialises the type with the title from an `Error`'s localised description along with the default Ok button.
+    ///
+    /// Currently this initialiser creates an alert for every error, however in the future it may be updated to filter
+    /// out some specific errors such as cancellation and networking issues that create too much noise or are
+    /// indicated to the user using other mechanisms.
+    init(error: Error) where T == String {
+        self.init(id: error.localizedDescription,
+                  title: error.localizedDescription)
+    }
 }
 
 extension View {

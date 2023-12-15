@@ -230,15 +230,6 @@ extension MapLibreMapView {
 
 // MARK: - MGLMapView convenient methods
 
-private extension MGLMapView {
-    func removeAllAnnotations() {
-        guard let annotations else {
-            return
-        }
-        removeAnnotations(annotations)
-    }
-}
-
 private extension MapTilerStyle {
     init(_ colorScheme: ColorScheme) {
         switch colorScheme {

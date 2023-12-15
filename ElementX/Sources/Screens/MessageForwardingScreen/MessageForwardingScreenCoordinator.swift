@@ -29,7 +29,6 @@ enum MessageForwardingScreenCoordinatorAction {
 }
 
 final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
-    private let parameters: MessageForwardingScreenCoordinatorParameters
     private var viewModel: MessageForwardingScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<MessageForwardingScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -39,8 +38,6 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: MessageForwardingScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = MessageForwardingScreenViewModel(roomSummaryProvider: parameters.roomSummaryProvider,
                                                      mediaProvider: parameters.mediaProvider,
                                                      sourceRoomID: parameters.sourceRoomID)

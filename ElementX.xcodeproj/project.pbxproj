@@ -467,7 +467,6 @@
 		7A0A0929556792FB19B812C5 /* SessionVerificationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84816E0D2F34E368BF64FA60 /* SessionVerificationScreen.swift */; };
 		7A642EE5F1ADC5D520F21924 /* MediaProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EB16E7FE59A947CA441531 /* MediaProviderProtocol.swift */; };
 		7A71AEF419904209BB8C2833 /* UserAgentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2529D434C750ED78ADF1ED /* UserAgentBuilder.swift */; };
-		7ABAB3A1D52B86FACF2F74CF /* MapTilerGeoCodingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23B3FAD8B23C421BC0D1B1E /* MapTilerGeoCodingServiceProtocol.swift */; };
 		7AEC56ADEFC5A7198A17412F /* InviteUsersScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB35E2DB4EFE8E6F3959629 /* InviteUsersScreenUITests.swift */; };
 		7B5DAB915357BE596529BF25 /* MapTilerStaticMapProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20872C3887F835958CE2F1D0 /* MapTilerStaticMapProtocol.swift */; };
 		7BB31E67648CF32D2AB5E502 /* RoomScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3C90E487B255B735D73C8 /* RoomScreenViewModel.swift */; };
@@ -1716,7 +1715,6 @@
 		C18CC37B97E77838609CFFE7 /* AdvancedSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsScreen.swift; sourceTree = "<group>"; };
 		C1D737F4672021D0A7D218CD /* OIDCAccountSettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDCAccountSettingsPresenter.swift; sourceTree = "<group>"; };
 		C1FA515B3B0D61EF1E907D2D /* BadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
-		C23B3FAD8B23C421BC0D1B1E /* MapTilerGeoCodingServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerGeoCodingServiceProtocol.swift; sourceTree = "<group>"; };
 		C2886615BEBAE33A0AA4D5F8 /* RoomScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScreenModels.swift; sourceTree = "<group>"; };
 		C2E9B841EE4878283ECDB554 /* InviteUsersScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreen.swift; sourceTree = "<group>"; };
 		C2F079B5DBD0D85FEA687AAE /* SDKGeneratedMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKGeneratedMocks.swift; sourceTree = "<group>"; };
@@ -4217,7 +4215,6 @@
 				B81B6170DB690013CEB646F4 /* MapLibreModels.swift */,
 				592A35163B0749C66BFD6186 /* MapLibreStaticMapView.swift */,
 				E062C1750EFC8627DE4CAB8E /* MapTilerAuthorization.swift */,
-				C23B3FAD8B23C421BC0D1B1E /* MapTilerGeoCodingServiceProtocol.swift */,
 				1A4D29F2683F5772AC72406F /* MapTilerStaticMap.swift */,
 				20872C3887F835958CE2F1D0 /* MapTilerStaticMapProtocol.swift */,
 				F0B9F5BC4C80543DE7228B9D /* MapTilerStyle.swift */,
@@ -5495,7 +5492,6 @@
 				E2DDA49BD62F03F180A42E30 /* MapLibreStaticMapView.swift in Sources */,
 				D181AC8FF236B7F91C0A8C28 /* MapTiler.swift in Sources */,
 				FCDA202B246F75BA28E10C5F /* MapTilerAuthorization.swift in Sources */,
-				7ABAB3A1D52B86FACF2F74CF /* MapTilerGeoCodingServiceProtocol.swift in Sources */,
 				D6661A94DBD97658B2ADBD6A /* MapTilerStaticMap.swift in Sources */,
 				7B5DAB915357BE596529BF25 /* MapTilerStaticMapProtocol.swift in Sources */,
 				83A4DAB181C56987C3E804FF /* MapTilerStyle.swift in Sources */,

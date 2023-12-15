@@ -14,15 +14,14 @@
 // limitations under the License.
 //
 
+// periphery:ignore:all
+
 import Combine
 import Foundation
 
 class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// An array of timeline item arrays that will be inserted in order for each back pagination request.
     var backPaginationResponses: [[RoomTimelineItemProtocol]] = []
-    /// The time delay added to each back pagination request.
-    var backPaginationDelay: Duration = .milliseconds(500)
-
     /// An array of timeline items that will be appended in order when ``simulateIncomingItems()`` is called.
     var incomingItems: [RoomTimelineItemProtocol] = []
     

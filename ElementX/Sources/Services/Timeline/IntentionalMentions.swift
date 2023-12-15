@@ -22,10 +22,6 @@ import WysiwygComposer
 struct IntentionalMentions: Equatable {
     let userIDs: Set<String>
     let atRoom: Bool
-    
-    static var empty: Self {
-        IntentionalMentions(userIDs: [], atRoom: false)
-    }
 }
 
 extension IntentionalMentions {

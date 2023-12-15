@@ -45,10 +45,6 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
         notificationItem.roomInfo.displayName
     }
 
-    var roomCanonicalAlias: String? {
-        notificationItem.roomInfo.canonicalAlias
-    }
-
     var isRoomDirect: Bool {
         notificationItem.roomInfo.isDirect
     }
@@ -101,21 +97,13 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
 
     var roomDisplayName: String { "" }
 
-    var roomCanonicalAlias: String? { nil }
-
-    var roomAvatarURL: String? { nil }
-
     var isNoisy: Bool { false }
 
     var isRoomDirect: Bool { false }
 
-    var isRoomEncrypted: Bool? { nil }
-
     var senderAvatarMediaSource: MediaSourceProxy? { nil }
 
     var roomAvatarMediaSource: MediaSourceProxy? { nil }
-
-    var notificationIdentifier: String { "" }
 
     var roomJoinedMembers: Int { 0 }
     

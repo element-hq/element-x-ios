@@ -35,8 +35,6 @@ protocol NotificationItemProxyProtocol {
 
     var roomDisplayName: String { get }
 
-    var roomCanonicalAlias: String? { get }
-
     var roomAvatarMediaSource: MediaSourceProxy? { get }
 
     var roomJoinedMembers: Int { get }
