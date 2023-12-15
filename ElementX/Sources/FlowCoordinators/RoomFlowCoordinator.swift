@@ -254,7 +254,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 break
                 
             case (.notificationSettings, .presentGlobalNotificationSettingsScreen, .globalNotificationSettings):
-                presentGlobalNotificationSettingsScreen(animated: animated)
+                presentGlobalNotificationSettingsScreen()
             case (.globalNotificationSettings, .dismissGlobalNotificationSettingsScreen, .notificationSettings):
                 break
                 
@@ -981,7 +981,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentGlobalNotificationSettingsScreen(animated: Bool) {
+    private func presentGlobalNotificationSettingsScreen() {
         let navigationCoordinator = NavigationStackCoordinator()
         let parameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: navigationCoordinator,
                                                                          userSession: userSession,

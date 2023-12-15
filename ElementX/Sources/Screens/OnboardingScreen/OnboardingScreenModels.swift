@@ -22,13 +22,6 @@ enum OnboardingScreenCoordinatorAction {
     case login
 }
 
-/// The content displayed in a single screen page.
-struct OnboardingScreenPageContent {
-    let title: AttributedString
-    let message: String
-    let image: ImageAsset
-}
-
 enum OnboardingScreenViewModelAction {
     case login
 }

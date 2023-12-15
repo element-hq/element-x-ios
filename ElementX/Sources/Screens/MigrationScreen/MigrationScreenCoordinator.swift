@@ -19,7 +19,6 @@ import SwiftUI
 
 final class MigrationScreenCoordinator: CoordinatorProtocol {
     private var viewModel: MigrationScreenViewModelProtocol
-    private var cancellables = Set<AnyCancellable>()
     
     init() {
         viewModel = MigrationScreenViewModel()

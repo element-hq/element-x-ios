@@ -22,8 +22,6 @@ import SwiftUI
 class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomStringConvertible {
     fileprivate let placeholderModule: NavigationModule
     
-    private var cancellables = Set<AnyCancellable>()
-
     var sidebarStackModuleCancellable: AnyCancellable?
 
     @Published fileprivate var sidebarModule: NavigationModule? {
@@ -111,6 +109,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         }
     }
     
+    // periphery:ignore - might be useful to have
     /// The currently displayed fullscreen cover coordinator
     var fullScreenCoverCoordinator: (any CoordinatorProtocol)? {
         fullScreenCoverModule?.coordinator
@@ -502,6 +501,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         }
     }
     
+    // periphery:ignore - might be useful to have
     // The currently presented fullscreen cover coordinator
     // Fullscreen covers will be presented through the NavigationSplitCoordinator if provided
     var fullScreenCoverCoordinator: (any CoordinatorProtocol)? {
@@ -636,6 +636,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         }
     }
 
+    // periphery:ignore - might be useful to have
     /// Present a fullscreen cover on top of the stack. If this NavigationStackCoordinator is embedded within a NavigationSplitCoordinator
     /// then the presentation will be proxied to the split
     /// - Parameters:

@@ -16,8 +16,6 @@
 
 import Foundation
 
-enum MigrationScreenViewModelAction { }
-
 struct MigrationScreenViewState: BindableState { }
 
 enum MigrationScreenViewAction { }

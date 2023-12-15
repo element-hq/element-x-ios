@@ -58,7 +58,7 @@ private struct PINTextFieldStyle: TextFieldStyle {
     let pinCode: String
     let isSecure: Bool
     
-    public func _body(configuration: TextField<_Label>) -> some View {
+    func _body(configuration: TextField<_Label>) -> some View {
         HStack(spacing: 8) {
             ForEach(0..<4) { index in
                 PINDigitField(digit: digit(index))

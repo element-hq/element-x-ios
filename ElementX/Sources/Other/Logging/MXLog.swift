@@ -160,6 +160,7 @@ enum MXLog {
     
     // MARK: - Private
     
+    // periphery:ignore:parameters function,column
     private static func createSpan(_ name: String,
                                    level: LogLevel,
                                    file: String = #file,
@@ -177,6 +178,7 @@ enum MXLog {
         return Span(file: file, line: UInt32(line), level: level, target: target, name: name)
     }
     
+    // periphery:ignore:parameters function,column,context
     private static func log(_ message: Any,
                             level: LogLevel,
                             file: String = #file,

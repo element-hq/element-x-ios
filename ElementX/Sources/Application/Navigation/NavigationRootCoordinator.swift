@@ -49,6 +49,7 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
         }
     }
     
+    // periphery:ignore - might be useful to have
     // The currently presented sheet coordinator
     // Sheets will be presented through the NavigationSplitCoordinator if provided
     var sheetCoordinator: (any CoordinatorProtocol)? {

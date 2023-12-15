@@ -17,6 +17,7 @@
 import Foundation
 import MatrixRustSDK
 
+// periphery:ignore - for generic conformance
 enum InviteUsersScreenErrorType: Error {
     case unknown
 }

@@ -14,13 +14,13 @@
 // limitations under the License.
 //
 
-// periphery:ignore:all - subscripts lead to false positives
 import Foundation
 
 struct AdvancedSettingsScreenViewState: BindableState {
     var bindings: AdvancedSettingsScreenViewStateBindings
 }
 
+// periphery:ignore - subscript are seen as false positives
 @dynamicMemberLookup
 struct AdvancedSettingsScreenViewStateBindings {
     private let advancedSettings: AdvancedSettingsProtocol

@@ -18,6 +18,5 @@ import Combine
 
 @MainActor
 protocol MigrationScreenViewModelProtocol {
-    var actions: AnyPublisher<MigrationScreenViewModelAction, Never> { get }
     var context: MigrationScreenViewModelType.Context { get }
 }

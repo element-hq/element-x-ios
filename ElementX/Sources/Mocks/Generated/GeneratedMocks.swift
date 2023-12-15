@@ -813,27 +813,6 @@ class KeychainControllerMock: KeychainControllerProtocol {
         setRestorationTokenForUsernameReceivedInvocations.append((restorationToken: restorationToken, forUsername: forUsername))
         setRestorationTokenForUsernameClosure?(restorationToken, forUsername)
     }
-    //MARK: - restorationTokenForUsername
-
-    var restorationTokenForUsernameCallsCount = 0
-    var restorationTokenForUsernameCalled: Bool {
-        return restorationTokenForUsernameCallsCount > 0
-    }
-    var restorationTokenForUsernameReceivedUsername: String?
-    var restorationTokenForUsernameReceivedInvocations: [String] = []
-    var restorationTokenForUsernameReturnValue: RestorationToken?
-    var restorationTokenForUsernameClosure: ((String) -> RestorationToken?)?
-
-    func restorationTokenForUsername(_ username: String) -> RestorationToken? {
-        restorationTokenForUsernameCallsCount += 1
-        restorationTokenForUsernameReceivedUsername = username
-        restorationTokenForUsernameReceivedInvocations.append(username)
-        if let restorationTokenForUsernameClosure = restorationTokenForUsernameClosure {
-            return restorationTokenForUsernameClosure(username)
-        } else {
-            return restorationTokenForUsernameReturnValue
-        }
-    }
     //MARK: - restorationTokens
 
     var restorationTokensCallsCount = 0
@@ -878,18 +857,6 @@ class KeychainControllerMock: KeychainControllerProtocol {
     func removeAllRestorationTokens() {
         removeAllRestorationTokensCallsCount += 1
         removeAllRestorationTokensClosure?()
-    }
-    //MARK: - resetSecrets
-
-    var resetSecretsCallsCount = 0
-    var resetSecretsCalled: Bool {
-        return resetSecretsCallsCount > 0
-    }
-    var resetSecretsClosure: (() -> Void)?
-
-    func resetSecrets() {
-        resetSecretsCallsCount += 1
-        resetSecretsClosure?()
     }
     //MARK: - containsPINCode
 
@@ -1227,16 +1194,6 @@ class NetworkMonitorMock: NetworkMonitorProtocol {
         set(value) { underlyingReachabilityPublisher = value }
     }
     var underlyingReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
-    var isCurrentConnectionExpensive: Bool {
-        get { return underlyingIsCurrentConnectionExpensive }
-        set(value) { underlyingIsCurrentConnectionExpensive = value }
-    }
-    var underlyingIsCurrentConnectionExpensive: Bool!
-    var isCurrentConnectionConstrained: Bool {
-        get { return underlyingIsCurrentConnectionConstrained }
-        set(value) { underlyingIsCurrentConnectionConstrained = value }
-    }
-    var underlyingIsCurrentConnectionConstrained: Bool!
 
 }
 class NotificationCenterMock: NotificationCenterProtocol {
@@ -1493,23 +1450,6 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
         restoreDefaultNotificationModeRoomIdReceivedInvocations.append(roomId)
         try await restoreDefaultNotificationModeRoomIdClosure?(roomId)
     }
-    //MARK: - containsKeywordsRules
-
-    var containsKeywordsRulesCallsCount = 0
-    var containsKeywordsRulesCalled: Bool {
-        return containsKeywordsRulesCallsCount > 0
-    }
-    var containsKeywordsRulesReturnValue: Bool!
-    var containsKeywordsRulesClosure: (() async -> Bool)?
-
-    func containsKeywordsRules() async -> Bool {
-        containsKeywordsRulesCallsCount += 1
-        if let containsKeywordsRulesClosure = containsKeywordsRulesClosure {
-            return await containsKeywordsRulesClosure()
-        } else {
-            return containsKeywordsRulesReturnValue
-        }
-    }
     //MARK: - unmuteRoom
 
     var unmuteRoomRoomIdIsEncryptedIsOneToOneThrowableError: Error?
@@ -1570,47 +1510,6 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
         setRoomMentionEnabledEnabledReceivedEnabled = enabled
         setRoomMentionEnabledEnabledReceivedInvocations.append(enabled)
         try await setRoomMentionEnabledEnabledClosure?(enabled)
-    }
-    //MARK: - isUserMentionEnabled
-
-    var isUserMentionEnabledThrowableError: Error?
-    var isUserMentionEnabledCallsCount = 0
-    var isUserMentionEnabledCalled: Bool {
-        return isUserMentionEnabledCallsCount > 0
-    }
-    var isUserMentionEnabledReturnValue: Bool!
-    var isUserMentionEnabledClosure: (() async throws -> Bool)?
-
-    func isUserMentionEnabled() async throws -> Bool {
-        if let error = isUserMentionEnabledThrowableError {
-            throw error
-        }
-        isUserMentionEnabledCallsCount += 1
-        if let isUserMentionEnabledClosure = isUserMentionEnabledClosure {
-            return try await isUserMentionEnabledClosure()
-        } else {
-            return isUserMentionEnabledReturnValue
-        }
-    }
-    //MARK: - setUserMentionEnabled
-
-    var setUserMentionEnabledEnabledThrowableError: Error?
-    var setUserMentionEnabledEnabledCallsCount = 0
-    var setUserMentionEnabledEnabledCalled: Bool {
-        return setUserMentionEnabledEnabledCallsCount > 0
-    }
-    var setUserMentionEnabledEnabledReceivedEnabled: Bool?
-    var setUserMentionEnabledEnabledReceivedInvocations: [Bool] = []
-    var setUserMentionEnabledEnabledClosure: ((Bool) async throws -> Void)?
-
-    func setUserMentionEnabled(enabled: Bool) async throws {
-        if let error = setUserMentionEnabledEnabledThrowableError {
-            throw error
-        }
-        setUserMentionEnabledEnabledCallsCount += 1
-        setUserMentionEnabledEnabledReceivedEnabled = enabled
-        setUserMentionEnabledEnabledReceivedInvocations.append(enabled)
-        try await setUserMentionEnabledEnabledClosure?(enabled)
     }
     //MARK: - isCallEnabled
 
@@ -1746,21 +1645,6 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingMembership = value }
     }
     var underlyingMembership: MembershipState!
-    var isNameAmbiguous: Bool {
-        get { return underlyingIsNameAmbiguous }
-        set(value) { underlyingIsNameAmbiguous = value }
-    }
-    var underlyingIsNameAmbiguous: Bool!
-    var powerLevel: Int {
-        get { return underlyingPowerLevel }
-        set(value) { underlyingPowerLevel = value }
-    }
-    var underlyingPowerLevel: Int!
-    var normalizedPowerLevel: Int {
-        get { return underlyingNormalizedPowerLevel }
-        set(value) { underlyingNormalizedPowerLevel = value }
-    }
-    var underlyingNormalizedPowerLevel: Int!
     var isAccountOwner: Bool {
         get { return underlyingIsAccountOwner }
         set(value) { underlyingIsAccountOwner = value }
@@ -1872,11 +1756,6 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingIsEncrypted = value }
     }
     var underlyingIsEncrypted: Bool!
-    var isTombstoned: Bool {
-        get { return underlyingIsTombstoned }
-        set(value) { underlyingIsTombstoned = value }
-    }
-    var underlyingIsTombstoned: Bool!
     var membership: Membership {
         get { return underlyingMembership }
         set(value) { underlyingMembership = value }
@@ -1888,7 +1767,6 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     var underlyingHasOngoingCall: Bool!
     var canonicalAlias: String?
-    var alternativeAliases: [String] = []
     var hasUnreadNotifications: Bool {
         get { return underlyingHasUnreadNotifications }
         set(value) { underlyingHasUnreadNotifications = value }
@@ -1908,11 +1786,6 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingMembers = value }
     }
     var underlyingMembers: CurrentValuePublisher<[RoomMemberProxyProtocol], Never>!
-    var invitedMembersCount: Int {
-        get { return underlyingInvitedMembersCount }
-        set(value) { underlyingInvitedMembersCount = value }
-    }
-    var underlyingInvitedMembersCount: Int!
     var joinedMembersCount: Int {
         get { return underlyingJoinedMembersCount }
         set(value) { underlyingJoinedMembersCount = value }
@@ -1933,11 +1806,6 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingTimeline = value }
     }
     var underlyingTimeline: TimelineProxyProtocol!
-    var pollHistoryTimeline: TimelineProxyProtocol {
-        get { return underlyingPollHistoryTimeline }
-        set(value) { underlyingPollHistoryTimeline = value }
-    }
-    var underlyingPollHistoryTimeline: TimelineProxyProtocol!
 
     //MARK: - subscribeForUpdates
 
@@ -1950,48 +1818,6 @@ class RoomProxyMock: RoomProxyProtocol {
     func subscribeForUpdates() async {
         subscribeForUpdatesCallsCount += 1
         await subscribeForUpdatesClosure?()
-    }
-    //MARK: - loadAvatarURLForUserId
-
-    var loadAvatarURLForUserIdCallsCount = 0
-    var loadAvatarURLForUserIdCalled: Bool {
-        return loadAvatarURLForUserIdCallsCount > 0
-    }
-    var loadAvatarURLForUserIdReceivedUserId: String?
-    var loadAvatarURLForUserIdReceivedInvocations: [String] = []
-    var loadAvatarURLForUserIdReturnValue: Result<URL?, RoomProxyError>!
-    var loadAvatarURLForUserIdClosure: ((String) async -> Result<URL?, RoomProxyError>)?
-
-    func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError> {
-        loadAvatarURLForUserIdCallsCount += 1
-        loadAvatarURLForUserIdReceivedUserId = userId
-        loadAvatarURLForUserIdReceivedInvocations.append(userId)
-        if let loadAvatarURLForUserIdClosure = loadAvatarURLForUserIdClosure {
-            return await loadAvatarURLForUserIdClosure(userId)
-        } else {
-            return loadAvatarURLForUserIdReturnValue
-        }
-    }
-    //MARK: - loadDisplayNameForUserId
-
-    var loadDisplayNameForUserIdCallsCount = 0
-    var loadDisplayNameForUserIdCalled: Bool {
-        return loadDisplayNameForUserIdCallsCount > 0
-    }
-    var loadDisplayNameForUserIdReceivedUserId: String?
-    var loadDisplayNameForUserIdReceivedInvocations: [String] = []
-    var loadDisplayNameForUserIdReturnValue: Result<String?, RoomProxyError>!
-    var loadDisplayNameForUserIdClosure: ((String) async -> Result<String?, RoomProxyError>)?
-
-    func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        loadDisplayNameForUserIdCallsCount += 1
-        loadDisplayNameForUserIdReceivedUserId = userId
-        loadDisplayNameForUserIdReceivedInvocations.append(userId)
-        if let loadDisplayNameForUserIdClosure = loadDisplayNameForUserIdClosure {
-            return await loadDisplayNameForUserIdClosure(userId)
-        } else {
-            return loadDisplayNameForUserIdReturnValue
-        }
     }
     //MARK: - redact
 
@@ -2104,23 +1930,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return await getMemberUserIDClosure(userID)
         } else {
             return getMemberUserIDReturnValue
-        }
-    }
-    //MARK: - inviter
-
-    var inviterCallsCount = 0
-    var inviterCalled: Bool {
-        return inviterCallsCount > 0
-    }
-    var inviterReturnValue: RoomMemberProxyProtocol?
-    var inviterClosure: (() async -> RoomMemberProxyProtocol?)?
-
-    func inviter() async -> RoomMemberProxyProtocol? {
-        inviterCallsCount += 1
-        if let inviterClosure = inviterClosure {
-            return await inviterClosure()
-        } else {
-            return inviterReturnValue
         }
     }
     //MARK: - rejectInvitation

@@ -18,23 +18,12 @@ struct LocationRoomTimelineItemContent: Hashable {
     let body: String
     let geoURI: GeoURI?
     let description: String?
-    let zoomLevel: UInt8?
-    let asset: AssetType?
-
-    enum AssetType {
-        case sender
-        case pin
-    }
 
     init(body: String,
          geoURI: GeoURI? = nil,
-         description: String? = nil,
-         zoomLevel: UInt8? = nil,
-         asset: AssetType? = nil) {
+         description: String? = nil) {
         self.body = body
         self.geoURI = geoURI
         self.description = description
-        self.zoomLevel = zoomLevel
-        self.asset = asset
     }
 }

@@ -83,6 +83,5 @@ enum RoomMemberDetailsScreenViewAction {
 }
 
 enum RoomMemberDetailsScreenError: Hashable {
-    case alert(String)
     case unknown
 }

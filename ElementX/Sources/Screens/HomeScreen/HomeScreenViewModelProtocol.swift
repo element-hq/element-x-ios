@@ -22,5 +22,6 @@ protocol HomeScreenViewModelProtocol {
     
     var context: HomeScreenViewModelType.Context { get }
     
+    // periphery: ignore - used in release mode
     func presentCrashedLastRunAlert()
 }

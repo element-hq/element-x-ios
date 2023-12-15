@@ -68,7 +68,6 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
     class PreviewHostingController: UIViewController, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
         let previewItem: MediaPreviewItem
         let shouldHideControls: Bool
-        let dismissalPublisher: PassthroughSubject<Void, Never>
         let onDismiss: () -> Void
         
         private var dismissalObserver: AnyCancellable?
@@ -81,7 +80,6 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
              onDismiss: @escaping () -> Void) {
             self.previewItem = previewItem
             self.shouldHideControls = shouldHideControls
-            self.dismissalPublisher = dismissalPublisher
             self.onDismiss = onDismiss
 
             super.init(nibName: nil, bundle: nil)

@@ -28,8 +28,4 @@ extension ImageProviderProtocol {
     func imageFromSource(_ source: MediaSourceProxy?) -> UIImage? {
         imageFromSource(source, size: nil)
     }
-    
-    func loadImageFromSource(_ source: MediaSourceProxy) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromSource(source, size: nil)
-    }
 }

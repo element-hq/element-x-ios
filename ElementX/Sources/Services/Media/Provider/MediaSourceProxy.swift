@@ -40,11 +40,11 @@ struct MediaSourceProxy: Hashable {
     
     // MARK: - Hashable
     
-    public static func == (lhs: MediaSourceProxy, rhs: MediaSourceProxy) -> Bool {
+    static func == (lhs: MediaSourceProxy, rhs: MediaSourceProxy) -> Bool {
         lhs.url == rhs.url
     }
     
-    public func hash(into hasher: inout Hasher) {
+    func hash(into hasher: inout Hasher) {
         hasher.combine(url)
     }
 }

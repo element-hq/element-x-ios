@@ -155,6 +155,7 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
     }
     
     private func displayError(_ error: RoomProxyError) {
+        MXLog.error("Failed to accept/decline invite: \(error)")
         state.bindings.alertInfo = .init(id: true,
                                          title: L10n.commonError,
                                          message: L10n.errorUnknown)

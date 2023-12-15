@@ -80,10 +80,13 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
     // Fixes crashes when inserting mention pills in the composer on Mac
     // https://github.com/element-hq/element-x-ios/issues/2070
     
+    // periphery:ignore - read comment above
     static var supportsSecureCoding = false
     
+    // periphery:ignore - read comment above
     func encode(with coder: NSCoder) { }
     
+    // periphery:ignore - read comment above
     init?(coder: NSCoder) {
         fatalError("Not implemented")
     }

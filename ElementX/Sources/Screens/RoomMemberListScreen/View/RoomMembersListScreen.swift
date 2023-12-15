@@ -18,8 +18,6 @@ import Compound
 import SwiftUI
 
 struct RoomMembersListScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-
     @ObservedObject var context: RoomMembersListScreenViewModel.Context
     
     var body: some View {

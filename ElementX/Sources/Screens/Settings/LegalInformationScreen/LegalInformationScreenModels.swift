@@ -16,6 +16,7 @@
 
 import Foundation
 
+// periphery:ignore - required for the architecture
 enum LegalInformationScreenViewModelAction { }
 
 struct LegalInformationScreenViewState: BindableState {

@@ -81,7 +81,6 @@ struct RoomNotificationSettingsScreenViewState: BindableState {
 
 struct RoomNotificationSettingsScreenViewStateBindings {
     var allowCustomSetting = false
-    var customMode: RoomNotificationModeProxy = .allMessages
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomNotificationSettingsScreenErrorType>?
 }

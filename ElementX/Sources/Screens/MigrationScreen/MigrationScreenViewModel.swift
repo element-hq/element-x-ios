@@ -20,12 +20,6 @@ import SwiftUI
 typealias MigrationScreenViewModelType = StateStoreViewModel<MigrationScreenViewState, MigrationScreenViewAction>
 
 class MigrationScreenViewModel: MigrationScreenViewModelType, MigrationScreenViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<MigrationScreenViewModelAction, Never> = .init()
-    
-    var actions: AnyPublisher<MigrationScreenViewModelAction, Never> {
-        actionsSubject.eraseToAnyPublisher()
-    }
-
     init() {
         super.init(initialViewState: MigrationScreenViewState())
     }

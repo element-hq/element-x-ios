@@ -77,8 +77,6 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
 private struct LoadableImageContent<TransformerView: View, PlaceholderView: View>: View, ImageDataProvider {
     private let mediaSource: MediaSourceProxy
     private let blurhash: String?
-    private let size: CGSize?
-    private let imageProvider: ImageProviderProtocol?
     private let transformer: (AnyView) -> TransformerView
     private let placeholder: () -> PlaceholderView
     
@@ -92,8 +90,6 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
          placeholder: @escaping () -> PlaceholderView) {
         self.mediaSource = mediaSource
         self.blurhash = blurhash
-        self.size = size
-        self.imageProvider = imageProvider
         self.transformer = transformer
         self.placeholder = placeholder
         _contentLoader = StateObject(wrappedValue: ContentLoader(mediaSource: mediaSource, size: size, imageProvider: imageProvider))

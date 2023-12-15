@@ -18,7 +18,6 @@ import SwiftUI
 
 struct PollRoomTimelineView: View {
     let timelineItem: PollRoomTimelineItem
-    @Environment(\.timelineStyle) var timelineStyle
     @EnvironmentObject private var context: RoomScreenViewModel.Context
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)

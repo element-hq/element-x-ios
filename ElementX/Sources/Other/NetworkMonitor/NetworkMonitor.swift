@@ -27,14 +27,6 @@ class NetworkMonitor: NetworkMonitorProtocol {
         reachabilitySubject.asCurrentValuePublisher()
     }
     
-    var isCurrentConnectionExpensive: Bool {
-        pathMonitor.currentPath.isExpensive
-    }
-    
-    var isCurrentConnectionConstrained: Bool {
-        pathMonitor.currentPath.isConstrained
-    }
-    
     init() {
         queue = DispatchQueue(label: "io.element.elementx.networkmonitor", qos: .background)
         pathMonitor = NWPathMonitor()

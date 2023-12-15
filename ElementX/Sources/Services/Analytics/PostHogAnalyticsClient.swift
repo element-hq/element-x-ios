@@ -50,10 +50,6 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
         // it. Keep it around to avoid having multiple instances if the user re-enables
     }
     
-    func flush() {
-        postHog?.flush()
-    }
-    
     func capture(_ event: AnalyticsEventProtocol) {
         guard isRunning else { return }
         postHog?.capture(event.eventName, properties: attachUserProperties(to: event.properties))

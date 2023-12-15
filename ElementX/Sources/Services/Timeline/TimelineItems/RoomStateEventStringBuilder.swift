@@ -121,7 +121,7 @@ struct RoomStateEventStringBuilder {
         }
     }
     
-    func buildString(for state: OtherState, stateKey: String?, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
+    func buildString(for state: OtherState, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
         let senderName = sender.displayName ?? sender.id
         
         switch state {

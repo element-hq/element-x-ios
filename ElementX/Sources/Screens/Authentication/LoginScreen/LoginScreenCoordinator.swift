@@ -37,9 +37,7 @@ enum LoginScreenCoordinatorAction {
 final class LoginScreenCoordinator: CoordinatorProtocol {
     private let parameters: LoginScreenCoordinatorParameters
     private var viewModel: LoginScreenViewModelProtocol
-    
-    @CancellableTask private var currentTask: Task<Void, Error>?
-    
+        
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
 
     private let actionsSubject: PassthroughSubject<LoginScreenCoordinatorAction, Never> = .init()

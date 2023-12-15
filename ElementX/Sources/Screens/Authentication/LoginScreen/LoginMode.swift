@@ -35,22 +35,4 @@ enum LoginMode: Equatable {
             return false
         }
     }
-    
-    var supportsPasswordFlow: Bool {
-        switch self {
-        case .password:
-            return true
-        default:
-            return false
-        }
-    }
-
-    var isUnsupported: Bool {
-        switch self {
-        case .unsupported:
-            return true
-        default:
-            return false
-        }
-    }
 }

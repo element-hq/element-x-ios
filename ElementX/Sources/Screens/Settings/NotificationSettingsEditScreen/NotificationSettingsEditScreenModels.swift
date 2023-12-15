@@ -53,7 +53,6 @@ struct NotificationSettingsEditScreenViewState: BindableState {
 }
 
 struct NotificationSettingsEditScreenViewStateBindings {
-    var searchQuery = ""
     var alertInfo: AlertInfo<NotificationSettingsEditScreenErrorType>?
 }
 
@@ -103,8 +102,6 @@ struct NotificationSettingsEditScreenStrings {
 }
 
 struct NotificationSettingsEditScreenRoom: Identifiable, Equatable {
-    static let placeholderLastMessage = AttributedString("Hidden last message")
-    
     /// The list item identifier can be a real room identifier, a custom one for invalidated entries
     /// or a completely unique one for empty items and skeletons
     let id: String
@@ -117,13 +114,4 @@ struct NotificationSettingsEditScreenRoom: Identifiable, Equatable {
     var avatarURL: URL?
     
     var notificationMode: RoomNotificationModeProxy?
-    
-    var isPlaceholder = false
-    
-    static func placeholder() -> NotificationSettingsEditScreenRoom {
-        NotificationSettingsEditScreenRoom(id: UUID().uuidString,
-                                           roomId: nil,
-                                           name: "Placeholder room name",
-                                           isPlaceholder: true)
-    }
 }

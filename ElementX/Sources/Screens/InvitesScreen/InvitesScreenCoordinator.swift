@@ -26,7 +26,6 @@ enum InvitesScreenCoordinatorAction {
 }
 
 final class InvitesScreenCoordinator: CoordinatorProtocol {
-    private let parameters: InvitesScreenCoordinatorParameters
     private var viewModel: InvitesScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<InvitesScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -36,7 +35,6 @@ final class InvitesScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: InvitesScreenCoordinatorParameters) {
-        self.parameters = parameters
         viewModel = InvitesScreenViewModel(userSession: parameters.userSession,
                                            appSettings: ServiceLocator.shared.settings,
                                            analytics: ServiceLocator.shared.analytics,

@@ -46,8 +46,7 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     init(parameters: NotificationSettingsScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = NotificationSettingsScreenViewModel(userSession: parameters.userSession,
-                                                        appSettings: ServiceLocator.shared.settings,
+        viewModel = NotificationSettingsScreenViewModel(appSettings: ServiceLocator.shared.settings,
                                                         userNotificationCenter: parameters.userNotificationCenter,
                                                         notificationSettingsProxy: parameters.notificationSettings,
                                                         isModallyPresented: parameters.isModallyPresented)

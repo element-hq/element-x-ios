@@ -152,6 +152,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
     }
     
+    // perphery: ignore - used in release mode
     func presentCrashedLastRunAlert() {
         state.bindings.alertInfo = AlertInfo(id: UUID(),
                                              title: L10n.crashDetectionDialogContent(InfoPlistReader.main.bundleDisplayName),

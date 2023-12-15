@@ -22,7 +22,6 @@ import XCTest
 @MainActor
 class InviteUsersScreenViewModelTests: XCTestCase {
     var viewModel: InviteUsersScreenViewModelProtocol!
-    var clientProxy: MockClientProxy!
     var userDiscoveryService: UserDiscoveryServiceMock!
     
     private var cancellables = Set<AnyCancellable>()
@@ -96,7 +95,6 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     
     private func setupWithRoomType(roomType: InviteUsersScreenRoomType) {
         let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
-        clientProxy = .init(userID: "")
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([])
         userDiscoveryService.searchProfilesWithReturnValue = .success([])

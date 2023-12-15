@@ -19,7 +19,6 @@ import SwiftUI
 
 struct NotificationSettingsEditScreen: View {
     @ObservedObject var context: NotificationSettingsEditScreenViewModel.Context
-    @State var isSearching = false
     
     var body: some View {
         Form {

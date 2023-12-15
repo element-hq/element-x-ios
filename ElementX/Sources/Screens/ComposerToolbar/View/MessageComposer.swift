@@ -203,7 +203,6 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     ]
     
     static func messageComposer(_ content: String = "",
-                                sendingDisabled: Bool = false,
                                 mode: RoomScreenComposerMode = .default) -> MessageComposer {
         let viewModel = WysiwygComposerViewModel(minHeight: 22,
                                                  maxExpandedHeight: 250)
@@ -228,7 +227,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         VStack(spacing: 8) {
-            messageComposer(sendingDisabled: true)
+            messageComposer()
             
             messageComposer("Some message",
                             mode: .edit(originalItemId: .random))

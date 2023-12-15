@@ -132,13 +132,3 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
                           userIndicatorController: userIndicatorController)
     }
 }
-
-private extension ImageInfo {
-    static let mock: ImageInfo = .init(height: nil,
-                                       width: nil,
-                                       mimetype: nil,
-                                       size: nil,
-                                       thumbnailInfo: nil,
-                                       thumbnailSource: nil,
-                                       blurhash: nil)
-}

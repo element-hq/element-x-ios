@@ -45,7 +45,6 @@ enum RoomScreenCoordinatorAction {
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
-    private var parameters: RoomScreenCoordinatorParameters
     private var viewModel: RoomScreenViewModelProtocol
     private var composerViewModel: ComposerToolbarViewModel
     private var wysiwygViewModel: WysiwygComposerViewModel
@@ -58,8 +57,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
                                         timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,

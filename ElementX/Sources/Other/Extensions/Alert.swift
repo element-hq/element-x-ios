@@ -95,6 +95,7 @@ extension AlertInfo {
         message = L10n.errorUnknown
     }
 
+    // periphery: ignore - might be useful in the future
     /// Initialises the type with the title from an `Error`'s localised description along with the default Ok button.
     ///
     /// Currently this initialiser creates an alert for every error, however in the future it may be updated to filter

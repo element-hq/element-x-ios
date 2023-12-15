@@ -18,8 +18,6 @@ import Compound
 import SwiftUI
 
 struct LocationMarkerView: View {
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    
     var mode: Mode = .map
     enum Mode { case map, button }
     
