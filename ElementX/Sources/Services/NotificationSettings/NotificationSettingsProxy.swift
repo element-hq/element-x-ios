@@ -92,10 +92,6 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         try await notificationSettings.restoreDefaultRoomNotificationMode(roomId: roomId)
         await updatedSettings()
     }
-    
-    func containsKeywordsRules() async -> Bool {
-        await notificationSettings.containsKeywordsRules()
-    }
        
     func unmuteRoom(roomId: String, isEncrypted: Bool, isOneToOne: Bool) async throws {
         let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "unmuteRoom")
@@ -114,18 +110,6 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.setRoomMentionEnabled(enabled: enabled)
-        await updatedSettings()
-    }
-    
-    func isUserMentionEnabled() async throws -> Bool {
-        try await notificationSettings.isUserMentionEnabled()
-    }
-    
-    func setUserMentionEnabled(enabled: Bool) async throws {
-        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setUserMentionEnabled")
-        defer { backgroundTask?.stop() }
-
-        try await notificationSettings.setUserMentionEnabled(enabled: enabled)
         await updatedSettings()
     }
     

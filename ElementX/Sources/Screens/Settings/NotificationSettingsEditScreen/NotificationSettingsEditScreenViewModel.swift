@@ -26,7 +26,9 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
     private let userSession: UserSessionProtocol
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
     
+    // periphery:ignore - cancellable tasks get cancelled when reassigned
     @CancellableTask private var fetchDefaultRoomNotificationModesTask: Task<Void, Error>?
+    // periphery:ignore - cancellable tasks get cancelled when reassigned
     @CancellableTask private var updateRoomsWithUserDefinedModeTask: Task<Void, Error>?
     
     var actions: AnyPublisher<NotificationSettingsEditScreenViewModelAction, Never> {

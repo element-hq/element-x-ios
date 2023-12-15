@@ -41,9 +41,3 @@ extension PlatformViewVersionPredicate<ViewControllerType, UIViewController> {
         .iOS(.v16, .v17)
     }
 }
-
-extension PlatformViewVersionPredicate<NavigationStackType, UINavigationController> {
-    static var supportedVersions: Self {
-        .iOS(.v16, .v17)
-    }
-}

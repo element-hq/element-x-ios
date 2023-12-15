@@ -22,9 +22,6 @@ struct RoomMemberProxyMockConfiguration {
     var displayName: String
     var avatarURL: URL?
     var membership: MembershipState
-    var isNameAmbiguous = false
-    var powerLevel = 50
-    var normalizedPowerLevel = 50
     var isAccountOwner = false
     var isIgnored = false
     var canInviteUsers = false
@@ -38,9 +35,6 @@ extension RoomMemberProxyMock {
         displayName = configuration.displayName
         avatarURL = configuration.avatarURL
         membership = configuration.membership
-        isNameAmbiguous = configuration.isNameAmbiguous
-        powerLevel = configuration.powerLevel
-        normalizedPowerLevel = configuration.normalizedPowerLevel
         isAccountOwner = configuration.isAccountOwner
         isIgnored = configuration.isIgnored
         canInviteUsers = configuration.canInviteUsers

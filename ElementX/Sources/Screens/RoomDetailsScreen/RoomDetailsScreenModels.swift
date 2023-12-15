@@ -219,12 +219,6 @@ extension RoomDetailsNotificationSettingsState {
         return false
     }
     
-    /// Returns `true` when the settings are loaded and `isDefault` is true.
-    var isDefault: Bool {
-        guard case let .loaded(settings) = self else { return false }
-        return settings.isDefault
-    }
-    
     /// Returns `true` when the settings are loaded and `isDefault` is false.
     var isCustom: Bool {
         guard case let .loaded(settings) = self else { return false }

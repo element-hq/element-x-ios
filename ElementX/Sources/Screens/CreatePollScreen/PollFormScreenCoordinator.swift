@@ -28,7 +28,6 @@ enum PollFormScreenCoordinatorAction {
 }
 
 final class PollFormScreenCoordinator: CoordinatorProtocol {
-    private let parameters: PollFormScreenCoordinatorParameters
     private var viewModel: PollFormScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<PollFormScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -38,8 +37,6 @@ final class PollFormScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: PollFormScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = PollFormScreenViewModel(mode: parameters.mode)
     }
     

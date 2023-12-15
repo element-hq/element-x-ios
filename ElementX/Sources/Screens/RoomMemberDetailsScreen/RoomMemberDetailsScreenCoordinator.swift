@@ -29,7 +29,6 @@ enum RoomMemberDetailsScreenCoordinatorAction {
 }
 
 final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
-    private let parameters: RoomMemberDetailsScreenCoordinatorParameters
     private var viewModel: RoomMemberDetailsScreenViewModelProtocol
 
     private let actionsSubject: PassthroughSubject<RoomMemberDetailsScreenCoordinatorAction, Never> = .init()
@@ -40,8 +39,6 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
     }
 
     init(parameters: RoomMemberDetailsScreenCoordinatorParameters) {
-        self.parameters = parameters
-
         viewModel = RoomMemberDetailsScreenViewModel(roomProxy: parameters.roomProxy,
                                                      roomMemberProxy: parameters.roomMemberProxy,
                                                      mediaProvider: parameters.mediaProvider,

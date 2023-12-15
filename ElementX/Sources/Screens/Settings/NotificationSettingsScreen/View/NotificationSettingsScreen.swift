@@ -220,8 +220,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe"), mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 
-        var viewModel = NotificationSettingsScreenViewModel(userSession: userSession,
-                                                            appSettings: appSettings,
+        var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
                                                             notificationSettingsProxy: notificationSettingsProxy,
                                                             isModallyPresented: true)
@@ -249,8 +248,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe"), mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 
-        var viewModel = NotificationSettingsScreenViewModel(userSession: userSession,
-                                                            appSettings: appSettings,
+        var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
                                                             notificationSettingsProxy: notificationSettingsProxy,
                                                             isModallyPresented: true)

@@ -24,6 +24,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let roomProxy: RoomProxyProtocol
     
+    // periphery:ignore - cancellable tasks cancel when reassigned
     @CancellableTask private var fetchNotificationSettingsTask: Task<Void, Error>?
     
     var actions: AnyPublisher<RoomNotificationSettingsScreenViewModelAction, Never> {
@@ -93,9 +94,6 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
             state.notificationSettingsState = .loaded(settings: settings)
             if !state.isRestoringDefaultSetting {
                 state.bindings.allowCustomSetting = !settings.isDefault
-            }
-            if state.pendingCustomMode == nil {
-                state.bindings.customMode = settings.mode
             }
         } catch {
             state.notificationSettingsState = .error

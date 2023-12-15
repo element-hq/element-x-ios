@@ -19,8 +19,6 @@ import Foundation
 import MatrixRustSDK
 
 enum RoomProxyError: Error, Equatable {
-    case failedRetrievingMemberAvatarURL
-    case failedRetrievingMemberDisplayName
     case failedRedactingEvent
     case failedReportingContent
     case failedRetrievingMember
@@ -46,11 +44,9 @@ protocol RoomProxyProtocol {
     var isPublic: Bool { get }
     var isSpace: Bool { get }
     var isEncrypted: Bool { get }
-    var isTombstoned: Bool { get }
     var membership: Membership { get }
     var hasOngoingCall: Bool { get }
     var canonicalAlias: String? { get }
-    var alternativeAliases: [String] { get }
     var hasUnreadNotifications: Bool { get }
     var ownUserID: String { get }
     
@@ -62,9 +58,7 @@ protocol RoomProxyProtocol {
     var avatarURL: URL? { get }
 
     var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
-    
-    var invitedMembersCount: Int { get }
-    
+        
     var joinedMembersCount: Int { get }
     
     var activeMembersCount: Int { get }
@@ -73,14 +67,7 @@ protocol RoomProxyProtocol {
     
     var timeline: TimelineProxyProtocol { get }
     
-    /// A timeline providing just polls related events
-    var pollHistoryTimeline: TimelineProxyProtocol { get }
-    
     func subscribeForUpdates() async
-
-    func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
-    
-    func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
     
@@ -93,8 +80,6 @@ protocol RoomProxyProtocol {
     func updateMembers() async
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError>
-
-    func inviter() async -> RoomMemberProxyProtocol?
     
     func rejectInvitation() async -> Result<Void, RoomProxyError>
     

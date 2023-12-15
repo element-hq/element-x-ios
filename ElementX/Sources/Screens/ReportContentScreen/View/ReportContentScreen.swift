@@ -18,13 +18,7 @@ import Compound
 import SwiftUI
 
 struct ReportContentScreen: View {
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    
     @ObservedObject var context: ReportContentScreenViewModel.Context
-    
-    private var horizontalPadding: CGFloat {
-        horizontalSizeClass == .regular ? 50 : 16
-    }
 
     var body: some View {
         Form {

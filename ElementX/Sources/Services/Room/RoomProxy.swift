@@ -34,6 +34,7 @@ class RoomProxy: RoomProxyProtocol {
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
     private(set) var displayName: String?
+    // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
     private var subscribedForUpdates = false
 
@@ -104,10 +105,6 @@ class RoomProxy: RoomProxyProtocol {
         room.topic()
     }
     
-    var isJoined: Bool {
-        room.membership() == .joined
-    }
-    
     var membership: Membership {
         room.membership()
     }
@@ -128,20 +125,12 @@ class RoomProxy: RoomProxyProtocol {
         (try? room.isEncrypted()) ?? false
     }
     
-    var isTombstoned: Bool {
-        room.isTombstoned()
-    }
-    
     var hasOngoingCall: Bool {
         room.hasActiveRoomCall()
     }
     
     var canonicalAlias: String? {
         room.canonicalAlias()
-    }
-    
-    var alternativeAliases: [String] {
-        room.alternativeAliases()
     }
     
     var hasUnreadNotifications: Bool {
@@ -162,36 +151,6 @@ class RoomProxy: RoomProxyProtocol {
     
     var activeMembersCount: Int {
         Int(room.activeMembersCount())
-    }
-
-    func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError> {
-        do {
-            guard let urlString = try await Task.dispatch(on: lowPriorityDispatchQueue, {
-                try self.room.memberAvatarUrl(userId: userId)
-            }) else {
-                return .success(nil)
-            }
-            
-            guard let avatarURL = URL(string: urlString) else {
-                MXLog.error("Invalid avatar URL string: \(String(describing: urlString))")
-                return .failure(.failedRetrievingMemberAvatarURL)
-            }
-            
-            return .success(avatarURL)
-        } catch {
-            return .failure(.failedRetrievingMemberAvatarURL)
-        }
-    }
-    
-    func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        do {
-            let displayName = try await Task.dispatch(on: lowPriorityDispatchQueue) {
-                try self.room.memberDisplayName(userId: userId)
-            }
-            return .success(displayName)
-        } catch {
-            return .failure(.failedRetrievingMemberDisplayName)
-        }
     }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
@@ -287,16 +246,6 @@ class RoomProxy: RoomProxyProtocol {
                 MXLog.error("Failed to leave the room: \(error)")
                 return .failure(.failedLeavingRoom)
             }
-        }
-    }
-    
-    func inviter() async -> RoomMemberProxyProtocol? {
-        let inviter = await Task.dispatch(on: .global()) {
-            self.room.inviter()
-        }
-        
-        return inviter.map {
-            RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
         }
     }
     

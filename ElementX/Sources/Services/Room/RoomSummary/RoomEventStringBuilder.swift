@@ -48,9 +48,9 @@ struct RoomEventStringBuilder {
             
             let messageType = messageContent.msgtype()
             return messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: senderDisplayName, prefixWithSenderName: true)
-        case .state(let stateKey, let state):
+        case .state(_, let state):
             return stateEventStringBuilder
-                .buildString(for: state, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing)
+                .buildString(for: state, sender: sender, isOutgoing: isOutgoing)
                 .map(AttributedString.init)
         case .roomMembership(let userID, let change):
             return stateEventStringBuilder

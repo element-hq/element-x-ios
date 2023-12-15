@@ -32,12 +32,9 @@ protocol NotificationSettingsProxyProtocol {
     func getDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool) async -> RoomNotificationModeProxy
     func setDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy) async throws
     func restoreDefaultNotificationMode(roomId: String) async throws
-    func containsKeywordsRules() async -> Bool
     func unmuteRoom(roomId: String, isEncrypted: Bool, isOneToOne: Bool) async throws
     func isRoomMentionEnabled() async throws -> Bool
     func setRoomMentionEnabled(enabled: Bool) async throws
-    func isUserMentionEnabled() async throws -> Bool
-    func setUserMentionEnabled(enabled: Bool) async throws
     func isCallEnabled() async throws -> Bool
     func setCallEnabled(enabled: Bool) async throws
     func isInviteForMeEnabled() async throws -> Bool

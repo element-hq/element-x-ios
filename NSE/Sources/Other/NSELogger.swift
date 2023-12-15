@@ -66,7 +66,7 @@ enum NSELogger {
 
     /// Formatted memory footprint for debugging purposes
     /// - Returns: Memory footprint in MBs as a readable string
-    public static var formattedMemoryFootprint: String {
+    static var formattedMemoryFootprint: String {
         let usedBytes = UInt64(memoryFootprint ?? 0)
         let usedMB = Double(usedBytes) / 1024 / 1024
         guard let formattedStr = numberFormatter.string(from: NSNumber(value: usedMB)) else {

@@ -92,9 +92,7 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     var senderID: String { "" }
 
     var senderDisplayName: String? { nil }
-
-    var senderAvatarURL: String? { nil }
-
+    
     var roomDisplayName: String { "" }
 
     var isNoisy: Bool { false }

@@ -38,10 +38,6 @@ final class RoomNotificationSettingsScreenCoordinator: CoordinatorProtocol {
     var actions: AnyPublisher<RoomNotificationSettingsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-    
-    private var navigationStackCoordinator: NavigationStackCoordinator? {
-        parameters.navigationStackCoordinator
-    }
         
     init(parameters: RoomNotificationSettingsScreenCoordinatorParameters) {
         self.parameters = parameters

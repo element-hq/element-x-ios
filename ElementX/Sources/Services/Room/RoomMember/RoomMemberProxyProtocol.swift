@@ -28,9 +28,6 @@ protocol RoomMemberProxyProtocol: AnyObject {
     var displayName: String? { get }
     var avatarURL: URL? { get }
     var membership: MembershipState { get }
-    var isNameAmbiguous: Bool { get }
-    var powerLevel: Int { get }
-    var normalizedPowerLevel: Int { get }
     var isAccountOwner: Bool { get }
     var isIgnored: Bool { get }
     var canInviteUsers: Bool { get }

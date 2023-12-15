@@ -27,7 +27,6 @@ struct RoomProxyMockConfiguration {
     var isSpace = Bool.random()
     var isPublic = Bool.random()
     var isEncrypted = true
-    var isTombstoned = Bool.random()
     var hasOngoingCall = false
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
@@ -40,7 +39,6 @@ struct RoomProxyMockConfiguration {
     }()
     
     var members: [RoomMemberProxyProtocol]?
-    var inviter: RoomMemberProxyMock?
     var memberForID: RoomMemberProxyMock = .mockMe
     var ownUserID = "@alice:somewhere.org"
 
@@ -65,15 +63,12 @@ extension RoomProxyMock {
         isSpace = configuration.isSpace
         isPublic = configuration.isPublic
         isEncrypted = configuration.isEncrypted
-        isTombstoned = configuration.isTombstoned
         hasOngoingCall = configuration.hasOngoingCall
         canonicalAlias = configuration.canonicalAlias
-        alternativeAliases = configuration.alternativeAliases
         hasUnreadNotifications = configuration.hasUnreadNotifications
         
         timeline = configuration.timeline
         
-        invitedMembersCount = configuration.invitedMembersCount
         joinedMembersCount = configuration.joinedMembersCount
         activeMembersCount = configuration.activeMembersCount
         ownUserID = configuration.ownUserID
@@ -82,10 +77,6 @@ extension RoomProxyMock {
             members = CurrentValueSubject(configuredMembers).asCurrentValuePublisher()
         } else {
             members = CurrentValueSubject([]).asCurrentValuePublisher()
-        }
-        
-        if let inviter = configuration.inviter {
-            inviterClosure = { inviter }
         }
 
         updateMembersClosure = { }

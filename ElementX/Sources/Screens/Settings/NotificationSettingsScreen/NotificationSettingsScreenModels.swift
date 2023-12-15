@@ -27,7 +27,6 @@ struct NotificationSettingsScreenViewState: BindableState {
     var strings = NotificationSettingsScreenStrings()
     let isModallyPresented: Bool
     var isUserPermissionGranted: Bool?
-    var allowedNotificationModes: [RoomNotificationModeProxy] = [.allMessages, .mentionsAndKeywordsOnly]
     var fixingConfigurationMismatch = false
     // Hide calls settings until calls are available in El-X
     let showCallsSettings = false

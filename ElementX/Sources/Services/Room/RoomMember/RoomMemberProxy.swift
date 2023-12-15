@@ -39,12 +39,6 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
 
     lazy var membership = member.membership()
 
-    lazy var isNameAmbiguous = member.isNameAmbiguous()
-
-    lazy var powerLevel = Int(member.powerLevel())
-
-    lazy var normalizedPowerLevel = Int(member.normalizedPowerLevel())
-
     lazy var isAccountOwner = member.isAccountUser()
 
     lazy var isIgnored = member.isIgnored()

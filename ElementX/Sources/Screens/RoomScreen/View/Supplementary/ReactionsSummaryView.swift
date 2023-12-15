@@ -23,10 +23,6 @@ struct ReactionsSummaryView: View {
     
     @State var selectedReactionKey: String
     
-    var selectedReactionIndex: Int {
-        reactions.firstIndex(where: { $0.key == selectedReactionKey }) ?? 0
-    }
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             reactionButtons

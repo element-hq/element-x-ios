@@ -566,7 +566,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                         state: OtherState,
                                         stateKey: String,
                                         isOutgoing: Bool) -> RoomTimelineItemProtocol? {
-        guard let text = stateEventStringBuilder.buildString(for: state, stateKey: stateKey, sender: eventItemProxy.sender, isOutgoing: isOutgoing) else { return nil }
+        guard let text = stateEventStringBuilder.buildString(for: state, sender: eventItemProxy.sender, isOutgoing: isOutgoing) else { return nil }
         return buildStateTimelineItem(for: eventItemProxy, text: text, isOutgoing: isOutgoing)
     }
     
