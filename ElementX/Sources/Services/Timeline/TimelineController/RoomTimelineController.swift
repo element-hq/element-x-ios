@@ -107,7 +107,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) { }
     
     func sendMessage(_ message: String,
-                     html: String?,
+                     html: String,
                      inReplyTo itemID: TimelineItemIdentifier?,
                      intentionalMentions: IntentionalMentions) async {
         var inReplyTo: String?
@@ -148,7 +148,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func editMessage(_ newMessage: String,
-                     html: String?,
+                     html: String,
                      original itemID: TimelineItemIdentifier,
                      intentionalMentions: IntentionalMentions) async {
         MXLog.info("Edit message in \(roomID)")

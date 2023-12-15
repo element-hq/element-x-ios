@@ -138,7 +138,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     func toPresentable() -> AnyView {
         let composerToolbar = ComposerToolbar(context: composerViewModel.context,
                                               wysiwygViewModel: wysiwygViewModel,
-                                              keyCommandHandler: composerViewModel.handleKeyCommand)
+                                              keyCommands: composerViewModel.keyCommands)
 
         return AnyView(RoomScreen(context: viewModel.context, composerToolbar: composerToolbar))
     }

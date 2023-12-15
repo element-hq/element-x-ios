@@ -93,8 +93,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 switch action {
                 case .callEnded:
                     actionsSubject.send(.dismiss)
-                default:
-                    break
                 }
             }
             .store(in: &cancellables)
