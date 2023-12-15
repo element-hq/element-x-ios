@@ -117,6 +117,10 @@ struct InfoPlistReader {
     
     // MARK: - Custom App Scheme
     
+    var appScheme: String {
+        customSchemeForName("Application")
+    }
+    
     var elementCallScheme: String {
         customSchemeForName("Element Call")
     }
