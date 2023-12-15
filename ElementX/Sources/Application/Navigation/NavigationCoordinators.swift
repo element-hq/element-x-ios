@@ -109,6 +109,12 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         }
     }
     
+    // periphery:ignore - might be useful to have
+    /// The currently displayed fullscreen cover coordinator
+    var fullScreenCoverCoordinator: (any CoordinatorProtocol)? {
+        fullScreenCoverModule?.coordinator
+    }
+    
     fileprivate var compactLayoutRootModule: NavigationModule? {
         if let sidebarNavigationStackCoordinator = sidebarModule?.coordinator as? NavigationStackCoordinator {
             if let sidebarRootModule = sidebarNavigationStackCoordinator.rootModule {
@@ -495,6 +501,17 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         }
     }
     
+    // periphery:ignore - might be useful to have
+    // The currently presented fullscreen cover coordinator
+    // Fullscreen covers will be presented through the NavigationSplitCoordinator if provided
+    var fullScreenCoverCoordinator: (any CoordinatorProtocol)? {
+        if let navigationSplitCoordinator {
+            return navigationSplitCoordinator.fullScreenCoverCoordinator
+        }
+        
+        return fullScreenCoverModule?.coordinator
+    }
+    
     @Published fileprivate var stackModules = [NavigationModule]() {
         didSet {
             let diffs = stackModules.difference(from: oldValue)
@@ -616,6 +633,36 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
 
         withTransaction(transaction) {
             sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
+    }
+
+    // periphery:ignore - might be useful to have
+    /// Present a fullscreen cover on top of the stack. If this NavigationStackCoordinator is embedded within a NavigationSplitCoordinator
+    /// then the presentation will be proxied to the split
+    /// - Parameters:
+    ///   - coordinator: the coordinator to display
+    ///   - animated: whether to animate the transition or not. Default is true
+    ///   - dismissalCallback: called when the fullscreen cover has been dismissed, programatically or otherwise
+    func setFullScreenCoverCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
+        if let navigationSplitCoordinator {
+            navigationSplitCoordinator.setFullScreenCoverCoordinator(coordinator, dismissalCallback: dismissalCallback)
+            return
+        }
+        
+        guard let coordinator else {
+            fullScreenCoverModule = nil
+            return
+        }
+        
+        if fullScreenCoverModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
+        }
+
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
     }
     

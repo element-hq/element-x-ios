@@ -49,6 +49,13 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
         }
     }
     
+    // periphery:ignore - might be useful to have
+    // The currently presented sheet coordinator
+    // Sheets will be presented through the NavigationSplitCoordinator if provided
+    var sheetCoordinator: (any CoordinatorProtocol)? {
+        sheetModule?.coordinator
+    }
+    
     /// Sets or replaces the presented coordinator
     /// - Parameter coordinator: the coordinator to display
     func setRootCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
