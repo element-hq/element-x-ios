@@ -37,8 +37,6 @@ struct HomeScreenUserMenuButton: View {
                     }
                 }
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.settings)
-            }
-            Section {
                 Button(role: .destructive) {
                     context.send(viewAction: .userMenu(action: .logout))
                 } label: {
