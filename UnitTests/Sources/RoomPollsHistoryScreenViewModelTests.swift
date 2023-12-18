@@ -83,7 +83,6 @@ class RoomPollsHistoryScreenViewModelTests: XCTestCase {
              PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: false))],
             [PollRoomTimelineItem.mock(poll: .endedDisclosed)]
         ]
-        timelineController.backPaginationDelay = .seconds(1)
         let deferredViewState = deferFulfillment(viewModel.context.$viewState, keyPath: \.isBackPaginating, transitionValues: [false, true, false])
         
         viewModel.context.send(viewAction: .loadMore)
