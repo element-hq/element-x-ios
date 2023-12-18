@@ -27,10 +27,14 @@ extension View {
             aspectRatio(contentAspectRatio, contentMode: .fit)
                 .frame(minHeight: minMediaHeight, maxHeight: minMediaHeight)
         } else {
-            aspectRatio(contentAspectRatio, contentMode: .fit)
-                .frame(maxHeight: min(maxMediaHeight, max(minMediaHeight, contentHeight ?? .infinity)))
-                // Required to prevent the reply details to get higher priority in rendering the width of the view.
-                .aspectRatio(contentAspectRatio, contentMode: .fit)
+            if let contentAspectRatio {
+                aspectRatio(contentAspectRatio, contentMode: .fit)
+                    .frame(maxHeight: min(maxMediaHeight, max(minMediaHeight, contentHeight ?? .infinity)))
+                    // Required to prevent the reply details to get higher priority in rendering the width of the view.
+                    .aspectRatio(contentAspectRatio, contentMode: .fit)
+            } else { // Otherwise let the image load and use its native aspect ratio with a max height
+                frame(maxHeight: maxMediaHeight)
+            }
         }
     }
 }
