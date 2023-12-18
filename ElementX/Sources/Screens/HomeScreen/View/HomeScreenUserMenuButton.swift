@@ -39,16 +39,6 @@ struct HomeScreenUserMenuButton: View {
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.settings)
             }
             Section {
-                MatrixUserShareLink(userID: context.viewState.userID) {
-                    Label(L10n.actionInvite, iconAsset: Asset.Images.shareIos)
-                }
-                Button {
-                    context.send(viewAction: .userMenu(action: .feedback))
-                } label: {
-                    Label(L10n.commonReportAProblem, icon: \.chatProblem)
-                }
-            }
-            Section {
                 Button(role: .destructive) {
                     context.send(viewAction: .userMenu(action: .logout))
                 } label: {
