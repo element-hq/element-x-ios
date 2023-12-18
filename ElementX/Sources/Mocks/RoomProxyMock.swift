@@ -35,6 +35,7 @@ struct RoomProxyMockConfiguration {
     var timeline = {
         let mock = TimelineProxyMock()
         mock.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
+        mock.timelineStartReached = false
         return mock
     }()
     

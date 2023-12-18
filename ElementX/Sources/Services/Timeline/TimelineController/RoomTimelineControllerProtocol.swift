@@ -45,6 +45,8 @@ protocol RoomTimelineControllerProtocol {
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async
     
+    func paginateBackwards(requestSize: UInt) async -> Result<Void, RoomTimelineControllerError>
+    
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError>
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError>
@@ -70,6 +72,8 @@ protocol RoomTimelineControllerProtocol {
     func retrySending(itemID: TimelineItemIdentifier) async
     
     func cancelSending(itemID: TimelineItemIdentifier) async
+    
+    func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date?
 }
 
 extension RoomTimelineControllerProtocol {

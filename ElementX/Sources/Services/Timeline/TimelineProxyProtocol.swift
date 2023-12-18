@@ -43,6 +43,8 @@ protocol TimelineProxyProtocol {
     
     var timelineProvider: RoomTimelineProviderProtocol { get }
     
+    var timelineStartReached: Bool { get }
+    
     func subscribeForUpdates() async
     
     /// Cancels a failed message given its transaction ID from the timeline
@@ -61,6 +63,8 @@ protocol TimelineProxyProtocol {
     
     /// Retries sending a failed message given its transaction ID
     func retrySend(transactionID: String) async
+    
+    func paginateBackwards(requestSize: UInt) async -> Result<Void, TimelineProxyError>
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError>
     

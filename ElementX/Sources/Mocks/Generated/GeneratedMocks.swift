@@ -1632,6 +1632,51 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
         }
     }
 }
+class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
+
+    //MARK: - sendPollResponse
+
+    var sendPollResponsePollStartIDOptionIDCallsCount = 0
+    var sendPollResponsePollStartIDOptionIDCalled: Bool {
+        return sendPollResponsePollStartIDOptionIDCallsCount > 0
+    }
+    var sendPollResponsePollStartIDOptionIDReceivedArguments: (pollStartID: String, optionID: String)?
+    var sendPollResponsePollStartIDOptionIDReceivedInvocations: [(pollStartID: String, optionID: String)] = []
+    var sendPollResponsePollStartIDOptionIDReturnValue: Result<Void, Error>!
+    var sendPollResponsePollStartIDOptionIDClosure: ((String, String) async -> Result<Void, Error>)?
+
+    func sendPollResponse(pollStartID: String, optionID: String) async -> Result<Void, Error> {
+        sendPollResponsePollStartIDOptionIDCallsCount += 1
+        sendPollResponsePollStartIDOptionIDReceivedArguments = (pollStartID: pollStartID, optionID: optionID)
+        sendPollResponsePollStartIDOptionIDReceivedInvocations.append((pollStartID: pollStartID, optionID: optionID))
+        if let sendPollResponsePollStartIDOptionIDClosure = sendPollResponsePollStartIDOptionIDClosure {
+            return await sendPollResponsePollStartIDOptionIDClosure(pollStartID, optionID)
+        } else {
+            return sendPollResponsePollStartIDOptionIDReturnValue
+        }
+    }
+    //MARK: - endPoll
+
+    var endPollPollStartIDCallsCount = 0
+    var endPollPollStartIDCalled: Bool {
+        return endPollPollStartIDCallsCount > 0
+    }
+    var endPollPollStartIDReceivedPollStartID: String?
+    var endPollPollStartIDReceivedInvocations: [String] = []
+    var endPollPollStartIDReturnValue: Result<Void, Error>!
+    var endPollPollStartIDClosure: ((String) async -> Result<Void, Error>)?
+
+    func endPoll(pollStartID: String) async -> Result<Void, Error> {
+        endPollPollStartIDCallsCount += 1
+        endPollPollStartIDReceivedPollStartID = pollStartID
+        endPollPollStartIDReceivedInvocations.append(pollStartID)
+        if let endPollPollStartIDClosure = endPollPollStartIDClosure {
+            return await endPollPollStartIDClosure(pollStartID)
+        } else {
+            return endPollPollStartIDReturnValue
+        }
+    }
+}
 class RoomMemberProxyMock: RoomMemberProxyProtocol {
     var userID: String {
         get { return underlyingUserID }
@@ -2402,6 +2447,11 @@ class TimelineProxyMock: TimelineProxyProtocol {
         set(value) { underlyingTimelineProvider = value }
     }
     var underlyingTimelineProvider: RoomTimelineProviderProtocol!
+    var timelineStartReached: Bool {
+        get { return underlyingTimelineStartReached }
+        set(value) { underlyingTimelineStartReached = value }
+    }
+    var underlyingTimelineStartReached: Bool!
 
     //MARK: - subscribeForUpdates
 
@@ -2520,6 +2570,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
         retrySendTransactionIDReceivedTransactionID = transactionID
         retrySendTransactionIDReceivedInvocations.append(transactionID)
         await retrySendTransactionIDClosure?(transactionID)
+    }
+    //MARK: - paginateBackwards
+
+    var paginateBackwardsRequestSizeCallsCount = 0
+    var paginateBackwardsRequestSizeCalled: Bool {
+        return paginateBackwardsRequestSizeCallsCount > 0
+    }
+    var paginateBackwardsRequestSizeReceivedRequestSize: UInt?
+    var paginateBackwardsRequestSizeReceivedInvocations: [UInt] = []
+    var paginateBackwardsRequestSizeReturnValue: Result<Void, TimelineProxyError>!
+    var paginateBackwardsRequestSizeClosure: ((UInt) async -> Result<Void, TimelineProxyError>)?
+
+    func paginateBackwards(requestSize: UInt) async -> Result<Void, TimelineProxyError> {
+        paginateBackwardsRequestSizeCallsCount += 1
+        paginateBackwardsRequestSizeReceivedRequestSize = requestSize
+        paginateBackwardsRequestSizeReceivedInvocations.append(requestSize)
+        if let paginateBackwardsRequestSizeClosure = paginateBackwardsRequestSizeClosure {
+            return await paginateBackwardsRequestSizeClosure(requestSize)
+        } else {
+            return paginateBackwardsRequestSizeReturnValue
+        }
     }
     //MARK: - paginateBackwards
 
