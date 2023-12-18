@@ -189,10 +189,11 @@ extension UNMutableNotificationContent {
         return updatedContent.mutableCopy() as! UNMutableNotificationContent
     }
 
+    @MainActor
     private func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
         // The version value is used in case the design of the placeholder is updated to force a replacement
-        let isIOS17Available = isIOS17Available()
-        let prefix = "notification_placeholder\(isIOS17Available ? "V3" : "V2")"
+        let shouldFlipAvatar = shouldFlipAvatar()
+        let prefix = "notification_placeholder\(shouldFlipAvatar ? "V5" : "V4")"
         let fileName = "\(prefix)_\(name)_\(id).png"
         if let data = try? Data(contentsOf: URL.temporaryDirectory.appendingPathComponent(fileName)) {
             MXLog.info("Found existing notification icon placeholder")
@@ -204,25 +205,25 @@ extension UNMutableNotificationContent {
                                            contentID: id)
             .clipShape(Circle())
             .frame(width: 50, height: 50)
-        let renderer = await ImageRenderer(content: image)
-        guard let image = await renderer.uiImage else {
+        let renderer = ImageRenderer(content: image)
+        
+        // Specify the scale so the image is rendered correctly. We don't have access to the screen
+        // here so a hardcoded 3.0 will have to do
+        renderer.scale = 3.0
+        
+        guard let image = renderer.uiImage else {
             MXLog.info("Generating notification icon placeholder failed")
             return nil
         }
-
+        
         let data: Data?
-        // On simulator and macOS the image is rendered correctly
-        // But on other devices before iOS 17 is rendered upside down so we need to flip it
-        #if targetEnvironment(simulator)
-        data = image.pngData()
-        #else
-        if ProcessInfo.processInfo.isiOSAppOnMac || isIOS17Available {
-            data = image.pngData()
-        } else {
+        
+        if shouldFlipAvatar {
             data = image.flippedVertically().pngData()
+        } else {
+            data = image.pngData()
         }
-        #endif
-
+        
         if let data {
             do {
                 // cache image data
@@ -235,12 +236,26 @@ extension UNMutableNotificationContent {
         return data
     }
     
-    private func isIOS17Available() -> Bool {
+    /// On simulators and macOS the image is rendered correctly
+    /// On devices before iOS 17 and after iOS 17.2 it's rendered upside down and needs to be flipped
+    private func shouldFlipAvatar() -> Bool {
+        #if targetEnvironment(simulator)
+        return false
+        #else
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            return false
+        }
+        
         guard let version = Version(UIDevice.current.systemVersion) else {
             return false
         }
         
-        return version.major >= 17
+        if version >= Version(17, 0, 0), version < Version(17, 2, 0) {
+            return false
+        }
+        
+        return true
+        #endif
     }
 }
 
