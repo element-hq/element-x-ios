@@ -29,7 +29,6 @@ enum SecureBackupLogoutConfirmationScreenCoordinatorAction {
 }
 
 final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol {
-    private let parameters: SecureBackupLogoutConfirmationScreenCoordinatorParameters
     private var viewModel: SecureBackupLogoutConfirmationScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<SecureBackupLogoutConfirmationScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -39,8 +38,6 @@ final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol
     }
     
     init(parameters: SecureBackupLogoutConfirmationScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: parameters.secureBackupController,
                                                                   networkMonitor: parameters.networkMonitor)
     }

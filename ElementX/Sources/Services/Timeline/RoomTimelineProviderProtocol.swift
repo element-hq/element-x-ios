@@ -19,15 +19,10 @@ import Foundation
 
 import MatrixRustSDK
 
-struct TimelineProviderUpdate {
-    let items: [TimelineItemProxy]
-    let backPaginationState: BackPaginationStatus
-}
-
 @MainActor
 // sourcery: AutoMockable
 protocol RoomTimelineProviderProtocol {
-    var updatePublisher: AnyPublisher<TimelineProviderUpdate, Never> { get }
+    var updatePublisher: AnyPublisher<Void, Never> { get }
     var itemProxies: [TimelineItemProxy] { get }
     var backPaginationState: BackPaginationStatus { get }
 }

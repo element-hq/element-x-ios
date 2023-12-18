@@ -99,6 +99,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             .store(in: &cancellables)
     }
     
+    // periphery:ignore - auto cancels when reassigned
     @CancellableTask
     private var fetchUsersTask: Task<Void, Never>?
     

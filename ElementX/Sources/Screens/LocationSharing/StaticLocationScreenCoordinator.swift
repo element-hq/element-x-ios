@@ -27,7 +27,6 @@ enum StaticLocationScreenCoordinatorAction {
 }
 
 final class StaticLocationScreenCoordinator: CoordinatorProtocol {
-    let parameters: StaticLocationScreenCoordinatorParameters
     let viewModel: StaticLocationScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<StaticLocationScreenCoordinatorAction, Never> = .init()
@@ -38,8 +37,6 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: StaticLocationScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = StaticLocationScreenViewModel(interactionMode: parameters.interactionMode)
     }
     

@@ -33,8 +33,6 @@ struct SecureBackupKeyBackupScreenViewStateBindings {
     var alertInfo: AlertInfo<UUID>?
 }
 
-var alertInfo: AlertInfo<UUID>?
-
 enum SecureBackupKeyBackupScreenViewAction {
     case cancel
     case toggleBackup

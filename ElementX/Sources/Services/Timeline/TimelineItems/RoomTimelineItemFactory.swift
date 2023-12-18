@@ -19,24 +19,18 @@ import UIKit
 import UniformTypeIdentifiers
 
 struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
-    private let mediaProvider: MediaProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     private let stateEventStringBuilder: RoomStateEventStringBuilder
-    private let appSettings: AppSettings
     
     /// The Matrix ID of the current user.
     private let userID: String
     
     init(userID: String,
-         mediaProvider: MediaProviderProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol,
-         stateEventStringBuilder: RoomStateEventStringBuilder,
-         appSettings: AppSettings) {
+         stateEventStringBuilder: RoomStateEventStringBuilder) {
         self.userID = userID
-        self.mediaProvider = mediaProvider
         self.attributedStringBuilder = attributedStringBuilder
         self.stateEventStringBuilder = stateEventStringBuilder
-        self.appSettings = appSettings
     }
     
     func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy) -> RoomTimelineItemProtocol? {
@@ -61,7 +55,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .message:
             return buildMessageTimelineItem(eventItemProxy, isOutgoing)
         case .state(let stateKey, let content):
-            return buildStateTimelineItem(for: eventItemProxy, state: content, stateKey: stateKey, isOutgoing: isOutgoing)
+            return buildStateTimelineItem(for: eventItemProxy, state: content, isOutgoing: isOutgoing)
         case .roomMembership(userId: let userID, change: let change):
             return buildStateMembershipChangeTimelineItem(for: eventItemProxy, member: userID, membershipChange: change, isOutgoing: isOutgoing)
         case .profileChange(let displayName, let prevDisplayName, let avatarUrl, let prevAvatarUrl):
@@ -564,7 +558,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildStateTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                         state: OtherState,
-                                        stateKey: String,
                                         isOutgoing: Bool) -> RoomTimelineItemProtocol? {
         guard let text = stateEventStringBuilder.buildString(for: state, sender: eventItemProxy.sender, isOutgoing: isOutgoing) else { return nil }
         return buildStateTimelineItem(for: eventItemProxy, text: text, isOutgoing: isOutgoing)

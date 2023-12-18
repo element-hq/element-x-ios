@@ -2194,11 +2194,11 @@ class RoomProxyMock: RoomProxyProtocol {
     }
 }
 class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
-    var updatePublisher: AnyPublisher<TimelineProviderUpdate, Never> {
+    var updatePublisher: AnyPublisher<Void, Never> {
         get { return underlyingUpdatePublisher }
         set(value) { underlyingUpdatePublisher = value }
     }
-    var underlyingUpdatePublisher: AnyPublisher<TimelineProviderUpdate, Never>!
+    var underlyingUpdatePublisher: AnyPublisher<Void, Never>!
     var itemProxies: [TimelineItemProxy] = []
     var backPaginationState: BackPaginationStatus {
         get { return underlyingBackPaginationState }

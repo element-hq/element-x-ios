@@ -29,7 +29,6 @@ struct RoomProxyMockConfiguration {
     var isEncrypted = true
     var hasOngoingCall = false
     var canonicalAlias: String?
-    var alternativeAliases: [String] = []
     var hasUnreadNotifications = Bool.random()
     
     var timeline = {
@@ -46,7 +45,6 @@ struct RoomProxyMockConfiguration {
     var canUserTriggerRoomNotification = false
     var canUserJoinCall = false
     
-    var invitedMembersCount = 100
     var joinedMembersCount = 50
     var activeMembersCount = 25
 }

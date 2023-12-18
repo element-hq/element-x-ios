@@ -32,10 +32,10 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         itemProxiesSubject.value
     }
 
-    var updatePublisher: AnyPublisher<TimelineProviderUpdate, Never> {
+    var updatePublisher: AnyPublisher<Void, Never> {
         itemProxiesSubject
             .combineLatest(backPaginationStateSubject)
-            .map(TimelineProviderUpdate.init)
+            .map { _, _ in () }
             .eraseToAnyPublisher()
     }
 

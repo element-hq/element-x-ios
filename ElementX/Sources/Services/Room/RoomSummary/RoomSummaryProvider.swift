@@ -30,6 +30,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     private let serialDispatchQueue: DispatchQueue
     
+    // periphery:ignore - retaining purpose
     private var roomList: RoomListProtocol?
     
     private var cancellables = Set<AnyCancellable>()
@@ -39,7 +40,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     private let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
     private let stateSubject = CurrentValueSubject<RoomSummaryProviderState, Never>(.notLoaded)
-    private let countSubject = CurrentValueSubject<UInt, Never>(0)
     
     private let diffsPublisher = PassthroughSubject<[RoomListEntriesUpdate], Never>()
     
@@ -405,15 +405,6 @@ extension MatrixRustSDK.RoomListEntry {
             return "Invalidated(\(roomId))"
         case .filled(let roomId):
             return "Filled(\(roomId))"
-        }
-    }
-    
-    var isInvalidated: Bool {
-        switch self {
-        case .invalidated:
-            return true
-        default:
-            return false
         }
     }
 }

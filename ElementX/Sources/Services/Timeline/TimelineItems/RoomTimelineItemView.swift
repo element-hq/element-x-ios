@@ -78,8 +78,4 @@ struct RoomTimelineItemView: View {
             VoiceMessageRoomTimelineView(timelineItem: item, playerState: context.viewState.audioPlayerStateProvider?(item.id) ?? AudioPlayerState(id: .timelineItemIdentifier(item.id), duration: 0))
         }
     }
-
-    var timelineGroupStyle: TimelineGroupStyle {
-        viewState.groupStyle
-    }
 }

@@ -34,10 +34,6 @@ final class RoomTimelineItemViewState: Identifiable, Equatable, ObservableObject
         identifier.timelineID
     }
 
-    var isReactable: Bool {
-        type.isReactable
-    }
-
     init(type: RoomTimelineItemType, groupStyle: TimelineGroupStyle) {
         self.type = type
         self.groupStyle = groupStyle
@@ -144,20 +140,6 @@ enum RoomTimelineItemType: Equatable {
              .poll(let item as RoomTimelineItemProtocol),
              .voice(let item as RoomTimelineItemProtocol):
             return item.id
-        }
-    }
-
-    /// Whether or not it is possible to send a reaction to this timeline item.
-    var isReactable: Bool {
-        switch self {
-        case .text, .image, .video, .audio, .file, .emote, .notice, .sticker, .location, .poll, .voice:
-            return true
-        case .redacted, .encrypted, .unsupported, .state: // Event based items that aren't reactable
-            return false
-        case .timelineStart, .encryptedHistory, .separator, .readMarker, .paginationIndicator: // Virtual items are never reactable
-            return false
-        case .group:
-            return false
         }
     }
 }

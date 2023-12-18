@@ -41,6 +41,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     private let parameters: SettingsScreenCoordinatorParameters
     private var viewModel: SettingsScreenViewModelProtocol
     
+    // periphery:ignore - retaining purpose
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
     
     private let actionsSubject: PassthroughSubject<SettingsScreenCoordinatorAction, Never> = .init()

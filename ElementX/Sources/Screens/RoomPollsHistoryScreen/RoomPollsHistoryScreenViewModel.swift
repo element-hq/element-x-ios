@@ -26,7 +26,6 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
         static let backPaginationEventLimit: UInt = 250
     }
     
-    private let roomProxy: RoomProxyProtocol
     private let pollInteractionHandler: PollInteractionHandlerProtocol
     private let roomTimelineController: RoomTimelineControllerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -40,11 +39,9 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(roomProxy: RoomProxyProtocol,
-         pollInteractionHandler: PollInteractionHandlerProtocol,
+    init(pollInteractionHandler: PollInteractionHandlerProtocol,
          roomTimelineController: RoomTimelineControllerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
-        self.roomProxy = roomProxy
         self.pollInteractionHandler = pollInteractionHandler
         self.roomTimelineController = roomTimelineController
         self.userIndicatorController = userIndicatorController
@@ -188,13 +185,4 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
             state.isBackPaginating = false
         }
     }
-}
-
-// MARK: - Mocks
-
-extension RoomPollsHistoryScreenViewModel {
-    static let mock = RoomPollsHistoryScreenViewModel(roomProxy: RoomProxyMock(),
-                                                      pollInteractionHandler: PollInteractionHandlerMock(),
-                                                      roomTimelineController: MockRoomTimelineController(),
-                                                      userIndicatorController: UserIndicatorControllerMock())
 }

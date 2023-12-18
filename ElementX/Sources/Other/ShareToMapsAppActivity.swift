@@ -43,10 +43,6 @@ final class ShareToMapsAppActivity: UIActivity {
         type.activityTitle
     }
 
-    var activityCategory: UIActivity.Category {
-        .action
-    }
-
     override var activityType: UIActivity.ActivityType {
         .shareToMapsApp
     }

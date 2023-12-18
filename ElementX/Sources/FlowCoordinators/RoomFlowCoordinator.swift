@@ -408,11 +408,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let userID = userSession.clientProxy.userID
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
-                                                          mediaProvider: userSession.mediaProvider,
                                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL,
                                                                                                            mentionBuilder: MentionBuilder()),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
-                                                          appSettings: appSettings)
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            timelineItemFactory: timelineItemFactory,
@@ -889,11 +887,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let userID = userSession.clientProxy.userID
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
-                                                          mediaProvider: userSession.mediaProvider,
                                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL,
                                                                                                            mentionBuilder: MentionBuilder()),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
-                                                          appSettings: appSettings)
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
         let roomTimelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                                timelineItemFactory: timelineItemFactory,

@@ -27,11 +27,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let serialDispatchQueue: DispatchQueue
     
     private var cancellables = Set<AnyCancellable>()
-    private var timelineItemsUpdateTask: Task<Void, Never>? {
-        willSet {
-            timelineItemsUpdateTask?.cancel()
-        }
-    }
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
@@ -259,11 +254,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             
             // Try building a stable identifier for items that don't have one
             // We need to avoid duplicates otherwise the diffable datasource will crash
-            let reversedIndex = collapsibleChunks.count - index
             
             let items = collapsibleChunk.compactMap { itemProxy in
                 
-                let timelineItem = buildTimelineItem(for: itemProxy, chunkIndex: reversedIndex)
+                let timelineItem = buildTimelineItem(for: itemProxy)
                 
                 if timelineItem is EncryptedHistoryRoomTimelineItem {
                     canBackPaginate = false
@@ -319,7 +313,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.isBackPaginating(isBackPaginating))
     }
     
-    private func buildTimelineItem(for itemProxy: TimelineItemProxy, chunkIndex: Int) -> RoomTimelineItemProtocol? {
+    private func buildTimelineItem(for itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
         switch itemProxy {
         case .event(let eventTimelineItem):
             let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem)

@@ -20,8 +20,6 @@ struct PollRoomTimelineView: View {
     let timelineItem: PollRoomTimelineItem
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     
-    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
-    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             PollView(poll: poll, editable: timelineItem.isEditable) { action in

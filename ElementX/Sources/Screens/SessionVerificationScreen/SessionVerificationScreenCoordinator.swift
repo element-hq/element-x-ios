@@ -26,7 +26,6 @@ struct SessionVerificationScreenCoordinatorParameters {
 }
 
 final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
-    private let parameters: SessionVerificationScreenCoordinatorParameters
     private var viewModel: SessionVerificationScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<SessionVerificationScreenCoordinatorAction, Never> = .init()
@@ -37,8 +36,6 @@ final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: SessionVerificationScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy)
     }
     

@@ -162,19 +162,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         """
     }
     
-    private func evaluateJavaScript(_ script: String) async -> String? {
-        guard let evaluator = state.bindings.javaScriptEvaluator else {
-            fatalError("Invalid javaScriptEvaluator")
-        }
-        
-        do {
-            return try await evaluator(script) as? String
-        } catch {
-            MXLog.error("Failed evaluating javaScript with error: \(error)")
-            return nil
-        }
-    }
-    
     private func setupVoIPSession(callID: UUID) async throws {
         try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [])
         try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)

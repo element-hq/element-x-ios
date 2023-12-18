@@ -28,7 +28,6 @@ enum ServerConfirmationScreenCoordinatorAction {
 }
 
 final class ServerConfirmationScreenCoordinator: CoordinatorProtocol {
-    private let parameters: ServerConfirmationScreenCoordinatorParameters
     private var viewModel: ServerConfirmationScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<ServerConfirmationScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -38,8 +37,6 @@ final class ServerConfirmationScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: ServerConfirmationScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = ServerConfirmationScreenViewModel(authenticationService: parameters.authenticationService,
                                                       authenticationFlow: parameters.authenticationFlow)
     }

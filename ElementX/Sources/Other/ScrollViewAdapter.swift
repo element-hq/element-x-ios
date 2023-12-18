@@ -18,11 +18,6 @@ import Combine
 import UIKit
 
 class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
-    enum ScrollDirection {
-        case up
-        case down
-    }
-    
     var scrollView: UIScrollView? {
         didSet {
             oldValue?.delegate = nil
@@ -42,13 +37,6 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
         .init(isScrollingSubject)
     }
     
-    private let scrollDirectionSubject: PassthroughSubject<ScrollDirection, Never> = .init()
-    var scrollDirection: AnyPublisher<ScrollDirection, Never> {
-        scrollDirectionSubject
-            .removeDuplicates()
-            .eraseToAnyPublisher()
-    }
-    
     private let isAtTopEdgeSubject: CurrentValueSubject<Bool, Never> = .init(false)
     var isAtTopEdge: CurrentValuePublisher<Bool, Never> {
         isAtTopEdgeSubject
@@ -59,7 +47,6 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         didScrollSubject.send(())
-        updateScrollDirection(scrollView)
         let insetContentOffset = scrollView.contentOffset.y + scrollView.contentInset.top
         isAtTopEdgeSubject.send(insetContentOffset >= 3)
     }
@@ -96,19 +83,5 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
     
     private func updateDidScroll(_ scrollView: UIScrollView) {
         isScrollingSubject.send(scrollView.isDragging || scrollView.isDecelerating)
-    }
-    
-    private func updateScrollDirection(_ scrollView: UIScrollView) {
-        let velocity = scrollView.panGestureRecognizer.velocity(in: nil)
-
-        if velocity.y > Constant.scrollDirectionThreshold {
-            scrollDirectionSubject.send(.up)
-        } else if velocity.y < -Constant.scrollDirectionThreshold {
-            scrollDirectionSubject.send(.down)
-        }
-    }
-    
-    private enum Constant {
-        static let scrollDirectionThreshold: CGFloat = 200
     }
 }
