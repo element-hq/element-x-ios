@@ -34,6 +34,8 @@ final class TimelineProxy: TimelineProxyProtocol {
    
     private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
     private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
+   
+    private(set) var timelineStartReached = false
     
     private let actionsSubject = PassthroughSubject<TimelineProxyAction, Never>()
     var actions: AnyPublisher<TimelineProxyAction, Never> {
@@ -132,6 +134,18 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
         try? timeline.getTimelineEventContentByEventId(eventId: eventID)
+    }
+    
+    func paginateBackwards(requestSize: UInt) async -> Result<Void, TimelineProxyError> {
+        do {
+            try await Task.dispatch(on: .global()) {
+                try self.timeline.paginateBackwards(opts: .simpleRequest(eventLimit: UInt16(requestSize), waitForToken: true))
+            }
+            
+            return .success(())
+        } catch {
+            return .failure(.failedPaginatingBackwards)
+        }
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError> {
@@ -480,6 +494,9 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private func subscribeToBackpagination() {
         let listener = RoomBackpaginationStatusListener { [weak self] status in
+            if status == .timelineStartReached {
+                self?.timelineStartReached = true
+            }
             self?.backPaginationStateSubject.send(status)
         }
         do {

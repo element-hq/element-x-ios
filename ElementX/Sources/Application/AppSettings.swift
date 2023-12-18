@@ -264,7 +264,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.chatBackupEnabled, defaultValue: false, storageType: .userDefaults(store))
     var chatBackupEnabled
-    
+        
     #endif
     
     // MARK: - Shared

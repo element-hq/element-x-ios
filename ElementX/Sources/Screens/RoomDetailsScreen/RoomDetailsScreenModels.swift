@@ -27,6 +27,7 @@ enum RoomDetailsScreenViewModelAction {
     case requestInvitePeoplePresentation
     case leftRoom
     case requestEditDetailsPresentation(RoomMemberProxyProtocol)
+    case requestPollsHistoryPresentation
 }
 
 // MARK: View
@@ -174,6 +175,7 @@ enum RoomDetailsScreenViewAction {
     case processTapNotifications
     case processToogleMuteNotifications
     case displayAvatar
+    case processTapPolls
 }
 
 enum RoomDetailsScreenViewShortcut {
