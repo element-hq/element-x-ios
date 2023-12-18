@@ -26,8 +26,6 @@ class VoiceMessageCacheTests: XCTestCase {
     private var fileManager: FileManager!
     
     private let someURL = URL("/some/url")
-    private let cachedFileURL = URL("/cache/file/url")
-    private let audioOGGMimeType = "audio/ogg"
     private let testFilename = "test-file"
     private let mpeg4aacFileExtension = "m4a"
     private let testTemporaryDirectory = URL.temporaryDirectory.appendingPathComponent("test-voice-messsage-cache")

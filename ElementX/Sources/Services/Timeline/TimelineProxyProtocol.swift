@@ -125,14 +125,3 @@ protocol TimelineProxyProtocol {
     
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineProxyError>
 }
-
-extension TimelineProxyProtocol {
-    func sendMessage(_ message: String,
-                     html: String,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
-        await sendMessage(message,
-                          html: html,
-                          inReplyTo: nil,
-                          intentionalMentions: intentionalMentions)
-    }
-}

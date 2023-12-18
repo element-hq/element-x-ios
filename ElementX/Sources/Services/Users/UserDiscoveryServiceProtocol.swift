@@ -18,7 +18,6 @@ import Foundation
 
 enum UserDiscoveryErrorType: Error {
     case failedSearchingUsers
-    case failedFetchingSuggestedUsers
 }
 
 // sourcery: AutoMockable

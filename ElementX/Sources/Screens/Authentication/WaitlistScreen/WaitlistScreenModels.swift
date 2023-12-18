@@ -43,14 +43,6 @@ struct WaitlistScreenViewState: BindableState {
     /// Whether or not the user is still waiting in the queue.
     var isWaiting: Bool { userSession == nil }
     
-    var iconSymbolName: String {
-        if isWaiting {
-            return "stopwatch"
-        } else {
-            return "sparkles"
-        }
-    }
-    
     var title: String {
         if isWaiting {
             return L10n.screenWaitlistTitle

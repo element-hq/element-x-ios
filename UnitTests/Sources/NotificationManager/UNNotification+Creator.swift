@@ -19,7 +19,7 @@ import UserNotifications
 import XCTest
 
 extension UNNotification {
-    static func with(userInfo: [AnyHashable: Any], actionIdentifier: String = UNNotificationDefaultActionIdentifier) throws -> UNNotification {
+    static func with(userInfo: [AnyHashable: Any]) throws -> UNNotification {
         let content = UNMutableNotificationContent()
         content.userInfo = userInfo
         let request = UNNotificationRequest(identifier: "",

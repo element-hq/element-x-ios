@@ -18,7 +18,6 @@ import Combine
 import Foundation
 
 enum VoiceMessageRecorderError: Error {
-    case genericError
     case missingRecordingFile
     case previewNotAvailable
     case audioRecorderError(AudioRecorderError)
@@ -33,11 +32,9 @@ enum VoiceMessageRecorderAction {
 }
 
 protocol VoiceMessageRecorderProtocol {
-    var audioRecorder: AudioRecorderProtocol { get }
     var previewAudioPlayerState: AudioPlayerState? { get }
     var isRecording: Bool { get }
     var recordingURL: URL? { get }
-    var recordingDuration: TimeInterval { get }
 
     var actions: AnyPublisher<VoiceMessageRecorderAction, Never> { get }
 
@@ -50,7 +47,6 @@ protocol VoiceMessageRecorderProtocol {
     func seekPlayback(to progress: Double) async
     func deleteRecording() async
     
-    func buildRecordingWaveform() async -> Result<[UInt16], VoiceMessageRecorderError>
     func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError>
 }
 

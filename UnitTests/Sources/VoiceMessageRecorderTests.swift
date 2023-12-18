@@ -61,7 +61,6 @@ class VoiceMessageRecorderTests: XCTestCase {
         
         voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: audioRecorder,
                                                     mediaPlayerProvider: mediaPlayerProvider,
-                                                    audioConverter: audioConverter,
                                                     voiceMessageCache: voiceMessageCache)
     }
     

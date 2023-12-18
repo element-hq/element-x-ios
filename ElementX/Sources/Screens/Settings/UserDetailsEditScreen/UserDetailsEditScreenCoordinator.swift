@@ -24,17 +24,10 @@ struct UserDetailsEditScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
-enum UserDetailsEditScreenCoordinatorAction { }
-
 final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
     private let parameters: UserDetailsEditScreenCoordinatorParameters
     private var viewModel: UserDetailsEditScreenViewModelProtocol
-    private let actionsSubject: PassthroughSubject<UserDetailsEditScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
-    
-    var actions: AnyPublisher<UserDetailsEditScreenCoordinatorAction, Never> {
-        actionsSubject.eraseToAnyPublisher()
-    }
     
     init(parameters: UserDetailsEditScreenCoordinatorParameters) {
         self.parameters = parameters

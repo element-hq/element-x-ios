@@ -66,9 +66,6 @@ struct UITimelineView: UIViewControllerRepresentable {
             if tableViewController.isBackPaginating != context.viewState.timelineViewState.isBackPaginating {
                 tableViewController.isBackPaginating = context.viewState.timelineViewState.isBackPaginating
             }
-            
-            // Doesn't have an equatable conformance :(
-            tableViewController.contextMenuActionProvider = context.viewState.timelineItemMenuActionProvider
         }
         
         func send(viewAction: RoomScreenViewAction) {

@@ -24,7 +24,6 @@ struct VoiceMessagePreviewComposer: View {
     let waveform: WaveformSource
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
-    @State private var resumePlaybackAfterScrubbing = false
     @GestureState var isDragging = false
 
     let onPlay: () -> Void
@@ -93,20 +92,6 @@ struct VoiceMessagePreviewComposer: View {
             onPause()
         } else {
             onPlay()
-        }
-    }
-    
-    private func onScrubbing(_ scrubbing: Bool) {
-        if scrubbing {
-            if playerState.playbackState == .playing {
-                resumePlaybackAfterScrubbing = true
-                onPause()
-            }
-        } else {
-            if resumePlaybackAfterScrubbing {
-                onPlay()
-                resumePlaybackAfterScrubbing = false
-            }
         }
     }
 }

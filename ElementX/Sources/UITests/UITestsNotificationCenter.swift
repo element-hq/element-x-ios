@@ -25,6 +25,7 @@ import SwiftUI
 /// - Start the app from the tests and call `client.waitForApp()` to establish communication.
 /// - Send the notification from the tests you would like posted in the app.
 class UITestsNotificationCenter: NotificationCenter {
+    // periphery:ignore - retaining purpose
     private var client: UITestsSignalling.Client?
     private var signalCancellable: AnyCancellable?
     

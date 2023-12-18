@@ -27,11 +27,8 @@ enum UserSessionFlowCoordinatorAction {
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let navigationSplitCoordinator: NavigationSplitCoordinator
-    private let appLockService: AppLockServiceProtocol
     private let bugReportService: BugReportServiceProtocol
-    private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let appSettings: AppSettings
-    private let analytics: AnalyticsService
     private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
@@ -60,11 +57,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
-        self.appLockService = appLockService
         self.bugReportService = bugReportService
-        self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.appSettings = appSettings
-        self.analytics = analytics
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)

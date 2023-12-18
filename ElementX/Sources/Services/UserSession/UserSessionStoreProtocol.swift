@@ -21,7 +21,6 @@ enum UserSessionStoreError: Error {
     case missingCredentials
     case failedRestoringLogin
     case failedSettingUpSession
-    case failedRefreshingRestoreToken
 }
 
 protocol UserSessionStoreProtocol {

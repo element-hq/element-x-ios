@@ -20,9 +20,7 @@ import UserNotifications
 
 protocol NotificationItemProxyProtocol {
     var event: NotificationEvent? { get }
-
-    var eventID: String { get }
-
+    
     var senderID: String { get }
 
     var roomID: String { get }

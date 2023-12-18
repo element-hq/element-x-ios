@@ -30,6 +30,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private var backPaginationStateObservationToken: TaskHandle?
     private var roomTimelineObservationToken: TaskHandle?
+    
+    // periphery:ignore - retaining purpose
     private var timelineListener: RoomTimelineListener?
    
     private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
@@ -45,10 +47,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     private var innerTimelineProvider: RoomTimelineProviderProtocol!
     var timelineProvider: RoomTimelineProviderProtocol {
         innerTimelineProvider
-    }
-    
-    var hasPendingUpdatesSubscription: Bool {
-        innerTimelineProvider != nil
     }
     
     deinit {

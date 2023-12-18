@@ -33,12 +33,6 @@ struct VoiceMessageRecordingComposer: View {
                 }
             }
     }
-    
-    private func onPlaybackPlayPause() { }
-    
-    private func onPlaybackSeek(_ progress: Double) { }
-    
-    private func onPlaybackScrubbing(_ dragging: Bool) { }
 }
 
 struct VoiceMessageRecordingComposer_Previews: PreviewProvider, TestablePreview {

@@ -44,10 +44,6 @@ extension UNNotificationContent {
     @objc var roomID: String? {
         userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String
     }
-
-    @objc var eventID: String? {
-        userInfo[NotificationConstants.UserInfoKey.eventIdentifier] as? String
-    }
 }
 
 extension UNMutableNotificationContent {
@@ -66,15 +62,6 @@ extension UNMutableNotificationContent {
         }
         set {
             userInfo[NotificationConstants.UserInfoKey.roomIdentifier] = newValue
-        }
-    }
-
-    override var eventID: String? {
-        get {
-            userInfo[NotificationConstants.UserInfoKey.eventIdentifier] as? String
-        }
-        set {
-            userInfo[NotificationConstants.UserInfoKey.eventIdentifier] = newValue
         }
     }
 

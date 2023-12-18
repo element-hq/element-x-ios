@@ -18,8 +18,6 @@ import SwiftUI
 
 @MainActor
 struct TimelineReactionsView: View {
-    private static let horizontalSpacing: CGFloat = 4
-    private static let verticalSpacing: CGFloat = 4
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     @Environment(\.layoutDirection) private var layoutDirection: LayoutDirection
 
