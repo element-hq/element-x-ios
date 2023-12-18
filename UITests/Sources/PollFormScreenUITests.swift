@@ -54,6 +54,9 @@ class PollFormScreenUITests: XCTestCase {
                 app.swipeUp()
             }
             addOption.tap()
+        }
+        
+        if app.hasFocus {
             app.typeText("\n") // Dismiss the keyboard so the Add button is always visible.
         }
         
