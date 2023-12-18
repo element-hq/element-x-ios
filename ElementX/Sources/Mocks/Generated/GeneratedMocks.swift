@@ -2447,6 +2447,11 @@ class TimelineProxyMock: TimelineProxyProtocol {
         set(value) { underlyingTimelineProvider = value }
     }
     var underlyingTimelineProvider: RoomTimelineProviderProtocol!
+    var timelineStartReached: Bool {
+        get { return underlyingTimelineStartReached }
+        set(value) { underlyingTimelineStartReached = value }
+    }
+    var underlyingTimelineStartReached: Bool!
 
     //MARK: - subscribeForUpdates
 

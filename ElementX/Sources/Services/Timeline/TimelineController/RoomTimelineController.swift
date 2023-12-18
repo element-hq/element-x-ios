@@ -248,7 +248,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     private func updateTimelineItems() {
         var newTimelineItems = [RoomTimelineItemProtocol]()
-        var canBackPaginate = true
+        var canBackPaginate = !roomProxy.timeline.timelineStartReached
         var isBackPaginating = false
         var lastEncryptedHistoryItemIndex: Int?
         

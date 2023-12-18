@@ -34,6 +34,8 @@ final class TimelineProxy: TimelineProxyProtocol {
    
     private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
     private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
+   
+    private(set) var timelineStartReached = false
     
     private let actionsSubject = PassthroughSubject<TimelineProxyAction, Never>()
     var actions: AnyPublisher<TimelineProxyAction, Never> {
@@ -492,6 +494,9 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private func subscribeToBackpagination() {
         let listener = RoomBackpaginationStatusListener { [weak self] status in
+            if status == .timelineStartReached {
+                self?.timelineStartReached = true
+            }
             self?.backPaginationStateSubject.send(status)
         }
         do {

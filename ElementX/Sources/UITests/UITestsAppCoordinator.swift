@@ -885,7 +885,9 @@ class MockScreen: Identifiable {
                 [],
                 []
             ]
-            let parameters = RoomPollsHistoryScreenCoordinatorParameters(roomProxy: RoomProxyMock(),
+            let roomProxyMockConfiguration = RoomProxyMockConfiguration(displayName: "Polls")
+            roomProxyMockConfiguration.timeline.timelineStartReached = false
+            let parameters = RoomPollsHistoryScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: roomProxyMockConfiguration),
                                                                          pollInteractionHandler: interactionHandler,
                                                                          roomTimelineController: roomTimelineController)
             let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
@@ -901,7 +903,9 @@ class MockScreen: Identifiable {
             let date: Date! = DateComponents(calendar: .current, timeZone: .gmt, year: 2023, month: 12, day: 1, hour: 12).date
             roomTimelineController.timelineItemsTimestamp = [poll.id: date]
             
-            let parameters = RoomPollsHistoryScreenCoordinatorParameters(roomProxy: RoomProxyMock(),
+            let roomProxyMockConfiguration = RoomProxyMockConfiguration(displayName: "Polls")
+            roomProxyMockConfiguration.timeline.timelineStartReached = false
+            let parameters = RoomPollsHistoryScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: roomProxyMockConfiguration),
                                                                          pollInteractionHandler: interactionHandler,
                                                                          roomTimelineController: roomTimelineController)
             let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)

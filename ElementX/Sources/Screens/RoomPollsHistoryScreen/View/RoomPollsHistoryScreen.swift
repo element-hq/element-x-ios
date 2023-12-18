@@ -124,8 +124,9 @@ struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModelEmpty: RoomPollsHistoryScreenViewModel = {
         let roomTimelineController = MockRoomTimelineController()
         roomTimelineController.timelineItems = []
-
-        let viewModel = RoomPollsHistoryScreenViewModel(roomProxy: RoomProxyMock(),
+        let roomProxyMockConfiguration = RoomProxyMockConfiguration(displayName: "Polls")
+        roomProxyMockConfiguration.timeline.timelineStartReached = false
+        let viewModel = RoomPollsHistoryScreenViewModel(roomProxy: RoomProxyMock(with: roomProxyMockConfiguration),
                                                         pollInteractionHandler: PollInteractionHandlerMock(),
                                                         roomTimelineController: roomTimelineController,
                                                         userIndicatorController: UserIndicatorControllerMock())
@@ -147,7 +148,9 @@ struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
             roomTimelineController.timelineItemsTimestamp[item.id] = date
         }
 
-        let viewModel = RoomPollsHistoryScreenViewModel(roomProxy: RoomProxyMock(),
+        let roomProxyMockConfiguration = RoomProxyMockConfiguration(displayName: "Polls")
+        roomProxyMockConfiguration.timeline.timelineStartReached = true
+        let viewModel = RoomPollsHistoryScreenViewModel(roomProxy: RoomProxyMock(with: roomProxyMockConfiguration),
                                                         pollInteractionHandler: PollInteractionHandlerMock(),
                                                         roomTimelineController: roomTimelineController,
                                                         userIndicatorController: UserIndicatorControllerMock())
