@@ -373,7 +373,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         return await Task.dispatch(on: lowPriorityDispatchQueue) {
             do {
-                try self.timeline.sendReadReceipt(eventId: eventID)
+                try self.timeline.sendReadReceipt(receiptType: .read, eventId: eventID)
                 return .success(())
             } catch {
                 return .failure(.failedSendingReadReceipt)

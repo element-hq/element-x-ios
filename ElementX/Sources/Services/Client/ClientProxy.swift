@@ -266,16 +266,14 @@ class ClientProxy: ClientProxyProtocol {
     
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError> {
         guard let mimeType = media.mimeType else { return .failure(ClientProxyError.mediaFileError) }
-        return await Task.dispatch(on: clientQueue) {
-            do {
-                let data = try Data(contentsOf: media.url)
-                let matrixUrl = try self.client.uploadMedia(mimeType: mimeType, data: data, progressWatcher: nil)
-                return .success(matrixUrl)
-            } catch let error as ClientError {
-                return .failure(ClientProxyError.failedUploadingMedia(error.code))
-            } catch {
-                return .failure(ClientProxyError.mediaFileError)
-            }
+        do {
+            let data = try Data(contentsOf: media.url)
+            let matrixUrl = try await client.uploadMedia(mimeType: mimeType, data: data, progressWatcher: nil)
+            return .success(matrixUrl)
+        } catch let error as ClientError {
+            return .failure(ClientProxyError.failedUploadingMedia(error.code))
+        } catch {
+            return .failure(ClientProxyError.mediaFileError)
         }
     }
     
