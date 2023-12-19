@@ -217,9 +217,9 @@ class SDKClientMock: SDKClientProtocol {
     public var getMediaContentMediaSourceReceivedMediaSource: MediaSource?
     public var getMediaContentMediaSourceReceivedInvocations: [MediaSource] = []
     public var getMediaContentMediaSourceReturnValue: Data!
-    public var getMediaContentMediaSourceClosure: ((MediaSource) throws -> Data)?
+    public var getMediaContentMediaSourceClosure: ((MediaSource) async throws -> Data)?
 
-    public func getMediaContent(mediaSource: MediaSource) throws -> Data {
+    public func getMediaContent(mediaSource: MediaSource) async throws -> Data {
         if let error = getMediaContentMediaSourceThrowableError {
             throw error
         }
@@ -227,7 +227,7 @@ class SDKClientMock: SDKClientProtocol {
         getMediaContentMediaSourceReceivedMediaSource = mediaSource
         getMediaContentMediaSourceReceivedInvocations.append(mediaSource)
         if let getMediaContentMediaSourceClosure = getMediaContentMediaSourceClosure {
-            return try getMediaContentMediaSourceClosure(mediaSource)
+            return try await getMediaContentMediaSourceClosure(mediaSource)
         } else {
             return getMediaContentMediaSourceReturnValue
         }
@@ -242,9 +242,9 @@ class SDKClientMock: SDKClientProtocol {
     public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedArguments: (mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?)?
     public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedInvocations: [(mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?)] = []
     public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReturnValue: MediaFileHandle!
-    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure: ((MediaSource, String?, String, Bool, String?) throws -> MediaFileHandle)?
+    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure: ((MediaSource, String?, String, Bool, String?) async throws -> MediaFileHandle)?
 
-    public func getMediaFile(mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?) throws -> MediaFileHandle {
+    public func getMediaFile(mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?) async throws -> MediaFileHandle {
         if let error = getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirThrowableError {
             throw error
         }
@@ -252,7 +252,7 @@ class SDKClientMock: SDKClientProtocol {
         getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedArguments = (mediaSource: mediaSource, body: body, mimeType: mimeType, useCache: useCache, tempDir: tempDir)
         getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedInvocations.append((mediaSource: mediaSource, body: body, mimeType: mimeType, useCache: useCache, tempDir: tempDir))
         if let getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure = getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure {
-            return try getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure(mediaSource, body, mimeType, useCache, tempDir)
+            return try await getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure(mediaSource, body, mimeType, useCache, tempDir)
         } else {
             return getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReturnValue
         }
@@ -267,9 +267,9 @@ class SDKClientMock: SDKClientProtocol {
     public var getMediaThumbnailMediaSourceWidthHeightReceivedArguments: (mediaSource: MediaSource, width: UInt64, height: UInt64)?
     public var getMediaThumbnailMediaSourceWidthHeightReceivedInvocations: [(mediaSource: MediaSource, width: UInt64, height: UInt64)] = []
     public var getMediaThumbnailMediaSourceWidthHeightReturnValue: Data!
-    public var getMediaThumbnailMediaSourceWidthHeightClosure: ((MediaSource, UInt64, UInt64) throws -> Data)?
+    public var getMediaThumbnailMediaSourceWidthHeightClosure: ((MediaSource, UInt64, UInt64) async throws -> Data)?
 
-    public func getMediaThumbnail(mediaSource: MediaSource, width: UInt64, height: UInt64) throws -> Data {
+    public func getMediaThumbnail(mediaSource: MediaSource, width: UInt64, height: UInt64) async throws -> Data {
         if let error = getMediaThumbnailMediaSourceWidthHeightThrowableError {
             throw error
         }
@@ -277,7 +277,7 @@ class SDKClientMock: SDKClientProtocol {
         getMediaThumbnailMediaSourceWidthHeightReceivedArguments = (mediaSource: mediaSource, width: width, height: height)
         getMediaThumbnailMediaSourceWidthHeightReceivedInvocations.append((mediaSource: mediaSource, width: width, height: height))
         if let getMediaThumbnailMediaSourceWidthHeightClosure = getMediaThumbnailMediaSourceWidthHeightClosure {
-            return try getMediaThumbnailMediaSourceWidthHeightClosure(mediaSource, width, height)
+            return try await getMediaThumbnailMediaSourceWidthHeightClosure(mediaSource, width, height)
         } else {
             return getMediaThumbnailMediaSourceWidthHeightReturnValue
         }
@@ -695,9 +695,9 @@ class SDKClientMock: SDKClientProtocol {
     public var uploadMediaMimeTypeDataProgressWatcherReceivedArguments: (mimeType: String, data: Data, progressWatcher: ProgressWatcher?)?
     public var uploadMediaMimeTypeDataProgressWatcherReceivedInvocations: [(mimeType: String, data: Data, progressWatcher: ProgressWatcher?)] = []
     public var uploadMediaMimeTypeDataProgressWatcherReturnValue: String!
-    public var uploadMediaMimeTypeDataProgressWatcherClosure: ((String, Data, ProgressWatcher?) throws -> String)?
+    public var uploadMediaMimeTypeDataProgressWatcherClosure: ((String, Data, ProgressWatcher?) async throws -> String)?
 
-    public func uploadMedia(mimeType: String, data: Data, progressWatcher: ProgressWatcher?) throws -> String {
+    public func uploadMedia(mimeType: String, data: Data, progressWatcher: ProgressWatcher?) async throws -> String {
         if let error = uploadMediaMimeTypeDataProgressWatcherThrowableError {
             throw error
         }
@@ -705,7 +705,7 @@ class SDKClientMock: SDKClientProtocol {
         uploadMediaMimeTypeDataProgressWatcherReceivedArguments = (mimeType: mimeType, data: data, progressWatcher: progressWatcher)
         uploadMediaMimeTypeDataProgressWatcherReceivedInvocations.append((mimeType: mimeType, data: data, progressWatcher: progressWatcher))
         if let uploadMediaMimeTypeDataProgressWatcherClosure = uploadMediaMimeTypeDataProgressWatcherClosure {
-            return try uploadMediaMimeTypeDataProgressWatcherClosure(mimeType, data, progressWatcher)
+            return try await uploadMediaMimeTypeDataProgressWatcherClosure(mimeType, data, progressWatcher)
         } else {
             return uploadMediaMimeTypeDataProgressWatcherReturnValue
         }

@@ -27,8 +27,14 @@ private class WeakSessionVerificationControllerProxy: SessionVerificationControl
     
     // MARK: - SessionVerificationControllerDelegate
     
-    func didReceiveVerificationData(data: [MatrixRustSDK.SessionVerificationEmoji]) {
-        proxy?.didReceiveData(data)
+    func didReceiveVerificationData(data: MatrixRustSDK.SessionVerificationData) {
+        switch data {
+        // We can handle only emojis for now
+        case .emojis(let emojis, _):
+            proxy?.didReceiveData(emojis)
+        default:
+            break
+        }
     }
     
     func didAcceptVerificationRequest() {
