@@ -48,3 +48,12 @@ setup_github_actions_environment() {
     bundle config path vendor/bundle
     bundle install --jobs 4 --retry 3
 }
+
+setup_github_actions_translations_environment() {
+    unset HOMEBREW_NO_INSTALL_FROM_API
+    export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+
+    brew update && brew install mint localazy/tools/localazy
+
+    mint install Asana/locheck
+}
