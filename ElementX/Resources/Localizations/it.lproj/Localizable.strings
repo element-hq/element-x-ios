@@ -49,7 +49,7 @@
 "action_forgot_password" = "Forgot password?";
 "action_forward" = "Forward";
 "action_invite" = "Invita";
-"action_invite_friends" = "Invite friends";
+"action_invite_friends" = "Invite people";
 "action_invite_friends_to_app" = "Invita amici a %1$@";
 "action_invite_people_to_app" = "Invite people to %1$@";
 "action_invites_list" = "Invites";

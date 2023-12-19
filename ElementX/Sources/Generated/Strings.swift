@@ -128,9 +128,9 @@ public enum L10n {
   public static var actionForward: String { return L10n.tr("Localizable", "action_forward") }
   /// Invite
   public static var actionInvite: String { return L10n.tr("Localizable", "action_invite") }
-  /// Invite friends
+  /// Invite people
   public static var actionInviteFriends: String { return L10n.tr("Localizable", "action_invite_friends") }
-  /// Invite friends to %1$@
+  /// Invite people to %1$@
   public static func actionInviteFriendsToApp(_ p1: Any) -> String {
     return L10n.tr("Localizable", "action_invite_friends_to_app", String(describing: p1))
   }
@@ -900,7 +900,7 @@ public enum L10n {
   public static var screenCreatePollTitle: String { return L10n.tr("Localizable", "screen_create_poll_title") }
   /// New room
   public static var screenCreateRoomActionCreateRoom: String { return L10n.tr("Localizable", "screen_create_room_action_create_room") }
-  /// Invite friends to Element
+  /// Invite people to Element
   public static var screenCreateRoomActionInvitePeople: String { return L10n.tr("Localizable", "screen_create_room_action_invite_people") }
   /// Invite people
   public static var screenCreateRoomAddPeopleTitle: String { return L10n.tr("Localizable", "screen_create_room_add_people_title") }

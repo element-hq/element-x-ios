@@ -49,8 +49,8 @@
 "action_forgot_password" = "Forgot password?";
 "action_forward" = "Forward";
 "action_invite" = "Invite";
-"action_invite_friends" = "Invite friends";
-"action_invite_friends_to_app" = "Invite friends to %1$@";
+"action_invite_friends" = "Invite people";
+"action_invite_friends_to_app" = "Invite people to %1$@";
 "action_invite_people_to_app" = "Invite people to %1$@";
 "action_invites_list" = "Invites";
 "action_join" = "Join";
@@ -369,7 +369,7 @@
 "screen_create_poll_question_hint" = "What is the poll about?";
 "screen_create_poll_title" = "Create Poll";
 "screen_create_room_action_create_room" = "New room";
-"screen_create_room_action_invite_people" = "Invite friends to Element";
+"screen_create_room_action_invite_people" = "Invite people to Element";
 "screen_create_room_add_people_title" = "Invite people";
 "screen_create_room_error_creating_room" = "An error occurred when creating the room";
 "screen_create_room_private_option_description" = "Messages in this room are encrypted. Encryption can’t be disabled afterwards.";
