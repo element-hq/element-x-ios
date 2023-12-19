@@ -128,8 +128,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             leaveRoom(roomId: roomIdentifier)
         case .userMenu(let action):
             switch action {
-            case .feedback:
-                actionsSubject.send(.presentFeedbackScreen)
             case .settings:
                 actionsSubject.send(.presentSettingsScreen)
             case .logout:
