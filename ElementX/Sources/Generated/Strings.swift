@@ -1320,6 +1320,10 @@ public enum L10n {
   public static var screenSessionVerificationCompareEmojisSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_emojis_subtitle") }
   /// Compare emojis
   public static var screenSessionVerificationCompareEmojisTitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_emojis_title") }
+  /// Confirm that the numbers below match those shown on your other session.
+  public static var screenSessionVerificationCompareNumbersSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_numbers_subtitle") }
+  /// Compare numbers
+  public static var screenSessionVerificationCompareNumbersTitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_numbers_title") }
   /// Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.
   public static var screenSessionVerificationCompleteSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_complete_subtitle") }
   /// Prove it’s you in order to access your encrypted message history.

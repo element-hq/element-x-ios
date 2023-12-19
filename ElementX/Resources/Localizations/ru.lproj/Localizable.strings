@@ -94,6 +94,7 @@
 "action_try_again" = "Повторить попытку";
 "action_view_source" = "Показать источник";
 "action_yes" = "Да";
+"action.load_more" = "Загрузить еще";
 "common_about" = "О приложении";
 "common_acceptable_use_policy" = "Политика допустимого использования";
 "common_advanced_settings" = "Дополнительные параметры";
@@ -427,7 +428,7 @@
 "screen_notification_settings_enable_notifications" = "Включить уведомления на данном устройстве";
 "screen_notification_settings_failed_fixing_configuration" = "Конфигурация не была исправлена, попробуйте еще раз.";
 "screen_notification_settings_group_chats" = "Групповые чаты";
-"screen_notification_settings_invite_for_me_label" = "Invitations";
+"screen_notification_settings_invite_for_me_label" = "Приглашения";
 "screen_notification_settings_mentions_only_disclaimer" = "Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, в некоторых комнатах вы можете не получать уведомления.";
 "screen_notification_settings_mentions_section_title" = "Упоминания";
 "screen_notification_settings_mode_all" = "Все";
@@ -444,6 +445,11 @@
 "screen_onboarding_welcome_message" = "Добро пожаловать в самый быстрый Element. Преимущество в скорости и простоте.";
 "screen_onboarding_welcome_subtitle" = "Добро пожаловать в %1$@. Supercharged — это скорость и простота.";
 "screen_onboarding_welcome_title" = "Будь c element";
+"screen_polls_history_empty_ongoing" = "Не найдено текущих опросов.";
+"screen_polls_history_empty_past" = "Не найдено предыдущих опросов.";
+"screen_polls_history_filter_ongoing" = "Текущие";
+"screen_polls_history_filter_past" = "Прошедшие";
+"screen_polls_history_title" = "Опросы";
 "screen_recovery_key_change_description" = "Получите новый ключ восстановления, если вы потеряли существующий. После смены ключа восстановления старый ключ больше не будет работать.";
 "screen_recovery_key_change_generate_key" = "Создать новый ключ восстановления";
 "screen_recovery_key_change_generate_key_description" = "Убедитесь, что вы можете хранить ключ восстановления в безопасном месте";
@@ -544,6 +550,8 @@
 "screen_session_verification_cancelled_subtitle" = "Кажется, что-то не так. Время ожидания запроса истекло, либо запрос был отклонен.";
 "screen_session_verification_compare_emojis_subtitle" = "Убедитесь, что приведенные ниже смайлики совпадают со смайликами, показанными во время другого сеанса.";
 "screen_session_verification_compare_emojis_title" = "Сравните емодзи";
+"screen_session_verification_compare_numbers_subtitle" = "Убедитесь, что приведенные ниже числа совпадают с цифрами, показанными в другом сеансе.";
+"screen_session_verification_compare_numbers_title" = "Сравните числа";
 "screen_session_verification_complete_subtitle" = "Ваш новый сеанс подтвержден. У него есть доступ к вашим зашифрованным сообщениям, и другие пользователи увидят его как доверенное.";
 "screen_session_verification_open_existing_session_subtitle" = "Чтобы получить доступ к зашифрованной истории сообщений, докажите, что это вы.";
 "screen_session_verification_open_existing_session_title" = "Открыть существующий сеанс";

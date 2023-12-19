@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Um Bilder oder Videos aufzunehmen und als Nachricht zu versenden, benötigt Element X Zugriff auf die Kamera.";
+"NSFaceIDUsageDescription" = "Face ID wird verwendet um die App zu entsperren.";
+"NSLocationWhenInUseUsageDescription" = "Erlaube Element X den Zugriff auf deinen Standort, um den Standort zu teilen.";
+"NSMicrophoneUsageDescription" = "Um Sprachnachrichten aufzunehmen und mit Element X zu versenden, wird der Zugriff auf das Mikrofon benötigt.";
+"NSPhotoLibraryUsageDescription" = "Ermöglicht das Speichern von Fotos und Videos in der Bibliothek.";

@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d member</string>
+			<string>%1$d tag</string>
 			<key>other</key>
-			<string>%1$d members</string>
+			<string>%1$d tag</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -61,9 +61,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d vote</string>
+			<string>%d szavazat</string>
 			<key>other</key>
-			<string>%d votes</string>
+			<string>%d szavazat</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -77,9 +77,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d message</string>
+			<string>%1$@: %2$d üzenet</string>
 			<key>other</key>
-			<string>%1$@: %2$d messages</string>
+			<string>%1$@: %2$d üzenet</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -93,9 +93,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d notification</string>
+			<string>%d értesítés</string>
 			<key>other</key>
-			<string>%d notifications</string>
+			<string>%d értesítés</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -109,9 +109,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d invitation</string>
+			<string>%d meghívó</string>
 			<key>other</key>
-			<string>%d invitations</string>
+			<string>%d meghívó</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d new message</string>
+			<string>%d új üzenet</string>
 			<key>other</key>
-			<string>%d new messages</string>
+			<string>%d új üzenet</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -141,9 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d unread notified message</string>
+			<string>%d olvasatlan értesített üzenet</string>
 			<key>other</key>
-			<string>%d unread notified messages</string>
+			<string>%d olvasatlan értesített üzenet</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -157,9 +157,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d room</string>
+			<string>%d szoba</string>
 			<key>other</key>
-			<string>%d rooms</string>
+			<string>%d szoba</string>
 		</dict>
 	</dict>
 	<key>room_timeline_state_changes</key>
@@ -173,9 +173,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d room change</string>
+			<string>%1$d szobaváltozás</string>
 			<key>other</key>
-			<string>%1$d room changes</string>
+			<string>%1$d szobaváltozás</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -221,9 +221,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d person</string>
+			<string>%1$d személy</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d személy</string>
 		</dict>
 	</dict>
 </dict>

@@ -94,6 +94,7 @@
 "action_try_again" = "Essayer à nouveau";
 "action_view_source" = "Afficher la source";
 "action_yes" = "Oui";
+"action.load_more" = "Voir plus";
 "common_about" = "À propos";
 "common_acceptable_use_policy" = "Politique d’utilisation acceptable";
 "common_advanced_settings" = "Paramètres avancés";
@@ -444,6 +445,11 @@
 "screen_onboarding_welcome_message" = "Bienvenue dans l’Element le plus rapide de tous les temps. Boosté pour plus de rapidité et de simplicité.";
 "screen_onboarding_welcome_subtitle" = "Bienvenue sur %1$@. Boosté, pour plus de rapidité et de simplicité.";
 "screen_onboarding_welcome_title" = "Soyez dans votre Element";
+"screen_polls_history_empty_ongoing" = "Impossible de trouver des sondages en cours.";
+"screen_polls_history_empty_past" = "Impossible de trouver des sondages terminés.";
+"screen_polls_history_filter_ongoing" = "En cours";
+"screen_polls_history_filter_past" = "Terminés";
+"screen_polls_history_title" = "Sondages";
 "screen_recovery_key_change_description" = "Obtenez une nouvelle clé de récupération dans le cas où vous avez oublié l’ancienne. Après le changement, l’ancienne clé ne sera plus utilisable.";
 "screen_recovery_key_change_generate_key" = "Générer une nouvelle clé";
 "screen_recovery_key_change_generate_key_description" = "Assurez-vous de conserver la clé dans un endroit sûr.";
@@ -544,6 +550,8 @@
 "screen_session_verification_cancelled_subtitle" = "Quelque chose ne va pas. Soit la demande a expiré, soit elle a été refusée.";
 "screen_session_verification_compare_emojis_subtitle" = "Confirmez que les emojis ci-dessous correspondent à ceux affichés sur votre autre session.";
 "screen_session_verification_compare_emojis_title" = "Comparez les émojis";
+"screen_session_verification_compare_numbers_subtitle" = "Confirmez que les nombres ci-dessous correspondent à ceux affichés sur votre autre session.";
+"screen_session_verification_compare_numbers_title" = "Comparez les nombres";
 "screen_session_verification_complete_subtitle" = "Votre nouvelle session est désormais vérifiée. Elle a accès à vos messages chiffrés et les autres utilisateurs la verront identifiée comme fiable.";
 "screen_session_verification_open_existing_session_subtitle" = "Prouvez qu’il s’agit bien de vous pour accéder à l’historique de vos messages chiffrés.";
 "screen_session_verification_open_existing_session_title" = "Ouvrir une session existante";

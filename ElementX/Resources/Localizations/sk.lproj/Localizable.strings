@@ -94,6 +94,7 @@
 "action_try_again" = "Skúste to znova";
 "action_view_source" = "Zobraziť zdroj";
 "action_yes" = "Áno";
+"action.load_more" = "Načítať viac";
 "common_about" = "O aplikácii";
 "common_acceptable_use_policy" = "Zásady prijateľného používania";
 "common_advanced_settings" = "Pokročilé nastavenia";
@@ -427,7 +428,7 @@
 "screen_notification_settings_enable_notifications" = "Povoliť oznámenia na tomto zariadení";
 "screen_notification_settings_failed_fixing_configuration" = "Konfigurácia nebola opravená, skúste to prosím znova.";
 "screen_notification_settings_group_chats" = "Skupinové rozhovory";
-"screen_notification_settings_invite_for_me_label" = "Invitations";
+"screen_notification_settings_invite_for_me_label" = "Pozvánky";
 "screen_notification_settings_mentions_only_disclaimer" = "Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v niektorých miestnostiach nemusíte dostať upozornenie.";
 "screen_notification_settings_mentions_section_title" = "Zmienky";
 "screen_notification_settings_mode_all" = "Všetky";
@@ -444,6 +445,11 @@
 "screen_onboarding_welcome_message" = "Vitajte v najrýchlejšom Element vôbec. Nadupaný pre rýchlosť a jednoduchosť.";
 "screen_onboarding_welcome_subtitle" = "Vitajte v %1$@. Nadupaný, pre rýchlosť a jednoduchosť.";
 "screen_onboarding_welcome_title" = "Buďte vo svojom elemente";
+"screen_polls_history_empty_ongoing" = "Nepodarilo sa nájsť žiadne prebiehajúce ankety.";
+"screen_polls_history_empty_past" = "Nie je možné nájsť žiadne predchádzajúce ankety.";
+"screen_polls_history_filter_ongoing" = "Prebiehajúce";
+"screen_polls_history_filter_past" = "Minulé";
+"screen_polls_history_title" = "Ankety";
 "screen_recovery_key_change_description" = "Získajte nový kľúč na obnovenie, ak ste stratili svoj existujúci. Po zmene kľúča na obnovenie už starý kľúč nebude fungovať.";
 "screen_recovery_key_change_generate_key" = "Vygenerovať nový kľúč na obnovenie";
 "screen_recovery_key_change_generate_key_description" = "Uistite sa, že kľúč na obnovenie môžete uložiť niekde v bezpečí";
@@ -544,6 +550,8 @@
 "screen_session_verification_cancelled_subtitle" = "Zdá sa, že niečo nie je v poriadku. Časový limit žiadosti vypršal alebo bola žiadosť zamietnutá.";
 "screen_session_verification_compare_emojis_subtitle" = "Skontrolujte, či sa emotikony uvedené nižšie zhodujú s emotikonmi zobrazenými vo vašej druhej relácii.";
 "screen_session_verification_compare_emojis_title" = "Porovnajte emotikony";
+"screen_session_verification_compare_numbers_subtitle" = "Skontrolujte, či sa nižšie uvedené čísla zhodujú s číslami zobrazenými na vašej druhej relácii.";
+"screen_session_verification_compare_numbers_title" = "Porovnať čísla";
 "screen_session_verification_complete_subtitle" = "Vaša nová relácia je teraz overená. Má prístup k vašim zašifrovaným správam a ostatní používatelia ju budú vidieť ako dôveryhodnú.";
 "screen_session_verification_open_existing_session_subtitle" = "Dokážte, že ste to vy, aby ste získali prístup k histórii vašich zašifrovaných správ.";
 "screen_session_verification_open_existing_session_title" = "Otvoriť existujúcu reláciu";
