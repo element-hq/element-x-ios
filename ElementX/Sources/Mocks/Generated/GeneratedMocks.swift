@@ -2194,11 +2194,11 @@ class RoomProxyMock: RoomProxyProtocol {
     }
 }
 class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
-    var updatePublisher: AnyPublisher<TimelineProviderUpdate, Never> {
+    var updatePublisher: AnyPublisher<Void, Never> {
         get { return underlyingUpdatePublisher }
         set(value) { underlyingUpdatePublisher = value }
     }
-    var underlyingUpdatePublisher: AnyPublisher<TimelineProviderUpdate, Never>!
+    var underlyingUpdatePublisher: AnyPublisher<Void, Never>!
     var itemProxies: [TimelineItemProxy] = []
     var backPaginationState: BackPaginationStatus {
         get { return underlyingBackPaginationState }
@@ -3225,11 +3225,6 @@ class VoiceMessageMediaManagerMock: VoiceMessageMediaManagerProtocol {
     }
 }
 class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
-    var audioRecorder: AudioRecorderProtocol {
-        get { return underlyingAudioRecorder }
-        set(value) { underlyingAudioRecorder = value }
-    }
-    var underlyingAudioRecorder: AudioRecorderProtocol!
     var previewAudioPlayerState: AudioPlayerState?
     var isRecording: Bool {
         get { return underlyingIsRecording }
@@ -3237,11 +3232,6 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     }
     var underlyingIsRecording: Bool!
     var recordingURL: URL?
-    var recordingDuration: TimeInterval {
-        get { return underlyingRecordingDuration }
-        set(value) { underlyingRecordingDuration = value }
-    }
-    var underlyingRecordingDuration: TimeInterval!
     var actions: AnyPublisher<VoiceMessageRecorderAction, Never> {
         get { return underlyingActions }
         set(value) { underlyingActions = value }
@@ -3352,23 +3342,6 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     func deleteRecording() async {
         deleteRecordingCallsCount += 1
         await deleteRecordingClosure?()
-    }
-    //MARK: - buildRecordingWaveform
-
-    var buildRecordingWaveformCallsCount = 0
-    var buildRecordingWaveformCalled: Bool {
-        return buildRecordingWaveformCallsCount > 0
-    }
-    var buildRecordingWaveformReturnValue: Result<[UInt16], VoiceMessageRecorderError>!
-    var buildRecordingWaveformClosure: (() async -> Result<[UInt16], VoiceMessageRecorderError>)?
-
-    func buildRecordingWaveform() async -> Result<[UInt16], VoiceMessageRecorderError> {
-        buildRecordingWaveformCallsCount += 1
-        if let buildRecordingWaveformClosure = buildRecordingWaveformClosure {
-            return await buildRecordingWaveformClosure()
-        } else {
-            return buildRecordingWaveformReturnValue
-        }
     }
     //MARK: - sendVoiceMessage
 

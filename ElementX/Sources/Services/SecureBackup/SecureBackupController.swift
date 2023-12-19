@@ -24,9 +24,12 @@ class SecureBackupController: SecureBackupControllerProtocol {
     private let recoveryKeyStateSubject = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.unknown)
     private let keyBackupStateSubject = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.unknown)
     
+    // periphery:ignore - retaining purpose
     private var backupStateListenerTaskHandle: TaskHandle?
+    // periphery:ignore - retaining purpose
     private var recoveryStateListenerTaskHandle: TaskHandle?
     
+    // periphery:ignore - auto cancels when reassigned
     /// Used to dedupe remote backup state requests
     @CancellableTask private var remoteBackupStateTask: Task<Void, Error>?
     

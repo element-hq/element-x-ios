@@ -24,17 +24,10 @@ struct SecureBackupScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
-enum SecureBackupScreenCoordinatorAction { }
-
 final class SecureBackupScreenCoordinator: CoordinatorProtocol {
     private let parameters: SecureBackupScreenCoordinatorParameters
     private var viewModel: SecureBackupScreenViewModelProtocol
-    private let actionsSubject: PassthroughSubject<SecureBackupScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
-    
-    var actions: AnyPublisher<SecureBackupScreenCoordinatorAction, Never> {
-        actionsSubject.eraseToAnyPublisher()
-    }
     
     init(parameters: SecureBackupScreenCoordinatorParameters) {
         self.parameters = parameters

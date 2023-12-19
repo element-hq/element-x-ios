@@ -30,7 +30,6 @@ enum SecureBackupRecoveryKeyScreenCoordinatorAction {
 }
 
 final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
-    private let parameters: SecureBackupRecoveryKeyScreenCoordinatorParameters
     private var viewModel: SecureBackupRecoveryKeyScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<SecureBackupRecoveryKeyScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -40,8 +39,6 @@ final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: SecureBackupRecoveryKeyScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: parameters.secureBackupController,
                                                            userIndicatorController: parameters.userIndicatorController)
     }

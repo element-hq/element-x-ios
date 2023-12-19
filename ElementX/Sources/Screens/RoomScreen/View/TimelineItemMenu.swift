@@ -133,7 +133,7 @@ extension RoomTimelineItemProtocol {
     }
 }
 
-public struct TimelineItemMenu: View {
+struct TimelineItemMenu: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.dismiss) private var dismiss
     
@@ -141,7 +141,7 @@ public struct TimelineItemMenu: View {
     let actions: TimelineItemMenuActions
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 8) {
             header
                 .frame(idealWidth: 300.0)

@@ -161,11 +161,6 @@ struct SoftLogoutScreen: View {
         context.send(viewAction: .login)
     }
 
-    /// Sends the `forgotPassword` view action.
-    func forgotPassword() {
-        context.send(viewAction: .forgotPassword)
-    }
-
     /// Sends the `clearAllData` view action.
     func clearData() {
         context.send(viewAction: .clearAllData)

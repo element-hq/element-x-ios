@@ -89,9 +89,7 @@ class EventTimelineItemProxy {
     }()
     
     lazy var canBeRepliedTo = item.canBeRepliedTo()
-        
-    lazy var isRoomState = content.kind().isRoomState
-    
+            
     lazy var content = item.content()
 
     lazy var isOwn = item.isOwn()
@@ -123,17 +121,6 @@ class EventTimelineItemProxy {
     }()
 
     lazy var readReceipts = item.readReceipts()
-}
-
-extension TimelineItemContentKind {
-    var isRoomState: Bool {
-        switch self {
-        case .state, .roomMembership:
-            return true
-        default:
-            return false
-        }
-    }
 }
 
 struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {

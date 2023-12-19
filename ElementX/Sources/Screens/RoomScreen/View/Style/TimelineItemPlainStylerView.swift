@@ -24,8 +24,6 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
-    
-    @State private var showItemActionMenu = false
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 0) {

@@ -20,10 +20,6 @@ import XCTest
 
 @MainActor
 class ServerSelectionViewModelTests: XCTestCase {
-    private enum Constants {
-        static let counterInitialValue = 0
-    }
-    
     var viewModel: ServerSelectionScreenViewModelProtocol!
     var context: ServerSelectionScreenViewModelType.Context!
     

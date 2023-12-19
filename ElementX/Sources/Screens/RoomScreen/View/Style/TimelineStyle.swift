@@ -68,10 +68,6 @@ private struct TimelineGroupStyleKey: EnvironmentKey {
     static let defaultValue = TimelineGroupStyle.single
 }
 
-private struct ReadReceiptsEnabledKey: EnvironmentKey {
-    static let defaultValue = false
-}
-
 extension EnvironmentValues {
     var timelineStyle: TimelineStyle {
         get { self[TimelineStyleKey.self] }

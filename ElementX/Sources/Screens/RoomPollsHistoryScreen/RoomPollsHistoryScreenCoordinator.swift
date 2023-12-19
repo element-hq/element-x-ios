@@ -37,8 +37,7 @@ final class RoomPollsHistoryScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomPollsHistoryScreenCoordinatorParameters) {
-        viewModel = RoomPollsHistoryScreenViewModel(roomProxy: parameters.roomProxy,
-                                                    pollInteractionHandler: parameters.pollInteractionHandler,
+        viewModel = RoomPollsHistoryScreenViewModel(pollInteractionHandler: parameters.pollInteractionHandler,
                                                     roomTimelineController: parameters.roomTimelineController,
                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }

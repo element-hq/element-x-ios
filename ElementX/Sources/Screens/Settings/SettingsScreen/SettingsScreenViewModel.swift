@@ -20,9 +20,6 @@ import SwiftUI
 typealias SettingsScreenViewModelType = StateStoreViewModel<SettingsScreenViewState, SettingsScreenViewAction>
 
 class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewModelProtocol {
-    private let userSession: UserSessionProtocol
-    private let appSettings: AppSettings
-
     private var actionsSubject: PassthroughSubject<SettingsScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<SettingsScreenViewModelAction, Never> {
@@ -30,9 +27,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     }
     
     init(userSession: UserSessionProtocol, appSettings: AppSettings) {
-        self.userSession = userSession
-        self.appSettings = appSettings
-        
         super.init(initialViewState: .init(deviceID: userSession.deviceID,
                                            userID: userSession.userID,
                                            accountProfileURL: userSession.clientProxy.accountURL(action: .profile),

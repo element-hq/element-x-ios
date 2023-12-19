@@ -211,19 +211,6 @@ struct SessionVerificationScreen: View {
             .padding(8.0)
         }
     }
-    
-    struct StateIcon: View {
-        let systemName: String
-        
-        var body: some View {
-            Image(systemName: systemName)
-                .resizable()
-                .font(.compound.bodyLG.weight(.light))
-                .scaledToFit()
-                .foregroundColor(.compound.iconPrimary)
-                .frame(width: 100, height: 100)
-        }
-    }
 }
 
 // MARK: - Previews

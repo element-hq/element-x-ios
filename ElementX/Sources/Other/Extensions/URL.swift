@@ -47,17 +47,6 @@ extension URL: ExpressibleByStringLiteral {
 
         return applicationSupportSessionsURL
     }
-
-    /// The base directory where all cache is stored.
-    static var cacheBaseDirectory: URL {
-        let url = appGroupContainerDirectory
-            .appendingPathComponent("Library", isDirectory: true)
-            .appendingPathComponent("Caches", isDirectory: true)
-
-        try? FileManager.default.createDirectoryIfNeeded(at: url)
-
-        return url
-    }
     
     /// The base directory where all application support data is stored.
     static var applicationSupportBaseDirectory: URL {

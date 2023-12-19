@@ -26,8 +26,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
-    
-    @State private var showItemActionMenu = false
 
     private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
     

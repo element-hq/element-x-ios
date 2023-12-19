@@ -21,7 +21,6 @@ import MatrixRustSDK
 
 class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     let audioRecorder: AudioRecorderProtocol
-    private let audioConverter: AudioConverterProtocol
     private let voiceMessageCache: VoiceMessageCacheProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     
@@ -31,7 +30,6 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
 
     private let mp4accMimeType = "audio/m4a"
-    private let waveformSamplesCount = 100
     
     var isRecording: Bool {
         audioRecorder.isRecording
@@ -53,11 +51,9 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         
     init(audioRecorder: AudioRecorderProtocol = AudioRecorder(),
          mediaPlayerProvider: MediaPlayerProviderProtocol,
-         audioConverter: AudioConverterProtocol = AudioConverter(),
          voiceMessageCache: VoiceMessageCacheProtocol = VoiceMessageCache()) {
         self.audioRecorder = audioRecorder
         self.mediaPlayerProvider = mediaPlayerProvider
-        self.audioConverter = audioConverter
         self.voiceMessageCache = voiceMessageCache
         
         addObservers()

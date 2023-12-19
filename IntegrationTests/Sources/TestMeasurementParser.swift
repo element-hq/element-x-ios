@@ -39,7 +39,7 @@ enum TestMeasurementParserMetric: String {
 
 /// This class is responsible for extracting XCTest measurement run results from stderr in lieu of an official API
 /// Heavily inspired by https://stackoverflow.com/questions/54814422/how-to-extract-performance-metrics-measured-by-measureblock-in-xctest
-class TestMeasurementParser {
+final class TestMeasurementParser {
     private let pipe = Pipe()
     private let regex: NSRegularExpression
     private var results = [String: Double]()
@@ -117,12 +117,5 @@ class TestMeasurementParser {
         }
         
         testCase.waitForExpectations(timeout: 10.0)
-    }
-    
-    /// Retrieve the recorded average value for a particular metric
-    /// - Parameter metric: Needs to match one of the metrics passed in the XCTest measure metrics array
-    /// - Returns: The resulting average value
-    func valueForMetric(_ metric: TestMeasurementParserMetric) -> Double? {
-        results[metric.rawValue]
     }
 }

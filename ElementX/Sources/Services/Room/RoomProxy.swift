@@ -29,7 +29,6 @@ class RoomProxy: RoomProxyProtocol {
     private let backgroundTaskName = "SendRoomEvent"
     
     private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
-    private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.low_priority", qos: .utility)
     
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
@@ -139,10 +138,6 @@ class RoomProxy: RoomProxyProtocol {
     
     var avatarURL: URL? {
         roomListItem.avatarUrl().flatMap(URL.init(string:))
-    }
-
-    var invitedMembersCount: Int {
-        Int(room.invitedMembersCount())
     }
 
     var joinedMembersCount: Int {

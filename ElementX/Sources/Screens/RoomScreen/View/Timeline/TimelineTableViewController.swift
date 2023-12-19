@@ -24,6 +24,7 @@ import OrderedCollections
 class TimelineItemCell: UITableViewCell {
     static let reuseIdentifier = "TimelineItemCell"
     
+    // periphery:ignore - retaining purpose
     var item: RoomTimelineItemViewState?
     
     override func prepareForReuse() {
@@ -63,8 +64,6 @@ class TimelineTableViewController: UIViewController {
             paginateBackwardsPublisher.send(())
         }
     }
-        
-    var contextMenuActionProvider: (@MainActor (_ itemID: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
     
     @Binding private var isScrolledToBottom: Bool
 

@@ -37,12 +37,7 @@ struct UserDetailsEditScreenViewState: BindableState {
     var nameDidChange: Bool {
         bindings.name != currentDisplayName
     }
-    
-    /// The string shown for the room's name when it can't be edited.
-    var nameRowTitle: String {
-        bindings.name.isEmpty ? L10n.screenEditProfileDisplayName : bindings.name
-    }
-            
+      
     var avatarDidChange: Bool {
         localMedia != nil || selectedAvatarURL != currentAvatarURL
     }

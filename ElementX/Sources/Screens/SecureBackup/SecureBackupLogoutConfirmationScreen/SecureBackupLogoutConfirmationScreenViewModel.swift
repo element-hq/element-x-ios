@@ -23,6 +23,7 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     private let secureBackupController: SecureBackupControllerProtocol
     private let networkMonitor: NetworkMonitorProtocol
     
+    // periphery:ignore - auto cancels when reassigned
     @CancellableTask
     private var keyUploadWaitingTask: Task<Void, Never>?
     

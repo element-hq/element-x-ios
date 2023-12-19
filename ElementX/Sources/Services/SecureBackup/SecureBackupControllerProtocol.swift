@@ -64,11 +64,3 @@ protocol SecureBackupControllerProtocol {
     
     func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError>
 }
-
-extension SecureBackupControllerMock {
-    convenience init(keyBackupState: SecureBackupKeyBackupState, recoveryKeyState: SecureBackupRecoveryKeyState) {
-        self.init()
-        underlyingKeyBackupState = CurrentValueSubject<SecureBackupKeyBackupState, Never>(keyBackupState).asCurrentValuePublisher()
-        underlyingRecoveryKeyState = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(recoveryKeyState).asCurrentValuePublisher()
-    }
-}
