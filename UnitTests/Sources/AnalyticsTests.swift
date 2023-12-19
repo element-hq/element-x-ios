@@ -134,7 +134,8 @@ class AnalyticsTests: XCTestCase {
         XCTAssertNil(client.pendingUserProperties, "No user properties should have been set yet.")
         
         // When updating the user properties
-        client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil, ftueUseCaseSelection: .PersonalMessaging,
+        client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil,
+                                                                  ftueUseCaseSelection: .PersonalMessaging,
                                                                   numFavouriteRooms: 4,
                                                                   numSpaces: 5))
         
