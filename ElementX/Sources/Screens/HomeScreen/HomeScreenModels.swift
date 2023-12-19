@@ -33,7 +33,6 @@ enum HomeScreenViewModelAction {
 
 enum HomeScreenViewUserMenuAction {
     case settings
-    case feedback
     case logout
 }
 
