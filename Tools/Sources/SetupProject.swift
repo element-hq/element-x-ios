@@ -19,7 +19,7 @@ struct SetupProject: ParsableCommand {
     }
 
     func brewBundleInstall() throws {
-        try Utilities.zsh("brew install --verbose --debug xcodegen swiftgen swiftformat git-lfs sourcery mint kiliankoe/formulae/swift-outdated localazy/tools/localazy peripheryapp/periphery/periphery")
+        try Utilities.zsh("brew install --verbose xcodegen swiftgen swiftformat git-lfs sourcery mint kiliankoe/formulae/swift-outdated localazy/tools/localazy peripheryapp/periphery/periphery")
         if !ci {
             try Utilities.zsh("brew install swiftlint")
         }
