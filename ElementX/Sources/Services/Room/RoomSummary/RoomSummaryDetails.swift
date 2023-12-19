@@ -25,6 +25,7 @@ struct RoomSummaryDetails {
     let lastMessage: AttributedString?
     let lastMessageFormattedTimestamp: String?
     let unreadNotificationCount: UInt
+    let unreadMentionsCount: UInt
     let notificationMode: RoomNotificationModeProxy?
     let canonicalAlias: String?
     let inviter: RoomMemberProxyProtocol?

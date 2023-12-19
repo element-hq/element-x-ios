@@ -121,9 +121,14 @@ struct HomeScreenRoomCell: View {
                     CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
                         .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
                 }
-                
+                                
                 notificationModeIcon
-                    .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+                    .foregroundColor(.compound.iconQuaternary)
+                
+                if room.hasMentions, room.notificationMode != .mentionsAndKeywordsOnly {
+                    atIcon
+                        .foregroundColor(.compound.iconAccentTertiary)
+                }
                 
                 if room.hasUnreads {
                     Circle()
@@ -134,14 +139,22 @@ struct HomeScreenRoomCell: View {
         }
     }
     
+    private var atIcon: some View {
+        CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
+            .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
+    }
+    
     @ViewBuilder
     private var notificationModeIcon: some View {
         switch room.notificationMode {
         case .none, .allMessages:
             EmptyView()
         case .mentionsAndKeywordsOnly:
-            CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
-                .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
+            if room.hasMentions {
+                EmptyView()
+            } else {
+                atIcon
+            }
         case .mute:
             CompoundIcon(\.notificationsSolidOff, size: .custom(15), relativeTo: .compound.bodyMD)
                 .accessibilityLabel(L10n.a11yNotificationsMuted)
@@ -198,7 +211,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                 return HomeScreenRoom(id: UUID().uuidString,
                                       roomId: details.id,
                                       name: details.name,
-                                      hasUnreads: details.unreadNotificationCount > 0,
+                                      hasUnreads: details.unreadNotificationCount > 0, hasMentions: details.unreadMentionsCount > 0,
                                       hasOngoingCall: details.hasOngoingCall,
                                       timestamp: Date(timeIntervalSinceReferenceDate: 0).formattedMinimal(),
                                       lastMessage: details.lastMessage,
