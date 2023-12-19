@@ -1,5 +1,5 @@
 "NSCameraUsageDescription" = "Element X требуется доступ к камере, для того чтобы отправлять фото и видно в сообщении";
 "NSFaceIDUsageDescription" = "Для доступа к приложению используется Face ID.";
 "NSLocationWhenInUseUsageDescription" = "Element X необходимо предоставить разрешения для отправки местоположения.";
-"NSMicrophoneUsageDescription" = "%s необходимо предоставить доступ к микрофону, для отправки аудиосообщений.";
+"NSMicrophoneUsageDescription" = "Element X необходимо предоставить доступ к микрофону, для отправки аудиосообщений.";
 "NSPhotoLibraryUsageDescription" = "Разрешить сохранять фотографии и видео в библиотеку.";

@@ -94,6 +94,7 @@
 "action_try_again" = "Try again";
 "action_view_source" = "Vedi Sorgente";
 "action_yes" = "Sì";
+"action.load_more" = "Load more";
 "common_about" = "Informazioni";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_advanced_settings" = "Advanced settings";
@@ -444,6 +445,11 @@
 "screen_onboarding_welcome_message" = "Welcome to the fastest Element ever. Supercharged for speed and simplicity.";
 "screen_onboarding_welcome_subtitle" = "Benvenuto su %1$@. Potenziato in velocità e semplicità.";
 "screen_onboarding_welcome_title" = "Sii nel tuo elemento";
+"screen_polls_history_empty_ongoing" = "Can't find any ongoing polls.";
+"screen_polls_history_empty_past" = "Can't find any past polls.";
+"screen_polls_history_filter_ongoing" = "Ongoing";
+"screen_polls_history_filter_past" = "Past";
+"screen_polls_history_title" = "Polls";
 "screen_recovery_key_change_description" = "Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.";
 "screen_recovery_key_change_generate_key" = "Generate a new recovery key";
 "screen_recovery_key_change_generate_key_description" = "Make sure you can store your recovery key somewhere safe";
@@ -544,6 +550,8 @@
 "screen_session_verification_cancelled_subtitle" = "C'è qualcosa che non va. La richiesta è scaduta o è stata rifiutata.";
 "screen_session_verification_compare_emojis_subtitle" = "Verifica che gli emoji sottostanti corrispondano a quelli mostrati nell'altra sessione.";
 "screen_session_verification_compare_emojis_title" = "Confronta le emoji";
+"screen_session_verification_compare_numbers_subtitle" = "Confirm that the numbers below match those shown on your other session.";
+"screen_session_verification_compare_numbers_title" = "Compare numbers";
 "screen_session_verification_complete_subtitle" = "La tua nuova sessione è ora verificata. Ha accesso ai tuoi messaggi crittografati e gli altri utenti la vedranno come attendibile.";
 "screen_session_verification_open_existing_session_subtitle" = "Dimostra la tua identità per accedere alla cronologia dei messaggi crittografati.";
 "screen_session_verification_open_existing_session_title" = "Apri una sessione esistente";

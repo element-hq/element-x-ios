@@ -94,6 +94,7 @@
 "action_try_again" = "Try again";
 "action_view_source" = "檢視原始碼";
 "action_yes" = "是";
+"action.load_more" = "Load more";
 "common_about" = "關於";
 "common_acceptable_use_policy" = "可接受使用政策";
 "common_advanced_settings" = "進階設定";
@@ -444,6 +445,11 @@
 "screen_onboarding_welcome_message" = "歡迎使用有史以來最快的 Element。速度超快，操作簡便。";
 "screen_onboarding_welcome_subtitle" = "Welcome to %1$@. Supercharged, for speed and simplicity.";
 "screen_onboarding_welcome_title" = "Be in your element";
+"screen_polls_history_empty_ongoing" = "Can't find any ongoing polls.";
+"screen_polls_history_empty_past" = "Can't find any past polls.";
+"screen_polls_history_filter_ongoing" = "Ongoing";
+"screen_polls_history_filter_past" = "Past";
+"screen_polls_history_title" = "Polls";
 "screen_recovery_key_change_description" = "Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.";
 "screen_recovery_key_change_generate_key" = "Generate a new recovery key";
 "screen_recovery_key_change_generate_key_description" = "Make sure you can store your recovery key somewhere safe";
@@ -544,6 +550,8 @@
 "screen_session_verification_cancelled_subtitle" = "似乎出了一點問題。有可能是因為等候逾時，或是請求被拒絕。";
 "screen_session_verification_compare_emojis_subtitle" = "確認顯示在其他工作階段上的表情符號是否和下方的相同。";
 "screen_session_verification_compare_emojis_title" = "比對表情符號";
+"screen_session_verification_compare_numbers_subtitle" = "Confirm that the numbers below match those shown on your other session.";
+"screen_session_verification_compare_numbers_title" = "Compare numbers";
 "screen_session_verification_complete_subtitle" = "新的工作階段已完成驗證。它能夠存取您的加密訊息，而其他使用者會將它視為可信任的。";
 "screen_session_verification_open_existing_session_subtitle" = "為了存取被加密的歷史訊息，您需要證明這是您本人。";
 "screen_session_verification_open_existing_session_title" = "開啟一個現存的工作階段";
