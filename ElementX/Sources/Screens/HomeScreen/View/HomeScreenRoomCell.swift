@@ -121,11 +121,14 @@ struct HomeScreenRoomCell: View {
                     CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
                         .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
                 }
-                                
-                notificationModeIcon
-                    .foregroundColor(.compound.iconQuaternary)
+                 
+                if room.notificationMode == .mute {
+                    CompoundIcon(\.notificationsSolidOff, size: .custom(15), relativeTo: .compound.bodyMD)
+                        .accessibilityLabel(L10n.a11yNotificationsMuted)
+                        .foregroundColor(.compound.iconQuaternary)
+                }
                 
-                if room.hasMentions, room.notificationMode != .mentionsAndKeywordsOnly {
+                if room.hasMentions, room.notificationMode != .mute {
                     atIcon
                         .foregroundColor(.compound.iconAccentTertiary)
                 }
@@ -133,32 +136,19 @@ struct HomeScreenRoomCell: View {
                 if room.hasUnreads {
                     Circle()
                         .frame(width: 12, height: 12)
-                        .foregroundColor(.compound.iconAccentTertiary)
+                        .foregroundColor(isNotificationDotHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
                 }
             }
         }
     }
     
+    private var isNotificationDotHighlighted: Bool {
+        room.notificationMode == .allMessages || (room.notificationMode == .mentionsAndKeywordsOnly && room.hasMentions)
+    }
+    
     private var atIcon: some View {
         CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
             .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
-    }
-    
-    @ViewBuilder
-    private var notificationModeIcon: some View {
-        switch room.notificationMode {
-        case .none, .allMessages:
-            EmptyView()
-        case .mentionsAndKeywordsOnly:
-            if room.hasMentions {
-                EmptyView()
-            } else {
-                atIcon
-            }
-        case .mute:
-            CompoundIcon(\.notificationsSolidOff, size: .custom(15), relativeTo: .compound.bodyMD)
-                .accessibilityLabel(L10n.a11yNotificationsMuted)
-        }
     }
     
     @ViewBuilder
