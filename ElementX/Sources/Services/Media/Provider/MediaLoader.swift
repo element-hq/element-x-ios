@@ -25,13 +25,11 @@ private final class MediaRequest {
 
 actor MediaLoader: MediaLoaderProtocol {
     private let client: ClientProtocol
-    private let clientQueue: DispatchQueue
     private var ongoingRequests = [MediaSourceProxy: MediaRequest]()
 
     init(client: ClientProtocol,
          clientQueue: DispatchQueue = .global()) {
         self.client = client
-        self.clientQueue = clientQueue
     }
     
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
