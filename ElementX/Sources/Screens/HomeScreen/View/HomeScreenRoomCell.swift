@@ -143,7 +143,7 @@ struct HomeScreenRoomCell: View {
     }
     
     private var isHighlighted: Bool {
-        room.notificationMode == .allMessages || (room.notificationMode == .mentionsAndKeywordsOnly && room.hasMentions)
+        (room.notificationMode == .allMessages && room.hasUnreads) || (room.notificationMode == .mentionsAndKeywordsOnly && room.hasMentions)
     }
     
     private var atIcon: some View {
