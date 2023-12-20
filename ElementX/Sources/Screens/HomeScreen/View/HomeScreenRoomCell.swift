@@ -236,13 +236,12 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("Generic")
         
-        VStack(spacing: 0) {
-            ForEach(notificationsStateRooms) { room in
-                HomeScreenRoomCell(room: room, context: viewModelForNotificationsState.context, isSelected: false)
+        ScrollView {
+            VStack(spacing: 0) {
+                ForEach(notificationsStateRooms) { room in
+                    HomeScreenRoomCell(room: room, context: viewModelForNotificationsState.context, isSelected: false)
+                }
             }
-            
-            HomeScreenRoomCell(room: .placeholder(), context: viewModelForNotificationsState.context, isSelected: false)
-                .redacted(reason: .placeholder)
         }
         .previewDisplayName("Notifications State")
     }
