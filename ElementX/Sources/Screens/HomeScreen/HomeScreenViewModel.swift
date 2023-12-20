@@ -77,7 +77,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         userSession.clientProxy.secureBackupController.recoveryKeyState
             .receive(on: DispatchQueue.main)
             .sink { [weak self] recoveryKeyState in
-                guard let self, appSettings.chatBackupEnabled else { return }
+                guard let self else { return }
                 
                 let requiresSecureBackupSetup = recoveryKeyState == .disabled || recoveryKeyState == .incomplete
                 

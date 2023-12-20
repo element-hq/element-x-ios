@@ -44,16 +44,12 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
-//        appSettings.$chatBackupEnabled
-//            .weakAssign(to: \.state.chatBackupEnabled, on: self)
-//            .store(in: &cancellables)
-        
         userSession.clientProxy.secureBackupController.recoveryKeyState
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 guard let self else { return }
                 
-                self.state.showSecureBackupBadge = (state == .incomplete || state == .disabled) && appSettings.chatBackupEnabled
+                self.state.showSecureBackupBadge = (state == .incomplete || state == .disabled)
             }
             .store(in: &cancellables)
         

@@ -49,7 +49,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var shouldCollapseRoomStateEvents: Bool { get set }
     var userSuggestionsEnabled: Bool { get set }
     var swiftUITimelineEnabled: Bool { get set }
-//    var chatBackupEnabled: Bool { get set }
     
     var elementCallBaseURL: URL { get set }
     var elementCallUseEncryption: Bool { get set }

@@ -42,7 +42,6 @@ struct SettingsScreenViewState: BindableState {
     var userAvatarURL: URL?
     var userDisplayName: String?
     var isSessionVerified: Bool?
-    var chatBackupEnabled = false
     var showSecureBackupBadge = false
     var showDeveloperOptions: Bool
     
