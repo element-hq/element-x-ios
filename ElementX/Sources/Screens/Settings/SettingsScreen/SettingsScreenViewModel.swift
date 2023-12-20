@@ -44,9 +44,9 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
-        appSettings.$chatBackupEnabled
-            .weakAssign(to: \.state.chatBackupEnabled, on: self)
-            .store(in: &cancellables)
+//        appSettings.$chatBackupEnabled
+//            .weakAssign(to: \.state.chatBackupEnabled, on: self)
+//            .store(in: &cancellables)
         
         userSession.clientProxy.secureBackupController.recoveryKeyState
             .receive(on: DispatchQueue.main)

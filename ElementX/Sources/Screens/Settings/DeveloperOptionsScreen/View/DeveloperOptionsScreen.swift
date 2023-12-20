@@ -32,12 +32,12 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Security") {
-                Toggle(isOn: $context.chatBackupEnabled) {
-                    Text("Chat backup")
-                    Text("Requires app reboot")
-                }
-            }
+//            Section("Security") {
+//                Toggle(isOn: $context.chatBackupEnabled) {
+//                    Text("Chat backup")
+//                    Text("Requires app reboot")
+//                }
+//            }
             
             Section("Timeline") {
                 Toggle(isOn: $context.shouldCollapseRoomStateEvents) {

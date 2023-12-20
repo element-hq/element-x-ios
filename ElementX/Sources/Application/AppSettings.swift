@@ -262,8 +262,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
     
-    @UserPreference(key: UserDefaultsKeys.chatBackupEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var chatBackupEnabled
+    let chatBackupEnabled = true
         
     #endif
     
