@@ -72,10 +72,29 @@ struct HomeScreenViewState: BindableState {
     let userID: String
     var userDisplayName: String?
     var userAvatarURL: URL?
+    
     var isSessionVerified: Bool?
-    var showSessionVerificationBanner = false
-    var showRecoveryKeyConfirmationBanner = false
+    var hasSessionVerificationBannerBeenDismissed = false
+    var showSessionVerificationBanner: Bool {
+        guard let isSessionVerified else {
+            return false
+        }
+        
+        return !isSessionVerified && !hasSessionVerificationBannerBeenDismissed
+    }
+    
     var requiresSecureBackupSetup = false
+
+    var needsRecoveryKeyConfirmation = false
+    var hasRecoveryKeyConfirmationBannerBeenDismissed = false
+    var showRecoveryKeyConfirmationBanner: Bool {
+        guard let isSessionVerified else {
+            return false
+        }
+        
+        return isSessionVerified && needsRecoveryKeyConfirmation && !hasRecoveryKeyConfirmationBannerBeenDismissed
+    }
+    
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
     

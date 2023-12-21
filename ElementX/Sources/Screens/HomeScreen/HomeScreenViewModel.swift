@@ -61,14 +61,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         userSession.sessionVerificationState
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] isVerified in
-                guard let self else { return }
-                self.state.isSessionVerified = isVerified
-                
-                if let isVerified {
-                    self.state.showSessionVerificationBanner = !isVerified
-                }
-            }
+            .weakAssign(to: \.state.isSessionVerified, on: self)
             .store(in: &cancellables)
         
         userSession.clientProxy.secureBackupController.recoveryKeyState
@@ -77,10 +70,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 guard let self else { return }
                 
                 let requiresSecureBackupSetup = recoveryKeyState == .disabled || recoveryKeyState == .incomplete
-                
                 state.requiresSecureBackupSetup = requiresSecureBackupSetup
                 
-                state.showRecoveryKeyConfirmationBanner = recoveryKeyState == .incomplete
+                state.needsRecoveryKeyConfirmation = recoveryKeyState == .incomplete
             }
             .store(in: &cancellables)
         
@@ -134,9 +126,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .confirmRecoveryKey:
             actionsSubject.send(.presentSecureBackupSettings)
         case .skipSessionVerification:
-            state.showSessionVerificationBanner = false
+            state.hasSessionVerificationBannerBeenDismissed = true
         case .skipRecoveryKeyConfirmation:
-            state.showRecoveryKeyConfirmationBanner = false
+            state.hasRecoveryKeyConfirmationBannerBeenDismissed = true
         case .updateVisibleItemRange(let range, let isScrolling):
             visibleItemRangePublisher.send((range, isScrolling))
         case .startChat:

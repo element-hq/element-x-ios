@@ -191,12 +191,10 @@ struct HomeScreen: View {
     @ViewBuilder
     /// The session verification banner and invites button if either are needed.
     private var topSection: some View {
-        if let isSessionVerified = context.viewState.isSessionVerified {
-            if context.viewState.showSessionVerificationBanner {
-                HomeScreenSessionVerificationBanner(context: context)
-            } else if isSessionVerified, context.viewState.showRecoveryKeyConfirmationBanner {
-                HomeScreenRecoveryKeyConfirmationBanner(context: context)
-            }
+        if context.viewState.showSessionVerificationBanner {
+            HomeScreenSessionVerificationBanner(context: context)
+        } else if context.viewState.showRecoveryKeyConfirmationBanner {
+            HomeScreenRecoveryKeyConfirmationBanner(context: context)
         }
         
         if context.viewState.hasPendingInvitations, !context.isSearchFieldFocused {
