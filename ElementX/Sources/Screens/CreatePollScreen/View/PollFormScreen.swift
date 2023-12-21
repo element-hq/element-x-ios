@@ -94,6 +94,8 @@ struct PollFormScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.addOption)
             }
         }
+        // Disables animations when the text view resizes for multiline
+        .animation(.noAnimation, value: UUID())
     }
     
     private var showResultsSection: some View {
@@ -166,12 +168,9 @@ private struct PollFormOptionRow: View {
                     .accessibilityLabel(L10n.actionRemove)
                 }
                 
-                TextField(text: $text) {
+                TextField(text: $text, axis: .vertical) {
                     Text(placeholder)
                         .compoundTextFieldPlaceholder()
-                }
-                .introspect(.textField, on: .supportedVersions) { textField in
-                    textField.clearButtonMode = .whileEditing
                 }
                 .tint(.compound.iconAccentTertiary)
                 .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }

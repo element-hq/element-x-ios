@@ -238,7 +238,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     @objc private func contentSizeCategoryDidChange() {
         // Recompute all attributed strings on content size changes -> DynamicType support
-        updateTimelineItems()
+        serialDispatchQueue.async {
+            self.updateTimelineItems()
+        }
     }
     
     private func updateTimelineItems() {
@@ -303,7 +305,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
         }
         
-        timelineItems = newTimelineItems
+        DispatchQueue.main.sync {
+            timelineItems = newTimelineItems
+        }
         
         callbacks.send(.updatedTimelineItems)
         callbacks.send(.canBackPaginate(canBackPaginate))

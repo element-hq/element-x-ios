@@ -4,9 +4,6 @@ import Foundation
 struct SetupProject: ParsableCommand {
     static var configuration = CommandConfiguration(abstract: "A tool to setup the required components to efficiently run and contribute to Element X iOS")
 
-    @Flag(help: "Use this only on ci to avoid installing failing packages")
-    var ci = false
-
     func run() throws {
         try setupGitHooks()
         try brewBundleInstall()
@@ -19,10 +16,7 @@ struct SetupProject: ParsableCommand {
     }
 
     func brewBundleInstall() throws {
-        try Utilities.zsh("brew install --verbose --debug xcodegen swiftgen swiftformat git-lfs sourcery mint kiliankoe/formulae/swift-outdated localazy/tools/localazy peripheryapp/periphery/periphery")
-        if !ci {
-            try Utilities.zsh("brew install swiftlint")
-        }
+        try Utilities.zsh("brew install xcodegen swiftgen swiftformat git-lfs sourcery mint kiliankoe/formulae/swift-outdated localazy/tools/localazy peripheryapp/periphery/periphery")
     }
 
     func mintPackagesInstall() throws {
