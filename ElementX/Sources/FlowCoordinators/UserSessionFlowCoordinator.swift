@@ -383,7 +383,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        guard isLastSession, appSettings.chatBackupEnabled else {
+        guard isLastSession else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
                                                                             title: L10n.screenSignoutConfirmationDialogTitle,
                                                                             message: L10n.screenSignoutConfirmationDialogContent,

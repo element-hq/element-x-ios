@@ -29,8 +29,15 @@ class UserSession: UserSessionProtocol {
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
+    
     let callbacks = PassthroughSubject<UserSessionCallback, Never>()
+    
     private(set) var sessionVerificationController: SessionVerificationControllerProxyProtocol?
+    
+    private var sessionVerificationStateSubject: CurrentValueSubject<Bool?, Never> = .init(nil)
+    var sessionVerificationState: CurrentValuePublisher<Bool?, Never> {
+        sessionVerificationStateSubject.asCurrentValuePublisher()
+    }
     
     init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol, voiceMessageMediaManager: VoiceMessageMediaManagerProtocol) {
         self.clientProxy = clientProxy
@@ -64,16 +71,14 @@ class UserSession: UserSessionProtocol {
                 
                 tearDownSessionVerificationControllerWatchdog()
                 
-                if !isVerified {
-                    callbacks.send(.sessionVerificationNeeded)
-                }
-                
                 self.sessionVerificationController = sessionVerificationController
+                
+                sessionVerificationStateSubject.send(isVerified)
                 
                 sessionVerificationController.callbacks.sink { [weak self] callback in
                     switch callback {
                     case .finished:
-                        self?.callbacks.send(.didVerifySession)
+                        self?.sessionVerificationStateSubject.send(true)
                     default:
                         break
                     }

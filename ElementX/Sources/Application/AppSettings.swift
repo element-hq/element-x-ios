@@ -45,7 +45,6 @@ final class AppSettings {
         case shouldCollapseRoomStateEvents
         case userSuggestionsEnabled
         case swiftUITimelineEnabled
-        case chatBackupEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -144,7 +143,13 @@ final class AppSettings {
     /// Any pre-defined static client registrations for OIDC issuers.
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
     /// The redirect URL used for OIDC.
-    let oidcRedirectURL = URL(string: "\(InfoPlistReader.main.appScheme):/callback")!
+    let oidcRedirectURL = {
+        guard let url = URL(string: "\(InfoPlistReader.main.appScheme):/callback") else {
+            fatalError("Invalid OIDC redirect URL")
+        }
+        
+        return url
+    }()
 
     /// The date that the call to `/login` completed successfully. This is used to put
     /// a hard wall on the history of encrypted messages until we have key backup.
@@ -261,9 +266,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.chatBackupEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var chatBackupEnabled
         
     #endif
     

@@ -191,9 +191,9 @@ struct HomeScreen: View {
     @ViewBuilder
     /// The session verification banner and invites button if either are needed.
     private var topSection: some View {
-        if context.viewState.needsSessionVerification {
+        if context.viewState.showSessionVerificationBanner {
             HomeScreenSessionVerificationBanner(context: context)
-        } else if context.viewState.needsRecoveryKeyConfirmation {
+        } else if context.viewState.showRecoveryKeyConfirmationBanner {
             HomeScreenRecoveryKeyConfirmationBanner(context: context)
         }
         

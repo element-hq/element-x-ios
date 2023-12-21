@@ -88,7 +88,7 @@ struct SettingsScreen: View {
                     ListRow(label: .default(title: L10n.actionCompleteVerification,
                                             icon: \.checkCircle),
                             kind: .button { context.send(viewAction: .sessionVerification) })
-                } else if context.viewState.chatBackupEnabled {
+                } else {
                     ListRow(label: .default(title: L10n.commonChatBackup,
                                             icon: Image(asset: Asset.Images.secureBackupIcon)),
                             details: context.viewState.showSecureBackupBadge ? .icon(secureBackupBadge) : nil,

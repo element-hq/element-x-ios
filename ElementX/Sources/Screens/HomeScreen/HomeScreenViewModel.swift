@@ -31,7 +31,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let visibleItemRangePublisher = CurrentValueSubject<(range: Range<Int>, isScrolling: Bool), Never>((0..<0, false))
     
     private var actionsSubject: PassthroughSubject<HomeScreenViewModelAction, Never> = .init()
-    
     var actions: AnyPublisher<HomeScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -50,20 +49,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         super.init(initialViewState: .init(userID: userSession.userID),
                    imageProvider: userSession.mediaProvider)
         
-        userSession.callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                switch callback {
-                case .sessionVerificationNeeded:
-                    self?.state.needsSessionVerification = true
-                case .didVerifySession:
-                    self?.state.needsSessionVerification = false
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
-
         userSession.clientProxy.userAvatarURL
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userAvatarURL, on: self)
@@ -74,15 +59,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
+        userSession.sessionVerificationState
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.isSessionVerified, on: self)
+            .store(in: &cancellables)
+        
         userSession.clientProxy.secureBackupController.recoveryKeyState
             .receive(on: DispatchQueue.main)
             .sink { [weak self] recoveryKeyState in
-                guard let self, appSettings.chatBackupEnabled else { return }
+                guard let self else { return }
                 
                 let requiresSecureBackupSetup = recoveryKeyState == .disabled || recoveryKeyState == .incomplete
-                
-                state.showUserMenuBadge = requiresSecureBackupSetup
-                state.showSettingsMenuOptionBadge = requiresSecureBackupSetup
+                state.requiresSecureBackupSetup = requiresSecureBackupSetup
                 
                 state.needsRecoveryKeyConfirmation = recoveryKeyState == .incomplete
             }
@@ -138,9 +126,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .confirmRecoveryKey:
             actionsSubject.send(.presentSecureBackupSettings)
         case .skipSessionVerification:
-            state.needsSessionVerification = false
+            state.hasSessionVerificationBannerBeenDismissed = true
         case .skipRecoveryKeyConfirmation:
-            state.needsRecoveryKeyConfirmation = false
+            state.hasRecoveryKeyConfirmationBannerBeenDismissed = true
         case .updateVisibleItemRange(let range, let isScrolling):
             visibleItemRangePublisher.send((range, isScrolling))
         case .startChat:
