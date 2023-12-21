@@ -129,7 +129,7 @@ struct HomeScreenRoomCell: View {
                 }
                 
                 if room.hasMentions, room.notificationMode != .mute {
-                    atIcon
+                    mentionIcon
                         .foregroundColor(.compound.iconAccentTertiary)
                 }
                 
@@ -149,7 +149,7 @@ struct HomeScreenRoomCell: View {
         return ((room.notificationMode == nil || room.notificationMode == .allMessages) && room.hasUnreads) || (room.notificationMode == .mentionsAndKeywordsOnly && room.hasMentions)
     }
     
-    private var atIcon: some View {
+    private var mentionIcon: some View {
         CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
             .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
     }
