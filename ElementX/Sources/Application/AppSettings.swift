@@ -143,7 +143,13 @@ final class AppSettings {
     /// Any pre-defined static client registrations for OIDC issuers.
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
     /// The redirect URL used for OIDC.
-    let oidcRedirectURL = URL(string: "\(InfoPlistReader.main.appScheme):/callback")!
+    let oidcRedirectURL = {
+        guard let url = URL(string: "\(InfoPlistReader.main.appScheme):/callback") else {
+            fatalError("Invalid OIDC redirect URL")
+        }
+        
+        return url
+    }()
 
     /// The date that the call to `/login` completed successfully. This is used to put
     /// a hard wall on the history of encrypted messages until we have key backup.
