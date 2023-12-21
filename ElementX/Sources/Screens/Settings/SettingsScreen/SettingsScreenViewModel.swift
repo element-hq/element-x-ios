@@ -44,6 +44,11 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
+        userSession.sessionVerificationState
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.isSessionVerified, on: self)
+            .store(in: &cancellables)
+        
         userSession.clientProxy.secureBackupController.recoveryKeyState
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
@@ -56,26 +61,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         Task {
             await userSession.clientProxy.loadUserAvatarURL()
             await userSession.clientProxy.loadUserDisplayName()
-            
-            if let sessionVerificationController = userSession.sessionVerificationController,
-               case let .success(isVerified) = await sessionVerificationController.isVerified() {
-                state.isSessionVerified = isVerified
-            }
         }
-        
-        userSession.callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                switch callback {
-                case .sessionVerificationNeeded:
-                    self?.state.isSessionVerified = false
-                case .didVerifySession:
-                    self?.state.isSessionVerified = true
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
     }
     
     override func process(viewAction: SettingsScreenViewAction) {

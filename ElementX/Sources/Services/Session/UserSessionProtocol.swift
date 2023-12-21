@@ -18,8 +18,6 @@ import Combine
 import Foundation
 
 enum UserSessionCallback {
-    case sessionVerificationNeeded
-    case didVerifySession
     case didReceiveAuthError(isSoftLogout: Bool)
 }
 
@@ -32,6 +30,7 @@ protocol UserSessionProtocol {
     var mediaProvider: MediaProviderProtocol { get }
     var voiceMessageMediaManager: VoiceMessageMediaManagerProtocol { get }
     
+    var sessionVerificationState: CurrentValuePublisher<Bool?, Never> { get }
     var sessionVerificationController: SessionVerificationControllerProxyProtocol? { get }
     
     var callbacks: PassthroughSubject<UserSessionCallback, Never> { get }

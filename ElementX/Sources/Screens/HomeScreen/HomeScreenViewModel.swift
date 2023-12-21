@@ -31,7 +31,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let visibleItemRangePublisher = CurrentValueSubject<(range: Range<Int>, isScrolling: Bool), Never>((0..<0, false))
     
     private var actionsSubject: PassthroughSubject<HomeScreenViewModelAction, Never> = .init()
-    
     var actions: AnyPublisher<HomeScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -50,22 +49,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         super.init(initialViewState: .init(userID: userSession.userID),
                    imageProvider: userSession.mediaProvider)
         
-        userSession.callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                switch callback {
-                case .sessionVerificationNeeded:
-                    self?.state.isSessionVerified = false
-                    self?.state.showSessionVerificationBanner = true
-                case .didVerifySession:
-                    self?.state.isSessionVerified = true
-                    self?.state.showSessionVerificationBanner = false
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
-
         userSession.clientProxy.userAvatarURL
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userAvatarURL, on: self)
@@ -74,6 +57,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         userSession.clientProxy.userDisplayName
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userDisplayName, on: self)
+            .store(in: &cancellables)
+        
+        userSession.sessionVerificationState
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isVerified in
+                guard let self else { return }
+                self.state.isSessionVerified = isVerified
+                
+                if let isVerified {
+                    self.state.showSessionVerificationBanner = !isVerified
+                }
+            }
             .store(in: &cancellables)
         
         userSession.clientProxy.secureBackupController.recoveryKeyState
