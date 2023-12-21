@@ -34,7 +34,7 @@ struct RoomSummaryDetails {
 
 extension RoomSummaryDetails: CustomStringConvertible {
     var description: String {
-        "RoomSummaryDetails: \(name) - id: \(id) - isDirect: \(isDirect) - unreadMessagesCount: \(unreadMessagesCount) - unreadMentionsCount: \(unreadMentionsCount) - notificationMode: \(notificationMode?.rawValue ?? "nil") - canonicalAlias: \(canonicalAlias ?? "nil") - inviter: \(inviter?.displayName ?? "nil") - hasOngoingCall: \(hasOngoingCall)"
+        "RoomSummaryDetails: - id: \(id) - isDirect: \(isDirect) - unreadMessagesCount: \(unreadMessagesCount) - unreadMentionsCount: \(unreadMentionsCount) - notificationMode: \(notificationMode?.rawValue ?? "nil")"
     }
 }
 

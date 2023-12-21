@@ -119,7 +119,7 @@ struct HomeScreenRoomCell: View {
             HStack(spacing: 8) {
                 if room.hasOngoingCall {
                     CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
-                        .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+                        .foregroundColor(isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
                 }
                  
                 if room.notificationMode == .mute {
@@ -143,7 +143,10 @@ struct HomeScreenRoomCell: View {
     }
     
     private var isHighlighted: Bool {
-        (room.notificationMode == nil || room.notificationMode == .allMessages && room.hasUnreads) || (room.notificationMode == .mentionsAndKeywordsOnly && room.hasMentions)
+        guard !room.isPlaceholder else {
+            return false
+        }
+        return ((room.notificationMode == nil || room.notificationMode == .allMessages) && room.hasUnreads) || (room.notificationMode == .mentionsAndKeywordsOnly && room.hasMentions)
     }
     
     private var atIcon: some View {
