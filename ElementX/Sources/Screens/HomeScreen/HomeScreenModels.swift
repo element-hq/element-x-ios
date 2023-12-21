@@ -128,6 +128,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var hasUnreads = false
     
+    var hasMentions = false
+    
     var hasOngoingCall = false
     
     var timestamp: String?
@@ -145,6 +147,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        roomId: nil,
                        name: "Placeholder room name",
                        hasUnreads: false,
+                       hasMentions: false,
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
                        isPlaceholder: true)

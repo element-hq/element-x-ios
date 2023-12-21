@@ -95,8 +95,8 @@ struct HomeScreenRoomCell: View {
             
             if let timestamp = room.timestamp {
                 Text(timestamp)
-                    .font(room.hasUnreads ? .compound.bodySMSemibold : .compound.bodySM)
-                    .foregroundColor(room.hasUnreads ? .compound.textActionAccent : .compound.textSecondary)
+                    .font(isHighlighted ? .compound.bodySMSemibold : .compound.bodySM)
+                    .foregroundColor(isHighlighted ? .compound.textActionAccent : .compound.textSecondary)
             }
         }
     }
@@ -119,33 +119,48 @@ struct HomeScreenRoomCell: View {
             HStack(spacing: 8) {
                 if room.hasOngoingCall {
                     CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
-                        .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+                        .foregroundColor(isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+                }
+                 
+                if room.notificationMode == .mute {
+                    CompoundIcon(\.notificationsSolidOff, size: .custom(15), relativeTo: .compound.bodyMD)
+                        .accessibilityLabel(L10n.a11yNotificationsMuted)
+                        .foregroundColor(.compound.iconQuaternary)
                 }
                 
-                notificationModeIcon
-                    .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+                if room.hasMentions, room.notificationMode != .mute {
+                    mentionIcon
+                        .foregroundColor(.compound.iconAccentTertiary)
+                }
                 
-                if room.hasUnreads {
+                if hasNewContent {
                     Circle()
                         .frame(width: 12, height: 12)
-                        .foregroundColor(.compound.iconAccentTertiary)
+                        .foregroundColor(isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
                 }
             }
         }
     }
     
-    @ViewBuilder
-    private var notificationModeIcon: some View {
-        switch room.notificationMode {
-        case .none, .allMessages:
-            EmptyView()
-        case .mentionsAndKeywordsOnly:
-            CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
-                .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
-        case .mute:
-            CompoundIcon(\.notificationsSolidOff, size: .custom(15), relativeTo: .compound.bodyMD)
-                .accessibilityLabel(L10n.a11yNotificationsMuted)
+    private var hasNewContent: Bool {
+        room.hasUnreads || room.hasMentions
+    }
+    
+    private var isHighlighted: Bool {
+        guard !room.isPlaceholder else {
+            return false
         }
+        return (isNotificationModeUnrestricted && hasNewContent) ||
+            (room.notificationMode == .mentionsAndKeywordsOnly && room.hasMentions)
+    }
+    
+    private var isNotificationModeUnrestricted: Bool {
+        room.notificationMode == nil || room.notificationMode == .allMessages
+    }
+        
+    private var mentionIcon: some View {
+        CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
+            .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
     }
     
     @ViewBuilder
@@ -178,41 +193,67 @@ private extension View {
 }
 
 struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
-    static var previews: some View {
-        let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
-
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe", roomSummaryProvider: summaryProvider),
+    static let summaryProviderGeneric = MockRoomSummaryProvider(state: .loaded(.mockRooms))
+    static let viewModelGeneric = {
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe", roomSummaryProvider: summaryProviderGeneric),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 
-        let viewModel = HomeScreenViewModel(userSession: userSession,
-                                            selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                            appSettings: ServiceLocator.shared.settings,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
-        
-        let rooms: [HomeScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary -> HomeScreenRoom? in
-            switch summary {
-            case .empty:
-                return nil
-            case .invalidated(let details), .filled(let details):
-                return HomeScreenRoom(id: UUID().uuidString,
-                                      roomId: details.id,
-                                      name: details.name,
-                                      hasUnreads: details.unreadNotificationCount > 0,
-                                      hasOngoingCall: details.hasOngoingCall,
-                                      timestamp: Date(timeIntervalSinceReferenceDate: 0).formattedMinimal(),
-                                      lastMessage: details.lastMessage,
-                                      notificationMode: details.notificationMode)
-            }
-        }
+        return HomeScreenViewModel(userSession: userSession,
+                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   appSettings: ServiceLocator.shared.settings,
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+    }()
+    
+    static let summaryProviderForNotificationsState = MockRoomSummaryProvider(state: .loaded(.mockRoomsWithNotificationsState))
+    static let viewModelForNotificationsState = {
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe", roomSummaryProvider: summaryProviderForNotificationsState),
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 
-        return VStack(spacing: 0) {
-            ForEach(rooms) { room in
-                HomeScreenRoomCell(room: room, context: viewModel.context, isSelected: false)
+        return HomeScreenViewModel(userSession: userSession,
+                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   appSettings: ServiceLocator.shared.settings,
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+    }()
+    
+    static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
+        switch summary {
+        case .empty:
+            return nil
+        case .invalidated(let details), .filled(let details):
+            return HomeScreenRoom(id: UUID().uuidString,
+                                  roomId: details.id,
+                                  name: details.name,
+                                  hasUnreads: details.unreadMessagesCount > 0, hasMentions: details.unreadMentionsCount > 0,
+                                  hasOngoingCall: details.hasOngoingCall,
+                                  timestamp: Date(timeIntervalSinceReferenceDate: 0).formattedMinimal(),
+                                  lastMessage: details.lastMessage,
+                                  notificationMode: details.notificationMode)
+        }
+    }
+    
+    static var previews: some View {
+        let genericRooms: [HomeScreenRoom] = summaryProviderGeneric.roomListPublisher.value.compactMap(mockRoom)
+        
+        let notificationsStateRooms: [HomeScreenRoom] = summaryProviderForNotificationsState.roomListPublisher.value.compactMap(mockRoom)
+
+        VStack(spacing: 0) {
+            ForEach(genericRooms) { room in
+                HomeScreenRoomCell(room: room, context: viewModelGeneric.context, isSelected: false)
             }
             
-            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
+            HomeScreenRoomCell(room: .placeholder(), context: viewModelGeneric.context, isSelected: false)
                 .redacted(reason: .placeholder)
         }
+        .previewDisplayName("Generic")
+        
+        VStack(spacing: 0) {
+            ForEach(notificationsStateRooms) { room in
+                HomeScreenRoomCell(room: room, context: viewModelForNotificationsState.context, isSelected: false)
+            }
+        }
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Notifications State")
     }
 }
