@@ -300,8 +300,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
         let identifier = invalidated ? "invalidated-" + details.id : details.id
         
-        let notificationMode = details.notificationMode == .allMessages ? nil : details.notificationMode
-        
         return HomeScreenRoom(id: identifier,
                               roomId: details.id,
                               name: details.name,
@@ -311,7 +309,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                               timestamp: details.lastMessageFormattedTimestamp,
                               lastMessage: details.lastMessage,
                               avatarURL: details.avatarURL,
-                              notificationMode: notificationMode)
+                              notificationMode: details.notificationMode)
     }
     
     private func updateVisibleRange(_ range: Range<Int>) {
