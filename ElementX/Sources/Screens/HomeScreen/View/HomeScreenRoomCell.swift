@@ -133,7 +133,7 @@ struct HomeScreenRoomCell: View {
                         .foregroundColor(.compound.iconAccentTertiary)
                 }
                 
-                if room.hasUnreads {
+                if hasNewContent {
                     Circle()
                         .frame(width: 12, height: 12)
                         .foregroundColor(isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
@@ -142,13 +142,22 @@ struct HomeScreenRoomCell: View {
         }
     }
     
+    private var hasNewContent: Bool {
+        room.hasUnreads || room.hasMentions
+    }
+    
     private var isHighlighted: Bool {
         guard !room.isPlaceholder else {
             return false
         }
-        return ((room.notificationMode == nil || room.notificationMode == .allMessages) && room.hasUnreads) || (room.notificationMode == .mentionsAndKeywordsOnly && room.hasMentions)
+        return (isNotificationModeUnrestricted && hasNewContent) ||
+            (room.notificationMode == .mentionsAndKeywordsOnly && room.hasMentions)
     }
     
+    private var isNotificationModeUnrestricted: Bool {
+        room.notificationMode == nil || room.notificationMode == .allMessages
+    }
+        
     private var mentionIcon: some View {
         CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
             .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
@@ -239,13 +248,12 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("Generic")
         
-        ScrollView {
-            VStack(spacing: 0) {
-                ForEach(notificationsStateRooms) { room in
-                    HomeScreenRoomCell(room: room, context: viewModelForNotificationsState.context, isSelected: false)
-                }
+        VStack(spacing: 0) {
+            ForEach(notificationsStateRooms) { room in
+                HomeScreenRoomCell(room: room, context: viewModelForNotificationsState.context, isSelected: false)
             }
         }
+        .previewLayout(.sizeThatFits)
         .previewDisplayName("Notifications State")
     }
 }
