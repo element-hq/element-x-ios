@@ -55,9 +55,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .sink { [weak self] callback in
                 switch callback {
                 case .sessionVerificationNeeded:
-                    self?.state.needsSessionVerification = true
+                    self?.state.isSessionVerified = false
+                    self?.state.showSessionVerificationBanner = true
                 case .didVerifySession:
-                    self?.state.needsSessionVerification = false
+                    self?.state.isSessionVerified = true
+                    self?.state.showSessionVerificationBanner = false
                 default:
                     break
                 }
@@ -81,10 +83,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 
                 let requiresSecureBackupSetup = recoveryKeyState == .disabled || recoveryKeyState == .incomplete
                 
-                state.showUserMenuBadge = requiresSecureBackupSetup
-                state.showSettingsMenuOptionBadge = requiresSecureBackupSetup
+                state.requiresSecureBackupSetup = requiresSecureBackupSetup
                 
-                state.needsRecoveryKeyConfirmation = recoveryKeyState == .incomplete
+                state.showRecoveryKeyConfirmationBanner = recoveryKeyState == .incomplete
             }
             .store(in: &cancellables)
         
@@ -138,9 +139,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .confirmRecoveryKey:
             actionsSubject.send(.presentSecureBackupSettings)
         case .skipSessionVerification:
-            state.needsSessionVerification = false
+            state.showSessionVerificationBanner = false
         case .skipRecoveryKeyConfirmation:
-            state.needsRecoveryKeyConfirmation = false
+            state.showRecoveryKeyConfirmationBanner = false
         case .updateVisibleItemRange(let range, let isScrolling):
             visibleItemRangePublisher.send((range, isScrolling))
         case .startChat:
