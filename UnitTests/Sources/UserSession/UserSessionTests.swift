@@ -32,12 +32,9 @@ final class UserSessionTests: XCTestCase {
 
     func test_whenUserSessionReceivesSyncUpdateAndSessionControllerRetrievedAndSessionNotVerified_sessionVerificationNeededEventReceived() throws {
         let expectation = expectation(description: "SessionVerificationNeeded expectation")
-        userSession.callbacks.sink { callback in
-            switch callback {
-            case .sessionVerificationNeeded:
+        userSession.sessionVerificationState.sink { isVerified in
+            if let isVerified, isVerified == false {
                 expectation.fulfill()
-            default:
-                break
             }
         }
         .store(in: &cancellables)
