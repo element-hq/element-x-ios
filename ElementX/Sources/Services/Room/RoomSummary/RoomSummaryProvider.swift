@@ -238,14 +238,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         let notificationMode = roomInfo.userDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
-        
+        MXLog.info("roomInfo: \(roomInfo)")
         let details = RoomSummaryDetails(id: roomInfo.id,
                                          name: roomInfo.name ?? roomInfo.id,
                                          isDirect: roomInfo.isDirect,
                                          avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
-                                         unreadMessagesCount: UInt(roomInfo.numUnreadMessages),
+                                         unreadMessagesCount: UInt(roomInfo.notificationCount),
                                          unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
                                          notificationMode: notificationMode,
                                          canonicalAlias: roomInfo.canonicalAlias,
