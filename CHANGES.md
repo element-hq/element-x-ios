@@ -1,3 +1,30 @@
+## Changes in 1.5.0 (2023-12-21)
+
+✨ Features
+
+- When mentioned in a room, the room list will display a green at symbol for that room. ([#1823](https://github.com/element-hq/element-x-ios/issues/1823))
+- The poll history can be viewed in the room details. ([#2230](https://github.com/element-hq/element-x-ios/issues/2230))
+
+🙌 Improvements
+
+- Add notification toggle for invitations. ([#2205](https://github.com/element-hq/element-x-ios/issues/2205))
+- Removed redundant options from the home menu. ([#2250](https://github.com/element-hq/element-x-ios/issues/2250))
+
+🐛 Bugfixes
+
+- Don't keep throwing an error each time the user dismisses the error's alert when sharing a location. ([#2233](https://github.com/element-hq/element-x-ios/pull/2233))
+- Fix for plain text mode, using the RTE markdown to html conversion properly. ([#2246](https://github.com/element-hq/element-x-ios/pull/2246))
+- Detect links in room detail topics and make it more obvious when the text is truncated ([#2210](https://github.com/element-hq/element-x-ios/issues/2210))
+- Poll title is displayed in multiline when creating a poll. ([#2215](https://github.com/element-hq/element-x-ios/issues/2215))
+- Fix timeline thumbnail frames for media missing sizing info ([#2253](https://github.com/element-hq/element-x-ios/issues/2253))
+- Fix flipped notification placeholder avatars on iOS 17.2+ ([#2259](https://github.com/element-hq/element-x-ios/issues/2259))
+- Options in poll form creation can be multiline. ([#2273](https://github.com/element-hq/element-x-ios/issues/2273))
+
+🧱 Build
+
+- Update most references of the old vector-im organisation to the new element-hq one. ([#2231](https://github.com/element-hq/element-x-ios/pull/2231))
+- Add support for InfoPlist.strings conversion from Localazy. ([#2100](https://github.com/element-hq/element-x-ios/issues/2100))
+
 ## Changes in 1.4.3 (2023-12-05)
 
 ✨ Features
