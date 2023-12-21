@@ -1,0 +1,1 @@
+When mentioned in a room, the room list will display a green at symbol for that room.
