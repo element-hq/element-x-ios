@@ -238,7 +238,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         let notificationMode = roomInfo.userDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
-        MXLog.info("roomInfo: \(roomInfo)")
+        
         let details = RoomSummaryDetails(id: roomInfo.id,
                                          name: roomInfo.name ?? roomInfo.id,
                                          isDirect: roomInfo.isDirect,

@@ -29,7 +29,7 @@ settings:
   APP_NAME: ElementX
   APP_DISPLAY_NAME: Element X
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
-  MARKETING_VERSION: 1.5.1
+  MARKETING_VERSION: 1.5.2
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
   SUPPORTS_MACCATALYST: NO
@@ -47,7 +47,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.1.30
+    exactVersion: 0.0.1-december23
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios

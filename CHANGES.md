@@ -1,3 +1,8 @@
+## Changes in 1.5.1 (2023-12-22)
+
+No significant changes.
+
+
 ## Changes in 1.5.0 (2023-12-21)
 
 ✨ Features
