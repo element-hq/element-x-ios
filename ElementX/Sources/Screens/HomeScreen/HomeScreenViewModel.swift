@@ -287,18 +287,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
         let identifier = invalidated ? "invalidated-" + details.id : details.id
-        
-        let notificationMode = details.notificationMode == .allMessages ? nil : details.notificationMode
+        let hasMentions = appSettings.mentionsBadgeEnabled ? details.unreadMentionsCount > 0 : false
         
         return HomeScreenRoom(id: identifier,
                               roomId: details.id,
                               name: details.name,
-                              hasUnreads: details.unreadNotificationCount > 0,
+                              hasUnreads: details.unreadMessagesCount > 0,
+                              hasMentions: hasMentions,
                               hasOngoingCall: details.hasOngoingCall,
                               timestamp: details.lastMessageFormattedTimestamp,
                               lastMessage: details.lastMessage,
                               avatarURL: details.avatarURL,
-                              notificationMode: notificationMode)
+                              notificationMode: details.notificationMode)
     }
     
     private func updateVisibleRange(_ range: Range<Int>) {
