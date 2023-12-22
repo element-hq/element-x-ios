@@ -1,0 +1,1 @@
+Added back the mention badge option but only behind a feature flag.
