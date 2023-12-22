@@ -49,6 +49,13 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("Mentions") {
+                Toggle(isOn: $context.mentionsBadgeEnabled) {
+                    Text("Mentions badge")
+                    Text("Requires app reboot")
+                }
+            }
+            
             Section("Element Call") {
                 TextField(context.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
                     .submitLabel(.done)

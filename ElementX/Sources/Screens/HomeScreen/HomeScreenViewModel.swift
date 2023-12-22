@@ -287,12 +287,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
         let identifier = invalidated ? "invalidated-" + details.id : details.id
+        let hasMentions = appSettings.mentionsBadgeEnabled ? details.unreadMentionsCount > 0 : false
         
         return HomeScreenRoom(id: identifier,
                               roomId: details.id,
                               name: details.name,
                               hasUnreads: details.unreadMessagesCount > 0,
-                              hasMentions: details.unreadMentionsCount > 0,
+                              hasMentions: hasMentions,
                               hasOngoingCall: details.hasOngoingCall,
                               timestamp: details.lastMessageFormattedTimestamp,
                               lastMessage: details.lastMessage,

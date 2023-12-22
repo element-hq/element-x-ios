@@ -45,6 +45,7 @@ final class AppSettings {
         case shouldCollapseRoomStateEvents
         case userSuggestionsEnabled
         case swiftUITimelineEnabled
+        case mentionsBadgeEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -266,6 +267,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.mentionsBadgeEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var mentionsBadgeEnabled
         
     #endif
     
