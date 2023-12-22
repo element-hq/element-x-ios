@@ -17,7 +17,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum RoomNotificationModeProxy {
+enum RoomNotificationModeProxy: String {
     case allMessages
     case mentionsAndKeywordsOnly
     case mute

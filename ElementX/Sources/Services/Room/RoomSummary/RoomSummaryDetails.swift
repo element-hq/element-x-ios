@@ -24,7 +24,8 @@ struct RoomSummaryDetails {
     let avatarURL: URL?
     let lastMessage: AttributedString?
     let lastMessageFormattedTimestamp: String?
-    let unreadNotificationCount: UInt
+    let unreadMessagesCount: UInt
+    let unreadMentionsCount: UInt
     let notificationMode: RoomNotificationModeProxy?
     let canonicalAlias: String?
     let inviter: RoomMemberProxyProtocol?
@@ -33,6 +34,24 @@ struct RoomSummaryDetails {
 
 extension RoomSummaryDetails: CustomStringConvertible {
     var description: String {
-        "id: \"\(id)\", isDirect: \"\(isDirect)\", unreadNotificationCount: \"\(unreadNotificationCount)\""
+        "RoomSummaryDetails: - id: \(id) - isDirect: \(isDirect) - unreadMessagesCount: \(unreadMessagesCount) - unreadMentionsCount: \(unreadMentionsCount) - notificationMode: \(notificationMode?.rawValue ?? "nil")"
+    }
+}
+
+extension RoomSummaryDetails {
+    init(id: String, settingsMode: RoomNotificationModeProxy, hasUnreadMessages: Bool, hasUnreadMentions: Bool) {
+        self.id = id
+        let string = "\(settingsMode) - hasUnreadMessages: \(hasUnreadMessages) - hasUnreadMentions: \(hasUnreadMentions)"
+        name = string
+        isDirect = true
+        avatarURL = nil
+        lastMessage = AttributedString(string)
+        lastMessageFormattedTimestamp = "Now"
+        unreadMessagesCount = hasUnreadMessages ? 1 : 0
+        unreadMentionsCount = hasUnreadMentions ? 1 : 0
+        notificationMode = settingsMode
+        canonicalAlias = nil
+        inviter = nil
+        hasOngoingCall = false
     }
 }
