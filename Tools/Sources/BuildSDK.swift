@@ -97,6 +97,12 @@ struct BuildSDK: ParsableCommand {
         if let target {
             buildCommand.append(" --only-target \(target.rawValue)")
         }
+        switch profile {
+        case .debug, .reldbg:
+            buildCommand.append(" --build-mocks true")
+        default:
+            buildCommand.append(" --build-mocks false")
+        }
         try Utilities.zsh(buildCommand, workingDirectoryURL: Utilities.sdkDirectoryURL)
     }
     
