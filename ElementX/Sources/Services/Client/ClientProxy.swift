@@ -102,7 +102,8 @@ class ClientProxy: ClientProxyProtocol {
     init(client: ClientProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol,
          appSettings: AppSettings,
-         networkMonitor: NetworkMonitorProtocol) async {
+         networkMonitor: NetworkMonitorProtocol,
+         secureBackupController: SecureBackupControllerProtocol? = nil) async {
         self.client = client
         self.backgroundTaskService = backgroundTaskService
         self.appSettings = appSettings
@@ -115,7 +116,7 @@ class ClientProxy: ClientProxyProtocol {
         notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings(),
                                                          backgroundTaskService: backgroundTaskService)
         
-        secureBackupController = SecureBackupController(encryption: client.encryption())
+        self.secureBackupController = secureBackupController ?? SecureBackupController(encryption: client.encryption())
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
