@@ -642,6 +642,8 @@
 "state_event_room_name_changed_by_you" = "Ați schimbat numele camerei în: %1$@";
 "state_event_room_name_removed" = "%1$@ a sters numele camerei";
 "state_event_room_name_removed_by_you" = "Ați șters numele camerei";
+"state_event_room_none" = "%1$@ made no changes";
+"state_event_room_none_by_you" = "You made no changes";
 "state_event_room_reject" = "%1$@ a respins invitația";
 "state_event_room_reject_by_you" = "Ați respins invitația";
 "state_event_room_remove" = "%1$@ l-a îndepărtat pe %2$@";

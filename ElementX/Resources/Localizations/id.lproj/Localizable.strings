@@ -49,8 +49,8 @@
 "action_forgot_password" = "Lupa kata sandi?";
 "action_forward" = "Teruskan";
 "action_invite" = "Undang";
-"action_invite_friends" = "Undang teman";
-"action_invite_friends_to_app" = "Undang teman ke %1$@";
+"action_invite_friends" = "Undang orang-orang";
+"action_invite_friends_to_app" = "Undang orang-orang ke %1$@";
 "action_invite_people_to_app" = "Undang orang-orang ke %1$@";
 "action_invites_list" = "Undangan";
 "action_join" = "Gabung";
@@ -369,7 +369,7 @@
 "screen_create_poll_question_hint" = "Tentang apa pemungutan suara ini?";
 "screen_create_poll_title" = "Buat pemungutan suara";
 "screen_create_room_action_create_room" = "Ruangan baru";
-"screen_create_room_action_invite_people" = "Undang teman ke Element";
+"screen_create_room_action_invite_people" = "Undang orang-orang ke Element";
 "screen_create_room_add_people_title" = "Undang seseorang";
 "screen_create_room_error_creating_room" = "Terjadi kesalahan saat membuat ruangan";
 "screen_create_room_private_option_description" = "Pesan di ruangan ini dienkripsi. Enkripsi tidak dapat dinonaktifkan setelahnya.";
@@ -445,11 +445,11 @@
 "screen_onboarding_welcome_message" = "Selamat datang di Element tercepat yang pernah ada. Berdaya besar untuk kecepatan dan kesederhanaan.";
 "screen_onboarding_welcome_subtitle" = "Selamat datang di %1$@. Berdaya penuh, untuk kecepatan dan kesederhanaan.";
 "screen_onboarding_welcome_title" = "Berada di elemen Anda";
-"screen_polls_history_empty_ongoing" = "Can't find any ongoing polls.";
-"screen_polls_history_empty_past" = "Can't find any past polls.";
-"screen_polls_history_filter_ongoing" = "Ongoing";
-"screen_polls_history_filter_past" = "Past";
-"screen_polls_history_title" = "Polls";
+"screen_polls_history_empty_ongoing" = "Tidak dapat menemukan pemungutan suara yang sedang berlangsung.";
+"screen_polls_history_empty_past" = "Tidak dapat menemukan pemungutan suara sebelumnya.";
+"screen_polls_history_filter_ongoing" = "Sedang berlangsung";
+"screen_polls_history_filter_past" = "Masa lalu";
+"screen_polls_history_title" = "Pemungutan suara";
 "screen_recovery_key_change_description" = "Dapatkan kunci pemulihan yang baru jika Anda kehilangan kunci pemulihan saat ini. Setelah mengganti kunci pemulihan Anda, yang lama tidak akan bekerja lagi.";
 "screen_recovery_key_change_generate_key" = "Buat kunci pemulihan baru";
 "screen_recovery_key_change_generate_key_description" = "Pastikan Anda dapat menyimpan kunci pemulihan Anda di tempat yang aman";
@@ -550,8 +550,8 @@
 "screen_session_verification_cancelled_subtitle" = "Sepertinya ada yang tidak beres. Entah permintaan sudah habis masa berlakunya atau permintaan ditolak.";
 "screen_session_verification_compare_emojis_subtitle" = "Konfirmasikan bahwa emoji di bawah ini sesuai dengan yang ditampilkan pada sesi Anda yang lain.";
 "screen_session_verification_compare_emojis_title" = "Bandingkan emoji";
-"screen_session_verification_compare_numbers_subtitle" = "Confirm that the numbers below match those shown on your other session.";
-"screen_session_verification_compare_numbers_title" = "Compare numbers";
+"screen_session_verification_compare_numbers_subtitle" = "Konfirmasikan bahwa angka-angka di bawah ini sesuai dengan yang ditampilkan pada sesi Anda yang lain.";
+"screen_session_verification_compare_numbers_title" = "Bandingkan angka";
 "screen_session_verification_complete_subtitle" = "Sesi baru Anda sekarang diverifikasi. Ini memiliki akses ke pesan terenkripsi Anda, dan pengguna lain akan melihatnya sebagai tepercaya.";
 "screen_session_verification_open_existing_session_subtitle" = "Buktikan bahwa ini memang Anda untuk mengakses riwayat pesan terenkripsi Anda.";
 "screen_session_verification_open_existing_session_title" = "Buka sesi yang sudah ada";
@@ -642,6 +642,8 @@
 "state_event_room_name_changed_by_you" = "Anda mengubah nama ruangan menjadi: %1$@";
 "state_event_room_name_removed" = "%1$@ menghapus nama ruangan";
 "state_event_room_name_removed_by_you" = "Anda menghapus nama ruangan";
+"state_event_room_none" = "%1$@ made no changes";
+"state_event_room_none_by_you" = "You made no changes";
 "state_event_room_reject" = "%1$@ menolak undangan";
 "state_event_room_reject_by_you" = "Anda menolak undangan";
 "state_event_room_remove" = "%1$@ mengeluarkan %2$@";

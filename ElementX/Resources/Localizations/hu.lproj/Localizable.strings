@@ -642,6 +642,8 @@
 "state_event_room_name_changed_by_you" = "Megváltoztatta a szoba nevét: %1$@";
 "state_event_room_name_removed" = "%1$@ eltávolította a szoba nevét";
 "state_event_room_name_removed_by_you" = "Eltávolította a szoba nevét";
+"state_event_room_none" = "%1$@ made no changes";
+"state_event_room_none_by_you" = "You made no changes";
 "state_event_room_reject" = "%1$@ elutasította a meghívást";
 "state_event_room_reject_by_you" = "Elutasította a meghívást";
 "state_event_room_remove" = "%1$@ eltávolította: %2$@";

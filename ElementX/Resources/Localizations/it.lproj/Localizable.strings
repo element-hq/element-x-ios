@@ -49,7 +49,7 @@
 "action_forgot_password" = "Forgot password?";
 "action_forward" = "Forward";
 "action_invite" = "Invita";
-"action_invite_friends" = "Invite friends";
+"action_invite_friends" = "Invite people";
 "action_invite_friends_to_app" = "Invita amici a %1$@";
 "action_invite_people_to_app" = "Invite people to %1$@";
 "action_invites_list" = "Invites";
@@ -642,6 +642,8 @@
 "state_event_room_name_changed_by_you" = "Hai cambiato il nome della stanza in: %1$@";
 "state_event_room_name_removed" = "%1$@ ha rimosso il nome della stanza";
 "state_event_room_name_removed_by_you" = "Hai rimosso il nome della stanza";
+"state_event_room_none" = "%1$@ made no changes";
+"state_event_room_none_by_you" = "You made no changes";
 "state_event_room_reject" = "%1$@ ha rifiutato l'invito";
 "state_event_room_reject_by_you" = "Hai rifiutato l'invito";
 "state_event_room_remove" = "%1$@ ha rimosso %2$@";

@@ -1,4 +1,4 @@
-"Notification" = "Benachrichtigung";
+"Notification" = "Mitteilung";
 "a11y_delete" = "Löschen";
 "a11y_hide_password" = "Passwort verbergen";
 "a11y_jump_to_bottom" = "Nach unten springen";
@@ -23,7 +23,7 @@
 "a11y_voice_message_record" = "Sprachnachricht aufnehmen.";
 "a11y_voice_message_stop_recording" = "Aufnahme beenden";
 "action_accept" = "Akzeptieren";
-"action_add_to_timeline" = "Zur Zeitleiste hinzufügen";
+"action_add_to_timeline" = "Zum Nachrichtenverlauf hinzufügen";
 "action_back" = "Zurück";
 "action_cancel" = "Abbrechen";
 "action_choose_photo" = "Foto auswählen";
@@ -49,8 +49,8 @@
 "action_forgot_password" = "Passwort vergessen?";
 "action_forward" = "Weiter";
 "action_invite" = "Einladen";
-"action_invite_friends" = "Freunde einladen";
-"action_invite_friends_to_app" = "Freunde einladen %1$@";
+"action_invite_friends" = "Personen einladen";
+"action_invite_friends_to_app" = "Zu %1$@ einladen";
 "action_invite_people_to_app" = "Lade Personen in %1$@ ein";
 "action_invites_list" = "Einladungen";
 "action_join" = "Beitreten";
@@ -61,8 +61,8 @@
 "action_manage_devices" = "Geräte verwalten";
 "action_next" = "Weiter";
 "action_no" = "Nein";
-"action_not_now" = "Nicht jetzt";
-"action_ok" = "OK";
+"action_not_now" = "Später";
+"action_ok" = "Ok";
 "action_open_settings" = "Einstellungen öffnen";
 "action_open_with" = "Öffnen mit";
 "action_quick_reply" = "Schnelle Antwort";
@@ -92,7 +92,7 @@
 "action_take_photo" = "Foto machen";
 "action_tap_for_options" = "Für Optionen tippen";
 "action_try_again" = "Erneut versuchen";
-"action_view_source" = "Quelle anzeigen";
+"action_view_source" = "Quellcode anzeigen";
 "action_yes" = "Ja";
 "action.load_more" = "Mehr laden ...";
 "common_about" = "Über";
@@ -109,7 +109,7 @@
 "common_dark" = "Dunkel";
 "common_decryption_error" = "Dekodierungsfehler";
 "common_developer_options" = "Entwickleroptionen";
-"common_direct_chat" = "Direct chat";
+"common_direct_chat" = "Direktnachricht";
 "common_edited_suffix" = "(bearbeitet)";
 "common_editing" = "Bearbeitung";
 "common_emote" = "* %1$@ %2$@";
@@ -146,7 +146,7 @@
 "common_privacy_policy" = "Datenschutz­erklärung";
 "common_reaction" = "Reaktion";
 "common_reactions" = "Reaktionen";
-"common_recovery_key" = "Recovery key";
+"common_recovery_key" = "Wiederherstellungsschlüssel";
 "common_refreshing" = "Wird erneuert...";
 "common_replying_to" = "%1$@ antworten";
 "common_report_a_bug" = "Einen Fehler melden";
@@ -369,7 +369,7 @@
 "screen_create_poll_question_hint" = "Worum geht es bei der Umfrage?";
 "screen_create_poll_title" = "Umfrage erstellen";
 "screen_create_room_action_create_room" = "Neuer Raum";
-"screen_create_room_action_invite_people" = "Freunde zu Element einladen";
+"screen_create_room_action_invite_people" = "Zu Element einladen";
 "screen_create_room_add_people_title" = "Personen einladen";
 "screen_create_room_error_creating_room" = "Beim Erstellen des Raums ist ein Fehler aufgetreten";
 "screen_create_room_private_option_description" = "Die Nachrichten in diesem Raum sind verschlüsselt. Die Verschlüsselung kann nicht nachträglich deaktiviert werden.";
@@ -389,8 +389,8 @@
 "screen_edit_profile_updating_details" = "Profil wird aktualisiert...";
 "screen_invites_decline_chat_message" = "Möchtest du die Einladung zum Betreten von %1$@ wirklich ablehnen?";
 "screen_invites_decline_chat_title" = "Einladung ablehnen";
-"screen_invites_decline_direct_chat_message" = "Bist du sicher, dass du diesen privaten Chat mit %1$@ ablehnen möchtest?";
-"screen_invites_decline_direct_chat_title" = "Chat ablehnen";
+"screen_invites_decline_direct_chat_message" = "Bist du sicher, dass du diese Direktnachricht von %1$@ ablehnen möchtest?";
+"screen_invites_decline_direct_chat_title" = "Einladung ablehnen";
 "screen_invites_empty_list" = "Keine Einladungen";
 "screen_invites_invited_you" = "%1$@ (%2$@) hat dich eingeladen";
 "screen_key_backup_disable_confirmation_action_turn_off" = "Ausschalten";
@@ -418,17 +418,17 @@
 "screen_notification_settings_calls_label" = "Audio- und Videoanrufe";
 "screen_notification_settings_configuration_mismatch" = "Konfiguration stimmt nicht überein";
 "screen_notification_settings_configuration_mismatch_description" = "Wir haben die Einstellungen für Benachrichtigungen vereinfacht, damit die Optionen leichter zu finden sind. Einige benutzerdefinierte Einstellungen, die du in der Vergangenheit gewählt hast, werden hier nicht angezeigt, sind aber immer noch aktiv. Wenn du fortfährst, können sich einige deiner Einstellungen ändern.";
-"screen_notification_settings_direct_chats" = "Direkte Chats";
+"screen_notification_settings_direct_chats" = "Direktnachrichten";
 "screen_notification_settings_edit_custom_settings_section_title" = "Benutzerdefinierte Einstellung pro Chat";
 "screen_notification_settings_edit_failed_updating_default_mode" = "Beim Aktualisieren der Benachrichtigungseinstellungen ist ein Fehler aufgetreten.";
 "screen_notification_settings_edit_mode_all_messages" = "Alle Nachrichten";
 "screen_notification_settings_edit_mode_mentions_and_keywords" = "Nur Erwähnungen und Schlüsselwörter";
-"screen_notification_settings_edit_screen_direct_section_header" = "Bei direkten Chats, benachrichtige mich bei";
+"screen_notification_settings_edit_screen_direct_section_header" = "Benachrichtige mich bei Direktnachrichten über ";
 "screen_notification_settings_edit_screen_group_section_header" = "Bei Gruppenchats benachrichtige mich bei";
 "screen_notification_settings_enable_notifications" = "Benachrichtigungen auf diesem Gerät aktivieren";
 "screen_notification_settings_failed_fixing_configuration" = "Die Konfiguration wurde nicht korrigiert, bitte versuche es erneut.";
 "screen_notification_settings_group_chats" = "Gruppenchats";
-"screen_notification_settings_invite_for_me_label" = "Invitations";
+"screen_notification_settings_invite_for_me_label" = "Einladungen";
 "screen_notification_settings_mentions_only_disclaimer" = "Dein Homeserver unterstützt diese Option in verschlüsselten Räumen nicht. In einigen Räumen wirst du möglicherweise nicht benachrichtigt.";
 "screen_notification_settings_mentions_section_title" = "Erwähnungen";
 "screen_notification_settings_mode_all" = "Alle";
@@ -451,7 +451,7 @@
 "screen_polls_history_filter_past" = "Vergangene";
 "screen_polls_history_title" = "Umfragen";
 "screen_recovery_key_change_description" = "Besorge dir einen neuen Wiederherstellungsschlüssel, wenn du deinen alten verloren hast. Nachdem du deinen Wiederherstellungsschlüssel geändert hast, funktioniert dein alter Schlüssel nicht mehr.";
-"screen_recovery_key_change_generate_key" = "Generate a new recovery key";
+"screen_recovery_key_change_generate_key" = "Erstelle einen neuen Wiederherstellungsschlüssel";
 "screen_recovery_key_change_generate_key_description" = "Stelle sicher, dass du deinen Wiederherstellungsschlüssel an einem sicheren Ort aufbewahren kannst";
 "screen_recovery_key_change_success" = "Wiederherstellungsschlüssel geändert";
 "screen_recovery_key_change_title" = "Wiederherstellungsschlüssel ändern?";
@@ -642,6 +642,8 @@
 "state_event_room_name_changed_by_you" = "Du hast den Raumnamen geändert in: %1$@";
 "state_event_room_name_removed" = "%1$@ hat den Raumnamen entfernt";
 "state_event_room_name_removed_by_you" = "Du hast den Raumnamen entfernt";
+"state_event_room_none" = "%1$@ made no changes";
+"state_event_room_none_by_you" = "You made no changes";
 "state_event_room_reject" = "%1$@ hat die Einladung abgelehnt";
 "state_event_room_reject_by_you" = "Du hast die Einladung abgelehnt";
 "state_event_room_remove" = "%1$@ hat %2$@ entfernt";
@@ -661,7 +663,7 @@
 "test_untranslated_default_language_identifier" = "en";
 "dialog_title_error" = "Fehler";
 "dialog_title_success" = "Erfolg";
-"notification_fallback_content" = "Benachrichtigung";
+"notification_fallback_content" = "Mitteilung";
 "notification_room_action_quick_reply" = "Schnelle Antwort";
 "screen_room_mentions_at_room_title" = "Alle";
 "screen_analytics_settings_help_us_improve" = "Teile anonyme Nutzungsdaten, um uns bei der Identifizierung von Problemen zu helfen.";

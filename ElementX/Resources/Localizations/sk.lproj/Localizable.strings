@@ -49,8 +49,8 @@
 "action_forgot_password" = "Zabudnuté heslo?";
 "action_forward" = "Preposlať";
 "action_invite" = "Pozvať";
-"action_invite_friends" = "Pozvať priateľov";
-"action_invite_friends_to_app" = "Pozvať priateľov do %1$@";
+"action_invite_friends" = "Pozvať ľudí";
+"action_invite_friends_to_app" = "Pozvať ľudí do %1$@";
 "action_invite_people_to_app" = "Pozvať ľudí do %1$@";
 "action_invites_list" = "Pozvánky";
 "action_join" = "Pripojiť sa";
@@ -369,7 +369,7 @@
 "screen_create_poll_question_hint" = "O čom je anketa?";
 "screen_create_poll_title" = "Vytvoriť anketu";
 "screen_create_room_action_create_room" = "Nová miestnosť";
-"screen_create_room_action_invite_people" = "Pozvať priateľov na Element";
+"screen_create_room_action_invite_people" = "Pozvať ľudí na Element";
 "screen_create_room_add_people_title" = "Pozvať ľudí";
 "screen_create_room_error_creating_room" = "Pri vytváraní miestnosti došlo k chybe";
 "screen_create_room_private_option_description" = "Správy v tejto miestnosti sú šifrované. Šifrovanie už potom nie je možné vypnúť.";
@@ -642,6 +642,8 @@
 "state_event_room_name_changed_by_you" = "Zmenili ste názov miestnosti na: %1$@";
 "state_event_room_name_removed" = "%1$@ odstránil/a názov miestnosti";
 "state_event_room_name_removed_by_you" = "Odstránili ste názov miestnosti";
+"state_event_room_none" = "%1$@ nevykonal/a žiadne zmeny";
+"state_event_room_none_by_you" = "Nevykonali ste žiadne zmeny";
 "state_event_room_reject" = "%1$@ odmietol/a pozvánku";
 "state_event_room_reject_by_you" = "Odmietli ste pozvánku";
 "state_event_room_remove" = "%1$@ odstránil/a %2$@";

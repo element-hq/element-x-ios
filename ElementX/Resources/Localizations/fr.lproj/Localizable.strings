@@ -642,6 +642,8 @@
 "state_event_room_name_changed_by_you" = "Vous avez changé le nom du salon en : %1$@";
 "state_event_room_name_removed" = "%1$@ a supprimé le nom du salon";
 "state_event_room_name_removed_by_you" = "Vous avez supprimé le nom du salon";
+"state_event_room_none" = "%1$@ n‘a fait aucun changement visible";
+"state_event_room_none_by_you" = "Vous n‘avez fait aucun changement visible";
 "state_event_room_reject" = "%1$@ a rejeté l’invitation";
 "state_event_room_reject_by_you" = "Vous avez refusé l’invitation";
 "state_event_room_remove" = "%1$@ a supprimé %2$@";
