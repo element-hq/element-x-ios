@@ -642,6 +642,8 @@
 "state_event_room_name_changed_by_you" = "Změnili jste název místnosti na: %1$@";
 "state_event_room_name_removed" = "%1$@ odstranil(a) název místnosti";
 "state_event_room_name_removed_by_you" = "Odstranili jste název místnosti";
+"state_event_room_none" = "%1$@ neprovedl(a) žádné změny";
+"state_event_room_none_by_you" = "Neprovedli jste žádné změny";
 "state_event_room_reject" = "%1$@ pozvánku odmítl(a)";
 "state_event_room_reject_by_you" = "Odmítli jste pozvání";
 "state_event_room_remove" = "%1$@ odebral(a) %2$@";
