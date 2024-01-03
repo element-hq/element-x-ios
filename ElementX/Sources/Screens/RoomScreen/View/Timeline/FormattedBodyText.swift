@@ -93,7 +93,7 @@ struct FormattedBodyText: View {
     /// The attributed components laid out for the bubbles timeline style.
     var bubbleLayout: some View {
         TimelineBubbleLayout(spacing: 8) {
-            ForEach(attributedComponents, id: \.self) { component in
+            ForEach(attributedComponents) { component in
                 // Ignore if the string contains only the layout correction
                 if String(component.attributedString.characters) == layoutDirection.isolateLayoutUnicodeString {
                     EmptyView()
@@ -123,7 +123,7 @@ struct FormattedBodyText: View {
             
             // Make a second iteration through the components adding fixed width blockquotes
             // which are used for layout calculations but won't be rendered.
-            ForEach(attributedComponents, id: \.self) { component in
+            ForEach(attributedComponents) { component in
                 if component.isBlockquote {
                     MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
                         .fixedSize(horizontal: false, vertical: true)
@@ -138,7 +138,7 @@ struct FormattedBodyText: View {
     /// The attributed components laid out for the plain timeline style.
     var plainLayout: some View {
         VStack(alignment: .leading, spacing: 8.0) {
-            ForEach(attributedComponents, id: \.self) { component in
+            ForEach(attributedComponents) { component in
                 if component.isBlockquote {
                     HStack(spacing: 4.0) {
                         Rectangle()
