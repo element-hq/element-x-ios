@@ -24,10 +24,11 @@ class WindowManager: WindowManagerProtocol {
     
     private(set) var mainWindow: UIWindow!
     private(set) var overlayWindow: UIWindow!
+    private(set) var globalSearchWindow: UIWindow!
     private(set) var alternateWindow: UIWindow!
         
     var windows: [UIWindow] {
-        [mainWindow, overlayWindow, alternateWindow]
+        [mainWindow, overlayWindow, globalSearchWindow, alternateWindow]
     }
     
     // periphery:ignore - auto cancels when reassigned
@@ -50,6 +51,11 @@ class WindowManager: WindowManagerProtocol {
         overlayWindow.backgroundColor = .clear
         overlayWindow.isHidden = false
         
+        globalSearchWindow = PassthroughWindow(windowScene: windowScene)
+        globalSearchWindow.tintColor = .compound.textActionPrimary
+        globalSearchWindow.backgroundColor = .clear
+        globalSearchWindow.isHidden = false
+        
         alternateWindow = UIWindow(windowScene: windowScene)
         alternateWindow.tintColor = .compound.textActionPrimary
         
@@ -59,6 +65,9 @@ class WindowManager: WindowManagerProtocol {
     func switchToMain() {
         mainWindow.isHidden = false
         overlayWindow.isHidden = false
+        globalSearchWindow.isHidden = false
+        
+        mainWindow.makeKey()
         
         switchTask = Task {
             // Delay hiding to make sure the main windows are visible.
@@ -83,11 +92,16 @@ class WindowManager: WindowManagerProtocol {
             // Delay hiding to make sure the alternate window is visible.
             try await Task.sleep(for: windowHideDelay)
             
-            overlayWindow.isHidden = true
             mainWindow.isHidden = true
+            overlayWindow.isHidden = true
+            globalSearchWindow.isHidden = true
         }
     }
     
+    func switchToGlobalSearch() {
+        globalSearchWindow.makeKey()
+    }
+
     func setOrientation(_ orientation: UIInterfaceOrientationMask) {
         windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
     }
@@ -103,7 +117,15 @@ private class PassthroughWindow: UIWindow {
             return nil
         }
         
+        guard let rootViewController else {
+            return nil
+        }
+        
+        guard hitView != self else {
+            return nil
+        }
+        
         // If the returned view is the `UIHostingController`'s view, ignore.
-        return rootViewController?.view == hitView ? nil : hitView
+        return rootViewController.view == hitView ? nil : hitView
     }
 }

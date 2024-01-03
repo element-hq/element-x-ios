@@ -94,6 +94,12 @@ struct HomeScreenContent: View {
             .onChange(of: context.viewState.visibleRooms) { _ in
                 updateVisibleRange()
             }
+            .background(
+                Button("", action: {
+                    context.send(viewAction: .globalSearch)
+                })
+                .keyboardShortcut(KeyEquivalent("k"), modifiers: [.command])
+            )
             .scrollDismissesKeyboard(.immediately)
             .scrollDisabled(context.viewState.roomListMode == .skeletons)
             .scrollBounceBehavior(context.viewState.roomListMode == .empty ? .basedOnSize : .automatic)

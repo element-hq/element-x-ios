@@ -31,7 +31,7 @@ class MockClientProxy: ClientProxyProtocol {
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
-    var messageForwardingRoomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+    var alternateRoomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
     var inviteSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
 

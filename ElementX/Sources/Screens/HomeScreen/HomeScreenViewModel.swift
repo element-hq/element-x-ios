@@ -141,6 +141,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             actionsSubject.send(.presentStartChatScreen)
         case .selectInvites:
             actionsSubject.send(.presentInvitesScreen)
+        case .globalSearch:
+            actionsSubject.send(.presentGlobalSearch)
         }
     }
     
