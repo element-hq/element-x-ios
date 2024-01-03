@@ -17,11 +17,15 @@
 import Foundation
 
 /// Represents all reactions of the same type for a single event.
-struct AggregatedReaction: Hashable {
+struct AggregatedReaction: Hashable, Identifiable {
     /// Length at which we ellipsize a reaction key for display
     /// Reactions can be free text, so we need to limit the length
     /// displayed on screen.
     private static let maxDisplayChars = 16
+    
+    var id: String {
+        key
+    }
     
     /// The id of the account owner
     let accountOwnerID: String
@@ -32,9 +36,9 @@ struct AggregatedReaction: Hashable {
 }
 
 /// Details of who sent the reaction
-struct ReactionSender: Hashable {
+struct ReactionSender: Hashable, Identifiable {
     /// The id of the user who sent the reaction
-    let senderID: String
+    let id: String
     /// The time that the reaction was received on the original homeserver
     let timestamp: Date
 }
@@ -47,7 +51,7 @@ extension AggregatedReaction {
     
     /// Whether to highlight the reaction, indicating that the current user sent this reaction.
     var isHighlighted: Bool {
-        senders.contains(where: { $0.senderID == accountOwnerID })
+        senders.contains(where: { $0.id == accountOwnerID })
     }
     
     /// The key to be displayed on screen. See `maxDisplayChars`.

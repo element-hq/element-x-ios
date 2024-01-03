@@ -37,11 +37,10 @@ struct ReactionsSummaryView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             ScrollViewReader { scrollView in
                 HStack(spacing: 8) {
-                    ForEach(reactions, id: \.self) { reaction in
+                    ForEach(reactions) { reaction in
                         ReactionSummaryButton(reaction: reaction, highlighted: selectedReactionKey == reaction.key) { key in
                             selectedReactionKey = key
                         }
-                        .id(reaction.key)
                     }
                 }
                 .padding(.horizontal, 20)
@@ -61,11 +60,11 @@ struct ReactionsSummaryView: View {
     
     private var sendersList: some View {
         TabView(selection: $selectedReactionKey) {
-            ForEach(reactions, id: \.self) { reaction in
+            ForEach(reactions) { reaction in
                 ScrollView {
                     VStack(alignment: .leading, spacing: 8) {
-                        ForEach(reaction.senders, id: \.self) { sender in
-                            ReactionSummarySenderView(sender: sender, member: members[sender.senderID], imageProvider: imageProvider)
+                        ForEach(reaction.senders) { sender in
+                            ReactionSummarySenderView(sender: sender, member: members[sender.id], imageProvider: imageProvider)
                                 .padding(.horizontal, 16)
                         }
                     }
@@ -114,14 +113,14 @@ private struct ReactionSummarySenderView: View {
     let imageProvider: ImageProviderProtocol?
     
     var displayName: String {
-        member?.displayName ?? sender.senderID
+        member?.displayName ?? sender.id
     }
     
     var body: some View {
         HStack(spacing: 8) {
             LoadableAvatarImage(url: member?.avatarURL,
                                 name: displayName,
-                                contentID: sender.senderID,
+                                contentID: sender.id,
                                 avatarSize: .user(on: .timeline),
                                 imageProvider: imageProvider)
             
@@ -134,7 +133,7 @@ private struct ReactionSummarySenderView: View {
                         .font(.compound.bodyXS)
                         .foregroundColor(.compound.textSecondary)
                 }
-                Text(sender.senderID)
+                Text(sender.id)
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
             }

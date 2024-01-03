@@ -418,7 +418,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         reactions.map { reaction in
             let senders = reaction.senders
                 .map { senderData in
-                    ReactionSender(senderID: senderData.senderId, timestamp: Date(timeIntervalSince1970: TimeInterval(senderData.timestamp / 1000)))
+                    ReactionSender(id: senderData.senderId, timestamp: Date(timeIntervalSince1970: TimeInterval(senderData.timestamp / 1000)))
                 }
                 .sorted { a, b in
                     // Sort reactions within an aggregation by timestamp descending.

@@ -51,7 +51,7 @@ struct TimelineReactionsView: View {
     
     var body: some View {
         layout {
-            ForEach(reactions, id: \.self) { reaction in
+            ForEach(reactions) { reaction in
                 TimelineReactionButton(reaction: reaction) { key in
                     feedbackGenerator.impactOccurred()
                     context.send(viewAction: .toggleReaction(key: key, itemID: itemID))
