@@ -180,7 +180,7 @@ extension UNMutableNotificationContent {
     private func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
         // The version value is used in case the design of the placeholder is updated to force a replacement
         let shouldFlipAvatar = shouldFlipAvatar()
-        let prefix = "notification_placeholder\(shouldFlipAvatar ? "V5" : "V4")"
+        let prefix = "notification_placeholder\(shouldFlipAvatar ? "V7" : "V6")"
         let fileName = "\(prefix)_\(name)_\(id).png"
         if let data = try? Data(contentsOf: URL.temporaryDirectory.appendingPathComponent(fileName)) {
             MXLog.info("Found existing notification icon placeholder")
@@ -224,7 +224,8 @@ extension UNMutableNotificationContent {
     }
     
     /// On simulators and macOS the image is rendered correctly
-    /// On devices before iOS 17 and after iOS 17.2 it's rendered upside down and needs to be flipped
+    /// On devices before iOS 17 and iOS 17.2.0 it's rendered upside down and needs to be flipped
+    /// On all other versions it's rendered correctly and **doesn't** need to be flipped
     private func shouldFlipAvatar() -> Bool {
         #if targetEnvironment(simulator)
         return false
@@ -237,11 +238,15 @@ extension UNMutableNotificationContent {
             return false
         }
         
-        if version >= Version(17, 0, 0), version < Version(17, 2, 0) {
-            return false
+        if version < Version(17, 0, 0) {
+            return true
         }
         
-        return true
+        if version == Version(17, 2, 0) {
+            return true
+        }
+        
+        return false
         #endif
     }
 }
