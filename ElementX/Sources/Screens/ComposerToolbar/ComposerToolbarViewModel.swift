@@ -245,7 +245,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     private func set(text: String) {
         wysiwygViewModel.textView.flushPills()
-        wysiwygViewModel.setHtmlContent(text)
+        
+        if appSettings.richTextEditorEnabled {
+            wysiwygViewModel.setHtmlContent(text)
+        } else {
+            wysiwygViewModel.setMarkdownContent(text)
+        }
     }
 
     private func createLinkAlert() {
