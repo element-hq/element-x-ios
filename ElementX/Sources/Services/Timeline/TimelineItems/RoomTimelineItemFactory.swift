@@ -54,7 +54,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
         case .message:
             return buildMessageTimelineItem(eventItemProxy, isOutgoing)
-        case .state(let stateKey, let content):
+        case .state(_, let content):
             return buildStateTimelineItem(for: eventItemProxy, state: content, isOutgoing: isOutgoing)
         case .roomMembership(userId: let userID, change: let change):
             return buildStateMembershipChangeTimelineItem(for: eventItemProxy, member: userID, membershipChange: change, isOutgoing: isOutgoing)

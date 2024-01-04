@@ -157,12 +157,13 @@ struct FormattedBodyText: View {
     }
     
     private var blockquoteAttributes: AttributeContainer {
-        var container = AttributeContainer()
+        // The paragraph style removes the block style paragraph that the parser adds by default
+        // Set directly in the constructor to avoid `Conformance to 'Sendable'` warnings
+        var container = AttributeContainer([.paragraphStyle: NSParagraphStyle.default])
         // Sadly setting SwiftUI fonts do not work so we would need UIFont equivalents for compound, this one is bodyMD
         container.font = UIFont.preferredFont(forTextStyle: .subheadline)
         container.foregroundColor = UIColor.compound.textSecondary
-        // To remove the block style paragraph that the parser adds by default
-        container.paragraphStyle = .default
+        
         return container
     }
 }
