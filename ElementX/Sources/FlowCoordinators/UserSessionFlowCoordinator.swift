@@ -49,7 +49,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     init(userSession: UserSessionProtocol,
          navigationSplitCoordinator: NavigationSplitCoordinator,
-         windowManager: WindowManager,
+         windowManager: WindowManagerProtocol,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,

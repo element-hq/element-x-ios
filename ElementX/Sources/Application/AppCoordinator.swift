@@ -57,7 +57,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private var clientProxyObserver: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
     
-    let windowManager = WindowManager()
+    let windowManager: WindowManagerProtocol = WindowManager()
     let notificationManager: NotificationManagerProtocol
 
     private let appRouteURLParser: AppRouteURLParser
@@ -218,7 +218,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     // MARK: - WindowManagerDelegate
     
-    func windowManagerDidConfigureWindows(_ windowManager: WindowManager) {
+    func windowManagerDidConfigureWindows(_ windowManager: WindowManagerProtocol) {
         windowManager.alternateWindow.rootViewController = UIHostingController(rootView: appLockFlowCoordinator.toPresentable())
         ServiceLocator.shared.userIndicatorController.window = windowManager.overlayWindow
     }

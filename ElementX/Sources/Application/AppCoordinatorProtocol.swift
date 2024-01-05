@@ -17,6 +17,6 @@
 import Foundation
 
 protocol AppCoordinatorProtocol: CoordinatorProtocol {
-    var windowManager: WindowManager { get }
+    var windowManager: WindowManagerProtocol { get }
     @discardableResult func handleDeepLink(_ url: URL) -> Bool
 }
