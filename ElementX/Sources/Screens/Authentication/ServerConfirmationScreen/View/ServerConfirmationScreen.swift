@@ -47,7 +47,7 @@ struct ServerConfirmationScreen: View {
             Text(context.viewState.message)
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textPrimary)
+                .foregroundColor(.compound.textSecondary)
         }
         .padding(.horizontal, 16)
     }
