@@ -19,7 +19,10 @@ import Foundation
 
 class UserSession: UserSessionProtocol {
     private var cancellables = Set<AnyCancellable>()
-    private var checkForSessionVerificationControllerCancellable: AnyCancellable?
+    
+    private var checkSessionVerificationStateCancellable: AnyCancellable?
+    private var checkSessionVerificationStateTask: Task<Void, Never>?
+    
     private var authErrorCancellable: AnyCancellable?
     
     var userID: String { clientProxy.userID }
@@ -32,7 +35,19 @@ class UserSession: UserSessionProtocol {
     
     let callbacks = PassthroughSubject<UserSessionCallback, Never>()
     
-    private(set) var sessionVerificationController: SessionVerificationControllerProxyProtocol?
+    private(set) var sessionVerificationController: SessionVerificationControllerProxyProtocol? {
+        didSet {
+            sessionVerificationController?.callbacks.sink { [weak self] callback in
+                switch callback {
+                case .finished:
+                    self?.sessionVerificationStateSubject.send(true)
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        }
+    }
     
     private var sessionVerificationStateSubject: CurrentValueSubject<Bool?, Never> = .init(nil)
     var sessionVerificationState: CurrentValuePublisher<Bool?, Never> {
@@ -51,19 +66,30 @@ class UserSession: UserSessionProtocol {
     // MARK: - Private
     
     private func setupSessionVerificationWatchdog() {
-        checkForSessionVerificationControllerCancellable = clientProxy.callbacks
+        checkSessionVerificationStateCancellable = clientProxy.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
-                if case .receivedSyncUpdate = callback {
+                if callback.isSyncUpdate {
                     self?.attemptSessionVerification()
                 }
             }
     }
     
     private func attemptSessionVerification() {
-        Task {
+        guard checkSessionVerificationStateTask == nil else {
+            MXLog.info("Session verification state check already in progress")
+            return
+        }
+        
+        MXLog.info("Checking session verification state")
+        
+        checkSessionVerificationStateTask = Task {
+            MXLog.info("Retrieving session verification controller")
+            
             switch await clientProxy.sessionVerificationControllerProxy() {
             case .success(let sessionVerificationController):
+                MXLog.info("Retrieving session verification state")
+                
                 guard case let .success(isVerified) = await sessionVerificationController.isVerified() else {
                     MXLog.error("Failed checking verification state. Will retry on the next sync update.")
                     return
@@ -73,18 +99,11 @@ class UserSession: UserSessionProtocol {
                 
                 self.sessionVerificationController = sessionVerificationController
                 
+                MXLog.info("Session verified: \(isVerified)")
+                
                 sessionVerificationStateSubject.send(isVerified)
                 
-                sessionVerificationController.callbacks.sink { [weak self] callback in
-                    switch callback {
-                    case .finished:
-                        self?.sessionVerificationStateSubject.send(true)
-                    default:
-                        break
-                    }
-                }
-                .store(in: &cancellables)
-                
+                checkSessionVerificationStateTask = nil
             case .failure(let error):
                 MXLog.info("Failed getting session verification controller with error: \(error). Will retry on the next sync update.")
             }
@@ -92,7 +111,7 @@ class UserSession: UserSessionProtocol {
     }
     
     private func tearDownSessionVerificationControllerWatchdog() {
-        checkForSessionVerificationControllerCancellable = nil
+        checkSessionVerificationStateCancellable = nil
     }
 
     // MARK: Auth Error Watchdog
