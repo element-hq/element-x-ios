@@ -21,6 +21,13 @@ import UIKit
 
 class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     private let navigationRootCoordinator: NavigationRootCoordinator
+    
+    // periphery:ignore - retaining purpose
+    private var mockScreen: MockScreen?
+    
+    // periphery:ignore - retaining purpose
+    private var alternateWindowMockScreen: MockScreen?
+    
     let windowManager = WindowManager()
     
     init() {
@@ -47,6 +54,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
         
         let mockScreen = MockScreen(id: screenID)
         navigationRootCoordinator.setRootCoordinator(mockScreen.coordinator)
+        self.mockScreen = mockScreen
     }
     
     func toPresentable() -> AnyView {
@@ -64,6 +72,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
         guard let screenID = ProcessInfo.testScreenID, screenID == .appLockFlow || screenID == .appLockFlowDisabled else { return }
         let screen = MockScreen(id: screenID == .appLockFlow ? .appLockFlowAlternateWindow : .appLockFlowDisabledAlternateWindow, windowManager: windowManager)
         windowManager.alternateWindow.rootViewController = UIHostingController(rootView: screen.coordinator.toPresentable().statusBarHidden())
+        alternateWindowMockScreen = screen
     }
 }
 
