@@ -17,23 +17,11 @@
 import Combine
 import SwiftUI
 
-protocol WindowManagerDelegate: AnyObject {
-    /// The window manager has configured its windows.
-    func windowManagerDidConfigureWindows(_ windowManager: WindowManager)
-}
-
-@MainActor
-/// A window manager that supports switching between a main app window with an overlay and
-/// an alternate window to switch contexts whilst also preserving the main view hierarchy.
-/// Heavily inspired by https://www.fivestars.blog/articles/swiftui-windows/
-class WindowManager {
+class WindowManager: WindowManagerProtocol {
     weak var delegate: WindowManagerDelegate?
     
-    /// The app's main window (we only support a single scene).
     private(set) var mainWindow: UIWindow!
-    /// Presented on top of the main window, to display e.g. user indicators.
     private(set) var overlayWindow: UIWindow!
-    /// A secondary window that can be presented instead of the main/overlay window combo.
     private(set) var alternateWindow: UIWindow!
     
     var windows: [UIWindow] {
@@ -46,7 +34,6 @@ class WindowManager {
     /// A duration that allows window switching to wait a couple of frames to avoid a transition through black.
     private let windowHideDelay = Duration.milliseconds(33)
     
-    /// Configures the window manager to operate on the supplied scene.
     func configure(with windowScene: UIWindowScene) {
         mainWindow = windowScene.keyWindow
         mainWindow.tintColor = .compound.textActionPrimary
@@ -62,7 +49,6 @@ class WindowManager {
         delegate?.windowManagerDidConfigureWindows(self)
     }
     
-    /// Shows the main and overlay window combo, hiding the alternate window.
     func switchToMain() {
         mainWindow.isHidden = false
         overlayWindow.isHidden = false
@@ -75,7 +61,6 @@ class WindowManager {
         }
     }
     
-    /// Shows the alternate window, hiding the main and overlay combo.
     func switchToAlternate() {
         alternateWindow.isHidden = false
         

@@ -28,7 +28,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     // periphery:ignore - retaining purpose
     private var alternateWindowMockScreen: MockScreen?
     
-    let windowManager = WindowManager()
+    let windowManager: WindowManagerProtocol = WindowManager()
     
     init() {
         // disabling View animations
@@ -65,7 +65,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
         fatalError("Not implemented.")
     }
     
-    func windowManagerDidConfigureWindows(_ windowManager: WindowManager) {
+    func windowManagerDidConfigureWindows(_ windowManager: WindowManagerProtocol) {
         ServiceLocator.shared.userIndicatorController.window = windowManager.overlayWindow
         
         // Set up the alternate window for the App Lock flow coordinator tests.
@@ -79,12 +79,12 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
 @MainActor
 class MockScreen: Identifiable {
     let id: UITestsScreenIdentifier
-    let windowManager: WindowManager
+    let windowManager: WindowManagerProtocol
     
     private var retainedState = [Any]()
     private var cancellables = Set<AnyCancellable>()
     
-    init(id: UITestsScreenIdentifier, windowManager: WindowManager) {
+    init(id: UITestsScreenIdentifier, windowManager: WindowManagerProtocol) {
         self.id = id
         self.windowManager = windowManager
     }

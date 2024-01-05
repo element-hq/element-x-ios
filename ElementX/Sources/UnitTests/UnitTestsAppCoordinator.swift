@@ -17,7 +17,7 @@
 import SwiftUI
 
 class UnitTestsAppCoordinator: AppCoordinatorProtocol {
-    let windowManager = WindowManager()
+    let windowManager: WindowManagerProtocol = WindowManager()
     
     init() {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorControllerMock.default)

@@ -28,7 +28,7 @@ enum SettingsFlowCoordinatorAction {
 
 struct SettingsFlowCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let windowManager: WindowManager
+    let windowManager: WindowManagerProtocol
     let appLockService: AppLockServiceProtocol
     let bugReportService: BugReportServiceProtocol
     let notificationSettings: NotificationSettingsProxyProtocol

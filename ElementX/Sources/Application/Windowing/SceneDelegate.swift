@@ -20,7 +20,7 @@ import SwiftUI
 ///
 /// We don't support multiple scenes right now, so the implementation is pretty basic.
 class SceneDelegate: NSObject, UIWindowSceneDelegate {
-    weak static var windowManager: WindowManager!
+    weak static var windowManager: WindowManagerProtocol!
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
