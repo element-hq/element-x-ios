@@ -94,12 +94,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.advancedSettings)
         case .developerOptions:
             actionsSubject.send(.developerOptions)
-            
-        case .updateWindow(let window):
-            Task {
-                guard state.window != window else { return }
-                state.window = window
-            }
         }
     }
 }

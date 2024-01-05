@@ -44,9 +44,6 @@ struct SettingsScreenViewState: BindableState {
     var isSessionVerified: Bool?
     var showSecureBackupBadge = false
     var showDeveloperOptions: Bool
-    
-    /// The presentation anchor used to display the OIDC account URL.
-    var window: UIWindow?
 }
 
 enum SettingsScreenViewAction {
@@ -64,7 +61,4 @@ enum SettingsScreenViewAction {
     case developerOptions
     case advancedSettings
     case logout
-    
-    /// Updates the window used for the OIDC account URL anchor.
-    case updateWindow(UIWindow)
 }

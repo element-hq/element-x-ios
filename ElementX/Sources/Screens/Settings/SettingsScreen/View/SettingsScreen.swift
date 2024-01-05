@@ -41,9 +41,6 @@ struct SettingsScreen: View {
         .navigationTitle(L10n.commonSettings)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-        .introspect(.window, on: .supportedVersions) { window in
-            context.send(viewAction: .updateWindow(window))
-        }
     }
     
     private var userSection: some View {

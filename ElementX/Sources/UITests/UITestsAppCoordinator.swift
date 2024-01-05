@@ -52,7 +52,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     func start() {
         guard let screenID = ProcessInfo.testScreenID else { fatalError("Unable to launch with unknown screen.") }
         
-        let mockScreen = MockScreen(id: screenID)
+        let mockScreen = MockScreen(id: screenID, windowManager: windowManager)
         navigationRootCoordinator.setRootCoordinator(mockScreen.coordinator)
         self.mockScreen = mockScreen
     }
@@ -79,12 +79,12 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
 @MainActor
 class MockScreen: Identifiable {
     let id: UITestsScreenIdentifier
-    let windowManager: WindowManager?
+    let windowManager: WindowManager
     
     private var retainedState = [Any]()
     private var cancellables = Set<AnyCancellable>()
     
-    init(id: UITestsScreenIdentifier, windowManager: WindowManager? = nil) {
+    init(id: UITestsScreenIdentifier, windowManager: WindowManager) {
         self.id = id
         self.windowManager = windowManager
     }
@@ -209,10 +209,10 @@ class MockScreen: Identifiable {
                                                      navigationCoordinator: navigationCoordinator,
                                                      notificationCenter: notificationCenter)
             
-            guard let windowManager else { fatalError("The window manager must be supplied.") }
-            
             coordinator.actions
-                .sink { action in
+                .sink { [weak self] action in
+                    guard let self else { return }
+                    
                     switch action {
                     case .lockApp:
                         windowManager.switchToAlternate()
@@ -268,16 +268,9 @@ class MockScreen: Identifiable {
         case .settings:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
-            let coordinator = SettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
-                                                                          userIndicatorController: UserIndicatorControllerMock(),
-                                                                          userSession: MockUserSession(clientProxy: clientProxy,
+            let coordinator = SettingsScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy,
                                                                                                        mediaProvider: MockMediaProvider(),
                                                                                                        voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
-                                                                          appLockService: AppLockService(keychainController: KeychainControllerMock(),
-                                                                                                         appSettings: ServiceLocator.shared.settings),
-                                                                          bugReportService: BugReportServiceMock(),
-                                                                          notificationSettings: NotificationSettingsProxyMock(with: .init()),
-                                                                          secureBackupController: SecureBackupControllerMock(),
                                                                           appSettings: ServiceLocator.shared.settings))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -566,6 +559,7 @@ class MockScreen: Identifiable {
             
             let coordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
                                                          navigationSplitCoordinator: navigationSplitCoordinator,
+                                                         windowManager: windowManager,
                                                          appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                         appSettings: ServiceLocator.shared.settings),
                                                          bugReportService: BugReportServiceMock(),

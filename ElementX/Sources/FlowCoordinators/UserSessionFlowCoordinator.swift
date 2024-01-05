@@ -49,6 +49,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     init(userSession: UserSessionProtocol,
          navigationSplitCoordinator: NavigationSplitCoordinator,
+         windowManager: WindowManager,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
@@ -75,6 +76,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
                 
         settingsFlowCoordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                            windowManager: windowManager,
                                                                             appLockService: appLockService,
                                                                             bugReportService: bugReportService,
                                                                             notificationSettings: userSession.clientProxy.notificationSettings,
