@@ -74,9 +74,16 @@ struct PollFormScreen: View {
                     }
                     .focused($focus, equals: .option(index: index))
                     .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.optionID(index))
-                    .onSubmit {
-                        let nextOptionIndex = index == context.options.endIndex - 1 ? nil : index + 1
-                        focus = nextOptionIndex.map { .option(index: $0) }
+                    .onChange(of: context.options[index].text) { optionText in
+                        guard let lastCharacter = optionText.last, lastCharacter.isNewline else {
+                            return
+                        }
+                        
+                        context.options[index].text.removeLast()
+                        submitOption(at: index)
+                    }
+                    .onSubmit { // onSubmit is still called when using the return key on a hardware keyboard
+                        submitOption(at: index)
                     }
                     .submitLabel(index == context.options.endIndex - 1 ? .done : .next)
                 }
@@ -96,6 +103,11 @@ struct PollFormScreen: View {
         }
         // Disables animations when the text view resizes for multiline
         .animation(.noAnimation, value: UUID())
+    }
+    
+    private func submitOption(at index: Array<PollFormScreenViewStateBindings.Option>.Index) {
+        let nextOptionIndex = index == context.options.endIndex - 1 ? nil : index + 1
+        focus = nextOptionIndex.map { .option(index: $0) }
     }
     
     private var showResultsSection: some View {

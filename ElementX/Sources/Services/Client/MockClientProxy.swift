@@ -42,7 +42,7 @@ class MockClientProxy: ClientProxyProtocol {
     
     lazy var secureBackupController: SecureBackupControllerProtocol = {
         let secureBackupController = SecureBackupControllerMock()
-        secureBackupController.underlyingRecoveryKeyState = .init(CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.disabled))
+        secureBackupController.underlyingRecoveryKeyState = .init(CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.enabled))
         secureBackupController.underlyingKeyBackupState = .init(CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled))
         secureBackupController.isLastSessionReturnValue = .success(false)
         return secureBackupController
