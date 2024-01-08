@@ -595,11 +595,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             fatalError()
         }
         
-        let navigationStackCoordinator = NavigationStackCoordinator()
+        let stackCoordinator = NavigationStackCoordinator()
         
         let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner,
                                                                                    mediaProvider: userSession.mediaProvider,
-                                                                                   navigationStackCoordinator: navigationStackCoordinator,
+                                                                                   navigationStackCoordinator: stackCoordinator,
                                                                                    roomProxy: roomProxy,
                                                                                    userIndicatorController: userIndicatorController)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
@@ -612,9 +612,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator.setRootCoordinator(roomDetailsEditCoordinator)
+        stackCoordinator.setRootCoordinator(roomDetailsEditCoordinator)
         
-        self.navigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissRoomDetailsEditScreen)
         }
     }
@@ -624,7 +624,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             fatalError()
         }
         
-        let navigationStackCoordinator = NavigationStackCoordinator()
+        let stackCoordinator = NavigationStackCoordinator()
         let parameters = ReportContentScreenCoordinatorParameters(eventID: eventID,
                                                                   senderID: senderID,
                                                                   roomProxy: roomProxy,
@@ -646,8 +646,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        navigationStackCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissReportContent)
         }
     }
@@ -733,7 +733,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
 
     private func presentMapNavigator(interactionMode: StaticLocationInteractionMode) {
-        let locationPickerNavigationStackCoordinator = NavigationStackCoordinator()
+        let stackCoordinator = NavigationStackCoordinator()
         
         let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
@@ -762,17 +762,17 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        locationPickerNavigationStackCoordinator.setRootCoordinator(coordinator)
+        stackCoordinator.setRootCoordinator(coordinator)
         
-        navigationStackCoordinator.setSheetCoordinator(locationPickerNavigationStackCoordinator) { [weak self] in
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMapNavigator)
         }
     }
 
     private func presentPollForm(mode: PollFormMode) {
-        let navigationStackCoordinator = NavigationStackCoordinator()
+        let stackCoordinator = NavigationStackCoordinator()
         let coordinator = PollFormScreenCoordinator(parameters: .init(mode: mode))
-        navigationStackCoordinator.setRootCoordinator(coordinator)
+        stackCoordinator.setRootCoordinator(coordinator)
 
         coordinator.actions
             .sink { [weak self] action in
@@ -798,7 +798,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
 
-        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissPollForm)
         }
     }
@@ -972,7 +972,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             fatalError()
         }
         
-        let messageForwardingNavigationStackCoordinator = NavigationStackCoordinator()
+        let stackCoordinator = NavigationStackCoordinator()
         
         let parameters = MessageForwardingScreenCoordinatorParameters(roomSummaryProvider: roomSummaryProvider,
                                                                       mediaProvider: userSession.mediaProvider,
@@ -981,6 +981,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
+            
             switch action {
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
@@ -993,9 +994,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
         }.store(in: &cancellables)
         
-        messageForwardingNavigationStackCoordinator.setRootCoordinator(coordinator)
+        stackCoordinator.setRootCoordinator(coordinator)
 
-        navigationStackCoordinator.setSheetCoordinator(messageForwardingNavigationStackCoordinator) { [weak self] in
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMessageForwarding)
         }
     }
@@ -1052,8 +1053,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentGlobalNotificationSettingsScreen() {
-        let navigationCoordinator = NavigationStackCoordinator()
-        let parameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: navigationCoordinator,
+        let stackCoordinator = NavigationStackCoordinator()
+        let parameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: stackCoordinator,
                                                                          userSession: userSession,
                                                                          userNotificationCenter: UNUserNotificationCenter.current(),
                                                                          notificationSettings: userSession.clientProxy.notificationSettings,
@@ -1067,8 +1068,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(navigationCoordinator) { [weak self] in
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissGlobalNotificationSettingsScreen)
         }
     }
@@ -1080,7 +1081,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let selectedUsersSubject: CurrentValueSubject<[UserProfileProxy], Never> = .init([])
         
-        let inviteUsersStackCoordinator = NavigationStackCoordinator()
+        let stackCoordinator = NavigationStackCoordinator()
         let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: .init(selectedUsersSubject),
                                                                       roomType: .room(roomProxy: roomProxy),
                                                                       mediaProvider: userSession.mediaProvider,
@@ -1088,7 +1089,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                       userIndicatorController: userIndicatorController)
         
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
-        inviteUsersStackCoordinator.setRootCoordinator(coordinator)
+        stackCoordinator.setRootCoordinator(coordinator)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -1114,7 +1115,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator.setSheetCoordinator(inviteUsersStackCoordinator) { [weak self] in
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissInviteUsersScreen)
         }
     }
