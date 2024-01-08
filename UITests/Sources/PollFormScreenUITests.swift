@@ -29,13 +29,16 @@ class PollFormScreenUITests: XCTestCase {
         questionTextField.coordinate(withNormalizedOffset: .init(dx: 0.5, dy: 0.5)).tap() // Tap isn't registered without the offset.
         questionTextField.typeText("Do you like polls?")
 
-        let option1TextField = app.textFields[A11yIdentifiers.pollFormScreen.optionID(0)]
+        let option1TextField = app.textViews[A11yIdentifiers.pollFormScreen.optionID(0)]
         option1TextField.tap()
         option1TextField.typeText("Yes")
 
-        let option2TextField = app.textFields[A11yIdentifiers.pollFormScreen.optionID(1)]
+        let option2TextField = app.textViews[A11yIdentifiers.pollFormScreen.optionID(1)]
         option2TextField.tap()
-        option2TextField.typeText("No\n")
+        option2TextField.typeText("No")
+        
+        // Dismiss the keyboard
+        app.swipeDown()
 
         let createButton = app.buttons[A11yIdentifiers.pollFormScreen.submit]
         XCTAssertTrue(createButton.isEnabled)
@@ -56,9 +59,7 @@ class PollFormScreenUITests: XCTestCase {
             addOption.tap()
         }
         
-        if app.hasFocus {
-            app.typeText("\n") // Dismiss the keyboard so the Add button is always visible.
-        }
+        app.swipeDown() // Dismiss the keyboard so the Add button is always visible.
         
         app.swipeUp() // Ensures that the bottom is shown.
         
