@@ -205,11 +205,13 @@ class UserSessionFlowCoordinatorStateMachine {
     func addErrorHandler(_ handler: @escaping StateMachine<State, Event>.Handler) {
         stateMachine.addErrorHandler(handler: handler)
     }
-
+    
     /// Flag indicating the machine is displaying room screen with given room identifier
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
         switch stateMachine.state {
         case .roomList(let selectedRoomID):
+            return roomID == selectedRoomID
+        case .invitesScreen(let selectedRoomID):
             return roomID == selectedRoomID
         default:
             return false
