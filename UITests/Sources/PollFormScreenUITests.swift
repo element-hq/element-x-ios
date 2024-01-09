@@ -59,7 +59,7 @@ class PollFormScreenUITests: XCTestCase {
             addOption.tap()
         }
         
-        app.swipeUp() // Dismiss the keyboard so the Add button is always visible.
+        app.swipeDown() // Dismiss the keyboard so the Add button is always visible.
         
         app.swipeUp() // Ensures that the bottom is shown.
         
