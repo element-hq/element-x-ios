@@ -37,7 +37,7 @@ extension XCUIElement {
         if isHittable {
             tap()
         } else {
-            let coordinate: XCUICoordinate = coordinate(withNormalizedOffset: .init(dx: 0.0, dy: 0.0))
+            let coordinate: XCUICoordinate = coordinate(withNormalizedOffset: .init(dx: 0.5, dy: 0.5))
             coordinate.tap()
         }
     }
