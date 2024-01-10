@@ -75,6 +75,8 @@ class UserFlowTests: XCTestCase {
         
         // Cancel the upload flow
         tapOnButton("Cancel")
+        
+        sleep(2) // Wait for dismissal
     }
     
     private func checkRoomCreation() {
@@ -90,7 +92,7 @@ class UserFlowTests: XCTestCase {
         
         tapOnButton("Cancel")
         
-        sleep(1)
+        sleep(2) // Wait for dismissal
     }
     
     private func checkTimelineItemActionMenu() {
@@ -114,9 +116,9 @@ class UserFlowTests: XCTestCase {
         // Open the room member details
         tapOnButton(A11yIdentifiers.roomDetailsScreen.people)
         
-        // Open the first member's details
+        // Open the first member's details. Loading members for big rooms can take a while.
         let firstRoomMember = app.scrollViews.buttons.firstMatch
-        XCTAssertTrue(firstRoomMember.waitForExistence(timeout: 10.0))
+        XCTAssertTrue(firstRoomMember.waitForExistence(timeout: 300.0))
         firstRoomMember.tap()
         
         // Go back to the room member details
@@ -133,6 +135,10 @@ class UserFlowTests: XCTestCase {
     }
     
     private func checkSettings() {
+        // On first login when multiple sheets get presented the profile button is not hittable
+        // Moving the scroll fixed it for some obscure reason
+        app.swipeDown()
+        
         let profileButton = app.buttons[A11yIdentifiers.homeScreen.userAvatar]
         
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924

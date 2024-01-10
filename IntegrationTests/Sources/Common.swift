@@ -36,8 +36,9 @@ extension XCUIApplication {
         XCTAssertTrue(confirmButton.waitForExistence(timeout: 10.0))
         confirmButton.tap()
         
+        // Server cofirmation is network bound and might take a while
         let continueButton = buttons[A11yIdentifiers.serverConfirmationScreen.continue]
-        XCTAssertTrue(continueButton.waitForExistence(timeout: 10.0))
+        XCTAssertTrue(continueButton.waitForExistence(timeout: 30.0))
         continueButton.tap()
         
         let usernameTextField = textFields[A11yIdentifiers.loginScreen.emailUsername]
@@ -56,10 +57,13 @@ extension XCUIApplication {
         
         nextButton.tap()
         
-        sleep(10)
+        // Wait for login to finish
+        let doesNotExistPredicate = NSPredicate(format: "exists == 0")
+        currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: usernameTextField)
+        currentTestCase.waitForExpectations(timeout: 300.0)
         
         // Handle analytics prompt screen
-        if staticTexts[A11yIdentifiers.analyticsPromptScreen.title].waitForExistence(timeout: 1.0) {
+        if staticTexts[A11yIdentifiers.analyticsPromptScreen.title].waitForExistence(timeout: 10.0) {
             // Wait for login and then handle save password sheet
             let savePasswordButton = buttons["Save Password"]
             if savePasswordButton.waitForExistence(timeout: 10.0) {
@@ -79,9 +83,9 @@ extension XCUIApplication {
         
         // Handle the notifications permission alert https://stackoverflow.com/a/58171074/730924
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        let alertAllowButton = springboard.buttons.element(boundBy: 1)
-        if alertAllowButton.waitForExistence(timeout: 10.0) {
-            alertAllowButton.tap()
+        let notificationAlertDeclineButton = springboard.buttons.element(boundBy: 0)
+        if notificationAlertDeclineButton.waitForExistence(timeout: 10.0) {
+            notificationAlertDeclineButton.tap()
         }
         
         // Migration screen may be shown as an overlay.
@@ -108,8 +112,12 @@ extension XCUIApplication {
     }
     
     func logout() {
-        let profileButton = buttons[A11yIdentifiers.homeScreen.userAvatar]
+        // On first login when multiple sheets get presented the profile button is not hittable
+        // Moving the scroll fixed it for some obscure reason
+        swipeDown()
         
+        let profileButton = buttons[A11yIdentifiers.homeScreen.userAvatar]
+                
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
         profileButton.forceTap()
         
