@@ -40,7 +40,7 @@ struct MediaProvider: MediaProviderProtocol {
         return imageCache.retrieveImageInMemoryCache(forKey: cacheKey, options: nil)
     }
     
-    func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
+    func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?, storeToDisk: Bool) async -> Result<UIImage, MediaProviderError> {
         if let image = imageFromSource(source, size: size) {
             return .success(image)
         }
@@ -70,7 +70,7 @@ struct MediaProvider: MediaProviderProtocol {
                 return .failure(.invalidImageData)
             }
 
-            imageCache.store(image, forKey: cacheKey)
+            imageCache.store(image, forKey: cacheKey, toDisk: storeToDisk)
 
             return .success(image)
         } catch {

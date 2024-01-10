@@ -19,7 +19,7 @@ import UIKit
 protocol ImageProviderProtocol {
     func imageFromSource(_ source: MediaSourceProxy?, size: CGSize?) -> UIImage?
     
-    func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError>
+    func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?, storeToDisk: Bool) async -> Result<UIImage, MediaProviderError>
     
     func loadImageDataFromSource(_ source: MediaSourceProxy) async -> Result<Data, MediaProviderError>
 }
@@ -27,5 +27,9 @@ protocol ImageProviderProtocol {
 extension ImageProviderProtocol {
     func imageFromSource(_ source: MediaSourceProxy?) -> UIImage? {
         imageFromSource(source, size: nil)
+    }
+    
+    func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
+        await loadImageFromSource(source, size: size, storeToDisk: false)
     }
 }

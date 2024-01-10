@@ -78,7 +78,6 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/Date.swift
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
-    - path: ../../ElementX/Sources/Other/Extensions/ImageCache.swift
     - path: ../../ElementX/Sources/Other/Extensions/LayoutDirection.swift
     - path: ../../ElementX/Sources/Other/Extensions/NSRegularExpresion.swift
     - path: ../../ElementX/Sources/Other/Extensions/String.swift

@@ -91,11 +91,8 @@ class UserSessionStore: UserSessionStoreProtocol {
     // MARK: - Private
     
     private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol) -> UserSessionProtocol {
-        let imageCache = ImageCache.onlyInMemory
-        imageCache.memoryStorage.config.keepWhenEnteringBackground = true
-        
         let mediaProvider = MediaProvider(mediaLoader: clientProxy,
-                                          imageCache: imageCache,
+                                          imageCache: ImageCache.default,
                                           backgroundTaskService: backgroundTaskService)
         
         let voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,

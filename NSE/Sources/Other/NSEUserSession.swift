@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import Kingfisher
 import MatrixRustSDK
 
 final class NSEUserSession {
@@ -22,7 +23,7 @@ final class NSEUserSession {
     private let notificationClient: NotificationClient
     private let userID: String
     private(set) lazy var mediaProvider: MediaProviderProtocol = MediaProvider(mediaLoader: MediaLoader(client: baseClient),
-                                                                               imageCache: .onlyOnDisk,
+                                                                               imageCache: ImageCache.default,
                                                                                backgroundTaskService: nil)
     private let delegateHandle: TaskHandle?
 

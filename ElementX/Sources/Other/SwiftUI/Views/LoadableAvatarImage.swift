@@ -47,7 +47,8 @@ struct LoadableAvatarImage: View {
         if let url {
             LoadableImage(url: url,
                           size: avatarSize.scaledSize,
-                          imageProvider: imageProvider) { image in
+                          imageProvider: imageProvider,
+                          storeToDisk: true) { image in
                 image
                     .scaledToFill()
             } placeholder: {

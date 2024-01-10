@@ -22,6 +22,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     private let blurhash: String?
     private let size: CGSize?
     private let imageProvider: ImageProviderProtocol?
+    private let storeToDisk: Bool
     private let transformer: (AnyView) -> TransformerView
     private let placeholder: () -> PlaceholderView
     
@@ -37,12 +38,14 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
+         storeToDisk: Bool = false,
          transformer: @escaping (AnyView) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
         self.mediaSource = mediaSource
         self.blurhash = blurhash
         self.size = size
         self.imageProvider = imageProvider
+        self.storeToDisk = storeToDisk
         self.transformer = transformer
         self.placeholder = placeholder
     }
@@ -51,12 +54,14 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
+         storeToDisk: Bool = false,
          transformer: @escaping (AnyView) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
         self.init(mediaSource: MediaSourceProxy(url: url, mimeType: nil),
                   blurhash: blurhash,
                   size: size,
                   imageProvider: imageProvider,
+                  storeToDisk: storeToDisk,
                   transformer: transformer,
                   placeholder: placeholder)
     }
@@ -66,6 +71,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
                              blurhash: blurhash,
                              size: size,
                              imageProvider: imageProvider,
+                             storeToDisk: storeToDisk,
                              transformer: transformer,
                              placeholder: placeholder)
             // Binds the lifecycle of the LoadableImage to the associated URL.
@@ -86,13 +92,18 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
+         storeToDisk: Bool,
          transformer: @escaping (AnyView) -> TransformerView,
          placeholder: @escaping () -> PlaceholderView) {
         self.mediaSource = mediaSource
         self.blurhash = blurhash
         self.transformer = transformer
         self.placeholder = placeholder
-        _contentLoader = StateObject(wrappedValue: ContentLoader(mediaSource: mediaSource, size: size, imageProvider: imageProvider))
+        
+        _contentLoader = StateObject(wrappedValue: ContentLoader(mediaSource: mediaSource,
+                                                                 size: size,
+                                                                 imageProvider: imageProvider,
+                                                                 storeToDisk: storeToDisk))
     }
     
     var body: some View {
@@ -147,6 +158,7 @@ private class ContentLoader: ObservableObject {
     }
     
     private let imageProvider: ImageProviderProtocol?
+    private let storeToDisk: Bool
     private let mediaSource: MediaSourceProxy
     private let size: CGSize?
     
@@ -169,10 +181,11 @@ private class ContentLoader: ObservableObject {
         return cachedContent
     }
     
-    init(mediaSource: MediaSourceProxy, size: CGSize?, imageProvider: ImageProviderProtocol?) {
+    init(mediaSource: MediaSourceProxy, size: CGSize?, imageProvider: ImageProviderProtocol?, storeToDisk: Bool) {
         self.mediaSource = mediaSource
         self.size = size
         self.imageProvider = imageProvider
+        self.storeToDisk = storeToDisk
     }
     
     @MainActor
@@ -182,7 +195,7 @@ private class ContentLoader: ObservableObject {
                 cachedContent = .gifData(data)
             }
         } else {
-            if case let .success(image) = await imageProvider?.loadImageFromSource(mediaSource, size: size) {
+            if case let .success(image) = await imageProvider?.loadImageFromSource(mediaSource, size: size, storeToDisk: storeToDisk) {
                 cachedContent = .image(image)
             }
         }
