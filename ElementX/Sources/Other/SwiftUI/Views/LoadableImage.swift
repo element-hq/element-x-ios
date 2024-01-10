@@ -17,8 +17,15 @@
 import Kingfisher
 import SwiftUI
 
+/// Used to configure animations
+enum LoadableImageMediaType {
+    case avatar
+    case generic
+}
+
 struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     private let mediaSource: MediaSourceProxy
+    private let mediaType: LoadableImageMediaType
     private let blurhash: String?
     private let size: CGSize?
     private let imageProvider: ImageProviderProtocol?
@@ -34,12 +41,14 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     ///   - transformer: entry point for configuring the resulting image view
     ///   - placeholder: a view to show while the image or blurhash are not available
     init(mediaSource: MediaSourceProxy,
+         mediaType: LoadableImageMediaType = .generic,
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
          transformer: @escaping (AnyView) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
         self.mediaSource = mediaSource
+        self.mediaType = mediaType
         self.blurhash = blurhash
         self.size = size
         self.imageProvider = imageProvider
@@ -48,12 +57,14 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     }
     
     init(url: URL,
+         mediaType: LoadableImageMediaType = .generic,
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
          transformer: @escaping (AnyView) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
         self.init(mediaSource: MediaSourceProxy(url: url, mimeType: nil),
+                  mediaType: mediaType,
                   blurhash: blurhash,
                   size: size,
                   imageProvider: imageProvider,
@@ -63,6 +74,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     
     var body: some View {
         LoadableImageContent(mediaSource: mediaSource,
+                             mediaType: mediaType,
                              blurhash: blurhash,
                              size: size,
                              imageProvider: imageProvider,
@@ -76,6 +88,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
 
 private struct LoadableImageContent<TransformerView: View, PlaceholderView: View>: View, ImageDataProvider {
     private let mediaSource: MediaSourceProxy
+    private let mediaType: LoadableImageMediaType
     private let blurhash: String?
     private let transformer: (AnyView) -> TransformerView
     private let placeholder: () -> PlaceholderView
@@ -83,12 +96,14 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
     @StateObject private var contentLoader: ContentLoader
     
     init(mediaSource: MediaSourceProxy,
+         mediaType: LoadableImageMediaType,
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
          transformer: @escaping (AnyView) -> TransformerView,
          placeholder: @escaping () -> PlaceholderView) {
         self.mediaSource = mediaSource
+        self.mediaType = mediaType
         self.blurhash = blurhash
         self.transformer = transformer
         self.placeholder = placeholder
@@ -122,7 +137,7 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
                 }
             }
         }
-        .animation(.elementDefault, value: contentLoader.content)
+        .animation(mediaType == .avatar ? .noAnimation : .elementDefault, value: contentLoader.content)
     }
     
     // MARK: - ImageDataProvider

@@ -46,6 +46,7 @@ struct LoadableAvatarImage: View {
     var avatar: some View {
         if let url {
             LoadableImage(url: url,
+                          mediaType: .avatar,
                           size: avatarSize.scaledSize,
                           imageProvider: imageProvider) { image in
                 image

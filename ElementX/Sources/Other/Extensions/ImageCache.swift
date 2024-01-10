@@ -20,6 +20,7 @@ import Kingfisher
 extension ImageCache {
     static var onlyInMemory: ImageCache {
         let result = ImageCache.default
+        result.memoryStorage.config.keepWhenEnteringBackground = true
         result.diskStorage.config.sizeLimit = 1
         return result
     }
