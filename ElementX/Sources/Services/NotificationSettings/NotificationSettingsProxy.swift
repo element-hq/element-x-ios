@@ -141,7 +141,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         await notificationSettings.getRoomsWithUserDefinedRules(enabled: true)
     }
     
-    func canHomeserverPushEncryptedEventsToDevice() async -> Bool {
+    func canPushEncryptedEventsToDevice() async -> Bool {
         await notificationSettings.canPushEncryptedEventToDevice()
     }
     

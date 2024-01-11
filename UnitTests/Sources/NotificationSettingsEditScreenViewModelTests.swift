@@ -72,7 +72,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.defaultMode, .mentionsAndKeywordsOnly)
         XCTAssertNil(context.viewState.bindings.alertInfo)
-        XCTAssertFalse(context.viewState.canHomeServerPushEncryptedEvents)
+        XCTAssertFalse(context.viewState.canPushEncryptedEvents)
         XCTAssertNotNil(context.viewState.description(for: .mentionsAndKeywordsOnly))
     }
     
@@ -113,7 +113,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.defaultMode, .mentionsAndKeywordsOnly)
         XCTAssertNil(context.viewState.bindings.alertInfo)
-        XCTAssertTrue(context.viewState.canHomeServerPushEncryptedEvents)
+        XCTAssertTrue(context.viewState.canPushEncryptedEvents)
         XCTAssertNil(context.viewState.description(for: .mentionsAndKeywordsOnly))
     }
     
