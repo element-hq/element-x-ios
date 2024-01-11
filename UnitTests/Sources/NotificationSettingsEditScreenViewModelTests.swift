@@ -85,7 +85,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
                 return .mentionsAndKeywordsOnly
             }
         }
-        notificationSettingsProxy.canHomeserverPushEncryptedEventsToDeviceClosure = {
+        notificationSettingsProxy.canPushEncryptedEventsToDeviceClosure = {
             true
         }
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
