@@ -175,23 +175,31 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
-
+    
     func updateMembers() async {
         // We always update members first using the no sync API in case internet is not readily available
         // To get the members stored on disk first, this API call is very fast.
-        if let membersNoSyncIterator = try? await room.membersNoSync(),
-           let members = membersNoSyncIterator.nextChunk(chunkSize: membersNoSyncIterator.len()) {
-            membersSubject.value = members.map {
-                RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
+        do {
+            let membersNoSyncIterator = try await room.membersNoSync()
+            if let members = membersNoSyncIterator.nextChunk(chunkSize: membersNoSyncIterator.len()) {
+                membersSubject.value = members.map {
+                    RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
+                }
             }
+        } catch {
+            MXLog.error("[RoomProxy] Failed to update members using no sync API: \(error)")
         }
-            
-        // Then we update members using the sync API, this is slower but will get us the latest members
-        if let membersIterator = try? await room.members(),
-           let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
-            membersSubject.value = members.map {
-                RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
+        
+        do {
+            // Then we update members using the sync API, this is slower but will get us the latest members
+            let membersIterator = try await room.members()
+            if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
+                membersSubject.value = members.map {
+                    RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
+                }
             }
+        } catch {
+            MXLog.error("[RoomProxy] Failed to update members using sync API: \(error)")
         }
     }
 
