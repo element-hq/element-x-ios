@@ -22,12 +22,12 @@ struct NotificationSettingsProxyMockConfiguration {
     var callback = PassthroughSubject<NotificationSettingsProxyCallback, Never>()
     var defaultRoomMode: RoomNotificationModeProxy
     var roomMode: RoomNotificationSettingsProxyMock
-    var canHomeserverPushEncryptedEvents = false
+    var canPushEncryptedEvents = false
     
-    init(defaultRoomMode: RoomNotificationModeProxy = .allMessages, roomMode: RoomNotificationModeProxy = .allMessages, canHomeserverPushEncryptedEvents: Bool = false) {
+    init(defaultRoomMode: RoomNotificationModeProxy = .allMessages, roomMode: RoomNotificationModeProxy = .allMessages, canPushEncryptedEvents: Bool = false) {
         self.defaultRoomMode = defaultRoomMode
         self.roomMode = RoomNotificationSettingsProxyMock(with: RoomNotificationSettingsProxyMockConfiguration(mode: roomMode, isDefault: defaultRoomMode == roomMode))
-        self.canHomeserverPushEncryptedEvents = canHomeserverPushEncryptedEvents
+        self.canPushEncryptedEvents = canPushEncryptedEvents
     }
 }
 
@@ -92,8 +92,8 @@ extension NotificationSettingsProxyMock {
             }
         }
         
-        canHomeserverPushEncryptedEventsToDeviceClosure = {
-            configuration.canHomeserverPushEncryptedEvents
+        canPushEncryptedEventsToDeviceClosure = {
+            configuration.canPushEncryptedEvents
         }
     }
 }

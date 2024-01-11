@@ -114,7 +114,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
     }()
     
     static let viewModelGroupChatsWithouDisclaimer: NotificationSettingsEditScreenViewModel = {
-        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(canHomeserverPushEncryptedEvents: true))
+        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(canPushEncryptedEvents: true))
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = [RoomSummary].mockRooms.compactMap(\.id)
