@@ -23,8 +23,9 @@ extension XCUIApplication {
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 10.0))
         getStartedButton.tap()
         
+        // Get started is network bound, wait for the change homeserver button for longer
         let changeHomeserverButton = buttons[A11yIdentifiers.serverConfirmationScreen.changeServer]
-        XCTAssertTrue(changeHomeserverButton.waitForExistence(timeout: 10.0))
+        XCTAssertTrue(changeHomeserverButton.waitForExistence(timeout: 30.0))
         changeHomeserverButton.tap()
         
         let homeserverTextField = textFields[A11yIdentifiers.changeServerScreen.server]
@@ -36,7 +37,11 @@ extension XCUIApplication {
         XCTAssertTrue(confirmButton.waitForExistence(timeout: 10.0))
         confirmButton.tap()
         
-        // Server cofirmation is network bound and might take a while
+        // Wait for server confirmation to finish
+        let doesNotExistPredicate = NSPredicate(format: "exists == 0")
+        currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: confirmButton)
+        currentTestCase.waitForExpectations(timeout: 300.0)
+        
         let continueButton = buttons[A11yIdentifiers.serverConfirmationScreen.continue]
         XCTAssertTrue(continueButton.waitForExistence(timeout: 30.0))
         continueButton.tap()
@@ -58,7 +63,6 @@ extension XCUIApplication {
         nextButton.tap()
         
         // Wait for login to finish
-        let doesNotExistPredicate = NSPredicate(format: "exists == 0")
         currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: usernameTextField)
         currentTestCase.waitForExpectations(timeout: 300.0)
         
@@ -93,7 +97,6 @@ extension XCUIApplication {
         let message = staticTexts[A11yIdentifiers.migrationScreen.message]
         
         if message.waitForExistence(timeout: 10.0) {
-            let doesNotExistPredicate = NSPredicate(format: "exists == 0")
             currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: message)
             currentTestCase.waitForExpectations(timeout: 300.0)
         }

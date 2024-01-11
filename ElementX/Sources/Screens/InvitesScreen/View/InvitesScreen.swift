@@ -73,6 +73,7 @@ struct InvitesScreen_Previews: PreviewProvider, TestablePreview {
         NavigationView {
             InvitesScreen(context: InvitesScreenViewModel.someInvite.context)
         }
+        .snapshot(delay: 1.0)
         .previewDisplayName("Some Invite")
     }
 }

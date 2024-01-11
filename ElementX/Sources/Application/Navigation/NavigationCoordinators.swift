@@ -176,7 +176,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
             case .insert:
                 break
             case .remove(_, let module, _):
-                self.processCompactLayoutStackModuleRemoval(module)
+                processCompactLayoutStackModuleRemoval(module)
             }
         }
     }
