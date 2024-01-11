@@ -36,7 +36,11 @@ class UserFlowTests: XCTestCase {
         XCTAssertTrue(firstRoom.waitForExistence(timeout: 10.0))
         firstRoom.tap()
         
-        checkAttachmentsPicker()
+        checkPhotoSharing()
+        
+        checkDocumentSharing()
+        
+        checkLocationSharing()
         
         checkTimelineItemActionMenu()
         
@@ -55,15 +59,7 @@ class UserFlowTests: XCTestCase {
         tapOnBackButton("All Chats")
     }
     
-    private func checkAttachmentsPicker() {
-        for identifier in [A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary,
-                           A11yIdentifiers.roomScreen.attachmentPickerDocuments,
-                           A11yIdentifiers.roomScreen.attachmentPickerLocation] {
-            tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
-            tapOnButton(identifier)
-            tapOnButton("Cancel")
-        }
-                
+    private func checkPhotoSharing() {
         // Open attachments picker
         tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
 
@@ -77,6 +73,43 @@ class UserFlowTests: XCTestCase {
         tapOnButton("Cancel")
         
         sleep(2) // Wait for dismissal
+    }
+    
+    private func checkDocumentSharing() {
+        tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
+        tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
+        tapOnButton("Cancel")
+        
+        sleep(2) // Wait for dismissal
+    }
+    
+    private func checkLocationSharing() {
+        tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
+        tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerLocation)
+        
+        // The order of the alerts is a bit of a mistery so try twice
+        
+        allowLocationPermissionOnce()
+        
+        // Handle map loading errors (missing credentials)
+        let alertOkButton = app.alerts.firstMatch.buttons["OK"].firstMatch
+        if alertOkButton.waitForExistence(timeout: 10.0) {
+            alertOkButton.tap()
+        }
+        
+        allowLocationPermissionOnce()
+        
+        tapOnButton("Cancel")
+        
+        sleep(2) // Wait for dismissal
+    }
+    
+    private func allowLocationPermissionOnce() {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let notificationAlertAllowButton = springboard.buttons["Allow Once"].firstMatch
+        if notificationAlertAllowButton.waitForExistence(timeout: 10.0) {
+            notificationAlertAllowButton.tap()
+        }
     }
     
     private func checkRoomCreation() {
