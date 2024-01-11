@@ -80,6 +80,7 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
         
         inviteSummaryProvider.roomListPublisher
             .removeDuplicates()
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] roomSummaries in
                 guard let self else { return }
                 
