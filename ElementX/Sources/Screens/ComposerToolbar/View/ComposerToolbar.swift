@@ -29,6 +29,7 @@ struct ComposerToolbar: View {
     @FocusState private var composerFocused: Bool
     @State private var frame: CGRect = .zero
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @State private var hasAlreadyAppeared = false
     
     var body: some View {
         VStack(spacing: 8) {
@@ -174,7 +175,11 @@ struct ComposerToolbar: View {
         } editCancellationAction: {
             context.send(viewAction: .cancelEdit)
         } onAppearAction: {
+            guard !hasAlreadyAppeared else {
+                return
+            }
             context.send(viewAction: .composerAppeared)
+            hasAlreadyAppeared = true
         }
         .focused($composerFocused)
         .onChange(of: context.composerFocused) { newValue in
