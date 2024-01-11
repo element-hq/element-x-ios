@@ -142,7 +142,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func canHomeserverPushEncryptedEventsToDevice() async -> Bool {
-        await notificationSettings.canHomeserverPushEncryptedEventToDevice()
+        await notificationSettings.canPushEncryptedEventToDevice()
     }
     
     // MARK: - Private
