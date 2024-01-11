@@ -67,7 +67,9 @@ class UserFlowTests: XCTestCase {
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
         
         // Tap on the second image. First one is always broken on simulators.
-        app.scrollViews.images.element(boundBy: 1).tap()
+        let secondImage = app.scrollViews.images.element(boundBy: 1)
+        XCTAssertTrue(secondImage.waitForExistence(timeout: 10.0)) // Photo library takes a bit to load
+        secondImage.tap()
         
         // Cancel the upload flow
         tapOnButton("Cancel")
