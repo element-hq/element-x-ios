@@ -4,6 +4,7 @@
 
 --disable wrapMultiLineStatementBraces
 --disable hoistPatternLet
+--disable preferForLoop
 
 --commas inline
 --ifdef no-indent
