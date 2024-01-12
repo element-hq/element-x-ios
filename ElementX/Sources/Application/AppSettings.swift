@@ -72,7 +72,8 @@ final class AppSettings {
     
     // MARK: - Application
     
-    lazy var canShowDeveloperOptions: Bool = {
+    /// Whether or not the app is a development build that isn't in production.
+    lazy var isDevelopmentBuild: Bool = {
         #if DEBUG
         true
         #else

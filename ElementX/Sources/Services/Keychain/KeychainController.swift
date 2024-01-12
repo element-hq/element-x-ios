@@ -113,7 +113,14 @@ class KeychainController: KeychainControllerProtocol {
     
     func saveSessionInKeychain(session: Session) {
         MXLog.info("Saving session changes in the keychain.")
-        let restorationToken = RestorationToken(session: session)
+        
+        guard let oldToken = restorationTokenForUsername(session.userId) else {
+            MXLog.error("Failed retrieving the restoration token for \(session.userId)")
+            fatalError("Something has gone mega wrong, all bets are off.")
+        }
+        let restorationToken = RestorationToken(session: session,
+                                                passphrase: oldToken.passphrase,
+                                                pusherNotificationClientIdentifier: oldToken.pusherNotificationClientIdentifier)
         setRestorationToken(restorationToken, forUsername: session.userId)
     }
     

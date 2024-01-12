@@ -68,13 +68,21 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
     }
     
-    func userSession(for client: Client) async -> Result<UserSessionProtocol, UserSessionStoreError> {
-        switch await setupProxyForClient(client) {
-        case .success(let clientProxy):
+    func userSession(for client: Client, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError> {
+        do {
+            let session = try client.session()
+            let userID = try client.userId()
+            let clientProxy = await setupProxyForClient(client)
+            
+            keychainController.setRestorationToken(RestorationToken(session: session,
+                                                                    passphrase: passphrase,
+                                                                    pusherNotificationClientIdentifier: clientProxy.pusherNotificationClientIdentifier),
+                                                   forUsername: userID)
+            
             return .success(buildUserSessionWithClient(clientProxy))
-        case .failure(let error):
+        } catch {
             MXLog.error("Failed creating user session with error: \(error)")
-            return .failure(error)
+            return .failure(.failedSettingUpSession)
         }
     }
     
@@ -104,10 +112,14 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
+        if credentials.restorationToken.passphrase != nil {
+            MXLog.info("Restoring client with encrypted store.")
+        }
         let builder = ClientBuilder()
             .basePath(path: baseDirectory.path)
             .username(username: credentials.userID)
             .homeserverUrl(url: credentials.restorationToken.session.homeserverUrl)
+            .passphrase(passphrase: credentials.restorationToken.passphrase)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
                                            sessionDelegate: keychainController)
@@ -119,30 +131,18 @@ class UserSessionStore: UserSessionStoreProtocol {
                 try client.restoreSession(session: credentials.restorationToken.session)
                 return client
             }
-            return await setupProxyForClient(client)
+            return await .success(setupProxyForClient(client))
         } catch {
             MXLog.error("Failed restoring login with error: \(error)")
             return .failure(.failedRestoringLogin)
         }
     }
     
-    private func setupProxyForClient(_ client: Client) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
-        do {
-            let session = try client.session()
-            let userID = try client.userId()
-            
-            keychainController.setRestorationToken(RestorationToken(session: session), forUsername: userID)
-        } catch {
-            MXLog.error("Failed setting up user session with error: \(error)")
-            return .failure(.failedSettingUpSession)
-        }
-        
-        let clientProxy = await ClientProxy(client: client,
-                                            backgroundTaskService: backgroundTaskService,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            networkMonitor: ServiceLocator.shared.networkMonitor)
-        
-        return .success(clientProxy)
+    private func setupProxyForClient(_ client: Client) async -> ClientProxyProtocol {
+        await ClientProxy(client: client,
+                          backgroundTaskService: backgroundTaskService,
+                          appSettings: ServiceLocator.shared.settings,
+                          networkMonitor: ServiceLocator.shared.networkMonitor)
     }
     
     private func deleteSessionDirectory(for userID: String) {

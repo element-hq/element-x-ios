@@ -79,11 +79,13 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var homeserver: String { get }
     
+    var session: Session? { get }
+    
     var userDisplayName: CurrentValuePublisher<String?, Never> { get }
 
     var userAvatarURL: CurrentValuePublisher<URL?, Never> { get }
-
-    var restorationToken: RestorationToken? { get }
+    
+    var pusherNotificationClientIdentifier: String? { get }
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
