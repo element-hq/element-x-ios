@@ -18,12 +18,7 @@ import Foundation
 
 extension AttributedString {
     var formattedComponents: [AttributedStringBuilderComponent] {
-        var components = [AttributedStringBuilderComponent]()
-        
-        for (index, run) in runs[\.blockquote].enumerated() {
-            let value = run.0
-            let range = run.1
-            
+        runs[\.blockquote].map { value, range in
             var attributedString = AttributedString(self[range])
             
             // Remove trailing new lines if any
@@ -34,10 +29,8 @@ extension AttributedString {
             
             let isBlockquote = value != nil
             
-            components.append(AttributedStringBuilderComponent(id: index, attributedString: attributedString, isBlockquote: isBlockquote))
+            return AttributedStringBuilderComponent(id: String(attributedString.characters), attributedString: attributedString, isBlockquote: isBlockquote)
         }
-        
-        return components
     }
     
     /// Replaces the specified placeholder with a string that links to the specified URL.

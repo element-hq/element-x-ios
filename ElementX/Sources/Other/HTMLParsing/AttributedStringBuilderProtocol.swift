@@ -17,7 +17,7 @@
 import Foundation
 
 struct AttributedStringBuilderComponent: Hashable, Identifiable {
-    let id: Int
+    let id: String
     let attributedString: AttributedString
     let isBlockquote: Bool
 }
