@@ -31,11 +31,16 @@ struct RoomMembersListScreenMemberCell: View {
                                     avatarSize: .user(on: .roomDetails),
                                     imageProvider: context.imageProvider)
                     .accessibilityHidden(true)
-
-                Text(member.name ?? "")
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundColor(.compound.textPrimary)
-                    .lineLimit(1)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(member.name ?? "")
+                        .font(.compound.bodyMDSemibold)
+                        .foregroundColor(.compound.textPrimary)
+                        .lineLimit(1)
+                    Text(member.id)
+                        .font(.compound.bodySM)
+                        .foregroundColor(.compound.textSecondary)
+                        .lineLimit(1)
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
