@@ -88,5 +88,6 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             RoomMembersListScreen(context: viewModel.context)
         }
+        .snapshot(delay: 1.0)
     }
 }
