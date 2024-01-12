@@ -99,6 +99,8 @@ final class TimelineProxy: TimelineProxyProtocol {
                      html: String?,
                      original eventID: String,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Editing message with original event ID: \(eventID)")
+
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -361,6 +363,8 @@ final class TimelineProxy: TimelineProxyProtocol {
                           waveform: [UInt16],
                           progressSubject: CurrentValueSubject<Double, Never>?,
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Sending voice message")
+        
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -389,6 +393,12 @@ final class TimelineProxy: TimelineProxyProtocol {
                      html: String?,
                      inReplyTo eventID: String? = nil,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        if let eventID {
+            MXLog.info("Sending reply to eventID: \(eventID)")
+        } else {
+            MXLog.info("Sending message")
+        }
+        
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
