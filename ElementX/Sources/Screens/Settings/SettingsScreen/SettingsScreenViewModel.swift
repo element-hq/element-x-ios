@@ -31,7 +31,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            userID: userSession.userID,
                                            accountProfileURL: userSession.clientProxy.accountURL(action: .profile),
                                            accountSessionsListURL: userSession.clientProxy.accountURL(action: .sessionsList),
-                                           showDeveloperOptions: appSettings.canShowDeveloperOptions),
+                                           showDeveloperOptions: appSettings.isDevelopmentBuild),
                    imageProvider: userSession.mediaProvider)
         
         userSession.clientProxy.userAvatarURL

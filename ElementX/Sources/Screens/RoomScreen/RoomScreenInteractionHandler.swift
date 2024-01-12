@@ -112,7 +112,7 @@ class RoomScreenInteractionHandler {
         }
 
         var debugActions: [TimelineItemMenuAction] = []
-        if appSettings.canShowDeveloperOptions || appSettings.viewSourceEnabled {
+        if appSettings.isDevelopmentBuild || appSettings.viewSourceEnabled {
             debugActions.append(.viewSource)
         }
 

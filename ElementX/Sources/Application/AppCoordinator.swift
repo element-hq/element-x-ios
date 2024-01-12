@@ -393,7 +393,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     private func startAuthentication() {
         let authenticationNavigationStackCoordinator = NavigationStackCoordinator()
-        let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore, appSettings: appSettings)
+        let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
+                                                               encryptionKeyProvider: EncryptionKeyProvider(),
+                                                               appSettings: appSettings)
         authenticationCoordinator = AuthenticationCoordinator(authenticationService: authenticationService,
                                                               navigationStackCoordinator: authenticationNavigationStackCoordinator,
                                                               appSettings: appSettings,
@@ -418,7 +420,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                           userDisplayName: userSession.clientProxy.userDisplayName.value ?? "",
                                                           deviceID: userSession.deviceID)
             
-            let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore, appSettings: appSettings)
+            let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
+                                                                   encryptionKeyProvider: EncryptionKeyProvider(),
+                                                                   appSettings: appSettings)
             _ = await authenticationService.configure(for: userSession.homeserver)
             
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,

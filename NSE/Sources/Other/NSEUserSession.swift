@@ -28,9 +28,13 @@ final class NSEUserSession {
 
     init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate) throws {
         userID = credentials.userID
+        if credentials.restorationToken.passphrase != nil {
+            MXLog.info("Restoring client with encrypted store.")
+        }
         baseClient = try ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
+            .passphrase(passphrase: credentials.restorationToken.passphrase)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
                                            sessionDelegate: clientSessionDelegate)

@@ -21,11 +21,18 @@ import MatrixRustSDK
 class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     private let authenticationService: AuthenticationService
     private let userSessionStore: UserSessionStoreProtocol
+    private let passphrase: String?
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
     
-    init(userSessionStore: UserSessionStoreProtocol, appSettings: AppSettings) {
+    init(userSessionStore: UserSessionStoreProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, appSettings: AppSettings) {
+        let passphrase = appSettings.isDevelopmentBuild ? encryptionKeyProvider.generateKey().base64EncodedString() : nil
+        if passphrase != nil {
+            MXLog.info("Testing database encryption in development build.")
+        }
+        
+        self.passphrase = passphrase
         self.userSessionStore = userSessionStore
         
         homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress,
@@ -41,7 +48,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
                                                   staticRegistrations: appSettings.oidcStaticRegistrations.mapKeys { $0.absoluteString })
         
         authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
-                                                      passphrase: nil,
+                                                      passphrase: passphrase,
                                                       userAgent: UserAgentBuilder.makeASCIIUserAgent(),
                                                       oidcConfiguration: oidcConfiguration,
                                                       customSlidingSyncProxy: appSettings.slidingSyncProxyURL?.absoluteString,
@@ -138,7 +145,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     // MARK: - Private
     
     private func userSession(for client: Client) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        switch await userSessionStore.userSession(for: client) {
+        switch await userSessionStore.userSession(for: client, passphrase: passphrase) {
         case .success(let clientProxy):
             return .success(clientProxy)
         case .failure:
