@@ -15,9 +15,9 @@
 //
 
 import Combine
-import Foundation
+import CryptoKit
 import MatrixRustSDK
-import UIKit
+import SwiftUI
 
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
@@ -159,14 +159,22 @@ class ClientProxy: ClientProxyProtocol {
         client.homeserver()
     }
 
-    var restorationToken: RestorationToken? {
+    var session: Session? {
         do {
-            return try RestorationToken(session: client.session())
+            return try client.session()
         } catch {
-            MXLog.error("Failed retrieving restore token with error: \(error)")
+            MXLog.error("Failed retrieving the client's session with error: \(error)")
             return nil
         }
     }
+    
+    private(set) lazy var pusherNotificationClientIdentifier: String? = {
+        // NOTE: The result is stored as part of the restoration token. Any changes
+        // here would require a migration to correctly match incoming notifications.
+        guard let data = userID.data(using: .utf8) else { return nil }
+        let digest = SHA256.hash(data: data)
+        return digest.compactMap { String(format: "%02x", $0) }.joined()
+    }()
 
     func startSync() {
         guard !hasEncounteredAuthError else {
