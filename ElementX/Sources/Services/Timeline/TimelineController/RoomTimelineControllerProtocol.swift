@@ -52,12 +52,12 @@ protocol RoomTimelineControllerProtocol {
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError>
     
     func sendMessage(_ message: String,
-                     html: String,
+                     html: String?,
                      inReplyTo itemID: TimelineItemIdentifier?,
                      intentionalMentions: IntentionalMentions) async
     
     func editMessage(_ newMessage: String,
-                     html: String,
+                     html: String?,
                      original itemID: TimelineItemIdentifier,
                      intentionalMentions: IntentionalMentions) async
     
@@ -78,7 +78,7 @@ protocol RoomTimelineControllerProtocol {
 
 extension RoomTimelineControllerProtocol {
     func sendMessage(_ message: String,
-                     html: String,
+                     html: String?,
                      intentionalMentions: IntentionalMentions) async {
         await sendMessage(message,
                           html: html,

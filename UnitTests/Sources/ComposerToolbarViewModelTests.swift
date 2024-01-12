@@ -179,4 +179,18 @@ class ComposerToolbarViewModelTests: XCTestCase {
         
         try await deferred.fulfill()
     }
+    
+    func testSuggestionsAreIgnoredWhenRTEDisabled() async throws {
+        appSettings.richTextEditorEnabled = false
+        let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
+                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
+        let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions))
+        viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                             completionSuggestionService: mockCompletionSuggestionService,
+                                             mediaProvider: MockMediaProvider(),
+                                             appSettings: ServiceLocator.shared.settings,
+                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+        
+        XCTAssertEqual(viewModel.state.suggestions, [])
+    }
 }

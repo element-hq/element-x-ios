@@ -51,7 +51,7 @@ protocol TimelineProxyProtocol {
     func cancelSend(transactionID: String) async
     
     func editMessage(_ message: String,
-                     html: String,
+                     html: String?,
                      original eventID: String,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
     
@@ -107,7 +107,7 @@ protocol TimelineProxyProtocol {
     func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
     
     func sendMessage(_ message: String,
-                     html: String,
+                     html: String?,
                      inReplyTo eventID: String?,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
     
@@ -124,4 +124,15 @@ protocol TimelineProxyProtocol {
     func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineProxyError>
     
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineProxyError>
+}
+
+extension TimelineProxyProtocol {
+    func sendMessage(_ message: String,
+                     html: String?,
+                     intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        await sendMessage(message,
+                          html: html,
+                          inReplyTo: nil,
+                          intentionalMentions: intentionalMentions)
+    }
 }

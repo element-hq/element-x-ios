@@ -87,11 +87,15 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
             .store(in: &cancellables)
         
-        appSettings.$richTextEditorEnabled
-            .map { !$0 }
-            .assign(to: &wysiwygViewModel.$plainTextMode)
-        
         completionSuggestionService.suggestionsPublisher
+            .combineLatest(appSettings.$richTextEditorEnabled)
+            .map { suggestions, richTextEditorEnabled in
+                // We ignore user suggestions when RTE is disabled since mentions would not work
+                guard richTextEditorEnabled else {
+                    return []
+                }
+                return suggestions
+            }
             .weakAssign(to: \.state.suggestions, on: self)
             .store(in: &cancellables)
         
@@ -111,8 +115,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             case .previewVoiceMessage:
                 actionsSubject.send(.voiceMessage(.send))
             default:
+                let sendHTML = appSettings.richTextEditorEnabled
                 actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
-                                                 html: wysiwygViewModel.content.html,
+                                                 html: sendHTML ? wysiwygViewModel.content.html : nil,
                                                  mode: state.composerMode,
                                                  intentionalMentions: wysiwygViewModel
                                                      .getMentionsState()
