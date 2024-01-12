@@ -112,6 +112,9 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
+        if credentials.restorationToken.passphrase != nil {
+            MXLog.info("Restoring client with encrypted store.")
+        }
         let builder = ClientBuilder()
             .basePath(path: baseDirectory.path)
             .username(username: credentials.userID)
