@@ -96,11 +96,9 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func editMessage(_ message: String,
-                     html: String,
+                     html: String?,
                      original eventID: String,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Editing message with original event ID: \(eventID)")
-        
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -363,8 +361,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                           waveform: [UInt16],
                           progressSubject: CurrentValueSubject<Double, Never>?,
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Sending voice message")
-        
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -390,15 +386,9 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func sendMessage(_ message: String,
-                     html: String,
+                     html: String?,
                      inReplyTo eventID: String? = nil,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
-        if let eventID {
-            MXLog.info("Sending reply to eventID: \(eventID)")
-        } else {
-            MXLog.info("Sending message")
-        }
-        
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -573,7 +563,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     // MARK: - Private
     
     private func buildMessageContentFor(_ message: String,
-                                        html: String,
+                                        html: String?,
                                         intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation {
         let emoteSlashCommand = "/me "
         let isEmote: Bool = message.starts(with: emoteSlashCommand)
@@ -581,10 +571,18 @@ final class TimelineProxy: TimelineProxyProtocol {
         let content: RoomMessageEventContentWithoutRelation
         if isEmote {
             let emoteMessage = String(message.dropFirst(emoteSlashCommand.count))
-            let emoteHtml = String(html.dropFirst(emoteSlashCommand.count))
+            
+            var emoteHtml: String?
+            if let html {
+                emoteHtml = String(html.dropFirst(emoteSlashCommand.count))
+            }
             content = buildEmoteMessageContentFor(emoteMessage, html: emoteHtml)
         } else {
-            content = messageEventContentFromHtml(body: message, htmlBody: html)
+            if let html {
+                content = messageEventContentFromHtml(body: message, htmlBody: html)
+            } else {
+                content = messageEventContentFromMarkdown(md: message)
+            }
         }
         return content.withMentions(mentions: intentionalMentions)
     }

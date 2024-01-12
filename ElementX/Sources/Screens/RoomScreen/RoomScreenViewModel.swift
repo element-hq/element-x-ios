@@ -461,7 +461,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.showLoading = false
     }
 
-    private func sendCurrentMessage(_ message: String, html: String, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions) async {
+    private func sendCurrentMessage(_ message: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions) async {
         guard !message.isEmpty else {
             fatalError("This message should never be empty")
         }

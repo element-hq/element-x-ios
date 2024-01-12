@@ -70,14 +70,14 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async { }
     
     func sendMessage(_ message: String,
-                     html: String,
+                     html: String?,
                      inReplyTo itemID: TimelineItemIdentifier?,
                      intentionalMentions: IntentionalMentions) async { }
         
     func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async { }
 
     func editMessage(_ newMessage: String,
-                     html: String,
+                     html: String?,
                      original itemID: TimelineItemIdentifier,
                      intentionalMentions: IntentionalMentions) async { }
     
