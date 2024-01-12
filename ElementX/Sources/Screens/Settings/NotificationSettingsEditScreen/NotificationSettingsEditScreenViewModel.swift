@@ -93,7 +93,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
             if encrypted_mode == unencrypted_mode {
                 mode = encrypted_mode
             }
-            let canHomserverPushEncryptedEvents = await notificationSettingsProxy.canHomeserverPushEncryptedEventsToDevice()
+            let canPushEncryptedEvents = await notificationSettingsProxy.canPushEncryptedEventsToDevice()
             guard !Task.isCancelled else { return }
             
             switch mode {
@@ -104,7 +104,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
             default:
                 state.defaultMode = nil
             }
-            state.canHomeServerPushEncryptedEvents = canHomserverPushEncryptedEvents
+            state.canPushEncryptedEvents = canPushEncryptedEvents
         }
     }
     

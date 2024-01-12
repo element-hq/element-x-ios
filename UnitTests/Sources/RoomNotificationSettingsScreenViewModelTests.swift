@@ -56,7 +56,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
     
     func testInitialStateDefaultModeEncryptedRoomWithCanPushEncrypted() async throws {
         let roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isEncrypted: true, joinedMembersCount: 0))
-        let notificationSettingsProxyMock = NotificationSettingsProxyMock(with: .init(canHomeserverPushEncryptedEvents: true))
+        let notificationSettingsProxyMock = NotificationSettingsProxyMock(with: .init(canPushEncryptedEvents: true))
         
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: true))
         

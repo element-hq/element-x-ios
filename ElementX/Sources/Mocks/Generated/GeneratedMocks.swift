@@ -1614,21 +1614,21 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
             return getRoomsWithUserDefinedRulesReturnValue
         }
     }
-    //MARK: - canHomeserverPushEncryptedEventsToDevice
+    //MARK: - canPushEncryptedEventsToDevice
 
-    var canHomeserverPushEncryptedEventsToDeviceCallsCount = 0
-    var canHomeserverPushEncryptedEventsToDeviceCalled: Bool {
-        return canHomeserverPushEncryptedEventsToDeviceCallsCount > 0
+    var canPushEncryptedEventsToDeviceCallsCount = 0
+    var canPushEncryptedEventsToDeviceCalled: Bool {
+        return canPushEncryptedEventsToDeviceCallsCount > 0
     }
-    var canHomeserverPushEncryptedEventsToDeviceReturnValue: Bool!
-    var canHomeserverPushEncryptedEventsToDeviceClosure: (() async -> Bool)?
+    var canPushEncryptedEventsToDeviceReturnValue: Bool!
+    var canPushEncryptedEventsToDeviceClosure: (() async -> Bool)?
 
-    func canHomeserverPushEncryptedEventsToDevice() async -> Bool {
-        canHomeserverPushEncryptedEventsToDeviceCallsCount += 1
-        if let canHomeserverPushEncryptedEventsToDeviceClosure = canHomeserverPushEncryptedEventsToDeviceClosure {
-            return await canHomeserverPushEncryptedEventsToDeviceClosure()
+    func canPushEncryptedEventsToDevice() async -> Bool {
+        canPushEncryptedEventsToDeviceCallsCount += 1
+        if let canPushEncryptedEventsToDeviceClosure = canPushEncryptedEventsToDeviceClosure {
+            return await canPushEncryptedEventsToDeviceClosure()
         } else {
-            return canHomeserverPushEncryptedEventsToDeviceReturnValue
+            return canPushEncryptedEventsToDeviceReturnValue
         }
     }
 }

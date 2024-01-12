@@ -33,7 +33,7 @@ struct NotificationSettingsEditScreenViewState: BindableState {
     var defaultMode: NotificationSettingsEditScreenDefaultMode?
     var pendingMode: NotificationSettingsEditScreenDefaultMode?
     var roomsWithUserDefinedMode: [NotificationSettingsEditScreenRoom] = []
-    var canHomeServerPushEncryptedEvents = false
+    var canPushEncryptedEvents = false
 
     func isSelected(mode: NotificationSettingsEditScreenDefaultMode) -> Bool {
         pendingMode == nil && defaultMode == mode
@@ -41,7 +41,7 @@ struct NotificationSettingsEditScreenViewState: BindableState {
     
     func description(for mode: NotificationSettingsEditScreenDefaultMode) -> String? {
         guard mode == .mentionsAndKeywordsOnly,
-              !canHomeServerPushEncryptedEvents else {
+              !canPushEncryptedEvents else {
             return nil
         }
         return L10n.screenNotificationSettingsMentionsOnlyDisclaimer

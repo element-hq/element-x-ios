@@ -65,10 +65,6 @@ class RoomProxy: RoomProxyProtocol {
         pollHistoryTimeline = await TimelineProxy(timeline: room.pollHistory(), backgroundTaskService: backgroundTaskService)
         
         Task {
-            // Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
-            // This should become automatic on the RustSDK side at some point
-            await room.timeline().fetchMembers()
-            
             await updateMembers()
         }
     }
@@ -179,21 +175,31 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
-
+    
     func updateMembers() async {
+        // We always update members first using the no sync API in case internet is not readily available
+        // To get the members stored on disk first, this API call is very fast.
         do {
-            let membersIterator = try await room.members()
-            guard let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) else {
-                return
+            let membersNoSyncIterator = try await room.membersNoSync()
+            if let members = membersNoSyncIterator.nextChunk(chunkSize: membersNoSyncIterator.len()) {
+                membersSubject.value = members.map {
+                    RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
+                }
             }
-            
-            let roomMembersProxies = members.map {
-                RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
-            }
-            
-            membersSubject.value = roomMembersProxies
         } catch {
-            return
+            MXLog.error("[RoomProxy] Failed to update members using no sync API: \(error)")
+        }
+        
+        do {
+            // Then we update members using the sync API, this is slower but will get us the latest members
+            let membersIterator = try await room.members()
+            if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
+                membersSubject.value = members.map {
+                    RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
+                }
+            }
+        } catch {
+            MXLog.error("[RoomProxy] Failed to update members using sync API: \(error)")
         }
     }
 

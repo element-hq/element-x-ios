@@ -40,5 +40,5 @@ protocol NotificationSettingsProxyProtocol {
     func isInviteForMeEnabled() async throws -> Bool
     func setInviteForMeEnabled(enabled: Bool) async throws
     func getRoomsWithUserDefinedRules() async throws -> [String]
-    func canHomeserverPushEncryptedEventsToDevice() async -> Bool
+    func canPushEncryptedEventsToDevice() async -> Bool
 }
