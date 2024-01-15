@@ -43,6 +43,7 @@ struct AvatarHeaderView<Footer: View>: View {
                 .foregroundColor(.compound.textPrimary)
                 .font(.compound.headingLGBold)
                 .multilineTextAlignment(.center)
+                .textSelection(.enabled)
 
             if let subtitle {
                 Text(subtitle)
