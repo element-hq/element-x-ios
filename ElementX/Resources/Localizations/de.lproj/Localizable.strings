@@ -89,7 +89,7 @@
 "action_start_chat" = "Chat starten";
 "action_start_verification" = "Verifizierung starten";
 "action_static_map_load" = "Tippe, um die Karte zu laden";
-"action_take_photo" = "Foto machen";
+"action_take_photo" = "Foto aufnehmen";
 "action_tap_for_options" = "Für Optionen tippen";
 "action_try_again" = "Erneut versuchen";
 "action_view_source" = "Quellcode anzeigen";
@@ -411,7 +411,7 @@
 "screen_media_upload_preview_error_failed_processing" = "Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut.";
 "screen_media_upload_preview_error_failed_sending" = "Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut.";
 "screen_migration_message" = "Dies ist ein einmaliger Vorgang, danke fürs Warten.";
-"screen_migration_title" = "Richte dein Konto ein.";
+"screen_migration_title" = "Dein Konto wird eingerichtet.";
 "screen_notification_optin_subtitle" = "Du kannst deine Einstellungen später ändern.";
 "screen_notification_optin_title" = "Erlaube Benachrichtigungen und verpasse keine Nachricht";
 "screen_notification_settings_additional_settings_section_title" = "Zusätzliche Einstellungen";
@@ -477,7 +477,7 @@
 "screen_recovery_key_setup_title" = "Wiederherstellung einrichten";
 "screen_report_content_block_user_hint" = "Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest";
 "screen_room_attachment_source_camera" = "Kamera";
-"screen_room_attachment_source_camera_photo" = "Foto machen";
+"screen_room_attachment_source_camera_photo" = "Foto aufnehmen";
 "screen_room_attachment_source_camera_video" = "Video aufnehmen";
 "screen_room_attachment_source_files" = "Anhang";
 "screen_room_attachment_source_gallery" = "Foto- und Videobibliothek";

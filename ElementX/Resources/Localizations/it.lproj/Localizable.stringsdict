@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d digit entered</string>
+			<string>%1$d cifra inserita</string>
 			<key>other</key>
-			<string>%1$d digits entered</string>
+			<string>%1$d cifre inserite</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Read by %1$@ and %2$d other</string>
+			<string>Letto da %1$@ e %2$d altro</string>
 			<key>other</key>
-			<string>Read by %1$@ and %2$d others</string>
+			<string>Letto da %1$@ e altri %2$d</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -61,9 +61,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d vote</string>
+			<string>%d voto</string>
 			<key>other</key>
-			<string>%d votes</string>
+			<string>%d voti</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -77,9 +77,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d message</string>
+			<string>%1$@: %2$d messaggio</string>
 			<key>other</key>
-			<string>%1$@: %2$d messages</string>
+			<string>%1$@: %2$d messaggi</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -93,9 +93,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d notification</string>
+			<string>%d notifica</string>
 			<key>other</key>
-			<string>%d notifications</string>
+			<string>%d notifiche</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -109,9 +109,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d invitation</string>
+			<string>%d invito</string>
 			<key>other</key>
-			<string>%d invitations</string>
+			<string>%d inviti</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d new message</string>
+			<string>%d nuovo messaggio</string>
 			<key>other</key>
-			<string>%d new messages</string>
+			<string>%d nuovi messaggi</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -141,9 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d unread notified message</string>
+			<string>%d messaggio notificato non letto</string>
 			<key>other</key>
-			<string>%d unread notified messages</string>
+			<string>%d messaggi notificati non letti</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -157,9 +157,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d room</string>
+			<string>%d stanza</string>
 			<key>other</key>
-			<string>%d rooms</string>
+			<string>%d stanze</string>
 		</dict>
 	</dict>
 	<key>room_timeline_state_changes</key>
@@ -189,9 +189,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
+			<string>Hai %1$d tentativo di sblocco</string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>Hai %1$d tentativi di sblocco</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -205,9 +205,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Wrong PIN. You have %1$d more chance</string>
+			<string>PIN sbagliato. Hai %1$d altro tentativo</string>
 			<key>other</key>
-			<string>Wrong PIN. You have %1$d more chances</string>
+			<string>PIN sbagliato. Hai altri %1$d tentativi</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
