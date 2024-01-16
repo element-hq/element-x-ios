@@ -36,6 +36,7 @@ class GenericCallLinkCoordinator: CoordinatorProtocol {
     func toPresentable() -> AnyView {
         AnyView(
             WebView(url: parameters.url)
+                .id(UUID())
                 .ignoresSafeArea(edges: .bottom)
                 .presentationDragIndicator(.visible)
         )
