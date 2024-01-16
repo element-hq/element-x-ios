@@ -417,6 +417,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         self.roomProxy = roomProxy
         
+        Task {
+            // Mark the room as read on entering but don't send read receipts
+            // as those will be handled by the timeline
+            await roomProxy.markAsRead(sendReadReceipts: false, receiptType: appSettings.sendReadReceiptsEnabled ? .read : .readPrivate)
+        }
+        
         let userID = userSession.clientProxy.userID
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,

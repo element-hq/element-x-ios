@@ -55,6 +55,10 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.roomListFiltersEnabled) {
                     Text("Show filters")
                 }
+                
+                Toggle(isOn: $context.markAsUnreadEnabled) {
+                    Text("Mark as unread")
+                }
             }
             
             Section("Element Call") {

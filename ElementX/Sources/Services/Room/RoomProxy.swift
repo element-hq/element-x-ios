@@ -45,18 +45,24 @@ class RoomProxy: RoomProxyProtocol {
     var actions: AnyPublisher<RoomProxyAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     var ownUserID: String {
         room.ownUserId()
     }
-
-    init(roomListItem: RoomListItemProtocol,
-         room: RoomProtocol,
-         backgroundTaskService: BackgroundTaskServiceProtocol) async {
+    
+    init?(roomListItem: RoomListItemProtocol,
+          room: RoomProtocol,
+          backgroundTaskService: BackgroundTaskServiceProtocol) async {
         self.roomListItem = roomListItem
         self.room = room
         self.backgroundTaskService = backgroundTaskService
-        timeline = await TimelineProxy(timeline: room.timeline(), backgroundTaskService: backgroundTaskService)
+        
+        do {
+            timeline = try await TimelineProxy(timeline: room.timeline(), backgroundTaskService: backgroundTaskService)
+        } catch {
+            MXLog.error("Failed creating timeline with error: \(error)")
+            return nil
+        }
         
         Task {
             await updateMembers()
@@ -352,6 +358,37 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    func markAsUnread() async -> Result<Void, RoomProxyError> {
+        MXLog.info("Marking room \(id) as unread")
+        
+        do {
+            try await room.markAsUnread()
+            return .success(())
+        } catch {
+            MXLog.error("Failed marking room \(id) as unread with error: \(error)")
+            return .failure(.failedMarkingAsUnread)
+        }
+    }
+    
+    func markAsRead(sendReadReceipts: Bool, receiptType: ReceiptType) async -> Result<Void, RoomProxyError> {
+        MXLog.info("Marking room \(id) as read, sending read receipts: \(sendReadReceipts)")
+        
+        do {
+            if sendReadReceipts {
+                try await room.markAsReadAndSendReadReceipt(receiptType: receiptType)
+            } else {
+                try await room.markAsRead()
+            }
+            
+            return .success(())
+        } catch {
+            MXLog.error("Failed marking room \(id) as read with error: \(error)")
+            return .failure(.failedMarkingAsRead)
+        }
+    }
+    
+    // MARK: - Element Call
+    
     func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError> {
         do {
             return try await .success(room.canUserSendState(userId: userID, stateEvent: .callMember))
@@ -360,8 +397,6 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.failedCheckingPermission)
         }
     }
-    
-    // MARK: - Element Call
     
     func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol {
         ElementCallWidgetDriver(room: room)

@@ -44,8 +44,25 @@ struct HomeScreenRoomList: View {
                     .redacted(reason: .placeholder)
             } else {
                 let isSelected = context.viewState.selectedRoomID == room.id
+                
                 HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
                     .contextMenu {
+                        if context.viewState.markAsUnreadEnabled {
+                            if room.hasNewContent {
+                                Button {
+                                    context.send(viewAction: .markRoomAsRead(roomIdentifier: room.id))
+                                } label: {
+                                    Text(L10n.screenRoomlistMarkAsRead)
+                                }
+                            } else {
+                                Button {
+                                    context.send(viewAction: .markRoomAsUnread(roomIdentifier: room.id))
+                                } label: {
+                                    Text(L10n.screenRoomlistMarkAsUnread)
+                                }
+                            }
+                        }
+                        
                         Button {
                             context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
                         } label: {
