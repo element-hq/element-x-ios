@@ -190,6 +190,9 @@ struct ComposerToolbar: View {
         .onChange(of: composerFocused) { newValue in
             context.composerFocused = newValue
         }
+        .onAppear {
+            composerFocused = context.composerFocused
+        }
     }
     
     private var placeholder: String {
