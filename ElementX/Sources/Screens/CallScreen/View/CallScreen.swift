@@ -23,6 +23,7 @@ struct CallScreen: View {
     
     var body: some View {
         WebView(url: context.viewState.url, viewModelContext: context)
+            .id(UUID())
             .ignoresSafeArea(edges: .bottom)
             .presentationDragIndicator(.visible)
             .environment(\.colorScheme, .dark)
