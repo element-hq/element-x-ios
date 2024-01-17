@@ -22,8 +22,10 @@ enum AppDelegateCallback {
     case failedToRegisteredNotifications(error: Error)
 }
 
-class AppDelegate: NSObject, UIApplicationDelegate {
+// If the AppDelegate is ObservableObject you can access it from anywhere by using @EnvironmentObject without the need of injecting it
+final class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
     let callbacks = PassthroughSubject<AppDelegateCallback, Never>()
+    var orientationLock = UIInterfaceOrientationMask.all
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Add a SceneDelegate to the SwiftUI scene so that we can connect up the WindowManager.
@@ -43,5 +45,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         callbacks.send(.failedToRegisteredNotifications(error: error))
+    }
+
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        orientationLock
     }
 }

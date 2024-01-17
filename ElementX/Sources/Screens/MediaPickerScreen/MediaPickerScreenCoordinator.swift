@@ -77,7 +77,7 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
     }
     
     private var cameraPicker: some View {
-        CameraPicker(userIndicatorController: userIndicatorController) { [weak self] action in
+        OrientableCameraPicker(userIndicatorController: userIndicatorController) { [weak self] action in
             switch action {
             case .cancel:
                 self?.callback?(.cancel)
@@ -88,10 +88,29 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
                 self?.callback?(.selectMediaAtURL(url))
             }
         }
-        .background(.black, ignoresSafeAreaEdges: .bottom)
     }
     
     private func showError() {
         userIndicatorController.submitIndicator(UserIndicator(title: L10n.screenMediaPickerErrorFailedSelection))
+    }
+}
+
+private struct OrientableCameraPicker: View {
+    let userIndicatorController: UserIndicatorControllerProtocol
+    let callback: (CameraPickerAction) -> Void
+    @EnvironmentObject private var appDelegate: AppDelegate
+    
+    var body: some View {
+        CameraPicker(userIndicatorController: userIndicatorController, callback: callback)
+            .background(.black, ignoresSafeAreaEdges: .bottom)
+            .onAppear {
+                // This how you are supposed to force an orientation on iOS 16+
+                appDelegate.orientationLock = .portrait
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
+            }
+            .onDisappear {
+                appDelegate.orientationLock = .all
+            }
     }
 }
