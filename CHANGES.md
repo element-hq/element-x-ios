@@ -1,3 +1,30 @@
+## Changes in 1.5.2 (2024-01-16)
+
+✨ Features
+
+- Added back the mention badge option but only behind a feature flag. ([#2281](https://github.com/element-hq/element-x-ios/issues/2281))
+- Allow copying user display names on the room member details screen ([#2333](https://github.com/element-hq/element-x-ios/issues/2333))
+
+🙌 Improvements
+
+- Added the user id in the room members list cells, to avoid ambiguity. ([#2332](https://github.com/element-hq/element-x-ios/pull/2332))
+
+🐛 Bugfixes
+
+- Improved plain text mode stability. ([#2327](https://github.com/element-hq/element-x-ios/pull/2327))
+- Fix for dictation not working properly in RTE mode. ([#2030](https://github.com/element-hq/element-x-ios/issues/2030))
+- Composer won't reset its content the app is backgrounded on iPad. ([#2275](https://github.com/element-hq/element-x-ios/issues/2275))
+- Fix timeline entries flickering when a lot of mention pills present ([#2286](https://github.com/element-hq/element-x-ios/issues/2286))
+- Fix wrong notification placeholder avatar orientation on 17.2.1 ([#2291](https://github.com/element-hq/element-x-ios/issues/2291))
+- Trying to edit messages containing links with angle brackets doesn't pre-populate the message composer ([#2296](https://github.com/element-hq/element-x-ios/issues/2296))
+- Fix room messages coming in as push notifications when inside a room when entering it from the invites list ([#2302](https://github.com/element-hq/element-x-ios/issues/2302))
+- Fix for read receipts loading slowly when opening a room. ([#2304](https://github.com/element-hq/element-x-ios/issues/2304))
+- Fix reporting content screen not being displayed ([#2306](https://github.com/element-hq/element-x-ios/issues/2306))
+
+🚧 In development 🚧
+
+- Enable database encryption for new logins on Nightly/PR builds. ([#441](https://github.com/element-hq/element-x-ios/issues/441))
+
 ## Changes in 1.5.1 (2023-12-22)
 
 No significant changes.

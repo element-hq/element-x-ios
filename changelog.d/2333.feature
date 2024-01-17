@@ -1,1 +1,0 @@
-Allow copying user display names on the room member details screen
