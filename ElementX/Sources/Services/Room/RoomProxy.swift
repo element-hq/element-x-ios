@@ -51,10 +51,6 @@ class RoomProxy: RoomProxyProtocol {
         room.ownUserId()
     }
 
-    deinit {
-        roomListItem.unsubscribe()
-    }
-
     init(roomListItem: RoomListItemProtocol,
          room: RoomProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) async {
@@ -88,6 +84,10 @@ class RoomProxy: RoomProxyProtocol {
         await pollHistoryTimeline.subscribeForUpdates()
         
         subscribeToRoomStateUpdates()
+    }
+    
+    func unsubscribeFromUpdates() {
+        roomListItem.unsubscribe()
     }
 
     lazy var id: String = room.id()

@@ -69,6 +69,8 @@ protocol RoomProxyProtocol {
     
     func subscribeForUpdates() async
     
+    func unsubscribeFromUpdates()
+    
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
     
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError>

@@ -58,7 +58,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var roomProxy: RoomProxyProtocol?
+    private var roomProxy: RoomProxyProtocol? {
+        didSet {
+            oldValue?.unsubscribeFromUpdates()
+        }
+    }
+    
     private var timelineController: RoomTimelineControllerProtocol?
     
     init(userSession: UserSessionProtocol,

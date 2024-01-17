@@ -1864,6 +1864,18 @@ class RoomProxyMock: RoomProxyProtocol {
         subscribeForUpdatesCallsCount += 1
         await subscribeForUpdatesClosure?()
     }
+    //MARK: - unsubscribeFromUpdates
+
+    var unsubscribeFromUpdatesCallsCount = 0
+    var unsubscribeFromUpdatesCalled: Bool {
+        return unsubscribeFromUpdatesCallsCount > 0
+    }
+    var unsubscribeFromUpdatesClosure: (() -> Void)?
+
+    func unsubscribeFromUpdates() {
+        unsubscribeFromUpdatesCallsCount += 1
+        unsubscribeFromUpdatesClosure?()
+    }
     //MARK: - redact
 
     var redactCallsCount = 0
