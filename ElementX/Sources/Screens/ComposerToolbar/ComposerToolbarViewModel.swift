@@ -16,6 +16,7 @@
 
 import Combine
 import Foundation
+import GameKit
 import SwiftUI
 import WysiwygComposer
 
@@ -100,8 +101,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .store(in: &cancellables)
         
         setupMentionsHandling(mentionDisplayHelper: mentionDisplayHelper)
+        
+        focusComposerIfHardwareKeyboardConnected()
     }
-
+    
     // MARK: - Public
 
     override func process(viewAction: ComposerToolbarViewAction) {
@@ -360,6 +363,23 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     private func removeLinks() {
         wysiwygViewModel.applyLinkOperation(.removeLinks)
+    }
+    
+    private func focusComposerIfHardwareKeyboardConnected() {
+        // The simulator always detects the hardware keyboard as connected
+        #if !targetEnvironment(simulator)
+        if GCKeyboard.coalesced != nil {
+            MXLog.info("Hardware keyboard is connected")
+            state.bindings.composerFocused = true
+        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(hardwareKeyboardDidConnect), name: .GCKeyboardDidConnect, object: nil)
+        #endif
+    }
+    
+    @objc private func hardwareKeyboardDidConnect(_ notification: Notification) {
+        MXLog.info("Did connect hardware keyboard")
+        state.bindings.composerFocused = true
     }
 }
 

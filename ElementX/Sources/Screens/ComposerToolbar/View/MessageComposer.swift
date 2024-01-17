@@ -31,7 +31,6 @@ struct MessageComposer: View {
     let replyCancellationAction: () -> Void
     let editCancellationAction: () -> Void
     let onAppearAction: () -> Void
-    @FocusState private var focused: Bool
     
     @State private var composerTranslation: CGFloat = 0
     private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
@@ -77,7 +76,6 @@ struct MessageComposer: View {
                        alignment: .top)
                 .tint(.compound.iconAccentTertiary)
                 .padding(.vertical, 10)
-                .focused($focused)
                 .onAppear {
                     onAppearAction()
                 }

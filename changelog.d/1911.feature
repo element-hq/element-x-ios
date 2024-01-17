@@ -1,0 +1,1 @@
+Automatically focus the composer when a hardware keyboards is connected
