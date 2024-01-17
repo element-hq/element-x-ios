@@ -105,9 +105,9 @@ private struct OrientableCameraPicker: View {
             .background(.black, ignoresSafeAreaEdges: .bottom)
             .onAppear {
                 // This how you are supposed to force an orientation on iOS 16+
-                appDelegate.orientationLock = .portrait
                 let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                 windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
+                appDelegate.orientationLock = .portrait
             }
             .onDisappear {
                 appDelegate.orientationLock = .all
