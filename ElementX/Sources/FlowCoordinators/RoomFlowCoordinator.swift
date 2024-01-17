@@ -872,17 +872,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func asyncPresentRoomPollsHistory(roomID: String) async {
-        let roomProxy: RoomProxyProtocol
-        
-        guard let proxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            MXLog.error("Invalid room identifier: \(roomID)")
-            stateMachine.tryEvent(.dismissPollsHistory)
-            return
+        guard let roomProxy else {
+            fatalError()
         }
-        
-        roomProxy = proxy
-        
-        await roomProxy.subscribeForUpdates()
                 
         let userID = userSession.clientProxy.userID
         
