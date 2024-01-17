@@ -1,3 +1,14 @@
+## Changes in 1.5.3 (2024-01-17)
+
+✨ Features
+
+- Automatically focus the composer when a hardware keyboards is connected ([#1911](https://github.com/element-hq/element-x-ios/issues/1911))
+
+🐛 Bugfixes
+
+- Prevent the same WebView from being reused for multiple Element Call links ([#2325](https://github.com/element-hq/element-x-ios/issues/2325))
+- Fixed a bug that made the app crash when dictation ended. ([#2344](https://github.com/element-hq/element-x-ios/issues/2344))
+
 ## Changes in 1.5.2 (2024-01-16)
 
 ✨ Features
