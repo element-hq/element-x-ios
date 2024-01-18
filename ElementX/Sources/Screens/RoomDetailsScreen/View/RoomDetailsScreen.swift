@@ -220,10 +220,14 @@ struct RoomDetailsScreen: View {
             }
         }
     }
+    
+    private var leaveRoomTitle: String {
+        context.viewState.dmRecipient == nil ? L10n.screenRoomDetailsLeaveRoomTitle : L10n.screenRoomDetailsLeaveConversationTitle
+    }
 
     private var leaveRoomSection: some View {
         Section {
-            ListRow(label: .action(title: L10n.actionLeaveRoom,
+            ListRow(label: .action(title: leaveRoomTitle,
                                    icon: \.leave,
                                    role: .destructive),
                     kind: .button { context.send(viewAction: .processTapLeave) })

@@ -147,15 +147,19 @@ struct LeaveRoomAlertItem: AlertProtocol {
     }
 
     let roomId: String
+    let isDM: Bool
     let state: RoomState
-    let title = L10n.actionLeaveRoom
     let confirmationTitle = L10n.actionLeave
     let cancelTitle = L10n.actionCancel
+    
+    var title: String {
+        isDM ? L10n.actionLeaveConversation : L10n.actionLeaveRoom
+    }
 
     var subtitle: String {
         switch state {
         case .empty: return L10n.leaveRoomAlertEmptySubtitle
-        case .private: return L10n.leaveRoomAlertPrivateSubtitle
+        case .private: return isDM ? L10n.leaveConversationAlertSubtitle : L10n.leaveRoomAlertPrivateSubtitle
         case .public: return L10n.leaveRoomAlertSubtitle
         }
     }
