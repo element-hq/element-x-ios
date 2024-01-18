@@ -146,6 +146,8 @@ public enum L10n {
   public static var actionLearnMore: String { return L10n.tr("Localizable", "action_learn_more") }
   /// Leave
   public static var actionLeave: String { return L10n.tr("Localizable", "action_leave") }
+  /// Leave conversation
+  public static var actionLeaveConversation: String { return L10n.tr("Localizable", "action_leave_conversation") }
   /// Leave room
   public static var actionLeaveRoom: String { return L10n.tr("Localizable", "action_leave_room") }
   /// Manage account
@@ -524,6 +526,8 @@ public enum L10n {
   public static func inviteFriendsText(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "invite_friends_text", String(describing: p1), String(describing: p2))
   }
+  /// Are you sure that you want to leave this conversation? This conversation is not public and you won't be able to rejoin without an invite.
+  public static var leaveConversationAlertSubtitle: String { return L10n.tr("Localizable", "leave_conversation_alert_subtitle") }
   /// Are you sure that you want to leave this room? You're the only person here. If you leave, no one will be able to join in the future, including you.
   public static var leaveRoomAlertEmptySubtitle: String { return L10n.tr("Localizable", "leave_room_alert_empty_subtitle") }
   /// Are you sure that you want to leave this room? This room is not public and you won't be able to rejoin without an invite.
@@ -1188,6 +1192,8 @@ public enum L10n {
   public static var screenRoomDetailsErrorUnmuting: String { return L10n.tr("Localizable", "screen_room_details_error_unmuting") }
   /// Invite people
   public static var screenRoomDetailsInvitePeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_invite_people_title") }
+  /// Leave conversation
+  public static var screenRoomDetailsLeaveConversationTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_conversation_title") }
   /// Leave room
   public static var screenRoomDetailsLeaveRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_room_title") }
   /// Custom
