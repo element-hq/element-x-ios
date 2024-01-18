@@ -47,6 +47,23 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
         AnyView(mediaPicker)
     }
     
+    func start() {
+        guard source == .camera else {
+            return
+        }
+        
+        orientationManager.setOrientation(.portrait)
+        orientationManager.lockOrientation(.portrait)
+    }
+    
+    func stop() {
+        guard source == .camera else {
+            return
+        }
+        
+        orientationManager.lockOrientation(.all)
+    }
+    
     @ViewBuilder
     private var mediaPicker: some View {
         switch source {
@@ -94,16 +111,6 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
             }
         }
         .background(.black, ignoresSafeAreaEdges: .bottom)
-        .onAppear { [weak self] in
-            guard let self else {
-                return
-            }
-            orientationManager.setOrientation(.portrait)
-            orientationManager.lockOrientation(.portrait)
-        }
-        .onDisappear { [weak self] in
-            self?.orientationManager.lockOrientation(.all)
-        }
     }
     
     private func showError() {
