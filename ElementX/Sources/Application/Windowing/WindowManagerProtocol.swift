@@ -25,8 +25,12 @@ protocol WindowManagerDelegate: AnyObject {
 /// A window manager that supports switching between a main app window with an overlay and
 /// an alternate window to switch contexts whilst also preserving the main view hierarchy.
 /// Heavily inspired by https://www.fivestars.blog/articles/swiftui-windows/
+// sourcery: AutoMockable
 protocol WindowManagerProtocol: AnyObject {
     var delegate: WindowManagerDelegate? { get set }
+    
+    /// Controls the currently supported orientations for the app
+    var orientationLock: UIInterfaceOrientationMask { get set }
     
     /// The app's main window (we only support a single scene).
     var mainWindow: UIWindow! { get }
@@ -46,4 +50,7 @@ protocol WindowManagerProtocol: AnyObject {
     
     /// Shows the alternate window, hiding the main and overlay combo.
     func switchToAlternate()
+    
+    /// Forces the current orientation for the main window, works only on iOS
+    func setOrientation(_ orientation: UIInterfaceOrientationMask)
 }

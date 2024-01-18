@@ -18,6 +18,7 @@ import Combine
 import SwiftUI
 
 struct StartChatScreenCoordinatorParameters {
+    let windowManager: WindowManagerProtocol
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     weak var navigationStackCoordinator: NavigationStackCoordinator?
@@ -146,7 +147,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source) { [weak self] action in
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source, windowManager: parameters.windowManager) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:

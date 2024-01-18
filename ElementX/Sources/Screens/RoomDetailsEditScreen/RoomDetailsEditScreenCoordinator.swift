@@ -23,6 +23,7 @@ struct RoomDetailsEditScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let roomProxy: RoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let windowManager: WindowManagerProtocol
 }
 
 enum RoomDetailsEditScreenCoordinatorAction {
@@ -72,7 +73,7 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
     private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source) { [weak self] action in
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source, windowManager: parameters.windowManager) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:

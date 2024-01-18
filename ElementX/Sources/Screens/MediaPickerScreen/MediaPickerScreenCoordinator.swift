@@ -28,13 +28,15 @@ enum MediaPickerScreenCoordinatorAction {
 }
 
 class MediaPickerScreenCoordinator: CoordinatorProtocol {
+    private let windowManger: WindowManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let source: MediaPickerScreenSource
-    private let callback: ((MediaPickerScreenCoordinatorAction) -> Void)?
+    private let callback: (MediaPickerScreenCoordinatorAction) -> Void
     
-    init(userIndicatorController: UserIndicatorControllerProtocol, source: MediaPickerScreenSource, callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
+    init(userIndicatorController: UserIndicatorControllerProtocol, source: MediaPickerScreenSource, windowManager: WindowManagerProtocol, callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
         self.userIndicatorController = userIndicatorController
         self.source = source
+        windowManger = windowManager
         self.callback = callback
     }
     
@@ -51,12 +53,12 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
             PhotoLibraryPicker(userIndicatorController: userIndicatorController) { [weak self] action in
                 switch action {
                 case .cancel:
-                    self?.callback?(.cancel)
+                    self?.callback(.cancel)
                 case .error(let error):
                     MXLog.error("Failed selecting media from the photo library with error: \(error)")
                     self?.showError()
                 case .selectFile(let url):
-                    self?.callback?(.selectMediaAtURL(url))
+                    self?.callback(.selectMediaAtURL(url))
                 }
             }
         case .documents:
@@ -65,52 +67,43 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
             DocumentPicker(userIndicatorController: userIndicatorController) { action in
                 switch action {
                 case .cancel:
-                    self.callback?(.cancel)
+                    self.callback(.cancel)
                 case .error(let error):
                     MXLog.error("Failed selecting media from the document picker with error: \(error)")
                     self.showError()
                 case .selectFile(let url):
-                    self.callback?(.selectMediaAtURL(url))
+                    self.callback(.selectMediaAtURL(url))
                 }
             }
         }
     }
     
     private var cameraPicker: some View {
-        OrientableCameraPicker(userIndicatorController: userIndicatorController) { [weak self] action in
+        CameraPicker(userIndicatorController: userIndicatorController) { [weak self] action in
             switch action {
             case .cancel:
-                self?.callback?(.cancel)
+                self?.callback(.cancel)
             case .error(let error):
                 MXLog.error("Failed selecting media from the camera picker with error: \(error)")
                 self?.showError()
             case .selectFile(let url):
-                self?.callback?(.selectMediaAtURL(url))
+                self?.callback(.selectMediaAtURL(url))
             }
+        }
+        .background(.black, ignoresSafeAreaEdges: .bottom)
+        .onAppear { [weak self] in
+            guard let self else {
+                return
+            }
+            windowManger.setOrientation(.portrait)
+            windowManger.orientationLock = .portrait
+        }
+        .onDisappear { [weak self] in
+            self?.windowManger.orientationLock = .all
         }
     }
     
     private func showError() {
         userIndicatorController.submitIndicator(UserIndicator(title: L10n.screenMediaPickerErrorFailedSelection))
-    }
-}
-
-private struct OrientableCameraPicker: View {
-    let userIndicatorController: UserIndicatorControllerProtocol
-    let callback: (CameraPickerAction) -> Void
-    @EnvironmentObject private var appDelegate: AppDelegate
-    
-    var body: some View {
-        CameraPicker(userIndicatorController: userIndicatorController, callback: callback)
-            .background(.black, ignoresSafeAreaEdges: .bottom)
-            .onAppear {
-                // This how you are supposed to force an orientation on iOS 16+
-                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
-                appDelegate.orientationLock = .portrait
-            }
-            .onDisappear {
-                appDelegate.orientationLock = .all
-            }
     }
 }

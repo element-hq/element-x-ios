@@ -64,6 +64,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     @Consumable private var storedAppRoute: AppRoute?
 
     init(appDelegate: AppDelegate) {
+        appDelegate.windowManager = windowManager
         Self.setupEnvironmentVariables()
         
         let appSettings = AppSettings()

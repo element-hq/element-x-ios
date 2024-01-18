@@ -3377,4 +3377,73 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
         }
     }
 }
+class WindowManagerMock: WindowManagerProtocol {
+    weak var delegate: WindowManagerDelegate?
+    var orientationLock: UIInterfaceOrientationMask {
+        get { return underlyingOrientationLock }
+        set(value) { underlyingOrientationLock = value }
+    }
+    var underlyingOrientationLock: UIInterfaceOrientationMask!
+    var mainWindow: UIWindow!
+    var overlayWindow: UIWindow!
+    var alternateWindow: UIWindow!
+    var windows: [UIWindow] = []
+
+    //MARK: - configure
+
+    var configureWithCallsCount = 0
+    var configureWithCalled: Bool {
+        return configureWithCallsCount > 0
+    }
+    var configureWithReceivedWindowScene: UIWindowScene?
+    var configureWithReceivedInvocations: [UIWindowScene] = []
+    var configureWithClosure: ((UIWindowScene) -> Void)?
+
+    func configure(with windowScene: UIWindowScene) {
+        configureWithCallsCount += 1
+        configureWithReceivedWindowScene = windowScene
+        configureWithReceivedInvocations.append(windowScene)
+        configureWithClosure?(windowScene)
+    }
+    //MARK: - switchToMain
+
+    var switchToMainCallsCount = 0
+    var switchToMainCalled: Bool {
+        return switchToMainCallsCount > 0
+    }
+    var switchToMainClosure: (() -> Void)?
+
+    func switchToMain() {
+        switchToMainCallsCount += 1
+        switchToMainClosure?()
+    }
+    //MARK: - switchToAlternate
+
+    var switchToAlternateCallsCount = 0
+    var switchToAlternateCalled: Bool {
+        return switchToAlternateCallsCount > 0
+    }
+    var switchToAlternateClosure: (() -> Void)?
+
+    func switchToAlternate() {
+        switchToAlternateCallsCount += 1
+        switchToAlternateClosure?()
+    }
+    //MARK: - setOrientation
+
+    var setOrientationCallsCount = 0
+    var setOrientationCalled: Bool {
+        return setOrientationCallsCount > 0
+    }
+    var setOrientationReceivedOrientation: UIInterfaceOrientationMask?
+    var setOrientationReceivedInvocations: [UIInterfaceOrientationMask] = []
+    var setOrientationClosure: ((UIInterfaceOrientationMask) -> Void)?
+
+    func setOrientation(_ orientation: UIInterfaceOrientationMask) {
+        setOrientationCallsCount += 1
+        setOrientationReceivedOrientation = orientation
+        setOrientationReceivedInvocations.append(orientation)
+        setOrientationClosure?(orientation)
+    }
+}
 // swiftlint:enable all

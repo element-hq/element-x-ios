@@ -45,7 +45,8 @@ class RoomFlowCoordinatorTests: XCTestCase {
                                                   emojiProvider: EmojiProvider(),
                                                   appSettings: ServiceLocator.shared.settings,
                                                   analytics: ServiceLocator.shared.analytics,
-                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                  windowManager: WindowManagerMock())
     }
     
     func testRoomPresentation() async throws {
