@@ -40,7 +40,7 @@ enum RoomFlowCoordinatorAction: Equatable {
 
 // swiftlint:disable file_length
 class RoomFlowCoordinator: FlowCoordinatorProtocol {
-    private let windowManager: WindowManagerProtocol
+    private let orientationManager: OrientationManagerProtocol
     private let userSession: UserSessionProtocol
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
@@ -75,7 +75,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         windowManager: WindowManagerProtocol) {
+         orientationManager: OrientationManagerProtocol) {
         self.userSession = userSession
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.navigationStackCoordinator = navigationStackCoordinator
@@ -84,7 +84,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
-        self.windowManager = windowManager
+        self.orientationManager = orientationManager
         
         setupStateMachine()
     }
@@ -610,7 +610,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                    navigationStackCoordinator: stackCoordinator,
                                                                                    roomProxy: roomProxy,
                                                                                    userIndicatorController: userIndicatorController,
-                                                                                   windowManager: windowManager)
+                                                                                   orientationManager: orientationManager)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
         roomDetailsEditCoordinator.actions.sink { [weak self] action in
@@ -664,7 +664,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMediaUploadPickerWithSource(_ source: MediaPickerScreenSource) {
         let stackCoordinator = NavigationStackCoordinator()
 
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: userIndicatorController, source: source, windowManager: windowManager) { [weak self] action in
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: userIndicatorController,
+                                                                  source: source,
+                                                                  orientationManager: orientationManager) { [weak self] action in
             guard let self else {
                 return
             }

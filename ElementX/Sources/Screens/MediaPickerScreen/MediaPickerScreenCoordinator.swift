@@ -28,15 +28,18 @@ enum MediaPickerScreenCoordinatorAction {
 }
 
 class MediaPickerScreenCoordinator: CoordinatorProtocol {
-    private let windowManger: WindowManagerProtocol
+    private let orientationManager: OrientationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let source: MediaPickerScreenSource
     private let callback: (MediaPickerScreenCoordinatorAction) -> Void
     
-    init(userIndicatorController: UserIndicatorControllerProtocol, source: MediaPickerScreenSource, windowManager: WindowManagerProtocol, callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
+    init(userIndicatorController: UserIndicatorControllerProtocol,
+         source: MediaPickerScreenSource,
+         orientationManager: OrientationManagerProtocol,
+         callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
         self.userIndicatorController = userIndicatorController
         self.source = source
-        windowManger = windowManager
+        self.orientationManager = orientationManager
         self.callback = callback
     }
     
@@ -95,11 +98,11 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
             guard let self else {
                 return
             }
-            windowManger.setOrientation(.portrait)
-            windowManger.orientationLock = .portrait
+            orientationManager.setOrientation(.portrait)
+            orientationManager.lockOrientation(.portrait)
         }
         .onDisappear { [weak self] in
-            self?.windowManger.orientationLock = .all
+            self?.orientationManager.lockOrientation(.all)
         }
     }
     

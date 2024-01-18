@@ -18,6 +18,7 @@ import Combine
 import SwiftUI
 
 class WindowManager: WindowManagerProtocol {
+    private let appDelegate: AppDelegate
     weak var windowScene: UIWindowScene?
     weak var delegate: WindowManagerDelegate?
     
@@ -36,6 +37,10 @@ class WindowManager: WindowManagerProtocol {
     @CancellableTask private var switchTask: Task<Void, Error>?
     /// A duration that allows window switching to wait a couple of frames to avoid a transition through black.
     private let windowHideDelay = Duration.milliseconds(33)
+    
+    init(appDelegate: AppDelegate) {
+        self.appDelegate = appDelegate
+    }
     
     func configure(with windowScene: UIWindowScene) {
         self.windowScene = windowScene
@@ -87,6 +92,10 @@ class WindowManager: WindowManagerProtocol {
     
     func setOrientation(_ orientation: UIInterfaceOrientationMask) {
         windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
+    }
+    
+    func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
+        appDelegate.orientationLock = orientation
     }
 }
 

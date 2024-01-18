@@ -46,7 +46,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
                                                   appSettings: ServiceLocator.shared.settings,
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                  windowManager: WindowManagerMock())
+                                                  orientationManager: OrientationManagerMock())
     }
     
     func testRoomPresentation() async throws {

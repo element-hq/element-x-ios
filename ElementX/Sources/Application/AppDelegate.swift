@@ -24,7 +24,7 @@ enum AppDelegateCallback {
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
     let callbacks = PassthroughSubject<AppDelegateCallback, Never>()
-    weak var windowManager: WindowManagerProtocol?
+    var orientationLock = UIInterfaceOrientationMask.all
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Add a SceneDelegate to the SwiftUI scene so that we can connect up the WindowManager.
@@ -47,6 +47,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        windowManager?.orientationLock ?? .all
+        orientationLock
     }
 }

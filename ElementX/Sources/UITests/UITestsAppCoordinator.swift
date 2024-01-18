@@ -28,9 +28,10 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     // periphery:ignore - retaining purpose
     private var alternateWindowMockScreen: MockScreen?
     
-    let windowManager: WindowManagerProtocol = WindowManager()
+    let windowManager: WindowManagerProtocol
     
-    init() {
+    init(appDelegate: AppDelegate) {
+        windowManager = WindowManager(appDelegate: appDelegate)
         // disabling View animations
         UIView.setAnimationsEnabled(false)
         
@@ -686,7 +687,7 @@ class MockScreen: Identifiable {
                                                                                  navigationStackCoordinator: navigationStackCoordinator,
                                                                                  roomProxy: roomProxy,
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                                 windowManager: WindowManagerMock()))
+                                                                                 orientationManager: OrientationManagerMock()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMembersListScreen:
@@ -736,7 +737,7 @@ class MockScreen: Identifiable {
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([])
             let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())
-            let parameters: StartChatScreenCoordinatorParameters = .init(windowManager: WindowManagerMock(),
+            let parameters: StartChatScreenCoordinatorParameters = .init(orientationManager: OrientationManagerMock(),
                                                                          userSession: userSession,
                                                                          userIndicatorController: UserIndicatorControllerMock(),
                                                                          navigationStackCoordinator: navigationStackCoordinator,
@@ -751,7 +752,7 @@ class MockScreen: Identifiable {
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
             let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())
-            let coordinator = StartChatScreenCoordinator(parameters: .init(windowManager: WindowManagerMock(),
+            let coordinator = StartChatScreenCoordinator(parameters: .init(orientationManager: OrientationManagerMock(),
                                                                            userSession: userSession,
                                                                            userIndicatorController: UserIndicatorControllerMock(),
                                                                            navigationStackCoordinator: navigationStackCoordinator,

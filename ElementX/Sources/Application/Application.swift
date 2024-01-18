@@ -25,9 +25,9 @@ struct Application: App {
 
     init() {
         if ProcessInfo.isRunningUITests {
-            appCoordinator = UITestsAppCoordinator()
+            appCoordinator = UITestsAppCoordinator(appDelegate: appDelegate)
         } else if ProcessInfo.isRunningUnitTests {
-            appCoordinator = UnitTestsAppCoordinator()
+            appCoordinator = UnitTestsAppCoordinator(appDelegate: appDelegate)
         } else {
             appCoordinator = AppCoordinator(appDelegate: appDelegate)
         }

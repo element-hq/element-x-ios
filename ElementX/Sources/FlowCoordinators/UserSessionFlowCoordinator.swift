@@ -76,7 +76,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                   appSettings: appSettings,
                                                   analytics: analytics,
                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                  windowManager: windowManager)
+                                                  orientationManager: windowManager)
                 
         settingsFlowCoordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
                                                                             windowManager: windowManager,
@@ -458,7 +458,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let startChatNavigationStackCoordinator = NavigationStackCoordinator()
 
         let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
-        let parameters = StartChatScreenCoordinatorParameters(windowManager: windowManager,
+        let parameters = StartChatScreenCoordinatorParameters(orientationManager: windowManager,
                                                               userSession: userSession,
                                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                               navigationStackCoordinator: startChatNavigationStackCoordinator,

@@ -17,9 +17,10 @@
 import SwiftUI
 
 class UnitTestsAppCoordinator: AppCoordinatorProtocol {
-    let windowManager: WindowManagerProtocol = WindowManager()
+    let windowManager: WindowManagerProtocol
     
-    init() {
+    init(appDelegate: AppDelegate) {
+        windowManager = WindowManager(appDelegate: appDelegate)
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorControllerMock.default)
         
         AppSettings.configureWithSuiteName("io.element.elementx.unittests")
