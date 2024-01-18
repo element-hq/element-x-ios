@@ -18,6 +18,7 @@ import Combine
 import SwiftUI
 
 struct UserDetailsEditScreenCoordinatorParameters {
+    let orientationManager: OrientationManagerProtocol
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     weak var navigationStackCoordinator: NavigationStackCoordinator?
@@ -61,7 +62,7 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
     private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source) { [weak self] action in
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source, orientationManager: parameters.orientationManager) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:

@@ -152,7 +152,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentUserDetailsEditScreen() {
-        let coordinator = UserDetailsEditScreenCoordinator(parameters: .init(clientProxy: parameters.userSession.clientProxy,
+        let coordinator = UserDetailsEditScreenCoordinator(parameters: .init(orientationManager: parameters.windowManager,
+                                                                             clientProxy: parameters.userSession.clientProxy,
                                                                              mediaProvider: parameters.userSession.mediaProvider,
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              userIndicatorController: parameters.userIndicatorController))

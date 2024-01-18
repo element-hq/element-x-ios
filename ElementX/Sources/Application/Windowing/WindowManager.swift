@@ -18,12 +18,14 @@ import Combine
 import SwiftUI
 
 class WindowManager: WindowManagerProtocol {
+    private let appDelegate: AppDelegate
+    weak var windowScene: UIWindowScene?
     weak var delegate: WindowManagerDelegate?
     
     private(set) var mainWindow: UIWindow!
     private(set) var overlayWindow: UIWindow!
     private(set) var alternateWindow: UIWindow!
-    
+        
     var windows: [UIWindow] {
         [mainWindow, overlayWindow, alternateWindow]
     }
@@ -34,7 +36,12 @@ class WindowManager: WindowManagerProtocol {
     /// A duration that allows window switching to wait a couple of frames to avoid a transition through black.
     private let windowHideDelay = Duration.milliseconds(33)
     
+    init(appDelegate: AppDelegate) {
+        self.appDelegate = appDelegate
+    }
+    
     func configure(with windowScene: UIWindowScene) {
+        self.windowScene = windowScene
         mainWindow = windowScene.keyWindow
         mainWindow.tintColor = .compound.textActionPrimary
         
@@ -79,6 +86,14 @@ class WindowManager: WindowManagerProtocol {
             overlayWindow.isHidden = true
             mainWindow.isHidden = true
         }
+    }
+    
+    func setOrientation(_ orientation: UIInterfaceOrientationMask) {
+        windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
+    }
+    
+    func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
+        appDelegate.orientationLock = orientation
     }
 }
 

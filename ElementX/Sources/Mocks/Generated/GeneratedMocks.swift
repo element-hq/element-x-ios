@@ -1632,6 +1632,41 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
         }
     }
 }
+class OrientationManagerMock: OrientationManagerProtocol {
+
+    //MARK: - setOrientation
+
+    var setOrientationCallsCount = 0
+    var setOrientationCalled: Bool {
+        return setOrientationCallsCount > 0
+    }
+    var setOrientationReceivedOrientation: UIInterfaceOrientationMask?
+    var setOrientationReceivedInvocations: [UIInterfaceOrientationMask] = []
+    var setOrientationClosure: ((UIInterfaceOrientationMask) -> Void)?
+
+    func setOrientation(_ orientation: UIInterfaceOrientationMask) {
+        setOrientationCallsCount += 1
+        setOrientationReceivedOrientation = orientation
+        setOrientationReceivedInvocations.append(orientation)
+        setOrientationClosure?(orientation)
+    }
+    //MARK: - lockOrientation
+
+    var lockOrientationCallsCount = 0
+    var lockOrientationCalled: Bool {
+        return lockOrientationCallsCount > 0
+    }
+    var lockOrientationReceivedOrientation: UIInterfaceOrientationMask?
+    var lockOrientationReceivedInvocations: [UIInterfaceOrientationMask] = []
+    var lockOrientationClosure: ((UIInterfaceOrientationMask) -> Void)?
+
+    func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
+        lockOrientationCallsCount += 1
+        lockOrientationReceivedOrientation = orientation
+        lockOrientationReceivedInvocations.append(orientation)
+        lockOrientationClosure?(orientation)
+    }
+}
 class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
 
     //MARK: - sendPollResponse

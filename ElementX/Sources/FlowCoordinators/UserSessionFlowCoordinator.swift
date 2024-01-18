@@ -25,6 +25,7 @@ enum UserSessionFlowCoordinatorAction {
 }
 
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
+    private let windowManager: WindowManagerProtocol
     private let userSession: UserSessionProtocol
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let bugReportService: BugReportServiceProtocol
@@ -60,6 +61,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.bugReportService = bugReportService
         self.appSettings = appSettings
+        self.windowManager = windowManager
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
@@ -73,7 +75,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                   emojiProvider: EmojiProvider(),
                                                   appSettings: appSettings,
                                                   analytics: analytics,
-                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                  orientationManager: windowManager)
                 
         settingsFlowCoordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
                                                                             windowManager: windowManager,
@@ -455,7 +458,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let startChatNavigationStackCoordinator = NavigationStackCoordinator()
 
         let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
-        let parameters = StartChatScreenCoordinatorParameters(userSession: userSession,
+        let parameters = StartChatScreenCoordinatorParameters(orientationManager: windowManager,
+                                                              userSession: userSession,
                                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                               navigationStackCoordinator: startChatNavigationStackCoordinator,
                                                               userDiscoveryService: userDiscoveryService)

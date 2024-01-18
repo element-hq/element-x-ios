@@ -28,18 +28,40 @@ enum MediaPickerScreenCoordinatorAction {
 }
 
 class MediaPickerScreenCoordinator: CoordinatorProtocol {
+    private let orientationManager: OrientationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let source: MediaPickerScreenSource
-    private let callback: ((MediaPickerScreenCoordinatorAction) -> Void)?
+    private let callback: (MediaPickerScreenCoordinatorAction) -> Void
     
-    init(userIndicatorController: UserIndicatorControllerProtocol, source: MediaPickerScreenSource, callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
+    init(userIndicatorController: UserIndicatorControllerProtocol,
+         source: MediaPickerScreenSource,
+         orientationManager: OrientationManagerProtocol,
+         callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
         self.userIndicatorController = userIndicatorController
         self.source = source
+        self.orientationManager = orientationManager
         self.callback = callback
     }
     
     func toPresentable() -> AnyView {
         AnyView(mediaPicker)
+    }
+    
+    func start() {
+        guard source == .camera else {
+            return
+        }
+        
+        orientationManager.setOrientation(.portrait)
+        orientationManager.lockOrientation(.portrait)
+    }
+    
+    func stop() {
+        guard source == .camera else {
+            return
+        }
+        
+        orientationManager.lockOrientation(.all)
     }
     
     @ViewBuilder
@@ -51,12 +73,12 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
             PhotoLibraryPicker(userIndicatorController: userIndicatorController) { [weak self] action in
                 switch action {
                 case .cancel:
-                    self?.callback?(.cancel)
+                    self?.callback(.cancel)
                 case .error(let error):
                     MXLog.error("Failed selecting media from the photo library with error: \(error)")
                     self?.showError()
                 case .selectFile(let url):
-                    self?.callback?(.selectMediaAtURL(url))
+                    self?.callback(.selectMediaAtURL(url))
                 }
             }
         case .documents:
@@ -65,12 +87,12 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
             DocumentPicker(userIndicatorController: userIndicatorController) { action in
                 switch action {
                 case .cancel:
-                    self.callback?(.cancel)
+                    self.callback(.cancel)
                 case .error(let error):
                     MXLog.error("Failed selecting media from the document picker with error: \(error)")
                     self.showError()
                 case .selectFile(let url):
-                    self.callback?(.selectMediaAtURL(url))
+                    self.callback(.selectMediaAtURL(url))
                 }
             }
         }
@@ -80,12 +102,12 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
         CameraPicker(userIndicatorController: userIndicatorController) { [weak self] action in
             switch action {
             case .cancel:
-                self?.callback?(.cancel)
+                self?.callback(.cancel)
             case .error(let error):
                 MXLog.error("Failed selecting media from the camera picker with error: \(error)")
                 self?.showError()
             case .selectFile(let url):
-                self?.callback?(.selectMediaAtURL(url))
+                self?.callback(.selectMediaAtURL(url))
             }
         }
         .background(.black, ignoresSafeAreaEdges: .bottom)

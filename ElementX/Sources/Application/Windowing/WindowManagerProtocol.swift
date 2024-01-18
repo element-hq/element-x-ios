@@ -25,7 +25,7 @@ protocol WindowManagerDelegate: AnyObject {
 /// A window manager that supports switching between a main app window with an overlay and
 /// an alternate window to switch contexts whilst also preserving the main view hierarchy.
 /// Heavily inspired by https://www.fivestars.blog/articles/swiftui-windows/
-protocol WindowManagerProtocol: AnyObject {
+protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     var delegate: WindowManagerDelegate? { get set }
     
     /// The app's main window (we only support a single scene).

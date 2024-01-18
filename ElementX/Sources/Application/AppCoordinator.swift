@@ -57,13 +57,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private var clientProxyObserver: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
     
-    let windowManager: WindowManagerProtocol = WindowManager()
+    let windowManager: WindowManagerProtocol
     let notificationManager: NotificationManagerProtocol
 
     private let appRouteURLParser: AppRouteURLParser
     @Consumable private var storedAppRoute: AppRoute?
 
     init(appDelegate: AppDelegate) {
+        windowManager = WindowManager(appDelegate: appDelegate)
         Self.setupEnvironmentVariables()
         
         let appSettings = AppSettings()
