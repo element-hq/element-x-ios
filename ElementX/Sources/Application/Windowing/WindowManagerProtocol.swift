@@ -28,9 +28,6 @@ protocol WindowManagerDelegate: AnyObject {
 protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     var delegate: WindowManagerDelegate? { get set }
     
-    /// Controls the currently supported orientations for the app
-    var orientationLock: UIInterfaceOrientationMask { get set }
-    
     /// The app's main window (we only support a single scene).
     var mainWindow: UIWindow! { get }
     /// Presented on top of the main window, to display e.g. user indicators.

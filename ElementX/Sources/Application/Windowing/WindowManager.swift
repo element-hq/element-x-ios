@@ -25,9 +25,7 @@ class WindowManager: WindowManagerProtocol {
     private(set) var mainWindow: UIWindow!
     private(set) var overlayWindow: UIWindow!
     private(set) var alternateWindow: UIWindow!
-    
-    var orientationLock: UIInterfaceOrientationMask = .all
-    
+        
     var windows: [UIWindow] {
         [mainWindow, overlayWindow, alternateWindow]
     }
