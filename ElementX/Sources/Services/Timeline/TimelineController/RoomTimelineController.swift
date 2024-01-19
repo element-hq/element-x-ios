@@ -294,8 +294,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             // Otherwise check if we need to add anything to the top of the timeline.
             switch timelineProvider.backPaginationState {
             case .timelineStartReached:
-                let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name)
-                newTimelineItems.insert(timelineStart, at: 0)
+                if !roomProxy.isEncryptedOneToOneRoom {
+                    let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name)
+                    newTimelineItems.insert(timelineStart, at: 0)
+                }
                 canBackPaginate = false
             case .paginating:
                 newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(), at: 0)
@@ -317,7 +319,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private func buildTimelineItem(for itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
         switch itemProxy {
         case .event(let eventTimelineItem):
-            let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem)
+            let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem, isDM: roomProxy.isEncryptedOneToOneRoom)
             
             // When backup is enabled just show the timeline items, they will most likely
             // resolve eventually. If we don't know the backup state then we assume the session is not verified yet,
