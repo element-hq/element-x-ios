@@ -34,6 +34,8 @@ class OnboardingScreenViewModel: OnboardingScreenViewModelType, OnboardingScreen
         switch viewAction {
         case .login:
             actionsSubject.send(.login)
+        case .reportProblem:
+            actionsSubject.send(.reportProblem)
         }
     }
 }

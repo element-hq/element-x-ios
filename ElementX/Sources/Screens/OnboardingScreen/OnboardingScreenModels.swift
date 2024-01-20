@@ -20,14 +20,17 @@ import SwiftUI
 
 enum OnboardingScreenCoordinatorAction {
     case login
+    case reportProblem
 }
 
 enum OnboardingScreenViewModelAction {
     case login
+    case reportProblem
 }
 
 struct OnboardingScreenViewState: BindableState { }
 
 enum OnboardingScreenViewAction {
     case login
+    case reportProblem
 }

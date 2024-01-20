@@ -24,7 +24,7 @@ enum BugReportScreenCoordinatorResult {
 
 struct BugReportScreenCoordinatorParameters {
     let bugReportService: BugReportServiceProtocol
-    let userID: String
+    let userID: String?
     let deviceID: String?
     
     let userIndicatorController: UserIndicatorControllerProtocol?

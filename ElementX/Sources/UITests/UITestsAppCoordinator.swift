@@ -137,11 +137,12 @@ class MockScreen: Identifiable {
         case .authenticationFlow:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),
+                                                        appLockService: AppLockServiceMock(),
+                                                        bugReportService: BugReportServiceMock(),
                                                         navigationStackCoordinator: navigationStackCoordinator,
                                                         appSettings: ServiceLocator.shared.settings,
                                                         analytics: ServiceLocator.shared.analytics,
-                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                        appLockService: AppLockServiceMock())
+                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
             retainedState.append(coordinator)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator

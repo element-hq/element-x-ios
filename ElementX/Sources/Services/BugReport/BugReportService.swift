@@ -119,10 +119,13 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
         var params = [
-            MultipartFormData(key: "user_id", type: .text(value: bugReport.userID)),
             MultipartFormData(key: "text", type: .text(value: bugReport.text)),
             MultipartFormData(key: "can_contact", type: .text(value: "\(bugReport.canContact)"))
         ]
+        
+        if let userID = bugReport.userID {
+            params.append(.init(key: "user_id", type: .text(value: userID)))
+        }
         
         if let deviceID = bugReport.deviceID {
             params.append(.init(key: "device_id", type: .text(value: deviceID)))

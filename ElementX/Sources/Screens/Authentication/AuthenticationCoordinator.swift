@@ -24,11 +24,12 @@ protocol AuthenticationCoordinatorDelegate: AnyObject {
 
 class AuthenticationCoordinator: CoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProxyProtocol
+    private let appLockService: AppLockServiceProtocol
+    private let bugReportService: BugReportServiceProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let appLockService: AppLockServiceProtocol
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -39,17 +40,19 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     weak var delegate: AuthenticationCoordinatorDelegate?
     
     init(authenticationService: AuthenticationServiceProxyProtocol,
+         appLockService: AppLockServiceProtocol,
+         bugReportService: BugReportServiceProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          appSettings: AppSettings,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         appLockService: AppLockServiceProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
+        self.appLockService = appLockService
+        self.bugReportService = bugReportService
         self.navigationStackCoordinator = navigationStackCoordinator
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
-        self.appLockService = appLockService
     }
     
     func start() {
@@ -81,11 +84,34 @@ class AuthenticationCoordinator: CoordinatorProtocol {
                 switch action {
                 case .login:
                     Task { await self.startAuthentication() }
+                case .reportProblem:
+                    showReportProblemScreen()
                 }
             }
             .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+    
+    private func showReportProblemScreen() {
+        let feedbackNavigationStackCoordinator = NavigationStackCoordinator()
+        
+        let parameters = BugReportScreenCoordinatorParameters(bugReportService: bugReportService,
+                                                              userID: nil,
+                                                              deviceID: nil,
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                              screenshot: nil,
+                                                              isModallyPresented: true)
+        
+        let coordinator = BugReportScreenCoordinator(parameters: parameters)
+        
+        coordinator.completion = { [weak self] _ in
+            self?.navigationStackCoordinator.setSheetCoordinator(nil)
+        }
+        
+        feedbackNavigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationStackCoordinator.setSheetCoordinator(feedbackNavigationStackCoordinator, animated: true)
     }
     
     private func startAuthentication() async {
