@@ -42,6 +42,16 @@ struct OnboardingScreen: View {
                     .frame(height: UIConstants.spacerHeight(in: geometry))
             }
             .frame(maxHeight: .infinity)
+            .safeAreaInset(edge: .bottom) {
+                Button {
+                    context.send(viewAction: .reportProblem)
+                } label: {
+                    Text(L10n.commonReportAProblem)
+                        .font(.compound.bodySM)
+                        .foregroundColor(.compound.textSecondary)
+                }
+                .frame(width: geometry.size.width)
+            }
         }
         .navigationBarHidden(true)
         .background {

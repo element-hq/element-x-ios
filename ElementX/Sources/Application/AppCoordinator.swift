@@ -398,11 +398,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                                encryptionKeyProvider: EncryptionKeyProvider(),
                                                                appSettings: appSettings)
         authenticationCoordinator = AuthenticationCoordinator(authenticationService: authenticationService,
+                                                              appLockService: appLockFlowCoordinator.appLockService,
+                                                              bugReportService: ServiceLocator.shared.bugReportService,
                                                               navigationStackCoordinator: authenticationNavigationStackCoordinator,
                                                               appSettings: appSettings,
                                                               analytics: ServiceLocator.shared.analytics,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                              appLockService: appLockFlowCoordinator.appLockService)
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
         authenticationCoordinator?.delegate = self
         
         authenticationCoordinator?.start()

@@ -19,7 +19,7 @@ import Foundation
 import UIKit
 
 struct BugReport: Equatable {
-    let userID: String
+    let userID: String?
     let deviceID: String?
     let text: String
     let includeLogs: Bool

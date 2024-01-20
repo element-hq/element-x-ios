@@ -40,6 +40,8 @@ final class OnboardingScreenCoordinator: CoordinatorProtocol {
                 switch action {
                 case .login:
                     actionsSubject.send(.login)
+                case .reportProblem:
+                    actionsSubject.send(.reportProblem)
                 }
             }
             .store(in: &cancellables)

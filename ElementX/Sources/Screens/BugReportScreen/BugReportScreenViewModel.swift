@@ -21,7 +21,7 @@ typealias BugReportScreenViewModelType = StateStoreViewModel<BugReportScreenView
 
 class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenViewModelProtocol {
     private let bugReportService: BugReportServiceProtocol
-    private let userID: String
+    private let userID: String?
     private let deviceID: String?
     private let actionsSubject: PassthroughSubject<BugReportScreenViewModelAction, Never> = .init()
     // periphery:ignore - when set to nil this is automatically cancelled
@@ -32,7 +32,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     }
     
     init(bugReportService: BugReportServiceProtocol,
-         userID: String,
+         userID: String?,
          deviceID: String?,
          screenshot: UIImage?,
          isModallyPresented: Bool) {
