@@ -84,7 +84,7 @@ extension RoomProxyMock {
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }
         getMemberUserIDReturnValue = .success(configuration.memberForID)
-        canUserRedactUserIDReturnValue = .success(false)
+        canUserRedactOtherUserIDReturnValue = .success(false)
         canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
         canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
     }

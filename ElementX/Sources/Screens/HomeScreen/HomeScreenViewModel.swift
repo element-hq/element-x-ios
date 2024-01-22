@@ -292,7 +292,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         return HomeScreenRoom(id: identifier,
                               roomId: details.id,
                               name: details.name,
-                              hasUnreads: details.unreadMessagesCount > 0,
+                              hasUnreads: details.unreadNotificationsCount > 0,
                               hasMentions: hasMentions,
                               hasOngoingCall: details.hasOngoingCall,
                               timestamp: details.lastMessageFormattedTimestamp,

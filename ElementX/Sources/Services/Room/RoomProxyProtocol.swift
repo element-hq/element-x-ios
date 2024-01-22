@@ -97,7 +97,7 @@ protocol RoomProxyProtocol {
     
     func uploadAvatar(media: MediaInfo) async -> Result<Void, RoomProxyError>
 
-    func canUserRedact(userID: String) async -> Result<Bool, RoomProxyError>
+    func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError>
     
     func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
     

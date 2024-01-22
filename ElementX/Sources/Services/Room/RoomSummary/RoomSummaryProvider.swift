@@ -25,6 +25,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let shouldUpdateVisibleRange: Bool
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
+    private let appSettings: AppSettings
     
     private let roomListPageSize = 200
     
@@ -67,7 +68,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          name: String,
          shouldUpdateVisibleRange: Bool = false,
          notificationSettings: NotificationSettingsProxyProtocol,
-         backgroundTaskService: BackgroundTaskServiceProtocol) {
+         backgroundTaskService: BackgroundTaskServiceProtocol,
+         appSettings: AppSettings) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
@@ -75,6 +77,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
         self.notificationSettings = notificationSettings
         self.backgroundTaskService = backgroundTaskService
+        self.appSettings = appSettings
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -245,7 +248,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
-                                         unreadMessagesCount: UInt(roomInfo.notificationCount),
+                                         unreadNotificationsCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadNotifications) : UInt(roomInfo.notificationCount),
                                          unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
                                          notificationMode: notificationMode,
                                          canonicalAlias: roomInfo.canonicalAlias,

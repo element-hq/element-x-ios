@@ -510,21 +510,24 @@ class ClientProxy: ClientProxyProtocol {
                                                       name: "AllRooms",
                                                       shouldUpdateVisibleRange: true,
                                                       notificationSettings: notificationSettings,
-                                                      backgroundTaskService: backgroundTaskService)
+                                                      backgroundTaskService: backgroundTaskService,
+                                                      appSettings: appSettings)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             messageForwardingRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                                        eventStringBuilder: eventStringBuilder,
                                                                        name: "MessageForwarding",
                                                                        notificationSettings: notificationSettings,
-                                                                       backgroundTaskService: backgroundTaskService)
+                                                                       backgroundTaskService: backgroundTaskService,
+                                                                       appSettings: appSettings)
             try await messageForwardingRoomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,
                                                         name: "Invites",
                                                         notificationSettings: notificationSettings,
-                                                        backgroundTaskService: backgroundTaskService)
+                                                        backgroundTaskService: backgroundTaskService,
+                                                        appSettings: appSettings)
             try await inviteSummaryProvider?.setRoomList(roomListService.invites())
             
             self.syncService = syncService
