@@ -1,0 +1,1 @@
+Bugfix for the mention badge not being unset properly when opening the room. Also the mention badge is enabled by default.

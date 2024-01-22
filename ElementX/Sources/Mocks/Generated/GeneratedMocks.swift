@@ -2159,25 +2159,25 @@ class RoomProxyMock: RoomProxyProtocol {
             return uploadAvatarMediaReturnValue
         }
     }
-    //MARK: - canUserRedact
+    //MARK: - canUserRedactOther
 
-    var canUserRedactUserIDCallsCount = 0
-    var canUserRedactUserIDCalled: Bool {
-        return canUserRedactUserIDCallsCount > 0
+    var canUserRedactOtherUserIDCallsCount = 0
+    var canUserRedactOtherUserIDCalled: Bool {
+        return canUserRedactOtherUserIDCallsCount > 0
     }
-    var canUserRedactUserIDReceivedUserID: String?
-    var canUserRedactUserIDReceivedInvocations: [String] = []
-    var canUserRedactUserIDReturnValue: Result<Bool, RoomProxyError>!
-    var canUserRedactUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+    var canUserRedactOtherUserIDReceivedUserID: String?
+    var canUserRedactOtherUserIDReceivedInvocations: [String] = []
+    var canUserRedactOtherUserIDReturnValue: Result<Bool, RoomProxyError>!
+    var canUserRedactOtherUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
 
-    func canUserRedact(userID: String) async -> Result<Bool, RoomProxyError> {
-        canUserRedactUserIDCallsCount += 1
-        canUserRedactUserIDReceivedUserID = userID
-        canUserRedactUserIDReceivedInvocations.append(userID)
-        if let canUserRedactUserIDClosure = canUserRedactUserIDClosure {
-            return await canUserRedactUserIDClosure(userID)
+    func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError> {
+        canUserRedactOtherUserIDCallsCount += 1
+        canUserRedactOtherUserIDReceivedUserID = userID
+        canUserRedactOtherUserIDReceivedInvocations.append(userID)
+        if let canUserRedactOtherUserIDClosure = canUserRedactOtherUserIDClosure {
+            return await canUserRedactOtherUserIDClosure(userID)
         } else {
-            return canUserRedactUserIDReturnValue
+            return canUserRedactOtherUserIDReturnValue
         }
     }
     //MARK: - canUserTriggerRoomNotification

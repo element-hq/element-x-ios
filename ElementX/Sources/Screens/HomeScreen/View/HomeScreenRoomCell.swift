@@ -225,7 +225,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
             return HomeScreenRoom(id: UUID().uuidString,
                                   roomId: details.id,
                                   name: details.name,
-                                  hasUnreads: details.unreadMessagesCount > 0, hasMentions: details.unreadMentionsCount > 0,
+                                  hasUnreads: details.unreadNotificationsCount > 0, hasMentions: details.unreadMentionsCount > 0,
                                   hasOngoingCall: details.hasOngoingCall,
                                   timestamp: Date(timeIntervalSinceReferenceDate: 0).formattedMinimal(),
                                   lastMessage: details.lastMessage,
