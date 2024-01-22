@@ -342,6 +342,7 @@
 "screen_bug_report_include_logs" = "Allow logs";
 "screen_bug_report_include_screenshot" = "Send screenshot";
 "screen_bug_report_logs_description" = "Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting.";
+"screen_bug_report_view_logs" = "View logs";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org is a large, free server on the public Matrix network for secure, decentralised communication, run by the Matrix.org Foundation.";
 "screen_change_account_provider_other" = "Other";
 "screen_change_account_provider_subtitle" = "Use a different account provider, such as your own private server or a work account.";

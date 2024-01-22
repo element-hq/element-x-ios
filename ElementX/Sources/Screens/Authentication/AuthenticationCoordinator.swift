@@ -34,8 +34,12 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     private var oidcPresenter: OIDCAuthenticationPresenter?
+    
     // periphery: ignore - used to store the coordinator to avoid deallocation
     private var appLockFlowCoordinator: AppLockSetupFlowCoordinator?
+    
+    // periphery:ignore - retaining purpose
+    private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     
     weak var delegate: AuthenticationCoordinatorDelegate?
     
@@ -94,24 +98,12 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     }
     
     private func showReportProblemScreen() {
-        let feedbackNavigationStackCoordinator = NavigationStackCoordinator()
-        
-        let parameters = BugReportScreenCoordinatorParameters(bugReportService: bugReportService,
-                                                              userID: nil,
-                                                              deviceID: nil,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                              screenshot: nil,
-                                                              isModallyPresented: true)
-        
-        let coordinator = BugReportScreenCoordinator(parameters: parameters)
-        
-        coordinator.completion = { [weak self] _ in
-            self?.navigationStackCoordinator.setSheetCoordinator(nil)
-        }
-        
-        feedbackNavigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationStackCoordinator.setSheetCoordinator(feedbackNavigationStackCoordinator, animated: true)
+        bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(navigationStackCoordinator),
+                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                              bugReportService: bugReportService,
+                                                                              userID: nil,
+                                                                              deviceID: nil))
+        bugReportFlowCoordinator?.start()
     }
     
     private func startAuthentication() async {

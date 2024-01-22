@@ -206,12 +206,12 @@ class MockScreen: Identifiable {
                 fatalError("Failed to start listening for notifications.")
             }
             
-            let coordinator = AppLockFlowCoordinator(initialState: .unlocked,
-                                                     appLockService: appLockService,
-                                                     navigationCoordinator: navigationCoordinator,
-                                                     notificationCenter: notificationCenter)
+            let flowCoordinator = AppLockFlowCoordinator(initialState: .unlocked,
+                                                         appLockService: appLockService,
+                                                         navigationCoordinator: navigationCoordinator,
+                                                         notificationCenter: notificationCenter)
             
-            coordinator.actions
+            flowCoordinator.actions
                 .sink { [weak self] action in
                     guard let self else { return }
                     
@@ -226,7 +226,9 @@ class MockScreen: Identifiable {
                 }
                 .store(in: &cancellables)
             
-            return coordinator
+            retainedState.append(flowCoordinator)
+            
+            return navigationCoordinator
         case .appLockSetupFlow, .appLockSetupFlowUnlock, .appLockSetupFlowMandatory:
             let navigationStackCoordinator = NavigationStackCoordinator()
             // The flow expects an existing root coordinator, use a blank form as a placeholder.
@@ -248,11 +250,12 @@ class MockScreen: Identifiable {
             }
             
             let flow: AppLockSetupFlowCoordinator.PresentationFlow = id == .appLockSetupFlowMandatory ? .onboarding : .settings
-            let coordinator = AppLockSetupFlowCoordinator(presentingFlow: flow,
-                                                          appLockService: appLockService,
-                                                          navigationStackCoordinator: navigationStackCoordinator)
-            coordinator.start()
-            retainedState.append(coordinator)
+            let flowCoordinator = AppLockSetupFlowCoordinator(presentingFlow: flow,
+                                                              appLockService: appLockService,
+                                                              navigationStackCoordinator: navigationStackCoordinator)
+            flowCoordinator.start()
+            
+            retainedState.append(flowCoordinator)
             
             return navigationStackCoordinator
         case .home:
@@ -559,19 +562,19 @@ class MockScreen: Identifiable {
             ServiceLocator.shared.settings.migratedAccounts[clientProxy.userID] = true
             ServiceLocator.shared.settings.hasShownWelcomeScreen = true
             
-            let coordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
-                                                         navigationSplitCoordinator: navigationSplitCoordinator,
-                                                         windowManager: windowManager,
-                                                         appLockService: AppLockService(keychainController: KeychainControllerMock(),
-                                                                                        appSettings: ServiceLocator.shared.settings),
-                                                         bugReportService: BugReportServiceMock(),
-                                                         roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
-                                                         appSettings: appSettings,
-                                                         analytics: ServiceLocator.shared.analytics)
+            let flowCoordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
+                                                             navigationSplitCoordinator: navigationSplitCoordinator,
+                                                             windowManager: windowManager,
+                                                             appLockService: AppLockService(keychainController: KeychainControllerMock(),
+                                                                                            appSettings: ServiceLocator.shared.settings),
+                                                             bugReportService: BugReportServiceMock(),
+                                                             roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
+                                                             appSettings: appSettings,
+                                                             analytics: ServiceLocator.shared.analytics)
             
-            coordinator.start()
+            flowCoordinator.start()
             
-            retainedState.append(coordinator)
+            retainedState.append(flowCoordinator)
             
             return navigationSplitCoordinator
         case .roomDetailsScreen:

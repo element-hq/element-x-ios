@@ -838,6 +838,8 @@ public enum L10n {
   public static func screenBugReportRashLogsAlertTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bug_report_rash_logs_alert_title", String(describing: p1))
   }
+  /// View logs
+  public static var screenBugReportViewLogs: String { return L10n.tr("Localizable", "screen_bug_report_view_logs") }
   /// Matrix.org is a large, free server on the public Matrix network for secure, decentralised communication, run by the Matrix.org Foundation.
   public static var screenChangeAccountProviderMatrixOrgSubtitle: String { return L10n.tr("Localizable", "screen_change_account_provider_matrix_org_subtitle") }
   /// Other

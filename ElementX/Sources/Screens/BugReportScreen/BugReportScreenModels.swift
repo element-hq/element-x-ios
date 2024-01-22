@@ -19,6 +19,7 @@ import UIKit
 
 enum BugReportScreenViewModelAction {
     case cancel
+    case viewLogs
     case submitStarted(progressPublisher: CurrentValuePublisher<Double, Never>)
     case submitFinished
     case submitFailed(error: Error)
@@ -42,4 +43,5 @@ enum BugReportScreenViewAction {
     case submit
     case removeScreenshot
     case attachScreenshot(UIImage)
+    case viewLogs
 }

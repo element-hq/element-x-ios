@@ -68,6 +68,9 @@ struct BugReportScreen: View {
             ListRow(label: .plain(title: L10n.screenBugReportIncludeLogs),
                     kind: .toggle($context.sendingLogsEnabled))
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
+            ListRow(label: .plain(title: L10n.screenBugReportViewLogs),
+                    kind: .navigationLink { context.send(viewAction: .viewLogs) })
+                .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
         } footer: {
             Text(L10n.screenBugReportLogsDescription)
                 .compoundListSectionFooter()
