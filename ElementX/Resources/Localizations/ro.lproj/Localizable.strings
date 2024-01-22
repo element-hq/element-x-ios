@@ -56,6 +56,7 @@
 "action_join" = "Join";
 "action_learn_more" = "Aflați mai multe";
 "action_leave" = "Părăsiți";
+"action_leave_conversation" = "Leave conversation";
 "action_leave_room" = "Părăsiți camera";
 "action_manage_account" = "Manage account";
 "action_manage_devices" = "Manage devices";
@@ -228,6 +229,7 @@
 "error_unknown" = "Ne pare rău, a apărut o eroare";
 "invite_friends_rich_title" = "🔐️ Alăturați-vă mie pe %1$@";
 "invite_friends_text" = "Hei, vorbește cu mine pe %1$@: %2$@";
+"leave_conversation_alert_subtitle" = "Are you sure that you want to leave this conversation? This conversation is not public and you won't be able to rejoin without an invite.";
 "leave_room_alert_empty_subtitle" = "Sunteți sigur că vreți să părăsiți această cameră? Sunteți singura persoană de aici. Dacă o părasiți, nimeni nu se va mai putea alătura în viitor, inclusiv dumneavoastra.";
 "leave_room_alert_private_subtitle" = "Sunteți sigur că vrei să părăsiți această cameră? Această cameră nu este publică și nu va veti putea alătura din nou fără o invitație.";
 "leave_room_alert_subtitle" = "Sunteți sigur că vreți să părăsiți camera?";
@@ -679,6 +681,7 @@
 "screen_dm_details_unblock_user" = "Deblocați utilizatorul";
 "screen_login_subtitle" = "Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată.";
 "screen_report_content_block_user" = "Blocați utilizatorul";
+"screen_room_details_leave_conversation_title" = "Leave conversation";
 "screen_room_details_leave_room_title" = "Părăsiți camera";
 "screen_room_details_security_title" = "Securitate";
 "screen_room_details_topic_title" = "Subiect";

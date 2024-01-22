@@ -56,6 +56,7 @@
 "action_join" = "Csatlakozás";
 "action_learn_more" = "További tudnivalók";
 "action_leave" = "Elhagyás";
+"action_leave_conversation" = "Leave conversation";
 "action_leave_room" = "Szoba elhagyása";
 "action_manage_account" = "Fiók kezelése";
 "action_manage_devices" = "Eszközök kezelése";
@@ -228,6 +229,7 @@
 "error_unknown" = "Elnézést, hiba történt";
 "invite_friends_rich_title" = "🔐️ Csatlakozz hozzám itt: %1$@";
 "invite_friends_text" = "Beszélj velem az %1$@ használatával: %2$@";
+"leave_conversation_alert_subtitle" = "Are you sure that you want to leave this conversation? This conversation is not public and you won't be able to rejoin without an invite.";
 "leave_room_alert_empty_subtitle" = "Biztos, hogy elhagyja ezt a szobát? Ön az egyedüli ember itt. Ha kilép, akkor senki sem fog tudni csatlakozni a jövőben, Önt is beleértve.";
 "leave_room_alert_private_subtitle" = "Biztos, hogy elhagyod ezt a szobát? Ez a szoba nem nyilvános, és meghívó nélkül nem fogsz tudni újra belépni.";
 "leave_room_alert_subtitle" = "Biztos, hogy elhagyod a szobát?";
@@ -679,6 +681,7 @@
 "screen_dm_details_unblock_user" = "Felhasználó kitiltásának feloldása";
 "screen_login_subtitle" = "A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz.";
 "screen_report_content_block_user" = "Felhasználó letiltása";
+"screen_room_details_leave_conversation_title" = "Leave conversation";
 "screen_room_details_leave_room_title" = "Szoba elhagyása";
 "screen_room_details_security_title" = "Biztonság";
 "screen_room_details_topic_title" = "Téma";

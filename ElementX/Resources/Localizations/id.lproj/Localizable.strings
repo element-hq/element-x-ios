@@ -56,6 +56,7 @@
 "action_join" = "Gabung";
 "action_learn_more" = "Pelajari lebih lanjut";
 "action_leave" = "Tinggalkan";
+"action_leave_conversation" = "Leave conversation";
 "action_leave_room" = "Tinggalkan ruangan";
 "action_manage_account" = "Kelola akun";
 "action_manage_devices" = "Kelola perangkat";
@@ -228,6 +229,7 @@
 "error_unknown" = "Maaf, terjadi kesalahan";
 "invite_friends_rich_title" = "🔐️ Bergabunglah dengan saya di %1$@";
 "invite_friends_text" = "Hai, bicaralah dengan saya di %1$@: %2$@";
+"leave_conversation_alert_subtitle" = "Are you sure that you want to leave this conversation? This conversation is not public and you won't be able to rejoin without an invite.";
 "leave_room_alert_empty_subtitle" = "Apakah Anda yakin ingin meninggalkan ruangan ini? Anda adalah orang satu-satunya di sini. Jika Anda pergi, tidak akan ada yang bisa bergabung di masa depan, termasuk Anda.";
 "leave_room_alert_private_subtitle" = "Apakah Anda yakin ingin meninggalkan ruangan ini? Ruangan ini tidak umum dan Anda tidak akan dapat bergabung kembali tanpa undangan.";
 "leave_room_alert_subtitle" = "Apakah Anda yakin ingin meninggalkan ruangan?";
@@ -679,6 +681,7 @@
 "screen_dm_details_unblock_user" = "Buka blokir pengguna";
 "screen_login_subtitle" = "Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi.";
 "screen_report_content_block_user" = "Blokir pengguna";
+"screen_room_details_leave_conversation_title" = "Leave conversation";
 "screen_room_details_leave_room_title" = "Tinggalkan ruangan";
 "screen_room_details_security_title" = "Keamanan";
 "screen_room_details_topic_title" = "Topik";

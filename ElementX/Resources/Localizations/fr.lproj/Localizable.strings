@@ -56,6 +56,7 @@
 "action_join" = "Rejoindre";
 "action_learn_more" = "En savoir plus";
 "action_leave" = "Quitter";
+"action_leave_conversation" = "Quitter la discussion";
 "action_leave_room" = "Quitter le salon";
 "action_manage_account" = "Gérer le compte";
 "action_manage_devices" = "Gérez les sessions";
@@ -228,6 +229,7 @@
 "error_unknown" = "Désolé, une erreur s’est produite";
 "invite_friends_rich_title" = "🔐️ Rejoignez-moi sur %1$@";
 "invite_friends_text" = "Salut, parle-moi sur %1$@ : %2$@";
+"leave_conversation_alert_subtitle" = "Êtes-vous sûr de vouloir quitter cette discussion? Vous ne pourrez pas la rejoindre à nouveau sans y être invité.";
 "leave_room_alert_empty_subtitle" = "Êtes-vous sûr de vouloir quitter ce salon ? Vous êtes la seule personne ici. Si vous partez, personne ne pourra rejoindre le salon à l’avenir, y compris vous.";
 "leave_room_alert_private_subtitle" = "Êtes-vous sûr de vouloir quitter ce salon ? Ce salon n’est pas public et vous ne pourrez pas le rejoindre sans invitation.";
 "leave_room_alert_subtitle" = "Êtes-vous sûr de vouloir quitter le salon ?";
@@ -480,7 +482,7 @@
 "screen_room_attachment_source_camera_photo" = "Prendre une photo";
 "screen_room_attachment_source_camera_video" = "Enregistrer une vidéo";
 "screen_room_attachment_source_files" = "Pièce jointe";
-"screen_room_attachment_source_gallery" = "Gallerie Photo et Vidéo";
+"screen_room_attachment_source_gallery" = "Galerie Photo et Vidéo";
 "screen_room_attachment_source_location" = "Position";
 "screen_room_attachment_source_poll" = "Sondage";
 "screen_room_attachment_text_formatting" = "Formatage du texte";
@@ -679,6 +681,7 @@
 "screen_dm_details_unblock_user" = "Débloquer l’utilisateur";
 "screen_login_subtitle" = "Matrix est un réseau ouvert pour une communication sécurisée et décentralisée.";
 "screen_report_content_block_user" = "Bloquer l’utilisateur";
+"screen_room_details_leave_conversation_title" = "Quitter la discussion";
 "screen_room_details_leave_room_title" = "Quitter le salon";
 "screen_room_details_security_title" = "Sécurité";
 "screen_room_details_topic_title" = "Sujet";
