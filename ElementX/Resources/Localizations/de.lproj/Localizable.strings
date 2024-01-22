@@ -56,6 +56,7 @@
 "action_join" = "Beitreten";
 "action_learn_more" = "Mehr erfahren";
 "action_leave" = "Verlassen";
+"action_leave_conversation" = "Leave conversation";
 "action_leave_room" = "Raum verlassen";
 "action_manage_account" = "Konto verwalten";
 "action_manage_devices" = "Geräte verwalten";
@@ -228,6 +229,7 @@
 "error_unknown" = "Entschuldigung, es ist ein Fehler aufgetreten";
 "invite_friends_rich_title" = "🔐️ Begleite mich auf %1$@";
 "invite_friends_text" = "Hey, sprich mit mir auf %1$@: %2$@";
+"leave_conversation_alert_subtitle" = "Are you sure that you want to leave this conversation? This conversation is not public and you won't be able to rejoin without an invite.";
 "leave_room_alert_empty_subtitle" = "Bist du sicher, dass du diesen Raum verlassen möchtest? Du bist die einzige Person hier. Wenn du austritst, kann in Zukunft niemand mehr eintreten, auch du nicht.";
 "leave_room_alert_private_subtitle" = "Bist du sicher, dass du diesen Raum verlassen möchtest? Dieser Raum ist nicht öffentlich und du kannst ihm ohne Einladung nicht erneut beitreten.";
 "leave_room_alert_subtitle" = "Bist du sicher, dass du den Raum verlassen willst?";
@@ -679,6 +681,7 @@
 "screen_dm_details_unblock_user" = "Blockierung aufheben";
 "screen_login_subtitle" = "Matrix ist ein offenes Netzwerk für eine sichere, dezentrale Kommunikation.";
 "screen_report_content_block_user" = "Benutzer blockieren";
+"screen_room_details_leave_conversation_title" = "Leave conversation";
 "screen_room_details_leave_room_title" = "Raum verlassen";
 "screen_room_details_security_title" = "Sicherheit";
 "screen_room_details_topic_title" = "Thema";

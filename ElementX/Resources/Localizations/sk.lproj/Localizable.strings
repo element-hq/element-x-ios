@@ -56,6 +56,7 @@
 "action_join" = "Pripojiť sa";
 "action_learn_more" = "Zistiť viac";
 "action_leave" = "Opustiť";
+"action_leave_conversation" = "Opustiť konverzáciu";
 "action_leave_room" = "Opustiť miestnosť";
 "action_manage_account" = "Spravovať účet";
 "action_manage_devices" = "Spravovať zariadenia";
@@ -228,6 +229,7 @@
 "error_unknown" = "Prepáčte, vyskytla sa chyba";
 "invite_friends_rich_title" = "🔐️ Pripojte sa ku mne na %1$@";
 "invite_friends_text" = "Ahoj, porozprávajte sa so mnou na %1$@: %2$@";
+"leave_conversation_alert_subtitle" = "Ste si istí, že chcete opustiť konverzáciu?";
 "leave_room_alert_empty_subtitle" = "Ste si istí, že chcete opustiť túto miestnosť? Ste tu jediná osoba. Ak odídete, nikto sa do nej nebude môcť v budúcnosti pripojiť, vrátane vás.";
 "leave_room_alert_private_subtitle" = "Ste si istí, že chcete opustiť túto miestnosť? Táto miestnosť nie je verejná a bez pozvania sa do nej nebudete môcť vrátiť.";
 "leave_room_alert_subtitle" = "Ste si istí, že chcete opustiť miestnosť?";
@@ -679,6 +681,7 @@
 "screen_dm_details_unblock_user" = "Odblokovať používateľa";
 "screen_login_subtitle" = "Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu.";
 "screen_report_content_block_user" = "Zablokovať používateľa";
+"screen_room_details_leave_conversation_title" = "Opustiť konverzáciu";
 "screen_room_details_leave_room_title" = "Opustiť miestnosť";
 "screen_room_details_security_title" = "Bezpečnosť";
 "screen_room_details_topic_title" = "Téma";

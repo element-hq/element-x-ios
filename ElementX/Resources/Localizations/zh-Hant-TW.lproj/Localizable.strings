@@ -56,6 +56,7 @@
 "action_join" = "加入";
 "action_learn_more" = "了解更多";
 "action_leave" = "離開";
+"action_leave_conversation" = "Leave conversation";
 "action_leave_room" = "離開聊天室";
 "action_manage_account" = "管理帳號";
 "action_manage_devices" = "管理裝置";
@@ -228,6 +229,7 @@
 "error_unknown" = "Sorry, an error occurred";
 "invite_friends_rich_title" = "🔐️ Join me on %1$@";
 "invite_friends_text" = "嘿，來 %1$@ 和我聊天：%2$@";
+"leave_conversation_alert_subtitle" = "Are you sure that you want to leave this conversation? This conversation is not public and you won't be able to rejoin without an invite.";
 "leave_room_alert_empty_subtitle" = "您確定要離開聊天室嗎？這裡只有您一個人。如果您離開了，包含您在內的所有人都無法再進入此聊天室。";
 "leave_room_alert_private_subtitle" = "您確定要離開聊天室嗎？此聊天室不是公開的，如果沒有收到邀請，您無法重新加入。";
 "leave_room_alert_subtitle" = "您確定要離開聊天室嗎？";
@@ -679,6 +681,7 @@
 "screen_dm_details_unblock_user" = "解除封鎖使用者";
 "screen_login_subtitle" = "Matrix 是一個開放網路，為了安全且去中心化的通訊而生。";
 "screen_report_content_block_user" = "封鎖使用者";
+"screen_room_details_leave_conversation_title" = "Leave conversation";
 "screen_room_details_leave_room_title" = "離開聊天室";
 "screen_room_details_security_title" = "安全性";
 "screen_room_details_topic_title" = "主題";
