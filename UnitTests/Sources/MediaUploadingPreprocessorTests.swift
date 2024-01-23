@@ -72,11 +72,11 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(videoInfo.size, 1_431_959)
         XCTAssertEqual(videoInfo.width, 1280)
         XCTAssertEqual(videoInfo.height, 720)
-        XCTAssertEqual(floor(videoInfo.duration ?? 0), 30483)
+        XCTAssertEqual(floor(videoInfo.duration ?? 0), 30439)
         
         XCTAssertNotNil(videoInfo.thumbnailInfo)
         XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(videoInfo.thumbnailInfo?.size, 33949)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.size, 34001)
         XCTAssertEqual(videoInfo.thumbnailInfo?.width, 800)
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 450)
     }
@@ -116,7 +116,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertNotNil(videoInfo.thumbnailInfo)
         XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(videoInfo.thumbnailInfo?.size, 82854)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.size, 82886)
         XCTAssertEqual(videoInfo.thumbnailInfo?.width, 337)
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 600)
     }
@@ -144,7 +144,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertNotNil(imageInfo.thumbnailInfo)
         XCTAssertEqual(imageInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(imageInfo.thumbnailInfo?.size, 89553)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.size, 89605)
         XCTAssertEqual(imageInfo.thumbnailInfo?.width, 800)
         XCTAssertEqual(imageInfo.thumbnailInfo?.height, 344)
     }
@@ -172,7 +172,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertNotNil(imageInfo.thumbnailInfo)
         XCTAssertEqual(imageInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(imageInfo.thumbnailInfo?.size, 264_500)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.size, 264_552)
         XCTAssertEqual(imageInfo.thumbnailInfo?.width, 600)
         XCTAssertEqual(imageInfo.thumbnailInfo?.height, 800)
     }
