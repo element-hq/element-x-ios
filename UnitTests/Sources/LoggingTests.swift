@@ -229,7 +229,7 @@ class LoggingTests: XCTestCase {
                                              avatarURL: nil,
                                              lastMessage: AttributedString(lastMessage),
                                              lastMessageFormattedTimestamp: "Now",
-                                             unreadNotificationsCount: 0,
+                                             unreadMessagesCount: 0,
                                              unreadMentionsCount: 0,
                                              notificationMode: nil,
                                              canonicalAlias: nil,

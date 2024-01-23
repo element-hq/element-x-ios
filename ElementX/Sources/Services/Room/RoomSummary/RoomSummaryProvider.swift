@@ -248,7 +248,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
-                                         unreadNotificationsCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadNotifications) : UInt(roomInfo.notificationCount),
+                                         unreadMessagesCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadMessages) : UInt(roomInfo.notificationCount),
                                          unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
                                          notificationMode: notificationMode,
                                          canonicalAlias: roomInfo.canonicalAlias,
