@@ -128,7 +128,7 @@ struct HomeScreenRoomCell: View {
                         .foregroundColor(.compound.iconQuaternary)
                 }
                 
-                if room.hasMentions, isHighlighted {
+                if room.hasUnreadMentions, room.notificationMode != .mute {
                     mentionIcon
                         .foregroundColor(.compound.iconAccentTertiary)
                 }
@@ -147,16 +147,19 @@ struct HomeScreenRoomCell: View {
     }
     
     private var hasNewContent: Bool {
-        room.hasMessages ||
-            room.hasMentions ||
-            room.hasNotifications
+        room.hasUnreadMessages ||
+            room.hasUnreadMentions ||
+            room.hasUnreadNotifications
     }
     
     private var isHighlighted: Bool {
-        guard !room.isPlaceholder, room.notificationMode != .mute else {
+        guard !room.isPlaceholder,
+              room.notificationMode != .mute else {
             return false
         }
-        return room.hasNotifications
+        return room.hasUnreadNotifications ||
+            // If the homeserver can't push encrypted events we need to higlight manually for the mentions only setting when we have mentions, however this won't work when the global settings are changed
+            (room.notificationMode == .mentionsAndKeywordsOnly && room.hasUnreadMentions)
     }
         
     private var mentionIcon: some View {
@@ -226,9 +229,9 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
             return HomeScreenRoom(id: UUID().uuidString,
                                   roomId: details.id,
                                   name: details.name,
-                                  hasMessages: details.unreadMessagesCount > 0,
-                                  hasMentions: details.unreadMentionsCount > 0,
-                                  hasNotifications: details.unreadNotificationsCount > 0,
+                                  hasUnreadMessages: details.unreadMessagesCount > 0,
+                                  hasUnreadMentions: details.unreadMentionsCount > 0,
+                                  hasUnreadNotifications: details.unreadNotificationsCount > 0,
                                   hasOngoingCall: details.hasOngoingCall,
                                   timestamp: Date(timeIntervalSinceReferenceDate: 0).formattedMinimal(),
                                   lastMessage: details.lastMessage,

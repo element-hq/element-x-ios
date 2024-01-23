@@ -145,11 +145,11 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var name = ""
     
-    var hasMessages = false
+    var hasUnreadMessages = false
     
-    var hasMentions = false
+    var hasUnreadMentions = false
     
-    var hasNotifications = false
+    var hasUnreadNotifications = false
     
     var hasOngoingCall = false
     
@@ -167,9 +167,9 @@ struct HomeScreenRoom: Identifiable, Equatable {
         HomeScreenRoom(id: UUID().uuidString,
                        roomId: nil,
                        name: "Placeholder room name",
-                       hasMessages: false,
-                       hasMentions: false,
-                       hasNotifications: false,
+                       hasUnreadMessages: false,
+                       hasUnreadMentions: false,
+                       hasUnreadNotifications: false,
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
                        isPlaceholder: true)
