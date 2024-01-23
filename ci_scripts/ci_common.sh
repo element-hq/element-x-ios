@@ -57,3 +57,26 @@ setup_github_actions_translations_environment() {
 
     mint install Asana/locheck
 }
+
+generate_what_to_test_notes() {
+    if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
+        TESTFLIGHT_DIR_PATH=../TestFlight
+
+        LATEST_TAG=""
+        if [ "$CI_WORKFLOW" = "Release" ]; then
+            # Use -v to invert grep, searching for non-nightlies
+            LATEST_TAG=$(git tag --sort=-creatordate --merged | grep -v 'nightly' | head -n1)
+        elif [ "$CI_WORKFLOW" = "Nightly" ]; then
+            LATEST_TAG=$(git tag --sort=-creatordate --merged | grep 'nightly' | head -n1)
+        fi
+
+        if [ -z "$LATEST_TAG" ]; then
+            echo "Failed fetching previous tag"
+            return 0 # Continue even though this failed
+        fi
+
+        mkdir $TESTFLIGHT_DIR_PATH
+
+        git log --pretty='- %an: %s' "$LATEST_TAG"..HEAD >! $TESTFLIGHT_DIR_PATH/WhatToTest.en-US.txt
+    fi   
+}
