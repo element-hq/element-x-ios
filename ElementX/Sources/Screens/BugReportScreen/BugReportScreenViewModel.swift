@@ -53,6 +53,8 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
         case .cancel:
             uploadTask = nil
             actionsSubject.send(.cancel)
+        case .viewLogs:
+            actionsSubject.send(.viewLogs)
         case .submit:
             state.shouldDisableInteraction = true
             uploadTask = Task { await submitBugReport() }

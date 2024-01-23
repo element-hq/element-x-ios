@@ -48,6 +48,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
     
+    // periphery:ignore - retaining purpose
+    private var bugReportFlowCoordinator: BugReportFlowCoordinator?
+    
     private let actionsSubject: PassthroughSubject<SettingsFlowCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<SettingsFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -55,6 +58,10 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     init(parameters: SettingsFlowCoordinatorParameters) {
         self.parameters = parameters
+    }
+    
+    func start() {
+        fatalError("Unavailable")
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -76,17 +83,17 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    func clearRoute(animated: Bool) { }
+    func clearRoute(animated: Bool) {
+        fatalError("Unavailable")
+    }
     
     // MARK: - Private
     
     private func presentSettingsScreen(animated: Bool) {
         navigationStackCoordinator = NavigationStackCoordinator()
         
-        let parameters = SettingsScreenCoordinatorParameters(userSession: parameters.userSession,
-                                                             appSettings: parameters.appSettings)
-        
-        let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: parameters)
+        let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: parameters.userSession,
+                                                                                    appSettings: parameters.appSettings))
         
         settingsScreenCoordinator.actions
             .sink { [weak self] action in
@@ -94,9 +101,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .dismiss:
-                    self.parameters.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    parameters.navigationSplitCoordinator.setSheetCoordinator(nil)
                 case .logout:
-                    self.parameters.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    parameters.navigationSplitCoordinator.setSheetCoordinator(nil)
                     
                     // The settings sheet needs to be dismissed before the alert can be shown
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -113,7 +120,12 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .appLock:
                     presentAppLockSetupFlow()
                 case .bugReport:
-                    presentBugReportScreen()
+                    bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .push(navigationStackCoordinator),
+                                                                                          userIndicatorController: parameters.userIndicatorController,
+                                                                                          bugReportService: parameters.bugReportService,
+                                                                                          userID: parameters.userSession.userID,
+                                                                                          deviceID: parameters.userSession.deviceID))
+                    bugReportFlowCoordinator?.start()
                 case .about:
                     presentLegalInformationScreen()
                 case .sessionVerification:
@@ -132,7 +144,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator, animated: animated)
         
-        self.parameters.navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+        parameters.navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
             guard let self else { return }
             
             navigationStackCoordinator = nil
@@ -185,28 +197,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         
         appLockSetupFlowCoordinator = coordinator
         coordinator.start()
-    }
-    
-    private func presentBugReportScreen() {
-        let params = BugReportScreenCoordinatorParameters(bugReportService: parameters.bugReportService,
-                                                          userID: parameters.userSession.userID,
-                                                          deviceID: parameters.userSession.deviceID,
-                                                          userIndicatorController: parameters.userIndicatorController,
-                                                          screenshot: nil,
-                                                          isModallyPresented: false)
-        let coordinator = BugReportScreenCoordinator(parameters: params)
-        coordinator.completion = { [weak self] result in
-            switch result {
-            case .finish:
-                self?.showSuccess(label: L10n.actionDone)
-            default:
-                break
-            }
-            
-            self?.navigationStackCoordinator.pop()
-        }
-        
-        navigationStackCoordinator.push(coordinator)
     }
     
     private func presentLegalInformationScreen() {
@@ -269,10 +259,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
 
-    private func showSuccess(label: String) {
-        parameters.userIndicatorController.submitIndicator(UserIndicator(title: label))
-    }
-    
     // MARK: OIDC Account Management
     
     private func presentAccountProfileURL() {

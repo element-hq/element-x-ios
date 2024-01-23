@@ -17,8 +17,9 @@
 import Combine
 import SwiftUI
 
-enum BugReportScreenCoordinatorResult {
+enum BugReportScreenCoordinatorAction {
     case cancel
+    case viewLogs
     case finish
 }
 
@@ -37,7 +38,10 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
     private var viewModel: BugReportScreenViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     
-    var completion: ((BugReportScreenCoordinatorResult) -> Void)?
+    private let actionsSubject: PassthroughSubject<BugReportScreenCoordinatorAction, Never> = .init()
+    var actions: AnyPublisher<BugReportScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: BugReportScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -56,18 +60,21 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
             .actions
             .sink { [weak self] action in
                 guard let self else { return }
+                
                 MXLog.info("BugReportViewModel did complete with result: \(action).")
                 switch action {
                 case .cancel:
-                    self.completion?(.cancel)
+                    actionsSubject.send(.cancel)
+                case .viewLogs:
+                    actionsSubject.send(.viewLogs)
                 case let .submitStarted(progressPublisher):
-                    self.startLoading(label: L10n.commonSending, progressPublisher: progressPublisher)
+                    startLoading(label: L10n.commonSending, progressPublisher: progressPublisher)
                 case .submitFinished:
-                    self.stopLoading()
-                    self.completion?(.finish)
+                    stopLoading()
+                    actionsSubject.send(.finish)
                 case .submitFailed(let error):
-                    self.stopLoading()
-                    self.showError(label: error.localizedDescription)
+                    stopLoading()
+                    showError(label: error.localizedDescription)
                 }
             }
             .store(in: &cancellables)
