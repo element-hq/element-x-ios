@@ -158,8 +158,8 @@ struct HomeScreenRoomCell: View {
             return false
         }
         return room.hasUnreadNotifications ||
-            // If the homeserver can't push encrypted events we need to higlight manually for the mentions only setting when we have mentions, however this won't work when the global settings are changed
-            (room.notificationMode == .mentionsAndKeywordsOnly && room.hasUnreadMentions)
+            // If the homeserver can't push encrypted events we need to higlight manually for the mentions, however this won't work when the global settings are changed
+            (room.notificationMode != .mute && room.hasUnreadMentions)
     }
         
     private var mentionIcon: some View {
