@@ -62,6 +62,8 @@ generate_what_to_test_notes() {
     if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
         echo "generate_what_to_test_notes: App signed, notes for $CI_WORKFLOW"
 
+        echo "generate_what_to_test_notes: current path is $(pwd)"
+
         # Xcode Cloud shallow clones the repo, we need to manually fetch the tags
         git fetch --tags
         
