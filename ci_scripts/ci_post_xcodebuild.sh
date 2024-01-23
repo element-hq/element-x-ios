@@ -8,6 +8,8 @@ setup_xcode_cloud_environment
 # Perform this step before releasing to github in case it fails.
 bundle exec fastlane upload_dsyms_to_sentry dsym_path:"$CI_ARCHIVE_PATH/dSYMs"
 
+generate_what_to_test_notes
+
 if [ "$CI_WORKFLOW" = "Release" ]; then
     install_xcode_cloud_python_dependencies
 
