@@ -147,7 +147,9 @@ struct HomeScreenRoomCell: View {
     }
     
     private var hasNewContent: Bool {
-        room.hasMessages || room.hasMentions
+        room.hasMessages ||
+            room.hasMentions ||
+            room.hasNotifications
     }
     
     private var isHighlighted: Bool {
