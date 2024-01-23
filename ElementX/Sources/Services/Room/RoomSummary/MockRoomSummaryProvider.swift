@@ -85,6 +85,7 @@ extension Array where Element == RoomSummary {
                                             lastMessageFormattedTimestamp: "14:56",
                                             unreadMessagesCount: 0,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: .allMessages,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -97,6 +98,7 @@ extension Array where Element == RoomSummary {
                                             lastMessageFormattedTimestamp: "2:56 PM",
                                             unreadMessagesCount: 2,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 2,
                                             notificationMode: .mute,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -109,6 +111,7 @@ extension Array where Element == RoomSummary {
                                             lastMessageFormattedTimestamp: "Some time ago",
                                             unreadMessagesCount: 3,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: .mentionsAndKeywordsOnly,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -121,6 +124,7 @@ extension Array where Element == RoomSummary {
                                             lastMessageFormattedTimestamp: "Just now",
                                             unreadMessagesCount: 2,
                                             unreadMentionsCount: 2,
+                                            unreadNotificationsCount: 2,
                                             notificationMode: .allMessages,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -133,6 +137,7 @@ extension Array where Element == RoomSummary {
                                             lastMessageFormattedTimestamp: "1986",
                                             unreadMessagesCount: 1,
                                             unreadMentionsCount: 1,
+                                            unreadNotificationsCount: 1,
                                             notificationMode: .allMessages,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -145,6 +150,7 @@ extension Array where Element == RoomSummary {
                                             lastMessageFormattedTimestamp: "きょうはじゅういちがつじゅういちにちです",
                                             unreadMessagesCount: 6,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: .mute,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -157,6 +163,7 @@ extension Array where Element == RoomSummary {
                                             lastMessageFormattedTimestamp: nil,
                                             unreadMessagesCount: 0,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: nil,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -164,56 +171,34 @@ extension Array where Element == RoomSummary {
         .empty
     ]
     
-    static let mockRoomsWithNotificationsState: [Element] = [
-        .filled(details: RoomSummaryDetails(id: "1",
-                                            settingsMode: .allMessages,
-                                            hasUnreadMessages: false,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "2",
-                                            settingsMode: .allMessages,
-                                            hasUnreadMessages: true,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "3",
-                                            settingsMode: .allMessages,
-                                            hasUnreadMessages: true,
-                                            hasUnreadMentions: true)),
-        .filled(details: RoomSummaryDetails(id: "4",
-                                            settingsMode: .allMessages,
-                                            hasUnreadMessages: false,
-                                            hasUnreadMentions: true)),
-        .filled(details: RoomSummaryDetails(id: "5",
-                                            settingsMode: .mentionsAndKeywordsOnly,
-                                            hasUnreadMessages: false,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "6",
-                                            settingsMode: .mentionsAndKeywordsOnly,
-                                            hasUnreadMessages: true,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "7",
-                                            settingsMode: .mentionsAndKeywordsOnly,
-                                            hasUnreadMessages: true,
-                                            hasUnreadMentions: true)),
-        .filled(details: RoomSummaryDetails(id: "8",
-                                            settingsMode: .mentionsAndKeywordsOnly,
-                                            hasUnreadMessages: false,
-                                            hasUnreadMentions: true)),
-        .filled(details: RoomSummaryDetails(id: "9",
-                                            settingsMode: .mute,
-                                            hasUnreadMessages: false,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "10",
-                                            settingsMode: .mute,
-                                            hasUnreadMessages: true,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "11",
-                                            settingsMode: .mute,
-                                            hasUnreadMessages: true,
-                                            hasUnreadMentions: true)),
-        .filled(details: RoomSummaryDetails(id: "12",
-                                            settingsMode: .mute,
-                                            hasUnreadMessages: false,
-                                            hasUnreadMentions: true))
-    ]
+    static let mockRoomsWithNotificationsState: [Element] = {
+        var result: [Element] = []
+
+        // Iterate over settings modes
+        for mode in RoomNotificationModeProxy.allCases {
+            // Iterate over unread messages states
+            for hasUnreadMessages in [false, true] {
+                // Iterate over unread mentions states
+                for hasUnreadMentions in [false, true] {
+                    // Iterate over unread notifications states
+                    for hasUnreadNotifications in [false, true] {
+                        // Incrementing id value for each combination
+                        let id = result.count + 1
+
+                        let room = RoomSummary.filled(details: RoomSummaryDetails(id: "\(id)",
+                                                                                  settingsMode: mode,
+                                                                                  hasUnreadMessages: hasUnreadMessages,
+                                                                                  hasUnreadMentions: hasUnreadMentions,
+                                                                                  hasUnreadNotifications: hasUnreadNotifications))
+
+                        result.append(room)
+                    }
+                }
+            }
+        }
+
+        return result
+    }()
     
     static let mockInvites: [Element] = [
         .filled(details: RoomSummaryDetails(id: "someAwesomeRoomId1", name: "First room",
@@ -223,6 +208,7 @@ extension Array where Element == RoomSummary {
                                             lastMessageFormattedTimestamp: nil,
                                             unreadMessagesCount: 0,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: nil,
                                             canonicalAlias: "#footest:somewhere.org",
                                             inviter: RoomMemberProxyMock.mockCharlie,
@@ -235,6 +221,7 @@ extension Array where Element == RoomSummary {
                                             lastMessageFormattedTimestamp: nil,
                                             unreadMessagesCount: 0,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: nil,
                                             canonicalAlias: nil,
                                             inviter: RoomMemberProxyMock.mockCharlie,

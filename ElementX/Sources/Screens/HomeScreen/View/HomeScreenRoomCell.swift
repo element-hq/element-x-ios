@@ -128,34 +128,33 @@ struct HomeScreenRoomCell: View {
                         .foregroundColor(.compound.iconQuaternary)
                 }
                 
-                if room.hasMentions, room.notificationMode != .mute {
+                if room.hasMentions, isHighlighted {
                     mentionIcon
                         .foregroundColor(.compound.iconAccentTertiary)
                 }
                 
-                if hasNewContent {
+                if isHighlighted {
                     Circle()
                         .frame(width: 12, height: 12)
-                        .foregroundColor(isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+                        .foregroundColor(.compound.iconAccentTertiary)
+                } else if hasNewContent {
+                    Circle()
+                        .frame(width: 12, height: 12)
+                        .foregroundColor(.compound.iconQuaternary)
                 }
             }
         }
     }
     
     private var hasNewContent: Bool {
-        room.hasUnreads || room.hasMentions
+        room.hasMessages || room.hasMentions
     }
     
     private var isHighlighted: Bool {
-        guard !room.isPlaceholder else {
+        guard !room.isPlaceholder, room.notificationMode != .mute else {
             return false
         }
-        return (isNotificationModeUnrestricted && hasNewContent) ||
-            (room.notificationMode == .mentionsAndKeywordsOnly && room.hasMentions)
-    }
-    
-    private var isNotificationModeUnrestricted: Bool {
-        room.notificationMode == nil || room.notificationMode == .allMessages
+        return room.hasNotifications
     }
         
     private var mentionIcon: some View {
@@ -225,7 +224,9 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
             return HomeScreenRoom(id: UUID().uuidString,
                                   roomId: details.id,
                                   name: details.name,
-                                  hasUnreads: details.unreadMessagesCount > 0, hasMentions: details.unreadMentionsCount > 0,
+                                  hasMessages: details.unreadMessagesCount > 0,
+                                  hasMentions: details.unreadMentionsCount > 0,
+                                  hasNotifications: details.unreadNotificationsCount > 0,
                                   hasOngoingCall: details.hasOngoingCall,
                                   timestamp: Date(timeIntervalSinceReferenceDate: 0).formattedMinimal(),
                                   lastMessage: details.lastMessage,

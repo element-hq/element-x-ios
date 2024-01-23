@@ -231,6 +231,7 @@ class LoggingTests: XCTestCase {
                                              lastMessageFormattedTimestamp: "Now",
                                              unreadMessagesCount: 0,
                                              unreadMentionsCount: 0,
+                                             unreadNotificationsCount: 0,
                                              notificationMode: nil,
                                              canonicalAlias: nil,
                                              inviter: nil,
