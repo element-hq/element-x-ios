@@ -52,6 +52,7 @@ class RoomScreenInteractionHandler {
     
     private var voiceMessageRecorderObserver: AnyCancellable?
     private var canCurrentUserRedactOthers = false
+    private var canCurrentUserRedactSelf = false
     private var resumeVoiceMessagePlaybackAfterScrubbing = false
     
     init(roomProxy: RoomProxyProtocol,
@@ -85,6 +86,12 @@ class RoomScreenInteractionHandler {
                 canCurrentUserRedactOthers = value
             } else {
                 canCurrentUserRedactOthers = false
+            }
+            
+            if case let .success(value) = await roomProxy.canUserRedactOwn(userID: roomProxy.ownUserID) {
+                canCurrentUserRedactSelf = value
+            } else {
+                canCurrentUserRedactSelf = false
             }
          
             guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
@@ -604,7 +611,7 @@ class RoomScreenInteractionHandler {
     // MARK: - Private
     
     private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {
-        item.isOutgoing || (canCurrentUserRedactOthers && !roomProxy.isDirect)
+        item.isOutgoing ? canCurrentUserRedactSelf : canCurrentUserRedactOthers && !roomProxy.isDirect
     }
     
     private func buildReplyInfo(for item: EventBasedTimelineItemProtocol) -> ReplyInfo {
