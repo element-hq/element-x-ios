@@ -65,7 +65,7 @@ generate_what_to_test_notes() {
         # Xcode Cloud shallow clones the repo, we need to manually fetch the tags
         git fetch --tags
         
-        TESTFLIGHT_DIR_PATH=../TestFlight
+        TESTFLIGHT_DIR_PATH=TestFlight
 
         LATEST_TAG=""
         if [ "$CI_WORKFLOW" = "Release" ]; then
