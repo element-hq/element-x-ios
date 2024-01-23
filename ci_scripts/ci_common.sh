@@ -88,8 +88,10 @@ generate_what_to_test_notes() {
 
         NOTES=$(git log --pretty='- %an: %s' "$LATEST_TAG"..HEAD)
 
-        echo "generate_what_to_test_notes: Generated notes:\n $NOTES"
+        echo "generate_what_to_test_notes: Generated notes:\n$NOTES"
 
-        echo $NOTES >! $TESTFLIGHT_DIR_PATH/WhatToTest.en-US.txt
+        echo $NOTES > $TESTFLIGHT_DIR_PATH/WhatToTest.en-US.txt
+
+        echo "generate_what_to_test_notes: WhatToTest.en-US.txt:\n$(cat $TESTFLIGHT_DIR_PATH/WhatToTest.en-US.txt)"
     fi
 }
