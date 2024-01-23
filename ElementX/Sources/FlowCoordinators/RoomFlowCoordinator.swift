@@ -91,6 +91,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
     // MARK: - FlowCoordinatorProtocol
     
+    func start() {
+        fatalError("This flow coordinator expect a route")
+    }
+    
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         switch appRoute {
         case .room(let roomID):

@@ -33,8 +33,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
+    
     private let roomFlowCoordinator: RoomFlowCoordinator
+    
     private let settingsFlowCoordinator: SettingsFlowCoordinator
+    
+    // periphery:ignore - retaining purpose
+    private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     
     private var cancellables = Set<AnyCancellable>()
     private var migrationCancellable: AnyCancellable?
@@ -250,7 +255,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 break
                 
             case (.roomList, .feedbackScreen, .feedbackScreen):
-                presentFeedbackScreen(animated: animated)
+                bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(sidebarNavigationStackCoordinator),
+                                                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                                      bugReportService: bugReportService,
+                                                                                      userID: userSession.userID,
+                                                                                      deviceID: userSession.deviceID))
+                bugReportFlowCoordinator?.start()
             case (.feedbackScreen, .dismissedFeedbackScreen, .roomList):
                 break
                 
@@ -483,30 +493,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             self?.stateMachine.processEvent(.dismissedStartChatScreen)
         }
     }
-    
-    // MARK: Bug reporting
-    
-    private func presentFeedbackScreen(animated: Bool, for image: UIImage? = nil) {
-        let feedbackNavigationStackCoordinator = NavigationStackCoordinator()
         
-        let parameters = BugReportScreenCoordinatorParameters(bugReportService: bugReportService,
-                                                              userID: userSession.userID,
-                                                              deviceID: userSession.deviceID,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                              screenshot: image,
-                                                              isModallyPresented: true)
-        let coordinator = BugReportScreenCoordinator(parameters: parameters)
-        coordinator.completion = { [weak self] _ in
-            self?.navigationSplitCoordinator.setSheetCoordinator(nil)
-        }
-        
-        feedbackNavigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationSplitCoordinator.setSheetCoordinator(feedbackNavigationStackCoordinator, animated: animated) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedFeedbackScreen)
-        }
-    }
-    
     // MARK: Invites list
     
     private func presentInvitesList(animated: Bool) {

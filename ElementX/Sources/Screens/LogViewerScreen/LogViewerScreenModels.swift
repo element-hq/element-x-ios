@@ -1,5 +1,5 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2022 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,10 +16,14 @@
 
 import Foundation
 
-// periphery:ignore - markdown protocol
-@MainActor
-protocol FlowCoordinatorProtocol {
-    func start()
-    func handleAppRoute(_ appRoute: AppRoute, animated: Bool)
-    func clearRoute(animated: Bool)
+enum LogViewerScreenViewModelAction {
+    case done
+}
+
+struct LogViewerScreenViewState: BindableState {
+    let urls: [URL]
+}
+
+enum LogViewerScreenViewAction {
+    case done
 }
