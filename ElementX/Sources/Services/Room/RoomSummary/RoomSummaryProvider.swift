@@ -250,7 +250,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
                                          unreadMessagesCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadMessages) : 0,
                                          unreadMentionsCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadMentions) : 0,
-                                         unreadNotificationsCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.notificationCount) : UInt(roomInfo.numUnreadNotifications),
+                                         unreadNotificationsCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadNotifications) : UInt(roomInfo.notificationCount),
                                          notificationMode: notificationMode,
                                          canonicalAlias: roomInfo.canonicalAlias,
                                          inviter: inviterProxy,

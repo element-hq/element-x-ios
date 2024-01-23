@@ -133,14 +133,10 @@ struct HomeScreenRoomCell: View {
                         .foregroundColor(.compound.iconAccentTertiary)
                 }
                 
-                if isHighlighted {
+                if hasNewContent {
                     Circle()
                         .frame(width: 12, height: 12)
-                        .foregroundColor(.compound.iconAccentTertiary)
-                } else if hasNewContent {
-                    Circle()
-                        .frame(width: 12, height: 12)
-                        .foregroundColor(.compound.iconQuaternary)
+                        .foregroundColor(isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
                 }
             }
         }
@@ -153,13 +149,11 @@ struct HomeScreenRoomCell: View {
     }
     
     private var isHighlighted: Bool {
-        guard !room.isPlaceholder,
-              room.notificationMode != .mute else {
+        guard !room.isPlaceholder &&
+            room.notificationMode != .mute else {
             return false
         }
-        return room.hasUnreadNotifications ||
-            // If the homeserver can't push encrypted events we need to higlight manually for the mentions, however this won't work when the global settings are changed
-            (room.notificationMode != .mute && room.hasUnreadMentions)
+        return room.hasUnreadNotifications || room.hasUnreadMentions
     }
         
     private var mentionIcon: some View {
