@@ -83,8 +83,9 @@ extension Array where Element == RoomSummary {
                                             avatarURL: nil,
                                             lastMessage: AttributedString("I do not wish to take the trouble to understand mysticism"),
                                             lastMessageFormattedTimestamp: "14:56",
-                                            unreadNotificationsCount: 0,
+                                            unreadMessagesCount: 0,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: .allMessages,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -95,8 +96,9 @@ extension Array where Element == RoomSummary {
                                             avatarURL: URL.picturesDirectory,
                                             lastMessage: AttributedString("How do you see the Emperor then? You think he keeps office hours?"),
                                             lastMessageFormattedTimestamp: "2:56 PM",
-                                            unreadNotificationsCount: 2,
+                                            unreadMessagesCount: 2,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 2,
                                             notificationMode: .mute,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -107,8 +109,9 @@ extension Array where Element == RoomSummary {
                                             avatarURL: nil,
                                             lastMessage: try? AttributedString(markdown: "He certainly seemed no *mental genius* to me"),
                                             lastMessageFormattedTimestamp: "Some time ago",
-                                            unreadNotificationsCount: 3,
+                                            unreadMessagesCount: 3,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: .mentionsAndKeywordsOnly,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -119,8 +122,9 @@ extension Array where Element == RoomSummary {
                                             avatarURL: nil,
                                             lastMessage: AttributedString("There's an archaic measure of time that's called the month"),
                                             lastMessageFormattedTimestamp: "Just now",
-                                            unreadNotificationsCount: 2,
+                                            unreadMessagesCount: 2,
                                             unreadMentionsCount: 2,
+                                            unreadNotificationsCount: 2,
                                             notificationMode: .allMessages,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -131,8 +135,9 @@ extension Array where Element == RoomSummary {
                                             avatarURL: nil,
                                             lastMessage: AttributedString("Clearly, if Earth is powerful enough to do that, it might also be capable of adjusting minds in order to force belief in its radioactivity"),
                                             lastMessageFormattedTimestamp: "1986",
-                                            unreadNotificationsCount: 1,
+                                            unreadMessagesCount: 1,
                                             unreadMentionsCount: 1,
+                                            unreadNotificationsCount: 1,
                                             notificationMode: .allMessages,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -143,8 +148,9 @@ extension Array where Element == RoomSummary {
                                             avatarURL: nil,
                                             lastMessage: AttributedString("Are you groping for the word 'paranoia'?"),
                                             lastMessageFormattedTimestamp: "きょうはじゅういちがつじゅういちにちです",
-                                            unreadNotificationsCount: 6,
+                                            unreadMessagesCount: 6,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: .mute,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -155,8 +161,9 @@ extension Array where Element == RoomSummary {
                                             avatarURL: nil,
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
-                                            unreadNotificationsCount: 0,
+                                            unreadMessagesCount: 0,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: nil,
                                             canonicalAlias: nil,
                                             inviter: nil,
@@ -164,56 +171,34 @@ extension Array where Element == RoomSummary {
         .empty
     ]
     
-    static let mockRoomsWithNotificationsState: [Element] = [
-        .filled(details: RoomSummaryDetails(id: "1",
-                                            settingsMode: .allMessages,
-                                            hasUnreadNotifications: false,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "2",
-                                            settingsMode: .allMessages,
-                                            hasUnreadNotifications: true,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "3",
-                                            settingsMode: .allMessages,
-                                            hasUnreadNotifications: true,
-                                            hasUnreadMentions: true)),
-        .filled(details: RoomSummaryDetails(id: "4",
-                                            settingsMode: .allMessages,
-                                            hasUnreadNotifications: false,
-                                            hasUnreadMentions: true)),
-        .filled(details: RoomSummaryDetails(id: "5",
-                                            settingsMode: .mentionsAndKeywordsOnly,
-                                            hasUnreadNotifications: false,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "6",
-                                            settingsMode: .mentionsAndKeywordsOnly,
-                                            hasUnreadNotifications: true,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "7",
-                                            settingsMode: .mentionsAndKeywordsOnly,
-                                            hasUnreadNotifications: true,
-                                            hasUnreadMentions: true)),
-        .filled(details: RoomSummaryDetails(id: "8",
-                                            settingsMode: .mentionsAndKeywordsOnly,
-                                            hasUnreadNotifications: false,
-                                            hasUnreadMentions: true)),
-        .filled(details: RoomSummaryDetails(id: "9",
-                                            settingsMode: .mute,
-                                            hasUnreadNotifications: false,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "10",
-                                            settingsMode: .mute,
-                                            hasUnreadNotifications: true,
-                                            hasUnreadMentions: false)),
-        .filled(details: RoomSummaryDetails(id: "11",
-                                            settingsMode: .mute,
-                                            hasUnreadNotifications: true,
-                                            hasUnreadMentions: true)),
-        .filled(details: RoomSummaryDetails(id: "12",
-                                            settingsMode: .mute,
-                                            hasUnreadNotifications: false,
-                                            hasUnreadMentions: true))
-    ]
+    static let mockRoomsWithNotificationsState: [Element] = {
+        var result: [Element] = []
+
+        // Iterate over settings modes
+        for mode in RoomNotificationModeProxy.allCases {
+            // Iterate over unread messages states
+            for hasUnreadMessages in [false, true] {
+                // Iterate over unread mentions states
+                for hasUnreadMentions in [false, true] {
+                    // Iterate over unread notifications states
+                    for hasUnreadNotifications in [false, true] {
+                        // Incrementing id value for each combination
+                        let id = result.count + 1
+
+                        let room = RoomSummary.filled(details: RoomSummaryDetails(id: "\(id)",
+                                                                                  settingsMode: mode,
+                                                                                  hasUnreadMessages: hasUnreadMessages,
+                                                                                  hasUnreadMentions: hasUnreadMentions,
+                                                                                  hasUnreadNotifications: hasUnreadNotifications))
+
+                        result.append(room)
+                    }
+                }
+            }
+        }
+
+        return result
+    }()
     
     static let mockInvites: [Element] = [
         .filled(details: RoomSummaryDetails(id: "someAwesomeRoomId1", name: "First room",
@@ -221,8 +206,9 @@ extension Array where Element == RoomSummary {
                                             avatarURL: URL.picturesDirectory,
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
-                                            unreadNotificationsCount: 0,
+                                            unreadMessagesCount: 0,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: nil,
                                             canonicalAlias: "#footest:somewhere.org",
                                             inviter: RoomMemberProxyMock.mockCharlie,
@@ -233,8 +219,9 @@ extension Array where Element == RoomSummary {
                                             avatarURL: nil,
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
-                                            unreadNotificationsCount: 0,
+                                            unreadMessagesCount: 0,
                                             unreadMentionsCount: 0,
+                                            unreadNotificationsCount: 0,
                                             notificationMode: nil,
                                             canonicalAlias: nil,
                                             inviter: RoomMemberProxyMock.mockCharlie,

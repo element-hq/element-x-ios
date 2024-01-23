@@ -332,7 +332,16 @@ class RoomProxy: RoomProxyProtocol {
         do {
             return try await .success(room.canUserRedactOther(userId: userID))
         } catch {
-            MXLog.error("Failed checking if the user can redact with error: \(error)")
+            MXLog.error("Failed checking if the user can redact others with error: \(error)")
+            return .failure(.failedCheckingPermission)
+        }
+    }
+    
+    func canUserRedactOwn(userID: String) async -> Result<Bool, RoomProxyError> {
+        do {
+            return try await .success(room.canUserRedactOwn(userId: userID))
+        } catch {
+            MXLog.error("Failed checking if the user can redact self with error: \(error)")
             return .failure(.failedCheckingPermission)
         }
     }

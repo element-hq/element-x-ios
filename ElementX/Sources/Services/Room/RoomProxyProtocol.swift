@@ -99,6 +99,8 @@ protocol RoomProxyProtocol {
 
     func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError>
     
+    func canUserRedactOwn(userID: String) async -> Result<Bool, RoomProxyError>
+    
     func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
     
     func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError>
