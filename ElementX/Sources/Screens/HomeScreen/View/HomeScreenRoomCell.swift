@@ -128,7 +128,7 @@ struct HomeScreenRoomCell: View {
                         .foregroundColor(.compound.iconQuaternary)
                 }
                 
-                if room.hasMentions, room.notificationMode != .mute {
+                if room.hasUnreadMentions, room.notificationMode != .mute {
                     mentionIcon
                         .foregroundColor(.compound.iconAccentTertiary)
                 }
@@ -143,19 +143,17 @@ struct HomeScreenRoomCell: View {
     }
     
     private var hasNewContent: Bool {
-        room.hasUnreads || room.hasMentions
+        room.hasUnreadMessages ||
+            room.hasUnreadMentions ||
+            room.hasUnreadNotifications
     }
     
     private var isHighlighted: Bool {
-        guard !room.isPlaceholder else {
+        guard !room.isPlaceholder &&
+            room.notificationMode != .mute else {
             return false
         }
-        return (isNotificationModeUnrestricted && hasNewContent) ||
-            (room.notificationMode == .mentionsAndKeywordsOnly && room.hasMentions)
-    }
-    
-    private var isNotificationModeUnrestricted: Bool {
-        room.notificationMode == nil || room.notificationMode == .allMessages
+        return room.hasUnreadNotifications || room.hasUnreadMentions
     }
         
     private var mentionIcon: some View {
@@ -225,7 +223,9 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
             return HomeScreenRoom(id: UUID().uuidString,
                                   roomId: details.id,
                                   name: details.name,
-                                  hasUnreads: details.unreadNotificationsCount > 0, hasMentions: details.unreadMentionsCount > 0,
+                                  hasUnreadMessages: details.unreadMessagesCount > 0,
+                                  hasUnreadMentions: details.unreadMentionsCount > 0,
+                                  hasUnreadNotifications: details.unreadNotificationsCount > 0,
                                   hasOngoingCall: details.hasOngoingCall,
                                   timestamp: Date(timeIntervalSinceReferenceDate: 0).formattedMinimal(),
                                   lastMessage: details.lastMessage,

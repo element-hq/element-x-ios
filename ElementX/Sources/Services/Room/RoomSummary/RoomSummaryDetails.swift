@@ -24,8 +24,9 @@ struct RoomSummaryDetails {
     let avatarURL: URL?
     let lastMessage: AttributedString?
     let lastMessageFormattedTimestamp: String?
-    let unreadNotificationsCount: UInt
+    let unreadMessagesCount: UInt
     let unreadMentionsCount: UInt
+    let unreadNotificationsCount: UInt
     let notificationMode: RoomNotificationModeProxy?
     let canonicalAlias: String?
     let inviter: RoomMemberProxyProtocol?
@@ -34,21 +35,22 @@ struct RoomSummaryDetails {
 
 extension RoomSummaryDetails: CustomStringConvertible {
     var description: String {
-        "RoomSummaryDetails: - id: \(id) - isDirect: \(isDirect) - unreadNotificationsCount: \(unreadNotificationsCount) - unreadMentionsCount: \(unreadMentionsCount) - notificationMode: \(notificationMode?.rawValue ?? "nil")"
+        "RoomSummaryDetails: - id: \(id) - isDirect: \(isDirect) - unreadMessagesCount: \(unreadMessagesCount) - unreadMentionsCount: \(unreadMentionsCount) - unreadNotificationsCount: \(unreadNotificationsCount) - notificationMode: \(notificationMode?.rawValue ?? "nil")"
     }
 }
 
 extension RoomSummaryDetails {
-    init(id: String, settingsMode: RoomNotificationModeProxy, hasUnreadNotifications: Bool, hasUnreadMentions: Bool) {
+    init(id: String, settingsMode: RoomNotificationModeProxy, hasUnreadMessages: Bool, hasUnreadMentions: Bool, hasUnreadNotifications: Bool) {
         self.id = id
-        let string = "\(settingsMode) - hasUnreadNotifications: \(hasUnreadNotifications) - hasUnreadMentions: \(hasUnreadMentions)"
+        let string = "\(settingsMode) - messages: \(hasUnreadMessages) - mentions: \(hasUnreadMentions) - notifications: \(hasUnreadNotifications)"
         name = string
         isDirect = true
         avatarURL = nil
         lastMessage = AttributedString(string)
         lastMessageFormattedTimestamp = "Now"
-        unreadNotificationsCount = hasUnreadNotifications ? 1 : 0
+        unreadMessagesCount = hasUnreadMessages ? 1 : 0
         unreadMentionsCount = hasUnreadMentions ? 1 : 0
+        unreadNotificationsCount = hasUnreadNotifications ? 1 : 0
         notificationMode = settingsMode
         canonicalAlias = nil
         inviter = nil
