@@ -78,7 +78,7 @@ end
 lane :unit_tests do
   run_tests(
     scheme: "UnitTests",
-    device: 'iPhone 15',
+    device: 'iPhone 15 (17.2)',
     ensure_devices_found: true,
     result_bundle: true,
     number_of_retries: 3,
