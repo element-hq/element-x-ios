@@ -125,8 +125,12 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             let refreshToken = try? await Task.dispatch(on: .global()) {
                 try client.session().refreshToken
             }
+            
             if refreshToken != nil {
-                MXLog.warning("Refresh token found for a non oidc session, can't restore session.")
+                MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
+                _ = try? await Task.dispatch(on: .global()) {
+                    try client.logout()
+                }
                 return .failure(.cantUseRefreshToken)
             }
             
