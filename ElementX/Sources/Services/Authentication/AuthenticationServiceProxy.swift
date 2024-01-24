@@ -128,8 +128,8 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             
             if refreshToken != nil {
                 MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
-                _ = try? await Task.dispatch(on: .global()) {
-                    try client.logout()
+                _ = await Task.dispatch(on: .global()) {
+                    try? client.logout()
                 }
                 return .failure(.cantUseRefreshToken)
             }
