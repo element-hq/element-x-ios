@@ -1,0 +1,1 @@
+Allow partial text selection in the timeline item view source menu

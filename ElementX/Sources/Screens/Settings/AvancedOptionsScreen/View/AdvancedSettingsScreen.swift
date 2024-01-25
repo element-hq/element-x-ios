@@ -36,6 +36,10 @@ struct AdvancedSettingsScreen: View {
                 
                 ListRow(label: .plain(title: L10n.actionViewSource),
                         kind: .toggle($context.viewSourceEnabled))
+                
+                ListRow(label: .plain(title: L10n.screenAdvancedSettingsSendReadReceipts,
+                                      description: L10n.screenAdvancedSettingsSendReadReceiptsDescription),
+                        kind: .toggle($context.sendReadReceiptsEnabled))
             }
         }
         .compoundList()

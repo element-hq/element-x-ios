@@ -42,6 +42,7 @@ protocol AdvancedSettingsProtocol: AnyObject {
     var viewSourceEnabled: Bool { get set }
     var richTextEditorEnabled: Bool { get set }
     var appAppearance: AppAppearance { get set }
+    var sendReadReceiptsEnabled: Bool { get set }
 }
 
 extension AppSettings: AdvancedSettingsProtocol { }

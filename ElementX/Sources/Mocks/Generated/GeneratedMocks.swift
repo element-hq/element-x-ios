@@ -2789,23 +2789,23 @@ class TimelineProxyMock: TimelineProxyProtocol {
     }
     //MARK: - sendReadReceipt
 
-    var sendReadReceiptForCallsCount = 0
-    var sendReadReceiptForCalled: Bool {
-        return sendReadReceiptForCallsCount > 0
+    var sendReadReceiptForTypeCallsCount = 0
+    var sendReadReceiptForTypeCalled: Bool {
+        return sendReadReceiptForTypeCallsCount > 0
     }
-    var sendReadReceiptForReceivedEventID: String?
-    var sendReadReceiptForReceivedInvocations: [String] = []
-    var sendReadReceiptForReturnValue: Result<Void, TimelineProxyError>!
-    var sendReadReceiptForClosure: ((String) async -> Result<Void, TimelineProxyError>)?
+    var sendReadReceiptForTypeReceivedArguments: (eventID: String, type: ReceiptType)?
+    var sendReadReceiptForTypeReceivedInvocations: [(eventID: String, type: ReceiptType)] = []
+    var sendReadReceiptForTypeReturnValue: Result<Void, TimelineProxyError>!
+    var sendReadReceiptForTypeClosure: ((String, ReceiptType) async -> Result<Void, TimelineProxyError>)?
 
-    func sendReadReceipt(for eventID: String) async -> Result<Void, TimelineProxyError> {
-        sendReadReceiptForCallsCount += 1
-        sendReadReceiptForReceivedEventID = eventID
-        sendReadReceiptForReceivedInvocations.append(eventID)
-        if let sendReadReceiptForClosure = sendReadReceiptForClosure {
-            return await sendReadReceiptForClosure(eventID)
+    func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError> {
+        sendReadReceiptForTypeCallsCount += 1
+        sendReadReceiptForTypeReceivedArguments = (eventID: eventID, type: type)
+        sendReadReceiptForTypeReceivedInvocations.append((eventID: eventID, type: type))
+        if let sendReadReceiptForTypeClosure = sendReadReceiptForTypeClosure {
+            return await sendReadReceiptForTypeClosure(eventID, type)
         } else {
-            return sendReadReceiptForReturnValue
+            return sendReadReceiptForTypeReturnValue
         }
     }
     //MARK: - sendMessageEventContent

@@ -1,1 +1,0 @@
-Enable log previewing before reporting a problem
