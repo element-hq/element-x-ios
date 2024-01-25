@@ -23,7 +23,8 @@ struct CallScreen: View {
     
     var body: some View {
         WebView(url: context.viewState.url, viewModelContext: context)
-            .id(UUID())
+            // This URL is stable, forces view reloads if this representable is ever reused for another url
+            .id(context.viewState.url)
             .ignoresSafeArea(edges: .bottom)
             .presentationDragIndicator(.visible)
             .environment(\.colorScheme, .dark)
