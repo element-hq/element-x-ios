@@ -535,7 +535,7 @@ class RoomScreenViewModelTests: XCTestCase {
         
         // Then a read receipt should be sent for the item before it.
         XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCalled, true)
-        var arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
+        let arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
         XCTAssertEqual(arguments?.eventID, "t2")
         XCTAssertEqual(arguments?.type, .read)
     }
