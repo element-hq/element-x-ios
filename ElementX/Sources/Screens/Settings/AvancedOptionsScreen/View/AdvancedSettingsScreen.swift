@@ -51,6 +51,7 @@ private extension TimelineStyle {
             return L10n.commonModern
         case .bubbles:
             return L10n.commonBubbles
+            
         }
     }
 }
