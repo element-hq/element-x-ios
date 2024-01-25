@@ -131,7 +131,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
                 _ = await Task.dispatch(on: .global()) {
                     try? client.logout()
                 }
-                return .failure(.cantUseRefreshToken)
+                return .failure(.sessionTokenRefreshNotSupported)
             }
             
             return await userSession(for: client)

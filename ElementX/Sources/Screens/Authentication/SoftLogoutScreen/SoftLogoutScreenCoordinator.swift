@@ -186,7 +186,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
         case .oidcError(.userCancellation):
             // No need to show an error, the user cancelled authentication.
             break
-        case .cantUseRefreshToken:
+        case .sessionTokenRefreshNotSupported:
             // We should display a specific error saying that we do not support this kind of login
             viewModel.displayError(.alert(L10n.errorUnknown))
         default:

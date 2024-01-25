@@ -35,7 +35,7 @@ enum AuthenticationServiceError: Error {
     case accountDeactivated
     case failedLoggingIn
     case isOnWaitlist
-    case cantUseRefreshToken
+    case sessionTokenRefreshNotSupported
 }
 
 protocol AuthenticationServiceProxyProtocol {
