@@ -52,10 +52,12 @@ struct HomeScreen: View {
                             .layoutPriority(1)
                     }
                 case .rooms:
-                    topSection
-                    
-                    LazyVStack(spacing: 0) {
-                        HomeScreenRoomList(context: context)
+                    LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+                        Section {
+                            HomeScreenRoomList(context: context)
+                        } header: {
+                            topSection
+                        }
                     }
                     .searchable(text: $context.searchQuery)
                     .compoundSearchField()
@@ -191,20 +193,30 @@ struct HomeScreen: View {
     @ViewBuilder
     /// The session verification banner and invites button if either are needed.
     private var topSection: some View {
-        if context.viewState.showSessionVerificationBanner {
-            HomeScreenSessionVerificationBanner(context: context)
-        } else if context.viewState.showRecoveryKeyConfirmationBanner {
-            HomeScreenRecoveryKeyConfirmationBanner(context: context)
-        }
-        
-        if context.viewState.hasPendingInvitations, !context.isSearchFieldFocused {
-            HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
-                context.send(viewAction: .selectInvites)
+        VStack(spacing: 0) {
+            if context.viewState.shouldShowFilters {
+                filters
             }
-            .accessibilityIdentifier(A11yIdentifiers.homeScreen.invites)
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding(.vertical, -8.0)
+            
+            if context.viewState.showSessionVerificationBanner {
+                HomeScreenSessionVerificationBanner(context: context)
+            } else if context.viewState.showRecoveryKeyConfirmationBanner {
+                HomeScreenRecoveryKeyConfirmationBanner(context: context)
+            }
+            
+            if context.viewState.hasPendingInvitations, !context.isSearchFieldFocused {
+                HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
+                    context.send(viewAction: .selectInvites)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.homeScreen.invites)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .background(Color.compound.bgCanvasDefault)
+            }
         }
+    }
+    
+    private var filters: some View {
+        RoomListFiltersView(state: context.viewState.filtersState)
     }
         
     @ToolbarContentBuilder

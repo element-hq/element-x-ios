@@ -46,6 +46,7 @@ final class AppSettings {
         case userSuggestionsEnabled
         case swiftUITimelineEnabled
         case mentionsBadgeEnabled
+        case roomListFiltersEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -271,7 +272,10 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.mentionsBadgeEnabled, defaultValue: true, storageType: .userDefaults(store))
     var mentionsBadgeEnabled
-        
+    
+    @UserPreference(key: UserDefaultsKeys.roomListFiltersEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var roomListFiltersEnabled
+    
     #endif
     
     // MARK: - Shared
