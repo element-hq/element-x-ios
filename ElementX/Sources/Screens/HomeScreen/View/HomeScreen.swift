@@ -210,9 +210,9 @@ struct HomeScreen: View {
                 }
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.invites)
                 .frame(maxWidth: .infinity, alignment: .trailing)
-                .background(Color.compound.bgCanvasDefault)
             }
         }
+        .background(Color.compound.bgCanvasDefault)
     }
     
     private var filters: some View {
