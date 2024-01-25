@@ -32,10 +32,10 @@ struct RoomListFiltersView: View {
                         .frame(width: 0)
                 }
                 ForEach(state.sortedEnabledFilters) { filter in
-                    FilterView(filter: filter, state: state)
+                    RoomListFilterView(filter: filter, state: state)
                 }
                 ForEach(state.sortedAvailableFilters) { filter in
-                    FilterView(filter: filter, state: state)
+                    RoomListFilterView(filter: filter, state: state)
                 }
             }
             .padding(.leading, state.isFiltering ? 8 : 16)

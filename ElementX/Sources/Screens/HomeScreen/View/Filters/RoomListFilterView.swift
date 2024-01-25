@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct FilterView: View {
+struct RoomListFilterView: View {
     let filter: RoomListFilter
     @StateObject var state: RoomListFiltersState
 
@@ -35,8 +35,8 @@ struct FilterView: View {
 
 struct FilterView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        FilterView(filter: .people, state: .init())
-        FilterView(filter: .people, state: .init(enabledFilters: [.people]))
+        RoomListFilterView(filter: .people, state: .init())
+        RoomListFilterView(filter: .people, state: .init(enabledFilters: [.people]))
     }
 }
 
