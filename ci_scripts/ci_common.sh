@@ -57,3 +57,36 @@ setup_github_actions_translations_environment() {
 
     mint install Asana/locheck
 }
+
+generate_what_to_test_notes() {
+    if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
+        TESTFLIGHT_DIR_PATH=TestFlight
+        TESTFLIGHT_NOTES_FILE_NAME=WhatToTest.en-US.txt
+
+        # Xcode Cloud shallow clones the repo, we need to manually fetch the tags
+        git fetch --tags --quiet
+        
+        LATEST_TAG=""
+        if [ "$CI_WORKFLOW" = "Release" ]; then
+            # Use -v to invert grep, searching for non-nightlies
+            LATEST_TAG=$(git tag --sort=-creatordate | grep -v 'nightly' | head -n1)
+        elif [ "$CI_WORKFLOW" = "Nightly" ]; then
+            LATEST_TAG=$(git tag --sort=-creatordate | grep 'nightly' | head -n1)
+        fi
+
+        if [[ -z "$LATEST_TAG" ]]; then
+            echo "generate_what_to_test_notes: Failed fetching previous tag"
+            return 0 # Continue even though this failed
+        fi
+
+        echo "generate_what_to_test_notes: latest tag is $LATEST_TAG"
+
+        mkdir $TESTFLIGHT_DIR_PATH
+
+        NOTES=$(git log --pretty='- %an: %s' "$LATEST_TAG"..HEAD)
+
+        echo "generate_what_to_test_notes: Generated notes:\n$NOTES"
+
+        echo $NOTES > $TESTFLIGHT_DIR_PATH/$TESTFLIGHT_NOTES_FILE_NAME
+    fi
+}
