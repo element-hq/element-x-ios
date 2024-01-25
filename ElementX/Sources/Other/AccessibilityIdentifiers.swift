@@ -142,6 +142,7 @@ enum A11yIdentifiers {
         let attachmentPickerPoll = "room-attachment_picker_poll"
         let attachmentPickerTextFormatting = "room-attachment_picker_text_formatting"
         let timelineItemActionMenu = "room-timeline_item_action_menu"
+        let joinCall = "room-join_call"
 
         let composerToolbar = ComposerToolbar()
 
