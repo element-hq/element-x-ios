@@ -25,6 +25,7 @@ class RoomScreenViewModelTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()
 
     override func setUp() async throws {
+        AppSettings.reset()
         cancellables.removeAll()
         userIndicatorControllerMock = UserIndicatorControllerMock.default
     }
@@ -456,8 +457,10 @@ class RoomScreenViewModelTests: XCTestCase {
         try await Task.sleep(for: .milliseconds(100))
         
         // Then the receipt should be sent.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForCalled, true)
-        XCTAssertEqual(timelineProxy.sendReadReceiptForReceivedEventID, "t3")
+        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCalled, true)
+        let arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
+        XCTAssertEqual(arguments?.eventID, "t3")
+        XCTAssertEqual(arguments?.type, .read)
         
         // And the notifications should be cleared.
         XCTAssertEqual(notificationCenter.postNameObjectReceivedArguments?.aName, .roomMarkedAsRead)
@@ -473,16 +476,20 @@ class RoomScreenViewModelTests: XCTestCase {
         let (viewModel, _, timelineProxy, timelineController, _) = readReceiptsConfiguration(with: items)
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
         try await Task.sleep(for: .milliseconds(100))
-        XCTAssertEqual(timelineProxy.sendReadReceiptForCallsCount, 1)
-        XCTAssertEqual(timelineProxy.sendReadReceiptForReceivedEventID, "t3")
+        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 1)
+        var arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
+        XCTAssertEqual(arguments?.eventID, "t3")
+        XCTAssertEqual(arguments?.type, .read)
         
         // When sending a receipt for the first item in the timeline.
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.first!.id))
         try await Task.sleep(for: .milliseconds(100))
         
         // Then the request should be ignored.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForCallsCount, 1)
-        XCTAssertEqual(timelineProxy.sendReadReceiptForReceivedEventID, "t3")
+        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 1)
+        arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
+        XCTAssertEqual(arguments?.eventID, "t3")
+        XCTAssertEqual(arguments?.type, .read)
         
         // When a new message is received and marked as read.
         let newMessage = TextRoomTimelineItem(eventID: "t4")
@@ -494,8 +501,10 @@ class RoomScreenViewModelTests: XCTestCase {
         try await Task.sleep(for: .milliseconds(100))
         
         // Then the request should be made.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForCallsCount, 2)
-        XCTAssertEqual(timelineProxy.sendReadReceiptForReceivedEventID, "t4")
+        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 2)
+        arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
+        XCTAssertEqual(arguments?.eventID, "t4")
+        XCTAssertEqual(arguments?.type, .read)
     }
     
     func testSendReadReceiptWithoutEvents() async throws {
@@ -510,7 +519,7 @@ class RoomScreenViewModelTests: XCTestCase {
         try await Task.sleep(for: .milliseconds(100))
         
         // Then nothing should be sent.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForCalled, false)
+        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCalled, false)
     }
     
     func testSendReadReceiptVirtualLast() async throws {
@@ -525,8 +534,10 @@ class RoomScreenViewModelTests: XCTestCase {
         try await Task.sleep(for: .milliseconds(100))
         
         // Then a read receipt should be sent for the item before it.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForCalled, true)
-        XCTAssertEqual(timelineProxy.sendReadReceiptForReceivedEventID, "t2")
+        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCalled, true)
+        var arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
+        XCTAssertEqual(arguments?.eventID, "t2")
+        XCTAssertEqual(arguments?.type, .read)
     }
     
     func testSendReadReceiptMultipleRequests() async throws {
@@ -537,15 +548,17 @@ class RoomScreenViewModelTests: XCTestCase {
         let (viewModel, _, timelineProxy, _, _) = readReceiptsConfiguration(with: items)
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
         try await Task.sleep(for: .milliseconds(100))
-        XCTAssertEqual(timelineProxy.sendReadReceiptForCallsCount, 1)
-        XCTAssertEqual(timelineProxy.sendReadReceiptForReceivedEventID, "t2")
+        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 1)
+        let arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
+        XCTAssertEqual(arguments?.eventID, "t2")
+        XCTAssertEqual(arguments?.type, .read)
         
         // When sending the same receipt again
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
         try await Task.sleep(for: .milliseconds(100))
         
         // Then the second call should be ignored.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForCallsCount, 1)
+        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 1)
     }
     
     // swiftlint:enable force_unwrapping
@@ -564,7 +577,7 @@ class RoomScreenViewModelTests: XCTestCase {
         roomProxy.timeline = timelineProxy
         let timelineController = MockRoomTimelineController()
         
-        timelineProxy.sendReadReceiptForReturnValue = .success(())
+        timelineProxy.sendReadReceiptForTypeReturnValue = .success(())
         
         roomProxy.underlyingHasUnreadNotifications = true
         timelineController.timelineItems = items
@@ -580,7 +593,6 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: notificationCenter)
-        
         return (viewModel, roomProxy, timelineProxy, timelineController, notificationCenter)
     }
     
