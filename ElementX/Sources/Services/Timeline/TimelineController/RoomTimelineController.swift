@@ -93,7 +93,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
               let eventID = itemID.eventID
         else { return .success(()) }
         
-        switch await roomProxy.timeline.sendReadReceipt(for: eventID) {
+        switch await roomProxy.timeline.sendReadReceipt(for: eventID,
+                                                        type: appSettings.sendReadReceiptsEnabled ? .read : .readPrivate) {
         case .success:
             return .success(())
         case .failure:

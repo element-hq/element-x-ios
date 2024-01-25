@@ -453,7 +453,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func sendReadReceipt(for eventID: String) async -> Result<Void, TimelineProxyError> {
+    func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending read receipt for eventID: \(eventID)")
         
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
@@ -463,7 +463,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         return await Task.dispatch(on: lowPriorityDispatchQueue) {
             do {
-                try self.timeline.sendReadReceipt(receiptType: .read, eventId: eventID)
+                try self.timeline.sendReadReceipt(receiptType: type, eventId: eventID)
                 MXLog.info("Finished sending read receipt for eventID: \(eventID)")
                 return .success(())
             } catch {

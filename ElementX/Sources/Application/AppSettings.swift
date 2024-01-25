@@ -37,6 +37,7 @@ final class AppSettings {
         case viewSourceEnabled
         case richTextEditorEnabled
         case appAppearance
+        case sendReadReceiptsEnabled
         
         case elementCallBaseURL
         case elementCallEncryptionEnabled
@@ -260,6 +261,11 @@ final class AppSettings {
 
     // maptiler api key
     let mapTilerApiKey = InfoPlistReader.main.mapLibreAPIKey
+    
+    // MARK: - Read Receipts
+
+    @UserPreference(key: UserDefaultsKeys.sendReadReceiptsEnabled, defaultValue: true, storageType: .userDefaults(store))
+    var sendReadReceiptsEnabled
     
     // MARK: - Feature Flags
     
