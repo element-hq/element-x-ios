@@ -34,12 +34,11 @@ class GenericCallLinkCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(
-            WebView(url: parameters.url)
-                .id(UUID())
-                .ignoresSafeArea(edges: .bottom)
-                .presentationDragIndicator(.visible)
-        )
+        AnyView(WebView(url: parameters.url)
+            // This URL is stable, forces view reloads if this representable is ever reused for another url
+            .id(parameters.url)
+            .ignoresSafeArea(edges: .bottom)
+            .presentationDragIndicator(.visible))
     }
 }
 
