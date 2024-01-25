@@ -34,8 +34,8 @@ enum AuthenticationServiceError: Error {
     case slidingSyncNotAvailable
     case accountDeactivated
     case failedLoggingIn
-    
     case isOnWaitlist
+    case sessionTokenRefreshNotSupported
 }
 
 protocol AuthenticationServiceProxyProtocol {
