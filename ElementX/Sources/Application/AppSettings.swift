@@ -275,7 +275,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
     
-    @UserPreference(key: UserDefaultsKeys.mentionsBadgeEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.mentionsBadgeEnabled, defaultValue: true, storageType: .userDefaults(store))
     var mentionsBadgeEnabled
         
     #endif
