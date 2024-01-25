@@ -176,12 +176,14 @@ struct RoomScreen: View {
                     .labelStyle(.titleAndIcon)
             }
             .buttonStyle(ElementCallButtonStyle())
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         } else {
             Button {
                 context.send(viewAction: .presentCall)
             } label: {
                 CompoundIcon(\.videoCallSolid)
             }
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         }
     }
     

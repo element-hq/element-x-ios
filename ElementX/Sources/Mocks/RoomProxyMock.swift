@@ -27,7 +27,7 @@ struct RoomProxyMockConfiguration {
     var isSpace = Bool.random()
     var isPublic = Bool.random()
     var isEncrypted = true
-    var hasOngoingCall = false
+    var hasOngoingCall = true
     var canonicalAlias: String?
     var hasUnreadNotifications = Bool.random()
     
@@ -43,7 +43,7 @@ struct RoomProxyMockConfiguration {
     var ownUserID = "@alice:somewhere.org"
 
     var canUserTriggerRoomNotification = false
-    var canUserJoinCall = false
+    var canUserJoinCall = true
     
     var joinedMembersCount = 50
     var activeMembersCount = 25
@@ -87,5 +87,17 @@ extension RoomProxyMock {
         canUserRedactOtherUserIDReturnValue = .success(false)
         canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
         canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
+        
+        let widgetDriver = ElementCallWidgetDriverMock()
+        widgetDriver.underlyingMessagePublisher = .init()
+        widgetDriver.underlyingActions = PassthroughSubject().eraseToAnyPublisher()
+        
+        guard let url = URL(string: "https://call.element.dev/\(UUID().uuidString)#?appPrompt=false") else {
+            fatalError()
+        }
+        
+        widgetDriver.startBaseURLClientIDUseEncryptionReturnValue = .success(url)
+        
+        elementCallWidgetDriverReturnValue = widgetDriver
     }
 }
