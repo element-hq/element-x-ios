@@ -33,7 +33,7 @@ struct RoomListFilterView: View {
     }
 }
 
-struct FilterView_Previews: PreviewProvider, TestablePreview {
+struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         RoomListFilterView(filter: .people, state: .init())
         RoomListFilterView(filter: .people, state: .init(enabledFilters: [.people]))
