@@ -22,7 +22,7 @@ struct RoomListFiltersView: View {
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: 8) {
-                if !state.isEmpty {
+                if state.isFiltering {
                     clearButton
                 } else {
                     // This solves a weird issue withe the LazyHStack
@@ -38,22 +38,22 @@ struct RoomListFiltersView: View {
                     FilterView(filter: filter, state: state)
                 }
             }
-            .padding(.leading, state.isEmpty ? 8 : 16)
+            .padding(.leading, state.isFiltering ? 8 : 16)
             .padding(.vertical, 12)
         }
         .scrollIndicators(.hidden)
-        .background(Color.compound.bgCanvasDefault)
     }
     
     private var clearButton: some View {
-        Image(systemName: "xmark.circle.fill")
-            .font(.system(size: 24))
-            .foregroundColor(.compound.bgActionPrimaryRest)
-            .onTapGesture {
-                withAnimation(.elementDefault) {
-                    state.clearFilters()
-                }
+        Button(action: {
+            withAnimation(.elementDefault) {
+                state.clearFilters()
             }
+        }, label: {
+            Image(systemName: "xmark.circle.fill")
+                .font(.system(size: 24))
+                .foregroundColor(.compound.bgActionPrimaryRest)
+        })
     }
 }
 

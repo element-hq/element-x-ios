@@ -34,7 +34,6 @@ struct HomeScreenInvitesButton: View {
             }
             .padding(.trailing, 16.0)
             .padding(.leading, 64.0)
-            .padding(.vertical, 8.0)
         }
     }
     

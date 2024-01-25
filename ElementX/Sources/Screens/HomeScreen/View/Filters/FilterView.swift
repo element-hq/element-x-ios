@@ -22,12 +22,12 @@ struct FilterView: View {
 
     var body: some View {
         let binding = Binding<Bool>(get: {
-            state.isSelected(filter)
-        }, set: { isSelected, _ in
-            state.setIsEnabled(isSelected, for: filter)
+            state.isEnabled(filter)
+        }, set: { isEnabled, _ in
+            state.set(filter, isEnabled: isEnabled)
         })
         Toggle(isOn: binding) {
-            Text(filter.localisedName)
+            Text(filter.localizedName)
         }
         .toggleStyle(FilterToggleStyle())
     }
@@ -65,6 +65,7 @@ private struct FilterToggleStyle: ToggleStyle {
                 .inset(by: 0.5)
                 .stroke(strokeColor(isOn: configuration.isOn)))
             .drawingGroup()
+            // The button breaks the animation for some reason, so better to use the label directly with an onTapGesture
             .onTapGesture {
                 withAnimation(.elementDefault) {
                     configuration.isOn.toggle()

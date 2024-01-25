@@ -190,7 +190,7 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     case favourites
     case lowPriority
     
-    var localisedName: String {
+    var localizedName: String {
         switch self {
         case .people:
             return L10n.commonFilterPeople
@@ -243,11 +243,11 @@ final class RoomListFiltersState: ObservableObject {
         return availableFilters.sorted(by: { $0.rawValue < $1.rawValue })
     }
     
-    var isEmpty: Bool {
-        enabledFilters.isEmpty
+    var isFiltering: Bool {
+        !enabledFilters.isEmpty
     }
     
-    func setIsEnabled(_ isEnabled: Bool, for filter: RoomListFilter) {
+    func set(_ filter: RoomListFilter, isEnabled: Bool) {
         if isEnabled {
             enabledFilters.insert(filter)
         } else {
@@ -259,7 +259,7 @@ final class RoomListFiltersState: ObservableObject {
         enabledFilters.removeAll()
     }
     
-    func isSelected(_ filter: RoomListFilter) -> Bool {
+    func isEnabled(_ filter: RoomListFilter) -> Bool {
         enabledFilters.contains(filter)
     }
 }
