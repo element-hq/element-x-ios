@@ -37,9 +37,8 @@ struct AdvancedSettingsScreen: View {
                 ListRow(label: .plain(title: L10n.actionViewSource),
                         kind: .toggle($context.viewSourceEnabled))
                 
-                // TODO: Use a localised string
-                ListRow(label: .plain(title: "Send read receipts",
-                                      description: "On disabling, others won't see your read receipt."),
+                ListRow(label: .plain(title: L10n.screenAdvancedSettingsSendReadReceipts,
+                                      description: L10n.screenAdvancedSettingsSendReadReceiptsDescription),
                         kind: .toggle($context.sendReadReceiptsEnabled))
             }
         }
