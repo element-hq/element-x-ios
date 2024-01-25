@@ -81,9 +81,10 @@ struct TimelineItemDebugView: View {
                 Divider()
                     .padding(.vertical, 8)
                 
-                Text(text)
+                TextField("", text: .constant(text), axis: .vertical)
                     .font(.compound.bodyXS.monospaced())
                     .foregroundColor(.compound.textPrimary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .frame(maxWidth: .infinity)
         }
