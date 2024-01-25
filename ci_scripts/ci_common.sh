@@ -60,15 +60,12 @@ setup_github_actions_translations_environment() {
 
 generate_what_to_test_notes() {
     if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
-        echo "generate_what_to_test_notes: App signed, notes for $CI_WORKFLOW"
-
-        echo "generate_what_to_test_notes: current path is $(pwd)"
+        TESTFLIGHT_DIR_PATH=TestFlight
+        TESTFLIGHT_NOTES_FILE_NAME=WhatToTest.en-US.txt
 
         # Xcode Cloud shallow clones the repo, we need to manually fetch the tags
-        git fetch --tags
+        git fetch --tags --quiet
         
-        TESTFLIGHT_DIR_PATH=TestFlight
-
         LATEST_TAG=""
         if [ "$CI_WORKFLOW" = "Release" ]; then
             # Use -v to invert grep, searching for non-nightlies
@@ -90,8 +87,6 @@ generate_what_to_test_notes() {
 
         echo "generate_what_to_test_notes: Generated notes:\n$NOTES"
 
-        echo $NOTES > $TESTFLIGHT_DIR_PATH/WhatToTest.en-US.txt
-
-        echo "generate_what_to_test_notes: WhatToTest.en-US.txt:\n$(cat $TESTFLIGHT_DIR_PATH/WhatToTest.en-US.txt)"
+        echo $NOTES > $TESTFLIGHT_DIR_PATH/$TESTFLIGHT_NOTES_FILE_NAME
     fi
 }
