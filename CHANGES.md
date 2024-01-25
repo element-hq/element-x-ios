@@ -1,3 +1,21 @@
+## Changes in 1.5.4 (2024-01-25)
+
+✨ Features
+
+- Enable log previewing before reporting a problem ([#734](https://github.com/element-hq/element-x-ios/issues/734))
+
+🙌 Improvements
+
+- Unread messages that do not trigger notifications, will show a grey dot in the room list. ([#2371](https://github.com/element-hq/element-x-ios/pull/2371))
+- Removed unnecessary state events for DMs. ([#2329](https://github.com/element-hq/element-x-ios/issues/2329))
+- Change Leave Room to Leave Conversation for DMs ([#2330](https://github.com/element-hq/element-x-ios/issues/2330))
+
+🐛 Bugfixes
+
+- Bugfix for the mention badge not being unset properly when opening the room. Also the mention badge is enabled by default. ([#2367](https://github.com/element-hq/element-x-ios/pull/2367))
+- You can't redact a message of your own if the room does not allow it. ([#2368](https://github.com/element-hq/element-x-ios/pull/2368))
+- Is now possible to take photos in landscape mode. ([#1815](https://github.com/element-hq/element-x-ios/issues/1815))
+
 ## Changes in 1.5.3 (2024-01-17)
 
 ✨ Features
