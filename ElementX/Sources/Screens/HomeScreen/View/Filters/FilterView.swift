@@ -21,7 +21,7 @@ struct FilterView: View {
     @StateObject var state: RoomListFiltersState
 
     var body: some View {
-        let binding = Binding<Bool>.init(get: {
+        let binding = Binding<Bool>(get: {
             state.isSelected(filter)
         }, set: { isSelected, _ in
             state.setIsEnabled(isSelected, for: filter)

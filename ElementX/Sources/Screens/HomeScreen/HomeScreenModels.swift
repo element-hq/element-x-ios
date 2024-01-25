@@ -190,19 +190,18 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     case favourites
     case lowPriority
     
-    // TODO: Localise
     var localisedName: String {
         switch self {
         case .people:
-            return "People"
+            return L10n.commonFilterPeople
         case .rooms:
-            return "Rooms"
+            return L10n.commonFilterRooms
         case .unreads:
-            return "Unreads"
+            return L10n.commonFilterUnreads
         case .favourites:
-            return "Favourites"
+            return L10n.commonFilterFavourites
         case .lowPriority:
-            return "Low Priority"
+            return L10n.commonFilterLowPriority
         }
     }
     

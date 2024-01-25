@@ -274,6 +274,16 @@ public enum L10n {
   public static var commonFaceIdIos: String { return L10n.tr("Localizable", "common_face_id_ios") }
   /// File
   public static var commonFile: String { return L10n.tr("Localizable", "common_file") }
+  /// Favourites
+  public static var commonFilterFavourites: String { return L10n.tr("Localizable", "common_filter_favourites") }
+  /// Low Priority
+  public static var commonFilterLowPriority: String { return L10n.tr("Localizable", "common_filter_low_priority") }
+  /// People
+  public static var commonFilterPeople: String { return L10n.tr("Localizable", "common_filter_people") }
+  /// Rooms
+  public static var commonFilterRooms: String { return L10n.tr("Localizable", "common_filter_rooms") }
+  /// Unreads
+  public static var commonFilterUnreads: String { return L10n.tr("Localizable", "common_filter_unreads") }
   /// Forward message
   public static var commonForwardMessage: String { return L10n.tr("Localizable", "common_forward_message") }
   /// GIF
@@ -718,6 +728,10 @@ public enum L10n {
   public static var screenAdvancedSettingsElementCallBaseUrlValidationError: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url_validation_error") }
   /// Disable the rich text editor to type Markdown manually.
   public static var screenAdvancedSettingsRichTextEditorDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_rich_text_editor_description") }
+  /// Send read receipts
+  public static var screenAdvancedSettingsSendReadReceipts: String { return L10n.tr("Localizable", "screen_advanced_settings_send_read_receipts") }
+  /// On disabling, others won't see your read receipts.
+  public static var screenAdvancedSettingsSendReadReceiptsDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_send_read_receipts_description") }
   /// Enable option to view message source in the timeline.
   public static var screenAdvancedSettingsViewSourceDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_view_source_description") }
   /// We won't record or profile any personal data

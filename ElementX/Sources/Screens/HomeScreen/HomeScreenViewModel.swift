@@ -337,7 +337,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             if room.isPublic {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .public)
             } else {
-                state.bindings.leaveRoomAlertItem = room.joinedMembersCount > 1 ? LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .private) : LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .empty)
+                state.bindings.leaveRoomAlertItem = room.joinedMembersCount > 1 ?
+                    LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .private) :
+                    LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .empty)
             }
         }
     }
