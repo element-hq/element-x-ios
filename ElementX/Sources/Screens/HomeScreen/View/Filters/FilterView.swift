@@ -61,9 +61,11 @@ private struct FilterToggleStyle: ToggleStyle {
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
             .background(shape.fill(backgroundColor(isOn: configuration.isOn)))
-            .overlay(shape
-                .inset(by: 0.5)
-                .stroke(strokeColor(isOn: configuration.isOn)))
+            .overlay {
+                shape
+                    .inset(by: 0.5)
+                    .stroke(strokeColor(isOn: configuration.isOn))
+            }
             .drawingGroup()
             // The button breaks the animation for some reason, so better to use the label directly with an onTapGesture
             .onTapGesture {
