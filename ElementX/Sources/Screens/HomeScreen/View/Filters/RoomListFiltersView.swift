@@ -38,7 +38,7 @@ struct RoomListFiltersView: View {
                     RoomListFilterView(filter: filter, state: state)
                 }
             }
-            .padding(.leading, state.isFiltering ? 8 : 16)
+            .padding(.leading, !state.isFiltering ? 8 : 16)
             .padding(.vertical, 12)
         }
         .scrollIndicators(.hidden)
