@@ -131,9 +131,6 @@ class MockScreen: Identifiable {
                                                                                    analytics: ServiceLocator.shared.analytics))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .migration:
-            let coordinator = MigrationScreenCoordinator()
-            return coordinator
         case .authenticationFlow:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),

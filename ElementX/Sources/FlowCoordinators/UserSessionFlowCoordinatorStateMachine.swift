@@ -23,9 +23,6 @@ class UserSessionFlowCoordinatorStateMachine {
         /// The initial state, used before the coordinator starts
         case initial
         
-        /// Showing the migration screen whilst the proxy performs an initial sync.
-        case migration
-
         /// Showing the welcome screen.
         case welcomeScreen
         
@@ -63,11 +60,6 @@ class UserSessionFlowCoordinatorStateMachine {
         /// **Note:** This is event is only for users who used the app before v1.1.8.
         /// It can be removed once the older TestFlight builds have expired.
         case startWithWelcomeScreen
-        /// Start the user session flows with a migration screen.
-        case startWithMigration
-        
-        /// Request to transition from the migration state to the home screen.
-        case completeMigration
         
         /// Request presentation of the welcome screen.
         case presentWelcomeScreen
@@ -124,9 +116,7 @@ class UserSessionFlowCoordinatorStateMachine {
 
     private func configure() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .roomList(selectedRoomID: nil)])
-        stateMachine.addRoutes(event: .startWithMigration, transitions: [.initial => .migration])
         stateMachine.addRoutes(event: .startWithWelcomeScreen, transitions: [.initial => .welcomeScreen])
-        stateMachine.addRoutes(event: .completeMigration, transitions: [.migration => .roomList(selectedRoomID: nil)])
         stateMachine.addRoutes(event: .dismissedWelcomeScreen, transitions: [.welcomeScreen => .roomList(selectedRoomID: nil)])
 
         stateMachine.addRouteMapping { event, fromState, _ in
