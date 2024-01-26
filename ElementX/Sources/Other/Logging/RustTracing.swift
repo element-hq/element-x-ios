@@ -79,6 +79,7 @@ struct TracingConfiguration {
         case matrix_sdk_sliding_sync = "matrix_sdk::sliding_sync"
         case matrix_sdk_base_sliding_sync = "matrix_sdk_base::sliding_sync"
         case matrix_sdk_ui_timeline = "matrix_sdk_ui::timeline"
+        case matrix_sdk_base_read_receipts = "matrix_sdk_base::read_receipts"
     }
     
     static let targets: OrderedDictionary<Target, LogLevel> = [
@@ -92,7 +93,8 @@ struct TracingConfiguration {
         .matrix_sdk_http_client: .debug,
         .matrix_sdk_sliding_sync: .info,
         .matrix_sdk_base_sliding_sync: .info,
-        .matrix_sdk_ui_timeline: .info
+        .matrix_sdk_ui_timeline: .info,
+        .matrix_sdk_base_read_receipts: .trace
     ]
     
     let filter: String
@@ -114,7 +116,8 @@ struct TracingConfiguration {
                                             .matrix_sdk_oidc,
                                             .matrix_sdk_client,
                                             .matrix_sdk_crypto,
-                                            .matrix_sdk_http_client]
+                                            .matrix_sdk_http_client,
+                                            .matrix_sdk_base_read_receipts]
             if ignoredTargets.contains(target) {
                 return
             }
