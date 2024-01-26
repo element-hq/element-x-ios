@@ -52,16 +52,28 @@ struct HomeScreenContent: View {
                             .layoutPriority(1)
                     }
                 case .rooms:
-                    LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
-                        Section {
-                            HomeScreenRoomList(context: context)
-                        } header: {
-                            topSection
+                    if context.viewState.shouldShowFilters {
+                        // Showing empty views in pinned headers makes the room list spasm when reaching the top
+                        LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+                            Section {
+                                HomeScreenRoomList(context: context)
+                            } header: {
+                                topSection
+                            }
                         }
+                        .searchable(text: $context.searchQuery)
+                        .compoundSearchField()
+                        .disableAutocorrection(true)
+                    } else {
+                        topSection
+
+                        LazyVStack(spacing: 0) {
+                            HomeScreenRoomList(context: context)
+                        }
+                        .searchable(text: $context.searchQuery)
+                        .compoundSearchField()
+                        .disableAutocorrection(true)
                     }
-                    .searchable(text: $context.searchQuery)
-                    .compoundSearchField()
-                    .disableAutocorrection(true)
                 case .migration:
                     EmptyView()
                 }
