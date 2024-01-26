@@ -97,6 +97,7 @@ struct HomeScreenViewState: BindableState {
     
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
+    var shouldShowFilters = false
     
     var hasPendingInvitations = false
     var hasUnreadPendingInvitations = false
@@ -110,6 +111,8 @@ struct HomeScreenViewState: BindableState {
         
         return rooms
     }
+    
+    var filtersState = RoomListFiltersState()
     
     var bindings = HomeScreenViewStateBindings()
     
@@ -173,5 +176,90 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
                        isPlaceholder: true)
+    }
+}
+
+enum RoomListFilter: Int, CaseIterable, Identifiable {
+    var id: Int {
+        rawValue
+    }
+    
+    case people
+    case rooms
+    case unreads
+    case favourites
+    case lowPriority
+    
+    var localizedName: String {
+        switch self {
+        case .people:
+            return L10n.screenRoomlistFilterPeople
+        case .rooms:
+            return L10n.screenRoomlistFilterRooms
+        case .unreads:
+            return L10n.screenRoomlistFilterUnreads
+        case .favourites:
+            return L10n.screenRoomlistFilterFavourites
+        case .lowPriority:
+            return L10n.screenRoomlistFilterLowPriority
+        }
+    }
+    
+    var complementaryFilter: RoomListFilter? {
+        switch self {
+        case .people:
+            return .rooms
+        case .rooms:
+            return .people
+        case .unreads:
+            return nil
+        case .favourites:
+            return .lowPriority
+        case .lowPriority:
+            return .favourites
+        }
+    }
+}
+
+final class RoomListFiltersState: ObservableObject {
+    @Published private var enabledFilters: Set<RoomListFilter>
+    
+    init(enabledFilters: Set<RoomListFilter> = []) {
+        self.enabledFilters = enabledFilters
+    }
+    
+    var sortedEnabledFilters: [RoomListFilter] {
+        enabledFilters.sorted(by: { $0.rawValue < $1.rawValue })
+    }
+    
+    var sortedAvailableFilters: [RoomListFilter] {
+        var availableFilters = Set(RoomListFilter.allCases)
+        for filter in enabledFilters {
+            availableFilters.remove(filter)
+            if let complementaryFilter = filter.complementaryFilter {
+                availableFilters.remove(complementaryFilter)
+            }
+        }
+        return availableFilters.sorted(by: { $0.rawValue < $1.rawValue })
+    }
+    
+    var isFiltering: Bool {
+        !enabledFilters.isEmpty
+    }
+    
+    func set(_ filter: RoomListFilter, isEnabled: Bool) {
+        if isEnabled {
+            enabledFilters.insert(filter)
+        } else {
+            enabledFilters.remove(filter)
+        }
+    }
+    
+    func clearFilters() {
+        enabledFilters.removeAll()
+    }
+    
+    func isEnabled(_ filter: RoomListFilter) -> Bool {
+        enabledFilters.contains(filter)
     }
 }

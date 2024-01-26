@@ -80,6 +80,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
+        appSettings.$roomListFiltersEnabled
+            .weakAssign(to: \.state.shouldShowFilters, on: self)
+            .store(in: &cancellables)
+        
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         isSearchFieldFocused
@@ -333,7 +337,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             if room.isPublic {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .public)
             } else {
-                state.bindings.leaveRoomAlertItem = room.joinedMembersCount > 1 ? LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .private) : LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .empty)
+                state.bindings.leaveRoomAlertItem = if room.joinedMembersCount > 1 {
+                    LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .private)
+                } else {
+                    LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .empty)
+                }
             }
         }
     }

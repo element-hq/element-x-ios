@@ -550,6 +550,11 @@
 "screen_roomlist_a11y_create_message" = "Create a new conversation or room";
 "screen_roomlist_empty_message" = "Get started by messaging someone.";
 "screen_roomlist_empty_title" = "No chats yet.";
+"screen_roomlist_filter_favourites" = "Favourites";
+"screen_roomlist_filter_low_priority" = "Low Priority";
+"screen_roomlist_filter_people" = "People";
+"screen_roomlist_filter_rooms" = "Rooms";
+"screen_roomlist_filter_unreads" = "Unreads";
 "screen_roomlist_main_space_title" = "All Chats";
 "screen_server_confirmation_change_server" = "Change account provider";
 "screen_server_confirmation_message_login_element_dot_io" = "A private server for Element employees.";

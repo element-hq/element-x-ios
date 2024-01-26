@@ -56,6 +56,12 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("Room List") {
+                Toggle(isOn: $context.roomListFiltersEnabled) {
+                    Text("Show filters")
+                }
+            }
+            
             Section("Element Call") {
                 TextField(context.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
                     .submitLabel(.done)
