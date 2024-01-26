@@ -256,8 +256,12 @@ class MockScreen: Identifiable {
             
             return navigationStackCoordinator
         case .home:
+            let userID = "@mock:matrix.org"
+            
+            ServiceLocator.shared.settings.migratedAccounts[userID] = true
+            
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
+            let session = MockUserSession(clientProxy: MockClientProxy(userID: userID),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             let coordinator = HomeScreenCoordinator(parameters: .init(userSession: session,
