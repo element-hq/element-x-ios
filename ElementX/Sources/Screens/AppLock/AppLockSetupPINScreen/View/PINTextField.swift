@@ -26,6 +26,7 @@ struct PINTextField: View {
         textField
             .textFieldStyle(PINTextFieldStyle(pinCode: pinCode, isSecure: isSecure))
             .keyboardType(.numberPad)
+            .accessibilityIdentifier(A11yIdentifiers.appLockSetupPINScreen.textField)
             .onChange(of: pinCode) { newValue in
                 let sanitized = sanitize(newValue)
                 if sanitized != newValue {
@@ -67,7 +68,8 @@ private struct PINTextFieldStyle: TextFieldStyle {
         .overlay {
             configuration
                 .focused($isFocussed)
-                .opacity(0.0)
+                // Textfield isn't accessible for UI tests otherwise
+                .opacity(0.01)
         }
         .onTapGesture { isFocussed = true }
     }
