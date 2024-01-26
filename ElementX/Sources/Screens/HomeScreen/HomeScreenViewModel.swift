@@ -27,6 +27,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
     private let inviteSummaryProvider: RoomSummaryProviderProtocol?
     
+    private var migrationCancellable: AnyCancellable?
+    
     private var visibleItemRangeObservationToken: AnyCancellable?
     private let visibleItemRangePublisher = CurrentValueSubject<(range: Range<Int>, isScrolling: Bool), Never>((0..<0, false))
     
@@ -101,7 +103,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        setupRoomSummaryProviderSubscriptions()
+        setupRoomListSubscriptions()
         
         updateRooms()
     }
@@ -166,7 +168,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
     }
     
-    private func setupRoomSummaryProviderSubscriptions() {
+    private func setupRoomListSubscriptions() {
         guard let roomSummaryProvider, let inviteSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
@@ -174,42 +176,32 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         ServiceLocator.shared.analytics.signpost.beginFirstRooms()
         
+        let hasUserBeenMigrated = appSettings.migratedAccounts[userSession.userID] == true
+
+        if !hasUserBeenMigrated {
+            state.roomListMode = .migration
+            
+            MXLog.info("Account not migrated, setting view room list mode to \"\(state.roomListMode)\"")
+            
+            migrationCancellable = userSession.clientProxy.callbacks
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] callback in
+                    guard let self, case .receivedSyncUpdate = callback else { return }
+                    migrationCancellable = nil
+                    appSettings.migratedAccounts[userSession.userID] = true
+                    
+                    MXLog.info("Received first sync response, updating room list mode")
+                    
+                    updateRoomListMode(with: roomSummaryProvider.statePublisher.value)
+                }
+        }
+        
         roomSummaryProvider.statePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 guard let self else { return }
                 
-                let isLoadingData = !state.isLoaded
-                let hasNoRooms = state.isLoaded && state.totalNumberOfRooms == 0
-                
-                var roomListMode = self.state.roomListMode
-                if isLoadingData {
-                    roomListMode = .skeletons
-                } else if hasNoRooms {
-                    roomListMode = .empty
-                } else {
-                    roomListMode = .rooms
-                }
-                
-                guard roomListMode != self.state.roomListMode else {
-                    return
-                }
-                
-                if roomListMode == .rooms, self.state.roomListMode == .skeletons {
-                    ServiceLocator.shared.analytics.signpost.endFirstRooms()
-                }
-                
-                self.state.roomListMode = roomListMode
-                
-                MXLog.info("Received room summary provider update, setting view room list mode to \"\(self.state.roomListMode)\"")
-                
-                // Delay user profile detail loading until after the initial room list loads
-                if roomListMode == .rooms {
-                    Task {
-                        await self.userSession.clientProxy.loadUserAvatarURL()
-                        await self.userSession.clientProxy.loadUserDisplayName()
-                    }
-                }
+                updateRoomListMode(with: state)
             }
             .store(in: &cancellables)
         
@@ -238,6 +230,44 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 })
             }
             .store(in: &cancellables)
+    }
+    
+    private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState) {
+        guard appSettings.migratedAccounts[userSession.userID] == true else {
+            // Ignore room summary provider updates while "migrating"
+            return
+        }
+        
+        let isLoadingData = !roomSummaryProviderState.isLoaded
+        let hasNoRooms = roomSummaryProviderState.isLoaded && roomSummaryProviderState.totalNumberOfRooms == 0
+        
+        var roomListMode = state.roomListMode
+        if isLoadingData {
+            roomListMode = .skeletons
+        } else if hasNoRooms {
+            roomListMode = .empty
+        } else {
+            roomListMode = .rooms
+        }
+        
+        guard roomListMode != state.roomListMode else {
+            return
+        }
+        
+        if roomListMode == .rooms, state.roomListMode == .skeletons {
+            ServiceLocator.shared.analytics.signpost.endFirstRooms()
+        }
+        
+        state.roomListMode = roomListMode
+        
+        MXLog.info("Received room summary provider update, setting view room list mode to \"\(state.roomListMode)\"")
+        // Delay user profile detail loading until after the initial room list loads
+        if roomListMode == .rooms {
+            Task {
+                await self.userSession.clientProxy.loadUserAvatarURL()
+                await self.userSession.clientProxy.loadUserDisplayName()
+            }
+        }
     }
     
     private func installListRangeModifiers() {

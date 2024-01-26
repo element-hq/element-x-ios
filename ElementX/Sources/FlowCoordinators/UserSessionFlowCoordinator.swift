@@ -42,7 +42,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     
     private var cancellables = Set<AnyCancellable>()
-    private var migrationCancellable: AnyCancellable?
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
@@ -137,10 +136,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func start() {
-        if appSettings.migratedAccounts[userSession.userID] != true {
-            // Show the migration screen for a new account.
-            stateMachine.processEvent(.startWithMigration)
-        } else if !appSettings.hasShownWelcomeScreen {
+        if !appSettings.hasShownWelcomeScreen {
             stateMachine.processEvent(.startWithWelcomeScreen)
         } else {
             // Otherwise go straight to the home screen.
@@ -220,12 +216,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.initial, .start, .roomList):
                 presentHomeScreen()
             
-            case (.initial, .startWithMigration, .migration):
-                presentMigrationScreen() // Full screen cover
-                presentHomeScreen() // Have the home screen ready to show underneath
-            case (.migration, .completeMigration, .roomList):
-                dismissMigrationScreen()
-
             case (.initial, .startWithWelcomeScreen, .welcomeScreen):
                 presentHomeScreen()
                 presentWelcomeScreen()
@@ -300,33 +290,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 MXLog.error("Failed transition from equal states: \(context.fromState)")
             } else {
                 fatalError("Failed transition with context: \(context)")
-            }
-        }
-    }
-    
-    private func presentMigrationScreen() {
-        // Listen for the first sync to finish.
-        migrationCancellable = userSession.clientProxy.callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                guard let self, stateMachine.state == .migration, case .receivedSyncUpdate = callback else { return }
-                migrationCancellable = nil
-                appSettings.migratedAccounts[userSession.userID] = true
-                stateMachine.processEvent(.completeMigration)
-            }
-        
-        let coordinator = MigrationScreenCoordinator()
-        navigationSplitCoordinator.setFullScreenCoverCoordinator(coordinator)
-    }
-    
-    private func dismissMigrationScreen() {
-        navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
-
-        // Not sure why but the full screen closure dismissal closure doesn't seem to work properly
-        // And not using the DispatchQueue.main results in the the screen getting presented as full screen too.
-        if !appSettings.hasShownWelcomeScreen {
-            DispatchQueue.main.async {
-                self.stateMachine.processEvent(.presentWelcomeScreen)
             }
         }
     }

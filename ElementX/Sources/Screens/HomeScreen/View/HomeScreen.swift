@@ -32,102 +32,49 @@ struct HomeScreen: View {
     @State private var hairlineView: UIView?
     
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                switch context.viewState.roomListMode {
-                case .skeletons:
-                    LazyVStack(spacing: 0) {
-                        ForEach(context.viewState.visibleRooms) { room in
-                            HomeScreenRoomCell(room: room, context: context, isSelected: false)
-                                .redacted(reason: .placeholder)
-                                .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
-                        }
+        HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            .alert(item: $context.alertInfo)
+            .alert(item: $context.leaveRoomAlertItem,
+                   actions: leaveRoomAlertActions,
+                   message: leaveRoomAlertMessage)
+            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
+            .toolbar { toolbar }
+            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+            .track(screen: .home)
+            .introspect(.viewController, on: .supportedVersions) { controller in
+                Task {
+                    if bloomView == nil {
+                        makeBloomView(controller: controller)
                     }
-                    .disabled(true)
-                case .empty:
-                    HomeScreenEmptyStateLayout(minHeight: geometry.size.height) {
-                        topSection
-                        
-                        HomeScreenEmptyStateView(context: context)
-                            .layoutPriority(1)
+                }
+                let isTopController = controller.navigationController?.topViewController != controller
+                let isHidden = isTopController || context.isSearchFieldFocused
+                if let bloomView {
+                    bloomView.isHidden = isHidden
+                    UIView.transition(with: bloomView, duration: 1.75, options: .curveEaseInOut) {
+                        bloomView.alpha = isTopController ? 0 : 1
                     }
-                case .rooms:
-                    LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
-                        Section {
-                            HomeScreenRoomList(context: context)
-                        } header: {
-                            topSection
-                        }
+                }
+                gradientView?.isHidden = isHidden
+                navigationBarContainer?.clipsToBounds = !isHidden
+                hairlineView?.isHidden = isHidden || !scrollViewAdapter.isAtTopEdge.value
+                if !isHidden {
+                    updateBloomCenter()
+                }
+            }
+            .onReceive(scrollViewAdapter.isAtTopEdge.removeDuplicates()) { value in
+                hairlineView?.isHidden = !value
+                guard let gradientView else {
+                    return
+                }
+                if value {
+                    UIView.transition(with: gradientView, duration: 0.3, options: .curveEaseIn) {
+                        gradientView.alpha = 0
                     }
-                    .searchable(text: $context.searchQuery)
-                    .compoundSearchField()
-                    .disableAutocorrection(true)
+                } else {
+                    gradientView.alpha = 1
                 }
             }
-            .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                guard scrollView != scrollViewAdapter.scrollView else { return }
-                scrollViewAdapter.scrollView = scrollView
-            }
-            .onReceive(scrollViewAdapter.didScroll) { _ in
-                updateVisibleRange()
-            }
-            .onReceive(scrollViewAdapter.isScrolling) { _ in
-                updateVisibleRange()
-            }
-            .onChange(of: context.searchQuery) { _ in
-                updateVisibleRange()
-            }
-            .onChange(of: context.viewState.visibleRooms) { _ in
-                updateVisibleRange()
-            }
-            .scrollDismissesKeyboard(.immediately)
-            .scrollDisabled(context.viewState.roomListMode == .skeletons)
-            .scrollBounceBehavior(context.viewState.roomListMode == .empty ? .basedOnSize : .automatic)
-            .animation(.elementDefault, value: context.viewState.roomListMode)
-            .animation(.none, value: context.viewState.visibleRooms)
-        }
-        .alert(item: $context.alertInfo)
-        .alert(item: $context.leaveRoomAlertItem,
-               actions: leaveRoomAlertActions,
-               message: leaveRoomAlertMessage)
-        .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-        .toolbar { toolbar }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-        .track(screen: .home)
-        .introspect(.viewController, on: .supportedVersions) { controller in
-            Task {
-                if bloomView == nil {
-                    makeBloomView(controller: controller)
-                }
-            }
-            let isTopController = controller.navigationController?.topViewController != controller
-            let isHidden = isTopController || context.isSearchFieldFocused
-            if let bloomView {
-                bloomView.isHidden = isHidden
-                UIView.transition(with: bloomView, duration: 1.75, options: .curveEaseInOut) {
-                    bloomView.alpha = isTopController ? 0 : 1
-                }
-            }
-            gradientView?.isHidden = isHidden
-            navigationBarContainer?.clipsToBounds = !isHidden
-            hairlineView?.isHidden = isHidden || !scrollViewAdapter.isAtTopEdge.value
-            if !isHidden {
-                updateBloomCenter()
-            }
-        }
-        .onReceive(scrollViewAdapter.isAtTopEdge.removeDuplicates()) { value in
-            hairlineView?.isHidden = !value
-            guard let gradientView else {
-                return
-            }
-            if value {
-                UIView.transition(with: gradientView, duration: 0.3, options: .curveEaseIn) {
-                    gradientView.alpha = 0
-                }
-            } else {
-                gradientView.alpha = 1
-            }
-        }
     }
     
     // MARK: - Private
@@ -189,35 +136,6 @@ struct HomeScreen: View {
         let center = leftBarButtonView.convert(leftBarButtonView.center, to: navigationBarContainer.coordinateSpace)
         bloomView.center = center
     }
-    
-    @ViewBuilder
-    /// The session verification banner and invites button if either are needed.
-    private var topSection: some View {
-        VStack(spacing: 0) {
-            if context.viewState.shouldShowFilters {
-                filters
-            }
-            
-            if context.viewState.showSessionVerificationBanner {
-                HomeScreenSessionVerificationBanner(context: context)
-            } else if context.viewState.showRecoveryKeyConfirmationBanner {
-                HomeScreenRecoveryKeyConfirmationBanner(context: context)
-            }
-            
-            if context.viewState.hasPendingInvitations, !context.isSearchFieldFocused {
-                HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
-                    context.send(viewAction: .selectInvites)
-                }
-                .accessibilityIdentifier(A11yIdentifiers.homeScreen.invites)
-                .frame(maxWidth: .infinity, alignment: .trailing)
-            }
-        }
-        .background(Color.compound.bgCanvasDefault)
-    }
-    
-    private var filters: some View {
-        RoomListFiltersView(state: context.viewState.filtersState)
-    }
         
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
@@ -225,7 +143,7 @@ struct HomeScreen: View {
             HomeScreenUserMenuButton(context: context)
         }
         
-        ToolbarItemGroup(placement: .primaryAction) {
+        ToolbarItem(placement: .primaryAction) {
             newRoomButton
         }
     }
@@ -234,41 +152,20 @@ struct HomeScreen: View {
         BloomView(context: context)
     }
     
+    @ViewBuilder
     private var newRoomButton: some View {
-        Button {
-            context.send(viewAction: .startChat)
-        } label: {
-            CompoundIcon(\.edit)
+        switch context.viewState.roomListMode {
+        case .empty, .rooms:
+            Button {
+                context.send(viewAction: .startChat)
+            } label: {
+                CompoundIcon(\.edit)
+            }
+            .accessibilityLabel(L10n.actionStartChat)
+            .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)
+        default:
+            EmptyView()
         }
-        .accessibilityLabel(L10n.actionStartChat)
-        .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)
-    }
-    
-    /// Often times the scroll view's content size isn't correct yet when this method is called e.g. when cancelling a search
-    /// Dispatch it with a delay to allow the UI to update and the computations to be correct
-    /// Once we move to iOS 17 we should remove all of this and use scroll anchors instead
-    private func updateVisibleRange() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { delayedUpdateVisibleRange() }
-    }
-    
-    private func delayedUpdateVisibleRange() {
-        guard let scrollView = scrollViewAdapter.scrollView,
-              context.viewState.visibleRooms.count > 0 else {
-            return
-        }
-        
-        guard scrollView.contentSize.height > scrollView.bounds.height else {
-            return
-        }
-        
-        let adjustedContentSize = max(scrollView.contentSize.height - scrollView.contentInset.top - scrollView.contentInset.bottom, scrollView.bounds.height)
-        let cellHeight = adjustedContentSize / Double(context.viewState.visibleRooms.count)
-        
-        let firstIndex = Int(max(0.0, scrollView.contentOffset.y + scrollView.contentInset.top) / cellHeight)
-        let lastIndex = Int(max(0.0, scrollView.contentOffset.y + scrollView.bounds.height) / cellHeight)
-        
-        // This will be deduped and throttled on the view model layer
-        context.send(viewAction: .updateVisibleItemRange(range: firstIndex..<lastIndex, isScrolling: scrollViewAdapter.isScrolling.value))
     }
     
     @ViewBuilder
@@ -287,32 +184,54 @@ struct HomeScreen: View {
 // MARK: - Previews
 
 struct HomeScreen_Previews: PreviewProvider, TestablePreview {
-    static let loadingViewModel = viewModel(.loading)
-    static let loadedViewModel = viewModel(.loaded(.mockRooms))
-    static let emptyViewModel = viewModel(.loaded([]))
+    static let migratingViewModel = viewModel(.migration)
+    static let loadingViewModel = viewModel(.skeletons)
+    static let emptyViewModel = viewModel(.empty)
+    static let loadedViewModel = viewModel(.rooms)
     
     static var previews: some View {
+        NavigationStack {
+            HomeScreen(context: migratingViewModel.context)
+        }
+        .previewDisplayName("Migrating")
+        
         NavigationStack {
             HomeScreen(context: loadingViewModel.context)
         }
         .previewDisplayName("Loading")
         
         NavigationStack {
-            HomeScreen(context: loadedViewModel.context)
-        }
-        .previewDisplayName("Loaded")
-        .snapshot(delay: 4.0)
-        
-        NavigationStack {
             HomeScreen(context: emptyViewModel.context)
         }
         .previewDisplayName("Empty")
         .snapshot(delay: 4.0)
+        
+        NavigationStack {
+            HomeScreen(context: loadedViewModel.context)
+        }
+        .previewDisplayName("Loaded")
+        .snapshot(delay: 4.0)
     }
     
-    static func viewModel(_ state: MockRoomSummaryProviderState) -> HomeScreenViewModel {
-        let clientProxy = MockClientProxy(userID: "@alice:example.com",
-                                          roomSummaryProvider: MockRoomSummaryProvider(state: state))
+    static func viewModel(_ mode: HomeScreenRoomListMode) -> HomeScreenViewModel {
+        let userID = mode == .migration ? "@unmigrated_alice:example.com" : "@alice:example.com"
+        
+        let appSettings = AppSettings() // This uses shared storage under the hood
+        appSettings.migratedAccounts[userID] = mode != .migration
+        
+        let roomSummaryProviderState: MockRoomSummaryProviderState = switch mode {
+        case .migration:
+            .loading
+        case .skeletons:
+            .loading
+        case .empty:
+            .loaded([])
+        case .rooms:
+            .loaded(.mockRooms)
+        }
+        
+        let clientProxy = MockClientProxy(userID: userID,
+                                          roomSummaryProvider: MockRoomSummaryProvider(state: roomSummaryProviderState))
         
         let userSession = MockUserSession(clientProxy: clientProxy,
                                           mediaProvider: MockMediaProvider(),
@@ -320,7 +239,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         
         return HomeScreenViewModel(userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   appSettings: ServiceLocator.shared.settings,
+                                   appSettings: appSettings,
                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }
