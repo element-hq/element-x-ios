@@ -137,16 +137,16 @@ class AppLockSetupUITests: XCTestCase {
     // MARK: - Helpers
     
     private func enterPIN() {
-        app.keys["2"].tap()
-        app.keys["0"].tap()
-        app.keys["2"].tap()
-        app.keys["3"].tap()
+        let textField = app.secureTextFields[A11yIdentifiers.appLockSetupPINScreen.textField]
+        XCTAssert(textField.waitForExistence(timeout: 10))
+        
+        textField.clearAndTypeText("2023")
     }
     
     private func enterDifferentPIN() {
-        app.keys["2"].tap()
-        app.keys["2"].tap()
-        app.keys["3"].tap()
-        app.keys["3"].tap()
+        let textField = app.secureTextFields[A11yIdentifiers.appLockSetupPINScreen.textField]
+        XCTAssert(textField.waitForExistence(timeout: 10))
+        
+        textField.clearAndTypeText("2233")
     }
 }

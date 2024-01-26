@@ -62,6 +62,7 @@ enum A11yIdentifiers {
     }
     
     struct AppLockSetupPINScreen {
+        let textField = "app_lock_setup_pin-text_field"
         let cancel = "app_lock_setup_pin-cancel"
     }
     
