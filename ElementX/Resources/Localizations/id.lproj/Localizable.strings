@@ -298,6 +298,8 @@
 "screen_advanced_settings_developer_mode" = "Mode pengembang";
 "screen_advanced_settings_developer_mode_description" = "Aktifkan untuk mengakses fitur dan fungsi untuk para pengembang.";
 "screen_advanced_settings_rich_text_editor_description" = "Nonaktifkan penyunting teks kaya untuk mengetik Markdown secara manual.";
+"screen_advanced_settings_send_read_receipts" = "Read receipts";
+"screen_advanced_settings_send_read_receipts_description" = "If turned off, your read receipts won't be sent to anyone. You will still receive read receipts from other users.";
 "screen_advanced_settings_view_source_description" = "Aktifkan opsi untuk melihat sumber pesan dalam lini masa.";
 "screen_analytics_prompt_data_usage" = "Kami tidak akan merekam atau memprofil data pribadi apa pun";
 "screen_analytics_prompt_help_us_improve" = "Bagikan data penggunaan anonim untuk membantu kami mengidentifikasi masalah.";
@@ -342,6 +344,7 @@
 "screen_bug_report_include_logs" = "Izinkan log";
 "screen_bug_report_include_screenshot" = "Kirim tangkapan layar";
 "screen_bug_report_logs_description" = "Log akan disertakan dengan pesan Anda untuk memastikan bahwa semuanya berfungsi dengan baik. Untuk mengirimkan pesan Anda tanpa log, matikan pengaturan ini.";
+"screen_bug_report_view_logs" = "View logs";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org adalah server besar dan gratis di jaringan Matrix publik untuk komunikasi yang aman dan terdesentralisasi, disediakan oleh Yayasan Matrix.org.";
 "screen_change_account_provider_other" = "Lainnya";
 "screen_change_account_provider_subtitle" = "Gunakan penyedia akun yang berbeda, seperti server pribadi Anda sendiri atau akun kerja.";
@@ -542,6 +545,11 @@
 "screen_roomlist_a11y_create_message" = "Buat percakapan atau ruangan baru";
 "screen_roomlist_empty_message" = "Mulailah dengan mengirim pesan kepada seseorang.";
 "screen_roomlist_empty_title" = "Belum ada obrolan.";
+"screen_roomlist_filter_favourites" = "Favourites";
+"screen_roomlist_filter_low_priority" = "Low Priority";
+"screen_roomlist_filter_people" = "People";
+"screen_roomlist_filter_rooms" = "Rooms";
+"screen_roomlist_filter_unreads" = "Unreads";
 "screen_roomlist_main_space_title" = "Semua Obrolan";
 "screen_server_confirmation_change_server" = "Ubah penyedia akun";
 "screen_server_confirmation_message_login_element_dot_io" = "Server pribadi untuk karyawan Element.";

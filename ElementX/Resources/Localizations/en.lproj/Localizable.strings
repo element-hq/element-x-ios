@@ -120,11 +120,6 @@
 "common_everyone" = "Everyone";
 "common_face_id_ios" = "Face ID";
 "common_file" = "File";
-"common_filter_favourites" = "Favourites";
-"common_filter_low_priority" = "Low Priority";
-"common_filter_people" = "People";
-"common_filter_rooms" = "Rooms";
-"common_filter_unreads" = "Unreads";
 "common_forward_message" = "Forward message";
 "common_gif" = "GIF";
 "common_image" = "Image";

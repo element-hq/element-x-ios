@@ -298,6 +298,8 @@
 "screen_advanced_settings_developer_mode" = "Mode développeur";
 "screen_advanced_settings_developer_mode_description" = "Activer pour pouvoir accéder aux fonctionnalités destinées aux développeurs.";
 "screen_advanced_settings_rich_text_editor_description" = "Désactivez l’éditeur de texte enrichi pour saisir manuellement du Markdown.";
+"screen_advanced_settings_send_read_receipts" = "Accusés de lecture";
+"screen_advanced_settings_send_read_receipts_description" = "En cas de désactivation, vos accusés de lecture ne seront pas envoyés aux autres membres. Vous verrez toujours les accusés des autres membres.";
 "screen_advanced_settings_view_source_description" = "Activer cette option pour pouvoir voir la source des messages dans la discussion.";
 "screen_analytics_prompt_data_usage" = "Nous n’enregistrerons ni ne profilerons aucune donnée personnelle";
 "screen_analytics_prompt_help_us_improve" = "Partagez des données d’utilisation anonymes pour nous aider à identifier les problèmes.";
@@ -342,6 +344,7 @@
 "screen_bug_report_include_logs" = "Autoriser à inclure les journaux techniques";
 "screen_bug_report_include_screenshot" = "Envoyer une capture d’écran";
 "screen_bug_report_logs_description" = "Pour vérifier que les choses fonctionnent comme prévu, des journaux techniques seront envoyés avec votre message. Pour ne pas envoyer ces journaux, désactivez ce paramètre.";
+"screen_bug_report_view_logs" = "View logs";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org est un grand serveur gratuit sur le réseau public Matrix pour une communication sécurisée et décentralisée, géré par la Fondation Matrix.org.";
 "screen_change_account_provider_other" = "Autres";
 "screen_change_account_provider_subtitle" = "Utilisez un autre fournisseur de compte, tel que votre propre serveur privé ou un serveur professionnel.";
@@ -542,6 +545,11 @@
 "screen_roomlist_a11y_create_message" = "Créer une nouvelle discussion ou un nouveau salon";
 "screen_roomlist_empty_message" = "Commencez par envoyer un message à quelqu’un.";
 "screen_roomlist_empty_title" = "Aucune discussion pour le moment.";
+"screen_roomlist_filter_favourites" = "Favoris";
+"screen_roomlist_filter_low_priority" = "Priorité basse";
+"screen_roomlist_filter_people" = "Discussions";
+"screen_roomlist_filter_rooms" = "Salons";
+"screen_roomlist_filter_unreads" = "Non-lus";
 "screen_roomlist_main_space_title" = "Conversations";
 "screen_server_confirmation_change_server" = "Changer de fournisseur de compte";
 "screen_server_confirmation_message_login_element_dot_io" = "Un serveur privé pour les employés d’Element.";

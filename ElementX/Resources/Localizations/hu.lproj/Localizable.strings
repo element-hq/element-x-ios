@@ -228,7 +228,7 @@
 "error_some_messages_have_not_been_sent" = "Néhány üzenet nem került elküldésre";
 "error_unknown" = "Elnézést, hiba történt";
 "invite_friends_rich_title" = "🔐️ Csatlakozz hozzám itt: %1$@";
-"invite_friends_text" = "Beszélj velem az %1$@ használatával: %2$@";
+"invite_friends_text" = "Beszélgessünk a(z) %1$@: %2$@ -n";
 "leave_conversation_alert_subtitle" = "Are you sure that you want to leave this conversation? This conversation is not public and you won't be able to rejoin without an invite.";
 "leave_room_alert_empty_subtitle" = "Biztos, hogy elhagyja ezt a szobát? Ön az egyedüli ember itt. Ha kilép, akkor senki sem fog tudni csatlakozni a jövőben, Önt is beleértve.";
 "leave_room_alert_private_subtitle" = "Biztos, hogy elhagyod ezt a szobát? Ez a szoba nem nyilvános, és meghívó nélkül nem fogsz tudni újra belépni.";
@@ -298,6 +298,8 @@
 "screen_advanced_settings_developer_mode" = "Fejlesztői mód";
 "screen_advanced_settings_developer_mode_description" = "Engedélyezd, hogy elérd a fejlesztőknek szánt funkciókat.";
 "screen_advanced_settings_rich_text_editor_description" = "A formázott szöveges szerkesztő letiltása, hogy kézzel írhass Markdownt.";
+"screen_advanced_settings_send_read_receipts" = "Read receipts";
+"screen_advanced_settings_send_read_receipts_description" = "If turned off, your read receipts won't be sent to anyone. You will still receive read receipts from other users.";
 "screen_advanced_settings_view_source_description" = "Engedélyezze a beállítást az üzenet forrásának megjelenítéséhez az idővonalon.";
 "screen_analytics_prompt_data_usage" = "Nem rögzítünk vagy profilozunk személyes adatokat";
 "screen_analytics_prompt_help_us_improve" = "Anonim használati adatok megosztása a problémák azonosítása érdekében.";
@@ -342,6 +344,7 @@
 "screen_bug_report_include_logs" = "Naplók engedélyezése";
 "screen_bug_report_include_screenshot" = "Képernyőkép küldése";
 "screen_bug_report_logs_description" = "A naplók szerepelni fognak az üzenetben, hogy megbizonyosodhassunk arról, hogy minden megfelelően működik-e. Ha naplók nélkül szeretné elküldeni az üzenetet, akkor kapcsolja ki ezt a beállítást.";
+"screen_bug_report_view_logs" = "View logs";
 "screen_change_account_provider_matrix_org_subtitle" = "A Matrix.org egy nagy, ingyenes kiszolgáló a nyilvános Matrix-hálózaton, a biztonságos, decentralizált kommunikáció érdekében, amelyet a Matrix.org Alapítvány üzemeltet.";
 "screen_change_account_provider_other" = "Egyéb";
 "screen_change_account_provider_subtitle" = "Másik fiókszolgáltató, például a saját privát kiszolgáló vagy egy munkahelyi fiók használata.";
@@ -542,6 +545,11 @@
 "screen_roomlist_a11y_create_message" = "Új beszélgetés vagy szoba létrehozása";
 "screen_roomlist_empty_message" = "Kezdje azzal, hogy üzenetet küld valakinek.";
 "screen_roomlist_empty_title" = "Még nincsenek csevegések.";
+"screen_roomlist_filter_favourites" = "Favourites";
+"screen_roomlist_filter_low_priority" = "Low Priority";
+"screen_roomlist_filter_people" = "People";
+"screen_roomlist_filter_rooms" = "Rooms";
+"screen_roomlist_filter_unreads" = "Unreads";
 "screen_roomlist_main_space_title" = "Összes csevegés";
 "screen_server_confirmation_change_server" = "Fiókszolgáltató módosítása";
 "screen_server_confirmation_message_login_element_dot_io" = "Egy privát kiszolgáló az Element alkalmazottai számára.";
