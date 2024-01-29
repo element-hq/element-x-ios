@@ -51,10 +51,10 @@ class WindowManager: WindowManagerProtocol {
         overlayWindow.backgroundColor = .clear
         overlayWindow.isHidden = false
         
-        globalSearchWindow = PassthroughWindow(windowScene: windowScene)
+        globalSearchWindow = UIWindow(windowScene: windowScene)
         globalSearchWindow.tintColor = .compound.textActionPrimary
         globalSearchWindow.backgroundColor = .clear
-        globalSearchWindow.isHidden = false
+        globalSearchWindow.isHidden = true
         
         alternateWindow = UIWindow(windowScene: windowScene)
         alternateWindow.tintColor = .compound.textActionPrimary
@@ -65,7 +65,6 @@ class WindowManager: WindowManagerProtocol {
     func switchToMain() {
         mainWindow.isHidden = false
         overlayWindow.isHidden = false
-        globalSearchWindow.isHidden = false
         
         mainWindow.makeKey()
         
@@ -85,6 +84,8 @@ class WindowManager: WindowManagerProtocol {
         // e.g. the keyboard being displayed on top of a call sheet.
         mainWindow.endEditing(true)
         
+        hideGlobalSearch()
+        
         // alternateWindow.isHidden = false cannot got inside the Task otherwise the timing
         // is poor when you lock the phone - you briefly see the main window for a few
         // frames after you've unlocked the phone and then the placeholder animates in.
@@ -98,10 +99,24 @@ class WindowManager: WindowManagerProtocol {
         }
     }
     
-    func switchToGlobalSearch() {
+    func showGlobalSearch() {
+        guard alternateWindow.isHidden else {
+            return
+        }
+        
+        globalSearchWindow.isHidden = false
         globalSearchWindow.makeKey()
     }
-
+    
+    func hideGlobalSearch() {
+        guard alternateWindow.isHidden else {
+            return
+        }
+        
+        globalSearchWindow.isHidden = true
+        mainWindow.makeKey()
+    }
+    
     func setOrientation(_ orientation: UIInterfaceOrientationMask) {
         windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
     }

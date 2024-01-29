@@ -175,7 +175,9 @@ private struct GlobalSearchTextFieldRepresentable: UIViewRepresentable {
             }
             
             let currentText = textField.text ?? ""
-            text.wrappedValue = (currentText as NSString).replacingCharacters(in: range, with: string)
+            DispatchQueue.main.async {
+                self.text.wrappedValue = (currentText as NSString).replacingCharacters(in: range, with: string)
+            }
             return true
         }
     }

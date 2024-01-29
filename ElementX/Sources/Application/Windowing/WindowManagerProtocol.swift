@@ -50,5 +50,7 @@ protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     func switchToAlternate()
     
     /// Makes the global search window key. Used to get automatic text field focus.
-    func switchToGlobalSearch()
+    func showGlobalSearch()
+    
+    func hideGlobalSearch()
 }

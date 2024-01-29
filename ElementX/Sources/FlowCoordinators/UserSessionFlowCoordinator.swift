@@ -564,12 +564,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         hostingController.view.backgroundColor = .clear
         windowManager.globalSearchWindow.rootViewController = hostingController
 
-        windowManager.switchToGlobalSearch()
+        windowManager.showGlobalSearch()
     }
     
     private func dismissGlobalSearch() {
         windowManager.globalSearchWindow.rootViewController = nil
-        windowManager.switchToMain()
+        windowManager.hideGlobalSearch()
         
         globalSearchScreenCoordinator = nil
     }
