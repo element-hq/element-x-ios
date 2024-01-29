@@ -56,7 +56,7 @@
 "action_join" = "Entra";
 "action_learn_more" = "Ulteriori informazioni";
 "action_leave" = "Esci";
-"action_leave_conversation" = "Leave conversation";
+"action_leave_conversation" = "Abbandona la conversazione";
 "action_leave_room" = "Esci dalla stanza";
 "action_manage_account" = "Gestisci account";
 "action_manage_devices" = "Gestisci dispositivi";
@@ -229,7 +229,7 @@
 "error_unknown" = "Siamo spiacenti, si è verificato un errore";
 "invite_friends_rich_title" = "🔐️ Unisciti a me su %1$@";
 "invite_friends_text" = "Ehi, parlami su %1$@: %2$@";
-"leave_conversation_alert_subtitle" = "Are you sure that you want to leave this conversation? This conversation is not public and you won't be able to rejoin without an invite.";
+"leave_conversation_alert_subtitle" = "Vuoi davvero abbandonare questa conversazione? La conversazione non è pubblica e non potrai rientrare senza un invito.";
 "leave_room_alert_empty_subtitle" = "Sei sicuro di voler lasciare questa stanza? Sei l'unica persona presente. Se esci, nessuno potrà unirsi in futuro, te compreso.";
 "leave_room_alert_private_subtitle" = "Sei sicuro di voler lasciare questa stanza? Questa stanza non è pubblica e non potrai rientrare senza un invito.";
 "leave_room_alert_subtitle" = "Sei sicuro di voler lasciare la stanza?";
@@ -298,6 +298,8 @@
 "screen_advanced_settings_developer_mode" = "Modalità sviluppatore";
 "screen_advanced_settings_developer_mode_description" = "Attiva per avere accesso a caratteristiche e funzionalità per sviluppatori.";
 "screen_advanced_settings_rich_text_editor_description" = "Disattiva l'editor in rich text per digitare Markdown manualmente.";
+"screen_advanced_settings_send_read_receipts" = "Read receipts";
+"screen_advanced_settings_send_read_receipts_description" = "If turned off, your read receipts won't be sent to anyone. You will still receive read receipts from other users.";
 "screen_advanced_settings_view_source_description" = "Attiva l'opzione per visualizzare il sorgente del messaggio nella linea temporale.";
 "screen_analytics_prompt_data_usage" = "Non registreremo né profileremo alcun dato personale";
 "screen_analytics_prompt_help_us_improve" = "Condividi dati di utilizzo anonimi per aiutarci a identificare problemi.";
@@ -342,6 +344,7 @@
 "screen_bug_report_include_logs" = "Consenti i log";
 "screen_bug_report_include_screenshot" = "Invia istantanea schermo";
 "screen_bug_report_logs_description" = "Per verificare che le cose funzionino come previsto, i log verranno inviati con il tuo messaggio. Per inviare solo il tuo messaggio, disattiva questa impostazione.";
+"screen_bug_report_view_logs" = "View logs";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org è un grande server gratuito nella rete pubblica Matrix per una comunicazione sicura e decentralizzata, gestito dalla Fondazione Matrix.org.";
 "screen_change_account_provider_other" = "Altro";
 "screen_change_account_provider_subtitle" = "Utilizza un provider di account diverso, ad esempio il tuo server privato o un account di lavoro.";
@@ -542,6 +545,11 @@
 "screen_roomlist_a11y_create_message" = "Crea una nuova conversazione o stanza";
 "screen_roomlist_empty_message" = "Inizia inviando un messaggio a qualcuno.";
 "screen_roomlist_empty_title" = "Ancora nessuna chat.";
+"screen_roomlist_filter_favourites" = "Favourites";
+"screen_roomlist_filter_low_priority" = "Low Priority";
+"screen_roomlist_filter_people" = "People";
+"screen_roomlist_filter_rooms" = "Rooms";
+"screen_roomlist_filter_unreads" = "Unreads";
 "screen_roomlist_main_space_title" = "Tutte le conversazioni";
 "screen_server_confirmation_change_server" = "Cambia fornitore dell'account";
 "screen_server_confirmation_message_login_element_dot_io" = "Un server privato per i dipendenti di Element.";
@@ -681,7 +689,7 @@
 "screen_dm_details_unblock_user" = "Sblocca utente";
 "screen_login_subtitle" = "Matrix è una rete aperta per comunicazioni sicure e decentralizzate.";
 "screen_report_content_block_user" = "Blocca utente";
-"screen_room_details_leave_conversation_title" = "Leave conversation";
+"screen_room_details_leave_conversation_title" = "Abbandona la conversazione";
 "screen_room_details_leave_room_title" = "Esci dalla stanza";
 "screen_room_details_security_title" = "Sicurezza";
 "screen_room_details_topic_title" = "Oggetto";

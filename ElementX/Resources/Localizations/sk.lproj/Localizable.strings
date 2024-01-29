@@ -298,6 +298,8 @@
 "screen_advanced_settings_developer_mode" = "Vývojársky režim";
 "screen_advanced_settings_developer_mode_description" = "Umožniť prístup k možnostiam a funkciám pre vývojárov.";
 "screen_advanced_settings_rich_text_editor_description" = "Vypnite rozšírený textový editor na ručné písanie Markdown.";
+"screen_advanced_settings_send_read_receipts" = "Potvrdenia o prečítaní";
+"screen_advanced_settings_send_read_receipts_description" = "Ak je táto funkcia vypnutá, vaše potvrdenia o prečítaní sa nebudú nikomu odosielať. Stále budete dostávať potvrdenia o prečítaní od ostatných používateľov.";
 "screen_advanced_settings_view_source_description" = "Povoliť možnosť zobrazenia zdroja správy na časovej osi.";
 "screen_analytics_prompt_data_usage" = "Nezaznamenávame ani neprofilujeme žiadne osobné údaje";
 "screen_analytics_prompt_help_us_improve" = "Zdieľajte anonymné údaje o používaní, aby sme mohli identifikovať problémy.";
@@ -342,6 +344,7 @@
 "screen_bug_report_include_logs" = "Povoliť záznamy";
 "screen_bug_report_include_screenshot" = "Odoslať snímku obrazovky";
 "screen_bug_report_logs_description" = "K vašej správe budú priložené záznamy o chybe, aby sme sa uistili, že všetko funguje správne. Ak chcete odoslať správu bez záznamov o chybe, vypnite toto nastavenie.";
+"screen_bug_report_view_logs" = "Zobraziť záznamy";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org je veľký bezplatný server vo verejnej sieti Matrix na bezpečnú, decentralizovanú komunikáciu, ktorý prevádzkuje nadácia Matrix.org.";
 "screen_change_account_provider_other" = "Iný";
 "screen_change_account_provider_subtitle" = "Použite iného poskytovateľa účtu, ako napríklad vlastný súkromný server alebo pracovný účet.";
@@ -542,6 +545,11 @@
 "screen_roomlist_a11y_create_message" = "Vytvorte novú konverzáciu alebo miestnosť";
 "screen_roomlist_empty_message" = "Začnite tým, že niekomu pošlete správu.";
 "screen_roomlist_empty_title" = "Zatiaľ žiadne konverzácie.";
+"screen_roomlist_filter_favourites" = "Obľúbené";
+"screen_roomlist_filter_low_priority" = "Nízka priorita";
+"screen_roomlist_filter_people" = "Ľudia";
+"screen_roomlist_filter_rooms" = "Miestnosti";
+"screen_roomlist_filter_unreads" = "Neprečítané";
 "screen_roomlist_main_space_title" = "Všetky konverzácie";
 "screen_server_confirmation_change_server" = "Zmeniť poskytovateľa účtu";
 "screen_server_confirmation_message_login_element_dot_io" = "Súkromný server pre zamestnancov spoločnosti Element.";

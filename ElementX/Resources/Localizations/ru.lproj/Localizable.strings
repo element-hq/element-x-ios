@@ -298,6 +298,8 @@
 "screen_advanced_settings_developer_mode" = "Режим разработчика";
 "screen_advanced_settings_developer_mode_description" = "Предоставьте разработчикам доступ к функциям и функциональным возможностям.";
 "screen_advanced_settings_rich_text_editor_description" = "Отключить редактор форматированного текста и включить Markdown.";
+"screen_advanced_settings_send_read_receipts" = "Read receipts";
+"screen_advanced_settings_send_read_receipts_description" = "If turned off, your read receipts won't be sent to anyone. You will still receive read receipts from other users.";
 "screen_advanced_settings_view_source_description" = "Включить опцию просмотра источника сообщения в ленте.";
 "screen_analytics_prompt_data_usage" = "Мы не будем записывать или профилировать какие-либо персональные данные";
 "screen_analytics_prompt_help_us_improve" = "Предоставлять анонимные данные об использовании, чтобы помочь нам выявить проблемы.";
@@ -342,6 +344,7 @@
 "screen_bug_report_include_logs" = "Разрешить ведение журналов";
 "screen_bug_report_include_screenshot" = "Отправить снимок экрана";
 "screen_bug_report_logs_description" = "Чтобы убедиться, что все работает правильно, в сообщение будут включены журналы. Чтобы отправить сообщение без журналов, отключите эту настройку.";
+"screen_bug_report_view_logs" = "Просмотр журналов";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org — это большой бесплатный сервер в общедоступной сети Matrix для безопасной децентрализованной связи, управляемый Matrix.org Foundation.";
 "screen_change_account_provider_other" = "Другое";
 "screen_change_account_provider_subtitle" = "Используйте другого поставщика учетных записей, например, собственный частный сервер или рабочую учетную запись.";
@@ -542,6 +545,11 @@
 "screen_roomlist_a11y_create_message" = "Создайте новую беседу или комнату";
 "screen_roomlist_empty_message" = "Начните переписку с отправки сообщения.";
 "screen_roomlist_empty_title" = "Пока нет доступных чатов.";
+"screen_roomlist_filter_favourites" = "Favourites";
+"screen_roomlist_filter_low_priority" = "Low Priority";
+"screen_roomlist_filter_people" = "People";
+"screen_roomlist_filter_rooms" = "Rooms";
+"screen_roomlist_filter_unreads" = "Unreads";
 "screen_roomlist_main_space_title" = "Все чаты";
 "screen_server_confirmation_change_server" = "Сменить учетную запись";
 "screen_server_confirmation_message_login_element_dot_io" = "Частный сервер для сотрудников Element.";

@@ -274,16 +274,6 @@ public enum L10n {
   public static var commonFaceIdIos: String { return L10n.tr("Localizable", "common_face_id_ios") }
   /// File
   public static var commonFile: String { return L10n.tr("Localizable", "common_file") }
-  /// Favourites
-  public static var commonFilterFavourites: String { return L10n.tr("Localizable", "common_filter_favourites") }
-  /// Low Priority
-  public static var commonFilterLowPriority: String { return L10n.tr("Localizable", "common_filter_low_priority") }
-  /// People
-  public static var commonFilterPeople: String { return L10n.tr("Localizable", "common_filter_people") }
-  /// Rooms
-  public static var commonFilterRooms: String { return L10n.tr("Localizable", "common_filter_rooms") }
-  /// Unreads
-  public static var commonFilterUnreads: String { return L10n.tr("Localizable", "common_filter_unreads") }
   /// Forward message
   public static var commonForwardMessage: String { return L10n.tr("Localizable", "common_forward_message") }
   /// GIF

@@ -298,6 +298,8 @@
 "screen_advanced_settings_developer_mode" = "Vývojářský režim";
 "screen_advanced_settings_developer_mode_description" = "Povolením získáte přístup k funkcím a funkcím pro vývojáře.";
 "screen_advanced_settings_rich_text_editor_description" = "Vypněte editor formátovaného textu pro ruční zadání Markdown.";
+"screen_advanced_settings_send_read_receipts" = "Potvrzení o přečtení";
+"screen_advanced_settings_send_read_receipts_description" = "Pokud je vypnuto, potvrzení o přečtení se nikomu neodesílají. Stále budete dostávat potvrzení o přečtení od ostatních uživatelů.";
 "screen_advanced_settings_view_source_description" = "Povolit možnost zobrazení zdroje zprávy na časové ose.";
 "screen_analytics_prompt_data_usage" = "Nezaznamenáváme ani neprofilujeme žádné údaje o účtu";
 "screen_analytics_prompt_help_us_improve" = "Sdílejte anonymní údaje o používání, které nám pomohou identifikovat problémy.";
@@ -342,6 +344,7 @@
 "screen_bug_report_include_logs" = "Povolit protokoly";
 "screen_bug_report_include_screenshot" = "Odeslat snímek obrazovky";
 "screen_bug_report_logs_description" = "Protokoly budou součástí vaší zprávy, aby se zajistilo že vše funguje správně. Chcete-li odeslat zprávu bez protokolů, vypněte toto nastavení.";
+"screen_bug_report_view_logs" = "Zobrazit protokoly";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org je velký bezplatný server ve veřejné síti Matrix pro bezpečnou decentralizovanou komunikaci, který provozuje nadace Matrix.org.";
 "screen_change_account_provider_other" = "Jiný";
 "screen_change_account_provider_subtitle" = "Použijte jiného poskytovatele účtu, například vlastní soukromý server nebo pracovní účet.";
@@ -542,6 +545,11 @@
 "screen_roomlist_a11y_create_message" = "Vytvořte novou konverzaci nebo místnost";
 "screen_roomlist_empty_message" = "Začněte tím, že někomu pošnete zprávu.";
 "screen_roomlist_empty_title" = "Zatím žádné konverzace.";
+"screen_roomlist_filter_favourites" = "Oblíbené";
+"screen_roomlist_filter_low_priority" = "Nízká priorita";
+"screen_roomlist_filter_people" = "Lidé";
+"screen_roomlist_filter_rooms" = "Místnosti";
+"screen_roomlist_filter_unreads" = "Nepřečtené";
 "screen_roomlist_main_space_title" = "Všechny chaty";
 "screen_server_confirmation_change_server" = "Změnit poskytovatele účtu";
 "screen_server_confirmation_message_login_element_dot_io" = "Soukromý server pro zaměstnance Elementu.";
