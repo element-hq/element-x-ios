@@ -38,7 +38,8 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
             .receive(on: DispatchQueue.main)
             .sink { [weak self] summaries in
                 self?.updateRooms(with: summaries)
-            }.store(in: &cancellables)
+            }
+            .store(in: &cancellables)
         
         context.$viewState
             .map(\.bindings.searchQuery)
@@ -59,6 +60,7 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
         switch viewAction {
         case .dismiss:
             actionsSubject.send(.dismiss)
+            roomSummaryProvider.setFilter(.all) // This is a shared provider
         case .select(let roomID):
             actionsSubject.send(.select(roomID: roomID))
         case .reachedTop:

@@ -24,37 +24,35 @@ struct GlobalSearchScreen: View {
     @FocusState private var searchFieldFocus
     
     var body: some View {
-        ZStack {
-            List {
-                header
-                
-                Section {
-                    ForEach(context.viewState.rooms) { room in
-                        GlobalSearchScreenListRow(room: room, context: context)
-                            .listRowBackground(backgroundColor(for: room))
-                            .listRowInsets(.init())
-                            .onTapGesture {
-                                context.send(viewAction: .select(roomID: room.id))
+        List {
+            header
+            
+            Section {
+                ForEach(context.viewState.rooms) { room in
+                    GlobalSearchScreenListRow(room: room, context: context)
+                        .listRowBackground(backgroundColor(for: room))
+                        .listRowInsets(.init())
+                        .onTapGesture {
+                            context.send(viewAction: .select(roomID: room.id))
+                        }
+                        .onAppear {
+                            if room == context.viewState.rooms.first {
+                                context.send(viewAction: .reachedTop)
+                            } else if room == context.viewState.rooms.last {
+                                context.send(viewAction: .reachedBottom)
                             }
-                            .onAppear {
-                                if room == context.viewState.rooms.first {
-                                    context.send(viewAction: .reachedTop)
-                                } else if room == context.viewState.rooms.last {
-                                    context.send(viewAction: .reachedBottom)
-                                }
-                            }
-                    }
+                        }
                 }
             }
-            .listStyle(.plain)
-            .background(.compound.bgCanvasDefault)
-            .frame(maxWidth: 700, maxHeight: 800)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
         }
-        .listStyle(PlainListStyle())
+        .listStyle(.plain)
+        .frame(maxWidth: 700, maxHeight: 800)
+        .background(.compound.bgCanvasDefault)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background { keyboardShortcuts }
         .background(Color.black.opacity(0.5).ignoresSafeArea())
+        .background { keyboardShortcuts }
         .onAppear {
             selectedRoom = context.viewState.rooms.first
             searchFieldFocus = true
@@ -157,25 +155,27 @@ private struct GlobalSearchTextFieldRepresentable: UIViewRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(parent: self)
+        Coordinator(text: $text, endEditingHandler: endEditingHandler)
     }
 
     class Coordinator: NSObject, UITextFieldDelegate {
-        var parent: GlobalSearchTextFieldRepresentable
+        var text: Binding<String>
+        let endEditingHandler: () -> Void
         
-        init(parent: GlobalSearchTextFieldRepresentable) {
-            self.parent = parent
+        init(text: Binding<String>, endEditingHandler: @escaping () -> Void) {
+            self.text = text
+            self.endEditingHandler = endEditingHandler
         }
         
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             // pressesBegan sometimes doesn't receive return events. Handle it here instead
             if string.rangeOfCharacter(from: .newlines) != nil {
-                parent.endEditingHandler()
+                endEditingHandler()
                 return false
             }
             
             let currentText = textField.text ?? ""
-            parent.text = (currentText as NSString).replacingCharacters(in: range, with: string)
+            text.wrappedValue = (currentText as NSString).replacingCharacters(in: range, with: string)
             return true
         }
     }

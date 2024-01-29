@@ -1002,7 +1002,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     await self.forward(eventID: eventID, toRoomID: roomID)
                 }
             }
-        }.store(in: &cancellables)
+        }
+        .store(in: &cancellables)
         
         stackCoordinator.setRootCoordinator(coordinator)
 

@@ -54,7 +54,8 @@ final class RoomNotificationSettingsScreenCoordinator: CoordinatorProtocol {
             case .dismiss:
                 self?.parameters.navigationStackCoordinator?.pop(animated: true)
             }
-        }.store(in: &cancellables)
+        }
+        .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {
