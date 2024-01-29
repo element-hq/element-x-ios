@@ -60,6 +60,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         switch viewAction {
         case .cancel:
             actionsSubject.send(.dismiss)
+            roomSummaryProvider?.setFilter(.all)
         case .send:
             guard let roomID = state.selectedRoomID else {
                 fatalError()

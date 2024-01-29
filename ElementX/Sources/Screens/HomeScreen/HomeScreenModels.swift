@@ -28,6 +28,7 @@ enum HomeScreenViewModelAction {
     case presentFeedbackScreen
     case presentStartChatScreen
     case presentInvitesScreen
+    case presentGlobalSearch
     case logout
 }
 
@@ -49,6 +50,7 @@ enum HomeScreenViewAction {
     case skipRecoveryKeyConfirmation
     case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
     case selectInvites
+    case globalSearch
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {

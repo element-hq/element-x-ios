@@ -978,7 +978,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentMessageForwarding(for itemID: TimelineItemIdentifier) {
-        guard let roomProxy, let roomSummaryProvider = userSession.clientProxy.messageForwardingRoomSummaryProvider, let eventID = itemID.eventID else {
+        guard let roomProxy, let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider, let eventID = itemID.eventID else {
             fatalError()
         }
         
@@ -1002,7 +1002,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     await self.forward(eventID: eventID, toRoomID: roomID)
                 }
             }
-        }.store(in: &cancellables)
+        }
+        .store(in: &cancellables)
         
         stackCoordinator.setRootCoordinator(coordinator)
 

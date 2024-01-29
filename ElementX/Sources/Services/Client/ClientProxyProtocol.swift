@@ -89,7 +89,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
-    var messageForwardingRoomSummaryProvider: RoomSummaryProviderProtocol? { get }
+    /// Used for listing rooms that shouldn't be affected by the main `roomSummaryProvider` filtering
+    var alternateRoomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
     var inviteSummaryProvider: RoomSummaryProviderProtocol? { get }
     

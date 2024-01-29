@@ -25,9 +25,9 @@ enum UserSessionFlowCoordinatorAction {
 }
 
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
-    private let windowManager: WindowManagerProtocol
     private let userSession: UserSessionProtocol
     private let navigationSplitCoordinator: NavigationSplitCoordinator
+    private let windowManager: WindowManagerProtocol
     private let bugReportService: BugReportServiceProtocol
     private let appSettings: AppSettings
     private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
@@ -40,6 +40,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
+    
+    // periphery:ignore - retaining purpose
+    private var globalSearchScreenCoordinator: GlobalSearchScreenCoordinator?
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -63,9 +66,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
+        self.windowManager = windowManager
         self.bugReportService = bugReportService
         self.appSettings = appSettings
-        self.windowManager = windowManager
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
@@ -331,6 +334,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     Task { await self.runLogoutFlow() }
                 case .presentInvitesScreen:
                     stateMachine.processEvent(.showInvitesScreen)
+                case .presentGlobalSearch:
+                    presentGlobalSearch()
                 }
             }
             .store(in: &cancellables)
@@ -527,5 +532,45 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationSplitCoordinator.setSheetCoordinator(coordinator, animated: true)
+    }
+    
+    // MARK: Global search
+    
+    private func presentGlobalSearch() {
+        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
+            fatalError("Global search room summary provider unavailable")
+        }
+        
+        let coordinator = GlobalSearchScreenCoordinator(parameters: .init(roomSummaryProvider: roomSummaryProvider,
+                                                                          mediaProvider: userSession.mediaProvider))
+        
+        globalSearchScreenCoordinator = coordinator
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .dismiss:
+                    dismissGlobalSearch()
+                case .select(let roomID):
+                    dismissGlobalSearch()
+                    handleAppRoute(.room(roomID: roomID), animated: true)
+                }
+            }
+            .store(in: &cancellables)
+        
+        let hostingController = UIHostingController(rootView: coordinator.toPresentable())
+        hostingController.view.backgroundColor = .clear
+        windowManager.globalSearchWindow.rootViewController = hostingController
+
+        windowManager.showGlobalSearch()
+    }
+    
+    private func dismissGlobalSearch() {
+        windowManager.globalSearchWindow.rootViewController = nil
+        windowManager.hideGlobalSearch()
+        
+        globalSearchScreenCoordinator = nil
     }
 }
