@@ -24,7 +24,6 @@ class RoomProxy: RoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
-    let pollHistoryTimeline: TimelineProxyProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let backgroundTaskName = "SendRoomEvent"
     
@@ -58,7 +57,6 @@ class RoomProxy: RoomProxyProtocol {
         self.room = room
         self.backgroundTaskService = backgroundTaskService
         timeline = await TimelineProxy(timeline: room.timeline(), backgroundTaskService: backgroundTaskService)
-        pollHistoryTimeline = await TimelineProxy(timeline: room.pollHistory(), backgroundTaskService: backgroundTaskService)
         
         Task {
             await updateMembers()
@@ -81,7 +79,6 @@ class RoomProxy: RoomProxyProtocol {
         roomListItem.subscribe(settings: settings)
         
         await timeline.subscribeForUpdates()
-        await pollHistoryTimeline.subscribeForUpdates()
         
         subscribeToRoomStateUpdates()
     }
