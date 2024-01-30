@@ -586,14 +586,35 @@ class ClientProxy: ClientProxyProtocol {
         })
     }
     
+    private let eventFilters: TimelineEventTypeFilter = {
+        let stateEventFilters: [FilterStateEventType] = [.roomAliases,
+                                                         .roomCanonicalAlias,
+                                                         .roomGuestAccess,
+                                                         .roomHistoryVisibility,
+                                                         .roomJoinRules,
+                                                         .roomPinnedEvents,
+                                                         .roomPowerLevels,
+                                                         .roomServerAcl,
+                                                         .roomTombstone,
+                                                         .spaceChild,
+                                                         .spaceParent,
+                                                         .policyRuleRoom,
+                                                         .policyRuleServer]
+        
+        return .exclude(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
+    }()
+
     private func roomTupleForIdentifier(_ identifier: String) async -> (RoomListItem?, Room?) {
         do {
             let roomListItem = try roomListService?.room(roomId: identifier)
-            let fullRoom = await roomListItem?.fullRoom()
+            if roomListItem?.isTimelineInitialized() == false {
+                try await roomListItem?.initTimeline(eventTypeFilter: eventFilters)
+            }
+            let fullRoom = try await roomListItem?.fullRoom()
             
             return (roomListItem, fullRoom)
         } catch {
-            MXLog.error("Failed retrieving room with identifier: \(identifier)")
+            MXLog.error("Failed retrieving/initialising room with identifier: \(identifier)")
             return (nil, nil)
         }
     }
