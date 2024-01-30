@@ -586,23 +586,24 @@ class ClientProxy: ClientProxyProtocol {
         })
     }
     
-    private let eventFilters: TimelineEventTypeFilter = .exclude(eventTypes: [
-        .roomAliases,
-        .roomCanonicalAlias,
-        .roomGuestAccess,
-        .roomHistoryVisibility,
-        .roomJoinRules,
-        .roomPinnedEvents,
-        .roomPowerLevels,
-        .roomServerAcl,
-        .roomTombstone,
-        .spaceChild,
-        .spaceParent,
-        .policyRuleRoom,
-        .policyRuleServer,
-        .policyRuleServer
-    ].map { .state(eventType: $0) })
-    
+    private let eventFilters: TimelineEventTypeFilter = {
+        let stateEventFilters: [FilterStateEventType] = [.roomAliases,
+                                                         .roomCanonicalAlias,
+                                                         .roomGuestAccess,
+                                                         .roomHistoryVisibility,
+                                                         .roomJoinRules,
+                                                         .roomPinnedEvents,
+                                                         .roomPowerLevels,
+                                                         .roomServerAcl,
+                                                         .roomTombstone,
+                                                         .spaceChild,
+                                                         .spaceParent,
+                                                         .policyRuleRoom,
+                                                         .policyRuleServer]
+        
+        return .exclude(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
+    }()
+
     private func roomTupleForIdentifier(_ identifier: String) async -> (RoomListItem?, Room?) {
         do {
             let roomListItem = try roomListService?.room(roomId: identifier)
