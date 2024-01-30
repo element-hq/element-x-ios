@@ -1,3 +1,18 @@
+## Changes in 1.5.5 (2024-01-30)
+
+✨ Features
+
+- Added an advanced setting to turn off sending read receipts. ([#2319](https://github.com/element-hq/element-x-ios/issues/2319))
+- Allow partial text selection in the timeline item view source menu ([#2378](https://github.com/element-hq/element-x-ios/issues/2378))
+
+🐛 Bugfixes
+
+- If a refresh token is found in a non OIDC session, the app will be logged out. ([#2365](https://github.com/element-hq/element-x-ios/issues/2365))
+
+🚧 In development 🚧
+
+- Room list filters UI (does not have any impact on the room list yet) ([#2382](https://github.com/element-hq/element-x-ios/pull/2382))
+
 ## Changes in 1.5.4 (2024-01-25)
 
 ✨ Features

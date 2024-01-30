@@ -1,1 +1,0 @@
-Added an advanced setting to turn off sending read receipts.

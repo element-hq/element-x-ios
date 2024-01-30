@@ -1,1 +1,0 @@
-If a refresh token is found in a non OIDC session, the app will be logged out.
