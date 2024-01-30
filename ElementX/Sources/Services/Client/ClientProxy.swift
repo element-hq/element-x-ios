@@ -599,7 +599,8 @@ class ClientProxy: ClientProxyProtocol {
                                                          .spaceChild,
                                                          .spaceParent,
                                                          .policyRuleRoom,
-                                                         .policyRuleServer]
+                                                         .policyRuleServer,
+                                                         .policyRuleUser]
         
         return .exclude(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
     }()
