@@ -72,17 +72,14 @@ class UserFlowTests: XCTestCase {
         secondImage.tap()
         
         // Cancel the upload flow
-        tapOnButton("Cancel")
-        
-        sleep(2) // Wait for dismissal
+        tapOnButton("Cancel", waitForDisappearance: true)
     }
     
     private func checkDocumentSharing() {
         tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
-        tapOnButton("Cancel")
         
-        sleep(2) // Wait for dismissal
+        tapOnButton("Cancel", waitForDisappearance: true)
     }
     
     private func checkLocationSharing() {
@@ -101,9 +98,7 @@ class UserFlowTests: XCTestCase {
         
         allowLocationPermissionOnce()
         
-        tapOnButton("Cancel")
-        
-        sleep(2) // Wait for dismissal
+        tapOnButton("Cancel", waitForDisappearance: true)
     }
     
     private func allowLocationPermissionOnce() {
@@ -125,9 +120,7 @@ class UserFlowTests: XCTestCase {
         
         tapOnBackButton("Start chat")
         
-        tapOnButton("Cancel")
-        
-        sleep(2) // Wait for dismissal
+        tapOnButton("Cancel", waitForDisappearance: true)
     }
     
     private func checkTimelineItemActionMenu() {
@@ -138,8 +131,11 @@ class UserFlowTests: XCTestCase {
         
         // Hide the bottom sheet
         let timelineItemActionMenu = app.scrollViews[A11yIdentifiers.roomScreen.timelineItemActionMenu].firstMatch
-        XCTAssertTrue(timelineItemActionMenu.waitForExistence(timeout: 10.0))
-        timelineItemActionMenu.swipeDown(velocity: .fast)
+        
+        // Some rooms might not have any messages in it (e.g. message history unavailable)
+        if timelineItemActionMenu.waitForExistence(timeout: 10.0) {
+            timelineItemActionMenu.swipeDown(velocity: .fast)
+        }
     }
     
     private func checkRoomDetails() {
@@ -153,7 +149,7 @@ class UserFlowTests: XCTestCase {
         
         // Open the first member's details. Loading members for big rooms can take a while.
         let firstRoomMember = app.scrollViews.buttons.firstMatch
-        XCTAssertTrue(firstRoomMember.waitForExistence(timeout: 300.0))
+        XCTAssertTrue(firstRoomMember.waitForExistence(timeout: 1000.0))
         firstRoomMember.tap()
         
         // Go back to the room member details
@@ -204,10 +200,16 @@ class UserFlowTests: XCTestCase {
         tapOnButton(A11yIdentifiers.settingsScreen.done)
     }
     
-    private func tapOnButton(_ identifier: String) {
+    private func tapOnButton(_ identifier: String, waitForDisappearance: Bool = false) {
         let button = app.buttons[identifier]
         XCTAssertTrue(button.waitForExistence(timeout: 10.0))
         button.tap()
+        
+        if waitForDisappearance {
+            let doesNotExistPredicate = NSPredicate(format: "exists == 0")
+            expectation(for: doesNotExistPredicate, evaluatedWith: button)
+            waitForExpectations(timeout: 10.0)
+        }
     }
     
     private func tapOnMenu(_ identifier: String) {
