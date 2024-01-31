@@ -15,9 +15,11 @@
 //
 
 import Compound
+import SFSafeSymbols
 import SwiftUI
 
 struct TimelineItemMenuActions {
+    let reactions: [TimelineItemMenuReaction]
     let actions: [TimelineItemMenuAction]
     let debugActions: [TimelineItemMenuAction]
     
@@ -28,6 +30,13 @@ struct TimelineItemMenuActions {
         
         self.actions = actions
         self.debugActions = debugActions
+        reactions = [
+            .init(key: "👍️", symbol: .handThumbsup),
+            .init(key: "👎️", symbol: .handThumbsdown),
+            .init(key: "🔥", symbol: .flame),
+            .init(key: "❤️", symbol: .heart),
+            .init(key: "👏", symbol: .handsClap)
+        ]
     }
     
     var canReply: Bool {
@@ -41,6 +50,11 @@ struct TimelineItemMenuActions {
     }
 }
 
+struct TimelineItemMenuReaction {
+    let key: String
+    let symbol: SFSymbol
+}
+
 enum TimelineItemMenuAction: Identifiable, Hashable {
     case copy
     case edit
@@ -52,6 +66,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case retryDecryption(sessionID: String)
     case report
     case react
+    case toggleReaction(key: String)
     case endPoll(pollStartID: String)
     
     var id: Self { self }
@@ -119,6 +134,9 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .report:
             Label(L10n.actionReportContent, icon: \.chatProblem)
         case .react:
+            Label(L10n.actionReact, icon: \.reactionAdd)
+        case .toggleReaction:
+            // Unused label - manually created in TimelineItemMacContextMenu.
             Label(L10n.actionReact, icon: \.reactionAdd)
         case .endPoll:
             Label(L10n.actionEndPoll, icon: \.pollsEnd)
@@ -216,11 +234,9 @@ struct TimelineItemMenu: View {
     private var reactionsSection: some View {
         ScrollView(.horizontal) {
             HStack(alignment: .center, spacing: 8) {
-                reactionButton(for: "👍️")
-                reactionButton(for: "👎️")
-                reactionButton(for: "🔥")
-                reactionButton(for: "❤️")
-                reactionButton(for: "👏")
+                ForEach(actions.reactions, id: \.key) {
+                    reactionButton(for: $0.key)
+                }
                 
                 Button {
                     dismiss()
