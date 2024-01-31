@@ -40,7 +40,7 @@ struct SessionVerificationEmoji: Hashable {
     let description: String
     
     var localizedDescription: String {
-        SASL10n.localizedDescription(for: description)
+        SASL10n.localizedDescription(for: description.lowercased())
     }
 }
 
