@@ -93,7 +93,9 @@ struct GenerateSAS: ParsableCommand {
         
         do {
             // This will fail is the .lproj dir does not exist already, which is fine since we don't want to add translations for unsupported languages.
-            try dict.map { "\"\($0.key.lowercased().replacingOccurrences(of: " ", with: "_"))\" = \"\($0.value)\";" }
+            try dict
+                .sorted(by: { $0.key < $1.key })
+                .map { "\"\($0.key.lowercased().replacingOccurrences(of: " ", with: "_"))\" = \"\($0.value)\";" }
                 .joined(separator: "\n")
                 .write(to: filePath, atomically: true, encoding: .utf8)
         } catch {
@@ -101,7 +103,7 @@ struct GenerateSAS: ParsableCommand {
         }
     }
     
-    struct SASEmoji: Codable {
+    private struct SASEmoji: Codable {
         let number: Int
         let emoji, description, unicode: String
         let translatedDescriptions: [String: String?]
