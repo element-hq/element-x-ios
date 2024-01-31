@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum UntranslatedL10n {
+  /// Sanity mode
+  public static var screenNotificationSettingsHideUnreadBadges: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_hide_unread_badges") }
+  /// Hide unread badges for rooms set to mute or mentions and keywords.
+  public static var screenNotificationSettingsHideUnreadBadgesDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_hide_unread_badges_description") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   public static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

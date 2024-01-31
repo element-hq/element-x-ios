@@ -36,12 +36,17 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         self.userNotificationCenter = userNotificationCenter
         self.notificationSettingsProxy = notificationSettingsProxy
         
-        let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
+        let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications,
+                                                                   hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge)
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings, isModallyPresented: isModallyPresented))
                 
-        // Listen for changes to AppSettings.enableNotifications
+        // Listen for changes to AppSettings.
         appSettings.$enableNotifications
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$hideUnreadMessagesBadge
+            .weakAssign(to: \.state.bindings.hideUnreadMessagesBadge, on: self)
             .store(in: &cancellables)
         
         setupDidBecomeActiveSubscription()
@@ -77,6 +82,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                 return
             }
             Task { await enableInvitations(state.bindings.invitationsEnabled) }
+        case .hideUnreadMessagesBadgeChanged:
+            appSettings.hideUnreadMessagesBadge = state.bindings.hideUnreadMessagesBadge
         case .close:
             actionsSubject.send(.close)
         case .fixConfigurationMismatchTapped:

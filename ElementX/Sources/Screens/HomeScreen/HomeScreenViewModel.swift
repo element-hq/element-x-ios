@@ -90,6 +90,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.markAsUnreadEnabled, on: self)
             .store(in: &cancellables)
         
+        appSettings.$hideUnreadMessagesBadge
+            .sink { [weak self] _ in self?.updateRooms() }
+            .store(in: &cancellables)
+        
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         isSearchFieldFocused
@@ -360,7 +364,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                               roomId: details.id,
                               name: details.name,
                               isMarkedUnread: details.isMarkedUnread,
-                              hasUnreadMessages: details.unreadMessagesCount > 0,
+                              hasUnreadMessages: appSettings.hideUnreadMessagesBadge ? false : details.unreadMessagesCount > 0,
                               hasUnreadMentions: details.unreadMentionsCount > 0,
                               hasUnreadNotifications: details.unreadNotificationsCount > 0,
                               hasOngoingCall: details.hasOngoingCall,

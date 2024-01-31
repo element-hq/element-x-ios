@@ -28,18 +28,21 @@ struct NotificationSettingsScreen: View {
                 if context.viewState.showSystemNotificationsAlert {
                     userPermissionSection
                 }
+                
                 enableNotificationSection
+                
                 if context.enableNotifications {
                     roomsNotificationSection
+                    
                     if context.viewState.settings?.roomMentionsEnabled != nil {
                         mentionsSection
                     }
+                    
                     if context.viewState.showCallsSettings, context.viewState.settings?.callsEnabled != nil {
                         callsSection
                     }
-                    if context.viewState.settings?.invitationsEnabled != nil {
-                        additionalSettingsSection
-                    }
+                    
+                    additionalSettingsSection
                 }
             }
         }
@@ -158,12 +161,21 @@ struct NotificationSettingsScreen: View {
     
     private var additionalSettingsSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenNotificationSettingsInviteForMeLabel),
-                    kind: .toggle($context.invitationsEnabled))
-                .disabled(context.viewState.settings?.invitationsEnabled == nil)
-                .allowsHitTesting(!context.viewState.applyingChange)
-                .onChange(of: context.invitationsEnabled) { _ in
-                    context.send(viewAction: .invitationsChanged)
+            if context.viewState.settings?.invitationsEnabled != nil {
+                ListRow(label: .plain(title: L10n.screenNotificationSettingsInviteForMeLabel),
+                        kind: .toggle($context.invitationsEnabled))
+                    .disabled(context.viewState.settings?.invitationsEnabled == nil)
+                    .allowsHitTesting(!context.viewState.applyingChange)
+                    .onChange(of: context.invitationsEnabled) { _ in
+                        context.send(viewAction: .invitationsChanged)
+                    }
+            }
+            
+            ListRow(label: .plain(title: UntranslatedL10n.screenNotificationSettingsHideUnreadBadges,
+                                  description: UntranslatedL10n.screenNotificationSettingsHideUnreadBadgesDescription),
+                    kind: .toggle($context.hideUnreadMessagesBadge))
+                .onChange(of: context.hideUnreadMessagesBadge) { _ in
+                    context.send(viewAction: .hideUnreadMessagesBadgeChanged)
                 }
         } header: {
             Text(L10n.screenNotificationSettingsAdditionalSettingsSectionTitle)
