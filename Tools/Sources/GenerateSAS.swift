@@ -7,14 +7,12 @@ struct GenerateSAS: ParsableCommand {
     
     @Flag(name: .shortAndLong, help: "Increase output verbosity.")
     var verbose = false
-
+    
     func run() throws {
         let baseURL = URL(string: "https://raw.githubusercontent.com/matrix-org/matrix-spec/main/data-definitions/sas-emoji.json")!
         
-        if verbose {
-            print("Argument:")
-            print(self)
-        }
+        printIfVerbose("Argument:")
+        printIfVerbose(self)
         
         print("Downloading \(baseURL.absoluteString)…")
         
@@ -24,12 +22,8 @@ struct GenerateSAS: ParsableCommand {
             return
         }
         
-        if verbose {
-            print("Json data:")
-            print(json)
-        }
-        
-        print()
+        printIfVerbose("Json data:")
+        printIfVerbose(json)
         
         var defaultTranslations = [String: String]()
         var cumulativeTranslations = [String: [String: String]]()
@@ -38,9 +32,7 @@ struct GenerateSAS: ParsableCommand {
         for emoji in json {
             let description = emoji.description
             
-            if verbose {
-                print("Description: \(description)")
-            }
+            printIfVerbose("Description: \(description)")
             
             defaultTranslations[description] = description
             
@@ -48,9 +40,7 @@ struct GenerateSAS: ParsableCommand {
             // en is not included since is the default language so we need to add it ourselves
             cumulativeTranslations[Self.defaultLanguage]![description] = description
             for (lang, translation) in translations {
-                if verbose {
-                    print("Lang: \(lang)")
-                }
+                printIfVerbose("Lang: \(lang)")
                 
                 if cumulativeTranslations[lang] == nil {
                     cumulativeTranslations[lang] = [String: String]()
@@ -60,11 +50,9 @@ struct GenerateSAS: ParsableCommand {
             }
         }
         
-        if verbose {
-            print(defaultTranslations)
-            print(cumulativeTranslations)
-        }
-                        
+        printIfVerbose(defaultTranslations)
+        printIfVerbose(cumulativeTranslations)
+        
         for (lang, translations) in cumulativeTranslations {
             let iosLang = lang
                 .replacingOccurrences(of: "_", with: "-")
@@ -73,9 +61,7 @@ struct GenerateSAS: ParsableCommand {
             writeToFile(file: "SAS.strings", dict: translations, subdirectory: iosLang)
         }
         
-        if verbose {
-            print("Write completed")
-        }
+        print("Write completed")
     }
     
     private func writeToFile(file: String, dict: [String: String], subdirectory: String) {
@@ -86,13 +72,11 @@ struct GenerateSAS: ParsableCommand {
         
         print("Writing file \(filePath.path)")
         
-        if verbose {
-            print("With")
-            print(dict)
-        }
+        printIfVerbose("With")
+        printIfVerbose(dict)
         
         do {
-            // This will fail is the .lproj dir does not exist already, which is fine since we don't want to add translations for unsupported languages.
+            // This will fail if the .lproj dir does not exist already, which is fine since we don't want to add translations for unsupported languages.
             try dict
                 .sorted(by: { $0.key < $1.key })
                 .map { "\"\($0.key.lowercased().replacingOccurrences(of: " ", with: "_"))\" = \"\($0.value)\";" }
@@ -107,10 +91,16 @@ struct GenerateSAS: ParsableCommand {
         let number: Int
         let emoji, description, unicode: String
         let translatedDescriptions: [String: String?]
-
+        
         enum CodingKeys: String, CodingKey {
             case number, emoji, description, unicode
             case translatedDescriptions = "translated_descriptions"
+        }
+    }
+    
+    private func printIfVerbose(_ items: Any...) {
+        if verbose {
+            print(items)
         }
     }
 }
