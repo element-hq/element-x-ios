@@ -9,5 +9,6 @@ struct Tools: ParsableCommand {
                                                                   OutdatedPackages.self,
                                                                   DownloadStrings.self,
                                                                   Locheck.self,
-                                                                  GenerateSDKMocks.self])
+                                                                  GenerateSDKMocks.self,
+                                                                  GenerateSAS.self])
 }
