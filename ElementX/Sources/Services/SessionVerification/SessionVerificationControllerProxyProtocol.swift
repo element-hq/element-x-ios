@@ -38,6 +38,10 @@ enum SessionVerificationControllerProxyCallback {
 struct SessionVerificationEmoji: Hashable {
     let symbol: String
     let description: String
+    
+    var localizedDescription: String {
+        SASL10n.localizedDescription(for: description)
+    }
 }
 
 // sourcery: AutoMockable
