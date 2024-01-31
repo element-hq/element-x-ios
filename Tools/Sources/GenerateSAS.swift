@@ -68,7 +68,6 @@ struct GenerateSAS: ParsableCommand {
         for (lang, translations) in cumulativeTranslations {
             let iosLang = lang
                 .replacingOccurrences(of: "_", with: "-")
-                .replacingOccurrences(of: "zh-rHant", with: "zh-Hant-TW")
                 .appending(".lproj")
             
             writeToFile(file: "SAS.strings", dict: translations, subdirectory: iosLang)
