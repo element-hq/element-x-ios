@@ -75,10 +75,6 @@ struct DeveloperOptionsScreen: View {
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)
                     .foregroundColor(URL(string: elementCallBaseURLString) == nil ? .red : .primary)
-                
-                Toggle(isOn: $context.elementCallUseEncryption) {
-                    Text("Use encryption")
-                }
             }
             
             Section {

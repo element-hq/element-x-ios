@@ -35,7 +35,7 @@ protocol ElementCallWidgetDriverProtocol {
     var messagePublisher: PassthroughSubject<String, Never> { get }
     var actions: AnyPublisher<ElementCallWidgetDriverAction, Never> { get }
     
-    func start(baseURL: URL, clientID: String, useEncryption: Bool) async -> Result<URL, ElementCallWidgetDriverError>
+    func start(baseURL: URL, clientID: String) async -> Result<URL, ElementCallWidgetDriverError>
     
     func sendMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError>
 }

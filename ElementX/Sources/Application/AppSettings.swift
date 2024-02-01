@@ -231,9 +231,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.elementCallBaseURL, defaultValue: "https://call.element.io", storageType: .userDefaults(store))
     var elementCallBaseURL: URL
     
-    @UserPreference(key: UserDefaultsKeys.elementCallEncryptionEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var elementCallUseEncryption
-    
     // MARK: - Notifications
 
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))

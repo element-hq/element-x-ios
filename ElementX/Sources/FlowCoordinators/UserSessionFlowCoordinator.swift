@@ -495,8 +495,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func presentCallScreen(roomProxy: RoomProxyProtocol) {
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                             callBaseURL: appSettings.elementCallBaseURL,
-                                                                            clientID: InfoPlistReader.main.bundleIdentifier,
-                                                                            useEncryption: appSettings.elementCallUseEncryption))
+                                                                            clientID: InfoPlistReader.main.bundleIdentifier))
         
         callScreenCoordinator.actions
             .sink { [weak self] action in

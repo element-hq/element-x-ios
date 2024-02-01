@@ -53,7 +53,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var roomListFiltersEnabled: Bool { get set }
     
     var elementCallBaseURL: URL { get set }
-    var elementCallUseEncryption: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

@@ -163,14 +163,13 @@ struct CallScreen_Previews: PreviewProvider {
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
         widgetDriver.underlyingActions = PassthroughSubject<ElementCallWidgetDriverAction, Never>().eraseToAnyPublisher()
-        widgetDriver.startBaseURLClientIDUseEncryptionReturnValue = .success(URL.userDirectory)
+        widgetDriver.startBaseURLClientIDReturnValue = .success(URL.userDirectory)
         
         roomProxy.elementCallWidgetDriverReturnValue = widgetDriver
         
         return CallScreenViewModel(roomProxy: roomProxy,
                                    callBaseURL: "https://call.element.io",
-                                   clientID: "io.element.elementx",
-                                   useEncryption: false)
+                                   clientID: "io.element.elementx")
     }()
     
     static var previews: some View {

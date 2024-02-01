@@ -23,8 +23,6 @@ struct CallScreenCoordinatorParameters {
     let callBaseURL: URL
     /// A way to identify the current client against Element Call
     let clientID: String
-    /// Whether encryption should be used within the call
-    let useEncryption: Bool
 }
 
 enum CallScreenCoordinatorAction {
@@ -43,8 +41,7 @@ final class CallScreenCoordinator: CoordinatorProtocol {
     init(parameters: CallScreenCoordinatorParameters) {
         viewModel = CallScreenViewModel(roomProxy: parameters.roomProxy,
                                         callBaseURL: parameters.callBaseURL,
-                                        clientID: parameters.clientID,
-                                        useEncryption: parameters.useEncryption)
+                                        clientID: parameters.clientID)
     }
     
     func start() {

@@ -48,8 +48,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     ///   - clientID: Something to identify the current client on the Element Call side
     init(roomProxy: RoomProxyProtocol,
          callBaseURL: URL,
-         clientID: String,
-         useEncryption: Bool) {
+         clientID: String) {
         self.roomProxy = roomProxy
         
         widgetDriver = roomProxy.elementCallWidgetDriver()
@@ -98,7 +97,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             .store(in: &cancellables)
         
         Task {
-            switch await widgetDriver.start(baseURL: callBaseURL, clientID: clientID, useEncryption: useEncryption) {
+            switch await widgetDriver.start(baseURL: callBaseURL, clientID: clientID) {
             case .success(let url):
                 state.url = url
             case .failure(let error):
