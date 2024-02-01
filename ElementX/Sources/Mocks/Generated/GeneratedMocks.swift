@@ -754,23 +754,23 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
 
     //MARK: - start
 
-    var startBaseURLClientIDUseEncryptionCallsCount = 0
-    var startBaseURLClientIDUseEncryptionCalled: Bool {
-        return startBaseURLClientIDUseEncryptionCallsCount > 0
+    var startBaseURLClientIDCallsCount = 0
+    var startBaseURLClientIDCalled: Bool {
+        return startBaseURLClientIDCallsCount > 0
     }
-    var startBaseURLClientIDUseEncryptionReceivedArguments: (baseURL: URL, clientID: String, useEncryption: Bool)?
-    var startBaseURLClientIDUseEncryptionReceivedInvocations: [(baseURL: URL, clientID: String, useEncryption: Bool)] = []
-    var startBaseURLClientIDUseEncryptionReturnValue: Result<URL, ElementCallWidgetDriverError>!
-    var startBaseURLClientIDUseEncryptionClosure: ((URL, String, Bool) async -> Result<URL, ElementCallWidgetDriverError>)?
+    var startBaseURLClientIDReceivedArguments: (baseURL: URL, clientID: String)?
+    var startBaseURLClientIDReceivedInvocations: [(baseURL: URL, clientID: String)] = []
+    var startBaseURLClientIDReturnValue: Result<URL, ElementCallWidgetDriverError>!
+    var startBaseURLClientIDClosure: ((URL, String) async -> Result<URL, ElementCallWidgetDriverError>)?
 
-    func start(baseURL: URL, clientID: String, useEncryption: Bool) async -> Result<URL, ElementCallWidgetDriverError> {
-        startBaseURLClientIDUseEncryptionCallsCount += 1
-        startBaseURLClientIDUseEncryptionReceivedArguments = (baseURL: baseURL, clientID: clientID, useEncryption: useEncryption)
-        startBaseURLClientIDUseEncryptionReceivedInvocations.append((baseURL: baseURL, clientID: clientID, useEncryption: useEncryption))
-        if let startBaseURLClientIDUseEncryptionClosure = startBaseURLClientIDUseEncryptionClosure {
-            return await startBaseURLClientIDUseEncryptionClosure(baseURL, clientID, useEncryption)
+    func start(baseURL: URL, clientID: String) async -> Result<URL, ElementCallWidgetDriverError> {
+        startBaseURLClientIDCallsCount += 1
+        startBaseURLClientIDReceivedArguments = (baseURL: baseURL, clientID: clientID)
+        startBaseURLClientIDReceivedInvocations.append((baseURL: baseURL, clientID: clientID))
+        if let startBaseURLClientIDClosure = startBaseURLClientIDClosure {
+            return await startBaseURLClientIDClosure(baseURL, clientID)
         } else {
-            return startBaseURLClientIDUseEncryptionReturnValue
+            return startBaseURLClientIDReturnValue
         }
     }
     //MARK: - sendMessage
