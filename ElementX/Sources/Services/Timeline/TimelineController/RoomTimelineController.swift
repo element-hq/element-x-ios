@@ -57,8 +57,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
             .store(in: &cancellables)
         
+        // Inform the world that the initial items are loading from the store
+        callbacks.send(.isBackPaginating(true))
         serialDispatchQueue.async {
             self.updateTimelineItems()
+            self.callbacks.send(.isBackPaginating(false))
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
