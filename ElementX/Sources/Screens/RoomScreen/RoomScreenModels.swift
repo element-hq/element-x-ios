@@ -215,7 +215,7 @@ struct RoomMemberState {
 /// Is also nice to have this as a wrapper for any state that is directly connected to the timeline.
 struct TimelineViewState {
     var canBackPaginate = true
-    var isBackPaginating = false
+    var isBackPaginating = true
     
     // These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
