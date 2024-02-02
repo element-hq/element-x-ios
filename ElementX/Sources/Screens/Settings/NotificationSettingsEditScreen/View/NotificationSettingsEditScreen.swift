@@ -31,7 +31,7 @@ struct NotificationSettingsEditScreen: View {
         .compoundList()
         .navigationTitle(context.viewState.strings.navigationTitle)
         .alert(item: $context.alertInfo)
-        .track(screen: .settingsDefaultNotifications)
+        .track(screen: .SettingsDefaultNotifications)
     }
     
     // MARK: - Private

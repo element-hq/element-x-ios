@@ -778,7 +778,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 self.analytics.trackComposer(inThread: false,
                                              isEditing: false,
                                              isReply: false,
-                                             messageType: isUserLocation ? .location(.user) : .location(.pin),
+                                             messageType: isUserLocation ? .LocationUser : .LocationPin,
                                              startsThread: nil)
             case .close:
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
@@ -839,7 +839,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             self.analytics.trackComposer(inThread: false,
                                          isEditing: false,
                                          isReply: false,
-                                         messageType: .poll,
+                                         messageType: .Poll,
                                          startsThread: nil)
 
             self.analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)

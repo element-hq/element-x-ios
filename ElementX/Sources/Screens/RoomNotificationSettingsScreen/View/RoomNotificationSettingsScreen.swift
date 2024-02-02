@@ -33,7 +33,7 @@ struct RoomNotificationSettingsScreen: View {
         .compoundList()
         .navigationTitle(context.viewState.navigationTitle)
         .alert(item: $context.alertInfo)
-        .track(screen: .roomNotifications)
+        .track(screen: .RoomNotifications)
     }
     
     // MARK: - Private

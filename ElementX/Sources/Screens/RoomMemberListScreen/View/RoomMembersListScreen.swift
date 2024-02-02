@@ -37,7 +37,7 @@ struct RoomMembersListScreen: View {
                 inviteButton
             }
         }
-        .track(screen: .roomMembers)
+        .track(screen: .RoomMembers)
     }
     
     // MARK: - Private

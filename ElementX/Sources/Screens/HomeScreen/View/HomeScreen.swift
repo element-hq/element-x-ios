@@ -40,7 +40,7 @@ struct HomeScreen: View {
             .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
             .toolbar { toolbar }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .track(screen: .home)
+            .track(screen: .Home)
             .introspect(.viewController, on: .supportedVersions) { controller in
                 Task {
                     if bloomView == nil {

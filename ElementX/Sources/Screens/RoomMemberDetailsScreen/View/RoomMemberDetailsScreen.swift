@@ -32,7 +32,7 @@ struct RoomMemberDetailsScreen: View {
         .compoundList()
         .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .alert(item: $context.alertInfo)
-        .track(screen: .user)
+        .track(screen: .User)
         .interactiveQuickLook(item: $context.mediaPreviewItem, shouldHideControls: true)
     }
     

@@ -48,7 +48,7 @@ struct NotificationSettingsScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
-        .track(screen: .settingsNotifications)
+        .track(screen: .SettingsNotifications)
     }
     
     // MARK: - Private

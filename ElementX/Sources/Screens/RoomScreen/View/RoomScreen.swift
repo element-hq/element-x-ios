@@ -70,7 +70,7 @@ struct RoomScreen: View {
                     .environmentObject(context)
             }
             .interactiveQuickLook(item: $context.mediaPreviewItem)
-            .track(screen: .room)
+            .track(screen: .Room)
             .onDrop(of: ["public.item", "public.file-url"], isTargeted: $dragOver) { providers -> Bool in
                 guard let provider = providers.first,
                       provider.isSupportedForPasteOrDrop else {

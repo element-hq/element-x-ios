@@ -34,7 +34,7 @@ struct StaticLocationScreen: View {
             }
             mapView
         }
-        .track(screen: context.viewState.isLocationPickerMode ? .locationSend : .locationView)
+        .track(screen: context.viewState.isLocationPickerMode ? .LocationSend : .LocationView)
         .navigationTitle(context.viewState.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
