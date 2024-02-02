@@ -126,6 +126,10 @@ extension AnalyticsService {
         let event = AnalyticsEvent.MobileScreen(durationMs: milliseconds, screenName: screen.screenName)
         client.screen(event)
     }
+    
+    func trackInteraction(index: Int? = nil, name: AnalyticsEvent.Interaction.Name) {
+        capture(event: AnalyticsEvent.Interaction(index: index, interactionType: .Touch, name: name))
+    }
 
     /// Track the creation of a room
     /// - Parameter isDM: true if the created room is a direct message, false otherwise

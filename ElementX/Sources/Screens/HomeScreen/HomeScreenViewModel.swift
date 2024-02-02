@@ -152,6 +152,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 if let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) {
                     if case .failure(let error) = await roomProxy.markAsUnread() {
                         MXLog.error("Failed marking room \(roomIdentifier) as unread with error: \(error)")
+                    } else {
+                        ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
                     }
                 }
             }
@@ -160,6 +162,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 if let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) {
                     if case .failure(let error) = await roomProxy.markAsRead(sendReadReceipts: true, receiptType: appSettings.sendReadReceiptsEnabled ? .read : .readPrivate) {
                         MXLog.error("Failed marking room \(roomIdentifier) as read with error: \(error)")
+                    } else {
+                        ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
                     }
                 }
             }

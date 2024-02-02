@@ -1266,6 +1266,8 @@
 		340179A0FC1AD4AEDA7FC134 /* CreateRoomViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomViewModelProtocol.swift; sourceTree = "<group>"; };
 		342BEBC3C5FC3F9943C41C4C /* TemplateScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		347D708104CCEF771428C9A3 /* PollFormScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollFormScreenViewModelTests.swift; sourceTree = "<group>"; };
+		34E0FA38BD473FFA6F1AB7A5 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = be; path = be.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		34ED3AB7E0287552A5648AB3 /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		351E89CE2ED9B73C5CC47955 /* TimelineReactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineReactionsView.swift; sourceTree = "<group>"; };
 		3558A15CFB934F9229301527 /* RestorationToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestorationToken.swift; sourceTree = "<group>"; };
 		35AFCF4C05DEED04E3DB1A16 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1945,6 +1947,7 @@
 		EFF7BF82A950B91BC5469E91 /* ViewFrameReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFrameReader.swift; sourceTree = "<group>"; };
 		EFFD3200F9960D4996159F10 /* BugReportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportServiceTests.swift; sourceTree = "<group>"; };
 		F012CB5EE3F2B67359F6CC52 /* target.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = target.yml; sourceTree = "<group>"; };
+		F0205C03F98BE861EDABCB0D /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F08776C48FFB47CACF64ED10 /* ServerConfirmationScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfirmationScreenViewModelTests.swift; sourceTree = "<group>"; };
 		F0B9F5BC4C80543DE7228B9D /* MapTilerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerStyle.swift; sourceTree = "<group>"; };
 		F0E14FF533D25A0692F7CEB0 /* RoomPollsHistoryScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPollsHistoryScreenViewModel.swift; sourceTree = "<group>"; };
@@ -4979,6 +4982,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
+				be,
 				cs,
 				de,
 				en,
@@ -6190,6 +6194,7 @@
 		187853A7E643995EE49FAD43 /* Localizable.stringsdict */ = {
 			isa = PBXVariantGroup;
 			children = (
+				34E0FA38BD473FFA6F1AB7A5 /* be */,
 				6654859746B0BE9611459391 /* cs */,
 				AE5DDBEBBA17973ED4638823 /* de */,
 				13802897C7AFA360EA74C0B0 /* en */,
@@ -6209,6 +6214,7 @@
 		7109E709A7738E6BCC4553E6 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
+				F0205C03F98BE861EDABCB0D /* be */,
 				8D8169443E5AC5FF71BFB3DB /* cs */,
 				35AFCF4C05DEED04E3DB1A16 /* de */,
 				CACA846B3E3E9A521D98B178 /* en */,
@@ -6228,6 +6234,7 @@
 		91DE43B8815918E590912DDA /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
+				34ED3AB7E0287552A5648AB3 /* be */,
 				8D1FA20DAB853C1156054912 /* cs */,
 				84311D707B09854D67F78BBF /* de */,
 				1215A4FC53D2319E81AE8970 /* en */,
@@ -6764,7 +6771,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 1.1.36;
+				version = 1.1.37;
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {
@@ -6811,8 +6818,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/matrix-org/matrix-analytics-events";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 0.9.0;
+				kind = revision;
+				revision = 28d1e65d306420b3affc32f719cb516f74a7406f;
 			};
 		};
 		C13F55E4518415CB4C278E73 /* XCRemoteSwiftPackageReference "DTCoreText" */ = {
