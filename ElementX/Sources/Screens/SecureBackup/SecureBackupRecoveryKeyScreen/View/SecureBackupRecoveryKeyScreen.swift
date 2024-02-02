@@ -143,7 +143,7 @@ struct SecureBackupRecoveryKeyScreen: View {
                         Button {
                             context.send(viewAction: .copyKey)
                         } label: {
-                            Image(asset: Asset.Images.copy)
+                            CompoundIcon(\.copy)
                         }
                         .tint(.compound.iconSecondary)
                         .accessibilityLabel(L10n.actionCopy)

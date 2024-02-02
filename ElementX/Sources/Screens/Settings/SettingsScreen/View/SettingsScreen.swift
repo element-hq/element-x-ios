@@ -87,7 +87,7 @@ struct SettingsScreen: View {
                             kind: .button { context.send(viewAction: .sessionVerification) })
                 } else {
                     ListRow(label: .default(title: L10n.commonChatBackup,
-                                            icon: Image(asset: Asset.Images.secureBackupIcon)),
+                                            icon: \.key),
                             details: context.viewState.showSecureBackupBadge ? .icon(secureBackupBadge) : nil,
                             kind: .navigationLink { context.send(viewAction: .secureBackup) })
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.secureBackup)
@@ -122,7 +122,7 @@ struct SettingsScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.analytics)
             
             ListRow(label: .default(title: L10n.commonScreenLock,
-                                    icon: CompoundIcon(asset: Asset.Images.lock)),
+                                    icon: \.lock),
                     kind: .navigationLink {
                         context.send(viewAction: .appLock)
                     })
@@ -147,7 +147,7 @@ struct SettingsScreen: View {
     private var manageSessionsSection: some View {
         Section {
             ListRow(label: .default(title: L10n.actionManageDevices,
-                                    icon: CompoundIcon(asset: Asset.Images.devices)),
+                                    icon: \.devices),
                     kind: .button {
                         context.send(viewAction: .accountSessionsList)
                     })
@@ -177,7 +177,7 @@ struct SettingsScreen: View {
     private var signOutSection: some View {
         Section {
             ListRow(label: .action(title: L10n.screenSignoutPreferenceItem,
-                                   icon: CompoundIcon(asset: Asset.Images.signOut),
+                                   icon: \.signOut,
                                    role: .destructive),
                     kind: .button {
                         context.send(viewAction: .logout)

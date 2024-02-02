@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 enum PollViewAction {
@@ -43,11 +44,9 @@ struct PollView: View {
 
     private var questionView: some View {
         HStack(alignment: .top, spacing: 12) {
-            let asset = poll.hasEnded ? Asset.Images.pollsEnd : Asset.Images.polls
-
-            Image(asset.name)
-                .resizable()
-                .scaledFrame(size: 22)
+            CompoundIcon(poll.hasEnded ? \.pollsEnd : \.polls,
+                         size: .custom(22),
+                         relativeTo: .compound.bodyLGSemibold)
                 .accessibilityHidden(true)
 
             Text(poll.question)

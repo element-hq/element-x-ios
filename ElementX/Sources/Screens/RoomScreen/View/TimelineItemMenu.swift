@@ -101,27 +101,27 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     var label: some View {
         switch self {
         case .copy:
-            Label(L10n.actionCopy, iconAsset: Asset.Images.copy)
+            Label(L10n.actionCopy, icon: \.copy)
         case .edit:
-            Label(L10n.actionEdit, iconAsset: Asset.Images.editOutline)
+            Label(L10n.actionEdit, icon: \.edit)
         case .copyPermalink:
             Label(L10n.actionCopyLinkToMessage, icon: \.link)
         case .reply(let isThread):
-            Label(isThread ? L10n.actionReplyInThread : L10n.actionReply, iconAsset: Asset.Images.reply)
+            Label(isThread ? L10n.actionReplyInThread : L10n.actionReply, icon: \.reply)
         case .forward:
-            Label(L10n.actionForward, iconAsset: Asset.Images.forward)
+            Label(L10n.actionForward, icon: \.forward)
         case .redact:
             Label(L10n.actionRemove, icon: \.delete)
         case .viewSource:
-            Label(L10n.actionViewSource, iconAsset: Asset.Images.viewSource)
+            Label(L10n.actionViewSource, icon: \.code)
         case .retryDecryption:
             Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
         case .report:
             Label(L10n.actionReportContent, icon: \.chatProblem)
         case .react:
-            Label(L10n.actionReact, iconAsset: Asset.Images.addReaction)
+            Label(L10n.actionReact, icon: \.reactionAdd)
         case .endPoll:
-            Label(L10n.actionEndPoll, iconAsset: Asset.Images.pollsEnd)
+            Label(L10n.actionEndPoll, icon: \.pollsEnd)
         }
     }
 }
@@ -225,10 +225,7 @@ struct TimelineItemMenu: View {
                     context.send(viewAction: .displayEmojiPicker(itemID: item.id))
                 }
             } label: {
-                Image(asset: Asset.Images.addReaction)
-                    .resizable()
-                    .scaledFrame(size: 24)
-                    .frame(maxHeight: .infinity, alignment: .center)
+                CompoundIcon(\.reactionAdd, size: .medium, relativeTo: .compound.headingLG)
                     .foregroundColor(.compound.iconSecondary)
                     .padding(10)
             }

@@ -89,7 +89,7 @@ struct UserDetailsEditScreen: View {
     }
     
     private var avatarOverlayIcon: some View {
-        CompoundIcon(asset: Asset.Images.editing, size: .xSmall, relativeTo: .compound.bodyLG)
+        CompoundIcon(\.editSolid, size: .xSmall, relativeTo: .compound.bodyLG)
             .foregroundColor(.white)
             .padding(4)
             .background {

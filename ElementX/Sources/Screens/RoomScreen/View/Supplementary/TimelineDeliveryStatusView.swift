@@ -28,7 +28,7 @@ struct TimelineDeliveryStatusView: View {
     private var icon: CompoundIcon {
         switch deliveryStatus {
         case .sending:
-            return CompoundIcon(asset: Asset.Images.circle, size: .xSmall, relativeTo: .compound.bodyMD)
+            return CompoundIcon(\.circle, size: .xSmall, relativeTo: .compound.bodyMD)
         case .sent:
             return CompoundIcon(\.checkCircle, size: .xSmall, relativeTo: .compound.bodyMD)
         }

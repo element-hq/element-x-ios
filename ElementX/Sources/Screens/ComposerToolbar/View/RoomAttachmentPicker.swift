@@ -48,7 +48,7 @@ struct RoomAttachmentPicker: View {
             Button {
                 context.send(viewAction: .attach(.file))
             } label: {
-                Label(L10n.screenRoomAttachmentSourceFiles, iconAsset: Asset.Images.attachment)
+                Label(L10n.screenRoomAttachmentSourceFiles, icon: \.attachment)
                     .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
@@ -56,7 +56,7 @@ struct RoomAttachmentPicker: View {
             Button {
                 context.send(viewAction: .attach(.camera))
             } label: {
-                Label(L10n.screenRoomAttachmentSourceCamera, iconAsset: Asset.Images.takePhoto)
+                Label(L10n.screenRoomAttachmentSourceCamera, icon: \.takePhoto)
                     .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerCamera)
@@ -64,7 +64,7 @@ struct RoomAttachmentPicker: View {
             Button {
                 context.send(viewAction: .attach(.location))
             } label: {
-                Label(L10n.screenRoomAttachmentSourceLocation, iconAsset: Asset.Images.addLocation)
+                Label(L10n.screenRoomAttachmentSourceLocation, icon: \.locationPin)
                     .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
@@ -72,7 +72,7 @@ struct RoomAttachmentPicker: View {
             Button {
                 context.send(viewAction: .attach(.poll))
             } label: {
-                Label(L10n.screenRoomAttachmentSourcePoll, iconAsset: Asset.Images.polls)
+                Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
                     .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)

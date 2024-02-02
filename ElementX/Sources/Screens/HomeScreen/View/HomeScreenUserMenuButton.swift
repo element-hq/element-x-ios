@@ -40,7 +40,7 @@ struct HomeScreenUserMenuButton: View {
                 Button(role: .destructive) {
                     context.send(viewAction: .userMenu(action: .logout))
                 } label: {
-                    Label(L10n.screenSignoutPreferenceItem, iconAsset: Asset.Images.signOut)
+                    Label(L10n.screenSignoutPreferenceItem, icon: \.signOut)
                 }
             }
         } label: {

@@ -154,7 +154,7 @@ private struct MessageComposerEditHeader: View {
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
             Label(L10n.commonEditing,
-                  iconAsset: Asset.Images.editing,
+                  icon: \.editSolid,
                   iconSize: .xSmall,
                   relativeTo: .compound.bodySMSemibold)
                 .labelStyle(MessageComposerHeaderLabelStyle())

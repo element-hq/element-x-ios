@@ -84,7 +84,7 @@ struct CreateRoomScreen: View {
                 .scaledFrame(size: 70)
                 .clipShape(Circle())
             } else {
-                CompoundIcon(asset: Asset.Images.takePhoto, size: .custom(36), relativeTo: .title)
+                CompoundIcon(\.takePhoto, size: .custom(36), relativeTo: .title)
                     .foregroundColor(.compound.iconSecondary)
                     .scaledFrame(size: 70, relativeTo: .title)
                     .background(.compound.bgSubtlePrimary, in: Circle())
@@ -146,7 +146,7 @@ struct CreateRoomScreen: View {
         Section {
             ListRow(label: .default(title: L10n.screenCreateRoomPrivateOptionTitle,
                                     description: L10n.screenCreateRoomPrivateOptionDescription,
-                                    icon: CompoundIcon(asset: Asset.Images.lock),
+                                    icon: \.lock,
                                     iconAlignment: .top),
                     kind: .selection(isSelected: context.isRoomPrivate) { context.isRoomPrivate = true })
             ListRow(label: .default(title: L10n.screenCreateRoomPublicOptionTitle,
