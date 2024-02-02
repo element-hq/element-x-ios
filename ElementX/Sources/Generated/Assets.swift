@@ -41,8 +41,6 @@ internal enum Asset {
     internal static let locationMarkerShape = ImageAsset(name: "images/location-marker-shape")
     internal static let mediaPause = ImageAsset(name: "images/media-pause")
     internal static let mediaPlay = ImageAsset(name: "images/media-play")
-    internal static let secureBackupOff = ImageAsset(name: "images/secure-backup-off")
-    internal static let secureBackupOn = ImageAsset(name: "images/secure-backup-on")
     internal static let waitingGradient = ImageAsset(name: "images/waiting-gradient")
   }
 }

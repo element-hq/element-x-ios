@@ -106,7 +106,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     private var header: some View {
         VStack(spacing: 16) {
-            HeroImage(image: Image(asset: Asset.Images.secureBackupOn))
+            HeroImage(icon: \.keySolid)
             
             Text(context.viewState.title)
                 .foregroundColor(.compound.textPrimary)

@@ -14,28 +14,44 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
-/// An image that is styled for use as the main/top/hero screen icon.
+/// An image that is styled for use as the main/top/hero screen icon. This component
+/// takes a compound icon. If you would like to apply it to an SFSymbol, you can call
+/// the `heroImage()` modifier directly on the Image.
 struct HeroImage: View {
     /// The icon that is shown.
-    let image: Image
-    /// The amount of padding between the icon and the borders. Defaults to 16.
-    var insets: CGFloat = 16
+    let icon: KeyPath<CompoundIcons, Image>
     
     var body: some View {
-        image
-            .resizable()
+        CompoundIcon(icon, size: .custom(42), relativeTo: .title)
+            .modifier(HeroImageModifier())
+    }
+}
+
+extension Image {
+    /// Styles the image for use as the main/top/hero screen icon. You should prefer
+    /// the HeroImage component when possible, by using an icon from Compound.
+    func heroImage(insets: CGFloat = 16) -> some View {
+        resizable()
             .renderingMode(.template)
-            .foregroundColor(.compound.iconSecondary)
             .aspectRatio(contentMode: .fit)
-            .accessibilityHidden(true)
-            .padding(insets)
-            .frame(width: 70, height: 70)
+            .scaledPadding(insets, relativeTo: .title)
+            .modifier(HeroImageModifier())
+    }
+}
+
+private struct HeroImageModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(.compound.iconPrimary)
+            .scaledFrame(size: 70, relativeTo: .title)
             .background {
                 RoundedRectangle(cornerRadius: 14)
                     .fill(Color.compound.bgSubtleSecondary)
             }
+            .accessibilityHidden(true)
     }
 }
 
@@ -44,8 +60,11 @@ struct HeroImage: View {
 struct HeroImage_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         HStack(spacing: 20) {
-            HeroImage(image: Image(asset: Asset.Images.serverSelectionIcon), insets: 19)
-            HeroImage(image: Image(systemName: "hourglass"))
+            HeroImage(icon: \.lockSolid)
+            Image(systemName: "hourglass")
+                .heroImage()
+            Image(asset: Asset.Images.serverSelectionIcon)
+                .heroImage(insets: 19)
         }
     }
 }

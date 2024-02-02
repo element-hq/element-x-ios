@@ -40,7 +40,7 @@ struct SecureBackupKeyBackupScreen: View {
         
     private var disableBackupSection: some View {
         VStack(spacing: 16) {
-            HeroImage(image: Image(asset: Asset.Images.secureBackupOff))
+            HeroImage(icon: \.keyOffSolid)
             
             Text(L10n.screenKeyBackupDisableTitle)
                 .foregroundColor(.compound.textPrimary)

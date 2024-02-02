@@ -40,7 +40,8 @@ struct ServerSelectionScreen: View {
     /// The title, message and icon at the top of the screen.
     var header: some View {
         VStack(spacing: 8) {
-            HeroImage(image: Image(asset: Asset.Images.serverSelectionIcon), insets: 19)
+            Image(asset: Asset.Images.serverSelectionIcon)
+                .heroImage(insets: 19)
                 .padding(.bottom, 8)
             
             Text(L10n.screenChangeServerTitle)

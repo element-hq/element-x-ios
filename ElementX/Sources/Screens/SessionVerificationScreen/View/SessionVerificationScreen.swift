@@ -71,7 +71,8 @@ struct SessionVerificationScreen: View {
     @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
-            HeroImage(image: Image(systemName: headerImageName))
+            Image(systemName: headerImageName)
+                .heroImage()
                 .padding(.bottom, 16)
             
             Text(context.viewState.title ?? "")
