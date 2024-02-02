@@ -45,7 +45,6 @@ final class AppSettings {
         // Feature flags
         case shouldCollapseRoomStateEvents
         case userSuggestionsEnabled
-        case swiftUITimelineEnabled
         case mentionsBadgeEnabled
         case roomListFiltersEnabled
     }
@@ -269,9 +268,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.userSuggestionsEnabled, defaultValue: false, storageType: .volatile)
     var userSuggestionsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
-    var swiftUITimelineEnabled
     
     @UserPreference(key: UserDefaultsKeys.mentionsBadgeEnabled, defaultValue: true, storageType: .userDefaults(store))
     var mentionsBadgeEnabled

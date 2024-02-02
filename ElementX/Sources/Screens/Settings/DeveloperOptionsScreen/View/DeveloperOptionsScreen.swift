@@ -36,11 +36,6 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
                     Text("Collapse room state events")
                 }
-
-                Toggle(isOn: $context.swiftUITimelineEnabled) {
-                    Text("SwiftUI Timeline")
-                    Text("Resets on reboot")
-                }
             }
             
             Section("Room creation") {

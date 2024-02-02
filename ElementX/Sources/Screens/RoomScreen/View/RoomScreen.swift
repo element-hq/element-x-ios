@@ -88,35 +88,18 @@ struct RoomScreen: View {
                     context.send(viewAction: .cancelSend(itemID: info.itemID))
                 }
             }
-            .onChange(of: context.isScrolledToBottom) { isScrolledToBottom in
-                if isScrolledToBottom {
-                    context.send(viewAction: .scrolledToBottom)
-                }
-            }
     }
 
     private var timeline: some View {
-        timelineSwitch
+        UITimelineView()
             .id(context.viewState.roomID)
             .environmentObject(context)
             .environment(\.timelineStyle, context.viewState.timelineStyle)
-    }
-
-    @ViewBuilder
-    private var timelineSwitch: some View {
-        if context.viewState.swiftUITimelineEnabled {
-            TimelineView(viewState: context.viewState.timelineViewState,
-                         isScrolledToBottom: $context.isScrolledToBottom) {
-                context.send(viewAction: .paginateBackwards)
+            .overlay(alignment: .bottomTrailing) {
+                scrollToBottomButton
             }
-        } else {
-            UITimelineView()
-                .overlay(alignment: .bottomTrailing) {
-                    scrollToBottomButton
-                }
-        }
     }
-
+    
     private var scrollToBottomButton: some View {
         Button { context.viewState.timelineViewState.scrollToBottomPublisher.send(()) } label: {
             Image(systemName: "chevron.down")

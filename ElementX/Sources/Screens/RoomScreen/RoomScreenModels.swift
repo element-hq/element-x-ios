@@ -99,8 +99,6 @@ enum RoomScreenViewAction {
     
     case showReadReceipts(itemID: TimelineItemIdentifier)
     
-    case scrolledToBottom
-    
     case poll(RoomScreenViewPollAction)
     
     case audio(RoomScreenViewAudioAction)
@@ -124,7 +122,6 @@ struct RoomScreenViewState: BindableState {
     var timelineStyle: TimelineStyle
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this
-    var swiftUITimelineEnabled = false
 
     var ownUserID: String
     
@@ -222,14 +219,11 @@ struct TimelineViewState {
     
     var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
     
-    var renderedTimelineIDs = [String]()
-    var pendingTimelineIDs = [String]()
-    
     var timelineIDs: [String] {
         itemsDictionary.keys.elements
     }
     
     var itemViewStates: [RoomTimelineItemViewState] {
-        renderedTimelineIDs.compactMap { itemsDictionary[$0] }
+        itemsDictionary.values.elements
     }
 }
