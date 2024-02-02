@@ -162,10 +162,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await timelineController.cancelSending(itemID: itemID) }
         case .paginateBackwards:
             paginateBackwards()
-        case .scrolledToBottom:
-            if state.swiftUITimelineEnabled {
-                renderPendingTimelineItems()
-            }
         case .poll(let pollAction):
             processPollAction(pollAction)
         case .audio(let audioAction):
@@ -267,10 +263,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
 
     private func setupSubscriptions() {
-        appSettings.$swiftUITimelineEnabled
-            .weakAssign(to: \.state.swiftUITimelineEnabled, on: self)
-            .store(in: &cancellables)
-
         timelineController.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
@@ -551,13 +543,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }
         
-        // The SwiftUI scroll view needs special handling, see `selectivelyUpdateTimelineItems`
-        if state.swiftUITimelineEnabled {
-            selectivelyUpdateTimelineItems(timelineItemsDictionary: timelineItemsDictionary)
-        } else {
-            state.timelineViewState.itemsDictionary = timelineItemsDictionary
-            state.timelineViewState.renderedTimelineIDs = Array(timelineItemsDictionary.keys)
-        }
+        state.timelineViewState.itemsDictionary = timelineItemsDictionary
     }
 
     private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {
@@ -568,41 +554,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         } else {
             return RoomTimelineItemViewState(item: item, groupStyle: groupStyle)
         }
-    }
-    
-    /// With the timeline scroll being reversed, introducing items at it's top (i.e. bottom now) will make the content move upwards, which is unwanted when
-    /// reading history. Delay rendering new items until it reaches the bottom again.
-    private func selectivelyUpdateTimelineItems(timelineItemsDictionary: OrderedDictionary<String, RoomTimelineItemViewState>) {
-        var timelineViewState = state.timelineViewState
-        
-        let newItemIdentifiers = Array(timelineItemsDictionary.keys)
-        
-        if !state.bindings.isScrolledToBottom,
-           let lastItemIdentifier = state.timelineViewState.renderedTimelineIDs.last,
-           let newLastItemIdentifierIndex = newItemIdentifiers.firstIndex(where: { $0 == lastItemIdentifier }) {
-            timelineViewState.pendingTimelineIDs = Array(newItemIdentifiers.dropFirst(newLastItemIdentifierIndex + 1))
-            timelineViewState.renderedTimelineIDs = Array(newItemIdentifiers.dropLast(newItemIdentifiers.count - (newLastItemIdentifierIndex + 1)))
-        } else {
-            // Otherwise just render everything normally
-            timelineViewState.renderedTimelineIDs = Array(timelineItemsDictionary.keys)
-        }
-        
-        timelineViewState.itemsDictionary = timelineItemsDictionary
-        
-        state.timelineViewState = timelineViewState
-    }
-    
-    private func renderPendingTimelineItems() {
-        // Render pending timeline items when the scroll view reaches the bottom again
-        guard state.bindings.isScrolledToBottom,
-              state.timelineViewState.pendingTimelineIDs.count > 0 else {
-            return
-        }
-        
-        var newTimelineViewState = state.timelineViewState
-        newTimelineViewState.renderedTimelineIDs = state.timelineViewState.renderedTimelineIDs + state.timelineViewState.pendingTimelineIDs
-        newTimelineViewState.pendingTimelineIDs = []
-        state.timelineViewState = newTimelineViewState
     }
 
     private func canGroupItem(timelineItem: RoomTimelineItemProtocol, with otherTimelineItem: RoomTimelineItemProtocol) -> Bool {

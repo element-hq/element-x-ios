@@ -48,7 +48,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var otlpTracingEnabled: Bool { get set }
     var shouldCollapseRoomStateEvents: Bool { get set }
     var userSuggestionsEnabled: Bool { get set }
-    var swiftUITimelineEnabled: Bool { get set }
     var mentionsBadgeEnabled: Bool { get set }
     var roomListFiltersEnabled: Bool { get set }
     
