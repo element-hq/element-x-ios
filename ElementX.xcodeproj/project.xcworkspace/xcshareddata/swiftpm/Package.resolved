@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens.git",
       "state" : {
-        "revision" : "f006a14218e279f81f2ab9398d8ebae58e87e25f",
-        "version" : "0.1.1"
+        "revision" : "d7c3bba963d6b7ffab862c3293eb242a8932a0c1",
+        "version" : "1.0.0"
       }
     },
     {
@@ -14,7 +14,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "787d62f7388ed7cc7812dcbf8a3f090e793cdb12"
+        "revision" : "b2d1227d8628a28dafb85ae057a8df4bb7279029"
       }
     },
     {
@@ -263,7 +263,7 @@
     {
       "identity" : "swiftui-introspect",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
+      "location" : "https://github.com/siteline/SwiftUI-Introspect",
       "state" : {
         "revision" : "b94da693e57eaf79d16464b8b7c90d09cba4e290",
         "version" : "0.9.2"

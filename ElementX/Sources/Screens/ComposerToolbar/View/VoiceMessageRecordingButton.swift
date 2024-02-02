@@ -41,7 +41,7 @@ struct VoiceMessageRecordingButton: View {
         } label: {
             switch mode {
             case .idle:
-                CompoundIcon(\.micOnOutline, size: .medium, relativeTo: .title)
+                CompoundIcon(\.micOn, size: .medium, relativeTo: .title)
                     .foregroundColor(.compound.iconSecondary)
                     .scaledPadding(10, relativeTo: .title)
             case .recording:

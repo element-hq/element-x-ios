@@ -69,7 +69,7 @@ struct TimelineReplyView: View {
                         ReplyView(sender: sender,
                                   plainBody: L10n.commonVoiceMessage,
                                   formattedBody: nil,
-                                  icon: .init(kind: .icon(\.micOnOutline), cornerRadii: iconCornerRadii))
+                                  icon: .init(kind: .icon(\.micOn), cornerRadii: iconCornerRadii))
                     case .location:
                         ReplyView(sender: sender,
                                   plainBody: L10n.commonSharedLocation,

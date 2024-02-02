@@ -123,7 +123,7 @@ struct HomeScreenRoomCell: View {
                 }
                  
                 if room.notificationMode == .mute {
-                    CompoundIcon(\.notificationsSolidOff, size: .custom(15), relativeTo: .compound.bodyMD)
+                    CompoundIcon(\.notificationsOffSolid, size: .custom(15), relativeTo: .compound.bodyMD)
                         .accessibilityLabel(L10n.a11yNotificationsMuted)
                         .foregroundColor(.compound.iconQuaternary)
                 }

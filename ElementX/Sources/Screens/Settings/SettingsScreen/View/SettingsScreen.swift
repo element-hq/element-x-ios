@@ -115,7 +115,7 @@ struct SettingsScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
             
             ListRow(label: .default(title: L10n.commonAnalytics,
-                                    icon: \.polls),
+                                    icon: \.chart),
                     kind: .navigationLink {
                         context.send(viewAction: .analytics)
                     })
