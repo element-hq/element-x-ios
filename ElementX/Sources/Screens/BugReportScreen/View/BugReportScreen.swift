@@ -109,7 +109,11 @@ struct BugReportScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.screenshot)
                     .overlay(alignment: .topTrailing) {
                         Button { context.send(viewAction: .removeScreenshot) } label: {
-                            Image(Asset.Images.closeCircle.name)
+                            CompoundIcon(\.close, size: .small, relativeTo: .compound.bodyMD)
+                                .foregroundStyle(.compound.iconSecondary)
+                                .background {
+                                    Circle().fill(.compound.bgCanvasDefaultLevel1)
+                                }
                         }
                         .offset(x: 10, y: -10)
                         .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.removeScreenshot)

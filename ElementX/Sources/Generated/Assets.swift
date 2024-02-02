@@ -33,7 +33,6 @@ internal enum Asset {
   internal enum Images {
     internal static let appLogo = ImageAsset(name: "images/app-logo")
     internal static let serverSelectionIcon = ImageAsset(name: "images/server-selection-icon")
-    internal static let closeCircle = ImageAsset(name: "images/close-circle")
     internal static let closeRte = ImageAsset(name: "images/close-rte")
     internal static let composerAttachment = ImageAsset(name: "images/composer-attachment")
     internal static let stopRecording = ImageAsset(name: "images/stop-recording")
