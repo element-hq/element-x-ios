@@ -81,7 +81,7 @@ struct RoomAttachmentPicker: View {
                 Button {
                     context.send(viewAction: .enableTextFormatting)
                 } label: {
-                    Label(L10n.screenRoomAttachmentTextFormatting, iconAsset: Asset.Images.textFormat)
+                    Label(L10n.screenRoomAttachmentTextFormatting, icon: \.textFormatting)
                         .labelStyle(.menuSheet)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)

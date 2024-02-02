@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
-import UIKit
 import WysiwygComposer
 
 enum ComposerToolbarVoiceMessageAction {
@@ -152,32 +152,32 @@ extension FormatItem: Identifiable {
 
 extension FormatItem {
     /// The icon to display in the formatting toolbar.
-    var icon: Image {
+    var icon: KeyPath<CompoundIcons, Image> {
         switch type {
         case .bold:
-            return Image(asset: Asset.Images.bold)
+            return \.bold
         case .italic:
-            return Image(asset: Asset.Images.italic)
+            return \.italic
         case .underline:
-            return Image(asset: Asset.Images.underline)
+            return \.underline
         case .strikeThrough:
-            return Image(asset: Asset.Images.strikethrough)
+            return \.strikethrough
         case .unorderedList:
-            return Image(asset: Asset.Images.bulletList)
+            return \.listBulleted
         case .orderedList:
-            return Image(asset: Asset.Images.numberedList)
+            return \.listNumbered
         case .indent:
-            return Image(asset: Asset.Images.indent)
+            return \.indentIncrease
         case .unindent:
-            return Image(asset: Asset.Images.unindent)
+            return \.indentDecrease
         case .inlineCode:
-            return Image(asset: Asset.Images.inlineCode)
+            return \.inlineCode
         case .codeBlock:
-            return Image(asset: Asset.Images.codeBlock)
+            return \.code
         case .quote:
-            return Image(asset: Asset.Images.quote)
+            return \.quote
         case .link:
-            return Image(asset: Asset.Images.link)
+            return \.link
         }
     }
 

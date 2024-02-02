@@ -165,7 +165,7 @@ struct SettingsScreen: View {
             
             if context.viewState.showDeveloperOptions {
                 ListRow(label: .default(title: L10n.commonDeveloperOptions,
-                                        icon: CompoundIcon(asset: Asset.Images.codeBlock)),
+                                        icon: \.code),
                         kind: .navigationLink {
                             context.send(viewAction: .developerOptions)
                         })
