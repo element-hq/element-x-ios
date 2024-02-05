@@ -89,8 +89,8 @@ enum RoomSummary: CustomStringConvertible, Equatable {
 
 enum RoomSummaryProviderFilter {
     case none
-    case all
-    case normalizedMatchRoomName(String)
+    case all(filters: Set<RoomListFilter>)
+    case normalizedMatchRoomName(query: String, filters: Set<RoomListFilter>)
 }
 
 protocol RoomSummaryProviderProtocol {

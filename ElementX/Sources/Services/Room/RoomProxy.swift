@@ -49,20 +49,14 @@ class RoomProxy: RoomProxyProtocol {
     var ownUserID: String {
         room.ownUserId()
     }
-    
-    init?(roomListItem: RoomListItemProtocol,
-          room: RoomProtocol,
-          backgroundTaskService: BackgroundTaskServiceProtocol) async {
+
+    init(roomListItem: RoomListItemProtocol,
+         room: RoomProtocol,
+         backgroundTaskService: BackgroundTaskServiceProtocol) async throws {
         self.roomListItem = roomListItem
         self.room = room
         self.backgroundTaskService = backgroundTaskService
-        
-        do {
-            timeline = try await TimelineProxy(timeline: room.timeline(), backgroundTaskService: backgroundTaskService)
-        } catch {
-            MXLog.error("Failed creating timeline with error: \(error)")
-            return nil
-        }
+        timeline = try await TimelineProxy(timeline: room.timeline(), backgroundTaskService: backgroundTaskService)
         
         Task {
             await updateMembers()
@@ -130,7 +124,7 @@ class RoomProxy: RoomProxyProtocol {
     var canonicalAlias: String? {
         room.canonicalAlias()
     }
-        
+    
     var avatarURL: URL? {
         roomListItem.avatarUrl().flatMap(URL.init(string:))
     }

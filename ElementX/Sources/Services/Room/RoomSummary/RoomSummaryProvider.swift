@@ -102,7 +102,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             })
             
             // Forces the listener above to be called with the current state
-            setFilter(.all)
+            setFilter(.all(filters: []))
             
             listUpdatesTaskHandle = listUpdatesSubscriptionResult?.entriesStream
             
@@ -153,10 +153,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         switch filter {
         case .none:
             _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .none)
-        case .all:
-            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .allNonLeft)
-        case .normalizedMatchRoomName(let query):
-            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .normalizedMatchRoomName(pattern: query.lowercased()))
+        case let .all(filters):
+            var filters = filters.compactMap(\.rustFilter)
+            filters.append(.nonLeft)
+            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .all(filters: filters))
+        case let .normalizedMatchRoomName(query, filters):
+            var filters = filters.compactMap(\.rustFilter)
+            filters.append(.normalizedMatchRoomName(pattern: query.lowercased()))
+            filters.append(.nonLeft)
+            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .all(filters: filters))
         }
     }
     
@@ -436,5 +441,24 @@ private class RoomListStateObserver: RoomListLoadingStateListener {
     
     func onUpdate(state: RoomListLoadingState) {
         onUpdateClosure(state)
+    }
+}
+
+private extension RoomListFilter {
+    var rustFilter: RoomListEntriesDynamicFilterKind? {
+        switch self {
+        case .people:
+            return .kind(expectedKind: .directMessages)
+        case .rooms:
+            return .kind(expectedKind: .group)
+        case .unreads:
+            return .unread
+        case .favourites:
+            // Not implemented yet
+            return nil
+        case .lowPriority:
+            // Not implemented yet
+            return nil
+        }
     }
 }

@@ -238,7 +238,7 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 }
 
 final class RoomListFiltersState: ObservableObject {
-    @Published private var enabledFilters: Set<RoomListFilter>
+    @Published private(set) var enabledFilters: Set<RoomListFilter>
     
     init(enabledFilters: Set<RoomListFilter> = []) {
         self.enabledFilters = enabledFilters

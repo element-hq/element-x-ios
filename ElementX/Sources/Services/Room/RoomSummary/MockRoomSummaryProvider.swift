@@ -65,11 +65,12 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
             roomListSubject.send(initialRooms)
         case .none:
             roomListSubject.send([])
+        // TODO: improve this mock
         case .normalizedMatchRoomName(let filter):
-            if filter.isEmpty {
+            if filter.query.isEmpty {
                 roomListSubject.send(initialRooms)
             } else {
-                roomListSubject.send(initialRooms.filter { $0.name?.localizedCaseInsensitiveContains(filter) ?? false })
+                roomListSubject.send(initialRooms.filter { $0.name?.localizedCaseInsensitiveContains(filter.query) ?? false })
             }
         }
     }
