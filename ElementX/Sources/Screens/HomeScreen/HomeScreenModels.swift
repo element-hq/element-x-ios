@@ -51,6 +51,8 @@ enum HomeScreenViewAction {
     case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
     case selectInvites
     case globalSearch
+    case markRoomAsUnread(roomIdentifier: String)
+    case markRoomAsRead(roomIdentifier: String)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -102,7 +104,9 @@ struct HomeScreenViewState: BindableState {
     
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
+    
     var shouldShowFilters = false
+    var markAsUnreadEnabled = false
     
     var hasPendingInvitations = false
     var hasUnreadPendingInvitations = false
@@ -153,6 +157,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var name = ""
     
+    var isMarkedUnread: Bool
+    
     var hasUnreadMessages = false
     
     var hasUnreadMentions = false
@@ -171,10 +177,15 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var isPlaceholder = false
     
+    var hasNewContent: Bool {
+        hasUnreadMessages || hasUnreadMentions || hasUnreadNotifications || isMarkedUnread
+    }
+    
     static func placeholder() -> HomeScreenRoom {
         HomeScreenRoom(id: UUID().uuidString,
                        roomId: nil,
                        name: "Placeholder room name",
+                       isMarkedUnread: false,
                        hasUnreadMessages: false,
                        hasUnreadMentions: false,
                        hasUnreadNotifications: false,

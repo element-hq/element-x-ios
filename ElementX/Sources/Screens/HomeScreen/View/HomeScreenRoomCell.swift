@@ -133,7 +133,7 @@ struct HomeScreenRoomCell: View {
                         .foregroundColor(.compound.iconAccentTertiary)
                 }
                 
-                if hasNewContent {
+                if room.hasNewContent {
                     Circle()
                         .frame(width: 12, height: 12)
                         .foregroundColor(isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
@@ -141,21 +141,15 @@ struct HomeScreenRoomCell: View {
             }
         }
     }
-    
-    private var hasNewContent: Bool {
-        room.hasUnreadMessages ||
-            room.hasUnreadMentions ||
-            room.hasUnreadNotifications
-    }
-    
+        
     private var isHighlighted: Bool {
-        guard !room.isPlaceholder &&
-            room.notificationMode != .mute else {
+        guard !room.isPlaceholder && room.notificationMode != .mute else {
             return false
         }
-        return room.hasUnreadNotifications || room.hasUnreadMentions
-    }
         
+        return room.hasUnreadNotifications || room.hasUnreadMentions || room.isMarkedUnread
+    }
+            
     private var mentionIcon: some View {
         CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
             .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
@@ -223,6 +217,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
             return HomeScreenRoom(id: UUID().uuidString,
                                   roomId: details.id,
                                   name: details.name,
+                                  isMarkedUnread: details.isMarkedUnread,
                                   hasUnreadMessages: details.unreadMessagesCount > 0,
                                   hasUnreadMentions: details.unreadMentionsCount > 0,
                                   hasUnreadNotifications: details.unreadNotificationsCount > 0,

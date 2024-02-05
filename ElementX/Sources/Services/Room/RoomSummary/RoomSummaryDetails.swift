@@ -24,6 +24,7 @@ struct RoomSummaryDetails {
     let avatarURL: URL?
     let lastMessage: AttributedString?
     let lastMessageFormattedTimestamp: String?
+    let isMarkedUnread: Bool
     let unreadMessagesCount: UInt
     let unreadMentionsCount: UInt
     let unreadNotificationsCount: UInt
@@ -54,6 +55,7 @@ extension RoomSummaryDetails {
         avatarURL = nil
         lastMessage = AttributedString(string)
         lastMessageFormattedTimestamp = "Now"
+        isMarkedUnread = false
         unreadMessagesCount = hasUnreadMessages ? 1 : 0
         unreadMentionsCount = hasUnreadMentions ? 1 : 0
         unreadNotificationsCount = hasUnreadNotifications ? 1 : 0

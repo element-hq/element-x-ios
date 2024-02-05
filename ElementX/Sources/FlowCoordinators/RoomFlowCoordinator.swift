@@ -417,6 +417,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         self.roomProxy = roomProxy
         
+        Task {
+            // Mark the room as read on entering but don't send read receipts
+            // as those will be handled by the timeline
+            await roomProxy.markAsRead(sendReadReceipts: false, receiptType: appSettings.sendReadReceiptsEnabled ? .read : .readPrivate)
+        }
+        
         let userID = userSession.clientProxy.userID
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
@@ -772,7 +778,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 self.analytics.trackComposer(inThread: false,
                                              isEditing: false,
                                              isReply: false,
-                                             messageType: isUserLocation ? .location(.user) : .location(.pin),
+                                             messageType: isUserLocation ? .LocationUser : .LocationPin,
                                              startsThread: nil)
             case .close:
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
@@ -833,7 +839,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             self.analytics.trackComposer(inThread: false,
                                          isEditing: false,
                                          isReply: false,
-                                         messageType: .poll,
+                                         messageType: .Poll,
                                          startsThread: nil)
 
             self.analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)

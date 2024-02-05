@@ -86,6 +86,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.shouldShowFilters, on: self)
             .store(in: &cancellables)
         
+        appSettings.$markAsUnreadEnabled
+            .weakAssign(to: \.state.markAsUnreadEnabled, on: self)
+            .store(in: &cancellables)
+        
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         isSearchFieldFocused
@@ -143,6 +147,34 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             actionsSubject.send(.presentInvitesScreen)
         case .globalSearch:
             actionsSubject.send(.presentGlobalSearch)
+        case .markRoomAsUnread(let roomIdentifier):
+            Task {
+                guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
+                    MXLog.error("Failed retrieving room for identifier: \(roomIdentifier)")
+                    return
+                }
+                
+                switch await roomProxy.markAsUnread() {
+                case .success:
+                    ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
+                case .failure(let error):
+                    MXLog.error("Failed marking room \(roomIdentifier) as unread with error: \(error)")
+                }
+            }
+        case .markRoomAsRead(let roomIdentifier):
+            Task {
+                guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
+                    MXLog.error("Failed retrieving room for identifier: \(roomIdentifier)")
+                    return
+                }
+                
+                switch await roomProxy.markAsRead(sendReadReceipts: true, receiptType: appSettings.sendReadReceiptsEnabled ? .read : .readPrivate) {
+                case .success:
+                    ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
+                case .failure(let error):
+                    MXLog.error("Failed marking room \(roomIdentifier) as read with error: \(error)")
+                }
+            }
         }
     }
     
@@ -327,6 +359,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         return HomeScreenRoom(id: identifier,
                               roomId: details.id,
                               name: details.name,
+                              isMarkedUnread: details.isMarkedUnread,
                               hasUnreadMessages: details.unreadMessagesCount > 0,
                               hasUnreadMentions: details.unreadMentionsCount > 0,
                               hasUnreadNotifications: details.unreadNotificationsCount > 0,

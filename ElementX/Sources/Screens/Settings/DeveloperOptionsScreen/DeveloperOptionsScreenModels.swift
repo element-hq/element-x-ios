@@ -50,6 +50,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var userSuggestionsEnabled: Bool { get set }
     var mentionsBadgeEnabled: Bool { get set }
     var roomListFiltersEnabled: Bool { get set }
+    var markAsUnreadEnabled: Bool { get set }
     
     var elementCallBaseURL: URL { get set }
 }

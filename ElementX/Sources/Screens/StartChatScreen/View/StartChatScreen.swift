@@ -29,7 +29,7 @@ struct StartChatScreen: View {
             }
         }
         .compoundList()
-        .track(screen: .startChat)
+        .track(screen: .StartChat)
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.actionStartChat)
         .navigationBarTitleDisplayMode(.inline)

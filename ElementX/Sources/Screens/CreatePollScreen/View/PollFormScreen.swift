@@ -156,7 +156,7 @@ private extension View {
         case .edit:
             self
         case .new:
-            track(screen: .createPoll)
+            track(screen: .CreatePollView)
         }
     }
 }

@@ -1847,11 +1847,6 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     var underlyingHasOngoingCall: Bool!
     var canonicalAlias: String?
-    var hasUnreadNotifications: Bool {
-        get { return underlyingHasUnreadNotifications }
-        set(value) { underlyingHasUnreadNotifications = value }
-    }
-    var underlyingHasUnreadNotifications: Bool!
     var ownUserID: String {
         get { return underlyingOwnUserID }
         set(value) { underlyingOwnUserID = value }
@@ -2220,6 +2215,44 @@ class RoomProxyMock: RoomProxyProtocol {
             return await canUserTriggerRoomNotificationUserIDClosure(userID)
         } else {
             return canUserTriggerRoomNotificationUserIDReturnValue
+        }
+    }
+    //MARK: - markAsUnread
+
+    var markAsUnreadCallsCount = 0
+    var markAsUnreadCalled: Bool {
+        return markAsUnreadCallsCount > 0
+    }
+    var markAsUnreadReturnValue: Result<Void, RoomProxyError>!
+    var markAsUnreadClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func markAsUnread() async -> Result<Void, RoomProxyError> {
+        markAsUnreadCallsCount += 1
+        if let markAsUnreadClosure = markAsUnreadClosure {
+            return await markAsUnreadClosure()
+        } else {
+            return markAsUnreadReturnValue
+        }
+    }
+    //MARK: - markAsRead
+
+    var markAsReadSendReadReceiptsReceiptTypeCallsCount = 0
+    var markAsReadSendReadReceiptsReceiptTypeCalled: Bool {
+        return markAsReadSendReadReceiptsReceiptTypeCallsCount > 0
+    }
+    var markAsReadSendReadReceiptsReceiptTypeReceivedArguments: (sendReadReceipts: Bool, receiptType: ReceiptType)?
+    var markAsReadSendReadReceiptsReceiptTypeReceivedInvocations: [(sendReadReceipts: Bool, receiptType: ReceiptType)] = []
+    var markAsReadSendReadReceiptsReceiptTypeReturnValue: Result<Void, RoomProxyError>!
+    var markAsReadSendReadReceiptsReceiptTypeClosure: ((Bool, ReceiptType) async -> Result<Void, RoomProxyError>)?
+
+    func markAsRead(sendReadReceipts: Bool, receiptType: ReceiptType) async -> Result<Void, RoomProxyError> {
+        markAsReadSendReadReceiptsReceiptTypeCallsCount += 1
+        markAsReadSendReadReceiptsReceiptTypeReceivedArguments = (sendReadReceipts: sendReadReceipts, receiptType: receiptType)
+        markAsReadSendReadReceiptsReceiptTypeReceivedInvocations.append((sendReadReceipts: sendReadReceipts, receiptType: receiptType))
+        if let markAsReadSendReadReceiptsReceiptTypeClosure = markAsReadSendReadReceiptsReceiptTypeClosure {
+            return await markAsReadSendReadReceiptsReceiptTypeClosure(sendReadReceipts, receiptType)
+        } else {
+            return markAsReadSendReadReceiptsReceiptTypeReturnValue
         }
     }
     //MARK: - canUserJoinCall

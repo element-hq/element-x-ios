@@ -31,6 +31,8 @@ enum RoomProxyError: Error, Equatable {
     case failedRemovingAvatar
     case failedUploadingAvatar
     case failedCheckingPermission
+    case failedMarkingAsRead
+    case failedMarkingAsUnread
 }
 
 enum RoomProxyAction {
@@ -47,7 +49,6 @@ protocol RoomProxyProtocol {
     var membership: Membership { get }
     var hasOngoingCall: Bool { get }
     var canonicalAlias: String? { get }
-    var hasUnreadNotifications: Bool { get }
     var ownUserID: String { get }
     
     var name: String? { get }
@@ -103,9 +104,13 @@ protocol RoomProxyProtocol {
     
     func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
     
-    func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError>
+    func markAsUnread() async -> Result<Void, RoomProxyError>
+    
+    func markAsRead(sendReadReceipts: Bool, receiptType: ReceiptType) async -> Result<Void, RoomProxyError>
     
     // MARK: - Element Call
+    
+    func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError>
     
     func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol
 }

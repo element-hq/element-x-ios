@@ -47,7 +47,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.1.36
+    exactVersion: 1.1.37
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
@@ -55,7 +55,8 @@ packages:
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    minorVersion: 0.9.0
+    # minorVersion: 0.9.0
+    revision: 28d1e65d306420b3affc32f719cb516f74a7406f
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     minorVersion: 1.0.0

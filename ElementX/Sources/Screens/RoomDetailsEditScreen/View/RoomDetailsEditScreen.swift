@@ -37,7 +37,7 @@ struct RoomDetailsEditScreen: View {
         .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-        .track(screen: .roomSettings)
+        .track(screen: .RoomSettings)
     }
     
     // MARK: - Private

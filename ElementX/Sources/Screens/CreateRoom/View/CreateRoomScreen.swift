@@ -33,7 +33,7 @@ struct CreateRoomScreen: View {
             securitySection
         }
         .compoundList()
-        .track(screen: .createRoom)
+        .track(screen: .CreateRoom)
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.screenCreateRoomTitle)
         .navigationBarTitleDisplayMode(.inline)

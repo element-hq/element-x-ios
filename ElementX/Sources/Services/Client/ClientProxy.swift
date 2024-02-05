@@ -587,20 +587,20 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private let eventFilters: TimelineEventTypeFilter = {
-        let stateEventFilters: [FilterStateEventType] = [.roomAliases,
-                                                         .roomCanonicalAlias,
-                                                         .roomGuestAccess,
-                                                         .roomHistoryVisibility,
-                                                         .roomJoinRules,
-                                                         .roomPinnedEvents,
-                                                         .roomPowerLevels,
-                                                         .roomServerAcl,
-                                                         .roomTombstone,
-                                                         .spaceChild,
-                                                         .spaceParent,
-                                                         .policyRuleRoom,
-                                                         .policyRuleServer,
-                                                         .policyRuleUser]
+        let stateEventFilters: [StateEventType] = [.roomAliases,
+                                                   .roomCanonicalAlias,
+                                                   .roomGuestAccess,
+                                                   .roomHistoryVisibility,
+                                                   .roomJoinRules,
+                                                   .roomPinnedEvents,
+                                                   .roomPowerLevels,
+                                                   .roomServerAcl,
+                                                   .roomTombstone,
+                                                   .spaceChild,
+                                                   .spaceParent,
+                                                   .policyRuleRoom,
+                                                   .policyRuleServer,
+                                                   .policyRuleUser]
         
         return .exclude(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
     }()

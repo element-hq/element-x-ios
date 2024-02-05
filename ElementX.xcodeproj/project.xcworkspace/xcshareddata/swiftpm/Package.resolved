@@ -121,8 +121,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-analytics-events",
       "state" : {
-        "revision" : "aa14cbcdf81af2746d20a71779ec751f971e1d7f",
-        "version" : "0.9.0"
+        "revision" : "28d1e65d306420b3affc32f719cb516f74a7406f"
       }
     },
     {
@@ -130,8 +129,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "e6aecad747a12e399ee718b5fb2ece45b7b6e23a",
-        "version" : "1.1.36"
+        "revision" : "4d0d75004f8361530d7424ab198e363027823718",
+        "version" : "1.1.37"
       }
     },
     {

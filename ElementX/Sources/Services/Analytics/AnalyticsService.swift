@@ -121,10 +121,14 @@ extension AnalyticsService {
     /// Track the presentation of a screen
     /// - Parameter screen: The screen that was shown
     /// - Parameter duration: An optional value representing how long the screen was shown for in milliseconds.
-    func track(screen: AnalyticsScreen, duration milliseconds: Int? = nil) {
+    func track(screen: AnalyticsEvent.MobileScreen.ScreenName, duration milliseconds: Int? = nil) {
         MXLog.debug("\(screen)")
-        let event = AnalyticsEvent.MobileScreen(durationMs: milliseconds, screenName: screen.screenName)
+        let event = AnalyticsEvent.MobileScreen(durationMs: milliseconds, screenName: screen)
         client.screen(event)
+    }
+    
+    func trackInteraction(index: Int? = nil, name: AnalyticsEvent.Interaction.Name) {
+        capture(event: AnalyticsEvent.Interaction(index: index, interactionType: .Touch, name: name))
     }
 
     /// Track the creation of a room
@@ -143,12 +147,12 @@ extension AnalyticsService {
     func trackComposer(inThread: Bool,
                        isEditing: Bool,
                        isReply: Bool,
-                       messageType: AnalyticsMessageType = .text,
+                       messageType: AnalyticsEvent.Composer.MessageType = .Text,
                        startsThread: Bool?) {
         capture(event: AnalyticsEvent.Composer(inThread: inThread,
                                                isEditing: isEditing,
                                                isReply: isReply,
-                                               messageType: .init(messageType),
+                                               messageType: messageType,
                                                startsThread: startsThread))
     }
     

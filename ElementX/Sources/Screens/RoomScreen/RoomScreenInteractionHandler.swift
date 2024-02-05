@@ -428,7 +428,7 @@ class RoomScreenInteractionHandler {
         analyticsService.trackComposer(inThread: false,
                                        isEditing: false,
                                        isReply: false,
-                                       messageType: .voiceMessage,
+                                       messageType: .VoiceMessage,
                                        startsThread: nil)
 
         actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: true))))
