@@ -48,7 +48,7 @@ struct HomeScreenRoomList: View {
                 HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
                     .contextMenu {
                         if context.viewState.markAsUnreadEnabled {
-                            if room.hasNewContent {
+                            if room.badges.isDotShown {
                                 Button {
                                     context.send(viewAction: .markRoomAsRead(roomIdentifier: room.id))
                                 } label: {
