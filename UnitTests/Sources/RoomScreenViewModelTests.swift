@@ -579,7 +579,6 @@ class RoomScreenViewModelTests: XCTestCase {
         
         timelineProxy.sendReadReceiptForTypeReturnValue = .success(())
         
-        roomProxy.underlyingHasUnreadNotifications = true
         timelineController.timelineItems = items
         timelineController.roomProxy = roomProxy
 
