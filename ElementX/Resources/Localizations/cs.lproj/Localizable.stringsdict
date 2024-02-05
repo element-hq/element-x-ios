@@ -254,5 +254,41 @@
 			<string>%1$d osob</string>
 		</dict>
 	</dict>
+	<key>screen_room_typing_many_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@, %2$@ a %3$d další</string>
+			<key>few</key>
+			<string>%1$@, %2$@ a %3$d další</string>
+			<key>other</key>
+			<string>%1$@, %2$@ a %3$d dalších</string>
+		</dict>
+	</dict>
+	<key>screen_room_typing_notification</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ píše</string>
+			<key>few</key>
+			<string>%1$@ píší</string>
+			<key>other</key>
+			<string>%1$@ píše</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

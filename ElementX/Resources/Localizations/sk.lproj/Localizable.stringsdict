@@ -254,5 +254,37 @@
 			<string>%1$d osôb</string>
 		</dict>
 	</dict>
+	<key>screen_room_typing_many_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@, %2$@ and %3$d other</string>
+			<key>other</key>
+			<string>%1$@, %2$@ and %3$d others</string>
+		</dict>
+	</dict>
+	<key>screen_room_typing_notification</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ is typing</string>
+			<key>other</key>
+			<string>%1$@ are typing</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

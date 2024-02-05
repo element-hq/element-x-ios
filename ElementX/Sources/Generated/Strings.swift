@@ -272,6 +272,8 @@ public enum L10n {
   public static var commonEveryone: String { return L10n.tr("Localizable", "common_everyone") }
   /// Face ID
   public static var commonFaceIdIos: String { return L10n.tr("Localizable", "common_face_id_ios") }
+  /// Favourite
+  public static var commonFavourite: String { return L10n.tr("Localizable", "common_favourite") }
   /// File
   public static var commonFile: String { return L10n.tr("Localizable", "common_file") }
   /// Forward message
@@ -1300,6 +1302,18 @@ public enum L10n {
   public static var screenRoomTimelineAddReaction: String { return L10n.tr("Localizable", "screen_room_timeline_add_reaction") }
   /// Show less
   public static var screenRoomTimelineLessReactions: String { return L10n.tr("Localizable", "screen_room_timeline_less_reactions") }
+  /// Plural format key: "%#@COUNT@"
+  public static func screenRoomTypingManyMembers(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_typing_many_members", p1)
+  }
+  /// Plural format key: "%#@COUNT@"
+  public static func screenRoomTypingNotification(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_typing_notification", p1)
+  }
+  /// %1$@ and %2$@
+  public static func screenRoomTypingTwoMembers(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_typing_two_members", String(describing: p1), String(describing: p2))
+  }
   /// Hold to record
   public static var screenRoomVoiceMessageTooltip: String { return L10n.tr("Localizable", "screen_room_voice_message_tooltip") }
   /// Create a new conversation or room
@@ -1320,6 +1334,10 @@ public enum L10n {
   public static var screenRoomlistFilterUnreads: String { return L10n.tr("Localizable", "screen_roomlist_filter_unreads") }
   /// All Chats
   public static var screenRoomlistMainSpaceTitle: String { return L10n.tr("Localizable", "screen_roomlist_main_space_title") }
+  /// Mark as read
+  public static var screenRoomlistMarkAsRead: String { return L10n.tr("Localizable", "screen_roomlist_mark_as_read") }
+  /// Mark as unread
+  public static var screenRoomlistMarkAsUnread: String { return L10n.tr("Localizable", "screen_roomlist_mark_as_unread") }
   /// Change account provider
   public static var screenServerConfirmationChangeServer: String { return L10n.tr("Localizable", "screen_server_confirmation_change_server") }
   /// A private server for Element employees.
