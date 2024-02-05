@@ -191,6 +191,7 @@ struct TimelineItemMenu: View {
                 Text(item.sender.displayName ?? item.sender.id)
                     .font(.compound.bodySMSemibold)
                     .foregroundColor(.compound.textPrimary)
+                    .textSelection(.enabled)
                 
                 Text(item.timelineMenuDescription)
                     .font(.compound.bodyMD)
