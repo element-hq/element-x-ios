@@ -1,0 +1,1 @@
+Remove unnecessary analytics abstraction levels, directly create analytics events in the analytics service

@@ -149,22 +149,30 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             actionsSubject.send(.presentGlobalSearch)
         case .markRoomAsUnread(let roomIdentifier):
             Task {
-                if let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) {
-                    if case .failure(let error) = await roomProxy.markAsUnread() {
-                        MXLog.error("Failed marking room \(roomIdentifier) as unread with error: \(error)")
-                    } else {
-                        ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
-                    }
+                guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
+                    MXLog.error("Failed retrieving room for identifier: \(roomIdentifier)")
+                    return
+                }
+                
+                switch await roomProxy.markAsUnread() {
+                case .success:
+                    ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
+                case .failure(let error):
+                    MXLog.error("Failed marking room \(roomIdentifier) as unread with error: \(error)")
                 }
             }
         case .markRoomAsRead(let roomIdentifier):
             Task {
-                if let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) {
-                    if case .failure(let error) = await roomProxy.markAsRead(sendReadReceipts: true, receiptType: appSettings.sendReadReceiptsEnabled ? .read : .readPrivate) {
-                        MXLog.error("Failed marking room \(roomIdentifier) as read with error: \(error)")
-                    } else {
-                        ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
-                    }
+                guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
+                    MXLog.error("Failed retrieving room for identifier: \(roomIdentifier)")
+                    return
+                }
+                
+                switch await roomProxy.markAsRead(sendReadReceipts: true, receiptType: appSettings.sendReadReceiptsEnabled ? .read : .readPrivate) {
+                case .success:
+                    ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
+                case .failure(let error):
+                    MXLog.error("Failed marking room \(roomIdentifier) as read with error: \(error)")
                 }
             }
         }
