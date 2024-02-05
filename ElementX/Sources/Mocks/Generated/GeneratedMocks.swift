@@ -1847,11 +1847,6 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     var underlyingHasOngoingCall: Bool!
     var canonicalAlias: String?
-    var hasUnreadNotifications: Bool {
-        get { return underlyingHasUnreadNotifications }
-        set(value) { underlyingHasUnreadNotifications = value }
-    }
-    var underlyingHasUnreadNotifications: Bool!
     var ownUserID: String {
         get { return underlyingOwnUserID }
         set(value) { underlyingOwnUserID = value }

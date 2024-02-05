@@ -49,7 +49,6 @@ protocol RoomProxyProtocol {
     var membership: Membership { get }
     var hasOngoingCall: Bool { get }
     var canonicalAlias: String? { get }
-    var hasUnreadNotifications: Bool { get }
     var ownUserID: String { get }
     
     var name: String? { get }

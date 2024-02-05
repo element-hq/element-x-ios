@@ -29,7 +29,6 @@ struct RoomProxyMockConfiguration {
     var isEncrypted = true
     var hasOngoingCall = true
     var canonicalAlias: String?
-    var hasUnreadNotifications = Bool.random()
     
     var timeline = {
         let mock = TimelineProxyMock()
@@ -64,7 +63,6 @@ extension RoomProxyMock {
         isEncrypted = configuration.isEncrypted
         hasOngoingCall = configuration.hasOngoingCall
         canonicalAlias = configuration.canonicalAlias
-        hasUnreadNotifications = configuration.hasUnreadNotifications
         
         timeline = configuration.timeline
         

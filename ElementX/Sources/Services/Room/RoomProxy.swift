@@ -130,11 +130,7 @@ class RoomProxy: RoomProxyProtocol {
     var canonicalAlias: String? {
         room.canonicalAlias()
     }
-    
-    var hasUnreadNotifications: Bool {
-        roomListItem.hasUnreadNotifications()
-    }
-    
+        
     var avatarURL: URL? {
         roomListItem.avatarUrl().flatMap(URL.init(string:))
     }
