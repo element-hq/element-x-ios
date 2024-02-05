@@ -120,7 +120,7 @@ struct StaticLocationScreen: View {
         Button {
             context.send(viewAction: .centerToUser)
         } label: {
-            CompoundIcon(asset: context.viewState.isSharingUserLocation ? Asset.Images.locationNavigatorCentred : Asset.Images.locationNavigator)
+            CompoundIcon(context.viewState.isSharingUserLocation ? \.locationNavigatorCentred : \.locationNavigator)
                 .padding(8)
                 .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 6))
         }

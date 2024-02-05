@@ -60,8 +60,7 @@ struct AppLockSetupPINScreen: View {
     
     var header: some View {
         VStack(spacing: 8) {
-            HeroImage(image: Image(systemSymbol: .lock))
-                .symbolVariant(.fill)
+            HeroImage(icon: \.lockSolid)
                 .padding(.bottom, 8)
             
             Text(context.viewState.title)

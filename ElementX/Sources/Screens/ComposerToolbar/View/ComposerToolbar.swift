@@ -147,9 +147,9 @@ struct ComposerToolbar: View {
         Button {
             context.send(viewAction: .sendMessage)
         } label: {
-            submitButtonImage
-                .symbolVariant(.fill)
-                .font(.compound.bodyLG)
+            CompoundIcon(context.viewState.composerMode.isEdit ? \.check : \.sendSolid)
+                .scaledPadding(6, relativeTo: .title)
+                .accessibilityLabel(context.viewState.composerMode.isEdit ? L10n.actionConfirm : L10n.actionSend)
                 .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .white)
                 .background {
                     Circle()
@@ -211,26 +211,6 @@ struct ComposerToolbar: View {
                             itemProviderHelper: ItemProviderHelper(),
                             keyCommands: keyCommands) { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
-        }
-    }
-    
-    private var submitButtonImage: some View {
-        // ZStack with opacity so the button size is consistent.
-        ZStack {
-            CompoundIcon(\.check)
-                .opacity(context.viewState.composerMode.isEdit ? 1 : 0)
-                .accessibilityLabel(L10n.actionConfirm)
-                .accessibilityHidden(!context.viewState.composerMode.isEdit)
-            
-            let sendImageOffset: CGFloat = 1
-            Image(asset: Asset.Images.sendMessage)
-                .resizable()
-                .scaledToFit()
-                .scaledFrame(width: 16 + sendImageOffset, height: 16, alignment: .trailing, relativeTo: .title)
-                .scaledPadding(10, relativeTo: .title)
-                .opacity(context.viewState.composerMode.isEdit ? 0 : 1)
-                .accessibilityLabel(L10n.actionSend)
-                .accessibilityHidden(context.viewState.composerMode.isEdit)
         }
     }
     

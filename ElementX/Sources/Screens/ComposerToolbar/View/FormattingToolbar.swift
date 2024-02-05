@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct FormattingToolbar: View {
@@ -29,10 +30,7 @@ struct FormattingToolbar: View {
                     Button {
                         formatAction(item.type)
                     } label: {
-                        item.icon
-                            .resizable()
-                            .scaledToFit()
-                            .scaledFrame(size: 20)
+                        CompoundIcon(item.icon, size: .small, relativeTo: .compound.headingLG)
                             .foregroundColor(item.foregroundColor)
                             .padding(8)
                             .background(item.backgroundColor)
@@ -66,6 +64,18 @@ private extension FormatItem {
             return .compound._bgAccentSelected
         case .enabled, .disabled:
             return .compound.bgCanvasDefault
+        }
+    }
+}
+
+struct FormattingToolbar_Previews: PreviewProvider, TestablePreview {
+    static let items = FormatType.allCases.map { FormatItem(type: $0, state: .enabled) }
+    static let disabledItems = FormatType.allCases.map { FormatItem(type: $0, state: .disabled) }
+    
+    static var previews: some View {
+        VStack {
+            FormattingToolbar(formatItems: items) { _ in }
+            FormattingToolbar(formatItems: disabledItems) { _ in }
         }
     }
 }

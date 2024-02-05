@@ -108,7 +108,7 @@ struct RoomDetailsScreen: View {
                     toggleMuteButton
                 case .share(let permalink):
                     ShareLink(item: permalink) {
-                        CompoundIcon(asset: Asset.Images.shareIos)
+                        CompoundIcon(\.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
                 }
@@ -150,7 +150,7 @@ struct RoomDetailsScreen: View {
         Section {
             if context.viewState.dmRecipient == nil {
                 ListRow(label: .default(title: L10n.commonPeople,
-                                        icon: CompoundIcon(asset: Asset.Images.user)),
+                                        icon: \.user),
                         details: .title(String(context.viewState.joinedMembersCount)),
                         kind: .navigationLink {
                             context.send(viewAction: .processTapPeople)
@@ -159,7 +159,7 @@ struct RoomDetailsScreen: View {
                 
                 if context.viewState.canInviteUsers {
                     ListRow(label: .default(title: L10n.screenRoomDetailsInvitePeopleTitle,
-                                            icon: CompoundIcon(asset: Asset.Images.userAdd)),
+                                            icon: \.userAdd),
                             kind: .navigationLink {
                                 context.send(viewAction: .processTapInvite)
                             })
@@ -167,7 +167,7 @@ struct RoomDetailsScreen: View {
                 }
             }
             ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
-                                    icon: CompoundIcon(asset: Asset.Images.polls)),
+                                    icon: \.polls),
                     kind: .navigationLink {
                         context.send(viewAction: .processTapPolls)
                     })
@@ -211,7 +211,7 @@ struct RoomDetailsScreen: View {
             Section {
                 ListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
                                         description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
-                                        icon: CompoundIcon(asset: Asset.Images.lock),
+                                        icon: \.lock,
                                         iconAlignment: .top),
                         kind: .label)
             } header: {
@@ -237,7 +237,7 @@ struct RoomDetailsScreen: View {
     private func ignoreUserSection(user: RoomMemberDetails) -> some View {
         Section {
             ListRow(label: .default(title: user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
-                                    icon: CompoundIcon(asset: Asset.Images.block),
+                                    icon: \.block,
                                     role: user.isIgnored ? nil : .destructive),
                     details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
                     kind: .button {

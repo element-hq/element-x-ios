@@ -159,7 +159,7 @@ struct HomeScreen: View {
             Button {
                 context.send(viewAction: .startChat)
             } label: {
-                CompoundIcon(\.edit)
+                CompoundIcon(\.compose)
             }
             .accessibilityLabel(L10n.actionStartChat)
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)

@@ -44,7 +44,7 @@ struct FormButtonStyles_Previews: PreviewProvider, TestablePreview {
         Form {
             Section { } header: {
                 Button { } label: {
-                    CompoundIcon(asset: Asset.Images.shareIos)
+                    CompoundIcon(\.shareIos)
                 }
                 .buttonStyle(FormActionButtonStyle(title: "Share"))
             }

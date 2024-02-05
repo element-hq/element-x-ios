@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 @MainActor
@@ -191,9 +192,7 @@ struct TimelineReactionButton: View {
 struct TimelineReactionAddMoreButtonLabel: View {
     var body: some View {
         TimelineReactionButtonLabel {
-            Image(asset: Asset.Images.addReaction)
-                .resizable()
-                .scaledFrame(size: 16)
+            CompoundIcon(\.reactionAdd, size: .xSmall, relativeTo: .compound.bodySM)
                 .padding(.vertical, 8)
                 .padding(.horizontal, 12)
                 .foregroundColor(.compound.iconSecondary)

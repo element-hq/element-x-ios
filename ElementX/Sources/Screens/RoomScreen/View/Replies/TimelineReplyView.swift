@@ -46,7 +46,7 @@ struct TimelineReplyView: View {
                         ReplyView(sender: sender,
                                   plainBody: content.body,
                                   formattedBody: nil,
-                                  icon: .init(kind: .iconAsset(Asset.Images.document), cornerRadii: iconCornerRadii))
+                                  icon: .init(kind: .icon(\.document), cornerRadii: iconCornerRadii))
                     case .image(let content):
                         ReplyView(sender: sender,
                                   plainBody: content.body,
@@ -69,18 +69,18 @@ struct TimelineReplyView: View {
                         ReplyView(sender: sender,
                                   plainBody: L10n.commonVoiceMessage,
                                   formattedBody: nil,
-                                  icon: .init(kind: .icon(\.micOnOutline), cornerRadii: iconCornerRadii))
+                                  icon: .init(kind: .icon(\.micOn), cornerRadii: iconCornerRadii))
                     case .location:
                         ReplyView(sender: sender,
                                   plainBody: L10n.commonSharedLocation,
                                   formattedBody: nil,
-                                  icon: .init(kind: .iconAsset(Asset.Images.addLocation), cornerRadii: iconCornerRadii))
+                                  icon: .init(kind: .icon(\.locationPin), cornerRadii: iconCornerRadii))
                     }
                 case .poll(let question):
                     ReplyView(sender: sender,
                               plainBody: question,
                               formattedBody: nil,
-                              icon: .init(kind: .iconAsset(Asset.Images.polls), cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .icon(\.polls), cornerRadii: iconCornerRadii))
                 }
             default:
                 LoadingReplyView()

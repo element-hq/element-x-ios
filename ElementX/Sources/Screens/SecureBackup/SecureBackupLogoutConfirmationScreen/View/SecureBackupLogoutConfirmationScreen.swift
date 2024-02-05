@@ -39,7 +39,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
     
     @ViewBuilder
     private var header: some View {
-        HeroImage(image: Image(asset: Asset.Images.secureBackupOff))
+        HeroImage(icon: \.keyOffSolid)
     }
     
     @ViewBuilder

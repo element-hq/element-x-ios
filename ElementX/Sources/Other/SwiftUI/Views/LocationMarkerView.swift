@@ -33,7 +33,7 @@ struct LocationMarkerView: View {
     }
     
     var mapMarker: some View {
-        CompoundIcon(asset: Asset.Images.locationPinSolid)
+        CompoundIcon(\.locationPinSolid)
             .dynamicTypeSize(.large)
             .foregroundStyle(pinColor)
             .padding(pinInsets)
@@ -47,7 +47,7 @@ struct LocationMarkerView: View {
     }
     
     var buttonMarker: some View {
-        CompoundIcon(asset: Asset.Images.locationPinSolid, size: .custom(13), relativeTo: .body)
+        CompoundIcon(\.locationPinSolid, size: .custom(13), relativeTo: .body)
             .foregroundStyle(pinColor)
             .scaledPadding(.top, pinInsets.top * buttonScale)
             .scaledPadding(.bottom, pinInsets.bottom * buttonScale)

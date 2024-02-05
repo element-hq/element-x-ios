@@ -21,7 +21,7 @@ struct SwipeToReplyView: View {
     let timelineItem: RoomTimelineItemProtocol
     
     var body: some View {
-        CompoundIcon(asset: Asset.Images.reply)
+        CompoundIcon(\.reply)
             .foregroundColor(.compound.iconPrimary)
             .accessibilityHidden(true)
     }

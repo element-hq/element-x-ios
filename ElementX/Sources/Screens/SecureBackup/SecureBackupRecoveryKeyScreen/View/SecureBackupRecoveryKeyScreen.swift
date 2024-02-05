@@ -106,7 +106,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     private var header: some View {
         VStack(spacing: 16) {
-            HeroImage(image: Image(asset: Asset.Images.secureBackupOn))
+            HeroImage(icon: \.keySolid)
             
             Text(context.viewState.title)
                 .foregroundColor(.compound.textPrimary)
@@ -143,7 +143,7 @@ struct SecureBackupRecoveryKeyScreen: View {
                         Button {
                             context.send(viewAction: .copyKey)
                         } label: {
-                            Image(asset: Asset.Images.copy)
+                            CompoundIcon(\.copy)
                         }
                         .tint(.compound.iconSecondary)
                         .accessibilityLabel(L10n.actionCopy)

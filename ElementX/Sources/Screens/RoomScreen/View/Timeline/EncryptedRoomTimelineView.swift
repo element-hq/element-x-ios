@@ -21,7 +21,7 @@ struct EncryptedRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Label(timelineItem.body, iconAsset: Asset.Images.decryptionError, iconSize: .small, relativeTo: .compound.bodyLG)
+            Label(timelineItem.body, icon: \.time, iconSize: .small, relativeTo: .compound.bodyLG)
                 .labelStyle(RoomTimelineViewLabelStyle())
                 .font(.compound.bodyLG)
         }

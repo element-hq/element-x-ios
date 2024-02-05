@@ -51,7 +51,7 @@ struct RoomMemberDetailsScreen: View {
             if let permalink = context.viewState.details.permalink {
                 HStack(spacing: 32) {
                     ShareLink(item: permalink) {
-                        CompoundIcon(asset: Asset.Images.shareIos)
+                        CompoundIcon(\.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
                 }
@@ -74,7 +74,7 @@ struct RoomMemberDetailsScreen: View {
     private var blockUserSection: some View {
         Section {
             ListRow(label: .default(title: blockUserButtonTitle,
-                                    icon: CompoundIcon(asset: Asset.Images.block),
+                                    icon: \.block,
                                     role: context.viewState.details.isIgnored ? nil : .destructive),
                     details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
                     kind: .button {

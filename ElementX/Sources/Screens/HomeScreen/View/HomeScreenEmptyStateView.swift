@@ -36,7 +36,7 @@ struct HomeScreenEmptyStateView: View {
                 .padding(.bottom, 12)
             
             Button { context.send(viewAction: .startChat) } label: {
-                Label(L10n.actionStartChat, icon: \.edit)
+                Label(L10n.actionStartChat, icon: \.compose)
                     .font(.compound.bodyLGSemibold)
                     .foregroundColor(.compound.textOnSolidPrimary)
                     .padding(.vertical, 6)

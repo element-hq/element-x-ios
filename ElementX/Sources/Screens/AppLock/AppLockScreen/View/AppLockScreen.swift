@@ -66,7 +66,7 @@ struct AppLockScreen: View {
     
     var header: some View {
         VStack(spacing: 8) {
-            CompoundIcon(\.lock, size: .medium, relativeTo: .compound.headingMDBold)
+            CompoundIcon(\.lockSolid, size: .medium, relativeTo: .compound.headingMDBold)
                 .padding(.bottom, 8)
                 .accessibilityHidden(true)
             
