@@ -13,9 +13,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d dígito introducido</string>
-			<key>other</key>
-			<string>%1$d dígitos introducidos</string>
+			<string>Уведзеная лічба %1$d</string>
+			<key>few</key>
+			<string>Уведзена %1$d лічбы</string>
+			<key>many</key>
+			<string>Уведзена %1$d лічб</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -29,9 +31,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Leído por %1$@ y %2$d otro</string>
-			<key>other</key>
-			<string>Leído por %1$@ y %2$d otros</string>
+			<string>Прачытана %1$@ і %2$d іншым</string>
+			<key>few</key>
+			<string>Прачытана %1$@ і %2$d іншымі</string>
+			<key>many</key>
+			<string>Прачытана %1$@ і %2$d іншымі</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -45,9 +49,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d miembro</string>
-			<key>other</key>
-			<string>%1$d miembros</string>
+			<string>%1$d карыстальнік</string>
+			<key>few</key>
+			<string>%1$d карыстальнікаў</string>
+			<key>many</key>
+			<string>%1$d карыстальнікаў</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -61,9 +67,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d voto</string>
-			<key>other</key>
-			<string>%d votos</string>
+			<string>%d голас</string>
+			<key>few</key>
+			<string>%d галасоў</string>
+			<key>many</key>
+			<string>%d галасоў</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -77,9 +85,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d mensaje</string>
-			<key>other</key>
-			<string>%1$@: %2$d mensajes</string>
+			<string>%1$@: %2$d паведамленне</string>
+			<key>few</key>
+			<string>%1$@: %2$d паведамленняў</string>
+			<key>many</key>
+			<string>%1$@: %2$d паведамленняў</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -93,9 +103,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d notificación</string>
-			<key>other</key>
-			<string>%d notificaciones</string>
+			<string>%d апавяшчэнне</string>
+			<key>few</key>
+			<string>%d апавяшчэнняў</string>
+			<key>many</key>
+			<string>%d апавяшчэнняў</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -109,9 +121,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d invitación</string>
-			<key>other</key>
-			<string>%d invitaciones</string>
+			<string>%d запрашэнне</string>
+			<key>few</key>
+			<string>%d запрашэнняў</string>
+			<key>many</key>
+			<string>%d запрашэнняў</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -125,9 +139,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d mensaje nuevo</string>
-			<key>other</key>
-			<string>%d mensajes nuevos</string>
+			<string>%d новае паведамленне</string>
+			<key>few</key>
+			<string>%d новых паведамленняў</string>
+			<key>many</key>
+			<string>%d новых паведамленняў</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -141,9 +157,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d mensaje notificado no leído</string>
-			<key>other</key>
-			<string>%d mensajes notificados no leídos</string>
+			<string>%d непрачытанае апавяшчэнне</string>
+			<key>few</key>
+			<string>%d непрачытаных апавяшчэнняў</string>
+			<key>many</key>
+			<string>%d непрачытаных апавяшчэнняў</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -157,9 +175,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d sala</string>
-			<key>other</key>
-			<string>%d salas</string>
+			<string>%d пакой</string>
+			<key>few</key>
+			<string>%d пакояў</string>
+			<key>many</key>
+			<string>%d пакояў</string>
 		</dict>
 	</dict>
 	<key>room_timeline_state_changes</key>
@@ -173,9 +193,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d cambio en la sala</string>
-			<key>other</key>
-			<string>%1$d cambios en la sala</string>
+			<string>%1$d змена ў пакоі</string>
+			<key>few</key>
+			<string>%1$d змен у пакоі</string>
+			<key>many</key>
+			<string>%1$d змен у пакоі</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -189,9 +211,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Tienes %1$d intento de desbloqueo</string>
-			<key>other</key>
-			<string>Tienes %1$d intentos de desbloqueo</string>
+			<string>У вас %1$d спроба разблакіроўкі</string>
+			<key>few</key>
+			<string>У вас %1$d спроб разблакіроўкі</string>
+			<key>many</key>
+			<string>У вас %1$d спроб разблакіроўкі</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -205,9 +229,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>PIN incorrecto. Tienes %1$d oportunidad más</string>
-			<key>other</key>
-			<string>PIN incorrecto. Tienes %1$d oportunidades más</string>
+			<string>Няправільны PIN-код. У вас застаўся %1$d шанец</string>
+			<key>few</key>
+			<string>Няправільны PIN-код. У вас застаўася %1$d шанцаў</string>
+			<key>many</key>
+			<string>Няправільны PIN-код. У вас застаўася %1$d шанцаў</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -221,9 +247,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Una persona</string>
-			<key>other</key>
-			<string>%1$d personas</string>
+			<string>%1$d карыстальнік</string>
+			<key>few</key>
+			<string>%1$d карыстальнікаў</string>
+			<key>many</key>
+			<string>%1$d карыстальнікаў</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
