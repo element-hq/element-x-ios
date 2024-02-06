@@ -74,6 +74,7 @@ struct TracingConfiguration {
         case hyper, matrix_sdk_ffi, matrix_sdk_crypto
         
         case matrix_sdk_client = "matrix_sdk::client"
+        case matrix_sdk_crypto_account = "matrix_sdk_crypto::olm::account"
         case matrix_sdk_oidc = "matrix_sdk::oidc"
         case matrix_sdk_http_client = "matrix_sdk::http_client"
         case matrix_sdk_sliding_sync = "matrix_sdk::sliding_sync"
@@ -89,6 +90,7 @@ struct TracingConfiguration {
         .matrix_sdk_ffi: .info,
         .matrix_sdk_client: .trace,
         .matrix_sdk_crypto: .debug,
+        .matrix_sdk_crypto_account: .trace,
         .matrix_sdk_oidc: .trace,
         .matrix_sdk_http_client: .debug,
         .matrix_sdk_sliding_sync: .info,
@@ -116,6 +118,7 @@ struct TracingConfiguration {
                                             .matrix_sdk_oidc,
                                             .matrix_sdk_client,
                                             .matrix_sdk_crypto,
+                                            .matrix_sdk_crypto_account,
                                             .matrix_sdk_http_client,
                                             .matrix_sdk_base_read_receipts]
             if ignoredTargets.contains(target) {
