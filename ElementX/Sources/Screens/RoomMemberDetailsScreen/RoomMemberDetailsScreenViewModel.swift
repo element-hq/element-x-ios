@@ -21,29 +21,46 @@ typealias RoomMemberDetailsScreenViewModelType = StateStoreViewModel<RoomMemberD
 
 class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, RoomMemberDetailsScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
-    private let roomMemberProxy: RoomMemberProxyProtocol
+    private let userID: String
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var actionsSubject: PassthroughSubject<RoomMemberDetailsScreenViewModelAction, Never> = .init()
+    
+    private var roomMemberProxy: RoomMemberProxyProtocol?
     
     var actions: AnyPublisher<RoomMemberDetailsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init(roomProxy: RoomProxyProtocol,
-         roomMemberProxy: RoomMemberProxyProtocol,
+         userID: String,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
-        self.roomMemberProxy = roomMemberProxy
+        self.userID = userID
         self.mediaProvider = mediaProvider
         self.userIndicatorController = userIndicatorController
         
-        let initialViewState = RoomMemberDetailsScreenViewState(details: RoomMemberDetails(withProxy: roomMemberProxy),
-                                                                bindings: .init())
+        let initialViewState = RoomMemberDetailsScreenViewState(userID: userID, bindings: .init())
         
         super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
+        
+        showMemberLoadingIndicator()
+        Task {
+            defer {
+                hideMemberLoadingIndicator()
+            }
+            
+            switch await roomProxy.getMember(userID: userID) {
+            case .success(let member):
+                roomMemberProxy = member
+                state.memberDetails = RoomMemberDetails(withProxy: member)
+            case .failure(let error):
+                state.bindings.alertInfo = .init(id: .unknown)
+                MXLog.error("[RoomFlowCoordinator] Failed to get member: \(error)")
+            }
+        }
     }
     
     // MARK: - Public
@@ -51,6 +68,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     func stop() {
         // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
         state.bindings.mediaPreviewItem = nil
+        
+        hideMemberLoadingIndicator()
     }
     
     override func process(viewAction: RoomMemberDetailsScreenViewAction) {
@@ -66,7 +85,11 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         case .displayAvatar:
             displayFullScreenAvatar()
         case .openDirectChat:
-            actionsSubject.send(.openDirectChat)
+            guard let roomMemberProxy else {
+                fatalError()
+            }
+            
+            actionsSubject.send(.openDirectChat(displayName: roomMemberProxy.displayName))
         }
     }
 
@@ -74,12 +97,16 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
 
     @MainActor
     private func ignoreUser() async {
+        guard let roomMemberProxy else {
+            fatalError()
+        }
+        
         state.isProcessingIgnoreRequest = true
         let result = await roomMemberProxy.ignoreUser()
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
-            state.details.isIgnored = true
+            state.memberDetails?.isIgnored = true
             updateMembers()
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
@@ -88,12 +115,16 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
 
     @MainActor
     private func unignoreUser() async {
+        guard let roomMemberProxy else {
+            fatalError()
+        }
+        
         state.isProcessingIgnoreRequest = true
         let result = await roomMemberProxy.unignoreUser()
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
-            state.details.isIgnored = false
+            state.memberDetails?.isIgnored = false
             updateMembers()
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
@@ -107,6 +138,10 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     }
     
     private func displayFullScreenAvatar() {
+        guard let roomMemberProxy else {
+            fatalError()
+        }
+        
         guard let avatarURL = roomMemberProxy.avatarURL else {
             return
         }
@@ -124,5 +159,21 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
                 state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomMemberProxy.displayName)
             }
         }
+    }
+    
+    // MARK: Loading indicator
+    
+    private static let loadingIndicatorIdentifier = "RoomMemberLoading"
+    
+    private func showMemberLoadingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: true),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true),
+                                                delay: .milliseconds(100))
+    }
+    
+    private func hideMemberLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

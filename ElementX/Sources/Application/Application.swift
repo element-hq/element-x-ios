@@ -31,6 +31,7 @@ struct Application: App {
         } else {
             appCoordinator = AppCoordinator(appDelegate: appDelegate)
         }
+        
         SceneDelegate.windowManager = appCoordinator.windowManager
     }
 

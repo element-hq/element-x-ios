@@ -109,16 +109,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         case .roomList:
             stateMachine.tryEvent(.dismissRoom, userInfo: EventUserInfo(animated: animated))
         case .roomMemberDetails(let userID):
-            Task {
-                switch await roomProxy?.getMember(userID: userID) {
-                case .success(let member):
-                    stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
-                case .failure(let error):
-                    MXLog.error("[RoomFlowCoordinator] Failed to get member: \(error)")
-                case .none:
-                    MXLog.error("[RoomFlowCoordinator] Failed to get member: RoomProxy is nil")
-                }
-            }
+            stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
         case .genericCallLink, .oidcCallback, .settings, .chatBackupSettings:
             break
         }
@@ -173,10 +164,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomMembersList(let roomID), .dismissRoomMembersList):
                 return .roomDetails(roomID: roomID, isRoot: false)
 
-            case (.room(let roomID), .presentRoomMemberDetails(let member)):
-                return .roomMemberDetails(roomID: roomID, member: member, fromRoomMembersList: false)
-            case (.roomMembersList(let roomID), .presentRoomMemberDetails(let member)):
-                return .roomMemberDetails(roomID: roomID, member: member, fromRoomMembersList: true)
+            case (.room(let roomID), .presentRoomMemberDetails(userID: let userID)):
+                return .roomMemberDetails(roomID: roomID, userID: userID, fromRoomMembersList: false)
+            case (.roomMembersList(let roomID), .presentRoomMemberDetails(userID: let userID)):
+                return .roomMemberDetails(roomID: roomID, userID: userID, fromRoomMembersList: true)
             case (.roomMemberDetails(let roomID, _, let fromRoomMembersList), .dismissRoomMemberDetails):
                 return fromRoomMembersList ? .roomMembersList(roomID: roomID) : .room(roomID: roomID)
                 
@@ -285,13 +276,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomMembersList, .dismissRoomMembersList, .roomDetails):
                 break
                 
-            case (.room, .presentRoomMemberDetails, .roomMemberDetails(_, let member, _)):
-                presentRoomMemberDetails(member: member.value)
+            case (.room, .presentRoomMemberDetails, .roomMemberDetails(_, let userID, _)):
+                presentRoomMemberDetails(userID: userID)
             case (.roomMemberDetails, .dismissRoomMemberDetails, .room):
                 break
                 
-            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(_, let member, _)):
-                presentRoomMemberDetails(member: member.value)
+            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(_, let userID, _)):
+                presentRoomMemberDetails(userID: userID)
             case (.roomMemberDetails, .dismissRoomMemberDetails, .roomMembersList):
                 break
                 
@@ -469,8 +460,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentPollForm(mode: mode))
                 case .presentLocationViewer(_, let geoURI, let description):
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)))
-                case .presentRoomMemberDetails(member: let member):
-                    stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
+                case .presentRoomMemberDetails(userID: let userID):
+                    stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
                 case .presentMessageForwarding(let itemID):
                     stateMachine.tryEvent(.presentMessageForwarding(itemID: itemID))
                 case .presentCallScreen:
@@ -598,7 +589,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .invite:
                     stateMachine.tryEvent(.presentInviteUsersScreen)
                 case .selectedMember(let member):
-                    stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
+                    stateMachine.tryEvent(.presentRoomMemberDetails(userID: member.userID))
                 }
             }
             .store(in: &cancellables)
@@ -931,13 +922,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentRoomMemberDetails(member: RoomMemberProxyProtocol) {
+    private func presentRoomMemberDetails(userID: String) {
         guard let roomProxy else {
             fatalError()
         }
         
         let params = RoomMemberDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
-                                                                  roomMemberProxy: member,
+                                                                  userID: userID,
                                                                   mediaProvider: userSession.mediaProvider,
                                                                   userIndicatorController: userIndicatorController)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
@@ -945,7 +936,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .openDirectChat:
+            case .openDirectChat(let displayName):
                 let loadingIndicatorIdentifier = "OpenDirectChatLoadingIndicator"
                 
                 userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier,
@@ -956,12 +947,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 Task { [weak self] in
                     guard let self else { return }
                     
-                    let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(member.userID)
+                    let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(userID)
                     switch currentDirectRoom {
                     case .success(.some(let roomID)):
                         stateMachine.tryEvent(.presentRoom(roomID: roomID))
                     case .success(nil):
-                        switch await userSession.clientProxy.createDirectRoom(with: member.userID, expectedRoomName: member.displayName) {
+                        switch await userSession.clientProxy.createDirectRoom(with: userID, expectedRoomName: displayName) {
                         case .success(let roomID):
                             analytics.trackCreatedRoom(isDM: true)
                             stateMachine.tryEvent(.presentRoom(roomID: roomID))
@@ -1185,7 +1176,7 @@ private extension RoomFlowCoordinator {
         case notificationSettings(roomID: String)
         case globalNotificationSettings(roomID: String)
         case roomMembersList(roomID: String)
-        case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper, fromRoomMembersList: Bool)
+        case roomMemberDetails(roomID: String, userID: String, fromRoomMembersList: Bool)
         case inviteUsersScreen(roomID: String, fromRoomMembersList: Bool)
         case mediaUploadPicker(roomID: String, source: MediaPickerScreenSource)
         case mediaUploadPreview(roomID: String, fileURL: URL)
@@ -1225,7 +1216,7 @@ private extension RoomFlowCoordinator {
         case presentRoomMembersList
         case dismissRoomMembersList
         
-        case presentRoomMemberDetails(member: HashableRoomMemberWrapper)
+        case presentRoomMemberDetails(userID: String)
         case dismissRoomMemberDetails
         
         case presentInviteUsersScreen
