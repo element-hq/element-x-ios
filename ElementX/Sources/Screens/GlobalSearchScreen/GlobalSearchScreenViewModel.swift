@@ -46,7 +46,7 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
             .removeDuplicates()
             .sink { [weak self] searchQuery in
                 // Not sure about this I imagine the global search should not care about filters?
-                self?.roomSummaryProvider.setFilter(.normalizedMatchRoomName(query: searchQuery, filters: []))
+                self?.roomSummaryProvider.setFilter(.include(.init(query: searchQuery)))
             }
             .store(in: &cancellables)
         
@@ -62,7 +62,7 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
         case .dismiss:
             actionsSubject.send(.dismiss)
             // Also not sure about this one
-            roomSummaryProvider.setFilter(.all(filters: [])) // This is a shared provider
+            roomSummaryProvider.setFilter(.include(.all)) // This is a shared provider
         case .select(let roomID):
             actionsSubject.send(.select(roomID: roomID))
         case .reachedTop:

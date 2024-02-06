@@ -61,17 +61,14 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
         switch filter {
-        case .all:
-            roomListSubject.send(initialRooms)
-        case .none:
-            roomListSubject.send([])
-        // TODO: improve this mock
-        case .normalizedMatchRoomName(let filter):
-            if filter.query.isEmpty {
-                roomListSubject.send(initialRooms)
+        case let .include(filterLogic):
+            if let query = filterLogic.query {
+                roomListSubject.send(initialRooms.filter { $0.name?.localizedCaseInsensitiveContains(query) ?? false })
             } else {
-                roomListSubject.send(initialRooms.filter { $0.name?.localizedCaseInsensitiveContains(filter.query) ?? false })
+                roomListSubject.send(initialRooms)
             }
+        case .excludeAll:
+            roomListSubject.send([])
         }
     }
 }

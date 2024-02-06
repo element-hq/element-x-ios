@@ -102,7 +102,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             })
             
             // Forces the listener above to be called with the current state
-            setFilter(.all(filters: []))
+            setFilter(.include(.all))
             
             listUpdatesTaskHandle = listUpdatesSubscriptionResult?.entriesStream
             
@@ -151,15 +151,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
         switch filter {
-        case .none:
+        case .excludeAll:
             _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .none)
-        case let .all(filters):
-            var filters = filters.compactMap(\.rustFilter)
-            filters.append(.nonLeft)
-            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .all(filters: filters))
-        case let .normalizedMatchRoomName(query, filters):
-            var filters = filters.compactMap(\.rustFilter)
-            filters.append(.normalizedMatchRoomName(pattern: query.lowercased()))
+        case let .include(filterLogic):
+            var filters = filterLogic.filters.compactMap(\.rustFilter)
+            if let query = filterLogic.query {
+                filters.append(.normalizedMatchRoomName(pattern: query.lowercased()))
+            }
+            // We never want to show left rooms.
             filters.append(.nonLeft)
             _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .all(filters: filters))
         }
