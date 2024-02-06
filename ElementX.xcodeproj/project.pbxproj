@@ -6858,8 +6858,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/element-hq/swift-ogg";
 			requirement = {
-				branch = 0.0.1;
-				kind = branch;
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.0.2;
 			};
 		};
 		E9C4F3A12AA1F65C13A8C8EB /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
