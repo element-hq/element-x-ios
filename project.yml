@@ -56,7 +56,7 @@ packages:
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
     # minorVersion: 0.9.0
-    revision: 28d1e65d306420b3affc32f719cb516f74a7406f
+    revision: ad2b2d2b221bab89bf6443aafb925d52e30f4f6d
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     minorVersion: 1.0.0
