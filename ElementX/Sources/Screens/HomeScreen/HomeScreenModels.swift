@@ -204,7 +204,6 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     case rooms
     case unreads
     case favourites
-    case lowPriority
     
     var localizedName: String {
         switch self {
@@ -216,8 +215,6 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return L10n.screenRoomlistFilterUnreads
         case .favourites:
             return L10n.screenRoomlistFilterFavourites
-        case .lowPriority:
-            return L10n.screenRoomlistFilterLowPriority
         }
     }
     
@@ -230,9 +227,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         case .unreads:
             return nil
         case .favourites:
-            return .lowPriority
-        case .lowPriority:
-            return .favourites
+            // When we will have Low Priority we may need to return it here
+            return nil
         }
     }
 }

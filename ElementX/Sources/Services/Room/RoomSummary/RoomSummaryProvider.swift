@@ -456,9 +456,6 @@ private extension RoomListFilter {
         case .favourites:
             // Not implemented yet
             return nil
-        case .lowPriority:
-            // Not implemented yet
-            return nil
         }
     }
 }
