@@ -85,6 +85,7 @@ extension RoomProxyMock {
         canUserRedactOtherUserIDReturnValue = .success(false)
         canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
         canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
+        markAsReadSendReadReceiptsReceiptTypeReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
