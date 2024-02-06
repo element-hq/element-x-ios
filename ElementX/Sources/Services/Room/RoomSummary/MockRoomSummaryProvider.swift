@@ -64,7 +64,7 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
         currentFilter = filter
         switch filter {
         case let .include(filterLogic):
-            if let query = filterLogic.query {
+            if let query = filterLogic.query, !query.isEmpty {
                 roomListSubject.send(initialRooms.filter { $0.name?.localizedCaseInsensitiveContains(query) ?? false })
             } else {
                 roomListSubject.send(initialRooms)
