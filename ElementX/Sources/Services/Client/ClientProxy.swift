@@ -313,9 +313,9 @@ class ClientProxy: ClientProxyProtocol {
         var (roomListItem, room) = await roomTupleForIdentifier(identifier)
         
         if let roomListItem, let room {
-            return try? await RoomProxy(roomListItem: roomListItem,
-                                        room: room,
-                                        backgroundTaskService: backgroundTaskService)
+            return try await RoomProxy(roomListItem: roomListItem,
+                                       room: room,
+                                       backgroundTaskService: backgroundTaskService)
         }
         
         // Else wait for the visible rooms list to go into fully loaded
@@ -341,9 +341,9 @@ class ClientProxy: ClientProxyProtocol {
             return nil
         }
         
-        return try? await RoomProxy(roomListItem: roomListItem,
-                                    room: room,
-                                    backgroundTaskService: backgroundTaskService)
+        return try await RoomProxy(roomListItem: roomListItem,
+                                   room: room,
+                                   backgroundTaskService: backgroundTaskService)
     }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
