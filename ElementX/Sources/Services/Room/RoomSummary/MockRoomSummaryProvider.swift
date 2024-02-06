@@ -25,6 +25,7 @@ enum MockRoomSummaryProviderState {
 
 class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     private let initialRooms: [RoomSummary]
+    private(set) var currentFilter: RoomSummaryProviderFilter?
     
     private let roomListSubject: CurrentValueSubject<[RoomSummary], Never>
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
@@ -60,6 +61,7 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     func updateVisibleRange(_ range: Range<Int>) { }
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
+        currentFilter = filter
         switch filter {
         case let .include(filterLogic):
             if let query = filterLogic.query {

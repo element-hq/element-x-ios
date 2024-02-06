@@ -87,8 +87,8 @@ enum RoomSummary: CustomStringConvertible, Equatable {
     }
 }
 
-enum RoomSummaryProviderFilter {
-    struct Predicate {
+enum RoomSummaryProviderFilter: Equatable {
+    struct Predicate: Equatable {
         let query: String?
         let filters: Set<RoomListFilter>
         

@@ -261,6 +261,11 @@ final class RoomListFiltersState: ObservableObject {
     
     func set(_ filter: RoomListFilter, isEnabled: Bool) {
         if isEnabled {
+            if let complementaryFilter = filter.complementaryFilter,
+               enabledFilters.contains(complementaryFilter) {
+                MXLog.error("[RoomListFiltersState] adding mutually exclusive filters is not allowed")
+                return
+            }
             enabledFilters.insert(filter)
         } else {
             enabledFilters.remove(filter)

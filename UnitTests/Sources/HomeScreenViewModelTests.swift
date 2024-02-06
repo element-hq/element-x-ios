@@ -25,16 +25,23 @@ class HomeScreenViewModelTests: XCTestCase {
     var clientProxy: MockClientProxy!
     var context: HomeScreenViewModelType.Context! { viewModel.context }
     var cancellables = Set<AnyCancellable>()
+    var roomSummaryProvider: MockRoomSummaryProvider!
     
     override func setUpWithError() throws {
+        ServiceLocator.shared.settings.roomListFiltersEnabled = true
         cancellables.removeAll()
-        clientProxy = MockClientProxy(userID: "@mock:client.com")
+        roomSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
+        clientProxy = MockClientProxy(userID: "@mock:client.com", roomSummaryProvider: roomSummaryProvider)
         viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: clientProxy,
                                                                      mediaProvider: MockMediaProvider(),
                                                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         appSettings: ServiceLocator.shared.settings,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
+    }
+    
+    override func tearDown() {
+        AppSettings.reset()
     }
     
     func testSelectRoom() async throws {
@@ -152,5 +159,15 @@ class HomeScreenViewModelTests: XCTestCase {
         await Task.yield()
         XCTAssertNil(context.alertInfo)
         XCTAssertTrue(correctResult)
+    }
+    
+    func testFilters() async throws {
+        context.viewState.filtersState.set(.people, isEnabled: true)
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertEqual(roomSummaryProvider.currentFilter, RoomSummaryProviderFilter.include(.init(filters: [.people])))
+        context.isSearchFieldFocused = true
+        context.searchQuery = "Test"
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertEqual(roomSummaryProvider.currentFilter, RoomSummaryProviderFilter.include(.init(query: "Test", filters: [.people])))
     }
 }
