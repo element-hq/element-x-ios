@@ -73,7 +73,7 @@ struct FormattingToolbar_Previews: PreviewProvider, TestablePreview {
     static let disabledItems = FormatType.allCases.map { FormatItem(type: $0, state: .disabled) }
     
     static var previews: some View {
-        VStack {
+        VStack(spacing: 16.0) {
             FormattingToolbar(formatItems: items) { _ in }
             FormattingToolbar(formatItems: disabledItems) { _ in }
         }
