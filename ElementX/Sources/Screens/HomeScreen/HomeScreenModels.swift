@@ -157,15 +157,15 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var name = ""
     
-    var isMarkedUnread: Bool
+    var badges: Badges
+    struct Badges: Equatable {
+        let isDotShown: Bool
+        let isMentionShown: Bool
+        let isMuteShown: Bool
+        let isCallShown: Bool
+    }
     
-    var hasUnreadMessages = false
-    
-    var hasUnreadMentions = false
-    
-    var hasUnreadNotifications = false
-    
-    var hasOngoingCall = false
+    let isHighlighted: Bool
     
     var timestamp: String?
     
@@ -173,25 +173,43 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var avatarURL: URL?
     
-    var notificationMode: RoomNotificationModeProxy?
-    
     var isPlaceholder = false
-    
-    var hasNewContent: Bool {
-        hasUnreadMessages || hasUnreadMentions || hasUnreadNotifications || isMarkedUnread
-    }
     
     static func placeholder() -> HomeScreenRoom {
         HomeScreenRoom(id: UUID().uuidString,
                        roomId: nil,
                        name: "Placeholder room name",
-                       isMarkedUnread: false,
-                       hasUnreadMessages: false,
-                       hasUnreadMentions: false,
-                       hasUnreadNotifications: false,
+                       badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, isCallShown: false),
+                       isHighlighted: false,
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
                        isPlaceholder: true)
+    }
+}
+
+extension HomeScreenRoom {
+    init(details: RoomSummaryDetails, invalidated: Bool, hideUnreadMessagesBadge: Bool) {
+        let identifier = invalidated ? "invalidated-" + details.id : details.id
+        
+        let hasUnreadMessages = hideUnreadMessagesBadge ? false : details.hasUnreadMessages
+        
+        let isDotShown = hasUnreadMessages || details.hasUnreadMentions || details.hasUnreadNotifications || details.isMarkedUnread
+        let isMentionShown = details.hasUnreadMentions && !details.isMuted
+        let isMuteShown = details.isMuted
+        let isCallShown = details.hasOngoingCall
+        let isHighlighted = !details.isMuted && (details.hasUnreadNotifications || details.hasUnreadMentions || details.isMarkedUnread)
+        
+        self.init(id: identifier,
+                  roomId: details.id,
+                  name: details.name,
+                  badges: .init(isDotShown: isDotShown,
+                                isMentionShown: isMentionShown,
+                                isMuteShown: isMuteShown,
+                                isCallShown: isCallShown),
+                  isHighlighted: isHighlighted,
+                  timestamp: details.lastMessageFormattedTimestamp,
+                  lastMessage: details.lastMessage,
+                  avatarURL: details.avatarURL)
     }
 }
 

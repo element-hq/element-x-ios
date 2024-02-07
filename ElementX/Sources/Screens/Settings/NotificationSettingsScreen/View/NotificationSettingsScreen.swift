@@ -28,15 +28,20 @@ struct NotificationSettingsScreen: View {
                 if context.viewState.showSystemNotificationsAlert {
                     userPermissionSection
                 }
+                
                 enableNotificationSection
+                
                 if context.enableNotifications {
                     roomsNotificationSection
+                    
                     if context.viewState.settings?.roomMentionsEnabled != nil {
                         mentionsSection
                     }
+                    
                     if context.viewState.showCallsSettings, context.viewState.settings?.callsEnabled != nil {
                         callsSection
                     }
+                    
                     if context.viewState.settings?.invitationsEnabled != nil {
                         additionalSettingsSection
                     }

@@ -90,6 +90,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.markAsUnreadEnabled, on: self)
             .store(in: &cancellables)
         
+        appSettings.$hideUnreadMessagesBadge
+            .sink { [weak self] _ in self?.updateRooms() }
+            .store(in: &cancellables)
+        
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         isSearchFieldFocused
@@ -339,11 +343,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             switch summary {
             case .empty:
                 rooms.append(HomeScreenRoom.placeholder())
-            case .invalidated(let details):
-                let room = buildRoom(with: details, invalidated: true)
-                rooms.append(room)
             case .filled(let details):
-                let room = buildRoom(with: details, invalidated: false)
+                let room = HomeScreenRoom(details: details, invalidated: false, hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge)
+                rooms.append(room)
+            case .invalidated(let details):
+                let room = HomeScreenRoom(details: details, invalidated: true, hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge)
                 rooms.append(room)
             }
         }
@@ -351,23 +355,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         state.rooms = rooms
         
         MXLog.verbose("Finished updating rooms")
-    }
-    
-    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
-        let identifier = invalidated ? "invalidated-" + details.id : details.id
-        
-        return HomeScreenRoom(id: identifier,
-                              roomId: details.id,
-                              name: details.name,
-                              isMarkedUnread: details.isMarkedUnread,
-                              hasUnreadMessages: details.unreadMessagesCount > 0,
-                              hasUnreadMentions: details.unreadMentionsCount > 0,
-                              hasUnreadNotifications: details.unreadNotificationsCount > 0,
-                              hasOngoingCall: details.hasOngoingCall,
-                              timestamp: details.lastMessageFormattedTimestamp,
-                              lastMessage: details.lastMessage,
-                              avatarURL: details.avatarURL,
-                              notificationMode: details.notificationMode)
     }
     
     private func updateVisibleRange(_ range: Range<Int>) {

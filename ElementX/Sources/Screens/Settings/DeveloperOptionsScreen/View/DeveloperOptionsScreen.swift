@@ -59,6 +59,10 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.markAsUnreadEnabled) {
                     Text("Mark as unread")
                 }
+                
+                Toggle(isOn: $context.hideUnreadMessagesBadge) {
+                    Text("Hide grey dots")
+                }
             }
             
             Section("Element Call") {

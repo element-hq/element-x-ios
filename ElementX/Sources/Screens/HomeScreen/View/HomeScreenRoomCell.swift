@@ -95,8 +95,8 @@ struct HomeScreenRoomCell: View {
             
             if let timestamp = room.timestamp {
                 Text(timestamp)
-                    .font(isHighlighted ? .compound.bodySMSemibold : .compound.bodySM)
-                    .foregroundColor(isHighlighted ? .compound.textActionAccent : .compound.textSecondary)
+                    .font(room.isHighlighted ? .compound.bodySMSemibold : .compound.bodySM)
+                    .foregroundColor(room.isHighlighted ? .compound.textActionAccent : .compound.textSecondary)
             }
         }
     }
@@ -117,37 +117,29 @@ struct HomeScreenRoomCell: View {
             Spacer()
             
             HStack(spacing: 8) {
-                if room.hasOngoingCall {
+                if room.badges.isCallShown {
                     CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
-                        .foregroundColor(isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+                        .foregroundColor(room.isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
                 }
-                 
-                if room.notificationMode == .mute {
+                
+                if room.badges.isMuteShown {
                     CompoundIcon(\.notificationsOffSolid, size: .custom(15), relativeTo: .compound.bodyMD)
                         .accessibilityLabel(L10n.a11yNotificationsMuted)
                         .foregroundColor(.compound.iconQuaternary)
                 }
                 
-                if room.hasUnreadMentions, room.notificationMode != .mute {
+                if room.badges.isMentionShown {
                     mentionIcon
                         .foregroundColor(.compound.iconAccentTertiary)
                 }
                 
-                if room.hasNewContent {
+                if room.badges.isDotShown {
                     Circle()
                         .frame(width: 12, height: 12)
-                        .foregroundColor(isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+                        .foregroundColor(room.isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
                 }
             }
         }
-    }
-        
-    private var isHighlighted: Bool {
-        guard !room.isPlaceholder && room.notificationMode != .mute else {
-            return false
-        }
-        
-        return room.hasUnreadNotifications || room.hasUnreadMentions || room.isMarkedUnread
     }
             
     private var mentionIcon: some View {
@@ -212,19 +204,11 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
         switch summary {
         case .empty:
-            return nil
-        case .invalidated(let details), .filled(let details):
-            return HomeScreenRoom(id: UUID().uuidString,
-                                  roomId: details.id,
-                                  name: details.name,
-                                  isMarkedUnread: details.isMarkedUnread,
-                                  hasUnreadMessages: details.unreadMessagesCount > 0,
-                                  hasUnreadMentions: details.unreadMentionsCount > 0,
-                                  hasUnreadNotifications: details.unreadNotificationsCount > 0,
-                                  hasOngoingCall: details.hasOngoingCall,
-                                  timestamp: Date(timeIntervalSinceReferenceDate: 0).formattedMinimal(),
-                                  lastMessage: details.lastMessage,
-                                  notificationMode: details.notificationMode)
+            nil
+        case .invalidated(let details):
+            HomeScreenRoom(details: details, invalidated: true, hideUnreadMessagesBadge: false)
+        case .filled(let details):
+            HomeScreenRoom(details: details, invalidated: false, hideUnreadMessagesBadge: false)
         }
     }
     
