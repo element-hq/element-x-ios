@@ -17,11 +17,12 @@
 import Foundation
 
 enum RoomMemberDetailsScreenViewModelAction {
-    case openDirectChat
+    case openDirectChat(displayName: String?)
 }
 
 struct RoomMemberDetailsScreenViewState: BindableState {
-    var details: RoomMemberDetails
+    let userID: String
+    var memberDetails: RoomMemberDetails?
     var isProcessingIgnoreRequest = false
 
     var bindings: RoomMemberDetailsScreenViewStateBindings

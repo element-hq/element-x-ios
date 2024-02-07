@@ -337,8 +337,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     actionsSubject.send(.displayReportContent(itemID: itemID, senderID: senderID))
                 case .displayMediaUploadPreviewScreen(let url):
                     actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
-                case .displayRoomMemberDetails(let member):
-                    actionsSubject.send(.displayRoomMemberDetails(member: member))
+                case .displayRoomMemberDetails(userID: let userID):
+                    actionsSubject.send(.displayRoomMemberDetails(userID: userID))
                 case .showActionMenu(let actionMenuInfo):
                     state.bindings.actionMenuInfo = actionMenuInfo
                 case .showDebugInfo(let debugInfo):

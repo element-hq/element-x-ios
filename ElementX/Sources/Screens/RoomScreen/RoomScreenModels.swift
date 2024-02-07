@@ -30,7 +30,7 @@ enum RoomScreenViewModelAction {
     case displayLocationPicker
     case displayPollForm(mode: PollFormMode)
     case displayMediaUploadPreviewScreen(url: URL)
-    case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
+    case displayRoomMemberDetails(userID: String)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case composer(action: RoomScreenComposerAction)

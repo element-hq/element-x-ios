@@ -25,7 +25,7 @@ enum RoomScreenInteractionHandlerAction {
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayMediaUploadPreviewScreen(url: URL)
     case displayPollForm(mode: PollFormMode)
-    case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
+    case displayRoomMemberDetails(userID: String)
     case showActionMenu(TimelineItemActionMenuInfo)
     case showDebugInfo(TimelineItemDebugInfo)
     case showConfirmationAlert(AlertInfo<UUID>)
@@ -579,19 +579,7 @@ class RoomScreenInteractionHandler {
     }
     
     func handleTappedUser(userID: String) async {
-        // This is generally fast but it could take some time for rooms with thousands of users on first load
-        // Show a loader only if it takes more than 0.1 seconds
-        showLoadingIndicator(with: .milliseconds(100))
-        let result = await roomProxy.getMember(userID: userID)
-        hideLoadingIndicator()
-        
-        switch result {
-        case .success(let member):
-            actionsSubject.send(.displayRoomMemberDetails(member: member))
-        case .failure(let error):
-            actionsSubject.send(.displayError(.alert(L10n.screenRoomErrorFailedRetrievingUserDetails)))
-            MXLog.error("Failed retrieving the user given the following id \(userID) with error: \(error)")
-        }
+        actionsSubject.send(.displayRoomMemberDetails(userID: userID))
     }
     
     func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {
@@ -659,22 +647,6 @@ class RoomScreenInteractionHandler {
         case .failure:
             return .none
         }
-    }
-    
-    // MARK: User indicators
-    
-    private static let loadingIndicatorIdentifier = "RoomScreenLoadingIndicator"
-
-    private func showLoadingIndicator(with delay: Duration) {
-        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                              title: L10n.commonLoading,
-                                                              persistent: true),
-                                                delay: delay)
-    }
-
-    private func hideLoadingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }
 
