@@ -4,10 +4,6 @@
 /* Used for testing */
 "untranslated" = "Untranslated";
 
-// MARK: - Notification Settings
-"screen_notification_settings_hide_unread_badges" = "Sanity mode";
-"screen_notification_settings_hide_unread_badges_description" = "Hide unread badges for rooms set to mute or mentions and keywords.";
-
 // MARK: - Soft logout
 
 "soft_logout_signin_title" = "Sign in";

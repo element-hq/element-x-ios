@@ -44,7 +44,6 @@ struct NotificationSettingsScreenViewStateBindings {
     var roomMentionsEnabled = false
     var callsEnabled = false
     var invitationsEnabled = false
-    var hideUnreadMessagesBadge = false
     var alertInfo: AlertInfo<NotificationSettingsScreenErrorType>?
 }
 
@@ -96,7 +95,6 @@ enum NotificationSettingsScreenViewAction {
     case roomMentionChanged
     case callsChanged
     case invitationsChanged
-    case hideUnreadMessagesBadgeChanged
     case close
     case fixConfigurationMismatchTapped
 }

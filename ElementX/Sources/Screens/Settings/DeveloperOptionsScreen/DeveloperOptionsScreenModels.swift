@@ -51,6 +51,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var mentionsBadgeEnabled: Bool { get set }
     var roomListFiltersEnabled: Bool { get set }
     var markAsUnreadEnabled: Bool { get set }
+    var hideUnreadMessagesBadge: Bool { get set }
     
     var elementCallBaseURL: URL { get set }
 }
