@@ -203,6 +203,10 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
+        if let member = members.value.filter({ $0.userID == userID }).first {
+            return .success(member)
+        }
+        
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
