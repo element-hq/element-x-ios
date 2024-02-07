@@ -153,9 +153,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         switch filter {
         case .excludeAll:
             _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .none)
-        case let .include(filterLogic):
-            var filters = filterLogic.filters.compactMap(\.rustFilter)
-            if let query = filterLogic.query {
+        case let .include(predicate):
+            var filters = predicate.filters.compactMap(\.rustFilter)
+            if let query = predicate.query {
                 filters.append(.normalizedMatchRoomName(pattern: query.lowercased()))
             }
             // We never want to show left rooms.
