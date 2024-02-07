@@ -42,6 +42,15 @@ extension RoomMemberProxyMock {
     }
 
     // Mocks
+    static var mockMe: RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@me:matrix.org",
+                                        displayName: "Me",
+                                        avatarURL: URL.picturesDirectory,
+                                        membership: .join,
+                                        isAccountOwner: true,
+                                        canInviteUsers: true))
+    }
+    
     static var mockAlice: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@alice:matrix.org",
                                         displayName: "Alice",
@@ -76,14 +85,13 @@ extension RoomMemberProxyMock {
                                         avatarURL: URL.picturesDirectory,
                                         membership: .join))
     }
-
-    static var mockMe: RoomMemberProxyMock {
-        RoomMemberProxyMock(with: .init(userID: "@me:matrix.org",
-                                        displayName: "Me",
-                                        avatarURL: URL.picturesDirectory,
-                                        membership: .join,
-                                        isAccountOwner: true,
-                                        canInviteUsers: true))
+    
+    static var mockInvited: RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@invited:matrix.org",
+                                        displayName: "Invited",
+                                        avatarURL: nil,
+                                        membership: .invite,
+                                        isIgnored: true))
     }
 
     static var mockIgnored: RoomMemberProxyMock {
@@ -102,4 +110,16 @@ extension RoomMemberProxyMock {
                                         canInviteUsers: canInviteUsers,
                                         canSendStateEvent: { allowedStateEvents.contains($0) }))
     }
+}
+
+extension Array where Element == RoomMemberProxyMock {
+    static let allMembers: [RoomMemberProxyMock] = [
+        .mockMe,
+        .mockAlice,
+        .mockBob,
+        .mockCharlie,
+        .mockDan,
+        .mockInvited,
+        .mockIgnored
+    ]
 }
