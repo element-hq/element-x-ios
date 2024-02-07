@@ -39,7 +39,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings, isModallyPresented: isModallyPresented))
                 
-        // Listen for changes to AppSettings.enableNotifications
+        // Listen for changes to AppSettings.
         appSettings.$enableNotifications
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
             .store(in: &cancellables)

@@ -32,6 +32,11 @@ struct RoomSummaryDetails {
     let canonicalAlias: String?
     let inviter: RoomMemberProxyProtocol?
     let hasOngoingCall: Bool
+    
+    var hasUnreadMessages: Bool { unreadMessagesCount > 0 }
+    var hasUnreadMentions: Bool { unreadMentionsCount > 0 }
+    var hasUnreadNotifications: Bool { unreadNotificationsCount > 0 }
+    var isMuted: Bool { notificationMode == .mute }
 }
 
 extension RoomSummaryDetails: CustomStringConvertible {

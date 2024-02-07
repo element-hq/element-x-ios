@@ -38,6 +38,7 @@ final class AppSettings {
         case richTextEditorEnabled
         case appAppearance
         case sendReadReceiptsEnabled
+        case hideUnreadMessagesBadge
         
         case elementCallBaseURL
         case elementCallEncryptionEnabled
@@ -211,6 +212,11 @@ final class AppSettings {
     /// Whether the user has opted in to send analytics.
     @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))
     var analyticsConsentState
+    
+    // MARK: - Home Screen
+    
+    @UserPreference(key: UserDefaultsKeys.hideUnreadMessagesBadge, defaultValue: false, storageType: .userDefaults(store))
+    var hideUnreadMessagesBadge
     
     // MARK: - Room Screen
     
