@@ -442,19 +442,3 @@ private class RoomListStateObserver: RoomListLoadingStateListener {
         onUpdateClosure(state)
     }
 }
-
-private extension RoomListFilter {
-    var rustFilter: RoomListEntriesDynamicFilterKind? {
-        switch self {
-        case .people:
-            return .kind(expectedKind: .directMessages)
-        case .rooms:
-            return .kind(expectedKind: .group)
-        case .unreads:
-            return .unread
-        case .favourites:
-            // Not implemented yet
-            return nil
-        }
-    }
-}

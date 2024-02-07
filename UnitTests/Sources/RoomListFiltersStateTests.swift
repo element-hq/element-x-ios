@@ -27,48 +27,44 @@ final class RoomListFiltersStateTests: XCTestCase {
     
     func testInitialState() {
         XCTAssertFalse(state.isFiltering)
-        XCTAssertEqual(state.enabledFilters, [])
-        XCTAssertEqual(state.sortedAvailableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.activeFilters, [])
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
     }
     
     func testSetAndUnsetFilters() {
-        state.set(.unreads, isEnabled: true)
+        state.activateFilter(.unreads)
         XCTAssertTrue(state.isFiltering)
-        XCTAssertEqual(state.enabledFilters, [.unreads])
-        XCTAssertEqual(state.sortedAvailableFilters, [.people, .rooms, .favourites])
-        state.set(.unreads, isEnabled: false)
+        XCTAssertEqual(state.activeFilters, [.unreads])
+        XCTAssertEqual(state.availableFilters, [.people, .rooms, .favourites])
+        state.deactivateFilter(.unreads)
         XCTAssertFalse(state.isFiltering)
-        XCTAssertEqual(state.enabledFilters, [])
-        XCTAssertEqual(state.sortedAvailableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.activeFilters, [])
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
     }
     
     func testMutuallyExclusiveFilters() {
-        state.set(.people, isEnabled: true)
-        // This is not allowed and should do nothing
-        state.set(.rooms, isEnabled: true)
+        state.activateFilter(.people)
         XCTAssertTrue(state.isFiltering)
-        XCTAssertEqual(state.enabledFilters, [.people])
-        XCTAssertEqual(state.sortedAvailableFilters, [.unreads, .favourites])
-        state.set(.people, isEnabled: false)
-        state.set(.rooms, isEnabled: true)
-        // This is not allowed and should do nothing
-        state.set(.people, isEnabled: true)
-        state.set(.unreads, isEnabled: true)
+        XCTAssertEqual(state.activeFilters, [.people])
+        XCTAssertEqual(state.availableFilters, [.unreads, .favourites])
+        state.deactivateFilter(.people)
+        state.activateFilter(.rooms)
+        state.activateFilter(.unreads)
         XCTAssertTrue(state.isFiltering)
-        XCTAssertEqual(state.enabledFilters, [.rooms, .unreads])
-        XCTAssertEqual(state.sortedAvailableFilters, [.favourites])
+        XCTAssertEqual(state.activeFilters, [.rooms, .unreads])
+        XCTAssertEqual(state.availableFilters, [.favourites])
     }
     
     func testClearFilters() {
-        state.set(.people, isEnabled: true)
-        state.set(.unreads, isEnabled: true)
-        state.set(.favourites, isEnabled: true)
+        state.activateFilter(.people)
+        state.activateFilter(.unreads)
+        state.activateFilter(.favourites)
         XCTAssertTrue(state.isFiltering)
-        XCTAssertEqual(state.enabledFilters, [.people, .unreads, .favourites])
-        XCTAssertEqual(state.sortedAvailableFilters, [])
+        XCTAssertEqual(state.activeFilters, [.people, .unreads, .favourites])
+        XCTAssertEqual(state.availableFilters, [])
         state.clearFilters()
         XCTAssertFalse(state.isFiltering)
-        XCTAssertEqual(state.enabledFilters, [])
-        XCTAssertEqual(state.sortedAvailableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.activeFilters, [])
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
     }
 }

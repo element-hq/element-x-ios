@@ -102,7 +102,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
-        let enabledFilters = context.viewState.filtersState.$enabledFilters
+        let enabledFilters = context.viewState.filtersState.$activeFilters
         isSearchFieldFocused
             .combineLatest(searchQuery, enabledFilters)
             .removeDuplicates { $0 == $1 }
@@ -207,9 +207,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         } else {
             if state.bindings.isSearchFieldFocused {
                 roomSummaryProvider?.setFilter(.include(.init(query: state.bindings.searchQuery,
-                                                              filters: state.filtersState.enabledFilters)))
+                                                              filters: state.filtersState.activeFilters)))
             } else {
-                roomSummaryProvider?.setFilter(.include(.init(filters: state.filtersState.enabledFilters)))
+                roomSummaryProvider?.setFilter(.include(.init(filters: state.filtersState.activeFilters)))
             }
         }
     }

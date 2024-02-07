@@ -22,9 +22,9 @@ struct RoomListFilterView: View {
 
     var body: some View {
         let binding = Binding<Bool>(get: {
-            state.isEnabled(filter)
+            state.isFilterActive(filter)
         }, set: { isEnabled, _ in
-            state.set(filter, isEnabled: isEnabled)
+            isEnabled ? state.activateFilter(filter) : state.deactivateFilter(filter)
         })
         Toggle(isOn: binding) {
             Text(filter.localizedName)
@@ -36,7 +36,7 @@ struct RoomListFilterView: View {
 struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         RoomListFilterView(filter: .people, state: .init())
-        RoomListFilterView(filter: .people, state: .init(enabledFilters: [.people]))
+        RoomListFilterView(filter: .people, state: .init(activeFilters: [.people]))
     }
 }
 
