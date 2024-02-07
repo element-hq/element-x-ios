@@ -23,9 +23,9 @@ struct RoomProxyMockConfiguration {
     let displayName: String?
     var topic: String?
     var avatarURL: URL?
-    var isDirect = Bool.random()
-    var isSpace = Bool.random()
-    var isPublic = Bool.random()
+    var isDirect = false
+    var isSpace = false
+    var isPublic = false
     var isEncrypted = true
     var hasOngoingCall = true
     var canonicalAlias: String?
@@ -37,15 +37,12 @@ struct RoomProxyMockConfiguration {
         return mock
     }()
     
-    var members: [RoomMemberProxyProtocol]?
+    var members: [RoomMemberProxyMock] = .allMembers
     var memberForID: RoomMemberProxyMock = .mockMe
     var ownUserID = "@alice:somewhere.org"
 
     var canUserTriggerRoomNotification = false
     var canUserJoinCall = true
-    
-    var joinedMembersCount = 50
-    var activeMembersCount = 25
 }
 
 extension RoomProxyMock {
@@ -66,15 +63,13 @@ extension RoomProxyMock {
         
         timeline = configuration.timeline
         
-        joinedMembersCount = configuration.joinedMembersCount
-        activeMembersCount = configuration.activeMembersCount
         ownUserID = configuration.ownUserID
+        
+        members = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
 
-        if let configuredMembers = configuration.members {
-            members = CurrentValueSubject(configuredMembers).asCurrentValuePublisher()
-        } else {
-            members = CurrentValueSubject([]).asCurrentValuePublisher()
-        }
+        let joinedMembers = configuration.members.filter { $0.membership == .join }
+        joinedMembersCount = joinedMembers.count
+        activeMembersCount = joinedMembers.count
 
         updateMembersClosure = { }
         acceptInvitationClosure = { .success(()) }

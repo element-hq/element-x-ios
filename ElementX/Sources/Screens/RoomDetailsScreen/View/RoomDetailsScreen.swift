@@ -321,8 +321,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   isDirect: true,
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",
-                                                  members: members,
-                                                  activeMembersCount: 2))
+                                                  members: members))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
         
