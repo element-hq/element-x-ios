@@ -73,8 +73,15 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         
         try await deferred.fulfill()
         
+        guard let memberDetails = context.viewState.memberDetails else {
+            XCTFail("Member details should be loaded at this point")
+            return
+        }
+        
+        XCTAssertTrue(memberDetails.isIgnored)
+        
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
-        XCTAssertTrue(context.viewState.memberDetails?.isIgnored ?? false)
+        
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(roomProxyMock.updateMembersCalled)
     }
@@ -104,8 +111,15 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         
         try await deferred.fulfill()
         
+        guard let memberDetails = context.viewState.memberDetails else {
+            XCTFail("Member details should be loaded at this point")
+            return
+        }
+        
+        XCTAssertFalse(memberDetails.isIgnored)
+        
         XCTAssertNotNil(context.alertInfo)
-        XCTAssertFalse(context.viewState.memberDetails?.isIgnored ?? false)
+        
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertFalse(roomProxyMock.updateMembersCalled)
     }
@@ -136,7 +150,13 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         
         try await deferred.fulfill()
         
-        XCTAssertFalse(context.viewState.memberDetails?.isIgnored ?? false)
+        guard let memberDetails = context.viewState.memberDetails else {
+            XCTFail("Member details should be loaded at this point")
+            return
+        }
+        
+        XCTAssertFalse(memberDetails.isIgnored)
+        
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(roomProxyMock.updateMembersCalled)
     }
@@ -166,8 +186,15 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         
         try await deferred.fulfill()
         
-        XCTAssertTrue(context.viewState.memberDetails?.isIgnored ?? false)
+        guard let memberDetails = context.viewState.memberDetails else {
+            XCTFail("Member details should be loaded at this point")
+            return
+        }
+        
+        XCTAssertTrue(memberDetails.isIgnored)
+        
         XCTAssertNotNil(context.alertInfo)
+        
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertFalse(roomProxyMock.updateMembersCalled)
     }
