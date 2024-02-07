@@ -278,11 +278,13 @@ struct RoomDetailsScreen: View {
 struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let genericRoomViewModel = {
         let members: [RoomMemberProxyMock] = [
+            .mockMe,
             .mockAlice,
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = RoomProxyMock(with: .init(id: "room_a_id", displayName: "Room A",
+        let roomProxy = RoomProxyMock(with: .init(id: "room_a_id",
+                                                  displayName: "Room A",
                                                   topic: """
                                                   Discussions about Element X iOS | https://github.com/vector-im/element-x-ios
                                                   
@@ -301,7 +303,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
         let appSettings = AppSettings()
         
-        return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
+        return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -316,7 +318,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
             .mockDan
         ]
         
-        let roomProxy = RoomProxyMock(with: .init(id: "dm_room_id", displayName: "DM Room",
+        let roomProxy = RoomProxyMock(with: .init(id: "dm_room_id",
+                                                  displayName: "DM Room",
                                                   topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                                                   isDirect: true,
                                                   isEncrypted: true,
@@ -325,7 +328,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
         
-        return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
+        return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -336,18 +339,20 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     
     static let simpleRoomViewModel = {
         let members: [RoomMemberProxyMock] = [
+            .mockMe,
             .mockAlice,
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = RoomProxyMock(with: .init(id: "simple_room_id", displayName: "Room A",
+        let roomProxy = RoomProxyMock(with: .init(id: "simple_room_id",
+                                                  displayName: "Room A",
                                                   isDirect: false,
                                                   isEncrypted: false,
                                                   members: members))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
         
-        return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
+        return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -361,6 +366,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("Generic Room")
         RoomDetailsScreen(context: dmRoomViewModel.context)
             .previewDisplayName("DM Room")
+            .snapshot(delay: 0.25)
         RoomDetailsScreen(context: simpleRoomViewModel.context)
             .previewDisplayName("Simple Room")
     }

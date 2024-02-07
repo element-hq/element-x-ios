@@ -66,10 +66,9 @@ extension RoomProxyMock {
         ownUserID = configuration.ownUserID
         
         members = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
-
-        let joinedMembers = configuration.members.filter { $0.membership == .join }
-        joinedMembersCount = joinedMembers.count
-        activeMembersCount = joinedMembers.count
+        
+        joinedMembersCount = configuration.members.filter { $0.membership == .join }.count
+        activeMembersCount = configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count
 
         updateMembersClosure = { }
         acceptInvitationClosure = { .success(()) }
