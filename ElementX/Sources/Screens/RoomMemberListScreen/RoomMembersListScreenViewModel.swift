@@ -58,6 +58,10 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         }
     }
     
+    func stop() {
+        hideLoader()
+    }
+    
     // MARK: - Private
     
     private func setupMembers() {
@@ -120,7 +124,11 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     private let userIndicatorID = UUID().uuidString
     
     private func showLoader() {
-        userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
+        userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: true),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true),
+                                                delay: .milliseconds(200))
     }
     
     private func hideLoader() {

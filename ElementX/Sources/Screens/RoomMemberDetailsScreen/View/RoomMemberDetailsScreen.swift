@@ -21,42 +21,58 @@ struct RoomMemberDetailsScreen: View {
     @ObservedObject var context: RoomMemberDetailsScreenViewModel.Context
     
     var body: some View {
+        content
+            .compoundList()
+            .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
+            .alert(item: $context.alertInfo)
+            .track(screen: .User)
+            .interactiveQuickLook(item: $context.mediaPreviewItem, shouldHideControls: true)
+    }
+    
+    // MARK: - Private
+    
+    @ViewBuilder
+    private var content: some View {
         Form {
             headerSection
-
-            if !context.viewState.details.isAccountOwner {
+            
+            if let memberDetails = context.viewState.memberDetails,
+               !memberDetails.isAccountOwner {
                 directChatSection
                 blockUserSection
             }
         }
-        .compoundList()
-        .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
-        .alert(item: $context.alertInfo)
-        .track(screen: .User)
-        .interactiveQuickLook(item: $context.mediaPreviewItem, shouldHideControls: true)
     }
     
-    // MARK: - Private
-
     @ViewBuilder
     private var headerSection: some View {
-        AvatarHeaderView(avatarUrl: context.viewState.details.avatarURL,
-                         name: context.viewState.details.name,
-                         id: context.viewState.details.id,
-                         avatarSize: .user(on: .memberDetails),
-                         imageProvider: context.imageProvider,
-                         subtitle: context.viewState.details.id) {
-            context.send(viewAction: .displayAvatar)
-        } footer: {
-            if let permalink = context.viewState.details.permalink {
-                HStack(spacing: 32) {
-                    ShareLink(item: permalink) {
-                        CompoundIcon(\.shareIos)
+        if let memberDetails = context.viewState.memberDetails {
+            AvatarHeaderView(avatarUrl: memberDetails.avatarURL,
+                             name: memberDetails.name,
+                             id: memberDetails.id,
+                             avatarSize: .user(on: .memberDetails),
+                             imageProvider: context.imageProvider,
+                             subtitle: memberDetails.id) {
+                context.send(viewAction: .displayAvatar)
+            } footer: {
+                if let permalink = memberDetails.permalink {
+                    HStack(spacing: 32) {
+                        ShareLink(item: permalink) {
+                            CompoundIcon(\.shareIos)
+                        }
+                        .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
                     }
-                    .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
+                    .padding(.top, 32)
                 }
-                .padding(.top, 32)
             }
+        } else {
+            AvatarHeaderView(avatarUrl: nil,
+                             name: nil,
+                             id: context.viewState.userID,
+                             avatarSize: .user(on: .memberDetails),
+                             imageProvider: context.imageProvider,
+                             subtitle: nil,
+                             footer: { })
         }
     }
     
@@ -71,30 +87,25 @@ struct RoomMemberDetailsScreen: View {
         }
     }
 
+    @ViewBuilder
     private var blockUserSection: some View {
-        Section {
-            ListRow(label: .default(title: blockUserButtonTitle,
-                                    icon: \.block,
-                                    role: context.viewState.details.isIgnored ? nil : .destructive),
-                    details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
-                    kind: .button {
-                        context.send(viewAction: blockUserButtonAction)
-                    })
-                    .accessibilityIdentifier(blockUserButtonAccessibilityIdentifier)
-                    .disabled(context.viewState.isProcessingIgnoreRequest)
+        if let memberDetails = context.viewState.memberDetails {
+            let title = memberDetails.isIgnored ? L10n.screenRoomMemberDetailsUnblockUser : L10n.screenRoomMemberDetailsBlockUser
+            let action: RoomMemberDetailsScreenViewAction = memberDetails.isIgnored ? .showUnignoreAlert : .showIgnoreAlert
+            let accessibilityIdentifier = memberDetails.isIgnored ? A11yIdentifiers.roomMemberDetailsScreen.unignore : A11yIdentifiers.roomMemberDetailsScreen.ignore
+            
+            Section {
+                ListRow(label: .default(title: title,
+                                        icon: \.block,
+                                        role: memberDetails.isIgnored ? nil : .destructive),
+                        details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
+                        kind: .button {
+                            context.send(viewAction: action)
+                        })
+                        .accessibilityIdentifier(accessibilityIdentifier)
+                        .disabled(context.viewState.isProcessingIgnoreRequest)
+            }
         }
-    }
-
-    private var blockUserButtonAction: RoomMemberDetailsScreenViewAction {
-        context.viewState.details.isIgnored ? .showUnignoreAlert : .showIgnoreAlert
-    }
-
-    private var blockUserButtonTitle: String {
-        context.viewState.details.isIgnored ? L10n.screenRoomMemberDetailsUnblockUser : L10n.screenRoomMemberDetailsBlockUser
-    }
-
-    private var blockUserButtonAccessibilityIdentifier: String {
-        context.viewState.details.isIgnored ? A11yIdentifiers.roomMemberDetailsScreen.unignore : A11yIdentifiers.roomMemberDetailsScreen.ignore
     }
 
     @ViewBuilder
@@ -114,27 +125,35 @@ struct RoomMemberDetailsScreen: View {
 // MARK: - Previews
 
 struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
-    static let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
     static let otherUserViewModel = {
         let member = RoomMemberProxyMock.mockDan
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        roomProxyMock.getMemberUserIDReturnValue = .success(member)
+        
         return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
-                                                roomMemberProxy: member,
+                                                userID: member.userID,
                                                 mediaProvider: MockMediaProvider(),
                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
 
     static let accountOwnerViewModel = {
         let member = RoomMemberProxyMock.mockMe
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        roomProxyMock.getMemberUserIDReturnValue = .success(member)
+        
         return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
-                                                roomMemberProxy: member,
+                                                userID: member.userID,
                                                 mediaProvider: MockMediaProvider(),
                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
 
     static let ignoredUserViewModel = {
         let member = RoomMemberProxyMock.mockIgnored
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        roomProxyMock.getMemberUserIDReturnValue = .success(member)
+        
         return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
-                                                roomMemberProxy: member,
+                                                userID: member.userID,
                                                 mediaProvider: MockMediaProvider(),
                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
@@ -142,9 +161,12 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         RoomMemberDetailsScreen(context: otherUserViewModel.context)
             .previewDisplayName("Other User")
+            .snapshot(delay: 0.25)
         RoomMemberDetailsScreen(context: accountOwnerViewModel.context)
             .previewDisplayName("Account Owner")
+            .snapshot(delay: 0.25)
         RoomMemberDetailsScreen(context: ignoredUserViewModel.context)
             .previewDisplayName("Ignored User")
+            .snapshot(delay: 0.25)
     }
 }

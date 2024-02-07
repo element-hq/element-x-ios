@@ -19,13 +19,13 @@ import SwiftUI
 
 struct RoomMemberDetailsScreenCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
-    let roomMemberProxy: RoomMemberProxyProtocol
+    let userID: String
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum RoomMemberDetailsScreenCoordinatorAction {
-    case openDirectChat
+    case openDirectChat(displayName: String?)
 }
 
 final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
@@ -40,7 +40,7 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
 
     init(parameters: RoomMemberDetailsScreenCoordinatorParameters) {
         viewModel = RoomMemberDetailsScreenViewModel(roomProxy: parameters.roomProxy,
-                                                     roomMemberProxy: parameters.roomMemberProxy,
+                                                     userID: parameters.userID,
                                                      mediaProvider: parameters.mediaProvider,
                                                      userIndicatorController: parameters.userIndicatorController)
     }
@@ -50,14 +50,16 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .openDirectChat:
-                actionsSubject.send(.openDirectChat)
+            case .openDirectChat(let displayName):
+                actionsSubject.send(.openDirectChat(displayName: displayName))
             }
         }
         .store(in: &cancellables)
     }
     
-    func stop() { viewModel.stop() }
+    func stop() {
+        viewModel.stop()
+    }
 
     func toPresentable() -> AnyView {
         AnyView(RoomMemberDetailsScreen(context: viewModel.context))

@@ -765,25 +765,37 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMemberDetailsAccountOwner:
+            let member = RoomMemberProxyMock.mockMe
+            let roomProxy = RoomProxyMock(with: .init(displayName: ""))
+            roomProxy.getMemberUserIDReturnValue = .success(member)
+            
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: RoomProxyMock(with: .init(displayName: "")),
-                                                                                   roomMemberProxy: RoomMemberProxyMock.mockMe,
+            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                                   userID: member.userID,
                                                                                    mediaProvider: MockMediaProvider(),
                                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMemberDetails:
+            let member = RoomMemberProxyMock.mockAlice
+            let roomProxy = RoomProxyMock(with: .init(displayName: ""))
+            roomProxy.getMemberUserIDReturnValue = .success(member)
+            
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: RoomProxyMock(with: .init(displayName: "")),
-                                                                                   roomMemberProxy: RoomMemberProxyMock.mockAlice,
+            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                                   userID: member.userID,
                                                                                    mediaProvider: MockMediaProvider(),
                                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMemberDetailsIgnoredUser:
+            let member = RoomMemberProxyMock.mockIgnored
+            let roomProxy = RoomProxyMock(with: .init(displayName: ""))
+            roomProxy.getMemberUserIDReturnValue = .success(member)
+            
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: RoomProxyMock(with: .init(displayName: "")),
-                                                                                   roomMemberProxy: RoomMemberProxyMock.mockIgnored,
+            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                                   userID: member.userID,
                                                                                    mediaProvider: MockMediaProvider(),
                                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
