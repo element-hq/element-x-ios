@@ -69,7 +69,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     }
     
     func testJoinedAndInvitedMembers() async throws {
-        setup(with: [.mockInvitedAlice, .mockBob])
+        setup(with: [.mockInvited, .mockBob])
         
         let deferred = deferFulfillment(context.$viewState) { state in
             state.visibleInvitedMembers.count == 1
@@ -83,7 +83,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     }
     
     func testInvitedMembers() async throws {
-        setup(with: [.mockInvitedAlice])
+        setup(with: [.mockInvited])
         
         let deferred = deferFulfillment(context.$viewState) { state in
             state.visibleInvitedMembers.count == 1
@@ -97,9 +97,9 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     }
     
     func testSearchInvitedMembers() async throws {
-        setup(with: [.mockInvitedAlice])
+        setup(with: [.mockInvited])
         
-        context.searchQuery = "alice"
+        context.searchQuery = "invited"
         
         let deferred = deferFulfillment(context.$viewState) { state in
             state.visibleInvitedMembers.count == 1
@@ -113,7 +113,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     }
     
     private func setup(with members: [RoomMemberProxyMock]) {
-        viewModel = .init(roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members, joinedMembersCount: members.filter { $0.membership == .join }.count)),
+        viewModel = .init(roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members)),
                           mediaProvider: MockMediaProvider(),
                           userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
