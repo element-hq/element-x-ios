@@ -49,14 +49,13 @@ class RoomProxy: RoomProxyProtocol {
     var ownUserID: String {
         room.ownUserId()
     }
-    
+
     init?(roomListItem: RoomListItemProtocol,
           room: RoomProtocol,
           backgroundTaskService: BackgroundTaskServiceProtocol) async {
         self.roomListItem = roomListItem
         self.room = room
         self.backgroundTaskService = backgroundTaskService
-        
         do {
             timeline = try await TimelineProxy(timeline: room.timeline(), backgroundTaskService: backgroundTaskService)
         } catch {
@@ -130,7 +129,7 @@ class RoomProxy: RoomProxyProtocol {
     var canonicalAlias: String? {
         room.canonicalAlias()
     }
-        
+    
     var avatarURL: URL? {
         roomListItem.avatarUrl().flatMap(URL.init(string:))
     }
