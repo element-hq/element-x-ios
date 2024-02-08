@@ -26,6 +26,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let appSettings: AppSettings
+    private let mentionDisplayHelper: MentionDisplayHelper
+    private var hasAppeard = false
 
     private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> {
@@ -45,6 +47,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.appSettings = appSettings
+        self.mentionDisplayHelper = mentionDisplayHelper
         
         super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview, duration: 0),
                                                               audioRecorderState: .init(),
@@ -99,9 +102,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
             .weakAssign(to: \.state.suggestions, on: self)
             .store(in: &cancellables)
-        
-        setupMentionsHandling(mentionDisplayHelper: mentionDisplayHelper)
-        
+                
         focusComposerIfHardwareKeyboardConnected()
     }
     
@@ -110,7 +111,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     override func process(viewAction: ComposerToolbarViewAction) {
         switch viewAction {
         case .composerAppeared:
-            wysiwygViewModel.setup()
+            setupMentionsHandlingIfNecessary()
+            if !hasAppeard {
+                hasAppeard = true
+                wysiwygViewModel.setup()
+            }
         case .sendMessage:
             guard !state.sendButtonDisabled else { return }
 
@@ -200,8 +205,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
     
-    private func setupMentionsHandling(mentionDisplayHelper: MentionDisplayHelper) {
-        wysiwygViewModel.textView.mentionDisplayHelper = mentionDisplayHelper
+    private func setupMentionsHandlingIfNecessary() {
+        guard let textView = wysiwygViewModel.textView,
+              textView.mentionDisplayHelper == nil else {
+            return
+        }
+        textView.mentionDisplayHelper = mentionDisplayHelper
         
         let attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", permalinkBaseURL: appSettings.permalinkBaseURL, mentionBuilder: MentionBuilder())
         
@@ -252,7 +261,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(text: String) {
-        wysiwygViewModel.textView.flushPills()
+        wysiwygViewModel.textView?.flushPills()
         
         if appSettings.richTextEditorEnabled {
             wysiwygViewModel.setHtmlContent(text)
