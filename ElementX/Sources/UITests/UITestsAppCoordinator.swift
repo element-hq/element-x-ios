@@ -585,8 +585,7 @@ class MockScreen: Identifiable {
                                                       displayName: "Room",
                                                       isEncrypted: true,
                                                       members: members,
-                                                      memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false),
-                                                      activeMembersCount: members.count))
+                                                      memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false)))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
@@ -606,8 +605,7 @@ class MockScreen: Identifiable {
                                                       isEncrypted: true,
                                                       canonicalAlias: "#mock:room.org",
                                                       members: members,
-                                                      memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false),
-                                                      activeMembersCount: members.count))
+                                                      memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false)))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
@@ -629,8 +627,7 @@ class MockScreen: Identifiable {
                                                       isEncrypted: true,
                                                       canonicalAlias: "#mock:room.org",
                                                       members: members,
-                                                      memberForID: owner,
-                                                      activeMembersCount: members.count))
+                                                      memberForID: owner))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
@@ -648,8 +645,7 @@ class MockScreen: Identifiable {
                                                       displayName: "Room",
                                                       isEncrypted: true,
                                                       members: members,
-                                                      memberForID: owner,
-                                                      activeMembersCount: members.count))
+                                                      memberForID: owner))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
@@ -668,8 +664,7 @@ class MockScreen: Identifiable {
                                                       isDirect: true,
                                                       isEncrypted: true,
                                                       members: members,
-                                                      memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false),
-                                                      activeMembersCount: members.count))
+                                                      memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false)))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
