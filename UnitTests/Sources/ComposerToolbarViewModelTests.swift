@@ -33,6 +33,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         appSettings.richTextEditorEnabled = true
         ServiceLocator.shared.register(appSettings: appSettings)
         wysiwygViewModel = WysiwygComposerViewModel()
+        wysiwygViewModel.textView = WysiwygTextView()
         completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: completionSuggestionServiceMock,
@@ -142,7 +143,9 @@ class ComposerToolbarViewModelTests: XCTestCase {
         XCTAssertEqual(wysiwygViewModel.content.html, string)
     }
     
-    func testUserMentionPillInRTE() {
+    func testUserMentionPillInRTE() async {
+        viewModel.context.send(viewAction: .composerAppeared)
+        await Task.yield()
         let userID = "@test:matrix.org"
         let suggestion = SuggestionItem.user(item: .init(id: userID, displayName: "Test", avatarURL: nil))
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
@@ -151,7 +154,9 @@ class ComposerToolbarViewModelTests: XCTestCase {
         XCTAssertEqual(attachment?.pillData?.type, .user(userID: userID))
     }
     
-    func testAllUsersMentionPillInRTE() {
+    func testAllUsersMentionPillInRTE() async {
+        viewModel.context.send(viewAction: .composerAppeared)
+        await Task.yield()
         let suggestion = SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: nil))
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
