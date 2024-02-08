@@ -83,7 +83,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         appSettings.$roomListFiltersEnabled
-            .weakAssign(to: \.state.shouldShowFilters, on: self)
+            .sink { [weak self] value in
+                guard let self else {
+                    return
+                }
+                if !value {
+                    state.shouldShowFilters = false
+                    state.filtersState.clearFilters()
+                } else {
+                    state.shouldShowFilters = true
+                }
+            }
             .store(in: &cancellables)
         
         appSettings.$markAsUnreadEnabled
@@ -96,8 +106,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
+        let enabledFilters = context.viewState.filtersState.$activeFilters
         isSearchFieldFocused
-            .combineLatest(searchQuery)
+            .combineLatest(searchQuery, enabledFilters)
             .removeDuplicates { $0 == $1 }
             .map { _ in () }
             .sink { [weak self] in
@@ -196,12 +207,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func updateFilter() {
         if state.shouldHideRoomList {
-            roomSummaryProvider?.setFilter(.none)
+            roomSummaryProvider?.setFilter(.excludeAll)
         } else {
             if state.bindings.isSearchFieldFocused {
-                roomSummaryProvider?.setFilter(.normalizedMatchRoomName(state.bindings.searchQuery))
+                roomSummaryProvider?.setFilter(.include(.init(query: state.bindings.searchQuery,
+                                                              filters: state.filtersState.activeFilters)))
             } else {
-                roomSummaryProvider?.setFilter(.all)
+                roomSummaryProvider?.setFilter(.include(.init(filters: state.filtersState.activeFilters)))
             }
         }
     }

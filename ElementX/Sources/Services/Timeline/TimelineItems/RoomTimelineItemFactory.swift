@@ -134,7 +134,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         var aspectRatio: CGFloat?
         let width = imageInfo.width.map(CGFloat.init)
         let height = imageInfo.height.map(CGFloat.init)
-        if let width, let height {
+        if let width, let height, width > 0, height > 0 {
             aspectRatio = width / height
         }
         
@@ -488,7 +488,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let height = messageContent.info?.height.map(CGFloat.init)
         
         var aspectRatio: CGFloat?
-        if let width, let height {
+        if let width, let height, width > 0, height > 0 {
             aspectRatio = width / height
         }
         
@@ -508,7 +508,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let height = messageContent.info?.height.map(CGFloat.init)
         
         var aspectRatio: CGFloat?
-        if let width, let height {
+        if let width, let height, width > 0, height > 0 {
             aspectRatio = width / height
         }
         

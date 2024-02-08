@@ -31,10 +31,10 @@ struct RoomListFiltersView: View {
                         .hidden()
                         .frame(width: 0)
                 }
-                ForEach(state.sortedEnabledFilters) { filter in
+                ForEach(state.sortedActiveFilters) { filter in
                     RoomListFilterView(filter: filter, state: state)
                 }
-                ForEach(state.sortedAvailableFilters) { filter in
+                ForEach(state.availableFilters) { filter in
                     RoomListFilterView(filter: filter, state: state)
                 }
             }
@@ -62,6 +62,6 @@ struct RoomListFiltersView: View {
 struct RoomListFiltersView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         RoomListFiltersView(state: .init())
-        RoomListFiltersView(state: .init(enabledFilters: [.rooms, .favourites]))
+        RoomListFiltersView(state: .init(activeFilters: [.rooms, .favourites]))
     }
 }

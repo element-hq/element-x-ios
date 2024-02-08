@@ -25,6 +25,7 @@ enum MockRoomSummaryProviderState {
 
 class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     private let initialRooms: [RoomSummary]
+    private(set) var currentFilter: RoomSummaryProviderFilter?
     
     private let roomListSubject: CurrentValueSubject<[RoomSummary], Never>
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
@@ -60,17 +61,16 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     func updateVisibleRange(_ range: Range<Int>) { }
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
+        currentFilter = filter
         switch filter {
-        case .all:
-            roomListSubject.send(initialRooms)
-        case .none:
-            roomListSubject.send([])
-        case .normalizedMatchRoomName(let filter):
-            if filter.isEmpty {
-                roomListSubject.send(initialRooms)
+        case let .include(predicate):
+            if let query = predicate.query, !query.isEmpty {
+                roomListSubject.send(initialRooms.filter { $0.name?.localizedCaseInsensitiveContains(query) ?? false })
             } else {
-                roomListSubject.send(initialRooms.filter { $0.name?.localizedCaseInsensitiveContains(filter) ?? false })
+                roomListSubject.send(initialRooms)
             }
+        case .excludeAll:
+            roomListSubject.send([])
         }
     }
 }

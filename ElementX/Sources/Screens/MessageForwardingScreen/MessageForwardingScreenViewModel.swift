@@ -49,7 +49,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             .removeDuplicates()
             .sink { [weak self] searchQuery in
                 guard let self else { return }
-                self.roomSummaryProvider?.setFilter(.normalizedMatchRoomName(searchQuery))
+                self.roomSummaryProvider?.setFilter(.include(.init(query: searchQuery)))
             }
             .store(in: &cancellables)
         
@@ -60,7 +60,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         switch viewAction {
         case .cancel:
             actionsSubject.send(.dismiss)
-            roomSummaryProvider?.setFilter(.all)
+            roomSummaryProvider?.setFilter(.include(.all))
         case .send:
             guard let roomID = state.selectedRoomID else {
                 fatalError()
