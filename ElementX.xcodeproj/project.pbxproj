@@ -969,6 +969,7 @@
 		F421FD5979EF53C8204BDC77 /* SecureBackupLogoutConfirmationScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC09F30B0E1010951952BDC /* SecureBackupLogoutConfirmationScreenUITests.swift */; };
 		F4433EF57B4BB3C077F8B00E /* SessionVerificationScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD9E0FFA29EAACFF3AB9732 /* SessionVerificationScreenViewModel.swift */; };
 		F4971845B5C4F270F6BC5745 /* ScaledFrameModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D82F234B3576BD6268C7950 /* ScaledFrameModifier.swift */; };
+		F4996C82A4B3A5FF0C8EDD03 /* RoomListFilterModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06AAD6D9D3F5833E7A5A2F9 /* RoomListFilterModels.swift */; };
 		F508683B76EF7B23BB2CBD6D /* TimelineItemPlainStylerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94BCC8A9C73C1F838122C645 /* TimelineItemPlainStylerView.swift */; };
 		F50A6FCE26714E27FE5495DD /* PollOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F23B21CF15F9F4BAA0788B /* PollOptionView.swift */; };
 		F519DE17A3A0F760307B2E6D /* InviteUsersScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D155E09BF961BBA8F85263 /* InviteUsersScreenViewModel.swift */; };
@@ -1885,6 +1886,7 @@
 		DF05DA24F71B455E8EFEBC3B /* SessionVerificationViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationViewModelTests.swift; sourceTree = "<group>"; };
 		DF3D25B3EDB283B5807EADCF /* ReadMarkerRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadMarkerRoomTimelineItem.swift; sourceTree = "<group>"; };
 		E062C1750EFC8627DE4CAB8E /* MapTilerAuthorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerAuthorization.swift; sourceTree = "<group>"; };
+		E06AAD6D9D3F5833E7A5A2F9 /* RoomListFilterModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListFilterModels.swift; sourceTree = "<group>"; };
 		E0FCA0957FAA0E15A9F5579D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Untranslated.stringsdict; sourceTree = "<group>"; };
 		E10DA51DBC8C7E1460DBCCBD /* UserProfileListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileListRow.swift; sourceTree = "<group>"; };
 		E1573D28C8A9FB6399D0EEFB /* SecureBackupLogoutConfirmationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupLogoutConfirmationScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -2132,6 +2134,7 @@
 		037A5661B26EC6BE068188D7 /* Filters */ = {
 			isa = PBXGroup;
 			children = (
+				E06AAD6D9D3F5833E7A5A2F9 /* RoomListFilterModels.swift */,
 				E6372DD10DED30E7AD7BCE21 /* RoomListFiltersView.swift */,
 				24EC819497BB5F8C4998D760 /* RoomListFilterView.swift */,
 			);
@@ -5800,6 +5803,7 @@
 				42F1C8731166633E35A6D7E6 /* RoomEventStringBuilder.swift in Sources */,
 				D55AF9B5B55FEED04771A461 /* RoomFlowCoordinator.swift in Sources */,
 				04A16B45228F7678A027C079 /* RoomHeaderView.swift in Sources */,
+				F4996C82A4B3A5FF0C8EDD03 /* RoomListFilterModels.swift in Sources */,
 				4A9CEEE612D6D8B3DDBD28BA /* RoomListFilterView.swift in Sources */,
 				33F1FB19F222BA9930AB1A00 /* RoomListFiltersView.swift in Sources */,
 				FA4296218444C48BC890F46B /* RoomMemberDetails.swift in Sources */,
@@ -6767,7 +6771,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 1.1.37;
+				version = 1.1.38;
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {
