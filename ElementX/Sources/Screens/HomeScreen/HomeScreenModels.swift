@@ -197,7 +197,7 @@ extension HomeScreenRoom {
         let isMentionShown = details.hasUnreadMentions && !details.isMuted
         let isMuteShown = details.isMuted
         let isCallShown = details.hasOngoingCall
-        let isHighlighted = !details.isMuted && (details.hasUnreadNotifications || details.hasUnreadMentions || details.isMarkedUnread)
+        let isHighlighted = details.isMarkedUnread || (!details.isMuted && (details.hasUnreadNotifications || details.hasUnreadMentions))
         
         self.init(id: identifier,
                   roomId: details.id,
