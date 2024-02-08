@@ -1,0 +1,1 @@
+Prevent crashes when computing aspect ratios on zero media width or height
