@@ -33,6 +33,7 @@ enum RoomProxyError: Error, Equatable {
     case failedCheckingPermission
     case failedMarkingAsRead
     case failedMarkingAsUnread
+    case failedSendingTypingNotice
 }
 
 enum RoomProxyAction {
@@ -107,6 +108,9 @@ protocol RoomProxyProtocol {
     func markAsUnread() async -> Result<Void, RoomProxyError>
     
     func markAsRead(sendReadReceipts: Bool, receiptType: ReceiptType) async -> Result<Void, RoomProxyError>
+    
+    /// https://spec.matrix.org/v1.9/client-server-api/#typing-notifications
+    @discardableResult func sendTypingNotification(isTyping: Bool) async -> Result<Void, RoomProxyError>
     
     // MARK: - Element Call
     

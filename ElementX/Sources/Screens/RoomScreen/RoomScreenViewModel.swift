@@ -192,6 +192,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             composerFocusedSubject.send(isFocused)
         case .voiceMessage(let voiceMessageAction):
             processVoiceMessageAction(voiceMessageAction)
+        case .contentChanged(let isEmpty):
+            Task {
+                await roomProxy.sendTypingNotification(isTyping: !isEmpty)
+            }
         }
     }
     

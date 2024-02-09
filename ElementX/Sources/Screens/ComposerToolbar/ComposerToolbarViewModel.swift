@@ -68,7 +68,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .store(in: &cancellables)
 
         wysiwygViewModel.$isContentEmpty
-            .weakAssign(to: \.state.composerEmpty, on: self)
+            .sink { [weak self] isEmpty in
+                self?.state.composerEmpty = isEmpty
+                self?.actionsSubject.send(.contentChanged(isEmpty: isEmpty))
+            }
             .store(in: &cancellables)
 
         wysiwygViewModel.$actionStates
