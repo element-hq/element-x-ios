@@ -284,30 +284,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    /// The ID of the newest item in the room that the user has seen.
-    /// This includes both event based items and virtual items.
-    private var lastReadItemID: TimelineItemIdentifier?
     private func sendReadReceiptIfNeeded(for lastVisibleItemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError> {
-        guard lastReadItemID != lastVisibleItemID,
-              let eventItemID = eventBasedItem(nearest: lastVisibleItemID)
-        else { return .success(()) }
-        
-        // Make sure the item is newer than the item that was last marked as read.
-        if let lastReadItemIndex = state.timelineViewState.timelineIDs.firstIndex(of: lastReadItemID?.timelineID ?? ""),
-           let lastVisibleItemIndex = state.timelineViewState.timelineIDs.firstIndex(of: eventItemID.timelineID),
-           lastReadItemIndex > lastVisibleItemIndex {
-            return .success(())
-        }
-        
-        // Update the last read item ID to avoid attempting duplicate requests.
-        lastReadItemID = lastVisibleItemID
-        
         // Clear any notifications from notification center.
         if lastVisibleItemID.timelineID == state.timelineViewState.timelineIDs.last {
             notificationCenterProtocol.post(name: .roomMarkedAsRead, object: roomProxy.id)
         }
         
-        switch await timelineController.sendReadReceipt(for: eventItemID) {
+        switch await timelineController.sendReadReceipt(for: lastVisibleItemID) {
         case .success:
             return .success(())
         case .failure:
