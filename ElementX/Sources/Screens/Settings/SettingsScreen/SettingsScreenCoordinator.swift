@@ -40,7 +40,6 @@ enum SettingsScreenCoordinatorAction {
 }
 
 final class SettingsScreenCoordinator: CoordinatorProtocol {
-    private let parameters: SettingsScreenCoordinatorParameters
     private var viewModel: SettingsScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<SettingsScreenCoordinatorAction, Never> = .init()
@@ -53,8 +52,6 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     // MARK: - Setup
     
     init(parameters: SettingsScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = SettingsScreenViewModel(userSession: parameters.userSession,
                                             appSettings: parameters.appSettings)
         

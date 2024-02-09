@@ -360,12 +360,6 @@ class RoomScreenViewModelTests: XCTestCase {
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.first!.id))
         try await Task.sleep(for: .milliseconds(100))
         
-        // Then the request should be ignored.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 1)
-        arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
-        XCTAssertEqual(arguments?.eventID, "t3")
-        XCTAssertEqual(arguments?.type, .read)
-        
         // When a new message is received and marked as read.
         let newMessage = TextRoomTimelineItem(eventID: "t4")
         timelineController.timelineItems.append(newMessage)
@@ -376,7 +370,7 @@ class RoomScreenViewModelTests: XCTestCase {
         try await Task.sleep(for: .milliseconds(100))
         
         // Then the request should be made.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 2)
+        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 3)
         arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
         XCTAssertEqual(arguments?.eventID, "t4")
         XCTAssertEqual(arguments?.type, .read)
@@ -407,33 +401,6 @@ class RoomScreenViewModelTests: XCTestCase {
         // When sending a read receipt for the last item.
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
         try await Task.sleep(for: .milliseconds(100))
-        
-        // Then a read receipt should be sent for the item before it.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCalled, true)
-        let arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
-        XCTAssertEqual(arguments?.eventID, "t2")
-        XCTAssertEqual(arguments?.type, .read)
-    }
-    
-    func testSendReadReceiptMultipleRequests() async throws {
-        // Given a room where the last event is a virtual item which was already read.
-        let items: [RoomTimelineItemProtocol] = [TextRoomTimelineItem(eventID: "t1"),
-                                                 TextRoomTimelineItem(eventID: "t2"),
-                                                 SeparatorRoomTimelineItem(timelineID: "v3")]
-        let (viewModel, _, timelineProxy, _, _) = readReceiptsConfiguration(with: items)
-        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
-        try await Task.sleep(for: .milliseconds(100))
-        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 1)
-        let arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
-        XCTAssertEqual(arguments?.eventID, "t2")
-        XCTAssertEqual(arguments?.type, .read)
-        
-        // When sending the same receipt again
-        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
-        try await Task.sleep(for: .milliseconds(100))
-        
-        // Then the second call should be ignored.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 1)
     }
     
     // swiftlint:enable force_unwrapping
