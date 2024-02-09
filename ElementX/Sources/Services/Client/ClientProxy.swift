@@ -110,7 +110,7 @@ class ClientProxy: ClientProxyProtocol {
         
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
-        mediaLoader = MediaLoader(client: client, clientQueue: clientQueue)
+        mediaLoader = MediaLoader(client: client)
         
         notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings(),
                                                          backgroundTaskService: backgroundTaskService)
