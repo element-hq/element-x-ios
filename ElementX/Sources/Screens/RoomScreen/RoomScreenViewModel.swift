@@ -392,49 +392,20 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    /// The ID of the newest item in the room that the user has seen.
-    /// This includes both event based items and virtual items.
-    private var lastReadItemID: TimelineItemIdentifier?
     private func sendReadReceiptIfNeeded(for lastVisibleItemID: TimelineItemIdentifier) async {
         guard application.applicationState == .active else { return }
-        
-        guard lastReadItemID != lastVisibleItemID,
-              let eventItemID = eventBasedItem(nearest: lastVisibleItemID) else {
-            return
-        }
-        
-        // Make sure the item is newer than the item that was last marked as read.
-        if let lastReadItemIndex = state.timelineViewState.timelineIDs.firstIndex(of: lastReadItemID?.timelineID ?? ""),
-           let lastVisibleItemIndex = state.timelineViewState.timelineIDs.firstIndex(of: eventItemID.timelineID),
-           lastReadItemIndex > lastVisibleItemIndex {
-            return
-        }
-        
-        // Update the last read item ID to avoid attempting duplicate requests.
-        lastReadItemID = lastVisibleItemID
         
         // Clear any notifications from notification center.
         if lastVisibleItemID.timelineID == state.timelineViewState.timelineIDs.last {
             notificationCenter.post(name: .roomMarkedAsRead, object: roomProxy.id)
         }
         
-        switch await timelineController.sendReadReceipt(for: eventItemID) {
+        switch await timelineController.sendReadReceipt(for: lastVisibleItemID) {
         case .success:
             break
         case let .failure(error):
             MXLog.error("[TimelineViewController] Failed to send read receipt: \(error)")
         }
-    }
-    
-    /// Returns the first item ID that contains an `eventID` starting from the supplied ID, working backwards through the timeline.
-    private func eventBasedItem(nearest itemID: TimelineItemIdentifier) -> TimelineItemIdentifier? {
-        guard itemID.eventID == nil else { return itemID }
-        
-        let timelineIDs = state.timelineViewState.itemViewStates.map(\.identifier)
-        guard let index = timelineIDs.firstIndex(of: itemID) else { return nil }
-        
-        let nearestItemID = timelineIDs[..<index].last(where: { $0.eventID != nil })
-        return nearestItemID
     }
 
     private func handleItemTapped(with itemID: TimelineItemIdentifier) async {
