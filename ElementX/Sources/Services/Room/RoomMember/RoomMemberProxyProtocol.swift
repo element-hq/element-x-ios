@@ -30,6 +30,8 @@ protocol RoomMemberProxyProtocol: AnyObject {
     var membership: MembershipState { get }
     var isAccountOwner: Bool { get }
     var isIgnored: Bool { get }
+    var powerLevel: Int { get }
+    var role: RoomMemberRole { get }
     var canInviteUsers: Bool { get }
 
     func ignoreUser() async -> Result<Void, RoomMemberProxyError>

@@ -39,6 +39,19 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 2)
     }
     
+    func testSortingMembers() async throws {
+        setup(with: [.mockModerator, .mockDan, .mockAlice, .mockAdmin])
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.visibleJoinedMembers.count == 4
+        }
+        
+        try await deferred.fulfill()
+        
+        let sortedMembers: [RoomMemberProxyMock] = [.mockAdmin, .mockModerator, .mockAlice, .mockDan]
+        XCTAssertEqual(viewModel.state.visibleJoinedMembers, sortedMembers.map(RoomMemberDetails.init))
+    }
+    
     func testSearch() async throws {
         setup(with: [.mockAlice, .mockBob])
         

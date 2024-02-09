@@ -1735,6 +1735,16 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingIsIgnored = value }
     }
     var underlyingIsIgnored: Bool!
+    var powerLevel: Int {
+        get { return underlyingPowerLevel }
+        set(value) { underlyingPowerLevel = value }
+    }
+    var underlyingPowerLevel: Int!
+    var role: RoomMemberRole {
+        get { return underlyingRole }
+        set(value) { underlyingRole = value }
+    }
+    var underlyingRole: RoomMemberRole!
     var canInviteUsers: Bool {
         get { return underlyingCanInviteUsers }
         set(value) { underlyingCanInviteUsers = value }

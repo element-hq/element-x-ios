@@ -24,6 +24,8 @@ struct RoomMemberProxyMockConfiguration {
     var membership: MembershipState
     var isAccountOwner = false
     var isIgnored = false
+    var powerLevel = 0
+    var role = RoomMemberRole.user
     var canInviteUsers = false
     var canSendStateEvent: (StateEventType) -> Bool = { _ in true }
 }
@@ -37,6 +39,8 @@ extension RoomMemberProxyMock {
         membership = configuration.membership
         isAccountOwner = configuration.isAccountOwner
         isIgnored = configuration.isIgnored
+        powerLevel = configuration.powerLevel
+        role = configuration.role
         canInviteUsers = configuration.canInviteUsers
         canSendStateEventTypeClosure = configuration.canSendStateEvent
     }
@@ -109,6 +113,24 @@ extension RoomMemberProxyMock {
                                         isAccountOwner: true,
                                         canInviteUsers: canInviteUsers,
                                         canSendStateEvent: { allowedStateEvents.contains($0) }))
+    }
+    
+    static var mockAdmin: RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@admin:matrix.org",
+                                        displayName: "Arthur",
+                                        avatarURL: nil,
+                                        membership: .join,
+                                        powerLevel: 100,
+                                        role: .administrator))
+    }
+    
+    static var mockModerator: RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@mod:matrix.org",
+                                        displayName: "Merlin",
+                                        avatarURL: nil,
+                                        membership: .join,
+                                        powerLevel: 50,
+                                        role: .moderator))
     }
 }
 

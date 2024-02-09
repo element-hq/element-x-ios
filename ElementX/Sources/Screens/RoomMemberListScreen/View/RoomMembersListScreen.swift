@@ -77,7 +77,9 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         let members: [RoomMemberProxyMock] = [
             .mockAlice,
             .mockBob,
-            .mockCharlie
+            .mockCharlie,
+            .mockAdmin,
+            .mockModerator
         ]
         return RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
                                               mediaProvider: MockMediaProvider(),
