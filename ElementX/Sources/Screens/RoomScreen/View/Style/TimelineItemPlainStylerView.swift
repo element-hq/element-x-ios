@@ -98,7 +98,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     TimelineSenderAvatarView(timelineItem: timelineItem)
                     Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                         .font(.subheadline)
-                        .foregroundColor(.compound.avatarColor(for: timelineItem.sender.id).foreground)
+                        .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
                         .fontWeight(.semibold)
                         .lineLimit(1)
                 }

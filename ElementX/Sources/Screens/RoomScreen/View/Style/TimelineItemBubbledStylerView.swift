@@ -80,7 +80,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 TimelineSenderAvatarView(timelineItem: timelineItem)
                 Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                     .font(.compound.bodySMSemibold)
-                    .foregroundColor(.compound.avatarColor(for: timelineItem.sender.id).foreground)
+                    .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
                     .lineLimit(1)
                     .scaledPadding(.vertical, 3)
             }
