@@ -140,8 +140,9 @@ struct MessageText: UIViewRepresentable {
         func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
             if interaction == .invokeDefaultAction {
                 openURLAction.callAsFunction(URL)
+                return false
             }
-            return false
+            return true
         }
     }
 }

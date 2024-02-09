@@ -45,7 +45,8 @@ struct LongPressWithFeedback: ViewModifier {
                 feedbackGenerator.prepare()
                 
                 triggerTask = Task {
-                    try? await Task.sleep(for: .seconds(0.35))
+                    // The wait time needs to be at least 0.5 seconds or the long press gesture will take precedence over long pressing links.
+                    try? await Task.sleep(for: .seconds(0.5))
                     
                     if Task.isCancelled { return }
 
