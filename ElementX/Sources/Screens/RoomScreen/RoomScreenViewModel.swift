@@ -407,17 +407,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             MXLog.error("[TimelineViewController] Failed to send read receipt: \(error)")
         }
     }
-    
-    /// Returns the first item ID that contains an `eventID` starting from the supplied ID, working backwards through the timeline.
-    private func eventBasedItem(nearest itemID: TimelineItemIdentifier) -> TimelineItemIdentifier? {
-        guard itemID.eventID == nil else { return itemID }
-        
-        let timelineIDs = state.timelineViewState.itemViewStates.map(\.identifier)
-        guard let index = timelineIDs.firstIndex(of: itemID) else { return nil }
-        
-        let nearestItemID = timelineIDs[..<index].last(where: { $0.eventID != nil })
-        return nearestItemID
-    }
 
     private func handleItemTapped(with itemID: TimelineItemIdentifier) async {
         state.showLoading = true
