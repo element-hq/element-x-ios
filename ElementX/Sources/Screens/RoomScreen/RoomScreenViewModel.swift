@@ -321,6 +321,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .weakAssign(to: \.state.members, on: self)
             .store(in: &cancellables)
         
+        roomProxy.typingMembers
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.typingMembers, on: self)
+            .store(in: &cancellables)
+        
         roomScreenInteractionHandler.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in

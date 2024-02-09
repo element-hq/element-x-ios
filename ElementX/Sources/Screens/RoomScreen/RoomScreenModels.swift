@@ -118,6 +118,7 @@ struct RoomScreenViewState: BindableState {
     var roomTitle = ""
     var roomAvatarURL: URL?
     var members: [String: RoomMemberState] = [:]
+    var typingMembers: [String] = []
     var showLoading = false
     var timelineStyle: TimelineStyle
     var isEncryptedOneToOneRoom = false

@@ -31,14 +31,23 @@ class RoomProxy: RoomProxyProtocol {
     
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
-    private(set) var displayName: String?
     // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var typingNotificationObservationToken: TaskHandle?
+    
     private var subscribedForUpdates = false
+    
+    private(set) var displayName: String?
 
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.asCurrentValuePublisher()
+    }
+    
+    private let typingMembersSubject = CurrentValueSubject<[String], Never>([])
+    var typingMembers: CurrentValuePublisher<[String], Never> {
+        typingMembersSubject.asCurrentValuePublisher()
     }
         
     private let actionsSubject = PassthroughSubject<RoomProxyAction, Never>()
@@ -86,6 +95,8 @@ class RoomProxy: RoomProxyProtocol {
         await timeline.subscribeForUpdates()
         
         subscribeToRoomStateUpdates()
+        
+        subscribeToTypingNotifications()
     }
     
     func unsubscribeFromUpdates() {
@@ -421,6 +432,26 @@ class RoomProxy: RoomProxyProtocol {
             self?.actionsSubject.send(.stateUpdate)
         })
     }
+    
+    private func subscribeToTypingNotifications() {
+        Task {
+            typingNotificationObservationToken = await room.subscribeToTypingNotifications(listener: RoomTypingNotificationUpdateListener { [weak self] typingUserIDs in
+                guard let self else { return }
+                
+                MXLog.info("Received typing notification update, typingUsers: \(typingUserIDs)")
+                
+                let typingMembers = typingUserIDs.compactMap { userID in
+                    if let member = self.members.value.filter({ $0.userID == userID }).first {
+                        return member.displayName ?? member.userID
+                    } else {
+                        return userID
+                    }
+                }
+                
+                typingMembersSubject.send(typingMembers)
+            })
+        }
+    }
 }
 
 private final class RoomInfoUpdateListener: RoomInfoListener {
@@ -432,5 +463,17 @@ private final class RoomInfoUpdateListener: RoomInfoListener {
     
     func call(roomInfo: RoomInfo) {
         onUpdateClosure()
+    }
+}
+
+private final class RoomTypingNotificationUpdateListener: TypingNotificationsListener {
+    private let onUpdateClosure: ([String]) -> Void
+    
+    init(_ onUpdateClosure: @escaping ([String]) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func call(typingUserIds: [String]) {
+        onUpdateClosure(typingUserIds)
     }
 }

@@ -1871,6 +1871,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingMembers = value }
     }
     var underlyingMembers: CurrentValuePublisher<[RoomMemberProxyProtocol], Never>!
+    var typingMembers: CurrentValuePublisher<[String], Never> {
+        get { return underlyingTypingMembers }
+        set(value) { underlyingTypingMembers = value }
+    }
+    var underlyingTypingMembers: CurrentValuePublisher<[String], Never>!
     var joinedMembersCount: Int {
         get { return underlyingJoinedMembersCount }
         set(value) { underlyingJoinedMembersCount = value }

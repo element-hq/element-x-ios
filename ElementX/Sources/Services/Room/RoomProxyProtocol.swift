@@ -53,6 +53,7 @@ protocol RoomProxyProtocol {
     var ownUserID: String { get }
     
     var name: String? { get }
+    
     var displayName: String? { get }
     
     var topic: String? { get }
@@ -60,6 +61,8 @@ protocol RoomProxyProtocol {
     var avatarURL: URL? { get }
 
     var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
+    
+    var typingMembers: CurrentValuePublisher<[String], Never> { get }
         
     var joinedMembersCount: Int { get }
     
