@@ -33,7 +33,6 @@ class ComposerToolbarViewModelTests: XCTestCase {
         appSettings.richTextEditorEnabled = true
         ServiceLocator.shared.register(appSettings: appSettings)
         wysiwygViewModel = WysiwygComposerViewModel()
-        wysiwygViewModel.textView = WysiwygTextView()
         completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: completionSuggestionServiceMock,
@@ -150,7 +149,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         let suggestion = SuggestionItem.user(item: .init(id: userID, displayName: "Test", avatarURL: nil))
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
-        let attachment = wysiwygViewModel.textView?.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) as? PillTextAttachment
+        let attachment = wysiwygViewModel.textView.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) as? PillTextAttachment
         XCTAssertEqual(attachment?.pillData?.type, .user(userID: userID))
     }
     
@@ -160,7 +159,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         let suggestion = SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: nil))
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
-        let attachment = wysiwygViewModel.textView?.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) as? PillTextAttachment
+        let attachment = wysiwygViewModel.textView.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) as? PillTextAttachment
         XCTAssertEqual(attachment?.pillData?.type, .allUsers)
     }
     
