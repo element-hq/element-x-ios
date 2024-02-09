@@ -78,9 +78,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var deviceID: String? { get }
 
     var homeserver: String { get }
-    
-    var session: Session? { get }
-    
+        
     var userDisplayName: CurrentValuePublisher<String?, Never> { get }
 
     var userAvatarURL: CurrentValuePublisher<URL?, Never> { get }

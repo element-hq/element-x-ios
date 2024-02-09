@@ -159,15 +159,6 @@ class ClientProxy: ClientProxyProtocol {
         client.homeserver()
     }
 
-    var session: Session? {
-        do {
-            return try client.session()
-        } catch {
-            MXLog.error("Failed retrieving the client's session with error: \(error)")
-            return nil
-        }
-    }
-    
     private(set) lazy var pusherNotificationClientIdentifier: String? = {
         // NOTE: The result is stored as part of the restoration token. Any changes
         // here would require a migration to correctly match incoming notifications.

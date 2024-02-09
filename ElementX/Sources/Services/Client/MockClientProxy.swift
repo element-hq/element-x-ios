@@ -26,7 +26,6 @@ class MockClientProxy: ClientProxyProtocol {
     let userID: String
     let deviceID: String?
     let homeserver = ""
-    let session: Session? = nil
     let pusherNotificationClientIdentifier: String? = nil
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()

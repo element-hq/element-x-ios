@@ -27,8 +27,7 @@ actor MediaLoader: MediaLoaderProtocol {
     private let client: ClientProtocol
     private var ongoingRequests = [MediaSourceProxy: MediaRequest]()
 
-    init(client: ClientProtocol,
-         clientQueue: DispatchQueue = .global()) {
+    init(client: ClientProtocol) {
         self.client = client
     }
     

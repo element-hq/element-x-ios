@@ -882,11 +882,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentPollsHistory(roomID: String) {
         Task {
-            await asyncPresentRoomPollsHistory(roomID: roomID)
+            await asyncPresentRoomPollsHistory()
         }
     }
     
-    private func asyncPresentRoomPollsHistory(roomID: String) async {
+    private func asyncPresentRoomPollsHistory() async {
         guard let roomProxy else {
             fatalError()
         }

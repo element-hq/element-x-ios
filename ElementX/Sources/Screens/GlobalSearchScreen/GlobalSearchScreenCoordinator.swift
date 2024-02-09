@@ -30,7 +30,6 @@ enum GlobalSearchControllerAction {
 
 @MainActor
 class GlobalSearchScreenCoordinator: CoordinatorProtocol {
-    private let parameters: GlobalSearchScreenCoordinatorParameters
     private let viewModel: GlobalSearchScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -41,7 +40,6 @@ class GlobalSearchScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: GlobalSearchScreenCoordinatorParameters) {
-        self.parameters = parameters
         viewModel = GlobalSearchScreenViewModel(roomSummaryProvider: parameters.roomSummaryProvider,
                                                 imageProvider: parameters.mediaProvider)
         
