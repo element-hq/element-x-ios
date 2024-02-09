@@ -116,7 +116,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 // Don't capture the values here as combine behaves incorrectly and `isSearchFieldFocused` is sometimes
                 // turning to true after cancelling the search. Read them directly from the state in the updateFilter
                 // method instead on the next run loop to make sure they're up to date.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                DispatchQueue.main.async {
                     self.updateFilter()
                 }
             }
