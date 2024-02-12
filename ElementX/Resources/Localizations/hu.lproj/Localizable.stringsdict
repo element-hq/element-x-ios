@@ -237,9 +237,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
+			<string>%1$@, %2$@ és %3$d további felhasználó</string>
 			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@, %2$@ és %3$d további felhasználó</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -253,9 +253,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
+			<string>%1$@ éppen ír…</string>
 			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ éppen ír…</string>
 		</dict>
 	</dict>
 </dict>
