@@ -128,6 +128,7 @@ struct MessageText: UIViewRepresentable {
 
     final class Coordinator: NSObject, UITextViewDelegate {
         var openURLAction: OpenURLAction
+        let permalinkBaseURL = ServiceLocator.shared.settings.permalinkBaseURL
         
         init(openURLAction: OpenURLAction) {
             self.openURLAction = openURLAction
@@ -138,10 +139,28 @@ struct MessageText: UIViewRepresentable {
         }
         
         func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-            if interaction == .invokeDefaultAction {
+            switch interaction {
+            case .invokeDefaultAction:
                 openURLAction.callAsFunction(URL)
+                return false
+            case .preview:
+                // We don't want to show a URL preview for permalinks
+                return PermalinkBuilder.detectPermalink(in: URL, baseURL: permalinkBaseURL) == nil
+            default:
+                return true
             }
-            return false
+        }
+        
+        @available(iOS 17.0, *)
+        func textView(_ textView: UITextView, menuConfigurationFor textItem: UITextItem, defaultMenu: UIMenu) -> UITextItem.MenuConfiguration? {
+            switch textItem.content {
+            case let .link(url):
+                // We don't want to show a URL preview for permalinks
+                let isPermalink = PermalinkBuilder.detectPermalink(in: url, baseURL: permalinkBaseURL) != nil
+                return .init(preview: isPermalink ? nil : .default, menu: defaultMenu)
+            default:
+                return nil
+            }
         }
     }
 }

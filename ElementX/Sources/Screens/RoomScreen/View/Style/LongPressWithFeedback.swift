@@ -30,7 +30,7 @@ struct LongPressWithFeedback: ViewModifier {
             .shadow(color: .black.opacity(isLongPressing ? 0.1 : 0.0), radius: isLongPressing ? 3 : 0)
             .scaleEffect(x: isLongPressing ? 1.05 : 1,
                          y: isLongPressing ? 1.05 : 1)
-            .animation(.spring(response: 0.5).delay(isLongPressing ? 0.1 : 0).disabledDuringTests(),
+            .animation(.spring(response: 0.7).delay(isLongPressing ? 0.1 : 0).disabledDuringTests(),
                        value: isLongPressing)
             // The minimum duration here doesn't actually invoke the perform block when elapsed (thus
             // the implementation below) but it does cancel other system gestures e.g. swipe to reply
@@ -45,7 +45,8 @@ struct LongPressWithFeedback: ViewModifier {
                 feedbackGenerator.prepare()
                 
                 triggerTask = Task {
-                    try? await Task.sleep(for: .seconds(0.35))
+                    // The wait time needs to be at least 0.5 seconds or the long press gesture will take precedence over long pressing links.
+                    try? await Task.sleep(for: .seconds(0.5))
                     
                     if Task.isCancelled { return }
 
