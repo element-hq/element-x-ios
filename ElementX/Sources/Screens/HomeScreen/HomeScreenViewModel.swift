@@ -110,13 +110,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         isSearchFieldFocused
             .combineLatest(searchQuery, enabledFilters)
             .removeDuplicates { $0 == $1 }
-            .map { _ in () }
-            .sink { [weak self] in
+            .sink { [weak self] isSearchFieldFocused, _, _ in
                 guard let self else { return }
-                // Don't capture the values here as combine behaves incorrectly and `isSearchFieldFocused` is sometimes
-                // turning to true after cancelling the search. Read them directly from the state in the updateFilter
-                // method instead on the next run loop to make sure they're up to date.
-                DispatchQueue.main.async {
+                // isSearchFieldFocused` is sometimes turning to true after cancelling the search. So to be extra sure we are updating the values correctly we read them directly in the next run loop, and we add a small delay if the value has changed
+                let delay = isSearchFieldFocused == self.context.viewState.bindings.isSearchFieldFocused ? 0.0 : 0.05
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     self.updateFilter()
                 }
             }
