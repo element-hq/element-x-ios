@@ -297,6 +297,8 @@
 "screen_advanced_settings_rich_text_editor_description" = "Desactiva el editor de texto enriquecido para escribir Markdown manualmente.";
 "screen_advanced_settings_send_read_receipts" = "Read receipts";
 "screen_advanced_settings_send_read_receipts_description" = "If turned off, your read receipts won't be sent to anyone. You will still receive read receipts from other users.";
+"screen_advanced_settings_share_presence" = "Share presence";
+"screen_advanced_settings_share_presence_description" = "If turned off, you won’t be able to send or receive read receipts or typing notifications";
 "screen_advanced_settings_view_source_description" = "Habilita la opción para ver el contenido en bruto del mensaje en la cronología.";
 "screen_analytics_prompt_data_usage" = "No registraremos o perfilaremos ningún dato personal";
 "screen_analytics_prompt_help_us_improve" = "Compartir datos de uso anónimos para ayudarnos a identificar problemas.";
@@ -337,6 +339,7 @@
 "screen_bug_report_editor_description" = "Describe el problema. ¿Qué has hecho? ¿Qué esperabas que ocurriera? ¿Qué ocurrió realmente? Por favor, detállalo todo lo que puedas.";
 "screen_bug_report_editor_placeholder" = "Describe el problema...";
 "screen_bug_report_editor_supporting" = "Si es posible, escriba la descripción en inglés.";
+"screen_bug_report_error_description_too_short" = "The description is too short, please provide more details about what happened. Thanks!";
 "screen_bug_report_include_crash_logs" = "Enviar registros de fallos";
 "screen_bug_report_include_logs" = "Permitir registros";
 "screen_bug_report_include_screenshot" = "Enviar captura de pantalla";
@@ -511,6 +514,8 @@
 "screen_room_member_details_unblock_alert_description" = "Podrás ver todos sus mensajes de nuevo.";
 "screen_room_member_details_unblock_user" = "Desbloquear usuario";
 "screen_room_member_list_pending_header_title" = "Pendiente";
+"screen_room_member_list_role_administrator" = "Admin";
+"screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "Miembros de la sala";
 "screen_room_message_copied" = "Mensaje copiado";
 "screen_room_no_permission_to_post" = "No tienes permiso para publicar en esta sala";

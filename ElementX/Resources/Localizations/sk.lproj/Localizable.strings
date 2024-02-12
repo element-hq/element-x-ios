@@ -119,7 +119,7 @@
 "common_error" = "Chyba";
 "common_everyone" = "Všetci";
 "common_face_id_ios" = "Face ID";
-"common_favourite" = "Favourite";
+"common_favourite" = "Obľúbené";
 "common_file" = "Súbor";
 "common_forward_message" = "Preposlať správu";
 "common_gif" = "GIF";
@@ -297,6 +297,8 @@
 "screen_advanced_settings_rich_text_editor_description" = "Vypnite rozšírený textový editor na ručné písanie Markdown.";
 "screen_advanced_settings_send_read_receipts" = "Potvrdenia o prečítaní";
 "screen_advanced_settings_send_read_receipts_description" = "Ak je táto funkcia vypnutá, vaše potvrdenia o prečítaní sa nebudú nikomu odosielať. Stále budete dostávať potvrdenia o prečítaní od ostatných používateľov.";
+"screen_advanced_settings_share_presence" = "Zdieľať prítomnosť";
+"screen_advanced_settings_share_presence_description" = "Ak je vypnuté, nebudete môcť odosielať ani prijímať potvrdenia o prečítaní alebo písať upozornenia";
 "screen_advanced_settings_view_source_description" = "Povoliť možnosť zobrazenia zdroja správy na časovej osi.";
 "screen_analytics_prompt_data_usage" = "Nezaznamenávame ani neprofilujeme žiadne osobné údaje";
 "screen_analytics_prompt_help_us_improve" = "Zdieľajte anonymné údaje o používaní, aby sme mohli identifikovať problémy.";
@@ -337,6 +339,7 @@
 "screen_bug_report_editor_description" = "Popíšte prosím chybu. Čo ste urobili? Čo ste očakávali, že sa stane? Čo sa skutočne stalo. Prosím, uveďte čo najviac podrobností.";
 "screen_bug_report_editor_placeholder" = "Popíšte chybu…";
 "screen_bug_report_editor_supporting" = "Ak je to možné, napíšte popis v angličtine.";
+"screen_bug_report_error_description_too_short" = "Popis je príliš krátky, uveďte viac podrobností o tom, čo sa stalo. Ďakujeme!";
 "screen_bug_report_include_crash_logs" = "Odoslať záznamy o zlyhaní";
 "screen_bug_report_include_logs" = "Povoliť záznamy";
 "screen_bug_report_include_screenshot" = "Odoslať snímku obrazovky";
@@ -511,6 +514,8 @@
 "screen_room_member_details_unblock_alert_description" = "Všetky správy od nich budete môcť opäť vidieť.";
 "screen_room_member_details_unblock_user" = "Odblokovať používateľa";
 "screen_room_member_list_pending_header_title" = "Čaká sa";
+"screen_room_member_list_role_administrator" = "Administrátor";
+"screen_room_member_list_role_moderator" = "Moderátor";
 "screen_room_member_list_room_members_header_title" = "Členovia miestnosti";
 "screen_room_message_copied" = "Správa skopírovaná";
 "screen_room_no_permission_to_post" = "Nemáte povolenie uverejňovať príspevky v tejto miestnosti";
@@ -533,7 +538,7 @@
 "screen_room_retry_send_menu_title" = "Vašu správu sa nepodarilo odoslať";
 "screen_room_timeline_add_reaction" = "Pridať emoji";
 "screen_room_timeline_less_reactions" = "Zobraziť menej";
-"screen_room_typing_two_members" = "%1$@ and %2$@";
+"screen_room_typing_two_members" = "%1$@ a %2$@";
 "screen_room_voice_message_tooltip" = "Podržaním nahrajte";
 "screen_roomlist_a11y_create_message" = "Vytvorte novú konverzáciu alebo miestnosť";
 "screen_roomlist_empty_message" = "Začnite tým, že niekomu pošlete správu.";
@@ -543,8 +548,8 @@
 "screen_roomlist_filter_rooms" = "Miestnosti";
 "screen_roomlist_filter_unreads" = "Neprečítané";
 "screen_roomlist_main_space_title" = "Všetky konverzácie";
-"screen_roomlist_mark_as_read" = "Mark as read";
-"screen_roomlist_mark_as_unread" = "Mark as unread";
+"screen_roomlist_mark_as_read" = "Označiť ako prečítané";
+"screen_roomlist_mark_as_unread" = "Označiť ako neprečítané";
 "screen_server_confirmation_change_server" = "Zmeniť poskytovateľa účtu";
 "screen_server_confirmation_message_login_element_dot_io" = "Súkromný server pre zamestnancov spoločnosti Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu.";
@@ -669,7 +674,7 @@
 "dialog_title_success" = "Úspech";
 "notification_fallback_content" = "Oznámenie";
 "notification_invitation_action_join" = "Pripojiť sa";
-"notification_room_action_mark_as_read" = "Mark as read";
+"notification_room_action_mark_as_read" = "Označiť ako prečítané";
 "notification_room_action_quick_reply" = "Rýchla odpoveď";
 "screen_room_mentions_at_room_title" = "Všetci";
 "screen_account_provider_signin_subtitle" = "Tu budú žiť vaše konverzácie - podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov.";

@@ -56,7 +56,7 @@
 "action_join" = "Далучыцца";
 "action_learn_more" = "Падрабязней";
 "action_leave" = "Пакінуць";
-"action_leave_conversation" = "Leave conversation";
+"action_leave_conversation" = "Пакінуць размову";
 "action_leave_room" = "Пакінуць пакой";
 "action_manage_account" = "Кіраванне ўліковым запісам";
 "action_manage_devices" = "Кіраванне прыладамі";
@@ -100,7 +100,7 @@
 "common_acceptable_use_policy" = "Палітыка дапушчальнага выкарыстання";
 "common_advanced_settings" = "Пашыраныя налады";
 "common_analytics" = "Аналітыка";
-"common_appearance" = "Appearance";
+"common_appearance" = "Знешні выгляд";
 "common_audio" = "Аўдыё";
 "common_bubbles" = "Бурбалкі";
 "common_chat_backup" = "Рэзервовае капіраванне чата";
@@ -140,7 +140,7 @@
 "common_offline" = "Па-за сеткай";
 "common_optic_id_ios" = "Optic ID";
 "common_password" = "Пароль";
-"common_people" = "People";
+"common_people" = "Людзі";
 "common_permalink" = "Пастаянная спасылка";
 "common_permission" = "Дазвол";
 "common_poll_total_votes" = "Усяго галасоў: %1$@";
@@ -297,6 +297,8 @@
 "screen_advanced_settings_rich_text_editor_description" = "Адключыць рэдактар фарматаванага тэксту і ўключыць Markdown.";
 "screen_advanced_settings_send_read_receipts" = "Read receipts";
 "screen_advanced_settings_send_read_receipts_description" = "If turned off, your read receipts won't be sent to anyone. You will still receive read receipts from other users.";
+"screen_advanced_settings_share_presence" = "Share presence";
+"screen_advanced_settings_share_presence_description" = "If turned off, you won’t be able to send or receive read receipts or typing notifications";
 "screen_advanced_settings_view_source_description" = "Уключыце опцыю для прагляду крыніцы паведамлення на часовай шкале.";
 "screen_analytics_prompt_data_usage" = "Мы не будзем запісваць або прафіляваць любыя асабістыя даныя";
 "screen_analytics_prompt_help_us_improve" = "Даваць ананімныя дадзеныя аб выкарыстанні, каб дапамагчы нам выявіць праблемы.";
@@ -337,6 +339,7 @@
 "screen_bug_report_editor_description" = "Калі ласка, апішыце памылку. Што вы зрабілі? Якія паводзіны вы чакалі? Што адбылося насамрэч. Калі ласка, апішыце ўсё як магчыма падрабязней.";
 "screen_bug_report_editor_placeholder" = "Апішыце праблему…";
 "screen_bug_report_editor_supporting" = "Калі магчыма, калі ласка, напішыце апісанне на англійскай мове.";
+"screen_bug_report_error_description_too_short" = "The description is too short, please provide more details about what happened. Thanks!";
 "screen_bug_report_include_crash_logs" = "Адправіць часопісы збояў";
 "screen_bug_report_include_logs" = "Дазволіць часопісы";
 "screen_bug_report_include_screenshot" = "Адправіць здымак экрана";
@@ -511,6 +514,8 @@
 "screen_room_member_details_unblock_alert_description" = "Вы зноў зможаце ўбачыць усе паведамленні.";
 "screen_room_member_details_unblock_user" = "Разблакіраваць карыстальніка";
 "screen_room_member_list_pending_header_title" = "У чаканні";
+"screen_room_member_list_role_administrator" = "Admin";
+"screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "Карыстальнікі пакоя";
 "screen_room_message_copied" = "Паведамленне скапіравана";
 "screen_room_no_permission_to_post" = "У вас няма дазволу публікаваць паведамленні ў гэтым пакоі";
@@ -691,14 +696,14 @@
 "screen_login_subtitle" = "Matrix - гэта адкрытая сетка для бяспечнай, дэцэнтралізаванай сувязі.";
 "screen_report_content_block_user" = "Заблакіраваць карыстальніка";
 "screen_room_attachment_source_camera_photo" = "Зрабіць фота";
-"screen_room_details_leave_conversation_title" = "Leave conversation";
+"screen_room_details_leave_conversation_title" = "Пакінуць размову";
 "screen_room_details_leave_room_title" = "Пакінуць пакой";
 "screen_room_details_room_name_label" = "Назва пакоя";
 "screen_room_details_security_title" = "Бяспека";
 "screen_room_details_topic_title" = "Тэма";
 "screen_room_error_failed_processing_media" = "Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз.";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Толькі згадванні і ключавыя словы";
-"screen_roomlist_filter_people" = "People";
+"screen_roomlist_filter_people" = "Людзі";
 "screen_signout_confirmation_dialog_submit" = "Выйсці";
 "screen_signout_confirmation_dialog_title" = "Выйсці";
 "screen_signout_preference_item" = "Выйсці";

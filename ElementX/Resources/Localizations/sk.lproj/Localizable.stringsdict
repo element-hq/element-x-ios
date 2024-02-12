@@ -265,9 +265,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
+			<string>%1$@, %2$@ a %3$d ďalší</string>
+			<key>few</key>
+			<string>%1$@, %2$@ a %3$d ďalší</string>
 			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@, %2$@ a %3$d ďalší</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -281,9 +283,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
+			<string>%1$@ píše</string>
+			<key>few</key>
+			<string>%1$@ píšu</string>
 			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ píšu</string>
 		</dict>
 	</dict>
 </dict>

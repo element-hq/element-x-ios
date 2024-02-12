@@ -297,6 +297,8 @@
 "screen_advanced_settings_rich_text_editor_description" = "Vypněte editor formátovaného textu pro ruční zadání Markdown.";
 "screen_advanced_settings_send_read_receipts" = "Potvrzení o přečtení";
 "screen_advanced_settings_send_read_receipts_description" = "Pokud je vypnuto, potvrzení o přečtení se nikomu neodesílají. Stále budete dostávat potvrzení o přečtení od ostatních uživatelů.";
+"screen_advanced_settings_share_presence" = "Sdílejte přítomnost";
+"screen_advanced_settings_share_presence_description" = "Pokud je tato funkce vypnutá, nebudete moci odesílat ani přijímat potvrzení o přečtení ani upozornění na psaní";
 "screen_advanced_settings_view_source_description" = "Povolit možnost zobrazení zdroje zprávy na časové ose.";
 "screen_analytics_prompt_data_usage" = "Nezaznamenáváme ani neprofilujeme žádné údaje o účtu";
 "screen_analytics_prompt_help_us_improve" = "Sdílejte anonymní údaje o používání, které nám pomohou identifikovat problémy.";
@@ -337,6 +339,7 @@
 "screen_bug_report_editor_description" = "Popište prosím chybu. Co jste udělali? Co jste očekávali, že se stane? Co se ve skutečnosti stalo? Uveďte co nejvíce podrobností.";
 "screen_bug_report_editor_placeholder" = "Popište chybu…";
 "screen_bug_report_editor_supporting" = "Pokud je to možné, prosím, napište popis anglicky.";
+"screen_bug_report_error_description_too_short" = "Popis je příliš krátký, uveďte prosím více podrobností o tom, co se stalo. Děkujeme!";
 "screen_bug_report_include_crash_logs" = "Odeslat záznamy o selhání";
 "screen_bug_report_include_logs" = "Povolit protokoly";
 "screen_bug_report_include_screenshot" = "Odeslat snímek obrazovky";
@@ -511,6 +514,8 @@
 "screen_room_member_details_unblock_alert_description" = "Znovu uvidíte všechny zprávy od nich.";
 "screen_room_member_details_unblock_user" = "Odblokovat uživatele";
 "screen_room_member_list_pending_header_title" = "Nevyřízeno";
+"screen_room_member_list_role_administrator" = "Admin";
+"screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "Členové místnosti";
 "screen_room_message_copied" = "Zpráva zkopírována";
 "screen_room_no_permission_to_post" = "Nemáte oprávnění zveřejňovat příspěvky v této místnosti";

@@ -297,6 +297,8 @@
 "screen_advanced_settings_rich_text_editor_description" = "Disattiva l'editor in rich text per digitare Markdown manualmente.";
 "screen_advanced_settings_send_read_receipts" = "Conferme di lettura";
 "screen_advanced_settings_send_read_receipts_description" = "Se disattivato, le tue conferme di lettura non verranno inviate a nessuno. Riceverai comunque conferme di lettura da altri utenti.";
+"screen_advanced_settings_share_presence" = "Share presence";
+"screen_advanced_settings_share_presence_description" = "If turned off, you won’t be able to send or receive read receipts or typing notifications";
 "screen_advanced_settings_view_source_description" = "Attiva l'opzione per visualizzare il sorgente del messaggio nella linea temporale.";
 "screen_analytics_prompt_data_usage" = "Non registreremo né profileremo alcun dato personale";
 "screen_analytics_prompt_help_us_improve" = "Condividi dati di utilizzo anonimi per aiutarci a identificare problemi.";
@@ -337,6 +339,7 @@
 "screen_bug_report_editor_description" = "Descrivi il problema. Che cosa hai fatto? Cosa ti aspettavi che accadesse? Cosa è effettivamente accaduto. Si prega di inserire il maggior numero di dettagli possibile.";
 "screen_bug_report_editor_placeholder" = "Descrivi il problema…";
 "screen_bug_report_editor_supporting" = "Se possibile, scrivere la descrizione in inglese.";
+"screen_bug_report_error_description_too_short" = "The description is too short, please provide more details about what happened. Thanks!";
 "screen_bug_report_include_crash_logs" = "Invia i log degli arresti anomali";
 "screen_bug_report_include_logs" = "Consenti i log";
 "screen_bug_report_include_screenshot" = "Invia istantanea schermo";
@@ -511,6 +514,8 @@
 "screen_room_member_details_unblock_alert_description" = "Potrai vedere di nuovo tutti i suoi messaggi.";
 "screen_room_member_details_unblock_user" = "Sblocca utente";
 "screen_room_member_list_pending_header_title" = "In attesa";
+"screen_room_member_list_role_administrator" = "Admin";
+"screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "Membri della stanza";
 "screen_room_message_copied" = "Messaggio copiato";
 "screen_room_no_permission_to_post" = "Non sei autorizzato a postare in questa stanza";
