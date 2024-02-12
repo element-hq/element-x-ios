@@ -32,6 +32,20 @@ class TimelineItemCell: UITableViewCell {
     }
 }
 
+/// A table view cell that displays member typing notifications. The cell is intended
+/// to be configured to display a SwiftUI view and not use any UIKit.
+class TimelineTypingIndicatorCell: UITableViewCell {
+    static let reuseIdentifier = "TimelineTypingIndicatorCell"
+}
+
+class TypingMembersObservableObject: ObservableObject {
+    @Published var members: [String] = []
+    
+    init(members: [String]) {
+        self.members = members
+    }
+}
+
 /// A table view controller that displays the timeline of a room.
 ///
 /// This class subclasses `UIViewController` as `UITableViewController` adds some
@@ -65,6 +79,18 @@ class TimelineTableViewController: UIViewController {
         }
     }
     
+    /// Used to hold an observable object that the typing indicator can use
+    let typingMembers = TypingMembersObservableObject(members: [])
+    
+    /// Updates the typing members but also updates table view items
+    func setTypingMembers(_ members: [String]) {
+        DispatchQueue.main.async {
+            // Avoid `Publishing changes from within view update warnings`
+            self.typingMembers.members = members
+            self.applySnapshot()
+        }
+    }
+    
     @Binding private var isScrolledToBottom: Bool
 
     private var timelineItemsIDs: [String] {
@@ -94,6 +120,7 @@ class TimelineTableViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         tableView.register(TimelineItemCell.self, forCellReuseIdentifier: TimelineItemCell.reuseIdentifier)
+        tableView.register(TimelineTypingIndicatorCell.self, forCellReuseIdentifier: TimelineTypingIndicatorCell.reuseIdentifier)
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
         tableView.keyboardDismissMode = .onDrag
@@ -146,31 +173,49 @@ class TimelineTableViewController: UIViewController {
     /// Configures a diffable data source for the timeline's table view.
     private func configureDataSource() {
         dataSource = .init(tableView: tableView) { [weak self] tableView, indexPath, id in
-            let cell = tableView.dequeueReusableCell(withIdentifier: TimelineItemCell.reuseIdentifier, for: indexPath)
-            guard let self, let cell = cell as? TimelineItemCell else { return cell }
-            
-            // A local reference to avoid capturing self in the cell configuration.
-            let coordinator = self.coordinator
-
-            let viewState = timelineItemsDictionary[id]
-            cell.item = viewState
-            guard let viewState else {
+            switch id {
+            case TimelineTypingIndicatorCell.reuseIdentifier:
+                let cell = tableView.dequeueReusableCell(withIdentifier: TimelineTypingIndicatorCell.reuseIdentifier, for: indexPath)
+                guard let self else {
+                    return cell
+                }
+                
+                cell.contentConfiguration = UIHostingConfiguration {
+                    TypingIndicatorView(typingMembers: self.typingMembers)
+                }
+                .background(Color.clear)
+                
+                // Flipping the cell can create some issues with cell resizing, so flip the content View
+                cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
+                
+                return cell
+            default:
+                let cell = tableView.dequeueReusableCell(withIdentifier: TimelineItemCell.reuseIdentifier, for: indexPath)
+                guard let self, let cell = cell as? TimelineItemCell else { return cell }
+                
+                // A local reference to avoid capturing self in the cell configuration.
+                let coordinator = self.coordinator
+                
+                let viewState = timelineItemsDictionary[id]
+                cell.item = viewState
+                guard let viewState else {
+                    return cell
+                }
+                cell.contentConfiguration = UIHostingConfiguration {
+                    RoomTimelineItemView(viewState: viewState)
+                        .id(id)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
+                        .environment(\.roomContext, coordinator.context)
+                }
+                .margins(.all, self.timelineStyle.rowInsets)
+                .minSize(height: 1)
+                .background(Color.clear)
+                
+                // Flipping the cell can create some issues with cell resizing, so flip the content View
+                cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
                 return cell
             }
-            cell.contentConfiguration = UIHostingConfiguration {
-                RoomTimelineItemView(viewState: viewState)
-                    .id(id)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
-                    .environment(\.roomContext, coordinator.context)
-            }
-            .margins(.all, self.timelineStyle.rowInsets)
-            .minSize(height: 1)
-            .background(Color.clear)
-
-            // Flipping the cell can create some issues with cell resizing, so flip the content View
-            cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
-            return cell
         }
         
         // We only animate when there's a new last message, so its safe
@@ -197,14 +242,27 @@ class TimelineTableViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItemsIDs)
-
+        
         let currentSnapshot = dataSource.snapshot()
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
-
-        // We only animate when new items come at the end of the timeline, ignoring transitions through empty.
-        let animated = currentSnapshot.numberOfItems > 0 && snapshot.numberOfItems > 0 &&
-            snapshot.itemIdentifiers.first != currentSnapshot.itemIdentifiers.first
-        dataSource.apply(snapshot, animatingDifferences: animated)
+        
+        if currentSnapshot.sectionIdentifiers.contains(.main), snapshot.sectionIdentifiers.contains(.main) {
+            // We only animate when new items come at the end of the timeline, ignoring transitions through empty.
+            let animated = currentSnapshot.numberOfItems(inSection: .main) > 0 &&
+                snapshot.numberOfItems(inSection: .main) > 0 &&
+                snapshot.itemIdentifiers(inSection: .main).first != currentSnapshot.itemIdentifiers(inSection: .main).first
+            
+            dataSource.apply(snapshot, animatingDifferences: animated)
+        } else {
+            dataSource.apply(snapshot, animatingDifferences: true)
+        }
+        
+        // Always animate typing indicators
+        if !typingMembers.members.isEmpty {
+            snapshot.insertSections([.typingIndicator], beforeSection: .main)
+            snapshot.appendItems([TimelineTypingIndicatorCell.reuseIdentifier], toSection: .typingIndicator)
+            dataSource.apply(snapshot, animatingDifferences: true)
+        }
     }
     
     /// Scrolls to the bottom of the timeline.
@@ -293,5 +351,6 @@ extension TimelineTableViewController {
     /// The sections of the table view used in the diffable data source.
     enum TimelineSection {
         case main
+        case typingIndicator
     }
 }
