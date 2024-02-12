@@ -83,6 +83,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     private func updateState(members: [RoomMemberProxyProtocol]) {
         Task {
             showLoader()
+            let members = members.sorted()
             let roomMembersDetails = await buildMembersDetails(members: members)
             self.members = members
             self.state = .init(joinedMembersCount: roomProxy.joinedMembersCount,

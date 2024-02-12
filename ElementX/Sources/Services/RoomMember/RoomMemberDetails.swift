@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 struct RoomMemberDetails: Identifiable, Equatable {
     let id: String
@@ -23,6 +24,9 @@ struct RoomMemberDetails: Identifiable, Equatable {
     let permalink: URL?
     let isAccountOwner: Bool
     var isIgnored: Bool
+    
+    enum Role { case administrator, moderator, user }
+    let role: Role
 
     init(withProxy proxy: RoomMemberProxyProtocol) {
         id = proxy.userID
@@ -31,5 +35,16 @@ struct RoomMemberDetails: Identifiable, Equatable {
         permalink = proxy.permalink
         isAccountOwner = proxy.isAccountOwner
         isIgnored = proxy.isIgnored
+        role = .init(proxy.role)
+    }
+}
+
+extension RoomMemberDetails.Role {
+    init(_ role: RoomMemberRole) {
+        self = switch role {
+        case .administrator: .administrator
+        case .moderator: .moderator
+        case .user: .user
+        }
     }
 }

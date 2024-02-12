@@ -30,6 +30,8 @@ protocol RoomMemberProxyProtocol: AnyObject {
     var membership: MembershipState { get }
     var isAccountOwner: Bool { get }
     var isIgnored: Bool { get }
+    var powerLevel: Int { get }
+    var role: RoomMemberRole { get }
     var canInviteUsers: Bool { get }
 
     func ignoreUser() async -> Result<Void, RoomMemberProxyError>
@@ -41,5 +43,25 @@ extension RoomMemberProxyProtocol {
     var permalink: URL? {
         try? PermalinkBuilder.permalinkTo(userIdentifier: userID,
                                           baseURL: ServiceLocator.shared.settings.permalinkBaseURL)
+    }
+    
+    /// The name used for sorting the member alphabetically. This will be the displayname if,
+    /// it exists otherwise it will be the userID with the leading `@` removed.
+    var sortingName: String {
+        // If there isn't a displayname we sort by the userID without the @.
+        displayName ?? String(userID.dropFirst())
+    }
+}
+
+extension [RoomMemberProxyProtocol] {
+    /// The members, sorted first by power-level, and then alphabetically within each power-level.
+    func sorted() -> Self {
+        sorted { lhs, rhs in
+            if lhs.powerLevel != rhs.powerLevel {
+                lhs.powerLevel > rhs.powerLevel
+            } else {
+                lhs.sortingName < rhs.sortingName
+            }
+        }
     }
 }

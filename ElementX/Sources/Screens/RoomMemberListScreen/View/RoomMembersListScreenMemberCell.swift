@@ -31,19 +31,40 @@ struct RoomMembersListScreenMemberCell: View {
                                     avatarSize: .user(on: .roomDetails),
                                     imageProvider: context.imageProvider)
                     .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(member.name ?? "")
-                        .font(.compound.bodyMDSemibold)
-                        .foregroundColor(.compound.textPrimary)
-                        .lineLimit(1)
-                    Text(member.id)
-                        .font(.compound.bodySM)
-                        .foregroundColor(.compound.textSecondary)
-                        .lineLimit(1)
+                
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(member.name ?? "")
+                            .font(.compound.bodyMDSemibold)
+                            .foregroundColor(.compound.textPrimary)
+                            .lineLimit(1)
+                        Text(member.id)
+                            .font(.compound.bodySM)
+                            .foregroundColor(.compound.textSecondary)
+                            .lineLimit(1)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    if let role {
+                        Text(role)
+                            .font(.compound.bodyXS)
+                            .foregroundStyle(.compound.textSecondary)
+                    }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
+        }
+    }
+    
+    var role: String? {
+        switch member.role {
+        case .administrator:
+            L10n.screenRoomMemberListRoleAdministrator
+        case .moderator:
+            L10n.screenRoomMemberListRoleModerator
+        case .user:
+            nil
         }
     }
 }
@@ -52,7 +73,8 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
     static let members: [RoomMemberProxyMock] = [
         .mockAlice,
         .mockBob,
-        .mockCharlie
+        .mockCharlie,
+        .mockModerator
     ]
     static let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
                                                           mediaProvider: MockMediaProvider(),
