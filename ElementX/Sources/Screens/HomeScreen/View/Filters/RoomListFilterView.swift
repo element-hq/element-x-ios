@@ -18,7 +18,7 @@ import SwiftUI
 
 struct RoomListFilterView: View {
     let filter: RoomListFilter
-    @StateObject var state: RoomListFiltersState
+    @Binding var state: RoomListFiltersState
 
     var body: some View {
         let binding = Binding<Bool>(get: {
@@ -35,8 +35,8 @@ struct RoomListFilterView: View {
 
 struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomListFilterView(filter: .people, state: .init())
-        RoomListFilterView(filter: .people, state: .init(activeFilters: [.people]))
+        RoomListFilterView(filter: .people, state: .constant(.init()))
+        RoomListFilterView(filter: .people, state: .constant(.init(activeFilters: [.people])))
     }
 }
 

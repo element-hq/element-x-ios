@@ -17,22 +17,25 @@
 import SwiftUI
 
 struct RoomListFiltersView: View {
-    @StateObject var state: RoomListFiltersState
+    @Binding var state: RoomListFiltersState
+    @Namespace var namespace
     
     var body: some View {
         ScrollView(.horizontal) {
-            // The external HStack is required otherwise the appearence and disappearence of the clear button will change the height of the LazyHStack
             HStack(spacing: 8) {
                 if state.isFiltering {
                     clearButton
                 }
-                LazyHStack(spacing: 8) {
-                    ForEach(state.sortedActiveFilters) { filter in
-                        RoomListFilterView(filter: filter, state: state)
-                    }
-                    ForEach(state.availableFilters) { filter in
-                        RoomListFilterView(filter: filter, state: state)
-                    }
+                
+                ForEach(state.sortedActiveFilters) { filter in
+                    RoomListFilterView(filter: filter, state: $state)
+                        .matchedGeometryEffect(id: filter.id, in: namespace)
+                        // This will make the animation always render the enabled ones on top
+                        .zIndex(1)
+                }
+                ForEach(state.availableFilters) { filter in
+                    RoomListFilterView(filter: filter, state: $state)
+                        .matchedGeometryEffect(id: filter.id, in: namespace)
                 }
             }
             .padding(.leading, 16)
@@ -58,7 +61,7 @@ struct RoomListFiltersView: View {
 
 struct RoomListFiltersView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomListFiltersView(state: .init())
-        RoomListFiltersView(state: .init(activeFilters: [.rooms, .favourites]))
+        RoomListFiltersView(state: .constant(.init()))
+        RoomListFiltersView(state: .constant(.init(activeFilters: [.rooms, .favourites])))
     }
 }
