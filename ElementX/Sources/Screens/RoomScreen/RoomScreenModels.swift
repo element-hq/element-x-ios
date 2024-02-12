@@ -120,6 +120,7 @@ struct RoomScreenViewState: BindableState {
     var members: [String: RoomMemberState] = [:]
     var typingMembers: [String] = []
     var showLoading = false
+    var showReadReceipts = false
     var timelineStyle: TimelineStyle
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this

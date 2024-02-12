@@ -97,7 +97,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         switch await roomProxy.timeline.sendReadReceipt(for: eventID,
-                                                        type: appSettings.sendReadReceiptsEnabled ? .read : .readPrivate) {
+                                                        type: appSettings.sharePresence ? .read : .readPrivate) {
         case .success:
             return .success(())
         case .failure:

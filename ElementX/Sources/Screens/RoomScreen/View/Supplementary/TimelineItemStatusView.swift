@@ -33,7 +33,7 @@ struct TimelineItemStatusView: View {
 
     @ViewBuilder
     private var mainContent: some View {
-        if !timelineItem.properties.orderedReadReceipts.isEmpty {
+        if context.viewState.showReadReceipts, !timelineItem.properties.orderedReadReceipts.isEmpty {
             readReceipts
         } else {
             deliveryStatusBadge
