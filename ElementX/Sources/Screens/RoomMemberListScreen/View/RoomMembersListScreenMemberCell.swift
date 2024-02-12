@@ -25,8 +25,8 @@ struct RoomMembersListScreenMemberCell: View {
             context.send(viewAction: .selectMember(id: member.id))
         } label: {
             HStack(spacing: 8) {
-                LoadableAvatarImage(url: member.avatarURL,
-                                    name: member.name ?? "",
+                LoadableAvatarImage(url: avatarURL,
+                                    name: avatarName,
                                     contentID: member.id,
                                     avatarSize: .user(on: .roomDetails),
                                     imageProvider: context.imageProvider)
@@ -34,14 +34,17 @@ struct RoomMembersListScreenMemberCell: View {
                 
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     VStack(alignment: .leading, spacing: 0) {
-                        Text(member.name ?? "")
+                        Text(title)
                             .font(.compound.bodyMDSemibold)
                             .foregroundColor(.compound.textPrimary)
                             .lineLimit(1)
-                        Text(member.id)
-                            .font(.compound.bodySM)
-                            .foregroundColor(.compound.textSecondary)
-                            .lineLimit(1)
+                        
+                        if let subtitle {
+                            Text(subtitle)
+                                .font(.compound.bodySM)
+                                .foregroundColor(.compound.textSecondary)
+                                .lineLimit(1)
+                        }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
@@ -67,22 +70,59 @@ struct RoomMembersListScreenMemberCell: View {
             nil
         }
     }
+    
+    // Computed properties to hide the user's profile when banned.
+    
+    var title: String {
+        guard !member.isBanned else { return member.id }
+        return member.name ?? member.id
+    }
+    
+    var subtitle: String? {
+        member.isBanned ? nil : member.id
+    }
+    
+    var avatarName: String? {
+        member.isBanned ? nil : member.name
+    }
+    
+    var avatarURL: URL? {
+        member.isBanned ? nil : member.avatarURL
+    }
 }
 
 struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
     static let members: [RoomMemberProxyMock] = [
         .mockAlice,
-        .mockBob,
-        .mockCharlie,
-        .mockModerator
+        .mockAdmin,
+        .mockModerator,
+        .init(with: .init(userID: "@nodisplayname:matrix.org", membership: .join)),
+        .init(with: .init(userID: "@avatar:matrix.org", displayName: "Avatar", avatarURL: .picturesDirectory, membership: .join))
     ]
-    static let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
+    
+    static let bannedMembers: [RoomMemberProxyMock] = [
+        .init(with: .init(userID: "@nodisplayname:matrix.org", membership: .ban)),
+        .init(with: .init(userID: "@fake:matrix.org", displayName: "President", membership: .ban)),
+        .init(with: .init(userID: "@badavatar:matrix.org", avatarURL: .picturesDirectory, membership: .ban))
+    ]
+    
+    static let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room",
+                                                                                               members: members)),
                                                           mediaProvider: MockMediaProvider(),
                                                           userIndicatorController: ServiceLocator.shared.userIndicatorController)
     static var previews: some View {
         VStack(spacing: 12) {
-            ForEach(members, id: \.userID) { member in
-                RoomMembersListScreenMemberCell(member: .init(withProxy: member), context: viewModel.context)
+            Section("Invited/Joined") {
+                ForEach(members, id: \.userID) { member in
+                    RoomMembersListScreenMemberCell(member: .init(withProxy: member), context: viewModel.context)
+                }
+            }
+            
+            // Banned members should have their profiles hidden and the avatar should use the first letter from their user ID.
+            Section("Banned") {
+                ForEach(bannedMembers, id: \.userID) { member in
+                    RoomMembersListScreenMemberCell(member: .init(withProxy: member), context: viewModel.context)
+                }
             }
         }
     }

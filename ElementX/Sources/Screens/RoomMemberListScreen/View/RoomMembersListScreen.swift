@@ -22,9 +22,23 @@ struct RoomMembersListScreen: View {
     
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: 12) {
-                membersSection(data: context.viewState.visibleInvitedMembers, sectionTitle: L10n.screenRoomMemberListPendingHeaderTitle)
-                membersSection(data: context.viewState.visibleJoinedMembers, sectionTitle: L10n.screenRoomMemberListHeaderTitle(Int(context.viewState.joinedMembersCount)))
+            if context.viewState.canBanUsers,
+               context.viewState.bannedMembersCount > 0 {
+                // Maybe this should go into the search bar if it can be pinned when not focussed?
+                Picker("", selection: $context.mode) {
+                    Text(L10n.screenRoomMemberListModeMembers)
+                        .tag(RoomMembersListScreenMode.members)
+                    Text(L10n.screenRoomMemberListModeBanned)
+                        .tag(RoomMembersListScreenMode.banned)
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal, 16)
+            }
+            
+            if context.mode == .members {
+                roomMembers
+            } else {
+                bannedUsers
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
@@ -42,20 +56,39 @@ struct RoomMembersListScreen: View {
     
     // MARK: - Private
     
-    private func membersSection(data: [RoomMemberDetails], sectionTitle: String) -> some View {
-        Section {
-            ForEach(data, id: \.id) { member in
-                RoomMembersListScreenMemberCell(member: member, context: context)
-            }
-        } header: {
-            if !data.isEmpty {
-                Text(sectionTitle)
-                    .foregroundColor(.compound.textSecondary)
-                    .font(.compound.bodyLG)
-                    .padding(.top, 12)
-            }
+    var roomMembers: some View {
+        LazyVStack(alignment: .leading, spacing: 12) {
+            membersSection(data: context.viewState.visibleInvitedMembers, sectionTitle: L10n.screenRoomMemberListPendingHeaderTitle)
+            membersSection(data: context.viewState.visibleJoinedMembers, sectionTitle: L10n.screenRoomMemberListHeaderTitle(Int(context.viewState.joinedMembersCount)))
         }
-        .padding(.horizontal)
+    }
+    
+    var bannedUsers: some View {
+        LazyVStack(alignment: .leading, spacing: 12) {
+            membersSection(data: context.viewState.visibleBannedMembers)
+        }
+    }
+    
+    @ViewBuilder
+    private func membersSection(data: [RoomMemberDetails], sectionTitle: String? = nil) -> some View {
+        if !data.isEmpty {
+            Section {
+                ForEach(data, id: \.id) { member in
+                    RoomMembersListScreenMemberCell(member: member, context: context)
+                }
+            } header: {
+                if let sectionTitle {
+                    Text(sectionTitle)
+                        .foregroundColor(.compound.textSecondary)
+                        .font(.compound.bodyLG)
+                        .padding(.top, 12)
+                } else {
+                    // Put something in here to maintain constant top padding.
+                    Spacer().frame(height: 0)
+                }
+            }
+            .padding(.horizontal, 16)
+        }
     }
     
     @ViewBuilder
@@ -73,23 +106,49 @@ struct RoomMembersListScreen: View {
 // MARK: - Previews
 
 struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = {
-        let members: [RoomMemberProxyMock] = [
-            .mockAlice,
-            .mockBob,
-            .mockCharlie,
-            .mockAdmin,
-            .mockModerator
-        ]
-        return RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
-                                              mediaProvider: MockMediaProvider(),
-                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
-    }()
+    static let viewModel = makeViewModel()
+    static let adminViewModel = makeViewModel(isAdmin: true, initialMode: .members)
+    static let bannedViewModel = makeViewModel(isAdmin: true, initialMode: .banned)
     
     static var previews: some View {
         NavigationStack {
             RoomMembersListScreen(context: viewModel.context)
         }
         .snapshot(delay: 1.0)
+        .previewDisplayName("Member")
+        
+        NavigationStack {
+            RoomMembersListScreen(context: adminViewModel.context)
+        }
+        .snapshot(delay: 1.0)
+        .previewDisplayName("Admin: Members")
+        
+        NavigationStack {
+            RoomMembersListScreen(context: bannedViewModel.context)
+        }
+        .snapshot(delay: 1.0)
+        .previewDisplayName("Admin: Banned")
+    }
+    
+    static func makeViewModel(isAdmin: Bool = false, initialMode: RoomMembersListScreenMode = .members) -> RoomMembersListScreenViewModel {
+        let mockAdmin = RoomMemberProxyMock.mockAdmin
+        
+        if isAdmin {
+            mockAdmin.underlyingCanBanUsers = true
+            mockAdmin.underlyingIsAccountOwner = true
+        }
+        
+        let members: [RoomMemberProxyMock] = [
+            .mockAlice,
+            .mockBob,
+            .mockCharlie,
+            mockAdmin,
+            .mockModerator
+        ] + RoomMemberProxyMock.mockBanned
+        
+        return RoomMembersListScreenViewModel(initialMode: initialMode,
+                                              roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
+                                              mediaProvider: MockMediaProvider(),
+                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

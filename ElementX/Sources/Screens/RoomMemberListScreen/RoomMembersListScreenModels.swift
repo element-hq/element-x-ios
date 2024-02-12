@@ -21,41 +21,59 @@ enum RoomMembersListScreenViewModelAction {
     case invite
 }
 
+/// The different modes that the screen can be in.
+enum RoomMembersListScreenMode {
+    /// The screen is showing invited and joined members.
+    case members
+    /// The screen is showing banned members (to mods/admins)
+    case banned
+}
+
 struct RoomMembersListScreenViewState: BindableState {
     private var joinedMembers: [RoomMemberDetails]
     private var invitedMembers: [RoomMemberDetails]
+    private var bannedMembers: [RoomMemberDetails]
     
     let joinedMembersCount: Int
+    var bannedMembersCount: Int { bannedMembers.count }
+    
     var canInviteUsers = false
+    var canBanUsers = false
+    
     var bindings: RoomMembersListScreenViewStateBindings
     
     init(joinedMembersCount: Int,
          joinedMembers: [RoomMemberDetails] = [],
          invitedMembers: [RoomMemberDetails] = [],
+         bannedMembers: [RoomMemberDetails] = [],
          bindings: RoomMembersListScreenViewStateBindings) {
         self.joinedMembersCount = joinedMembersCount
         self.joinedMembers = joinedMembers
         self.invitedMembers = invitedMembers
+        self.bannedMembers = bannedMembers
         self.bindings = bindings
     }
 
     var visibleJoinedMembers: [RoomMemberDetails] {
-        joinedMembers.lazy
-            .filter { member in
-                member.matches(searchQuery: bindings.searchQuery)
-            }
+        joinedMembers
+            .filter { $0.matches(searchQuery: bindings.searchQuery) }
     }
     
     var visibleInvitedMembers: [RoomMemberDetails] {
-        invitedMembers.lazy
-            .filter { member in
-                member.matches(searchQuery: bindings.searchQuery)
-            }
+        invitedMembers
+            .filter { $0.matches(searchQuery: bindings.searchQuery) }
+    }
+    
+    var visibleBannedMembers: [RoomMemberDetails] {
+        bannedMembers
+            .filter { $0.matches(searchQuery: bindings.searchQuery) }
     }
 }
 
 struct RoomMembersListScreenViewStateBindings {
     var searchQuery = ""
+    /// The current mode the screen is in.
+    var mode: RoomMembersListScreenMode = .members
 
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomDetailsScreenErrorType>?
