@@ -18,7 +18,7 @@ import SwiftUI
 
 struct RoomListFiltersView: View {
     @Binding var state: RoomListFiltersState
-    @Namespace var namespace
+    @Namespace private var namespace
     
     var body: some View {
         ScrollView(.horizontal) {
