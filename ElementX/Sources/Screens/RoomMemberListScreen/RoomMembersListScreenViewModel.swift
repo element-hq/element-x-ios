@@ -142,22 +142,3 @@ private struct RoomMembersDetails {
     var joinedMembers: [RoomMemberDetails]
     var accountOwner: RoomMemberProxyProtocol?
 }
-
-private extension [RoomMemberProxyProtocol] {
-    func sorted() -> Self {
-        sorted { lhs, rhs in
-            if lhs.powerLevel != rhs.powerLevel {
-                lhs.powerLevel > rhs.powerLevel
-            } else {
-                lhs.sortingName < rhs.sortingName
-            }
-        }
-    }
-}
-
-private extension RoomMemberProxyProtocol {
-    var sortingName: String {
-        // If there isn't a displayname we sort by the userID without the @.
-        displayName ?? String(userID.dropFirst())
-    }
-}
