@@ -21,24 +21,21 @@ struct RoomListFiltersView: View {
     
     var body: some View {
         ScrollView(.horizontal) {
-            LazyHStack(spacing: 8) {
+            // The external HStack is required otherwise the appearence and disappearence of the clear button will change the height of the LazyHStack
+            HStack(spacing: 8) {
                 if state.isFiltering {
                     clearButton
-                } else {
-                    // This solves a weird issue withe the LazyHStack
-                    // where it is resized when the button appears and disappears
-                    clearButton
-                        .hidden()
-                        .frame(width: 0)
                 }
-                ForEach(state.sortedActiveFilters) { filter in
-                    RoomListFilterView(filter: filter, state: state)
-                }
-                ForEach(state.availableFilters) { filter in
-                    RoomListFilterView(filter: filter, state: state)
+                LazyHStack(spacing: 8) {
+                    ForEach(state.sortedActiveFilters) { filter in
+                        RoomListFilterView(filter: filter, state: state)
+                    }
+                    ForEach(state.availableFilters) { filter in
+                        RoomListFilterView(filter: filter, state: state)
+                    }
                 }
             }
-            .padding(.leading, !state.isFiltering ? 8 : 16)
+            .padding(.leading, 16)
             .padding(.vertical, 12)
         }
         .scrollIndicators(.hidden)
