@@ -18,15 +18,10 @@ import SwiftUI
 
 struct RoomListFilterView: View {
     let filter: RoomListFilter
-    @Binding var state: RoomListFiltersState
+    @Binding var isActive: Bool
 
     var body: some View {
-        let binding = Binding<Bool>(get: {
-            state.isFilterActive(filter)
-        }, set: { isEnabled, _ in
-            isEnabled ? state.activateFilter(filter) : state.deactivateFilter(filter)
-        })
-        Toggle(isOn: binding) {
+        Toggle(isOn: $isActive) {
             Text(filter.localizedName)
         }
         .toggleStyle(FilterToggleStyle())
@@ -35,8 +30,8 @@ struct RoomListFilterView: View {
 
 struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomListFilterView(filter: .people, state: .constant(.init()))
-        RoomListFilterView(filter: .people, state: .constant(.init(activeFilters: [.people])))
+        RoomListFilterView(filter: .people, isActive: .constant(true))
+        RoomListFilterView(filter: .people, isActive: .constant(false))
     }
 }
 

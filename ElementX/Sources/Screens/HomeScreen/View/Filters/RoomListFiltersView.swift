@@ -28,13 +28,15 @@ struct RoomListFiltersView: View {
                 }
                 
                 ForEach(state.sortedActiveFilters) { filter in
-                    RoomListFilterView(filter: filter, state: $state)
+                    RoomListFilterView(filter: filter,
+                                       isActive: getBinding(for: filter))
                         .matchedGeometryEffect(id: filter.id, in: namespace)
                         // This will make the animation always render the enabled ones on top
                         .zIndex(1)
                 }
                 ForEach(state.availableFilters) { filter in
-                    RoomListFilterView(filter: filter, state: $state)
+                    RoomListFilterView(filter: filter,
+                                       isActive: getBinding(for: filter))
                         .matchedGeometryEffect(id: filter.id, in: namespace)
                 }
             }
@@ -53,6 +55,14 @@ struct RoomListFiltersView: View {
             Image(systemName: "xmark.circle.fill")
                 .font(.system(size: 24))
                 .foregroundColor(.compound.bgActionPrimaryRest)
+        })
+    }
+    
+    private func getBinding(for filter: RoomListFilter) -> Binding<Bool> {
+        Binding<Bool>(get: {
+            state.isFilterActive(filter)
+        }, set: { isEnabled, _ in
+            isEnabled ? state.activateFilter(filter) : state.deactivateFilter(filter)
         })
     }
 }
