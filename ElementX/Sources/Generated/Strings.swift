@@ -724,6 +724,10 @@ public enum L10n {
   public static var screenAdvancedSettingsSendReadReceipts: String { return L10n.tr("Localizable", "screen_advanced_settings_send_read_receipts") }
   /// If turned off, your read receipts won't be sent to anyone. You will still receive read receipts from other users.
   public static var screenAdvancedSettingsSendReadReceiptsDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_send_read_receipts_description") }
+  /// Share presence
+  public static var screenAdvancedSettingsSharePresence: String { return L10n.tr("Localizable", "screen_advanced_settings_share_presence") }
+  /// If turned off, you won’t be able to send or receive read receipts or typing notifications
+  public static var screenAdvancedSettingsSharePresenceDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_share_presence_description") }
   /// Enable option to view message source in the timeline.
   public static var screenAdvancedSettingsViewSourceDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_view_source_description") }
   /// We won't record or profile any personal data
@@ -832,6 +836,8 @@ public enum L10n {
   public static var screenBugReportEditorPlaceholder: String { return L10n.tr("Localizable", "screen_bug_report_editor_placeholder") }
   /// If possible, please write the description in English.
   public static var screenBugReportEditorSupporting: String { return L10n.tr("Localizable", "screen_bug_report_editor_supporting") }
+  /// The description is too short, please provide more details about what happened. Thanks!
+  public static var screenBugReportErrorDescriptionTooShort: String { return L10n.tr("Localizable", "screen_bug_report_error_description_too_short") }
   /// Send crash logs
   public static var screenBugReportIncludeCrashLogs: String { return L10n.tr("Localizable", "screen_bug_report_include_crash_logs") }
   /// Allow logs
@@ -1250,6 +1256,10 @@ public enum L10n {
   }
   /// Pending
   public static var screenRoomMemberListPendingHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_pending_header_title") }
+  /// Admin
+  public static var screenRoomMemberListRoleAdministrator: String { return L10n.tr("Localizable", "screen_room_member_list_role_administrator") }
+  /// Moderator
+  public static var screenRoomMemberListRoleModerator: String { return L10n.tr("Localizable", "screen_room_member_list_role_moderator") }
   /// Room members
   public static var screenRoomMemberListRoomMembersHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_room_members_header_title") }
   /// Notify the whole room

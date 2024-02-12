@@ -297,6 +297,8 @@
 "screen_advanced_settings_rich_text_editor_description" = "Désactivez l’éditeur de texte enrichi pour saisir manuellement du Markdown.";
 "screen_advanced_settings_send_read_receipts" = "Accusés de lecture";
 "screen_advanced_settings_send_read_receipts_description" = "En cas de désactivation, vos accusés de lecture ne seront pas envoyés aux autres membres. Vous verrez toujours les accusés des autres membres.";
+"screen_advanced_settings_share_presence" = "Share presence";
+"screen_advanced_settings_share_presence_description" = "If turned off, you won’t be able to send or receive read receipts or typing notifications";
 "screen_advanced_settings_view_source_description" = "Activer cette option pour pouvoir voir la source des messages dans la discussion.";
 "screen_analytics_prompt_data_usage" = "Nous n’enregistrerons ni ne profilerons aucune donnée personnelle";
 "screen_analytics_prompt_help_us_improve" = "Partagez des données d’utilisation anonymes pour nous aider à identifier les problèmes.";
@@ -337,6 +339,7 @@
 "screen_bug_report_editor_description" = "S’il vous plait, veuillez décrire le problème. Qu’avez-vous fait ? À quoi vous attendiez-vous ? Que s’est-il réellement passé ? Veuillez ajouter le plus de détails possible.";
 "screen_bug_report_editor_placeholder" = "Décrire le problème…";
 "screen_bug_report_editor_supporting" = "Si possible, veuillez rédiger la description en anglais.";
+"screen_bug_report_error_description_too_short" = "The description is too short, please provide more details about what happened. Thanks!";
 "screen_bug_report_include_crash_logs" = "Envoyer des journaux d’incident";
 "screen_bug_report_include_logs" = "Autoriser à inclure les journaux techniques";
 "screen_bug_report_include_screenshot" = "Envoyer une capture d’écran";
@@ -511,6 +514,8 @@
 "screen_room_member_details_unblock_alert_description" = "Vous pourrez à nouveau voir tous ses messages.";
 "screen_room_member_details_unblock_user" = "Débloquer l’utilisateur";
 "screen_room_member_list_pending_header_title" = "En attente";
+"screen_room_member_list_role_administrator" = "Admin";
+"screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "Membres du salon";
 "screen_room_message_copied" = "Message copié";
 "screen_room_no_permission_to_post" = "Vous n’êtes pas autorisé à publier dans ce salon";

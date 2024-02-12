@@ -297,6 +297,8 @@
 "screen_advanced_settings_rich_text_editor_description" = "Отключить редактор форматированного текста и включить Markdown.";
 "screen_advanced_settings_send_read_receipts" = "Уведомления о прочтении";
 "screen_advanced_settings_send_read_receipts_description" = "Если этот параметр выключен, ваш статус о прочтении не будет отображаться. Вы по-прежнему будете видеть статус о прочтении от других пользователей.";
+"screen_advanced_settings_share_presence" = "Поделиться присутствием";
+"screen_advanced_settings_share_presence_description" = "Если выключено, вы не сможете отправлять, получать уведомления о прочтении и наборе текста";
 "screen_advanced_settings_view_source_description" = "Включить опцию просмотра источника сообщения в ленте.";
 "screen_analytics_prompt_data_usage" = "Мы не будем записывать или профилировать какие-либо персональные данные";
 "screen_analytics_prompt_help_us_improve" = "Предоставлять анонимные данные об использовании, чтобы помочь нам выявить проблемы.";
@@ -337,6 +339,7 @@
 "screen_bug_report_editor_description" = "Пожалуйста, опишите ошибку. Что вы сделали? Какое поведение вы ожидали? Что произошло на самом деле. Пожалуйста, опишите все как можно подробнее.";
 "screen_bug_report_editor_placeholder" = "Опишите проблему…";
 "screen_bug_report_editor_supporting" = "Если возможно, пожалуйста, напишите описание на английском языке.";
+"screen_bug_report_error_description_too_short" = "Описание слишком короткое, пожалуйста, расскажите подробнее о том, что произошло. Спасибо!";
 "screen_bug_report_include_crash_logs" = "Отправка журналов сбоев";
 "screen_bug_report_include_logs" = "Разрешить ведение журналов";
 "screen_bug_report_include_screenshot" = "Отправить снимок экрана";
@@ -511,6 +514,8 @@
 "screen_room_member_details_unblock_alert_description" = "Вы снова сможете увидеть все сообщения.";
 "screen_room_member_details_unblock_user" = "Разблокировать пользователя";
 "screen_room_member_list_pending_header_title" = "В ожидании";
+"screen_room_member_list_role_administrator" = "Администратор";
+"screen_room_member_list_role_moderator" = "Модератор";
 "screen_room_member_list_room_members_header_title" = "Участники комнаты";
 "screen_room_message_copied" = "Сообщение скопировано";
 "screen_room_no_permission_to_post" = "У вас нет разрешения публиковать сообщения в этой комнате";
