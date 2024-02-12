@@ -30,8 +30,8 @@ struct RoomListFilterView: View {
 
 struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomListFilterView(filter: .people, isActive: .constant(true))
         RoomListFilterView(filter: .people, isActive: .constant(false))
+        RoomListFilterView(filter: .people, isActive: .constant(true))
     }
 }
 
