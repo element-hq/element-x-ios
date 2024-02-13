@@ -64,7 +64,10 @@ struct TypingIndicatorView: View {
                 Text(L10n.screenRoomTypingNotificationSingularIos)
                     .opacity(0)
             } else {
-                EmptyView()
+                // Together with the margins and minSize on the contentConfiguration forces the tableView cell to be small
+                Rectangle()
+                    .frame(height: 1)
+                    .opacity(0)
             }
         }
     }
