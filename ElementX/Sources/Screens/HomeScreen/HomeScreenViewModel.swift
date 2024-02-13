@@ -89,7 +89,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 }
                 if !value {
                     state.shouldShowFilters = false
-                    state.filtersState.clearFilters()
+                    state.bindings.filtersState.clearFilters()
                 } else {
                     state.shouldShowFilters = true
                 }
@@ -106,9 +106,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
-        let enabledFilters = context.viewState.filtersState.$activeFilters
+        let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
         isSearchFieldFocused
-            .combineLatest(searchQuery, enabledFilters)
+            .combineLatest(searchQuery, activeFilters)
             .removeDuplicates { $0 == $1 }
             .sink { [weak self] isSearchFieldFocused, _, _ in
                 guard let self else { return }
@@ -209,9 +209,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         } else {
             if state.bindings.isSearchFieldFocused {
                 roomSummaryProvider?.setFilter(.include(.init(query: state.bindings.searchQuery,
-                                                              filters: state.filtersState.activeFilters)))
+                                                              filters: state.bindings.filtersState.activeFilters)))
             } else {
-                roomSummaryProvider?.setFilter(.include(.init(filters: state.filtersState.activeFilters)))
+                roomSummaryProvider?.setFilter(.include(.init(filters: state.bindings.filtersState.activeFilters)))
             }
         }
     }
