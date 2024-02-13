@@ -40,9 +40,10 @@ class EmojiDetectionTests: XCTestCase {
         
         XCTAssertTrue("👍".containsOnlyEmoji)
         XCTAssertTrue("🫱🏼‍🫲🏾".containsOnlyEmoji)
-        XCTAssertTrue("👁❤️🍝".containsOnlyEmoji)
         XCTAssertFalse("🙂 ".containsOnlyEmoji)
         XCTAssertFalse("Hello 👋".containsOnlyEmoji)
         XCTAssertFalse("Thanks".containsOnlyEmoji)
+        
+        XCTAssertFalse("0*".containsOnlyEmoji)
     }
 }

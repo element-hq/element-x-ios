@@ -16,51 +16,46 @@
 
 import Foundation
 
-extension UnicodeScalar {
-    var isZeroWidthJoiner: Bool {
-        value == 8205
+// Taken from https://gist.github.com/krummler/879e1ce942893db3104783d1d0e67b34
+extension Character {
+    /// A simple emoji is one scalar and presented to the user as an Emoji
+    var isSimpleEmoji: Bool {
+        unicodeScalars.count == 1 && unicodeScalars.first?.properties.isEmojiPresentation ?? false
     }
-    
-    var isKeycap: Bool {
-        value == 8419
+
+    /// Checks if the scalars will be merged into and emoji
+    var isCombinedIntoEmoji: Bool {
+        unicodeScalars.count > 1 &&
+            unicodeScalars.contains { $0.properties.isJoinControl || $0.properties.isVariationSelector }
     }
-    
-    var isNumber: Bool {
-        switch value {
-        case 48...57:
-            return true
-        default:
-            return false
-        }
+
+    var isEmoji: Bool {
+        isSimpleEmoji || isCombinedIntoEmoji
     }
 }
 
 extension String {
+    var isSingleEmoji: Bool {
+        count == 1 && containsEmoji
+    }
+
+    var containsEmoji: Bool {
+        contains { $0.isEmoji }
+    }
+
     var containsOnlyEmoji: Bool {
-        guard !isEmpty else {
-            return false
-        }
-        
-        var emojiMarkerCount = 0
-        for scalar in unicodeScalars {
-            let isEmojiMarker = scalar.properties.isEmoji ||
-                scalar.properties.isEmojiPresentation ||
-                scalar.isZeroWidthJoiner ||
-                scalar.properties.isDefaultIgnorableCodePoint ||
-                scalar.isKeycap
-            
-            guard isEmojiMarker else {
-                return false
-            }
-            
-            emojiMarkerCount += 1
-        }
-        
-        // Plain numbers like 0 return true for .isEmoji. We don't want that
-        let markersRequiringSiblings = unicodeScalars.filter {
-            $0.properties.isEmoji && $0.isNumber
-        }
-        
-        return markersRequiringSiblings.count != emojiMarkerCount && emojiMarkerCount == unicodeScalars.count
+        !isEmpty && !contains { !$0.isEmoji }
+    }
+
+    var emojiString: String {
+        emojis.map { String($0) }.reduce("", +)
+    }
+
+    var emojis: [Character] {
+        filter(\.isEmoji)
+    }
+
+    var emojiScalars: [UnicodeScalar] {
+        filter(\.isEmoji).flatMap(\.unicodeScalars)
     }
 }
