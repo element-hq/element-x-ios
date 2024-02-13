@@ -87,7 +87,6 @@ class TimelineTableViewController: UIViewController {
         DispatchQueue.main.async {
             // Avoid `Publishing changes from within view update warnings`
             self.typingMembers.members = members
-            self.applySnapshot()
         }
     }
     
@@ -183,6 +182,7 @@ class TimelineTableViewController: UIViewController {
                 cell.contentConfiguration = UIHostingConfiguration {
                     TypingIndicatorView(typingMembers: self.typingMembers)
                 }
+                .minSize(height: 0)
                 .background(Color.clear)
                 
                 // Flipping the cell can create some issues with cell resizing, so flip the content View
@@ -240,29 +240,22 @@ class TimelineTableViewController: UIViewController {
         guard let dataSource else { return }
 
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
+        snapshot.appendSections([.typingIndicator])
+        snapshot.appendItems([TimelineTypingIndicatorCell.reuseIdentifier])
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItemsIDs)
         
         let currentSnapshot = dataSource.snapshot()
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
         
-        if currentSnapshot.sectionIdentifiers.contains(.main), snapshot.sectionIdentifiers.contains(.main) {
-            // We only animate when new items come at the end of the timeline, ignoring transitions through empty.
-            let animated = currentSnapshot.numberOfItems(inSection: .main) > 0 &&
-                snapshot.numberOfItems(inSection: .main) > 0 &&
-                snapshot.itemIdentifiers(inSection: .main).first != currentSnapshot.itemIdentifiers(inSection: .main).first
-            
-            dataSource.apply(snapshot, animatingDifferences: animated)
-        } else {
-            dataSource.apply(snapshot, animatingDifferences: true)
-        }
+        // We only animate when new items come at the end of the timeline, ignoring transitions through empty.
+        let animated = currentSnapshot.sectionIdentifiers.contains(.main) &&
+            snapshot.sectionIdentifiers.contains(.main) &&
+            currentSnapshot.numberOfItems(inSection: .main) > 0 &&
+            snapshot.numberOfItems(inSection: .main) > 0 &&
+            snapshot.itemIdentifiers(inSection: .main).first != currentSnapshot.itemIdentifiers(inSection: .main).first
         
-        // Always animate typing indicators
-        if !typingMembers.members.isEmpty {
-            snapshot.insertSections([.typingIndicator], beforeSection: .main)
-            snapshot.appendItems([TimelineTypingIndicatorCell.reuseIdentifier], toSection: .typingIndicator)
-            dataSource.apply(snapshot, animatingDifferences: true)
-        }
+        dataSource.apply(snapshot, animatingDifferences: animated)
     }
     
     /// Scrolls to the bottom of the timeline.

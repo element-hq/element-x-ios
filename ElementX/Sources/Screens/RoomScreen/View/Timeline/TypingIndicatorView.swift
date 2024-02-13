@@ -26,6 +26,7 @@ struct TypingIndicatorView: View {
             .lineLimit(1)
             .truncationMode(.middle)
             .padding(.horizontal, 4)
+            .animation(.elementDefault, value: typingMembers.members)
     }
     
     @ViewBuilder

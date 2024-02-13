@@ -68,6 +68,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .store(in: &cancellables)
 
         wysiwygViewModel.$isContentEmpty
+            .removeDuplicates()
             .sink { [weak self] isEmpty in
                 self?.state.composerEmpty = isEmpty
                 self?.actionsSubject.send(.contentChanged(isEmpty: isEmpty))
