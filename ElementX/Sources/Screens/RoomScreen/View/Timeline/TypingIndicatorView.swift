@@ -18,6 +18,7 @@ import SwiftUI
 
 struct TypingIndicatorView: View {
     @ObservedObject var typingMembers: TypingMembersObservableObject
+    @State private var didShowTextOnce = false
     
     var body: some View {
         content
@@ -27,6 +28,11 @@ struct TypingIndicatorView: View {
             .truncationMode(.middle)
             .padding(.horizontal, 4)
             .animation(.elementDefault, value: typingMembers.members)
+            .onChange(of: typingMembers.members) { newValue in
+                if !newValue.isEmpty {
+                    didShowTextOnce = true
+                }
+            }
     }
     
     @ViewBuilder
@@ -54,7 +60,12 @@ struct TypingIndicatorView: View {
                 Text(L10n.tr("Localizable", "screen_room_typing_many_members_second_component_ios", typingMembers.members.count - 2)).bold() +
                 Text(L10n.screenRoomTypingNotificationPluralIos)
         default:
-            EmptyView()
+            if didShowTextOnce {
+                Text(L10n.screenRoomTypingNotificationSingularIos)
+                    .opacity(0)
+            } else {
+                EmptyView()
+            }
         }
     }
 }
