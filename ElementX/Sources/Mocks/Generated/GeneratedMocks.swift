@@ -1871,6 +1871,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingMembers = value }
     }
     var underlyingMembers: CurrentValuePublisher<[RoomMemberProxyProtocol], Never>!
+    var typingMembers: CurrentValuePublisher<[String], Never> {
+        get { return underlyingTypingMembers }
+        set(value) { underlyingTypingMembers = value }
+    }
+    var underlyingTypingMembers: CurrentValuePublisher<[String], Never>!
     var joinedMembersCount: Int {
         get { return underlyingJoinedMembersCount }
         set(value) { underlyingJoinedMembersCount = value }
@@ -2263,6 +2268,28 @@ class RoomProxyMock: RoomProxyProtocol {
             return await markAsReadSendReadReceiptsReceiptTypeClosure(sendReadReceipts, receiptType)
         } else {
             return markAsReadSendReadReceiptsReceiptTypeReturnValue
+        }
+    }
+    //MARK: - sendTypingNotification
+
+    var sendTypingNotificationIsTypingCallsCount = 0
+    var sendTypingNotificationIsTypingCalled: Bool {
+        return sendTypingNotificationIsTypingCallsCount > 0
+    }
+    var sendTypingNotificationIsTypingReceivedIsTyping: Bool?
+    var sendTypingNotificationIsTypingReceivedInvocations: [Bool] = []
+    var sendTypingNotificationIsTypingReturnValue: Result<Void, RoomProxyError>!
+    var sendTypingNotificationIsTypingClosure: ((Bool) async -> Result<Void, RoomProxyError>)?
+
+    @discardableResult
+    func sendTypingNotification(isTyping: Bool) async -> Result<Void, RoomProxyError> {
+        sendTypingNotificationIsTypingCallsCount += 1
+        sendTypingNotificationIsTypingReceivedIsTyping = isTyping
+        sendTypingNotificationIsTypingReceivedInvocations.append(isTyping)
+        if let sendTypingNotificationIsTypingClosure = sendTypingNotificationIsTypingClosure {
+            return await sendTypingNotificationIsTypingClosure(isTyping)
+        } else {
+            return sendTypingNotificationIsTypingReturnValue
         }
     }
     //MARK: - canUserJoinCall

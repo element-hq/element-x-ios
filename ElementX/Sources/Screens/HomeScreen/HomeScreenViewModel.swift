@@ -181,7 +181,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     return
                 }
                 
-                switch await roomProxy.markAsRead(sendReadReceipts: true, receiptType: appSettings.sendReadReceiptsEnabled ? .read : .readPrivate) {
+                switch await roomProxy.markAsRead(sendReadReceipts: true, receiptType: appSettings.sharePresence ? .read : .readPrivate) {
                 case .success:
                     ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
                 case .failure(let error):

@@ -192,6 +192,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             composerFocusedSubject.send(isFocused)
         case .voiceMessage(let voiceMessageAction):
             processVoiceMessageAction(voiceMessageAction)
+        case .contentChanged(let isEmpty):
+            guard appSettings.sharePresence else {
+                return
+            }
+            
+            Task {
+                await roomProxy.sendTypingNotification(isTyping: !isEmpty)
+            }
         }
     }
     
@@ -306,6 +314,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         appSettings.$timelineStyle
             .weakAssign(to: \.state.timelineStyle, on: self)
             .store(in: &cancellables)
+        
+        appSettings.$sharePresence
+            .weakAssign(to: \.state.showReadReceipts, on: self)
+            .store(in: &cancellables)
                 
         roomProxy.members
             .map { members in
@@ -315,6 +327,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.members, on: self)
+            .store(in: &cancellables)
+        
+        roomProxy.typingMembers
+            .receive(on: DispatchQueue.main)
+            .filter { [weak self] _ in self?.appSettings.sharePresence ?? false }
+            .weakAssign(to: \.state.typingMembers, on: self)
             .store(in: &cancellables)
         
         roomScreenInteractionHandler.actions
