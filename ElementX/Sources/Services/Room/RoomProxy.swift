@@ -31,14 +31,23 @@ class RoomProxy: RoomProxyProtocol {
     
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
-    private(set) var displayName: String?
     // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var typingNotificationObservationToken: TaskHandle?
+    
     private var subscribedForUpdates = false
+    
+    private(set) var displayName: String?
 
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.asCurrentValuePublisher()
+    }
+    
+    private let typingMembersSubject = CurrentValueSubject<[String], Never>([])
+    var typingMembers: CurrentValuePublisher<[String], Never> {
+        typingMembersSubject.asCurrentValuePublisher()
     }
         
     private let actionsSubject = PassthroughSubject<RoomProxyAction, Never>()
@@ -86,6 +95,8 @@ class RoomProxy: RoomProxyProtocol {
         await timeline.subscribeForUpdates()
         
         subscribeToRoomStateUpdates()
+        
+        subscribeToTypingNotifications()
     }
     
     func unsubscribeFromUpdates() {
@@ -357,32 +368,49 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func markAsUnread() async -> Result<Void, RoomProxyError> {
-        MXLog.info("Marking room \(id) as unread")
+    func flagAsUnread() async -> Result<Void, RoomProxyError> {
+        MXLog.info("Flagging room \(id) as unread")
         
         do {
-            try await room.markAsUnread()
+            try await room.setUnreadFlag(newValue: true)
             return .success(())
         } catch {
             MXLog.error("Failed marking room \(id) as unread with error: \(error)")
-            return .failure(.failedMarkingAsUnread)
+            return .failure(.failedFlaggingAsUnread)
         }
     }
     
-    func markAsRead(sendReadReceipts: Bool, receiptType: ReceiptType) async -> Result<Void, RoomProxyError> {
-        MXLog.info("Marking room \(id) as read, sending read receipts: \(sendReadReceipts)")
+    func flagAsRead() async -> Result<Void, RoomProxyError> {
+        MXLog.info("Flagging room \(id) as read")
         
         do {
-            if sendReadReceipts {
-                try await room.markAsReadAndSendReadReceipt(receiptType: receiptType)
-            } else {
-                try await room.markAsRead()
-            }
-            
+            try await room.setUnreadFlag(newValue: false)
+            return .success(())
+        } catch {
+            MXLog.error("Failed marking room \(id) as read with error: \(error)")
+            return .failure(.failedFlaggingAsRead)
+        }
+    }
+    
+    func markAsRead(receiptType: ReceiptType) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.markAsRead(receiptType: receiptType)
             return .success(())
         } catch {
             MXLog.error("Failed marking room \(id) as read with error: \(error)")
             return .failure(.failedMarkingAsRead)
+        }
+    }
+    
+    func sendTypingNotification(isTyping: Bool) async -> Result<Void, RoomProxyError> {
+        MXLog.info("Sending typing notification isTyping: \(isTyping)")
+        
+        do {
+            try await room.typingNotice(isTyping: isTyping)
+            return .success(())
+        } catch {
+            MXLog.error("Failed sending typing notice with error: \(error)")
+            return .failure(.failedSendingTypingNotice)
         }
     }
     
@@ -409,6 +437,26 @@ class RoomProxy: RoomProxyProtocol {
             self?.actionsSubject.send(.stateUpdate)
         })
     }
+    
+    private func subscribeToTypingNotifications() {
+        Task {
+            typingNotificationObservationToken = await room.subscribeToTypingNotifications(listener: RoomTypingNotificationUpdateListener { [weak self] typingUserIDs in
+                guard let self else { return }
+                
+                MXLog.info("Received typing notification update, typingUsers: \(typingUserIDs)")
+                
+                let typingMembers = typingUserIDs.compactMap { userID in
+                    if let member = self.members.value.filter({ $0.userID == userID }).first {
+                        return member.displayName ?? member.userID
+                    } else {
+                        return userID
+                    }
+                }
+                
+                typingMembersSubject.send(typingMembers)
+            })
+        }
+    }
 }
 
 private final class RoomInfoUpdateListener: RoomInfoListener {
@@ -420,5 +468,17 @@ private final class RoomInfoUpdateListener: RoomInfoListener {
     
     func call(roomInfo: RoomInfo) {
         onUpdateClosure()
+    }
+}
+
+private final class RoomTypingNotificationUpdateListener: TypingNotificationsListener {
+    private let onUpdateClosure: ([String]) -> Void
+    
+    init(_ onUpdateClosure: @escaping ([String]) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func call(typingUserIds: [String]) {
+        onUpdateClosure(typingUserIds)
     }
 }

@@ -538,6 +538,9 @@
 "screen_room_retry_send_menu_title" = "Your message failed to send";
 "screen_room_timeline_add_reaction" = "Add emoji";
 "screen_room_timeline_less_reactions" = "Show less";
+"screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ and ";
+"screen_room_typing_notification_plural_ios" = " are typing";
+"screen_room_typing_notification_singular_ios" = " is typing";
 "screen_room_typing_two_members" = "%1$@ and %2$@";
 "screen_room_voice_message_tooltip" = "Hold to record";
 "screen_roomlist_a11y_create_message" = "Create a new conversation or room";

@@ -66,6 +66,7 @@ extension RoomProxyMock {
         ownUserID = configuration.ownUserID
         
         members = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
+        typingMembers = CurrentValueSubject([]).asCurrentValuePublisher()
         
         joinedMembersCount = configuration.members.filter { $0.membership == .join }.count
         activeMembersCount = configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count
@@ -79,7 +80,10 @@ extension RoomProxyMock {
         canUserRedactOtherUserIDReturnValue = .success(false)
         canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
         canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
-        markAsReadSendReadReceiptsReceiptTypeReturnValue = .success(())
+
+        flagAsReadReturnValue = .success(())
+        flagAsUnreadReturnValue = .success(())
+        markAsReadReceiptTypeReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()

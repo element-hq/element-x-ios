@@ -162,7 +162,7 @@ class HomeScreenViewModelTests: XCTestCase {
     }
     
     func testFilters() async throws {
-        context.viewState.filtersState.activateFilter(.people)
+        context.filtersState.activateFilter(.people)
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(roomSummaryProvider.currentFilter, RoomSummaryProviderFilter.include(.init(filters: [.people])))
         context.isSearchFieldFocused = true

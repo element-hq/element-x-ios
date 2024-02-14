@@ -1,1 +1,0 @@
-Show admins and moderators in the room member list.

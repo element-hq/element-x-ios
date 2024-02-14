@@ -1316,10 +1316,22 @@ public enum L10n {
   public static func screenRoomTypingManyMembers(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_typing_many_members", p1)
   }
+  /// %1$@, %2$@ and 
+  public static func screenRoomTypingManyMembersFirstComponentIos(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_typing_many_members_first_component_ios", String(describing: p1), String(describing: p2))
+  }
+  /// Plural format key: "%#@COUNT@"
+  public static func screenRoomTypingManyMembersSecondComponentIos(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_typing_many_members_second_component_ios", p1)
+  }
   /// Plural format key: "%#@COUNT@"
   public static func screenRoomTypingNotification(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_typing_notification", p1)
   }
+  ///  are typing
+  public static var screenRoomTypingNotificationPluralIos: String { return L10n.tr("Localizable", "screen_room_typing_notification_plural_ios") }
+  ///  is typing
+  public static var screenRoomTypingNotificationSingularIos: String { return L10n.tr("Localizable", "screen_room_typing_notification_singular_ios") }
   /// %1$@ and %2$@
   public static func screenRoomTypingTwoMembers(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_room_typing_two_members", String(describing: p1), String(describing: p2))

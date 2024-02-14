@@ -31,8 +31,10 @@ enum RoomProxyError: Error, Equatable {
     case failedRemovingAvatar
     case failedUploadingAvatar
     case failedCheckingPermission
+    case failedFlaggingAsUnread
+    case failedFlaggingAsRead
     case failedMarkingAsRead
-    case failedMarkingAsUnread
+    case failedSendingTypingNotice
 }
 
 enum RoomProxyAction {
@@ -52,6 +54,7 @@ protocol RoomProxyProtocol {
     var ownUserID: String { get }
     
     var name: String? { get }
+    
     var displayName: String? { get }
     
     var topic: String? { get }
@@ -59,6 +62,8 @@ protocol RoomProxyProtocol {
     var avatarURL: URL? { get }
 
     var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
+    
+    var typingMembers: CurrentValuePublisher<[String], Never> { get }
         
     var joinedMembersCount: Int { get }
     
@@ -104,9 +109,14 @@ protocol RoomProxyProtocol {
     
     func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
     
-    func markAsUnread() async -> Result<Void, RoomProxyError>
+    func flagAsUnread() async -> Result<Void, RoomProxyError>
     
-    func markAsRead(sendReadReceipts: Bool, receiptType: ReceiptType) async -> Result<Void, RoomProxyError>
+    func flagAsRead() async -> Result<Void, RoomProxyError>
+    
+    func markAsRead(receiptType: ReceiptType) async -> Result<Void, RoomProxyError>
+    
+    /// https://spec.matrix.org/v1.9/client-server-api/#typing-notifications
+    @discardableResult func sendTypingNotification(isTyping: Bool) async -> Result<Void, RoomProxyError>
     
     // MARK: - Element Call
     

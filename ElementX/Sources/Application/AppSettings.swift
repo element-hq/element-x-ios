@@ -37,7 +37,7 @@ final class AppSettings {
         case viewSourceEnabled
         case richTextEditorEnabled
         case appAppearance
-        case sendReadReceiptsEnabled
+        case sharePresence
         case hideUnreadMessagesBadge
         
         case elementCallBaseURL
@@ -266,10 +266,10 @@ final class AppSettings {
     // maptiler api key
     let mapTilerApiKey = InfoPlistReader.main.mapLibreAPIKey
     
-    // MARK: - Read Receipts
+    // MARK: - Presence
 
-    @UserPreference(key: UserDefaultsKeys.sendReadReceiptsEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var sendReadReceiptsEnabled
+    @UserPreference(key: UserDefaultsKeys.sharePresence, defaultValue: true, storageType: .userDefaults(store))
+    var sharePresence
     
     // MARK: - Feature Flags
     

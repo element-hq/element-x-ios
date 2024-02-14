@@ -49,7 +49,7 @@ protocol RoomTimelineControllerProtocol {
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError>
     
-    func sendReadReceipt(for itemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError>
+    func sendReadReceipt(for itemID: TimelineItemIdentifier) async
     
     func sendMessage(_ message: String,
                      html: String?,

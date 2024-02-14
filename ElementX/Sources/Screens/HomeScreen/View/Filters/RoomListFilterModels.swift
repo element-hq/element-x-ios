@@ -71,8 +71,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     }
 }
 
-final class RoomListFiltersState: ObservableObject {
-    @Published private(set) var activeFilters: Set<RoomListFilter>
+struct RoomListFiltersState {
+    private(set) var activeFilters: Set<RoomListFilter>
     
     init(activeFilters: Set<RoomListFilter> = []) {
         self.activeFilters = activeFilters
@@ -97,7 +97,7 @@ final class RoomListFiltersState: ObservableObject {
         !activeFilters.isEmpty
     }
     
-    func activateFilter(_ filter: RoomListFilter) {
+    mutating func activateFilter(_ filter: RoomListFilter) {
         if let incompatibleFilter = filter.incompatibleFilter,
            activeFilters.contains(incompatibleFilter) {
             fatalError("[RoomListFiltersState] adding mutually exclusive filters is not allowed")
@@ -105,11 +105,11 @@ final class RoomListFiltersState: ObservableObject {
         activeFilters.insert(filter)
     }
     
-    func deactivateFilter(_ filter: RoomListFilter) {
+    mutating func deactivateFilter(_ filter: RoomListFilter) {
         activeFilters.remove(filter)
     }
     
-    func clearFilters() {
+    mutating func clearFilters() {
         activeFilters.removeAll()
     }
     

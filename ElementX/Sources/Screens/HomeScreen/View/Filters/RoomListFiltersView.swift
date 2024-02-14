@@ -17,28 +17,30 @@
 import SwiftUI
 
 struct RoomListFiltersView: View {
-    @StateObject var state: RoomListFiltersState
+    @Binding var state: RoomListFiltersState
+    @Namespace private var namespace
     
     var body: some View {
         ScrollView(.horizontal) {
-            LazyHStack(spacing: 8) {
+            HStack(spacing: 8) {
                 if state.isFiltering {
                     clearButton
-                } else {
-                    // This solves a weird issue withe the LazyHStack
-                    // where it is resized when the button appears and disappears
-                    clearButton
-                        .hidden()
-                        .frame(width: 0)
                 }
+                
                 ForEach(state.sortedActiveFilters) { filter in
-                    RoomListFilterView(filter: filter, state: state)
+                    RoomListFilterView(filter: filter,
+                                       isActive: getBinding(for: filter))
+                        .matchedGeometryEffect(id: filter.id, in: namespace)
+                        // This will make the animation always render the enabled ones on top
+                        .zIndex(1)
                 }
                 ForEach(state.availableFilters) { filter in
-                    RoomListFilterView(filter: filter, state: state)
+                    RoomListFilterView(filter: filter,
+                                       isActive: getBinding(for: filter))
+                        .matchedGeometryEffect(id: filter.id, in: namespace)
                 }
             }
-            .padding(.leading, !state.isFiltering ? 8 : 16)
+            .padding(.leading, 16)
             .padding(.vertical, 12)
         }
         .scrollIndicators(.hidden)
@@ -55,13 +57,21 @@ struct RoomListFiltersView: View {
                 .foregroundColor(.compound.bgActionPrimaryRest)
         })
     }
+    
+    private func getBinding(for filter: RoomListFilter) -> Binding<Bool> {
+        Binding<Bool>(get: {
+            state.isFilterActive(filter)
+        }, set: { isEnabled, _ in
+            isEnabled ? state.activateFilter(filter) : state.deactivateFilter(filter)
+        })
+    }
 }
 
 // MARK: - Previews
 
 struct RoomListFiltersView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomListFiltersView(state: .init())
-        RoomListFiltersView(state: .init(activeFilters: [.rooms, .favourites]))
+        RoomListFiltersView(state: .constant(.init()))
+        RoomListFiltersView(state: .constant(.init(activeFilters: [.rooms, .favourites])))
     }
 }

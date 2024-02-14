@@ -134,7 +134,7 @@ struct HomeScreenContent: View {
     }
     
     private var filters: some View {
-        RoomListFiltersView(state: context.viewState.filtersState)
+        RoomListFiltersView(state: $context.filtersState)
     }
     
     @ViewBuilder
