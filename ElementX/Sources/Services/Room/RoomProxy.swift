@@ -368,28 +368,33 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func markAsUnread() async -> Result<Void, RoomProxyError> {
-        MXLog.info("Marking room \(id) as unread")
+    func flagAsUnread() async -> Result<Void, RoomProxyError> {
+        MXLog.info("Flagging room \(id) as unread")
         
         do {
-            try await room.markAsUnread()
+            try await room.setUnreadFlag(newValue: true)
             return .success(())
         } catch {
             MXLog.error("Failed marking room \(id) as unread with error: \(error)")
-            return .failure(.failedMarkingAsUnread)
+            return .failure(.failedFlaggingAsUnread)
         }
     }
     
-    func markAsRead(sendReadReceipts: Bool, receiptType: ReceiptType) async -> Result<Void, RoomProxyError> {
-        MXLog.info("Marking room \(id) as read, sending read receipts: \(sendReadReceipts)")
+    func flagAsRead() async -> Result<Void, RoomProxyError> {
+        MXLog.info("Flagging room \(id) as read")
         
         do {
-            if sendReadReceipts {
-                try await room.markAsReadAndSendReadReceipt(receiptType: receiptType)
-            } else {
-                try await room.markAsRead()
-            }
-            
+            try await room.setUnreadFlag(newValue: false)
+            return .success(())
+        } catch {
+            MXLog.error("Failed marking room \(id) as read with error: \(error)")
+            return .failure(.failedFlaggingAsRead)
+        }
+    }
+    
+    func markAsRead(receiptType: ReceiptType) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.markAsRead(receiptType: receiptType)
             return .success(())
         } catch {
             MXLog.error("Failed marking room \(id) as read with error: \(error)")

@@ -454,7 +454,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Sending read receipt for eventID: \(eventID)")
+        MXLog.verbose("Sending read receipt for eventID: \(eventID)")
         
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {

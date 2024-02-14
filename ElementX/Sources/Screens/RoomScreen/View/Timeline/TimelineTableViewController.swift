@@ -64,7 +64,7 @@ class TimelineTableViewController: UIViewController {
                 paginateBackwardsPublisher.send()
             }
             
-            sendReadReceiptIfNeeded()
+            sendLastVisibleItemReadReceipt()
         }
     }
     
@@ -144,6 +144,12 @@ class TimelineTableViewController: UIViewController {
             }
             .store(in: &cancellables)
         
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in
+                self?.sendLastVisibleItemReadReceipt()
+            }
+            .store(in: &cancellables)
+        
         configureDataSource()
     }
     
@@ -152,6 +158,8 @@ class TimelineTableViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        sendLastVisibleItemReadReceipt()
         
         guard !hasAppearedOnce else { return }
         tableView.contentOffset.y = -1
@@ -287,13 +295,20 @@ class TimelineTableViewController: UIViewController {
         coordinator.send(viewAction: .paginateBackwards)
     }
     
-    private func sendReadReceiptIfNeeded() {
-        guard let lastVisibleItemIndexPath = tableView.indexPathsForVisibleRows?.first,
-              let lastVisibleItemTimelineID = dataSource?.itemIdentifier(for: lastVisibleItemIndexPath),
-              let lastVisibleItemID = timelineItemsDictionary[lastVisibleItemTimelineID]?.identifier
-        else { return }
+    private func sendLastVisibleItemReadReceipt() {
+        // Find the last visible timeline item and send a read receipt for it
+        guard let visibleIndexPaths = tableView.indexPathsForVisibleRows else {
+            return
+        }
         
-        coordinator.send(viewAction: .sendReadReceiptIfNeeded(lastVisibleItemID))
+        // These are already in reverse order because the table view is flipped
+        for indexPath in visibleIndexPaths {
+            if let visibleItemTimelineID = dataSource?.itemIdentifier(for: indexPath),
+               let visibleItemID = timelineItemsDictionary[visibleItemTimelineID]?.identifier {
+                coordinator.send(viewAction: .sendReadReceiptIfNeeded(visibleItemID))
+                return
+            }
+        }
     }
 }
 
@@ -327,15 +342,15 @@ extension TimelineTableViewController: UITableViewDelegate {
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        sendReadReceiptIfNeeded()
+        sendLastVisibleItemReadReceipt()
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        sendReadReceiptIfNeeded()
+        sendLastVisibleItemReadReceipt()
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        sendReadReceiptIfNeeded()
+        sendLastVisibleItemReadReceipt()
     }
 }
 
