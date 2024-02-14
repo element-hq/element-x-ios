@@ -418,12 +418,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             notificationCenter.post(name: .roomMarkedAsRead, object: roomProxy.id)
         }
         
-        switch await timelineController.sendReadReceipt(for: lastVisibleItemID) {
-        case .success:
-            break
-        case let .failure(error):
-            MXLog.error("[TimelineViewController] Failed to send read receipt: \(error)")
-        }
+        await timelineController.sendReadReceipt(for: lastVisibleItemID)
     }
 
     private func handleItemTapped(with itemID: TimelineItemIdentifier) async {

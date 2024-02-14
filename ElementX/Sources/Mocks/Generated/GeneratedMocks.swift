@@ -2232,42 +2232,59 @@ class RoomProxyMock: RoomProxyProtocol {
             return canUserTriggerRoomNotificationUserIDReturnValue
         }
     }
-    //MARK: - markAsUnread
+    //MARK: - flagAsUnread
 
-    var markAsUnreadCallsCount = 0
-    var markAsUnreadCalled: Bool {
-        return markAsUnreadCallsCount > 0
+    var flagAsUnreadCallsCount = 0
+    var flagAsUnreadCalled: Bool {
+        return flagAsUnreadCallsCount > 0
     }
-    var markAsUnreadReturnValue: Result<Void, RoomProxyError>!
-    var markAsUnreadClosure: (() async -> Result<Void, RoomProxyError>)?
+    var flagAsUnreadReturnValue: Result<Void, RoomProxyError>!
+    var flagAsUnreadClosure: (() async -> Result<Void, RoomProxyError>)?
 
-    func markAsUnread() async -> Result<Void, RoomProxyError> {
-        markAsUnreadCallsCount += 1
-        if let markAsUnreadClosure = markAsUnreadClosure {
-            return await markAsUnreadClosure()
+    func flagAsUnread() async -> Result<Void, RoomProxyError> {
+        flagAsUnreadCallsCount += 1
+        if let flagAsUnreadClosure = flagAsUnreadClosure {
+            return await flagAsUnreadClosure()
         } else {
-            return markAsUnreadReturnValue
+            return flagAsUnreadReturnValue
+        }
+    }
+    //MARK: - flagAsRead
+
+    var flagAsReadCallsCount = 0
+    var flagAsReadCalled: Bool {
+        return flagAsReadCallsCount > 0
+    }
+    var flagAsReadReturnValue: Result<Void, RoomProxyError>!
+    var flagAsReadClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func flagAsRead() async -> Result<Void, RoomProxyError> {
+        flagAsReadCallsCount += 1
+        if let flagAsReadClosure = flagAsReadClosure {
+            return await flagAsReadClosure()
+        } else {
+            return flagAsReadReturnValue
         }
     }
     //MARK: - markAsRead
 
-    var markAsReadSendReadReceiptsReceiptTypeCallsCount = 0
-    var markAsReadSendReadReceiptsReceiptTypeCalled: Bool {
-        return markAsReadSendReadReceiptsReceiptTypeCallsCount > 0
+    var markAsReadReceiptTypeCallsCount = 0
+    var markAsReadReceiptTypeCalled: Bool {
+        return markAsReadReceiptTypeCallsCount > 0
     }
-    var markAsReadSendReadReceiptsReceiptTypeReceivedArguments: (sendReadReceipts: Bool, receiptType: ReceiptType)?
-    var markAsReadSendReadReceiptsReceiptTypeReceivedInvocations: [(sendReadReceipts: Bool, receiptType: ReceiptType)] = []
-    var markAsReadSendReadReceiptsReceiptTypeReturnValue: Result<Void, RoomProxyError>!
-    var markAsReadSendReadReceiptsReceiptTypeClosure: ((Bool, ReceiptType) async -> Result<Void, RoomProxyError>)?
+    var markAsReadReceiptTypeReceivedReceiptType: ReceiptType?
+    var markAsReadReceiptTypeReceivedInvocations: [ReceiptType] = []
+    var markAsReadReceiptTypeReturnValue: Result<Void, RoomProxyError>!
+    var markAsReadReceiptTypeClosure: ((ReceiptType) async -> Result<Void, RoomProxyError>)?
 
-    func markAsRead(sendReadReceipts: Bool, receiptType: ReceiptType) async -> Result<Void, RoomProxyError> {
-        markAsReadSendReadReceiptsReceiptTypeCallsCount += 1
-        markAsReadSendReadReceiptsReceiptTypeReceivedArguments = (sendReadReceipts: sendReadReceipts, receiptType: receiptType)
-        markAsReadSendReadReceiptsReceiptTypeReceivedInvocations.append((sendReadReceipts: sendReadReceipts, receiptType: receiptType))
-        if let markAsReadSendReadReceiptsReceiptTypeClosure = markAsReadSendReadReceiptsReceiptTypeClosure {
-            return await markAsReadSendReadReceiptsReceiptTypeClosure(sendReadReceipts, receiptType)
+    func markAsRead(receiptType: ReceiptType) async -> Result<Void, RoomProxyError> {
+        markAsReadReceiptTypeCallsCount += 1
+        markAsReadReceiptTypeReceivedReceiptType = receiptType
+        markAsReadReceiptTypeReceivedInvocations.append(receiptType)
+        if let markAsReadReceiptTypeClosure = markAsReadReceiptTypeClosure {
+            return await markAsReadReceiptTypeClosure(receiptType)
         } else {
-            return markAsReadSendReadReceiptsReceiptTypeReturnValue
+            return markAsReadReceiptTypeReturnValue
         }
     }
     //MARK: - sendTypingNotification

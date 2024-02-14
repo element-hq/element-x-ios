@@ -167,7 +167,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     return
                 }
                 
-                switch await roomProxy.markAsUnread() {
+                switch await roomProxy.flagAsUnread() {
                 case .success:
                     ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
                 case .failure(let error):
@@ -181,11 +181,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     return
                 }
                 
-                switch await roomProxy.markAsRead(sendReadReceipts: true, receiptType: appSettings.sharePresence ? .read : .readPrivate) {
+                switch await roomProxy.flagAsRead() {
                 case .success:
                     ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
+                    
+                    if case .failure(let error) = await roomProxy.markAsRead(receiptType: appSettings.sharePresence ? .read : .readPrivate) {
+                        MXLog.error("Failed marking room \(roomIdentifier) as read with error: \(error)")
+                    }
                 case .failure(let error):
-                    MXLog.error("Failed marking room \(roomIdentifier) as read with error: \(error)")
+                    MXLog.error("Failed flagging room \(roomIdentifier) as read with error: \(error)")
                 }
             }
         }
