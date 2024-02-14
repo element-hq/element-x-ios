@@ -1,3 +1,31 @@
+## Changes in 1.5.6 (2024-02-14)
+
+✨ Features
+
+- Show admins and moderators in the room member list. ([#2355](https://github.com/element-hq/element-x-ios/issues/2355))
+- Add support for manually marking a room as read/unread ([#2360](https://github.com/element-hq/element-x-ios/issues/2360))
+
+🙌 Improvements
+
+- The timeline will filter some unnecessary state events. ([#2404](https://github.com/element-hq/element-x-ios/issues/2404))
+- Move member loading to the room member detail screen, avoid blocking the whole application ([#2414](https://github.com/element-hq/element-x-ios/issues/2414))
+- Allow text selection on the timeline item menu header ([#2416](https://github.com/element-hq/element-x-ios/issues/2416))
+
+🐛 Bugfixes
+
+- Prevent crashes when computing aspect ratios on zero media width or height ([#2437](https://github.com/element-hq/element-x-ios/pull/2437))
+- Fixed RTE not retaining content when transitioning from a split navigation to a stack navigation. ([#2364](https://github.com/element-hq/element-x-ios/issues/2364))
+- SAS Emojis are now localised. ([#2402](https://github.com/element-hq/element-x-ios/issues/2402))
+- Long pressing a link will give the preview and the context menu to copy it (or open it in Safari). ([#2440](https://github.com/element-hq/element-x-ios/issues/2440))
+
+⚠️ API Changes
+
+- Remove unnecessary analytics abstraction levels, directly create analytics events in the analytics service ([#2408](https://github.com/element-hq/element-x-ios/pull/2408))
+
+🚧 In development 🚧
+
+- All Filters have been implemented, except for the Favourites one. ([#2423](https://github.com/element-hq/element-x-ios/pull/2423))
+
 ## Changes in 1.5.5 (2024-01-30)
 
 ✨ Features

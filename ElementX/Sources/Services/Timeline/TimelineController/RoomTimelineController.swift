@@ -16,6 +16,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 import UIKit
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
@@ -91,17 +92,18 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func sendReadReceipt(for itemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError> {
-        guard let eventID = itemID.eventID else {
-            return .failure(.generic)
-        }
+    func sendReadReceipt(for itemID: TimelineItemIdentifier) async {
+        let receiptType: MatrixRustSDK.ReceiptType = appSettings.sharePresence ? .read : .readPrivate
         
-        switch await roomProxy.timeline.sendReadReceipt(for: eventID,
-                                                        type: appSettings.sendReadReceiptsEnabled ? .read : .readPrivate) {
-        case .success:
-            return .success(())
-        case .failure:
-            return .failure(.generic)
+        // Mark the whole room as read if it's the last timeline item
+        if timelineItems.last?.id == itemID {
+            _ = await roomProxy.markAsRead(receiptType: receiptType)
+        } else {
+            guard let eventID = itemID.eventID else {
+                return
+            }
+            
+            _ = await roomProxy.timeline.sendReadReceipt(for: eventID, type: receiptType)
         }
     }
     

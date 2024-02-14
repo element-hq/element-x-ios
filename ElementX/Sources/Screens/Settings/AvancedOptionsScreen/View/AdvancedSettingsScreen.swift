@@ -37,9 +37,9 @@ struct AdvancedSettingsScreen: View {
                 ListRow(label: .plain(title: L10n.actionViewSource),
                         kind: .toggle($context.viewSourceEnabled))
                 
-                ListRow(label: .plain(title: L10n.screenAdvancedSettingsSendReadReceipts,
-                                      description: L10n.screenAdvancedSettingsSendReadReceiptsDescription),
-                        kind: .toggle($context.sendReadReceiptsEnabled))
+                ListRow(label: .plain(title: L10n.screenAdvancedSettingsSharePresence,
+                                      description: L10n.screenAdvancedSettingsSharePresenceDescription),
+                        kind: .toggle($context.sharePresence))
             }
         }
         .compoundList()

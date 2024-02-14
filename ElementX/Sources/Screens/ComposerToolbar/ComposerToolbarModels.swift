@@ -40,6 +40,8 @@ enum ComposerToolbarViewModelAction {
     case composerFocusedChanged(isFocused: Bool)
     
     case voiceMessage(ComposerToolbarVoiceMessageAction)
+    
+    case contentChanged(isEmpty: Bool)
 }
 
 enum ComposerToolbarViewAction {

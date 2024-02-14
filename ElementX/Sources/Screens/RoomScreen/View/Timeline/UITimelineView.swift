@@ -62,6 +62,10 @@ struct UITimelineView: UIViewControllerRepresentable {
             if tableViewController.isBackPaginating != context.viewState.timelineViewState.isBackPaginating {
                 tableViewController.isBackPaginating = context.viewState.timelineViewState.isBackPaginating
             }
+            
+            if tableViewController.typingMembers.members != context.viewState.typingMembers {
+                tableViewController.setTypingMembers(context.viewState.typingMembers)
+            }
         }
         
         func send(viewAction: RoomScreenViewAction) {
