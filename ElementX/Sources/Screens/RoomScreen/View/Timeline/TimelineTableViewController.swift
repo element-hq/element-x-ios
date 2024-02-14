@@ -190,7 +190,7 @@ class TimelineTableViewController: UIViewController {
                 cell.contentConfiguration = UIHostingConfiguration {
                     TypingIndicatorView(typingMembers: self.typingMembers)
                 }
-                .margins(.all, 0)
+                .margins(.vertical, 0)
                 .minSize(height: 0)
                 .background(Color.clear)
                 
