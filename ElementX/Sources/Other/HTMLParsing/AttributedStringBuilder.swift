@@ -52,8 +52,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
 
         let mutableAttributedString = NSMutableAttributedString(string: string)
         addLinksAndMentions(mutableAttributedString)
-        removeLinkColors(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
+        removeLinkColors(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
         Self.caches[cacheKey]?.setValue(result, forKey: string)
@@ -108,10 +108,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
         removeDefaultForegroundColor(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
-        removeLinkColors(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
+        removeLinkColors(mutableAttributedString)
         removeDTCoreTextArtifacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
