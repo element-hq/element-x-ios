@@ -52,8 +52,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
 
         let mutableAttributedString = NSMutableAttributedString(string: string)
         addLinksAndMentions(mutableAttributedString)
-        detectPermalinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
+        detectPermalinks(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
         Self.caches[cacheKey]?.setValue(result, forKey: string)
@@ -108,10 +108,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
         removeDefaultForegroundColor(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
+        removeLinkColors(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
-        removeLinkColors(mutableAttributedString)
         removeDTCoreTextArtifacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
@@ -151,8 +151,20 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             if let value = value as? UIColor,
                value == temporaryCodeBlockMarkingColor {
                 attributedString.addAttribute(.backgroundColor, value: UIColor(.compound._bgCodeBlock) as Any, range: range)
-                // Codeblocks should not have links and all users mentions
-                attributedString.removeAttribute(.link, range: range)
+                // Codebloks should not have explicit links
+                attributedString.enumerateAttribute(.link, in: range, options: []) { value, range, _ in
+                    if let link = value as? URL {
+                        var text = attributedString.attributedSubstring(from: range).string
+                        if !text.contains("://") {
+                            // we sanitize links by always  them use https://
+                            text.insert(contentsOf: "https://", at: text.startIndex)
+                        }
+                        if text == link.absoluteString {
+                            attributedString.removeAttribute(.link, range: range)
+                        }
+                    }
+                }
+                // Codeblocks should not have all users mentions
                 attributedString.removeAttribute(.MatrixAllUsersMention, range: range)
             }
         }
