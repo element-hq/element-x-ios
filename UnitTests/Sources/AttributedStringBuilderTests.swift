@@ -494,8 +494,13 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     func testURLsAreIgnoredInCode() {
-        let htmlString = "<pre><code>test https://matrix.org test</code></pre>"
-        let attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
+        var htmlString = "<pre><code>test https://matrix.org test</code></pre>"
+        var attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
+        XCTAssert(attributedStringFromHTML?.runs.count == 1)
+        XCTAssertNil(attributedStringFromHTML?.link)
+        
+        htmlString = "<pre><code>matrix.org</code></pre>"
+        attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
         XCTAssert(attributedStringFromHTML?.runs.count == 1)
         XCTAssertNil(attributedStringFromHTML?.link)
     }
