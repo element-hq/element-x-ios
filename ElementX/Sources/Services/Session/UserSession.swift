@@ -84,6 +84,7 @@ class UserSession: UserSessionProtocol {
             }
         
         Publishers.CombineLatest(sessionVerificationStateSubject, clientProxy.secureBackupController.recoveryState)
+            .removeDuplicates { $0 == $1 }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] verificationState, recoveryState in
                 
