@@ -54,7 +54,7 @@ class MockClientProxy: ClientProxyProtocol {
     }
     
     func isLastDevice() async -> Result<Bool, ClientProxyError> {
-        .failure(.failedCheckingIsLastDevice(nil))
+        .success(false)
     }
     
     func startSync() { }
