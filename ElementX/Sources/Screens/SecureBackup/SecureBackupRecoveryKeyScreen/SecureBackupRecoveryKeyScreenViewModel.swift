@@ -32,9 +32,9 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
         self.secureBackupController = secureBackupController
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: .init(mode: secureBackupController.recoveryKeyState.value.viewMode, bindings: .init()))
+        super.init(initialViewState: .init(mode: secureBackupController.recoveryState.value.viewMode, bindings: .init()))
         
-        secureBackupController.recoveryKeyState
+        secureBackupController.recoveryState
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak userIndicatorController] state in
                 let loadingIndicatorIdentifier = "SecureBackupRecoveryKeyScreenLoading"
@@ -100,7 +100,7 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
     }
 }
 
-extension SecureBackupRecoveryKeyState {
+extension SecureBackupRecoveryState {
     var viewMode: SecureBackupRecoveryKeyScreenViewMode {
         switch self {
         case .disabled:

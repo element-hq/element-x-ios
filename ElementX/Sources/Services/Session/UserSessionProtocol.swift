@@ -30,7 +30,7 @@ enum SessionVerificationState {
 
 struct SessionSecurityState {
     let verificationState: SessionVerificationState
-    let recoveryState: SecureBackupRecoveryKeyState
+    let recoveryState: SecureBackupRecoveryState
 }
 
 protocol UserSessionProtocol {

@@ -21,7 +21,7 @@ import MatrixRustSDK
 class SecureBackupController: SecureBackupControllerProtocol {
     private let encryption: Encryption
     
-    private let recoveryKeyStateSubject = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.unknown)
+    private let recoveryStateSubject = CurrentValueSubject<SecureBackupRecoveryState, Never>(.unknown)
     private let keyBackupStateSubject = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.unknown)
     
     // periphery:ignore - retaining purpose
@@ -33,8 +33,8 @@ class SecureBackupController: SecureBackupControllerProtocol {
     /// Used to dedupe remote backup state requests
     @CancellableTask private var remoteBackupStateTask: Task<Void, Error>?
     
-    var recoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never> {
-        recoveryKeyStateSubject.asCurrentValuePublisher()
+    var recoveryState: CurrentValuePublisher<SecureBackupRecoveryState, Never> {
+        recoveryStateSubject.asCurrentValuePublisher()
     }
     
     var keyBackupState: CurrentValuePublisher<SecureBackupKeyBackupState, Never> {
@@ -76,16 +76,16 @@ class SecureBackupController: SecureBackupControllerProtocol {
             
             switch state {
             case .unknown:
-                recoveryKeyStateSubject.send(.unknown)
+                recoveryStateSubject.send(.unknown)
             case .enabled:
-                recoveryKeyStateSubject.send(.enabled)
+                recoveryStateSubject.send(.enabled)
             case .disabled:
-                recoveryKeyStateSubject.send(.disabled)
+                recoveryStateSubject.send(.disabled)
             case .incomplete:
-                recoveryKeyStateSubject.send(.incomplete)
+                recoveryStateSubject.send(.incomplete)
             }
             
-            MXLog.info("Recovery state changed to: \(state), setting local state to \(recoveryKeyStateSubject.value)")
+            MXLog.info("Recovery state changed to: \(state), setting local state to \(recoveryStateSubject.value)")
         })
         
         updateBackupStateFromRemote()
@@ -120,7 +120,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
     
     func generateRecoveryKey() async -> Result<String, SecureBackupControllerError> {
         do {
-            guard recoveryKeyState.value == .disabled else {
+            guard recoveryState.value == .disabled else {
                 MXLog.info("Resetting recovery key")
                 
                 let key = try await encryption.resetRecoveryKey()
@@ -135,9 +135,9 @@ class SecureBackupController: SecureBackupControllerProtocol {
                 
                 switch state {
                 case .starting, .creatingBackup, .creatingRecoveryKey, .backingUp:
-                    recoveryKeyStateSubject.send(.settingUp)
+                    recoveryStateSubject.send(.settingUp)
                 case .done:
-                    recoveryKeyStateSubject.send(.enabled)
+                    recoveryStateSubject.send(.enabled)
                 case .roomKeyUploadError:
                     MXLog.error("Failed enabling recovery: room key upload error")
                     keyUploadErrored = true

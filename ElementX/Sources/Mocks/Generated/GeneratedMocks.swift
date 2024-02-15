@@ -2363,11 +2363,11 @@ class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
 
 }
 class SecureBackupControllerMock: SecureBackupControllerProtocol {
-    var recoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never> {
-        get { return underlyingRecoveryKeyState }
-        set(value) { underlyingRecoveryKeyState = value }
+    var recoveryState: CurrentValuePublisher<SecureBackupRecoveryState, Never> {
+        get { return underlyingRecoveryState }
+        set(value) { underlyingRecoveryState = value }
     }
-    var underlyingRecoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never>!
+    var underlyingRecoveryState: CurrentValuePublisher<SecureBackupRecoveryState, Never>!
     var keyBackupState: CurrentValuePublisher<SecureBackupKeyBackupState, Never> {
         get { return underlyingKeyBackupState }
         set(value) { underlyingKeyBackupState = value }

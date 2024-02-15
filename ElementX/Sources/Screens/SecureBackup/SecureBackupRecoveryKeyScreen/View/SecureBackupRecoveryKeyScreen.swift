@@ -204,9 +204,9 @@ struct SecureBackupRecoveryKeyScreen: View {
 // MARK: - Previews
 
 struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview {
-    static let setupViewModel = viewModel(recoveryKeyState: .enabled)
-    static let notSetUpViewModel = viewModel(recoveryKeyState: .disabled)
-    static let incompleteViewModel = viewModel(recoveryKeyState: .incomplete)
+    static let setupViewModel = viewModel(recoveryState: .enabled)
+    static let notSetUpViewModel = viewModel(recoveryState: .disabled)
+    static let incompleteViewModel = viewModel(recoveryState: .incomplete)
     
     static var previews: some View {
         NavigationStack {
@@ -225,9 +225,9 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
         .previewDisplayName("Incomplete")
     }
     
-    static func viewModel(recoveryKeyState: SecureBackupRecoveryKeyState) -> SecureBackupRecoveryKeyScreenViewModelType {
+    static func viewModel(recoveryState: SecureBackupRecoveryState) -> SecureBackupRecoveryKeyScreenViewModelType {
         let backupController = SecureBackupControllerMock()
-        backupController.underlyingRecoveryKeyState = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(recoveryKeyState).asCurrentValuePublisher()
+        backupController.underlyingRecoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
         
         return SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController, userIndicatorController: UserIndicatorControllerMock())
     }

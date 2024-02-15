@@ -83,7 +83,7 @@ class UserSession: UserSessionProtocol {
                 }
             }
         
-        Publishers.CombineLatest(sessionVerificationStateSubject, clientProxy.secureBackupController.recoveryKeyState)
+        Publishers.CombineLatest(sessionVerificationStateSubject, clientProxy.secureBackupController.recoveryState)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] verificationState, recoveryState in
                 

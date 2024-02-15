@@ -36,9 +36,9 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
         
         super.init(initialViewState: .init(chatBackupDetailsURL: chatBackupDetailsURL))
         
-        secureBackupController.recoveryKeyState
+        secureBackupController.recoveryState
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.recoveryKeyState, on: self)
+            .weakAssign(to: \.state.recoveryState, on: self)
             .store(in: &cancellables)
         
         secureBackupController.keyBackupState
