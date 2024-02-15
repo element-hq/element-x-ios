@@ -32,13 +32,17 @@ public extension Bundle {
     
     // MARK: - Localisation
     
-    private static var cachedLocalizationBundles = [String: Bundle]()
+    /// Overrides `Bundle.app.preferredLocalizations` for testing translations.
+    static var overrideLocalizations: [String]?
+    
+    private static let cacheDispatchQueue = DispatchQueue(label: "io.element.elementx.localization_bundle_cache")
+    private static var cachedBundles = [String: Bundle]()
     
     /// Get an lproj language bundle from the receiver bundle.
     /// - Parameter language: The language to try to load.
     /// - Returns: The lproj bundle if found otherwise nil.
     static func lprojBundle(for language: String) -> Bundle? {
-        if let bundle = cachedLocalizationBundles[language] {
+        if let bundle = cachedValue(forKey: language) {
             return bundle
         }
         
@@ -48,13 +52,25 @@ public extension Bundle {
         
         let bundle = Bundle(url: lprojURL)
         
-        DispatchQueue.main.async {
-            cachedLocalizationBundles[language] = bundle
-        }
+        cacheValue(bundle, forKey: language)
         
         return bundle
     }
-
-    /// Overrides `Bundle.app.preferredLocalizations` for testing translations.
-    static var overrideLocalizations: [String]?
+    
+    // MARK: - Private
+    
+    private static func cacheValue(_ value: Bundle?, forKey key: String) {
+        cacheDispatchQueue.sync {
+            cachedBundles[key] = value
+        }
+    }
+    
+    private static func cachedValue(forKey key: String) -> Bundle? {
+        var result: Bundle?
+        cacheDispatchQueue.sync {
+            result = cachedBundles[key]
+        }
+        
+        return result
+    }
 }
