@@ -35,15 +35,22 @@ enum SettingsScreenViewModelAction {
 }
 
 struct SettingsScreenViewState: BindableState {
+    enum SecuritySectionMode {
+        case none
+        case sessionVerification
+        case secureBackup
+    }
+    
     var deviceID: String?
     var userID: String
     var accountProfileURL: URL?
     var accountSessionsListURL: URL?
     var userAvatarURL: URL?
     var userDisplayName: String?
-    var isSessionVerified: Bool?
-    var showSecureBackupBadge = false
     var showDeveloperOptions: Bool
+    
+    var securitySectionMode = SecuritySectionMode.none
+    var showSecuritySectionBadge = false
 }
 
 enum SettingsScreenViewAction {

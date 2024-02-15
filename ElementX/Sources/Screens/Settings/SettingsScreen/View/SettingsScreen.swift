@@ -80,18 +80,20 @@ struct SettingsScreen: View {
     @ViewBuilder
     private var accountSecuritySection: some View {
         Section {
-            if let isSessionVerified = context.viewState.isSessionVerified {
-                if !isSessionVerified {
-                    ListRow(label: .default(title: L10n.actionCompleteVerification,
-                                            icon: \.checkCircle),
-                            kind: .button { context.send(viewAction: .sessionVerification) })
-                } else {
-                    ListRow(label: .default(title: L10n.commonChatBackup,
-                                            icon: \.key),
-                            details: context.viewState.showSecureBackupBadge ? .icon(secureBackupBadge) : nil,
-                            kind: .navigationLink { context.send(viewAction: .secureBackup) })
-                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.secureBackup)
-                }
+            switch context.viewState.securitySectionMode {
+            case .sessionVerification:
+                ListRow(label: .default(title: L10n.actionCompleteVerification,
+                                        icon: \.checkCircle),
+                        details: context.viewState.showSecuritySectionBadge ? .icon(securitySectionBadge) : nil,
+                        kind: .button { context.send(viewAction: .sessionVerification) })
+            case .secureBackup:
+                ListRow(label: .default(title: L10n.commonChatBackup,
+                                        icon: \.key),
+                        details: context.viewState.showSecuritySectionBadge ? .icon(securitySectionBadge) : nil,
+                        kind: .navigationLink { context.send(viewAction: .secureBackup) })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.secureBackup)
+            default:
+                EmptyView()
             }
         }
     }
@@ -210,8 +212,8 @@ struct SettingsScreen: View {
     }
     
     @ViewBuilder
-    private var secureBackupBadge: some View {
-        if context.viewState.showSecureBackupBadge {
+    private var securitySectionBadge: some View {
+        if context.viewState.showSecuritySectionBadge {
             BadgeView(size: 10)
         }
     }

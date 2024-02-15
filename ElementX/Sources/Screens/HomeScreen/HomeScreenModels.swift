@@ -75,33 +75,21 @@ enum HomeScreenRoomListMode: CustomStringConvertible {
     }
 }
 
+enum SecurityBannerMode {
+    case none
+    case dismissed
+    case sessionVerification
+    case recoveryKeyConfirmation
+}
+
 struct HomeScreenViewState: BindableState {
     let userID: String
     var userDisplayName: String?
     var userAvatarURL: URL?
     
-    var isSessionVerified: Bool?
-    var hasSessionVerificationBannerBeenDismissed = false
-    var showSessionVerificationBanner: Bool {
-        guard let isSessionVerified else {
-            return false
-        }
+    var securityBannerMode = SecurityBannerMode.none
+    var requiresExtraAccountSetup = false
         
-        return !isSessionVerified && !hasSessionVerificationBannerBeenDismissed
-    }
-    
-    var requiresSecureBackupSetup = false
-
-    var needsRecoveryKeyConfirmation = false
-    var hasRecoveryKeyConfirmationBannerBeenDismissed = false
-    var showRecoveryKeyConfirmationBanner: Bool {
-        guard let isSessionVerified else {
-            return false
-        }
-        
-        return isSessionVerified && needsRecoveryKeyConfirmation && !hasRecoveryKeyConfirmationBannerBeenDismissed
-    }
-    
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
     

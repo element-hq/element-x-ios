@@ -361,12 +361,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func runLogoutFlow() async {
         let secureBackupController = userSession.clientProxy.secureBackupController
         
-        guard case let .success(isLastSession) = await secureBackupController.isLastSession() else {
+        guard case let .success(isLastDevice) = await userSession.clientProxy.isLastDevice() else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init())
             return
         }
         
-        guard isLastSession else {
+        guard isLastDevice else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
                                                                             title: L10n.screenSignoutConfirmationDialogTitle,
                                                                             message: L10n.screenSignoutConfirmationDialogContent,

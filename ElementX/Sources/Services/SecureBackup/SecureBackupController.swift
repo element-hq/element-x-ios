@@ -162,17 +162,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             return .failure(.failedConfirmingRecoveryKey)
         }
     }
-    
-    func isLastSession() async -> Result<Bool, SecureBackupControllerError> {
-        do {
-            MXLog.info("Checking if last session")
-            return try await .success(encryption.isLastDevice())
-        } catch {
-            MXLog.error("Failed checking if last session with error: \(error)")
-            return .failure(.failedFetchingSessionState)
-        }
-    }
-    
+        
     func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError> {
         do {
             MXLog.info("Waiting for backup upload steady state")

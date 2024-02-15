@@ -60,7 +60,5 @@ protocol SecureBackupControllerProtocol {
     func generateRecoveryKey() async -> Result<String, SecureBackupControllerError>
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError>
     
-    func isLastSession() async -> Result<Bool, SecureBackupControllerError>
-    
     func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError>
 }

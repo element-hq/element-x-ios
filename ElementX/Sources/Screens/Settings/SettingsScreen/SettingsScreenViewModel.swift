@@ -44,17 +44,31 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
-        userSession.sessionVerificationState
+        userSession.sessionSecurityState
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.isSessionVerified, on: self)
-            .store(in: &cancellables)
-        
-        userSession.clientProxy.secureBackupController.recoveryKeyState
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] state in
+            .sink { [weak self] securityState in
                 guard let self else { return }
                 
-                self.state.showSecureBackupBadge = (state == .incomplete || state == .disabled)
+                switch (securityState.verificationState, securityState.recoveryState) {
+                case (.unverified, _):
+                    state.showSecuritySectionBadge = true
+                    state.securitySectionMode = .sessionVerification
+                case (.unverifiedLastSession, .incomplete):
+                    state.showSecuritySectionBadge = true
+                    state.securitySectionMode = .secureBackup
+                case (.verified, .disabled):
+                    state.showSecuritySectionBadge = true
+                    state.securitySectionMode = .secureBackup
+                case (.verified, .incomplete):
+                    state.showSecuritySectionBadge = true
+                    state.securitySectionMode = .secureBackup
+                case (.unknown, _):
+                    state.showSecuritySectionBadge = false
+                    state.securitySectionMode = .none
+                default:
+                    state.showSecuritySectionBadge = false
+                    state.securitySectionMode = .secureBackup
+                }
             }
             .store(in: &cancellables)
         

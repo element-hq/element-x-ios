@@ -2446,23 +2446,6 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol {
             return confirmRecoveryKeyReturnValue
         }
     }
-    //MARK: - isLastSession
-
-    var isLastSessionCallsCount = 0
-    var isLastSessionCalled: Bool {
-        return isLastSessionCallsCount > 0
-    }
-    var isLastSessionReturnValue: Result<Bool, SecureBackupControllerError>!
-    var isLastSessionClosure: (() async -> Result<Bool, SecureBackupControllerError>)?
-
-    func isLastSession() async -> Result<Bool, SecureBackupControllerError> {
-        isLastSessionCallsCount += 1
-        if let isLastSessionClosure = isLastSessionClosure {
-            return await isLastSessionClosure()
-        } else {
-            return isLastSessionReturnValue
-        }
-    }
     //MARK: - waitForKeyBackupUpload
 
     var waitForKeyBackupUploadCallsCount = 0

@@ -18,10 +18,12 @@ import Combine
 import Foundation
 
 class UserSession: UserSessionProtocol {
+    private let sessionVerificationStateSubject: CurrentValueSubject<SessionVerificationState, Never> = .init(.unknown)
+    
     private var cancellables = Set<AnyCancellable>()
     
     private var checkSessionVerificationStateCancellable: AnyCancellable?
-    private var checkSessionVerificationStateTask: Task<Void, Never>?
+    private var retrieveSessionVerificationControllerTask: Task<Void, Never>?
     
     private var authErrorCancellable: AnyCancellable?
     
@@ -40,7 +42,7 @@ class UserSession: UserSessionProtocol {
             sessionVerificationController?.callbacks.sink { [weak self] callback in
                 switch callback {
                 case .finished:
-                    self?.sessionVerificationStateSubject.send(true)
+                    self?.sessionVerificationStateSubject.send(.verified)
                 default:
                     break
                 }
@@ -49,9 +51,9 @@ class UserSession: UserSessionProtocol {
         }
     }
     
-    private var sessionVerificationStateSubject: CurrentValueSubject<Bool?, Never> = .init(nil)
-    var sessionVerificationState: CurrentValuePublisher<Bool?, Never> {
-        sessionVerificationStateSubject.asCurrentValuePublisher()
+    private var sessionSecurityStateSubject: CurrentValueSubject<SessionSecurityState, Never> = .init(.init(verificationState: .unknown, recoveryState: .unknown))
+    var sessionSecurityState: CurrentValuePublisher<SessionSecurityState, Never> {
+        sessionSecurityStateSubject.asCurrentValuePublisher()
     }
     
     init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol, voiceMessageMediaManager: VoiceMessageMediaManagerProtocol) {
@@ -59,64 +61,15 @@ class UserSession: UserSessionProtocol {
         self.mediaProvider = mediaProvider
         self.voiceMessageMediaManager = voiceMessageMediaManager
         
-        setupSessionVerificationWatchdog()
-        setupAuthErrorWatchdog()
-    }
-    
-    // MARK: - Private
-    
-    private func setupSessionVerificationWatchdog() {
-        checkSessionVerificationStateCancellable = clientProxy.callbacks
+        clientProxy.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
                 if callback.isSyncUpdate {
-                    self?.attemptSessionVerification()
+                    self?.checkSessionVerificationState()
                 }
             }
-    }
-    
-    private func attemptSessionVerification() {
-        guard checkSessionVerificationStateTask == nil else {
-            MXLog.info("Session verification state check already in progress")
-            return
-        }
+            .store(in: &cancellables)
         
-        MXLog.info("Checking session verification state")
-        
-        checkSessionVerificationStateTask = Task {
-            MXLog.info("Retrieving session verification controller")
-            
-            switch await clientProxy.sessionVerificationControllerProxy() {
-            case .success(let sessionVerificationController):
-                MXLog.info("Retrieving session verification state")
-                
-                guard case let .success(isVerified) = await sessionVerificationController.isVerified() else {
-                    MXLog.error("Failed checking verification state. Will retry on the next sync update.")
-                    return
-                }
-                
-                tearDownSessionVerificationControllerWatchdog()
-                
-                self.sessionVerificationController = sessionVerificationController
-                
-                MXLog.info("Session verified: \(isVerified)")
-                
-                sessionVerificationStateSubject.send(isVerified)
-                
-                checkSessionVerificationStateTask = nil
-            case .failure(let error):
-                MXLog.info("Failed getting session verification controller with error: \(error). Will retry on the next sync update.")
-            }
-        }
-    }
-    
-    private func tearDownSessionVerificationControllerWatchdog() {
-        checkSessionVerificationStateCancellable = nil
-    }
-
-    // MARK: Auth Error Watchdog
-
-    private func setupAuthErrorWatchdog() {
         authErrorCancellable = clientProxy.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
@@ -124,14 +77,78 @@ class UserSession: UserSessionProtocol {
                 switch callback {
                 case .receivedAuthError(let isSoftLogout):
                     callbacks.send(.didReceiveAuthError(isSoftLogout: isSoftLogout))
-                    tearDownAuthErrorWatchdog()
+                    authErrorCancellable = nil
                 default:
                     break
                 }
             }
+        
+        Publishers.CombineLatest(sessionVerificationStateSubject, clientProxy.secureBackupController.recoveryKeyState)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] verificationState, recoveryState in
+                
+                MXLog.info("Session security state changed, verificationState: \(verificationState), recoveryState: \(recoveryState)")
+                
+                self?.sessionSecurityStateSubject.send(.init(verificationState: verificationState, recoveryState: recoveryState))
+            }
+            .store(in: &cancellables)
     }
-
-    private func tearDownAuthErrorWatchdog() {
-        authErrorCancellable = nil
+    
+    // MARK: - Private
+        
+    private func checkSessionVerificationState() {
+        guard retrieveSessionVerificationControllerTask == nil else {
+            MXLog.info("Session verification state check already in progress")
+            return
+        }
+        
+        guard sessionVerificationController == nil else {
+            Task {
+                await updateSessionVerificationState()
+            }
+            return
+        }
+        
+        MXLog.info("Retrieving session verification controller")
+        
+        retrieveSessionVerificationControllerTask = Task {
+            switch await clientProxy.sessionVerificationControllerProxy() {
+            case .success(let sessionVerificationController):
+                self.sessionVerificationController = sessionVerificationController
+                await updateSessionVerificationState()
+                
+                retrieveSessionVerificationControllerTask = nil
+            case .failure(let error):
+                MXLog.info("Failed getting session verification controller with error: \(error). Will retry on the next sync update.")
+            }
+        }
+    }
+    
+    private func updateSessionVerificationState() async {
+        guard let sessionVerificationController else {
+            fatalError("This point should never be reached")
+        }
+        
+        MXLog.info("Checking session verification state")
+        
+        guard case let .success(isVerified) = await sessionVerificationController.isVerified() else {
+            MXLog.error("Failed checking verification state. Will retry on the next sync update.")
+            return
+        }
+        
+        if isVerified {
+            sessionVerificationStateSubject.send(.verified)
+        } else {
+            guard case let .success(isLastDevice) = await clientProxy.isLastDevice() else {
+                MXLog.error("Failed checking isLastDevice. Will retry on the next sync update.")
+                return
+            }
+            
+            if isLastDevice {
+                sessionVerificationStateSubject.send(.unverifiedLastSession)
+            } else {
+                sessionVerificationStateSubject.send(.unverified)
+            }
+        }
     }
 }
