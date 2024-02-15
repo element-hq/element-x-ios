@@ -32,7 +32,7 @@ final class UserSessionTests: XCTestCase {
 
     func test_whenUserSessionReceivesSyncUpdateAndSessionControllerRetrievedAndSessionNotVerified_sessionVerificationNeededEventReceived() throws {
         let expectation = expectation(description: "SessionVerificationNeeded expectation")
-        userSession.sessionSecurityState.sink { securityState in
+        userSession.sessionSecurityStatePublisher.sink { securityState in
             if securityState.verificationState == .unverified {
                 expectation.fulfill()
             }

@@ -51,15 +51,21 @@ class UserSession: UserSessionProtocol {
         }
     }
     
-    private var sessionSecurityStateSubject: CurrentValueSubject<SessionSecurityState, Never> = .init(.init(verificationState: .unknown, recoveryState: .unknown))
-    var sessionSecurityState: CurrentValuePublisher<SessionSecurityState, Never> {
-        sessionSecurityStateSubject.asCurrentValuePublisher()
-    }
+    let sessionSecurityStatePublisher: AnyPublisher<SessionSecurityState, Never>
     
     init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol, voiceMessageMediaManager: VoiceMessageMediaManagerProtocol) {
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
         self.voiceMessageMediaManager = voiceMessageMediaManager
+        
+        sessionSecurityStatePublisher = Publishers.CombineLatest(sessionVerificationStateSubject, clientProxy.secureBackupController.recoveryState)
+            .map {
+                MXLog.info("Session security state changed, verificationState: \($0), recoveryState: \($1)")
+                return SessionSecurityState(verificationState: $0, recoveryState: $1)
+            }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
         
         clientProxy.callbacks
             .receive(on: DispatchQueue.main)
@@ -82,17 +88,6 @@ class UserSession: UserSessionProtocol {
                     break
                 }
             }
-        
-        Publishers.CombineLatest(sessionVerificationStateSubject, clientProxy.secureBackupController.recoveryState)
-            .removeDuplicates { $0 == $1 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] verificationState, recoveryState in
-                
-                MXLog.info("Session security state changed, verificationState: \(verificationState), recoveryState: \(recoveryState)")
-                
-                self?.sessionSecurityStateSubject.send(.init(verificationState: verificationState, recoveryState: recoveryState))
-            }
-            .store(in: &cancellables)
     }
     
     // MARK: - Private

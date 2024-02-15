@@ -65,25 +65,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     private var footer: some View {
         switch context.viewState.mode {
         case .setupRecovery, .changeRecovery:
-            VStack(spacing: 8.0) {
-                if let recoveryKey = context.viewState.recoveryKey {
-                    ShareLink(item: recoveryKey) {
-                        Label(L10n.screenRecoveryKeySaveAction, icon: \.download)
-                    }
-                    .buttonStyle(.compound(.primary))
-                    .simultaneousGesture(TapGesture().onEnded { _ in
-                        context.send(viewAction: .keySaved)
-                    })
-                }
-                
-                Button {
-                    context.send(viewAction: .done)
-                } label: {
-                    Text(L10n.actionDone)
-                }
-                .buttonStyle(.compound(.primary))
-                .disabled(context.viewState.recoveryKey == nil || context.viewState.doneButtonEnabled == false)
-            }
+            recoveryCreatedActionButtons
         case .fixRecovery:
             Button {
                 context.send(viewAction: .confirmKey)
@@ -92,6 +74,28 @@ struct SecureBackupRecoveryKeyScreen: View {
             }
             .buttonStyle(.compound(.primary))
             .disabled(context.confirmationRecoveryKey.isEmpty)
+        }
+    }
+    
+    private var recoveryCreatedActionButtons: some View {
+        VStack(spacing: 8.0) {
+            if let recoveryKey = context.viewState.recoveryKey {
+                ShareLink(item: recoveryKey) {
+                    Label(L10n.screenRecoveryKeySaveAction, icon: \.download)
+                }
+                .buttonStyle(.compound(.primary))
+                .simultaneousGesture(TapGesture().onEnded { _ in
+                    context.send(viewAction: .keySaved)
+                })
+            }
+            
+            Button {
+                context.send(viewAction: .done)
+            } label: {
+                Text(L10n.actionDone)
+            }
+            .buttonStyle(.compound(.primary))
+            .disabled(context.viewState.recoveryKey == nil || context.viewState.doneButtonEnabled == false)
         }
     }
     

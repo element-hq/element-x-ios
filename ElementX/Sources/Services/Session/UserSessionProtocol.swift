@@ -28,7 +28,7 @@ enum SessionVerificationState {
     case unverifiedLastSession
 }
 
-struct SessionSecurityState {
+struct SessionSecurityState: Equatable {
     let verificationState: SessionVerificationState
     let recoveryState: SecureBackupRecoveryState
 }
@@ -42,7 +42,7 @@ protocol UserSessionProtocol {
     var mediaProvider: MediaProviderProtocol { get }
     var voiceMessageMediaManager: VoiceMessageMediaManagerProtocol { get }
     
-    var sessionSecurityState: CurrentValuePublisher<SessionSecurityState, Never> { get }
+    var sessionSecurityStatePublisher: AnyPublisher<SessionSecurityState, Never> { get }
     var sessionVerificationController: SessionVerificationControllerProxyProtocol? { get }
     
     var callbacks: PassthroughSubject<UserSessionCallback, Never> { get }
