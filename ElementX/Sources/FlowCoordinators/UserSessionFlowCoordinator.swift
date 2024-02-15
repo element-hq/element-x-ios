@@ -361,7 +361,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func runLogoutFlow() async {
         let secureBackupController = userSession.clientProxy.secureBackupController
         
-        guard case let .success(isLastDevice) = await userSession.clientProxy.isLastDevice() else {
+        guard case let .success(isLastDevice) = await userSession.clientProxy.isOnlyDeviceLeft() else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init())
             return
         }

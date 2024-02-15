@@ -97,7 +97,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var secureBackupController: SecureBackupControllerProtocol { get }
     
-    func isLastDevice() async -> Result<Bool, ClientProxyError>
+    func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError>
     
     func startSync()
 

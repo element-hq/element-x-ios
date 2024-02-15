@@ -167,7 +167,7 @@ class ClientProxy: ClientProxyProtocol {
         return digest.compactMap { String(format: "%02x", $0) }.joined()
     }()
     
-    func isLastDevice() async -> Result<Bool, ClientProxyError> {
+    func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError> {
         do {
             let result = try await client.encryption().isLastDevice()
             return .success(result)

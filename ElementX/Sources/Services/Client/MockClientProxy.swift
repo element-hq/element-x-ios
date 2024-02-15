@@ -53,7 +53,7 @@ class MockClientProxy: ClientProxyProtocol {
         self.roomSummaryProvider = roomSummaryProvider
     }
     
-    func isLastDevice() async -> Result<Bool, ClientProxyError> {
+    func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError> {
         .success(false)
     }
     

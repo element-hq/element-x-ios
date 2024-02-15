@@ -140,7 +140,7 @@ class UserSession: UserSessionProtocol {
         if isVerified {
             sessionVerificationStateSubject.send(.verified)
         } else {
-            guard case let .success(isLastDevice) = await clientProxy.isLastDevice() else {
+            guard case let .success(isLastDevice) = await clientProxy.isOnlyDeviceLeft() else {
                 MXLog.error("Failed checking isLastDevice. Will retry on the next sync update.")
                 return
             }
