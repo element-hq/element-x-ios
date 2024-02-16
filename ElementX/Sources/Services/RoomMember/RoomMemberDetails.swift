@@ -24,17 +24,21 @@ struct RoomMemberDetails: Identifiable, Equatable {
     let permalink: URL?
     let isAccountOwner: Bool
     var isIgnored: Bool
+    var isBanned: Bool
     
     enum Role { case administrator, moderator, user }
     let role: Role
+}
 
+extension RoomMemberDetails {
     init(withProxy proxy: RoomMemberProxyProtocol) {
         id = proxy.userID
-        name = proxy.displayName ?? proxy.userID
+        name = proxy.displayName
         avatarURL = proxy.avatarURL
         permalink = proxy.permalink
         isAccountOwner = proxy.isAccountOwner
         isIgnored = proxy.isIgnored
+        isBanned = proxy.membership == .ban
         role = .init(proxy.role)
     }
 }

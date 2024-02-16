@@ -26,6 +26,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let mentionBuilder: MentionBuilderProtocol
     
     private static let defaultKey = "default"
+    
+    private static let cacheDispatchQueue = DispatchQueue(label: "io.element.elementx.attributed_string_builder_cache")
     private static var caches: [String: LRUCache<String, AttributedString>] = [:]
 
     static func invalidateCaches() {
@@ -34,9 +36,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     
     init(cacheKey: String = defaultKey, permalinkBaseURL: URL, mentionBuilder: MentionBuilderProtocol) {
         self.cacheKey = cacheKey
-        if Self.caches[cacheKey] == nil {
-            Self.caches[cacheKey] = LRUCache<String, AttributedString>(countLimit: 1000)
-        }
         self.permalinkBaseURL = permalinkBaseURL
         self.mentionBuilder = mentionBuilder
     }
@@ -46,7 +45,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return nil
         }
         
-        if let cached = Self.caches[cacheKey]?.value(forKey: string) {
+        if let cached = Self.cachedValue(forKey: string, cacheKey: cacheKey) {
             return cached
         }
 
@@ -56,7 +55,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         removeLinkColors(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
-        Self.caches[cacheKey]?.setValue(result, forKey: string)
+        Self.cacheValue(result, forKey: string, cacheKey: cacheKey)
+        
         return result
     }
         
@@ -72,10 +72,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return nil
         }
         
-        if let cached = Self.caches[cacheKey]?.value(forKey: originalHTMLString) {
+        if let cached = Self.cachedValue(forKey: originalHTMLString, cacheKey: cacheKey) {
             return cached
         }
-        
+                
         let htmlString = originalHTMLString.replacingHtmlBreaksOccurrences()
         
         guard let data = htmlString.data(using: .utf8) else {
@@ -115,11 +115,31 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         removeDTCoreTextArtifacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
-        Self.caches[cacheKey]?.setValue(result, forKey: htmlString)
+        Self.cacheValue(result, forKey: htmlString, cacheKey: cacheKey)
+        
         return result
     }
     
     // MARK: - Private
+    
+    private static func cacheValue(_ value: AttributedString?, forKey key: String, cacheKey: String) {
+        cacheDispatchQueue.sync {
+            if caches[cacheKey] == nil {
+                caches[cacheKey] = LRUCache<String, AttributedString>(countLimit: 1000)
+            }
+            
+            caches[cacheKey]?.setValue(value, forKey: key)
+        }
+    }
+    
+    private static func cachedValue(forKey key: String, cacheKey: String) -> AttributedString? {
+        var result: AttributedString?
+        cacheDispatchQueue.sync {
+            result = caches[cacheKey]?.value(forKey: key)
+        }
+        
+        return result
+    }
     
     private func replaceMarkedBlockquotes(_ attributedString: NSMutableAttributedString) {
         // According to blockquotes in the string, DTCoreText can apply 2 policies:

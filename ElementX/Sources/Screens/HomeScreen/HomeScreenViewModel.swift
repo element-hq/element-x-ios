@@ -61,20 +61,35 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
-        userSession.sessionVerificationState
+        userSession.sessionSecurityStatePublisher
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.isSessionVerified, on: self)
-            .store(in: &cancellables)
-        
-        userSession.clientProxy.secureBackupController.recoveryKeyState
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] recoveryKeyState in
+            .sink { [weak self] securityState in
                 guard let self else { return }
                 
-                let requiresSecureBackupSetup = recoveryKeyState == .disabled || recoveryKeyState == .incomplete
-                state.requiresSecureBackupSetup = requiresSecureBackupSetup
-                
-                state.needsRecoveryKeyConfirmation = recoveryKeyState == .incomplete
+                switch (securityState.verificationState, securityState.recoveryState) {
+                case (.unverified, _):
+                    state.requiresExtraAccountSetup = true
+                    if state.securityBannerMode != .dismissed {
+                        state.securityBannerMode = .sessionVerification
+                    }
+                case (.unverifiedLastSession, .incomplete):
+                    state.requiresExtraAccountSetup = true
+                    if state.securityBannerMode != .dismissed {
+                        state.securityBannerMode = .recoveryKeyConfirmation
+                    }
+                case (.verified, .disabled):
+                    state.requiresExtraAccountSetup = true
+                    state.securityBannerMode = .none
+                case (.verified, .incomplete):
+                    state.requiresExtraAccountSetup = true
+                    
+                    if state.securityBannerMode != .dismissed {
+                        state.securityBannerMode = .recoveryKeyConfirmation
+                    }
+                default:
+                    state.securityBannerMode = .none
+                    state.requiresExtraAccountSetup = false
+                }
             }
             .store(in: &cancellables)
         
@@ -149,9 +164,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .confirmRecoveryKey:
             actionsSubject.send(.presentSecureBackupSettings)
         case .skipSessionVerification:
-            state.hasSessionVerificationBannerBeenDismissed = true
+            state.securityBannerMode = .dismissed
         case .skipRecoveryKeyConfirmation:
-            state.hasRecoveryKeyConfirmationBannerBeenDismissed = true
+            state.securityBannerMode = .dismissed
         case .updateVisibleItemRange(let range, let isScrolling):
             visibleItemRangePublisher.send((range, isScrolling))
         case .startChat:

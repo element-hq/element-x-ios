@@ -361,12 +361,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func runLogoutFlow() async {
         let secureBackupController = userSession.clientProxy.secureBackupController
         
-        guard case let .success(isLastSession) = await secureBackupController.isLastSession() else {
+        guard case let .success(isLastDevice) = await userSession.clientProxy.isOnlyDeviceLeft() else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init())
             return
         }
         
-        guard isLastSession else {
+        guard isLastDevice else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
                                                                             title: L10n.screenSignoutConfirmationDialogTitle,
                                                                             message: L10n.screenSignoutConfirmationDialogContent,
@@ -376,7 +376,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        guard secureBackupController.recoveryKeyState.value == .enabled else {
+        guard secureBackupController.recoveryState.value == .enabled else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
                                                                             title: L10n.screenSignoutRecoveryDisabledTitle,
                                                                             message: L10n.screenSignoutRecoveryDisabledSubtitle,

@@ -25,5 +25,5 @@ struct MockUserSession: UserSessionProtocol {
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
-    var sessionVerificationState: CurrentValuePublisher<Bool?, Never> = .init(.init(true))
+    var sessionSecurityStatePublisher: AnyPublisher<SessionSecurityState, Never> = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .enabled)).eraseToAnyPublisher()
 }

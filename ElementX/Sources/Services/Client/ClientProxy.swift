@@ -166,6 +166,16 @@ class ClientProxy: ClientProxyProtocol {
         let digest = SHA256.hash(data: data)
         return digest.compactMap { String(format: "%02x", $0) }.joined()
     }()
+    
+    func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError> {
+        do {
+            let result = try await client.encryption().isLastDevice()
+            return .success(result)
+        } catch {
+            MXLog.error("Failed checking isLastDevice with error: \(error)")
+            return .failure(.failedCheckingIsLastDevice(error))
+        }
+    }
 
     func startSync() {
         guard !hasEncounteredAuthError else {

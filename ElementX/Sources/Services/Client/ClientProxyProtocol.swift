@@ -49,6 +49,7 @@ enum ClientProxyError: Error {
     case failedSearchingUsers
     case failedGettingUserProfile
     case failedSettingUserAvatar
+    case failedCheckingIsLastDevice(Error?)
 }
 
 enum SlidingSyncConstants {
@@ -95,6 +96,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var notificationSettings: NotificationSettingsProxyProtocol { get }
     
     var secureBackupController: SecureBackupControllerProtocol { get }
+    
+    func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError>
     
     func startSync()
 
