@@ -18,21 +18,11 @@ import Compound
 import SwiftUI
 
 struct LocationMarkerView: View {
-    var mode: Mode = .map
-    enum Mode { case map, button }
-    
     private let pinColor: Color = .compound.iconOnSolidPrimary
     private let pinInsets = EdgeInsets(top: 13, leading: 12, bottom: 15, trailing: 12)
     private let buttonScale: Double = 28 / 52
     
     var body: some View {
-        switch mode {
-        case .map: mapMarker
-        case .button: buttonMarker
-        }
-    }
-    
-    var mapMarker: some View {
         CompoundIcon(\.locationPinSolid)
             .dynamicTypeSize(.large)
             .foregroundStyle(pinColor)
@@ -43,17 +33,6 @@ struct LocationMarkerView: View {
             }
             .alignmentGuide(VerticalAlignment.center) { dimensions in
                 dimensions[.bottom]
-            }
-    }
-    
-    var buttonMarker: some View {
-        CompoundIcon(\.locationPinSolid, size: .custom(13), relativeTo: .body)
-            .foregroundStyle(pinColor)
-            .scaledPadding(.top, pinInsets.top * buttonScale)
-            .scaledPadding(.bottom, pinInsets.bottom * buttonScale)
-            .scaledPadding(.horizontal, pinInsets.leading * buttonScale)
-            .background {
-                backgroundShape
             }
     }
     
@@ -71,11 +50,6 @@ struct LocationMarkerView_Previews: PreviewProvider, TestablePreview {
             LocationMarkerView()
 
             LocationMarkerView()
-                .colorScheme(.dark)
-            
-            LocationMarkerView(mode: .button)
-
-            LocationMarkerView(mode: .button)
                 .colorScheme(.dark)
         }
     }
