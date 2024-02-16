@@ -86,8 +86,8 @@ struct RoomListFiltersState {
         var availableFilters = Set(RoomListFilter.allCases)
         for filter in activeFilters {
             availableFilters.remove(filter)
-            if let complementaryFilter = filter.incompatibleFilter {
-                availableFilters.remove(complementaryFilter)
+            if let incompatibleFilter = filter.incompatibleFilter {
+                availableFilters.remove(incompatibleFilter)
             }
         }
         return availableFilters.sorted(by: { $0.rawValue < $1.rawValue })

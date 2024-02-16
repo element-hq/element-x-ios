@@ -110,7 +110,7 @@ struct StaticLocationScreen: View {
             context.send(viewAction: .selectLocation)
         } label: {
             HStack(spacing: 8) {
-                LocationMarkerView(mode: .button)
+                CompoundIcon(\.shareIos)
                 Text(context.viewState.isSharingUserLocation ? L10n.screenShareMyLocationAction : L10n.screenShareThisLocationAction)
             }
         }
