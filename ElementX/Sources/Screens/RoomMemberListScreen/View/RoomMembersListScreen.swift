@@ -107,6 +107,7 @@ struct RoomMembersListScreen: View {
 
 struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
+    static let invitesViewModel = makeViewModel(withInvites: true)
     static let adminViewModel = makeViewModel(isAdmin: true, initialMode: .members)
     static let bannedViewModel = makeViewModel(isAdmin: true, initialMode: .banned)
     
@@ -116,6 +117,12 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         }
         .snapshot(delay: 1.0)
         .previewDisplayName("Member")
+        
+        NavigationStack {
+            RoomMembersListScreen(context: invitesViewModel.context)
+        }
+        .snapshot(delay: 1.0)
+        .previewDisplayName("Invites")
         
         NavigationStack {
             RoomMembersListScreen(context: adminViewModel.context)
@@ -130,7 +137,9 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Admin: Banned")
     }
     
-    static func makeViewModel(isAdmin: Bool = false, initialMode: RoomMembersListScreenMode = .members) -> RoomMembersListScreenViewModel {
+    static func makeViewModel(withInvites: Bool = false,
+                              isAdmin: Bool = false,
+                              initialMode: RoomMembersListScreenMode = .members) -> RoomMembersListScreenViewModel {
         let mockAdmin = RoomMemberProxyMock.mockAdmin
         
         if isAdmin {
@@ -138,13 +147,17 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
             mockAdmin.underlyingIsAccountOwner = true
         }
         
-        let members: [RoomMemberProxyMock] = [
+        var members: [RoomMemberProxyMock] = [
             .mockAlice,
             .mockBob,
             .mockCharlie,
             mockAdmin,
             .mockModerator
         ] + RoomMemberProxyMock.mockBanned
+        
+        if withInvites {
+            members.append(.mockInvited)
+        }
         
         return RoomMembersListScreenViewModel(initialMode: initialMode,
                                               roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
