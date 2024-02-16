@@ -50,6 +50,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
                                                       passphrase: passphrase,
                                                       userAgent: UserAgentBuilder.makeASCIIUserAgent(),
+                                                      additionalRootCertificates: [],
                                                       oidcConfiguration: oidcConfiguration,
                                                       customSlidingSyncProxy: appSettings.slidingSyncProxyURL?.absoluteString,
                                                       sessionDelegate: userSessionStore.clientSessionDelegate,
