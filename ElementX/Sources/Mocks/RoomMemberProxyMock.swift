@@ -19,7 +19,7 @@ import MatrixRustSDK
 
 struct RoomMemberProxyMockConfiguration {
     var userID: String
-    var displayName: String
+    var displayName: String?
     var avatarURL: URL?
     var membership: MembershipState
     var isAccountOwner = false
@@ -27,6 +27,7 @@ struct RoomMemberProxyMockConfiguration {
     var powerLevel = 0
     var role = RoomMemberRole.user
     var canInviteUsers = false
+    var canBanUsers = false
     var canSendStateEvent: (StateEventType) -> Bool = { _ in true }
 }
 
@@ -42,6 +43,7 @@ extension RoomMemberProxyMock {
         powerLevel = configuration.powerLevel
         role = configuration.role
         canInviteUsers = configuration.canInviteUsers
+        canBanUsers = configuration.canBanUsers
         canSendStateEventTypeClosure = configuration.canSendStateEvent
     }
 
@@ -58,28 +60,24 @@ extension RoomMemberProxyMock {
     static var mockAlice: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@alice:matrix.org",
                                         displayName: "Alice",
-                                        avatarURL: nil,
                                         membership: .join))
     }
     
     static var mockInvitedAlice: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@alice:matrix.org",
                                         displayName: "Alice",
-                                        avatarURL: nil,
                                         membership: .invite))
     }
 
     static var mockBob: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@bob:matrix.org",
                                         displayName: "Bob",
-                                        avatarURL: nil,
                                         membership: .join))
     }
 
     static var mockCharlie: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@charlie:matrix.org",
                                         displayName: "Charlie",
-                                        avatarURL: nil,
                                         membership: .join))
     }
 
@@ -93,7 +91,6 @@ extension RoomMemberProxyMock {
     static var mockInvited: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@invited:matrix.org",
                                         displayName: "Invited",
-                                        avatarURL: nil,
                                         membership: .invite,
                                         isIgnored: true))
     }
@@ -101,7 +98,6 @@ extension RoomMemberProxyMock {
     static var mockIgnored: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@ignored:matrix.org",
                                         displayName: "Ignored",
-                                        avatarURL: nil,
                                         membership: .join,
                                         isIgnored: true))
     }
@@ -118,7 +114,6 @@ extension RoomMemberProxyMock {
     static var mockAdmin: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@admin:matrix.org",
                                         displayName: "Arthur",
-                                        avatarURL: nil,
                                         membership: .join,
                                         powerLevel: 100,
                                         role: .administrator))
@@ -127,10 +122,23 @@ extension RoomMemberProxyMock {
     static var mockModerator: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@mod:matrix.org",
                                         displayName: "Merlin",
-                                        avatarURL: nil,
                                         membership: .join,
                                         powerLevel: 50,
                                         role: .moderator))
+    }
+    
+    static var mockBanned: [RoomMemberProxyMock] {
+        [
+            RoomMemberProxyMock(with: .init(userID: "@mischief:matrix.org",
+                                            membership: .ban)),
+            RoomMemberProxyMock(with: .init(userID: "@spam:matrix.org",
+                                            membership: .ban)),
+            RoomMemberProxyMock(with: .init(userID: "@angry:matrix.org",
+                                            membership: .ban)),
+            RoomMemberProxyMock(with: .init(userID: "@fake:matrix.org",
+                                            displayName: "The President",
+                                            membership: .ban))
+        ]
     }
 }
 

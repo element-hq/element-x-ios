@@ -42,9 +42,8 @@ class MockClientProxy: ClientProxyProtocol {
     
     lazy var secureBackupController: SecureBackupControllerProtocol = {
         let secureBackupController = SecureBackupControllerMock()
-        secureBackupController.underlyingRecoveryKeyState = .init(CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.enabled))
+        secureBackupController.underlyingRecoveryState = .init(CurrentValueSubject<SecureBackupRecoveryState, Never>(.enabled))
         secureBackupController.underlyingKeyBackupState = .init(CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled))
-        secureBackupController.isLastSessionReturnValue = .success(false)
         return secureBackupController
     }()
 
@@ -52,6 +51,10 @@ class MockClientProxy: ClientProxyProtocol {
         self.userID = userID
         self.deviceID = deviceID
         self.roomSummaryProvider = roomSummaryProvider
+    }
+    
+    func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError> {
+        .success(false)
     }
     
     func startSync() { }

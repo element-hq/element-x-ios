@@ -17,7 +17,7 @@
 import Combine
 import Foundation
 
-enum SecureBackupRecoveryKeyState {
+enum SecureBackupRecoveryState {
     case unknown
     case disabled
     case enabled
@@ -50,7 +50,7 @@ enum SecureBackupControllerError: Error {
 
 // sourcery: AutoMockable
 protocol SecureBackupControllerProtocol {
-    var recoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never> { get }
+    var recoveryState: CurrentValuePublisher<SecureBackupRecoveryState, Never> { get }
     
     var keyBackupState: CurrentValuePublisher<SecureBackupKeyBackupState, Never> { get }
     
@@ -59,8 +59,6 @@ protocol SecureBackupControllerProtocol {
     
     func generateRecoveryKey() async -> Result<String, SecureBackupControllerError>
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError>
-    
-    func isLastSession() async -> Result<Bool, SecureBackupControllerError>
     
     func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError>
 }

@@ -1750,6 +1750,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingCanInviteUsers = value }
     }
     var underlyingCanInviteUsers: Bool!
+    var canBanUsers: Bool {
+        get { return underlyingCanBanUsers }
+        set(value) { underlyingCanBanUsers = value }
+    }
+    var underlyingCanBanUsers: Bool!
 
     //MARK: - ignoreUser
 
@@ -2363,11 +2368,11 @@ class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
 
 }
 class SecureBackupControllerMock: SecureBackupControllerProtocol {
-    var recoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never> {
-        get { return underlyingRecoveryKeyState }
-        set(value) { underlyingRecoveryKeyState = value }
+    var recoveryState: CurrentValuePublisher<SecureBackupRecoveryState, Never> {
+        get { return underlyingRecoveryState }
+        set(value) { underlyingRecoveryState = value }
     }
-    var underlyingRecoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never>!
+    var underlyingRecoveryState: CurrentValuePublisher<SecureBackupRecoveryState, Never>!
     var keyBackupState: CurrentValuePublisher<SecureBackupKeyBackupState, Never> {
         get { return underlyingKeyBackupState }
         set(value) { underlyingKeyBackupState = value }
@@ -2444,23 +2449,6 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol {
             return await confirmRecoveryKeyClosure(key)
         } else {
             return confirmRecoveryKeyReturnValue
-        }
-    }
-    //MARK: - isLastSession
-
-    var isLastSessionCallsCount = 0
-    var isLastSessionCalled: Bool {
-        return isLastSessionCallsCount > 0
-    }
-    var isLastSessionReturnValue: Result<Bool, SecureBackupControllerError>!
-    var isLastSessionClosure: (() async -> Result<Bool, SecureBackupControllerError>)?
-
-    func isLastSession() async -> Result<Bool, SecureBackupControllerError> {
-        isLastSessionCallsCount += 1
-        if let isLastSessionClosure = isLastSessionClosure {
-            return await isLastSessionClosure()
-        } else {
-            return isLastSessionReturnValue
         }
     }
     //MARK: - waitForKeyBackupUpload

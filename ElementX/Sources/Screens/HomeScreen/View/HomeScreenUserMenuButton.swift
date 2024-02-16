@@ -29,7 +29,7 @@ struct HomeScreenUserMenuButton: View {
                     Label {
                         Text(L10n.commonSettings)
                     } icon: {
-                        if context.viewState.requiresSecureBackupSetup, context.viewState.isSessionVerified == true {
+                        if context.viewState.requiresExtraAccountSetup {
                             CompoundIcon(asset: Asset.Images.settingsIconWithBadge)
                         } else {
                             CompoundIcon(\.settings)
@@ -50,7 +50,7 @@ struct HomeScreenUserMenuButton: View {
                                 avatarSize: .user(on: .home),
                                 imageProvider: context.imageProvider)
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
-                .overlayBadge(10, isBadged: context.viewState.requiresSecureBackupSetup && context.viewState.isSessionVerified == true)
+                .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
                 .compositingGroup()
         }
         .accessibilityLabel(L10n.a11yUserMenu)

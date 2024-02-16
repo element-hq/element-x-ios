@@ -25,7 +25,7 @@ struct SecureBackupScreen: View {
         Form {
             // Show recovery options for confirming the recovery key and
             // getting access to secrets and implicitly the key backup
-            if context.viewState.recoveryKeyState == .incomplete {
+            if context.viewState.recoveryState == .incomplete {
                 recoveryKeySection
             } else {
                 keyBackupSection
@@ -93,7 +93,7 @@ struct SecureBackupScreen: View {
     @ViewBuilder
     private var recoveryKeySection: some View {
         Section {
-            switch context.viewState.recoveryKeyState {
+            switch context.viewState.recoveryState {
             case .enabled:
                 ListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionChange),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
@@ -116,7 +116,7 @@ struct SecureBackupScreen: View {
     
     @ViewBuilder
     private var recoveryKeySectionFooter: some View {
-        switch context.viewState.recoveryKeyState {
+        switch context.viewState.recoveryState {
         case .disabled:
             Text(L10n.screenChatBackupRecoveryActionSetupDescription(InfoPlistReader.main.bundleDisplayName))
         case .incomplete:
@@ -130,10 +130,10 @@ struct SecureBackupScreen: View {
 // MARK: - Previews
 
 struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
-    static let bothSetupViewModel = viewModel(keyBackupState: .enabled, recoveryKeyState: .enabled)
-    static let onlyKeyBackupSetUpViewModel = viewModel(keyBackupState: .enabled, recoveryKeyState: .disabled)
-    static let keyBackupDisabledViewModel = viewModel(keyBackupState: .unknown, recoveryKeyState: .disabled)
-    static let recoveryIncompleteViewModel = viewModel(keyBackupState: .enabled, recoveryKeyState: .incomplete)
+    static let bothSetupViewModel = viewModel(keyBackupState: .enabled, recoveryState: .enabled)
+    static let onlyKeyBackupSetUpViewModel = viewModel(keyBackupState: .enabled, recoveryState: .disabled)
+    static let keyBackupDisabledViewModel = viewModel(keyBackupState: .unknown, recoveryState: .disabled)
+    static let recoveryIncompleteViewModel = viewModel(keyBackupState: .enabled, recoveryState: .incomplete)
     
     static var previews: some View {
         Group {
@@ -161,10 +161,10 @@ struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func viewModel(keyBackupState: SecureBackupKeyBackupState,
-                          recoveryKeyState: SecureBackupRecoveryKeyState) -> SecureBackupScreenViewModelType {
+                          recoveryState: SecureBackupRecoveryState) -> SecureBackupScreenViewModelType {
         let backupController = SecureBackupControllerMock()
         backupController.underlyingKeyBackupState = CurrentValueSubject<SecureBackupKeyBackupState, Never>(keyBackupState).asCurrentValuePublisher()
-        backupController.underlyingRecoveryKeyState = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(recoveryKeyState).asCurrentValuePublisher()
+        backupController.underlyingRecoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
         
         return SecureBackupScreenViewModel(secureBackupController: backupController,
                                            userIndicatorController: UserIndicatorControllerMock(),

@@ -39,7 +39,7 @@ class UserSessionScreenTests: XCTestCase {
         XCTAssert(app.staticTexts[firstRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
 
-        let cell = app.cells.firstMatch
+        let cell = app.cells.element(boundBy: 1) // Skip the typing indicator cell
         cell.swipeRight(velocity: .fast)
 
         try await app.assertScreenshot(.userSessionScreenReply)

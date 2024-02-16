@@ -23,7 +23,7 @@ enum SecureBackupScreenViewModelAction {
 
 struct SecureBackupScreenViewState: BindableState {
     let chatBackupDetailsURL: URL
-    var recoveryKeyState = SecureBackupRecoveryKeyState.unknown
+    var recoveryState = SecureBackupRecoveryState.unknown
     var keyBackupState = SecureBackupKeyBackupState.unknown
     var bindings = SecureBackupScreenViewStateBindings()
 }

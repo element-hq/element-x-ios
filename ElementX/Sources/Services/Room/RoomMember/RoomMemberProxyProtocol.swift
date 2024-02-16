@@ -30,9 +30,11 @@ protocol RoomMemberProxyProtocol: AnyObject {
     var membership: MembershipState { get }
     var isAccountOwner: Bool { get }
     var isIgnored: Bool { get }
+    
     var powerLevel: Int { get }
     var role: RoomMemberRole { get }
     var canInviteUsers: Bool { get }
+    var canBanUsers: Bool { get }
 
     func ignoreUser() async -> Result<Void, RoomMemberProxyError>
     func unignoreUser() async -> Result<Void, RoomMemberProxyError>
@@ -49,7 +51,7 @@ extension RoomMemberProxyProtocol {
     /// it exists otherwise it will be the userID with the leading `@` removed.
     var sortingName: String {
         // If there isn't a displayname we sort by the userID without the @.
-        displayName ?? String(userID.dropFirst())
+        (displayName ?? String(userID.dropFirst())).lowercased()
     }
 }
 
@@ -60,7 +62,7 @@ extension [RoomMemberProxyProtocol] {
             if lhs.powerLevel != rhs.powerLevel {
                 lhs.powerLevel > rhs.powerLevel
             } else {
-                lhs.sortingName < rhs.sortingName
+                lhs.sortingName.localizedStandardCompare(rhs.sortingName) == .orderedAscending
             }
         }
     }
