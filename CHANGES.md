@@ -1,3 +1,9 @@
+## Changes in 1.5.7 (2024-02-16)
+
+🐛 Bugfixes
+
+- Fixed link colours inside code blocks. ([#2379](https://github.com/element-hq/element-x-ios/issues/2379))
+
 ## Changes in 1.5.6 (2024-02-14)
 
 ✨ Features
