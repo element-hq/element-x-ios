@@ -513,6 +513,8 @@
 "screen_room_member_details_unblock_alert_action" = "Unblock";
 "screen_room_member_details_unblock_alert_description" = "You'll be able to see all messages from them again.";
 "screen_room_member_details_unblock_user" = "Unblock user";
+"screen_room_member_list_mode_banned" = "Banned";
+"screen_room_member_list_mode_members" = "Members";
 "screen_room_member_list_pending_header_title" = "Pending";
 "screen_room_member_list_role_administrator" = "Admin";
 "screen_room_member_list_role_moderator" = "Moderator";

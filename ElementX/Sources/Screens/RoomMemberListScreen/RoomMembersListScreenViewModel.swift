@@ -31,13 +31,15 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(roomProxy: RoomProxyProtocol,
+    init(initialMode: RoomMembersListScreenMode = .members,
+         roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount, bindings: .init()),
+        super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount,
+                                           bindings: .init(mode: initialMode)),
                    imageProvider: mediaProvider)
         
         setupMembers()
@@ -89,8 +91,12 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             self.state = .init(joinedMembersCount: roomProxy.joinedMembersCount,
                                joinedMembers: roomMembersDetails.joinedMembers,
                                invitedMembers: roomMembersDetails.invitedMembers,
+                               bannedMembers: roomMembersDetails.bannedMembers,
                                bindings: state.bindings)
-            self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
+            if let accountOwner = roomMembersDetails.accountOwner {
+                self.state.canInviteUsers = accountOwner.canInviteUsers
+                self.state.canBanUsers = accountOwner.canBanUsers
+            }
             hideLoader()
         }
     }
@@ -100,6 +106,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
             var invitedMembers: [RoomMemberDetails] = .init()
             var joinedMembers: [RoomMemberDetails] = .init()
+            var bannedMembers: [RoomMemberDetails] = .init()
             var accountOwner: RoomMemberProxyProtocol?
             
             for member in members {
@@ -112,12 +119,17 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                     invitedMembers.append(.init(withProxy: member))
                 case .join:
                     joinedMembers.append(.init(withProxy: member))
+                case .ban:
+                    bannedMembers.append(.init(withProxy: member))
                 default:
                     continue
                 }
             }
             
-            return .init(invitedMembers: invitedMembers, joinedMembers: joinedMembers, accountOwner: accountOwner)
+            return .init(invitedMembers: invitedMembers,
+                         joinedMembers: joinedMembers,
+                         bannedMembers: bannedMembers.sorted { $0.id.localizedStandardCompare($1.id) == .orderedAscending }, // Re-sort ignoring display name.
+                         accountOwner: accountOwner)
         }
         .value
     }
@@ -140,5 +152,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
 private struct RoomMembersDetails {
     var invitedMembers: [RoomMemberDetails]
     var joinedMembers: [RoomMemberDetails]
+    var bannedMembers: [RoomMemberDetails]
     var accountOwner: RoomMemberProxyProtocol?
 }

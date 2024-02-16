@@ -1750,6 +1750,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingCanInviteUsers = value }
     }
     var underlyingCanInviteUsers: Bool!
+    var canBanUsers: Bool {
+        get { return underlyingCanBanUsers }
+        set(value) { underlyingCanBanUsers = value }
+    }
+    var underlyingCanBanUsers: Bool!
 
     //MARK: - ignoreUser
 
