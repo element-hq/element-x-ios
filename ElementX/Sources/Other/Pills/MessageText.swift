@@ -66,7 +66,8 @@ struct MessageText: UIViewRepresentable {
         // Need to use TextKit 1 for mentions
         let textView = MessageTextView(usingTextLayoutManager: false)
         textView.roomContext = viewModel
-        textView.updateClosure = {
+        textView.updateClosure = { [weak textView] in
+            guard let textView else { return }
             do {
                 attributedString = try AttributedString(textView.attributedText, including: \.elementX)
             } catch {
