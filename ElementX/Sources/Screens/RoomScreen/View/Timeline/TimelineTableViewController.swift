@@ -280,7 +280,7 @@ class TimelineTableViewController: UIViewController {
         guard !timelineItemsIDs.isEmpty else {
             return
         }
-        tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 0), at: .bottom, animated: animated)
+        tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 1), at: .bottom, animated: animated)
     }
     
     /// Checks whether or a backwards pagination is needed and requests one if so.
