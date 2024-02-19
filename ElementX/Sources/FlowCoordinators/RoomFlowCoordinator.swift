@@ -410,7 +410,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         Task {
             // Flag the room as read on entering, the timeline will take care of the read receipts
-            await roomProxy.flagAsRead()
+            await roomProxy.flagAsUnread(false)
         }
         
         let userID = userSession.clientProxy.userID
@@ -523,6 +523,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let params = RoomDetailsScreenCoordinatorParameters(accountUserID: userSession.userID,
                                                             roomProxy: roomProxy,
                                                             mediaProvider: userSession.mediaProvider,
+                                                            analyticsService: analytics,
                                                             userIndicatorController: userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
                                                             attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL,

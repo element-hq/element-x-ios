@@ -22,6 +22,7 @@ typealias RoomDetailsScreenViewModelType = StateStoreViewModel<RoomDetailsScreen
 class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScreenViewModelProtocol {
     private let accountUserID: String
     private let roomProxy: RoomProxyProtocol
+    private let analyticsService: AnalyticsService
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
@@ -42,12 +43,14 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     init(accountUserID: String,
          roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         analyticsService: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.accountUserID = accountUserID
         self.roomProxy = roomProxy
         self.mediaProvider = mediaProvider
+        self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         self.notificationSettingsProxy = notificationSettingsProxy
         self.attributedStringBuilder = attributedStringBuilder
@@ -67,6 +70,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            notificationSettingsState: .loading,
                                            bindings: .init()),
                    imageProvider: mediaProvider)
+        
+        updateRoomInfo()
                 
         setupRoomSubscription()
         fetchMembers()
@@ -122,6 +127,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             displayFullScreenAvatar()
         case .processTapPolls:
             actionsSubject.send(.requestPollsHistoryPresentation)
+        case .toggleFavourite(let isFavourite):
+            Task { await toggleFavourite(isFavourite) }
         }
     }
     
@@ -129,19 +136,26 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
 
     private func setupRoomSubscription() {
         roomProxy.actions
-            .filter { $0 == .stateUpdate }
+            .filter { $0 == .roomInfoUpdate }
             .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
-                guard let self else { return }
-                self.state.title = self.roomProxy.roomTitle
-                
-                let topic = attributedStringBuilder.fromPlain(self.roomProxy.topic)
-                self.state.topic = topic
-                self.state.topicSummary = topic?.unattributedStringByReplacingNewlinesWithSpaces()
-                self.state.avatarURL = self.roomProxy.avatarURL
-                self.state.joinedMembersCount = self.roomProxy.joinedMembersCount
+                self?.updateRoomInfo()
             }
             .store(in: &cancellables)
+    }
+    
+    private func updateRoomInfo() {
+        state.title = roomProxy.roomTitle
+        
+        let topic = attributedStringBuilder.fromPlain(roomProxy.topic)
+        state.topic = topic
+        state.topicSummary = topic?.unattributedStringByReplacingNewlinesWithSpaces()
+        state.avatarURL = roomProxy.avatarURL
+        state.joinedMembersCount = roomProxy.joinedMembersCount
+        
+        Task {
+            state.bindings.isFavourite = await roomProxy.isFavourite
+        }
     }
     
     private func fetchMembers() {
@@ -244,6 +258,15 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
         }
         state.isProcessingMuteToggleAction = false
+    }
+    
+    private func toggleFavourite(_ isFavourite: Bool) async {
+        if case let .failure(error) = await roomProxy.flagAsFavourite(isFavourite) {
+            MXLog.error("Failed flagging room as favourite with error: \(error)")
+            state.bindings.isFavourite = !isFavourite
+        } else {
+            analyticsService.trackInteraction(name: .MobileRoomFavouriteToggle)
+        }
     }
 
     private static let leaveRoomLoadingID = "LeaveRoomLoading"

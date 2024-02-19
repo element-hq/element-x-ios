@@ -35,8 +35,9 @@ class HomeScreenViewModelTests: XCTestCase {
         viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: clientProxy,
                                                                      mediaProvider: MockMediaProvider(),
                                                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
-                                        selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                        analyticsService: ServiceLocator.shared.analytics,
                                         appSettings: ServiceLocator.shared.settings,
+                                        selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
     

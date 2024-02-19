@@ -21,6 +21,7 @@ struct RoomDetailsScreenCoordinatorParameters {
     let accountUserID: String
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let analyticsService: AnalyticsService
     let userIndicatorController: UserIndicatorControllerProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
     let attributedStringBuilder: AttributedStringBuilderProtocol
@@ -49,6 +50,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         viewModel = RoomDetailsScreenViewModel(accountUserID: parameters.accountUserID,
                                                roomProxy: parameters.roomProxy,
                                                mediaProvider: parameters.mediaProvider,
+                                               analyticsService: parameters.analyticsService,
                                                userIndicatorController: parameters.userIndicatorController,
                                                notificationSettingsProxy: parameters.notificationSettings,
                                                attributedStringBuilder: parameters.attributedStringBuilder)

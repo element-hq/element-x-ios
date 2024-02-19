@@ -49,6 +49,7 @@ final class AppSettings {
         case mentionsBadgeEnabled
         case roomListFiltersEnabled
         case markAsUnreadEnabled
+        case markAsFavouriteEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -284,6 +285,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.markAsUnreadEnabled, defaultValue: false, storageType: .userDefaults(store))
     var markAsUnreadEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.markAsFavouriteEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var markAsFavouriteEnabled
     
     #endif
     

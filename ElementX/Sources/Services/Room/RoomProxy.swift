@@ -94,7 +94,7 @@ class RoomProxy: RoomProxyProtocol {
         
         await timeline.subscribeForUpdates()
         
-        subscribeToRoomStateUpdates()
+        subscribeToRoomInfoUpdates()
         
         subscribeToTypingNotifications()
     }
@@ -131,6 +131,12 @@ class RoomProxy: RoomProxyProtocol {
     
     var isEncrypted: Bool {
         (try? room.isEncrypted()) ?? false
+    }
+    
+    var isFavourite: Bool {
+        get async {
+            await (try? room.roomInfo().isFavourite) ?? false
+        }
     }
     
     var hasOngoingCall: Bool {
@@ -367,31 +373,7 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.failedCheckingPermission)
         }
     }
-    
-    func flagAsUnread() async -> Result<Void, RoomProxyError> {
-        MXLog.info("Flagging room \(id) as unread")
         
-        do {
-            try await room.setUnreadFlag(newValue: true)
-            return .success(())
-        } catch {
-            MXLog.error("Failed marking room \(id) as unread with error: \(error)")
-            return .failure(.failedFlaggingAsUnread)
-        }
-    }
-    
-    func flagAsRead() async -> Result<Void, RoomProxyError> {
-        MXLog.info("Flagging room \(id) as read")
-        
-        do {
-            try await room.setUnreadFlag(newValue: false)
-            return .success(())
-        } catch {
-            MXLog.error("Failed marking room \(id) as read with error: \(error)")
-            return .failure(.failedFlaggingAsRead)
-        }
-    }
-    
     func markAsRead(receiptType: ReceiptType) async -> Result<Void, RoomProxyError> {
         do {
             try await room.markAsRead(receiptType: receiptType)
@@ -414,6 +396,40 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    // MARK: - Room flags
+    
+    func flagAsUnread(_ isUnread: Bool) async -> Result<Void, RoomProxyError> {
+        MXLog.info("Flagging room \(id) as unread: \(isUnread)")
+        
+        do {
+            try await room.setUnreadFlag(newValue: isUnread)
+            return .success(())
+        } catch {
+            MXLog.error("Failed marking room \(id) as unread: \(isUnread) with error: \(error)")
+            return .failure(.failedFlaggingAsUnread)
+        }
+    }
+    
+    func getIsFavourite() async -> Result<Bool, RoomProxyError> {
+        do {
+            let result = try await room.roomInfo().isFavourite
+            return .success(result)
+        } catch {
+            MXLog.error("Failed retrieving isFavourite for room: \(id) with error: \(error)")
+            return .failure(.failedRetrievingIsFavourite)
+        }
+    }
+    
+    func flagAsFavourite(_ isFavourite: Bool) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.setIsFavourite(isFavourite: isFavourite, tagOrder: nil)
+            return .success(())
+        } catch {
+            MXLog.error("Failed flagging room \(id) as favourite with error: \(error)")
+            return .failure(.failedFlaggingAsFavourite)
+        }
+    }
+    
     // MARK: - Element Call
     
     func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError> {
@@ -431,10 +447,10 @@ class RoomProxy: RoomProxyProtocol {
 
     // MARK: - Private
     
-    private func subscribeToRoomStateUpdates() {
+    private func subscribeToRoomInfoUpdates() {
         roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] in
             MXLog.info("Received room info update")
-            self?.actionsSubject.send(.stateUpdate)
+            self?.actionsSubject.send(.roomInfoUpdate)
         })
     }
     

@@ -53,8 +53,9 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: HomeScreenCoordinatorParameters) {
         viewModel = HomeScreenViewModel(userSession: parameters.userSession,
-                                        selectedRoomPublisher: parameters.selectedRoomPublisher,
+                                        analyticsService: ServiceLocator.shared.analytics,
                                         appSettings: ServiceLocator.shared.settings,
+                                        selectedRoomPublisher: parameters.selectedRoomPublisher,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
         bugReportService = parameters.bugReportService
         

@@ -1851,6 +1851,23 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingIsEncrypted = value }
     }
     var underlyingIsEncrypted: Bool!
+    var isFavouriteCallsCount = 0
+    var isFavouriteCalled: Bool {
+        return isFavouriteCallsCount > 0
+    }
+
+    var isFavourite: Bool {
+        get async {
+            isFavouriteCallsCount += 1
+            if let isFavouriteClosure = isFavouriteClosure {
+                return await isFavouriteClosure()
+            } else {
+                return underlyingIsFavourite
+            }
+        }
+    }
+    var underlyingIsFavourite: Bool!
+    var isFavouriteClosure: (() async -> Bool)?
     var membership: Membership {
         get { return underlyingMembership }
         set(value) { underlyingMembership = value }
@@ -2237,40 +2254,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return canUserTriggerRoomNotificationUserIDReturnValue
         }
     }
-    //MARK: - flagAsUnread
-
-    var flagAsUnreadCallsCount = 0
-    var flagAsUnreadCalled: Bool {
-        return flagAsUnreadCallsCount > 0
-    }
-    var flagAsUnreadReturnValue: Result<Void, RoomProxyError>!
-    var flagAsUnreadClosure: (() async -> Result<Void, RoomProxyError>)?
-
-    func flagAsUnread() async -> Result<Void, RoomProxyError> {
-        flagAsUnreadCallsCount += 1
-        if let flagAsUnreadClosure = flagAsUnreadClosure {
-            return await flagAsUnreadClosure()
-        } else {
-            return flagAsUnreadReturnValue
-        }
-    }
-    //MARK: - flagAsRead
-
-    var flagAsReadCallsCount = 0
-    var flagAsReadCalled: Bool {
-        return flagAsReadCallsCount > 0
-    }
-    var flagAsReadReturnValue: Result<Void, RoomProxyError>!
-    var flagAsReadClosure: (() async -> Result<Void, RoomProxyError>)?
-
-    func flagAsRead() async -> Result<Void, RoomProxyError> {
-        flagAsReadCallsCount += 1
-        if let flagAsReadClosure = flagAsReadClosure {
-            return await flagAsReadClosure()
-        } else {
-            return flagAsReadReturnValue
-        }
-    }
     //MARK: - markAsRead
 
     var markAsReadReceiptTypeCallsCount = 0
@@ -2312,6 +2295,48 @@ class RoomProxyMock: RoomProxyProtocol {
             return await sendTypingNotificationIsTypingClosure(isTyping)
         } else {
             return sendTypingNotificationIsTypingReturnValue
+        }
+    }
+    //MARK: - flagAsUnread
+
+    var flagAsUnreadCallsCount = 0
+    var flagAsUnreadCalled: Bool {
+        return flagAsUnreadCallsCount > 0
+    }
+    var flagAsUnreadReceivedIsUnread: Bool?
+    var flagAsUnreadReceivedInvocations: [Bool] = []
+    var flagAsUnreadReturnValue: Result<Void, RoomProxyError>!
+    var flagAsUnreadClosure: ((Bool) async -> Result<Void, RoomProxyError>)?
+
+    func flagAsUnread(_ isUnread: Bool) async -> Result<Void, RoomProxyError> {
+        flagAsUnreadCallsCount += 1
+        flagAsUnreadReceivedIsUnread = isUnread
+        flagAsUnreadReceivedInvocations.append(isUnread)
+        if let flagAsUnreadClosure = flagAsUnreadClosure {
+            return await flagAsUnreadClosure(isUnread)
+        } else {
+            return flagAsUnreadReturnValue
+        }
+    }
+    //MARK: - flagAsFavourite
+
+    var flagAsFavouriteCallsCount = 0
+    var flagAsFavouriteCalled: Bool {
+        return flagAsFavouriteCallsCount > 0
+    }
+    var flagAsFavouriteReceivedIsFavourite: Bool?
+    var flagAsFavouriteReceivedInvocations: [Bool] = []
+    var flagAsFavouriteReturnValue: Result<Void, RoomProxyError>!
+    var flagAsFavouriteClosure: ((Bool) async -> Result<Void, RoomProxyError>)?
+
+    func flagAsFavourite(_ isFavourite: Bool) async -> Result<Void, RoomProxyError> {
+        flagAsFavouriteCallsCount += 1
+        flagAsFavouriteReceivedIsFavourite = isFavourite
+        flagAsFavouriteReceivedInvocations.append(isFavourite)
+        if let flagAsFavouriteClosure = flagAsFavouriteClosure {
+            return await flagAsFavouriteClosure(isFavourite)
+        } else {
+            return flagAsFavouriteReturnValue
         }
     }
     //MARK: - canUserJoinCall

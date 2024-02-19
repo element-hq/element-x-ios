@@ -181,8 +181,9 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 
         return HomeScreenViewModel(userSession: userSession,
-                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   analyticsService: ServiceLocator.shared.analytics,
                                    appSettings: ServiceLocator.shared.settings,
+                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
     
@@ -193,8 +194,9 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 
         return HomeScreenViewModel(userSession: userSession,
-                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   analyticsService: ServiceLocator.shared.analytics,
                                    appSettings: ServiceLocator.shared.settings,
+                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
     

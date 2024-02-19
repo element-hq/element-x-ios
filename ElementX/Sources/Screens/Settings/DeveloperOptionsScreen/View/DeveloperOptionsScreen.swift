@@ -60,6 +60,10 @@ struct DeveloperOptionsScreen: View {
                     Text("Mark as unread")
                 }
                 
+                Toggle(isOn: $context.markAsFavouriteEnabled) {
+                    Text("Mark as favourite")
+                }
+                
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
                     Text("Hide grey dots")
                 }
