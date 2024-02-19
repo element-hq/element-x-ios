@@ -1,1 +1,0 @@
-Add the list of banned users, shown to room members who have the power ban/unban.
