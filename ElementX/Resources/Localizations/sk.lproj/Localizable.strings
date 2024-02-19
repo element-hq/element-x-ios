@@ -513,6 +513,8 @@
 "screen_room_member_details_unblock_alert_action" = "Odblokovať";
 "screen_room_member_details_unblock_alert_description" = "Všetky správy od nich budete môcť opäť vidieť.";
 "screen_room_member_details_unblock_user" = "Odblokovať používateľa";
+"screen_room_member_list_mode_banned" = "Zakázaní";
+"screen_room_member_list_mode_members" = "Členovia";
 "screen_room_member_list_pending_header_title" = "Čaká sa";
 "screen_room_member_list_role_administrator" = "Administrátor";
 "screen_room_member_list_role_moderator" = "Moderátor";
@@ -538,6 +540,9 @@
 "screen_room_retry_send_menu_title" = "Vašu správu sa nepodarilo odoslať";
 "screen_room_timeline_add_reaction" = "Pridať emoji";
 "screen_room_timeline_less_reactions" = "Zobraziť menej";
+"screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ a ";
+"screen_room_typing_notification_plural_ios" = " píšu";
+"screen_room_typing_notification_singular_ios" = " píše";
 "screen_room_typing_two_members" = "%1$@ a %2$@";
 "screen_room_voice_message_tooltip" = "Podržaním nahrajte";
 "screen_roomlist_a11y_create_message" = "Vytvorte novú konverzáciu alebo miestnosť";

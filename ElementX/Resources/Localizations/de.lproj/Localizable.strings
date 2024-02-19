@@ -47,7 +47,7 @@
 "action_end_poll" = "Umfrage beenden";
 "action_enter_pin" = "PIN eingeben";
 "action_forgot_password" = "Passwort vergessen?";
-"action_forward" = "Weiter";
+"action_forward" = "Weiterleiten";
 "action_invite" = "Einladen";
 "action_invite_friends" = "Personen einladen";
 "action_invite_friends_to_app" = "Zu %1$@ einladen";
@@ -513,6 +513,8 @@
 "screen_room_member_details_unblock_alert_action" = "Blockierung aufheben";
 "screen_room_member_details_unblock_alert_description" = "Du kannst dann wieder alle Nachrichten von ihnen sehen.";
 "screen_room_member_details_unblock_user" = "Blockierung aufheben";
+"screen_room_member_list_mode_banned" = "Banned";
+"screen_room_member_list_mode_members" = "Members";
 "screen_room_member_list_pending_header_title" = "Ausstehend";
 "screen_room_member_list_role_administrator" = "Admin";
 "screen_room_member_list_role_moderator" = "Moderator";
@@ -538,6 +540,9 @@
 "screen_room_retry_send_menu_title" = "Deine Nachricht konnte nicht gesendet werden";
 "screen_room_timeline_add_reaction" = "Emoji hinzufügen";
 "screen_room_timeline_less_reactions" = "Weniger anzeigen";
+"screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ and ";
+"screen_room_typing_notification_plural_ios" = " are typing";
+"screen_room_typing_notification_singular_ios" = " is typing";
 "screen_room_typing_two_members" = "%1$@ und %2$@";
 "screen_room_voice_message_tooltip" = "Zum Aufnehmen gedrückt halten";
 "screen_roomlist_a11y_create_message" = "Eine neue Unterhaltung oder einen neuen Raum erstellen";
