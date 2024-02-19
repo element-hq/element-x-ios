@@ -53,6 +53,7 @@ enum HomeScreenViewAction {
     case globalSearch
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
+    case markRoomAsFavourite(roomIdentifier: String, isFavourite: Bool)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -95,6 +96,7 @@ struct HomeScreenViewState: BindableState {
     
     var shouldShowFilters = false
     var markAsUnreadEnabled = false
+    var markAsFavouriteEnabled = false
     
     var hasPendingInvitations = false
     var hasUnreadPendingInvitations = false
@@ -154,6 +156,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let isHighlighted: Bool
     
+    let isFavourite: Bool
+    
     var timestamp: String?
     
     var lastMessage: AttributedString?
@@ -168,6 +172,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        name: "Placeholder room name",
                        badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, isCallShown: false),
                        isHighlighted: false,
+                       isFavourite: false,
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
                        isPlaceholder: true)
@@ -194,6 +199,7 @@ extension HomeScreenRoom {
                                 isMuteShown: isMuteShown,
                                 isCallShown: isCallShown),
                   isHighlighted: isHighlighted,
+                  isFavourite: details.isFavourite,
                   timestamp: details.lastMessageFormattedTimestamp,
                   lastMessage: details.lastMessage,
                   avatarURL: details.avatarURL)

@@ -24,7 +24,6 @@ struct RoomSummaryDetails {
     let avatarURL: URL?
     let lastMessage: AttributedString?
     let lastMessageFormattedTimestamp: String?
-    let isMarkedUnread: Bool
     let unreadMessagesCount: UInt
     let unreadMentionsCount: UInt
     let unreadNotificationsCount: UInt
@@ -32,6 +31,9 @@ struct RoomSummaryDetails {
     let canonicalAlias: String?
     let inviter: RoomMemberProxyProtocol?
     let hasOngoingCall: Bool
+    
+    let isMarkedUnread: Bool
+    let isFavourite: Bool
     
     var hasUnreadMessages: Bool { unreadMessagesCount > 0 }
     var hasUnreadMentions: Bool { unreadMentionsCount > 0 }
@@ -60,7 +62,6 @@ extension RoomSummaryDetails {
         avatarURL = nil
         lastMessage = AttributedString(string)
         lastMessageFormattedTimestamp = "Now"
-        isMarkedUnread = false
         unreadMessagesCount = hasUnreadMessages ? 1 : 0
         unreadMentionsCount = hasUnreadMentions ? 1 : 0
         unreadNotificationsCount = hasUnreadNotifications ? 1 : 0
@@ -68,5 +69,8 @@ extension RoomSummaryDetails {
         canonicalAlias = nil
         inviter = nil
         hasOngoingCall = false
+        
+        isMarkedUnread = false
+        isFavourite = false
     }
 }

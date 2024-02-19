@@ -120,6 +120,7 @@
 "common_everyone" = "Everyone";
 "common_face_id_ios" = "Face ID";
 "common_favourite" = "Favourite";
+"common_favourited" = "Favourited";
 "common_file" = "File";
 "common_forward_message" = "Forward message";
 "common_gif" = "GIF";
@@ -567,6 +568,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Confirm that the numbers below match those shown on your other session.";
 "screen_session_verification_compare_numbers_title" = "Compare numbers";
 "screen_session_verification_complete_subtitle" = "Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.";
+"screen_session_verification_enter_recovery_key" = "Enter recovery key";
 "screen_session_verification_open_existing_session_subtitle" = "Prove it’s you in order to access your encrypted message history.";
 "screen_session_verification_open_existing_session_title" = "Open an existing session";
 "screen_session_verification_positive_button_canceled" = "Retry verification";

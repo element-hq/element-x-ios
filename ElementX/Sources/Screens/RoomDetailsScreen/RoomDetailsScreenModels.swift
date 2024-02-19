@@ -129,6 +129,8 @@ struct RoomDetailsScreenViewStateBindings {
             }
         }
     }
+    
+    var isFavourite = false
 
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomDetailsScreenErrorType>?
@@ -180,6 +182,7 @@ enum RoomDetailsScreenViewAction {
     case processToogleMuteNotifications
     case displayAvatar
     case processTapPolls
+    case toggleFavourite(isFavourite: Bool)
 }
 
 enum RoomDetailsScreenViewShortcut {

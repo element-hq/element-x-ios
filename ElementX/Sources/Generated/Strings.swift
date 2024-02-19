@@ -274,6 +274,8 @@ public enum L10n {
   public static var commonFaceIdIos: String { return L10n.tr("Localizable", "common_face_id_ios") }
   /// Favourite
   public static var commonFavourite: String { return L10n.tr("Localizable", "common_favourite") }
+  /// Favourited
+  public static var commonFavourited: String { return L10n.tr("Localizable", "common_favourited") }
   /// File
   public static var commonFile: String { return L10n.tr("Localizable", "common_file") }
   /// Forward message
@@ -1392,6 +1394,8 @@ public enum L10n {
   public static var screenSessionVerificationCompareNumbersTitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_numbers_title") }
   /// Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.
   public static var screenSessionVerificationCompleteSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_complete_subtitle") }
+  /// Enter recovery key
+  public static var screenSessionVerificationEnterRecoveryKey: String { return L10n.tr("Localizable", "screen_session_verification_enter_recovery_key") }
   /// Prove it’s you in order to access your encrypted message history.
   public static var screenSessionVerificationOpenExistingSessionSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_open_existing_session_subtitle") }
   /// Open an existing session

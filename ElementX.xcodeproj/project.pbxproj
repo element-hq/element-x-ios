@@ -6826,8 +6826,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/matrix-org/matrix-analytics-events";
 			requirement = {
-				kind = revision;
-				revision = ad2b2d2b221bab89bf6443aafb925d52e30f4f6d;
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.11.0;
 			};
 		};
 		C13F55E4518415CB4C278E73 /* XCRemoteSwiftPackageReference "DTCoreText" */ = {
