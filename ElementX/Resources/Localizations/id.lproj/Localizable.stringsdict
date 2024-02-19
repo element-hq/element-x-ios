@@ -214,6 +214,22 @@
 			<string>%1$@, %2$@ and %3$d others</string>
 		</dict>
 	</dict>
+	<key>screen_room_typing_many_members_second_component_ios</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d other</string>
+			<key>other</key>
+			<string>%d others</string>
+		</dict>
+	</dict>
 	<key>screen_room_typing_notification</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>

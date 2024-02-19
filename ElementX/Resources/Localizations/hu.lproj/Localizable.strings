@@ -513,9 +513,11 @@
 "screen_room_member_details_unblock_alert_action" = "Letiltás feloldása";
 "screen_room_member_details_unblock_alert_description" = "Újra láthatja az összes üzenetét.";
 "screen_room_member_details_unblock_user" = "Felhasználó kitiltásának feloldása";
+"screen_room_member_list_mode_banned" = "Kitiltva";
+"screen_room_member_list_mode_members" = "Tagok";
 "screen_room_member_list_pending_header_title" = "Függőben";
-"screen_room_member_list_role_administrator" = "Admin";
-"screen_room_member_list_role_moderator" = "Moderator";
+"screen_room_member_list_role_administrator" = "Rendszergazda";
+"screen_room_member_list_role_moderator" = "Moderátor";
 "screen_room_member_list_room_members_header_title" = "Szoba tagjai";
 "screen_room_message_copied" = "Üzenet másolva";
 "screen_room_no_permission_to_post" = "Nincs jogosultsága arra, hogy bejegyzést tegyen közzé ebben a szobában";
@@ -538,6 +540,9 @@
 "screen_room_retry_send_menu_title" = "Az üzenet elküldése sikertelen";
 "screen_room_timeline_add_reaction" = "Emodzsi hozzáadása";
 "screen_room_timeline_less_reactions" = "Kevesebb megjelenítése";
+"screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ és ";
+"screen_room_typing_notification_plural_ios" = " éppen ír";
+"screen_room_typing_notification_singular_ios" = " éppen ír";
 "screen_room_typing_two_members" = "%1$@ és %2$@";
 "screen_room_voice_message_tooltip" = "Tartsa a rögzítéshez";
 "screen_roomlist_a11y_create_message" = "Új beszélgetés vagy szoba létrehozása";

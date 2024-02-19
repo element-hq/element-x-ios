@@ -119,7 +119,7 @@
 "common_error" = "Памылка";
 "common_everyone" = "Усе";
 "common_face_id_ios" = "Face ID";
-"common_favourite" = "Favourite";
+"common_favourite" = "Захаванае";
 "common_file" = "Файл";
 "common_forward_message" = "Перасылка паведамлення";
 "common_gif" = "GIF";
@@ -132,7 +132,7 @@
 "common_loading" = "Загрузка…";
 "common_message" = "Паведамленне";
 "common_message_actions" = "Дзеянні з паведамленням";
-"common_message_layout" = "Message layout";
+"common_message_layout" = "Выгляд паведамлення";
 "common_message_removed" = "Паведамленне выдалена";
 "common_modern" = "Сучасны";
 "common_mute" = "Адключыць гук";
@@ -513,6 +513,8 @@
 "screen_room_member_details_unblock_alert_action" = "Разблакіраваць";
 "screen_room_member_details_unblock_alert_description" = "Вы зноў зможаце ўбачыць усе паведамленні.";
 "screen_room_member_details_unblock_user" = "Разблакіраваць карыстальніка";
+"screen_room_member_list_mode_banned" = "Banned";
+"screen_room_member_list_mode_members" = "Members";
 "screen_room_member_list_pending_header_title" = "У чаканні";
 "screen_room_member_list_role_administrator" = "Admin";
 "screen_room_member_list_role_moderator" = "Moderator";
@@ -538,6 +540,9 @@
 "screen_room_retry_send_menu_title" = "Не ўдалося адправіць ваша паведамленне";
 "screen_room_timeline_add_reaction" = "Дадаць эмодзі";
 "screen_room_timeline_less_reactions" = "Паказаць менш";
+"screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ and ";
+"screen_room_typing_notification_plural_ios" = " are typing";
+"screen_room_typing_notification_singular_ios" = " is typing";
 "screen_room_typing_two_members" = "%1$@ and %2$@";
 "screen_room_voice_message_tooltip" = "Утрымлівайце для запісу";
 "screen_roomlist_a11y_create_message" = "Стварыце новую размову або пакой";

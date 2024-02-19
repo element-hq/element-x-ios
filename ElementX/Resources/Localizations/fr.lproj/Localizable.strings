@@ -513,6 +513,8 @@
 "screen_room_member_details_unblock_alert_action" = "Débloquer";
 "screen_room_member_details_unblock_alert_description" = "Vous pourrez à nouveau voir tous ses messages.";
 "screen_room_member_details_unblock_user" = "Débloquer l’utilisateur";
+"screen_room_member_list_mode_banned" = "Banned";
+"screen_room_member_list_mode_members" = "Members";
 "screen_room_member_list_pending_header_title" = "En attente";
 "screen_room_member_list_role_administrator" = "Admin";
 "screen_room_member_list_role_moderator" = "Moderator";
@@ -538,6 +540,9 @@
 "screen_room_retry_send_menu_title" = "Votre message n’a pas pu être envoyé";
 "screen_room_timeline_add_reaction" = "Ajouter un émoji";
 "screen_room_timeline_less_reactions" = "Afficher moins";
+"screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ and ";
+"screen_room_typing_notification_plural_ios" = " are typing";
+"screen_room_typing_notification_singular_ios" = " is typing";
 "screen_room_typing_two_members" = "%1$@ et %2$@";
 "screen_room_voice_message_tooltip" = "Maintenir pour enregistrer";
 "screen_roomlist_a11y_create_message" = "Créer une nouvelle discussion ou un nouveau salon";

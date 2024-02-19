@@ -13,9 +13,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d digit entered</string>
+			<string>%1$d cifră introdusă</string>
+			<key>few</key>
+			<string></string>
 			<key>other</key>
-			<string>%1$d digits entered</string>
+			<string>%1$d cifre introduse</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -29,9 +31,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Read by %1$@ and %2$d other</string>
+			<string>Citit de %1$@ și incă %2$d</string>
+			<key>few</key>
+			<string></string>
 			<key>other</key>
-			<string>Read by %1$@ and %2$d others</string>
+			<string>Citit de %1$@ și incă %2$d</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -195,9 +199,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
+			<string>Aveți %1$d încercare de deblocare</string>
+			<key>few</key>
+			<string></string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>Aveți %1$d încercări de deblocare</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -211,9 +217,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Wrong PIN. You have %1$d more chance</string>
+			<string>PIN greșit. Mai aveți %1$d sansa</string>
+			<key>few</key>
+			<string></string>
 			<key>other</key>
-			<string>Wrong PIN. You have %1$d more chances</string>
+			<string>PIN greșit. Mai aveți %1$d sanse</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -243,9 +251,29 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
+			<string>%1$@, %2$@ și încă %3$d</string>
+			<key>few</key>
+			<string></string>
 			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@, %2$@ și încă %3$d</string>
+		</dict>
+	</dict>
+	<key>screen_room_typing_many_members_second_component_ios</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d altul</string>
+			<key>few</key>
+			<string></string>
+			<key>other</key>
+			<string>%d alții</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -259,9 +287,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
+			<string>%1$@ scrie</string>
+			<key>few</key>
+			<string></string>
 			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ scriu</string>
 		</dict>
 	</dict>
 </dict>

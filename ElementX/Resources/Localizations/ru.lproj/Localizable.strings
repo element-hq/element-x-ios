@@ -513,6 +513,8 @@
 "screen_room_member_details_unblock_alert_action" = "Разблокировать";
 "screen_room_member_details_unblock_alert_description" = "Вы снова сможете увидеть все сообщения.";
 "screen_room_member_details_unblock_user" = "Разблокировать пользователя";
+"screen_room_member_list_mode_banned" = "Заблокирован";
+"screen_room_member_list_mode_members" = "Участники";
 "screen_room_member_list_pending_header_title" = "В ожидании";
 "screen_room_member_list_role_administrator" = "Администратор";
 "screen_room_member_list_role_moderator" = "Модератор";
@@ -538,6 +540,9 @@
 "screen_room_retry_send_menu_title" = "Не удалось отправить ваше сообщение";
 "screen_room_timeline_add_reaction" = "Добавить эмодзи";
 "screen_room_timeline_less_reactions" = "Показать меньше";
+"screen_room_typing_many_members_first_component_ios" = "%1$@ и %2$@";
+"screen_room_typing_notification_plural_ios" = "набирают";
+"screen_room_typing_notification_singular_ios" = "набирает";
 "screen_room_typing_two_members" = "%1$@ и %2$@";
 "screen_room_voice_message_tooltip" = "Удерживайте для записи";
 "screen_roomlist_a11y_create_message" = "Создайте новую беседу или комнату";
