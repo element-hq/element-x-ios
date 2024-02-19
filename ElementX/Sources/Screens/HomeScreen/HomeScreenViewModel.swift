@@ -75,7 +75,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case (.unverifiedLastSession, .incomplete):
                     state.requiresExtraAccountSetup = true
                     if state.securityBannerMode != .dismissed {
-                        state.securityBannerMode = .recoveryKeyConfirmation
+                        state.securityBannerMode = .sessionVerification
                     }
                 case (.verified, .disabled):
                     state.requiresExtraAccountSetup = true

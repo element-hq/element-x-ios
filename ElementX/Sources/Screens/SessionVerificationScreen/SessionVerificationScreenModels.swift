@@ -17,10 +17,13 @@
 import Foundation
 
 enum SessionVerificationScreenViewModelAction {
+    case recoveryKey
     case finished
 }
 
 struct SessionVerificationScreenViewState: BindableState {
+    let showRecoveryOption: Bool
+    
     var verificationState: SessionVerificationScreenStateMachine.State = .initial
     
     var title: String? {
@@ -83,6 +86,7 @@ struct SessionVerificationScreenViewState: BindableState {
 }
 
 enum SessionVerificationScreenViewAction {
+    case recoveryKey
     case requestVerification
     case startSasVerification
     case restart

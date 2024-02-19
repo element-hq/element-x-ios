@@ -198,6 +198,7 @@ enum A11yIdentifiers {
         let emojiWrapper = "session_verification-emojis"
         let verificationComplete = "session_verification-verification_complete"
         let close = "session_verification-close"
+        let enterRecoveryKey = "session_verification-enter_recovery_key"
     }
     
     struct SettingsScreen {

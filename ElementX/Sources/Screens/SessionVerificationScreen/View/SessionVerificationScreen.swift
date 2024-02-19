@@ -128,12 +128,21 @@ struct SessionVerificationScreen: View {
     private var actionButtons: some View {
         switch context.viewState.verificationState {
         case .initial:
-            Button(L10n.actionStartVerification) {
-                context.send(viewAction: .requestVerification)
+            VStack(spacing: 32) {
+                Button(L10n.actionStartVerification) {
+                    context.send(viewAction: .requestVerification)
+                }
+                .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
+                
+                if context.viewState.showRecoveryOption {
+                    Button(L10n.screenSessionVerificationEnterRecoveryKey) {
+                        context.send(viewAction: .recoveryKey)
+                    }
+                    .buttonStyle(.compound(.plain))
+                    .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.enterRecoveryKey)
+                }
             }
-            .buttonStyle(.compound(.primary))
-            .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
-        
         case .cancelled:
             Button(L10n.actionRetry) {
                 context.send(viewAction: .restart)
@@ -235,7 +244,8 @@ struct SessionVerification_Previews: PreviewProvider, TestablePreview {
     
     static func sessionVerificationScreen(state: SessionVerificationScreenStateMachine.State) -> some View {
         let viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: SessionVerificationControllerProxyMock.configureMock(),
-                                                           initialState: SessionVerificationScreenViewState(verificationState: state))
+                                                           recoveryState: .incomplete,
+                                                           verificationState: state)
         
         return SessionVerificationScreen(context: viewModel.context)
     }

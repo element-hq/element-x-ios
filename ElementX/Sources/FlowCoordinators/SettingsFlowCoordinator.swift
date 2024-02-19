@@ -208,7 +208,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
             fatalError("The sessionVerificationController should aways be valid at this point")
         }
         
-        let verificationParameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
+        let verificationParameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
+                                                                                    recoveryState: parameters.userSession.sessionSecurityStatePublisher.value.recoveryState)
         let coordinator = SessionVerificationScreenCoordinator(parameters: verificationParameters)
         
         coordinator.actions
@@ -216,6 +217,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
+                case .recoveryKey:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                    handleAppRoute(.chatBackupSettings, animated: true)
                 case .done:
                     navigationStackCoordinator.setSheetCoordinator(nil)
                 }
