@@ -31,12 +31,13 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     }
 
     init(sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol,
-         initialState: SessionVerificationScreenViewState = SessionVerificationScreenViewState()) {
+         recoveryState: SecureBackupRecoveryState,
+         verificationState: SessionVerificationScreenStateMachine.State = .initial) {
         self.sessionVerificationControllerProxy = sessionVerificationControllerProxy
         
         stateMachine = SessionVerificationScreenStateMachine()
         
-        super.init(initialViewState: initialState)
+        super.init(initialViewState: .init(showRecoveryOption: recoveryState == .incomplete, verificationState: verificationState))
         
         setupStateMachine()
         
@@ -70,6 +71,8 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     
     override func process(viewAction: SessionVerificationScreenViewAction) {
         switch viewAction {
+        case .recoveryKey:
+            actionsSubject.send(.recoveryKey)
         case .requestVerification:
             stateMachine.processEvent(.requestVerification)
         case .startSasVerification:

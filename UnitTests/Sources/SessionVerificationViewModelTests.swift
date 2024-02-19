@@ -27,7 +27,8 @@ class SessionVerificationViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
-        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: sessionVerificationController)
+        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: sessionVerificationController,
+                                                       recoveryState: .incomplete)
         context = viewModel.context
     }
 

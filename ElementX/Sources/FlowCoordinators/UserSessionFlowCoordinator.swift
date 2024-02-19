@@ -270,7 +270,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 break
                 
             case (.roomList, .showLogoutConfirmationScreen, .logoutConfirmationScreen):
-                presentSecureBackupConfirmationScreen()
+                presentSecureBackupLogoutConfirmationScreen()
             case (.logoutConfirmationScreen, .dismissedLogoutConfirmationScreen, .roomList):
                 break
                 
@@ -400,7 +400,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        presentSecureBackupConfirmationScreen()
+        presentSecureBackupLogoutConfirmationScreen()
     }
     
     // MARK: Session verification
@@ -410,7 +410,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             fatalError("The sessionVerificationController should aways be valid at this point")
         }
         
-        let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
+        let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
+                                                                        recoveryState: userSession.sessionSecurityStatePublisher.value.recoveryState)
         
         let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
         
@@ -419,6 +420,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
+                case .recoveryKey:
+                    settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                 case .done:
                     navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
@@ -511,7 +514,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: Secure backup confirmation
     
-    private func presentSecureBackupConfirmationScreen() {
+    private func presentSecureBackupLogoutConfirmationScreen() {
         let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
                                                                                             networkMonitor: ServiceLocator.shared.networkMonitor))
         

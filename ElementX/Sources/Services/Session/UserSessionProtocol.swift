@@ -42,7 +42,7 @@ protocol UserSessionProtocol {
     var mediaProvider: MediaProviderProtocol { get }
     var voiceMessageMediaManager: VoiceMessageMediaManagerProtocol { get }
     
-    var sessionSecurityStatePublisher: AnyPublisher<SessionSecurityState, Never> { get }
+    var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> { get }
     var sessionVerificationController: SessionVerificationControllerProxyProtocol? { get }
     
     var callbacks: PassthroughSubject<UserSessionCallback, Never> { get }
