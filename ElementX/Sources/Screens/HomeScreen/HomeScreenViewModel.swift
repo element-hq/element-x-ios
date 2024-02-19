@@ -21,6 +21,7 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, Hom
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
+    private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -38,10 +39,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     init(userSession: UserSessionProtocol,
-         selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
+         analyticsService: AnalyticsService,
          appSettings: AppSettings,
+         selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
+        self.analyticsService = analyticsService
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         
@@ -75,7 +78,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case (.unverifiedLastSession, .incomplete):
                     state.requiresExtraAccountSetup = true
                     if state.securityBannerMode != .dismissed {
-                        state.securityBannerMode = .recoveryKeyConfirmation
+                        state.securityBannerMode = .sessionVerification
                     }
                 case (.verified, .disabled):
                     state.requiresExtraAccountSetup = true
@@ -113,6 +116,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         appSettings.$markAsUnreadEnabled
             .weakAssign(to: \.state.markAsUnreadEnabled, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$markAsFavouriteEnabled
+            .weakAssign(to: \.state.markAsFavouriteEnabled, on: self)
             .store(in: &cancellables)
         
         appSettings.$hideUnreadMessagesBadge
@@ -182,9 +189,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     return
                 }
                 
-                switch await roomProxy.flagAsUnread() {
+                switch await roomProxy.flagAsUnread(true) {
                 case .success:
-                    ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
+                    analyticsService.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
                 case .failure(let error):
                     MXLog.error("Failed marking room \(roomIdentifier) as unread with error: \(error)")
                 }
@@ -196,9 +203,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     return
                 }
                 
-                switch await roomProxy.flagAsRead() {
+                switch await roomProxy.flagAsUnread(false) {
                 case .success:
-                    ServiceLocator.shared.analytics.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
+                    analyticsService.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
                     
                     if case .failure(let error) = await roomProxy.markAsRead(receiptType: appSettings.sharePresence ? .read : .readPrivate) {
                         MXLog.error("Failed marking room \(roomIdentifier) as read with error: \(error)")
@@ -206,6 +213,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case .failure(let error):
                     MXLog.error("Failed flagging room \(roomIdentifier) as read with error: \(error)")
                 }
+            }
+        case .markRoomAsFavourite(let roomIdentifier, let isFavourite):
+            Task {
+                await markRoomAsFavourite(roomIdentifier, isFavourite: isFavourite)
             }
         }
     }
@@ -241,7 +252,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        ServiceLocator.shared.analytics.signpost.beginFirstRooms()
+        analyticsService.signpost.beginFirstRooms()
         
         let hasUserBeenMigrated = appSettings.migratedAccounts[userSession.userID] == true
 
@@ -322,7 +333,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         if roomListMode == .rooms, state.roomListMode == .skeletons {
-            ServiceLocator.shared.analytics.signpost.endFirstRooms()
+            analyticsService.signpost.endFirstRooms()
         }
         
         state.roomListMode = roomListMode
@@ -397,6 +408,20 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         roomSummaryProvider.updateVisibleRange(range)
+    }
+    
+    private func markRoomAsFavourite(_ roomID: String, isFavourite: Bool) async {
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            MXLog.error("Failed retrieving room for identifier: \(roomID)")
+            return
+        }
+        
+        switch await roomProxy.flagAsFavourite(isFavourite) {
+        case .success:
+            analyticsService.trackInteraction(name: .MobileRoomListRoomContextMenuFavouriteToggle)
+        case .failure(let error):
+            MXLog.error("Failed marking room \(roomID) as favourite: \(isFavourite) with error: \(error)")
+        }
     }
     
     private static let leaveRoomLoadingID = "LeaveRoomLoading"

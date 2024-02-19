@@ -238,8 +238,9 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         
         return HomeScreenViewModel(userSession: userSession,
-                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   analyticsService: ServiceLocator.shared.analytics,
                                    appSettings: appSettings,
+                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

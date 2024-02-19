@@ -187,6 +187,13 @@ struct RoomDetailsScreen: View {
                     })
                     .disabled(context.viewState.notificationSettingsState.isLoading)
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
+            
+            ListRow(label: .default(title: L10n.commonFavourite, icon: \.favourite),
+                    kind: .toggle($context.isFavourite))
+                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.favourite)
+                .onChange(of: context.isFavourite) { newValue in
+                    context.send(viewAction: .toggleFavourite(isFavourite: newValue))
+                }
         }
         .disabled(context.viewState.notificationSettingsState.isLoading)
     }
@@ -306,6 +313,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
+                                          analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
@@ -331,6 +339,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
+                                          analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
@@ -355,6 +364,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
+                                          analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,

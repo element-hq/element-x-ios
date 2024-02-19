@@ -186,14 +186,15 @@ private extension InvitesScreenRoomDetails {
                                         avatarURL: nil,
                                         lastMessage: nil,
                                         lastMessageFormattedTimestamp: nil,
-                                        isMarkedUnread: false,
                                         unreadMessagesCount: 0,
                                         unreadMentionsCount: 0,
                                         unreadNotificationsCount: 0,
                                         notificationMode: nil,
                                         canonicalAlias: "#footest:somewhere.org",
                                         inviter: inviter,
-                                        hasOngoingCall: false)
+                                        hasOngoingCall: false,
+                                        isMarkedUnread: false,
+                                        isFavourite: false)
         return .init(roomDetails: dmRoom, isUnread: false)
     }
     
@@ -209,14 +210,15 @@ private extension InvitesScreenRoomDetails {
                                         avatarURL: avatarURL,
                                         lastMessage: nil,
                                         lastMessageFormattedTimestamp: nil,
-                                        isMarkedUnread: false,
                                         unreadMessagesCount: 0,
                                         unreadMentionsCount: 0,
                                         unreadNotificationsCount: 0,
                                         notificationMode: nil,
                                         canonicalAlias: alias,
                                         inviter: inviter,
-                                        hasOngoingCall: false)
+                                        hasOngoingCall: false,
+                                        isMarkedUnread: false,
+                                        isFavourite: false)
         return .init(roomDetails: dmRoom, isUnread: isUnread)
     }
 }

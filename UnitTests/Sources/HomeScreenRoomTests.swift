@@ -36,14 +36,15 @@ class HomeScreenRoomTests: XCTestCase {
                                                 avatarURL: nil,
                                                 lastMessage: nil,
                                                 lastMessageFormattedTimestamp: nil,
-                                                isMarkedUnread: isMarkedUnread,
                                                 unreadMessagesCount: unreadMessagesCount,
                                                 unreadMentionsCount: unreadMentionsCount,
                                                 unreadNotificationsCount: unreadNotificationsCount,
                                                 notificationMode: notificationMode,
                                                 canonicalAlias: nil,
                                                 inviter: nil,
-                                                hasOngoingCall: hasOngoingCall)
+                                                hasOngoingCall: hasOngoingCall,
+                                                isMarkedUnread: isMarkedUnread,
+                                                isFavourite: false)
     }
     
     func testNoBadge() {

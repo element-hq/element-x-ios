@@ -1,3 +1,13 @@
+## Changes in 1.5.8 (2024-02-19)
+
+✨ Features
+
+- Add the list of banned users, shown to room members who have the power ban/unban. ([#2355](https://github.com/element-hq/element-x-ios/issues/2355))
+
+🙌 Improvements
+
+- Replaced the share my location button icon with the iOS share icon. ([#1486](https://github.com/element-hq/element-x-ios/issues/1486))
+
 ## Changes in 1.5.7 (2024-02-16)
 
 🐛 Bugfixes

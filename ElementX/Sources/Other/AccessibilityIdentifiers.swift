@@ -172,7 +172,8 @@ enum A11yIdentifiers {
         let people = "room_details-people"
         let invite = "room_details-invite"
         let notifications = "room_details-notifications"
-        let pollsHistory = "romm_details-polls_history"
+        let pollsHistory = "room_details-polls_history"
+        let favourite = "room_details-favourite"
     }
     
     struct RoomMemberDetailsScreen {
@@ -198,6 +199,7 @@ enum A11yIdentifiers {
         let emojiWrapper = "session_verification-emojis"
         let verificationComplete = "session_verification-verification_complete"
         let close = "session_verification-close"
+        let enterRecoveryKey = "session_verification-enter_recovery_key"
     }
     
     struct SettingsScreen {

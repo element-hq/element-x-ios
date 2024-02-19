@@ -121,7 +121,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-analytics-events",
       "state" : {
-        "revision" : "ad2b2d2b221bab89bf6443aafb925d52e30f4f6d"
+        "revision" : "354562b5cabf2b9aec6cbb12e3a614490b3cc6e8",
+        "version" : "0.11.0"
       }
     },
     {
@@ -262,7 +263,7 @@
     {
       "identity" : "swiftui-introspect",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/siteline/SwiftUI-Introspect",
+      "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
         "revision" : "b94da693e57eaf79d16464b8b7c90d09cba4e290",
         "version" : "0.9.2"

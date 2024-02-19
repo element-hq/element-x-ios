@@ -51,21 +51,15 @@ class UserSession: UserSessionProtocol {
         }
     }
     
-    let sessionSecurityStatePublisher: AnyPublisher<SessionSecurityState, Never>
+    let sessionSecurityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .unknown, recoveryState: .unknown))
+    var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> {
+        sessionSecurityStateSubject.asCurrentValuePublisher()
+    }
     
     init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol, voiceMessageMediaManager: VoiceMessageMediaManagerProtocol) {
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
         self.voiceMessageMediaManager = voiceMessageMediaManager
-        
-        sessionSecurityStatePublisher = Publishers.CombineLatest(sessionVerificationStateSubject, clientProxy.secureBackupController.recoveryState)
-            .map {
-                MXLog.info("Session security state changed, verificationState: \($0), recoveryState: \($1)")
-                return SessionSecurityState(verificationState: $0, recoveryState: $1)
-            }
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
         
         clientProxy.callbacks
             .receive(on: DispatchQueue.main)
@@ -88,6 +82,18 @@ class UserSession: UserSessionProtocol {
                     break
                 }
             }
+        
+        Publishers.CombineLatest(sessionVerificationStateSubject, clientProxy.secureBackupController.recoveryState)
+            .map {
+                MXLog.info("Session security state changed, verificationState: \($0), recoveryState: \($1)")
+                return SessionSecurityState(verificationState: $0, recoveryState: $1)
+            }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                self?.sessionSecurityStateSubject.send(value)
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Private

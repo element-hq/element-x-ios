@@ -274,6 +274,8 @@ public enum L10n {
   public static var commonFaceIdIos: String { return L10n.tr("Localizable", "common_face_id_ios") }
   /// Favourite
   public static var commonFavourite: String { return L10n.tr("Localizable", "common_favourite") }
+  /// Favourited
+  public static var commonFavourited: String { return L10n.tr("Localizable", "common_favourited") }
   /// File
   public static var commonFile: String { return L10n.tr("Localizable", "common_file") }
   /// Forward message
@@ -448,9 +450,9 @@ public enum L10n {
   public static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
   /// Waiting for this message
   public static var commonWaitingForDecryptionKey: String { return L10n.tr("Localizable", "common_waiting_for_decryption_key") }
-  /// Your chat backup is currently out of sync. You need to confirm your recovery key to maintain access to your chat backup.
+  /// Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup.
   public static var confirmRecoveryKeyBannerMessage: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_message") }
-  /// Confirm your recovery key
+  /// Enter your recovery key
   public static var confirmRecoveryKeyBannerTitle: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_title") }
   /// %1$@ crashed the last time it was used. Would you like to share a crash report with us?
   public static func crashDetectionDialogContent(_ p1: Any) -> String {
@@ -886,7 +888,7 @@ public enum L10n {
   public static var screenChatBackupKeyBackupTitle: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_title") }
   /// Change recovery key
   public static var screenChatBackupRecoveryActionChange: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_change") }
-  /// Confirm recovery key
+  /// Enter recovery key
   public static var screenChatBackupRecoveryActionConfirm: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm") }
   /// Your chat backup is currently out of sync.
   public static var screenChatBackupRecoveryActionConfirmDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm_description") }
@@ -1134,7 +1136,7 @@ public enum L10n {
   public static var screenRecoveryKeyConfirmKeyPlaceholder: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_placeholder") }
   /// Recovery key confirmed
   public static var screenRecoveryKeyConfirmSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_success") }
-  /// Confirm your recovery key
+  /// Enter your recovery key
   public static var screenRecoveryKeyConfirmTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_title") }
   /// Copied recovery key
   public static var screenRecoveryKeyCopiedToClipboard: String { return L10n.tr("Localizable", "screen_recovery_key_copied_to_clipboard") }
@@ -1392,6 +1394,8 @@ public enum L10n {
   public static var screenSessionVerificationCompareNumbersTitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_numbers_title") }
   /// Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.
   public static var screenSessionVerificationCompleteSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_complete_subtitle") }
+  /// Enter recovery key
+  public static var screenSessionVerificationEnterRecoveryKey: String { return L10n.tr("Localizable", "screen_session_verification_enter_recovery_key") }
   /// Prove it’s you in order to access your encrypted message history.
   public static var screenSessionVerificationOpenExistingSessionSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_open_existing_session_subtitle") }
   /// Open an existing session

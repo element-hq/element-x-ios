@@ -252,14 +252,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
-                                         isMarkedUnread: appSettings.markAsUnreadEnabled ? roomInfo.isMarkedUnread : false,
                                          unreadMessagesCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadMessages) : 0,
                                          unreadMentionsCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadMentions) : 0,
                                          unreadNotificationsCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadNotifications) : UInt(roomInfo.notificationCount),
                                          notificationMode: notificationMode,
                                          canonicalAlias: roomInfo.canonicalAlias,
                                          inviter: inviterProxy,
-                                         hasOngoingCall: roomInfo.hasRoomCall)
+                                         hasOngoingCall: roomInfo.hasRoomCall,
+                                         isMarkedUnread: appSettings.markAsUnreadEnabled ? roomInfo.isMarkedUnread : false,
+                                         isFavourite: roomInfo.isFavourite)
         
         return invalidated ? .invalidated(details: details) : .filled(details: details)
     }

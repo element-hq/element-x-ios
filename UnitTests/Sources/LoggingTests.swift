@@ -229,14 +229,15 @@ class LoggingTests: XCTestCase {
                                              avatarURL: nil,
                                              lastMessage: AttributedString(lastMessage),
                                              lastMessageFormattedTimestamp: "Now",
-                                             isMarkedUnread: false,
                                              unreadMessagesCount: 0,
                                              unreadMentionsCount: 0,
                                              unreadNotificationsCount: 0,
                                              notificationMode: nil,
                                              canonicalAlias: nil,
                                              inviter: nil,
-                                             hasOngoingCall: false)
+                                             hasOngoingCall: false,
+                                             isMarkedUnread: false,
+                                             isFavourite: false)
         
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)

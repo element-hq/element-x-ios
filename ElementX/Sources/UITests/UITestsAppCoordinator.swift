@@ -552,7 +552,8 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .sessionVerification:
             var sessionVerificationControllerProxy = SessionVerificationControllerProxyMock.configureMock(requestDelay: .seconds(5))
-            let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy)
+            let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy,
+                                                                            recoveryState: .unknown)
             return SessionVerificationScreenCoordinator(parameters: parameters)
         case .userSessionScreen, .userSessionScreenReply, .userSessionScreenRTE:
             let appSettings: AppSettings = ServiceLocator.shared.settings
@@ -589,6 +590,7 @@ class MockScreen: Identifiable {
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
+                                                                             analyticsService: ServiceLocator.shared.analytics,
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
@@ -609,6 +611,7 @@ class MockScreen: Identifiable {
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
+                                                                             analyticsService: ServiceLocator.shared.analytics,
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
@@ -631,6 +634,7 @@ class MockScreen: Identifiable {
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
+                                                                             analyticsService: ServiceLocator.shared.analytics,
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
@@ -649,6 +653,7 @@ class MockScreen: Identifiable {
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
+                                                                             analyticsService: ServiceLocator.shared.analytics,
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
@@ -668,6 +673,7 @@ class MockScreen: Identifiable {
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
+                                                                             analyticsService: ServiceLocator.shared.analytics,
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,

@@ -55,7 +55,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                     state.securitySectionMode = .sessionVerification
                 case (.unverifiedLastSession, .incomplete):
                     state.showSecuritySectionBadge = true
-                    state.securitySectionMode = .secureBackup
+                    state.securitySectionMode = .sessionVerification
                 case (.verified, .disabled):
                     state.showSecuritySectionBadge = true
                     state.securitySectionMode = .secureBackup

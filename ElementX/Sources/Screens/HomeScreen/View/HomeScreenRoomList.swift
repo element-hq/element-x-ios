@@ -63,6 +63,22 @@ struct HomeScreenRoomList: View {
                             }
                         }
                         
+                        if context.viewState.markAsFavouriteEnabled {
+                            if room.isFavourite {
+                                Button {
+                                    context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: false))
+                                } label: {
+                                    Label(L10n.commonFavourited, icon: \.favouriteSolid)
+                                }
+                            } else {
+                                Button {
+                                    context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: true))
+                                } label: {
+                                    Label(L10n.commonFavourite, icon: \.favourite)
+                                }
+                            }
+                        }
+                        
                         Button {
                             context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
                         } label: {

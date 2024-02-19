@@ -32,13 +32,14 @@ enum RoomProxyError: Error, Equatable {
     case failedUploadingAvatar
     case failedCheckingPermission
     case failedFlaggingAsUnread
-    case failedFlaggingAsRead
     case failedMarkingAsRead
     case failedSendingTypingNotice
+    case failedRetrievingIsFavourite
+    case failedFlaggingAsFavourite
 }
 
 enum RoomProxyAction {
-    case stateUpdate
+    case roomInfoUpdate
 }
 
 // sourcery: AutoMockable
@@ -48,6 +49,7 @@ protocol RoomProxyProtocol {
     var isPublic: Bool { get }
     var isSpace: Bool { get }
     var isEncrypted: Bool { get }
+    var isFavourite: Bool { get async }
     var membership: Membership { get }
     var hasOngoingCall: Bool { get }
     var canonicalAlias: String? { get }
@@ -109,14 +111,16 @@ protocol RoomProxyProtocol {
     
     func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
     
-    func flagAsUnread() async -> Result<Void, RoomProxyError>
-    
-    func flagAsRead() async -> Result<Void, RoomProxyError>
-    
     func markAsRead(receiptType: ReceiptType) async -> Result<Void, RoomProxyError>
     
     /// https://spec.matrix.org/v1.9/client-server-api/#typing-notifications
     @discardableResult func sendTypingNotification(isTyping: Bool) async -> Result<Void, RoomProxyError>
+    
+    // MARK: - Room Flags
+    
+    func flagAsUnread(_ isUnread: Bool) async -> Result<Void, RoomProxyError>
+    
+    func flagAsFavourite(_ isFavourite: Bool) async -> Result<Void, RoomProxyError>
     
     // MARK: - Element Call
     
