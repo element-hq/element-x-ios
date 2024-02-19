@@ -120,6 +120,7 @@
 "common_everyone" = "Everyone";
 "common_face_id_ios" = "Face ID";
 "common_favourite" = "Favourite";
+"common_favourited" = "Favourited";
 "common_file" = "File";
 "common_forward_message" = "Forward message";
 "common_gif" = "GIF";
@@ -199,8 +200,8 @@
 "common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";
 "common_verify_device" = "Verify device";
-"confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to confirm your recovery key to maintain access to your chat backup.";
-"confirm_recovery_key_banner_title" = "Confirm your recovery key";
+"confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup.";
+"confirm_recovery_key_banner_title" = "Enter your recovery key";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
 "dialog_permission_generic" = "Please grant the permission in the system settings.";
@@ -360,7 +361,7 @@
 "screen_chat_backup_key_backup_description" = "Backup ensures that you don't lose your message history. %1$@.";
 "screen_chat_backup_key_backup_title" = "Backup";
 "screen_chat_backup_recovery_action_change" = "Change recovery key";
-"screen_chat_backup_recovery_action_confirm" = "Confirm recovery key";
+"screen_chat_backup_recovery_action_confirm" = "Enter recovery key";
 "screen_chat_backup_recovery_action_confirm_description" = "Your chat backup is currently out of sync.";
 "screen_chat_backup_recovery_action_setup" = "Set up recovery";
 "screen_chat_backup_recovery_action_setup_description" = "Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.";
@@ -463,7 +464,7 @@
 "screen_recovery_key_confirm_key_description" = "Enter the 48 character code.";
 "screen_recovery_key_confirm_key_placeholder" = "Enter...";
 "screen_recovery_key_confirm_success" = "Recovery key confirmed";
-"screen_recovery_key_confirm_title" = "Confirm your recovery key";
+"screen_recovery_key_confirm_title" = "Enter your recovery key";
 "screen_recovery_key_copied_to_clipboard" = "Copied recovery key";
 "screen_recovery_key_generating_key" = "Generating…";
 "screen_recovery_key_save_action" = "Save recovery key";
