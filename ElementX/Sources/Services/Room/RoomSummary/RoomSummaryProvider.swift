@@ -154,7 +154,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         case .excludeAll:
             _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .none)
         case let .include(predicate):
-            var filters = predicate.filters.compactMap(\.rustFilter)
+            var filters = predicate.filters.map(\.rustFilter)
             if let query = predicate.query {
                 filters.append(.normalizedMatchRoomName(pattern: query.lowercased()))
             }

@@ -56,7 +56,7 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         }
     }
     
-    var rustFilter: RoomListEntriesDynamicFilterKind? {
+    var rustFilter: RoomListEntriesDynamicFilterKind {
         switch self {
         case .people:
             return .category(expect: .people)
@@ -65,8 +65,7 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         case .unreads:
             return .unread
         case .favourites:
-            // Not implemented yet
-            return nil
+            return .favourite
         }
     }
 }
