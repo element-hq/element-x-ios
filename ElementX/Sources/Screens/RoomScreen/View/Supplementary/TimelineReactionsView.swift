@@ -196,6 +196,7 @@ struct TimelineReactionAddMoreButtonLabel: View {
                 .padding(.vertical, 8)
                 .padding(.horizontal, 12)
                 .foregroundColor(.compound.iconSecondary)
+                .accessibilityLabel(L10n.actionReact)
         }
     }
 }
