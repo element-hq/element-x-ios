@@ -17,21 +17,54 @@
 import SwiftUI
 
 struct AvatarHeaderView<Footer: View>: View {
-    let avatarUrl: URL?
-    let name: String?
     let id: String
+    let name: String?
+    let subtitle: String?
+    let avatarURL: URL?
+    
     let avatarSize: AvatarSize
     let imageProvider: ImageProviderProtocol?
-    let subtitle: String?
     var onAvatarTap: (() -> Void)?
     @ViewBuilder var footer: () -> Footer
+    
+    init(room: RoomDetails,
+         avatarSize: AvatarSize,
+         imageProvider: ImageProviderProtocol? = nil,
+         onAvatarTap: (() -> Void)? = nil,
+         @ViewBuilder footer: @escaping () -> Footer) {
+        id = room.id
+        name = room.name
+        subtitle = room.canonicalAlias
+        avatarURL = room.avatarURL
+        
+        self.avatarSize = avatarSize
+        self.imageProvider = imageProvider
+        self.onAvatarTap = onAvatarTap
+        self.footer = footer
+    }
+    
+    init(member: RoomMemberDetails,
+         avatarSize: AvatarSize,
+         imageProvider: ImageProviderProtocol? = nil,
+         onAvatarTap: (() -> Void)? = nil,
+         @ViewBuilder footer: @escaping () -> Footer) {
+        id = member.id
+        name = member.isBanned ? nil : member.name
+        subtitle = member.isBanned ? nil : member.name == nil ? nil : member.id
+        avatarURL = member.isBanned ? nil : member.avatarURL
+        
+        self.avatarSize = avatarSize
+        self.imageProvider = imageProvider
+        self.onAvatarTap = onAvatarTap
+        self.footer = footer
+    }
 
     var body: some View {
         VStack(spacing: 8.0) {
             Button {
                 onAvatarTap?()
             } label: {
-                LoadableAvatarImage(url: avatarUrl,
+                LoadableAvatarImage(url: avatarURL,
                                     name: name,
                                     contentID: id,
                                     avatarSize: avatarSize,
@@ -60,15 +93,15 @@ struct AvatarHeaderView<Footer: View>: View {
     }
 }
 
-struct HeaderView_Previews: PreviewProvider, TestablePreview {
+struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         Form {
-            AvatarHeaderView(avatarUrl: URL.picturesDirectory,
-                             name: "Test Room",
-                             id: "test",
+            AvatarHeaderView(room: .init(id: "@test:matrix.org",
+                                         name: "Test Room",
+                                         avatarURL: URL.picturesDirectory,
+                                         canonicalAlias: "#test:matrix.org"),
                              avatarSize: .room(on: .details),
-                             imageProvider: MockMediaProvider(),
-                             subtitle: "#test:matrix.org") {
+                             imageProvider: MockMediaProvider()) {
                 HStack(spacing: 32) {
                     ShareLink(item: "test") {
                         Image(systemName: "square.and.arrow.up")
@@ -78,5 +111,20 @@ struct HeaderView_Previews: PreviewProvider, TestablePreview {
                 .padding(.top, 32)
             }
         }
+        .previewDisplayName("Room")
+        
+        VStack(spacing: 16) {
+            AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
+                             avatarSize: .room(on: .details),
+                             imageProvider: MockMediaProvider()) { Text("") }
+            
+            AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockBanned[3]),
+                             avatarSize: .room(on: .details),
+                             imageProvider: MockMediaProvider()) { Text("") }
+        }
+        .padding()
+        .background(Color.compound.bgSubtleSecondaryLevel0)
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Members")
     }
 }

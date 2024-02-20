@@ -99,7 +99,7 @@ class HomeScreenViewModelTests: XCTestCase {
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(context.leaveRoomAlertItem?.roomId, mockRoomId)
+        XCTAssertEqual(context.leaveRoomAlertItem?.roomID, mockRoomId)
     }
     
     func testLeaveRoomError() async throws {

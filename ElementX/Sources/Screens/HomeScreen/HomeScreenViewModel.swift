@@ -441,12 +441,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             
             if room.isPublic {
-                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .public)
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomId, isDM: room.isEncryptedOneToOneRoom, state: .public)
             } else {
                 state.bindings.leaveRoomAlertItem = if room.joinedMembersCount > 1 {
-                    LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .private)
+                    LeaveRoomAlertItem(roomID: roomId, isDM: room.isEncryptedOneToOneRoom, state: .private)
                 } else {
-                    LeaveRoomAlertItem(roomId: roomId, isDM: room.isEncryptedOneToOneRoom, state: .empty)
+                    LeaveRoomAlertItem(roomID: roomId, isDM: room.isEncryptedOneToOneRoom, state: .empty)
                 }
             }
         }

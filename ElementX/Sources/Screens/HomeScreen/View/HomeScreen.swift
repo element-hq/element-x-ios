@@ -172,7 +172,7 @@ struct HomeScreen: View {
     private func leaveRoomAlertActions(_ item: LeaveRoomAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
         Button(item.confirmationTitle, role: .destructive) {
-            context.send(viewAction: .confirmLeaveRoom(roomIdentifier: item.roomId))
+            context.send(viewAction: .confirmLeaveRoom(roomIdentifier: item.roomID))
         }
     }
     
