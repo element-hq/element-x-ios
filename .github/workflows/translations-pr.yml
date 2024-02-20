@@ -23,6 +23,9 @@ jobs:
 
       - name: Verify Translations
         run: swift run tools locheck
+        
+      - name: SAS Translations
+        run: swift run tools generate-sas
 
       - name: Create PR for Translations
         uses: peter-evans/create-pull-request@v5
