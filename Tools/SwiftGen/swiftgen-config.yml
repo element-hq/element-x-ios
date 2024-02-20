@@ -15,7 +15,7 @@ strings:
       params:
         enumName: L10n
         lookupFunction: tr  # used for the loc to be computed variables
-        publicAccess: true
+        publicAccess: false
   - inputs: Resources/Localizations/en.lproj
     filter: Untranslated*
     outputs:
@@ -24,4 +24,4 @@ strings:
       params:
         enumName: UntranslatedL10n
         lookupFunction: tr  # used for the loc to be computed variables
-        publicAccess: true
+        publicAccess: false

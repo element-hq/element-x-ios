@@ -32,17 +32,12 @@ enum HomeScreenViewModelAction {
     case logout
 }
 
-enum HomeScreenViewUserMenuAction {
-    case settings
-    case logout
-}
-
 enum HomeScreenViewAction {
     case selectRoom(roomIdentifier: String)
     case showRoomDetails(roomIdentifier: String)
     case leaveRoom(roomIdentifier: String)
     case confirmLeaveRoom(roomIdentifier: String)
-    case userMenu(action: HomeScreenViewUserMenuAction)
+    case showSettings
     case startChat
     case verifySession
     case confirmRecoveryKey

@@ -333,8 +333,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.pollForm, .dismissPollForm, .room):
                 break
 
-            case (.roomDetails(let roomID, _), .presentPollsHistory, .pollsHistory):
-                presentPollsHistory(roomID: roomID)
+            case (.roomDetails, .presentPollsHistory, .pollsHistory):
+                presentPollsHistory()
             case (.pollsHistory, .dismissPollsHistory, .roomDetails):
                 break
         
@@ -880,7 +880,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentPollsHistory(roomID: String) {
+    private func presentPollsHistory() {
         Task {
             await asyncPresentRoomPollsHistory()
         }

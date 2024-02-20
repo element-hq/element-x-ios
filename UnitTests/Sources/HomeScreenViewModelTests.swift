@@ -82,7 +82,7 @@ class HomeScreenViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        context.send(viewAction: .userMenu(action: .settings))
+        context.send(viewAction: .showSettings)
         await Task.yield()
         XCTAssert(correctResult)
     }

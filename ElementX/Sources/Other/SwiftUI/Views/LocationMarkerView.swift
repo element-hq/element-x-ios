@@ -20,7 +20,6 @@ import SwiftUI
 struct LocationMarkerView: View {
     private let pinColor: Color = .compound.iconOnSolidPrimary
     private let pinInsets = EdgeInsets(top: 13, leading: 12, bottom: 15, trailing: 12)
-    private let buttonScale: Double = 28 / 52
     
     var body: some View {
         CompoundIcon(\.locationPinSolid)

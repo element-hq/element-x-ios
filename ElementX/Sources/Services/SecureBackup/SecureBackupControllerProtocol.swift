@@ -42,9 +42,7 @@ enum SecureBackupControllerError: Error {
     
     case failedGeneratingRecoveryKey
     case failedConfirmingRecoveryKey
-    
-    case failedFetchingSessionState
-    
+        
     case failedUploadingForBackup
 }
 
