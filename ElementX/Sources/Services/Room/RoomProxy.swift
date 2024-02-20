@@ -410,16 +410,6 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func getIsFavourite() async -> Result<Bool, RoomProxyError> {
-        do {
-            let result = try await room.roomInfo().isFavourite
-            return .success(result)
-        } catch {
-            MXLog.error("Failed retrieving isFavourite for room: \(id) with error: \(error)")
-            return .failure(.failedRetrievingIsFavourite)
-        }
-    }
-    
     func flagAsFavourite(_ isFavourite: Bool) async -> Result<Void, RoomProxyError> {
         do {
             try await room.setIsFavourite(isFavourite: isFavourite, tagOrder: nil)

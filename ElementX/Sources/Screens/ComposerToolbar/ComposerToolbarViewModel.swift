@@ -384,6 +384,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         #endif
     }
     
+    // periphery:ignore:parameters notification
     @objc private func hardwareKeyboardDidConnect(_ notification: Notification) {
         MXLog.info("Did connect hardware keyboard")
         state.bindings.composerFocused = true

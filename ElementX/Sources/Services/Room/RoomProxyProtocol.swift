@@ -34,7 +34,6 @@ enum RoomProxyError: Error, Equatable {
     case failedFlaggingAsUnread
     case failedMarkingAsRead
     case failedSendingTypingNotice
-    case failedRetrievingIsFavourite
     case failedFlaggingAsFavourite
 }
 

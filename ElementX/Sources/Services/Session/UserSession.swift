@@ -22,7 +22,6 @@ class UserSession: UserSessionProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
-    private var checkSessionVerificationStateCancellable: AnyCancellable?
     private var retrieveSessionVerificationControllerTask: Task<Void, Never>?
     
     private var authErrorCancellable: AnyCancellable?

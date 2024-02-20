@@ -159,13 +159,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             startLeaveRoomProcess(roomId: roomIdentifier)
         case .confirmLeaveRoom(roomIdentifier: let roomIdentifier):
             leaveRoom(roomId: roomIdentifier)
-        case .userMenu(let action):
-            switch action {
-            case .settings:
-                actionsSubject.send(.presentSettingsScreen)
-            case .logout:
-                actionsSubject.send(.logout)
-            }
+        case .showSettings:
+            actionsSubject.send(.presentSettingsScreen)
         case .verifySession:
             actionsSubject.send(.presentSessionVerificationScreen)
         case .confirmRecoveryKey:
