@@ -57,8 +57,6 @@ protocol RoomProxyProtocol {
     
     var name: String? { get }
     
-    var displayName: String? { get }
-    
     var topic: String? { get }
     
     var avatarURL: URL? { get }
@@ -130,6 +128,13 @@ protocol RoomProxyProtocol {
 }
 
 extension RoomProxyProtocol {
+    var details: RoomDetails {
+        RoomDetails(id: id,
+                    name: name,
+                    avatarURL: avatarURL,
+                    canonicalAlias: canonicalAlias)
+    }
+    
     var permalink: URL? {
         if let canonicalAlias, let link = try? PermalinkBuilder.permalinkTo(roomAlias: canonicalAlias,
                                                                             baseURL: ServiceLocator.shared.settings.permalinkBaseURL) {
@@ -146,7 +151,7 @@ extension RoomProxyProtocol {
     // Avoids to duplicate the same logic around in the app
     // Probably this should be done in rust.
     var roomTitle: String {
-        displayName ?? name ?? "Unknown room 💥"
+        name ?? "Unknown room 💥"
     }
     
     var isEncryptedOneToOneRoom: Bool {

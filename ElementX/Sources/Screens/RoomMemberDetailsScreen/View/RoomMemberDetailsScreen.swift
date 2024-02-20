@@ -121,7 +121,7 @@ struct RoomMemberDetailsScreen: View {
 struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let otherUserViewModel = {
         let member = RoomMemberProxyMock.mockDan
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         
         return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
@@ -132,7 +132,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
 
     static let accountOwnerViewModel = {
         let member = RoomMemberProxyMock.mockMe
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         
         return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
@@ -143,7 +143,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
 
     static let ignoredUserViewModel = {
         let member = RoomMemberProxyMock.mockIgnored
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         
         return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,

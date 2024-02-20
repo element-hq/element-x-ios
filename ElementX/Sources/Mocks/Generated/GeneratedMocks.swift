@@ -1885,7 +1885,6 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     var underlyingOwnUserID: String!
     var name: String?
-    var displayName: String?
     var topic: String?
     var avatarURL: URL?
     var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {

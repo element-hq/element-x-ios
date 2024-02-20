@@ -20,7 +20,6 @@ import Foundation
 struct RoomProxyMockConfiguration {
     var id = UUID().uuidString
     var name: String?
-    let displayName: String?
     var topic: String?
     var avatarURL: URL?
     var isDirect = false
@@ -51,7 +50,6 @@ extension RoomProxyMock {
 
         id = configuration.id
         name = configuration.name
-        displayName = configuration.displayName
         topic = configuration.topic
         avatarURL = configuration.avatarURL
         isDirect = configuration.isDirect

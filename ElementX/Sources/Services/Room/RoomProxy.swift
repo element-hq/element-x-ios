@@ -37,8 +37,6 @@ class RoomProxy: RoomProxyProtocol {
     private var typingNotificationObservationToken: TaskHandle?
     
     private var subscribedForUpdates = false
-    
-    private(set) var displayName: String?
 
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {

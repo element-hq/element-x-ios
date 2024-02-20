@@ -68,12 +68,9 @@ struct RoomDetailsScreen: View {
     // MARK: - Private
     
     private var normalRoomHeaderSection: some View {
-        AvatarHeaderView(avatarUrl: context.viewState.avatarURL,
-                         name: context.viewState.title,
-                         id: context.viewState.roomId,
+        AvatarHeaderView(room: context.viewState.details,
                          avatarSize: .room(on: .details),
-                         imageProvider: context.imageProvider,
-                         subtitle: context.viewState.canonicalAlias) {
+                         imageProvider: context.imageProvider) {
             context.send(viewAction: .displayAvatar)
         } footer: {
             if !context.viewState.shortcuts.isEmpty {
@@ -84,12 +81,9 @@ struct RoomDetailsScreen: View {
     }
     
     private func dmHeaderSection(recipient: RoomMemberDetails) -> some View {
-        AvatarHeaderView(avatarUrl: recipient.avatarURL,
-                         name: recipient.name,
-                         id: recipient.id,
+        AvatarHeaderView(member: recipient,
                          avatarSize: .user(on: .memberDetails),
-                         imageProvider: context.imageProvider,
-                         subtitle: recipient.id) {
+                         imageProvider: context.imageProvider) {
             context.send(viewAction: .displayAvatar)
         } footer: {
             if !context.viewState.shortcuts.isEmpty {
@@ -291,7 +285,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
             .mockCharlie
         ]
         let roomProxy = RoomProxyMock(with: .init(id: "room_a_id",
-                                                  displayName: "Room A",
+                                                  name: "Room A",
                                                   topic: """
                                                   Discussions about Element X iOS | https://github.com/vector-im/element-x-ios
                                                   
@@ -327,7 +321,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         ]
         
         let roomProxy = RoomProxyMock(with: .init(id: "dm_room_id",
-                                                  displayName: "DM Room",
+                                                  name: "DM Room",
                                                   topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                                                   isDirect: true,
                                                   isEncrypted: true,
@@ -354,7 +348,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
             .mockCharlie
         ]
         let roomProxy = RoomProxyMock(with: .init(id: "simple_room_id",
-                                                  displayName: "Room A",
+                                                  name: "Room A",
                                                   isDirect: false,
                                                   isEncrypted: false,
                                                   members: members))

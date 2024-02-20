@@ -33,16 +33,14 @@ enum RoomDetailsScreenViewModelAction {
 // MARK: View
 
 struct RoomDetailsScreenViewState: BindableState {
-    let roomID: String
-    let canonicalAlias: String?
+    var details: RoomDetails
+    
     let isEncrypted: Bool
     let isDirect: Bool
     let permalink: URL?
 
-    var title = ""
     var topic: AttributedString?
     var topicSummary: AttributedString?
-    var avatarURL: URL?
     var joinedMembersCount: Int
     var isProcessingIgnoreRequest = false
     var canInviteUsers = false

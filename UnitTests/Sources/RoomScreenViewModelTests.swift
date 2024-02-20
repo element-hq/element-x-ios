@@ -50,7 +50,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = items
-        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "")),
                                             timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -87,7 +87,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = items
-        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "")),
                                             timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -122,7 +122,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = items
-        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "")),
                                             timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -154,7 +154,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = items
-        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "")),
                                             timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -186,7 +186,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = items
-        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "")),
                                             timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -207,7 +207,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
     func testRetrySend() async throws {
         let timelineController = MockRoomTimelineController()
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         
         let timelineProxy = TimelineProxyMock()
         timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
@@ -236,7 +236,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
     func testRetrySendNoTransactionID() async {
         let timelineController = MockRoomTimelineController()
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         
         let timelineProxy = TimelineProxyMock()
         timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
@@ -263,7 +263,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
     func testCancelSend() async {
         let timelineController = MockRoomTimelineController()
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         
         let timelineProxy = TimelineProxyMock()
         timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
@@ -292,7 +292,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
     func testCancelSendNoTransactionID() async {
         let timelineController = MockRoomTimelineController()
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         
         let timelineProxy = TimelineProxyMock()
         timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
@@ -411,7 +411,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                                                                        MockRoomTimelineController,
                                                                                        NotificationCenterMock) {
         let notificationCenter = NotificationCenterMock()
-        let roomProxy = RoomProxyMock(with: .init(displayName: ""))
+        let roomProxy = RoomProxyMock(with: .init(name: ""))
         
         let timelineProxy = TimelineProxyMock()
         timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
@@ -449,7 +449,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = [message]
-        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "",
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "",
                                                                                  members: [RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])),
                                             timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),

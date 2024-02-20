@@ -57,15 +57,12 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.topic)
         
-        super.init(initialViewState: .init(roomID: roomProxy.id,
-                                           canonicalAlias: roomProxy.canonicalAlias,
+        super.init(initialViewState: .init(details: roomProxy.details,
                                            isEncrypted: roomProxy.isEncrypted,
                                            isDirect: roomProxy.isDirect,
                                            permalink: roomProxy.permalink,
-                                           title: roomProxy.roomTitle,
                                            topic: topic,
                                            topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
-                                           avatarURL: roomProxy.avatarURL,
                                            joinedMembersCount: roomProxy.joinedMembersCount,
                                            notificationSettingsState: .loading,
                                            bindings: .init()),
@@ -145,12 +142,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     private func updateRoomInfo() {
-        state.title = roomProxy.roomTitle
+        state.details = roomProxy.details
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.topic)
         state.topic = topic
         state.topicSummary = topic?.unattributedStringByReplacingNewlinesWithSpaces()
-        state.avatarURL = roomProxy.avatarURL
         state.joinedMembersCount = roomProxy.joinedMembersCount
         
         Task {

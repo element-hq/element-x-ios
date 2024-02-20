@@ -301,7 +301,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             switch timelineProvider.backPaginationState {
             case .timelineStartReached:
                 if !roomProxy.isEncryptedOneToOneRoom {
-                    let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name)
+                    let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.name)
                     newTimelineItems.insert(timelineStart, at: 0)
                 }
                 canBackPaginate = false

@@ -55,7 +55,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
 
     @ViewBuilder
     static var bodyPlain: some View {
-        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name", avatarURL: URL.picturesDirectory)),
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Some Room name", avatarURL: URL.picturesDirectory)),
                                             timelineController: MockRoomTimelineController(),
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -73,7 +73,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     
     @ViewBuilder
     static var bodyEncrypted: some View {
-        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name")),
+        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Some Room name")),
                                             timelineController: MockRoomTimelineController(),
                                             mediaProvider: MockMediaProvider(),
                                             mediaPlayerProvider: MediaPlayerProviderMock(),

@@ -90,7 +90,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
         .mockMe
     ]
 
-    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Test", members: members)),
+    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Test", members: members)),
                                                timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
                                                mediaPlayerProvider: MediaPlayerProviderMock(),
