@@ -34,12 +34,12 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            showDeveloperOptions: appSettings.isDevelopmentBuild),
                    imageProvider: userSession.mediaProvider)
         
-        userSession.clientProxy.userAvatarURL
+        userSession.clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.userDisplayName
+        userSession.clientProxy.userDisplayNamePublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)

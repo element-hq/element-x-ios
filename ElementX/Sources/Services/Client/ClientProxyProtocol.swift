@@ -18,7 +18,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-enum ClientProxyCallback {
+enum ClientProxyAction {
     case receivedSyncUpdate
     case receivedAuthError(isSoftLogout: Bool)
     
@@ -50,6 +50,8 @@ enum ClientProxyError: Error {
     case failedGettingUserProfile
     case failedSettingUserAvatar
     case failedCheckingIsLastDevice(Error?)
+    case failedIgnoringUser
+    case failedUnignoringUser
 }
 
 enum SlidingSyncConstants {
@@ -70,7 +72,7 @@ struct PusherConfiguration {
 }
 
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
-    var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
+    var actionsPublisher: AnyPublisher<ClientProxyAction, Never> { get }
     
     var loadingStatePublisher: CurrentValuePublisher<ClientProxyLoadingState, Never> { get }
     
@@ -80,9 +82,12 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var homeserver: String { get }
         
-    var userDisplayName: CurrentValuePublisher<String?, Never> { get }
+    var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> { get }
 
-    var userAvatarURL: CurrentValuePublisher<URL?, Never> { get }
+    var userAvatarURLPublisher: CurrentValuePublisher<URL?, Never> { get }
+
+    /// We delay fetching this until after the first sync. Nil until then
+    var ignoredUsersPublisher: CurrentValuePublisher<[String]?, Never> { get }
     
     var pusherNotificationClientIdentifier: String? { get }
     
@@ -134,4 +139,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError>
     
     func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError>
+    
+    // MARK: - Ignored users
+    
+    func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError>
+    
+    func unignoreUser(_ userID: String) async -> Result<Void, ClientProxyError>
 }

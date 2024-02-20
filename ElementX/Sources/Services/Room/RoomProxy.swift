@@ -39,17 +39,17 @@ class RoomProxy: RoomProxyProtocol {
     private var subscribedForUpdates = false
 
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
-    var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
+    var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.asCurrentValuePublisher()
     }
     
     private let typingMembersSubject = CurrentValueSubject<[String], Never>([])
-    var typingMembers: CurrentValuePublisher<[String], Never> {
+    var typingMembersPublisher: CurrentValuePublisher<[String], Never> {
         typingMembersSubject.asCurrentValuePublisher()
     }
         
     private let actionsSubject = PassthroughSubject<RoomProxyAction, Never>()
-    var actions: AnyPublisher<RoomProxyAction, Never> {
+    var actionsPublisher: AnyPublisher<RoomProxyAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -217,7 +217,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
-        if let member = members.value.filter({ $0.userID == userID }).first {
+        if let member = membersPublisher.value.filter({ $0.userID == userID }).first {
             return .success(member)
         }
         
@@ -473,23 +473,21 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     private func subscribeToTypingNotifications() {
-        Task {
-            typingNotificationObservationToken = await room.subscribeToTypingNotifications(listener: RoomTypingNotificationUpdateListener { [weak self] typingUserIDs in
-                guard let self else { return }
-                
-                MXLog.info("Received typing notification update, typingUsers: \(typingUserIDs)")
-                
-                let typingMembers = typingUserIDs.compactMap { userID in
-                    if let member = self.members.value.filter({ $0.userID == userID }).first {
-                        return member.displayName ?? member.userID
-                    } else {
-                        return userID
-                    }
+        typingNotificationObservationToken = room.subscribeToTypingNotifications(listener: RoomTypingNotificationUpdateListener { [weak self] typingUserIDs in
+            guard let self else { return }
+            
+            MXLog.info("Received typing notification update, typingUsers: \(typingUserIDs)")
+            
+            let typingMembers = typingUserIDs.compactMap { userID in
+                if let member = self.membersPublisher.value.filter({ $0.userID == userID }).first {
+                    return member.displayName ?? member.userID
+                } else {
+                    return userID
                 }
-                
-                typingMembersSubject.send(typingMembers)
-            })
-        }
+            }
+            
+            typingMembersSubject.send(typingMembers)
+        })
     }
 }
 

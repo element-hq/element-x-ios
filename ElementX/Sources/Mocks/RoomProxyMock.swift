@@ -69,15 +69,15 @@ extension RoomProxyMock {
         
         ownUserID = configuration.ownUserID
         
-        members = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
-        typingMembers = CurrentValueSubject([]).asCurrentValuePublisher()
+        membersPublisher = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
+        typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
         
         joinedMembersCount = configuration.members.filter { $0.membership == .join }.count
         activeMembersCount = configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count
 
         updateMembersClosure = { }
         acceptInvitationClosure = { .success(()) }
-        underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
+        underlyingActionsPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }
         getMemberUserIDReturnValue = .success(configuration.memberForID)

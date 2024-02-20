@@ -292,7 +292,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .store(in: &cancellables)
 
         roomProxy
-            .actions
+            .actionsPublisher
             .filter { $0 == .roomInfoUpdate }
             .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
@@ -319,7 +319,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .weakAssign(to: \.state.showReadReceipts, on: self)
             .store(in: &cancellables)
                 
-        roomProxy.members
+        roomProxy.membersPublisher
             .map { members in
                 members.reduce(into: [String: RoomMemberState]()) { dictionary, member in
                     dictionary[member.userID] = RoomMemberState(displayName: member.displayName, avatarURL: member.avatarURL)
@@ -329,7 +329,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .weakAssign(to: \.state.members, on: self)
             .store(in: &cancellables)
         
-        roomProxy.typingMembers
+        roomProxy.typingMembersPublisher
             .receive(on: DispatchQueue.main)
             .filter { [weak self] _ in self?.appSettings.sharePresence ?? false }
             .weakAssign(to: \.state.typingMembers, on: self)

@@ -19,7 +19,10 @@ import Foundation
 import MatrixRustSDK
 
 class MockClientProxy: ClientProxyProtocol {
-    let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
+    let actionsSubject = PassthroughSubject<ClientProxyAction, Never>()
+    var actionsPublisher: AnyPublisher<ClientProxyAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     let loadingStatePublisher = CurrentValuePublisher<ClientProxyLoadingState, Never>(.notLoading)
     
@@ -34,9 +37,11 @@ class MockClientProxy: ClientProxyProtocol {
     
     var inviteSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
 
-    var userAvatarURL: CurrentValuePublisher<URL?, Never> { CurrentValueSubject<URL?, Never>(nil).asCurrentValuePublisher() }
+    var userAvatarURLPublisher: CurrentValuePublisher<URL?, Never> { CurrentValueSubject<URL?, Never>(nil).asCurrentValuePublisher() }
     
-    var userDisplayName: CurrentValuePublisher<String?, Never> { CurrentValueSubject<String?, Never>("User display name").asCurrentValuePublisher() }
+    var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> { CurrentValueSubject<String?, Never>("User display name").asCurrentValuePublisher() }
+    
+    var ignoredUsersPublisher: CurrentValuePublisher<[String]?, Never> { CurrentValueSubject<[String]?, Never>([]).asCurrentValuePublisher() }
     
     var notificationSettings: NotificationSettingsProxyProtocol = NotificationSettingsProxyMock(with: .init())
     
@@ -165,5 +170,13 @@ class MockClientProxy: ClientProxyProtocol {
     func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
         getProfileCalled = true
         return getProfileResult
+    }
+    
+    func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
+        .failure(.failedIgnoringUser)
+    }
+    
+    func unignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
+        .failure(.failedUnignoringUser)
     }
 }
