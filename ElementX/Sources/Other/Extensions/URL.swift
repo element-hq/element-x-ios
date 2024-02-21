@@ -67,4 +67,17 @@ extension URL: ExpressibleByStringLiteral {
 
         return url
     }
+    
+    var globalProxy: String? {
+        if let proxySettingsUnmanaged = CFNetworkCopySystemProxySettings() {
+            let proxySettings = proxySettingsUnmanaged.takeRetainedValue()
+            let proxiesUnmanaged = CFNetworkCopyProxiesForURL(self as CFURL, proxySettings)
+            if let proxy = (proxiesUnmanaged.takeRetainedValue() as? [[AnyHashable: Any]])?.first,
+               let hostname = proxy[kCFProxyHostNameKey] as? String,
+               let port = proxy[kCFProxyPortNumberKey] as? Int {
+                return "\(hostname):\(port)"
+            }
+        }
+        return nil
+    }
 }

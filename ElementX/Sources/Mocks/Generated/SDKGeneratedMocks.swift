@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.1.3 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.1.7 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -371,16 +371,37 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var ignoreUserUserIdReceivedUserId: String?
     public var ignoreUserUserIdReceivedInvocations: [String] = []
-    public var ignoreUserUserIdClosure: ((String) throws -> Void)?
+    public var ignoreUserUserIdClosure: ((String) async throws -> Void)?
 
-    public func ignoreUser(userId: String) throws {
+    public func ignoreUser(userId: String) async throws {
         if let error = ignoreUserUserIdThrowableError {
             throw error
         }
         ignoreUserUserIdCallsCount += 1
         ignoreUserUserIdReceivedUserId = userId
         ignoreUserUserIdReceivedInvocations.append(userId)
-        try ignoreUserUserIdClosure?(userId)
+        try await ignoreUserUserIdClosure?(userId)
+    }
+    //MARK: - ignoredUsers
+
+    public var ignoredUsersThrowableError: Error?
+    public var ignoredUsersCallsCount = 0
+    public var ignoredUsersCalled: Bool {
+        return ignoredUsersCallsCount > 0
+    }
+    public var ignoredUsersReturnValue: [String]!
+    public var ignoredUsersClosure: (() async throws -> [String])?
+
+    public func ignoredUsers() async throws -> [String] {
+        if let error = ignoredUsersThrowableError {
+            throw error
+        }
+        ignoredUsersCallsCount += 1
+        if let ignoredUsersClosure = ignoredUsersClosure {
+            return try await ignoredUsersClosure()
+        } else {
+            return ignoredUsersReturnValue
+        }
     }
     //MARK: - login
 
@@ -628,6 +649,27 @@ class SDKClientMock: SDKClientProtocol {
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang))
         try setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure?(identifiers, kind, appDisplayName, deviceDisplayName, profileTag, lang)
     }
+    //MARK: - subscribeToIgnoredUsers
+
+    public var subscribeToIgnoredUsersListenerCallsCount = 0
+    public var subscribeToIgnoredUsersListenerCalled: Bool {
+        return subscribeToIgnoredUsersListenerCallsCount > 0
+    }
+    public var subscribeToIgnoredUsersListenerReceivedListener: IgnoredUsersListener?
+    public var subscribeToIgnoredUsersListenerReceivedInvocations: [IgnoredUsersListener] = []
+    public var subscribeToIgnoredUsersListenerReturnValue: TaskHandle!
+    public var subscribeToIgnoredUsersListenerClosure: ((IgnoredUsersListener) -> TaskHandle)?
+
+    public func subscribeToIgnoredUsers(listener: IgnoredUsersListener) -> TaskHandle {
+        subscribeToIgnoredUsersListenerCallsCount += 1
+        subscribeToIgnoredUsersListenerReceivedListener = listener
+        subscribeToIgnoredUsersListenerReceivedInvocations.append(listener)
+        if let subscribeToIgnoredUsersListenerClosure = subscribeToIgnoredUsersListenerClosure {
+            return subscribeToIgnoredUsersListenerClosure(listener)
+        } else {
+            return subscribeToIgnoredUsersListenerReturnValue
+        }
+    }
     //MARK: - syncService
 
     public var syncServiceCallsCount = 0
@@ -654,16 +696,16 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var unignoreUserUserIdReceivedUserId: String?
     public var unignoreUserUserIdReceivedInvocations: [String] = []
-    public var unignoreUserUserIdClosure: ((String) throws -> Void)?
+    public var unignoreUserUserIdClosure: ((String) async throws -> Void)?
 
-    public func unignoreUser(userId: String) throws {
+    public func unignoreUser(userId: String) async throws {
         if let error = unignoreUserUserIdThrowableError {
             throw error
         }
         unignoreUserUserIdCallsCount += 1
         unignoreUserUserIdReceivedUserId = userId
         unignoreUserUserIdReceivedInvocations.append(userId)
-        try unignoreUserUserIdClosure?(userId)
+        try await unignoreUserUserIdClosure?(userId)
     }
     //MARK: - uploadAvatar
 
