@@ -94,6 +94,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.reportBug)
         case .about:
             actionsSubject.send(.about)
+        case .blockedUsers:
+            actionsSubject.send(.blockedUsers)
         case .logout:
             actionsSubject.send(.logout)
         case .sessionVerification:

@@ -25,6 +25,7 @@ enum SettingsScreenViewModelAction {
     case appLock
     case reportBug
     case about
+    case blockedUsers
     case sessionVerification
     case secureBackup
     case accountSessionsList
@@ -61,6 +62,7 @@ enum SettingsScreenViewAction {
     case appLock
     case reportBug
     case about
+    case blockedUsers
     case sessionVerification
     case secureBackup
     case accountSessionsList

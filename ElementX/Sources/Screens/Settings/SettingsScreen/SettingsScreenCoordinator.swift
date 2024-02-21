@@ -32,6 +32,7 @@ enum SettingsScreenCoordinatorAction {
     case appLock
     case bugReport
     case about
+    case blockedUsers
     case sessionVerification
     case accountSessions
     case notifications
@@ -74,6 +75,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.bugReport)
                 case .about:
                     actionsSubject.send(.about)
+                case .blockedUsers:
+                    actionsSubject.send(.blockedUsers)
                 case .sessionVerification:
                     actionsSubject.send(.sessionVerification)
                 case .secureBackup:

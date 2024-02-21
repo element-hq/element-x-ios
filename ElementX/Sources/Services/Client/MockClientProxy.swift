@@ -41,7 +41,10 @@ class MockClientProxy: ClientProxyProtocol {
     
     var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> { CurrentValueSubject<String?, Never>("User display name").asCurrentValuePublisher() }
     
-    var ignoredUsersPublisher: CurrentValuePublisher<[String]?, Never> { CurrentValueSubject<[String]?, Never>([]).asCurrentValuePublisher() }
+    var ignoredUsersPublisher: CurrentValuePublisher<[String]?, Never> {
+        let ignoredUsers = [RoomMemberProxyMock].allMembers.map(\.userID)
+        return CurrentValueSubject<[String]?, Never>(ignoredUsers).asCurrentValuePublisher()
+    }
     
     var notificationSettings: NotificationSettingsProxyProtocol = NotificationSettingsProxyMock(with: .init())
     

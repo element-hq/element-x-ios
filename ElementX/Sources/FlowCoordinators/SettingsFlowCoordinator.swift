@@ -128,6 +128,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     bugReportFlowCoordinator?.start()
                 case .about:
                     presentLegalInformationScreen()
+                case .blockedUsers:
+                    presentBlockedUsersScreen()
                 case .sessionVerification:
                     presentSessionVerificationScreen()
                 case .accountSessions:
@@ -201,6 +203,12 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentLegalInformationScreen() {
         navigationStackCoordinator.push(LegalInformationScreenCoordinator(appSettings: parameters.appSettings))
+    }
+    
+    private func presentBlockedUsersScreen() {
+        let coordinator = BlockedUsersScreenCoordinator(parameters: .init(clientProxy: parameters.userSession.clientProxy,
+                                                                          userIndicatorController: parameters.userIndicatorController))
+        navigationStackCoordinator.push(coordinator)
     }
     
     private func presentSessionVerificationScreen() {
