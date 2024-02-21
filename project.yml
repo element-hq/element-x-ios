@@ -37,6 +37,7 @@ settings:
 include:
   - path: ElementX/SupportingFiles/target.yml
   - path: UnitTests/SupportingFiles/target.yml
+  - path: PreviewTests/SupportingFiles/target.yml
   - path: UITests/SupportingFiles/target.yml
   - path: IntegrationTests/SupportingFiles/target.yml
   - path: NSE/SupportingFiles/target.yml

@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "D789E5F1-30B8-4A23-B20E-281ACE05CFD6",
+      "name" : "Default",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "defaultTestExecutionTimeAllowance" : 60,
+    "environmentVariableEntries" : [
+      {
+        "key" : "IS_RUNNING_UNIT_TESTS",
+        "value" : "1"
+      }
+    ],
+    "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ElementX.xcodeproj",
+        "identifier" : "7A17BE29BAC81ADBAC6349D9",
+        "name" : "PreviewTests"
+      }
+    }
+  ],
+  "version" : 1
+}
