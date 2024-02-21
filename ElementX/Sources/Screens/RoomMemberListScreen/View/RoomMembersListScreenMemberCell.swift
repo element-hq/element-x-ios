@@ -106,7 +106,7 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
         .init(with: .init(userID: "@badavatar:matrix.org", avatarURL: .picturesDirectory, membership: .ban))
     ]
     
-    static let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room",
+    static let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Some room",
                                                                                                members: members)),
                                                           mediaProvider: MockMediaProvider(),
                                                           userIndicatorController: ServiceLocator.shared.userIndicatorController)

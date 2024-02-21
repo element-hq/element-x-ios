@@ -33,16 +33,14 @@ enum RoomDetailsScreenViewModelAction {
 // MARK: View
 
 struct RoomDetailsScreenViewState: BindableState {
-    let roomId: String
-    let canonicalAlias: String?
+    var details: RoomDetails
+    
     let isEncrypted: Bool
     let isDirect: Bool
     let permalink: URL?
 
-    var title = ""
     var topic: AttributedString?
     var topicSummary: AttributedString?
-    var avatarURL: URL?
     var joinedMembersCount: Int
     var isProcessingIgnoreRequest = false
     var canInviteUsers = false
@@ -148,7 +146,7 @@ struct LeaveRoomAlertItem: AlertProtocol {
         case `private`
     }
 
-    let roomId: String
+    let roomID: String
     let isDM: Bool
     let state: RoomState
     let confirmationTitle = L10n.actionLeave

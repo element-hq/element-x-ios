@@ -31,13 +31,13 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     
     func testCannotSaveOnLanding() {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room"))
+                       roomProxyConfiguration: .init(name: "Some room"))
         XCTAssertFalse(context.viewState.canSave)
     }
     
     func testCanEdit() {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room"))
+                       roomProxyConfiguration: .init(name: "Some room"))
         XCTAssertTrue(context.viewState.canEditAvatar)
         XCTAssertTrue(context.viewState.canEditName)
         XCTAssertTrue(context.viewState.canEditTopic)
@@ -45,7 +45,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     
     func testCannotEdit() {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: []),
-                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room"))
+                       roomProxyConfiguration: .init(name: "Some room"))
         XCTAssertFalse(context.viewState.canEditAvatar)
         XCTAssertFalse(context.viewState.canEditName)
         XCTAssertFalse(context.viewState.canEditTopic)
@@ -53,7 +53,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     
     func testNameDidChange() {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room"))
+                       roomProxyConfiguration: .init(name: "Some room"))
         context.name = "name"
         XCTAssertTrue(context.viewState.nameDidChange)
         XCTAssertTrue(context.viewState.canSave)
@@ -61,7 +61,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     
     func testTopicDidChange() {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room"))
+                       roomProxyConfiguration: .init(name: "Some room"))
         context.topic = "topic"
         XCTAssertTrue(context.viewState.topicDidChange)
         XCTAssertTrue(context.viewState.canSave)
@@ -69,7 +69,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     
     func testAvatarDidChange() {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room", avatarURL: .picturesDirectory))
+                       roomProxyConfiguration: .init(name: "Some room", avatarURL: .picturesDirectory))
         context.send(viewAction: .removeImage)
         XCTAssertTrue(context.viewState.avatarDidChange)
         XCTAssertTrue(context.viewState.canSave)
@@ -77,14 +77,14 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     
     func testEmptyNameCannotBeSaved() {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room"))
+                       roomProxyConfiguration: .init(name: "Some room"))
         context.name = ""
         XCTAssertFalse(context.viewState.canSave)
     }
     
     func testSaveShowsSheet() {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room"))
+                       roomProxyConfiguration: .init(name: "Some room"))
         context.name = "name"
         XCTAssertFalse(context.showMediaSheet)
         context.send(viewAction: .presentMediaSource)
@@ -93,7 +93,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     
     func testSaveTriggersViewModelAction() async throws {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room"))
+                       roomProxyConfiguration: .init(name: "Some room"))
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             action == .saveFinished
@@ -108,7 +108,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     
     func testErrorShownOnFailedFetchOfMedia() async throws {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room"))
+                       roomProxyConfiguration: .init(name: "Some room"))
         viewModel.didSelectMediaUrl(url: .picturesDirectory)
         try? await Task.sleep(for: .milliseconds(100))
         XCTAssertNotNil(userIndicatorController.alertInfo)
@@ -116,7 +116,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     
     func testDeleteAvatar() {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room", avatarURL: .picturesDirectory))
+                       roomProxyConfiguration: .init(name: "Some room", avatarURL: .picturesDirectory))
         XCTAssertNotNil(context.viewState.avatarURL)
         context.send(viewAction: .removeImage)
         XCTAssertNil(context.viewState.avatarURL)

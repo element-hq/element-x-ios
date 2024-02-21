@@ -23,7 +23,7 @@ import XCTest
 class PillContextTests: XCTestCase {
     func testUser() async throws {
         let id = "@test:matrix.org"
-        let proxyMock = RoomProxyMock(with: .init(displayName: "Test"))
+        let proxyMock = RoomProxyMock(with: .init(name: "Test"))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
         proxyMock.members = subject.asCurrentValuePublisher()
         let mock = RoomScreenViewModel(roomProxy: proxyMock,
@@ -52,7 +52,7 @@ class PillContextTests: XCTestCase {
     
     func testOwnUser() async throws {
         let id = "@test:matrix.org"
-        let proxyMock = RoomProxyMock(with: .init(displayName: "Test", ownUserID: id))
+        let proxyMock = RoomProxyMock(with: .init(name: "Test", ownUserID: id))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
         proxyMock.members = subject.asCurrentValuePublisher()
         let mock = RoomScreenViewModel(roomProxy: proxyMock,
@@ -74,7 +74,7 @@ class PillContextTests: XCTestCase {
         let avatarURL = URL(string: "https://matrix.jpg")
         let id = "test_room"
         let displayName = "Test"
-        let proxyMock = RoomProxyMock(with: .init(id: id, displayName: displayName, avatarURL: avatarURL))
+        let proxyMock = RoomProxyMock(with: .init(id: id, name: displayName, avatarURL: avatarURL))
         let mockController = MockRoomTimelineController()
         mockController.roomProxy = proxyMock
         let mock = RoomScreenViewModel(roomProxy: proxyMock,

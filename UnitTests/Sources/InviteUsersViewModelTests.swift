@@ -64,7 +64,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
      
     func testInviteButton() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
-        setupWithRoomType(roomType: .room(roomProxy: RoomProxyMock(with: .init(displayName: "test", members: mockedMembers))))
+        setupWithRoomType(roomType: .room(roomProxy: RoomProxyMock(with: .init(name: "test", members: mockedMembers))))
         
         let deferredState = deferFulfillment(viewModel.context.$viewState) { state in
             state.isUserSelected(.mockAlice)

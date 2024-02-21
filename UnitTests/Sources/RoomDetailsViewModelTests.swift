@@ -31,7 +31,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     override func setUp() {
         cancellables.removeAll()
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test"))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test"))
         notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
@@ -47,7 +47,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testLeaveRoomTappedWhenPublic() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isPublic: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -69,7 +69,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testLeaveRoomTappedWhenRoomNotPublic() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: false, members: mockedMembers))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isPublic: false, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -92,7 +92,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testLeaveRoomTappedWithLessThanTwoMembers() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: false, members: mockedMembers))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isPublic: false, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -145,7 +145,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testInitialDMDetailsState() async throws {
         let recipient = RoomMemberProxyMock.mockDan
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -172,7 +172,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         }
         
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -208,7 +208,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             return .failure(.ignoreUserFailed)
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -245,7 +245,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             return .success(())
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -281,7 +281,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             return .failure(.unignoreUserFailed)
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -313,7 +313,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testCannotInvitePeople() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test",
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test",
                                                   isPublic: true,
                                                   members: mockedMembers,
                                                   memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false)))
@@ -333,7 +333,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testInvitePeople() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isPublic: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -367,7 +367,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testCanEditAvatar() async {
         let owner: RoomMemberProxyMock = .mockOwner(allowedStateEvents: [.roomAvatar])
         let mockedMembers: [RoomMemberProxyMock] = [owner, .mockBob, .mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -388,7 +388,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testCanEditName() async {
         let owner: RoomMemberProxyMock = .mockOwner(allowedStateEvents: [.roomName])
         let mockedMembers: [RoomMemberProxyMock] = [owner, .mockBob, .mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -409,7 +409,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testCanEditTopic() async {
         let owner: RoomMemberProxyMock = .mockOwner(allowedStateEvents: [.roomTopic])
         let mockedMembers: [RoomMemberProxyMock] = [owner, .mockBob, .mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -430,7 +430,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testCannotEditRoom() async {
         let owner: RoomMemberProxyMock = .mockOwner(allowedStateEvents: [])
         let mockedMembers: [RoomMemberProxyMock] = [owner, .mockBob, .mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -450,7 +450,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testCannotEditDirectRoom() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]), .mockBob, .mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isPublic: false, members: mockedMembers))
+        roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: true, isPublic: false, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),

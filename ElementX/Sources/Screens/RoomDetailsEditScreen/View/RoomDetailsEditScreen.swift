@@ -158,14 +158,14 @@ struct RoomDetailsEditScreen: View {
 struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomDetailsEditScreenViewModel(accountOwner: RoomMemberProxyMock.mockAlice,
                                                           mediaProvider: MockMediaProvider(),
-                                                          roomProxy: RoomProxyMock(with: .init(id: "test_id", name: "Room", displayName: "Room")),
+                                                          roomProxy: RoomProxyMock(with: .init(id: "test_id", name: "Room")),
                                                           userIndicatorController: UserIndicatorControllerMock.default)
     
     static let readOnlyViewModel = {
         let accountOwner = RoomMemberProxyMock.mockOwner(allowedStateEvents: [])
         return RoomDetailsEditScreenViewModel(accountOwner: accountOwner,
                                               mediaProvider: MockMediaProvider(),
-                                              roomProxy: RoomProxyMock(with: .init(id: "test_id", name: "Room", displayName: "Room")),
+                                              roomProxy: RoomProxyMock(with: .init(id: "test_id", name: "Room")),
                                               userIndicatorController: UserIndicatorControllerMock.default)
     }()
     

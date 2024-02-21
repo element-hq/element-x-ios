@@ -41,6 +41,17 @@ extension RoomMemberDetails {
         isBanned = proxy.membership == .ban
         role = .init(proxy.role)
     }
+    
+    init(loading id: String) {
+        self.id = id
+        name = nil
+        avatarURL = nil
+        permalink = nil
+        isAccountOwner = false
+        isIgnored = false
+        isBanned = false
+        role = .user
+    }
 }
 
 extension RoomMemberDetails.Role {

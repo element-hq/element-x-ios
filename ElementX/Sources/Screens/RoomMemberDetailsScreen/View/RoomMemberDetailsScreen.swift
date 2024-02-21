@@ -47,12 +47,9 @@ struct RoomMemberDetailsScreen: View {
     @ViewBuilder
     private var headerSection: some View {
         if let memberDetails = context.viewState.memberDetails {
-            AvatarHeaderView(avatarUrl: memberDetails.avatarURL,
-                             name: memberDetails.name,
-                             id: memberDetails.id,
+            AvatarHeaderView(member: memberDetails,
                              avatarSize: .user(on: .memberDetails),
-                             imageProvider: context.imageProvider,
-                             subtitle: memberDetails.id) {
+                             imageProvider: context.imageProvider) {
                 context.send(viewAction: .displayAvatar)
             } footer: {
                 if let permalink = memberDetails.permalink {
@@ -66,12 +63,9 @@ struct RoomMemberDetailsScreen: View {
                 }
             }
         } else {
-            AvatarHeaderView(avatarUrl: nil,
-                             name: nil,
-                             id: context.viewState.userID,
+            AvatarHeaderView(member: .init(loading: context.viewState.userID),
                              avatarSize: .user(on: .memberDetails),
                              imageProvider: context.imageProvider,
-                             subtitle: nil,
                              footer: { })
         }
     }
@@ -127,7 +121,7 @@ struct RoomMemberDetailsScreen: View {
 struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let otherUserViewModel = {
         let member = RoomMemberProxyMock.mockDan
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         
         return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
@@ -138,7 +132,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
 
     static let accountOwnerViewModel = {
         let member = RoomMemberProxyMock.mockMe
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         
         return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
@@ -149,7 +143,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
 
     static let ignoredUserViewModel = {
         let member = RoomMemberProxyMock.mockIgnored
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         
         return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
