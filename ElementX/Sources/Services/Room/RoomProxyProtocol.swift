@@ -21,6 +21,7 @@ import MatrixRustSDK
 enum RoomProxyError: Error, Equatable {
     case failedRedactingEvent
     case failedReportingContent
+    case failedIgnoringUser
     case failedRetrievingMember
     case failedLeavingRoom
     case failedAcceptingInvite

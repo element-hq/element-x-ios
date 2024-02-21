@@ -31,15 +31,23 @@ final class NSEUserSession {
         if credentials.restorationToken.passphrase != nil {
             MXLog.info("Restoring client with encrypted store.")
         }
-        baseClient = try ClientBuilder()
+        
+        let homeserverURL = credentials.restorationToken.session.homeserverUrl
+        var clientBuilder = ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
+            .homeserverUrl(url: homeserverURL)
             .passphrase(passphrase: credentials.restorationToken.passphrase)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
                                            sessionDelegate: clientSessionDelegate)
-            .build()
         
+        if let homeserverURL = URL(string: homeserverURL),
+           let proxy = homeserverURL.globalProxy {
+            clientBuilder = clientBuilder.proxy(url: proxy)
+        }
+        
+        baseClient = try clientBuilder.build()
         delegateHandle = baseClient.setDelegate(delegate: ClientDelegateWrapper())
         try baseClient.restoreSession(session: credentials.restorationToken.session)
         

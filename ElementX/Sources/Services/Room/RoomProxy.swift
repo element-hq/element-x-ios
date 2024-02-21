@@ -242,13 +242,11 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self.room.ignoreUser(userId: userID)
-                return .success(())
-            } catch {
-                return .failure(.failedReportingContent)
-            }
+        do {
+            try await room.ignoreUser(userId: userID)
+            return .success(())
+        } catch {
+            return .failure(.failedIgnoringUser)
         }
     }
 

@@ -115,19 +115,28 @@ class UserSessionStore: UserSessionStoreProtocol {
         if credentials.restorationToken.passphrase != nil {
             MXLog.info("Restoring client with encrypted store.")
         }
-        let builder = ClientBuilder()
+        
+        let homeserverURL = credentials.restorationToken.session.homeserverUrl
+        
+        var builder = ClientBuilder()
             .basePath(path: baseDirectory.path)
             .username(username: credentials.userID)
-            .homeserverUrl(url: credentials.restorationToken.session.homeserverUrl)
+            .homeserverUrl(url: homeserverURL)
             .passphrase(passphrase: credentials.restorationToken.passphrase)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
                                            sessionDelegate: keychainController)
             .serverVersions(versions: ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"]) // FIXME: Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
-
+        
+        if let homeserverURL = URL(string: homeserverURL),
+           let proxy = homeserverURL.globalProxy {
+            builder = builder.proxy(url: proxy)
+        }
+        let completeBuilder = builder
+        
         do {
             let client: Client = try await Task.dispatch(on: .global()) {
-                let client = try builder.build()
+                let client = try completeBuilder.build()
                 try client.restoreSession(session: credentials.restorationToken.session)
                 return client
             }

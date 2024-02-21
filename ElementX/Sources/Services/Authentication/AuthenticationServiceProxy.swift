@@ -46,11 +46,12 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
                                                   policyUri: appSettings.privacyURL.absoluteString,
                                                   contacts: [appSettings.supportEmailAddress],
                                                   staticRegistrations: appSettings.oidcStaticRegistrations.mapKeys { $0.absoluteString })
-        
+               
         authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
                                                       passphrase: passphrase,
                                                       userAgent: UserAgentBuilder.makeASCIIUserAgent(),
                                                       additionalRootCertificates: [],
+                                                      proxy: appSettings.websiteURL.globalProxy,
                                                       oidcConfiguration: oidcConfiguration,
                                                       customSlidingSyncProxy: appSettings.slidingSyncProxyURL?.absoluteString,
                                                       sessionDelegate: userSessionStore.clientSessionDelegate,
