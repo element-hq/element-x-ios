@@ -187,8 +187,6 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             // No need to show an error, the user cancelled authentication.
             break
         case .sessionTokenRefreshNotSupported:
-            // We should display a specific error saying that we do not support this kind of login
-            // But the copy is TBD
             viewModel.displayError(.alert(L10n.errorUnknown))
         default:
             viewModel.displayError(.alert(L10n.errorUnknown))

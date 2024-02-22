@@ -84,6 +84,8 @@ enum LoginScreenErrorType: Hashable {
     case invalidHomeserver
     /// An alert that allows the user to learn about sliding sync.
     case slidingSyncAlert
+    /// An alert that informs the user that login failed due to a refresh token being returned.
+    case refreshTokenAlert
     /// The response from the homeserver was unexpected.
     case unknown
 }

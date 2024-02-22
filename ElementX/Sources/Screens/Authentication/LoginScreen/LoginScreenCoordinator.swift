@@ -114,6 +114,8 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             viewModel.displayError(.alert(L10n.screenLoginErrorDeactivatedAccount))
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
+        case .sessionTokenRefreshNotSupported:
+            viewModel.displayError(.refreshTokenAlert)
         default:
             viewModel.displayError(.alert(L10n.errorUnknown))
         }

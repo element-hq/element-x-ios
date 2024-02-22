@@ -1010,6 +1010,8 @@ internal enum L10n {
   internal static var screenLoginErrorInvalidCredentials: String { return L10n.tr("Localizable", "screen_login_error_invalid_credentials") }
   /// This is not a valid user identifier. Expected format: ‘@user:homeserver.org’
   internal static var screenLoginErrorInvalidUserId: String { return L10n.tr("Localizable", "screen_login_error_invalid_user_id") }
+  /// This server is configured to use refresh tokens. These aren't supported when using password based login.
+  internal static var screenLoginErrorRefreshTokens: String { return L10n.tr("Localizable", "screen_login_error_refresh_tokens") }
   /// The selected homeserver doesn't support password or OIDC login. Please contact your admin or choose another homeserver.
   internal static var screenLoginErrorUnsupportedAuthentication: String { return L10n.tr("Localizable", "screen_login_error_unsupported_authentication") }
   /// Enter your details

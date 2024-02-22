@@ -76,6 +76,10 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
             
             // Clear out the invalid username to avoid an attempted login to matrix.org
             state.bindings.username = ""
+        case .refreshTokenAlert:
+            state.bindings.alertInfo = AlertInfo(id: type,
+                                                 title: L10n.commonServerNotSupported,
+                                                 message: L10n.screenLoginErrorRefreshTokens)
         case .unknown:
             state.bindings.alertInfo = AlertInfo(id: type)
         }
