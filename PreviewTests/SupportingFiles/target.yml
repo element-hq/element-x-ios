@@ -1,14 +1,14 @@
-name: UnitTests
+name: PreviewTests
 
 schemes:
-  UnitTests:
+  PreviewTests:
     analyze:
       config: Debug
     archive:
       config: Release
     build:
       targets:
-        UnitTests: all
+        PreviewTests: all
     profile:
       config: Release
     run:
@@ -21,30 +21,31 @@ schemes:
       coverageTargets:
         - ElementX
       testPlans:
-        - path: UnitTests.xctestplan
+        - path: PreviewTests.xctestplan
           defaultPlan: true
 
 targets:
-  UnitTests:
+  PreviewTests:
     type: bundle.unit-test
     platform: iOS
+    
+    buildToolPlugins:
+    - plugin: PrefireTestsPlugin
+      package: Prefire
 
     dependencies:
     - target: ElementX
+    - package: SnapshotTesting
 
     info:
       path: ../SupportingFiles/Info.plist
 
     settings:
       base:
-        PRODUCT_NAME: UnitTests
-        PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.unit.tests
+        PRODUCT_NAME: PreviewTests
+        PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.preview.tests
       debug:
       release:
 
     sources:
-    - path: ../Sources
     - path: ../SupportingFiles
-    - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
-    - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/Unit
-    - path: ../Resources
