@@ -89,13 +89,6 @@ lane :unit_tests do
     result_bundle: true,
     number_of_retries: 3,
   )
-
-  slather(
-    cobertura_xml: true,
-    output_directory: "./fastlane/test_output",
-    proj: "ElementX.xcodeproj",
-    scheme: "UnitTests",
-  )
   
   run_tests(
     scheme: "PreviewTests",
@@ -105,12 +98,7 @@ lane :unit_tests do
     xcargs: '-skipPackagePluginValidation',
   )
   
-  slather(
-    cobertura_xml: true,
-    output_directory: "./fastlane/test_output",
-    proj: "ElementX.xcodeproj",
-    scheme: "PreviewTests",
-  )
+  # We use xcresultparser in the workflow to collect coverage from both result bundles.
 end
 
 lane :ui_tests do |options|
