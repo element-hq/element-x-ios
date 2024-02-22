@@ -44,9 +44,6 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         self.maxUploadSize = maxUploadSize
         self.session = session
         super.init()
-        
-        //  set build version for logger
-        MXLogger.buildVersion = InfoPlistReader.main.bundleShortVersionString
     }
 
     // MARK: - BugReportServiceProtocol
@@ -100,14 +97,12 @@ class BugReportService: NSObject, BugReportServiceProtocol {
                 self?.lastCrashEventId = event.eventId.sentryIdString
             }
         }
-        MXLogger.logCrashes(true)
         MXLog.info("Started.")
     }
            
     func stop() {
         guard isRunning else { return }
         SentrySDK.close()
-        MXLogger.logCrashes(false)
         MXLog.info("Stopped.")
     }
     
@@ -115,7 +110,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         lastCrashEventId = nil
         MXLog.info("Reset.")
     }
-
+    
+    // swiftlint:disable:next cyclomatic_complexity
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
         var params = [
@@ -136,11 +132,12 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         for label in bugReport.githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
         }
-        let logAttachments = await zipFiles(includeLogs: bugReport.includeLogs,
-                                            includeCrashLog: bugReport.includeCrashLog)
         
-        for url in logAttachments.files {
-            params.append(MultipartFormData(key: "compressed-log", type: .file(url: url)))
+        if bugReport.includeLogs {
+            let logAttachments = await zipFiles(RustTracing.logFiles)
+            for url in logAttachments.files {
+                params.append(MultipartFormData(key: "compressed-log", type: .file(url: url)))
+            }
         }
         
         if let crashEventId = lastCrashEventId {
@@ -197,7 +194,6 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             let uploadResponse = try decoder.decode(SubmitBugReportResponse.self, from: data)
             
             if !uploadResponse.reportUrl.isEmpty {
-                MXLogger.deleteCrashLog()
                 lastCrashEventId = nil
             }
             
@@ -243,21 +239,12 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
     }
 
-    private func zipFiles(includeLogs: Bool,
-                          includeCrashLog: Bool) async -> Logs {
-        MXLog.info("zipFiles: includeLogs: \(includeLogs), includeCrashLog: \(includeCrashLog)")
-
-        var filesToCompress: [URL] = []
-        if includeLogs {
-            filesToCompress.append(contentsOf: MXLogger.logFiles)
-        }
-        if includeCrashLog, let crashLogFile = MXLogger.crashLog {
-            filesToCompress.append(crashLogFile)
-        }
+    private func zipFiles(_ logFiles: [URL]) async -> Logs {
+        MXLog.info("zipFiles")
         
         var compressedLogs = Logs(maxFileSize: maxUploadSize)
         
-        for url in filesToCompress {
+        for url in logFiles {
             do {
                 try attachFile(at: url, to: &compressedLogs)
             } catch {
@@ -275,23 +262,15 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     private func attachFile(at url: URL, to zippedFiles: inout Logs) throws {
         let fileHandle = try FileHandle(forReadingFrom: url)
         
-        var chunkIndex = -1
-        while let data = try fileHandle.read(upToCount: 10 * 1024 * 1024) {
-            do {
-                chunkIndex += 1
-                if let zippedData = (data as NSData).gzipped() {
-                    let zippedFilename = url.deletingPathExtension().lastPathComponent + "_\(chunkIndex).log"
-                    let chunkURL = URL.temporaryDirectory.appending(path: zippedFilename)
-                    
-                    // Remove old zipped file if exists
-                    try? FileManager.default.removeItem(at: chunkURL)
-                    
-                    try zippedData.write(to: chunkURL)
-                    zippedFiles.appendFile(at: chunkURL, zippedSize: zippedData.count, originalSize: data.count)
-                }
-            } catch {
-                MXLog.error("Failed attaching log chunk \(chunkIndex) from (\(url.lastPathComponent)")
-                continue
+        while let data = try fileHandle.readToEnd() {
+            if let zippedData = (data as NSData).gzipped() {
+                let zippedURL = URL.temporaryDirectory.appending(path: url.lastPathComponent)
+                
+                // Remove old zipped file if exists
+                try? FileManager.default.removeItem(at: zippedURL)
+                
+                try zippedData.write(to: zippedURL)
+                zippedFiles.appendFile(at: zippedURL, zippedSize: zippedData.count, originalSize: data.count)
             }
         }
     }

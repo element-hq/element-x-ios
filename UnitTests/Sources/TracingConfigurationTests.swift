@@ -20,7 +20,7 @@ import XCTest
 
 class TracingConfigurationTests: XCTestCase {
     func testConfiguration() {
-        let configuration = TracingConfiguration(logLevel: .trace)
+        let configuration = TracingConfiguration(logLevel: .trace, target: nil)
         
         let filterComponents = configuration.filter.components(separatedBy: ",")
         XCTAssertEqual(filterComponents.first, "info")

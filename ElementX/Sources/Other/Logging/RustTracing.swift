@@ -15,6 +15,7 @@
 //
 
 import Collections
+import Foundation
 import MatrixRustSDK
 
 struct OTLPConfiguration {
@@ -101,10 +102,22 @@ struct TracingConfiguration {
     
     let filter: String
     
+    /// The filename that logs should be written to.
+    let fileName: String
+    /// The file extension to use for log files.
+    let fileExtension = "log"
+    
     /// Sets the same log level for all Targets
     /// - Parameter logLevel: the desired log level
+    /// - Parameter target: the name of the target being configured
     /// - Returns: a custom tracing configuration
-    init(logLevel: LogLevel) {
+    init(logLevel: LogLevel, target: String?) {
+        fileName = if let target {
+            "\(RustTracing.filePrefix)-\(target)"
+        } else {
+            RustTracing.filePrefix
+        }
+        
         if case let .custom(filter) = logLevel {
             self.filter = filter
             return
@@ -146,10 +159,19 @@ struct TracingConfiguration {
 }
 
 enum RustTracing {
-    private(set) static var currentTracingConfiguration: TracingConfiguration?
+    /// The base filename used for log files. This may be suffixed by the target
+    /// name and other log management metadata during rotation.
+    static let filePrefix = "console"
+    /// The directory that stores all of the log files.
+    static var logsDirectory: URL { .appGroupContainerDirectory }
     
+    private(set) static var currentTracingConfiguration: TracingConfiguration?
     static func setup(configuration: TracingConfiguration, otlpConfiguration: OTLPConfiguration?) {
         currentTracingConfiguration = configuration
+        
+        // Keep a minimum of 1 week of log files. In reality it will be longer
+        // as the app is unlikely to be running continuously.
+        let maxFiles: UInt64 = 24 * 7
         
         if let otlpConfiguration {
             setupOtlpTracing(config: .init(clientName: "ElementX-iOS",
@@ -158,11 +180,51 @@ enum RustTracing {
                                            otlpEndpoint: otlpConfiguration.url,
                                            filter: configuration.filter,
                                            writeToStdoutOrSystem: true,
-                                           writeToFiles: nil))
+                                           writeToFiles: .init(path: logsDirectory.path(),
+                                                               filePrefix: configuration.fileName,
+                                                               fileSuffix: configuration.fileExtension,
+                                                               maxFiles: maxFiles)))
         } else {
             setupTracing(config: .init(filter: configuration.filter,
                                        writeToStdoutOrSystem: true,
-                                       writeToFiles: nil))
+                                       writeToFiles: .init(path: logsDirectory.path(),
+                                                           filePrefix: configuration.fileName,
+                                                           fileSuffix: configuration.fileExtension,
+                                                           maxFiles: maxFiles)))
+        }
+    }
+    
+    /// A list of all log file URLs, sorted chronologically. This is only public for testing purposes, within
+    /// the app please use ``copyLogs(to:)`` so that the files are name appropriates for QuickLook.
+    static var logFiles: [URL] {
+        var logFiles = [(url: URL, modificationDate: Date)]()
+        
+        let fileManager = FileManager.default
+        let enumerator = fileManager.enumerator(at: logsDirectory, includingPropertiesForKeys: [.contentModificationDateKey])
+        
+        // Find all *.log files and their modification dates.
+        while let logURL = enumerator?.nextObject() as? URL {
+            guard let resourceValues = try? logURL.resourceValues(forKeys: [.contentModificationDateKey]),
+                  let modificationDate = resourceValues.contentModificationDate
+            else { continue }
+            
+            if logURL.lastPathComponent.hasPrefix(filePrefix) {
+                logFiles.append((logURL, modificationDate))
+            }
+        }
+        
+        let sortedFiles = logFiles.sorted { $0.modificationDate > $1.modificationDate }.map(\.url)
+        
+        MXLog.info("logFiles: \(sortedFiles.map(\.lastPathComponent))")
+        
+        return sortedFiles
+    }
+    
+    /// Delete all log files.
+    static func deleteLogFiles() {
+        let fileManager = FileManager.default
+        for logFileURL in logFiles {
+            try? fileManager.removeItem(at: logFileURL)
         }
     }
 }

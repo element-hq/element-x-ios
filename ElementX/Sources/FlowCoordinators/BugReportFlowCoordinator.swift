@@ -98,7 +98,7 @@ class BugReportFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentLogViewerScreen() {
-        let coordinator = LogViewerScreenCoordinator(parameters: .init())
+        let coordinator = LogViewerScreenCoordinator()
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             
