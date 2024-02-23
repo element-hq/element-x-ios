@@ -82,6 +82,8 @@ enum LoginScreenErrorType: Hashable {
     case alert(String)
     /// Looking up the homeserver from the username failed.
     case invalidHomeserver
+    /// An alert that informs the user about a bad well-known file.
+    case invalidWellKnownAlert(String)
     /// An alert that allows the user to learn about sliding sync.
     case slidingSyncAlert
     /// An alert that informs the user that login failed due to a refresh token being returned.

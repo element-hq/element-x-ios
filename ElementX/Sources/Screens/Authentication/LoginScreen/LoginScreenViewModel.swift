@@ -66,6 +66,10 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: L10n.commonError,
                                                  message: L10n.screenLoginErrorInvalidUserId)
+        case .invalidWellKnownAlert(let error):
+            state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
+                                                 title: L10n.commonServerNotSupported,
+                                                 message: L10n.screenChangeServerErrorInvalidWellKnown(error))
         case .slidingSyncAlert:
             let openURL = { UIApplication.shared.open(self.slidingSyncLearnMoreURL) }
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
