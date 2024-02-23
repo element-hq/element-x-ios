@@ -27,16 +27,28 @@ class LoggingTests: XCTestCase {
         RustTracing.deleteLogFiles()
     }
     
-    // swiftlint:disable:next function_body_length
     func testLogging() async throws {
         let target = "tests"
         XCTAssertTrue(RustTracing.logFiles.isEmpty)
-
-        // MARK: - File logging
         
-        let infoLog = UUID().uuidString
-
         MXLog.configure(target: target, logLevel: .info)
+        
+        // There is something weird with Rust logging where the file writing handle doesn't
+        // notice that the file it is writing to was deleted, so we can't run these checks
+        // as separate tests. So instead we need to make sure we run all the tests that
+        // write logs in this single test case after configuring the log system.
+        
+        try validateFileLogging()
+        try validateLogLevels()
+        try validateTargetName(target)
+        
+        try validateRoomSummaryContentIsRedacted()
+        try validateTimelineContentIsRedacted()
+        try validateRustMessageContentIsRedacted()
+    }
+    
+    func validateFileLogging() throws {
+        let infoLog = UUID().uuidString
         
         MXLog.info(infoLog)
         
@@ -46,9 +58,9 @@ class LoggingTests: XCTestCase {
         }
         
         try XCTAssertTrue(String(contentsOf: logFile).contains(infoLog))
+    }
         
-        // MARK: - Log levels
-        
+    func validateLogLevels() throws {
         let verboseLog = UUID().uuidString
         
         MXLog.verbose(verboseLog)
@@ -58,19 +70,19 @@ class LoggingTests: XCTestCase {
         }
         
         try XCTAssertFalse(String(contentsOf: logFile).contains(verboseLog))
+    }
         
-        // MARK: - Target name
-        
+    func validateTargetName(_ target: String) throws {
         MXLog.info(UUID().uuidString)
         guard let logFile = RustTracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
-
+        
         XCTAssertTrue(logFile.lastPathComponent.contains(target))
+    }
         
-        // MARK: - Room summary content is redacted
-        
+    func validateRoomSummaryContentIsRedacted() throws {
         // Given a room summary that contains sensitive information
         let roomName = "Private Conversation"
         let lastMessage = "Secret information"
@@ -99,13 +111,13 @@ class LoggingTests: XCTestCase {
             return
         }
         
-        let roomSummaryContent = try String(contentsOf: logFile)
-        XCTAssertTrue(roomSummaryContent.contains(roomSummary.id))
-        XCTAssertFalse(roomSummaryContent.contains(roomName))
-        XCTAssertFalse(roomSummaryContent.contains(lastMessage))
+        let content = try String(contentsOf: logFile)
+        XCTAssertTrue(content.contains(roomSummary.id))
+        XCTAssertFalse(content.contains(roomName))
+        XCTAssertFalse(content.contains(lastMessage))
+    }
         
-        // MARK: - Timeline content is redacted
-        
+    func validateTimelineContentIsRedacted() throws {
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"
         let textMessage = TextRoomTimelineItem(id: .random,
@@ -174,31 +186,31 @@ class LoggingTests: XCTestCase {
             XCTFail(Constants.genericFailure)
             return
         }
-
-        let timelineContent = try String(contentsOf: logFile)
-        XCTAssertTrue(timelineContent.contains(textMessage.id.timelineID))
-        XCTAssertFalse(timelineContent.contains(textMessage.body))
-        XCTAssertFalse(timelineContent.contains(textAttributedString))
         
-        XCTAssertTrue(timelineContent.contains(noticeMessage.id.timelineID))
-        XCTAssertFalse(timelineContent.contains(noticeMessage.body))
-        XCTAssertFalse(timelineContent.contains(noticeAttributedString))
+        let content = try String(contentsOf: logFile)
+        XCTAssertTrue(content.contains(textMessage.id.timelineID))
+        XCTAssertFalse(content.contains(textMessage.body))
+        XCTAssertFalse(content.contains(textAttributedString))
         
-        XCTAssertTrue(timelineContent.contains(emoteMessage.id.timelineID))
-        XCTAssertFalse(timelineContent.contains(emoteMessage.body))
-        XCTAssertFalse(timelineContent.contains(emoteAttributedString))
+        XCTAssertTrue(content.contains(noticeMessage.id.timelineID))
+        XCTAssertFalse(content.contains(noticeMessage.body))
+        XCTAssertFalse(content.contains(noticeAttributedString))
         
-        XCTAssertTrue(timelineContent.contains(imageMessage.id.timelineID))
-        XCTAssertFalse(timelineContent.contains(imageMessage.body))
+        XCTAssertTrue(content.contains(emoteMessage.id.timelineID))
+        XCTAssertFalse(content.contains(emoteMessage.body))
+        XCTAssertFalse(content.contains(emoteAttributedString))
         
-        XCTAssertTrue(timelineContent.contains(videoMessage.id.timelineID))
-        XCTAssertFalse(timelineContent.contains(videoMessage.body))
+        XCTAssertTrue(content.contains(imageMessage.id.timelineID))
+        XCTAssertFalse(content.contains(imageMessage.body))
         
-        XCTAssertTrue(timelineContent.contains(fileMessage.id.timelineID))
-        XCTAssertFalse(timelineContent.contains(fileMessage.body))
+        XCTAssertTrue(content.contains(videoMessage.id.timelineID))
+        XCTAssertFalse(content.contains(videoMessage.body))
         
-        // MARK: - Rust message content is redacted
+        XCTAssertTrue(content.contains(fileMessage.id.timelineID))
+        XCTAssertFalse(content.contains(fileMessage.body))
+    }
         
+    func validateRustMessageContentIsRedacted() throws {
         // Given message content that contain text
         let textString = "TextString"
         let rustTextMessage = TextMessageContent(body: "",
@@ -229,27 +241,27 @@ class LoggingTests: XCTestCase {
             return
         }
 
-        let rustContent = try String(contentsOf: logFile)
-        XCTAssertTrue(rustContent.contains(String(describing: TextMessageContent.self)))
-        XCTAssertFalse(rustContent.contains(textString))
+        let content = try String(contentsOf: logFile)
+        XCTAssertTrue(content.contains(String(describing: TextMessageContent.self)))
+        XCTAssertFalse(content.contains(textString))
         
-        XCTAssertTrue(rustContent.contains(String(describing: NoticeMessageContent.self)))
-        XCTAssertFalse(rustContent.contains(noticeString))
+        XCTAssertTrue(content.contains(String(describing: NoticeMessageContent.self)))
+        XCTAssertFalse(content.contains(noticeString))
         
-        XCTAssertTrue(rustContent.contains(String(describing: EmoteMessageContent.self)))
-        XCTAssertFalse(rustContent.contains(emoteString))
+        XCTAssertTrue(content.contains(String(describing: EmoteMessageContent.self)))
+        XCTAssertFalse(content.contains(emoteString))
         
-        XCTAssertTrue(rustContent.contains(String(describing: ImageMessageContent.self)))
-        XCTAssertFalse(rustContent.contains(rustImageMessage.body))
+        XCTAssertTrue(content.contains(String(describing: ImageMessageContent.self)))
+        XCTAssertFalse(content.contains(rustImageMessage.body))
         
-        XCTAssertTrue(rustContent.contains(String(describing: VideoMessageContent.self)))
-        XCTAssertFalse(rustContent.contains(rustVideoMessage.body))
+        XCTAssertTrue(content.contains(String(describing: VideoMessageContent.self)))
+        XCTAssertFalse(content.contains(rustVideoMessage.body))
         
-        XCTAssertTrue(rustContent.contains(String(describing: FileMessageContent.self)))
-        XCTAssertFalse(rustContent.contains(rustFileMessage.body))
+        XCTAssertTrue(content.contains(String(describing: FileMessageContent.self)))
+        XCTAssertFalse(content.contains(rustFileMessage.body))
     }
     
-    func disabled_testLogFileSorting() async throws {
+    func testLogFileSorting() async throws {
         // Given a collection of log files.
         XCTAssertTrue(RustTracing.logFiles.isEmpty)
         
