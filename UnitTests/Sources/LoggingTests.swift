@@ -19,8 +19,6 @@
 import XCTest
 
 class LoggingTests: XCTestCase {
-    let tempDir = URL.temporaryDirectory.appending(path: "Logs")
-    
     private enum Constants {
         static let genericFailure = "Test failed"
     }
