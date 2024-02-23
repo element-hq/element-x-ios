@@ -19,14 +19,11 @@
 import Combine
 import SwiftUI
 
-struct LogViewerScreenCoordinatorParameters { }
-
 enum LogViewerScreenCoordinatorAction {
     case done
 }
 
 final class LogViewerScreenCoordinator: CoordinatorProtocol {
-    private let parameters: LogViewerScreenCoordinatorParameters
     private var viewModel: LogViewerScreenViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     
@@ -35,9 +32,7 @@ final class LogViewerScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: LogViewerScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
+    init() {
         viewModel = LogViewerScreenViewModel()
     }
     

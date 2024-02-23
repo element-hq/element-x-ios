@@ -85,7 +85,13 @@ class BugReportViewModelTests: XCTestCase {
         try await deferred.fulfill()
                 
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
-        XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, canContact: false, githubLabels: [], files: []))
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.userID, "@mock.client.com")
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.deviceID, nil)
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.text, "")
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.includeLogs, true)
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.canContact, false)
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.githubLabels, [])
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.files, [])
     }
 
     func testSendReportWithError() async throws {
@@ -112,6 +118,12 @@ class BugReportViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
-        XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, canContact: false, githubLabels: [], files: []))
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.userID, "@mock.client.com")
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.deviceID, nil)
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.text, "")
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.includeLogs, true)
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.canContact, false)
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.githubLabels, [])
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.files, [])
     }
 }

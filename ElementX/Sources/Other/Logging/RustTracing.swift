@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-import Collections
+import Foundation
 import MatrixRustSDK
 
 struct OTLPConfiguration {
@@ -23,133 +23,20 @@ struct OTLPConfiguration {
     let password: String
 }
 
-// This exposes the full Rust side tracing subscriber filter for more flexibility.
-// We can filter by level, crate and even file. See more details here:
-// https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
-struct TracingConfiguration {
-    enum LogLevel: Codable, Hashable {
-        case error, warn, info, debug, trace
-        case custom(String)
-        
-        var title: String {
-            switch self {
-            case .error:
-                return "Error"
-            case .warn:
-                return "Warning"
-            case .info:
-                return "Info"
-            case .debug:
-                return "Debug"
-            case .trace:
-                return "Trace"
-            case .custom:
-                return "Custom"
-            }
-        }
-        
-        fileprivate var rawValue: String {
-            switch self {
-            case .error:
-                return "error"
-            case .warn:
-                return "warn"
-            case .info:
-                return "info"
-            case .debug:
-                return "debug"
-            case .trace:
-                return "trace"
-            case .custom(let filter):
-                return filter
-            }
-        }
-    }
-    
-    enum Target: String {
-        case common = ""
-        
-        case elementx
-        
-        case hyper, matrix_sdk_ffi, matrix_sdk_crypto
-        
-        case matrix_sdk_client = "matrix_sdk::client"
-        case matrix_sdk_crypto_account = "matrix_sdk_crypto::olm::account"
-        case matrix_sdk_oidc = "matrix_sdk::oidc"
-        case matrix_sdk_http_client = "matrix_sdk::http_client"
-        case matrix_sdk_sliding_sync = "matrix_sdk::sliding_sync"
-        case matrix_sdk_base_sliding_sync = "matrix_sdk_base::sliding_sync"
-        case matrix_sdk_ui_timeline = "matrix_sdk_ui::timeline"
-        case matrix_sdk_base_read_receipts = "matrix_sdk_base::read_receipts"
-    }
-    
-    static let targets: OrderedDictionary<Target, LogLevel> = [
-        .common: .info,
-        .elementx: .info,
-        .hyper: .warn,
-        .matrix_sdk_ffi: .info,
-        .matrix_sdk_client: .trace,
-        .matrix_sdk_crypto: .debug,
-        .matrix_sdk_crypto_account: .trace,
-        .matrix_sdk_oidc: .trace,
-        .matrix_sdk_http_client: .debug,
-        .matrix_sdk_sliding_sync: .info,
-        .matrix_sdk_base_sliding_sync: .info,
-        .matrix_sdk_ui_timeline: .info,
-        .matrix_sdk_base_read_receipts: .trace
-    ]
-    
-    let filter: String
-    
-    /// Sets the same log level for all Targets
-    /// - Parameter logLevel: the desired log level
-    /// - Returns: a custom tracing configuration
-    init(logLevel: LogLevel) {
-        if case let .custom(filter) = logLevel {
-            self.filter = filter
-            return
-        }
-        
-        let overrides = Self.targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
-            // Keep the defaults here
-            let ignoredTargets: [Target] = [.common,
-                                            .hyper,
-                                            .matrix_sdk_ffi,
-                                            .matrix_sdk_oidc,
-                                            .matrix_sdk_client,
-                                            .matrix_sdk_crypto,
-                                            .matrix_sdk_crypto_account,
-                                            .matrix_sdk_http_client,
-                                            .matrix_sdk_base_read_receipts]
-            if ignoredTargets.contains(target) {
-                return
-            }
-            
-            partialResult[target] = logLevel
-        }
-        
-        var newTargets = Self.targets
-        for (target, logLevel) in overrides {
-            newTargets.updateValue(logLevel, forKey: target)
-        }
-        
-        let components = newTargets.map { (target: Target, logLevel: LogLevel) in
-            guard !target.rawValue.isEmpty else {
-                return logLevel.rawValue
-            }
-            
-            return "\(target.rawValue)=\(logLevel.rawValue)"
-        }
-        
-        filter = components.joined(separator: ",")
-    }
-}
-
 enum RustTracing {
-    private(set) static var currentTracingConfiguration: TracingConfiguration?
+    /// The base filename used for log files. This may be suffixed by the target
+    /// name and other log management metadata during rotation.
+    static let filePrefix = "console"
+    /// The directory that stores all of the log files.
+    static var logsDirectory: URL { .appGroupContainerDirectory }
     
+    private(set) static var currentTracingConfiguration: TracingConfiguration?
     static func setup(configuration: TracingConfiguration, otlpConfiguration: OTLPConfiguration?) {
         currentTracingConfiguration = configuration
+        
+        // Keep a minimum of 1 week of log files. In reality it will be longer
+        // as the app is unlikely to be running continuously.
+        let maxFiles: UInt64 = 24 * 7
         
         if let otlpConfiguration {
             setupOtlpTracing(config: .init(clientName: "ElementX-iOS",
@@ -158,11 +45,51 @@ enum RustTracing {
                                            otlpEndpoint: otlpConfiguration.url,
                                            filter: configuration.filter,
                                            writeToStdoutOrSystem: true,
-                                           writeToFiles: nil))
+                                           writeToFiles: .init(path: logsDirectory.path(),
+                                                               filePrefix: configuration.fileName,
+                                                               fileSuffix: configuration.fileExtension,
+                                                               maxFiles: maxFiles)))
         } else {
             setupTracing(config: .init(filter: configuration.filter,
                                        writeToStdoutOrSystem: true,
-                                       writeToFiles: nil))
+                                       writeToFiles: .init(path: logsDirectory.path(),
+                                                           filePrefix: configuration.fileName,
+                                                           fileSuffix: configuration.fileExtension,
+                                                           maxFiles: maxFiles)))
+        }
+    }
+    
+    /// A list of all log file URLs, sorted chronologically. This is only public for testing purposes, within
+    /// the app please use ``copyLogs(to:)`` so that the files are name appropriates for QuickLook.
+    static var logFiles: [URL] {
+        var logFiles = [(url: URL, modificationDate: Date)]()
+        
+        let fileManager = FileManager.default
+        let enumerator = fileManager.enumerator(at: logsDirectory, includingPropertiesForKeys: [.contentModificationDateKey])
+        
+        // Find all *.log files and their modification dates.
+        while let logURL = enumerator?.nextObject() as? URL {
+            guard let resourceValues = try? logURL.resourceValues(forKeys: [.contentModificationDateKey]),
+                  let modificationDate = resourceValues.contentModificationDate
+            else { continue }
+            
+            if logURL.lastPathComponent.hasPrefix(filePrefix) {
+                logFiles.append((logURL, modificationDate))
+            }
+        }
+        
+        let sortedFiles = logFiles.sorted { $0.modificationDate > $1.modificationDate }.map(\.url)
+        
+        MXLog.info("logFiles: \(sortedFiles.map(\.lastPathComponent))")
+        
+        return sortedFiles
+    }
+    
+    /// Delete all log files.
+    static func deleteLogFiles() {
+        let fileManager = FileManager.default
+        for logFileURL in logFiles {
+            try? fileManager.removeItem(at: logFileURL)
         }
     }
 }

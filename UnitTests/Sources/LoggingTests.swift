@@ -24,202 +24,65 @@ class LoggingTests: XCTestCase {
     }
 
     override func setUpWithError() throws {
-        // Force MXLogger to flush stderr and clean up after itself
-        MXLog.configure(logLevel: .info, redirectToFiles: false)
-        
-        MXLogger.deleteLogFiles()
+        RustTracing.deleteLogFiles()
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testFileLogging() throws {
-        XCTAssertTrue(MXLogger.logFiles.isEmpty)
-
-        let log = UUID().uuidString
-
-        MXLog.configure(logLevel: .info, redirectToFiles: true)
+    
+    func testLogging() async throws {
+        let target = "tests"
+        XCTAssertTrue(RustTracing.logFiles.isEmpty)
         
-        MXLog.info(log)
-        guard let logFile = MXLogger.logFiles.first else {
+        MXLog.configure(target: target, logLevel: .info)
+        
+        // There is something weird with Rust logging where the file writing handle doesn't
+        // notice that the file it is writing to was deleted, so we can't run these checks
+        // as separate tests. So instead we need to make sure we run all the tests that
+        // write logs in this single test case after configuring the log system.
+        
+        try validateFileLogging()
+        try validateLogLevels()
+        try validateTargetName(target)
+        
+        try validateRoomSummaryContentIsRedacted()
+        try validateTimelineContentIsRedacted()
+        try validateRustMessageContentIsRedacted()
+    }
+    
+    func validateFileLogging() throws {
+        let infoLog = UUID().uuidString
+        
+        MXLog.info(infoLog)
+        
+        guard let logFile = RustTracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
-
-        let content = try String(contentsOf: logFile)
-        XCTAssert(content.contains(log))
+        
+        try XCTAssertTrue(String(contentsOf: logFile).contains(infoLog))
     }
-    
-    func testFileRotationOnLaunch() throws {
-        // Given a fresh launch with no logs.
-        XCTAssertTrue(MXLogger.logFiles.isEmpty)
         
-        // When launching the app 5 times.
-        let launchCount = 5
-        for index in 0..<launchCount {
-            MXLog.configure(logLevel: .info, redirectToFiles: true)
-            MXLog.info("Launch \(index + 1)")
-        }
+    func validateLogLevels() throws {
+        let verboseLog = UUID().uuidString
         
-        // Then 5 log files should be created each with the correct contents.
-        let logFiles = MXLogger.logFiles
-        
-        XCTAssertEqual(logFiles.count, launchCount, "The number of log files should match the number of launches.")
-        try verifyContents(of: logFiles, after: launchCount)
-    }
-    
-    func testMaxLogFileCount() throws {
-        // Given a fresh launch with no logs.
-        XCTAssertTrue(MXLogger.logFiles.isEmpty)
-        
-        // When launching the app 10 times, with a maxLogCount of 5.
-        let launchCount = 10
-        let logFileCount = 5
-        for index in 0..<launchCount {
-            MXLog.configure(logLevel: .info, redirectToFiles: true, maxLogFileCount: UInt(logFileCount))
-            MXLog.info("Launch \(index + 1)")
-        }
-        
-        // Then only 5 log files should be stored on disk, with the contents of launches 6 to 10.
-        let logFiles = MXLogger.logFiles
-        
-        XCTAssertEqual(logFiles.count, logFileCount, "The number of log files should match the number of launches.")
-        try verifyContents(of: logFiles, after: launchCount)
-    }
-    
-    func testLogFileSizeLimit() throws {
-        // Given a fresh launch with no logs.
-        XCTAssertTrue(MXLogger.logFiles.isEmpty)
-        
-        // When launching the app 10 times, with a max total log size of 25KB and logging ~5KB data each time.
-        let launchCount = 10
-        let logFileSizeLimit: UInt = 25 * 1024
-        for index in 0..<launchCount {
-            MXLog.configure(logLevel: .info, redirectToFiles: true, logFileSizeLimit: logFileSizeLimit)
-            MXLog.info("Launch \(index + 1)")
-            
-            // Add ~5KB of logs
-            for _ in 0..<5 {
-                let string = [String](repeating: "a", count: 1024).joined()
-                MXLog.info(string)
-            }
-        }
-        
-        // Then only the most recent log files should be stored on disk.
-        let logFiles = MXLogger.logFiles
-        
-        XCTAssertGreaterThan(logFiles.count, 0, "There should be at least one log file created.")
-        XCTAssertLessThan(logFiles.count, launchCount, "Some of the log files should have been removed trimmed.")
-        try verifyContents(of: logFiles, after: launchCount)
-    }
-    
-    /// Verifies that the log files all contain the correct `Launch #` based on the index
-    /// in the file name and the number of launches of the app.
-    func verifyContents(of logFiles: [URL], after launchCount: Int) throws {
-        for logFile in logFiles {
-            let regex = /\d+/
-            let fileIndex = logFile.lastPathComponent.firstMatch(of: regex)?.0 ?? "0"
-            
-            guard let index = Int(fileIndex) else {
-                XCTFail(Constants.genericFailure)
-                return
-            }
-            
-            let content = try String(contentsOf: logFile)
-            XCTAssertTrue(content.contains("Launch \(launchCount - index)"), "The log files should be for the most recent launches in reverse chronological order.")
-        }
-    }
-
-    func testLogLevels() throws {
-        XCTAssert(MXLogger.logFiles.isEmpty)
-
-        let log = UUID().uuidString
-
-        MXLog.configure(logLevel: .info, redirectToFiles: true)
-        
-        MXLog.verbose(log)
-        guard let logFile = MXLogger.logFiles.first else {
+        MXLog.verbose(verboseLog)
+        guard let logFile = RustTracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
-
-        let content = try String(contentsOf: logFile)
-        XCTAssertFalse(content.contains(log))
-    }
-
-    func testSubLogName() {
-        XCTAssert(MXLogger.logFiles.isEmpty)
-
-        let target = "nse"
-
-        MXLog.configure(target: target, logLevel: .info, redirectToFiles: true)
         
+        try XCTAssertFalse(String(contentsOf: logFile).contains(verboseLog))
+    }
+        
+    func validateTargetName(_ target: String) throws {
         MXLog.info(UUID().uuidString)
-        guard let logFile = MXLogger.logFiles.first else {
+        guard let logFile = RustTracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
-
+        
         XCTAssertTrue(logFile.lastPathComponent.contains(target))
     }
-    
-    func testLogFileSorting() async throws {
-        // Given a collection of log files.
-        XCTAssertTrue(MXLogger.logFiles.isEmpty)
         
-        // When creating new logs.
-        let logsFileDirectory = URL.appGroupContainerDirectory
-        for i in 1...5 {
-            let filename = "console.\(i).log"
-            try "console".write(to: logsFileDirectory.appending(path: filename), atomically: true, encoding: .utf8)
-        }
-        
-        for i in 1...5 {
-            let nseFilename = "console-nse.\(i).log"
-            try "nse".write(to: logsFileDirectory.appending(path: nseFilename), atomically: true, encoding: .utf8)
-        }
-        
-        // Then the logs should be sorted chronologically (newest first) and not alphabetically.
-        XCTAssertEqual(MXLogger.logFiles.map(\.lastPathComponent),
-                       ["console-nse.5.log",
-                        "console-nse.4.log",
-                        "console-nse.3.log",
-                        "console-nse.2.log",
-                        "console-nse.1.log",
-                        "console.5.log",
-                        "console.4.log",
-                        "console.3.log",
-                        "console.2.log",
-                        "console.1.log"])
-        
-        // When updating the oldest log file.
-        let currentLogFile = logsFileDirectory.appending(path: "console.1.log")
-        let fileHandle = try FileHandle(forWritingTo: currentLogFile)
-        try fileHandle.seekToEnd()
-        guard let newLineData = "newline".data(using: .utf8) else {
-            XCTFail("Couldn't create data to write to disk.")
-            return
-        }
-        
-        try fileHandle.write(contentsOf: newLineData)
-        try fileHandle.close()
-        
-        // Then that file should now be the first log file.
-        XCTAssertEqual(MXLogger.logFiles.map(\.lastPathComponent),
-                       ["console.1.log",
-                        "console-nse.5.log",
-                        "console-nse.4.log",
-                        "console-nse.3.log",
-                        "console-nse.2.log",
-                        "console-nse.1.log",
-                        "console.5.log",
-                        "console.4.log",
-                        "console.3.log",
-                        "console.2.log"])
-    }
-    
-    func testRoomSummaryContentIsRedacted() throws {
+    func validateRoomSummaryContentIsRedacted() throws {
         // Given a room summary that contains sensitive information
         let roomName = "Private Conversation"
         let lastMessage = "Secret information"
@@ -240,14 +103,10 @@ class LoggingTests: XCTestCase {
                                              isFavourite: false)
         
         // When logging that value
-        XCTAssert(MXLogger.logFiles.isEmpty)
-        
-        MXLog.configure(logLevel: .info, redirectToFiles: true)
-        
         MXLog.info(roomSummary)
         
         // Then the log file should not include the sensitive information
-        guard let logFile = MXLogger.logFiles.first else {
+        guard let logFile = RustTracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
@@ -257,8 +116,8 @@ class LoggingTests: XCTestCase {
         XCTAssertFalse(content.contains(roomName))
         XCTAssertFalse(content.contains(lastMessage))
     }
-    
-    func testTimelineContentIsRedacted() throws {
+        
+    func validateTimelineContentIsRedacted() throws {
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"
         let textMessage = TextRoomTimelineItem(id: .random,
@@ -313,9 +172,7 @@ class LoggingTests: XCTestCase {
                                                content: .init(body: "FileString", source: nil, thumbnailSource: nil, contentType: nil))
         
         // When logging that value
-        XCTAssert(MXLogger.logFiles.isEmpty)
-        
-        MXLog.configure(logLevel: .info, redirectToFiles: true)
+        MXLog.configure(logLevel: .info)
         
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)
@@ -325,11 +182,11 @@ class LoggingTests: XCTestCase {
         MXLog.info(fileMessage)
         
         // Then the log file should not include the text content
-        guard let logFile = MXLogger.logFiles.first else {
+        guard let logFile = RustTracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
-
+        
         let content = try String(contentsOf: logFile)
         XCTAssertTrue(content.contains(textMessage.id.timelineID))
         XCTAssertFalse(content.contains(textMessage.body))
@@ -352,38 +209,34 @@ class LoggingTests: XCTestCase {
         XCTAssertTrue(content.contains(fileMessage.id.timelineID))
         XCTAssertFalse(content.contains(fileMessage.body))
     }
-    
-    func testRustMessageContentIsRedacted() throws {
+        
+    func validateRustMessageContentIsRedacted() throws {
         // Given message content that contain text
         let textString = "TextString"
-        let textMessage = TextMessageContent(body: "",
-                                             formatted: FormattedBody(format: .html, body: "<b>\(textString)</b>"))
+        let rustTextMessage = TextMessageContent(body: "",
+                                                 formatted: FormattedBody(format: .html, body: "<b>\(textString)</b>"))
         let noticeString = "NoticeString"
-        let noticeMessage = NoticeMessageContent(body: noticeString,
-                                                 formatted: FormattedBody(format: .html, body: "<b>\(noticeString)</b>"))
+        let rustNoticeMessage = NoticeMessageContent(body: noticeString,
+                                                     formatted: FormattedBody(format: .html, body: "<b>\(noticeString)</b>"))
         let emoteString = "EmoteString"
-        let emoteMessage = EmoteMessageContent(body: emoteString,
-                                               formatted: FormattedBody(format: .html, body: "<b>\(emoteString)</b>"))
+        let rustEmoteMessage = EmoteMessageContent(body: emoteString,
+                                                   formatted: FormattedBody(format: .html, body: "<b>\(emoteString)</b>"))
         
         let pointer = Unmanaged.passRetained(NSURL(fileURLWithPath: "/tmp/file")).toOpaque()
-        let imageMessage = ImageMessageContent(body: "ImageString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
-        let videoMessage = VideoMessageContent(body: "VideoString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
-        let fileMessage = FileMessageContent(body: "FileString", filename: "FileName", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        let rustImageMessage = ImageMessageContent(body: "ImageString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        let rustVideoMessage = VideoMessageContent(body: "VideoString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        let rustFileMessage = FileMessageContent(body: "FileString", filename: "FileName", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
         
         // When logging that value
-        XCTAssert(MXLogger.logFiles.isEmpty)
-        
-        MXLog.configure(logLevel: .info, redirectToFiles: true)
-        
-        MXLog.info(textMessage)
-        MXLog.info(noticeMessage)
-        MXLog.info(emoteMessage)
-        MXLog.info(imageMessage)
-        MXLog.info(videoMessage)
-        MXLog.info(fileMessage)
+        MXLog.info(rustTextMessage)
+        MXLog.info(rustNoticeMessage)
+        MXLog.info(rustEmoteMessage)
+        MXLog.info(rustImageMessage)
+        MXLog.info(rustVideoMessage)
+        MXLog.info(rustFileMessage)
         
         // Then the log file should not include the text content
-        guard let logFile = MXLogger.logFiles.first else {
+        guard let logFile = RustTracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
@@ -399,12 +252,67 @@ class LoggingTests: XCTestCase {
         XCTAssertFalse(content.contains(emoteString))
         
         XCTAssertTrue(content.contains(String(describing: ImageMessageContent.self)))
-        XCTAssertFalse(content.contains(imageMessage.body))
+        XCTAssertFalse(content.contains(rustImageMessage.body))
         
         XCTAssertTrue(content.contains(String(describing: VideoMessageContent.self)))
-        XCTAssertFalse(content.contains(videoMessage.body))
+        XCTAssertFalse(content.contains(rustVideoMessage.body))
         
         XCTAssertTrue(content.contains(String(describing: FileMessageContent.self)))
-        XCTAssertFalse(content.contains(fileMessage.body))
+        XCTAssertFalse(content.contains(rustFileMessage.body))
+    }
+    
+    func testLogFileSorting() async throws {
+        // Given a collection of log files.
+        XCTAssertTrue(RustTracing.logFiles.isEmpty)
+        
+        // When creating new logs.
+        let logsFileDirectory = RustTracing.logsDirectory
+        for i in 1...5 {
+            let filename = "console.\(i).log"
+            try "console".write(to: logsFileDirectory.appending(path: filename), atomically: true, encoding: .utf8)
+        }
+        
+        for i in 1...5 {
+            let nseFilename = "console-nse.\(i).log"
+            try "nse".write(to: logsFileDirectory.appending(path: nseFilename), atomically: true, encoding: .utf8)
+        }
+        
+        // Then the logs should be sorted chronologically (newest first) and not alphabetically.
+        XCTAssertEqual(RustTracing.logFiles.map(\.lastPathComponent),
+                       ["console-nse.5.log",
+                        "console-nse.4.log",
+                        "console-nse.3.log",
+                        "console-nse.2.log",
+                        "console-nse.1.log",
+                        "console.5.log",
+                        "console.4.log",
+                        "console.3.log",
+                        "console.2.log",
+                        "console.1.log"])
+        
+        // When updating the oldest log file.
+        let currentLogFile = logsFileDirectory.appending(path: "console.1.log")
+        let fileHandle = try FileHandle(forWritingTo: currentLogFile)
+        try fileHandle.seekToEnd()
+        guard let newLineData = "newline".data(using: .utf8) else {
+            XCTFail("Couldn't create data to write to disk.")
+            return
+        }
+        
+        try fileHandle.write(contentsOf: newLineData)
+        try fileHandle.close()
+        
+        // Then that file should now be the first log file.
+        XCTAssertEqual(RustTracing.logFiles.map(\.lastPathComponent),
+                       ["console.1.log",
+                        "console-nse.5.log",
+                        "console-nse.4.log",
+                        "console-nse.3.log",
+                        "console-nse.2.log",
+                        "console-nse.1.log",
+                        "console.5.log",
+                        "console.4.log",
+                        "console.3.log",
+                        "console.2.log"])
     }
 }

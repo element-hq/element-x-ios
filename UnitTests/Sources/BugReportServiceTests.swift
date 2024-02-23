@@ -39,7 +39,6 @@ class BugReportServiceTests: XCTestCase {
                                   deviceID: nil,
                                   text: "i cannot send message",
                                   includeLogs: true,
-                                  includeCrashLog: true,
                                   canContact: false,
                                   githubLabels: [],
                                   files: [])
@@ -70,7 +69,6 @@ class BugReportServiceTests: XCTestCase {
                                   deviceID: nil,
                                   text: "i cannot send message",
                                   includeLogs: true,
-                                  includeCrashLog: true,
                                   canContact: false,
                                   githubLabels: [],
                                   files: [])
