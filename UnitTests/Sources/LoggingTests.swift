@@ -28,48 +28,40 @@ class LoggingTests: XCTestCase {
     override func setUpWithError() throws {
         RustTracing.deleteLogFiles()
     }
-
-    func disabled_testFileLogging() async throws {
+    
+    // swiftlint:disable:next function_body_length
+    func testLogging() async throws {
+        let target = "tests"
         XCTAssertTrue(RustTracing.logFiles.isEmpty)
 
-        let log = UUID().uuidString
-
-        MXLog.configure(logLevel: .info)
+        // MARK: - File logging
         
-        MXLog.info(log)
-        
-        guard let logFile = RustTracing.logFiles.first else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
-
-        let content = try String(contentsOf: logFile)
-        XCTAssert(content.contains(log))
-    }
-
-    func disabled_testLogLevels() throws {
-        XCTAssert(RustTracing.logFiles.isEmpty)
-
-        let log = UUID().uuidString
-
-        MXLog.configure(logLevel: .info)
-        
-        MXLog.verbose(log)
-        guard let logFile = RustTracing.logFiles.first else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
-
-        let content = try String(contentsOf: logFile)
-        XCTAssertFalse(content.contains(log))
-    }
-
-    func disabled_testSubLogName() {
-        XCTAssert(RustTracing.logFiles.isEmpty)
-
-        let target = "nse"
+        let infoLog = UUID().uuidString
 
         MXLog.configure(target: target, logLevel: .info)
+        
+        MXLog.info(infoLog)
+        
+        guard let logFile = RustTracing.logFiles.first else {
+            XCTFail(Constants.genericFailure)
+            return
+        }
+        
+        try XCTAssertTrue(String(contentsOf: logFile).contains(infoLog))
+        
+        // MARK: - Log levels
+        
+        let verboseLog = UUID().uuidString
+        
+        MXLog.verbose(verboseLog)
+        guard let logFile = RustTracing.logFiles.first else {
+            XCTFail(Constants.genericFailure)
+            return
+        }
+        
+        try XCTAssertFalse(String(contentsOf: logFile).contains(verboseLog))
+        
+        // MARK: - Target name
         
         MXLog.info(UUID().uuidString)
         guard let logFile = RustTracing.logFiles.first else {
@@ -78,6 +70,185 @@ class LoggingTests: XCTestCase {
         }
 
         XCTAssertTrue(logFile.lastPathComponent.contains(target))
+        
+        // MARK: - Room summary content is redacted
+        
+        // Given a room summary that contains sensitive information
+        let roomName = "Private Conversation"
+        let lastMessage = "Secret information"
+        let roomSummary = RoomSummaryDetails(id: "myroomid",
+                                             name: roomName,
+                                             isDirect: true,
+                                             avatarURL: nil,
+                                             lastMessage: AttributedString(lastMessage),
+                                             lastMessageFormattedTimestamp: "Now",
+                                             unreadMessagesCount: 0,
+                                             unreadMentionsCount: 0,
+                                             unreadNotificationsCount: 0,
+                                             notificationMode: nil,
+                                             canonicalAlias: nil,
+                                             inviter: nil,
+                                             hasOngoingCall: false,
+                                             isMarkedUnread: false,
+                                             isFavourite: false)
+        
+        // When logging that value
+        MXLog.info(roomSummary)
+        
+        // Then the log file should not include the sensitive information
+        guard let logFile = RustTracing.logFiles.first else {
+            XCTFail(Constants.genericFailure)
+            return
+        }
+        
+        let roomSummaryContent = try String(contentsOf: logFile)
+        XCTAssertTrue(roomSummaryContent.contains(roomSummary.id))
+        XCTAssertFalse(roomSummaryContent.contains(roomName))
+        XCTAssertFalse(roomSummaryContent.contains(lastMessage))
+        
+        // MARK: - Timeline content is redacted
+        
+        // Given timeline items that contain text
+        let textAttributedString = "TextAttributed"
+        let textMessage = TextRoomTimelineItem(id: .random,
+                                               timestamp: "",
+                                               isOutgoing: false,
+                                               isEditable: false,
+                                               canBeRepliedTo: true,
+                                               isThreaded: false,
+                                               sender: .init(id: "sender"),
+                                               content: .init(body: "TextString", formattedBody: AttributedString(textAttributedString)))
+        let noticeAttributedString = "NoticeAttributed"
+        let noticeMessage = NoticeRoomTimelineItem(id: .random,
+                                                   timestamp: "",
+                                                   isOutgoing: false,
+                                                   isEditable: false,
+                                                   canBeRepliedTo: true,
+                                                   isThreaded: false,
+                                                   sender: .init(id: "sender"),
+                                                   content: .init(body: "NoticeString", formattedBody: AttributedString(noticeAttributedString)))
+        let emoteAttributedString = "EmoteAttributed"
+        let emoteMessage = EmoteRoomTimelineItem(id: .random,
+                                                 timestamp: "",
+                                                 isOutgoing: false,
+                                                 isEditable: false,
+                                                 canBeRepliedTo: true,
+                                                 isThreaded: false,
+                                                 sender: .init(id: "sender"),
+                                                 content: .init(body: "EmoteString", formattedBody: AttributedString(emoteAttributedString)))
+        let imageMessage = ImageRoomTimelineItem(id: .init(timelineID: "myimagemessage"),
+                                                 timestamp: "",
+                                                 isOutgoing: false,
+                                                 isEditable: false,
+                                                 canBeRepliedTo: true,
+                                                 isThreaded: false,
+                                                 sender: .init(id: "sender"),
+                                                 content: .init(body: "ImageString", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"), thumbnailSource: nil))
+        let videoMessage = VideoRoomTimelineItem(id: .random,
+                                                 timestamp: "",
+                                                 isOutgoing: false,
+                                                 isEditable: false,
+                                                 canBeRepliedTo: true,
+                                                 isThreaded: false,
+                                                 sender: .init(id: "sender"),
+                                                 content: .init(body: "VideoString", duration: 0, source: nil, thumbnailSource: nil))
+        let fileMessage = FileRoomTimelineItem(id: .random,
+                                               timestamp: "",
+                                               isOutgoing: false,
+                                               isEditable: false,
+                                               canBeRepliedTo: true,
+                                               isThreaded: false,
+                                               sender: .init(id: "sender"),
+                                               content: .init(body: "FileString", source: nil, thumbnailSource: nil, contentType: nil))
+        
+        // When logging that value
+        MXLog.configure(logLevel: .info)
+        
+        MXLog.info(textMessage)
+        MXLog.info(noticeMessage)
+        MXLog.info(emoteMessage)
+        MXLog.info(imageMessage)
+        MXLog.info(videoMessage)
+        MXLog.info(fileMessage)
+        
+        // Then the log file should not include the text content
+        guard let logFile = RustTracing.logFiles.first else {
+            XCTFail(Constants.genericFailure)
+            return
+        }
+
+        let timelineContent = try String(contentsOf: logFile)
+        XCTAssertTrue(timelineContent.contains(textMessage.id.timelineID))
+        XCTAssertFalse(timelineContent.contains(textMessage.body))
+        XCTAssertFalse(timelineContent.contains(textAttributedString))
+        
+        XCTAssertTrue(timelineContent.contains(noticeMessage.id.timelineID))
+        XCTAssertFalse(timelineContent.contains(noticeMessage.body))
+        XCTAssertFalse(timelineContent.contains(noticeAttributedString))
+        
+        XCTAssertTrue(timelineContent.contains(emoteMessage.id.timelineID))
+        XCTAssertFalse(timelineContent.contains(emoteMessage.body))
+        XCTAssertFalse(timelineContent.contains(emoteAttributedString))
+        
+        XCTAssertTrue(timelineContent.contains(imageMessage.id.timelineID))
+        XCTAssertFalse(timelineContent.contains(imageMessage.body))
+        
+        XCTAssertTrue(timelineContent.contains(videoMessage.id.timelineID))
+        XCTAssertFalse(timelineContent.contains(videoMessage.body))
+        
+        XCTAssertTrue(timelineContent.contains(fileMessage.id.timelineID))
+        XCTAssertFalse(timelineContent.contains(fileMessage.body))
+        
+        // MARK: - Rust message content is redacted
+        
+        // Given message content that contain text
+        let textString = "TextString"
+        let rustTextMessage = TextMessageContent(body: "",
+                                                 formatted: FormattedBody(format: .html, body: "<b>\(textString)</b>"))
+        let noticeString = "NoticeString"
+        let rustNoticeMessage = NoticeMessageContent(body: noticeString,
+                                                     formatted: FormattedBody(format: .html, body: "<b>\(noticeString)</b>"))
+        let emoteString = "EmoteString"
+        let rustEmoteMessage = EmoteMessageContent(body: emoteString,
+                                                   formatted: FormattedBody(format: .html, body: "<b>\(emoteString)</b>"))
+        
+        let pointer = Unmanaged.passRetained(NSURL(fileURLWithPath: "/tmp/file")).toOpaque()
+        let rustImageMessage = ImageMessageContent(body: "ImageString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        let rustVideoMessage = VideoMessageContent(body: "VideoString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        let rustFileMessage = FileMessageContent(body: "FileString", filename: "FileName", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        
+        // When logging that value
+        MXLog.info(rustTextMessage)
+        MXLog.info(rustNoticeMessage)
+        MXLog.info(rustEmoteMessage)
+        MXLog.info(rustImageMessage)
+        MXLog.info(rustVideoMessage)
+        MXLog.info(rustFileMessage)
+        
+        // Then the log file should not include the text content
+        guard let logFile = RustTracing.logFiles.first else {
+            XCTFail(Constants.genericFailure)
+            return
+        }
+
+        let rustContent = try String(contentsOf: logFile)
+        XCTAssertTrue(rustContent.contains(String(describing: TextMessageContent.self)))
+        XCTAssertFalse(rustContent.contains(textString))
+        
+        XCTAssertTrue(rustContent.contains(String(describing: NoticeMessageContent.self)))
+        XCTAssertFalse(rustContent.contains(noticeString))
+        
+        XCTAssertTrue(rustContent.contains(String(describing: EmoteMessageContent.self)))
+        XCTAssertFalse(rustContent.contains(emoteString))
+        
+        XCTAssertTrue(rustContent.contains(String(describing: ImageMessageContent.self)))
+        XCTAssertFalse(rustContent.contains(rustImageMessage.body))
+        
+        XCTAssertTrue(rustContent.contains(String(describing: VideoMessageContent.self)))
+        XCTAssertFalse(rustContent.contains(rustVideoMessage.body))
+        
+        XCTAssertTrue(rustContent.contains(String(describing: FileMessageContent.self)))
+        XCTAssertFalse(rustContent.contains(rustFileMessage.body))
     }
     
     func disabled_testLogFileSorting() async throws {
@@ -133,194 +304,5 @@ class LoggingTests: XCTestCase {
                         "console.4.log",
                         "console.3.log",
                         "console.2.log"])
-    }
-    
-    func disabled_testRoomSummaryContentIsRedacted() throws {
-        // Given a room summary that contains sensitive information
-        let roomName = "Private Conversation"
-        let lastMessage = "Secret information"
-        let roomSummary = RoomSummaryDetails(id: "myroomid",
-                                             name: roomName,
-                                             isDirect: true,
-                                             avatarURL: nil,
-                                             lastMessage: AttributedString(lastMessage),
-                                             lastMessageFormattedTimestamp: "Now",
-                                             unreadMessagesCount: 0,
-                                             unreadMentionsCount: 0,
-                                             unreadNotificationsCount: 0,
-                                             notificationMode: nil,
-                                             canonicalAlias: nil,
-                                             inviter: nil,
-                                             hasOngoingCall: false,
-                                             isMarkedUnread: false,
-                                             isFavourite: false)
-        
-        // When logging that value
-        XCTAssert(RustTracing.logFiles.isEmpty)
-        
-        MXLog.configure(logLevel: .info)
-        
-        MXLog.info(roomSummary)
-        
-        // Then the log file should not include the sensitive information
-        guard let logFile = RustTracing.logFiles.first else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
-        
-        let content = try String(contentsOf: logFile)
-        XCTAssertTrue(content.contains(roomSummary.id))
-        XCTAssertFalse(content.contains(roomName))
-        XCTAssertFalse(content.contains(lastMessage))
-    }
-    
-    func disabled_testTimelineContentIsRedacted() throws {
-        // Given timeline items that contain text
-        let textAttributedString = "TextAttributed"
-        let textMessage = TextRoomTimelineItem(id: .random,
-                                               timestamp: "",
-                                               isOutgoing: false,
-                                               isEditable: false,
-                                               canBeRepliedTo: true,
-                                               isThreaded: false,
-                                               sender: .init(id: "sender"),
-                                               content: .init(body: "TextString", formattedBody: AttributedString(textAttributedString)))
-        let noticeAttributedString = "NoticeAttributed"
-        let noticeMessage = NoticeRoomTimelineItem(id: .random,
-                                                   timestamp: "",
-                                                   isOutgoing: false,
-                                                   isEditable: false,
-                                                   canBeRepliedTo: true,
-                                                   isThreaded: false,
-                                                   sender: .init(id: "sender"),
-                                                   content: .init(body: "NoticeString", formattedBody: AttributedString(noticeAttributedString)))
-        let emoteAttributedString = "EmoteAttributed"
-        let emoteMessage = EmoteRoomTimelineItem(id: .random,
-                                                 timestamp: "",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 canBeRepliedTo: true,
-                                                 isThreaded: false,
-                                                 sender: .init(id: "sender"),
-                                                 content: .init(body: "EmoteString", formattedBody: AttributedString(emoteAttributedString)))
-        let imageMessage = ImageRoomTimelineItem(id: .init(timelineID: "myimagemessage"),
-                                                 timestamp: "",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 canBeRepliedTo: true,
-                                                 isThreaded: false,
-                                                 sender: .init(id: "sender"),
-                                                 content: .init(body: "ImageString", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"), thumbnailSource: nil))
-        let videoMessage = VideoRoomTimelineItem(id: .random,
-                                                 timestamp: "",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 canBeRepliedTo: true,
-                                                 isThreaded: false,
-                                                 sender: .init(id: "sender"),
-                                                 content: .init(body: "VideoString", duration: 0, source: nil, thumbnailSource: nil))
-        let fileMessage = FileRoomTimelineItem(id: .random,
-                                               timestamp: "",
-                                               isOutgoing: false,
-                                               isEditable: false,
-                                               canBeRepliedTo: true,
-                                               isThreaded: false,
-                                               sender: .init(id: "sender"),
-                                               content: .init(body: "FileString", source: nil, thumbnailSource: nil, contentType: nil))
-        
-        // When logging that value
-        XCTAssert(RustTracing.logFiles.isEmpty)
-        
-        MXLog.configure(logLevel: .info)
-        
-        MXLog.info(textMessage)
-        MXLog.info(noticeMessage)
-        MXLog.info(emoteMessage)
-        MXLog.info(imageMessage)
-        MXLog.info(videoMessage)
-        MXLog.info(fileMessage)
-        
-        // Then the log file should not include the text content
-        guard let logFile = RustTracing.logFiles.first else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
-
-        let content = try String(contentsOf: logFile)
-        XCTAssertTrue(content.contains(textMessage.id.timelineID))
-        XCTAssertFalse(content.contains(textMessage.body))
-        XCTAssertFalse(content.contains(textAttributedString))
-        
-        XCTAssertTrue(content.contains(noticeMessage.id.timelineID))
-        XCTAssertFalse(content.contains(noticeMessage.body))
-        XCTAssertFalse(content.contains(noticeAttributedString))
-        
-        XCTAssertTrue(content.contains(emoteMessage.id.timelineID))
-        XCTAssertFalse(content.contains(emoteMessage.body))
-        XCTAssertFalse(content.contains(emoteAttributedString))
-        
-        XCTAssertTrue(content.contains(imageMessage.id.timelineID))
-        XCTAssertFalse(content.contains(imageMessage.body))
-        
-        XCTAssertTrue(content.contains(videoMessage.id.timelineID))
-        XCTAssertFalse(content.contains(videoMessage.body))
-        
-        XCTAssertTrue(content.contains(fileMessage.id.timelineID))
-        XCTAssertFalse(content.contains(fileMessage.body))
-    }
-    
-    func disabled_testRustMessageContentIsRedacted() throws {
-        // Given message content that contain text
-        let textString = "TextString"
-        let textMessage = TextMessageContent(body: "",
-                                             formatted: FormattedBody(format: .html, body: "<b>\(textString)</b>"))
-        let noticeString = "NoticeString"
-        let noticeMessage = NoticeMessageContent(body: noticeString,
-                                                 formatted: FormattedBody(format: .html, body: "<b>\(noticeString)</b>"))
-        let emoteString = "EmoteString"
-        let emoteMessage = EmoteMessageContent(body: emoteString,
-                                               formatted: FormattedBody(format: .html, body: "<b>\(emoteString)</b>"))
-        
-        let pointer = Unmanaged.passRetained(NSURL(fileURLWithPath: "/tmp/file")).toOpaque()
-        let imageMessage = ImageMessageContent(body: "ImageString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
-        let videoMessage = VideoMessageContent(body: "VideoString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
-        let fileMessage = FileMessageContent(body: "FileString", filename: "FileName", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
-        
-        // When logging that value
-        XCTAssert(RustTracing.logFiles.isEmpty)
-        
-        MXLog.configure(logLevel: .info)
-        
-        MXLog.info(textMessage)
-        MXLog.info(noticeMessage)
-        MXLog.info(emoteMessage)
-        MXLog.info(imageMessage)
-        MXLog.info(videoMessage)
-        MXLog.info(fileMessage)
-        
-        // Then the log file should not include the text content
-        guard let logFile = RustTracing.logFiles.first else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
-
-        let content = try String(contentsOf: logFile)
-        XCTAssertTrue(content.contains(String(describing: TextMessageContent.self)))
-        XCTAssertFalse(content.contains(textString))
-        
-        XCTAssertTrue(content.contains(String(describing: NoticeMessageContent.self)))
-        XCTAssertFalse(content.contains(noticeString))
-        
-        XCTAssertTrue(content.contains(String(describing: EmoteMessageContent.self)))
-        XCTAssertFalse(content.contains(emoteString))
-        
-        XCTAssertTrue(content.contains(String(describing: ImageMessageContent.self)))
-        XCTAssertFalse(content.contains(imageMessage.body))
-        
-        XCTAssertTrue(content.contains(String(describing: VideoMessageContent.self)))
-        XCTAssertFalse(content.contains(videoMessage.body))
-        
-        XCTAssertTrue(content.contains(String(describing: FileMessageContent.self)))
-        XCTAssertFalse(content.contains(fileMessage.body))
     }
 }
