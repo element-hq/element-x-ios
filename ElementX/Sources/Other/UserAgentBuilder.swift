@@ -31,12 +31,21 @@ final class UserAgentBuilder {
         let clientVersion = InfoPlistReader.app.bundleShortVersionString
 
         #if os(iOS)
-        return String(format: "%@/%@ (%@; iOS %@; Scale/%0.2f)",
-                      clientName,
-                      clientVersion,
-                      Device.current.safeDescription,
-                      UIDevice.current.systemVersion,
-                      UIScreen.main.scale)
+        let scale = UIScreen.main.scale
+        return if ProcessInfo.processInfo.isiOSAppOnMac {
+            String(format: "%@/%@ (Mac; macOS %@; Scale/%0.2f)",
+                   clientName,
+                   clientVersion,
+                   ProcessInfo.processInfo.operatingSystemVersionString,
+                   scale)
+        } else {
+            String(format: "%@/%@ (%@; iOS %@; Scale/%0.2f)",
+                   clientName,
+                   clientVersion,
+                   Device.current.safeDescription,
+                   UIDevice.current.systemVersion,
+                   scale)
+        }
         #elseif os(tvOS)
         return String(format: "%@/%@ (%@; tvOS %@; Scale/%0.2f)",
                       clientName,
@@ -52,7 +61,7 @@ final class UserAgentBuilder {
                       WKInterfaceDevice.current.systemVersion,
                       WKInterfaceDevice.currentDevice.screenScale)
         #elseif os(OSX)
-        return String(format: "%@/%@ (Mac; Mac OS X %@)",
+        return String(format: "%@/%@ (Mac; macOS %@)",
                       clientName,
                       clientVersion,
                       NSProcessInfo.processInfo.operatingSystemVersionString)

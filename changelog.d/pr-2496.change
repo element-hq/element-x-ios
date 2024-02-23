@@ -1,0 +1,1 @@
+Add support for latest iPhones in the User Agent. Also correctly identify when running on a Mac. 
