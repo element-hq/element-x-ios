@@ -36,6 +36,7 @@ enum RoomProxyError: Error, Equatable {
     case failedMarkingAsRead
     case failedSendingTypingNotice
     case failedFlaggingAsFavourite
+    case failedModeration
 }
 
 enum RoomProxyAction {
@@ -119,6 +120,12 @@ protocol RoomProxyProtocol {
     func flagAsUnread(_ isUnread: Bool) async -> Result<Void, RoomProxyError>
     
     func flagAsFavourite(_ isFavourite: Bool) async -> Result<Void, RoomProxyError>
+    
+    // MARK: - Moderation
+    
+    func kickUser(_ userID: String) async -> Result<Void, RoomProxyError>
+    func banUser(_ userID: String) async -> Result<Void, RoomProxyError>
+    func unbanUser(_ userID: String) async -> Result<Void, RoomProxyError>
     
     // MARK: - Element Call
     

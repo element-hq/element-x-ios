@@ -46,6 +46,7 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
     lazy var powerLevel = Int(member.powerLevel())
     lazy var role = member.suggestedRoleForPowerLevel()
     lazy var canInviteUsers = member.canInvite()
+    lazy var canKickUsers = member.canKick()
     lazy var canBanUsers = member.canBan()
     
     func canSendStateEvent(type: StateEventType) -> Bool {

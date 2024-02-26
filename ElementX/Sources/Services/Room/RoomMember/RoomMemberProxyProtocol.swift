@@ -34,6 +34,7 @@ protocol RoomMemberProxyProtocol: AnyObject {
     var powerLevel: Int { get }
     var role: RoomMemberRole { get }
     var canInviteUsers: Bool { get }
+    var canKickUsers: Bool { get }
     var canBanUsers: Bool { get }
 
     func ignoreUser() async -> Result<Void, RoomMemberProxyError>

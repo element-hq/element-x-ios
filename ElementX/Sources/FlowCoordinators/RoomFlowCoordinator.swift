@@ -578,7 +578,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         let params = RoomMembersListScreenCoordinatorParameters(mediaProvider: userSession.mediaProvider,
-                                                                roomProxy: roomProxy)
+                                                                roomProxy: roomProxy,
+                                                                appSettings: appSettings)
         let coordinator = RoomMembersListScreenCoordinator(parameters: params)
         
         coordinator.actions

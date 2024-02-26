@@ -22,6 +22,7 @@ typealias RoomMembersListScreenViewModelType = StateStoreViewModel<RoomMembersLi
 class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMembersListScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appSettings: AppSettings
     
     private var members: [RoomMemberProxyProtocol] = []
     
@@ -34,9 +35,11 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     init(initialMode: RoomMembersListScreenMode = .members,
          roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appSettings: AppSettings) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
+        self.appSettings = appSettings
         
         super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount,
                                            bindings: .init(mode: initialMode)),
@@ -49,12 +52,16 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     override func process(viewAction: RoomMembersListScreenViewAction) {
         switch viewAction {
-        case .selectMember(let id):
-            guard let member = members.first(where: { $0.userID == id }) else {
-                MXLog.error("Selected member \(id) not found")
-                return
-            }
-            actionsSubject.send(.selectMember(member))
+        case .selectMember(let member):
+            selectMember(member)
+        case .showMemberDetails(let member):
+            showMemberDetails(member)
+        case .kickMember(let member):
+            Task { await kickMember(member) }
+        case .banMember(let member):
+            Task { await banMember(member) }
+        case .unbanMember(let member):
+            Task { await unbanMember(member) }
         case .invite:
             actionsSubject.send(.invite)
         }
@@ -64,7 +71,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         hideLoader()
     }
     
-    // MARK: - Private
+    // MARK: - Members
     
     private func setupMembers() {
         Task {
@@ -100,6 +107,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                                bindings: state.bindings)
             if let accountOwner = roomMembersDetails.accountOwner {
                 self.state.canInviteUsers = accountOwner.canInviteUsers
+                self.state.canKickUsers = accountOwner.canKickUsers
                 self.state.canBanUsers = accountOwner.canBanUsers
             }
             hideLoader()
@@ -139,6 +147,76 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         .value
     }
     
+    private func selectMember(_ member: RoomMemberDetails) {
+        if appSettings.roomModerationEnabled, state.canKickUsers || state.canBanUsers {
+            if member.isBanned {
+                state.bindings.alertInfo = AlertInfo(id: .unbanConfirmation(member),
+                                                     title: L10n.screenRoomMemberListManageMemberUnbanTitle,
+                                                     message: L10n.screenRoomMemberListManageMemberUnbanMessage,
+                                                     primaryButton: .init(title: L10n.screenRoomMemberListManageMemberUnbanAction) { [weak self] in
+                                                         self?.context.send(viewAction: .unbanMember(member))
+                                                     },
+                                                     secondaryButton: .init(title: L10n.actionCancel, role: .cancel) { })
+            } else {
+                state.bindings.memberToManage = member
+            }
+        } else {
+            showMemberDetails(member)
+        }
+    }
+    
+    private func showMemberDetails(_ member: RoomMemberDetails) {
+        guard let member = members.first(where: { $0.userID == member.id }) else {
+            MXLog.error("Selected member \(member.id) not found")
+            return
+        }
+        actionsSubject.send(.selectMember(member))
+        state.bindings.memberToManage = nil
+    }
+    
+    // MARK: - Member Management
+    
+    private func kickMember(_ member: RoomMemberDetails) async {
+        let indicatorTitle = L10n.screenRoomMemberListRemovingUser(member.name ?? member.id)
+        showManageMemberIndicator(title: indicatorTitle)
+        
+        switch await roomProxy.kickUser(member.id) {
+        case .success:
+            state.bindings.memberToManage = nil
+            hideManageMemberIndicator(title: indicatorTitle)
+        case .failure:
+            showManageMemberFailure(title: indicatorTitle)
+        }
+    }
+    
+    private func banMember(_ member: RoomMemberDetails) async {
+        let indicatorTitle = L10n.screenRoomMemberListBanningUser(member.name ?? member.id)
+        showManageMemberIndicator(title: indicatorTitle)
+        
+        switch await roomProxy.banUser(member.id) {
+        case .success:
+            state.bindings.memberToManage = nil
+            hideManageMemberIndicator(title: indicatorTitle)
+        case .failure:
+            showManageMemberFailure(title: indicatorTitle)
+        }
+    }
+    
+    private func unbanMember(_ member: RoomMemberDetails) async {
+        let indicatorTitle = L10n.screenRoomMemberListUnbanningUser(member.name ?? member.id)
+        showManageMemberIndicator(title: indicatorTitle)
+        
+        switch await roomProxy.unbanUser(member.id) {
+        case .success:
+            state.bindings.memberToManage = nil
+            hideManageMemberIndicator(title: indicatorTitle)
+        case .failure:
+            showManageMemberFailure(title: indicatorTitle)
+        }
+    }
+    
+    // MARK: - Indicators
+    
     private let userIndicatorID = UUID().uuidString
     
     private func showLoader() {
@@ -151,6 +229,22 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     private func hideLoader() {
         userIndicatorController.retractIndicatorWithId(userIndicatorID)
+    }
+    
+    private func showManageMemberIndicator(title: String) {
+        userIndicatorController.submitIndicator(UserIndicator(id: title,
+                                                              type: .toast(progress: .indeterminate),
+                                                              title: title,
+                                                              persistent: true))
+    }
+    
+    private func hideManageMemberIndicator(title: String) {
+        userIndicatorController.retractIndicatorWithId(title)
+    }
+    
+    private func showManageMemberFailure(title: String) {
+        userIndicatorController.retractIndicatorWithId(title)
+        userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonFailed, iconName: "xmark"))
     }
 }
 
