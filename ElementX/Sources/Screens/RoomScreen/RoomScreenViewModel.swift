@@ -110,6 +110,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         buildTimelineViews()
+        
+        updateMembers(roomProxy.membersPublisher.value)
 
         // Note: beware if we get to e.g. restore a reply / edit,
         // maybe we are tracking a non-needed first initial state
@@ -269,7 +271,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await roomScreenInteractionHandler.scrubVoiceMessagePlayback(scrubbing: scrubbing) }
         }
     }
-
+    
+    private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
+        state.members = members.reduce(into: [String: RoomMemberState]()) { dictionary, member in
+            dictionary[member.userID] = RoomMemberState(displayName: member.displayName, avatarURL: member.avatarURL)
+        }
+    }
+    
     private func setupSubscriptions() {
         timelineController.callbacks
             .receive(on: DispatchQueue.main)
@@ -318,15 +326,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         appSettings.$sharePresence
             .weakAssign(to: \.state.showReadReceipts, on: self)
             .store(in: &cancellables)
-                
+        
         roomProxy.membersPublisher
-            .map { members in
-                members.reduce(into: [String: RoomMemberState]()) { dictionary, member in
-                    dictionary[member.userID] = RoomMemberState(displayName: member.displayName, avatarURL: member.avatarURL)
-                }
-            }
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.members, on: self)
+            .sink { [weak self] in self?.updateMembers($0) }
             .store(in: &cancellables)
         
         roomProxy.typingMembersPublisher
