@@ -52,7 +52,7 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 19c778b6ce0b82601ecdca23ff8d4a7aa41f990f
+    revision: d084777ee50de4271670342d0adecfc99ea96121
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
@@ -107,8 +107,8 @@ packages:
     url: https://github.com/PostHog/posthog-ios
     minorVersion: 2.0.3
   Prefire:
-    url: https://github.com/BarredEwe/Prefire
-    minorVersion: 1.5.0
+    url: https://github.com/stefanceriu/Prefire
+    revision: 982b207efafb9c6ff0c7beae38211c37b918d2b9
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
     minorVersion: 8.13.0

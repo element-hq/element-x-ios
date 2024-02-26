@@ -2,9 +2,26 @@
   "configurations" : [
     {
       "id" : "D789E5F1-30B8-4A23-B20E-281ACE05CFD6",
-      "name" : "Default",
+      "name" : "English",
       "options" : {
-
+        "language" : "en",
+        "locationScenario" : {
+          "identifier" : "London, England",
+          "referenceType" : "built-in"
+        },
+        "region" : "GB"
+      }
+    },
+    {
+      "id" : "059C4F1C-EAB6-4D96-BA8F-30DF92A365E9",
+      "name" : "Pseudolanguage",
+      "options" : {
+        "language" : "IDELaunchSchemeLanguageDoubleLocalizedStrings",
+        "locationScenario" : {
+          "identifier" : "London, England",
+          "referenceType" : "built-in"
+        },
+        "region" : "DE"
       }
     }
   ],
