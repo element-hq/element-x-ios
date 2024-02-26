@@ -80,6 +80,11 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                 self?.updateState(members: members)
             }
             .store(in: &cancellables)
+        
+        roomProxy.timeline.timelineProvider.membershipChangePublisher.sink { [roomProxy] _ in
+            Task { await roomProxy.updateMembers() }
+        }
+        .store(in: &cancellables)
     }
     
     private func updateState(members: [RoomMemberProxyProtocol]) {

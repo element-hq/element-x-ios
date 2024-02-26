@@ -38,6 +38,12 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             .map { _, _ in () }
             .eraseToAnyPublisher()
     }
+    
+    private let membershipChangeSubject = PassthroughSubject<Void, Never>()
+    var membershipChangePublisher: AnyPublisher<Void, Never> {
+        membershipChangeSubject
+            .eraseToAnyPublisher()
+    }
 
     init(currentItems: [TimelineItem],
          updatePublisher: AnyPublisher<[TimelineDiff], Never>,
@@ -99,7 +105,13 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
 
             MXLog.verbose("Append \(items.map(\.debugIdentifier))")
             for (index, item) in items.enumerated() {
-                changes.append(.insert(offset: Int(itemProxies.count) + index, element: TimelineItemProxy(item: item), associatedWith: nil))
+                let itemProxy = TimelineItemProxy(item: item)
+                
+                if itemProxy.isMembershipChange {
+                    membershipChangeSubject.send(())
+                }
+                
+                changes.append(.insert(offset: Int(itemProxies.count) + index, element: itemProxy, associatedWith: nil))
             }
         case .clear:
             MXLog.verbose("Clear all items")
@@ -129,6 +141,11 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
 
             MXLog.verbose("Push Back \(item.debugIdentifier)")
             let itemProxy = TimelineItemProxy(item: item)
+            
+            if itemProxy.isMembershipChange {
+                membershipChangeSubject.send(())
+            }
+            
             changes.append(.insert(offset: Int(itemProxies.count), element: itemProxy, associatedWith: nil))
         case .pushFront:
             guard let item = diff.pushFront() else { fatalError() }
@@ -195,6 +212,20 @@ private extension TimelineItemProxy {
             return .virtual(timelineID: timelineID, dscription: virtualTimelineItem.description)
         case .unknown(let item):
             return .unknown(timelineID: String(item.uniqueId()))
+        }
+    }
+    
+    var isMembershipChange: Bool {
+        switch self {
+        case .event(let eventTimelineItemProxy):
+            switch eventTimelineItemProxy.content.kind() {
+            case .roomMembership:
+                true
+            default:
+                false
+            }
+        case .virtual, .unknown:
+            false
         }
     }
 }

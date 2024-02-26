@@ -22,7 +22,14 @@ import MatrixRustSDK
 @MainActor
 // sourcery: AutoMockable
 protocol RoomTimelineProviderProtocol {
+    /// A publisher that signals when ``itemProxies`` or ``backPaginationState`` are changed.
     var updatePublisher: AnyPublisher<Void, Never> { get }
+    /// The current set of items in the timeline.
     var itemProxies: [TimelineItemProxy] { get }
+    /// Whether the timeline is back paginating or not (or has reached the start of the room).
     var backPaginationState: BackPaginationStatus { get }
+    /// A publisher that signals when changes to the room's membership have occurred through `/sync`.
+    ///
+    /// This is temporary and will be replace by a subscription on the room itself.
+    var membershipChangePublisher: AnyPublisher<Void, Never> { get }
 }
