@@ -83,7 +83,7 @@ generate_what_to_test_notes() {
 
         mkdir $TESTFLIGHT_DIR_PATH
 
-        NOTES=$(git log --pretty='- %an: %s' "$LATEST_TAG"..HEAD)
+        NOTES="$(git log --pretty='- %an: %s' "$LATEST_TAG"..HEAD)"
 
         echo "generate_what_to_test_notes: Generated notes:\n"$NOTES""
 
