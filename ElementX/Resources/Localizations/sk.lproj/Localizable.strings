@@ -102,6 +102,7 @@
 "common_analytics" = "Analytika";
 "common_appearance" = "Vzhľad";
 "common_audio" = "Zvuk";
+"common_blocked_users" = "Blocked users";
 "common_bubbles" = "Bubliny";
 "common_chat_backup" = "Záloha konverzácie";
 "common_copyright" = "Autorské práva";
@@ -119,7 +120,9 @@
 "common_error" = "Chyba";
 "common_everyone" = "Všetci";
 "common_face_id_ios" = "Face ID";
+"common_failed" = "Failed";
 "common_favourite" = "Obľúbené";
+"common_favourited" = "Favourited";
 "common_file" = "Súbor";
 "common_forward_message" = "Preposlať správu";
 "common_gif" = "GIF";
@@ -139,6 +142,7 @@
 "common_no_results" = "Žiadne výsledky";
 "common_offline" = "Offline";
 "common_optic_id_ios" = "Optic ID";
+"common_or" = "or";
 "common_password" = "Heslo";
 "common_people" = "Ľudia";
 "common_permalink" = "Trvalý odkaz";
@@ -332,6 +336,7 @@
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN kódy sa nezhodujú";
 "screen_app_lock_signout_alert_message" = "Ak chcete pokračovať, musíte sa znovu prihlásiť a vytvoriť nový PIN kód.";
 "screen_app_lock_signout_alert_title" = "Prebieha odhlasovanie";
+"screen_blocked_users_unblocking" = "Unblocking...";
 "screen_bug_report_attach_screenshot" = "Priložiť snímku obrazovky";
 "screen_bug_report_contact_me" = "V prípade ďalších otázok ma môžete kontaktovať.";
 "screen_bug_report_contact_me_title" = "Kontaktujte ma";
@@ -350,6 +355,7 @@
 "screen_change_account_provider_subtitle" = "Použite iného poskytovateľa účtu, ako napríklad vlastný súkromný server alebo pracovný účet.";
 "screen_change_account_provider_title" = "Zmeniť poskytovateľa účtu";
 "screen_change_server_error_invalid_homeserver" = "Nemohli sme sa spojiť s týmto domovským serverom. Skontrolujte prosím, či ste zadali URL adresu domovského servera správne. Ak je adresa URL správna, kontaktujte svoj domovský server pre ďalšiu pomoc.";
+"screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Tento server momentálne nepodporuje kĺzavú synchronizáciu.";
 "screen_change_server_form_header" = "Adresa URL domovského servera";
 "screen_change_server_form_notice" = "Môžete sa pripojiť iba k existujúcemu serveru, ktorý podporuje kĺzavú synchronizáciu. Správca domovského servera ju bude musieť nakonfigurovať. %1$@";
@@ -375,7 +381,6 @@
 "screen_create_poll_title" = "Vytvoriť anketu";
 "screen_create_room_action_create_room" = "Nová miestnosť";
 "screen_create_room_action_invite_people" = "Pozvať ľudí na Element";
-"screen_create_room_add_people_title" = "Pozvať ľudí";
 "screen_create_room_error_creating_room" = "Pri vytváraní miestnosti došlo k chybe";
 "screen_create_room_private_option_description" = "Správy v tejto miestnosti sú šifrované. Šifrovanie už potom nie je možné vypnúť.";
 "screen_create_room_private_option_title" = "Súkromná miestnosť (len pre pozvaných)";
@@ -405,6 +410,7 @@
 "screen_login_error_deactivated_account" = "Tento účet bol deaktivovaný.";
 "screen_login_error_invalid_credentials" = "Nesprávne používateľské meno a/alebo heslo";
 "screen_login_error_invalid_user_id" = "Toto nie je platný identifikátor používateľa. Očakávaný formát: '@pouzivatel:homeserver.sk'";
+"screen_login_error_refresh_tokens" = "This server is configured to use refresh tokens. These aren't supported when using password based login.";
 "screen_login_error_unsupported_authentication" = "Vybraný domovský server nepodporuje prihlásenie pomocou hesla alebo OIDC. Obráťte sa na správcu alebo vyberte iný domovský server.";
 "screen_login_form_header" = "Zadajte svoje údaje";
 "screen_login_title" = "Vitajte späť!";
@@ -485,6 +491,11 @@
 "screen_room_attachment_source_location" = "Poloha";
 "screen_room_attachment_source_poll" = "Anketa";
 "screen_room_attachment_text_formatting" = "Formátovanie textu";
+"screen_room_change_role_confirm_add_admin_description" = "You will not be able to undo this action. You are promoting the user to have the same power level as you.";
+"screen_room_change_role_confirm_add_admin_title" = "Add Admin?";
+"screen_room_change_role_confirm_demote_self_action" = "Demote";
+"screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
+"screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_details_add_topic_title" = "Pridať tému";
 "screen_room_details_already_a_member" = "Už ste členom";
 "screen_room_details_already_invited" = "Už ste pozvaní";
@@ -496,7 +507,6 @@
 "screen_room_details_error_loading_notification_settings" = "Pri načítaní nastavení oznámení došlo k chybe.";
 "screen_room_details_error_muting" = "Nepodarilo sa stlmiť túto miestnosť, skúste to prosím znova.";
 "screen_room_details_error_unmuting" = "Nepodarilo sa zrušiť stlmenie tejto miestnosti, skúste to prosím znova.";
-"screen_room_details_invite_people_title" = "Pozvať ľudí";
 "screen_room_details_notification_mode_custom" = "Vlastné";
 "screen_room_details_notification_mode_default" = "Predvolené";
 "screen_room_details_notification_title" = "Oznámenia";
@@ -513,9 +523,16 @@
 "screen_room_member_details_unblock_alert_action" = "Odblokovať";
 "screen_room_member_details_unblock_alert_description" = "Všetky správy od nich budete môcť opäť vidieť.";
 "screen_room_member_details_unblock_user" = "Odblokovať používateľa";
+"screen_room_member_list_manage_member_remove" = "Remove member";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "Remove and ban member";
+"screen_room_member_list_manage_member_remove_confirmation_kick" = "Only remove member";
+"screen_room_member_list_manage_member_remove_confirmation_title" = "Remove member and ban from joining in the future?";
+"screen_room_member_list_manage_member_unban" = "Unban";
+"screen_room_member_list_manage_member_user_info" = "See user info";
 "screen_room_member_list_mode_banned" = "Zakázaní";
 "screen_room_member_list_mode_members" = "Členovia";
 "screen_room_member_list_pending_header_title" = "Čaká sa";
+"screen_room_member_list_removing_user" = "Removing %1$@...";
 "screen_room_member_list_role_administrator" = "Administrátor";
 "screen_room_member_list_role_moderator" = "Moderátor";
 "screen_room_member_list_room_members_header_title" = "Členovia miestnosti";
@@ -567,6 +584,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Skontrolujte, či sa nižšie uvedené čísla zhodujú s číslami zobrazenými na vašej druhej relácii.";
 "screen_session_verification_compare_numbers_title" = "Porovnať čísla";
 "screen_session_verification_complete_subtitle" = "Vaša nová relácia je teraz overená. Má prístup k vašim zašifrovaným správam a ostatní používatelia ju budú vidieť ako dôveryhodnú.";
+"screen_session_verification_enter_recovery_key" = "Enter recovery key";
 "screen_session_verification_open_existing_session_subtitle" = "Dokážte, že ste to vy, aby ste získali prístup k histórii vašich zašifrovaných správ.";
 "screen_session_verification_open_existing_session_title" = "Otvoriť existujúcu reláciu";
 "screen_session_verification_positive_button_canceled" = "Zopakovať overenie";
@@ -687,7 +705,11 @@
 "screen_analytics_settings_help_us_improve" = "Zdieľajte anonymné údaje o používaní, aby sme mohli identifikovať problémy.";
 "screen_analytics_settings_read_terms" = "Môžete si prečítať všetky naše podmienky %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "tu";
+"screen_blocked_users_unblock_alert_action" = "Odblokovať";
+"screen_blocked_users_unblock_alert_description" = "Všetky správy od nich budete môcť opäť vidieť.";
+"screen_blocked_users_unblock_alert_title" = "Odblokovať používateľa";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ zlyhal pri poslednom použití. Chcete zdieľať správu o páde s našim tímom?";
+"screen_create_room_add_people_title" = "Pozvať ľudí";
 "screen_create_room_room_name_label" = "Názov miestnosti";
 "screen_create_room_title" = "Vytvoriť miestnosť";
 "screen_dm_details_block_alert_action" = "Zablokovať";
@@ -701,6 +723,7 @@
 "screen_login_subtitle" = "Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu.";
 "screen_report_content_block_user" = "Zablokovať používateľa";
 "screen_room_attachment_source_camera_photo" = "Urobiť fotku";
+"screen_room_details_invite_people_title" = "Pozvať ľudí";
 "screen_room_details_leave_conversation_title" = "Opustiť konverzáciu";
 "screen_room_details_leave_room_title" = "Opustiť miestnosť";
 "screen_room_details_room_name_label" = "Názov miestnosti";

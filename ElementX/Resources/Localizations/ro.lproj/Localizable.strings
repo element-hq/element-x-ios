@@ -102,6 +102,7 @@
 "common_analytics" = "Analitice";
 "common_appearance" = "Aspect";
 "common_audio" = "Audio";
+"common_blocked_users" = "Blocked users";
 "common_bubbles" = "Baloane";
 "common_chat_backup" = "Backup conversații";
 "common_copyright" = "Drepturi de autor";
@@ -119,7 +120,9 @@
 "common_error" = "Eroare";
 "common_everyone" = "Toți";
 "common_face_id_ios" = "Face ID";
+"common_failed" = "Failed";
 "common_favourite" = "Favorite";
+"common_favourited" = "Favorită";
 "common_file" = "Fişier";
 "common_forward_message" = "Redirecționați mesajul";
 "common_gif" = "GIF";
@@ -139,6 +142,7 @@
 "common_no_results" = "Niciun rezultat";
 "common_offline" = "Deconectat";
 "common_optic_id_ios" = "Optic ID";
+"common_or" = "or";
 "common_password" = "Parola";
 "common_people" = "Persoane";
 "common_permalink" = "Permalink";
@@ -332,6 +336,7 @@
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "Codurile PIN nu corespund";
 "screen_app_lock_signout_alert_message" = "Va trebui să vă reconectați și să creați un cod PIN nou pentru a continua";
 "screen_app_lock_signout_alert_title" = "Sunteți deconectat";
+"screen_blocked_users_unblocking" = "Unblocking...";
 "screen_bug_report_attach_screenshot" = "Atașați o captură de ecran";
 "screen_bug_report_contact_me" = "Puteți să mă contactați dacă aveți întrebări suplimentare";
 "screen_bug_report_contact_me_title" = "Contactați-mă";
@@ -350,6 +355,7 @@
 "screen_change_account_provider_subtitle" = "Utilizați un alt furnizor de cont, cum ar fi propriul server privat sau un cont de serviciu.";
 "screen_change_account_provider_title" = "Schimbați furnizorul contului";
 "screen_change_server_error_invalid_homeserver" = "Nu am putut accesa acest homeserver. Te rugăm să verifici că ai introdus corect adresa URL a homeserver-ului. Dacă adresa URL este corectă, contactează administratorul homeserver-ului pentru ajutor suplimentar.";
+"screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Momentan acest server nu oferă suport pentru sliding sync.";
 "screen_change_server_form_header" = "Adresa URL a homeserver-ului";
 "screen_change_server_form_notice" = "Vă putețo conecta numai la un server existent care oferă suport pentru sliding sync. Administratorul homeserver-ului dumneavoastră va trebui să îl configureze. %1$@";
@@ -375,7 +381,6 @@
 "screen_create_poll_title" = "Creați un sondaj";
 "screen_create_room_action_create_room" = "Cameră nouă";
 "screen_create_room_action_invite_people" = "Invitați prieteni în Element";
-"screen_create_room_add_people_title" = "Invitați persoane";
 "screen_create_room_error_creating_room" = "A apărut o eroare la crearea camerei";
 "screen_create_room_private_option_description" = "Mesajele din această cameră sunt criptate. Criptarea nu poate fi dezactivată ulterior.";
 "screen_create_room_private_option_title" = "Cameră privată (doar pe bază de invitație)";
@@ -405,6 +410,7 @@
 "screen_login_error_deactivated_account" = "Acest cont a fost dezactivat.";
 "screen_login_error_invalid_credentials" = "Utilizator și/sau parolă incorecte";
 "screen_login_error_invalid_user_id" = "Acesta nu este un identificator de utilizator valid. Format așteptat: „@user:homeserver.org”";
+"screen_login_error_refresh_tokens" = "This server is configured to use refresh tokens. These aren't supported when using password based login.";
 "screen_login_error_unsupported_authentication" = "Homeserver-ul selectat nu acceptă autentificarea prin parola sau OIDC. Te rugăm să contactezi administratorul sau să alegi un alt homeserver.";
 "screen_login_form_header" = "Introduceți detaliile";
 "screen_login_title" = "Bine ați revenit!";
@@ -485,6 +491,11 @@
 "screen_room_attachment_source_location" = "Locație";
 "screen_room_attachment_source_poll" = "Sondaj";
 "screen_room_attachment_text_formatting" = "Formatarea textului";
+"screen_room_change_role_confirm_add_admin_description" = "You will not be able to undo this action. You are promoting the user to have the same power level as you.";
+"screen_room_change_role_confirm_add_admin_title" = "Add Admin?";
+"screen_room_change_role_confirm_demote_self_action" = "Demote";
+"screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
+"screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_details_add_topic_title" = "Adăugare subiect";
 "screen_room_details_already_a_member" = "Deja membru";
 "screen_room_details_already_invited" = "Deja invitat";
@@ -496,7 +507,6 @@
 "screen_room_details_error_loading_notification_settings" = "A apărut o eroare la încărcarea setărilor pentru notificari.";
 "screen_room_details_error_muting" = "Dezactivarea notificarilor pentru această cameră a eșuat, încercați din nou.";
 "screen_room_details_error_unmuting" = "Activarea notificarilor pentru această cameră a eșuat, încercați din nou.";
-"screen_room_details_invite_people_title" = "Invitați persoane";
 "screen_room_details_notification_mode_custom" = "Personalizat";
 "screen_room_details_notification_mode_default" = "Implicit";
 "screen_room_details_notification_title" = "Notificări";
@@ -513,9 +523,16 @@
 "screen_room_member_details_unblock_alert_action" = "Deblocați";
 "screen_room_member_details_unblock_alert_description" = "La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta.";
 "screen_room_member_details_unblock_user" = "Deblocați utilizatorul";
+"screen_room_member_list_manage_member_remove" = "Înlăturați membrul";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "Înlăturați și interziceți membrul";
+"screen_room_member_list_manage_member_remove_confirmation_kick" = "Doar înlăturare";
+"screen_room_member_list_manage_member_remove_confirmation_title" = "Înlăturați membrul și interziceți-i să se alăture în viitor?";
+"screen_room_member_list_manage_member_unban" = "Anulare excludere";
+"screen_room_member_list_manage_member_user_info" = "Vedeți informații despre utilizator";
 "screen_room_member_list_mode_banned" = "Excluși";
 "screen_room_member_list_mode_members" = "Membri";
 "screen_room_member_list_pending_header_title" = "În așteptare";
+"screen_room_member_list_removing_user" = "Removing %1$@...";
 "screen_room_member_list_role_administrator" = "Administrator";
 "screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "Membrii camerei";
@@ -567,6 +584,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Confirmați că numerele de mai jos se potrivesc cu cele afișate în cealaltă sesiune.";
 "screen_session_verification_compare_numbers_title" = "Comparați numerele";
 "screen_session_verification_complete_subtitle" = "Noua dumneavoastră sesiune este acum verificată. Are acces la mesajele dumneavoastră criptate, iar alți utilizatori vă vor vedea ca fiind de încredere.";
+"screen_session_verification_enter_recovery_key" = "Introduceți cheia de recuperare";
 "screen_session_verification_open_existing_session_subtitle" = "Demonstrați-vă identitatea pentru a accesa istoricul mesajelor criptate.";
 "screen_session_verification_open_existing_session_title" = "Deschideți o sesiune existentă";
 "screen_session_verification_positive_button_canceled" = "Reîncercați verificarea";
@@ -687,7 +705,11 @@
 "screen_analytics_settings_help_us_improve" = "Distribuiți date anonime de utilizare pentru a ne ajuta să identificăm probleme.";
 "screen_analytics_settings_read_terms" = "Puteți citi toate condițiile noastre %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "aici";
+"screen_blocked_users_unblock_alert_action" = "Deblocați";
+"screen_blocked_users_unblock_alert_description" = "La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta.";
+"screen_blocked_users_unblock_alert_title" = "Deblocați utilizatorul";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?";
+"screen_create_room_add_people_title" = "Invitați prieteni";
 "screen_create_room_room_name_label" = "Numele camerei";
 "screen_create_room_title" = "Creați o cameră";
 "screen_dm_details_block_alert_action" = "Blocați";
@@ -701,6 +723,7 @@
 "screen_login_subtitle" = "Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată.";
 "screen_report_content_block_user" = "Blocați utilizatorul";
 "screen_room_attachment_source_camera_photo" = "Faceți o fotografie";
+"screen_room_details_invite_people_title" = "Invitați prieteni";
 "screen_room_details_leave_conversation_title" = "Părăsiți conversația";
 "screen_room_details_leave_room_title" = "Părăsiți camera";
 "screen_room_details_room_name_label" = "Numele camerei";

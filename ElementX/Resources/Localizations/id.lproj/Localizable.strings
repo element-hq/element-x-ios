@@ -102,6 +102,7 @@
 "common_analytics" = "Analitik";
 "common_appearance" = "Penampilan";
 "common_audio" = "Audio";
+"common_blocked_users" = "Blocked users";
 "common_bubbles" = "Gelembung";
 "common_chat_backup" = "Pencadangan percakapan";
 "common_copyright" = "Hak cipta";
@@ -119,7 +120,9 @@
 "common_error" = "Eror";
 "common_everyone" = "Semua orang";
 "common_face_id_ios" = "Face ID";
+"common_failed" = "Failed";
 "common_favourite" = "Favourite";
+"common_favourited" = "Favourited";
 "common_file" = "Berkas";
 "common_forward_message" = "Teruskan pesan";
 "common_gif" = "GIF";
@@ -139,6 +142,7 @@
 "common_no_results" = "Tidak ada hasil";
 "common_offline" = "Luring";
 "common_optic_id_ios" = "Optic ID";
+"common_or" = "or";
 "common_password" = "Kata sandi";
 "common_people" = "Orang";
 "common_permalink" = "Tautan Permanen";
@@ -332,6 +336,7 @@
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN tidak cocok";
 "screen_app_lock_signout_alert_message" = "Anda harus masuk ulang dan membuat PIN baru untuk melanjutkan";
 "screen_app_lock_signout_alert_title" = "Anda sedang dikeluarkan";
+"screen_blocked_users_unblocking" = "Unblocking...";
 "screen_bug_report_attach_screenshot" = "Lampirkan tangkapan layar";
 "screen_bug_report_contact_me" = "Anda dapat menghubungi saya jika Anda memiliki pertanyaan lebih lanjut.";
 "screen_bug_report_contact_me_title" = "Hubungi saya";
@@ -350,6 +355,7 @@
 "screen_change_account_provider_subtitle" = "Gunakan penyedia akun yang berbeda, seperti server pribadi Anda sendiri atau akun kerja.";
 "screen_change_account_provider_title" = "Ubah penyedia akun";
 "screen_change_server_error_invalid_homeserver" = "Kami tidak dapat menjangkau server ini. Periksa apakah Anda telah memasukkan URL homeserver dengan benar. Jika URL sudah benar, hubungi administrator homeserver Anda untuk bantuan lebih lanjut.";
+"screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Server ini saat ini tidak mendukung sinkronisasi geser.";
 "screen_change_server_form_header" = "URL Homeserver";
 "screen_change_server_form_notice" = "Anda hanya dapat terhubung ke server yang ada yang mendukung sinkronisasi geser. Admin homeserver Anda perlu mengaturnya. %1$@";
@@ -375,7 +381,6 @@
 "screen_create_poll_title" = "Buat pemungutan suara";
 "screen_create_room_action_create_room" = "Ruangan baru";
 "screen_create_room_action_invite_people" = "Undang orang-orang ke Element";
-"screen_create_room_add_people_title" = "Undang seseorang";
 "screen_create_room_error_creating_room" = "Terjadi kesalahan saat membuat ruangan";
 "screen_create_room_private_option_description" = "Pesan di ruangan ini dienkripsi. Enkripsi tidak dapat dinonaktifkan setelahnya.";
 "screen_create_room_private_option_title" = "Ruangan pribadi (hanya undangan)";
@@ -405,6 +410,7 @@
 "screen_login_error_deactivated_account" = "Akun ini telah dinonaktifkan.";
 "screen_login_error_invalid_credentials" = "Nama pengguna dan/atau kata sandi salah";
 "screen_login_error_invalid_user_id" = "Ini bukan pengenal pengguna yang valid. Format yang diharapkan: '@pengguna:homeserver.org'";
+"screen_login_error_refresh_tokens" = "This server is configured to use refresh tokens. These aren't supported when using password based login.";
 "screen_login_error_unsupported_authentication" = "Homeserver yang dipilih tidak mendukung log masuk kata sandi atau OIDC. Silakan hubungi admin Anda atau pilih homeserver yang lain.";
 "screen_login_form_header" = "Masukkan detail Anda";
 "screen_login_title" = "Selamat datang kembali!";
@@ -485,6 +491,11 @@
 "screen_room_attachment_source_location" = "Lokasi";
 "screen_room_attachment_source_poll" = "Pemungutan suara";
 "screen_room_attachment_text_formatting" = "Pemformatan Teks";
+"screen_room_change_role_confirm_add_admin_description" = "You will not be able to undo this action. You are promoting the user to have the same power level as you.";
+"screen_room_change_role_confirm_add_admin_title" = "Add Admin?";
+"screen_room_change_role_confirm_demote_self_action" = "Demote";
+"screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
+"screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_details_add_topic_title" = "Tambahkan topik";
 "screen_room_details_already_a_member" = "Sudah menjadi anggota";
 "screen_room_details_already_invited" = "Sudah diundang";
@@ -496,7 +507,6 @@
 "screen_room_details_error_loading_notification_settings" = "Terjadi kesalahan saat memuat pengaturan notifikasi.";
 "screen_room_details_error_muting" = "Gagal membisukan ruangan ini, silakan coba lagi.";
 "screen_room_details_error_unmuting" = "Gagal membunyikan ruangan ini, silakan coba lagi.";
-"screen_room_details_invite_people_title" = "Undang seseorang";
 "screen_room_details_notification_mode_custom" = "Khusus";
 "screen_room_details_notification_mode_default" = "Bawaan";
 "screen_room_details_notification_title" = "Pemberitahuan";
@@ -513,9 +523,16 @@
 "screen_room_member_details_unblock_alert_action" = "Buka blokir";
 "screen_room_member_details_unblock_alert_description" = "Anda akan dapat melihat semua pesan dari mereka lagi.";
 "screen_room_member_details_unblock_user" = "Buka blokir pengguna";
+"screen_room_member_list_manage_member_remove" = "Remove member";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "Remove and ban member";
+"screen_room_member_list_manage_member_remove_confirmation_kick" = "Only remove member";
+"screen_room_member_list_manage_member_remove_confirmation_title" = "Remove member and ban from joining in the future?";
+"screen_room_member_list_manage_member_unban" = "Unban";
+"screen_room_member_list_manage_member_user_info" = "See user info";
 "screen_room_member_list_mode_banned" = "Banned";
 "screen_room_member_list_mode_members" = "Members";
 "screen_room_member_list_pending_header_title" = "Tertunda";
+"screen_room_member_list_removing_user" = "Removing %1$@...";
 "screen_room_member_list_role_administrator" = "Admin";
 "screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "Anggota ruangan";
@@ -567,6 +584,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Konfirmasikan bahwa angka-angka di bawah ini sesuai dengan yang ditampilkan pada sesi Anda yang lain.";
 "screen_session_verification_compare_numbers_title" = "Bandingkan angka";
 "screen_session_verification_complete_subtitle" = "Sesi baru Anda sekarang diverifikasi. Ini memiliki akses ke pesan terenkripsi Anda, dan pengguna lain akan melihatnya sebagai tepercaya.";
+"screen_session_verification_enter_recovery_key" = "Enter recovery key";
 "screen_session_verification_open_existing_session_subtitle" = "Buktikan bahwa ini memang Anda untuk mengakses riwayat pesan terenkripsi Anda.";
 "screen_session_verification_open_existing_session_title" = "Buka sesi yang sudah ada";
 "screen_session_verification_positive_button_canceled" = "Verifikasi ulang";
@@ -687,7 +705,11 @@
 "screen_analytics_settings_help_us_improve" = "Bagikan data penggunaan anonim untuk membantu kami mengidentifikasi masalah.";
 "screen_analytics_settings_read_terms" = "Anda dapat membaca semua persyaratan kami %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "di sini";
+"screen_blocked_users_unblock_alert_action" = "Buka blokir";
+"screen_blocked_users_unblock_alert_description" = "Anda akan dapat melihat semua pesan dari mereka lagi.";
+"screen_blocked_users_unblock_alert_title" = "Buka blokir pengguna";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ mengalami kemogokan saat terakhir kali digunakan. Apakah Anda ingin berbagi laporan kerusakan dengan kami?";
+"screen_create_room_add_people_title" = "Undang orang-orang";
 "screen_create_room_room_name_label" = "Nama ruangan";
 "screen_create_room_title" = "Buat ruangan";
 "screen_dm_details_block_alert_action" = "Blokir";
@@ -701,6 +723,7 @@
 "screen_login_subtitle" = "Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi.";
 "screen_report_content_block_user" = "Blokir pengguna";
 "screen_room_attachment_source_camera_photo" = "Ambil foto";
+"screen_room_details_invite_people_title" = "Undang orang-orang";
 "screen_room_details_leave_conversation_title" = "Leave conversation";
 "screen_room_details_leave_room_title" = "Tinggalkan ruangan";
 "screen_room_details_room_name_label" = "Nama ruangan";

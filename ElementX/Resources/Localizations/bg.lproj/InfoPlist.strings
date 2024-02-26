@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "За да правите снимки или видеа и да ги изпращате като съобщение, Element X се нуждае от достъп до камерата.";
+"NSFaceIDUsageDescription" = "Face ID is used to access your app.";
+"NSLocationWhenInUseUsageDescription" = "Предоставете достъп до местоположението, за да може Element X да споделя местоположението ви.";
+"NSMicrophoneUsageDescription" = "За да записвате и изпращате съобщения с аудио, Element X се нуждае от достъп до микрофона.";
+"NSPhotoLibraryUsageDescription" = "Allows saving photos and videos to your library.";

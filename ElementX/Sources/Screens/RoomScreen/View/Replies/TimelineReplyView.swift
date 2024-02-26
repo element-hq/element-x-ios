@@ -306,5 +306,6 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
             }
         }
         .environmentObject(viewModel.context)
+        .snapshot(delay: 0.2) // Allow member names to load.
     }
 }
