@@ -175,9 +175,6 @@ class UserFlowTests: XCTestCase {
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
         profileButton.forceTap()
         
-        // Open the settings
-        tapOnButton(A11yIdentifiers.homeScreen.settings)
-        
         // Open analytics
         tapOnButton(A11yIdentifiers.settingsScreen.analytics)
         

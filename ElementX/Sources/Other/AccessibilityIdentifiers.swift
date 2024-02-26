@@ -94,7 +94,6 @@ enum A11yIdentifiers {
     
     struct HomeScreen {
         let userAvatar = "home_screen-user_avatar"
-        let settings = "home_screen-settings"
         let verificationBannerContinue = "home_screen-verification_continue"
         let recoveryKeyConfirmationBannerContinue = "home_screen-recovery_key_confirmation_continue"
         let invites = "home_screen-invites"
