@@ -59,7 +59,7 @@ struct RoomMembersListManageMemberSheet: View {
         .compoundList()
         .scrollBounceBehavior(.basedOnSize)
         .presentationDragIndicator(.visible)
-        .presentationDetents([.fraction(0.5)]) // TODO: Use the ideal height somehow?
+        .presentationDetents([.large, .fraction(0.5)]) // TODO: Use the ideal height somehow?
         .confirmationDialog(L10n.screenRoomMemberListManageMemberRemoveConfirmationTitle,
                             isPresented: $isPresentingRemoveConfirmation,
                             titleVisibility: .visible) {
@@ -78,11 +78,21 @@ struct RoomMembersListManageMemberSheet: View {
 }
 
 struct RoomMembersListManageMemberSheet_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomMembersListScreenViewModel(initialMode: .members,
-                                                          roomProxy: RoomProxyMock(with: .init()),
-                                                          mediaProvider: MockMediaProvider(),
-                                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                          appSettings: ServiceLocator.shared.settings)
+    static let viewModel = RoomMembersListScreenViewModel.mock
+    
+    static var previews: some View {
+        RoomMembersListManageMemberSheet(member: .init(withProxy: RoomMemberProxyMock.mockDan),
+                                         context: viewModel.context)
+            .previewDisplayName("Joined")
+        
+        RoomMembersListManageMemberSheet(member: .init(withProxy: RoomMemberProxyMock.mockBanned[3]),
+                                         context: viewModel.context)
+            .previewDisplayName("Banned")
+    }
+}
+
+struct RoomMembersListManageMemberSheetLive_Previews: PreviewProvider {
+    static let viewModel = RoomMembersListScreenViewModel.mock
     
     static var previews: some View {
         Color.clear
@@ -90,13 +100,16 @@ struct RoomMembersListManageMemberSheet_Previews: PreviewProvider, TestablePrevi
                 RoomMembersListManageMemberSheet(member: .init(withProxy: RoomMemberProxyMock.mockDan),
                                                  context: viewModel.context)
             }
-            .previewDisplayName("Joined")
-        
-        Color.clear
-            .sheet(isPresented: .constant(true)) {
-                RoomMembersListManageMemberSheet(member: .init(withProxy: RoomMemberProxyMock.mockBanned[3]),
-                                                 context: viewModel.context)
-            }
-            .previewDisplayName("Banned")
+            .previewDisplayName("Sheet")
+    }
+}
+
+private extension RoomMembersListScreenViewModel {
+    static var mock: RoomMembersListScreenViewModel {
+        RoomMembersListScreenViewModel(initialMode: .members,
+                                       roomProxy: RoomProxyMock(with: .init()),
+                                       mediaProvider: MockMediaProvider(),
+                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                       appSettings: ServiceLocator.shared.settings)
     }
 }

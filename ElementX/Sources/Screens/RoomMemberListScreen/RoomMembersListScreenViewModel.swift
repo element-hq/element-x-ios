@@ -97,6 +97,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     private func updateState(members: [RoomMemberProxyProtocol]) {
         Task {
             showLoader()
+            
             let members = members.sorted()
             let roomMembersDetails = await buildMembersDetails(members: members)
             self.members = members
@@ -110,6 +111,10 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                 self.state.canKickUsers = accountOwner.canKickUsers
                 self.state.canBanUsers = accountOwner.canBanUsers
             }
+            if state.bindings.mode == .banned, roomMembersDetails.bannedMembers.isEmpty {
+                state.bindings.mode = .members
+            }
+            
             hideLoader()
         }
     }
