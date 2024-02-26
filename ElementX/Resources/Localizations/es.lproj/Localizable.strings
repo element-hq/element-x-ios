@@ -102,6 +102,7 @@
 "common_analytics" = "Estadísticas";
 "common_appearance" = "Apariencia";
 "common_audio" = "Sonido";
+"common_blocked_users" = "Blocked users";
 "common_bubbles" = "Burbujas";
 "common_chat_backup" = "Copia de seguridad del chat";
 "common_copyright" = "Derechos de autor";
@@ -119,7 +120,9 @@
 "common_error" = "Error";
 "common_everyone" = "Todos";
 "common_face_id_ios" = "Face ID";
+"common_failed" = "Failed";
 "common_favourite" = "Favourite";
+"common_favourited" = "Favourited";
 "common_file" = "Archivo";
 "common_forward_message" = "Reenviar mensaje";
 "common_gif" = "GIF";
@@ -139,6 +142,7 @@
 "common_no_results" = "No hay resultados";
 "common_offline" = "Sin conexión";
 "common_optic_id_ios" = "Optic ID";
+"common_or" = "or";
 "common_password" = "Contraseña";
 "common_people" = "Personas";
 "common_permalink" = "Enlace permanente";
@@ -332,6 +336,7 @@
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "Los PINs no coinciden";
 "screen_app_lock_signout_alert_message" = "Tendrás que volver a iniciar sesión y crear un nuevo PIN para continuar";
 "screen_app_lock_signout_alert_title" = "Se está cerrando tu sesión";
+"screen_blocked_users_unblocking" = "Unblocking...";
 "screen_bug_report_attach_screenshot" = "Adjuntar captura de pantalla";
 "screen_bug_report_contact_me" = "Pueden ponerse en contacto conmigo si tienen alguna pregunta relacionada.";
 "screen_bug_report_contact_me_title" = "Contáctame";
@@ -350,6 +355,7 @@
 "screen_change_account_provider_subtitle" = "Usa un proveedor de cuenta diferente, como tu propio servidor privado o una cuenta de trabajo.";
 "screen_change_account_provider_title" = "Cambiar el proveedor de la cuenta";
 "screen_change_server_error_invalid_homeserver" = "No hemos podido acceder a este servidor. Comprueba que has introducido correctamente la dirección del servidor. Si la dirección es correcta, ponte en contacto con el administrador del servidor para obtener más ayuda.";
+"screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Este servidor no soporta sliding sync.";
 "screen_change_server_form_header" = "Dirección del homeserver";
 "screen_change_server_form_notice" = "Solo puedes conectarte a un servidor que soporte sliding sync. El administrador de tu servidor tendrá que configurarlo. %1$@";
@@ -375,7 +381,6 @@
 "screen_create_poll_title" = "Crear una Encuesta";
 "screen_create_room_action_create_room" = "Nueva sala";
 "screen_create_room_action_invite_people" = "Invita a alguien a Element";
-"screen_create_room_add_people_title" = "Invitar personas";
 "screen_create_room_error_creating_room" = "Se ha producido un error al crear la sala";
 "screen_create_room_private_option_description" = "Los mensajes de esta sala están cifrados. La encriptación no se puede desactivar después.";
 "screen_create_room_private_option_title" = "Sala privada (sólo con invitación)";
@@ -405,6 +410,7 @@
 "screen_login_error_deactivated_account" = "Esta cuenta ha sido desactivada.";
 "screen_login_error_invalid_credentials" = "Usuario y/o contraseña incorrectos";
 "screen_login_error_invalid_user_id" = "Este no es un id de usuario válido. Formato esperado: '@user:homeserver.org'";
+"screen_login_error_refresh_tokens" = "This server is configured to use refresh tokens. These aren't supported when using password based login.";
 "screen_login_error_unsupported_authentication" = "El servidor seleccionado no admite contraseñas ni inicio de sesión OIDC. Póngase en contacto con su administrador o elija otro homeserver.";
 "screen_login_form_header" = "Introduce tus datos";
 "screen_login_title" = "¡Hola de nuevo!";
@@ -485,6 +491,11 @@
 "screen_room_attachment_source_location" = "Ubicación";
 "screen_room_attachment_source_poll" = "Encuesta";
 "screen_room_attachment_text_formatting" = "Formato de Texto";
+"screen_room_change_role_confirm_add_admin_description" = "You will not be able to undo this action. You are promoting the user to have the same power level as you.";
+"screen_room_change_role_confirm_add_admin_title" = "Add Admin?";
+"screen_room_change_role_confirm_demote_self_action" = "Demote";
+"screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
+"screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_details_add_topic_title" = "Añadir tema";
 "screen_room_details_already_a_member" = "Ya eres miembro";
 "screen_room_details_already_invited" = "Ya estás invitado";
@@ -496,7 +507,6 @@
 "screen_room_details_error_loading_notification_settings" = "Se ha producido un error al cargar la configuración de las notificaciones.";
 "screen_room_details_error_muting" = "No se ha podido silenciar esta sala, inténtalo de nuevo.";
 "screen_room_details_error_unmuting" = "Error al dejar de silenciar esta sala, por favor inténtalo de nuevo.";
-"screen_room_details_invite_people_title" = "Invitar a otras personas";
 "screen_room_details_notification_mode_custom" = "Personalizado";
 "screen_room_details_notification_mode_default" = "Por defecto";
 "screen_room_details_notification_title" = "Notificaciones";
@@ -513,9 +523,16 @@
 "screen_room_member_details_unblock_alert_action" = "Desbloquear";
 "screen_room_member_details_unblock_alert_description" = "Podrás ver todos sus mensajes de nuevo.";
 "screen_room_member_details_unblock_user" = "Desbloquear usuario";
+"screen_room_member_list_manage_member_remove" = "Remove member";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "Remove and ban member";
+"screen_room_member_list_manage_member_remove_confirmation_kick" = "Only remove member";
+"screen_room_member_list_manage_member_remove_confirmation_title" = "Remove member and ban from joining in the future?";
+"screen_room_member_list_manage_member_unban" = "Unban";
+"screen_room_member_list_manage_member_user_info" = "See user info";
 "screen_room_member_list_mode_banned" = "Banned";
 "screen_room_member_list_mode_members" = "Members";
 "screen_room_member_list_pending_header_title" = "Pendiente";
+"screen_room_member_list_removing_user" = "Removing %1$@...";
 "screen_room_member_list_role_administrator" = "Admin";
 "screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "Miembros de la sala";
@@ -567,6 +584,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Confirma que los números que aparecen a continuación coinciden con los mostrados en tu otra sesión.";
 "screen_session_verification_compare_numbers_title" = "Comparar números";
 "screen_session_verification_complete_subtitle" = "Tu nueva sesión ya está verificada. Tienes acceso a tus mensajes cifrados y otros usuarios lo considerarán de confianza.";
+"screen_session_verification_enter_recovery_key" = "Enter recovery key";
 "screen_session_verification_open_existing_session_subtitle" = "Demuestra que eres tú para acceder a tu historial de mensajes cifrados.";
 "screen_session_verification_open_existing_session_title" = "Abrir una sesión existente";
 "screen_session_verification_positive_button_canceled" = "Reintentar la verificación";
@@ -687,7 +705,11 @@
 "screen_analytics_settings_help_us_improve" = "Compartir datos de uso anónimos para ayudarnos a identificar problemas.";
 "screen_analytics_settings_read_terms" = "Puedes leer todos nuestros términos %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "aquí";
+"screen_blocked_users_unblock_alert_action" = "Desbloquear";
+"screen_blocked_users_unblock_alert_description" = "Podrás ver todos sus mensajes de nuevo.";
+"screen_blocked_users_unblock_alert_title" = "Desbloquear usuario";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ se cerró inesperadamente la última vez que se lo usaste. ¿Quieres compartir un informe de error con nosotros?";
+"screen_create_room_add_people_title" = "Invitar personas";
 "screen_create_room_room_name_label" = "Nombre de la sala";
 "screen_create_room_title" = "Crear una sala";
 "screen_dm_details_block_alert_action" = "Bloquear";
@@ -701,6 +723,7 @@
 "screen_login_subtitle" = "Matrix es una red abierta para una comunicación segura y descentralizada.";
 "screen_report_content_block_user" = "Bloquear usuario";
 "screen_room_attachment_source_camera_photo" = "Hacer foto";
+"screen_room_details_invite_people_title" = "Invitar personas";
 "screen_room_details_leave_conversation_title" = "Leave conversation";
 "screen_room_details_leave_room_title" = "Salir de la sala";
 "screen_room_details_room_name_label" = "Nombre de la sala";
