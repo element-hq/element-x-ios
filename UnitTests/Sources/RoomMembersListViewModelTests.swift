@@ -128,7 +128,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     
     func testKickMember() async throws {
         setup(with: .allMembers)
-        var deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
+        let deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
         try await deferred.fulfill()
         
         context.send(viewAction: .kickMember(viewModel.state.visibleJoinedMembers[0]))
@@ -141,7 +141,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     
     func testBanMember() async throws {
         setup(with: .allMembers)
-        var deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
+        let deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
         try await deferred.fulfill()
         
         context.send(viewAction: .banMember(viewModel.state.visibleJoinedMembers[0]))
@@ -154,7 +154,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     
     func testUnbanMember() async throws {
         setup(with: .allMembers)
-        var deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
+        let deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
         try await deferred.fulfill()
         
         context.send(viewAction: .unbanMember(viewModel.state.visibleJoinedMembers[0]))
