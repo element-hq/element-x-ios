@@ -24,15 +24,6 @@ import MatrixRustSDK
 enum MXLog {
     private enum Constants {
         static let target = "elementx"
-        
-        // Avoid redirecting NSLogs to files if we are attached to a debugger.
-        static let redirectToFiles = isatty(STDERR_FILENO) == 0
-        
-        /// the maximum number of log files to use before rolling. `10` by default.
-        static let maxLogFileCount: UInt = 10
-        
-        /// the maximum total space to use for log files in bytes. `100MB` by default.
-        static let logFilesSizeLimit: UInt = 100 * 1024 * 1024 // 100MB
     }
     
     // Rust side crashes if invoking setupTracing multiple times
@@ -43,38 +34,19 @@ enum MXLog {
     
     static func configure(target: String? = nil,
                           logLevel: TracingConfiguration.LogLevel,
-                          otlpConfiguration: OTLPConfiguration? = nil,
-                          redirectToFiles: Bool = Constants.redirectToFiles,
-                          maxLogFileCount: UInt = Constants.maxLogFileCount,
-                          logFileSizeLimit: UInt = Constants.logFilesSizeLimit) {
-        guard didConfigureOnce == false else {
-            if let target {
-                MXLogger.setSubLogName(target)
-            }
-            
-            // SubLogName needs to be set before calling configure in order to be applied
-            MXLogger.configure(redirectToFiles: redirectToFiles,
-                               maxLogFileCount: maxLogFileCount,
-                               logFileSizeLimit: logFileSizeLimit)
-            return
-        }
+                          otlpConfiguration: OTLPConfiguration? = nil) {
+        guard !didConfigureOnce else { return }
         
-        RustTracing.setup(configuration: .init(logLevel: logLevel), otlpConfiguration: otlpConfiguration)
+        RustTracing.setup(configuration: .init(logLevel: logLevel, target: target), otlpConfiguration: otlpConfiguration)
         
         if let target {
             self.target = target
-            MXLogger.setSubLogName(target)
         } else {
             self.target = Constants.target
         }
         
         rootSpan = Span(file: #file, line: #line, level: .info, target: self.target, name: "root")
-        
         rootSpan.enter()
-        
-        MXLogger.configure(redirectToFiles: redirectToFiles,
-                           maxLogFileCount: maxLogFileCount,
-                           logFileSizeLimit: logFileSizeLimit)
         
         didConfigureOnce = true
     }

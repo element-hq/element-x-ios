@@ -23,6 +23,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     private let bugReportService: BugReportServiceProtocol
     private let userID: String?
     private let deviceID: String?
+    
     private let actionsSubject: PassthroughSubject<BugReportScreenViewModelAction, Never> = .init()
     // periphery:ignore - when set to nil this is automatically cancelled
     @CancellableTask private var uploadTask: Task<Void, Never>?
@@ -89,7 +90,6 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
                                   deviceID: deviceID,
                                   text: context.reportText,
                                   includeLogs: context.sendingLogsEnabled,
-                                  includeCrashLog: true,
                                   canContact: context.canContact,
                                   githubLabels: [],
                                   files: files)

@@ -143,7 +143,7 @@ private struct LogLevelConfigurationView: View {
         if case .custom(let configuration) = logLevel.wrappedValue {
             customTracingConfiguration = configuration
         } else {
-            customTracingConfiguration = TracingConfiguration(logLevel: .info).filter
+            customTracingConfiguration = TracingConfiguration(logLevel: .info, target: nil).filter
         }
     }
     
