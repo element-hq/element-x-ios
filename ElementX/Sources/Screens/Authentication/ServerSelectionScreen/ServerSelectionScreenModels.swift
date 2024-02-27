@@ -87,6 +87,8 @@ enum ServerSelectionScreenViewAction {
 enum ServerSelectionScreenErrorType: Hashable {
     /// An error message to be shown in the text field footer.
     case footerMessage(String)
+    /// An alert that informs the user about a bad well-known file.
+    case invalidWellKnownAlert(String)
     /// An alert that allows the user to learn about sliding sync.
     case slidingSyncAlert
 }

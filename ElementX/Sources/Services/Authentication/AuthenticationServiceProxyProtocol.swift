@@ -31,6 +31,7 @@ enum AuthenticationServiceError: Error {
     case invalidServer
     case invalidCredentials
     case invalidHomeserverAddress
+    case invalidWellKnown(String)
     case slidingSyncNotAvailable
     case accountDeactivated
     case failedLoggingIn

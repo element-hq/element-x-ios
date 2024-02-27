@@ -112,8 +112,12 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             viewModel.displayError(.alert(L10n.screenLoginErrorInvalidCredentials))
         case .accountDeactivated:
             viewModel.displayError(.alert(L10n.screenLoginErrorDeactivatedAccount))
+        case .invalidWellKnown(let error):
+            viewModel.displayError(.invalidWellKnownAlert(error))
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
+        case .sessionTokenRefreshNotSupported:
+            viewModel.displayError(.refreshTokenAlert)
         default:
             viewModel.displayError(.alert(L10n.errorUnknown))
         }

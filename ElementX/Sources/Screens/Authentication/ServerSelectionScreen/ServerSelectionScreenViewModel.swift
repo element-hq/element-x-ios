@@ -54,6 +54,10 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
             withElementAnimation {
                 state.footerErrorMessage = message
             }
+        case .invalidWellKnownAlert(let error):
+            state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
+                                                 title: L10n.commonServerNotSupported,
+                                                 message: L10n.screenChangeServerErrorInvalidWellKnown(error))
         case .slidingSyncAlert:
             let openURL = { UIApplication.shared.open(self.slidingSyncLearnMoreURL) }
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,

@@ -80,6 +80,9 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             
             homeserverSubject.send(homeserver)
             return .success(())
+        } catch AuthenticationError.WellKnownDeserializationError(let error) {
+            MXLog.error("The user entered a server with an invalid well-known file: \(error)")
+            return .failure(.invalidWellKnown(error))
         } catch AuthenticationError.SlidingSyncNotAvailable {
             MXLog.info("User entered a homeserver that isn't configured for sliding sync.")
             return .failure(.slidingSyncNotAvailable)
