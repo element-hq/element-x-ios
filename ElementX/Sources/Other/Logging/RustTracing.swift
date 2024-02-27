@@ -38,6 +38,10 @@ enum RustTracing {
         // as the app is unlikely to be running continuously.
         let maxFiles: UInt64 = 24 * 7
         
+        guard let path = logsDirectory.path().removingPercentEncoding else {
+            return
+        }
+
         if let otlpConfiguration {
             setupOtlpTracing(config: .init(clientName: "ElementX-iOS",
                                            user: otlpConfiguration.username,
@@ -45,14 +49,14 @@ enum RustTracing {
                                            otlpEndpoint: otlpConfiguration.url,
                                            filter: configuration.filter,
                                            writeToStdoutOrSystem: true,
-                                           writeToFiles: .init(path: logsDirectory.path(),
+                                           writeToFiles: .init(path: path,
                                                                filePrefix: configuration.fileName,
                                                                fileSuffix: configuration.fileExtension,
                                                                maxFiles: maxFiles)))
         } else {
             setupTracing(config: .init(filter: configuration.filter,
                                        writeToStdoutOrSystem: true,
-                                       writeToFiles: .init(path: logsDirectory.path(),
+                                       writeToFiles: .init(path: path,
                                                            filePrefix: configuration.fileName,
                                                            fileSuffix: configuration.fileExtension,
                                                            maxFiles: maxFiles)))
