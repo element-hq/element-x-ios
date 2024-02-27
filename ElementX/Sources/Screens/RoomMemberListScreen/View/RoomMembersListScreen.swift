@@ -43,6 +43,7 @@ struct RoomMembersListScreen: View {
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
         .compoundSearchField()
+        .autocorrectionDisabled()
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
         .sheet(item: $context.memberToManage) {
