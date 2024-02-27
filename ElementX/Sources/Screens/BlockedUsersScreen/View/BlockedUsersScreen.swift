@@ -21,20 +21,31 @@ struct BlockedUsersScreen: View {
     @ObservedObject var context: BlockedUsersScreenViewModel.Context
     
     var body: some View {
-        Form {
-            ForEach(context.viewState.blockedUsers, id: \.self) { userID in
-                ListRow(label: .avatar(title: userID, icon: avatar(for: userID)),
-                        details: .isWaiting(context.viewState.processingUserID == userID),
-                        kind: .button(action: { context.send(viewAction: .unblockUser(userID: userID)) }))
-            }
-        }
-        .compoundList()
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle(L10n.commonBlockedUsers)
-        .alert(item: $context.alertInfo)
+        content
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(L10n.commonBlockedUsers)
+            .alert(item: $context.alertInfo)
     }
     
     // MARK: - Private
+    
+    @ViewBuilder
+    private var content: some View {
+        if context.viewState.blockedUsers.isEmpty {
+            Text(L10n.screenBlockedUsersEmpty)
+                .font(.compound.bodyMD)
+                .foregroundColor(.compound.textSecondary)
+        } else {
+            Form {
+                ForEach(context.viewState.blockedUsers, id: \.self) { userID in
+                    ListRow(label: .avatar(title: userID, icon: avatar(for: userID)),
+                            details: .isWaiting(context.viewState.processingUserID == userID),
+                            kind: .button(action: { context.send(viewAction: .unblockUser(userID: userID)) }))
+                }
+            }
+            .compoundList()
+        }
+    }
     
     private func avatar(for userID: String) -> some View {
         LoadableAvatarImage(url: nil,
