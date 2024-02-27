@@ -1385,7 +1385,7 @@ internal enum L10n {
   internal static var screenRoomRolesAndPermissionsModerators: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_moderators") }
   /// Permissions
   internal static var screenRoomRolesAndPermissionsPermissionsHeader: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_permissions_header") }
-  /// Reset roles and permissions
+  /// Reset permissions
   internal static var screenRoomRolesAndPermissionsReset: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_reset") }
   /// Roles
   internal static var screenRoomRolesAndPermissionsRolesHeader: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_roles_header") }

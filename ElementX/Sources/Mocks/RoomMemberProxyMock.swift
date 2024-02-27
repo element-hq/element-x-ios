@@ -59,6 +59,19 @@ extension RoomMemberProxyMock {
                                         canInviteUsers: true))
     }
     
+    static var mockMeAdmin: RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@me:matrix.org",
+                                        displayName: "Me admin",
+                                        avatarURL: URL.picturesDirectory,
+                                        membership: .join,
+                                        isAccountOwner: true,
+                                        powerLevel: 100,
+                                        role: .administrator,
+                                        canInviteUsers: true,
+                                        canKickUsers: true,
+                                        canBanUsers: true))
+    }
+    
     static var mockAlice: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@alice:matrix.org",
                                         displayName: "Alice",
@@ -153,5 +166,17 @@ extension Array where Element == RoomMemberProxyMock {
         .mockDan,
         .mockInvited,
         .mockIgnored
+    ]
+    
+    static let allMembersAsAdmin: [RoomMemberProxyMock] = [
+        .mockMeAdmin,
+        .mockAlice,
+        .mockBob,
+        .mockCharlie,
+        .mockDan,
+        .mockInvited,
+        .mockIgnored,
+        .mockAdmin,
+        .mockModerator
     ]
 }
