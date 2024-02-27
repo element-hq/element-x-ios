@@ -416,6 +416,38 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    // MARK: - Moderation
+    
+    func kickUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.kickUser(userId: userID, reason: nil)
+            return .success(())
+        } catch {
+            MXLog.error("Failed kicking \(userID) with error: \(error)")
+            return .failure(.failedModeration)
+        }
+    }
+    
+    func banUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.banUser(userId: userID, reason: nil)
+            return .success(())
+        } catch {
+            MXLog.error("Failed banning \(userID) with error: \(error)")
+            return .failure(.failedModeration)
+        }
+    }
+    
+    func unbanUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.unbanUser(userId: userID, reason: nil)
+            return .success(())
+        } catch {
+            MXLog.error("Failed unbanning \(userID) with error: \(error)")
+            return .failure(.failedModeration)
+        }
+    }
+    
     // MARK: - Element Call
     
     func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError> {

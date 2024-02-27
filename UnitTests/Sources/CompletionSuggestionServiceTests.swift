@@ -19,6 +19,7 @@ import XCTest
 
 @testable import ElementX
 
+@MainActor
 final class CompletionSuggestionServiceTests: XCTestCase {
     private var cancellables = Set<AnyCancellable>()
     

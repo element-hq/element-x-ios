@@ -22,7 +22,7 @@ struct RoomMembersListScreenMemberCell: View {
 
     var body: some View {
         Button {
-            context.send(viewAction: .selectMember(id: member.id))
+            context.send(viewAction: .selectMember(member))
         } label: {
             HStack(spacing: 8) {
                 LoadableAvatarImage(url: avatarURL,
@@ -109,7 +109,8 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Some room",
                                                                                                members: members)),
                                                           mediaProvider: MockMediaProvider(),
-                                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                          appSettings: ServiceLocator.shared.settings)
     static var previews: some View {
         VStack(spacing: 12) {
             Section("Invited/Joined") {

@@ -1750,6 +1750,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingCanInviteUsers = value }
     }
     var underlyingCanInviteUsers: Bool!
+    var canKickUsers: Bool {
+        get { return underlyingCanKickUsers }
+        set(value) { underlyingCanKickUsers = value }
+    }
+    var underlyingCanKickUsers: Bool!
     var canBanUsers: Bool {
         get { return underlyingCanBanUsers }
         set(value) { underlyingCanBanUsers = value }
@@ -2338,6 +2343,69 @@ class RoomProxyMock: RoomProxyProtocol {
             return flagAsFavouriteReturnValue
         }
     }
+    //MARK: - kickUser
+
+    var kickUserCallsCount = 0
+    var kickUserCalled: Bool {
+        return kickUserCallsCount > 0
+    }
+    var kickUserReceivedUserID: String?
+    var kickUserReceivedInvocations: [String] = []
+    var kickUserReturnValue: Result<Void, RoomProxyError>!
+    var kickUserClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
+    func kickUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        kickUserCallsCount += 1
+        kickUserReceivedUserID = userID
+        kickUserReceivedInvocations.append(userID)
+        if let kickUserClosure = kickUserClosure {
+            return await kickUserClosure(userID)
+        } else {
+            return kickUserReturnValue
+        }
+    }
+    //MARK: - banUser
+
+    var banUserCallsCount = 0
+    var banUserCalled: Bool {
+        return banUserCallsCount > 0
+    }
+    var banUserReceivedUserID: String?
+    var banUserReceivedInvocations: [String] = []
+    var banUserReturnValue: Result<Void, RoomProxyError>!
+    var banUserClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
+    func banUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        banUserCallsCount += 1
+        banUserReceivedUserID = userID
+        banUserReceivedInvocations.append(userID)
+        if let banUserClosure = banUserClosure {
+            return await banUserClosure(userID)
+        } else {
+            return banUserReturnValue
+        }
+    }
+    //MARK: - unbanUser
+
+    var unbanUserCallsCount = 0
+    var unbanUserCalled: Bool {
+        return unbanUserCallsCount > 0
+    }
+    var unbanUserReceivedUserID: String?
+    var unbanUserReceivedInvocations: [String] = []
+    var unbanUserReturnValue: Result<Void, RoomProxyError>!
+    var unbanUserClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
+    func unbanUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        unbanUserCallsCount += 1
+        unbanUserReceivedUserID = userID
+        unbanUserReceivedInvocations.append(userID)
+        if let unbanUserClosure = unbanUserClosure {
+            return await unbanUserClosure(userID)
+        } else {
+            return unbanUserReturnValue
+        }
+    }
     //MARK: - canUserJoinCall
 
     var canUserJoinCallUserIDCallsCount = 0
@@ -2389,6 +2457,11 @@ class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
         set(value) { underlyingBackPaginationState = value }
     }
     var underlyingBackPaginationState: BackPaginationStatus!
+    var membershipChangePublisher: AnyPublisher<Void, Never> {
+        get { return underlyingMembershipChangePublisher }
+        set(value) { underlyingMembershipChangePublisher = value }
+    }
+    var underlyingMembershipChangePublisher: AnyPublisher<Void, Never>!
 
 }
 class SecureBackupControllerMock: SecureBackupControllerProtocol {

@@ -699,14 +699,16 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             let members: [RoomMemberProxyMock] = [.mockAlice, .mockBob, .mockCharlie]
             let coordinator = RoomMembersListScreenCoordinator(parameters: .init(mediaProvider: MockMediaProvider(),
-                                                                                 roomProxy: RoomProxyMock(with: .init(name: "test", members: members))))
+                                                                                 roomProxy: RoomProxyMock(with: .init(name: "test", members: members)),
+                                                                                 appSettings: ServiceLocator.shared.settings))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMembersListScreenPendingInvites:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
             let coordinator = RoomMembersListScreenCoordinator(parameters: .init(mediaProvider: MockMediaProvider(),
-                                                                                 roomProxy: RoomProxyMock(with: .init(name: "test", members: members))))
+                                                                                 roomProxy: RoomProxyMock(with: .init(name: "test", members: members)),
+                                                                                 appSettings: ServiceLocator.shared.settings))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomNotificationSettingsDefaultSetting:
