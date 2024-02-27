@@ -244,8 +244,8 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
         let verificationController = SessionVerificationControllerProxyMock()
         verificationController.isVerifiedReturnValue = .success(false)
         let userSession = MockUserSession(sessionVerificationController: verificationController,
-                                          clientProxy: MockClientProxy(userID: "@userid:example.com",
-                                                                       deviceID: "AAAAAAAAAAA"),
+                                          clientProxy: ClientProxyMock(.init(userID: "@userid:example.com",
+                                                                             deviceID: "AAAAAAAAAAA")),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         return SettingsScreenViewModel(userSession: userSession,

@@ -30,7 +30,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     }
     
     @MainActor override func setUpWithError() throws {
-        let clientProxy = MockClientProxy(userID: "@a:b.com")
+        let clientProxy = ClientProxyMock(.init(userID: "@a:b.com"))
         userSession = MockUserSession(clientProxy: clientProxy,
                                       mediaProvider: MockMediaProvider(),
                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock())

@@ -62,7 +62,7 @@ class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             return .failure(.invalidCredentials)
         }
         
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: username),
+        let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: username)),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         return .success(userSession)

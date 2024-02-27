@@ -65,8 +65,8 @@ struct HomeScreenSessionVerificationBanner_Previews: PreviewProvider, TestablePr
     }
     
     static func buildViewModel() -> HomeScreenViewModel {
-        let clientProxy = MockClientProxy(userID: "@alice:example.com",
-                                          roomSummaryProvider: MockRoomSummaryProvider(state: .loading))
+        let clientProxy = ClientProxyMock(.init(userID: "@alice:example.com",
+                                                roomSummaryProvider: MockRoomSummaryProvider(state: .loading)))
         
         let userSession = MockUserSession(clientProxy: clientProxy,
                                           mediaProvider: MockMediaProvider(),

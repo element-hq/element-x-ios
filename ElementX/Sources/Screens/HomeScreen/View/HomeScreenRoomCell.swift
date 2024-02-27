@@ -176,10 +176,10 @@ private extension View {
 struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static let summaryProviderGeneric = MockRoomSummaryProvider(state: .loaded(.mockRooms))
     static let viewModelGeneric = {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe", roomSummaryProvider: summaryProviderGeneric),
+        let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "John Doe", roomSummaryProvider: summaryProviderGeneric)),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
-
+        
         return HomeScreenViewModel(userSession: userSession,
                                    analyticsService: ServiceLocator.shared.analytics,
                                    appSettings: ServiceLocator.shared.settings,
@@ -189,7 +189,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     
     static let summaryProviderForNotificationsState = MockRoomSummaryProvider(state: .loaded(.mockRoomsWithNotificationsState))
     static let viewModelForNotificationsState = {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe", roomSummaryProvider: summaryProviderForNotificationsState),
+        let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "John Doe", roomSummaryProvider: summaryProviderForNotificationsState)),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 

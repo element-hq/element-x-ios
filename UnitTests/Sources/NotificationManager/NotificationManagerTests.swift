@@ -23,7 +23,7 @@ import XCTest
 @MainActor
 final class NotificationManagerTests: XCTestCase {
     var notificationManager: NotificationManager!
-    private let clientProxy = MockClientProxy(userID: "@test:user.net")
+    private let clientProxy = ClientProxyMock(.init(userID: "@test:user.net"))
     private lazy var mockUserSession = MockUserSession(clientProxy: clientProxy,
                                                        mediaProvider: MockMediaProvider(),
                                                        voiceMessageMediaManager: VoiceMessageMediaManagerMock())
@@ -53,7 +53,8 @@ final class NotificationManagerTests: XCTestCase {
     
     func test_whenRegistered_pusherIsCalled() async {
         _ = await notificationManager.register(with: Data())
-        XCTAssertTrue(clientProxy.setPusherCalled)
+        
+        XCTAssertTrue(clientProxy.setPusherWithCalled)
     }
     
     func test_whenRegisteredSuccess_completionSuccessIsCalled() async throws {
@@ -65,21 +66,28 @@ final class NotificationManagerTests: XCTestCase {
         enum TestError: Error {
             case someError
         }
-        clientProxy.setPusherErrorToThrow = TestError.someError
+        
+        clientProxy.setPusherWithThrowableError = TestError.someError
         let success = await notificationManager.register(with: Data())
         XCTAssertFalse(success)
     }
-    
+
     func test_whenRegistered_pusherIsCalledWithCorrectValues() async throws {
         let pushkeyData = Data("1234".utf8)
         _ = await notificationManager.register(with: pushkeyData)
-        XCTAssertEqual(clientProxy.setPusherArgument?.identifiers.pushkey, pushkeyData.base64EncodedString())
-        XCTAssertEqual(clientProxy.setPusherArgument?.identifiers.appId, appSettings.pusherAppId)
-        XCTAssertEqual(clientProxy.setPusherArgument?.appDisplayName, "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
-        XCTAssertEqual(clientProxy.setPusherArgument?.deviceDisplayName, UIDevice.current.name)
-        XCTAssertNotNil(clientProxy.setPusherArgument?.profileTag)
-        XCTAssertEqual(clientProxy.setPusherArgument?.lang, Bundle.app.preferredLocalizations.first)
-        guard case let .http(data) = clientProxy.setPusherArgument?.kind else {
+        
+        guard let configuration = clientProxy.setPusherWithReceivedInvocations.first else {
+            XCTFail("Invalid pusher configuration sent")
+            return
+        }
+        
+        XCTAssertEqual(configuration.identifiers.pushkey, pushkeyData.base64EncodedString())
+        XCTAssertEqual(configuration.identifiers.appId, appSettings.pusherAppId)
+        XCTAssertEqual(configuration.appDisplayName, "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
+        XCTAssertEqual(configuration.deviceDisplayName, UIDevice.current.name)
+        XCTAssertNotNil(configuration.profileTag)
+        XCTAssertEqual(configuration.lang, Bundle.app.preferredLocalizations.first)
+        guard case let .http(data) = configuration.kind else {
             XCTFail("Http kind expected")
             return
         }

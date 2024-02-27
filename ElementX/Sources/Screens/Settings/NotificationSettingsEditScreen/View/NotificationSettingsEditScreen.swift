@@ -73,8 +73,8 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = [RoomSummary].mockRooms.compactMap(\.id)
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@alice:example.com",
-                                                                       roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms))),
+        let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "@alice:example.com",
+                                                                             roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms)))),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
@@ -88,8 +88,8 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@alice:example.com",
-                                                                       roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms))),
+        let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "@alice:example.com",
+                                                                             roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms)))),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
@@ -103,8 +103,10 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe"), mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())
-
+        let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "John Doe")),
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
+        
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                                 userSession: userSession,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
@@ -118,8 +120,8 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = [RoomSummary].mockRooms.compactMap(\.id)
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@alice:example.com",
-                                                                       roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms))),
+        let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "@alice:example.com",
+                                                                             roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms)))),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,

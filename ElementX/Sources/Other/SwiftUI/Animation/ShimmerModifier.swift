@@ -76,7 +76,7 @@ extension View {
 }
 
 struct ShimmerOverlay_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: MockClientProxy(userID: ""),
+    static let viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: ClientProxyMock(.init(userID: "")),
                                                                             mediaProvider: MockMediaProvider(),
                                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
                                                analyticsService: ServiceLocator.shared.analytics,

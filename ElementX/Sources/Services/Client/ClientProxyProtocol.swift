@@ -71,6 +71,7 @@ struct PusherConfiguration {
     let lang: String
 }
 
+// sourcery: AutoMockable
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> { get }
     

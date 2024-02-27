@@ -20,7 +20,7 @@ import XCTest
 @MainActor
 class InvitesScreenViewModelTests: XCTestCase {
     var viewModel: InvitesScreenViewModelProtocol!
-    var clientProxy: MockClientProxy!
+    var clientProxy: ClientProxyMock!
     var userSession: MockUserSession!
     var mockNotificationCenter: NotificationCenterMock!
     
@@ -29,7 +29,7 @@ class InvitesScreenViewModelTests: XCTestCase {
     }
     
     override func setUpWithError() throws {
-        clientProxy = MockClientProxy(userID: "@a:b.com")
+        clientProxy = ClientProxyMock(.init(userID: "@a:b.com"))
         userSession = MockUserSession(clientProxy: clientProxy,
                                       mediaProvider: MockMediaProvider(),
                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock())

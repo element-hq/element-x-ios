@@ -22,7 +22,7 @@ import XCTest
 @MainActor
 class HomeScreenViewModelTests: XCTestCase {
     var viewModel: HomeScreenViewModelProtocol!
-    var clientProxy: MockClientProxy!
+    var clientProxy: ClientProxyMock!
     var context: HomeScreenViewModelType.Context! { viewModel.context }
     var cancellables = Set<AnyCancellable>()
     var roomSummaryProvider: MockRoomSummaryProvider!
@@ -31,7 +31,7 @@ class HomeScreenViewModelTests: XCTestCase {
         ServiceLocator.shared.settings.roomListFiltersEnabled = true
         cancellables.removeAll()
         roomSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
-        clientProxy = MockClientProxy(userID: "@mock:client.com", roomSummaryProvider: roomSummaryProvider)
+        clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: roomSummaryProvider))
         viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: clientProxy,
                                                                      mediaProvider: MockMediaProvider(),
                                                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
@@ -89,7 +89,8 @@ class HomeScreenViewModelTests: XCTestCase {
     
     func testLeaveRoomAlert() async throws {
         let mockRoomId = "1"
-        clientProxy.roomForIdentifierMocks[mockRoomId] = .init(with: .init(id: mockRoomId, name: "Some room"))
+        
+        clientProxy.roomForIdentifierClosure = { _ in RoomProxyMock(with: .init(id: mockRoomId, name: "Some room")) }
         
         let deferred = deferFulfillment(context.$viewState) { value in
             value.bindings.leaveRoomAlertItem != nil
@@ -106,7 +107,8 @@ class HomeScreenViewModelTests: XCTestCase {
         let mockRoomId = "1"
         let room: RoomProxyMock = .init(with: .init(id: mockRoomId, name: "Some room"))
         room.leaveRoomClosure = { .failure(.failedLeavingRoom) }
-        clientProxy.roomForIdentifierMocks[mockRoomId] = room
+        
+        clientProxy.roomForIdentifierClosure = { _ in room }
 
         let deferred = deferFulfillment(context.$viewState) { value in
             value.bindings.alertInfo != nil
@@ -136,7 +138,9 @@ class HomeScreenViewModelTests: XCTestCase {
             .store(in: &cancellables)
         let room: RoomProxyMock = .init(with: .init(id: mockRoomId, name: "Some room"))
         room.leaveRoomClosure = { .success(()) }
-        clientProxy.roomForIdentifierMocks[mockRoomId] = room
+        
+        clientProxy.roomForIdentifierClosure = { _ in room }
+        
         context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomId))
         await fulfillment(of: [expectation])
         XCTAssertNil(context.alertInfo)
