@@ -1,3 +1,8 @@
+## Changes in 1.5.10 (2024-02-27)
+
+No significant changes.
+
+
 ## Changes in 1.5.9 (2024-02-27)
 
 🙌 Improvements
