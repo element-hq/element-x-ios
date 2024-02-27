@@ -102,6 +102,7 @@
 "common_analytics" = "分析";
 "common_appearance" = "外觀";
 "common_audio" = "音訊";
+"common_blocked_users" = "Blocked users";
 "common_bubbles" = "泡泡";
 "common_chat_backup" = "聊天室備份";
 "common_copyright" = "著作權";
@@ -119,7 +120,9 @@
 "common_error" = "錯誤";
 "common_everyone" = "所有人";
 "common_face_id_ios" = "Face ID";
+"common_failed" = "Failed";
 "common_favourite" = "Favourite";
+"common_favourited" = "Favourited";
 "common_file" = "檔案";
 "common_forward_message" = "訊息轉寄";
 "common_gif" = "GIF";
@@ -139,6 +142,7 @@
 "common_no_results" = "查無結果";
 "common_offline" = "離線";
 "common_optic_id_ios" = "Optic ID";
+"common_or" = "or";
 "common_password" = "密碼";
 "common_people" = "夥伴";
 "common_permalink" = "永久連結";
@@ -199,8 +203,8 @@
 "common_poll_end_confirmation" = "您確定要結束這項投票嗎？";
 "common_poll_summary" = "投票：%1$@";
 "common_verify_device" = "驗證裝置";
-"confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to confirm your recovery key to maintain access to your chat backup.";
-"confirm_recovery_key_banner_title" = "Confirm your recovery key";
+"confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup.";
+"confirm_recovery_key_banner_title" = "Enter your recovery key";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "dialog_permission_camera" = "為了讓應用程式使用相機，請到系統設定中開啟權限。";
 "dialog_permission_generic" = "請到系統設定中開啟權限。";
@@ -332,6 +336,7 @@
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN 碼不一樣";
 "screen_app_lock_signout_alert_message" = "You’ll need to re-login and create a new PIN to proceed";
 "screen_app_lock_signout_alert_title" = "您即將登出";
+"screen_blocked_users_unblocking" = "Unblocking...";
 "screen_bug_report_attach_screenshot" = "附上螢幕截圖";
 "screen_bug_report_contact_me" = "如果有其他問題，你可以聯絡我。";
 "screen_bug_report_contact_me_title" = "聯絡我";
@@ -350,6 +355,7 @@
 "screen_change_account_provider_subtitle" = "使用不同的帳戶提供者，例如您自己的伺服器或工作帳號。";
 "screen_change_account_provider_title" = "更改帳號提供者";
 "screen_change_server_error_invalid_homeserver" = "We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.";
+"screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "此伺服器目前不支援滑動同步（sliding sync）。";
 "screen_change_server_form_header" = "家伺服器 URL";
 "screen_change_server_form_notice" = "You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %1$@";
@@ -360,7 +366,7 @@
 "screen_chat_backup_key_backup_description" = "備份可確保您不會遺失歷史訊息。%1$@。";
 "screen_chat_backup_key_backup_title" = "備份";
 "screen_chat_backup_recovery_action_change" = "Change recovery key";
-"screen_chat_backup_recovery_action_confirm" = "Confirm recovery key";
+"screen_chat_backup_recovery_action_confirm" = "Enter recovery key";
 "screen_chat_backup_recovery_action_confirm_description" = "Your chat backup is currently out of sync.";
 "screen_chat_backup_recovery_action_setup" = "Set up recovery";
 "screen_chat_backup_recovery_action_setup_description" = "Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.";
@@ -375,7 +381,6 @@
 "screen_create_poll_title" = "建立投票";
 "screen_create_room_action_create_room" = "建立聊天室";
 "screen_create_room_action_invite_people" = "邀請朋友使用 Element";
-"screen_create_room_add_people_title" = "邀請夥伴";
 "screen_create_room_error_creating_room" = "建立聊天室時發生錯誤";
 "screen_create_room_private_option_description" = "聊天室裡的訊息會被加密。聊天室建立後，無法停用加密功能。";
 "screen_create_room_private_option_title" = "私密聊天室（僅限邀請）";
@@ -405,6 +410,7 @@
 "screen_login_error_deactivated_account" = "這個帳號已被停用。";
 "screen_login_error_invalid_credentials" = "不正確的使用者名稱或密碼";
 "screen_login_error_invalid_user_id" = "This is not a valid user identifier. Expected format: ‘@user:homeserver.org’";
+"screen_login_error_refresh_tokens" = "This server is configured to use refresh tokens. These aren't supported when using password based login.";
 "screen_login_error_unsupported_authentication" = "The selected homeserver doesn't support password or OIDC login. Please contact your admin or choose another homeserver.";
 "screen_login_form_header" = "輸入您的詳細資料";
 "screen_login_title" = "歡迎回來！";
@@ -463,7 +469,7 @@
 "screen_recovery_key_confirm_key_description" = "Enter the 48 character code.";
 "screen_recovery_key_confirm_key_placeholder" = "Enter...";
 "screen_recovery_key_confirm_success" = "Recovery key confirmed";
-"screen_recovery_key_confirm_title" = "Confirm your recovery key";
+"screen_recovery_key_confirm_title" = "Enter your recovery key";
 "screen_recovery_key_copied_to_clipboard" = "Copied recovery key";
 "screen_recovery_key_generating_key" = "Generating…";
 "screen_recovery_key_save_action" = "Save recovery key";
@@ -485,6 +491,11 @@
 "screen_room_attachment_source_location" = "位置";
 "screen_room_attachment_source_poll" = "投票";
 "screen_room_attachment_text_formatting" = "格式化文字";
+"screen_room_change_role_confirm_add_admin_description" = "You will not be able to undo this action. You are promoting the user to have the same power level as you.";
+"screen_room_change_role_confirm_add_admin_title" = "Add Admin?";
+"screen_room_change_role_confirm_demote_self_action" = "Demote";
+"screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
+"screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_details_add_topic_title" = "新增主題";
 "screen_room_details_already_a_member" = "已是成員";
 "screen_room_details_already_invited" = "已邀請";
@@ -496,7 +507,6 @@
 "screen_room_details_error_loading_notification_settings" = "載入通知設定時發生錯誤。";
 "screen_room_details_error_muting" = "無法關閉聊天室通知，請再試一次。";
 "screen_room_details_error_unmuting" = "無法開啟聊天室通知，請再試一次。";
-"screen_room_details_invite_people_title" = "邀請夥伴";
 "screen_room_details_notification_mode_custom" = "自訂";
 "screen_room_details_notification_mode_default" = "預設";
 "screen_room_details_notification_title" = "通知";
@@ -513,9 +523,16 @@
 "screen_room_member_details_unblock_alert_action" = "解除封鎖";
 "screen_room_member_details_unblock_alert_description" = "You'll be able to see all messages from them again.";
 "screen_room_member_details_unblock_user" = "解除封鎖使用者";
+"screen_room_member_list_manage_member_remove" = "Remove member";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "Remove and ban member";
+"screen_room_member_list_manage_member_remove_confirmation_kick" = "Only remove member";
+"screen_room_member_list_manage_member_remove_confirmation_title" = "Remove member and ban from joining in the future?";
+"screen_room_member_list_manage_member_unban" = "Unban";
+"screen_room_member_list_manage_member_user_info" = "See user info";
 "screen_room_member_list_mode_banned" = "Banned";
 "screen_room_member_list_mode_members" = "Members";
 "screen_room_member_list_pending_header_title" = "待定";
+"screen_room_member_list_removing_user" = "Removing %1$@...";
 "screen_room_member_list_role_administrator" = "Admin";
 "screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "聊天室成員";
@@ -567,6 +584,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Confirm that the numbers below match those shown on your other session.";
 "screen_session_verification_compare_numbers_title" = "Compare numbers";
 "screen_session_verification_complete_subtitle" = "新的工作階段已完成驗證。它能夠存取您的加密訊息，而其他使用者會將它視為可信任的。";
+"screen_session_verification_enter_recovery_key" = "Enter recovery key";
 "screen_session_verification_open_existing_session_subtitle" = "為了存取被加密的歷史訊息，您需要證明這是您本人。";
 "screen_session_verification_open_existing_session_title" = "開啟一個現存的工作階段";
 "screen_session_verification_positive_button_canceled" = "重新嘗試驗證";
@@ -687,7 +705,11 @@
 "screen_analytics_settings_help_us_improve" = "提供匿名的使用數據以協助我們釐清問題。";
 "screen_analytics_settings_read_terms" = "您可以到%1$@閱讀我們的條款。";
 "screen_analytics_settings_read_terms_content_link" = "這裡";
+"screen_blocked_users_unblock_alert_action" = "解除封鎖";
+"screen_blocked_users_unblock_alert_description" = "You'll be able to see all messages from them again.";
+"screen_blocked_users_unblock_alert_title" = "解除封鎖使用者";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
+"screen_create_room_add_people_title" = "邀請夥伴";
 "screen_create_room_room_name_label" = "聊天室名稱";
 "screen_create_room_title" = "建立聊天室";
 "screen_dm_details_block_alert_action" = "封鎖";
@@ -701,6 +723,7 @@
 "screen_login_subtitle" = "Matrix 是一個開放網路，為了安全且去中心化的通訊而生。";
 "screen_report_content_block_user" = "封鎖使用者";
 "screen_room_attachment_source_camera_photo" = "拍照";
+"screen_room_details_invite_people_title" = "邀請夥伴";
 "screen_room_details_leave_conversation_title" = "Leave conversation";
 "screen_room_details_leave_room_title" = "離開聊天室";
 "screen_room_details_room_name_label" = "聊天室名稱";

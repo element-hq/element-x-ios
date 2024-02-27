@@ -17,6 +17,7 @@
 import Combine
 import Foundation
 
+@MainActor
 struct RoomProxyMockConfiguration {
     var id = UUID().uuidString
     var name: String?
@@ -33,6 +34,10 @@ struct RoomProxyMockConfiguration {
         let mock = TimelineProxyMock()
         mock.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
         mock.timelineStartReached = false
+        
+        let timelineProvider = RoomTimelineProviderMock()
+        timelineProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
+        mock.underlyingTimelineProvider = timelineProvider
         return mock
     }()
     
@@ -45,6 +50,7 @@ struct RoomProxyMockConfiguration {
 }
 
 extension RoomProxyMock {
+    @MainActor
     convenience init(with configuration: RoomProxyMockConfiguration) {
         self.init()
 
@@ -83,6 +89,10 @@ extension RoomProxyMock {
         markAsReadReceiptTypeReturnValue = .success(())
         underlyingIsFavourite = false
         flagAsFavouriteReturnValue = .success(())
+        
+        kickUserReturnValue = .success(())
+        banUserReturnValue = .success(())
+        unbanUserReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()

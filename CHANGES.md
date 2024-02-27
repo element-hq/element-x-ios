@@ -1,3 +1,27 @@
+## Changes in 1.5.10 (2024-02-27)
+
+No significant changes.
+
+
+## Changes in 1.5.9 (2024-02-27)
+
+🙌 Improvements
+
+- Handover log file management to Rust. ([#2495](https://github.com/element-hq/element-x-ios/pull/2495))
+- Add support for latest iPhones in the User Agent. Also correctly identify when running on a Mac. ([#2496](https://github.com/element-hq/element-x-ios/pull/2496))
+- Add error messages about refresh tokens and an invalid well-known file. ([#2497](https://github.com/element-hq/element-x-ios/pull/2497))
+- Tapping on the user's own avatar in the Home Screen will now bring them directly to the settings screen. ([#2393](https://github.com/element-hq/element-x-ios/issues/2393))
+
+🚧 In development 🚧
+
+- Favourite filter implemented. ([#2484](https://github.com/element-hq/element-x-ios/pull/2484))
+- Implement support for (un)marking rooms as favourite from the room list and room detail screens ([#2320](https://github.com/element-hq/element-x-ios/issues/2320))
+- Add support for kicking and banning room members. ([#2357](https://github.com/element-hq/element-x-ios/issues/2357))
+
+Others
+
+- Refactor AvatarHeaderView. ([#2490](https://github.com/element-hq/element-x-ios/pull/2490))
+
 ## Changes in 1.5.8 (2024-02-19)
 
 ✨ Features

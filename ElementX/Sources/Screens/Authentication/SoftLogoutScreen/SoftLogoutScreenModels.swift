@@ -101,6 +101,8 @@ enum SoftLogoutScreenViewAction {
 enum SoftLogoutScreenErrorType: Hashable {
     /// A specific error message shown in an alert.
     case alert(String)
+    /// An alert that informs the user that login failed due to a refresh token being returned.
+    case refreshTokenAlert
     /// An unknown error occurred.
     case unknown
 }

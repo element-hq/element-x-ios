@@ -32,7 +32,10 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Timeline") {
+            Section("Room") {
+                Toggle(isOn: $context.roomModerationEnabled) {
+                    Text("Moderation")
+                }
                 Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
                     Text("Collapse room state events")
                 }

@@ -15,7 +15,7 @@
 			<key>one</key>
 			<string>%1$d cifră introdusă</string>
 			<key>few</key>
-			<string></string>
+			<string>%1$d cifre introduse</string>
 			<key>other</key>
 			<string>%1$d cifre introduse</string>
 		</dict>
@@ -33,7 +33,7 @@
 			<key>one</key>
 			<string>Citit de %1$@ și incă %2$d</string>
 			<key>few</key>
-			<string></string>
+			<string>Citit de %1$@ și incă %2$d</string>
 			<key>other</key>
 			<string>Citit de %1$@ și incă %2$d</string>
 		</dict>
@@ -201,7 +201,7 @@
 			<key>one</key>
 			<string>Aveți %1$d încercare de deblocare</string>
 			<key>few</key>
-			<string></string>
+			<string>Aveți %1$d încercări de deblocare</string>
 			<key>other</key>
 			<string>Aveți %1$d încercări de deblocare</string>
 		</dict>
@@ -219,7 +219,7 @@
 			<key>one</key>
 			<string>PIN greșit. Mai aveți %1$d sansa</string>
 			<key>few</key>
-			<string></string>
+			<string>PIN greșit. Mai aveți %1$d sanse</string>
 			<key>other</key>
 			<string>PIN greșit. Mai aveți %1$d sanse</string>
 		</dict>
@@ -253,7 +253,7 @@
 			<key>one</key>
 			<string>%1$@, %2$@ și încă %3$d</string>
 			<key>few</key>
-			<string></string>
+			<string>%1$@, %2$@ și încă %3$d</string>
 			<key>other</key>
 			<string>%1$@, %2$@ și încă %3$d</string>
 		</dict>
@@ -271,7 +271,7 @@
 			<key>one</key>
 			<string>%d altul</string>
 			<key>few</key>
-			<string></string>
+			<string>%d alții</string>
 			<key>other</key>
 			<string>%d alții</string>
 		</dict>
@@ -289,7 +289,7 @@
 			<key>one</key>
 			<string>%1$@ scrie</string>
 			<key>few</key>
-			<string></string>
+			<string>%1$@ scriu</string>
 			<key>other</key>
 			<string>%1$@ scriu</string>
 		</dict>

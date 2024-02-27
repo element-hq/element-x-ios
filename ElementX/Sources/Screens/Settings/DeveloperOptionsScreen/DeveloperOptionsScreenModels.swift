@@ -54,6 +54,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     
     var markAsUnreadEnabled: Bool { get set }
     var markAsFavouriteEnabled: Bool { get set }
+    var roomModerationEnabled: Bool { get set }
     
     var elementCallBaseURL: URL { get set }
 }

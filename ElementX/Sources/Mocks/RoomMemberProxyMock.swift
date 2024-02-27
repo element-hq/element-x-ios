@@ -27,6 +27,7 @@ struct RoomMemberProxyMockConfiguration {
     var powerLevel = 0
     var role = RoomMemberRole.user
     var canInviteUsers = false
+    var canKickUsers = false
     var canBanUsers = false
     var canSendStateEvent: (StateEventType) -> Bool = { _ in true }
 }
@@ -43,6 +44,7 @@ extension RoomMemberProxyMock {
         powerLevel = configuration.powerLevel
         role = configuration.role
         canInviteUsers = configuration.canInviteUsers
+        canKickUsers = configuration.canKickUsers
         canBanUsers = configuration.canBanUsers
         canSendStateEventTypeClosure = configuration.canSendStateEvent
     }
@@ -55,6 +57,19 @@ extension RoomMemberProxyMock {
                                         membership: .join,
                                         isAccountOwner: true,
                                         canInviteUsers: true))
+    }
+    
+    static var mockMeAdmin: RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@me:matrix.org",
+                                        displayName: "Me admin",
+                                        avatarURL: URL.picturesDirectory,
+                                        membership: .join,
+                                        isAccountOwner: true,
+                                        powerLevel: 100,
+                                        role: .administrator,
+                                        canInviteUsers: true,
+                                        canKickUsers: true,
+                                        canBanUsers: true))
     }
     
     static var mockAlice: RoomMemberProxyMock {
@@ -151,5 +166,17 @@ extension Array where Element == RoomMemberProxyMock {
         .mockDan,
         .mockInvited,
         .mockIgnored
+    ]
+    
+    static let allMembersAsAdmin: [RoomMemberProxyMock] = [
+        .mockMeAdmin,
+        .mockAlice,
+        .mockBob,
+        .mockCharlie,
+        .mockDan,
+        .mockInvited,
+        .mockIgnored,
+        .mockAdmin,
+        .mockModerator
     ]
 }

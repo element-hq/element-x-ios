@@ -43,14 +43,14 @@ struct RoomMembersListScreen: View {
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
         .compoundSearchField()
+        .autocorrectionDisabled()
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
-        .alert(item: $context.alertInfo)
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                inviteButton
-            }
+        .sheet(item: $context.memberToManage) {
+            RoomMembersListManageMemberSheet(member: $0, context: context)
         }
+        .alert(item: $context.alertInfo)
+        .toolbar { toolbar }
         .track(screen: .RoomMembers)
     }
     
@@ -91,13 +91,13 @@ struct RoomMembersListScreen: View {
         }
     }
     
-    @ViewBuilder
-    private var inviteButton: some View {
-        if context.viewState.canInviteUsers {
-            Button {
-                context.send(viewAction: .invite)
-            } label: {
-                Text(L10n.actionInvite)
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            if context.viewState.canInviteUsers {
+                Button(L10n.actionInvite) {
+                    context.send(viewAction: .invite)
+                }
             }
         }
     }
@@ -162,6 +162,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         return RoomMembersListScreenViewModel(initialMode: initialMode,
                                               roomProxy: RoomProxyMock(with: .init(name: "Some room", members: members)),
                                               mediaProvider: MockMediaProvider(),
-                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                              appSettings: ServiceLocator.shared.settings)
     }
 }

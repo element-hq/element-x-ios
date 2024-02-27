@@ -21,6 +21,7 @@ import XCTest
 @MainActor
 class RoomMembersListScreenViewModelTests: XCTestCase {
     var viewModel: RoomMembersListScreenViewModel!
+    var roomProxy: RoomProxyMock!
     
     var context: RoomMembersListScreenViewModel.Context {
         viewModel.context
@@ -125,9 +126,50 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 0)
     }
     
+    func testKickMember() async throws {
+        setup(with: .allMembers)
+        var deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
+        try await deferred.fulfill()
+        
+        context.send(viewAction: .kickMember(viewModel.state.visibleJoinedMembers[0]))
+        
+        // Calling the mock won't actually change any view state, so sleep instead.
+        try await Task.sleep(for: .milliseconds(100))
+        
+        XCTAssert(roomProxy.kickUserCalled)
+    }
+    
+    func testBanMember() async throws {
+        setup(with: .allMembers)
+        var deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
+        try await deferred.fulfill()
+        
+        context.send(viewAction: .banMember(viewModel.state.visibleJoinedMembers[0]))
+        
+        // Calling the mock won't actually change any view state, so sleep instead.
+        try await Task.sleep(for: .milliseconds(100))
+        
+        XCTAssert(roomProxy.banUserCalled)
+    }
+    
+    func testUnbanMember() async throws {
+        setup(with: .allMembers)
+        var deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
+        try await deferred.fulfill()
+        
+        context.send(viewAction: .unbanMember(viewModel.state.visibleJoinedMembers[0]))
+        
+        // Calling the mock won't actually change any view state, so sleep instead.
+        try await Task.sleep(for: .milliseconds(100))
+        
+        XCTAssert(roomProxy.unbanUserCalled)
+    }
+    
     private func setup(with members: [RoomMemberProxyMock]) {
-        viewModel = .init(roomProxy: RoomProxyMock(with: .init(name: "test", members: members)),
+        roomProxy = RoomProxyMock(with: .init(name: "test", members: members))
+        viewModel = .init(roomProxy: roomProxy,
                           mediaProvider: MockMediaProvider(),
-                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                          appSettings: ServiceLocator.shared.settings)
     }
 }

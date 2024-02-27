@@ -102,6 +102,7 @@
 "common_analytics" = "Elemzések";
 "common_appearance" = "Megjelenítés";
 "common_audio" = "Hang";
+"common_blocked_users" = "Blocked users";
 "common_bubbles" = "Buborékok";
 "common_chat_backup" = "Csevegés biztonsági mentése";
 "common_copyright" = "Szerzői jogok";
@@ -119,7 +120,9 @@
 "common_error" = "Hiba";
 "common_everyone" = "Mindenki";
 "common_face_id_ios" = "Face ID";
+"common_failed" = "Failed";
 "common_favourite" = "Kedvenc";
+"common_favourited" = "Favourited";
 "common_file" = "Fájl";
 "common_forward_message" = "Üzenet továbbítása";
 "common_gif" = "GIF";
@@ -139,6 +142,7 @@
 "common_no_results" = "Nincs találat";
 "common_offline" = "Kapcsolat nélkül";
 "common_optic_id_ios" = "Optic ID";
+"common_or" = "or";
 "common_password" = "Jelszó";
 "common_people" = "Emberek";
 "common_permalink" = "Állandó hivatkozás";
@@ -332,6 +336,7 @@
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "A PIN-kódok nem egyeznek";
 "screen_app_lock_signout_alert_message" = "A folytatáshoz újra be kell jelentkeznie, és létre kell hoznia egy új PIN-kódot";
 "screen_app_lock_signout_alert_title" = "Kijelentkeztetésre kerül";
+"screen_blocked_users_unblocking" = "Unblocking...";
 "screen_bug_report_attach_screenshot" = "Képernyőkép mellékelése";
 "screen_bug_report_contact_me" = "Felveheti velem a kapcsolatot, ha bármilyen további kérdése van.";
 "screen_bug_report_contact_me_title" = "Kapcsolat";
@@ -350,6 +355,7 @@
 "screen_change_account_provider_subtitle" = "Másik fiókszolgáltató, például a saját privát kiszolgáló vagy egy munkahelyi fiók használata.";
 "screen_change_account_provider_title" = "Fiókszolgáltató módosítása";
 "screen_change_server_error_invalid_homeserver" = "Nem sikerült elérni ezt a Matrix-kiszolgálót. Ellenőrizze, hogy helyesen adta-e meg a Matrix-kiszolgáló webcímét. Ha a webcím helyes, akkor további segítségért lépjen kapcsolatba a Matrix-kiszolgáló rendszergazdájával.";
+"screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "A kiszolgáló jelenleg nem támogatja a Sliding sync protokollt.";
 "screen_change_server_form_header" = "Matrix-kiszolgáló webcíme";
 "screen_change_server_form_notice" = "Csak olyan meglévő kiszolgálóhoz csatlakozhat, amely támogatja a Sliding sync protokollt. Ezt a Matrix-kiszolgáló rendszergazdájának kell beállítania. %1$@";
@@ -375,7 +381,6 @@
 "screen_create_poll_title" = "Szavazás létrehozása";
 "screen_create_room_action_create_room" = "Új szoba";
 "screen_create_room_action_invite_people" = "Hívja meg ismerőseit az Elementbe";
-"screen_create_room_add_people_title" = "Emberek meghívása";
 "screen_create_room_error_creating_room" = "Hiba történt a szoba létrehozásakor";
 "screen_create_room_private_option_description" = "A szobában lévő üzenetek titkosítottak. A titkosítást utólag nem lehet kikapcsolni.";
 "screen_create_room_private_option_title" = "Privát szoba (csak meghívással)";
@@ -405,6 +410,7 @@
 "screen_login_error_deactivated_account" = "Ez a fiók deaktiválva lett.";
 "screen_login_error_invalid_credentials" = "Helytelen felhasználónév vagy jelszó";
 "screen_login_error_invalid_user_id" = "Ez nem érvényes felhasználóazonosító. A várt formátum: „@user:homeserver.org”";
+"screen_login_error_refresh_tokens" = "This server is configured to use refresh tokens. These aren't supported when using password based login.";
 "screen_login_error_unsupported_authentication" = "A kiválasztott Matrix-kiszolgáló nem támogatja a jelszavas vagy OIDC-alapú bejelentkezést. Lépjen kapcsolatba a kiszolgáló rendszergazdájával, vagy válasszon másik Matrix-kiszolgálót.";
 "screen_login_form_header" = "Adja meg adatait";
 "screen_login_title" = "Örülünk, hogy visszatért!";
@@ -485,6 +491,11 @@
 "screen_room_attachment_source_location" = "Hely";
 "screen_room_attachment_source_poll" = "Szavazás";
 "screen_room_attachment_text_formatting" = "Szövegformázás";
+"screen_room_change_role_confirm_add_admin_description" = "You will not be able to undo this action. You are promoting the user to have the same power level as you.";
+"screen_room_change_role_confirm_add_admin_title" = "Add Admin?";
+"screen_room_change_role_confirm_demote_self_action" = "Demote";
+"screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
+"screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_details_add_topic_title" = "Téma hozzáadása";
 "screen_room_details_already_a_member" = "Már tag";
 "screen_room_details_already_invited" = "Már meghívták";
@@ -496,7 +507,6 @@
 "screen_room_details_error_loading_notification_settings" = "Hiba történt az értesítési beállítások betöltésekor.";
 "screen_room_details_error_muting" = "Nem sikerült elnémítani ezt a szobát, próbálja újra.";
 "screen_room_details_error_unmuting" = "Nem sikerült feloldani a szoba némítását, próbálja újra.";
-"screen_room_details_invite_people_title" = "Emberek meghívása";
 "screen_room_details_notification_mode_custom" = "Egyéni";
 "screen_room_details_notification_mode_default" = "Alapértelmezett";
 "screen_room_details_notification_title" = "Értesítések";
@@ -513,9 +523,16 @@
 "screen_room_member_details_unblock_alert_action" = "Letiltás feloldása";
 "screen_room_member_details_unblock_alert_description" = "Újra láthatja az összes üzenetét.";
 "screen_room_member_details_unblock_user" = "Felhasználó kitiltásának feloldása";
+"screen_room_member_list_manage_member_remove" = "Remove member";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "Remove and ban member";
+"screen_room_member_list_manage_member_remove_confirmation_kick" = "Only remove member";
+"screen_room_member_list_manage_member_remove_confirmation_title" = "Remove member and ban from joining in the future?";
+"screen_room_member_list_manage_member_unban" = "Unban";
+"screen_room_member_list_manage_member_user_info" = "See user info";
 "screen_room_member_list_mode_banned" = "Kitiltva";
 "screen_room_member_list_mode_members" = "Tagok";
 "screen_room_member_list_pending_header_title" = "Függőben";
+"screen_room_member_list_removing_user" = "Removing %1$@...";
 "screen_room_member_list_role_administrator" = "Rendszergazda";
 "screen_room_member_list_role_moderator" = "Moderátor";
 "screen_room_member_list_room_members_header_title" = "Szoba tagjai";
@@ -567,6 +584,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Ellenőrizze, hogy az alábbi számok megegyeznek-e a másik munkamenetben feltüntetett számokkal.";
 "screen_session_verification_compare_numbers_title" = "Számok összehasonlítása";
 "screen_session_verification_complete_subtitle" = "Az új munkamenete most már ellenőrizve van. Eléri a titkosított üzeneteit, és a többi felhasználó is megbízhatónak fogja látni.";
+"screen_session_verification_enter_recovery_key" = "Enter recovery key";
 "screen_session_verification_open_existing_session_subtitle" = "Bizonyítsa, hogy valóban Ön az, hogy elérje a titkosított üzeneteinek előzményeit.";
 "screen_session_verification_open_existing_session_title" = "Meglévő munkamenet megnyitása";
 "screen_session_verification_positive_button_canceled" = "Ellenőrzés újrapróbálása";
@@ -687,7 +705,11 @@
 "screen_analytics_settings_help_us_improve" = "Anonim használati adatok megosztása a problémák azonosítása érdekében.";
 "screen_analytics_settings_read_terms" = "%1$@ olvashatja el a feltételeinket.";
 "screen_analytics_settings_read_terms_content_link" = "Itt";
+"screen_blocked_users_unblock_alert_action" = "Letiltás feloldása";
+"screen_blocked_users_unblock_alert_description" = "Újra láthatja az összes üzenetét.";
+"screen_blocked_users_unblock_alert_title" = "Felhasználó kitiltásának feloldása";
 "screen_bug_report_rash_logs_alert_title" = "Az %1$@ összeomlott a legutóbbi használata óta. Megosztod velünk az összeomlás-jelentést?";
+"screen_create_room_add_people_title" = "Ismerősök meghívása";
 "screen_create_room_room_name_label" = "Szoba neve";
 "screen_create_room_title" = "Szoba létrehozása";
 "screen_dm_details_block_alert_action" = "Letiltás";
@@ -701,6 +723,7 @@
 "screen_login_subtitle" = "A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz.";
 "screen_report_content_block_user" = "Felhasználó letiltása";
 "screen_room_attachment_source_camera_photo" = "Fénykép készítése";
+"screen_room_details_invite_people_title" = "Ismerősök meghívása";
 "screen_room_details_leave_conversation_title" = "Beszélgetés elhagyása";
 "screen_room_details_leave_room_title" = "Szoba elhagyása";
 "screen_room_details_room_name_label" = "Szoba neve";

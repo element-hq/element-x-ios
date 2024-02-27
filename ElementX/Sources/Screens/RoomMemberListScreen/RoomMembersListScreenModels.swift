@@ -38,6 +38,7 @@ struct RoomMembersListScreenViewState: BindableState {
     var bannedMembersCount: Int { bannedMembers.count }
     
     var canInviteUsers = false
+    var canKickUsers = false
     var canBanUsers = false
     
     var bindings: RoomMembersListScreenViewStateBindings
@@ -74,14 +75,24 @@ struct RoomMembersListScreenViewStateBindings {
     var searchQuery = ""
     /// The current mode the screen is in.
     var mode: RoomMembersListScreenMode = .members
+    /// A selected member to kick, ban, promote etc.
+    var memberToManage: RoomMemberDetails?
 
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<RoomDetailsScreenErrorType>?
+    var alertInfo: AlertInfo<RoomMembersListScreenAlertType>?
 }
 
 enum RoomMembersListScreenViewAction {
-    case selectMember(id: String)
+    case selectMember(RoomMemberDetails)
+    case showMemberDetails(RoomMemberDetails)
+    case kickMember(RoomMemberDetails)
+    case banMember(RoomMemberDetails)
+    case unbanMember(RoomMemberDetails)
     case invite
+}
+
+enum RoomMembersListScreenAlertType: Hashable {
+    case unbanConfirmation(RoomMemberDetails)
 }
 
 private extension RoomMemberDetails {

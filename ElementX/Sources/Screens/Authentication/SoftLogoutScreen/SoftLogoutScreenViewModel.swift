@@ -60,6 +60,10 @@ class SoftLogoutScreenViewModel: SoftLogoutScreenViewModelType, SoftLogoutScreen
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: L10n.commonError,
                                                  message: message)
+        case .refreshTokenAlert:
+            state.bindings.alertInfo = AlertInfo(id: type,
+                                                 title: L10n.commonServerNotSupported,
+                                                 message: L10n.screenLoginErrorRefreshTokens)
         case .unknown:
             state.bindings.alertInfo = AlertInfo(id: type)
         }

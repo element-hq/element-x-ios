@@ -111,6 +111,8 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
         switch error {
         case .invalidServer, .invalidHomeserverAddress:
             viewModel.displayError(.footerMessage(L10n.screenChangeServerErrorInvalidHomeserver))
+        case .invalidWellKnown(let error):
+            viewModel.displayError(.invalidWellKnownAlert(error))
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
         default:

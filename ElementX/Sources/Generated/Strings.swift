@@ -236,6 +236,8 @@ internal enum L10n {
   internal static var commonAppearance: String { return L10n.tr("Localizable", "common_appearance") }
   /// Audio
   internal static var commonAudio: String { return L10n.tr("Localizable", "common_audio") }
+  /// Blocked users
+  internal static var commonBlockedUsers: String { return L10n.tr("Localizable", "common_blocked_users") }
   /// Bubbles
   internal static var commonBubbles: String { return L10n.tr("Localizable", "common_bubbles") }
   /// Chat backup
@@ -272,6 +274,8 @@ internal enum L10n {
   internal static var commonEveryone: String { return L10n.tr("Localizable", "common_everyone") }
   /// Face ID
   internal static var commonFaceIdIos: String { return L10n.tr("Localizable", "common_face_id_ios") }
+  /// Failed
+  internal static var commonFailed: String { return L10n.tr("Localizable", "common_failed") }
   /// Favourite
   internal static var commonFavourite: String { return L10n.tr("Localizable", "common_favourite") }
   /// Favourited
@@ -320,6 +324,8 @@ internal enum L10n {
   internal static var commonOffline: String { return L10n.tr("Localizable", "common_offline") }
   /// Optic ID
   internal static var commonOpticIdIos: String { return L10n.tr("Localizable", "common_optic_id_ios") }
+  /// or
+  internal static var commonOr: String { return L10n.tr("Localizable", "common_or") }
   /// Password
   internal static var commonPassword: String { return L10n.tr("Localizable", "common_password") }
   /// People
@@ -824,6 +830,14 @@ internal enum L10n {
   internal static func screenAppLockSubtitleWrongPin(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_app_lock_subtitle_wrong_pin", p1)
   }
+  /// Unblock
+  internal static var screenBlockedUsersUnblockAlertAction: String { return L10n.tr("Localizable", "screen_blocked_users_unblock_alert_action") }
+  /// You'll be able to see all messages from them again.
+  internal static var screenBlockedUsersUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_blocked_users_unblock_alert_description") }
+  /// Unblock user
+  internal static var screenBlockedUsersUnblockAlertTitle: String { return L10n.tr("Localizable", "screen_blocked_users_unblock_alert_title") }
+  /// Unblocking...
+  internal static var screenBlockedUsersUnblocking: String { return L10n.tr("Localizable", "screen_blocked_users_unblocking") }
   /// Attach screenshot
   internal static var screenBugReportAttachScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_attach_screenshot") }
   /// You may contact me if you have any follow up questions.
@@ -864,6 +878,11 @@ internal enum L10n {
   internal static var screenChangeAccountProviderTitle: String { return L10n.tr("Localizable", "screen_change_account_provider_title") }
   /// We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.
   internal static var screenChangeServerErrorInvalidHomeserver: String { return L10n.tr("Localizable", "screen_change_server_error_invalid_homeserver") }
+  /// Sliding sync isn't available due to an issue in the well-known file:
+  /// %1$@
+  internal static func screenChangeServerErrorInvalidWellKnown(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_change_server_error_invalid_well_known", String(describing: p1))
+  }
   /// This server currently doesn’t support sliding sync.
   internal static var screenChangeServerErrorNoSlidingSyncMessage: String { return L10n.tr("Localizable", "screen_change_server_error_no_sliding_sync_message") }
   /// Homeserver URL
@@ -1010,6 +1029,8 @@ internal enum L10n {
   internal static var screenLoginErrorInvalidCredentials: String { return L10n.tr("Localizable", "screen_login_error_invalid_credentials") }
   /// This is not a valid user identifier. Expected format: ‘@user:homeserver.org’
   internal static var screenLoginErrorInvalidUserId: String { return L10n.tr("Localizable", "screen_login_error_invalid_user_id") }
+  /// This server is configured to use refresh tokens. These aren't supported when using password based login.
+  internal static var screenLoginErrorRefreshTokens: String { return L10n.tr("Localizable", "screen_login_error_refresh_tokens") }
   /// The selected homeserver doesn't support password or OIDC login. Please contact your admin or choose another homeserver.
   internal static var screenLoginErrorUnsupportedAuthentication: String { return L10n.tr("Localizable", "screen_login_error_unsupported_authentication") }
   /// Enter your details
@@ -1184,6 +1205,16 @@ internal enum L10n {
   internal static var screenRoomAttachmentSourcePoll: String { return L10n.tr("Localizable", "screen_room_attachment_source_poll") }
   /// Text Formatting
   internal static var screenRoomAttachmentTextFormatting: String { return L10n.tr("Localizable", "screen_room_attachment_text_formatting") }
+  /// You will not be able to undo this action. You are promoting the user to have the same power level as you.
+  internal static var screenRoomChangeRoleConfirmAddAdminDescription: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_add_admin_description") }
+  /// Add Admin?
+  internal static var screenRoomChangeRoleConfirmAddAdminTitle: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_add_admin_title") }
+  /// Demote
+  internal static var screenRoomChangeRoleConfirmDemoteSelfAction: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_demote_self_action") }
+  /// You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.
+  internal static var screenRoomChangeRoleConfirmDemoteSelfDescription: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_demote_self_description") }
+  /// Demote yourself?
+  internal static var screenRoomChangeRoleConfirmDemoteSelfTitle: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_demote_self_title") }
   /// Add topic
   internal static var screenRoomDetailsAddTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_add_topic_title") }
   /// Already a member
@@ -1218,6 +1249,8 @@ internal enum L10n {
   internal static var screenRoomDetailsNotificationModeDefault: String { return L10n.tr("Localizable", "screen_room_details_notification_mode_default") }
   /// Notifications
   internal static var screenRoomDetailsNotificationTitle: String { return L10n.tr("Localizable", "screen_room_details_notification_title") }
+  /// Roles and permissions
+  internal static var screenRoomDetailsRolesAndPermissions: String { return L10n.tr("Localizable", "screen_room_details_roles_and_permissions") }
   /// Room name
   internal static var screenRoomDetailsRoomNameLabel: String { return L10n.tr("Localizable", "screen_room_details_room_name_label") }
   /// Security
@@ -1252,22 +1285,50 @@ internal enum L10n {
   internal static var screenRoomMemberDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_alert_description") }
   /// Unblock user
   internal static var screenRoomMemberDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_user") }
+  /// Banning %1$@
+  internal static func screenRoomMemberListBanningUser(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_member_list_banning_user", String(describing: p1))
+  }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomMemberListHeaderTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_member_list_header_title", p1)
   }
+  /// Remove member
+  internal static var screenRoomMemberListManageMemberRemove: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_remove") }
+  /// Remove and ban member
+  internal static var screenRoomMemberListManageMemberRemoveConfirmationBan: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_remove_confirmation_ban") }
+  /// Only remove member
+  internal static var screenRoomMemberListManageMemberRemoveConfirmationKick: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_remove_confirmation_kick") }
+  /// Remove member and ban from joining in the future?
+  internal static var screenRoomMemberListManageMemberRemoveConfirmationTitle: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_remove_confirmation_title") }
+  /// Unban
+  internal static var screenRoomMemberListManageMemberUnbanAction: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_unban_action") }
+  /// They will be able to join this room again if invited.
+  internal static var screenRoomMemberListManageMemberUnbanMessage: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_unban_message") }
+  /// Unban user
+  internal static var screenRoomMemberListManageMemberUnbanTitle: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_unban_title") }
+  /// See user info
+  internal static var screenRoomMemberListManageMemberUserInfo: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_user_info") }
   /// Banned
   internal static var screenRoomMemberListModeBanned: String { return L10n.tr("Localizable", "screen_room_member_list_mode_banned") }
   /// Members
   internal static var screenRoomMemberListModeMembers: String { return L10n.tr("Localizable", "screen_room_member_list_mode_members") }
   /// Pending
   internal static var screenRoomMemberListPendingHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_pending_header_title") }
+  /// Removing %1$@...
+  internal static func screenRoomMemberListRemovingUser(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_member_list_removing_user", String(describing: p1))
+  }
   /// Admin
   internal static var screenRoomMemberListRoleAdministrator: String { return L10n.tr("Localizable", "screen_room_member_list_role_administrator") }
   /// Moderator
   internal static var screenRoomMemberListRoleModerator: String { return L10n.tr("Localizable", "screen_room_member_list_role_moderator") }
   /// Room members
   internal static var screenRoomMemberListRoomMembersHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_room_members_header_title") }
+  /// Unbanning %1$@
+  internal static func screenRoomMemberListUnbanningUser(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_member_list_unbanning_user", String(describing: p1))
+  }
   /// Notify the whole room
   internal static var screenRoomMentionsAtRoomSubtitle: String { return L10n.tr("Localizable", "screen_room_mentions_at_room_subtitle") }
   /// Everyone
@@ -1314,6 +1375,24 @@ internal enum L10n {
   internal static var screenRoomRetrySendMenuSendAgainAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_send_again_action") }
   /// Your message failed to send
   internal static var screenRoomRetrySendMenuTitle: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_title") }
+  /// Admins
+  internal static var screenRoomRolesAndPermissionsAdmins: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_admins") }
+  /// Member moderation
+  internal static var screenRoomRolesAndPermissionsMemberModeration: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_member_moderation") }
+  /// Messages and content
+  internal static var screenRoomRolesAndPermissionsMessagesAndContent: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_messages_and_content") }
+  /// Moderators
+  internal static var screenRoomRolesAndPermissionsModerators: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_moderators") }
+  /// Permissions
+  internal static var screenRoomRolesAndPermissionsPermissionsHeader: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_permissions_header") }
+  /// Reset permissions
+  internal static var screenRoomRolesAndPermissionsReset: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_reset") }
+  /// Roles
+  internal static var screenRoomRolesAndPermissionsRolesHeader: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_roles_header") }
+  /// Room details
+  internal static var screenRoomRolesAndPermissionsRoomDetails: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_room_details") }
+  /// Roles and permissions
+  internal static var screenRoomRolesAndPermissionsTitle: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_title") }
   /// Add emoji
   internal static var screenRoomTimelineAddReaction: String { return L10n.tr("Localizable", "screen_room_timeline_add_reaction") }
   /// Show less
@@ -1360,7 +1439,7 @@ internal enum L10n {
   internal static var screenRoomlistFilterRooms: String { return L10n.tr("Localizable", "screen_roomlist_filter_rooms") }
   /// Unreads
   internal static var screenRoomlistFilterUnreads: String { return L10n.tr("Localizable", "screen_roomlist_filter_unreads") }
-  /// All Chats
+  /// Chats
   internal static var screenRoomlistMainSpaceTitle: String { return L10n.tr("Localizable", "screen_roomlist_main_space_title") }
   /// Mark as read
   internal static var screenRoomlistMarkAsRead: String { return L10n.tr("Localizable", "screen_roomlist_mark_as_read") }

@@ -17,7 +17,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomMemberDetails: Identifiable, Equatable {
+struct RoomMemberDetails: Identifiable, Hashable {
     let id: String
     let name: String?
     let avatarURL: URL?

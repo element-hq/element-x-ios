@@ -102,6 +102,7 @@
 "common_analytics" = "Аналитика";
 "common_appearance" = "Внешний вид";
 "common_audio" = "Аудио";
+"common_blocked_users" = "Заблокированные пользователи";
 "common_bubbles" = "Пузыри";
 "common_chat_backup" = "Резервная копия чатов";
 "common_copyright" = "Авторское право";
@@ -119,7 +120,9 @@
 "common_error" = "Ошибка";
 "common_everyone" = "Для всех";
 "common_face_id_ios" = "Face ID";
+"common_failed" = "Ошибка";
 "common_favourite" = "Избранное";
+"common_favourited" = "Избранное";
 "common_file" = "Файл";
 "common_forward_message" = "Переслать сообщение";
 "common_gif" = "GIF";
@@ -139,6 +142,7 @@
 "common_no_results" = "Ничего не найдено";
 "common_offline" = "Не в сети";
 "common_optic_id_ios" = "Оптический идентификатор";
+"common_or" = "или";
 "common_password" = "Пароль";
 "common_people" = "Люди";
 "common_permalink" = "Постоянная ссылка";
@@ -332,6 +336,7 @@
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN-коды не совпадают";
 "screen_app_lock_signout_alert_message" = "Чтобы продолжить, вам необходимо повторно войти в систему и создать новый PIN-код";
 "screen_app_lock_signout_alert_title" = "Вы выходите из системы";
+"screen_blocked_users_unblocking" = "Разблокировка...";
 "screen_bug_report_attach_screenshot" = "Приложить снимок экрана";
 "screen_bug_report_contact_me" = "Вы можете связаться со мной, если у Вас возникнут какие-либо дополнительные вопросы.";
 "screen_bug_report_contact_me_title" = "Связаться со мной";
@@ -350,6 +355,7 @@
 "screen_change_account_provider_subtitle" = "Используйте другого поставщика учетных записей, например, собственный частный сервер или рабочую учетную запись.";
 "screen_change_account_provider_title" = "Сменить поставщика учетной записи";
 "screen_change_server_error_invalid_homeserver" = "Нам не удалось связаться с этим домашним сервером. Убедитесь, что вы правильно ввели URL-адрес домашнего сервера. Если URL-адрес указан правильно, обратитесь к администратору домашнего сервера за дополнительной помощью.";
+"screen_change_server_error_invalid_well_known" = "Sliding sync недоступен из-за проблемы в известном файле:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "К сожалению данный сервер не поддерживает sliding sync.";
 "screen_change_server_form_header" = "URL-адрес домашнего сервера";
 "screen_change_server_form_notice" = "Вы можете подключиться только к существующему серверу, поддерживающему sliding sync. Администратору домашнего сервера потребуется настроить его. %1$@";
@@ -375,7 +381,6 @@
 "screen_create_poll_title" = "Создать опрос";
 "screen_create_room_action_create_room" = "Новая комната";
 "screen_create_room_action_invite_people" = "Пригласите друзей в Element";
-"screen_create_room_add_people_title" = "Пригласить людей";
 "screen_create_room_error_creating_room" = "Произошла ошибка при создании комнаты";
 "screen_create_room_private_option_description" = "Сообщения в этой комнате зашифрованы. Отключить шифрование позже будет невозможно.";
 "screen_create_room_private_option_title" = "Приватная комната (только по приглашению)";
@@ -405,6 +410,7 @@
 "screen_login_error_deactivated_account" = "Данная учетная запись была деактивирована.";
 "screen_login_error_invalid_credentials" = "Неверное имя пользователя и/или пароль";
 "screen_login_error_invalid_user_id" = "Это не корректный идентификатор пользователя. Ожидаемый формат: '@user:homeserver.org'";
+"screen_login_error_refresh_tokens" = "Этот сервер настроен на использование токенов обновления. Они не поддерживаются при использовании входа на основе пароля.";
 "screen_login_error_unsupported_authentication" = "Выбранный домашний сервер не поддерживает пароль или логин OIDC. Пожалуйста, свяжитесь с администратором или выберите другой домашний сервер.";
 "screen_login_form_header" = "Введите сведения о себе";
 "screen_login_title" = "Рады видеть вас снова!";
@@ -485,6 +491,11 @@
 "screen_room_attachment_source_location" = "Местоположение";
 "screen_room_attachment_source_poll" = "Опрос";
 "screen_room_attachment_text_formatting" = "Форматирование текста";
+"screen_room_change_role_confirm_add_admin_description" = "Вы не сможете отменить это действие. Вы устанавливаете уровень пользователю соответствующий вашему.";
+"screen_room_change_role_confirm_add_admin_title" = "Добавить администратора?";
+"screen_room_change_role_confirm_demote_self_action" = "Понизить уровень";
+"screen_room_change_role_confirm_demote_self_description" = "Вы не сможете отменить это изменение, так как понижаете себя статус. Если вы являетесь последним привилегированным пользователем в комнате, восстановить привилегии будет невозможно.";
+"screen_room_change_role_confirm_demote_self_title" = "Понизить свой уровень?";
 "screen_room_details_add_topic_title" = "Добавить тему";
 "screen_room_details_already_a_member" = "Уже зарегистрирован";
 "screen_room_details_already_invited" = "Уже приглашены";
@@ -496,7 +507,6 @@
 "screen_room_details_error_loading_notification_settings" = "При загрузке настроек уведомлений произошла ошибка.";
 "screen_room_details_error_muting" = "Не удалось отключить звук в этой комнате, попробуйте еще раз.";
 "screen_room_details_error_unmuting" = "Не удалось включить звук в эту комнату, попробуйте еще раз.";
-"screen_room_details_invite_people_title" = "Пригласить участника";
 "screen_room_details_notification_mode_custom" = "Пользовательский";
 "screen_room_details_notification_mode_default" = "По умолчанию";
 "screen_room_details_notification_title" = "Уведомления";
@@ -513,9 +523,16 @@
 "screen_room_member_details_unblock_alert_action" = "Разблокировать";
 "screen_room_member_details_unblock_alert_description" = "Вы снова сможете увидеть все сообщения.";
 "screen_room_member_details_unblock_user" = "Разблокировать пользователя";
+"screen_room_member_list_manage_member_remove" = "Удалить участника";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "Удалить и заблокировать участника";
+"screen_room_member_list_manage_member_remove_confirmation_kick" = "Только удалить участника";
+"screen_room_member_list_manage_member_remove_confirmation_title" = "Удалить участника и запретить присоединяться в будущем?";
+"screen_room_member_list_manage_member_unban" = "Разблокировать";
+"screen_room_member_list_manage_member_user_info" = "Посмотреть информацию о пользователе";
 "screen_room_member_list_mode_banned" = "Заблокирован";
 "screen_room_member_list_mode_members" = "Участники";
 "screen_room_member_list_pending_header_title" = "В ожидании";
+"screen_room_member_list_removing_user" = "Удаление %1$@...";
 "screen_room_member_list_role_administrator" = "Администратор";
 "screen_room_member_list_role_moderator" = "Модератор";
 "screen_room_member_list_room_members_header_title" = "Участники комнаты";
@@ -567,6 +584,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Убедитесь, что приведенные ниже числа совпадают с цифрами, показанными в другом сеансе.";
 "screen_session_verification_compare_numbers_title" = "Сравните числа";
 "screen_session_verification_complete_subtitle" = "Ваш новый сеанс подтвержден. У него есть доступ к вашим зашифрованным сообщениям, и другие пользователи увидят его как доверенное.";
+"screen_session_verification_enter_recovery_key" = "Введите ключ восстановления";
 "screen_session_verification_open_existing_session_subtitle" = "Чтобы получить доступ к зашифрованной истории сообщений, докажите, что это вы.";
 "screen_session_verification_open_existing_session_title" = "Открыть существующий сеанс";
 "screen_session_verification_positive_button_canceled" = "Повторить проверку";
@@ -687,7 +705,11 @@
 "screen_analytics_settings_help_us_improve" = "Предоставлять анонимные данные об использовании, чтобы помочь нам выявить проблемы.";
 "screen_analytics_settings_read_terms" = "Вы можете ознакомиться со всеми нашими условиями %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "здесь";
+"screen_blocked_users_unblock_alert_action" = "Разблокировать";
+"screen_blocked_users_unblock_alert_description" = "Вы снова сможете увидеть все сообщения.";
+"screen_blocked_users_unblock_alert_title" = "Разблокировать пользователя";
 "screen_bug_report_rash_logs_alert_title" = "При последнем использовании %1$@ произошел сбой. Хотите поделиться отчетом о сбое?";
+"screen_create_room_add_people_title" = "Пригласить друзей";
 "screen_create_room_room_name_label" = "Название комнаты";
 "screen_create_room_title" = "Создать комнату";
 "screen_dm_details_block_alert_action" = "Заблокировать";
@@ -701,6 +723,7 @@
 "screen_login_subtitle" = "Matrix — это открытая сеть для безопасной децентрализованной связи.";
 "screen_report_content_block_user" = "Заблокировать пользователя";
 "screen_room_attachment_source_camera_photo" = "Сделать фото";
+"screen_room_details_invite_people_title" = "Пригласить друзей";
 "screen_room_details_leave_conversation_title" = "Покинуть беседу";
 "screen_room_details_leave_room_title" = "Покинуть комнату";
 "screen_room_details_room_name_label" = "Название комнаты";
