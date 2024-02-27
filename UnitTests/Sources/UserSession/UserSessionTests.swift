@@ -19,11 +19,15 @@ import XCTest
 
 final class UserSessionTests: XCTestCase {
     var userSession: UserSession!
-    let clientProxy = MockClientProxy(userID: "@test:user.net")
+    var clientProxy: ClientProxyMock!
+    let actionsPublisher = PassthroughSubject<ClientProxyAction, Never>()
     
     private var cancellables = Set<AnyCancellable>()
     
     override func setUpWithError() throws {
+        clientProxy = ClientProxyMock(.init(userID: "@test:user.net"))
+        clientProxy.actionsPublisher = actionsPublisher.eraseToAnyPublisher()
+        
         cancellables.removeAll()
         userSession = UserSession(clientProxy: clientProxy,
                                   mediaProvider: MockMediaProvider(),
@@ -42,8 +46,11 @@ final class UserSessionTests: XCTestCase {
         let controller = SessionVerificationControllerProxyMock.configureMock(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
                                                                               isVerified: false,
                                                                               requestDelay: .zero)
-        clientProxy.sessionVerificationControllerProxyResult = .success(controller)
-        clientProxy.actionsSubject.send(.receivedSyncUpdate)
+
+        clientProxy.sessionVerificationControllerProxyReturnValue = .success(controller)
+        
+        actionsPublisher.send(.receivedSyncUpdate)
+
         waitForExpectations(timeout: 1.0)
     }
     
@@ -52,7 +59,7 @@ final class UserSessionTests: XCTestCase {
         let controller = SessionVerificationControllerProxyMock.configureMock(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
                                                                               isVerified: false,
                                                                               requestDelay: .zero)
-        clientProxy.sessionVerificationControllerProxyResult = .success(controller)
+        clientProxy.sessionVerificationControllerProxyReturnValue = .success(controller)
         
         controller.callbacks.sink { value in
             switch value {
@@ -64,7 +71,7 @@ final class UserSessionTests: XCTestCase {
         }
         .store(in: &cancellables)
         
-        clientProxy.actionsSubject.send(.receivedSyncUpdate)
+        actionsPublisher.send(.receivedSyncUpdate)
         controller.callbacks.send(.finished)
         waitForExpectations(timeout: 1.0)
     }

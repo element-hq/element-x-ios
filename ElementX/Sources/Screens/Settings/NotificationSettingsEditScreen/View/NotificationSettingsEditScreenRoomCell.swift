@@ -61,7 +61,7 @@ struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider, Testabl
     static var previews: some View {
         let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
 
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe", roomSummaryProvider: summaryProvider),
+        let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "John Doe", roomSummaryProvider: summaryProvider)),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 

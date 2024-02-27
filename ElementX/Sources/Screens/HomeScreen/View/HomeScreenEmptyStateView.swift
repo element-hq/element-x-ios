@@ -149,8 +149,8 @@ struct HomeScreenEmptyStateView_Previews: PreviewProvider, TestablePreview {
     }
     
     static let viewModel = {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@user:example.com",
-                                                                       roomSummaryProvider: MockRoomSummaryProvider(state: .loaded([]))),
+        let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "@user:example.com",
+                                                                             roomSummaryProvider: MockRoomSummaryProvider(state: .loaded([])))),
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         

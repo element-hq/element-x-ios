@@ -716,6 +716,534 @@ class BugReportServiceMock: BugReportServiceProtocol {
         }
     }
 }
+class ClientProxyMock: ClientProxyProtocol {
+    var actionsPublisher: AnyPublisher<ClientProxyAction, Never> {
+        get { return underlyingActionsPublisher }
+        set(value) { underlyingActionsPublisher = value }
+    }
+    var underlyingActionsPublisher: AnyPublisher<ClientProxyAction, Never>!
+    var loadingStatePublisher: CurrentValuePublisher<ClientProxyLoadingState, Never> {
+        get { return underlyingLoadingStatePublisher }
+        set(value) { underlyingLoadingStatePublisher = value }
+    }
+    var underlyingLoadingStatePublisher: CurrentValuePublisher<ClientProxyLoadingState, Never>!
+    var userID: String {
+        get { return underlyingUserID }
+        set(value) { underlyingUserID = value }
+    }
+    var underlyingUserID: String!
+    var deviceID: String?
+    var homeserver: String {
+        get { return underlyingHomeserver }
+        set(value) { underlyingHomeserver = value }
+    }
+    var underlyingHomeserver: String!
+    var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> {
+        get { return underlyingUserDisplayNamePublisher }
+        set(value) { underlyingUserDisplayNamePublisher = value }
+    }
+    var underlyingUserDisplayNamePublisher: CurrentValuePublisher<String?, Never>!
+    var userAvatarURLPublisher: CurrentValuePublisher<URL?, Never> {
+        get { return underlyingUserAvatarURLPublisher }
+        set(value) { underlyingUserAvatarURLPublisher = value }
+    }
+    var underlyingUserAvatarURLPublisher: CurrentValuePublisher<URL?, Never>!
+    var ignoredUsersPublisher: CurrentValuePublisher<[String]?, Never> {
+        get { return underlyingIgnoredUsersPublisher }
+        set(value) { underlyingIgnoredUsersPublisher = value }
+    }
+    var underlyingIgnoredUsersPublisher: CurrentValuePublisher<[String]?, Never>!
+    var pusherNotificationClientIdentifier: String?
+    var roomSummaryProvider: RoomSummaryProviderProtocol?
+    var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
+    var inviteSummaryProvider: RoomSummaryProviderProtocol?
+    var notificationSettings: NotificationSettingsProxyProtocol {
+        get { return underlyingNotificationSettings }
+        set(value) { underlyingNotificationSettings = value }
+    }
+    var underlyingNotificationSettings: NotificationSettingsProxyProtocol!
+    var secureBackupController: SecureBackupControllerProtocol {
+        get { return underlyingSecureBackupController }
+        set(value) { underlyingSecureBackupController = value }
+    }
+    var underlyingSecureBackupController: SecureBackupControllerProtocol!
+
+    //MARK: - isOnlyDeviceLeft
+
+    var isOnlyDeviceLeftCallsCount = 0
+    var isOnlyDeviceLeftCalled: Bool {
+        return isOnlyDeviceLeftCallsCount > 0
+    }
+    var isOnlyDeviceLeftReturnValue: Result<Bool, ClientProxyError>!
+    var isOnlyDeviceLeftClosure: (() async -> Result<Bool, ClientProxyError>)?
+
+    func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError> {
+        isOnlyDeviceLeftCallsCount += 1
+        if let isOnlyDeviceLeftClosure = isOnlyDeviceLeftClosure {
+            return await isOnlyDeviceLeftClosure()
+        } else {
+            return isOnlyDeviceLeftReturnValue
+        }
+    }
+    //MARK: - startSync
+
+    var startSyncCallsCount = 0
+    var startSyncCalled: Bool {
+        return startSyncCallsCount > 0
+    }
+    var startSyncClosure: (() -> Void)?
+
+    func startSync() {
+        startSyncCallsCount += 1
+        startSyncClosure?()
+    }
+    //MARK: - stopSync
+
+    var stopSyncCallsCount = 0
+    var stopSyncCalled: Bool {
+        return stopSyncCallsCount > 0
+    }
+    var stopSyncClosure: (() -> Void)?
+
+    func stopSync() {
+        stopSyncCallsCount += 1
+        stopSyncClosure?()
+    }
+    //MARK: - accountURL
+
+    var accountURLActionCallsCount = 0
+    var accountURLActionCalled: Bool {
+        return accountURLActionCallsCount > 0
+    }
+    var accountURLActionReceivedAction: AccountManagementAction?
+    var accountURLActionReceivedInvocations: [AccountManagementAction] = []
+    var accountURLActionReturnValue: URL?
+    var accountURLActionClosure: ((AccountManagementAction) -> URL?)?
+
+    func accountURL(action: AccountManagementAction) -> URL? {
+        accountURLActionCallsCount += 1
+        accountURLActionReceivedAction = action
+        accountURLActionReceivedInvocations.append(action)
+        if let accountURLActionClosure = accountURLActionClosure {
+            return accountURLActionClosure(action)
+        } else {
+            return accountURLActionReturnValue
+        }
+    }
+    //MARK: - directRoomForUserID
+
+    var directRoomForUserIDCallsCount = 0
+    var directRoomForUserIDCalled: Bool {
+        return directRoomForUserIDCallsCount > 0
+    }
+    var directRoomForUserIDReceivedUserID: String?
+    var directRoomForUserIDReceivedInvocations: [String] = []
+    var directRoomForUserIDReturnValue: Result<String?, ClientProxyError>!
+    var directRoomForUserIDClosure: ((String) async -> Result<String?, ClientProxyError>)?
+
+    func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
+        directRoomForUserIDCallsCount += 1
+        directRoomForUserIDReceivedUserID = userID
+        directRoomForUserIDReceivedInvocations.append(userID)
+        if let directRoomForUserIDClosure = directRoomForUserIDClosure {
+            return await directRoomForUserIDClosure(userID)
+        } else {
+            return directRoomForUserIDReturnValue
+        }
+    }
+    //MARK: - createDirectRoom
+
+    var createDirectRoomWithExpectedRoomNameCallsCount = 0
+    var createDirectRoomWithExpectedRoomNameCalled: Bool {
+        return createDirectRoomWithExpectedRoomNameCallsCount > 0
+    }
+    var createDirectRoomWithExpectedRoomNameReceivedArguments: (userID: String, expectedRoomName: String?)?
+    var createDirectRoomWithExpectedRoomNameReceivedInvocations: [(userID: String, expectedRoomName: String?)] = []
+    var createDirectRoomWithExpectedRoomNameReturnValue: Result<String, ClientProxyError>!
+    var createDirectRoomWithExpectedRoomNameClosure: ((String, String?) async -> Result<String, ClientProxyError>)?
+
+    func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError> {
+        createDirectRoomWithExpectedRoomNameCallsCount += 1
+        createDirectRoomWithExpectedRoomNameReceivedArguments = (userID: userID, expectedRoomName: expectedRoomName)
+        createDirectRoomWithExpectedRoomNameReceivedInvocations.append((userID: userID, expectedRoomName: expectedRoomName))
+        if let createDirectRoomWithExpectedRoomNameClosure = createDirectRoomWithExpectedRoomNameClosure {
+            return await createDirectRoomWithExpectedRoomNameClosure(userID, expectedRoomName)
+        } else {
+            return createDirectRoomWithExpectedRoomNameReturnValue
+        }
+    }
+    //MARK: - createRoom
+
+    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLCallsCount = 0
+    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLCalled: Bool {
+        return createRoomNameTopicIsRoomPrivateUserIDsAvatarURLCallsCount > 0
+    }
+    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReceivedArguments: (name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?)?
+    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReceivedInvocations: [(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?)] = []
+    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReturnValue: Result<String, ClientProxyError>!
+    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLClosure: ((String, String?, Bool, [String], URL?) async -> Result<String, ClientProxyError>)?
+
+    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError> {
+        createRoomNameTopicIsRoomPrivateUserIDsAvatarURLCallsCount += 1
+        createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReceivedArguments = (name: name, topic: topic, isRoomPrivate: isRoomPrivate, userIDs: userIDs, avatarURL: avatarURL)
+        createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReceivedInvocations.append((name: name, topic: topic, isRoomPrivate: isRoomPrivate, userIDs: userIDs, avatarURL: avatarURL))
+        if let createRoomNameTopicIsRoomPrivateUserIDsAvatarURLClosure = createRoomNameTopicIsRoomPrivateUserIDsAvatarURLClosure {
+            return await createRoomNameTopicIsRoomPrivateUserIDsAvatarURLClosure(name, topic, isRoomPrivate, userIDs, avatarURL)
+        } else {
+            return createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReturnValue
+        }
+    }
+    //MARK: - uploadMedia
+
+    var uploadMediaCallsCount = 0
+    var uploadMediaCalled: Bool {
+        return uploadMediaCallsCount > 0
+    }
+    var uploadMediaReceivedMedia: MediaInfo?
+    var uploadMediaReceivedInvocations: [MediaInfo] = []
+    var uploadMediaReturnValue: Result<String, ClientProxyError>!
+    var uploadMediaClosure: ((MediaInfo) async -> Result<String, ClientProxyError>)?
+
+    func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError> {
+        uploadMediaCallsCount += 1
+        uploadMediaReceivedMedia = media
+        uploadMediaReceivedInvocations.append(media)
+        if let uploadMediaClosure = uploadMediaClosure {
+            return await uploadMediaClosure(media)
+        } else {
+            return uploadMediaReturnValue
+        }
+    }
+    //MARK: - roomForIdentifier
+
+    var roomForIdentifierCallsCount = 0
+    var roomForIdentifierCalled: Bool {
+        return roomForIdentifierCallsCount > 0
+    }
+    var roomForIdentifierReceivedIdentifier: String?
+    var roomForIdentifierReceivedInvocations: [String] = []
+    var roomForIdentifierReturnValue: RoomProxyProtocol?
+    var roomForIdentifierClosure: ((String) async -> RoomProxyProtocol?)?
+
+    func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
+        roomForIdentifierCallsCount += 1
+        roomForIdentifierReceivedIdentifier = identifier
+        roomForIdentifierReceivedInvocations.append(identifier)
+        if let roomForIdentifierClosure = roomForIdentifierClosure {
+            return await roomForIdentifierClosure(identifier)
+        } else {
+            return roomForIdentifierReturnValue
+        }
+    }
+    //MARK: - loadUserDisplayName
+
+    var loadUserDisplayNameCallsCount = 0
+    var loadUserDisplayNameCalled: Bool {
+        return loadUserDisplayNameCallsCount > 0
+    }
+    var loadUserDisplayNameReturnValue: Result<Void, ClientProxyError>!
+    var loadUserDisplayNameClosure: (() async -> Result<Void, ClientProxyError>)?
+
+    @discardableResult
+    func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
+        loadUserDisplayNameCallsCount += 1
+        if let loadUserDisplayNameClosure = loadUserDisplayNameClosure {
+            return await loadUserDisplayNameClosure()
+        } else {
+            return loadUserDisplayNameReturnValue
+        }
+    }
+    //MARK: - setUserDisplayName
+
+    var setUserDisplayNameCallsCount = 0
+    var setUserDisplayNameCalled: Bool {
+        return setUserDisplayNameCallsCount > 0
+    }
+    var setUserDisplayNameReceivedName: String?
+    var setUserDisplayNameReceivedInvocations: [String] = []
+    var setUserDisplayNameReturnValue: Result<Void, ClientProxyError>!
+    var setUserDisplayNameClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError> {
+        setUserDisplayNameCallsCount += 1
+        setUserDisplayNameReceivedName = name
+        setUserDisplayNameReceivedInvocations.append(name)
+        if let setUserDisplayNameClosure = setUserDisplayNameClosure {
+            return await setUserDisplayNameClosure(name)
+        } else {
+            return setUserDisplayNameReturnValue
+        }
+    }
+    //MARK: - loadUserAvatarURL
+
+    var loadUserAvatarURLCallsCount = 0
+    var loadUserAvatarURLCalled: Bool {
+        return loadUserAvatarURLCallsCount > 0
+    }
+    var loadUserAvatarURLReturnValue: Result<Void, ClientProxyError>!
+    var loadUserAvatarURLClosure: (() async -> Result<Void, ClientProxyError>)?
+
+    @discardableResult
+    func loadUserAvatarURL() async -> Result<Void, ClientProxyError> {
+        loadUserAvatarURLCallsCount += 1
+        if let loadUserAvatarURLClosure = loadUserAvatarURLClosure {
+            return await loadUserAvatarURLClosure()
+        } else {
+            return loadUserAvatarURLReturnValue
+        }
+    }
+    //MARK: - setUserAvatar
+
+    var setUserAvatarMediaCallsCount = 0
+    var setUserAvatarMediaCalled: Bool {
+        return setUserAvatarMediaCallsCount > 0
+    }
+    var setUserAvatarMediaReceivedMedia: MediaInfo?
+    var setUserAvatarMediaReceivedInvocations: [MediaInfo] = []
+    var setUserAvatarMediaReturnValue: Result<Void, ClientProxyError>!
+    var setUserAvatarMediaClosure: ((MediaInfo) async -> Result<Void, ClientProxyError>)?
+
+    func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError> {
+        setUserAvatarMediaCallsCount += 1
+        setUserAvatarMediaReceivedMedia = media
+        setUserAvatarMediaReceivedInvocations.append(media)
+        if let setUserAvatarMediaClosure = setUserAvatarMediaClosure {
+            return await setUserAvatarMediaClosure(media)
+        } else {
+            return setUserAvatarMediaReturnValue
+        }
+    }
+    //MARK: - removeUserAvatar
+
+    var removeUserAvatarCallsCount = 0
+    var removeUserAvatarCalled: Bool {
+        return removeUserAvatarCallsCount > 0
+    }
+    var removeUserAvatarReturnValue: Result<Void, ClientProxyError>!
+    var removeUserAvatarClosure: (() async -> Result<Void, ClientProxyError>)?
+
+    func removeUserAvatar() async -> Result<Void, ClientProxyError> {
+        removeUserAvatarCallsCount += 1
+        if let removeUserAvatarClosure = removeUserAvatarClosure {
+            return await removeUserAvatarClosure()
+        } else {
+            return removeUserAvatarReturnValue
+        }
+    }
+    //MARK: - sessionVerificationControllerProxy
+
+    var sessionVerificationControllerProxyCallsCount = 0
+    var sessionVerificationControllerProxyCalled: Bool {
+        return sessionVerificationControllerProxyCallsCount > 0
+    }
+    var sessionVerificationControllerProxyReturnValue: Result<SessionVerificationControllerProxyProtocol, ClientProxyError>!
+    var sessionVerificationControllerProxyClosure: (() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>)?
+
+    func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
+        sessionVerificationControllerProxyCallsCount += 1
+        if let sessionVerificationControllerProxyClosure = sessionVerificationControllerProxyClosure {
+            return await sessionVerificationControllerProxyClosure()
+        } else {
+            return sessionVerificationControllerProxyReturnValue
+        }
+    }
+    //MARK: - logout
+
+    var logoutCallsCount = 0
+    var logoutCalled: Bool {
+        return logoutCallsCount > 0
+    }
+    var logoutReturnValue: URL?
+    var logoutClosure: (() async -> URL?)?
+
+    func logout() async -> URL? {
+        logoutCallsCount += 1
+        if let logoutClosure = logoutClosure {
+            return await logoutClosure()
+        } else {
+            return logoutReturnValue
+        }
+    }
+    //MARK: - setPusher
+
+    var setPusherWithThrowableError: Error?
+    var setPusherWithCallsCount = 0
+    var setPusherWithCalled: Bool {
+        return setPusherWithCallsCount > 0
+    }
+    var setPusherWithReceivedConfiguration: PusherConfiguration?
+    var setPusherWithReceivedInvocations: [PusherConfiguration] = []
+    var setPusherWithClosure: ((PusherConfiguration) async throws -> Void)?
+
+    func setPusher(with configuration: PusherConfiguration) async throws {
+        if let error = setPusherWithThrowableError {
+            throw error
+        }
+        setPusherWithCallsCount += 1
+        setPusherWithReceivedConfiguration = configuration
+        setPusherWithReceivedInvocations.append(configuration)
+        try await setPusherWithClosure?(configuration)
+    }
+    //MARK: - searchUsers
+
+    var searchUsersSearchTermLimitCallsCount = 0
+    var searchUsersSearchTermLimitCalled: Bool {
+        return searchUsersSearchTermLimitCallsCount > 0
+    }
+    var searchUsersSearchTermLimitReceivedArguments: (searchTerm: String, limit: UInt)?
+    var searchUsersSearchTermLimitReceivedInvocations: [(searchTerm: String, limit: UInt)] = []
+    var searchUsersSearchTermLimitReturnValue: Result<SearchUsersResultsProxy, ClientProxyError>!
+    var searchUsersSearchTermLimitClosure: ((String, UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError>)?
+
+    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
+        searchUsersSearchTermLimitCallsCount += 1
+        searchUsersSearchTermLimitReceivedArguments = (searchTerm: searchTerm, limit: limit)
+        searchUsersSearchTermLimitReceivedInvocations.append((searchTerm: searchTerm, limit: limit))
+        if let searchUsersSearchTermLimitClosure = searchUsersSearchTermLimitClosure {
+            return await searchUsersSearchTermLimitClosure(searchTerm, limit)
+        } else {
+            return searchUsersSearchTermLimitReturnValue
+        }
+    }
+    //MARK: - profile
+
+    var profileForCallsCount = 0
+    var profileForCalled: Bool {
+        return profileForCallsCount > 0
+    }
+    var profileForReceivedUserID: String?
+    var profileForReceivedInvocations: [String] = []
+    var profileForReturnValue: Result<UserProfileProxy, ClientProxyError>!
+    var profileForClosure: ((String) async -> Result<UserProfileProxy, ClientProxyError>)?
+
+    func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
+        profileForCallsCount += 1
+        profileForReceivedUserID = userID
+        profileForReceivedInvocations.append(userID)
+        if let profileForClosure = profileForClosure {
+            return await profileForClosure(userID)
+        } else {
+            return profileForReturnValue
+        }
+    }
+    //MARK: - ignoreUser
+
+    var ignoreUserCallsCount = 0
+    var ignoreUserCalled: Bool {
+        return ignoreUserCallsCount > 0
+    }
+    var ignoreUserReceivedUserID: String?
+    var ignoreUserReceivedInvocations: [String] = []
+    var ignoreUserReturnValue: Result<Void, ClientProxyError>!
+    var ignoreUserClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
+        ignoreUserCallsCount += 1
+        ignoreUserReceivedUserID = userID
+        ignoreUserReceivedInvocations.append(userID)
+        if let ignoreUserClosure = ignoreUserClosure {
+            return await ignoreUserClosure(userID)
+        } else {
+            return ignoreUserReturnValue
+        }
+    }
+    //MARK: - unignoreUser
+
+    var unignoreUserCallsCount = 0
+    var unignoreUserCalled: Bool {
+        return unignoreUserCallsCount > 0
+    }
+    var unignoreUserReceivedUserID: String?
+    var unignoreUserReceivedInvocations: [String] = []
+    var unignoreUserReturnValue: Result<Void, ClientProxyError>!
+    var unignoreUserClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func unignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
+        unignoreUserCallsCount += 1
+        unignoreUserReceivedUserID = userID
+        unignoreUserReceivedInvocations.append(userID)
+        if let unignoreUserClosure = unignoreUserClosure {
+            return await unignoreUserClosure(userID)
+        } else {
+            return unignoreUserReturnValue
+        }
+    }
+    //MARK: - loadMediaContentForSource
+
+    var loadMediaContentForSourceThrowableError: Error?
+    var loadMediaContentForSourceCallsCount = 0
+    var loadMediaContentForSourceCalled: Bool {
+        return loadMediaContentForSourceCallsCount > 0
+    }
+    var loadMediaContentForSourceReceivedSource: MediaSourceProxy?
+    var loadMediaContentForSourceReceivedInvocations: [MediaSourceProxy] = []
+    var loadMediaContentForSourceReturnValue: Data!
+    var loadMediaContentForSourceClosure: ((MediaSourceProxy) async throws -> Data)?
+
+    func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
+        if let error = loadMediaContentForSourceThrowableError {
+            throw error
+        }
+        loadMediaContentForSourceCallsCount += 1
+        loadMediaContentForSourceReceivedSource = source
+        loadMediaContentForSourceReceivedInvocations.append(source)
+        if let loadMediaContentForSourceClosure = loadMediaContentForSourceClosure {
+            return try await loadMediaContentForSourceClosure(source)
+        } else {
+            return loadMediaContentForSourceReturnValue
+        }
+    }
+    //MARK: - loadMediaThumbnailForSource
+
+    var loadMediaThumbnailForSourceWidthHeightThrowableError: Error?
+    var loadMediaThumbnailForSourceWidthHeightCallsCount = 0
+    var loadMediaThumbnailForSourceWidthHeightCalled: Bool {
+        return loadMediaThumbnailForSourceWidthHeightCallsCount > 0
+    }
+    var loadMediaThumbnailForSourceWidthHeightReceivedArguments: (source: MediaSourceProxy, width: UInt, height: UInt)?
+    var loadMediaThumbnailForSourceWidthHeightReceivedInvocations: [(source: MediaSourceProxy, width: UInt, height: UInt)] = []
+    var loadMediaThumbnailForSourceWidthHeightReturnValue: Data!
+    var loadMediaThumbnailForSourceWidthHeightClosure: ((MediaSourceProxy, UInt, UInt) async throws -> Data)?
+
+    func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
+        if let error = loadMediaThumbnailForSourceWidthHeightThrowableError {
+            throw error
+        }
+        loadMediaThumbnailForSourceWidthHeightCallsCount += 1
+        loadMediaThumbnailForSourceWidthHeightReceivedArguments = (source: source, width: width, height: height)
+        loadMediaThumbnailForSourceWidthHeightReceivedInvocations.append((source: source, width: width, height: height))
+        if let loadMediaThumbnailForSourceWidthHeightClosure = loadMediaThumbnailForSourceWidthHeightClosure {
+            return try await loadMediaThumbnailForSourceWidthHeightClosure(source, width, height)
+        } else {
+            return loadMediaThumbnailForSourceWidthHeightReturnValue
+        }
+    }
+    //MARK: - loadMediaFileForSource
+
+    var loadMediaFileForSourceBodyThrowableError: Error?
+    var loadMediaFileForSourceBodyCallsCount = 0
+    var loadMediaFileForSourceBodyCalled: Bool {
+        return loadMediaFileForSourceBodyCallsCount > 0
+    }
+    var loadMediaFileForSourceBodyReceivedArguments: (source: MediaSourceProxy, body: String?)?
+    var loadMediaFileForSourceBodyReceivedInvocations: [(source: MediaSourceProxy, body: String?)] = []
+    var loadMediaFileForSourceBodyReturnValue: MediaFileHandleProxy!
+    var loadMediaFileForSourceBodyClosure: ((MediaSourceProxy, String?) async throws -> MediaFileHandleProxy)?
+
+    func loadMediaFileForSource(_ source: MediaSourceProxy, body: String?) async throws -> MediaFileHandleProxy {
+        if let error = loadMediaFileForSourceBodyThrowableError {
+            throw error
+        }
+        loadMediaFileForSourceBodyCallsCount += 1
+        loadMediaFileForSourceBodyReceivedArguments = (source: source, body: body)
+        loadMediaFileForSourceBodyReceivedInvocations.append((source: source, body: body))
+        if let loadMediaFileForSourceBodyClosure = loadMediaFileForSourceBodyClosure {
+            return try await loadMediaFileForSourceBodyClosure(source, body)
+        } else {
+            return loadMediaFileForSourceBodyReturnValue
+        }
+    }
+}
 class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
     var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> {
         get { return underlyingSuggestionsPublisher }

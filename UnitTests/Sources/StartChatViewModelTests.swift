@@ -21,7 +21,7 @@ import XCTest
 @MainActor
 class StartChatScreenViewModelTests: XCTestCase {
     var viewModel: StartChatScreenViewModelProtocol!
-    var clientProxy: MockClientProxy!
+    var clientProxy: ClientProxyMock!
     var userDiscoveryService: UserDiscoveryServiceMock!
     
     var context: StartChatScreenViewModel.Context {
@@ -29,7 +29,7 @@ class StartChatScreenViewModelTests: XCTestCase {
     }
     
     override func setUpWithError() throws {
-        clientProxy = .init(userID: "")
+        clientProxy = .init(.init(userID: ""))
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([])
         userDiscoveryService.searchProfilesWithReturnValue = .success([])

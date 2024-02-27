@@ -22,7 +22,7 @@ import XCTest
 @MainActor
 class BlockedUsersScreenViewModelTests: XCTestCase {
     func testInitialState() {
-        let clientProxy = MockClientProxy(userID: RoomMemberProxyMock.mockMe.userID)
+        let clientProxy = ClientProxyMock(.init(userID: RoomMemberProxyMock.mockMe.userID))
         
         let viewModel = BlockedUsersScreenViewModel(clientProxy: clientProxy,
                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
