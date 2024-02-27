@@ -32,7 +32,7 @@ struct RoomRolesAndPermissionsScreen: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
-    var rolesSection: some View {
+    private var rolesSection: some View {
         Section {
             ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
                                     icon: \.admin),
@@ -53,7 +53,7 @@ struct RoomRolesAndPermissionsScreen: View {
         }
     }
     
-    var administratorDetails: ListRowDetails<Image> {
+    private var administratorDetails: ListRowDetails<Image> {
         if let administratorCount = context.viewState.administratorCount {
             .title("\(administratorCount)")
         } else {
@@ -61,7 +61,7 @@ struct RoomRolesAndPermissionsScreen: View {
         }
     }
     
-    var moderatorDetails: ListRowDetails<Image> {
+    private var moderatorDetails: ListRowDetails<Image> {
         if let moderatorCount = context.viewState.moderatorCount {
             .title("\(moderatorCount)")
         } else {
@@ -69,7 +69,7 @@ struct RoomRolesAndPermissionsScreen: View {
         }
     }
     
-    var permissionsSection: some View {
+    private var permissionsSection: some View {
         Section {
             ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsRoomDetails,
                                     icon: \.info),
@@ -94,7 +94,7 @@ struct RoomRolesAndPermissionsScreen: View {
         }
     }
     
-    var resetSection: some View {
+    private var resetSection: some View {
         Section {
             ListRow(label: .plain(title: L10n.screenRoomRolesAndPermissionsReset,
                                   role: .destructive),
