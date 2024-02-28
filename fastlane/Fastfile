@@ -132,22 +132,6 @@ lane :ui_tests do |options|
     only_testing: test_to_run,
     number_of_retries: 3,
   )
-
-  slather(
-    cobertura_xml: true,
-    output_directory: "./fastlane/test_output",
-    proj: "ElementX.xcodeproj",
-    scheme: "UITests",
-    binary_basename: "ElementX.app"
-  )
-  
-  # Zip the result bundle for faster upload.
-  zip(
-    path: "./fastlane/test_output/UITests.xcresult",
-    output_path: "./fastlane/test_output/UITests.xcresult.zip"
-  )
-  # Shell working directory is already inside the fastlane dir.
-  sh("rm -rf ./test_output/UITests.xcresult")
 end
 
 
@@ -167,14 +151,6 @@ lane :integration_tests do
     result_bundle: true,
     reset_simulator: true,
     include_simulator_logs: true
-  )
-
-  slather(
-    cobertura_xml: true,
-    output_directory: "./fastlane/test_output",
-    proj: "ElementX.xcodeproj",
-    scheme: "IntegrationTests",
-    binary_basename: "ElementX.app"
   )
 end
 

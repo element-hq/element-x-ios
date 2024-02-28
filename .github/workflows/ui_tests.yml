@@ -42,14 +42,22 @@ jobs:
             bundle exec fastlane ui_tests test_name:${{ github.event.inputs.test_name }}
           fi
 
+      - name: Zip results # for faster upload
+        if: failure()
+        working-directory: fastlane/test_output
+        run: zip -r UITests.xcresult.zip UITests.xcresult
+
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
-        if: always()
+        if: failure()
         with:
-          name: test-output
-          path: fastlane/test_output
+          name: Results
+          path: fastlane/test_output/UITests.xcresult.zip
           retention-days: 7
           if-no-files-found: ignore
+
+      - name: Collect coverage
+        run: xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/UITests.xcresult > fastlane/test_output/ui-cobertura.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

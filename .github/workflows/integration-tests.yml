@@ -36,13 +36,18 @@ jobs:
           INTEGRATION_TESTS_HOST: ${{ secrets.INTEGRATION_TESTS_HOST }}
           INTEGRATION_TESTS_USERNAME: ${{ secrets.INTEGRATION_TESTS_USERNAME }}
           INTEGRATION_TESTS_PASSWORD: ${{ secrets.INTEGRATION_TESTS_PASSWORD }}
+
+      - name: Zip results # for faster upload
+        if: failure()
+        working-directory: fastlane/test_output
+        run: zip -r IntegrationTests.xcresult.zip IntegrationTests.xcresult
       
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
-        if: always()
+        if: failure()
         with:
-          name: test-output
-          path: fastlane/test_output
+          name: Results
+          path: fastlane/test_output/IntegrationTests.xcresult.zip
           retention-days: 7
           if-no-files-found: ignore
 
@@ -71,6 +76,9 @@ jobs:
           git add .
           git commit -m "Results for $GITHUB_SHA"
           git push
+
+      - name: Collect coverage
+        run: xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/IntegrationTests.xcresult > fastlane/test_output/integration-cobertura.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
