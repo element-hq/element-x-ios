@@ -31,12 +31,12 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         self.roomProxy = roomProxy
         super.init(initialViewState: RoomRolesAndPermissionsScreenViewState())
         
-        roomProxy.members.sink { [weak self] members in
+        roomProxy.membersPublisher.sink { [weak self] members in
             self?.updateMembers(members)
         }
         .store(in: &cancellables)
         
-        updateMembers(roomProxy.members.value)
+        updateMembers(roomProxy.membersPublisher.value)
     }
     
     // MARK: - Public
