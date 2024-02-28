@@ -37,7 +37,7 @@ enum RustTracing {
         // Keep a minimum of 1 week of log files. In reality it will be longer
         // as the app is unlikely to be running continuously.
         let maxFiles: UInt64 = 24 * 7
-
+        
         if let otlpConfiguration {
             setupOtlpTracing(config: .init(clientName: "ElementX-iOS",
                                            user: otlpConfiguration.username,
