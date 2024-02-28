@@ -48,7 +48,7 @@ jobs:
         with:
           name: Results
           path: fastlane/test_output/IntegrationTests.xcresult.zip
-          retention-days: 1
+          retention-days: 7
           if-no-files-found: ignore
 
       - name: Archive raw log file

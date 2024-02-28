@@ -53,7 +53,7 @@ jobs:
         with:
           name: Results
           path: fastlane/test_output/UITests.xcresult.zip
-          retention-days: 1
+          retention-days: 7
           if-no-files-found: ignore
 
       - name: Collect coverage
