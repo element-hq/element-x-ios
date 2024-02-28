@@ -61,8 +61,8 @@ jobs:
       
       - name: Collect coverage
         run: |
-          xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/UnitTests.xcresult > fastlane/test_output/unittests-cobertura.xml
-          xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/PreviewTests.xcresult > fastlane/test_output/previewtests-cobertura.xml
+          xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/UnitTests.xcresult > fastlane/test_output/unit-cobertura.xml
+          xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/PreviewTests.xcresult > fastlane/test_output/preview-cobertura.xml
       
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
