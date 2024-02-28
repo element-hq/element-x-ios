@@ -231,7 +231,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         let appSettings = AppSettings() // This uses shared storage under the hood
         appSettings.migratedAccounts[userID] = mode != .migration
         
-        let roomSummaryProviderState: MockRoomSummaryProviderState = switch mode {
+        let roomSummaryProviderState: RoomSummaryProviderMockConfigurationState = switch mode {
         case .migration:
             .loading
         case .skeletons:
@@ -243,7 +243,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         }
         
         let clientProxy = ClientProxyMock(.init(userID: userID,
-                                                roomSummaryProvider: MockRoomSummaryProvider(state: roomSummaryProviderState)))
+                                                roomSummaryProvider: RoomSummaryProviderMock(.init(state: roomSummaryProviderState))))
         
         let userSession = MockUserSession(clientProxy: clientProxy,
                                           mediaProvider: MockMediaProvider(),

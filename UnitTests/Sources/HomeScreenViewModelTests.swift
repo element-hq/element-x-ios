@@ -25,12 +25,12 @@ class HomeScreenViewModelTests: XCTestCase {
     var clientProxy: ClientProxyMock!
     var context: HomeScreenViewModelType.Context! { viewModel.context }
     var cancellables = Set<AnyCancellable>()
-    var roomSummaryProvider: MockRoomSummaryProvider!
+    var roomSummaryProvider: RoomSummaryProviderMock!
     
     override func setUpWithError() throws {
         ServiceLocator.shared.settings.roomListFiltersEnabled = true
         cancellables.removeAll()
-        roomSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
+        roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
         clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: roomSummaryProvider))
         viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: clientProxy,
                                                                      mediaProvider: MockMediaProvider(),
@@ -169,10 +169,13 @@ class HomeScreenViewModelTests: XCTestCase {
     func testFilters() async throws {
         context.filtersState.activateFilter(.people)
         try await Task.sleep(for: .milliseconds(100))
-        XCTAssertEqual(roomSummaryProvider.currentFilter, RoomSummaryProviderFilter.include(.init(filters: [.people])))
+        XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.count, 2)
+        XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.first?.name, "Foundation and Earth")
+        
         context.isSearchFieldFocused = true
-        context.searchQuery = "Test"
+        context.searchQuery = "lude to Found"
         try await Task.sleep(for: .milliseconds(100))
-        XCTAssertEqual(roomSummaryProvider.currentFilter, RoomSummaryProviderFilter.include(.init(query: "Test", filters: [.people])))
+        XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.first?.name, "Prelude to Foundation")
+        XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.count, 1)
     }
 }
