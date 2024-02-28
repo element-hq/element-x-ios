@@ -37,10 +37,6 @@ enum RustTracing {
         // Keep a minimum of 1 week of log files. In reality it will be longer
         // as the app is unlikely to be running continuously.
         let maxFiles: UInt64 = 24 * 7
-        
-        guard let path = logsDirectory.path().removingPercentEncoding else {
-            return
-        }
 
         if let otlpConfiguration {
             setupOtlpTracing(config: .init(clientName: "ElementX-iOS",
@@ -49,14 +45,14 @@ enum RustTracing {
                                            otlpEndpoint: otlpConfiguration.url,
                                            filter: configuration.filter,
                                            writeToStdoutOrSystem: true,
-                                           writeToFiles: .init(path: path,
+                                           writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
                                                                filePrefix: configuration.fileName,
                                                                fileSuffix: configuration.fileExtension,
                                                                maxFiles: maxFiles)))
         } else {
             setupTracing(config: .init(filter: configuration.filter,
                                        writeToStdoutOrSystem: true,
-                                       writeToFiles: .init(path: path,
+                                       writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
                                                            filePrefix: configuration.fileName,
                                                            fileSuffix: configuration.fileExtension,
                                                            maxFiles: maxFiles)))
