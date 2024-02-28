@@ -38,6 +38,9 @@ class ClientProxy: ClientProxyProtocol {
     // periphery: ignore - only for retain
     private var syncServiceStateUpdateTaskHandle: TaskHandle?
     
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var ignoredUsersListenerTaskHandle: TaskHandle?
+    
     private var delegateHandle: TaskHandle?
     
     // These following summary providers both operate on the same allRooms() list but
@@ -69,13 +72,19 @@ class ClientProxy: ClientProxyProtocol {
 
     private var loadCachedAvatarURLTask: Task<Void, Never>?
     private let userAvatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
-    var userAvatarURL: CurrentValuePublisher<URL?, Never> {
+    var userAvatarURLPublisher: CurrentValuePublisher<URL?, Never> {
         userAvatarURLSubject.asCurrentValuePublisher()
     }
     
     private let userDisplayNameSubject = CurrentValueSubject<String?, Never>(nil)
-    var userDisplayName: CurrentValuePublisher<String?, Never> {
+    var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> {
         userDisplayNameSubject.asCurrentValuePublisher()
+    }
+    
+    private let ignoredUsersSubject = CurrentValueSubject<[String]?, Never>(nil)
+    var ignoredUsersPublisher: CurrentValuePublisher<[String]?, Never> {
+        ignoredUsersSubject
+            .asCurrentValuePublisher()
     }
     
     private var cancellables = Set<AnyCancellable>()
@@ -92,7 +101,10 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
+    private let actionsSubject = PassthroughSubject<ClientProxyAction, Never>()
+    var actionsPublisher: AnyPublisher<ClientProxyAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     private let loadingStateSubject = CurrentValueSubject<ClientProxyLoadingState, Never>(.notLoading)
     var loadingStatePublisher: CurrentValuePublisher<ClientProxyLoadingState, Never> {
@@ -119,7 +131,7 @@ class ClientProxy: ClientProxyProtocol {
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
-            self?.callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
+            self?.actionsSubject.send(.receivedAuthError(isSoftLogout: isSoftLogout))
         })
         
         networkMonitor.reachabilityPublisher
@@ -135,6 +147,10 @@ class ClientProxy: ClientProxyProtocol {
         await configureAppService()
 
         loadUserAvatarURLFromCache()
+        
+        ignoredUsersListenerTaskHandle = client.subscribeToIgnoredUsers(listener: IgnoredUsersListenerProxy { [weak self] ignoredUsers in
+            self?.ignoredUsersSubject.send(ignoredUsers)
+        })
     }
     
     var userID: String {
@@ -472,6 +488,28 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    // MARK: - Ignored users
+    
+    func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
+        do {
+            try await client.ignoreUser(userId: userID)
+            return .success(())
+        } catch {
+            MXLog.error("Failed ignoring user with error: \(error)")
+            return .failure(.failedIgnoringUser)
+        }
+    }
+    
+    func unignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
+        do {
+            try await client.unignoreUser(userId: userID)
+            return .success(())
+        } catch {
+            MXLog.error("Failed unignoring user with error: \(error)")
+            return .failure(.failedUnignoringUser)
+        }
+    }
+    
     // MARK: Private
 
     private func loadUserAvatarURLFromCache() {
@@ -570,7 +608,11 @@ class ClientProxy: ClientProxyProtocol {
             }
             
             // Hide the sync spinner as soon as we get any update back
-            callbacks.send(.receivedSyncUpdate)
+            actionsSubject.send(.receivedSyncUpdate)
+            
+            if ignoredUsersSubject.value == nil {
+                updateIgnoredUsers()
+            }
         })
     }
     
@@ -618,6 +660,17 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error("Failed retrieving/initialising room with identifier: \(identifier)")
             return (nil, nil)
+        }
+    }
+    
+    private func updateIgnoredUsers() {
+        Task {
+            do {
+                let ignoredUsers = try await client.ignoredUsers()
+                ignoredUsersSubject.send(ignoredUsers)
+            } catch {
+                MXLog.error("Failed fetching ignored users with error: \(error)")
+            }
         }
     }
 }
@@ -688,5 +741,17 @@ private class ClientDelegateWrapper: ClientDelegate {
     
     func didRefreshTokens() {
         MXLog.info("Delegating session updates to the ClientSessionDelegate.")
+    }
+}
+
+private class IgnoredUsersListenerProxy: IgnoredUsersListener {
+    private let onUpdateClosure: ([String]) -> Void
+
+    init(onUpdateClosure: @escaping ([String]) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func call(ignoredUserIds: [String]) {
+        onUpdateClosure(ignoredUserIds)
     }
 }

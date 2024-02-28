@@ -25,7 +25,7 @@ class PillContextTests: XCTestCase {
         let id = "@test:matrix.org"
         let proxyMock = RoomProxyMock(with: .init(name: "Test"))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
-        proxyMock.members = subject.asCurrentValuePublisher()
+        proxyMock.membersPublisher = subject.asCurrentValuePublisher()
         let mock = RoomScreenViewModel(roomProxy: proxyMock,
                                        timelineController: MockRoomTimelineController(),
                                        mediaProvider: MockMediaProvider(),
@@ -54,7 +54,7 @@ class PillContextTests: XCTestCase {
         let id = "@test:matrix.org"
         let proxyMock = RoomProxyMock(with: .init(name: "Test", ownUserID: id))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
-        proxyMock.members = subject.asCurrentValuePublisher()
+        proxyMock.membersPublisher = subject.asCurrentValuePublisher()
         let mock = RoomScreenViewModel(roomProxy: proxyMock,
                                        timelineController: MockRoomTimelineController(),
                                        mediaProvider: MockMediaProvider(),

@@ -38,22 +38,22 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         super.init(initialViewState: UserDetailsEditScreenViewState(userID: clientProxy.userID,
                                                                     bindings: .init()), imageProvider: mediaProvider)
         
-        clientProxy.userAvatarURL
+        clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.currentAvatarURL, on: self)
             .store(in: &cancellables)
         
-        clientProxy.userAvatarURL
+        clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.selectedAvatarURL, on: self)
             .store(in: &cancellables)
         
-        clientProxy.userDisplayName
+        clientProxy.userDisplayNamePublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.currentDisplayName, on: self)
             .store(in: &cancellables)
         
-        clientProxy.userDisplayName
+        clientProxy.userDisplayNamePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] displayName in
                 guard let self else { return }

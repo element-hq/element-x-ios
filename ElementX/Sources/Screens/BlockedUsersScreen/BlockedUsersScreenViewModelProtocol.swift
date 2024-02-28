@@ -17,7 +17,9 @@
 import Combine
 
 @MainActor
-protocol TemplateScreenViewModelProtocol {
-    var actionsPublisher: AnyPublisher<TemplateScreenViewModelAction, Never> { get }
-    var context: TemplateScreenViewModelType.Context { get }
+protocol BlockedUsersScreenViewModelProtocol {
+    var actionsPublisher: AnyPublisher<BlockedUsersScreenViewModelAction, Never> { get }
+    var context: BlockedUsersScreenViewModelType.Context { get }
+    
+    func stop()
 }

@@ -396,7 +396,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let items: [RoomTimelineItemProtocol] = [TextRoomTimelineItem(eventID: "t1"),
                                                  TextRoomTimelineItem(eventID: "t2"),
                                                  SeparatorRoomTimelineItem(timelineID: "v3")]
-        let (viewModel, _, timelineProxy, _, _) = readReceiptsConfiguration(with: items)
+        let (viewModel, _, _, _, _) = readReceiptsConfiguration(with: items)
         
         // When sending a read receipt for the last item.
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))

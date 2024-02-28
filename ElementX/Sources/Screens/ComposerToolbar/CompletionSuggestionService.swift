@@ -27,7 +27,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
         suggestionsPublisher = suggestionTriggerSubject
-            .combineLatest(roomProxy.members)
+            .combineLatest(roomProxy.membersPublisher)
             .map { [weak self] suggestionPattern, members -> [SuggestionItem] in
                 guard let self,
                       let suggestionPattern else {

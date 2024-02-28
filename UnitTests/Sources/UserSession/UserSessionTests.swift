@@ -43,7 +43,7 @@ final class UserSessionTests: XCTestCase {
                                                                               isVerified: false,
                                                                               requestDelay: .zero)
         clientProxy.sessionVerificationControllerProxyResult = .success(controller)
-        clientProxy.callbacks.send(.receivedSyncUpdate)
+        clientProxy.actionsSubject.send(.receivedSyncUpdate)
         waitForExpectations(timeout: 1.0)
     }
     
@@ -64,7 +64,7 @@ final class UserSessionTests: XCTestCase {
         }
         .store(in: &cancellables)
         
-        clientProxy.callbacks.send(.receivedSyncUpdate)
+        clientProxy.actionsSubject.send(.receivedSyncUpdate)
         controller.callbacks.send(.finished)
         waitForExpectations(timeout: 1.0)
     }

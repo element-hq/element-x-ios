@@ -143,6 +143,13 @@ struct SettingsScreen: View {
                         context.send(viewAction: .about)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.about)
+            
+            ListRow(label: .default(title: L10n.commonBlockedUsers,
+                                    icon: \.block),
+                    kind: .navigationLink {
+                        context.send(viewAction: .blockedUsers)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.blockedUsers)
         }
     }
     

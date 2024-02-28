@@ -1892,16 +1892,16 @@ class RoomProxyMock: RoomProxyProtocol {
     var name: String?
     var topic: String?
     var avatarURL: URL?
-    var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
-        get { return underlyingMembers }
-        set(value) { underlyingMembers = value }
+    var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
+        get { return underlyingMembersPublisher }
+        set(value) { underlyingMembersPublisher = value }
     }
-    var underlyingMembers: CurrentValuePublisher<[RoomMemberProxyProtocol], Never>!
-    var typingMembers: CurrentValuePublisher<[String], Never> {
-        get { return underlyingTypingMembers }
-        set(value) { underlyingTypingMembers = value }
+    var underlyingMembersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never>!
+    var typingMembersPublisher: CurrentValuePublisher<[String], Never> {
+        get { return underlyingTypingMembersPublisher }
+        set(value) { underlyingTypingMembersPublisher = value }
     }
-    var underlyingTypingMembers: CurrentValuePublisher<[String], Never>!
+    var underlyingTypingMembersPublisher: CurrentValuePublisher<[String], Never>!
     var joinedMembersCount: Int {
         get { return underlyingJoinedMembersCount }
         set(value) { underlyingJoinedMembersCount = value }
@@ -1912,11 +1912,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingActiveMembersCount = value }
     }
     var underlyingActiveMembersCount: Int!
-    var actions: AnyPublisher<RoomProxyAction, Never> {
-        get { return underlyingActions }
-        set(value) { underlyingActions = value }
+    var actionsPublisher: AnyPublisher<RoomProxyAction, Never> {
+        get { return underlyingActionsPublisher }
+        set(value) { underlyingActionsPublisher = value }
     }
-    var underlyingActions: AnyPublisher<RoomProxyAction, Never>!
+    var underlyingActionsPublisher: AnyPublisher<RoomProxyAction, Never>!
     var timeline: TimelineProxyProtocol {
         get { return underlyingTimeline }
         set(value) { underlyingTimeline = value }

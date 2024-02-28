@@ -14,10 +14,26 @@
 // limitations under the License.
 //
 
-import Combine
+import Foundation
 
-@MainActor
-protocol TemplateScreenViewModelProtocol {
-    var actionsPublisher: AnyPublisher<TemplateScreenViewModelAction, Never> { get }
-    var context: TemplateScreenViewModelType.Context { get }
+enum BlockedUsersScreenViewModelAction { }
+
+struct BlockedUsersScreenViewState: BindableState {
+    var blockedUsers: [String]
+    var processingUserID: String?
+    
+    var bindings = BlockedUsersScreenViewStateBindings()
+}
+
+struct BlockedUsersScreenViewStateBindings {
+    var alertInfo: AlertInfo<BlockedUsersScreenViewStateAlertType>?
+}
+
+enum BlockedUsersScreenViewAction {
+    case unblockUser(userID: String)
+}
+
+enum BlockedUsersScreenViewStateAlertType: Hashable {
+    case unblock
+    case error
 }
