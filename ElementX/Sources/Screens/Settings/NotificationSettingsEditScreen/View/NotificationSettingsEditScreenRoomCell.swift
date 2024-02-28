@@ -59,7 +59,7 @@ struct NotificationSettingsEditScreenRoomCell: View {
 
 struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
+        let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
 
         let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "John Doe", roomSummaryProvider: summaryProvider)),
                                           mediaProvider: MockMediaProvider(),

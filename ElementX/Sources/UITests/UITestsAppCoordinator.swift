@@ -560,7 +560,7 @@ class MockScreen: Identifiable {
             appSettings.richTextEditorEnabled = id == .userSessionScreenRTE
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
             
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms))))
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             ServiceLocator.shared.settings.migratedAccounts[clientProxy.userID] = true
             ServiceLocator.shared.settings.hasShownWelcomeScreen = true
             
@@ -820,7 +820,7 @@ class MockScreen: Identifiable {
                 }
             }
             
-            let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
+            let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockInvites)))
             clientProxy.inviteSummaryProvider = summaryProvider
             
             let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())))
@@ -842,7 +842,7 @@ class MockScreen: Identifiable {
                 }
             }
             
-            let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
+            let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockInvites)))
             clientProxy.inviteSummaryProvider = summaryProvider
             
             let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())))

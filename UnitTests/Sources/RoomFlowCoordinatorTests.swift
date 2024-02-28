@@ -27,7 +27,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     
     override func setUp() async throws {
         cancellables.removeAll()
-        let clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms))))
+        let clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         let mediaProvider = MockMediaProvider()
         let voiceMessageMediaManager = VoiceMessageMediaManagerMock()
         let userSession = MockUserSession(clientProxy: clientProxy,

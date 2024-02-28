@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2024 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,61 +16,55 @@
 
 import Combine
 import Foundation
-import MatrixRustSDK
 
-enum MockRoomSummaryProviderState {
+enum RoomSummaryProviderMockConfigurationState {
     case loading
     case loaded([RoomSummary])
 }
 
-class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
-    private let initialRooms: [RoomSummary]
-    private(set) var currentFilter: RoomSummaryProviderFilter?
-    
-    private let roomListSubject: CurrentValueSubject<[RoomSummary], Never>
-    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
-        roomListSubject.asCurrentValuePublisher()
-    }
-    
-    private let stateSuject: CurrentValueSubject<RoomSummaryProviderState, Never>
-    var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {
-        stateSuject.asCurrentValuePublisher()
-    }
-    
-    convenience init() {
-        self.init(state: .loading)
-    }
-    
-    init(state: MockRoomSummaryProviderState) {
-        switch state {
+struct RoomSummaryProviderMockConfiguration {
+    var state: RoomSummaryProviderMockConfigurationState = .loading
+}
+
+extension RoomSummaryProviderMock {
+    convenience init(_ configuration: RoomSummaryProviderMockConfiguration) {
+        self.init()
+        
+        let initialRooms: [RoomSummary]
+        let roomListSubject: CurrentValueSubject<[RoomSummary], Never>
+        let stateSubject: CurrentValueSubject<RoomSummaryProviderState, Never>
+        
+        switch configuration.state {
         case .loading:
             initialRooms = []
             roomListSubject = .init(initialRooms)
-            roomListSubject.send(initialRooms)
-            stateSuject = .init(.notLoaded)
+            stateSubject = .init(.notLoaded)
         case .loaded(let rooms):
             initialRooms = rooms
             roomListSubject = .init(initialRooms)
-            roomListSubject.send(initialRooms)
-            stateSuject = .init(.loaded(totalNumberOfRooms: UInt(initialRooms.count)))
+            stateSubject = .init(.loaded(totalNumberOfRooms: UInt(rooms.count)))
         }
-    }
-    
-    func setRoomList(_ roomList: RoomList) { }
-    
-    func updateVisibleRange(_ range: Range<Int>) { }
-    
-    func setFilter(_ filter: RoomSummaryProviderFilter) {
-        currentFilter = filter
-        switch filter {
-        case let .include(predicate):
-            if let query = predicate.query, !query.isEmpty {
-                roomListSubject.send(initialRooms.filter { $0.name?.localizedCaseInsensitiveContains(query) ?? false })
-            } else {
-                roomListSubject.send(initialRooms)
+        
+        roomListPublisher = roomListSubject.asCurrentValuePublisher()
+        statePublisher = stateSubject.asCurrentValuePublisher()
+        
+        setFilterClosure = { [initialRooms, roomListSubject] filter in
+            switch filter {
+            case let .include(predicate):
+                var rooms = initialRooms
+                
+                if let filter = predicate.filters.first {
+                    rooms = rooms.filter { filter == .people ? $0.isDirect : !$0.isDirect }
+                }
+                
+                if let query = predicate.query, !query.isEmpty {
+                    rooms = rooms.filter { $0.name?.localizedCaseInsensitiveContains(query) ?? false }
+                }
+                
+                roomListSubject.send(rooms)
+            case .excludeAll:
+                roomListSubject.send([])
             }
-        case .excludeAll:
-            roomListSubject.send([])
         }
     }
 }
@@ -79,7 +73,7 @@ extension Array where Element == RoomSummary {
     static let mockRooms: [Element] = [
         .filled(details: RoomSummaryDetails(id: "1",
                                             name: "Foundation 🔭🪐🌌",
-                                            isDirect: true,
+                                            isDirect: false,
                                             avatarURL: nil,
                                             lastMessage: AttributedString("I do not wish to take the trouble to understand mysticism"),
                                             lastMessageFormattedTimestamp: "14:56",
@@ -94,7 +88,7 @@ extension Array where Element == RoomSummary {
                                             isFavourite: false)),
         .filled(details: RoomSummaryDetails(id: "2",
                                             name: "Foundation and Empire",
-                                            isDirect: true,
+                                            isDirect: false,
                                             avatarURL: URL.picturesDirectory,
                                             lastMessage: AttributedString("How do you see the Emperor then? You think he keeps office hours?"),
                                             lastMessageFormattedTimestamp: "2:56 PM",
@@ -109,7 +103,7 @@ extension Array where Element == RoomSummary {
                                             isFavourite: false)),
         .filled(details: RoomSummaryDetails(id: "3",
                                             name: "Second Foundation",
-                                            isDirect: true,
+                                            isDirect: false,
                                             avatarURL: nil,
                                             lastMessage: try? AttributedString(markdown: "He certainly seemed no *mental genius* to me"),
                                             lastMessageFormattedTimestamp: "Some time ago",
@@ -124,7 +118,7 @@ extension Array where Element == RoomSummary {
                                             isFavourite: false)),
         .filled(details: RoomSummaryDetails(id: "4",
                                             name: "Foundation's Edge",
-                                            isDirect: true,
+                                            isDirect: false,
                                             avatarURL: nil,
                                             lastMessage: AttributedString("There's an archaic measure of time that's called the month"),
                                             lastMessageFormattedTimestamp: "Just now",

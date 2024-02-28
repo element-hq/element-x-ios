@@ -2973,6 +2973,67 @@ class RoomProxyMock: RoomProxyProtocol {
         }
     }
 }
+class RoomSummaryProviderMock: RoomSummaryProviderProtocol {
+    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
+        get { return underlyingRoomListPublisher }
+        set(value) { underlyingRoomListPublisher = value }
+    }
+    var underlyingRoomListPublisher: CurrentValuePublisher<[RoomSummary], Never>!
+    var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {
+        get { return underlyingStatePublisher }
+        set(value) { underlyingStatePublisher = value }
+    }
+    var underlyingStatePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never>!
+
+    //MARK: - setRoomList
+
+    var setRoomListCallsCount = 0
+    var setRoomListCalled: Bool {
+        return setRoomListCallsCount > 0
+    }
+    var setRoomListReceivedRoomList: RoomList?
+    var setRoomListReceivedInvocations: [RoomList] = []
+    var setRoomListClosure: ((RoomList) -> Void)?
+
+    func setRoomList(_ roomList: RoomList) {
+        setRoomListCallsCount += 1
+        setRoomListReceivedRoomList = roomList
+        setRoomListReceivedInvocations.append(roomList)
+        setRoomListClosure?(roomList)
+    }
+    //MARK: - updateVisibleRange
+
+    var updateVisibleRangeCallsCount = 0
+    var updateVisibleRangeCalled: Bool {
+        return updateVisibleRangeCallsCount > 0
+    }
+    var updateVisibleRangeReceivedRange: Range<Int>?
+    var updateVisibleRangeReceivedInvocations: [Range<Int>] = []
+    var updateVisibleRangeClosure: ((Range<Int>) -> Void)?
+
+    func updateVisibleRange(_ range: Range<Int>) {
+        updateVisibleRangeCallsCount += 1
+        updateVisibleRangeReceivedRange = range
+        updateVisibleRangeReceivedInvocations.append(range)
+        updateVisibleRangeClosure?(range)
+    }
+    //MARK: - setFilter
+
+    var setFilterCallsCount = 0
+    var setFilterCalled: Bool {
+        return setFilterCallsCount > 0
+    }
+    var setFilterReceivedFilter: RoomSummaryProviderFilter?
+    var setFilterReceivedInvocations: [RoomSummaryProviderFilter] = []
+    var setFilterClosure: ((RoomSummaryProviderFilter) -> Void)?
+
+    func setFilter(_ filter: RoomSummaryProviderFilter) {
+        setFilterCallsCount += 1
+        setFilterReceivedFilter = filter
+        setFilterReceivedInvocations.append(filter)
+        setFilterClosure?(filter)
+    }
+}
 class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
     var updatePublisher: AnyPublisher<Void, Never> {
         get { return underlyingUpdatePublisher }

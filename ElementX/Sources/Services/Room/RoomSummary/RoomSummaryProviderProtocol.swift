@@ -64,6 +64,15 @@ enum RoomSummary: CustomStringConvertible, Equatable {
         }
     }
     
+    var isDirect: Bool {
+        switch self {
+        case .empty:
+            return false
+        case .invalidated(let details), .filled(let details):
+            return details.isDirect
+        }
+    }
+    
     var description: String {
         switch self {
         case .empty:
@@ -111,6 +120,7 @@ enum RoomSummaryProviderFilter: Equatable {
     case include(Predicate)
 }
 
+// sourcery: AutoMockable
 protocol RoomSummaryProviderProtocol {
     /// Publishes the currently available room summaries
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> { get }

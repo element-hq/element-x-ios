@@ -20,7 +20,7 @@ import Foundation
 struct ClientProxyMockConfiguration {
     let userID: String
     var deviceID: String?
-    var roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+    var roomSummaryProvider: RoomSummaryProviderProtocol? = RoomSummaryProviderMock(.init())
 }
 
 extension ClientProxyMock {
@@ -33,8 +33,8 @@ extension ClientProxyMock {
         homeserver = ""
         
         roomSummaryProvider = configuration.roomSummaryProvider
-        alternateRoomSummaryProvider = MockRoomSummaryProvider()
-        inviteSummaryProvider = MockRoomSummaryProvider()
+        alternateRoomSummaryProvider = RoomSummaryProviderMock(.init())
+        inviteSummaryProvider = RoomSummaryProviderMock(.init())
         
         actionsPublisher = PassthroughSubject<ClientProxyAction, Never>().eraseToAnyPublisher()
         loadingStatePublisher = CurrentValuePublisher<ClientProxyLoadingState, Never>(.notLoading)

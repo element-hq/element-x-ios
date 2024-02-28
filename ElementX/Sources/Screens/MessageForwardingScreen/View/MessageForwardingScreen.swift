@@ -103,7 +103,7 @@ private struct MessageForwardingListRow: View {
 
 struct MessageForwardingScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
+        let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
         let viewModel = MessageForwardingScreenViewModel(roomSummaryProvider: summaryProvider,
                                                          mediaProvider: MockMediaProvider(),
                                                          sourceRoomID: "")

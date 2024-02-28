@@ -98,7 +98,7 @@ class InvitesScreenViewModelTests: XCTestCase {
     
     private func setupViewModel(roomSummaries: [RoomSummary]? = nil) {
         if let roomSummaries {
-            let summaryProvider = MockRoomSummaryProvider(state: .loaded(roomSummaries))
+            let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(roomSummaries)))
             clientProxy.inviteSummaryProvider = summaryProvider
             clientProxy.roomSummaryProvider = summaryProvider
         }
