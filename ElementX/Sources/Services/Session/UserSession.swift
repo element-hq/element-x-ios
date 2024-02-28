@@ -60,7 +60,7 @@ class UserSession: UserSessionProtocol {
         self.mediaProvider = mediaProvider
         self.voiceMessageMediaManager = voiceMessageMediaManager
         
-        clientProxy.callbacks
+        clientProxy.actionsPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
                 if callback.isSyncUpdate {
@@ -69,7 +69,7 @@ class UserSession: UserSessionProtocol {
             }
             .store(in: &cancellables)
         
-        authErrorCancellable = clientProxy.callbacks
+        authErrorCancellable = clientProxy.actionsPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
                 guard let self else { return }

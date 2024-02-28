@@ -62,15 +62,15 @@ protocol RoomProxyProtocol {
     
     var avatarURL: URL? { get }
 
-    var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
+    var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
-    var typingMembers: CurrentValuePublisher<[String], Never> { get }
+    var typingMembersPublisher: CurrentValuePublisher<[String], Never> { get }
         
     var joinedMembersCount: Int { get }
     
     var activeMembersCount: Int { get }
     
-    var actions: AnyPublisher<RoomProxyAction, Never> { get }
+    var actionsPublisher: AnyPublisher<RoomProxyAction, Never> { get }
     
     var timeline: TimelineProxyProtocol { get }
     
@@ -167,6 +167,6 @@ extension RoomProxyProtocol {
 
     func members() async -> [RoomMemberProxyProtocol]? {
         await updateMembers()
-        return members.value
+        return membersPublisher.value
     }
 }

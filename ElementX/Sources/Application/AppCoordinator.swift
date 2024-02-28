@@ -419,7 +419,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         Task {
             let credentials = SoftLogoutScreenCredentials(userID: userSession.userID,
                                                           homeserverName: userSession.homeserver,
-                                                          userDisplayName: userSession.clientProxy.userDisplayName.value ?? "",
+                                                          userDisplayName: userSession.clientProxy.userDisplayNamePublisher.value ?? "",
                                                           deviceID: userSession.deviceID)
             
             let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
@@ -866,7 +866,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         // Be a good citizen, run for a max of 10 SS responses or 10 seconds
         // An SS request will time out after 30 seconds if no new data is available
         backgroundRefreshSyncObserver = userSession.clientProxy
-            .callbacks
+            .actionsPublisher
             .filter(\.isSyncUpdate)
             .collect(.byTimeOrCount(DispatchQueue.main, .seconds(10), 10))
             .sink(receiveValue: { [weak self] _ in

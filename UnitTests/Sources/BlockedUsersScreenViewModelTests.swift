@@ -15,9 +15,18 @@
 //
 
 import Combine
+import XCTest
+
+@testable import ElementX
 
 @MainActor
-protocol TemplateScreenViewModelProtocol {
-    var actionsPublisher: AnyPublisher<TemplateScreenViewModelAction, Never> { get }
-    var context: TemplateScreenViewModelType.Context { get }
+class BlockedUsersScreenViewModelTests: XCTestCase {
+    func testInitialState() {
+        let clientProxy = MockClientProxy(userID: RoomMemberProxyMock.mockMe.userID)
+        
+        let viewModel = BlockedUsersScreenViewModel(clientProxy: clientProxy,
+                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        
+        XCTAssertFalse(viewModel.context.viewState.blockedUsers.isEmpty)
+    }
 }

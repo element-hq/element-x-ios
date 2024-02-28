@@ -80,7 +80,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             hideLoader()
         }
         
-        roomProxy.members
+        roomProxy.membersPublisher
             .filter { !$0.isEmpty }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] members in

@@ -20,9 +20,8 @@ import SwiftUI
 typealias TemplateScreenViewModelType = StateStoreViewModel<TemplateScreenViewState, TemplateScreenViewAction>
 
 class TemplateScreenViewModel: TemplateScreenViewModelType, TemplateScreenViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<TemplateScreenViewModelAction, Never> = .init()
-    
-    var actions: AnyPublisher<TemplateScreenViewModelAction, Never> {
+    private let actionsSubject: PassthroughSubject<TemplateScreenViewModelAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<TemplateScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 

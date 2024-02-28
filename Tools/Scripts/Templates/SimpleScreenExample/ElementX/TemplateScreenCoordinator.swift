@@ -29,11 +29,12 @@ enum TemplateScreenCoordinatorAction {
 
 final class TemplateScreenCoordinator: CoordinatorProtocol {
     private let parameters: TemplateScreenCoordinatorParameters
-    private var viewModel: TemplateScreenViewModelProtocol
-    private let actionsSubject: PassthroughSubject<TemplateScreenCoordinatorAction, Never> = .init()
-    private var cancellables = Set<AnyCancellable>()
+    private let viewModel: TemplateScreenViewModelProtocol
     
-    var actions: AnyPublisher<TemplateScreenCoordinatorAction, Never> {
+    private var cancellables = Set<AnyCancellable>()
+ 
+    private let actionsSubject: PassthroughSubject<TemplateScreenCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<TemplateScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -44,7 +45,7 @@ final class TemplateScreenCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.actions.sink { [weak self] action in
+        viewModel.actionsPublisher.sink { [weak self] action in
             MXLog.info("Coordinator: received view model action: \(action)")
             
             guard let self else { return }

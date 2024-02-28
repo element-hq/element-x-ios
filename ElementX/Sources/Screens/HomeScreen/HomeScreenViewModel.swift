@@ -54,12 +54,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         super.init(initialViewState: .init(userID: userSession.userID),
                    imageProvider: userSession.mediaProvider)
         
-        userSession.clientProxy.userAvatarURL
+        userSession.clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.userDisplayName
+        userSession.clientProxy.userDisplayNamePublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
@@ -256,7 +256,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             
             MXLog.info("Account not migrated, setting view room list mode to \"\(state.roomListMode)\"")
             
-            migrationCancellable = userSession.clientProxy.callbacks
+            migrationCancellable = userSession.clientProxy.actionsPublisher
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] callback in
                     guard let self, case .receivedSyncUpdate = callback else { return }
