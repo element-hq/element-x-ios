@@ -65,9 +65,14 @@ class BlockedUsersScreenViewModel: BlockedUsersScreenViewModelType, BlockedUsers
         }
     }
     
+    func stop() {
+        hideLoadingIndicator()
+    }
+    
     // MARK: - Private
     
     private func unblockUser(_ userID: String) {
+        showLoadingIndicator()
         state.processingUserID = userID
         
         Task {
@@ -76,6 +81,7 @@ class BlockedUsersScreenViewModel: BlockedUsersScreenViewModelType, BlockedUsers
             }
             
             state.processingUserID = nil
+            hideLoadingIndicator()
         }
     }
     

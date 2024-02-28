@@ -22,9 +22,11 @@ struct BlockedUsersScreen: View {
     
     var body: some View {
         content
+            .compoundList()
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(L10n.commonBlockedUsers)
             .alert(item: $context.alertInfo)
+            .disabled(context.viewState.processingUserID != nil)
     }
     
     // MARK: - Private
@@ -35,6 +37,7 @@ struct BlockedUsersScreen: View {
             Text(L10n.screenBlockedUsersEmpty)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textSecondary)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
             Form {
                 ForEach(context.viewState.blockedUsers, id: \.self) { userID in
@@ -43,7 +46,6 @@ struct BlockedUsersScreen: View {
                             kind: .button(action: { context.send(viewAction: .unblockUser(userID: userID)) }))
                 }
             }
-            .compoundList()
         }
     }
     
