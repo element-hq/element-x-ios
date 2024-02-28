@@ -46,7 +46,7 @@ class PerformanceTests: XCTestCase {
         firstRoom.tap()
                 
         // Go back to the room list
-        let backButton = app.navigationBars.firstMatch.buttons["All Chats"]
+        let backButton = app.navigationBars.firstMatch.buttons["Chats"]
         XCTAssertTrue(backButton.waitForExistence(timeout: 10.0))
         backButton.tap()
         

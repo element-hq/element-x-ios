@@ -56,7 +56,7 @@ class UserFlowTests: XCTestCase {
         invitesButton.tap()
         
         // Go back to the room list
-        tapOnBackButton("All Chats")
+        tapOnBackButton("Chats")
     }
     
     private func checkPhotoSharing() {
@@ -162,7 +162,7 @@ class UserFlowTests: XCTestCase {
         tapOnBackButton()
         
         // Go back to the room list
-        tapOnBackButton("All Chats")
+        tapOnBackButton("Chats")
     }
     
     private func checkSettings() {
