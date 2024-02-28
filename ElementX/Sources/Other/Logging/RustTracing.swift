@@ -45,14 +45,14 @@ enum RustTracing {
                                            otlpEndpoint: otlpConfiguration.url,
                                            filter: configuration.filter,
                                            writeToStdoutOrSystem: true,
-                                           writeToFiles: .init(path: logsDirectory.path(),
+                                           writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
                                                                filePrefix: configuration.fileName,
                                                                fileSuffix: configuration.fileExtension,
                                                                maxFiles: maxFiles)))
         } else {
             setupTracing(config: .init(filter: configuration.filter,
                                        writeToStdoutOrSystem: true,
-                                       writeToFiles: .init(path: logsDirectory.path(),
+                                       writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
                                                            filePrefix: configuration.fileName,
                                                            fileSuffix: configuration.fileExtension,
                                                            maxFiles: maxFiles)))
