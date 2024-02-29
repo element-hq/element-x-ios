@@ -32,6 +32,7 @@ enum RoomProxyError: Error, Equatable {
     case failedRemovingAvatar
     case failedUploadingAvatar
     case failedCheckingPermission
+    case failedSettingPermission
     case failedFlaggingAsUnread
     case failedMarkingAsRead
     case failedSendingTypingNotice
@@ -103,12 +104,6 @@ protocol RoomProxyProtocol {
     func removeAvatar() async -> Result<Void, RoomProxyError>
     
     func uploadAvatar(media: MediaInfo) async -> Result<Void, RoomProxyError>
-
-    func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError>
-    
-    func canUserRedactOwn(userID: String) async -> Result<Bool, RoomProxyError>
-    
-    func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
     
     func markAsRead(receiptType: ReceiptType) async -> Result<Void, RoomProxyError>
     
@@ -120,6 +115,14 @@ protocol RoomProxyProtocol {
     func flagAsUnread(_ isUnread: Bool) async -> Result<Void, RoomProxyError>
     
     func flagAsFavourite(_ isFavourite: Bool) async -> Result<Void, RoomProxyError>
+    
+    // MARK: - Power Levels
+    
+    func currentPowerLevelChanges() async -> Result<RoomPowerLevelChanges, RoomProxyError>
+    func applyPowerLevelChanges(_ changes: RoomPowerLevelChanges) async -> Result<Void, RoomProxyError>
+    func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError>
+    func canUserRedactOwn(userID: String) async -> Result<Bool, RoomProxyError>
+    func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
     
     // MARK: - Moderation
     

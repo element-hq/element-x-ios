@@ -162,6 +162,7 @@
 "common_room" = "Room";
 "common_room_name" = "Room name";
 "common_room_name_placeholder" = "e.g. your project name";
+"common_saving" = "Saving";
 "common_screen_lock" = "Screen lock";
 "common_search_for_someone" = "Search for someone";
 "common_search_results" = "Search results";

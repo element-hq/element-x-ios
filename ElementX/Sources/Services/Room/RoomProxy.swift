@@ -342,33 +342,6 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
-
-    func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserRedactOther(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can redact others with error: \(error)")
-            return .failure(.failedCheckingPermission)
-        }
-    }
-    
-    func canUserRedactOwn(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserRedactOwn(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can redact self with error: \(error)")
-            return .failure(.failedCheckingPermission)
-        }
-    }
-    
-    func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserTriggerRoomNotification(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can trigger room notification with error: \(error)")
-            return .failure(.failedCheckingPermission)
-        }
-    }
         
     func markAsRead(receiptType: ReceiptType) async -> Result<Void, RoomProxyError> {
         do {
@@ -413,6 +386,53 @@ class RoomProxy: RoomProxyProtocol {
         } catch {
             MXLog.error("Failed flagging room \(id) as favourite with error: \(error)")
             return .failure(.failedFlaggingAsFavourite)
+        }
+    }
+    
+    // MARK: - Power Levels
+    
+    func currentPowerLevelChanges() async -> Result<RoomPowerLevelChanges, RoomProxyError> {
+        do {
+            return try await .success(room.buildPowerLevelChangesFromCurrent())
+        } catch {
+            MXLog.error("Failed building the current power level settings: \(error)")
+            return .failure(.failedCheckingPermission)
+        }
+    }
+    
+    func applyPowerLevelChanges(_ changes: RoomPowerLevelChanges) async -> Result<Void, RoomProxyError> {
+        do {
+            return try await .success(room.applyPowerLevelChanges(changes: changes))
+        } catch {
+            MXLog.error("Failed applying the power level changes: \(error)")
+            return .failure(.failedSettingPermission)
+        }
+    }
+    
+    func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError> {
+        do {
+            return try await .success(room.canUserRedactOther(userId: userID))
+        } catch {
+            MXLog.error("Failed checking if the user can redact others with error: \(error)")
+            return .failure(.failedCheckingPermission)
+        }
+    }
+    
+    func canUserRedactOwn(userID: String) async -> Result<Bool, RoomProxyError> {
+        do {
+            return try await .success(room.canUserRedactOwn(userId: userID))
+        } catch {
+            MXLog.error("Failed checking if the user can redact self with error: \(error)")
+            return .failure(.failedCheckingPermission)
+        }
+    }
+    
+    func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError> {
+        do {
+            return try await .success(room.canUserTriggerRoomNotification(userId: userID))
+        } catch {
+            MXLog.error("Failed checking if the user can trigger room notification with error: \(error)")
+            return .failure(.failedCheckingPermission)
         }
     }
     
