@@ -34,40 +34,58 @@ struct RoomPermissionsSetting: Identifiable {
 }
 
 struct RoomPermissions {
-    // The level required to ban a user.
+    /// The level required to ban a user.
     var ban: RoomMemberDetails.Role?
-    // The level required to invite a user.
+    /// The level required to invite a user.
     var invite: RoomMemberDetails.Role?
-    // The level required to kick a user.
+    /// The level required to kick a user.
     var kick: RoomMemberDetails.Role?
-    // The level required to redact an event.
+    /// The level required to redact an event.
     var redact: RoomMemberDetails.Role?
-    // The default level required to send message events.
+    /// The default level required to send message events.
     var eventsDefault: RoomMemberDetails.Role?
-    // The default level required to send state events.
+    /// The default level required to send state events.
     var stateDefault: RoomMemberDetails.Role?
-    // The default power level for every user in the room.
+    /// The default power level for every user in the room.
     var usersDefault: RoomMemberDetails.Role?
-    // The level required to change the room's name.
+    /// The level required to change the room's name.
     var roomName: RoomMemberDetails.Role?
-    // The level required to change the room's avatar.
+    /// The level required to change the room's avatar.
     var roomAvatar: RoomMemberDetails.Role?
-    // The level required to change the room's topic.
+    /// The level required to change the room's topic.
     var roomTopic: RoomMemberDetails.Role?
 }
 
 extension RoomPermissions {
+    /// Returns the default value for a particular permission.
+    static func defaultValue(for keyPath: KeyPath<RoomPermissions, RoomMemberDetails.Role?>) -> RoomMemberDetails.Role {
+        switch keyPath {
+        case \.ban: .moderator
+        case \.invite: .user
+        case \.kick: .moderator
+        case \.redact: .moderator
+        case \.eventsDefault: .user
+        case \.stateDefault: .moderator
+        case \.usersDefault: .user
+        case \.roomName: .moderator
+        case \.roomAvatar: .moderator
+        case \.roomTopic: .moderator
+        default: fatalError("Unexpected key path: \(keyPath)")
+        }
+    }
+    
+    /// Constructs a set of permissions using the default values.
     static var `default`: RoomPermissions {
-        RoomPermissions(ban: .moderator,
-                        invite: .user,
-                        kick: .moderator,
-                        redact: .moderator,
-                        eventsDefault: .user,
-                        stateDefault: .moderator,
-                        usersDefault: .user,
-                        roomName: .moderator,
-                        roomAvatar: .moderator,
-                        roomTopic: .moderator)
+        RoomPermissions(ban: defaultValue(for: \.ban),
+                        invite: defaultValue(for: \.invite),
+                        kick: defaultValue(for: \.kick),
+                        redact: defaultValue(for: \.redact),
+                        eventsDefault: defaultValue(for: \.eventsDefault),
+                        stateDefault: defaultValue(for: \.stateDefault),
+                        usersDefault: defaultValue(for: \.usersDefault),
+                        roomName: defaultValue(for: \.roomName),
+                        roomAvatar: defaultValue(for: \.roomAvatar),
+                        roomTopic: defaultValue(for: \.roomTopic))
     }
     
     init(powerLevelChanges: RoomPowerLevelChanges) {
