@@ -52,6 +52,8 @@ struct SettingsScreenViewState: BindableState {
     
     var securitySectionMode = SettingsScreenSecuritySectionMode.none
     var showSecuritySectionBadge = false
+    
+    var showBlockedUsers = false
 }
 
 enum SettingsScreenViewAction {
