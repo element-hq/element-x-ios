@@ -180,7 +180,7 @@ extension UNMutableNotificationContent {
     private func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
         // The version value is used in case the design of the placeholder is updated to force a replacement
         let shouldFlipAvatar = shouldFlipAvatar()
-        let prefix = "notification_placeholder\(shouldFlipAvatar ? "V7" : "V6")"
+        let prefix = "notification_placeholder\(shouldFlipAvatar ? "V8F" : "V8")"
         let fileName = "\(prefix)_\(name)_\(id).png"
         if let data = try? Data(contentsOf: URL.temporaryDirectory.appendingPathComponent(fileName)) {
             MXLog.info("Found existing notification icon placeholder")
