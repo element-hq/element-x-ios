@@ -144,12 +144,14 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.about)
             
-            ListRow(label: .default(title: L10n.commonBlockedUsers,
-                                    icon: \.block),
-                    kind: .navigationLink {
-                        context.send(viewAction: .blockedUsers)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.blockedUsers)
+            if context.viewState.showBlockedUsers {
+                ListRow(label: .default(title: L10n.commonBlockedUsers,
+                                        icon: \.block),
+                        kind: .navigationLink {
+                            context.send(viewAction: .blockedUsers)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.blockedUsers)
+            }
         }
     }
     

@@ -72,6 +72,18 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             }
             .store(in: &cancellables)
         
+        userSession.clientProxy.ignoredUsersPublisher
+            .receive(on: DispatchQueue.main)
+            .map {
+                guard let blockedUsers = $0 else {
+                    return false
+                }
+                
+                return !blockedUsers.isEmpty
+            }
+            .weakAssign(to: \.state.showBlockedUsers, on: self)
+            .store(in: &cancellables)
+        
         Task {
             await userSession.clientProxy.loadUserAvatarURL()
             await userSession.clientProxy.loadUserDisplayName()
