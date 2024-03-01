@@ -2723,69 +2723,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return uploadAvatarMediaReturnValue
         }
     }
-    //MARK: - canUserRedactOther
-
-    var canUserRedactOtherUserIDCallsCount = 0
-    var canUserRedactOtherUserIDCalled: Bool {
-        return canUserRedactOtherUserIDCallsCount > 0
-    }
-    var canUserRedactOtherUserIDReceivedUserID: String?
-    var canUserRedactOtherUserIDReceivedInvocations: [String] = []
-    var canUserRedactOtherUserIDReturnValue: Result<Bool, RoomProxyError>!
-    var canUserRedactOtherUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
-
-    func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError> {
-        canUserRedactOtherUserIDCallsCount += 1
-        canUserRedactOtherUserIDReceivedUserID = userID
-        canUserRedactOtherUserIDReceivedInvocations.append(userID)
-        if let canUserRedactOtherUserIDClosure = canUserRedactOtherUserIDClosure {
-            return await canUserRedactOtherUserIDClosure(userID)
-        } else {
-            return canUserRedactOtherUserIDReturnValue
-        }
-    }
-    //MARK: - canUserRedactOwn
-
-    var canUserRedactOwnUserIDCallsCount = 0
-    var canUserRedactOwnUserIDCalled: Bool {
-        return canUserRedactOwnUserIDCallsCount > 0
-    }
-    var canUserRedactOwnUserIDReceivedUserID: String?
-    var canUserRedactOwnUserIDReceivedInvocations: [String] = []
-    var canUserRedactOwnUserIDReturnValue: Result<Bool, RoomProxyError>!
-    var canUserRedactOwnUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
-
-    func canUserRedactOwn(userID: String) async -> Result<Bool, RoomProxyError> {
-        canUserRedactOwnUserIDCallsCount += 1
-        canUserRedactOwnUserIDReceivedUserID = userID
-        canUserRedactOwnUserIDReceivedInvocations.append(userID)
-        if let canUserRedactOwnUserIDClosure = canUserRedactOwnUserIDClosure {
-            return await canUserRedactOwnUserIDClosure(userID)
-        } else {
-            return canUserRedactOwnUserIDReturnValue
-        }
-    }
-    //MARK: - canUserTriggerRoomNotification
-
-    var canUserTriggerRoomNotificationUserIDCallsCount = 0
-    var canUserTriggerRoomNotificationUserIDCalled: Bool {
-        return canUserTriggerRoomNotificationUserIDCallsCount > 0
-    }
-    var canUserTriggerRoomNotificationUserIDReceivedUserID: String?
-    var canUserTriggerRoomNotificationUserIDReceivedInvocations: [String] = []
-    var canUserTriggerRoomNotificationUserIDReturnValue: Result<Bool, RoomProxyError>!
-    var canUserTriggerRoomNotificationUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
-
-    func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError> {
-        canUserTriggerRoomNotificationUserIDCallsCount += 1
-        canUserTriggerRoomNotificationUserIDReceivedUserID = userID
-        canUserTriggerRoomNotificationUserIDReceivedInvocations.append(userID)
-        if let canUserTriggerRoomNotificationUserIDClosure = canUserTriggerRoomNotificationUserIDClosure {
-            return await canUserTriggerRoomNotificationUserIDClosure(userID)
-        } else {
-            return canUserTriggerRoomNotificationUserIDReturnValue
-        }
-    }
     //MARK: - markAsRead
 
     var markAsReadReceiptTypeCallsCount = 0
@@ -2869,6 +2806,107 @@ class RoomProxyMock: RoomProxyProtocol {
             return await flagAsFavouriteClosure(isFavourite)
         } else {
             return flagAsFavouriteReturnValue
+        }
+    }
+    //MARK: - currentPowerLevelChanges
+
+    var currentPowerLevelChangesCallsCount = 0
+    var currentPowerLevelChangesCalled: Bool {
+        return currentPowerLevelChangesCallsCount > 0
+    }
+    var currentPowerLevelChangesReturnValue: Result<RoomPowerLevelChanges, RoomProxyError>!
+    var currentPowerLevelChangesClosure: (() async -> Result<RoomPowerLevelChanges, RoomProxyError>)?
+
+    func currentPowerLevelChanges() async -> Result<RoomPowerLevelChanges, RoomProxyError> {
+        currentPowerLevelChangesCallsCount += 1
+        if let currentPowerLevelChangesClosure = currentPowerLevelChangesClosure {
+            return await currentPowerLevelChangesClosure()
+        } else {
+            return currentPowerLevelChangesReturnValue
+        }
+    }
+    //MARK: - applyPowerLevelChanges
+
+    var applyPowerLevelChangesCallsCount = 0
+    var applyPowerLevelChangesCalled: Bool {
+        return applyPowerLevelChangesCallsCount > 0
+    }
+    var applyPowerLevelChangesReceivedChanges: RoomPowerLevelChanges?
+    var applyPowerLevelChangesReceivedInvocations: [RoomPowerLevelChanges] = []
+    var applyPowerLevelChangesReturnValue: Result<Void, RoomProxyError>!
+    var applyPowerLevelChangesClosure: ((RoomPowerLevelChanges) async -> Result<Void, RoomProxyError>)?
+
+    func applyPowerLevelChanges(_ changes: RoomPowerLevelChanges) async -> Result<Void, RoomProxyError> {
+        applyPowerLevelChangesCallsCount += 1
+        applyPowerLevelChangesReceivedChanges = changes
+        applyPowerLevelChangesReceivedInvocations.append(changes)
+        if let applyPowerLevelChangesClosure = applyPowerLevelChangesClosure {
+            return await applyPowerLevelChangesClosure(changes)
+        } else {
+            return applyPowerLevelChangesReturnValue
+        }
+    }
+    //MARK: - canUserRedactOther
+
+    var canUserRedactOtherUserIDCallsCount = 0
+    var canUserRedactOtherUserIDCalled: Bool {
+        return canUserRedactOtherUserIDCallsCount > 0
+    }
+    var canUserRedactOtherUserIDReceivedUserID: String?
+    var canUserRedactOtherUserIDReceivedInvocations: [String] = []
+    var canUserRedactOtherUserIDReturnValue: Result<Bool, RoomProxyError>!
+    var canUserRedactOtherUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+
+    func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError> {
+        canUserRedactOtherUserIDCallsCount += 1
+        canUserRedactOtherUserIDReceivedUserID = userID
+        canUserRedactOtherUserIDReceivedInvocations.append(userID)
+        if let canUserRedactOtherUserIDClosure = canUserRedactOtherUserIDClosure {
+            return await canUserRedactOtherUserIDClosure(userID)
+        } else {
+            return canUserRedactOtherUserIDReturnValue
+        }
+    }
+    //MARK: - canUserRedactOwn
+
+    var canUserRedactOwnUserIDCallsCount = 0
+    var canUserRedactOwnUserIDCalled: Bool {
+        return canUserRedactOwnUserIDCallsCount > 0
+    }
+    var canUserRedactOwnUserIDReceivedUserID: String?
+    var canUserRedactOwnUserIDReceivedInvocations: [String] = []
+    var canUserRedactOwnUserIDReturnValue: Result<Bool, RoomProxyError>!
+    var canUserRedactOwnUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+
+    func canUserRedactOwn(userID: String) async -> Result<Bool, RoomProxyError> {
+        canUserRedactOwnUserIDCallsCount += 1
+        canUserRedactOwnUserIDReceivedUserID = userID
+        canUserRedactOwnUserIDReceivedInvocations.append(userID)
+        if let canUserRedactOwnUserIDClosure = canUserRedactOwnUserIDClosure {
+            return await canUserRedactOwnUserIDClosure(userID)
+        } else {
+            return canUserRedactOwnUserIDReturnValue
+        }
+    }
+    //MARK: - canUserTriggerRoomNotification
+
+    var canUserTriggerRoomNotificationUserIDCallsCount = 0
+    var canUserTriggerRoomNotificationUserIDCalled: Bool {
+        return canUserTriggerRoomNotificationUserIDCallsCount > 0
+    }
+    var canUserTriggerRoomNotificationUserIDReceivedUserID: String?
+    var canUserTriggerRoomNotificationUserIDReceivedInvocations: [String] = []
+    var canUserTriggerRoomNotificationUserIDReturnValue: Result<Bool, RoomProxyError>!
+    var canUserTriggerRoomNotificationUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+
+    func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError> {
+        canUserTriggerRoomNotificationUserIDCallsCount += 1
+        canUserTriggerRoomNotificationUserIDReceivedUserID = userID
+        canUserTriggerRoomNotificationUserIDReceivedInvocations.append(userID)
+        if let canUserTriggerRoomNotificationUserIDClosure = canUserTriggerRoomNotificationUserIDClosure {
+            return await canUserTriggerRoomNotificationUserIDClosure(userID)
+        } else {
+            return canUserTriggerRoomNotificationUserIDReturnValue
         }
     }
     //MARK: - kickUser

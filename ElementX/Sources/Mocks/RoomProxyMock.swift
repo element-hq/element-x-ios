@@ -81,14 +81,17 @@ extension RoomProxyMock {
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }
         getMemberUserIDReturnValue = .success(configuration.memberForID)
-        canUserRedactOtherUserIDReturnValue = .success(false)
-        canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
-        canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
 
         flagAsUnreadReturnValue = .success(())
         markAsReadReceiptTypeReturnValue = .success(())
         underlyingIsFavourite = false
         flagAsFavouriteReturnValue = .success(())
+        
+        currentPowerLevelChangesReturnValue = .success(.init())
+        applyPowerLevelChangesReturnValue = .success(())
+        canUserRedactOtherUserIDReturnValue = .success(false)
+        canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
+        canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
         
         kickUserReturnValue = .success(())
         banUserReturnValue = .success(())

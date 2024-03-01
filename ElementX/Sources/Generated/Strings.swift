@@ -378,6 +378,8 @@ internal enum L10n {
   internal static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
   /// e.g. your project name
   internal static var commonRoomNamePlaceholder: String { return L10n.tr("Localizable", "common_room_name_placeholder") }
+  /// Saving
+  internal static var commonSaving: String { return L10n.tr("Localizable", "common_saving") }
   /// Screen lock
   internal static var commonScreenLock: String { return L10n.tr("Localizable", "common_screen_lock") }
   /// Search for someone
