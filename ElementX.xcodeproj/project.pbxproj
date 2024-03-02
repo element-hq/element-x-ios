@@ -23,6 +23,7 @@
 /* Begin PBXBuildFile section */
 		0033481EE363E4914295F188 /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070FD43DC6BF4E50217965A /* LocalizationTests.swift */; };
 		0180C44B997EDA8D21F883AC /* RoomNotificationSettingsCustomSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B746EFA112532A7B701FB914 /* RoomNotificationSettingsCustomSectionView.swift */; };
+		01B63F1A04A276B39AC17014 /* CallInviteRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A3D3CFA199FA7897364547 /* CallInviteRoomTimelineItem.swift */; };
 		020C530986D7B97631877FEF /* TimelineItemMacContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4AD793D50748F8997E5B15 /* TimelineItemMacContextMenu.swift */; };
 		020F7E70167FB2833266F2F0 /* AnalyticsSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39D7F513A36C9C1951DB44C /* AnalyticsSettingsScreen.swift */; };
 		024E70451A7CD9E4E034D8A9 /* VoiceMessageRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D529B976F8B2AA654D923422 /* VoiceMessageRoomTimelineItem.swift */; };
@@ -1003,6 +1004,7 @@
 		F697284B9B5F2C00CFEA3B12 /* EmojiDetectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58E93D91DE3288010390DEE /* EmojiDetectionTests.swift */; };
 		F6DFA23885980118AD7359C5 /* NotificationSettingsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2389732B0E115A999A069083 /* NotificationSettingsScreenCoordinator.swift */; };
 		F6F49E37272AD7397CD29A01 /* HomeScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505208F28007C0FEC14E1FF0 /* HomeScreenViewModelTests.swift */; };
+		F7048AD79361405AA95F2B3B /* CallInviteRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8F098AE48D958B4257EB24 /* CallInviteRoomTimelineView.swift */; };
 		F7567DD6635434E8C563BF85 /* AnalyticsClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B97591B2D3D4D67553506D /* AnalyticsClientProtocol.swift */; };
 		F777C6FEE7D106136E2ED2B2 /* MessageForwardingScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F6E6EDC4BBF962B2ED595A4 /* MessageForwardingScreenViewModelTests.swift */; };
 		F78BAD28482A467287A9A5A3 /* EventBasedMessageTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0900BBF0A5D5D775E917C70 /* EventBasedMessageTimelineItemProtocol.swift */; };
@@ -1869,6 +1871,7 @@
 		CA29952595B804DA221A0C1D /* ComposerToolbarViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerToolbarViewModelTests.swift; sourceTree = "<group>"; };
 		CA2A71915C1F075E403F559C /* InvitesScreenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitesScreenCell.swift; sourceTree = "<group>"; };
 		CA89A2DD51B6BBE1DA55E263 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		CA8F098AE48D958B4257EB24 /* CallInviteRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallInviteRoomTimelineView.swift; sourceTree = "<group>"; };
 		CA90BD288E5AE6BC643AFDDF /* TemplateScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateScreenCoordinator.swift; sourceTree = "<group>"; };
 		CACA846B3E3E9A521D98B178 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CAD9547E47C58930E2CE8306 /* CallScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallScreenViewModelTests.swift; sourceTree = "<group>"; };
@@ -1995,6 +1998,7 @@
 		E8CA187FE656EE5A3F6C7DE5 /* UIFont+AttributedStringBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIFont+AttributedStringBuilder.m"; sourceTree = "<group>"; };
 		E96ED747FF90332EA1333C22 /* RoomTimelineItemFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemFixtures.swift; sourceTree = "<group>"; };
 		E992D7B8BE54B2AB454613AF /* XCUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUIElement.swift; sourceTree = "<group>"; };
+		E9A3D3CFA199FA7897364547 /* CallInviteRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallInviteRoomTimelineItem.swift; sourceTree = "<group>"; };
 		E9D059BFE329BE09B6D96A9F /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ro; path = ro.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		EA4D639E27D5882A6A71AECF /* GlobalSearchScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchScreenViewModelTests.swift; sourceTree = "<group>"; };
 		EA880E78AF4BD24E45A7808C /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -4259,6 +4263,7 @@
 		B1FC81662045E2369B0C4A0E /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				E9A3D3CFA199FA7897364547 /* CallInviteRoomTimelineItem.swift */,
 				A7C4EA55DA62F9D0F984A2AE /* CollapsibleTimelineItem.swift */,
 				5351EBD7A0B9610548E4B7B2 /* EncryptedRoomTimelineItem.swift */,
 				5281C5CDC4A712265A0B5FBF /* PollRoomTimelineItem.swift */,
@@ -4332,6 +4337,7 @@
 			isa = PBXGroup;
 			children = (
 				FC2D505742FDA21FCDC4C18A /* AudioRoomTimelineView.swift */,
+				CA8F098AE48D958B4257EB24 /* CallInviteRoomTimelineView.swift */,
 				6E2656184491C505700D2405 /* CollapsibleRoomTimelineView.swift */,
 				471EB7D96AFEA8D787659686 /* EmoteRoomTimelineView.swift */,
 				75697AB5E64A12F1F069F511 /* EncryptedHistoryRoomTimelineView.swift */,
@@ -5691,6 +5697,8 @@
 				172E6E9A612ADCF10A62CF13 /* BugReportServiceProtocol.swift in Sources */,
 				E1DF24D085572A55C9758A2D /* Bundle.swift in Sources */,
 				6BAD956B909A6E29F6CC6E7C /* ButtonStyle.swift in Sources */,
+				01B63F1A04A276B39AC17014 /* CallInviteRoomTimelineItem.swift in Sources */,
+				F7048AD79361405AA95F2B3B /* CallInviteRoomTimelineView.swift in Sources */,
 				D19A748E95E2FAB2940570F0 /* CallScreen.swift in Sources */,
 				763D69741D58D2B650BC1FC9 /* CallScreenCoordinator.swift in Sources */,
 				B7C9E07F4F9CCC8DD7156A20 /* CallScreenModels.swift in Sources */,
