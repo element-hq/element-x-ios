@@ -105,6 +105,7 @@
 "common_audio" = "Audio";
 "common_blocked_users" = "Blocked users";
 "common_bubbles" = "Bubbles";
+"common_call_invite" = "Call in progress (unsupported)";
 "common_chat_backup" = "Chat backup";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Creating room…";

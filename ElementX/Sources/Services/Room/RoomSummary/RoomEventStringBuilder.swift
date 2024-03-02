@@ -68,7 +68,7 @@ struct RoomEventStringBuilder {
         case .poll(let question, _, _, _, _, _, _):
             return prefix(L10n.commonPollSummary(question), with: senderDisplayName)
         case .callInvite:
-            return nil
+            return prefix(L10n.commonCallInvite, with: senderDisplayName)
         }
     }
     
