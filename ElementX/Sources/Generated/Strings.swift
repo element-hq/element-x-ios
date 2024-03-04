@@ -1237,6 +1237,8 @@ internal enum L10n {
   internal static var screenRoomChangePermissionsRoomTopic: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_topic") }
   /// Send messages
   internal static var screenRoomChangePermissionsSendMessages: String { return L10n.tr("Localizable", "screen_room_change_permissions_send_messages") }
+  /// Edit Admins
+  internal static var screenRoomChangeRoleAdministratorsTitle: String { return L10n.tr("Localizable", "screen_room_change_role_administrators_title") }
   /// You will not be able to undo this action. You are promoting the user to have the same power level as you.
   internal static var screenRoomChangeRoleConfirmAddAdminDescription: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_add_admin_description") }
   /// Add Admin?
@@ -1247,6 +1249,8 @@ internal enum L10n {
   internal static var screenRoomChangeRoleConfirmDemoteSelfDescription: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_demote_self_description") }
   /// Demote yourself?
   internal static var screenRoomChangeRoleConfirmDemoteSelfTitle: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_demote_self_title") }
+  /// Edit Moderators
+  internal static var screenRoomChangeRoleModeratorsTitle: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_title") }
   /// Add topic
   internal static var screenRoomDetailsAddTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_add_topic_title") }
   /// Already a member
@@ -1317,6 +1321,12 @@ internal enum L10n {
   internal static var screenRoomMemberDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_alert_description") }
   /// Unblock user
   internal static var screenRoomMemberDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_user") }
+  /// Ban
+  internal static var screenRoomMemberListBanMemberConfirmationAction: String { return L10n.tr("Localizable", "screen_room_member_list_ban_member_confirmation_action") }
+  /// They won’t be able to join this room again if invited.
+  internal static var screenRoomMemberListBanMemberConfirmationDescription: String { return L10n.tr("Localizable", "screen_room_member_list_ban_member_confirmation_description") }
+  /// Are you sure you want to ban this member?
+  internal static var screenRoomMemberListBanMemberConfirmationTitle: String { return L10n.tr("Localizable", "screen_room_member_list_ban_member_confirmation_title") }
   /// Banning %1$@
   internal static func screenRoomMemberListBanningUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_member_list_banning_user", String(describing: p1))
