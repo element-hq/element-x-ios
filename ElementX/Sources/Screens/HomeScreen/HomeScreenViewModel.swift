@@ -234,9 +234,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         } else {
             if state.bindings.isSearchFieldFocused {
                 roomSummaryProvider?.setFilter(.include(.init(query: state.bindings.searchQuery,
-                                                              filters: state.bindings.filtersState.activeFilters)))
+                                                              filters: state.bindings.filtersState.activeFilters.set)))
             } else {
-                roomSummaryProvider?.setFilter(.include(.init(filters: state.bindings.filtersState.activeFilters)))
+                roomSummaryProvider?.setFilter(.include(.init(filters: state.bindings.filtersState.activeFilters.set)))
             }
         }
     }

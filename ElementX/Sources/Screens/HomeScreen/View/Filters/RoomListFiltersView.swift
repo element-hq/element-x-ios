@@ -27,7 +27,7 @@ struct RoomListFiltersView: View {
                     clearButton
                 }
                 
-                ForEach(state.sortedActiveFilters) { filter in
+                ForEach(state.activeFilters) { filter in
                     RoomListFilterView(filter: filter,
                                        isActive: getBinding(for: filter))
                         .matchedGeometryEffect(id: filter.id, in: namespace)

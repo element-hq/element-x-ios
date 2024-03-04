@@ -37,21 +37,21 @@ struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
 
 private struct FilterToggleStyle: ToggleStyle {
     private func strokeColor(isOn: Bool) -> Color {
-        isOn ? .compound.bgActionPrimaryRest : .compound.borderInteractiveSecondary
+        isOn ? .compound.bgSubtleSecondary : .compound.borderInteractiveSecondary
     }
     
     private func backgroundColor(isOn: Bool) -> Color {
-        isOn ? .compound.bgActionPrimaryRest : .compound.bgCanvasDefault
+        isOn ? .compound.bgSubtleSecondary : .compound.bgCanvasDefault
     }
     
     private func foregroundColor(isOn: Bool) -> Color {
-        isOn ? .compound.textOnSolidPrimary : .compound.textPrimary
+        isOn ? .compound.textPrimary : .compound.textSecondary
     }
     
     func makeBody(configuration: Configuration) -> some View {
         let shape = RoundedRectangle(cornerRadius: 20)
         configuration.label
-            .font(.compound.bodyLG)
+            .font(.compound.bodyLGSemibold)
             .foregroundColor(foregroundColor(isOn: configuration.isOn))
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
