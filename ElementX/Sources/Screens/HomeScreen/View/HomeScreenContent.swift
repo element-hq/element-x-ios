@@ -60,7 +60,7 @@ struct HomeScreenContent: View {
                                 if context.viewState.shouldShowFilters,
                                    context.filtersState.isFiltering,
                                    context.viewState.visibleRooms.isEmpty {
-                                    HomeScreenEmptyStateView(context: context)
+                                    RoomListFiltersEmptyStateView(state: context.filtersState)
                                         .frame(height: geometry.size.height - topSectionFrame.height)
                                 } else {
                                     HomeScreenRoomList(context: context)

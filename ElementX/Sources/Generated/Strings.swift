@@ -1473,14 +1473,30 @@ internal enum L10n {
   internal static var screenRoomlistEmptyTitle: String { return L10n.tr("Localizable", "screen_roomlist_empty_title") }
   /// Favourites
   internal static var screenRoomlistFilterFavourites: String { return L10n.tr("Localizable", "screen_roomlist_filter_favourites") }
+  /// You can add a chat to your favourites in the chat settings.
+  /// For now, you can deselect filters in order to see your other chats
+  internal static var screenRoomlistFilterFavouritesEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_favourites_empty_state_subtitle") }
+  /// You don’t have favourite chats yet
+  internal static var screenRoomlistFilterFavouritesEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_favourites_empty_state_title") }
   /// Low Priority
   internal static var screenRoomlistFilterLowPriority: String { return L10n.tr("Localizable", "screen_roomlist_filter_low_priority") }
+  /// You can deselect filters in order to see your other chats
+  internal static var screenRoomlistFilterMixedEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_mixed_empty_state_subtitle") }
+  /// You don’t have chats for this selection
+  internal static var screenRoomlistFilterMixedEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_mixed_empty_state_title") }
   /// People
   internal static var screenRoomlistFilterPeople: String { return L10n.tr("Localizable", "screen_roomlist_filter_people") }
+  /// You don’t have any DMs yet
+  internal static var screenRoomlistFilterPeopleEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_people_empty_state_title") }
   /// Rooms
   internal static var screenRoomlistFilterRooms: String { return L10n.tr("Localizable", "screen_roomlist_filter_rooms") }
+  /// You’re not in any room yet
+  internal static var screenRoomlistFilterRoomsEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_rooms_empty_state_title") }
   /// Unreads
   internal static var screenRoomlistFilterUnreads: String { return L10n.tr("Localizable", "screen_roomlist_filter_unreads") }
+  /// Congrats!
+  /// You don’t have any unread message!
+  internal static var screenRoomlistFilterUnreadsEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_unreads_empty_state_title") }
   /// Chats
   internal static var screenRoomlistMainSpaceTitle: String { return L10n.tr("Localizable", "screen_roomlist_main_space_title") }
   /// Mark as read
