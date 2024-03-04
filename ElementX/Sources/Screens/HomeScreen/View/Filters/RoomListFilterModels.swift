@@ -18,15 +18,16 @@ import Combine
 import Foundation
 
 import MatrixRustSDK
+import OrderedCollections
 
 enum RoomListFilter: Int, CaseIterable, Identifiable {
     var id: Int {
         rawValue
     }
     
+    case unreads
     case people
     case rooms
-    case unreads
     case favourites
     
     var localizedName: String {
@@ -71,25 +72,22 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 }
 
 struct RoomListFiltersState {
-    private(set) var activeFilters: Set<RoomListFilter>
+    private(set) var activeFilters: OrderedSet<RoomListFilter>
+    private var disabledFilters: OrderedSet<RoomListFilter>
     
-    init(activeFilters: Set<RoomListFilter> = []) {
-        self.activeFilters = activeFilters
-    }
-    
-    var sortedActiveFilters: [RoomListFilter] {
-        activeFilters.sorted(by: { $0.rawValue < $1.rawValue })
+    init(activeFilters: OrderedSet<RoomListFilter> = []) {
+        self.activeFilters = .init(activeFilters)
+        disabledFilters = OrderedSet(RoomListFilter.allCases).subtracting(activeFilters)
     }
     
     var availableFilters: [RoomListFilter] {
-        var availableFilters = Set(RoomListFilter.allCases)
+        var availableFilters = disabledFilters
         for filter in activeFilters {
-            availableFilters.remove(filter)
             if let incompatibleFilter = filter.incompatibleFilter {
                 availableFilters.remove(incompatibleFilter)
             }
         }
-        return availableFilters.sorted(by: { $0.rawValue < $1.rawValue })
+        return availableFilters.elements
     }
     
     var isFiltering: Bool {
@@ -101,15 +99,21 @@ struct RoomListFiltersState {
            activeFilters.contains(incompatibleFilter) {
             fatalError("[RoomListFiltersState] adding mutually exclusive filters is not allowed")
         }
-        activeFilters.insert(filter)
+        activeFilters.append(filter)
+        disabledFilters.remove(filter)
     }
     
     mutating func deactivateFilter(_ filter: RoomListFilter) {
         activeFilters.remove(filter)
+        // We always want the most recent filter to be disabled to be on top of the others
+        disabledFilters.insert(filter, at: 0)
     }
     
     mutating func clearFilters() {
-        activeFilters.removeAll()
+        // We iterate in reverse because filters should get disabled starting from the first that has been used to the first that has been used.
+        for filter in activeFilters.reversed() {
+            deactivateFilter(filter)
+        }
     }
     
     func isFilterActive(_ filter: RoomListFilter) -> Bool {
