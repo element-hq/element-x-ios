@@ -73,15 +73,15 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 
 struct RoomListFiltersState {
     private(set) var activeFilters: OrderedSet<RoomListFilter>
-    private var disabledFilters: OrderedSet<RoomListFilter>
+    private var inactiveFilters: OrderedSet<RoomListFilter>
     
     init(activeFilters: OrderedSet<RoomListFilter> = []) {
         self.activeFilters = .init(activeFilters)
-        disabledFilters = OrderedSet(RoomListFilter.allCases).subtracting(activeFilters)
+        inactiveFilters = OrderedSet(RoomListFilter.allCases).subtracting(activeFilters)
     }
     
     var availableFilters: [RoomListFilter] {
-        var availableFilters = disabledFilters
+        var availableFilters = inactiveFilters
         for filter in activeFilters {
             if let incompatibleFilter = filter.incompatibleFilter {
                 availableFilters.remove(incompatibleFilter)
@@ -100,13 +100,13 @@ struct RoomListFiltersState {
             fatalError("[RoomListFiltersState] adding mutually exclusive filters is not allowed")
         }
         activeFilters.append(filter)
-        disabledFilters.remove(filter)
+        inactiveFilters.remove(filter)
     }
     
     mutating func deactivateFilter(_ filter: RoomListFilter) {
         activeFilters.remove(filter)
         // We always want the most recent filter to be disabled to be on top of the others
-        disabledFilters.insert(filter, at: 0)
+        inactiveFilters.insert(filter, at: 0)
     }
     
     mutating func clearFilters() {
