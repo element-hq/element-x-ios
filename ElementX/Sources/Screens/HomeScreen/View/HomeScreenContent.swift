@@ -20,6 +20,7 @@ struct HomeScreenContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     @ObservedObject var context: HomeScreenViewModel.Context
+    @State private var topSectionFrame: CGRect = .zero
     let scrollViewAdapter: ScrollViewAdapter
     
     var body: some View {
@@ -56,9 +57,17 @@ struct HomeScreenContent: View {
                         // Showing empty views in pinned headers makes the room list spasm when reaching the top
                         LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
                             Section {
-                                HomeScreenRoomList(context: context)
+                                if context.viewState.shouldShowFilters,
+                                   context.filtersState.isFiltering,
+                                   context.viewState.visibleRooms.isEmpty {
+                                    HomeScreenEmptyStateView(context: context)
+                                        .frame(height: geometry.size.height - topSectionFrame.height)
+                                } else {
+                                    HomeScreenRoomList(context: context)
+                                }
                             } header: {
                                 topSection
+                                    .readFrame($topSectionFrame)
                             }
                         }
                         .searchable(text: $context.searchQuery)
