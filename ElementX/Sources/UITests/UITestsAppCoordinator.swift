@@ -586,9 +586,11 @@ class MockScreen: Identifiable {
                                                       name: "Room",
                                                       isEncrypted: true,
                                                       members: members,
-                                                      memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false)))
+                                                      memberForID: .mockMe,
+                                                      canUserInvite: false))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
+                                                                             clientProxy: ClientProxyMock(.init()),
                                                                              mediaProvider: MockMediaProvider(),
                                                                              analyticsService: ServiceLocator.shared.analytics,
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -607,9 +609,11 @@ class MockScreen: Identifiable {
                                                       isEncrypted: true,
                                                       canonicalAlias: "#mock:room.org",
                                                       members: members,
-                                                      memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false)))
+                                                      memberForID: .mockMe,
+                                                      canUserInvite: false))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
+                                                                             clientProxy: ClientProxyMock(.init()),
                                                                              mediaProvider: MockMediaProvider(),
                                                                              analyticsService: ServiceLocator.shared.analytics,
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -620,8 +624,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .roomDetailsScreenWithEmptyTopic:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let owner: RoomMemberProxyMock = .mockOwner(allowedStateEvents: [.roomTopic], canInviteUsers: false)
-            let members: [RoomMemberProxyMock] = [owner, .mockBob, .mockCharlie]
+            let members: [RoomMemberProxyMock] = [.mockMeAdmin, .mockBob, .mockCharlie]
             let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
                                                       name: "Room",
                                                       topic: nil,
@@ -630,9 +633,11 @@ class MockScreen: Identifiable {
                                                       isEncrypted: true,
                                                       canonicalAlias: "#mock:room.org",
                                                       members: members,
-                                                      memberForID: owner))
+                                                      memberForID: .mockMeAdmin,
+                                                      canUserInvite: false))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
+                                                                             clientProxy: ClientProxyMock(.init()),
                                                                              mediaProvider: MockMediaProvider(),
                                                                              analyticsService: ServiceLocator.shared.analytics,
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -643,15 +648,17 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .roomDetailsScreenWithInvite:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let owner: RoomMemberProxyMock = .mockOwner(allowedStateEvents: [], canInviteUsers: true)
+            let owner: RoomMemberProxyMock = .mockMe
             let members: [RoomMemberProxyMock] = [owner, .mockBob, .mockCharlie]
             let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
                                                       name: "Room",
                                                       isEncrypted: true,
                                                       members: members,
-                                                      memberForID: owner))
+                                                      memberForID: owner,
+                                                      canUserInvite: true))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
+                                                                             clientProxy: ClientProxyMock(.init()),
                                                                              mediaProvider: MockMediaProvider(),
                                                                              analyticsService: ServiceLocator.shared.analytics,
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -669,9 +676,11 @@ class MockScreen: Identifiable {
                                                       isDirect: true,
                                                       isEncrypted: true,
                                                       members: members,
-                                                      memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false)))
+                                                      memberForID: .mockMe,
+                                                      canUserInvite: false))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              roomProxy: roomProxy,
+                                                                             clientProxy: ClientProxyMock(.init()),
                                                                              mediaProvider: MockMediaProvider(),
                                                                              analyticsService: ServiceLocator.shared.analytics,
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -681,16 +690,16 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomEditDetails, .roomEditDetailsReadOnly:
-            let allowedStateEvents: [StateEventType] = id == .roomEditDetails ? [.roomAvatar, .roomName, .roomTopic] : []
+            let members: [RoomMemberProxyMock] = id == .roomEditDetails ? [.mockMeAdmin] : [.mockMe]
             let navigationStackCoordinator = NavigationStackCoordinator()
             let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
                                                       name: "Room",
                                                       topic: "What a cool topic!",
-                                                      avatarURL: .picturesDirectory))
-            let coordinator = RoomDetailsEditScreenCoordinator(parameters: .init(accountOwner: RoomMemberProxyMock.mockOwner(allowedStateEvents: allowedStateEvents),
+                                                      avatarURL: .picturesDirectory,
+                                                      members: members))
+            let coordinator = RoomDetailsEditScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                                  mediaProvider: MockMediaProvider(),
                                                                                  navigationStackCoordinator: navigationStackCoordinator,
-                                                                                 roomProxy: roomProxy,
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                                  orientationManager: OrientationManagerMock()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -734,6 +743,7 @@ class MockScreen: Identifiable {
             let coordinator = ReportContentScreenCoordinator(parameters: .init(eventID: "test",
                                                                                senderID: RoomMemberProxyMock.mockAlice.userID,
                                                                                roomProxy: RoomProxyMock(with: .init(name: "test")),
+                                                                               clientProxy: ClientProxyMock(.init()),
                                                                                userIndicatorController: UserIndicatorControllerMock()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -774,8 +784,9 @@ class MockScreen: Identifiable {
             roomProxy.getMemberUserIDReturnValue = .success(member)
             
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                                   userID: member.userID,
+            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(userID: member.userID,
+                                                                                   roomProxy: roomProxy,
+                                                                                   clientProxy: ClientProxyMock(.init()),
                                                                                    mediaProvider: MockMediaProvider(),
                                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -786,8 +797,9 @@ class MockScreen: Identifiable {
             roomProxy.getMemberUserIDReturnValue = .success(member)
             
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                                   userID: member.userID,
+            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(userID: member.userID,
+                                                                                   roomProxy: roomProxy,
+                                                                                   clientProxy: ClientProxyMock(.init()),
                                                                                    mediaProvider: MockMediaProvider(),
                                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -798,8 +810,9 @@ class MockScreen: Identifiable {
             roomProxy.getMemberUserIDReturnValue = .success(member)
             
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                                   userID: member.userID,
+            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(userID: member.userID,
+                                                                                   roomProxy: roomProxy,
+                                                                                   clientProxy: ClientProxyMock(.init()),
                                                                                    mediaProvider: MockMediaProvider(),
                                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
