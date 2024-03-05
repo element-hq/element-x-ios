@@ -22,6 +22,7 @@ typealias RoomDetailsScreenViewModelType = StateStoreViewModel<RoomDetailsScreen
 class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScreenViewModelProtocol {
     private let accountUserID: String
     private let roomProxy: RoomProxyProtocol
+    private let clientProxy: ClientProxyProtocol
     private let analyticsService: AnalyticsService
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -29,7 +30,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let attributedStringBuilder: AttributedStringBuilderProtocol
 
     private var accountOwner: RoomMemberProxyProtocol? {
-        didSet { updatePowerLevelPermissions() }
+        didSet {
+            Task { await updatePowerLevelPermissions() }
+        }
     }
 
     private var dmRecipient: RoomMemberProxyProtocol?
@@ -42,6 +45,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     init(accountUserID: String,
          roomProxy: RoomProxyProtocol,
+         clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          analyticsService: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
@@ -49,6 +53,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
          attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.accountUserID = accountUserID
         self.roomProxy = roomProxy
+        self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
@@ -103,11 +108,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapUnignore:
             state.bindings.ignoreUserRoomAlertItem = .init(action: .unignore)
         case .processTapEdit, .processTapAddTopic:
-            guard let accountOwner else {
-                MXLog.error("Missing account owner when presenting the room's edit details screen")
-                return
-            }
-            actionsSubject.send(.requestEditDetailsPresentation(accountOwner))
+            actionsSubject.send(.requestEditDetailsPresentation)
         case .ignoreConfirmed:
             Task { await ignore() }
         case .unignoreConfirmed:
@@ -169,9 +170,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         roomProxy.membersPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] members in
+            .sink { [weak self, ownUserID = roomProxy.ownUserID] members in
                 guard let self else { return }
-                let dmRecipient = members.first(where: { !$0.isAccountOwner })
+                let dmRecipient = members.first(where: { $0.userID != ownUserID })
                 self.dmRecipient = dmRecipient
                 self.state.dmRecipient = dmRecipient.map(RoomMemberDetails.init(withProxy:))
             }
@@ -189,11 +190,15 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         }
     }
     
-    private func updatePowerLevelPermissions() {
-        state.canInviteUsers = accountOwner?.canInviteUsers ?? false
-        state.canEditRoomName = accountOwner?.canSendStateEvent(type: .roomName) ?? false
-        state.canEditRoomTopic = accountOwner?.canSendStateEvent(type: .roomTopic) ?? false
-        state.canEditRoomAvatar = accountOwner?.canSendStateEvent(type: .roomAvatar) ?? false
+    private func updatePowerLevelPermissions() async {
+        async let canInviteUsers = roomProxy.canUserInvite(userID: roomProxy.ownUserID)
+        async let canEditRoomName = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName)
+        async let canEditRoomTopic = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic)
+        async let canEditRoomAvatar = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar)
+        await state.canInviteUsers = canInviteUsers == .success(true)
+        await state.canEditRoomName = canEditRoomName == .success(true)
+        await state.canEditRoomTopic = canEditRoomTopic == .success(true)
+        await state.canEditRoomAvatar = canEditRoomAvatar == .success(true)
     }
     
     private func setupNotificationSettingsSubscription() {
@@ -280,8 +285,14 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
 
     private func ignore() async {
+        guard let dmUserID = dmRecipient?.userID else {
+            MXLog.error("Attempting to ignore a nil DM Recipient")
+            state.bindings.alertInfo = .init(id: .unknown)
+            return
+        }
+        
         state.isProcessingIgnoreRequest = true
-        let result = await dmRecipient?.ignoreUser()
+        let result = await clientProxy.ignoreUser(dmUserID)
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
@@ -289,14 +300,20 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             var dmRecipient = state.dmRecipient
             dmRecipient?.isIgnored = true
             state.dmRecipient = dmRecipient
-        case .failure, .none:
+        case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }
 
     private func unignore() async {
+        guard let dmUserID = dmRecipient?.userID else {
+            MXLog.error("Attempting to unignore a nil DM Recipient")
+            state.bindings.alertInfo = .init(id: .unknown)
+            return
+        }
+        
         state.isProcessingIgnoreRequest = true
-        let result = await dmRecipient?.unignoreUser()
+        let result = await clientProxy.unignoreUser(dmUserID)
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
@@ -304,7 +321,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             var dmRecipient = state.dmRecipient
             dmRecipient?.isIgnored = false
             state.dmRecipient = dmRecipient
-        case .failure, .none:
+        case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }

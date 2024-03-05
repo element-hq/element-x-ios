@@ -18,10 +18,9 @@ import Combine
 import SwiftUI
 
 struct RoomDetailsEditScreenCoordinatorParameters {
-    let accountOwner: RoomMemberProxyProtocol
+    let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
     weak var navigationStackCoordinator: NavigationStackCoordinator?
-    let roomProxy: RoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let orientationManager: OrientationManagerProtocol
 }
@@ -43,9 +42,8 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
     init(parameters: RoomDetailsEditScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = RoomDetailsEditScreenViewModel(accountOwner: parameters.accountOwner,
+        viewModel = RoomDetailsEditScreenViewModel(roomProxy: parameters.roomProxy,
                                                    mediaProvider: parameters.mediaProvider,
-                                                   roomProxy: parameters.roomProxy,
                                                    userIndicatorController: parameters.userIndicatorController)
     }
     

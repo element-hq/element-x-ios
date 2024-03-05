@@ -18,7 +18,7 @@ import Combine
 import Foundation
 
 struct ClientProxyMockConfiguration {
-    let userID: String
+    var userID: String = RoomMemberProxyMock.mockMe.userID
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol? = RoomSummaryProviderMock(.init())
 }

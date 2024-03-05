@@ -20,6 +20,7 @@ import SwiftUI
 struct RoomDetailsScreenCoordinatorParameters {
     let accountUserID: String
     let roomProxy: RoomProxyProtocol
+    let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let analyticsService: AnalyticsService
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -30,7 +31,7 @@ struct RoomDetailsScreenCoordinatorParameters {
 enum RoomDetailsScreenCoordinatorAction {
     case leftRoom
     case presentRoomMembersList
-    case presentRoomDetailsEditScreen(accountOwner: RoomMemberProxyProtocol)
+    case presentRoomDetailsEditScreen
     case presentNotificationSettingsScreen
     case presentInviteUsersScreen
     case presentPollsHistory
@@ -49,6 +50,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     init(parameters: RoomDetailsScreenCoordinatorParameters) {
         viewModel = RoomDetailsScreenViewModel(accountUserID: parameters.accountUserID,
                                                roomProxy: parameters.roomProxy,
+                                               clientProxy: parameters.clientProxy,
                                                mediaProvider: parameters.mediaProvider,
                                                analyticsService: parameters.analyticsService,
                                                userIndicatorController: parameters.userIndicatorController,
@@ -70,8 +72,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentInviteUsersScreen)
                 case .leftRoom:
                     actionsSubject.send(.leftRoom)
-                case .requestEditDetailsPresentation(let accountOwner):
-                    actionsSubject.send(.presentRoomDetailsEditScreen(accountOwner: accountOwner))
+                case .requestEditDetailsPresentation:
+                    actionsSubject.send(.presentRoomDetailsEditScreen)
                 case .requestNotificationSettingsPresentation:
                     actionsSubject.send(.presentNotificationSettingsScreen)
                 case .requestPollsHistoryPresentation:

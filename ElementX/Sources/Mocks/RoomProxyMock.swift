@@ -43,8 +43,9 @@ struct RoomProxyMockConfiguration {
     
     var members: [RoomMemberProxyMock] = .allMembers
     var memberForID: RoomMemberProxyMock = .mockMe
-    var ownUserID = "@alice:somewhere.org"
-
+    var ownUserID = RoomMemberProxyMock.mockMe.userID
+    
+    var canUserInvite = true
     var canUserTriggerRoomNotification = false
     var canUserJoinCall = true
 }
@@ -89,7 +90,17 @@ extension RoomProxyMock {
         
         currentPowerLevelChangesReturnValue = .success(.init())
         applyPowerLevelChangesReturnValue = .success(())
+        canUserUserIDSendStateEventClosure = { userID, _ in
+            .success(self.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
+        }
+        canUserInviteUserIDReturnValue = .success(configuration.canUserInvite)
         canUserRedactOtherUserIDReturnValue = .success(false)
+        canUserKickUserIDClosure = { userID in
+            .success(self.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
+        }
+        canUserBanUserIDClosure = { userID in
+            .success(self.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
+        }
         canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
         canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
         

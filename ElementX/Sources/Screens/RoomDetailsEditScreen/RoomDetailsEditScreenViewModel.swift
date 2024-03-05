@@ -29,9 +29,8 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(accountOwner: RoomMemberProxyProtocol,
+    init(roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
-         roomProxy: RoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
@@ -44,11 +43,17 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                                                                     initialAvatarURL: roomAvatar,
                                                                     initialName: roomName ?? "",
                                                                     initialTopic: roomTopic ?? "",
-                                                                    canEditAvatar: accountOwner.canSendStateEvent(type: .roomAvatar),
-                                                                    canEditName: accountOwner.canSendStateEvent(type: .roomName),
-                                                                    canEditTopic: accountOwner.canSendStateEvent(type: .roomTopic),
                                                                     avatarURL: roomAvatar,
                                                                     bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")), imageProvider: mediaProvider)
+        
+        Task {
+            async let canEditAvatar = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar)
+            async let canEditName = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName)
+            async let canEditTopic = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic)
+            state.canEditAvatar = await canEditAvatar == .success(true)
+            state.canEditName = await canEditName == .success(true)
+            state.canEditTopic = await canEditTopic == .success(true)
+        }
     }
     
     // MARK: - Public

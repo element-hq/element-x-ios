@@ -19,69 +19,25 @@ import MatrixRustSDK
 
 final class RoomMemberProxy: RoomMemberProxyProtocol {
     private let backgroundTaskService: BackgroundTaskServiceProtocol
-    private let member: RoomMemberProtocol
-
+    private let member: RoomMember
+    
     private let backgroundAccountDataTaskName = "SendAccountDataEvent"
     private var sendAccountDataEventBackgroundTask: BackgroundTaskProtocol?
-
+    
     private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roommemberproxy.userinitiated", qos: .userInitiated)
-
-    init(member: RoomMemberProtocol, backgroundTaskService: BackgroundTaskServiceProtocol) {
+    
+    init(member: RoomMember, backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.backgroundTaskService = backgroundTaskService
         self.member = member
     }
-
-    lazy var userID = member.userId()
-
-    lazy var displayName = member.displayName()
-
-    lazy var avatarURL = member.avatarUrl().flatMap(URL.init(string:))
-
-    lazy var membership = member.membership()
-
-    lazy var isAccountOwner = member.isAccountUser()
-
-    lazy var isIgnored = member.isIgnored()
     
-    lazy var powerLevel = Int(member.powerLevel())
-    lazy var role = member.suggestedRoleForPowerLevel()
-    lazy var canInviteUsers = member.canInvite()
-    lazy var canKickUsers = member.canKick()
-    lazy var canBanUsers = member.canBan()
+    var userID: String { member.userId }
+    var displayName: String? { member.displayName }
+    var avatarURL: URL? { member.avatarUrl.flatMap(URL.init(string:)) }
     
-    func canSendStateEvent(type: StateEventType) -> Bool {
-        member.canSendState(stateEvent: type)
-    }
-
-    func ignoreUser() async -> Result<Void, RoomMemberProxyError> {
-        sendAccountDataEventBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundAccountDataTaskName, isReusable: true)
-        defer {
-            sendAccountDataEventBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self.member.ignore()
-                return .success(())
-            } catch {
-                return .failure(.ignoreUserFailed)
-            }
-        }
-    }
-
-    func unignoreUser() async -> Result<Void, RoomMemberProxyError> {
-        sendAccountDataEventBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundAccountDataTaskName, isReusable: true)
-        defer {
-            sendAccountDataEventBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self.member.unignore()
-                return .success(())
-            } catch {
-                return .failure(.unignoreUserFailed)
-            }
-        }
-    }
+    var membership: MembershipState { member.membership }
+    var isIgnored: Bool { member.isIgnored }
+    
+    var powerLevel: Int { Int(member.powerLevel) }
+    var role: RoomMemberRole { member.suggestedRoleForPowerLevel }
 }
