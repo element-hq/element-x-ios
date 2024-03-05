@@ -73,6 +73,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        isOutgoing: isOutgoing)
         case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, votes: let votes, endTime: let endTime, let edited):
             return buildPollTimelineItem(question, kind, maxSelections, answers, votes, endTime, eventItemProxy, isOutgoing, edited)
+        case .callInvite:
+            return nil
         }
     }
     
