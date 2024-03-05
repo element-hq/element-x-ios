@@ -562,7 +562,6 @@ class MockScreen: Identifiable {
             
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             ServiceLocator.shared.settings.migratedAccounts[clientProxy.userID] = true
-            ServiceLocator.shared.settings.hasShownWelcomeScreen = true
             
             let flowCoordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
                                                              navigationSplitCoordinator: navigationSplitCoordinator,

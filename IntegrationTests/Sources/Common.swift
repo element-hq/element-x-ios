@@ -100,14 +100,7 @@ extension XCUIApplication {
             currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: message)
             currentTestCase.waitForExpectations(timeout: 300.0)
         }
-        
-        // Welcome screen may be shown as an overlay.
-        if buttons[A11yIdentifiers.welcomeScreen.letsGo].waitForExistence(timeout: 1.0) {
-            let goButton = buttons[A11yIdentifiers.welcomeScreen.letsGo]
-            XCTAssertTrue(goButton.waitForExistence(timeout: 1.0))
-            goButton.tap()
-        }
-        
+                
         // Wait for the home screen to become visible.
         let profileButton = buttons[A11yIdentifiers.homeScreen.userAvatar]
         // Timeouts are huge because we're waiting for the server.

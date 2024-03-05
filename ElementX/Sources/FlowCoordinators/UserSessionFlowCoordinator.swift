@@ -139,12 +139,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func start() {
-        if !appSettings.hasShownWelcomeScreen {
-            stateMachine.processEvent(.startWithWelcomeScreen)
-        } else {
-            // Otherwise go straight to the home screen.
-            stateMachine.processEvent(.start)
-        }
+        stateMachine.processEvent(.start)
     }
     
     func stop() { }
@@ -218,14 +213,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .start, .roomList):
                 presentHomeScreen()
-            
-            case (.initial, .startWithWelcomeScreen, .welcomeScreen):
-                presentHomeScreen()
-                presentWelcomeScreen()
-            case (.roomList, .presentWelcomeScreen, .welcomeScreen):
-                presentWelcomeScreen()
-            case (.welcomeScreen, .dismissedWelcomeScreen, .roomList):
-                break
                 
             case(.roomList, .selectRoom, .roomList):
                 break
@@ -341,21 +328,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
-    }
-
-    private func presentWelcomeScreen() {
-        let welcomeScreenCoordinator = WelcomeScreenScreenCoordinator()
-        welcomeScreenCoordinator.actions.sink { [weak self] action in
-            switch action {
-            case .dismiss:
-                self?.navigationSplitCoordinator.setSheetCoordinator(nil)
-            }
-        }
-        .store(in: &cancellables)
-
-        navigationSplitCoordinator.setSheetCoordinator(welcomeScreenCoordinator) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedWelcomeScreen)
-        }
     }
     
     private func runLogoutFlow() async {

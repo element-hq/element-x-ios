@@ -22,7 +22,6 @@ final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
-        case hasShownWelcomeScreen
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
         case lastLoginDate
@@ -109,9 +108,6 @@ final class AppSettings {
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
 
-    @UserPreference(key: UserDefaultsKeys.hasShownWelcomeScreen, defaultValue: false, storageType: .userDefaults(store))
-    var hasShownWelcomeScreen: Bool
-    
     /// A URL where users can go read more about the app.
     let websiteURL: URL = "https://element.io"
     /// A URL that contains the app's logo that may be used when showing content in a web view.
