@@ -66,7 +66,7 @@ struct HomeScreenContent: View {
                                 if shouldShowEmptyFilterState {
                                     RoomListFiltersEmptyStateView(state: context.filtersState)
                                         .frame(height: geometry.size.height - topSectionFrame.height)
-                                        .padding(.horizontal, geometry.size.width * 67 / 390)
+                                        .padding(.horizontal, 60)
                                 } else {
                                     HomeScreenRoomList(context: context)
                                 }
