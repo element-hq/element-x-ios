@@ -17,6 +17,8 @@
 import SwiftUI
 import SwiftUIIntrospect
 
+// MARK: - Search Controller Extensions
+
 extension View {
     /// A custom replacement for searchable that allows more precise configuration of the underlying search controller.
     ///
@@ -167,5 +169,23 @@ private struct SearchController: UIViewControllerRepresentable {
             parent?.navigationItem.preferredSearchBarPlacement = .stacked
             parent?.navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
         }
+    }
+}
+
+// MARK: - Searchable Extensions
+
+struct IsSearchingModifier: ViewModifier {
+    @Environment(\.isSearching) private var isSearchingEnv
+    @Binding var isSearching: Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .onChange(of: isSearchingEnv) { isSearching = $0 }
+    }
+}
+
+extension View {
+    func isSearching(_ isSearching: Binding<Bool>) -> some View {
+        modifier(IsSearchingModifier(isSearching: isSearching))
     }
 }

@@ -45,7 +45,7 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
             .map(\.bindings.searchQuery)
             .removeDuplicates()
             .sink { [weak self] searchQuery in
-                self?.roomSummaryProvider.setFilter(.include(.init(query: searchQuery)))
+                self?.roomSummaryProvider.setFilter(.search(query: searchQuery))
             }
             .store(in: &cancellables)
         
@@ -60,7 +60,7 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
         switch viewAction {
         case .dismiss:
             actionsSubject.send(.dismiss)
-            roomSummaryProvider.setFilter(.include(.all)) // This is a shared provider
+            roomSummaryProvider.setFilter(.all(filters: [])) // This is a shared provider
         case .select(let roomID):
             actionsSubject.send(.select(roomID: roomID))
         case .reachedTop:

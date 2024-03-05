@@ -50,15 +50,19 @@ extension RoomSummaryProviderMock {
         
         setFilterClosure = { [initialRooms, roomListSubject] filter in
             switch filter {
-            case let .include(predicate):
+            case let .search(query):
                 var rooms = initialRooms
                 
-                if let filter = predicate.filters.first {
-                    rooms = rooms.filter { filter == .people ? $0.isDirect : !$0.isDirect }
+                if !query.isEmpty {
+                    rooms = rooms.filter { $0.name?.localizedCaseInsensitiveContains(query) ?? false }
                 }
                 
-                if let query = predicate.query, !query.isEmpty {
-                    rooms = rooms.filter { $0.name?.localizedCaseInsensitiveContains(query) ?? false }
+                roomListSubject.send(rooms)
+            case let .all(filters):
+                var rooms = initialRooms
+                
+                if let filter = filters.first {
+                    rooms = rooms.filter { filter == .people ? $0.isDirect : !$0.isDirect }
                 }
                 
                 roomListSubject.send(rooms)

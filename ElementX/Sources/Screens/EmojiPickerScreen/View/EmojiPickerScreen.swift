@@ -58,7 +58,7 @@ struct EmojiPickerScreen: View {
             .navigationTitle(L10n.commonReactions)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
-            .modifier(IsSearching(isSearching: $isSearching))
+            .isSearching($isSearching)
             .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
             .compoundSearchField()
         }
@@ -84,17 +84,6 @@ struct EmojiPickerScreen: View {
                 Text(L10n.actionCancel)
             }
         }
-    }
-}
-
-/// A view modifier to extract whether the search field is focussed from a subview.
-private struct IsSearching: ViewModifier {
-    @Environment(\.isSearching) private var isSearchFieldFocused
-    @Binding var isSearching: Bool
-    
-    func body(content: Content) -> some View {
-        content
-            .onChange(of: isSearchFieldFocused) { isSearching = $0 }
     }
 }
 

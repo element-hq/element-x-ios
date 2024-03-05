@@ -53,7 +53,7 @@ struct HomeScreenContent: View {
                             .layoutPriority(1)
                     }
                 case .rooms:
-                    if context.viewState.shouldShowFilters {
+                    if context.viewState.areFiltersEnabled {
                         // Showing empty views in pinned headers makes the room list spasm when reaching the top
                         LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
                             Section {
@@ -68,6 +68,7 @@ struct HomeScreenContent: View {
                                     .readFrame($topSectionFrame)
                             }
                         }
+                        .isSearching($context.isSearchFieldFocused)
                         .searchable(text: $context.searchQuery)
                         .compoundSearchField()
                         .disableAutocorrection(true)
@@ -76,6 +77,7 @@ struct HomeScreenContent: View {
 
                         LazyVStack(spacing: 0) {
                             HomeScreenRoomList(context: context)
+                                .isSearching($context.isSearchFieldFocused)
                         }
                         .searchable(text: $context.searchQuery)
                         .compoundSearchField()
