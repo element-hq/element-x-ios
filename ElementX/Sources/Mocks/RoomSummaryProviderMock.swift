@@ -61,7 +61,10 @@ extension RoomSummaryProviderMock {
             case let .all(filters):
                 var rooms = initialRooms
                 
-                if let filter = filters.first {
+                if filters.count > 1 {
+                    // for testing purpose chaining more than one filter will always return an empty state
+                    rooms = []
+                } else if let filter = filters.first {
                     rooms = rooms.filter { filter == .people ? $0.isDirect : !$0.isDirect }
                 }
                 

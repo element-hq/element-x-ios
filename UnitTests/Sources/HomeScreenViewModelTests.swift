@@ -171,11 +171,23 @@ class HomeScreenViewModelTests: XCTestCase {
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.count, 2)
         XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.first?.name, "Foundation and Earth")
-        
+    }
+    
+    func testSearch() async throws {
         context.isSearchFieldFocused = true
         context.searchQuery = "lude to Found"
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.first?.name, "Prelude to Foundation")
         XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.count, 1)
+        XCTAssertFalse(context.viewState.shouldShowFilters)
+    }
+    
+    func testFiltersEmptyState() async throws {
+        context.filtersState.activateFilter(.people)
+        context.filtersState.activateFilter(.favourites)
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertTrue(context.viewState.shouldShowEmptyFilterState)
+        context.isSearchFieldFocused = true
+        XCTAssertFalse(context.viewState.shouldShowEmptyFilterState)
     }
 }
