@@ -20,7 +20,7 @@ enum ReportContentScreenViewModelAction: Equatable {
     case cancel
     case submitStarted
     case submitFinished
-    case submitFailed(error: RoomProxyError)
+    case submitFailed(message: String)
 }
 
 struct ReportContentScreenViewState: BindableState {

@@ -279,7 +279,7 @@ struct RoomDetailsScreen: View {
 struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let genericRoomViewModel = {
         let members: [RoomMemberProxyMock] = [
-            .mockMe,
+            .mockMeAdmin,
             .mockAlice,
             .mockBob,
             .mockCharlie
@@ -304,8 +304,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
         let appSettings = AppSettings()
         
-        return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
-                                          roomProxy: roomProxy,
+        return RoomDetailsScreenViewModel(roomProxy: roomProxy,
+                                          clientProxy: ClientProxyMock(.init()),
                                           mediaProvider: MockMediaProvider(),
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -330,8 +330,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
         
-        return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
-                                          roomProxy: roomProxy,
+        return RoomDetailsScreenViewModel(roomProxy: roomProxy,
+                                          clientProxy: ClientProxyMock(.init()),
                                           mediaProvider: MockMediaProvider(),
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -342,7 +342,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     
     static let simpleRoomViewModel = {
         let members: [RoomMemberProxyMock] = [
-            .mockMe,
+            .mockMeAdmin,
             .mockAlice,
             .mockBob,
             .mockCharlie
@@ -355,8 +355,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
         
-        return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
-                                          roomProxy: roomProxy,
+        return RoomDetailsScreenViewModel(roomProxy: roomProxy,
+                                          clientProxy: ClientProxyMock(.init()),
                                           mediaProvider: MockMediaProvider(),
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,

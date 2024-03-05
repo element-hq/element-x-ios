@@ -156,16 +156,18 @@ struct RoomDetailsEditScreen: View {
 // MARK: - Previews
 
 struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomDetailsEditScreenViewModel(accountOwner: RoomMemberProxyMock.mockAlice,
+    static let viewModel = RoomDetailsEditScreenViewModel(roomProxy: RoomProxyMock(with: .init(id: "test_id",
+                                                                                               name: "Room",
+                                                                                               members: [.mockMeAdmin])),
                                                           mediaProvider: MockMediaProvider(),
-                                                          roomProxy: RoomProxyMock(with: .init(id: "test_id", name: "Room")),
                                                           userIndicatorController: UserIndicatorControllerMock.default)
     
     static let readOnlyViewModel = {
-        let accountOwner = RoomMemberProxyMock.mockOwner(allowedStateEvents: [])
-        return RoomDetailsEditScreenViewModel(accountOwner: accountOwner,
+        let accountOwner = RoomMemberProxyMock.mockMe
+        return RoomDetailsEditScreenViewModel(roomProxy: RoomProxyMock(with: .init(id: "test_id",
+                                                                                   name: "Room",
+                                                                                   members: [.mockMe])),
                                               mediaProvider: MockMediaProvider(),
-                                              roomProxy: RoomProxyMock(with: .init(id: "test_id", name: "Room")),
                                               userIndicatorController: UserIndicatorControllerMock.default)
     }()
     
@@ -174,10 +176,12 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
             RoomDetailsEditScreen(context: viewModel.context)
         }
         .previewDisplayName("Normal")
+        .snapshot(delay: 0.1)
         
         NavigationStack {
             RoomDetailsEditScreen(context: readOnlyViewModel.context)
         }
         .previewDisplayName("Read only")
+        .snapshot(delay: 0.1)
     }
 }
