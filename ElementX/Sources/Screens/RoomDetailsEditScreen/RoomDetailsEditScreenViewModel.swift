@@ -47,12 +47,10 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                                                                     bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")), imageProvider: mediaProvider)
         
         Task {
-            async let canEditAvatar = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar)
-            async let canEditName = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName)
-            async let canEditTopic = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic)
-            state.canEditAvatar = await canEditAvatar == .success(true)
-            state.canEditName = await canEditName == .success(true)
-            state.canEditTopic = await canEditTopic == .success(true)
+            // Can't use async let because the mocks aren't thread safe when calling the same method 🤦‍♂️
+            state.canEditAvatar = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar) == .success(true)
+            state.canEditName = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName) == .success(true)
+            state.canEditTopic = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic) == .success(true)
         }
     }
     

@@ -90,16 +90,16 @@ extension RoomProxyMock {
         
         currentPowerLevelChangesReturnValue = .success(.init())
         applyPowerLevelChangesReturnValue = .success(())
-        canUserUserIDSendStateEventClosure = { userID, _ in
-            .success(self.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
+        canUserUserIDSendStateEventClosure = { [weak self] userID, _ in
+            .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }
         canUserInviteUserIDReturnValue = .success(configuration.canUserInvite)
         canUserRedactOtherUserIDReturnValue = .success(false)
-        canUserKickUserIDClosure = { userID in
-            .success(self.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
+        canUserKickUserIDClosure = { [weak self] userID in
+            .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }
-        canUserBanUserIDClosure = { userID in
-            .success(self.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
+        canUserBanUserIDClosure = { [weak self] userID in
+            .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }
         canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
         canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)

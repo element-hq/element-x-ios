@@ -18,7 +18,6 @@ import Combine
 import SwiftUI
 
 struct RoomDetailsScreenCoordinatorParameters {
-    let accountUserID: String
     let roomProxy: RoomProxyProtocol
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
@@ -48,8 +47,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     }
         
     init(parameters: RoomDetailsScreenCoordinatorParameters) {
-        viewModel = RoomDetailsScreenViewModel(accountUserID: parameters.accountUserID,
-                                               roomProxy: parameters.roomProxy,
+        viewModel = RoomDetailsScreenViewModel(roomProxy: parameters.roomProxy,
                                                clientProxy: parameters.clientProxy,
                                                mediaProvider: parameters.mediaProvider,
                                                analyticsService: parameters.analyticsService,

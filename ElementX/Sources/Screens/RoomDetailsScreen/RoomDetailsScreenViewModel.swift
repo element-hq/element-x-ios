@@ -20,7 +20,6 @@ import SwiftUI
 typealias RoomDetailsScreenViewModelType = StateStoreViewModel<RoomDetailsScreenViewState, RoomDetailsScreenViewAction>
 
 class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScreenViewModelProtocol {
-    private let accountUserID: String
     private let roomProxy: RoomProxyProtocol
     private let clientProxy: ClientProxyProtocol
     private let analyticsService: AnalyticsService
@@ -28,12 +27,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
-
-    private var accountOwner: RoomMemberProxyProtocol? {
-        didSet {
-            Task { await updatePowerLevelPermissions() }
-        }
-    }
 
     private var dmRecipient: RoomMemberProxyProtocol?
     
@@ -43,15 +36,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(accountUserID: String,
-         roomProxy: RoomProxyProtocol,
+    init(roomProxy: RoomProxyProtocol,
          clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          analyticsService: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol) {
-        self.accountUserID = accountUserID
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
@@ -74,9 +65,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                    imageProvider: mediaProvider)
         
         updateRoomInfo()
+        Task { await updatePowerLevelPermissions() }
                 
         setupRoomSubscription()
-        fetchMembers()
+        Task { await fetchMembersIfNeeded() }
         
         setupNotificationSettingsSubscription()
         fetchNotificationSettings()
@@ -155,13 +147,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         }
     }
     
-    private func fetchMembers() {
-        Task {
-            await fetchMembersIfNeeded()
-            await fetchAccountOwner()
-        }
-    }
-    
     private func fetchMembersIfNeeded() async {
         // We need to fetch members just in 1-to-1 chat to get the member object for the other person
         guard roomProxy.isEncryptedOneToOneRoom else {
@@ -181,24 +166,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         await roomProxy.updateMembers()
     }
     
-    private func fetchAccountOwner() async {
-        switch await roomProxy.getMember(userID: accountUserID) {
-        case .success(let member):
-            accountOwner = member
-        case .failure(let error):
-            MXLog.error("Failed (error: \(error) to get account owner member with id: \(accountUserID), in room: \(roomProxy.id)")
-        }
-    }
-    
     private func updatePowerLevelPermissions() async {
-        async let canInviteUsers = roomProxy.canUserInvite(userID: roomProxy.ownUserID)
-        async let canEditRoomName = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName)
-        async let canEditRoomTopic = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic)
-        async let canEditRoomAvatar = roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar)
-        await state.canInviteUsers = canInviteUsers == .success(true)
-        await state.canEditRoomName = canEditRoomName == .success(true)
-        await state.canEditRoomTopic = canEditRoomTopic == .success(true)
-        await state.canEditRoomAvatar = canEditRoomAvatar == .success(true)
+        async let canInviteUsers = roomProxy.canUserInvite(userID: roomProxy.ownUserID) == .success(true)
+        // Can't use async let because the mocks aren't thread safe when calling the same method 🤦‍♂️
+        state.canEditRoomName = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName) == .success(true)
+        state.canEditRoomTopic = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic) == .success(true)
+        state.canEditRoomAvatar = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar) == .success(true)
+        state.canInviteUsers = await canInviteUsers
     }
     
     private func setupNotificationSettingsSubscription() {

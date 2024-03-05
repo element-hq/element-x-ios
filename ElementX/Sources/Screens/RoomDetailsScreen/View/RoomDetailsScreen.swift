@@ -304,8 +304,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
         let appSettings = AppSettings()
         
-        return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
-                                          roomProxy: roomProxy,
+        return RoomDetailsScreenViewModel(roomProxy: roomProxy,
                                           clientProxy: ClientProxyMock(.init()),
                                           mediaProvider: MockMediaProvider(),
                                           analyticsService: ServiceLocator.shared.analytics,
@@ -331,8 +330,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
         
-        return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
-                                          roomProxy: roomProxy,
+        return RoomDetailsScreenViewModel(roomProxy: roomProxy,
                                           clientProxy: ClientProxyMock(.init()),
                                           mediaProvider: MockMediaProvider(),
                                           analyticsService: ServiceLocator.shared.analytics,
@@ -357,8 +355,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
         
-        return RoomDetailsScreenViewModel(accountUserID: RoomMemberProxyMock.mockMe.userID,
-                                          roomProxy: roomProxy,
+        return RoomDetailsScreenViewModel(roomProxy: roomProxy,
                                           clientProxy: ClientProxyMock(.init()),
                                           mediaProvider: MockMediaProvider(),
                                           analyticsService: ServiceLocator.shared.analytics,

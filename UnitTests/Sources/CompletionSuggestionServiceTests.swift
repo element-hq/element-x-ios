@@ -27,7 +27,7 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         cancellables.removeAll()
     }
     
-    func testUserSuggestons() async throws {
+    func testUserSuggestions() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
         let roomProxyMock = RoomProxyMock(with: .init(name: "test", members: members))
@@ -64,7 +64,7 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    func testUserSuggestonsIncludingAllUsers() async throws {
+    func testUserSuggestionsIncludingAllUsers() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
         let roomProxyMock = RoomProxyMock(with: .init(name: "test", members: members, canUserTriggerRoomNotification: true))

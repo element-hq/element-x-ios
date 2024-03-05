@@ -520,8 +520,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        let params = RoomDetailsScreenCoordinatorParameters(accountUserID: userSession.userID,
-                                                            roomProxy: roomProxy,
+        let params = RoomDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
                                                             clientProxy: userSession.clientProxy,
                                                             mediaProvider: userSession.mediaProvider,
                                                             analyticsService: analytics,

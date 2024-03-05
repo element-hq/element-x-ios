@@ -588,8 +588,7 @@ class MockScreen: Identifiable {
                                                       members: members,
                                                       memberForID: .mockMe,
                                                       canUserInvite: false))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
-                                                                             roomProxy: roomProxy,
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                              clientProxy: ClientProxyMock(.init()),
                                                                              mediaProvider: MockMediaProvider(),
                                                                              analyticsService: ServiceLocator.shared.analytics,
@@ -611,8 +610,7 @@ class MockScreen: Identifiable {
                                                       members: members,
                                                       memberForID: .mockMe,
                                                       canUserInvite: false))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
-                                                                             roomProxy: roomProxy,
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                              clientProxy: ClientProxyMock(.init()),
                                                                              mediaProvider: MockMediaProvider(),
                                                                              analyticsService: ServiceLocator.shared.analytics,
@@ -635,8 +633,7 @@ class MockScreen: Identifiable {
                                                       members: members,
                                                       memberForID: .mockMeAdmin,
                                                       canUserInvite: false))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
-                                                                             roomProxy: roomProxy,
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                              clientProxy: ClientProxyMock(.init()),
                                                                              mediaProvider: MockMediaProvider(),
                                                                              analyticsService: ServiceLocator.shared.analytics,
@@ -656,8 +653,7 @@ class MockScreen: Identifiable {
                                                       members: members,
                                                       memberForID: owner,
                                                       canUserInvite: true))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
-                                                                             roomProxy: roomProxy,
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                              clientProxy: ClientProxyMock(.init()),
                                                                              mediaProvider: MockMediaProvider(),
                                                                              analyticsService: ServiceLocator.shared.analytics,
@@ -678,8 +674,7 @@ class MockScreen: Identifiable {
                                                       members: members,
                                                       memberForID: .mockMe,
                                                       canUserInvite: false))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
-                                                                             roomProxy: roomProxy,
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                              clientProxy: ClientProxyMock(.init()),
                                                                              mediaProvider: MockMediaProvider(),
                                                                              analyticsService: ServiceLocator.shared.analytics,

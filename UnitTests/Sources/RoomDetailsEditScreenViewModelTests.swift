@@ -30,61 +30,57 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     }
     
     func testCannotSaveOnLanding() {
-        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room"))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         XCTAssertFalse(context.viewState.canSave)
     }
     
-    func testCanEdit() {
-        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room"))
+    func testCanEdit() async throws {
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.canEditName }
+        try await deferred.fulfill()
+        
         XCTAssertTrue(context.viewState.canEditAvatar)
         XCTAssertTrue(context.viewState.canEditName)
         XCTAssertTrue(context.viewState.canEditTopic)
     }
     
     func testCannotEdit() {
-        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: []),
-                       roomProxyConfiguration: .init(name: "Some room"))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMe]))
         XCTAssertFalse(context.viewState.canEditAvatar)
         XCTAssertFalse(context.viewState.canEditName)
         XCTAssertFalse(context.viewState.canEditTopic)
     }
     
     func testNameDidChange() {
-        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room"))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         context.name = "name"
         XCTAssertTrue(context.viewState.nameDidChange)
         XCTAssertTrue(context.viewState.canSave)
     }
     
     func testTopicDidChange() {
-        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room"))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         context.topic = "topic"
         XCTAssertTrue(context.viewState.topicDidChange)
         XCTAssertTrue(context.viewState.canSave)
     }
     
     func testAvatarDidChange() {
-        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", avatarURL: .picturesDirectory))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", avatarURL: .picturesDirectory, members: [.mockMeAdmin]))
         context.send(viewAction: .removeImage)
         XCTAssertTrue(context.viewState.avatarDidChange)
         XCTAssertTrue(context.viewState.canSave)
     }
     
     func testEmptyNameCannotBeSaved() {
-        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room"))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         context.name = ""
         XCTAssertFalse(context.viewState.canSave)
     }
     
     func testSaveShowsSheet() {
-        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room"))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         context.name = "name"
         XCTAssertFalse(context.showMediaSheet)
         context.send(viewAction: .presentMediaSource)
@@ -92,8 +88,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     }
     
     func testSaveTriggersViewModelAction() async throws {
-        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room"))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             action == .saveFinished
@@ -107,16 +102,14 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     }
     
     func testErrorShownOnFailedFetchOfMedia() async throws {
-        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room"))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         viewModel.didSelectMediaUrl(url: .picturesDirectory)
         try? await Task.sleep(for: .milliseconds(100))
         XCTAssertNotNil(userIndicatorController.alertInfo)
     }
     
     func testDeleteAvatar() {
-        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
-                       roomProxyConfiguration: .init(name: "Some room", avatarURL: .picturesDirectory))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", avatarURL: .picturesDirectory, members: [.mockMeAdmin]))
         XCTAssertNotNil(context.viewState.avatarURL)
         context.send(viewAction: .removeImage)
         XCTAssertNil(context.viewState.avatarURL)
@@ -124,11 +117,10 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     
     // MARK: - Private
     
-    private func setupViewModel(accountOwner: RoomMemberProxyMock, roomProxyConfiguration: RoomProxyMockConfiguration) {
+    private func setupViewModel(roomProxyConfiguration: RoomProxyMockConfiguration) {
         userIndicatorController = UserIndicatorControllerMock.default
-        viewModel = .init(accountOwner: accountOwner,
+        viewModel = .init(roomProxy: RoomProxyMock(with: roomProxyConfiguration),
                           mediaProvider: MockMediaProvider(),
-                          roomProxy: RoomProxyMock(with: roomProxyConfiguration),
                           userIndicatorController: userIndicatorController)
     }
 }
