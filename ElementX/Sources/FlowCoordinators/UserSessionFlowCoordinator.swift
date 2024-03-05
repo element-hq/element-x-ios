@@ -26,6 +26,7 @@ enum UserSessionFlowCoordinatorAction {
 
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
+    private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let windowManager: WindowManagerProtocol
     private let bugReportService: BugReportServiceProtocol
@@ -56,7 +57,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     init(userSession: UserSessionProtocol,
-         navigationSplitCoordinator: NavigationSplitCoordinator,
+         navigationRootCoordinator: NavigationRootCoordinator,
          windowManager: WindowManagerProtocol,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
@@ -65,10 +66,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          analytics: AnalyticsService) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
-        self.navigationSplitCoordinator = navigationSplitCoordinator
+        self.navigationRootCoordinator = navigationRootCoordinator
         self.windowManager = windowManager
         self.bugReportService = bugReportService
         self.appSettings = appSettings
+        
+        navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
@@ -328,6 +331,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
     }
     
     private func runLogoutFlow() async {

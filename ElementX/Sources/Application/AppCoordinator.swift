@@ -458,9 +458,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             fatalError("User session not setup")
         }
         
-        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
-                                                                    navigationSplitCoordinator: navigationSplitCoordinator,
+                                                                    navigationRootCoordinator: navigationRootCoordinator,
                                                                     windowManager: windowManager,
                                                                     appLockService: appLockFlowCoordinator.appLockService,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
@@ -486,8 +485,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         userSessionFlowCoordinator.start()
         
         self.userSessionFlowCoordinator = userSessionFlowCoordinator
-        
-        navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
 
         if let storedAppRoute {
             userSessionFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
