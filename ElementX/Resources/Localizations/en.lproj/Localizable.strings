@@ -48,6 +48,7 @@
 "action_enter_pin" = "Enter PIN";
 "action_forgot_password" = "Forgot password?";
 "action_forward" = "Forward";
+"action_go_back" = "Go back";
 "action_invite" = "Invite";
 "action_invite_friends" = "Invite people";
 "action_invite_friends_to_app" = "Invite people to %1$@";
@@ -162,6 +163,7 @@
 "common_room" = "Room";
 "common_room_name" = "Room name";
 "common_room_name_placeholder" = "e.g. your project name";
+"common_saved_changes" = "Saved changes";
 "common_saving" = "Saving";
 "common_screen_lock" = "Screen lock";
 "common_search_for_someone" = "Search for someone";
@@ -217,6 +219,8 @@
 "dialog_permission_notification" = "In order to let the application display notifications, please grant the permission in the system settings.";
 "dialog_title_confirmation" = "Confirmation";
 "dialog_title_warning" = "Warning";
+"dialog_unsaved_changes_description_ios" = "Your changes won’t be saved";
+"dialog_unsaved_changes_title" = "Save changes?";
 "emoji_picker_category_activity" = "Activities";
 "emoji_picker_category_flags" = "Flags";
 "emoji_picker_category_foods" = "Food & Drink";
@@ -510,6 +514,8 @@
 "screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
 "screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_change_role_moderators_title" = "Edit Moderators";
+"screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
+"screen_room_change_role_unsaved_changes_title" = "Save changes?";
 "screen_room_details_add_topic_title" = "Add topic";
 "screen_room_details_already_a_member" = "Already a member";
 "screen_room_details_already_invited" = "Already invited";
@@ -577,6 +583,9 @@
 "screen_room_retry_send_menu_send_again_action" = "Send again";
 "screen_room_retry_send_menu_title" = "Your message failed to send";
 "screen_room_roles_and_permissions_admins" = "Admins";
+"screen_room_roles_and_permissions_change_my_role" = "Change my role";
+"screen_room_roles_and_permissions_change_role_demote_to_member" = "Demote to member";
+"screen_room_roles_and_permissions_change_role_demote_to_moderator" = "Demote to moderator";
 "screen_room_roles_and_permissions_member_moderation" = "Member moderation";
 "screen_room_roles_and_permissions_messages_and_content" = "Messages and content";
 "screen_room_roles_and_permissions_moderators" = "Moderators";
@@ -605,7 +614,7 @@
 "screen_roomlist_filter_rooms" = "Rooms";
 "screen_roomlist_filter_rooms_empty_state_title" = "You’re not in any room yet";
 "screen_roomlist_filter_unreads" = "Unreads";
-"screen_roomlist_filter_unreads_empty_state_title" = "Congrats!\nYou don’t have any unread message!";
+"screen_roomlist_filter_unreads_empty_state_title" = "Congrats!\nYou don’t have any unread messages!";
 "screen_roomlist_main_space_title" = "Chats";
 "screen_roomlist_mark_as_read" = "Mark as read";
 "screen_roomlist_mark_as_unread" = "Mark as unread";

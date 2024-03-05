@@ -54,6 +54,7 @@ struct RoomListFiltersEmptyStateView: View {
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textSecondary)
         }
+        .padding(.horizontal, 60)
     }
 }
 
