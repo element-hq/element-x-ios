@@ -27,9 +27,11 @@ class ReportContentScreenViewModelTests: XCTestCase {
         // Given the report content view for some content.
         let roomProxy = RoomProxyMock(with: .init(name: "test"))
         roomProxy.reportContentReasonReturnValue = .success(())
+        let clientProxy = ClientProxyMock(.init())
         let viewModel = ReportContentScreenViewModel(eventID: eventID,
                                                      senderID: senderID,
-                                                     roomProxy: roomProxy)
+                                                     roomProxy: roomProxy,
+                                                     clientProxy: clientProxy)
         
         // When reporting the content without ignoring the user.
         viewModel.state.bindings.reasonText = reportReason
@@ -46,18 +48,19 @@ class ReportContentScreenViewModelTests: XCTestCase {
         XCTAssertEqual(roomProxy.reportContentReasonCallsCount, 1, "The content should always be reported.")
         XCTAssertEqual(roomProxy.reportContentReasonReceivedArguments?.eventID, eventID, "The event ID should match the content being reported.")
         XCTAssertEqual(roomProxy.reportContentReasonReceivedArguments?.reason, reportReason, "The reason should match the user input.")
-        XCTAssertEqual(roomProxy.ignoreUserCallsCount, 0, "A call to ignore a user should not have been made.")
-        XCTAssertNil(roomProxy.ignoreUserReceivedUserID, "The sender shouldn't have been ignored.")
+        XCTAssertEqual(clientProxy.ignoreUserCallsCount, 0, "A call to ignore a user should not have been made.")
+        XCTAssertNil(clientProxy.ignoreUserReceivedUserID, "The sender shouldn't have been ignored.")
     }
     
     func testReportIgnoringSender() async throws {
         // Given the report content view for some content.
         let roomProxy = RoomProxyMock(with: .init(name: "test"))
         roomProxy.reportContentReasonReturnValue = .success(())
-        roomProxy.ignoreUserReturnValue = .success(())
+        let clientProxy = ClientProxyMock(.init())
         let viewModel = ReportContentScreenViewModel(eventID: eventID,
                                                      senderID: senderID,
-                                                     roomProxy: roomProxy)
+                                                     roomProxy: roomProxy,
+                                                     clientProxy: clientProxy)
         
         // When reporting the content and also ignoring the user.
         viewModel.state.bindings.reasonText = reportReason
@@ -75,7 +78,7 @@ class ReportContentScreenViewModelTests: XCTestCase {
         XCTAssertEqual(roomProxy.reportContentReasonCallsCount, 1, "The content should always be reported.")
         XCTAssertEqual(roomProxy.reportContentReasonReceivedArguments?.eventID, eventID, "The event ID should match the content being reported.")
         XCTAssertEqual(roomProxy.reportContentReasonReceivedArguments?.reason, reportReason, "The reason should match the user input.")
-        XCTAssertEqual(roomProxy.ignoreUserCallsCount, 1, "A call should have been made to ignore the sender.")
-        XCTAssertEqual(roomProxy.ignoreUserReceivedUserID, senderID, "The ignored user ID should match the sender.")
+        XCTAssertEqual(clientProxy.ignoreUserCallsCount, 1, "A call should have been made to ignore the sender.")
+        XCTAssertEqual(clientProxy.ignoreUserReceivedUserID, senderID, "The ignored user ID should match the sender.")
     }
 }

@@ -23,16 +23,18 @@ class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportCont
     private let eventID: String
     private let senderID: String
     private let roomProxy: RoomProxyProtocol
+    private let clientProxy: ClientProxyProtocol
     private let actionsSubject: PassthroughSubject<ReportContentScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<ReportContentScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(eventID: String, senderID: String, roomProxy: RoomProxyProtocol) {
+    init(eventID: String, senderID: String, roomProxy: RoomProxyProtocol, clientProxy: ClientProxyProtocol) {
         self.eventID = eventID
         self.senderID = senderID
         self.roomProxy = roomProxy
+        self.clientProxy = clientProxy
         
         super.init(initialViewState: ReportContentScreenViewState(bindings: ReportContentScreenViewStateBindings(reasonText: "", ignoreUser: false)))
     }
@@ -55,14 +57,14 @@ class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportCont
         
         if case let .failure(error) = await roomProxy.reportContent(eventID, reason: state.bindings.reasonText) {
             MXLog.error("Submit Report Content failed: \(error)")
-            actionsSubject.send(.submitFailed(error: error))
+            actionsSubject.send(.submitFailed(message: error.localizedDescription))
             return
         }
         
         // Ignore the sender if the user wants to.
-        if state.bindings.ignoreUser, case let .failure(error) = await roomProxy.ignoreUser(senderID) {
+        if state.bindings.ignoreUser, case let .failure(error) = await clientProxy.ignoreUser(senderID) {
             MXLog.error("Ignore user failed: \(error)")
-            actionsSubject.send(.submitFailed(error: error))
+            actionsSubject.send(.submitFailed(message: error.localizedDescription))
             return
         }
         

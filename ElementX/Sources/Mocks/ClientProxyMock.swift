@@ -18,7 +18,7 @@ import Combine
 import Foundation
 
 struct ClientProxyMockConfiguration {
-    let userID: String
+    var userID: String = RoomMemberProxyMock.mockMe.userID
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol? = RoomSummaryProviderMock(.init())
 }
@@ -62,8 +62,8 @@ extension ClientProxyMock {
         searchUsersSearchTermLimitReturnValue = .success(.init(results: [], limited: false))
         profileForReturnValue = .success(.init(userID: "@a:b.com", displayName: "Some user"))
         sessionVerificationControllerProxyReturnValue = .failure(.failedRetrievingSessionVerificationController)
-        ignoreUserReturnValue = .failure(.failedIgnoringUser)
-        unignoreUserReturnValue = .failure(.failedUnignoringUser)
+        ignoreUserReturnValue = .success(())
+        unignoreUserReturnValue = .success(())
         
         loadMediaContentForSourceThrowableError = ClientProxyError.failedLoadingMedia
         loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.failedLoadingMedia
