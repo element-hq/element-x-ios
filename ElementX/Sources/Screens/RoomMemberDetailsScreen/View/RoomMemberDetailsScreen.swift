@@ -36,7 +36,8 @@ struct RoomMemberDetailsScreen: View {
         Form {
             headerSection
             
-            if context.viewState.memberDetails != nil, !context.viewState.isOwnMemberDetails {
+            if let memberDetails = context.viewState.memberDetails,
+               !memberDetails.isAccountOwner {
                 directChatSection
                 blockUserSection
             }
@@ -123,9 +124,8 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         
-        return RoomMemberDetailsScreenViewModel(userID: member.userID,
-                                                roomProxy: roomProxyMock,
-                                                clientProxy: ClientProxyMock(.init()),
+        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                userID: member.userID,
                                                 mediaProvider: MockMediaProvider(),
                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
@@ -135,9 +135,8 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         
-        return RoomMemberDetailsScreenViewModel(userID: member.userID,
-                                                roomProxy: roomProxyMock,
-                                                clientProxy: ClientProxyMock(.init()),
+        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                userID: member.userID,
                                                 mediaProvider: MockMediaProvider(),
                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
@@ -147,9 +146,8 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         
-        return RoomMemberDetailsScreenViewModel(userID: member.userID,
-                                                roomProxy: roomProxyMock,
-                                                clientProxy: ClientProxyMock(.init()),
+        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                userID: member.userID,
                                                 mediaProvider: MockMediaProvider(),
                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()

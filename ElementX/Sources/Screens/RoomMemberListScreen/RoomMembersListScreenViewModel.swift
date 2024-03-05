@@ -106,14 +106,11 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                                invitedMembers: roomMembersDetails.invitedMembers,
                                bannedMembers: roomMembersDetails.bannedMembers,
                                bindings: state.bindings)
-            
-            async let canInviteUsers = roomProxy.canUserInvite(userID: roomProxy.ownUserID)
-            async let canKickUsers = roomProxy.canUserKick(userID: roomProxy.ownUserID)
-            async let canBanUsers = roomProxy.canUserBan(userID: roomProxy.ownUserID)
-            self.state.canInviteUsers = await canInviteUsers == .success(true)
-            self.state.canKickUsers = await canKickUsers == .success(true)
-            self.state.canBanUsers = await canBanUsers == .success(true)
-            
+            if let accountOwner = roomMembersDetails.accountOwner {
+                self.state.canInviteUsers = accountOwner.canInviteUsers
+                self.state.canKickUsers = accountOwner.canKickUsers
+                self.state.canBanUsers = accountOwner.canBanUsers
+            }
             if state.bindings.mode == .banned, roomMembersDetails.bannedMembers.isEmpty {
                 state.bindings.mode = .members
             }
@@ -128,8 +125,13 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             var invitedMembers: [RoomMemberDetails] = .init()
             var joinedMembers: [RoomMemberDetails] = .init()
             var bannedMembers: [RoomMemberDetails] = .init()
+            var accountOwner: RoomMemberProxyProtocol?
             
             for member in members {
+                if accountOwner == nil, member.isAccountOwner {
+                    accountOwner = member
+                }
+                
                 switch member.membership {
                 case .invite:
                     invitedMembers.append(.init(withProxy: member))
@@ -144,7 +146,8 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             
             return .init(invitedMembers: invitedMembers,
                          joinedMembers: joinedMembers,
-                         bannedMembers: bannedMembers.sorted { $0.id.localizedStandardCompare($1.id) == .orderedAscending }) // Re-sort ignoring display name.
+                         bannedMembers: bannedMembers.sorted { $0.id.localizedStandardCompare($1.id) == .orderedAscending }, // Re-sort ignoring display name.
+                         accountOwner: accountOwner)
         }
         .value
     }
@@ -254,4 +257,5 @@ private struct RoomMembersDetails {
     var invitedMembers: [RoomMemberDetails]
     var joinedMembers: [RoomMemberDetails]
     var bannedMembers: [RoomMemberDetails]
+    var accountOwner: RoomMemberProxyProtocol?
 }

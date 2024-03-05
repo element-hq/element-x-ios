@@ -22,7 +22,7 @@ struct RoomMemberDetails: Identifiable, Hashable {
     let name: String?
     let avatarURL: URL?
     let permalink: URL?
-    
+    let isAccountOwner: Bool
     var isIgnored: Bool
     var isBanned: Bool
     
@@ -36,7 +36,7 @@ extension RoomMemberDetails {
         name = proxy.displayName
         avatarURL = proxy.avatarURL
         permalink = proxy.permalink
-        
+        isAccountOwner = proxy.isAccountOwner
         isIgnored = proxy.isIgnored
         isBanned = proxy.membership == .ban
         role = .init(proxy.role)
@@ -47,7 +47,7 @@ extension RoomMemberDetails {
         name = nil
         avatarURL = nil
         permalink = nil
-        
+        isAccountOwner = false
         isIgnored = false
         isBanned = false
         role = .user

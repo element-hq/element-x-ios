@@ -233,6 +233,20 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.failedRetrievingMember)
         }
     }
+    
+    func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        do {
+            try await room.ignoreUser(userId: userID)
+            return .success(())
+        } catch {
+            return .failure(.failedIgnoringUser)
+        }
+    }
 
     func leaveRoom() async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
@@ -395,24 +409,6 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func canUser(userID: String, sendStateEvent event: StateEventType) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserSendState(userId: userID, stateEvent: event))
-        } catch {
-            MXLog.error("Failed checking if the user can send \(event) with error: \(error)")
-            return .failure(.failedCheckingPermission)
-        }
-    }
-    
-    func canUserInvite(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserInvite(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can invite with error: \(error)")
-            return .failure(.failedCheckingPermission)
-        }
-    }
-    
     func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError> {
         do {
             return try await .success(room.canUserRedactOther(userId: userID))
@@ -427,24 +423,6 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.canUserRedactOwn(userId: userID))
         } catch {
             MXLog.error("Failed checking if the user can redact self with error: \(error)")
-            return .failure(.failedCheckingPermission)
-        }
-    }
-    
-    func canUserKick(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserKick(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can kick with error: \(error)")
-            return .failure(.failedCheckingPermission)
-        }
-    }
-    
-    func canUserBan(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserBan(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can ban with error: \(error)")
             return .failure(.failedCheckingPermission)
         }
     }

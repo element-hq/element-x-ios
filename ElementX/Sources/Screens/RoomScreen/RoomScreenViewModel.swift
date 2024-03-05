@@ -589,7 +589,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             guard
                 let members = await roomProxy.members(),
                 members.count == 2,
-                let otherPerson = members.first(where: { $0.userID != roomProxy.ownUserID && $0.membership == .leave })
+                let otherPerson = members.first(where: { !$0.isAccountOwner && $0.membership == .leave })
             else {
                 userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
                 return

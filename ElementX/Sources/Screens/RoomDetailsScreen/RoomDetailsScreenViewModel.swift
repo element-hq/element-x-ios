@@ -20,13 +20,17 @@ import SwiftUI
 typealias RoomDetailsScreenViewModelType = StateStoreViewModel<RoomDetailsScreenViewState, RoomDetailsScreenViewAction>
 
 class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScreenViewModelProtocol {
+    private let accountUserID: String
     private let roomProxy: RoomProxyProtocol
-    private let clientProxy: ClientProxyProtocol
     private let analyticsService: AnalyticsService
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
+
+    private var accountOwner: RoomMemberProxyProtocol? {
+        didSet { updatePowerLevelPermissions() }
+    }
 
     private var dmRecipient: RoomMemberProxyProtocol?
     
@@ -36,15 +40,15 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(roomProxy: RoomProxyProtocol,
-         clientProxy: ClientProxyProtocol,
+    init(accountUserID: String,
+         roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          analyticsService: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol) {
+        self.accountUserID = accountUserID
         self.roomProxy = roomProxy
-        self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
@@ -65,10 +69,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                    imageProvider: mediaProvider)
         
         updateRoomInfo()
-        Task { await updatePowerLevelPermissions() }
                 
         setupRoomSubscription()
-        Task { await fetchMembersIfNeeded() }
+        fetchMembers()
         
         setupNotificationSettingsSubscription()
         fetchNotificationSettings()
@@ -100,7 +103,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapUnignore:
             state.bindings.ignoreUserRoomAlertItem = .init(action: .unignore)
         case .processTapEdit, .processTapAddTopic:
-            actionsSubject.send(.requestEditDetailsPresentation)
+            guard let accountOwner else {
+                MXLog.error("Missing account owner when presenting the room's edit details screen")
+                return
+            }
+            actionsSubject.send(.requestEditDetailsPresentation(accountOwner))
         case .ignoreConfirmed:
             Task { await ignore() }
         case .unignoreConfirmed:
@@ -147,6 +154,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         }
     }
     
+    private func fetchMembers() {
+        Task {
+            await fetchMembersIfNeeded()
+            await fetchAccountOwner()
+        }
+    }
+    
     private func fetchMembersIfNeeded() async {
         // We need to fetch members just in 1-to-1 chat to get the member object for the other person
         guard roomProxy.isEncryptedOneToOneRoom else {
@@ -155,9 +169,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         roomProxy.membersPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self, ownUserID = roomProxy.ownUserID] members in
+            .sink { [weak self] members in
                 guard let self else { return }
-                let dmRecipient = members.first(where: { $0.userID != ownUserID })
+                let dmRecipient = members.first(where: { !$0.isAccountOwner })
                 self.dmRecipient = dmRecipient
                 self.state.dmRecipient = dmRecipient.map(RoomMemberDetails.init(withProxy:))
             }
@@ -166,13 +180,20 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         await roomProxy.updateMembers()
     }
     
-    private func updatePowerLevelPermissions() async {
-        async let canInviteUsers = roomProxy.canUserInvite(userID: roomProxy.ownUserID) == .success(true)
-        // Can't use async let because the mocks aren't thread safe when calling the same method 🤦‍♂️
-        state.canEditRoomName = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName) == .success(true)
-        state.canEditRoomTopic = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic) == .success(true)
-        state.canEditRoomAvatar = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar) == .success(true)
-        state.canInviteUsers = await canInviteUsers
+    private func fetchAccountOwner() async {
+        switch await roomProxy.getMember(userID: accountUserID) {
+        case .success(let member):
+            accountOwner = member
+        case .failure(let error):
+            MXLog.error("Failed (error: \(error) to get account owner member with id: \(accountUserID), in room: \(roomProxy.id)")
+        }
+    }
+    
+    private func updatePowerLevelPermissions() {
+        state.canInviteUsers = accountOwner?.canInviteUsers ?? false
+        state.canEditRoomName = accountOwner?.canSendStateEvent(type: .roomName) ?? false
+        state.canEditRoomTopic = accountOwner?.canSendStateEvent(type: .roomTopic) ?? false
+        state.canEditRoomAvatar = accountOwner?.canSendStateEvent(type: .roomAvatar) ?? false
     }
     
     private func setupNotificationSettingsSubscription() {
@@ -259,14 +280,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
 
     private func ignore() async {
-        guard let dmUserID = dmRecipient?.userID else {
-            MXLog.error("Attempting to ignore a nil DM Recipient")
-            state.bindings.alertInfo = .init(id: .unknown)
-            return
-        }
-        
         state.isProcessingIgnoreRequest = true
-        let result = await clientProxy.ignoreUser(dmUserID)
+        let result = await dmRecipient?.ignoreUser()
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
@@ -274,20 +289,14 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             var dmRecipient = state.dmRecipient
             dmRecipient?.isIgnored = true
             state.dmRecipient = dmRecipient
-        case .failure:
+        case .failure, .none:
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }
 
     private func unignore() async {
-        guard let dmUserID = dmRecipient?.userID else {
-            MXLog.error("Attempting to unignore a nil DM Recipient")
-            state.bindings.alertInfo = .init(id: .unknown)
-            return
-        }
-        
         state.isProcessingIgnoreRequest = true
-        let result = await clientProxy.unignoreUser(dmUserID)
+        let result = await dmRecipient?.unignoreUser()
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
@@ -295,7 +304,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             var dmRecipient = state.dmRecipient
             dmRecipient?.isIgnored = false
             state.dmRecipient = dmRecipient
-        case .failure:
+        case .failure, .none:
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }

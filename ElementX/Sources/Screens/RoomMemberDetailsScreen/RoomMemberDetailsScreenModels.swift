@@ -23,7 +23,6 @@ enum RoomMemberDetailsScreenViewModelAction {
 struct RoomMemberDetailsScreenViewState: BindableState {
     let userID: String
     var memberDetails: RoomMemberDetails?
-    var isOwnMemberDetails = false
     var isProcessingIgnoreRequest = false
 
     var bindings: RoomMemberDetailsScreenViewStateBindings

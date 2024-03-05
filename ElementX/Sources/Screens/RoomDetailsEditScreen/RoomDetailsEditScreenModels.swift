@@ -34,9 +34,9 @@ struct RoomDetailsEditScreenViewState: BindableState {
     let initialAvatarURL: URL?
     let initialName: String
     let initialTopic: String
-    var canEditAvatar = false
-    var canEditName = false
-    var canEditTopic = false
+    let canEditAvatar: Bool
+    let canEditName: Bool
+    let canEditTopic: Bool
     var avatarURL: URL?
     var localMedia: MediaInfo?
 

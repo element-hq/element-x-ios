@@ -28,7 +28,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         self.roomProxy = roomProxy
         suggestionsPublisher = suggestionTriggerSubject
             .combineLatest(roomProxy.membersPublisher)
-            .map { [weak self, ownUserID = roomProxy.ownUserID] suggestionPattern, members -> [SuggestionItem] in
+            .map { [weak self] suggestionPattern, members -> [SuggestionItem] in
                 guard let self,
                       let suggestionPattern else {
                     return []
@@ -38,7 +38,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                 case .user:
                     var membersSuggestion = members
                         .compactMap { member -> SuggestionItem? in
-                            guard member.userID != ownUserID,
+                            guard !member.isAccountOwner,
                                   member.membership == .join,
                                   Self.isIncluded(searchText: suggestionPattern.text, userID: member.userID, displayName: member.displayName) else {
                                 return nil

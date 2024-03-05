@@ -21,7 +21,6 @@ typealias RoomMemberDetailsScreenViewModelType = StateStoreViewModel<RoomMemberD
 
 class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, RoomMemberDetailsScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
-    private let clientProxy: ClientProxyProtocol
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -33,13 +32,11 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userID: String,
-         roomProxy: RoomProxyProtocol,
-         clientProxy: ClientProxyProtocol,
+    init(roomProxy: RoomProxyProtocol,
+         userID: String,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
-        self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
         self.userIndicatorController = userIndicatorController
         
@@ -57,7 +54,6 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             case .success(let member):
                 roomMemberProxy = member
                 state.memberDetails = RoomMemberDetails(withProxy: member)
-                state.isOwnMemberDetails = member.userID == roomProxy.ownUserID
             case .failure(let error):
                 state.bindings.alertInfo = .init(id: .unknown)
                 MXLog.error("[RoomFlowCoordinator] Failed to get member: \(error)")
@@ -104,7 +100,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
         
         state.isProcessingIgnoreRequest = true
-        let result = await clientProxy.ignoreUser(roomMemberProxy.userID)
+        let result = await roomMemberProxy.ignoreUser()
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
@@ -122,7 +118,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
         
         state.isProcessingIgnoreRequest = true
-        let result = await clientProxy.unignoreUser(roomMemberProxy.userID)
+        let result = await roomMemberProxy.unignoreUser()
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:

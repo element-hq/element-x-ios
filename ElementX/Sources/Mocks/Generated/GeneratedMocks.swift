@@ -2253,6 +2253,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingMembership = value }
     }
     var underlyingMembership: MembershipState!
+    var isAccountOwner: Bool {
+        get { return underlyingIsAccountOwner }
+        set(value) { underlyingIsAccountOwner = value }
+    }
+    var underlyingIsAccountOwner: Bool!
     var isIgnored: Bool {
         get { return underlyingIsIgnored }
         set(value) { underlyingIsIgnored = value }
@@ -2268,7 +2273,77 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingRole = value }
     }
     var underlyingRole: RoomMemberRole!
+    var canInviteUsers: Bool {
+        get { return underlyingCanInviteUsers }
+        set(value) { underlyingCanInviteUsers = value }
+    }
+    var underlyingCanInviteUsers: Bool!
+    var canKickUsers: Bool {
+        get { return underlyingCanKickUsers }
+        set(value) { underlyingCanKickUsers = value }
+    }
+    var underlyingCanKickUsers: Bool!
+    var canBanUsers: Bool {
+        get { return underlyingCanBanUsers }
+        set(value) { underlyingCanBanUsers = value }
+    }
+    var underlyingCanBanUsers: Bool!
 
+    //MARK: - ignoreUser
+
+    var ignoreUserCallsCount = 0
+    var ignoreUserCalled: Bool {
+        return ignoreUserCallsCount > 0
+    }
+    var ignoreUserReturnValue: Result<Void, RoomMemberProxyError>!
+    var ignoreUserClosure: (() async -> Result<Void, RoomMemberProxyError>)?
+
+    func ignoreUser() async -> Result<Void, RoomMemberProxyError> {
+        ignoreUserCallsCount += 1
+        if let ignoreUserClosure = ignoreUserClosure {
+            return await ignoreUserClosure()
+        } else {
+            return ignoreUserReturnValue
+        }
+    }
+    //MARK: - unignoreUser
+
+    var unignoreUserCallsCount = 0
+    var unignoreUserCalled: Bool {
+        return unignoreUserCallsCount > 0
+    }
+    var unignoreUserReturnValue: Result<Void, RoomMemberProxyError>!
+    var unignoreUserClosure: (() async -> Result<Void, RoomMemberProxyError>)?
+
+    func unignoreUser() async -> Result<Void, RoomMemberProxyError> {
+        unignoreUserCallsCount += 1
+        if let unignoreUserClosure = unignoreUserClosure {
+            return await unignoreUserClosure()
+        } else {
+            return unignoreUserReturnValue
+        }
+    }
+    //MARK: - canSendStateEvent
+
+    var canSendStateEventTypeCallsCount = 0
+    var canSendStateEventTypeCalled: Bool {
+        return canSendStateEventTypeCallsCount > 0
+    }
+    var canSendStateEventTypeReceivedType: StateEventType?
+    var canSendStateEventTypeReceivedInvocations: [StateEventType] = []
+    var canSendStateEventTypeReturnValue: Bool!
+    var canSendStateEventTypeClosure: ((StateEventType) -> Bool)?
+
+    func canSendStateEvent(type: StateEventType) -> Bool {
+        canSendStateEventTypeCallsCount += 1
+        canSendStateEventTypeReceivedType = type
+        canSendStateEventTypeReceivedInvocations.append(type)
+        if let canSendStateEventTypeClosure = canSendStateEventTypeClosure {
+            return canSendStateEventTypeClosure(type)
+        } else {
+            return canSendStateEventTypeReturnValue
+        }
+    }
 }
 class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol {
     var mode: RoomNotificationModeProxy {
@@ -2440,6 +2515,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return await reportContentReasonClosure(eventID, reason)
         } else {
             return reportContentReasonReturnValue
+        }
+    }
+    //MARK: - ignoreUser
+
+    var ignoreUserCallsCount = 0
+    var ignoreUserCalled: Bool {
+        return ignoreUserCallsCount > 0
+    }
+    var ignoreUserReceivedUserID: String?
+    var ignoreUserReceivedInvocations: [String] = []
+    var ignoreUserReturnValue: Result<Void, RoomProxyError>!
+    var ignoreUserClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
+    func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        ignoreUserCallsCount += 1
+        ignoreUserReceivedUserID = userID
+        ignoreUserReceivedInvocations.append(userID)
+        if let ignoreUserClosure = ignoreUserClosure {
+            return await ignoreUserClosure(userID)
+        } else {
+            return ignoreUserReturnValue
         }
     }
     //MARK: - leaveRoom
@@ -2750,48 +2846,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return applyPowerLevelChangesReturnValue
         }
     }
-    //MARK: - canUser
-
-    var canUserUserIDSendStateEventCallsCount = 0
-    var canUserUserIDSendStateEventCalled: Bool {
-        return canUserUserIDSendStateEventCallsCount > 0
-    }
-    var canUserUserIDSendStateEventReceivedArguments: (userID: String, event: StateEventType)?
-    var canUserUserIDSendStateEventReceivedInvocations: [(userID: String, event: StateEventType)] = []
-    var canUserUserIDSendStateEventReturnValue: Result<Bool, RoomProxyError>!
-    var canUserUserIDSendStateEventClosure: ((String, StateEventType) async -> Result<Bool, RoomProxyError>)?
-
-    func canUser(userID: String, sendStateEvent event: StateEventType) async -> Result<Bool, RoomProxyError> {
-        canUserUserIDSendStateEventCallsCount += 1
-        canUserUserIDSendStateEventReceivedArguments = (userID: userID, event: event)
-        canUserUserIDSendStateEventReceivedInvocations.append((userID: userID, event: event))
-        if let canUserUserIDSendStateEventClosure = canUserUserIDSendStateEventClosure {
-            return await canUserUserIDSendStateEventClosure(userID, event)
-        } else {
-            return canUserUserIDSendStateEventReturnValue
-        }
-    }
-    //MARK: - canUserInvite
-
-    var canUserInviteUserIDCallsCount = 0
-    var canUserInviteUserIDCalled: Bool {
-        return canUserInviteUserIDCallsCount > 0
-    }
-    var canUserInviteUserIDReceivedUserID: String?
-    var canUserInviteUserIDReceivedInvocations: [String] = []
-    var canUserInviteUserIDReturnValue: Result<Bool, RoomProxyError>!
-    var canUserInviteUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
-
-    func canUserInvite(userID: String) async -> Result<Bool, RoomProxyError> {
-        canUserInviteUserIDCallsCount += 1
-        canUserInviteUserIDReceivedUserID = userID
-        canUserInviteUserIDReceivedInvocations.append(userID)
-        if let canUserInviteUserIDClosure = canUserInviteUserIDClosure {
-            return await canUserInviteUserIDClosure(userID)
-        } else {
-            return canUserInviteUserIDReturnValue
-        }
-    }
     //MARK: - canUserRedactOther
 
     var canUserRedactOtherUserIDCallsCount = 0
@@ -2832,48 +2886,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return await canUserRedactOwnUserIDClosure(userID)
         } else {
             return canUserRedactOwnUserIDReturnValue
-        }
-    }
-    //MARK: - canUserKick
-
-    var canUserKickUserIDCallsCount = 0
-    var canUserKickUserIDCalled: Bool {
-        return canUserKickUserIDCallsCount > 0
-    }
-    var canUserKickUserIDReceivedUserID: String?
-    var canUserKickUserIDReceivedInvocations: [String] = []
-    var canUserKickUserIDReturnValue: Result<Bool, RoomProxyError>!
-    var canUserKickUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
-
-    func canUserKick(userID: String) async -> Result<Bool, RoomProxyError> {
-        canUserKickUserIDCallsCount += 1
-        canUserKickUserIDReceivedUserID = userID
-        canUserKickUserIDReceivedInvocations.append(userID)
-        if let canUserKickUserIDClosure = canUserKickUserIDClosure {
-            return await canUserKickUserIDClosure(userID)
-        } else {
-            return canUserKickUserIDReturnValue
-        }
-    }
-    //MARK: - canUserBan
-
-    var canUserBanUserIDCallsCount = 0
-    var canUserBanUserIDCalled: Bool {
-        return canUserBanUserIDCallsCount > 0
-    }
-    var canUserBanUserIDReceivedUserID: String?
-    var canUserBanUserIDReceivedInvocations: [String] = []
-    var canUserBanUserIDReturnValue: Result<Bool, RoomProxyError>!
-    var canUserBanUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
-
-    func canUserBan(userID: String) async -> Result<Bool, RoomProxyError> {
-        canUserBanUserIDCallsCount += 1
-        canUserBanUserIDReceivedUserID = userID
-        canUserBanUserIDReceivedInvocations.append(userID)
-        if let canUserBanUserIDClosure = canUserBanUserIDClosure {
-            return await canUserBanUserIDClosure(userID)
-        } else {
-            return canUserBanUserIDReturnValue
         }
     }
     //MARK: - canUserTriggerRoomNotification

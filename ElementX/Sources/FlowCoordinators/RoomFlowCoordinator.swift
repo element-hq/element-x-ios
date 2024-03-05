@@ -256,8 +256,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .dismissRoom, .initial):
                 dismissRoom(animated: animated)
                 
-            case (.roomDetails, .presentRoomDetailsEditScreen, .roomDetailsEditScreen):
-                presentRoomDetailsEditScreen()
+            case (.roomDetails, .presentRoomDetailsEditScreen(let accountOwner), .roomDetailsEditScreen):
+                presentRoomDetailsEditScreen(accountOwner: accountOwner.value)
             case (.roomDetailsEditScreen, .dismissRoomDetailsEditScreen, .roomDetails):
                 break
                 
@@ -520,8 +520,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        let params = RoomDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
-                                                            clientProxy: userSession.clientProxy,
+        let params = RoomDetailsScreenCoordinatorParameters(accountUserID: userSession.userID,
+                                                            roomProxy: roomProxy,
                                                             mediaProvider: userSession.mediaProvider,
                                                             analyticsService: analytics,
                                                             userIndicatorController: userIndicatorController,
@@ -537,8 +537,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 dismissRoom(animated: animated)
             case .presentRoomMembersList:
                 stateMachine.tryEvent(.presentRoomMembersList)
-            case .presentRoomDetailsEditScreen:
-                stateMachine.tryEvent(.presentRoomDetailsEditScreen)
+            case .presentRoomDetailsEditScreen(let accountOwner):
+                stateMachine.tryEvent(.presentRoomDetailsEditScreen(accountOwner: .init(value: accountOwner)))
             case .presentNotificationSettingsScreen:
                 stateMachine.tryEvent(.presentNotificationSettingsScreen)
             case .presentInviteUsersScreen:
@@ -600,16 +600,17 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentRoomDetailsEditScreen() {
+    private func presentRoomDetailsEditScreen(accountOwner: RoomMemberProxyProtocol) {
         guard let roomProxy else {
             fatalError()
         }
         
         let stackCoordinator = NavigationStackCoordinator()
         
-        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(roomProxy: roomProxy,
+        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner,
                                                                                    mediaProvider: userSession.mediaProvider,
                                                                                    navigationStackCoordinator: stackCoordinator,
+                                                                                   roomProxy: roomProxy,
                                                                                    userIndicatorController: userIndicatorController,
                                                                                    orientationManager: orientationManager)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
@@ -638,7 +639,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = ReportContentScreenCoordinatorParameters(eventID: eventID,
                                                                   senderID: senderID,
                                                                   roomProxy: roomProxy,
-                                                                  clientProxy: userSession.clientProxy,
                                                                   userIndicatorController: userIndicatorController)
         let coordinator = ReportContentScreenCoordinator(parameters: parameters)
         
@@ -928,9 +928,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             fatalError()
         }
         
-        let params = RoomMemberDetailsScreenCoordinatorParameters(userID: userID,
-                                                                  roomProxy: roomProxy,
-                                                                  clientProxy: userSession.clientProxy,
+        let params = RoomMemberDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
+                                                                  userID: userID,
                                                                   mediaProvider: userSession.mediaProvider,
                                                                   userIndicatorController: userIndicatorController)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
@@ -1206,7 +1205,7 @@ private extension RoomFlowCoordinator {
         case presentRoomDetails(roomID: String)
         case dismissRoomDetails
         
-        case presentRoomDetailsEditScreen
+        case presentRoomDetailsEditScreen(accountOwner: HashableRoomMemberWrapper)
         case dismissRoomDetailsEditScreen
         
         case presentNotificationSettingsScreen

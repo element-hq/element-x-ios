@@ -142,7 +142,10 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
                               initialMode: RoomMembersListScreenMode = .members) -> RoomMembersListScreenViewModel {
         let mockAdmin = RoomMemberProxyMock.mockAdmin
         
-        let ownUserID = isAdmin ? mockAdmin.userID : RoomMemberProxyMock.mockMe.userID
+        if isAdmin {
+            mockAdmin.underlyingCanBanUsers = true
+            mockAdmin.underlyingIsAccountOwner = true
+        }
         
         var members: [RoomMemberProxyMock] = [
             .mockAlice,
@@ -157,10 +160,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         }
         
         return RoomMembersListScreenViewModel(initialMode: initialMode,
-                                              roomProxy: RoomProxyMock(with: .init(name: "Some room",
-                                                                                   members: members,
-                                                                                   ownUserID: ownUserID,
-                                                                                   canUserInvite: false)),
+                                              roomProxy: RoomProxyMock(with: .init(name: "Some room", members: members)),
                                               mediaProvider: MockMediaProvider(),
                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                               appSettings: ServiceLocator.shared.settings)

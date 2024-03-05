@@ -27,12 +27,19 @@ protocol RoomMemberProxyProtocol: AnyObject {
     var userID: String { get }
     var displayName: String? { get }
     var avatarURL: URL? { get }
-    
     var membership: MembershipState { get }
+    var isAccountOwner: Bool { get }
     var isIgnored: Bool { get }
     
     var powerLevel: Int { get }
     var role: RoomMemberRole { get }
+    var canInviteUsers: Bool { get }
+    var canKickUsers: Bool { get }
+    var canBanUsers: Bool { get }
+
+    func ignoreUser() async -> Result<Void, RoomMemberProxyError>
+    func unignoreUser() async -> Result<Void, RoomMemberProxyError>
+    func canSendStateEvent(type: StateEventType) -> Bool
 }
 
 extension RoomMemberProxyProtocol {

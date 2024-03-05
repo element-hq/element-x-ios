@@ -21,7 +21,6 @@ struct ReportContentScreenCoordinatorParameters {
     let eventID: String
     let senderID: String
     let roomProxy: RoomProxyProtocol
-    let clientProxy: ClientProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -43,10 +42,7 @@ final class ReportContentScreenCoordinator: CoordinatorProtocol {
     init(parameters: ReportContentScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = ReportContentScreenViewModel(eventID: parameters.eventID,
-                                                 senderID: parameters.senderID,
-                                                 roomProxy: parameters.roomProxy,
-                                                 clientProxy: parameters.clientProxy)
+        viewModel = ReportContentScreenViewModel(eventID: parameters.eventID, senderID: parameters.senderID, roomProxy: parameters.roomProxy)
     }
 
     // MARK: - Public
@@ -59,9 +55,9 @@ final class ReportContentScreenCoordinator: CoordinatorProtocol {
                 switch action {
                 case .submitStarted:
                     startLoading()
-                case let .submitFailed(message):
+                case let .submitFailed(error):
                     stopLoading()
-                    showError(description: message)
+                    showError(description: error.localizedDescription)
                 case .submitFinished:
                     stopLoading()
                     actionsSubject.send(.finish)

@@ -82,6 +82,8 @@ protocol RoomProxyProtocol {
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
     
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
+    
+    func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError>
 
     func leaveRoom() async -> Result<Void, RoomProxyError>
     
@@ -118,12 +120,8 @@ protocol RoomProxyProtocol {
     
     func currentPowerLevelChanges() async -> Result<RoomPowerLevelChanges, RoomProxyError>
     func applyPowerLevelChanges(_ changes: RoomPowerLevelChanges) async -> Result<Void, RoomProxyError>
-    func canUser(userID: String, sendStateEvent event: StateEventType) async -> Result<Bool, RoomProxyError>
-    func canUserInvite(userID: String) async -> Result<Bool, RoomProxyError>
     func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError>
     func canUserRedactOwn(userID: String) async -> Result<Bool, RoomProxyError>
-    func canUserKick(userID: String) async -> Result<Bool, RoomProxyError>
-    func canUserBan(userID: String) async -> Result<Bool, RoomProxyError>
     func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
     
     // MARK: - Moderation

@@ -29,8 +29,9 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(roomProxy: RoomProxyProtocol,
+    init(accountOwner: RoomMemberProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         roomProxy: RoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
@@ -43,15 +44,11 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                                                                     initialAvatarURL: roomAvatar,
                                                                     initialName: roomName ?? "",
                                                                     initialTopic: roomTopic ?? "",
+                                                                    canEditAvatar: accountOwner.canSendStateEvent(type: .roomAvatar),
+                                                                    canEditName: accountOwner.canSendStateEvent(type: .roomName),
+                                                                    canEditTopic: accountOwner.canSendStateEvent(type: .roomTopic),
                                                                     avatarURL: roomAvatar,
                                                                     bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")), imageProvider: mediaProvider)
-        
-        Task {
-            // Can't use async let because the mocks aren't thread safe when calling the same method 🤦‍♂️
-            state.canEditAvatar = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar) == .success(true)
-            state.canEditName = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName) == .success(true)
-            state.canEditTopic = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic) == .success(true)
-        }
     }
     
     // MARK: - Public

@@ -35,9 +35,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
     func testInitialState() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     clientProxy: ClientProxyMock(.init()),
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     userID: roomMemberProxyMock.userID,
                                                      mediaProvider: MockMediaProvider(),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
@@ -51,9 +50,12 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
     func testIgnoreSuccess() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     clientProxy: ClientProxyMock(.init()),
+        roomMemberProxyMock.ignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(100))
+            return .success(())
+        }
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     userID: roomMemberProxyMock.userID,
                                                      mediaProvider: MockMediaProvider(),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
@@ -86,11 +88,12 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
     func testIgnoreFailure() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
-        let clientProxy = ClientProxyMock(.init())
-        clientProxy.ignoreUserReturnValue = .failure(.failedIgnoringUser)
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     clientProxy: clientProxy,
+        roomMemberProxyMock.ignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(100))
+            return .failure(.ignoreUserFailed)
+        }
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     userID: roomMemberProxyMock.userID,
                                                      mediaProvider: MockMediaProvider(),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
@@ -123,10 +126,13 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
     func testUnignoreSuccess() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
+        roomMemberProxyMock.unignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(100))
+            return .success(())
+        }
         
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     clientProxy: ClientProxyMock(.init()),
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     userID: roomMemberProxyMock.userID,
                                                      mediaProvider: MockMediaProvider(),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
@@ -157,11 +163,12 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
     func testUnignoreFailure() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
-        let clientProxy = ClientProxyMock(.init())
-        clientProxy.unignoreUserReturnValue = .failure(.failedUnignoringUser)
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     clientProxy: clientProxy,
+        roomMemberProxyMock.unignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(100))
+            return .failure(.unignoreUserFailed)
+        }
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     userID: roomMemberProxyMock.userID,
                                                      mediaProvider: MockMediaProvider(),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
@@ -194,9 +201,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
     func testInitialStateAccountOwner() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockMe
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     clientProxy: ClientProxyMock(.init()),
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     userID: roomMemberProxyMock.userID,
                                                      mediaProvider: MockMediaProvider(),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
@@ -210,9 +216,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
     func testInitialStateIgnoredUser() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
-        viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
-                                                     roomProxy: roomProxyMock,
-                                                     clientProxy: ClientProxyMock(.init()),
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     userID: roomMemberProxyMock.userID,
                                                      mediaProvider: MockMediaProvider(),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
