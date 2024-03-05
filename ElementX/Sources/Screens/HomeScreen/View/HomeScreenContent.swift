@@ -23,6 +23,12 @@ struct HomeScreenContent: View {
     @State private var topSectionFrame: CGRect = .zero
     let scrollViewAdapter: ScrollViewAdapter
     
+    private var shouldShowEmptyFilterState: Bool {
+        context.viewState.shouldShowFilters &&
+            context.filtersState.isFiltering &&
+            context.viewState.visibleRooms.isEmpty
+    }
+    
     var body: some View {
         switch context.viewState.roomListMode {
         case .migration:
@@ -57,9 +63,7 @@ struct HomeScreenContent: View {
                         // Showing empty views in pinned headers makes the room list spasm when reaching the top
                         LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
                             Section {
-                                if context.viewState.shouldShowFilters,
-                                   context.filtersState.isFiltering,
-                                   context.viewState.visibleRooms.isEmpty {
+                                if shouldShowEmptyFilterState {
                                     RoomListFiltersEmptyStateView(state: context.filtersState)
                                         .frame(height: geometry.size.height - topSectionFrame.height)
                                         .padding(.horizontal, geometry.size.width * 67 / 390)
