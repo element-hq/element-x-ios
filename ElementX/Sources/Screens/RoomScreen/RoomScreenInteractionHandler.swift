@@ -503,7 +503,9 @@ class RoomScreenInteractionHandler {
             await voiceMessageRecorder.stopRecording()
         }
 
-        let audioPlayerState = audioPlayerState(for: itemID)
+        guard let audioPlayerState = audioPlayerState(for: itemID) else {
+            fatalError("Audio player not found for \(itemID)")
+        }
         
         // Ensure this one is attached
         if !audioPlayerState.isAttached {
@@ -546,13 +548,15 @@ class RoomScreenInteractionHandler {
         await playerState.updateState(progress: progress)
     }
     
-    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
+    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState? {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
-            fatalError("TimelineItem \(itemID) not found")
+            MXLog.error("TimelineItem \(itemID) not found")
+            return nil
         }
         
         guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
-            fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+            MXLog.error("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+            return nil
         }
         
         if let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) {
