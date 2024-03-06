@@ -64,7 +64,7 @@ private struct FilterToggleStyle: ToggleStyle {
             .drawingGroup()
             // The button breaks the animation for some reason, so better to use the label directly with an onTapGesture
             .onTapGesture {
-                withAnimation(.elementDefault) {
+                withAnimation(.element(with: .easeInOut(duration: 0.2))) {
                     configuration.isOn.toggle()
                 }
             }

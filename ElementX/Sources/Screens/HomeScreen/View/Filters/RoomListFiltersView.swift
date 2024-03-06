@@ -48,7 +48,7 @@ struct RoomListFiltersView: View {
     
     private var clearButton: some View {
         Button(action: {
-            withAnimation(.elementDefault) {
+            withAnimation(.element(with: .easeInOut(duration: 0.2))) {
                 state.clearFilters()
             }
         }, label: {

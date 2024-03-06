@@ -20,10 +20,15 @@ import SwiftUI
 public extension Animation {
     /// Animation to be used to disable animations.
     static let noAnimation: Animation = .linear(duration: 0)
-
+    
     /// `noAnimation` if running tests, otherwise `default` animation if `UIAccessibility.isReduceMotionEnabled` is false
     static var elementDefault: Animation {
-        let animation: Animation = ProcessInfo.isRunningTests ? .noAnimation : .default
+        element(with: .default)
+    }
+
+    /// `noAnimation` if running tests, otherwise `customAnimation` animation if `UIAccessibility.isReduceMotionEnabled` is false
+    static func element(with customAnimation: Animation) -> Animation {
+        let animation: Animation = ProcessInfo.isRunningTests ? .noAnimation : customAnimation
         return animation.disabledIfReduceMotionEnabled()
     }
 
