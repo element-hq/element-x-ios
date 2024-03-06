@@ -106,10 +106,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     return
                 }
                 if !value {
-                    state.shouldShowFilters = false
+                    state.areFiltersEnabled = false
                     state.bindings.filtersState.clearFilters()
                 } else {
-                    state.shouldShowFilters = true
+                    state.areFiltersEnabled = true
                 }
             }
             .store(in: &cancellables)
@@ -233,10 +233,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             roomSummaryProvider?.setFilter(.excludeAll)
         } else {
             if state.bindings.isSearchFieldFocused {
-                roomSummaryProvider?.setFilter(.include(.init(query: state.bindings.searchQuery,
-                                                              filters: state.bindings.filtersState.activeFilters.set)))
+                roomSummaryProvider?.setFilter(.search(query: state.bindings.searchQuery))
             } else {
-                roomSummaryProvider?.setFilter(.include(.init(filters: state.bindings.filtersState.activeFilters.set)))
+                roomSummaryProvider?.setFilter(.all(filters: state.areFiltersEnabled ? state.bindings.filtersState.activeFilters.set : []))
             }
         }
     }

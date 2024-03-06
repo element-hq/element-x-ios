@@ -97,27 +97,12 @@ enum RoomSummary: CustomStringConvertible, Equatable {
 }
 
 enum RoomSummaryProviderFilter: Equatable {
-    struct Predicate: Equatable {
-        let query: String?
-        let filters: Set<RoomListFilter>
-        
-        static var all: Predicate {
-            Predicate()
-        }
-        
-        /// - Parameters:
-        ///    - query: If provided the filter will do a normalized search, default is nil
-        ///    - filters: Additional filters that can be provided for further filtering the room list, default is empty which means no additional filtering is done
-        init(query: String? = nil, filters: Set<RoomListFilter> = []) {
-            self.query = query
-            self.filters = filters
-        }
-    }
-    
     /// Filters out everything
     case excludeAll
     /// Includes only the items that satisfy the predicate logic
-    case include(Predicate)
+    case search(query: String)
+    /// Includes only what satisfies the filters used
+    case all(filters: Set<RoomListFilter>)
 }
 
 // sourcery: AutoMockable
