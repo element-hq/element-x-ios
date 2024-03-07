@@ -176,12 +176,12 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
             RoomDetailsEditScreen(context: viewModel.context)
         }
         .previewDisplayName("Normal")
-        .snapshot(delay: 0.1)
+        .snapshot(delay: 0.25)
         
         NavigationStack {
             RoomDetailsEditScreen(context: readOnlyViewModel.context)
         }
         .previewDisplayName("Read only")
-        .snapshot(delay: 0.1)
+        .snapshot(delay: 0.25)
     }
 }
