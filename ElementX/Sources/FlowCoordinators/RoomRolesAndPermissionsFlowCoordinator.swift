@@ -39,22 +39,22 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         case initial
         /// The root screen for this flow.
         case rolesAndPermissionsScreen
-        /// Changing the specified role.
-        case changingRole(RoomRolesAndPermissionsScreenRole)
-        /// Changing the specified permissions group.
-        case changingPermissions(RoomRolesAndPermissionsScreenPermissionsGroup)
+        /// Changing member roles.
+        case changingRoles
+        /// Changing room permissions.
+        case changingPermissions
     }
     
     enum Event: EventType {
         /// The flow is being started.
         case start
-        /// The user would like to change a role
-        case changeRole
-        /// The user finished changing a role.
-        case finishedChangingRole
-        /// The user would like to change some permissions.
+        /// The user would like to change member roles.
+        case changeRoles
+        /// The user finished changing member roles.
+        case finishedChangingRoles
+        /// The user would like to change room permissions.
         case changePermissions
-        /// The user finished changing some permissions
+        /// The user finished changing room permissions
         case finishedChangingPermissions
     }
     
@@ -91,7 +91,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
             break
         case .rolesAndPermissionsScreen:
             navigationStackCoordinator.pop(animated: animated)
-        case .changingRole, .changingPermissions:
+        case .changingRoles, .changingPermissions:
             navigationStackCoordinator.pop(animated: animated)
             navigationStackCoordinator.pop(animated: animated)
         }
@@ -104,35 +104,19 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
             self?.presentRolesAndPermissionsScreen()
         }
         
-        stateMachine.addRoutes(event: .changeRole, transitions: [
-            .rolesAndPermissionsScreen => .changingRole(.administrators),
-            .rolesAndPermissionsScreen => .changingRole(.moderators)
-        ]) { [weak self] context in
+        stateMachine.addRoutes(event: .changeRoles, transitions: [.rolesAndPermissionsScreen => .changingRoles]) { [weak self] context in
             guard let role = context.userInfo as? RoomRolesAndPermissionsScreenRole else { fatalError("Expected a role") }
             self?.presentChangeRolesScreen(role: role)
         }
+        stateMachine.addRoutes(event: .finishedChangingRoles, transitions: [.changingRoles => .rolesAndPermissionsScreen])
         
-        stateMachine.addRoutes(event: .finishedChangingRole, transitions: [
-            .changingRole(.administrators) => .rolesAndPermissionsScreen,
-            .changingRole(.moderators) => .rolesAndPermissionsScreen
-        ])
-        
-        stateMachine.addRoutes(event: .changePermissions, transitions: [
-            .rolesAndPermissionsScreen => .changingPermissions(.roomDetails),
-            .rolesAndPermissionsScreen => .changingPermissions(.messagesAndContent),
-            .rolesAndPermissionsScreen => .changingPermissions(.memberModeration)
-        ]) { [weak self] context in
+        stateMachine.addRoutes(event: .changePermissions, transitions: [.rolesAndPermissionsScreen => .changingPermissions]) { [weak self] context in
             guard let (group, permissions) = context.userInfo as? (RoomRolesAndPermissionsScreenPermissionsGroup, RoomPermissions) else {
                 fatalError("Expected a group and the current permissions")
             }
             self?.presentChangePermissionsScreen(permissions: permissions, group: group)
         }
-        
-        stateMachine.addRoutes(event: .finishedChangingPermissions, transitions: [
-            .changingPermissions(.roomDetails) => .rolesAndPermissionsScreen,
-            .changingPermissions(.messagesAndContent) => .rolesAndPermissionsScreen,
-            .changingPermissions(.memberModeration) => .rolesAndPermissionsScreen
-        ])
+        stateMachine.addRoutes(event: .finishedChangingPermissions, transitions: [.changingPermissions => .rolesAndPermissionsScreen])
         
         stateMachine.addErrorHandler { context in
             fatalError("Unexpected transition: \(context)")
@@ -145,7 +129,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions.sink { [stateMachine] action in
             switch action {
             case .editRoles(let role):
-                stateMachine.tryEvent(.changeRole, userInfo: role)
+                stateMachine.tryEvent(.changeRoles, userInfo: role)
             case .editPermissions(let group):
                 stateMachine.tryEvent(.changePermissions, userInfo: (group, RoomPermissions.default))
             }
@@ -178,7 +162,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator) { [stateMachine] in
-            stateMachine.tryEvent(.finishedChangingRole)
+            stateMachine.tryEvent(.finishedChangingRoles)
         }
     }
     
