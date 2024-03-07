@@ -228,7 +228,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 break
 
             case (.roomList, .showSessionVerificationScreen, .sessionVerificationScreen):
-                presentSessionVerification(animated: animated)
+                Task {
+                    await self.presentSessionVerification(animated: animated)
+                }
             case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .roomList):
                 break
                 
@@ -382,8 +384,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: Session verification
     
-    private func presentSessionVerification(animated: Bool) {
-        guard let sessionVerificationController = userSession.sessionVerificationController else {
+    private func presentSessionVerification(animated: Bool) async {
+        guard case let .success(sessionVerificationController) = await userSession.clientProxy.sessionVerificationControllerProxy() else {
             fatalError("The sessionVerificationController should aways be valid at this point")
         }
         

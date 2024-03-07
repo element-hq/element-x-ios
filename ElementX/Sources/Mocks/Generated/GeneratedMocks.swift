@@ -727,6 +727,11 @@ class ClientProxyMock: ClientProxyProtocol {
         set(value) { underlyingLoadingStatePublisher = value }
     }
     var underlyingLoadingStatePublisher: CurrentValuePublisher<ClientProxyLoadingState, Never>!
+    var verificationStatePublisher: CurrentValuePublisher<SessionVerificationState, Never> {
+        get { return underlyingVerificationStatePublisher }
+        set(value) { underlyingVerificationStatePublisher = value }
+    }
+    var underlyingVerificationStatePublisher: CurrentValuePublisher<SessionVerificationState, Never>!
     var userID: String {
         get { return underlyingUserID }
         set(value) { underlyingUserID = value }
