@@ -49,13 +49,18 @@ jobs:
       - name: Run tests
         run: bundle exec fastlane unit_tests
         
+      - name: Zip results # for faster upload
+        if: failure()
+        working-directory: fastlane/test_output
+        run: zip -r UnitTests.zip UnitTests.xcresult PreviewTests.xcresult
+      
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
-        # We only care about artifcats if the tests fail
+        # We only care about artefacts if the tests fail
         if: failure()
         with:
-            name: test-output
-            path: fastlane/test_output
+            name: Results
+            path: fastlane/test_output/UnitTests.zip
             retention-days: 1
             if-no-files-found: ignore
       
