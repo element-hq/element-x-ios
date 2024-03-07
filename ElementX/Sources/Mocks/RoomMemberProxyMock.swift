@@ -91,6 +91,12 @@ extension RoomMemberProxyMock {
                                         membership: .join))
     }
     
+    static var mockVerbose: RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@charliev:matrix.org",
+                                        displayName: "Charlie is the best display name",
+                                        membership: .join))
+    }
+    
     static var mockInvited: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@invited:matrix.org",
                                         displayName: "Invited",
