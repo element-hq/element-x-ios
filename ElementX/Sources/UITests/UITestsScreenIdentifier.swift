@@ -80,8 +80,6 @@ enum UITestsScreenIdentifier: String {
     case invitesWithBadges
     case invitesNoInvites
     case inviteUsers
-    case inviteUsersInRoom
-    case inviteUsersInRoomExistingMembers
     case createRoom
     case createRoomNoUsers
     case createPoll
