@@ -52,7 +52,7 @@ jobs:
       - name: Zip results # for faster upload
         if: failure()
         working-directory: fastlane/test_output
-        run: zip -r UnitTests.xcresult.zip UnitTests.xcresult PreviewTests.xcresult
+        run: zip -r UnitTests.zip UnitTests.xcresult PreviewTests.xcresult
       
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
@@ -60,7 +60,7 @@ jobs:
         if: failure()
         with:
             name: Results
-            path: fastlane/test_output/UnitTests.xcresult.zip
+            path: fastlane/test_output/UnitTests.zip
             retention-days: 1
             if-no-files-found: ignore
       
