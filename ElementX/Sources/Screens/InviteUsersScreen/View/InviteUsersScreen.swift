@@ -164,7 +164,6 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
                                           roomType: .draft,
                                           mediaProvider: MockMediaProvider(),
                                           userDiscoveryService: userDiscoveryService,
-                                          appSettings: ServiceLocator.shared.settings,
                                           userIndicatorController: UserIndicatorControllerMock())
     }()
     

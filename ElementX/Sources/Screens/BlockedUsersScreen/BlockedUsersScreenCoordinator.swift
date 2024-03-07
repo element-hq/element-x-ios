@@ -22,17 +22,8 @@ struct BlockedUsersScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
-enum BlockedUsersScreenCoordinatorAction { }
-
 final class BlockedUsersScreenCoordinator: CoordinatorProtocol {
     private let viewModel: BlockedUsersScreenViewModelProtocol
-    
-    private var cancellables = Set<AnyCancellable>()
- 
-    private let actionsSubject: PassthroughSubject<BlockedUsersScreenCoordinatorAction, Never> = .init()
-    var actionsPublisher: AnyPublisher<BlockedUsersScreenCoordinatorAction, Never> {
-        actionsSubject.eraseToAnyPublisher()
-    }
     
     init(parameters: BlockedUsersScreenCoordinatorParameters) {
         viewModel = BlockedUsersScreenViewModel(clientProxy: parameters.clientProxy,

@@ -16,8 +16,6 @@
 
 import Foundation
 
-enum BlockedUsersScreenViewModelAction { }
-
 struct BlockedUsersScreenViewState: BindableState {
     var blockedUsers: [String]
     var processingUserID: String?

@@ -17,11 +17,6 @@
 import Foundation
 import MatrixRustSDK
 
-enum RoomMemberProxyError: Error {
-    case ignoreUserFailed
-    case unignoreUserFailed
-}
-
 // sourcery: AutoMockable
 protocol RoomMemberProxyProtocol: AnyObject {
     var userID: String { get }

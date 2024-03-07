@@ -4,11 +4,12 @@ schemes:
 - IntegrationTests
 - UITests
 - UnitTests
+- PreviewTests
 targets:
 - ElementX
 - IntegrationTests
 - NSE
-# - NCE
+- PreviewTests
 - UITests
 - UnitTests
 report_exclude:

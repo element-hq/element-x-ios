@@ -89,10 +89,6 @@ struct RoomListFiltersState {
         return availableFilters.elements
     }
     
-    var orderedFilters: [RoomListFilter] {
-        activeFilters.elements + availableFilters
-    }
-    
     var isFiltering: Bool {
         !activeFilters.isEmpty
     }

@@ -195,9 +195,7 @@ class RoomProxy: RoomProxyProtocol {
         do {
             let membersNoSyncIterator = try await room.membersNoSync()
             if let members = membersNoSyncIterator.nextChunk(chunkSize: membersNoSyncIterator.len()) {
-                membersSubject.value = members.map {
-                    RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
-                }
+                membersSubject.value = members.map(RoomMemberProxy.init)
             }
         } catch {
             MXLog.error("[RoomProxy] Failed to update members using no sync API: \(error)")
@@ -207,9 +205,7 @@ class RoomProxy: RoomProxyProtocol {
             // Then we update members using the sync API, this is slower but will get us the latest members
             let membersIterator = try await room.members()
             if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
-                membersSubject.value = members.map {
-                    RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
-                }
+                membersSubject.value = members.map(RoomMemberProxy.init)
             }
         } catch {
             MXLog.error("[RoomProxy] Failed to update members using sync API: \(error)")
@@ -228,7 +224,7 @@ class RoomProxy: RoomProxyProtocol {
         
         do {
             let member = try await room.member(userId: userID)
-            return .success(RoomMemberProxy(member: member, backgroundTaskService: backgroundTaskService))
+            return .success(RoomMemberProxy(member: member))
         } catch {
             return .failure(.failedRetrievingMember)
         }

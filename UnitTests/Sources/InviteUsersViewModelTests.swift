@@ -101,7 +101,6 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         let viewModel = InviteUsersScreenViewModel(selectedUsers: usersSubject.asCurrentValuePublisher(),
                                                    roomType: roomType, mediaProvider: MockMediaProvider(),
                                                    userDiscoveryService: userDiscoveryService,
-                                                   appSettings: ServiceLocator.shared.settings,
                                                    userIndicatorController: UserIndicatorControllerMock())
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
         self.viewModel = viewModel

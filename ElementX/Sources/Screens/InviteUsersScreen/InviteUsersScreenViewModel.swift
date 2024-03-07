@@ -23,7 +23,6 @@ typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreen
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
     private let roomType: InviteUsersScreenRoomType
     private let userDiscoveryService: UserDiscoveryServiceProtocol
-    private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
@@ -36,11 +35,9 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
          roomType: InviteUsersScreenRoomType,
          mediaProvider: MediaProviderProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol,
-         appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomType = roomType
         self.userDiscoveryService = userDiscoveryService
-        self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), imageProvider: mediaProvider)
                 
