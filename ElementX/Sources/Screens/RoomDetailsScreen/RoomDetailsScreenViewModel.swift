@@ -27,6 +27,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
+    private let appSettings: AppSettings
 
     private var dmRecipient: RoomMemberProxyProtocol?
     
@@ -42,7 +43,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
          analyticsService: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
-         attributedStringBuilder: AttributedStringBuilderProtocol) {
+         attributedStringBuilder: AttributedStringBuilderProtocol,
+         appSettings: AppSettings) {
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
@@ -50,6 +52,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         self.userIndicatorController = userIndicatorController
         self.notificationSettingsProxy = notificationSettingsProxy
         self.attributedStringBuilder = attributedStringBuilder
+        self.appSettings = appSettings
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.topic)
         
@@ -111,7 +114,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             } else {
                 actionsSubject.send(.requestNotificationSettingsPresentation)
             }
-        case .processToogleMuteNotifications:
+        case .processToggleMuteNotifications:
             Task { await toggleMuteNotifications() }
         case .displayAvatar:
             displayFullScreenAvatar()
@@ -119,6 +122,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             actionsSubject.send(.requestPollsHistoryPresentation)
         case .toggleFavourite(let isFavourite):
             Task { await toggleFavourite(isFavourite) }
+        case .processTapRolesAndPermissions:
+            actionsSubject.send(.requestRolesAndPermissionsPresentation)
         }
     }
     
@@ -172,6 +177,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.canEditRoomName = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName) == .success(true)
         state.canEditRoomTopic = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic) == .success(true)
         state.canEditRoomAvatar = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar) == .success(true)
+        if appSettings.roomModerationEnabled {
+            state.canEditRolesOrPermissions = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomPowerLevels) == .success(true)
+        }
         state.canInviteUsers = await canInviteUsers
     }
     

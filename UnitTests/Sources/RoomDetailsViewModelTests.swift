@@ -40,7 +40,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         AppSettings.reset()
     }
@@ -55,7 +56,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         let deferred = deferFulfillment(context.$viewState) { state in
             state.bindings.leaveRoomAlertItem != nil
         }
@@ -77,7 +79,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         let deferred = deferFulfillment(context.$viewState) { state in
             state.bindings.leaveRoomAlertItem != nil
         }
@@ -100,7 +103,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         context.send(viewAction: .processTapLeave)
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .empty)
@@ -153,7 +157,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.dmRecipient != nil
@@ -176,7 +181,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.dmRecipient != nil
@@ -210,7 +216,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.dmRecipient != nil
@@ -243,7 +250,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.dmRecipient != nil
@@ -277,7 +285,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.dmRecipient != nil
@@ -312,7 +321,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -329,7 +339,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -365,7 +376,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -388,7 +400,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -411,7 +424,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -431,7 +445,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -451,7 +466,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
@@ -469,7 +485,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                mentionBuilder: MentionBuilder()))
+                                                                                                mentionBuilder: MentionBuilder()),
+                                               appSettings: ServiceLocator.shared.settings)
         
         var deferred = deferFulfillment(context.$viewState) { state in
             state.notificationSettingsState.isError
@@ -559,7 +576,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             }
             throw NotificationSettingsError.Generic(msg: "unmute error")
         }
-        context.send(viewAction: .processToogleMuteNotifications)
+        context.send(viewAction: .processToggleMuteNotifications)
         await fulfillment(of: [expectation])
         
         XCTAssertFalse(context.viewState.isProcessingMuteToggleAction)
@@ -584,7 +601,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             }
             throw NotificationSettingsError.Generic(msg: "mute error")
         }
-        context.send(viewAction: .processToogleMuteNotifications)
+        context.send(viewAction: .processToggleMuteNotifications)
         await fulfillment(of: [expectation])
         
         XCTAssertFalse(context.viewState.isProcessingMuteToggleAction)
@@ -607,7 +624,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             notificationSettingsProxyMock?.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: mode, isDefault: false))
             expectation.fulfill()
         }
-        context.send(viewAction: .processToogleMuteNotifications)
+        context.send(viewAction: .processToggleMuteNotifications)
         await fulfillment(of: [expectation])
         
         XCTAssertFalse(context.viewState.isProcessingMuteToggleAction)
@@ -640,7 +657,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             notificationSettingsProxyMock?.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
             expectation.fulfill()
         }
-        context.send(viewAction: .processToogleMuteNotifications)
+        context.send(viewAction: .processToggleMuteNotifications)
         await fulfillment(of: [expectation])
         
         XCTAssertFalse(context.viewState.isProcessingMuteToggleAction)

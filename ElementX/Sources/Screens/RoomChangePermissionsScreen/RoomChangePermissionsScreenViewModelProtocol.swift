@@ -18,6 +18,6 @@ import Combine
 
 @MainActor
 protocol RoomChangePermissionsScreenViewModelProtocol {
-    var actions: AnyPublisher<RoomChangePermissionsScreenViewModelAction, Never> { get }
+    var actionsPublisher: AnyPublisher<RoomChangePermissionsScreenViewModelAction, Never> { get }
     var context: RoomChangePermissionsScreenViewModelType.Context { get }
 }

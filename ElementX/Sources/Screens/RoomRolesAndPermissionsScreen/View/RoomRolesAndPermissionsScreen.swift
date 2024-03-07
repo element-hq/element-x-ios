@@ -40,12 +40,20 @@ struct RoomRolesAndPermissionsScreen: View {
                     kind: .navigationLink {
                         context.send(viewAction: .editRoles(.administrators))
                     })
+                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
             
             ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsModerators,
                                     icon: \.chatProblem),
                     details: moderatorDetails,
                     kind: .navigationLink {
                         context.send(viewAction: .editRoles(.moderators))
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
+            
+            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
+                                    icon: \.edit),
+                    kind: .button {
+                        context.send(viewAction: .editOwnUserRole)
                     })
         } header: {
             Text(L10n.screenRoomRolesAndPermissionsRolesHeader)
@@ -76,18 +84,21 @@ struct RoomRolesAndPermissionsScreen: View {
                     kind: .navigationLink {
                         context.send(viewAction: .editPermissions(.roomDetails))
                     })
+                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.roomDetails)
             
             ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsMessagesAndContent,
                                     icon: \.chat),
                     kind: .navigationLink {
                         context.send(viewAction: .editPermissions(.messagesAndContent))
                     })
+                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.messagesAndContent)
             
             ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsMemberModeration,
                                     icon: \.user),
                     kind: .navigationLink {
                         context.send(viewAction: .editPermissions(.memberModeration))
                     })
+                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.memberModeration)
         } header: {
             Text(L10n.screenRoomRolesAndPermissionsPermissionsHeader)
                 .compoundListSectionHeader()

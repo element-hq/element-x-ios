@@ -595,7 +595,8 @@ class MockScreen: Identifiable {
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                                              mentionBuilder: MentionBuilder())))
+                                                                                                                              mentionBuilder: MentionBuilder()),
+                                                                             appSettings: ServiceLocator.shared.settings))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenWithRoomAvatar:
@@ -617,7 +618,8 @@ class MockScreen: Identifiable {
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                                              mentionBuilder: MentionBuilder())))
+                                                                                                                              mentionBuilder: MentionBuilder()),
+                                                                             appSettings: ServiceLocator.shared.settings))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenWithEmptyTopic:
@@ -640,7 +642,8 @@ class MockScreen: Identifiable {
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                                              mentionBuilder: MentionBuilder())))
+                                                                                                                              mentionBuilder: MentionBuilder()),
+                                                                             appSettings: ServiceLocator.shared.settings))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenWithInvite:
@@ -660,7 +663,8 @@ class MockScreen: Identifiable {
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                                              mentionBuilder: MentionBuilder())))
+                                                                                                                              mentionBuilder: MentionBuilder()),
+                                                                             appSettings: ServiceLocator.shared.settings))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenDmDetails:
@@ -681,7 +685,8 @@ class MockScreen: Identifiable {
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                                              mentionBuilder: MentionBuilder())))
+                                                                                                                              mentionBuilder: MentionBuilder()),
+                                                                             appSettings: ServiceLocator.shared.settings))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomEditDetails, .roomEditDetailsReadOnly:
@@ -732,6 +737,15 @@ class MockScreen: Identifiable {
                                                                                           roomProxy: RoomProxyMock(with: .init(name: "test", members: members)),
                                                                                           displayAsUserDefinedRoomSettings: false))
             navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomRolesAndPermissionsFlow:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
+            let coordinator = RoomRolesAndPermissionsFlowCoordinator(parameters: .init(roomProxy: RoomProxyMock(with: .init(members: .allMembersAsAdmin)),
+                                                                                       navigationStackCoordinator: navigationStackCoordinator,
+                                                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController))
+            retainedState.append(coordinator)
+            coordinator.start()
             return navigationStackCoordinator
         case .reportContent:
             let navigationStackCoordinator = NavigationStackCoordinator()
