@@ -53,7 +53,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
     
     func testToggleUserOn() {
         testInitialStateModerators()
-        guard let firstUser = context.viewState.members.filter({ !context.viewState.isMemberSelected($0) }).first else {
+        guard let firstUser = context.viewState.members.first(where: { !context.viewState.isMemberSelected($0) }) else {
             XCTFail("There should be a regular user available to promote.")
             return
         }
@@ -152,7 +152,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         setupRoomProxy()
         viewModel = RoomChangeRolesScreenViewModel(mode: .moderator, roomProxy: roomProxy, userIndicatorController: UserIndicatorControllerMock())
         
-        guard let firstUser = context.viewState.members.filter({ !context.viewState.isMemberSelected($0) }).first,
+        guard let firstUser = context.viewState.members.first(where: { !context.viewState.isMemberSelected($0) }),
               let existingModerator = context.viewState.membersWithRole.first else {
             XCTFail("There should be a regular user and a moderator to begin with.")
             return
