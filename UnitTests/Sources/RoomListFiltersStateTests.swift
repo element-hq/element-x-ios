@@ -51,7 +51,7 @@ final class RoomListFiltersStateTests: XCTestCase {
         state.deactivateFilter(.people)
         XCTAssertFalse(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, [.people, .unreads, .rooms, .favourites])
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
         
         state.activateFilter(.rooms)
         XCTAssertTrue(state.isFiltering)
@@ -80,7 +80,7 @@ final class RoomListFiltersStateTests: XCTestCase {
         state.clearFilters()
         XCTAssertFalse(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, [.people, .unreads, .favourites, .rooms])
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
     }
     
     func testOrder() {
@@ -90,11 +90,11 @@ final class RoomListFiltersStateTests: XCTestCase {
 
         state.deactivateFilter(.favourites)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, [.favourites, .unreads, .people, .rooms])
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
         
         state.activateFilter(.rooms)
         XCTAssertEqual(state.activeFilters, [.rooms])
-        XCTAssertEqual(state.availableFilters, [.favourites, .unreads])
+        XCTAssertEqual(state.availableFilters, [.unreads, .favourites])
 
         state.activateFilter(.unreads)
         XCTAssertEqual(state.activeFilters, [.rooms, .unreads])

@@ -73,21 +73,24 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 
 struct RoomListFiltersState {
     private(set) var activeFilters: OrderedSet<RoomListFilter>
-    private var inactiveFilters: OrderedSet<RoomListFilter>
     
     init(activeFilters: OrderedSet<RoomListFilter> = []) {
         self.activeFilters = .init(activeFilters)
-        inactiveFilters = OrderedSet(RoomListFilter.allCases).subtracting(activeFilters)
     }
     
     var availableFilters: [RoomListFilter] {
-        var availableFilters = inactiveFilters
+        var availableFilters = OrderedSet(RoomListFilter.allCases)
         for filter in activeFilters {
+            availableFilters.remove(filter)
             if let incompatibleFilter = filter.incompatibleFilter {
                 availableFilters.remove(incompatibleFilter)
             }
         }
         return availableFilters.elements
+    }
+    
+    var orderedFilters: [RoomListFilter] {
+        activeFilters.elements + availableFilters
     }
     
     var isFiltering: Bool {
@@ -101,20 +104,14 @@ struct RoomListFiltersState {
         }
         // We always want the most recently enabled filter to be at the bottom of the others.
         activeFilters.append(filter)
-        inactiveFilters.remove(filter)
     }
     
     mutating func deactivateFilter(_ filter: RoomListFilter) {
         activeFilters.remove(filter)
-        // We always want the most recently disabled filter to be on top of the others
-        inactiveFilters.insert(filter, at: 0)
     }
     
     mutating func clearFilters() {
-        // We iterate in reverse because filters should get disabled from the first to last that has been used.
-        for filter in activeFilters.reversed() {
-            deactivateFilter(filter)
-        }
+        activeFilters.removeAll()
     }
     
     func isFilterActive(_ filter: RoomListFilter) -> Bool {

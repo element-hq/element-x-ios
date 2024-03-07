@@ -17,39 +17,50 @@
 import SwiftUI
 
 struct RoomListFiltersView: View {
+    let leadingID = "leading"
     @Binding var state: RoomListFiltersState
     @Namespace private var namespace
     
     var body: some View {
-        ScrollView(.horizontal) {
-            HStack(spacing: 8) {
-                if state.isFiltering {
-                    clearButton
-                }
-                
-                ForEach(state.activeFilters) { filter in
-                    RoomListFilterView(filter: filter,
-                                       isActive: getBinding(for: filter))
-                        .matchedGeometryEffect(id: filter.id, in: namespace)
-                        // This will make the animation always render the enabled ones on top
-                        .zIndex(1)
-                }
-                ForEach(state.availableFilters) { filter in
-                    RoomListFilterView(filter: filter,
-                                       isActive: getBinding(for: filter))
-                        .matchedGeometryEffect(id: filter.id, in: namespace)
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal) {
+                HStack(spacing: 0) {
+                    // Using an empty view makes the scroll a bit clunky, better a 0 frame spacer
+                    Spacer()
+                        .frame(width: 0, height: 0)
+                        .id(leadingID)
+                    
+                    HStack(spacing: 8) {
+                        if state.isFiltering {
+                            clearButton(scrollViewProxy: proxy)
+                        }
+                        
+                        ForEach(state.activeFilters) { filter in
+                            RoomListFilterView(filter: filter,
+                                               isActive: getBinding(for: filter, scrollViewProxy: proxy))
+                                .matchedGeometryEffect(id: filter.id, in: namespace)
+                                // This will make the animation always render the enabled ones on top
+                                .zIndex(1)
+                        }
+                        ForEach(state.availableFilters) { filter in
+                            RoomListFilterView(filter: filter,
+                                               isActive: getBinding(for: filter, scrollViewProxy: proxy))
+                                .matchedGeometryEffect(id: filter.id, in: namespace)
+                        }
+                    }
                 }
             }
+            .scrollIndicators(.hidden)
             .padding(.leading, 16)
             .padding(.vertical, 12)
         }
-        .scrollIndicators(.hidden)
     }
     
-    private var clearButton: some View {
+    private func clearButton(scrollViewProxy: ScrollViewProxy) -> some View {
         Button(action: {
-            withAnimation(.elementDefault) {
+            withAnimation(.easeInOut(duration: 0.2).disabledDuringTests()) {
                 state.clearFilters()
+                scrollViewProxy.scrollTo(leadingID, anchor: .leading)
             }
         }, label: {
             Image(systemName: "xmark.circle.fill")
@@ -58,11 +69,18 @@ struct RoomListFiltersView: View {
         })
     }
     
-    private func getBinding(for filter: RoomListFilter) -> Binding<Bool> {
+    private func getBinding(for filter: RoomListFilter, scrollViewProxy: ScrollViewProxy) -> Binding<Bool> {
         Binding<Bool>(get: {
             state.isFilterActive(filter)
         }, set: { isEnabled, _ in
-            isEnabled ? state.activateFilter(filter) : state.deactivateFilter(filter)
+            withAnimation(.easeInOut(duration: 0.2).disabledDuringTests()) {
+                if isEnabled {
+                    state.activateFilter(filter)
+                    scrollViewProxy.scrollTo(leadingID, anchor: .leading)
+                } else {
+                    state.deactivateFilter(filter)
+                }
+            }
         })
     }
 }
