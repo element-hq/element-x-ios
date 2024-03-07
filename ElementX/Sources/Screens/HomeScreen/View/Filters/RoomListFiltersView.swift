@@ -24,27 +24,29 @@ struct RoomListFiltersView: View {
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal) {
-                HStack(spacing: 8) {
-                    // Using an empty view makes the scroll a bit clunky
+                HStack(spacing: 0) {
+                    // Using an empty view makes the scroll a bit clunky, better a 0 frame spacer
                     Spacer()
                         .frame(width: 0, height: 0)
                         .id(leadingID)
                     
-                    if state.isFiltering {
-                        clearButton(scrollViewProxy: proxy)
-                    }
-                    
-                    ForEach(state.activeFilters) { filter in
-                        RoomListFilterView(filter: filter,
-                                           isActive: getBinding(for: filter, scrollViewProxy: proxy))
-                            .matchedGeometryEffect(id: filter.id, in: namespace)
-                            // This will make the animation always render the enabled ones on top
-                            .zIndex(1)
-                    }
-                    ForEach(state.availableFilters) { filter in
-                        RoomListFilterView(filter: filter,
-                                           isActive: getBinding(for: filter, scrollViewProxy: proxy))
-                            .matchedGeometryEffect(id: filter.id, in: namespace)
+                    HStack(spacing: 8) {
+                        if state.isFiltering {
+                            clearButton(scrollViewProxy: proxy)
+                        }
+                        
+                        ForEach(state.activeFilters) { filter in
+                            RoomListFilterView(filter: filter,
+                                               isActive: getBinding(for: filter, scrollViewProxy: proxy))
+                                .matchedGeometryEffect(id: filter.id, in: namespace)
+                                // This will make the animation always render the enabled ones on top
+                                .zIndex(1)
+                        }
+                        ForEach(state.availableFilters) { filter in
+                            RoomListFilterView(filter: filter,
+                                               isActive: getBinding(for: filter, scrollViewProxy: proxy))
+                                .matchedGeometryEffect(id: filter.id, in: namespace)
+                        }
                     }
                 }
             }
