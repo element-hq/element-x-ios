@@ -74,7 +74,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, votes: let votes, endTime: let endTime, let edited):
             return buildPollTimelineItem(question, kind, maxSelections, answers, votes, endTime, eventItemProxy, isOutgoing, edited)
         case .callInvite:
-            return nil
+            return buildCallInviteTimelineItem(for: eventItemProxy)
         }
     }
     
@@ -420,6 +420,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                            reactions: aggregateReactions(eventItemProxy.reactions),
                                                                            deliveryStatus: eventItemProxy.deliveryStatus,
                                                                            orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+    }
+    
+    private func buildCallInviteTimelineItem(for eventItemProxy: EventTimelineItemProxy) -> RoomTimelineItemProtocol {
+        CallInviteRoomTimelineItem(id: eventItemProxy.id,
+                                   timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
+                                   isEditable: eventItemProxy.isEditable,
+                                   canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                   sender: eventItemProxy.sender)
     }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {

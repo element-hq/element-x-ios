@@ -391,6 +391,16 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    func updatePowerLevelsForUsers(_ updates: [(userID: String, powerLevel: Int64)]) async -> Result<Void, RoomProxyError> {
+        do {
+            let updates = updates.map { UserPowerLevelUpdate(userId: $0.userID, powerLevel: $0.powerLevel) }
+            return try await .success(room.updatePowerLevelsForUsers(updates: updates))
+        } catch {
+            MXLog.error("Failed updating user power levels changes: \(error)")
+            return .failure(.failedSettingPermission)
+        }
+    }
+    
     func canUser(userID: String, sendStateEvent event: StateEventType) async -> Result<Bool, RoomProxyError> {
         do {
             return try await .success(room.canUserSendState(userId: userID, stateEvent: event))

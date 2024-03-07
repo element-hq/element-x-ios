@@ -90,6 +90,7 @@ extension RoomProxyMock {
         
         currentPowerLevelChangesReturnValue = .success(.init())
         applyPowerLevelChangesReturnValue = .success(())
+        updatePowerLevelsForUsersReturnValue = .success(())
         canUserUserIDSendStateEventClosure = { [weak self] userID, _ in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }

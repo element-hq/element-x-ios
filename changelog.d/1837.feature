@@ -1,0 +1,1 @@
+Added support for `m.call.invite` events in the timeline, room list and notifications

@@ -2750,6 +2750,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return applyPowerLevelChangesReturnValue
         }
     }
+    //MARK: - updatePowerLevelsForUsers
+
+    var updatePowerLevelsForUsersCallsCount = 0
+    var updatePowerLevelsForUsersCalled: Bool {
+        return updatePowerLevelsForUsersCallsCount > 0
+    }
+    var updatePowerLevelsForUsersReceivedUpdates: [(userID: String, powerLevel: Int64)]?
+    var updatePowerLevelsForUsersReceivedInvocations: [[(userID: String, powerLevel: Int64)]] = []
+    var updatePowerLevelsForUsersReturnValue: Result<Void, RoomProxyError>!
+    var updatePowerLevelsForUsersClosure: (([(userID: String, powerLevel: Int64)]) async -> Result<Void, RoomProxyError>)?
+
+    func updatePowerLevelsForUsers(_ updates: [(userID: String, powerLevel: Int64)]) async -> Result<Void, RoomProxyError> {
+        updatePowerLevelsForUsersCallsCount += 1
+        updatePowerLevelsForUsersReceivedUpdates = updates
+        updatePowerLevelsForUsersReceivedInvocations.append(updates)
+        if let updatePowerLevelsForUsersClosure = updatePowerLevelsForUsersClosure {
+            return await updatePowerLevelsForUsersClosure(updates)
+        } else {
+            return updatePowerLevelsForUsersReturnValue
+        }
+    }
     //MARK: - canUser
 
     var canUserUserIDSendStateEventCallsCount = 0

@@ -211,12 +211,38 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    /// A stored task for restarting the sync after a failure. This is stored so that we can cancel
+    /// it when `stopSync` is called (e.g. when signing out) to prevent an otherwise infinite
+    /// loop that was triggered by trying to sync a signed out session.
+    @CancellableTask private var restartTask: Task<Void, Never>?
+    
+    func restartSync() {
+        guard restartTask == nil else { return }
+        
+        restartTask = Task { [weak self] in
+            do {
+                // Until the SDK can tell us the failure, we add a small
+                // delay to avoid generating multi-gigabyte log files.
+                try await Task.sleep(for: .milliseconds(250))
+                self?.startSync()
+            } catch {
+                MXLog.error("Restart cancelled.")
+            }
+            self?.restartTask = nil
+        }
+    }
+    
     func stopSync() {
         stopSync(completion: nil)
     }
     
     private func stopSync(completion: (() -> Void)?) {
         MXLog.info("Stopping sync")
+        
+        if restartTask != nil {
+            MXLog.warning("Removing the sync service restart task.")
+            restartTask = nil
+        }
         
         Task {
             do {
@@ -586,7 +612,7 @@ class ClientProxy: ClientProxyProtocol {
             case .running, .terminated, .idle:
                 break
             case .error:
-                startSync()
+                restartSync()
             }
         })
     }
