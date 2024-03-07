@@ -44,7 +44,7 @@ struct RoomChangeRolesScreenViewState: BindableState {
         case .moderator:
             L10n.screenRoomChangeRoleModeratorsTitle
         case .user:
-            ""
+            "" // The screen can't be configured with this role.
         }
     }
     
@@ -52,8 +52,9 @@ struct RoomChangeRolesScreenViewState: BindableState {
     var visibleMembers: [RoomMemberDetails] {
         guard !bindings.searchQuery.isEmpty else { return members }
         
-        return members.filter {
-            $0.name?.localizedStandardContains(bindings.searchQuery) == true || $0.id.localizedStandardContains(bindings.searchQuery)
+        return members.filter { member in
+            member.name?.localizedStandardContains(bindings.searchQuery) == true
+                || member.id.localizedStandardContains(bindings.searchQuery)
         }
     }
     
