@@ -22,11 +22,6 @@ typealias BlockedUsersScreenViewModelType = StateStoreViewModel<BlockedUsersScre
 class BlockedUsersScreenViewModel: BlockedUsersScreenViewModelType, BlockedUsersScreenViewModelProtocol {
     let clientProxy: ClientProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    
-    private let actionsSubject: PassthroughSubject<BlockedUsersScreenViewModelAction, Never> = .init()
-    var actionsPublisher: AnyPublisher<BlockedUsersScreenViewModelAction, Never> {
-        actionsSubject.eraseToAnyPublisher()
-    }
 
     init(clientProxy: ClientProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {

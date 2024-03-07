@@ -47,15 +47,8 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var logLevel: TracingConfiguration.LogLevel { get set }
     var otlpTracingEnabled: Bool { get set }
     var shouldCollapseRoomStateEvents: Bool { get set }
-    var userSuggestionsEnabled: Bool { get set }
-    var mentionsBadgeEnabled: Bool { get set }
-    var roomListFiltersEnabled: Bool { get set }
     var hideUnreadMessagesBadge: Bool { get set }
-    
-    var markAsUnreadEnabled: Bool { get set }
-    var markAsFavouriteEnabled: Bool { get set }
     var roomModerationEnabled: Bool { get set }
-    
     var elementCallBaseURL: URL { get set }
 }
 

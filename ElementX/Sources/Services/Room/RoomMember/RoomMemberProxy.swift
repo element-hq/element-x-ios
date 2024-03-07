@@ -18,16 +18,9 @@ import Foundation
 import MatrixRustSDK
 
 final class RoomMemberProxy: RoomMemberProxyProtocol {
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let member: RoomMember
     
-    private let backgroundAccountDataTaskName = "SendAccountDataEvent"
-    private var sendAccountDataEventBackgroundTask: BackgroundTaskProtocol?
-    
-    private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roommemberproxy.userinitiated", qos: .userInitiated)
-    
-    init(member: RoomMember, backgroundTaskService: BackgroundTaskServiceProtocol) {
-        self.backgroundTaskService = backgroundTaskService
+    init(member: RoomMember) {
         self.member = member
     }
     

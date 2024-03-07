@@ -133,10 +133,8 @@ struct StartChatScreen_Previews: PreviewProvider, TestablePreview {
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         let userDiscoveryService = UserDiscoveryServiceMock()
-        userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
         let viewModel = StartChatScreenViewModel(userSession: userSession,
-                                                 userSuggestionsEnabled: true,
                                                  analytics: ServiceLocator.shared.analytics,
                                                  userIndicatorController: UserIndicatorControllerMock(),
                                                  userDiscoveryService: userDiscoveryService)

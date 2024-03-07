@@ -3787,23 +3787,6 @@ class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
             return searchProfilesWithReturnValue
         }
     }
-    //MARK: - fetchSuggestions
-
-    var fetchSuggestionsCallsCount = 0
-    var fetchSuggestionsCalled: Bool {
-        return fetchSuggestionsCallsCount > 0
-    }
-    var fetchSuggestionsReturnValue: Result<[UserProfileProxy], UserDiscoveryErrorType>!
-    var fetchSuggestionsClosure: (() async -> Result<[UserProfileProxy], UserDiscoveryErrorType>)?
-
-    func fetchSuggestions() async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
-        fetchSuggestionsCallsCount += 1
-        if let fetchSuggestionsClosure = fetchSuggestionsClosure {
-            return await fetchSuggestionsClosure()
-        } else {
-            return fetchSuggestionsReturnValue
-        }
-    }
 }
 class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
     var window: UIWindow?

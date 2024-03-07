@@ -18,7 +18,6 @@ import Combine
 
 @MainActor
 protocol BlockedUsersScreenViewModelProtocol {
-    var actionsPublisher: AnyPublisher<BlockedUsersScreenViewModelAction, Never> { get }
     var context: BlockedUsersScreenViewModelType.Context { get }
     
     func stop()

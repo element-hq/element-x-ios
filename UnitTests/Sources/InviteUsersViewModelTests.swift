@@ -96,13 +96,11 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     private func setupWithRoomType(roomType: InviteUsersScreenRoomType) {
         let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
         userDiscoveryService = UserDiscoveryServiceMock()
-        userDiscoveryService.fetchSuggestionsReturnValue = .success([])
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         usersSubject.send([])
         let viewModel = InviteUsersScreenViewModel(selectedUsers: usersSubject.asCurrentValuePublisher(),
                                                    roomType: roomType, mediaProvider: MockMediaProvider(),
                                                    userDiscoveryService: userDiscoveryService,
-                                                   appSettings: ServiceLocator.shared.settings,
                                                    userIndicatorController: UserIndicatorControllerMock())
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
         self.viewModel = viewModel

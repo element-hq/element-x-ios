@@ -46,7 +46,6 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
                                                roomType: parameters.roomType,
                                                mediaProvider: parameters.mediaProvider,
                                                userDiscoveryService: parameters.userDiscoveryService,
-                                               appSettings: ServiceLocator.shared.settings,
                                                userIndicatorController: parameters.userIndicatorController)
     }
     

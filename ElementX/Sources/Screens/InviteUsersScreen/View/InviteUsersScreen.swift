@@ -159,13 +159,11 @@ struct InviteUsersScreen: View {
 struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let userDiscoveryService = UserDiscoveryServiceMock()
-        userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
         return InviteUsersScreenViewModel(selectedUsers: .init([]),
                                           roomType: .draft,
                                           mediaProvider: MockMediaProvider(),
                                           userDiscoveryService: userDiscoveryService,
-                                          appSettings: ServiceLocator.shared.settings,
                                           userIndicatorController: UserIndicatorControllerMock())
     }()
     

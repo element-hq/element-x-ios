@@ -31,13 +31,11 @@ class StartChatScreenViewModelTests: XCTestCase {
     override func setUpWithError() throws {
         clientProxy = .init(.init(userID: ""))
         userDiscoveryService = UserDiscoveryServiceMock()
-        userDiscoveryService.fetchSuggestionsReturnValue = .success([])
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let userSession = MockUserSession(clientProxy: clientProxy,
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         viewModel = StartChatScreenViewModel(userSession: userSession,
-                                             userSuggestionsEnabled: true,
                                              analytics: ServiceLocator.shared.analytics,
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              userDiscoveryService: userDiscoveryService)
@@ -46,7 +44,6 @@ class StartChatScreenViewModelTests: XCTestCase {
     func testQueryShowingNoResults() async throws {
         await search(query: "A")
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
-        XCTAssertTrue(userDiscoveryService.fetchSuggestionsCalled)
         
         await search(query: "AA")
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)

@@ -100,28 +100,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
-        appSettings.$roomListFiltersEnabled
-            .sink { [weak self] value in
-                guard let self else {
-                    return
-                }
-                if !value {
-                    state.areFiltersEnabled = false
-                    state.bindings.filtersState.clearFilters()
-                } else {
-                    state.areFiltersEnabled = true
-                }
-            }
-            .store(in: &cancellables)
-        
-        appSettings.$markAsUnreadEnabled
-            .weakAssign(to: \.state.markAsUnreadEnabled, on: self)
-            .store(in: &cancellables)
-        
-        appSettings.$markAsFavouriteEnabled
-            .weakAssign(to: \.state.markAsFavouriteEnabled, on: self)
-            .store(in: &cancellables)
-        
         appSettings.$hideUnreadMessagesBadge
             .sink { [weak self] _ in self?.updateRooms() }
             .store(in: &cancellables)
@@ -235,7 +213,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             if state.bindings.isSearchFieldFocused {
                 roomSummaryProvider?.setFilter(.search(query: state.bindings.searchQuery))
             } else {
-                roomSummaryProvider?.setFilter(.all(filters: state.areFiltersEnabled ? state.bindings.filtersState.activeFilters.set : []))
+                roomSummaryProvider?.setFilter(.all(filters: state.bindings.filtersState.activeFilters.set))
             }
         }
     }

@@ -89,10 +89,6 @@ struct HomeScreenViewState: BindableState {
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
     
-    var areFiltersEnabled = false
-    var markAsUnreadEnabled = false
-    var markAsFavouriteEnabled = false
-    
     var hasPendingInvitations = false
     var hasUnreadPendingInvitations = false
     
@@ -120,11 +116,7 @@ struct HomeScreenViewState: BindableState {
     }
     
     var shouldShowEmptyFilterState: Bool {
-        shouldShowFilters && bindings.filtersState.isFiltering && visibleRooms.isEmpty
-    }
-    
-    var shouldShowFilters: Bool {
-        areFiltersEnabled && !bindings.isSearchFieldFocused
+        !bindings.isSearchFieldFocused && bindings.filtersState.isFiltering && visibleRooms.isEmpty
     }
 }
 

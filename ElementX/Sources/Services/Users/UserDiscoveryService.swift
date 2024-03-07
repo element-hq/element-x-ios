@@ -23,10 +23,6 @@ final class UserDiscoveryService: UserDiscoveryServiceProtocol {
         self.clientProxy = clientProxy
     }
 
-    func fetchSuggestions() async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
-        .success(filterAccountOwner([.mockAlice, .mockBob, .mockCharlie]))
-    }
-
     func searchProfiles(with searchQuery: String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
         async let queriedProfile = profileIfPossible(with: searchQuery)
 

@@ -24,9 +24,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let name: String
     private let shouldUpdateVisibleRange: Bool
     private let notificationSettings: NotificationSettingsProxyProtocol
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
-    private let appSettings: AppSettings
-    
+
     private let roomListPageSize = 200
     
     private let serialDispatchQueue: DispatchQueue
@@ -67,17 +65,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
          shouldUpdateVisibleRange: Bool = false,
-         notificationSettings: NotificationSettingsProxyProtocol,
-         backgroundTaskService: BackgroundTaskServiceProtocol,
-         appSettings: AppSettings) {
+         notificationSettings: NotificationSettingsProxyProtocol) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
         self.name = name
         self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
         self.notificationSettings = notificationSettings
-        self.backgroundTaskService = backgroundTaskService
-        self.appSettings = appSettings
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -240,7 +234,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         var inviterProxy: RoomMemberProxyProtocol?
         if let inviter = roomInfo.inviter {
-            inviterProxy = RoomMemberProxy(member: inviter, backgroundTaskService: backgroundTaskService)
+            inviterProxy = RoomMemberProxy(member: inviter)
         }
         
         let notificationMode = roomInfo.userDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
@@ -251,14 +245,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
-                                         unreadMessagesCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadMessages) : 0,
-                                         unreadMentionsCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadMentions) : 0,
-                                         unreadNotificationsCount: appSettings.mentionsBadgeEnabled ? UInt(roomInfo.numUnreadNotifications) : UInt(roomInfo.notificationCount),
+                                         unreadMessagesCount: UInt(roomInfo.numUnreadMessages),
+                                         unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
+                                         unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),
                                          notificationMode: notificationMode,
                                          canonicalAlias: roomInfo.canonicalAlias,
                                          inviter: inviterProxy,
                                          hasOngoingCall: roomInfo.hasRoomCall,
-                                         isMarkedUnread: appSettings.markAsUnreadEnabled ? roomInfo.isMarkedUnread : false,
+                                         isMarkedUnread: roomInfo.isMarkedUnread,
                                          isFavourite: roomInfo.isFavourite)
         
         return invalidated ? .invalidated(details: details) : .filled(details: details)

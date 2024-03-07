@@ -28,7 +28,6 @@ class HomeScreenViewModelTests: XCTestCase {
     var roomSummaryProvider: RoomSummaryProviderMock!
     
     override func setUpWithError() throws {
-        ServiceLocator.shared.settings.roomListFiltersEnabled = true
         cancellables.removeAll()
         roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
         clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: roomSummaryProvider))
@@ -179,7 +178,6 @@ class HomeScreenViewModelTests: XCTestCase {
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.first?.name, "Prelude to Foundation")
         XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.count, 1)
-        XCTAssertFalse(context.viewState.shouldShowFilters)
     }
     
     func testFiltersEmptyState() async throws {
