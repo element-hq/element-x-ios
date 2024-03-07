@@ -41,32 +41,7 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Room creation") {
-                Toggle(isOn: $context.userSuggestionsEnabled) {
-                    Text("User suggestions")
-                }
-            }
-            
-            Section("Mentions") {
-                Toggle(isOn: $context.mentionsBadgeEnabled) {
-                    Text("Mentions badge")
-                    Text("Requires app reboot")
-                }
-            }
-            
             Section("Room List") {
-                Toggle(isOn: $context.roomListFiltersEnabled) {
-                    Text("Show filters")
-                }
-                
-                Toggle(isOn: $context.markAsUnreadEnabled) {
-                    Text("Mark as unread")
-                }
-                
-                Toggle(isOn: $context.markAsFavouriteEnabled) {
-                    Text("Mark as favourite")
-                }
-                
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
                     Text("Hide grey dots")
                 }

@@ -53,36 +53,24 @@ struct HomeScreenContent: View {
                             .layoutPriority(1)
                     }
                 case .rooms:
-                    if context.viewState.areFiltersEnabled {
-                        // Showing empty views in pinned headers makes the room list spasm when reaching the top
-                        LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
-                            Section {
-                                if context.viewState.shouldShowEmptyFilterState {
-                                    RoomListFiltersEmptyStateView(state: context.filtersState)
-                                        .frame(height: geometry.size.height - topSectionFrame.height)
-                                } else {
-                                    HomeScreenRoomList(context: context)
-                                }
-                            } header: {
-                                topSection
-                                    .readFrame($topSectionFrame)
+                    // Showing empty views in pinned headers makes the room list spasm when reaching the top
+                    LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+                        Section {
+                            if context.viewState.shouldShowEmptyFilterState {
+                                RoomListFiltersEmptyStateView(state: context.filtersState)
+                                    .frame(height: geometry.size.height - topSectionFrame.height)
+                            } else {
+                                HomeScreenRoomList(context: context)
                             }
+                        } header: {
+                            topSection
+                                .readFrame($topSectionFrame)
                         }
-                        .isSearching($context.isSearchFieldFocused)
-                        .searchable(text: $context.searchQuery)
-                        .compoundSearchField()
-                        .disableAutocorrection(true)
-                    } else {
-                        topSection
-
-                        LazyVStack(spacing: 0) {
-                            HomeScreenRoomList(context: context)
-                                .isSearching($context.isSearchFieldFocused)
-                        }
-                        .searchable(text: $context.searchQuery)
-                        .compoundSearchField()
-                        .disableAutocorrection(true)
                     }
+                    .isSearching($context.isSearchFieldFocused)
+                    .searchable(text: $context.searchQuery)
+                    .compoundSearchField()
+                    .disableAutocorrection(true)
                 case .migration:
                     EmptyView()
                 }
@@ -121,7 +109,7 @@ struct HomeScreenContent: View {
     /// The session verification banner and invites button if either are needed.
     private var topSection: some View {
         VStack(spacing: 0) {
-            if context.viewState.shouldShowFilters {
+            if !context.isSearchFieldFocused {
                 filters
             }
             

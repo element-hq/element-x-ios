@@ -21,7 +21,6 @@ typealias StartChatScreenViewModelType = StateStoreViewModel<StartChatScreenView
 
 class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let userSuggestionsEnabled: Bool
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
@@ -33,12 +32,10 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     }
     
     init(userSession: UserSessionProtocol,
-         userSuggestionsEnabled: Bool,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
-        self.userSuggestionsEnabled = userSuggestionsEnabled
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.userDiscoveryService = userDiscoveryService
@@ -105,25 +102,13 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     
     private func fetchUsers() {
         guard searchQuery.count >= 3 else {
-            fetchSuggestions()
+            state.usersSection = .init(type: .suggestions, users: [])
             return
         }
         fetchUsersTask = Task {
             let result = await userDiscoveryService.searchProfiles(with: searchQuery)
             guard !Task.isCancelled else { return }
             handleResult(for: .searchResult, result: result)
-        }
-    }
-    
-    private func fetchSuggestions() {
-        guard userSuggestionsEnabled else {
-            state.usersSection = .init(type: .suggestions, users: [])
-            return
-        }
-        fetchUsersTask = Task {
-            let result = await userDiscoveryService.fetchSuggestions()
-            guard !Task.isCancelled else { return }
-            handleResult(for: .suggestions, result: result)
         }
     }
     

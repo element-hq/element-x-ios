@@ -275,21 +275,6 @@ final class AppSettings {
     
     // MARK: - Feature Flags
     
-    @UserPreference(key: UserDefaultsKeys.userSuggestionsEnabled, defaultValue: false, storageType: .volatile)
-    var userSuggestionsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.mentionsBadgeEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var mentionsBadgeEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.roomListFiltersEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var roomListFiltersEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.markAsUnreadEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var markAsUnreadEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.markAsFavouriteEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var markAsFavouriteEnabled
-    
     @UserPreference(key: UserDefaultsKeys.roomModerationEnabled, defaultValue: false, storageType: .userDefaults(store))
     var roomModerationEnabled
     

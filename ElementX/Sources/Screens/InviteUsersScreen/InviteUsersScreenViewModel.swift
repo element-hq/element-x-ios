@@ -130,7 +130,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private func fetchUsers() {
         guard searchQuery.count >= 3 else {
-            fetchSuggestions()
+            state.usersSection = .init(type: .suggestions, users: [])
             return
         }
         
@@ -139,20 +139,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             let result = await userDiscoveryService.searchProfiles(with: searchQuery)
             guard !Task.isCancelled else { return }
             handleResult(for: .searchResult, result: result)
-        }
-    }
-    
-    private func fetchSuggestions() {
-        guard appSettings.userSuggestionsEnabled else {
-            state.usersSection = .init(type: .suggestions, users: [])
-            return
-        }
-        
-        state.isSearching = true
-        fetchUsersTask = Task {
-            let result = await userDiscoveryService.fetchSuggestions()
-            guard !Task.isCancelled else { return }
-            handleResult(for: .suggestions, result: result)
         }
     }
     

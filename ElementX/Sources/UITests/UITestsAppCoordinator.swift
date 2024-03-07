@@ -743,10 +743,8 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .startChat:
-            ServiceLocator.shared.settings.userSuggestionsEnabled = true
             let navigationStackCoordinator = NavigationStackCoordinator()
             let userDiscoveryMock = UserDiscoveryServiceMock()
-            userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([])
             let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "@mock:client.com")),
                                               mediaProvider: MockMediaProvider(),
@@ -763,7 +761,6 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
             let userDiscoveryMock = UserDiscoveryServiceMock()
-            userDiscoveryMock.fetchSuggestionsReturnValue = .success([])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
             let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             let coordinator = StartChatScreenCoordinator(parameters: .init(orientationManager: OrientationManagerMock(),
@@ -863,10 +860,8 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .inviteUsers, .inviteUsersInRoom, .inviteUsersInRoomExistingMembers:
-            ServiceLocator.shared.settings.userSuggestionsEnabled = true
             let navigationStackCoordinator = NavigationStackCoordinator()
             let userDiscoveryMock = UserDiscoveryServiceMock()
-            userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([])
             let mediaProvider = MockMediaProvider()
             let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])

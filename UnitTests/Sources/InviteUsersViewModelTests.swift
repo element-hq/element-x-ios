@@ -96,7 +96,6 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     private func setupWithRoomType(roomType: InviteUsersScreenRoomType) {
         let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
         userDiscoveryService = UserDiscoveryServiceMock()
-        userDiscoveryService.fetchSuggestionsReturnValue = .success([])
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         usersSubject.send([])
         let viewModel = InviteUsersScreenViewModel(selectedUsers: usersSubject.asCurrentValuePublisher(),

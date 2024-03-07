@@ -39,35 +39,31 @@ struct HomeScreenRoomList: View {
                 
                 HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
                     .contextMenu {
-                        if context.viewState.markAsUnreadEnabled {
-                            if room.badges.isDotShown {
-                                Button {
-                                    context.send(viewAction: .markRoomAsRead(roomIdentifier: room.id))
-                                } label: {
-                                    Text(L10n.screenRoomlistMarkAsRead)
-                                }
-                            } else {
-                                Button {
-                                    context.send(viewAction: .markRoomAsUnread(roomIdentifier: room.id))
-                                } label: {
-                                    Text(L10n.screenRoomlistMarkAsUnread)
-                                }
+                        if room.badges.isDotShown {
+                            Button {
+                                context.send(viewAction: .markRoomAsRead(roomIdentifier: room.id))
+                            } label: {
+                                Text(L10n.screenRoomlistMarkAsRead)
+                            }
+                        } else {
+                            Button {
+                                context.send(viewAction: .markRoomAsUnread(roomIdentifier: room.id))
+                            } label: {
+                                Text(L10n.screenRoomlistMarkAsUnread)
                             }
                         }
                         
-                        if context.viewState.markAsFavouriteEnabled {
-                            if room.isFavourite {
-                                Button {
-                                    context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: false))
-                                } label: {
-                                    Label(L10n.commonFavourited, icon: \.favouriteSolid)
-                                }
-                            } else {
-                                Button {
-                                    context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: true))
-                                } label: {
-                                    Label(L10n.commonFavourite, icon: \.favourite)
-                                }
+                        if room.isFavourite {
+                            Button {
+                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: false))
+                            } label: {
+                                Label(L10n.commonFavourited, icon: \.favouriteSolid)
+                            }
+                        } else {
+                            Button {
+                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: true))
+                            } label: {
+                                Label(L10n.commonFavourite, icon: \.favourite)
                             }
                         }
                         

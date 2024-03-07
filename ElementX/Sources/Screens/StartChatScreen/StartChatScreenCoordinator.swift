@@ -54,7 +54,6 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = StartChatScreenViewModel(userSession: parameters.userSession,
-                                             userSuggestionsEnabled: ServiceLocator.shared.settings.userSuggestionsEnabled,
                                              analytics: ServiceLocator.shared.analytics,
                                              userIndicatorController: parameters.userIndicatorController,
                                              userDiscoveryService: parameters.userDiscoveryService)
