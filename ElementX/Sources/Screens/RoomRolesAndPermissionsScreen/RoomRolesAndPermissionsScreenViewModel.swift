@@ -47,6 +47,8 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         switch viewAction {
         case .editRoles(let role):
             actionsSubject.send(.editRoles(role))
+        case .editOwnUserRole:
+            break
         case .editPermissions(let permissionsGroup):
             actionsSubject.send(.editPermissions(permissionsGroup))
         case .reset:

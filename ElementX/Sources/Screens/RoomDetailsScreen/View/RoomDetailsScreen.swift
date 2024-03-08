@@ -32,7 +32,7 @@ struct RoomDetailsScreen: View {
 
             topicSection
             
-            notificationSection
+            configurationSection
 
             aboutSection
 
@@ -169,7 +169,7 @@ struct RoomDetailsScreen: View {
         }
     }
     
-    private var notificationSection: some View {
+    private var configurationSection: some View {
         Section {
             ListRow(label: .default(title: L10n.screenRoomDetailsNotificationTitle,
                                     icon: \.notifications),
@@ -188,13 +188,21 @@ struct RoomDetailsScreen: View {
                 .onChange(of: context.isFavourite) { newValue in
                     context.send(viewAction: .toggleFavourite(isFavourite: newValue))
                 }
+            
+            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
+                ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
+                                        icon: \.admin),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapRolesAndPermissions)
+                        })
+            }
         }
         .disabled(context.viewState.notificationSettingsState.isLoading)
     }
     
     private var toggleMuteButton: some View {
         Button {
-            context.send(viewAction: .processToogleMuteNotifications)
+            context.send(viewAction: .processToggleMuteNotifications)
         } label: {
             if context.viewState.isProcessingMuteToggleAction {
                 ProgressView()
@@ -311,7 +319,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
-                                                                                           mentionBuilder: MentionBuilder()))
+                                                                                           mentionBuilder: MentionBuilder()),
+                                          appSettings: ServiceLocator.shared.settings)
     }()
     
     static let dmRoomViewModel = {
@@ -337,7 +346,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
-                                                                                           mentionBuilder: MentionBuilder()))
+                                                                                           mentionBuilder: MentionBuilder()),
+                                          appSettings: ServiceLocator.shared.settings)
     }()
     
     static let simpleRoomViewModel = {
@@ -362,7 +372,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
-                                                                                           mentionBuilder: MentionBuilder()))
+                                                                                           mentionBuilder: MentionBuilder()),
+                                          appSettings: ServiceLocator.shared.settings)
     }()
     
     static var previews: some View {

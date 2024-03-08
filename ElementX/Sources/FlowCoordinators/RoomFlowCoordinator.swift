@@ -50,6 +50,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
+    private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
+    
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
     
     private var cancellables = Set<AnyCancellable>()
@@ -225,6 +227,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.pollsHistoryForm(let roomID), .dismissPollForm):
                 return .pollsHistory(roomID: roomID)
             
+            case (.roomDetails(let roomID, _), .presentRolesAndPermissionsScreen):
+                return .rolesAndPermissions(roomID: roomID)
+            case (.rolesAndPermissions(let roomID), .dismissRolesAndPermissionsScreen):
+                return .roomDetails(roomID: roomID, isRoot: false)
+            
             default:
                 return nil
             }
@@ -341,6 +348,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
                 presentPollForm(mode: mode)
             case (.pollsHistoryForm, .dismissPollForm, .pollsHistory):
+                break
+            
+            case (.roomDetails, .presentRolesAndPermissionsScreen, .rolesAndPermissions):
+                presentRolesAndPermissionsScreen()
+            case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen, .roomDetails):
                 break
             
             default:
@@ -527,7 +539,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                             userIndicatorController: userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
                                                             attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL,
-                                                                                                             mentionBuilder: MentionBuilder()))
+                                                                                                             mentionBuilder: MentionBuilder()),
+                                                            appSettings: appSettings)
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -545,6 +558,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentInviteUsersScreen)
             case .presentPollsHistory:
                 stateMachine.tryEvent(.presentPollsHistory)
+            case .presentRolesAndPermissionsScreen:
+                stateMachine.tryEvent(.presentRolesAndPermissionsScreen)
             }
         }
         .store(in: &cancellables)
@@ -1155,6 +1170,25 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                       message: L10n.commonUnableToInviteMessage)
         }
     }
+    
+    private func presentRolesAndPermissionsScreen() {
+        guard let roomProxy else { fatalError() }
+        
+        let parameters = RoomRolesAndPermissionsFlowCoordinatorParameters(roomProxy: roomProxy,
+                                                                          navigationStackCoordinator: navigationStackCoordinator,
+                                                                          userIndicatorController: userIndicatorController)
+        let coordinator = RoomRolesAndPermissionsFlowCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            switch action {
+            case .complete:
+                self?.rolesAndPermissionsFlowCoordinator = nil
+            }
+        }
+        .store(in: &cancellables)
+        
+        rolesAndPermissionsFlowCoordinator = coordinator
+        coordinator.start()
+    }
 }
 
 private extension RoomFlowCoordinator {
@@ -1189,6 +1223,7 @@ private extension RoomFlowCoordinator {
         case pollForm(roomID: String)
         case pollsHistory(roomID: String)
         case pollsHistoryForm(roomID: String)
+        case rolesAndPermissions(roomID: String)
     }
     
     struct EventUserInfo {
@@ -1244,6 +1279,9 @@ private extension RoomFlowCoordinator {
         
         case presentPollsHistory
         case dismissPollsHistory
+        
+        case presentRolesAndPermissionsScreen
+        case dismissRolesAndPermissionsScreen
     }
 }
 

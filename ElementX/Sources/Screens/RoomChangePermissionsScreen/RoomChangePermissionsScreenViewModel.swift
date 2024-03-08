@@ -24,7 +24,7 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
     let userIndicatorController: UserIndicatorControllerProtocol
     private var actionsSubject: PassthroughSubject<RoomChangePermissionsScreenViewModelAction, Never> = .init()
     
-    var actions: AnyPublisher<RoomChangePermissionsScreenViewModelAction, Never> {
+    var actionsPublisher: AnyPublisher<RoomChangePermissionsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     

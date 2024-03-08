@@ -32,6 +32,7 @@ enum A11yIdentifiers {
     static let roomScreen = RoomScreen()
     static let roomDetailsScreen = RoomDetailsScreen()
     static let roomNotificationSettingsScreen = RoomNotificationSettingsScreen()
+    static let roomRolesAndPermissionsScreen = RoomRolesAndPermissionsScreen()
     static let serverConfirmationScreen = ServerConfirmationScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
     static let settingsScreen = SettingsScreen()
@@ -183,6 +184,14 @@ enum A11yIdentifiers {
     
     struct RoomNotificationSettingsScreen {
         let allowCustomSetting = "room_notification_settings-allow_custom"
+    }
+    
+    struct RoomRolesAndPermissionsScreen {
+        let administrators = "room_roles_and_permissions-administrators"
+        let moderators = "room_roles_and_permissions-moderators"
+        let roomDetails = "room_roles_and_permissions-room_details"
+        let messagesAndContent = "room_roles_and_permissions-messages_and_content"
+        let memberModeration = "room_roles_and_permissions-member_moderation"
     }
     
     struct ServerConfirmationScreen {

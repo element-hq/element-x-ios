@@ -28,6 +28,7 @@ enum RoomDetailsScreenViewModelAction {
     case leftRoom
     case requestEditDetailsPresentation
     case requestPollsHistoryPresentation
+    case requestRolesAndPermissionsPresentation
 }
 
 // MARK: View
@@ -47,6 +48,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRoomName = false
     var canEditRoomTopic = false
     var canEditRoomAvatar = false
+    var canEditRolesOrPermissions = false
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     
     var canEdit: Bool {
@@ -177,10 +179,11 @@ enum RoomDetailsScreenViewAction {
     case ignoreConfirmed
     case unignoreConfirmed
     case processTapNotifications
-    case processToogleMuteNotifications
+    case processToggleMuteNotifications
     case displayAvatar
     case processTapPolls
     case toggleFavourite(isFavourite: Bool)
+    case processTapRolesAndPermissions
 }
 
 enum RoomDetailsScreenViewShortcut {

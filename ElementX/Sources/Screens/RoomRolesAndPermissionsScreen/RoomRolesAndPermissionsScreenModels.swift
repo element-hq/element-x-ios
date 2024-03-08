@@ -28,6 +28,7 @@ struct RoomRolesAndPermissionsScreenViewState: BindableState {
 
 enum RoomRolesAndPermissionsScreenViewAction {
     case editRoles(RoomRolesAndPermissionsScreenRole)
+    case editOwnUserRole
     case editPermissions(RoomRolesAndPermissionsScreenPermissionsGroup)
     case reset
 }

@@ -33,10 +33,10 @@ enum RoomChangePermissionsScreenCoordinatorAction {
 final class RoomChangePermissionsScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomChangePermissionsScreenCoordinatorParameters
     private var viewModel: RoomChangePermissionsScreenViewModelProtocol
-    private let actionsSubject: PassthroughSubject<RoomChangePermissionsScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
-    var actions: AnyPublisher<RoomChangePermissionsScreenCoordinatorAction, Never> {
+    private let actionsSubject: PassthroughSubject<RoomChangePermissionsScreenCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<RoomChangePermissionsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -50,7 +50,7 @@ final class RoomChangePermissionsScreenCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.actions.sink { [weak self] action in
+        viewModel.actionsPublisher.sink { [weak self] action in
             MXLog.info("Coordinator: received view model action: \(action)")
             
             guard let self else { return }
