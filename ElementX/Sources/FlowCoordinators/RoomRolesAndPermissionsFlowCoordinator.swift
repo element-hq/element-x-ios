@@ -131,7 +131,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
             case .editRoles(let role):
                 stateMachine.tryEvent(.changeRoles, userInfo: role)
             case .editPermissions(let group):
-                stateMachine.tryEvent(.changePermissions, userInfo: (group, RoomPermissions.default))
+                stateMachine.tryEvent(.changePermissions, userInfo: (group, RoomPermissions(powerLevels: .mock)))
             }
         }
         .store(in: &cancellables)
