@@ -2712,21 +2712,21 @@ class RoomProxyMock: RoomProxyProtocol {
             return flagAsFavouriteReturnValue
         }
     }
-    //MARK: - currentPowerLevelChanges
+    //MARK: - powerLevels
 
-    var currentPowerLevelChangesCallsCount = 0
-    var currentPowerLevelChangesCalled: Bool {
-        return currentPowerLevelChangesCallsCount > 0
+    var powerLevelsCallsCount = 0
+    var powerLevelsCalled: Bool {
+        return powerLevelsCallsCount > 0
     }
-    var currentPowerLevelChangesReturnValue: Result<RoomPowerLevelChanges, RoomProxyError>!
-    var currentPowerLevelChangesClosure: (() async -> Result<RoomPowerLevelChanges, RoomProxyError>)?
+    var powerLevelsReturnValue: Result<RoomPowerLevels, RoomProxyError>!
+    var powerLevelsClosure: (() async -> Result<RoomPowerLevels, RoomProxyError>)?
 
-    func currentPowerLevelChanges() async -> Result<RoomPowerLevelChanges, RoomProxyError> {
-        currentPowerLevelChangesCallsCount += 1
-        if let currentPowerLevelChangesClosure = currentPowerLevelChangesClosure {
-            return await currentPowerLevelChangesClosure()
+    func powerLevels() async -> Result<RoomPowerLevels, RoomProxyError> {
+        powerLevelsCallsCount += 1
+        if let powerLevelsClosure = powerLevelsClosure {
+            return await powerLevelsClosure()
         } else {
-            return currentPowerLevelChangesReturnValue
+            return powerLevelsReturnValue
         }
     }
     //MARK: - applyPowerLevelChanges

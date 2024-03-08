@@ -15,6 +15,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias RoomChangePermissionsScreenViewModelType = StateStoreViewModel<RoomChangePermissionsScreenViewState, RoomChangePermissionsScreenViewAction>
@@ -62,12 +63,12 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
             hideLoadingIndicator()
         }
         
-        var updatedPermissions = RoomPermissions()
+        var changes = RoomPowerLevelChanges()
         for setting in state.bindings.settings {
-            updatedPermissions[keyPath: setting.keyPath] = setting.value
+            changes[keyPath: setting.rustKeyPath] = setting.value.rustPowerLevel
         }
         
-        switch await roomProxy.applyPowerLevelChanges(updatedPermissions.makePowerLevelChanges()) {
+        switch await roomProxy.applyPowerLevelChanges(changes) {
         case .success:
             MXLog.info("Success")
         case .failure:
@@ -75,9 +76,9 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
             return
         }
         
-        switch await roomProxy.currentPowerLevelChanges() {
-        case .success(let powerLevelChanges):
-            state.currentPermissions = .init(powerLevelChanges: powerLevelChanges)
+        switch await roomProxy.powerLevels() {
+        case .success(let powerLevels):
+            state.currentPermissions = .init(powerLevels: powerLevels)
         case .failure:
             context.alertInfo = AlertInfo(id: .generic)
             return

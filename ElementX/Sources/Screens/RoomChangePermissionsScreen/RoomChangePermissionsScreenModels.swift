@@ -31,7 +31,7 @@ struct RoomChangePermissionsScreenViewState: BindableState {
     
     /// Whether or not there are and changes to be saved.
     var hasChanges: Bool {
-        bindings.settings.contains { currentPermissions[keyPath: $0.keyPath] ?? RoomPermissions.defaultValue(for: $0.keyPath) != $0.value }
+        bindings.settings.contains { currentPermissions[keyPath: $0.keyPath] != $0.value }
     }
 }
 
@@ -61,42 +61,42 @@ extension RoomChangePermissionsScreenViewState {
         switch group {
         case .roomDetails:
             let settings = [
-                RoomPermissionsSetting(keyPath: \.roomName,
-                                       value: currentPermissions.roomName ?? RoomPermissions.defaultValue(for: \.roomName),
-                                       title: L10n.screenRoomChangePermissionsRoomName),
-                RoomPermissionsSetting(keyPath: \.roomAvatar,
-                                       value: currentPermissions.roomAvatar ?? RoomPermissions.defaultValue(for: \.roomAvatar),
-                                       title: L10n.screenRoomChangePermissionsRoomAvatar),
-                RoomPermissionsSetting(keyPath: \.roomTopic,
-                                       value: currentPermissions.roomTopic ?? RoomPermissions.defaultValue(for: \.roomTopic),
-                                       title: L10n.screenRoomChangePermissionsRoomTopic)
+                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRoomName,
+                                       value: currentPermissions.roomName,
+                                       keyPath: \.roomName),
+                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRoomAvatar,
+                                       value: currentPermissions.roomAvatar,
+                                       keyPath: \.roomAvatar),
+                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRoomTopic,
+                                       value: currentPermissions.roomTopic,
+                                       keyPath: \.roomTopic)
             ]
             
             self.init(title: L10n.screenRoomChangePermissionsRoomDetails, currentPermissions: currentPermissions, bindings: .init(settings: settings))
         
         case .messagesAndContent:
             let settings = [
-                RoomPermissionsSetting(keyPath: \.eventsDefault,
-                                       value: currentPermissions.eventsDefault ?? RoomPermissions.defaultValue(for: \.eventsDefault),
-                                       title: L10n.screenRoomChangePermissionsSendMessages),
-                RoomPermissionsSetting(keyPath: \.redact,
-                                       value: currentPermissions.redact ?? RoomPermissions.defaultValue(for: \.redact),
-                                       title: L10n.screenRoomChangePermissionsDeleteMessages)
+                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsSendMessages,
+                                       value: currentPermissions.eventsDefault,
+                                       keyPath: \.eventsDefault),
+                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsDeleteMessages,
+                                       value: currentPermissions.redact,
+                                       keyPath: \.redact)
             ]
             
             self.init(title: L10n.screenRoomChangePermissionsMessagesAndContent, currentPermissions: currentPermissions, bindings: .init(settings: settings))
         
         case .memberModeration:
             let settings = [
-                RoomPermissionsSetting(keyPath: \.invite,
-                                       value: currentPermissions.invite ?? RoomPermissions.defaultValue(for: \.invite),
-                                       title: L10n.screenRoomChangePermissionsInvitePeople),
-                RoomPermissionsSetting(keyPath: \.kick,
-                                       value: currentPermissions.kick ?? RoomPermissions.defaultValue(for: \.kick),
-                                       title: L10n.screenRoomChangePermissionsRemovePeople),
-                RoomPermissionsSetting(keyPath: \.ban,
-                                       value: currentPermissions.ban ?? RoomPermissions.defaultValue(for: \.ban),
-                                       title: L10n.screenRoomChangePermissionsBanPeople)
+                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsInvitePeople,
+                                       value: currentPermissions.invite,
+                                       keyPath: \.invite),
+                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRemovePeople,
+                                       value: currentPermissions.kick,
+                                       keyPath: \.kick),
+                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsBanPeople,
+                                       value: currentPermissions.ban,
+                                       keyPath: \.ban)
             ]
             
             self.init(title: L10n.screenRoomChangePermissionsMemberModeration, currentPermissions: currentPermissions, bindings: .init(settings: settings))

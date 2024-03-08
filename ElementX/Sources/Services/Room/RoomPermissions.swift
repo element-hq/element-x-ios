@@ -18,12 +18,14 @@ import Foundation
 import MatrixRustSDK
 
 struct RoomPermissionsSetting: Identifiable {
-    var id: KeyPath<RoomPermissions, RoomMemberDetails.Role?> { keyPath }
+    var id: KeyPath<RoomPermissions, RoomMemberDetails.Role> { keyPath }
     
-    let keyPath: WritableKeyPath<RoomPermissions, RoomMemberDetails.Role?>
-    var value: RoomMemberDetails.Role
+    /// The title of this setting.
     let title: String
     
+    /// The selected role of this setting.
+    var value: RoomMemberDetails.Role
+    /// All of the available roles that this setting can be configured with.
     var allValues: [(title: String, tag: RoomMemberDetails.Role)] {
         [
             (title: L10n.screenRoomChangePermissionsAdministrators, tag: .administrator),
@@ -31,87 +33,63 @@ struct RoomPermissionsSetting: Identifiable {
             (title: L10n.screenRoomChangePermissionsEveryone, tag: .user)
         ]
     }
+    
+    /// The `RoomPermissions` property that this setting is for.
+    let keyPath: KeyPath<RoomPermissions, RoomMemberDetails.Role>
+    /// The `RoomPowerLevelChanges` property that this setting is saved into.
+    var rustKeyPath: WritableKeyPath<RoomPowerLevelChanges, Int64?> {
+        switch keyPath {
+        case \.ban: \.ban
+        case \.invite: \.invite
+        case \.kick: \.kick
+        case \.redact: \.redact
+        case \.eventsDefault: \.eventsDefault
+        case \.stateDefault: \.stateDefault
+        case \.usersDefault: \.usersDefault
+        case \.roomName: \.roomName
+        case \.roomAvatar: \.roomAvatar
+        case \.roomTopic: \.roomTopic
+        default: fatalError("Unexpected key path: \(keyPath)")
+        }
+    }
 }
 
 struct RoomPermissions {
     /// The level required to ban a user.
-    var ban: RoomMemberDetails.Role?
+    var ban: RoomMemberDetails.Role
     /// The level required to invite a user.
-    var invite: RoomMemberDetails.Role?
+    var invite: RoomMemberDetails.Role
     /// The level required to kick a user.
-    var kick: RoomMemberDetails.Role?
+    var kick: RoomMemberDetails.Role
     /// The level required to redact an event.
-    var redact: RoomMemberDetails.Role?
+    var redact: RoomMemberDetails.Role
     /// The default level required to send message events.
-    var eventsDefault: RoomMemberDetails.Role?
+    var eventsDefault: RoomMemberDetails.Role
     /// The default level required to send state events.
-    var stateDefault: RoomMemberDetails.Role?
+    var stateDefault: RoomMemberDetails.Role
     /// The default power level for every user in the room.
-    var usersDefault: RoomMemberDetails.Role?
+    var usersDefault: RoomMemberDetails.Role
     /// The level required to change the room's name.
-    var roomName: RoomMemberDetails.Role?
+    var roomName: RoomMemberDetails.Role
     /// The level required to change the room's avatar.
-    var roomAvatar: RoomMemberDetails.Role?
+    var roomAvatar: RoomMemberDetails.Role
     /// The level required to change the room's topic.
-    var roomTopic: RoomMemberDetails.Role?
+    var roomTopic: RoomMemberDetails.Role
 }
 
 extension RoomPermissions {
-    /// Returns the default value for a particular permission.
-    static func defaultValue(for keyPath: KeyPath<RoomPermissions, RoomMemberDetails.Role?>) -> RoomMemberDetails.Role {
-        switch keyPath {
-        case \.ban: .moderator
-        case \.invite: .user
-        case \.kick: .moderator
-        case \.redact: .moderator
-        case \.eventsDefault: .user
-        case \.stateDefault: .moderator
-        case \.usersDefault: .user
-        case \.roomName: .moderator
-        case \.roomAvatar: .moderator
-        case \.roomTopic: .moderator
-        default: fatalError("Unexpected key path: \(keyPath)")
-        }
-    }
-    
-    /// Constructs a set of permissions using the default values.
-    static var `default`: RoomPermissions {
-        RoomPermissions(ban: defaultValue(for: \.ban),
-                        invite: defaultValue(for: \.invite),
-                        kick: defaultValue(for: \.kick),
-                        redact: defaultValue(for: \.redact),
-                        eventsDefault: defaultValue(for: \.eventsDefault),
-                        stateDefault: defaultValue(for: \.stateDefault),
-                        usersDefault: defaultValue(for: \.usersDefault),
-                        roomName: defaultValue(for: \.roomName),
-                        roomAvatar: defaultValue(for: \.roomAvatar),
-                        roomTopic: defaultValue(for: \.roomTopic))
-    }
-    
-    init(powerLevelChanges: RoomPowerLevelChanges) {
-        ban = powerLevelChanges.ban.map(RoomMemberDetails.Role.init)
-        invite = powerLevelChanges.invite.map(RoomMemberDetails.Role.init)
-        kick = powerLevelChanges.kick.map(RoomMemberDetails.Role.init)
-        redact = powerLevelChanges.redact.map(RoomMemberDetails.Role.init)
-        eventsDefault = powerLevelChanges.eventsDefault.map(RoomMemberDetails.Role.init)
-        stateDefault = powerLevelChanges.stateDefault.map(RoomMemberDetails.Role.init)
-        usersDefault = powerLevelChanges.usersDefault.map(RoomMemberDetails.Role.init)
-        roomName = powerLevelChanges.roomName.map(RoomMemberDetails.Role.init)
-        roomAvatar = powerLevelChanges.roomAvatar.map(RoomMemberDetails.Role.init)
-        roomTopic = powerLevelChanges.roomTopic.map(RoomMemberDetails.Role.init)
-    }
-    
-    func makePowerLevelChanges() -> RoomPowerLevelChanges {
-        RoomPowerLevelChanges(ban: ban?.rustPowerLevel,
-                              invite: invite?.rustPowerLevel,
-                              kick: kick?.rustPowerLevel,
-                              redact: redact?.rustPowerLevel,
-                              eventsDefault: eventsDefault?.rustPowerLevel,
-                              stateDefault: stateDefault?.rustPowerLevel,
-                              usersDefault: usersDefault?.rustPowerLevel,
-                              roomName: roomName?.rustPowerLevel,
-                              roomAvatar: roomAvatar?.rustPowerLevel,
-                              roomTopic: roomTopic?.rustPowerLevel)
+    /// Create permissions from the room's power levels.
+    init(powerLevels: RoomPowerLevels) {
+        ban = RoomMemberDetails.Role(rustPowerLevel: powerLevels.ban)
+        invite = RoomMemberDetails.Role(rustPowerLevel: powerLevels.invite)
+        kick = RoomMemberDetails.Role(rustPowerLevel: powerLevels.kick)
+        redact = RoomMemberDetails.Role(rustPowerLevel: powerLevels.redact)
+        eventsDefault = RoomMemberDetails.Role(rustPowerLevel: powerLevels.eventsDefault)
+        stateDefault = RoomMemberDetails.Role(rustPowerLevel: powerLevels.stateDefault)
+        usersDefault = RoomMemberDetails.Role(rustPowerLevel: powerLevels.usersDefault)
+        roomName = RoomMemberDetails.Role(rustPowerLevel: powerLevels.roomName)
+        roomAvatar = RoomMemberDetails.Role(rustPowerLevel: powerLevels.roomAvatar)
+        roomTopic = RoomMemberDetails.Role(rustPowerLevel: powerLevels.roomTopic)
     }
 }
 
@@ -133,5 +111,20 @@ extension RoomMemberDetails.Role {
     
     var rustPowerLevel: Int64 {
         suggestedPowerLevelForRole(role: rustRole)
+    }
+}
+
+extension RoomPowerLevels {
+    static var mock: RoomPowerLevels {
+        RoomPowerLevels(ban: 50,
+                        invite: 0,
+                        kick: 50,
+                        redact: 50,
+                        eventsDefault: 0,
+                        stateDefault: 50,
+                        usersDefault: 0,
+                        roomName: 50,
+                        roomAvatar: 50,
+                        roomTopic: 50)
     }
 }

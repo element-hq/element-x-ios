@@ -20,72 +20,32 @@ import XCTest
 @testable import ElementX
 
 class RoomPermissionsTests: XCTestCase {
-    func testEmptyFromRust() {
-        // Given an empty set of power level changes.
-        let powerLevelChanges = RoomPowerLevelChanges()
+    func testFromRust() {
+        // Given a set of power level changes with various values.
+        let powerLevels = RoomPowerLevels(ban: 100,
+                                          invite: 100,
+                                          kick: 100,
+                                          redact: 50,
+                                          eventsDefault: 50,
+                                          stateDefault: 50,
+                                          usersDefault: 0,
+                                          roomName: 0,
+                                          roomAvatar: 0,
+                                          roomTopic: 0)
         
         // When creating room permissions from them.
-        let permissions = RoomPermissions(powerLevelChanges: powerLevelChanges)
+        let permissions = RoomPermissions(powerLevels: powerLevels)
         
-        // Then none of the permissions should be set.
-        XCTAssertNil(permissions.ban)
-        XCTAssertNil(permissions.invite)
-        XCTAssertNil(permissions.kick)
-        XCTAssertNil(permissions.redact)
-        XCTAssertNil(permissions.eventsDefault)
-        XCTAssertNil(permissions.stateDefault)
-        XCTAssertNil(permissions.usersDefault)
-        XCTAssertNil(permissions.roomName)
-        XCTAssertNil(permissions.roomAvatar)
-        XCTAssertNil(permissions.roomTopic)
-    }
-    
-    func testCompleteFromRust() {
-        // Given a set of power level changes with all the values set to 100.
-        let powerLevelChanges = RoomPowerLevelChanges(ban: 100,
-                                                      invite: 100,
-                                                      kick: 100,
-                                                      redact: 100,
-                                                      eventsDefault: 100,
-                                                      stateDefault: 100,
-                                                      usersDefault: 100,
-                                                      roomName: 100,
-                                                      roomAvatar: 100,
-                                                      roomTopic: 100)
-        
-        // When creating room permissions from them.
-        let permissions = RoomPermissions(powerLevelChanges: powerLevelChanges)
-        
-        // Then all of the permissions should be for an administrator.
+        // Then the permissions should be created with values mapped to the correct role.
         XCTAssertEqual(permissions.ban, .administrator)
         XCTAssertEqual(permissions.invite, .administrator)
         XCTAssertEqual(permissions.kick, .administrator)
-        XCTAssertEqual(permissions.redact, .administrator)
-        XCTAssertEqual(permissions.eventsDefault, .administrator)
-        XCTAssertEqual(permissions.stateDefault, .administrator)
-        XCTAssertEqual(permissions.usersDefault, .administrator)
-        XCTAssertEqual(permissions.roomName, .administrator)
-        XCTAssertEqual(permissions.roomAvatar, .administrator)
-        XCTAssertEqual(permissions.roomTopic, .administrator)
-    }
-    
-    func testToRust() {
-        // Given a set of permissions where on some of the values have been set.
-        let permissions = RoomPermissions(roomName: .administrator, roomAvatar: .administrator, roomTopic: .administrator)
-        
-        // When creating power level changes from them.
-        let powerLevelChanges = permissions.makePowerLevelChanges()
-        
-        // Then only the permissions that were set should be included.
-        XCTAssertNil(powerLevelChanges.ban, "Unset values should be nil for Rust to merge with the current value.")
-        XCTAssertNil(powerLevelChanges.invite, "Unset values should be nil for Rust to merge with the current value.")
-        XCTAssertNil(powerLevelChanges.kick, "Unset values should be nil for Rust to merge with the current value.")
-        XCTAssertNil(powerLevelChanges.redact, "Unset values should be nil for Rust to merge with the current value.")
-        XCTAssertNil(powerLevelChanges.eventsDefault, "Unset values should be nil for Rust to merge with the current value.")
-        XCTAssertNil(powerLevelChanges.stateDefault, "Unset values should be nil for Rust to merge with the current value.")
-        XCTAssertNil(powerLevelChanges.usersDefault, "Unset values should be nil for Rust to merge with the current value.")
-        XCTAssertEqual(powerLevelChanges.roomName, 100)
-        XCTAssertEqual(powerLevelChanges.roomAvatar, 100)
-        XCTAssertEqual(powerLevelChanges.roomTopic, 100)
+        XCTAssertEqual(permissions.redact, .moderator)
+        XCTAssertEqual(permissions.eventsDefault, .moderator)
+        XCTAssertEqual(permissions.stateDefault, .moderator)
+        XCTAssertEqual(permissions.usersDefault, .user)
+        XCTAssertEqual(permissions.roomName, .user)
+        XCTAssertEqual(permissions.roomAvatar, .user)
+        XCTAssertEqual(permissions.roomTopic, .user)
     }
 }
