@@ -21,14 +21,16 @@ typealias RoomRolesAndPermissionsScreenViewModelType = StateStoreViewModel<RoomR
 
 class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewModelType, RoomRolesAndPermissionsScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
-    private var actionsSubject: PassthroughSubject<RoomRolesAndPermissionsScreenViewModelAction, Never> = .init()
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
-    var actions: AnyPublisher<RoomRolesAndPermissionsScreenViewModelAction, Never> {
+    private var actionsSubject: PassthroughSubject<RoomRolesAndPermissionsScreenViewModelAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<RoomRolesAndPermissionsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(roomProxy: RoomProxyProtocol) {
+    init(roomProxy: RoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
+        self.userIndicatorController = userIndicatorController
         super.init(initialViewState: RoomRolesAndPermissionsScreenViewState())
         
         roomProxy.membersPublisher.sink { [weak self] members in
@@ -48,11 +50,28 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         case .editRoles(let role):
             actionsSubject.send(.editRoles(role))
         case .editOwnUserRole:
-            break
+            state.bindings.alertInfo = AlertInfo(id: .resetConfirmation,
+                                                 title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
+                                                 message: L10n.screenRoomChangeRoleConfirmDemoteSelfDescription,
+                                                 verticalButtons: [
+                                                     .init(title: L10n.screenRoomRolesAndPermissionsChangeRoleDemoteToModerator, role: .destructive) {
+                                                         Task { await self.updateOwnRole(.moderator) }
+                                                     },
+                                                     .init(title: L10n.screenRoomRolesAndPermissionsChangeRoleDemoteToMember, role: .destructive) {
+                                                         Task { await self.updateOwnRole(.user) }
+                                                     },
+                                                     .init(title: L10n.actionCancel, role: .cancel) { }
+                                                 ])
         case .editPermissions(let permissionsGroup):
             actionsSubject.send(.editPermissions(permissionsGroup))
         case .reset:
-            break
+            state.bindings.alertInfo = AlertInfo(id: .resetConfirmation,
+                                                 title: L10n.screenRoomRolesAndPermissionsResetConfirmTitle,
+                                                 message: L10n.screenRoomRolesAndPermissionsResetConfirmDescription,
+                                                 primaryButton: .init(title: L10n.actionReset, role: .destructive) {
+                                                     Task { await self.resetPermissions() }
+                                                 },
+                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel) { })
         }
     }
     
@@ -61,5 +80,55 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
         state.administratorCount = members.filter { $0.role == .administrator }.count
         state.moderatorCount = members.filter { $0.role == .moderator }.count
+    }
+    
+    private func updateOwnRole(_ role: RoomMemberDetails.Role) async {
+        showSavingIndicator()
+        
+        switch await roomProxy.updatePowerLevelsForUsers([(userID: roomProxy.ownUserID, powerLevel: role.rustPowerLevel)]) {
+        case .success:
+            showSuccessIndicator()
+            actionsSubject.send(.demotedOwnUser)
+        case .failure:
+            state.bindings.alertInfo = AlertInfo(id: .error)
+        }
+        
+        hideSavingIndicator()
+    }
+    
+    private func resetPermissions() async {
+        showSavingIndicator()
+        
+        switch await roomProxy.resetPowerLevels() {
+        case .success(let success):
+            showSuccessIndicator()
+        case .failure(let failure):
+            state.bindings.alertInfo = AlertInfo(id: .error)
+        }
+        
+        hideSavingIndicator()
+    }
+    
+    // MARK: Loading indicator
+    
+    private static let savingIndicatorID = "RolesAndPermissionsSaving"
+    private static let successIndicatorID = "RolesAndPermissionsSuccess"
+    
+    private func showSavingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.savingIndicatorID,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.commonSaving,
+                                                              persistent: true))
+    }
+    
+    private func hideSavingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.savingIndicatorID)
+    }
+    
+    private func showSuccessIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.successIndicatorID,
+                                                              type: .toast,
+                                                              title: L10n.commonSuccess,
+                                                              iconName: "checkmark"))
     }
 }

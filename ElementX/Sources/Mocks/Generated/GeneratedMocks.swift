@@ -2750,6 +2750,23 @@ class RoomProxyMock: RoomProxyProtocol {
             return applyPowerLevelChangesReturnValue
         }
     }
+    //MARK: - resetPowerLevels
+
+    var resetPowerLevelsCallsCount = 0
+    var resetPowerLevelsCalled: Bool {
+        return resetPowerLevelsCallsCount > 0
+    }
+    var resetPowerLevelsReturnValue: Result<RoomPowerLevels, RoomProxyError>!
+    var resetPowerLevelsClosure: (() async -> Result<RoomPowerLevels, RoomProxyError>)?
+
+    func resetPowerLevels() async -> Result<RoomPowerLevels, RoomProxyError> {
+        resetPowerLevelsCallsCount += 1
+        if let resetPowerLevelsClosure = resetPowerLevelsClosure {
+            return await resetPowerLevelsClosure()
+        } else {
+            return resetPowerLevelsReturnValue
+        }
+    }
     //MARK: - suggestedRole
 
     var suggestedRoleForCallsCount = 0

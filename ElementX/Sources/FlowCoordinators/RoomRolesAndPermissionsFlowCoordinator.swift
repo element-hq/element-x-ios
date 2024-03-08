@@ -54,8 +54,10 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         case finishedChangingRoles
         /// The user would like to change room permissions.
         case changePermissions
-        /// The user finished changing room permissions
+        /// The user finished changing room permissions.
         case finishedChangingPermissions
+        /// The user has demoted themself.
+        case demotedOwnUser
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -118,20 +120,26 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         }
         stateMachine.addRoutes(event: .finishedChangingPermissions, transitions: [.changingPermissions => .rolesAndPermissionsScreen])
         
+        stateMachine.addHandler(event: .demotedOwnUser) { [weak self] _ in
+            self?.actionsSubject.send(.complete)
+        }
+        
         stateMachine.addErrorHandler { context in
             fatalError("Unexpected transition: \(context)")
         }
     }
     
     private func presentRolesAndPermissionsScreen() {
-        let parameters = RoomRolesAndPermissionsScreenCoordinatorParameters(roomProxy: roomProxy)
+        let parameters = RoomRolesAndPermissionsScreenCoordinatorParameters(roomProxy: roomProxy, userIndicatorController: userIndicatorController)
         let coordinator = RoomRolesAndPermissionsScreenCoordinator(parameters: parameters)
-        coordinator.actions.sink { [stateMachine] action in
+        coordinator.actionsPublisher.sink { [stateMachine] action in
             switch action {
             case .editRoles(let role):
                 stateMachine.tryEvent(.changeRoles, userInfo: role)
             case .editPermissions(let group):
                 stateMachine.tryEvent(.changePermissions, userInfo: (group, RoomPermissions(powerLevels: .mock)))
+            case .demotedOwnUser:
+                stateMachine.tryEvent(.demotedOwnUser)
             }
         }
         .store(in: &cancellables)

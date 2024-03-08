@@ -21,28 +21,31 @@ import SwiftUI
 
 struct RoomRolesAndPermissionsScreenCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum RoomRolesAndPermissionsScreenCoordinatorAction {
     case editRoles(RoomRolesAndPermissionsScreenRole)
     case editPermissions(RoomRolesAndPermissionsScreenPermissionsGroup)
+    case demotedOwnUser
 }
 
 final class RoomRolesAndPermissionsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: RoomRolesAndPermissionsScreenViewModelProtocol
-    private let actionsSubject: PassthroughSubject<RoomRolesAndPermissionsScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
-    var actions: AnyPublisher<RoomRolesAndPermissionsScreenCoordinatorAction, Never> {
+    private let actionsSubject: PassthroughSubject<RoomRolesAndPermissionsScreenCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<RoomRolesAndPermissionsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init(parameters: RoomRolesAndPermissionsScreenCoordinatorParameters) {
-        viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: parameters.roomProxy)
+        viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: parameters.roomProxy,
+                                                           userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {
-        viewModel.actions.sink { [weak self] action in
+        viewModel.actionsPublisher.sink { [weak self] action in
             MXLog.info("Coordinator: received view model action: \(action)")
             
             guard let self else { return }
@@ -51,6 +54,8 @@ final class RoomRolesAndPermissionsScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.editRoles(role))
             case .editPermissions(let permissionsGroup):
                 actionsSubject.send(.editPermissions(permissionsGroup))
+            case .demotedOwnUser:
+                actionsSubject.send(.demotedOwnUser)
             }
         }
         .store(in: &cancellables)
