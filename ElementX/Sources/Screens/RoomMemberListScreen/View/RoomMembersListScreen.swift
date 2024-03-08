@@ -22,9 +22,7 @@ struct RoomMembersListScreen: View {
     
     var body: some View {
         ScrollView {
-            if context.viewState.canBanUsers,
-               context.viewState.bannedMembersCount > 0 {
-                // Maybe this should go into the search bar if it can be pinned when not focussed?
+            if context.viewState.canBanUsers {
                 Picker("", selection: $context.mode) {
                     Text(L10n.screenRoomMemberListModeMembers)
                         .tag(RoomMembersListScreenMode.members)
@@ -39,6 +37,16 @@ struct RoomMembersListScreen: View {
                 roomMembers
             } else {
                 bannedUsers
+            }
+        }
+        .overlay {
+            if context.mode == .banned, context.viewState.bannedMembersCount == 0 {
+                Text(L10n.screenRoomMemberListBannedEmpty)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .background(.compound.bgCanvasDefault)
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
@@ -110,6 +118,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
     static let invitesViewModel = makeViewModel(withInvites: true)
     static let adminViewModel = makeViewModel(isAdmin: true, initialMode: .members)
     static let bannedViewModel = makeViewModel(isAdmin: true, initialMode: .banned)
+    static let emptyBannedViewModel = makeViewModel(withBanned: false, isAdmin: true, initialMode: .banned)
     
     static var previews: some View {
         NavigationStack {
@@ -135,9 +144,16 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         }
         .snapshot(delay: 1.0)
         .previewDisplayName("Admin: Banned")
+        
+        NavigationStack {
+            RoomMembersListScreen(context: emptyBannedViewModel.context)
+        }
+        .snapshot(delay: 1.0)
+        .previewDisplayName("Admin: Empty Banned")
     }
     
     static func makeViewModel(withInvites: Bool = false,
+                              withBanned: Bool = true,
                               isAdmin: Bool = false,
                               initialMode: RoomMembersListScreenMode = .members) -> RoomMembersListScreenViewModel {
         let mockAdmin = RoomMemberProxyMock.mockAdmin
@@ -150,7 +166,11 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
             .mockCharlie,
             mockAdmin,
             .mockModerator
-        ] + RoomMemberProxyMock.mockBanned
+        ]
+        
+        if withBanned {
+            members.append(contentsOf: RoomMemberProxyMock.mockBanned)
+        }
         
         if withInvites {
             members.append(.mockInvited)
