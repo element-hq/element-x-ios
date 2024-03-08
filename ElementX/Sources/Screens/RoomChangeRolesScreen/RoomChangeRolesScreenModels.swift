@@ -83,12 +83,14 @@ struct RoomChangeRolesScreenViewState: BindableState {
 struct RoomChangeRolesScreenViewStateBindings {
     var searchQuery = ""
     /// Information about the currently displayed alert.
-    var alertInfo: AlertInfo<RoomChangePermissionsScreenAlertType>?
+    var alertInfo: AlertInfo<RoomChangeRolesScreenAlertType>?
 }
 
 enum RoomChangeRolesScreenAlertType {
+    /// A warning that a particular promotion can't be undone.
+    case promotionWarning
     /// The generic error message.
-    case generic
+    case error
 }
 
 enum RoomChangeRolesScreenViewAction {

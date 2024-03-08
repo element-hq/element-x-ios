@@ -148,7 +148,8 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.hasChanges)
     }
     
-    func testSaveChanges() async throws {
+    func testSaveModeratorChanges() async throws {
+        // Given the change roles view model for moderators.
         setupRoomProxy()
         viewModel = RoomChangeRolesScreenViewModel(mode: .moderator, roomProxy: roomProxy, userIndicatorController: UserIndicatorControllerMock())
         
@@ -158,16 +159,46 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
             return
         }
         
+        // When promoting a regular user and demoting a moderator.
         context.send(viewAction: .toggleMember(firstUser))
         context.send(viewAction: .toggleMember(existingModerator))
         context.send(viewAction: .save)
         
         try await Task.sleep(for: .milliseconds(100))
         
+        // Then no warning should be shown, and the call to update the users should be made straight away.
         XCTAssertTrue(roomProxy.updatePowerLevelsForUsersCalled)
         XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.count, 2)
         XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains(where: { $0.userID == existingModerator.id && $0.powerLevel == 0 }), true)
         XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains(where: { $0.userID == firstUser.id && $0.powerLevel == 50 }), true)
+    }
+    
+    func testSavePromotedAdministrator() async throws {
+        // Given the change roles view model for administrators.
+        setupRoomProxy()
+        viewModel = RoomChangeRolesScreenViewModel(mode: .administrator, roomProxy: roomProxy, userIndicatorController: UserIndicatorControllerMock())
+        XCTAssertNil(context.alertInfo)
+        
+        guard let firstUser = context.viewState.members.first(where: { !context.viewState.isMemberSelected($0) }) else {
+            XCTFail("There should be a regular user to begin with.")
+            return
+        }
+        
+        // When saving changes to promote a user to an administrator.
+        context.send(viewAction: .toggleMember(firstUser))
+        context.send(viewAction: .save)
+        
+        // Then an alert should be shown to warn the action cannot be undone.
+        XCTAssertNotNil(context.alertInfo)
+        
+        // When confirming the prompt
+        context.alertInfo?.primaryButton.action?()
+        try await Task.sleep(for: .milliseconds(100))
+        
+        // Then the user should be made into an administrator.
+        XCTAssertTrue(roomProxy.updatePowerLevelsForUsersCalled)
+        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.count, 1)
+        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains(where: { $0.userID == firstUser.id && $0.powerLevel == 100 }), true)
     }
     
     private func setupRoomProxy() {
