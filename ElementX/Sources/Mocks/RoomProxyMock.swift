@@ -88,7 +88,7 @@ extension RoomProxyMock {
         underlyingIsFavourite = false
         flagAsFavouriteReturnValue = .success(())
         
-        currentPowerLevelChangesReturnValue = .success(.init())
+        powerLevelsReturnValue = .success(.mock)
         applyPowerLevelChangesReturnValue = .success(())
         updatePowerLevelsForUsersReturnValue = .success(())
         canUserUserIDSendStateEventClosure = { [weak self] userID, _ in

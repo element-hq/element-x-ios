@@ -29,7 +29,7 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
     
     override func setUp() {
         roomProxy = RoomProxyMock(with: .init())
-        viewModel = RoomChangePermissionsScreenViewModel(currentPermissions: .init(),
+        viewModel = RoomChangePermissionsScreenViewModel(currentPermissions: .init(powerLevels: .mock),
                                                          group: .roomDetails,
                                                          roomProxy: roomProxy,
                                                          userIndicatorController: UserIndicatorControllerMock())
@@ -45,7 +45,7 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.hasChanges)
         
         // When updating a setting.
-        let setting = RoomPermissionsSetting(keyPath: \.roomAvatar, value: .user, title: "")
+        let setting = RoomPermissionsSetting(title: "", value: .user, keyPath: \.roomAvatar)
         context.settings[index] = setting
         
         // Then the setting should update and the changes should be flagged.
@@ -59,7 +59,7 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
             XCTFail("There should be a setting for the room avatar.")
             return
         }
-        context.settings[index] = RoomPermissionsSetting(keyPath: \.roomAvatar, value: .user, title: "")
+        context.settings[index] = RoomPermissionsSetting(title: "", value: .user, keyPath: \.roomAvatar)
         XCTAssertEqual(context.settings[index].value, .user)
         XCTAssertTrue(context.viewState.hasChanges)
         

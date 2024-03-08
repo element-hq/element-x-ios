@@ -373,9 +373,9 @@ class RoomProxy: RoomProxyProtocol {
     
     // MARK: - Power Levels
     
-    func currentPowerLevelChanges() async -> Result<RoomPowerLevelChanges, RoomProxyError> {
+    func powerLevels() async -> Result<RoomPowerLevels, RoomProxyError> {
         do {
-            return try await .success(room.buildPowerLevelChangesFromCurrent())
+            return try await .success(room.getPowerLevels())
         } catch {
             MXLog.error("Failed building the current power level settings: \(error)")
             return .failure(.failedCheckingPermission)
