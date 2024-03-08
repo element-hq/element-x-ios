@@ -94,6 +94,7 @@ extension RoomProxyMock {
         
         powerLevelsReturnValue = .success(.mock)
         applyPowerLevelChangesReturnValue = .success(())
+        resetPowerLevelsReturnValue = .success(.mock)
         suggestedRoleForClosure = { [weak self] userID in
             guard case .success(let member) = await self?.getMember(userID: userID) else {
                 return .failure(.failedCheckingPermission)
