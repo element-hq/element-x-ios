@@ -92,8 +92,8 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         case .rolesAndPermissionsScreen:
             navigationStackCoordinator.pop(animated: animated)
         case .changingRoles, .changingPermissions:
-            navigationStackCoordinator.pop(animated: animated)
-            navigationStackCoordinator.pop(animated: animated)
+            navigationStackCoordinator.pop(animated: animated) // ChangeRoles or ChangePermissions screen.
+            navigationStackCoordinator.pop(animated: animated) // RolesAndPermissions screen.
         }
     }
     
