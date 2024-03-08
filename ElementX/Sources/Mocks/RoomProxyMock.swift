@@ -42,7 +42,6 @@ struct RoomProxyMockConfiguration {
     }()
     
     var members: [RoomMemberProxyMock] = .allMembers
-    var memberForID: RoomMemberProxyMock = .mockMe
     var ownUserID = RoomMemberProxyMock.mockMe.userID
     
     var canUserInvite = true
@@ -81,7 +80,12 @@ extension RoomProxyMock {
         underlyingActionsPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }
-        getMemberUserIDReturnValue = .success(configuration.memberForID)
+        getMemberUserIDClosure = { [weak self] userID in
+            guard let member = self?.membersPublisher.value.first(where: { $0.userID == userID }) else {
+                return .failure(.failedRetrievingMember)
+            }
+            return .success(member)
+        }
 
         flagAsUnreadReturnValue = .success(())
         markAsReadReceiptTypeReturnValue = .success(())
@@ -90,6 +94,12 @@ extension RoomProxyMock {
         
         powerLevelsReturnValue = .success(.mock)
         applyPowerLevelChangesReturnValue = .success(())
+        suggestedRoleForClosure = { [weak self] userID in
+            guard case .success(let member) = await self?.getMember(userID: userID) else {
+                return .failure(.failedCheckingPermission)
+            }
+            return .success(member.role)
+        }
         updatePowerLevelsForUsersReturnValue = .success(())
         canUserUserIDSendStateEventClosure = { [weak self] userID, _ in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)

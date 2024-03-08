@@ -178,7 +178,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.canEditRoomTopic = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic) == .success(true)
         state.canEditRoomAvatar = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar) == .success(true)
         if appSettings.roomModerationEnabled {
-            state.canEditRolesOrPermissions = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomPowerLevels) == .success(true)
+            state.canEditRolesOrPermissions = await roomProxy.suggestedRole(for: roomProxy.ownUserID) == .success(.administrator)
         }
         state.canInviteUsers = await canInviteUsers
     }

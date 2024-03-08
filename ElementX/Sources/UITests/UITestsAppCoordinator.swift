@@ -586,7 +586,6 @@ class MockScreen: Identifiable {
                                                       name: "Room",
                                                       isEncrypted: true,
                                                       members: members,
-                                                      memberForID: .mockMe,
                                                       canUserInvite: false))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                              clientProxy: ClientProxyMock(.init()),
@@ -609,7 +608,6 @@ class MockScreen: Identifiable {
                                                       isEncrypted: true,
                                                       canonicalAlias: "#mock:room.org",
                                                       members: members,
-                                                      memberForID: .mockMe,
                                                       canUserInvite: false))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                              clientProxy: ClientProxyMock(.init()),
@@ -633,7 +631,6 @@ class MockScreen: Identifiable {
                                                       isEncrypted: true,
                                                       canonicalAlias: "#mock:room.org",
                                                       members: members,
-                                                      memberForID: .mockMeAdmin,
                                                       canUserInvite: false))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                              clientProxy: ClientProxyMock(.init()),
@@ -654,7 +651,6 @@ class MockScreen: Identifiable {
                                                       name: "Room",
                                                       isEncrypted: true,
                                                       members: members,
-                                                      memberForID: owner,
                                                       canUserInvite: true))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                              clientProxy: ClientProxyMock(.init()),
@@ -676,7 +672,6 @@ class MockScreen: Identifiable {
                                                       isDirect: true,
                                                       isEncrypted: true,
                                                       members: members,
-                                                      memberForID: .mockMe,
                                                       canUserInvite: false))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                              clientProxy: ClientProxyMock(.init()),
