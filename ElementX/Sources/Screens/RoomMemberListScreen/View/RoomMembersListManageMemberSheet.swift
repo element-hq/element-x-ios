@@ -78,10 +78,12 @@ struct RoomMembersListManageMemberSheet_Previews: PreviewProvider, TestablePrevi
         RoomMembersListManageMemberSheet(member: .init(withProxy: RoomMemberProxyMock.mockDan),
                                          context: viewModel.context)
             .previewDisplayName("Joined")
+            .snapshot(delay: 0.2)
         
         RoomMembersListManageMemberSheet(member: .init(withProxy: RoomMemberProxyMock.mockBanned[3]),
                                          context: viewModel.context)
             .previewDisplayName("Banned")
+            .snapshot(delay: 0.2)
     }
 }
 
