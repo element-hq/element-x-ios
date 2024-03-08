@@ -19,16 +19,19 @@ import MatrixRustSDK
 import SwiftUI
 
 struct RoomChangeRolesScreenRow: View {
+    @Environment(\.isEnabled) private var isEnabled
+    
     let member: RoomMemberDetails
     let imageProvider: ImageProviderProtocol?
     
-    let kind: ListRow<LoadableAvatarImage, EmptyView, EmptyView, Bool>.Kind<EmptyView, Bool>
+    let isSelected: Bool
+    let action: () -> Void
     
     var body: some View {
         ListRow(label: .avatar(title: member.name ?? member.id,
                                description: member.name == nil ? nil : member.id,
                                icon: avatar),
-                kind: kind)
+                kind: isEnabled ? .multiSelection(isSelected: isSelected, action: action) : .label)
     }
     
     var avatar: LoadableAvatarImage {
@@ -47,25 +50,30 @@ struct RoomChangeRolesScreenRow_Previews: PreviewProvider, TestablePreview {
         Form {
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock.mockAlice),
                                      imageProvider: MockMediaProvider(),
-                                     kind: .multiSelection(isSelected: true, action: action))
+                                     isSelected: true,
+                                     action: action)
             
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock.mockBob),
                                      imageProvider: MockMediaProvider(),
-                                     kind: .multiSelection(isSelected: false, action: action))
+                                     isSelected: false,
+                                     action: action)
             
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock.mockCharlie),
                                      imageProvider: MockMediaProvider(),
-                                     kind: .multiSelection(isSelected: true, action: action))
+                                     isSelected: true,
+                                     action: action)
                 .disabled(true)
             
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock(with: .init(userID: "@someone:matrix.org", membership: .join))),
                                      imageProvider: MockMediaProvider(),
-                                     kind: .multiSelection(isSelected: false, action: action))
+                                     isSelected: false,
+                                     action: action)
                 .disabled(true)
             
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock(with: .init(userID: "@someone:matrix.org", membership: .join))),
                                      imageProvider: MockMediaProvider(),
-                                     kind: .multiSelection(isSelected: false, action: action))
+                                     isSelected: false,
+                                     action: action)
         }
         .compoundList()
     }
