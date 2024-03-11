@@ -48,6 +48,7 @@
 "action_enter_pin" = "Add meg a PIN-kódot";
 "action_forgot_password" = "Elfelejtetted a jelszavadat?";
 "action_forward" = "Tovább";
+"action_go_back" = "Go back";
 "action_invite" = "Meghívás";
 "action_invite_friends" = "Ismerősök meghívása";
 "action_invite_friends_to_app" = "Ismerősök meghívása ide: %1$@";
@@ -74,6 +75,7 @@
 "action_reply_in_thread" = "Válasz az üzenetszálban";
 "action_report_bug" = "Hiba jelentése";
 "action_report_content" = "Tartalom jelentése";
+"action_reset" = "Reset";
 "action_retry" = "Újra";
 "action_retry_decryption" = "Visszafejtés újbóli megpróbálása";
 "action_save" = "Mentés";
@@ -104,6 +106,7 @@
 "common_audio" = "Hang";
 "common_blocked_users" = "Blocked users";
 "common_bubbles" = "Buborékok";
+"common_call_invite" = "Call in progress (unsupported)";
 "common_chat_backup" = "Csevegés biztonsági mentése";
 "common_copyright" = "Szerzői jogok";
 "common_creating_room" = "Szoba létrehozása…";
@@ -162,6 +165,7 @@
 "common_room" = "Szoba";
 "common_room_name" = "Szoba neve";
 "common_room_name_placeholder" = "például a projekted neve";
+"common_saved_changes" = "Saved changes";
 "common_saving" = "Saving";
 "common_screen_lock" = "Képernyőzár";
 "common_search_for_someone" = "Személy keresése";
@@ -217,6 +221,8 @@
 "dialog_permission_notification" = "Hogy az alkalmazás megjeleníthesse az értesítéseket, adja meg az engedélyt a rendszerbeállításokban.";
 "dialog_title_confirmation" = "Megerősítés";
 "dialog_title_warning" = "Figyelmeztetés";
+"dialog_unsaved_changes_description_ios" = "Your changes won’t be saved";
+"dialog_unsaved_changes_title" = "Save changes?";
 "emoji_picker_category_activity" = "Tevékenységek";
 "emoji_picker_category_flags" = "Zászlók";
 "emoji_picker_category_foods" = "Étel és ital";
@@ -510,6 +516,8 @@
 "screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
 "screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_change_role_moderators_title" = "Edit Moderators";
+"screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
+"screen_room_change_role_unsaved_changes_title" = "Save changes?";
 "screen_room_details_add_topic_title" = "Téma hozzáadása";
 "screen_room_details_already_a_member" = "Már tag";
 "screen_room_details_already_invited" = "Már meghívták";
@@ -540,7 +548,9 @@
 "screen_room_member_list_ban_member_confirmation_action" = "Ban";
 "screen_room_member_list_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
 "screen_room_member_list_ban_member_confirmation_title" = "Are you sure you want to ban this member?";
+"screen_room_member_list_banned_empty" = "There are no banned users in this room.";
 "screen_room_member_list_banning_user" = "Banning %1$@";
+"screen_room_member_list_manage_member_ban" = "Remove and ban member";
 "screen_room_member_list_manage_member_remove" = "Tag eltávolítása";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Tag eltávolítása és kitiltása";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Csak a tag eltávolítása";
@@ -577,11 +587,16 @@
 "screen_room_retry_send_menu_send_again_action" = "Újraküldés";
 "screen_room_retry_send_menu_title" = "Az üzenet elküldése sikertelen";
 "screen_room_roles_and_permissions_admins" = "Admins";
+"screen_room_roles_and_permissions_change_my_role" = "Change my role";
+"screen_room_roles_and_permissions_change_role_demote_to_member" = "Demote to member";
+"screen_room_roles_and_permissions_change_role_demote_to_moderator" = "Demote to moderator";
 "screen_room_roles_and_permissions_member_moderation" = "Member moderation";
 "screen_room_roles_and_permissions_messages_and_content" = "Messages and content";
 "screen_room_roles_and_permissions_moderators" = "Moderators";
 "screen_room_roles_and_permissions_permissions_header" = "Permissions";
 "screen_room_roles_and_permissions_reset" = "Reset permissions";
+"screen_room_roles_and_permissions_reset_confirm_description" = "Once you reset permissions, you will lose your current settings.";
+"screen_room_roles_and_permissions_reset_confirm_title" = "Reset permissions?";
 "screen_room_roles_and_permissions_roles_header" = "Roles";
 "screen_room_roles_and_permissions_room_details" = "Room details";
 "screen_room_roles_and_permissions_title" = "Roles and permissions";
@@ -596,9 +611,16 @@
 "screen_roomlist_empty_message" = "Kezdje azzal, hogy üzenetet küld valakinek.";
 "screen_roomlist_empty_title" = "Még nincsenek csevegések.";
 "screen_roomlist_filter_favourites" = "Kedvencek";
+"screen_roomlist_filter_favourites_empty_state_subtitle" = "You can add a chat to your favourites in the chat settings.\nFor now, you can deselect filters in order to see your other chats";
+"screen_roomlist_filter_favourites_empty_state_title" = "You don’t have favourite chats yet";
 "screen_roomlist_filter_low_priority" = "Alacsony prioritás";
+"screen_roomlist_filter_mixed_empty_state_subtitle" = "You can deselect filters in order to see your other chats";
+"screen_roomlist_filter_mixed_empty_state_title" = "You don’t have chats for this selection";
+"screen_roomlist_filter_people_empty_state_title" = "You don’t have any DMs yet";
 "screen_roomlist_filter_rooms" = "Szobák";
+"screen_roomlist_filter_rooms_empty_state_title" = "You’re not in any room yet";
 "screen_roomlist_filter_unreads" = "Olvasatlan";
+"screen_roomlist_filter_unreads_empty_state_title" = "Congrats!\nYou don’t have any unread messages!";
 "screen_roomlist_main_space_title" = "Összes csevegés";
 "screen_roomlist_mark_as_read" = "Megjelölés olvasottként";
 "screen_roomlist_mark_as_unread" = "Megjelölés olvasatlanként";

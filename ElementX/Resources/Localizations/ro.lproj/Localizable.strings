@@ -48,6 +48,7 @@
 "action_enter_pin" = "Introduceți PIN-ul";
 "action_forgot_password" = "Ați uitat parola?";
 "action_forward" = "Redirecționați";
+"action_go_back" = "Go back";
 "action_invite" = "Invitați";
 "action_invite_friends" = "Invitați prieteni";
 "action_invite_friends_to_app" = "Invitați prieteni în %1$@";
@@ -74,6 +75,7 @@
 "action_reply_in_thread" = "Răspundeți în fir";
 "action_report_bug" = "Raportați o eroare";
 "action_report_content" = "Raportați conținutul";
+"action_reset" = "Reset";
 "action_retry" = "Reîncercați";
 "action_retry_decryption" = "Reîncercați decriptarea";
 "action_save" = "Salvați";
@@ -104,6 +106,7 @@
 "common_audio" = "Audio";
 "common_blocked_users" = "Blocked users";
 "common_bubbles" = "Baloane";
+"common_call_invite" = "Call in progress (unsupported)";
 "common_chat_backup" = "Backup conversații";
 "common_copyright" = "Drepturi de autor";
 "common_creating_room" = "Se creează camera…";
@@ -162,6 +165,7 @@
 "common_room" = "Cameră";
 "common_room_name" = "Numele camerei";
 "common_room_name_placeholder" = "de exemplu, numele proiectului dvs.";
+"common_saved_changes" = "Saved changes";
 "common_saving" = "Saving";
 "common_screen_lock" = "Blocare ecran";
 "common_search_for_someone" = "Căutați pe cineva";
@@ -217,6 +221,8 @@
 "dialog_permission_notification" = "Pentru a permite aplicației să afișeze notificări, vă rugăm să acordați permisiunea în setările sistemului.";
 "dialog_title_confirmation" = "Confirmare";
 "dialog_title_warning" = "Avertisment";
+"dialog_unsaved_changes_description_ios" = "Your changes won’t be saved";
+"dialog_unsaved_changes_title" = "Save changes?";
 "emoji_picker_category_activity" = "Activități";
 "emoji_picker_category_flags" = "Steaguri";
 "emoji_picker_category_foods" = "Mâncare & Băutură";
@@ -510,6 +516,8 @@
 "screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
 "screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_change_role_moderators_title" = "Edit Moderators";
+"screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
+"screen_room_change_role_unsaved_changes_title" = "Save changes?";
 "screen_room_details_add_topic_title" = "Adăugare subiect";
 "screen_room_details_already_a_member" = "Deja membru";
 "screen_room_details_already_invited" = "Deja invitat";
@@ -540,7 +548,9 @@
 "screen_room_member_list_ban_member_confirmation_action" = "Ban";
 "screen_room_member_list_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
 "screen_room_member_list_ban_member_confirmation_title" = "Are you sure you want to ban this member?";
+"screen_room_member_list_banned_empty" = "There are no banned users in this room.";
 "screen_room_member_list_banning_user" = "Banning %1$@";
+"screen_room_member_list_manage_member_ban" = "Remove and ban member";
 "screen_room_member_list_manage_member_remove" = "Înlăturați membrul";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Înlăturați și interziceți membrul";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Doar înlăturare";
@@ -577,11 +587,16 @@
 "screen_room_retry_send_menu_send_again_action" = "Trimiteți din nou";
 "screen_room_retry_send_menu_title" = "Mesajul dvs. nu a putut fi trimis";
 "screen_room_roles_and_permissions_admins" = "Admins";
+"screen_room_roles_and_permissions_change_my_role" = "Change my role";
+"screen_room_roles_and_permissions_change_role_demote_to_member" = "Demote to member";
+"screen_room_roles_and_permissions_change_role_demote_to_moderator" = "Demote to moderator";
 "screen_room_roles_and_permissions_member_moderation" = "Member moderation";
 "screen_room_roles_and_permissions_messages_and_content" = "Messages and content";
 "screen_room_roles_and_permissions_moderators" = "Moderators";
 "screen_room_roles_and_permissions_permissions_header" = "Permissions";
 "screen_room_roles_and_permissions_reset" = "Reset permissions";
+"screen_room_roles_and_permissions_reset_confirm_description" = "Once you reset permissions, you will lose your current settings.";
+"screen_room_roles_and_permissions_reset_confirm_title" = "Reset permissions?";
 "screen_room_roles_and_permissions_roles_header" = "Roles";
 "screen_room_roles_and_permissions_room_details" = "Room details";
 "screen_room_roles_and_permissions_title" = "Roles and permissions";
@@ -596,9 +611,16 @@
 "screen_roomlist_empty_message" = "Începeți prin a trimite mesaje cuiva.";
 "screen_roomlist_empty_title" = "Nu există încă discuții.";
 "screen_roomlist_filter_favourites" = "Favorite";
+"screen_roomlist_filter_favourites_empty_state_subtitle" = "You can add a chat to your favourites in the chat settings.\nFor now, you can deselect filters in order to see your other chats";
+"screen_roomlist_filter_favourites_empty_state_title" = "You don’t have favourite chats yet";
 "screen_roomlist_filter_low_priority" = "Prioritate scăzută";
+"screen_roomlist_filter_mixed_empty_state_subtitle" = "You can deselect filters in order to see your other chats";
+"screen_roomlist_filter_mixed_empty_state_title" = "You don’t have chats for this selection";
+"screen_roomlist_filter_people_empty_state_title" = "You don’t have any DMs yet";
 "screen_roomlist_filter_rooms" = "Camere";
+"screen_roomlist_filter_rooms_empty_state_title" = "You’re not in any room yet";
 "screen_roomlist_filter_unreads" = "Necitite";
+"screen_roomlist_filter_unreads_empty_state_title" = "Congrats!\nYou don’t have any unread messages!";
 "screen_roomlist_main_space_title" = "Toate conversatiile";
 "screen_roomlist_mark_as_read" = "Marcați ca citită";
 "screen_roomlist_mark_as_unread" = "Marcați ca necitită";

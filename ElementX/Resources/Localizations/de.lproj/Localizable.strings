@@ -48,6 +48,7 @@
 "action_enter_pin" = "PIN eingeben";
 "action_forgot_password" = "Passwort vergessen?";
 "action_forward" = "Weiterleiten";
+"action_go_back" = "Go back";
 "action_invite" = "Einladen";
 "action_invite_friends" = "Personen einladen";
 "action_invite_friends_to_app" = "Zu %1$@ einladen";
@@ -74,6 +75,7 @@
 "action_reply_in_thread" = "Im Thread antworten";
 "action_report_bug" = "Fehler melden";
 "action_report_content" = "Inhalt melden";
+"action_reset" = "Reset";
 "action_retry" = "Erneut versuchen";
 "action_retry_decryption" = "Entschlüsselung wiederholen";
 "action_save" = "Speichern";
@@ -104,6 +106,7 @@
 "common_audio" = "Audio";
 "common_blocked_users" = "Blockierte Nutzer";
 "common_bubbles" = "Sprechblasen";
+"common_call_invite" = "Call in progress (unsupported)";
 "common_chat_backup" = "Chat-Backup";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Raum wird erstellt...";
@@ -162,6 +165,7 @@
 "common_room" = "Raum";
 "common_room_name" = "Raumname";
 "common_room_name_placeholder" = "z.B. dein Projektname";
+"common_saved_changes" = "Saved changes";
 "common_saving" = "Saving";
 "common_screen_lock" = "Bildschirmsperre";
 "common_search_for_someone" = "Nach jemandem suchen";
@@ -217,6 +221,8 @@
 "dialog_permission_notification" = "Damit die Anwendung Benachrichtigungen anzeigen kann, erteile bitte die Erlaubnis in den Systemeinstellungen.";
 "dialog_title_confirmation" = "Bestätigung";
 "dialog_title_warning" = "Warnung";
+"dialog_unsaved_changes_description_ios" = "Your changes won’t be saved";
+"dialog_unsaved_changes_title" = "Save changes?";
 "emoji_picker_category_activity" = "Aktivitäten";
 "emoji_picker_category_flags" = "Flaggen";
 "emoji_picker_category_foods" = "Essen & Trinken";
@@ -510,6 +516,8 @@
 "screen_room_change_role_confirm_demote_self_description" = "Du stufst dich selbst herab. Diese Änderung kann nicht rückgängig gemacht werden. Wenn du der letzte Benutzer mit dieser Rolle bist, ist es nicht möglich, diese Rolle wiederzuerlangen.";
 "screen_room_change_role_confirm_demote_self_title" = "Möchtest Du Dich selbst herabstufen?";
 "screen_room_change_role_moderators_title" = "Edit Moderators";
+"screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
+"screen_room_change_role_unsaved_changes_title" = "Save changes?";
 "screen_room_details_add_topic_title" = "Thema hinzufügen";
 "screen_room_details_already_a_member" = "Bereits Mitglied";
 "screen_room_details_already_invited" = "Bereits eingeladen";
@@ -540,7 +548,9 @@
 "screen_room_member_list_ban_member_confirmation_action" = "Ban";
 "screen_room_member_list_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
 "screen_room_member_list_ban_member_confirmation_title" = "Are you sure you want to ban this member?";
+"screen_room_member_list_banned_empty" = "There are no banned users in this room.";
 "screen_room_member_list_banning_user" = "%1$@ wird gesperrt.";
+"screen_room_member_list_manage_member_ban" = "Remove and ban member";
 "screen_room_member_list_manage_member_remove" = "Mitglied entfernen";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Mitglied entfernen und sperren";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Mitglied nur entfernen";
@@ -577,11 +587,16 @@
 "screen_room_retry_send_menu_send_again_action" = "Erneut senden";
 "screen_room_retry_send_menu_title" = "Deine Nachricht konnte nicht gesendet werden";
 "screen_room_roles_and_permissions_admins" = "Administratoren";
+"screen_room_roles_and_permissions_change_my_role" = "Change my role";
+"screen_room_roles_and_permissions_change_role_demote_to_member" = "Demote to member";
+"screen_room_roles_and_permissions_change_role_demote_to_moderator" = "Demote to moderator";
 "screen_room_roles_and_permissions_member_moderation" = "Moderation der Mitglieder";
 "screen_room_roles_and_permissions_messages_and_content" = "Nachrichten und Inhalte";
 "screen_room_roles_and_permissions_moderators" = "Moderatoren";
 "screen_room_roles_and_permissions_permissions_header" = "Berechtigungen";
 "screen_room_roles_and_permissions_reset" = "Rollen und Berechtigungen zurücksetzen";
+"screen_room_roles_and_permissions_reset_confirm_description" = "Once you reset permissions, you will lose your current settings.";
+"screen_room_roles_and_permissions_reset_confirm_title" = "Reset permissions?";
 "screen_room_roles_and_permissions_roles_header" = "Rollen";
 "screen_room_roles_and_permissions_room_details" = "Raumdetails";
 "screen_room_roles_and_permissions_title" = "Rollen und Berechtigungen";
@@ -596,9 +611,16 @@
 "screen_roomlist_empty_message" = "Beginne, indem du jemandem eine Nachricht sendest.";
 "screen_roomlist_empty_title" = "Noch keine Chats.";
 "screen_roomlist_filter_favourites" = "Favoriten";
+"screen_roomlist_filter_favourites_empty_state_subtitle" = "You can add a chat to your favourites in the chat settings.\nFor now, you can deselect filters in order to see your other chats";
+"screen_roomlist_filter_favourites_empty_state_title" = "You don’t have favourite chats yet";
 "screen_roomlist_filter_low_priority" = "Niedrige Priorität";
+"screen_roomlist_filter_mixed_empty_state_subtitle" = "You can deselect filters in order to see your other chats";
+"screen_roomlist_filter_mixed_empty_state_title" = "You don’t have chats for this selection";
+"screen_roomlist_filter_people_empty_state_title" = "You don’t have any DMs yet";
 "screen_roomlist_filter_rooms" = "Räume";
+"screen_roomlist_filter_rooms_empty_state_title" = "You’re not in any room yet";
 "screen_roomlist_filter_unreads" = "Ungelesen";
+"screen_roomlist_filter_unreads_empty_state_title" = "Congrats!\nYou don’t have any unread messages!";
 "screen_roomlist_main_space_title" = "Chats";
 "screen_roomlist_mark_as_read" = "Als gelesen markieren";
 "screen_roomlist_mark_as_unread" = "Als ungelesen markieren";

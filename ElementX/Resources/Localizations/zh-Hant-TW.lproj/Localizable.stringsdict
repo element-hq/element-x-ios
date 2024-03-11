@@ -168,10 +168,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>您有 %1$d 次解鎖的機會</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
