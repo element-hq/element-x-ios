@@ -108,7 +108,10 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
-            state.memberDetails?.isIgnored = true
+            var details = state.memberDetails
+            details?.isIgnored = true
+            state.memberDetails = details
+            
             updateMembers()
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
@@ -126,7 +129,10 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
-            state.memberDetails?.isIgnored = false
+            var details = state.memberDetails
+            details?.isIgnored = false
+            state.memberDetails = details
+            
             updateMembers()
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
