@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Введена цифра %1$d</string>
+			<string>Введена %1$d цифра</string>
 			<key>few</key>
-			<string>Ведено %1$d цифр</string>
+			<string>Ведено %1$d цифры</string>
 			<key>many</key>
 			<string>Введено много цифр</string>
 		</dict>
