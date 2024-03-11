@@ -29,6 +29,8 @@ jobs:
             ${{ runner.os }}-gems-
 
       - name: Setup environment
+        env:
+          CI_WORKFLOW: PR_BUILD
         run:
           source ci_scripts/ci_common.sh && setup_github_actions_environment
 
