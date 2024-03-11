@@ -30,6 +30,7 @@ struct RoomRolesAndPermissionsScreen: View {
         .compoundList()
         .navigationTitle(L10n.screenRoomRolesAndPermissionsTitle)
         .navigationBarTitleDisplayMode(.inline)
+        .alert(item: $context.alertInfo)
     }
     
     private var rolesSection: some View {
@@ -119,7 +120,8 @@ struct RoomRolesAndPermissionsScreen: View {
 // MARK: - Previews
 
 struct RoomRolesAndPermissionsScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: RoomProxyMock(with: .init(members: .allMembersAsAdmin)))
+    static let viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: RoomProxyMock(with: .init(members: .allMembersAsAdmin)),
+                                                                  userIndicatorController: UserIndicatorControllerMock())
     static var previews: some View {
         NavigationStack {
             RoomRolesAndPermissionsScreen(context: viewModel.context)

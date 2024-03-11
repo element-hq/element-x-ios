@@ -391,6 +391,24 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    func resetPowerLevels() async -> Result<RoomPowerLevels, RoomProxyError> {
+        do {
+            return try await .success(room.resetPowerLevels())
+        } catch {
+            MXLog.error("Failed resetting the power levels: \(error)")
+            return .failure(.failedSettingPermission)
+        }
+    }
+    
+    func suggestedRole(for userID: String) async -> Result<RoomMemberRole, RoomProxyError> {
+        do {
+            return try await .success(room.suggestedRoleForUser(userId: userID))
+        } catch {
+            MXLog.error("Failed getting a user's role: \(error)")
+            return .failure(.failedCheckingPermission)
+        }
+    }
+    
     func updatePowerLevelsForUsers(_ updates: [(userID: String, powerLevel: Int64)]) async -> Result<Void, RoomProxyError> {
         do {
             let updates = updates.map { UserPowerLevelUpdate(userId: $0.userID, powerLevel: $0.powerLevel) }

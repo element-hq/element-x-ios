@@ -2750,6 +2750,44 @@ class RoomProxyMock: RoomProxyProtocol {
             return applyPowerLevelChangesReturnValue
         }
     }
+    //MARK: - resetPowerLevels
+
+    var resetPowerLevelsCallsCount = 0
+    var resetPowerLevelsCalled: Bool {
+        return resetPowerLevelsCallsCount > 0
+    }
+    var resetPowerLevelsReturnValue: Result<RoomPowerLevels, RoomProxyError>!
+    var resetPowerLevelsClosure: (() async -> Result<RoomPowerLevels, RoomProxyError>)?
+
+    func resetPowerLevels() async -> Result<RoomPowerLevels, RoomProxyError> {
+        resetPowerLevelsCallsCount += 1
+        if let resetPowerLevelsClosure = resetPowerLevelsClosure {
+            return await resetPowerLevelsClosure()
+        } else {
+            return resetPowerLevelsReturnValue
+        }
+    }
+    //MARK: - suggestedRole
+
+    var suggestedRoleForCallsCount = 0
+    var suggestedRoleForCalled: Bool {
+        return suggestedRoleForCallsCount > 0
+    }
+    var suggestedRoleForReceivedUserID: String?
+    var suggestedRoleForReceivedInvocations: [String] = []
+    var suggestedRoleForReturnValue: Result<RoomMemberRole, RoomProxyError>!
+    var suggestedRoleForClosure: ((String) async -> Result<RoomMemberRole, RoomProxyError>)?
+
+    func suggestedRole(for userID: String) async -> Result<RoomMemberRole, RoomProxyError> {
+        suggestedRoleForCallsCount += 1
+        suggestedRoleForReceivedUserID = userID
+        suggestedRoleForReceivedInvocations.append(userID)
+        if let suggestedRoleForClosure = suggestedRoleForClosure {
+            return await suggestedRoleForClosure(userID)
+        } else {
+            return suggestedRoleForReturnValue
+        }
+    }
     //MARK: - updatePowerLevelsForUsers
 
     var updatePowerLevelsForUsersCallsCount = 0

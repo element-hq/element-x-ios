@@ -77,10 +77,10 @@ struct RoomChangeRolesScreen: View {
                 ForEach(context.viewState.visibleMembers, id: \.id) { member in
                     RoomChangeRolesScreenRow(member: member,
                                              imageProvider: context.imageProvider,
-                                             kind: .multiSelection(isSelected: context.viewState.isMemberSelected(member)) {
-                                                 context.send(viewAction: .toggleMember(member))
-                                             })
-                                             .disabled(member.role == .administrator)
+                                             isSelected: context.viewState.isMemberSelected(member)) {
+                        context.send(viewAction: .toggleMember(member))
+                    }
+                    .disabled(member.role == .administrator)
                 }
             } header: {
                 Text(L10n.screenRoomMemberListRoomMembersHeaderTitle)

@@ -184,6 +184,8 @@ internal enum L10n {
   internal static var actionReportBug: String { return L10n.tr("Localizable", "action_report_bug") }
   /// Report content
   internal static var actionReportContent: String { return L10n.tr("Localizable", "action_report_content") }
+  /// Reset
+  internal static var actionReset: String { return L10n.tr("Localizable", "action_reset") }
   /// Retry
   internal static var actionRetry: String { return L10n.tr("Localizable", "action_retry") }
   /// Retry decryption
@@ -1341,6 +1343,8 @@ internal enum L10n {
   internal static var screenRoomMemberListBanMemberConfirmationDescription: String { return L10n.tr("Localizable", "screen_room_member_list_ban_member_confirmation_description") }
   /// Are you sure you want to ban this member?
   internal static var screenRoomMemberListBanMemberConfirmationTitle: String { return L10n.tr("Localizable", "screen_room_member_list_ban_member_confirmation_title") }
+  /// There are no banned users in this room.
+  internal static var screenRoomMemberListBannedEmpty: String { return L10n.tr("Localizable", "screen_room_member_list_banned_empty") }
   /// Banning %1$@
   internal static func screenRoomMemberListBanningUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_member_list_banning_user", String(describing: p1))
@@ -1349,7 +1353,9 @@ internal enum L10n {
   internal static func screenRoomMemberListHeaderTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_member_list_header_title", p1)
   }
-  /// Remove member
+  /// Remove and ban member
+  internal static var screenRoomMemberListManageMemberBan: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_ban") }
+  /// Remove from room
   internal static var screenRoomMemberListManageMemberRemove: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_remove") }
   /// Remove and ban member
   internal static var screenRoomMemberListManageMemberRemoveConfirmationBan: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_remove_confirmation_ban") }
@@ -1363,7 +1369,7 @@ internal enum L10n {
   internal static var screenRoomMemberListManageMemberUnbanMessage: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_unban_message") }
   /// Unban user
   internal static var screenRoomMemberListManageMemberUnbanTitle: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_unban_title") }
-  /// See user info
+  /// View profile
   internal static var screenRoomMemberListManageMemberUserInfo: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_user_info") }
   /// Banned
   internal static var screenRoomMemberListModeBanned: String { return L10n.tr("Localizable", "screen_room_member_list_mode_banned") }
@@ -1449,6 +1455,10 @@ internal enum L10n {
   internal static var screenRoomRolesAndPermissionsPermissionsHeader: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_permissions_header") }
   /// Reset permissions
   internal static var screenRoomRolesAndPermissionsReset: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_reset") }
+  /// Once you reset permissions, you will lose your current settings.
+  internal static var screenRoomRolesAndPermissionsResetConfirmDescription: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_reset_confirm_description") }
+  /// Reset permissions?
+  internal static var screenRoomRolesAndPermissionsResetConfirmTitle: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_reset_confirm_title") }
   /// Roles
   internal static var screenRoomRolesAndPermissionsRolesHeader: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_roles_header") }
   /// Room details

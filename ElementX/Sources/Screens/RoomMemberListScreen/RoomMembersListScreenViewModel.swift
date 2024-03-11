@@ -114,10 +114,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             self.state.canKickUsers = await canKickUsers == .success(true)
             self.state.canBanUsers = await canBanUsers == .success(true)
             
-            if state.bindings.mode == .banned, roomMembersDetails.bannedMembers.isEmpty {
-                state.bindings.mode = .members
-            }
-            
             hideLoader()
         }
     }

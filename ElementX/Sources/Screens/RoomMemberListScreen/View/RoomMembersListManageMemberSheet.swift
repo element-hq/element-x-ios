@@ -19,9 +19,9 @@ import SwiftUI
 
 struct RoomMembersListManageMemberSheet: View {
     let member: RoomMemberDetails
-    let context: RoomMembersListScreenViewModel.Context
+    @ObservedObject var context: RoomMembersListScreenViewModel.Context
     
-    @State private var isPresentingRemoveConfirmation = false
+    @State private var isPresentingBanConfirmation = false
     
     var body: some View {
         Form {
@@ -33,25 +33,25 @@ struct RoomMembersListManageMemberSheet: View {
             
             Section {
                 ListRow(label: .default(title: L10n.screenRoomMemberListManageMemberUserInfo,
-                                        icon: \.info),
+                                        icon: \.userProfileSolid),
                         kind: .button {
                             context.send(viewAction: .showMemberDetails(member))
                         })
                 
-                if !member.isBanned {
+                if context.viewState.canKickUsers, !member.isBanned {
                     ListRow(label: .default(title: L10n.screenRoomMemberListManageMemberRemove,
-                                            icon: \.block,
-                                            role: .destructive),
+                                            icon: \.close),
                             kind: .button {
-                                isPresentingRemoveConfirmation = true
+                                context.send(viewAction: .kickMember(member))
                             })
-                } else {
-                    // Theoretically we shouldn't reach this branch but just in case we do.
-                    ListRow(label: .default(title: L10n.screenRoomMemberListManageMemberUnbanAction,
+                }
+                
+                if context.viewState.canBanUsers, !member.isBanned {
+                    ListRow(label: .default(title: L10n.screenRoomMemberListManageMemberBan,
                                             icon: \.block,
                                             role: .destructive),
                             kind: .button {
-                                context.send(viewAction: .unbanMember(member))
+                                isPresentingBanConfirmation = true
                             })
                 }
             }
@@ -59,20 +59,14 @@ struct RoomMembersListManageMemberSheet: View {
         .compoundList()
         .scrollBounceBehavior(.basedOnSize)
         .presentationDragIndicator(.visible)
-        .presentationDetents([.large, .fraction(0.5)]) // TODO: Use the ideal height somehow?
-        .confirmationDialog(L10n.screenRoomMemberListManageMemberRemoveConfirmationTitle,
-                            isPresented: $isPresentingRemoveConfirmation,
-                            titleVisibility: .visible) {
-            if context.viewState.canKickUsers {
-                Button(L10n.screenRoomMemberListManageMemberRemoveConfirmationKick) {
-                    context.send(viewAction: .kickMember(member))
-                }
+        .presentationDetents([.large, .fraction(0.54)]) // TODO: Use the ideal height somehow?
+        .alert(L10n.screenRoomMemberListBanMemberConfirmationTitle, isPresented: $isPresentingBanConfirmation) {
+            Button(L10n.actionCancel, role: .cancel) { }
+            Button(L10n.screenRoomMemberListBanMemberConfirmationAction) {
+                context.send(viewAction: .banMember(member))
             }
-            if context.viewState.canBanUsers {
-                Button(L10n.screenRoomMemberListManageMemberRemoveConfirmationBan, role: .destructive) {
-                    context.send(viewAction: .banMember(member))
-                }
-            }
+        } message: {
+            Text(L10n.screenRoomMemberListBanMemberConfirmationDescription)
         }
     }
 }
@@ -84,10 +78,12 @@ struct RoomMembersListManageMemberSheet_Previews: PreviewProvider, TestablePrevi
         RoomMembersListManageMemberSheet(member: .init(withProxy: RoomMemberProxyMock.mockDan),
                                          context: viewModel.context)
             .previewDisplayName("Joined")
+            .snapshot(delay: 0.2)
         
         RoomMembersListManageMemberSheet(member: .init(withProxy: RoomMemberProxyMock.mockBanned[3]),
                                          context: viewModel.context)
             .previewDisplayName("Banned")
+            .snapshot(delay: 0.2)
     }
 }
 
@@ -107,7 +103,7 @@ struct RoomMembersListManageMemberSheetLive_Previews: PreviewProvider {
 private extension RoomMembersListScreenViewModel {
     static var mock: RoomMembersListScreenViewModel {
         RoomMembersListScreenViewModel(initialMode: .members,
-                                       roomProxy: RoomProxyMock(with: .init()),
+                                       roomProxy: RoomProxyMock(with: .init(members: .allMembersAsAdmin)),
                                        mediaProvider: MockMediaProvider(),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                        appSettings: ServiceLocator.shared.settings)

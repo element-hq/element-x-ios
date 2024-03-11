@@ -64,7 +64,11 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         case .demoteMember(let member):
             demoteMember(member)
         case .save:
-            Task { await save() }
+            if state.mode == .administrator, !state.membersToPromote.isEmpty {
+                showPromotionWarning()
+            } else {
+                Task { await save() }
+            }
         }
     }
     
@@ -99,6 +103,16 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         }
     }
     
+    private func showPromotionWarning() {
+        context.alertInfo = AlertInfo(id: .promotionWarning,
+                                      title: L10n.screenRoomChangeRoleConfirmAddAdminTitle,
+                                      message: L10n.screenRoomChangeRoleConfirmAddAdminDescription,
+                                      primaryButton: .init(title: L10n.actionContinue) {
+                                          Task { await self.save() }
+                                      },
+                                      secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+    }
+    
     private func save() async {
         showSavingIndicator()
         
@@ -112,7 +126,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         case .success:
             MXLog.info("Success")
         case .failure:
-            context.alertInfo = AlertInfo(id: .generic)
+            context.alertInfo = AlertInfo(id: .error)
         }
     }
     

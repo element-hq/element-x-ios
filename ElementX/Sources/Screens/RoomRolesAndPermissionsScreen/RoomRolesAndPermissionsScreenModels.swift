@@ -17,13 +17,33 @@
 import Foundation
 
 enum RoomRolesAndPermissionsScreenViewModelAction {
+    /// The user would like to edit member roles.
     case editRoles(RoomRolesAndPermissionsScreenRole)
+    /// The user would like to edit room permissions.
     case editPermissions(RoomRolesAndPermissionsScreenPermissionsGroup)
+    /// The user has demoted themself.
+    case demotedOwnUser
 }
 
 struct RoomRolesAndPermissionsScreenViewState: BindableState {
+    /// The number of administrators in the room.
     var administratorCount: Int?
+    /// The number of moderators in the room.
     var moderatorCount: Int?
+    var bindings = RoomRolesAndPermissionsScreenViewStateBindings()
+}
+
+struct RoomRolesAndPermissionsScreenViewStateBindings {
+    var alertInfo: AlertInfo<RoomRolesAndPermissionsScreenAlertType>?
+}
+
+enum RoomRolesAndPermissionsScreenAlertType {
+    /// Ask the user which role they would like to demote themself to.
+    case editOwnRole
+    /// Confirm that the user would like to reset the room's permissions.
+    case resetConfirmation
+    /// An error occurred.
+    case error
 }
 
 enum RoomRolesAndPermissionsScreenViewAction {

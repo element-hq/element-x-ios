@@ -117,6 +117,8 @@ protocol RoomProxyProtocol {
     
     func powerLevels() async -> Result<RoomPowerLevels, RoomProxyError>
     func applyPowerLevelChanges(_ changes: RoomPowerLevelChanges) async -> Result<Void, RoomProxyError>
+    func resetPowerLevels() async -> Result<RoomPowerLevels, RoomProxyError>
+    func suggestedRole(for userID: String) async -> Result<RoomMemberRole, RoomProxyError>
     func updatePowerLevelsForUsers(_ updates: [(userID: String, powerLevel: Int64)]) async -> Result<Void, RoomProxyError>
     func canUser(userID: String, sendStateEvent event: StateEventType) async -> Result<Bool, RoomProxyError>
     func canUserInvite(userID: String) async -> Result<Bool, RoomProxyError>
