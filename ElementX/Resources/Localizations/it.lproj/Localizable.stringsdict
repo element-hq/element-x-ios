@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Letto da %1$@ e %2$d altro</string>
+			<string>Visualizzato da %1$@ e %2$d altro</string>
 			<key>other</key>
-			<string>Letto da %1$@ e altri %2$d</string>
+			<string>Visualizzato da %1$@ e altri %2$d</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -253,9 +253,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d other</string>
+			<string>%d altro</string>
 			<key>other</key>
-			<string>%d others</string>
+			<string>altri %d</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>

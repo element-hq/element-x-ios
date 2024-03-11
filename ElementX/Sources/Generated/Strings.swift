@@ -1239,13 +1239,13 @@ internal enum L10n {
   internal static var screenRoomChangePermissionsModerators: String { return L10n.tr("Localizable", "screen_room_change_permissions_moderators") }
   /// Remove people
   internal static var screenRoomChangePermissionsRemovePeople: String { return L10n.tr("Localizable", "screen_room_change_permissions_remove_people") }
-  /// Change Room Avatar
+  /// Change room avatar
   internal static var screenRoomChangePermissionsRoomAvatar: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_avatar") }
   /// Room details
   internal static var screenRoomChangePermissionsRoomDetails: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_details") }
-  /// Change Room Name
+  /// Change room name
   internal static var screenRoomChangePermissionsRoomName: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_name") }
-  /// Change Room Topic
+  /// Change room topic
   internal static var screenRoomChangePermissionsRoomTopic: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_topic") }
   /// Send messages
   internal static var screenRoomChangePermissionsSendMessages: String { return L10n.tr("Localizable", "screen_room_change_permissions_send_messages") }
@@ -1455,7 +1455,7 @@ internal enum L10n {
   internal static var screenRoomRolesAndPermissionsPermissionsHeader: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_permissions_header") }
   /// Reset permissions
   internal static var screenRoomRolesAndPermissionsReset: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_reset") }
-  /// Once you reset permissions, you will lose your current settings.
+  /// Once you reset permissions, you will lose the current settings.
   internal static var screenRoomRolesAndPermissionsResetConfirmDescription: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_reset_confirm_description") }
   /// Reset permissions?
   internal static var screenRoomRolesAndPermissionsResetConfirmTitle: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_reset_confirm_title") }
@@ -1691,6 +1691,14 @@ internal enum L10n {
   }
   /// You changed your avatar
   internal static var stateEventAvatarUrlChangedByYou: String { return L10n.tr("Localizable", "state_event_avatar_url_changed_by_you") }
+  /// %1$@ was demoted to member
+  internal static func stateEventDemotedToMember(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "state_event_demoted_to_member", String(describing: p1))
+  }
+  /// %1$@ was demoted to moderator
+  internal static func stateEventDemotedToModerator(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "state_event_demoted_to_moderator", String(describing: p1))
+  }
   /// %1$@ changed their display name from %2$@ to %3$@
   internal static func stateEventDisplayNameChangedFrom(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "state_event_display_name_changed_from", String(describing: p1), String(describing: p2), String(describing: p3))
@@ -1714,6 +1722,14 @@ internal enum L10n {
   /// You set your display name to %1$@
   internal static func stateEventDisplayNameSetByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_display_name_set_by_you", String(describing: p1))
+  }
+  /// %1$@ was promoted to admin
+  internal static func stateEventPromotedToAdministrator(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "state_event_promoted_to_administrator", String(describing: p1))
+  }
+  /// %1$@ was promoted to moderator
+  internal static func stateEventPromotedToModerator(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "state_event_promoted_to_moderator", String(describing: p1))
   }
   /// %1$@ changed the room avatar
   internal static func stateEventRoomAvatarChanged(_ p1: Any) -> String {

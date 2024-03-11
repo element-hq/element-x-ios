@@ -265,9 +265,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
-			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@, %2$@ і %3$d іншы</string>
+			<key>few</key>
+			<string></string>
+			<key>many</key>
+			<string>%1$@, %2$@ і %3$d іншыя</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members_second_component_ios</key>
@@ -281,9 +283,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d other</string>
-			<key>other</key>
-			<string>%d others</string>
+			<string>%d іншы</string>
+			<key>few</key>
+			<string>%d іншыя</string>
+			<key>many</key>
+			<string>%d іншыя</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -297,9 +301,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
-			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ піша</string>
+			<key>few</key>
+			<string>%1$@ пішуць</string>
+			<key>many</key>
+			<string>%1$@ пішуць</string>
 		</dict>
 	</dict>
 </dict>

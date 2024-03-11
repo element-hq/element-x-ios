@@ -595,7 +595,7 @@
 "screen_room_roles_and_permissions_moderators" = "Modérateurs";
 "screen_room_roles_and_permissions_permissions_header" = "Autorisations";
 "screen_room_roles_and_permissions_reset" = "Reset permissions";
-"screen_room_roles_and_permissions_reset_confirm_description" = "Once you reset permissions, you will lose your current settings.";
+"screen_room_roles_and_permissions_reset_confirm_description" = "Once you reset permissions, you will lose the current settings.";
 "screen_room_roles_and_permissions_reset_confirm_title" = "Reset permissions?";
 "screen_room_roles_and_permissions_roles_header" = "Rôles";
 "screen_room_roles_and_permissions_room_details" = "Détails du salon";
@@ -690,12 +690,16 @@
 "state_event_avatar_changed_too" = "(l’avatar a aussi été modifié)";
 "state_event_avatar_url_changed" = "%1$@ a changé son avatar";
 "state_event_avatar_url_changed_by_you" = "Vous avez changé d’avatar";
+"state_event_demoted_to_member" = "%1$@ was demoted to member";
+"state_event_demoted_to_moderator" = "%1$@ was demoted to moderator";
 "state_event_display_name_changed_from" = "%1$@ a changé son pseudonyme de %2$@ à %3$@";
 "state_event_display_name_changed_from_by_you" = "Vous avez changé votre pseudonyme de %1$@ à %2$@";
 "state_event_display_name_removed" = "%1$@ a supprimé son pseudonyme (c’était %2$@)";
 "state_event_display_name_removed_by_you" = "Vous avez supprimé votre pseudonyme (c’était %1$@)";
 "state_event_display_name_set" = "%1$@ a défini son pseudonyme en tant que %2$@";
 "state_event_display_name_set_by_you" = "Vous avez défini votre pseudonyme comme %1$@";
+"state_event_promoted_to_administrator" = "%1$@ was promoted to admin";
+"state_event_promoted_to_moderator" = "%1$@ was promoted to moderator";
 "state_event_room_avatar_changed" = "%1$@ a changé l’avatar du salon";
 "state_event_room_avatar_changed_by_you" = "Vous avez changé l’avatar du salon";
 "state_event_room_avatar_removed" = "%1$@ a supprimé l’avatar du salon";
