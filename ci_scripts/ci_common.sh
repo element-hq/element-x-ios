@@ -41,7 +41,11 @@ setup_github_actions_environment() {
     unset HOMEBREW_NO_INSTALL_FROM_API
     export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
     
-    brew update && brew install xcodegen swiftformat git-lfs imagemagick a7ex/homebrew-formulae/xcresultparser
+    brew update && brew install xcodegen swiftformat git-lfs a7ex/homebrew-formulae/xcresultparser
+    
+    if [ "$CI_WORKFLOW" = "PR_BUILD" ]; then
+        brew install imagemagick
+    fi
     
     # brew "swiftlint" # Fails on the CI: `Target /usr/local/bin/swiftlint Target /usr/local/bin/swiftlint already exists`. Installed through https://github.com/actions/virtual-environments/blob/main/images/macos/macos-12-Readme.md#linters
 
