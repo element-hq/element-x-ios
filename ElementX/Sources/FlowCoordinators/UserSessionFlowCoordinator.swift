@@ -139,6 +139,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
+        
+        userSession.clientProxy.actionsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { action in
+                guard case .receivedDecryptionError = action else {
+                    return
+                }
+                
+                analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError)
+            }
+            .store(in: &cancellables)
     }
     
     func start() {

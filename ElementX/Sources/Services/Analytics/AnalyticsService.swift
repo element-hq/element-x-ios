@@ -130,7 +130,11 @@ extension AnalyticsService {
     func trackInteraction(index: Int? = nil, name: AnalyticsEvent.Interaction.Name) {
         capture(event: AnalyticsEvent.Interaction(index: index, interactionType: .Touch, name: name))
     }
-
+    
+    func trackError(context: String?, domain: AnalyticsEvent.Error.Domain, name: AnalyticsEvent.Error.Name) {
+        capture(event: AnalyticsEvent.Error(context: context, cryptoModule: .Rust, domain: domain, name: name))
+    }
+    
     /// Track the creation of a room
     /// - Parameter isDM: true if the created room is a direct message, false otherwise
     func trackCreatedRoom(isDM: Bool) {

@@ -589,6 +589,7 @@ class ClientProxy: ClientProxyProtocol {
             let syncService = try await client
                 .syncService()
                 .withCrossProcessLock(appIdentifier: "MainApp")
+                .withUtdHook(delegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
                 .finish()
             let roomListService = syncService.roomListService()
             
@@ -800,6 +801,18 @@ private class ClientDelegateWrapper: ClientDelegate {
     
     func didRefreshTokens() {
         MXLog.info("Delegating session updates to the ClientSessionDelegate.")
+    }
+}
+
+private class ClientDecryptionErrorDelegate: UnableToDecryptDelegate {
+    private let actionsSubject: PassthroughSubject<ClientProxyAction, Never>
+    
+    init(actionsSubject: PassthroughSubject<ClientProxyAction, Never>) {
+        self.actionsSubject = actionsSubject
+    }
+    
+    func onUtd(info: UnableToDecryptInfo) {
+        actionsSubject.send(.receivedDecryptionError(info))
     }
 }
 
