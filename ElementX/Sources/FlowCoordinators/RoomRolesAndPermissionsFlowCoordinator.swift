@@ -43,6 +43,8 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         case changingRoles
         /// Changing room permissions.
         case changingPermissions
+        /// The flow is complete and the stack has been cleaned up.
+        case complete
     }
     
     enum Event: EventType {
@@ -89,7 +91,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
     func clearRoute(animated: Bool) {
         // As we push screens on top of an existing stack, popping to root wouldn't be safe.
         switch stateMachine.state {
-        case .initial:
+        case .initial, .complete:
             break
         case .rolesAndPermissionsScreen:
             navigationStackCoordinator.pop(animated: animated)
@@ -113,15 +115,15 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .finishedChangingRoles, transitions: [.changingRoles => .rolesAndPermissionsScreen])
         
         stateMachine.addRoutes(event: .changePermissions, transitions: [.rolesAndPermissionsScreen => .changingPermissions]) { [weak self] context in
-            guard let (group, permissions) = context.userInfo as? (RoomRolesAndPermissionsScreenPermissionsGroup, RoomPermissions) else {
+            guard let (permissions, group) = context.userInfo as? (RoomPermissions, RoomRolesAndPermissionsScreenPermissionsGroup) else {
                 fatalError("Expected a group and the current permissions")
             }
             self?.presentChangePermissionsScreen(permissions: permissions, group: group)
         }
         stateMachine.addRoutes(event: .finishedChangingPermissions, transitions: [.changingPermissions => .rolesAndPermissionsScreen])
         
-        stateMachine.addHandler(event: .demotedOwnUser) { [weak self] _ in
-            self?.actionsSubject.send(.complete)
+        stateMachine.addRoutes(event: .demotedOwnUser, transitions: [.rolesAndPermissionsScreen => .complete]) { [weak self] _ in
+            self?.navigationStackCoordinator.pop()
         }
         
         stateMachine.addErrorHandler { context in
@@ -136,8 +138,8 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .editRoles(let role):
                 stateMachine.tryEvent(.changeRoles, userInfo: role)
-            case .editPermissions(let group):
-                stateMachine.tryEvent(.changePermissions, userInfo: (group, RoomPermissions(powerLevels: .mock)))
+            case .editPermissions(let permissions, let group):
+                stateMachine.tryEvent(.changePermissions, userInfo: (permissions, group))
             case .demotedOwnUser:
                 stateMachine.tryEvent(.demotedOwnUser)
             }
@@ -162,7 +164,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .done:
+            case .complete:
                 // When discarding changes is finalised, either use an event or remove this action.
                 navigationStackCoordinator.pop()
             }
@@ -184,7 +186,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .cancel:
+            case .complete:
                 // When discarding changes is finalised, either use an event or remove this action.
                 navigationStackCoordinator.pop()
             }

@@ -82,24 +82,30 @@ struct RoomRolesAndPermissionsScreen: View {
         Section {
             ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsRoomDetails,
                                     icon: \.info),
+                    details: .isWaiting(context.viewState.permissions == nil),
                     kind: .navigationLink {
                         context.send(viewAction: .editPermissions(.roomDetails))
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.roomDetails)
+                    .disabled(context.viewState.permissions == nil)
             
             ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsMessagesAndContent,
                                     icon: \.chat),
+                    details: .isWaiting(context.viewState.permissions == nil),
                     kind: .navigationLink {
                         context.send(viewAction: .editPermissions(.messagesAndContent))
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.messagesAndContent)
+                    .disabled(context.viewState.permissions == nil)
             
             ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsMemberModeration,
                                     icon: \.user),
+                    details: .isWaiting(context.viewState.permissions == nil),
                     kind: .navigationLink {
                         context.send(viewAction: .editPermissions(.memberModeration))
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.memberModeration)
+                    .disabled(context.viewState.permissions == nil)
         } header: {
             Text(L10n.screenRoomRolesAndPermissionsPermissionsHeader)
                 .compoundListSectionHeader()

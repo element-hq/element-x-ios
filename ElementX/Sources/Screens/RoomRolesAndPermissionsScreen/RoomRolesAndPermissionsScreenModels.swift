@@ -20,7 +20,7 @@ enum RoomRolesAndPermissionsScreenViewModelAction {
     /// The user would like to edit member roles.
     case editRoles(RoomRolesAndPermissionsScreenRole)
     /// The user would like to edit room permissions.
-    case editPermissions(RoomRolesAndPermissionsScreenPermissionsGroup)
+    case editPermissions(permissions: RoomPermissions, group: RoomRolesAndPermissionsScreenPermissionsGroup)
     /// The user has demoted themself.
     case demotedOwnUser
 }
@@ -30,6 +30,8 @@ struct RoomRolesAndPermissionsScreenViewState: BindableState {
     var administratorCount: Int?
     /// The number of moderators in the room.
     var moderatorCount: Int?
+    /// The permissions of the room when loaded.
+    var permissions: RoomPermissions?
     var bindings = RoomRolesAndPermissionsScreenViewStateBindings()
 }
 

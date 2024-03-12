@@ -27,7 +27,7 @@ struct RoomChangePermissionsScreenCoordinatorParameters {
 }
 
 enum RoomChangePermissionsScreenCoordinatorAction {
-    case cancel
+    case complete
 }
 
 final class RoomChangePermissionsScreenCoordinator: CoordinatorProtocol {
@@ -55,8 +55,8 @@ final class RoomChangePermissionsScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .cancel:
-                actionsSubject.send(.cancel)
+            case .complete:
+                actionsSubject.send(.complete)
             }
         }
         .store(in: &cancellables)

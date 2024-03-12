@@ -122,9 +122,19 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         
         let promotingUpdates = state.membersToPromote.map { ($0.id, state.mode.rustPowerLevel) }
         let demotingUpdates = state.membersToDemote.map { ($0.id, Int64(0)) }
+        
+        // A task we can await until the room's info gets modified with the new power levels.
+        let infoTask = Task { await roomProxy.actionsPublisher.values.first { $0 == .roomInfoUpdate } }
+        
         switch await roomProxy.updatePowerLevelsForUsers(promotingUpdates + demotingUpdates) {
         case .success:
             MXLog.info("Success")
+            
+            // Call updateMembers so the count is correct on the root screen.
+            _ = await infoTask.value
+            await roomProxy.updateMembers()
+            
+            actionsSubject.send(.complete)
         case .failure:
             context.alertInfo = AlertInfo(id: .error)
         }

@@ -18,7 +18,7 @@ import Collections
 import Foundation
 
 enum RoomChangeRolesScreenViewModelAction {
-    case done
+    case complete
 }
 
 struct RoomChangeRolesScreenViewState: BindableState {

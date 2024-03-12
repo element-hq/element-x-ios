@@ -21,8 +21,8 @@ import SwiftUI
 typealias RoomChangePermissionsScreenViewModelType = StateStoreViewModel<RoomChangePermissionsScreenViewState, RoomChangePermissionsScreenViewAction>
 
 class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModelType, RoomChangePermissionsScreenViewModelProtocol {
-    let roomProxy: RoomProxyProtocol
-    let userIndicatorController: UserIndicatorControllerProtocol
+    private let roomProxy: RoomProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private var actionsSubject: PassthroughSubject<RoomChangePermissionsScreenViewModelAction, Never> = .init()
     
     var actionsPublisher: AnyPublisher<RoomChangePermissionsScreenViewModelAction, Never> {
@@ -71,14 +71,7 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
         switch await roomProxy.applyPowerLevelChanges(changes) {
         case .success:
             MXLog.info("Success")
-        case .failure:
-            context.alertInfo = AlertInfo(id: .generic)
-            return
-        }
-        
-        switch await roomProxy.powerLevels() {
-        case .success(let powerLevels):
-            state.currentPermissions = .init(powerLevels: powerLevels)
+            actionsSubject.send(.complete)
         case .failure:
             context.alertInfo = AlertInfo(id: .generic)
             return

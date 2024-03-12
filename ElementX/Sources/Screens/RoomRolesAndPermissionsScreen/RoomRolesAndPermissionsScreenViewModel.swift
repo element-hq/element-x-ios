@@ -33,12 +33,16 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         self.userIndicatorController = userIndicatorController
         super.init(initialViewState: RoomRolesAndPermissionsScreenViewState())
         
-        roomProxy.membersPublisher.sink { [weak self] members in
-            self?.updateMembers(members)
-        }
-        .store(in: &cancellables)
+        roomProxy.membersPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] members in
+                self?.updateMembers(members)
+            }
+            .store(in: &cancellables)
         
         updateMembers(roomProxy.membersPublisher.value)
+        
+        Task { await updatePermissions() }
     }
     
     // MARK: - Public
@@ -63,7 +67,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
                                                      .init(title: L10n.actionCancel, role: .cancel) { }
                                                  ])
         case .editPermissions(let permissionsGroup):
-            actionsSubject.send(.editPermissions(permissionsGroup))
+            editPermissions(group: permissionsGroup)
         case .reset:
             state.bindings.alertInfo = AlertInfo(id: .resetConfirmation,
                                                  title: L10n.screenRoomRolesAndPermissionsResetConfirmTitle,
@@ -85,15 +89,41 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
     private func updateOwnRole(_ role: RoomMemberDetails.Role) async {
         showSavingIndicator()
         
+        // A task we can await until the room's info gets modified with the new power levels.
+        let infoTask = Task { await roomProxy.actionsPublisher.values.first { $0 == .roomInfoUpdate } }
+        
         switch await roomProxy.updatePowerLevelsForUsers([(userID: roomProxy.ownUserID, powerLevel: role.rustPowerLevel)]) {
         case .success:
-            showSuccessIndicator()
+            _ = await infoTask.value
+            await roomProxy.updateMembers()
+            
             actionsSubject.send(.demotedOwnUser)
+            showSuccessIndicator()
         case .failure:
             state.bindings.alertInfo = AlertInfo(id: .error)
         }
         
         hideSavingIndicator()
+    }
+    
+    // MARK: - Permissions
+    
+    private func updatePermissions() async {
+        switch await roomProxy.powerLevels() {
+        case .success(let powerLevels):
+            state.permissions = .init(powerLevels: powerLevels)
+        case .failure:
+            break
+        }
+    }
+    
+    private func editPermissions(group: RoomRolesAndPermissionsScreenPermissionsGroup) {
+        guard let permissions = state.permissions else {
+            state.bindings.alertInfo = AlertInfo(id: .error)
+            MXLog.error("Missing permissions.")
+            return
+        }
+        actionsSubject.send(.editPermissions(permissions: permissions, group: group))
     }
     
     private func resetPermissions() async {
