@@ -1,1 +1,0 @@
-The features: Filters, Mark as Read/Unread/Favourites are now available.

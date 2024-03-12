@@ -1,3 +1,33 @@
+## Changes in 1.5.11 (2024-03-12)
+
+✨ Features
+
+- The features: Filters, Mark as Read/Unread/Favourites are now available. ([#2541](https://github.com/element-hq/element-x-ios/pull/2541))
+- Added support for `m.call.invite` events in the timeline, room list and notifications ([#1837](https://github.com/element-hq/element-x-ios/issues/1837))
+- Add a blocked users section in the app settings ([#2486](https://github.com/element-hq/element-x-ios/issues/2486))
+
+🙌 Improvements
+
+- Inline predictions have been disabled on iOS 17 temporarily to avoid issues with the text editor. ([#2558](https://github.com/element-hq/element-x-ios/pull/2558))
+
+🐛 Bugfixes
+
+- Don't pass a URL as a log destination to rust on macOS ([#2506](https://github.com/element-hq/element-x-ios/pull/2506))
+- Fix a bug where some avatar backgrounds were hard to see in notifications. ([#2514](https://github.com/element-hq/element-x-ios/pull/2514))
+- Fix crashes when blocking/unblocking users ([#2553](https://github.com/element-hq/element-x-ios/pull/2553))
+
+🚧 In development 🚧
+
+- Create the Roles and Permissions screen. ([#2505](https://github.com/element-hq/element-x-ios/pull/2505))
+- Searching hides and ignores filtering now. ([#2530](https://github.com/element-hq/element-x-ios/pull/2530))
+- Add RoomChangeRolesScreen. ([#2356](https://github.com/element-hq/element-x-ios/issues/2356))
+- Add RoomChangePermissionsScreen. ([#2358](https://github.com/element-hq/element-x-ios/issues/2358))
+- Added an empty state view when the filter returns no rooms. ([#2522](https://github.com/element-hq/element-x-ios/issues/2522))
+
+Others
+
+- Remove the special log level for the Rust SDK read receipts. ([#2544](https://github.com/element-hq/element-x-ios/issues/2544))
+
 ## Changes in 1.5.10 (2024-02-27)
 
 No significant changes.
