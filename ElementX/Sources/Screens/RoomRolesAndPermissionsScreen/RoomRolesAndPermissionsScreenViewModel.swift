@@ -33,6 +33,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         self.userIndicatorController = userIndicatorController
         super.init(initialViewState: RoomRolesAndPermissionsScreenViewState())
         
+        // Automatically update the admin/moderator counts.
         roomProxy.membersPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] members in
@@ -41,6 +42,15 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
             .store(in: &cancellables)
         
         updateMembers(roomProxy.membersPublisher.value)
+        
+        // Automatically update the room permissions
+        roomProxy.actionsPublisher
+            .filter { $0 == .roomInfoUpdate }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                Task { await self?.updatePermissions() }
+            }
+            .store(in: &cancellables)
         
         Task { await updatePermissions() }
     }
