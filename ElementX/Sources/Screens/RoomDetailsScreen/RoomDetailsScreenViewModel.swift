@@ -135,6 +135,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
                 self?.updateRoomInfo()
+                Task { await self?.updatePowerLevelPermissions() }
             }
             .store(in: &cancellables)
     }
