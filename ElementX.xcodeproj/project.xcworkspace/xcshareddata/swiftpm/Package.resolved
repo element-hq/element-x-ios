@@ -14,7 +14,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "d084777ee50de4271670342d0adecfc99ea96121"
+        "revision" : "19bc4c5cf9c69b7b7aeb9ac8c937c2c81a83e8b1"
       }
     },
     {
@@ -173,9 +173,10 @@
     {
       "identity" : "prefire",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/stefanceriu/Prefire",
+      "location" : "https://github.com/BarredEwe/Prefire",
       "state" : {
-        "revision" : "982b207efafb9c6ff0c7beae38211c37b918d2b9"
+        "revision" : "608e7992dedc5ee409e59b3580010371ff0cef57",
+        "version" : "2.0.4"
       }
     },
     {
