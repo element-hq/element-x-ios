@@ -148,17 +148,16 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .authenticationFlow:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),
-                                                        appLockService: AppLockServiceMock(),
-                                                        bugReportService: BugReportServiceMock(),
-                                                        navigationStackCoordinator: navigationStackCoordinator,
-                                                        appSettings: ServiceLocator.shared.settings,
-                                                        analytics: ServiceLocator.shared.analytics,
-                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
-            retainedState.append(coordinator)
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
+            let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: MockAuthenticationServiceProxy(),
+                                                                appLockService: AppLockServiceMock(),
+                                                                bugReportService: BugReportServiceMock(),
+                                                                navigationRootCoordinator: navigationRootCoordinator,
+                                                                appSettings: ServiceLocator.shared.settings,
+                                                                analytics: ServiceLocator.shared.analytics,
+                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
+            flowCoordinator.start()
+            retainedState.append(flowCoordinator)
+            return nil
         case .softLogout:
             let credentials = SoftLogoutScreenCredentials(userID: "@mock:matrix.org",
                                                           homeserverName: "matrix.org",

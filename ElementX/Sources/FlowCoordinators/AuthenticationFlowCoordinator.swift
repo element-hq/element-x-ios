@@ -18,14 +18,15 @@ import Combine
 import SwiftUI
 
 @MainActor
-protocol AuthenticationCoordinatorDelegate: AnyObject {
-    func authenticationCoordinator(didLoginWithSession userSession: UserSessionProtocol)
+protocol AuthenticationFlowCoordinatorDelegate: AnyObject {
+    func authenticationFlowCoordinator(didLoginWithSession userSession: UserSessionProtocol)
 }
 
-class AuthenticationCoordinator: CoordinatorProtocol {
+class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProxyProtocol
     private let appLockService: AppLockServiceProtocol
     private let bugReportService: BugReportServiceProtocol
+    private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
@@ -41,30 +42,36 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     
-    weak var delegate: AuthenticationCoordinatorDelegate?
+    weak var delegate: AuthenticationFlowCoordinatorDelegate?
     
     init(authenticationService: AuthenticationServiceProxyProtocol,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
-         navigationStackCoordinator: NavigationStackCoordinator,
+         navigationRootCoordinator: NavigationRootCoordinator,
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.appLockService = appLockService
         self.bugReportService = bugReportService
-        self.navigationStackCoordinator = navigationStackCoordinator
+        self.navigationRootCoordinator = navigationRootCoordinator
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
+        
+        navigationStackCoordinator = NavigationStackCoordinator()
     }
     
     func start() {
         showStartScreen()
     }
     
-    func stop() {
-        stopLoading()
+    func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        fatalError()
+    }
+    
+    func clearRoute(animated: Bool) {
+        fatalError()
     }
     
     func handleOIDCRedirectURL(_ url: URL) {
@@ -95,6 +102,8 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationRootCoordinator.setRootCoordinator(navigationStackCoordinator)
     }
     
     private func showReportProblemScreen() {
@@ -263,7 +272,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
         } else if analytics.shouldShowAnalyticsPrompt {
             showAnalyticsPrompt(userSession: userSession)
         } else {
-            delegate?.authenticationCoordinator(didLoginWithSession: userSession)
+            delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
         }
     }
     
@@ -279,7 +288,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
                 if analytics.shouldShowAnalyticsPrompt {
                     showAnalyticsPrompt(userSession: userSession)
                 } else {
-                    delegate?.authenticationCoordinator(didLoginWithSession: userSession)
+                    delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
                 }
             case .forceLogout:
                 fatalError("The PIN creation flow should not fail.")
@@ -299,7 +308,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .done:
-                    delegate?.authenticationCoordinator(didLoginWithSession: userSession)
+                    delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
                 }
             }
             .store(in: &cancellables)
@@ -307,7 +316,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
     
-    private static let loadingIndicatorIdentifier = "AuthenticationCoordinatorLoading"
+    private static let loadingIndicatorIdentifier = "authenticationFlowCoordinatorLoading"
     
     private func startLoading() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

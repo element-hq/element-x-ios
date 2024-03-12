@@ -17,7 +17,7 @@
 import XCTest
 
 @MainActor
-class AuthenticationCoordinatorUITests: XCTestCase {
+class AuthenticationFlowCoordinatorUITests: XCTestCase {
     func testLoginWithPassword() async throws {
         // Given the authentication flow.
         let app = Application.launch(.authenticationFlow)

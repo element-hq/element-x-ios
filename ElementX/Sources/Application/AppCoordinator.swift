@@ -20,7 +20,7 @@ import MatrixRustSDK
 import SwiftUI
 import Version
 
-class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate, NotificationManagerDelegate, WindowManagerDelegate {
+class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, WindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
@@ -43,7 +43,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         }
     }
     
-    private var authenticationCoordinator: AuthenticationCoordinator?
+    private var authenticationFlowCoordinator: AuthenticationFlowCoordinator?
     private let appLockFlowCoordinator: AppLockFlowCoordinator
     // periphery:ignore - used to avoid deallocation
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
@@ -189,7 +189,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 if stateMachine.state == .softLogout {
                     softLogoutCoordinator?.handleOIDCRedirectURL(url)
                 } else {
-                    authenticationCoordinator?.handleOIDCRedirectURL(url)
+                    authenticationFlowCoordinator?.handleOIDCRedirectURL(url)
                 }
             case .genericCallLink(let url):
                 if let userSessionFlowCoordinator {
@@ -209,11 +209,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         return false
     }
     
-    // MARK: - AuthenticationCoordinatorDelegate
+    // MARK: - AuthenticationFlowCoordinatorDelegate
     
-    func authenticationCoordinator(didLoginWithSession userSession: UserSessionProtocol) {
+    func authenticationFlowCoordinator(didLoginWithSession userSession: UserSessionProtocol) {
         self.userSession = userSession
-        authenticationCoordinator = nil
+        authenticationFlowCoordinator = nil
         stateMachine.processEvent(.createdUserSession)
     }
     
@@ -393,22 +393,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     private func startAuthentication() {
-        let authenticationNavigationStackCoordinator = NavigationStackCoordinator()
         let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
                                                                encryptionKeyProvider: EncryptionKeyProvider(),
                                                                appSettings: appSettings)
-        authenticationCoordinator = AuthenticationCoordinator(authenticationService: authenticationService,
-                                                              appLockService: appLockFlowCoordinator.appLockService,
-                                                              bugReportService: ServiceLocator.shared.bugReportService,
-                                                              navigationStackCoordinator: authenticationNavigationStackCoordinator,
-                                                              appSettings: appSettings,
-                                                              analytics: ServiceLocator.shared.analytics,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
-        authenticationCoordinator?.delegate = self
+        authenticationFlowCoordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
+                                                                      appLockService: appLockFlowCoordinator.appLockService,
+                                                                      bugReportService: ServiceLocator.shared.bugReportService,
+                                                                      navigationRootCoordinator: navigationRootCoordinator,
+                                                                      appSettings: appSettings,
+                                                                      analytics: ServiceLocator.shared.analytics,
+                                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        authenticationFlowCoordinator?.delegate = self
         
-        authenticationCoordinator?.start()
-        
-        navigationRootCoordinator.setRootCoordinator(authenticationNavigationStackCoordinator)
+        authenticationFlowCoordinator?.start()
     }
 
     private func startAuthenticationSoftLogout() {
