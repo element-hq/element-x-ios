@@ -49,6 +49,7 @@ struct AuthenticationStartScreen: View {
                     Text(L10n.commonReportAProblem)
                         .font(.compound.bodySM)
                         .foregroundColor(.compound.textSecondary)
+                        .padding()
                 }
                 .frame(width: geometry.size.width)
             }
