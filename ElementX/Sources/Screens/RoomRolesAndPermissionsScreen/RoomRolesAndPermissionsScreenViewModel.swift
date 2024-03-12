@@ -67,14 +67,14 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
             state.bindings.alertInfo = AlertInfo(id: .resetConfirmation,
                                                  title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
                                                  message: L10n.screenRoomChangeRoleConfirmDemoteSelfDescription,
+                                                 primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
                                                  verticalButtons: [
                                                      .init(title: L10n.screenRoomRolesAndPermissionsChangeRoleDemoteToModerator, role: .destructive) {
                                                          Task { await self.updateOwnRole(.moderator) }
                                                      },
                                                      .init(title: L10n.screenRoomRolesAndPermissionsChangeRoleDemoteToMember, role: .destructive) {
                                                          Task { await self.updateOwnRole(.user) }
-                                                     },
-                                                     .init(title: L10n.actionCancel, role: .cancel) { }
+                                                     }
                                                  ])
         case .editPermissions(let permissionsGroup):
             editPermissions(group: permissionsGroup)
