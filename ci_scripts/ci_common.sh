@@ -30,7 +30,11 @@ setup_xcode_cloud_environment () {
 }
 
 install_xcode_cloud_brew_dependencies () {
-    brew update && brew install xcodegen imagemagick
+    brew update && brew install xcodegen
+    
+    if [ "$CI_WORKFLOW" = "Nightly" ]; then
+        brew install imagemagick@6
+    fi
 }
 
 install_xcode_cloud_python_dependencies () {
@@ -44,7 +48,7 @@ setup_github_actions_environment() {
     brew update && brew install xcodegen swiftformat git-lfs a7ex/homebrew-formulae/xcresultparser
     
     if [ "$CI_WORKFLOW" = "PR_BUILD" ]; then
-        brew install imagemagick
+        brew install imagemagick@6
     fi
     
     # brew "swiftlint" # Fails on the CI: `Target /usr/local/bin/swiftlint Target /usr/local/bin/swiftlint already exists`. Installed through https://github.com/actions/virtual-environments/blob/main/images/macos/macos-12-Readme.md#linters
