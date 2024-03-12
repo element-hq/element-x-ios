@@ -92,12 +92,15 @@ enum RoomAvatarSizeOnScreen {
     case globalSearch
     case details
     case notificationSettings
+    case roomDirectorySearch
 
     var value: CGFloat {
         switch self {
         case .notificationSettings:
             return 30
         case .timeline:
+            return 32
+        case .roomDirectorySearch:
             return 32
         case .messageForwarding:
             return 36

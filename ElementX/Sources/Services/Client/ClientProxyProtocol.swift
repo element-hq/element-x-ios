@@ -150,6 +150,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError>
     
+    func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol
+
     // MARK: - Ignored users
     
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError>

@@ -50,6 +50,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var hideUnreadMessagesBadge: Bool { get set }
     var roomModerationEnabled: Bool { get set }
     var elementCallBaseURL: URL { get set }
+    var publicSearchEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

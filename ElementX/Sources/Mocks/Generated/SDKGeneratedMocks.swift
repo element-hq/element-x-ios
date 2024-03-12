@@ -505,6 +505,23 @@ class SDKClientMock: SDKClientProtocol {
         restoreSessionSessionReceivedInvocations.append(session)
         try restoreSessionSessionClosure?(session)
     }
+    //MARK: - roomDirectorySearch
+
+    public var roomDirectorySearchCallsCount = 0
+    public var roomDirectorySearchCalled: Bool {
+        return roomDirectorySearchCallsCount > 0
+    }
+    public var roomDirectorySearchReturnValue: RoomDirectorySearch!
+    public var roomDirectorySearchClosure: (() -> RoomDirectorySearch)?
+
+    public func roomDirectorySearch() -> RoomDirectorySearch {
+        roomDirectorySearchCallsCount += 1
+        if let roomDirectorySearchClosure = roomDirectorySearchClosure {
+            return roomDirectorySearchClosure()
+        } else {
+            return roomDirectorySearchReturnValue
+        }
+    }
     //MARK: - rooms
 
     public var roomsCallsCount = 0

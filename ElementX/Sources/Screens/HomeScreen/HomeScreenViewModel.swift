@@ -94,6 +94,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .sink { [weak self] _ in self?.updateRooms() }
             .store(in: &cancellables)
         
+        appSettings.$publicSearchEnabled
+            .weakAssign(to: \.state.isRoomDirectorySearchEnabled, on: self)
+            .store(in: &cancellables)
+        
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
@@ -177,6 +181,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             Task {
                 await markRoomAsFavourite(roomIdentifier, isFavourite: isFavourite)
             }
+        case .selectRoomDirectorySearch:
+            actionsSubject.send(.presentRoomDirectorySearch)
         }
     }
     

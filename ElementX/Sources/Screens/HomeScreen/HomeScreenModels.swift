@@ -28,6 +28,7 @@ enum HomeScreenViewModelAction {
     case presentStartChatScreen
     case presentInvitesScreen
     case presentGlobalSearch
+    case presentRoomDirectorySearch
     case logout
 }
 
@@ -46,6 +47,7 @@ enum HomeScreenViewAction {
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
     case markRoomAsFavourite(roomIdentifier: String, isFavourite: Bool)
+    case selectRoomDirectorySearch
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -87,6 +89,8 @@ struct HomeScreenViewState: BindableState {
     
     var hasPendingInvitations = false
     var hasUnreadPendingInvitations = false
+    
+    var isRoomDirectorySearchEnabled = false
     
     var selectedRoomID: String?
     
