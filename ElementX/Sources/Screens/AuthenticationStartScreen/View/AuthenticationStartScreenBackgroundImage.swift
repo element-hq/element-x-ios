@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,10 +14,15 @@
 // limitations under the License.
 //
 
-import Combine
+import SwiftUI
 
-@MainActor
-protocol OnboardingScreenViewModelProtocol {
-    var actions: AnyPublisher<OnboardingScreenViewModelAction, Never> { get }
-    var context: OnboardingScreenViewModelType.Context { get }
+/// The background gradient shown on the launch, splash and onboarding screens.
+struct AuthenticationStartScreenBackgroundImage: View {
+    var body: some View {
+        Image(asset: Asset.Images.launchBackground)
+            .resizable()
+            .scaledToFill()
+            .ignoresSafeArea()
+            .accessibilityHidden(true)
+    }
 }

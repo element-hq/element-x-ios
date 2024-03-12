@@ -27,13 +27,13 @@ struct WaitingDialog<Content: View, BottomContent: View>: View {
     private var contentTopPadding: CGFloat {
         if verticalSizeClass == .compact {
             // Reduced value for iPhones in landscape.
-            return UIConstants.onboardingBreakerScreenTopPadding
+            return UIConstants.startScreenBreakerScreenTopPadding
         } else if horizontalSizeClass == .compact {
             // The default value for portrait iPhones.
-            return 2 * UIConstants.onboardingBreakerScreenTopPadding
+            return 2 * UIConstants.startScreenBreakerScreenTopPadding
         } else {
             // Larger on iPad specifically for 11" in Landscape.
-            return 2.7 * UIConstants.onboardingBreakerScreenTopPadding
+            return 2.7 * UIConstants.startScreenBreakerScreenTopPadding
         }
     }
     
@@ -43,7 +43,7 @@ struct WaitingDialog<Content: View, BottomContent: View>: View {
     @ViewBuilder var bottomContent: () -> BottomContent
     
     var body: some View {
-        FullscreenDialog(topPadding: UIConstants.onboardingBreakerScreenTopPadding, horizontalPadding: 0) {
+        FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding, horizontalPadding: 0) {
             content()
                 .padding(.top, contentTopPadding)
                 .padding(.horizontal, horizontalPadding)
@@ -68,7 +68,7 @@ struct WaitingDialog<Content: View, BottomContent: View>: View {
         GeometryReader { geometry in
             VStack(spacing: -5) {
                 Color.white
-                    .frame(maxHeight: UIConstants.onboardingBreakerScreenTopPadding)
+                    .frame(maxHeight: UIConstants.startScreenBreakerScreenTopPadding)
                 
                 Image(asset: Asset.Images.waitingGradient)
                     .resizable()

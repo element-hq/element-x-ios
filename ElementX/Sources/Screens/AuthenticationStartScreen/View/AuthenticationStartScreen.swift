@@ -17,10 +17,10 @@
 import SwiftUI
 
 /// The screen shown at the beginning of the onboarding flow.
-struct OnboardingScreen: View {
+struct AuthenticationStartScreen: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
-    @ObservedObject var context: OnboardingScreenViewModel.Context
+    @ObservedObject var context: AuthenticationStartScreenViewModel.Context
     
     var body: some View {
         GeometryReader { geometry in
@@ -30,7 +30,7 @@ struct OnboardingScreen: View {
                 
                 content
                     .frame(width: geometry.size.width)
-                    .accessibilityIdentifier(A11yIdentifiers.onboardingScreen.hidden)
+                    .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.hidden)
                 
                 buttons
                     .frame(width: geometry.size.width)
@@ -55,7 +55,7 @@ struct OnboardingScreen: View {
         }
         .navigationBarHidden(true)
         .background {
-            OnboardingScreenBackgroundImage()
+            AuthenticationStartScreenBackgroundImage()
         }
     }
     
@@ -66,7 +66,7 @@ struct OnboardingScreen: View {
             if verticalSizeClass == .regular {
                 Spacer()
                 
-                OnboardingLogo(isOnGradient: true)
+                AuthenticationStartLogo(isOnGradient: true)
             }
             
             Spacer()
@@ -98,7 +98,7 @@ struct OnboardingScreen: View {
                 Text(L10n.actionContinue)
             }
             .buttonStyle(.compound(.primary))
-            .accessibilityIdentifier(A11yIdentifiers.onboardingScreen.signIn)
+            .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.signIn)
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()
@@ -107,10 +107,10 @@ struct OnboardingScreen: View {
 
 // MARK: - Previews
 
-struct OnboardingScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = OnboardingScreenViewModel()
+struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
+    static let viewModel = AuthenticationStartScreenViewModel()
     
     static var previews: some View {
-        OnboardingScreen(context: viewModel.context)
+        AuthenticationStartScreen(context: viewModel.context)
     }
 }

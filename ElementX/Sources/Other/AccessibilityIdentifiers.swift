@@ -27,7 +27,7 @@ enum A11yIdentifiers {
     static let changeServerScreen = ChangeServer()
     static let homeScreen = HomeScreen()
     static let loginScreen = LoginScreen()
-    static let onboardingScreen = OnboardingScreen()
+    static let authenticationStartScreen = AuthenticationStartScreen()
     static let reportContent = ReportContent()
     static let roomScreen = RoomScreen()
     static let roomDetailsScreen = RoomDetailsScreen()
@@ -123,9 +123,9 @@ enum A11yIdentifiers {
         let unsupportedServer = "login-unsupported_server"
     }
     
-    struct OnboardingScreen {
-        let signIn = "onboarding-sign_in"
-        let hidden = "onboarding-hidden"
+    struct AuthenticationStartScreen {
+        let signIn = "authentication_start-sign_in"
+        let hidden = "authentication_start-hidden"
     }
     
     struct ReportContent {

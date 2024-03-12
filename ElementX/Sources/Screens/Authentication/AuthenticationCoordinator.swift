@@ -60,7 +60,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        showOnboarding()
+        showStartScreen()
     }
     
     func stop() {
@@ -78,8 +78,8 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func showOnboarding() {
-        let coordinator = OnboardingScreenCoordinator()
+    private func showStartScreen() {
+        let coordinator = AuthenticationStartScreenCoordinator()
         
         coordinator.actions
             .sink { [weak self] action in

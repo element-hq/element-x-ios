@@ -17,17 +17,17 @@
 import Combine
 import SwiftUI
 
-final class OnboardingScreenCoordinator: CoordinatorProtocol {
-    private var viewModel: OnboardingScreenViewModelProtocol
-    private let actionsSubject: PassthroughSubject<OnboardingScreenCoordinatorAction, Never> = .init()
+final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
+    private var viewModel: AuthenticationStartScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<AuthenticationStartScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
-    var actions: AnyPublisher<OnboardingScreenCoordinatorAction, Never> {
+    var actions: AnyPublisher<AuthenticationStartScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init() {
-        viewModel = OnboardingScreenViewModel()
+        viewModel = AuthenticationStartScreenViewModel()
     }
     
     // MARK: - Public
@@ -48,6 +48,6 @@ final class OnboardingScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(OnboardingScreen(context: viewModel.context))
+        AnyView(AuthenticationStartScreen(context: viewModel.context))
     }
 }

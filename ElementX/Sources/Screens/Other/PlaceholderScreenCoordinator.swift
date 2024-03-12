@@ -33,11 +33,11 @@ struct PlaceholderScreen: View {
     let showsBackgroundGradient: Bool
     
     var body: some View {
-        OnboardingLogo(isOnGradient: showsBackgroundGradient)
+        AuthenticationStartLogo(isOnGradient: showsBackgroundGradient)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background {
                 if showsBackgroundGradient {
-                    OnboardingScreenBackgroundImage()
+                    AuthenticationStartScreenBackgroundImage()
                 }
             }
             .background()

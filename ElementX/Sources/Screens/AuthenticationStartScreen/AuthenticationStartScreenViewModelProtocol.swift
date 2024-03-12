@@ -14,23 +14,10 @@
 // limitations under the License.
 //
 
-import SwiftUI
+import Combine
 
-// MARK: - Coordinator
-
-enum OnboardingScreenCoordinatorAction {
-    case login
-    case reportProblem
-}
-
-enum OnboardingScreenViewModelAction {
-    case login
-    case reportProblem
-}
-
-struct OnboardingScreenViewState: BindableState { }
-
-enum OnboardingScreenViewAction {
-    case login
-    case reportProblem
+@MainActor
+protocol AuthenticationStartScreenViewModelProtocol {
+    var actions: AnyPublisher<AuthenticationStartScreenViewModelAction, Never> { get }
+    var context: AuthenticationStartScreenViewModelType.Context { get }
 }

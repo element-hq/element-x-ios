@@ -21,7 +21,7 @@ struct AnalyticsPromptScreen: View {
     @ObservedObject var context: AnalyticsPromptScreenViewModel.Context
     
     var body: some View {
-        FullscreenDialog(topPadding: UIConstants.onboardingBreakerScreenTopPadding) {
+        FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding) {
             mainContent
         } bottomContent: {
             buttons
