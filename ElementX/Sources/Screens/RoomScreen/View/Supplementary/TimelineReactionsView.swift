@@ -136,7 +136,7 @@ struct TimelineCollapseButtonLabel: View {
     
     var body: some View {
         TimelineReactionButtonLabel {
-            Text(collapsed ? L10n.screenRoomReactionsShowMore : L10n.screenRoomReactionsShowLess)
+            Text(collapsed ? L10n.screenRoomTimelineReactionsShowMore : L10n.screenRoomTimelineReactionsShowLess)
                 .frame(height: lineHeight, alignment: .center)
                 .padding(.vertical, 6)
                 .padding(.horizontal, 12)

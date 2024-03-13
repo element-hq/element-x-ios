@@ -22,7 +22,7 @@ struct ReadMarkerRoomTimelineView: View {
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 2) {
-            Text(L10n.roomTimelineReadMarkerTitle)
+            Text(L10n.screenRoomTimelineReadMarkerTitle)
                 .textCase(.uppercase)
                 .font(.compound.bodyXSSemibold)
                 .foregroundColor(.compound.textSecondary)
