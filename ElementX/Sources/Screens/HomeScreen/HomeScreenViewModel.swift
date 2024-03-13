@@ -434,7 +434,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
             case .some(.success):
                 userIndicatorController.submitIndicator(UserIndicator(id: UUID().uuidString,
-                                                                      type: .modal(progress: .none, interactiveDismissDisabled: false, allowsInteraction: false),
+                                                                      type: .toast,
                                                                       title: L10n.commonCurrentUserLeftRoom,
                                                                       iconName: "checkmark"))
                 actionsSubject.send(.roomLeft(roomIdentifier: roomId))

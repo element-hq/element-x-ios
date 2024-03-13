@@ -89,4 +89,93 @@ class RoomStateEventStringBuilderTests: XCTestCase {
                                                             memberIsYou: sender.id == userID)
         XCTAssertEqual(string, expectedString)
     }
+    
+    // MARK: - User Power Levels
+    
+    let aliceID = "@alice"
+    let bobID = "@bob"
+    
+    func testUserPowerLevelsPromotion() {
+        var string = stringBuilder.buildString(for: .roomPowerLevels(users: [aliceID: suggestedPowerLevelForRole(role: .moderator)],
+                                                                     previous: [aliceID: suggestedPowerLevelForRole(role: .user)]),
+                                               sender: TimelineItemSender(id: ""),
+                                               isOutgoing: false)
+        XCTAssertEqual(string, L10n.stateEventPromotedToModerator(aliceID))
+        
+        string = stringBuilder.buildString(for: .roomPowerLevels(users: [aliceID: suggestedPowerLevelForRole(role: .administrator)],
+                                                                 previous: [aliceID: suggestedPowerLevelForRole(role: .user)]),
+                                           sender: TimelineItemSender(id: ""),
+                                           isOutgoing: false)
+        XCTAssertEqual(string, L10n.stateEventPromotedToAdministrator(aliceID))
+        
+        string = stringBuilder.buildString(for: .roomPowerLevels(users: [aliceID: suggestedPowerLevelForRole(role: .administrator)],
+                                                                 previous: [aliceID: suggestedPowerLevelForRole(role: .moderator)]),
+                                           sender: TimelineItemSender(id: ""),
+                                           isOutgoing: false)
+        XCTAssertEqual(string, L10n.stateEventPromotedToAdministrator(aliceID))
+    }
+    
+    func testUserPowerLevelsDemotion() {
+        var string = stringBuilder.buildString(for: .roomPowerLevels(users: [aliceID: suggestedPowerLevelForRole(role: .moderator)],
+                                                                     previous: [aliceID: suggestedPowerLevelForRole(role: .administrator)]),
+                                               sender: TimelineItemSender(id: ""),
+                                               isOutgoing: false)
+        XCTAssertEqual(string, L10n.stateEventDemotedToModerator(aliceID))
+        
+        string = stringBuilder.buildString(for: .roomPowerLevels(users: [aliceID: suggestedPowerLevelForRole(role: .user)],
+                                                                 previous: [aliceID: suggestedPowerLevelForRole(role: .administrator)]),
+                                           sender: TimelineItemSender(id: ""),
+                                           isOutgoing: false)
+        XCTAssertEqual(string, L10n.stateEventDemotedToMember(aliceID))
+        
+        string = stringBuilder.buildString(for: .roomPowerLevels(users: [aliceID: suggestedPowerLevelForRole(role: .user)],
+                                                                 previous: [aliceID: suggestedPowerLevelForRole(role: .moderator)]),
+                                           sender: TimelineItemSender(id: ""),
+                                           isOutgoing: false)
+        XCTAssertEqual(string, L10n.stateEventDemotedToMember(aliceID))
+    }
+    
+    func testMultipleUserPowerLevels() {
+        let new = [aliceID: suggestedPowerLevelForRole(role: .administrator),
+                   bobID: suggestedPowerLevelForRole(role: .user)]
+        let previous = [aliceID: suggestedPowerLevelForRole(role: .user),
+                        bobID: suggestedPowerLevelForRole(role: .moderator)]
+        let string = stringBuilder.buildString(for: .roomPowerLevels(users: new, previous: previous),
+                                               sender: TimelineItemSender(id: ""),
+                                               isOutgoing: false)
+        XCTAssertEqual(string?.contains(L10n.stateEventPromotedToAdministrator(aliceID)), true)
+        XCTAssertEqual(string?.contains(L10n.stateEventDemotedToMember(bobID)), true)
+    }
+    
+    func testInvalidUserPowerLevels() {
+        // Admin demotions aren't relevant.
+        var string = stringBuilder.buildString(for: .roomPowerLevels(users: [aliceID: 100],
+                                                                     previous: [aliceID: 200]),
+                                               sender: TimelineItemSender(id: ""),
+                                               isOutgoing: false)
+        XCTAssertNil(string)
+        
+        // User promotions aren't relevant.
+        string = stringBuilder.buildString(for: .roomPowerLevels(users: [aliceID: 0],
+                                                                 previous: [aliceID: -100]),
+                                           sender: TimelineItemSender(id: ""),
+                                           isOutgoing: false)
+        XCTAssertNil(string)
+        
+        // Or more generally, any change within the same role isn't relevant either.
+        string = stringBuilder.buildString(for: .roomPowerLevels(users: [aliceID: 75],
+                                                                 previous: [aliceID: 60]),
+                                           sender: TimelineItemSender(id: ""),
+                                           isOutgoing: false)
+        XCTAssertNil(string)
+        
+        let new = [aliceID: 100,
+                   bobID: suggestedPowerLevelForRole(role: .user)]
+        let previous = [aliceID: 200,
+                        bobID: suggestedPowerLevelForRole(role: .moderator)]
+        string = stringBuilder.buildString(for: .roomPowerLevels(users: new, previous: previous),
+                                           sender: TimelineItemSender(id: ""),
+                                           isOutgoing: false)
+        XCTAssertEqual(string, L10n.stateEventDemotedToMember(bobID))
+    }
 }

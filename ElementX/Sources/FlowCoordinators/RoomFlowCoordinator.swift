@@ -353,7 +353,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentRolesAndPermissionsScreen, .rolesAndPermissions):
                 presentRolesAndPermissionsScreen()
             case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen, .roomDetails):
-                break
+                rolesAndPermissionsFlowCoordinator = nil
             
             default:
                 fatalError("Unknown transition: \(context)")
@@ -1181,7 +1181,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action {
             case .complete:
-                self?.rolesAndPermissionsFlowCoordinator = nil
+                self?.stateMachine.tryEvent(.dismissRolesAndPermissionsScreen)
             }
         }
         .store(in: &cancellables)

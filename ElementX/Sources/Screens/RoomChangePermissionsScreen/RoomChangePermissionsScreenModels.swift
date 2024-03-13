@@ -18,7 +18,7 @@ import Foundation
 import MatrixRustSDK
 
 enum RoomChangePermissionsScreenViewModelAction {
-    case cancel
+    case complete
 }
 
 struct RoomChangePermissionsScreenViewState: BindableState {
