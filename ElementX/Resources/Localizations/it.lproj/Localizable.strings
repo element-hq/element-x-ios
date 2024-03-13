@@ -40,7 +40,7 @@
 "action_decline" = "Rifiuta";
 "action_delete_poll" = "Elimina sondaggio";
 "action_disable" = "Disabilita";
-"action_discard" = "Discard";
+"action_discard" = "Annulla";
 "action_done" = "Fine";
 "action_edit" = "Modifica";
 "action_edit_poll" = "Modifica sondaggio";
@@ -133,7 +133,7 @@
 "common_image" = "Immagine";
 "common_in_reply_to" = "In risposta a %1$@";
 "common_invite_unknown_profile" = "Questo ID Matrix non può essere trovato, quindi l'invito potrebbe non essere ricevuto.";
-"common_leaving_room" = "Lasciando la stanza";
+"common_leaving_room" = "Lascio la stanza";
 "common_light" = "Chiaro";
 "common_link_copied_to_clipboard" = "Collegamento copiato negli appunti";
 "common_loading" = "Caricamento…";
