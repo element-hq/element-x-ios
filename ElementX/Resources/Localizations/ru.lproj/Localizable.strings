@@ -40,6 +40,7 @@
 "action_decline" = "Отклонить";
 "action_delete_poll" = "Удалить опрос";
 "action_disable" = "Отключить";
+"action_discard" = "Discard";
 "action_done" = "Готово";
 "action_edit" = "Редактировать";
 "action_edit_poll" = "Редактировать опрос";
@@ -266,8 +267,6 @@
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ в %2$@ и %3$@";
 "preference_rageshake" = "Встряхните устройство, чтобы сообщить об ошибке";
 "rageshake_detection_dialog_content" = "Похоже, что вы трясете телефон. Хотите открыть экран сообщения об ошибке?";
-"report_content_explanation" = "Это сообщение будет передано администратору вашего домашнего сервера. Они не смогут прочитать зашифрованные сообщения.";
-"report_content_hint" = "Причина, по которой вы пожаловались на этот контент";
 "rich_text_editor_bullet_list" = "Переключить список маркеров";
 "rich_text_editor_close_formatting_options" = "Закрыть параметры форматирования";
 "rich_text_editor_code_block" = "Переключить блок кода";
@@ -289,9 +288,6 @@
 "rich_text_editor_unindent" = "Без отступа";
 "rich_text_editor_url_placeholder" = "Ссылка";
 "rich_text_editor_a11y_add_attachment" = "Прикрепить файл";
-"room_timeline_beginning_of_room" = "Это начало %1$@.";
-"room_timeline_beginning_of_room_no_name" = "Это начало разговора.";
-"room_timeline_read_marker_title" = "Новый";
 "screen_advanced_settings_element_call_base_url" = "Базовый URL сервера звонков Element";
 "screen_advanced_settings_element_call_base_url_description" = "Задайте свой сервер Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Адрес указан неверно, удостоверьтесь, что вы указали протокол (http/https) и правильный адрес.";
@@ -492,6 +488,8 @@
 "screen_recovery_key_setup_success" = "Настройка восстановления выполнена успешно";
 "screen_recovery_key_setup_title" = "Настроить восстановление";
 "screen_report_content_block_user_hint" = "Отметьте, хотите ли вы скрыть все текущие и будущие сообщения от этого пользователя";
+"screen_report_content_explanation" = "Это сообщение будет передано администратору вашего домашнего сервера. Они не смогут прочитать зашифрованные сообщения.";
+"screen_report_content_hint" = "Причина, по которой вы пожаловались на этот контент";
 "screen_room_attachment_source_camera" = "Камера";
 "screen_room_attachment_source_camera_video" = "Записать видео";
 "screen_room_attachment_source_files" = "Вложение";
@@ -567,8 +565,6 @@
 "screen_room_member_list_role_moderator" = "Модератор";
 "screen_room_member_list_room_members_header_title" = "Участники комнаты";
 "screen_room_member_list_unbanning_user" = "Разблокировка %1$@";
-"screen_room_message_copied" = "Сообщение скопировано";
-"screen_room_no_permission_to_post" = "У вас нет разрешения публиковать сообщения в этой комнате";
 "screen_room_notification_settings_allow_custom" = "Разрешить пользовательские настройки";
 "screen_room_notification_settings_allow_custom_footnote" = "Включение этого параметра отменяет настройки по умолчанию";
 "screen_room_notification_settings_custom_settings_title" = "Уведомить меня в этом чате";
@@ -582,8 +578,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, вы не будете получать уведомления в этой комнате.";
 "screen_room_notification_settings_mode_all_messages" = "Все сообщения";
 "screen_room_notification_settings_room_custom_settings_title" = "В этой комнате уведомить меня о";
-"screen_room_reactions_show_less" = "Показать меньше";
-"screen_room_reactions_show_more" = "Показать больше";
 "screen_room_retry_send_menu_send_again_action" = "Отправить снова";
 "screen_room_retry_send_menu_title" = "Не удалось отправить ваше сообщение";
 "screen_room_roles_and_permissions_admins" = "Администраторы";
@@ -601,7 +595,14 @@
 "screen_room_roles_and_permissions_room_details" = "Информация о комнате";
 "screen_room_roles_and_permissions_title" = "Роли и разрешения";
 "screen_room_timeline_add_reaction" = "Добавить эмодзи";
+"screen_room_timeline_beginning_of_room" = "Это начало %1$@.";
+"screen_room_timeline_beginning_of_room_no_name" = "Это начало разговора.";
 "screen_room_timeline_less_reactions" = "Показать меньше";
+"screen_room_timeline_message_copied" = "Сообщение скопировано";
+"screen_room_timeline_no_permission_to_post" = "У вас нет разрешения публиковать сообщения в этой комнате";
+"screen_room_timeline_reactions_show_less" = "Показать меньше";
+"screen_room_timeline_reactions_show_more" = "Показать больше";
+"screen_room_timeline_read_marker_title" = "Новый";
 "screen_room_typing_many_members_first_component_ios" = "%1$@ и %2$@";
 "screen_room_typing_notification_plural_ios" = "печатают";
 "screen_room_typing_notification_singular_ios" = "печатает";

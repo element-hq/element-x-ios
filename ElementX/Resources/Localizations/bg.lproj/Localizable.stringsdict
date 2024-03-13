@@ -162,22 +162,6 @@
 			<string>%d стаи</string>
 		</dict>
 	</dict>
-	<key>room_timeline_state_changes</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%1$d промяна в стаята</string>
-			<key>other</key>
-			<string>%1$d промени в стаята</string>
-		</dict>
-	</dict>
 	<key>screen_app_lock_subtitle</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -224,6 +208,22 @@
 			<string>%1$d човек</string>
 			<key>other</key>
 			<string>%1$d души</string>
+		</dict>
+	</dict>
+	<key>screen_room_timeline_state_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d промяна в стаята</string>
+			<key>other</key>
+			<string>%1$d промени в стаята</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>

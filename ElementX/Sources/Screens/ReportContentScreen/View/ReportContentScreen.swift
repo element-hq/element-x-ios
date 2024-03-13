@@ -36,11 +36,11 @@ struct ReportContentScreen: View {
 
     private var reasonSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.reportContentHint),
+            ListRow(label: .plain(title: L10n.screenReportContentHint),
                     kind: .textField(text: $context.reasonText, axis: .vertical))
                 .lineLimit(4, reservesSpace: true)
         } footer: {
-            Text(L10n.reportContentExplanation)
+            Text(L10n.screenReportContentExplanation)
                 .compoundListSectionFooter()
         }
     }

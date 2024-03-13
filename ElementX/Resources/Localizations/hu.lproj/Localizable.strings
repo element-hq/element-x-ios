@@ -40,6 +40,7 @@
 "action_decline" = "Elutasítás";
 "action_delete_poll" = "Szavazás törlése";
 "action_disable" = "Letiltás";
+"action_discard" = "Discard";
 "action_done" = "Kész";
 "action_edit" = "Szerkesztés";
 "action_edit_poll" = "Szavazás szerkesztése";
@@ -266,8 +267,6 @@
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ itt: %2$@ és %3$@";
 "preference_rageshake" = "Az eszköz rázása a hibajelentéshez";
 "rageshake_detection_dialog_content" = "Úgy tűnik, mintha dühösen ráznád a telefont. Megnyitod a hibajelentési képernyőt?";
-"report_content_explanation" = "Ez az üzenet jelentve lesz a Matrix-kiszolgáló rendszergazdájának. Nem fogja tudni elolvasni a titkosított üzeneteket.";
-"report_content_hint" = "A tartalom jelentésének oka";
 "rich_text_editor_bullet_list" = "Felsorolás be/ki";
 "rich_text_editor_close_formatting_options" = "Formázási beállítások bezárása";
 "rich_text_editor_code_block" = "Kódblokk be/ki";
@@ -289,9 +288,6 @@
 "rich_text_editor_unindent" = "Behúzás nélkül";
 "rich_text_editor_url_placeholder" = "Hivatkozás";
 "rich_text_editor_a11y_add_attachment" = "Melléklet hozzáadása";
-"room_timeline_beginning_of_room" = "Ez a(z) %1$@ kezdete.";
-"room_timeline_beginning_of_room_no_name" = "Ez a beszélgetés kezdete.";
-"room_timeline_read_marker_title" = "Új";
 "screen_advanced_settings_element_call_base_url" = "Egyéni Element Call alapwebcím";
 "screen_advanced_settings_element_call_base_url_description" = "Egyéni alapwebcím beállítása az Element Callhoz.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Érvénytelen webcím, győződj meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím.";
@@ -492,6 +488,8 @@
 "screen_recovery_key_setup_success" = "A helyreállítás beállítása sikeres";
 "screen_recovery_key_setup_title" = "Helyreállítás beállítása";
 "screen_report_content_block_user_hint" = "Jelölje be, ha el akarja rejteni az összes jelenlegi és jövőbeli üzenetet ettől a felhasználótól";
+"screen_report_content_explanation" = "Ez az üzenet jelentve lesz a Matrix-kiszolgáló rendszergazdájának. Nem fogja tudni elolvasni a titkosított üzeneteket.";
+"screen_report_content_hint" = "A tartalom jelentésének oka";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Videó rögzítése";
 "screen_room_attachment_source_files" = "Melléklet";
@@ -567,8 +565,6 @@
 "screen_room_member_list_role_moderator" = "Moderátor";
 "screen_room_member_list_room_members_header_title" = "Szoba tagjai";
 "screen_room_member_list_unbanning_user" = "Unbanning %1$@";
-"screen_room_message_copied" = "Üzenet másolva";
-"screen_room_no_permission_to_post" = "Nincs jogosultsága arra, hogy bejegyzést tegyen közzé ebben a szobában";
 "screen_room_notification_settings_allow_custom" = "Egyéni beállítás engedélyezése";
 "screen_room_notification_settings_allow_custom_footnote" = "Ennek bekapcsolása felülírja az alapértelmezett beállítást";
 "screen_room_notification_settings_custom_settings_title" = "Értesítések kérése ebben a csevegésben ezekről:";
@@ -582,8 +578,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, egyes szobákban nem fog értesítéseket kapni.";
 "screen_room_notification_settings_mode_all_messages" = "Összes üzenet";
 "screen_room_notification_settings_room_custom_settings_title" = "Ebben a szobában, értesítés ezekről:";
-"screen_room_reactions_show_less" = "Kevesebb megjelenítése";
-"screen_room_reactions_show_more" = "Több megjelenítése";
 "screen_room_retry_send_menu_send_again_action" = "Újraküldés";
 "screen_room_retry_send_menu_title" = "Az üzenet elküldése sikertelen";
 "screen_room_roles_and_permissions_admins" = "Admins";
@@ -601,7 +595,14 @@
 "screen_room_roles_and_permissions_room_details" = "Room details";
 "screen_room_roles_and_permissions_title" = "Roles and permissions";
 "screen_room_timeline_add_reaction" = "Emodzsi hozzáadása";
+"screen_room_timeline_beginning_of_room" = "Ez a(z) %1$@ kezdete.";
+"screen_room_timeline_beginning_of_room_no_name" = "Ez a beszélgetés kezdete.";
 "screen_room_timeline_less_reactions" = "Kevesebb megjelenítése";
+"screen_room_timeline_message_copied" = "Üzenet másolva";
+"screen_room_timeline_no_permission_to_post" = "Nincs jogosultsága arra, hogy bejegyzést tegyen közzé ebben a szobában";
+"screen_room_timeline_reactions_show_less" = "Kevesebb megjelenítése";
+"screen_room_timeline_reactions_show_more" = "Több megjelenítése";
+"screen_room_timeline_read_marker_title" = "Új";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ és ";
 "screen_room_typing_notification_plural_ios" = " éppen ír";
 "screen_room_typing_notification_singular_ios" = " éppen ír";

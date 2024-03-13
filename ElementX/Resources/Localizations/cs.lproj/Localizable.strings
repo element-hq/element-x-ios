@@ -40,6 +40,7 @@
 "action_decline" = "Odmítnout";
 "action_delete_poll" = "Odstranit hlasování";
 "action_disable" = "Zakázat";
+"action_discard" = "Discard";
 "action_done" = "Hotovo";
 "action_edit" = "Upravit";
 "action_edit_poll" = "Upravit hlasování";
@@ -266,8 +267,6 @@
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ v %2$@ a %3$@";
 "preference_rageshake" = "Zatřeste zařízením pro nahlášení chyby";
 "rageshake_detection_dialog_content" = "Zdá se, že frustrovaně třesete telefonem. Chcete nahlásit chybu?";
-"report_content_explanation" = "Tato zpráva bude nahlášena správci vašeho domovského serveru. Nebude si moci přečíst žádné šifrované zprávy.";
-"report_content_hint" = "Důvod nahlášení tohoto obsahu";
 "rich_text_editor_bullet_list" = "Přepnout seznam s odrážkami";
 "rich_text_editor_close_formatting_options" = "Zavřít možnosti formátování";
 "rich_text_editor_code_block" = "Přepnout blok kódu";
@@ -289,9 +288,6 @@
 "rich_text_editor_unindent" = "Zrušit odsazení";
 "rich_text_editor_url_placeholder" = "Odkaz";
 "rich_text_editor_a11y_add_attachment" = "Přidat přílohu";
-"room_timeline_beginning_of_room" = "Toto je začátek %1$@.";
-"room_timeline_beginning_of_room_no_name" = "Toto je začátek této konverzace.";
-"room_timeline_read_marker_title" = "Nové";
 "screen_advanced_settings_element_call_base_url" = "Vlastní URL pro Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Nastavte vlastní URL pro Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatné URL, ujistěte se, že jste uvedli protokol (http/https) a správnou adresu.";
@@ -492,6 +488,8 @@
 "screen_recovery_key_setup_success" = "Nastavení obnovení bylo úspěšné";
 "screen_recovery_key_setup_title" = "Nastavení obnovy";
 "screen_report_content_block_user_hint" = "Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele";
+"screen_report_content_explanation" = "Tato zpráva bude nahlášena správci vašeho domovského serveru. Nebude si moci přečíst žádné šifrované zprávy.";
+"screen_report_content_hint" = "Důvod nahlášení tohoto obsahu";
 "screen_room_attachment_source_camera" = "Fotoaparát";
 "screen_room_attachment_source_camera_video" = "Natočit video";
 "screen_room_attachment_source_files" = "Příloha";
@@ -567,8 +565,6 @@
 "screen_room_member_list_role_moderator" = "Moderátor";
 "screen_room_member_list_room_members_header_title" = "Členové místnosti";
 "screen_room_member_list_unbanning_user" = "Rušení vykázání %1$@";
-"screen_room_message_copied" = "Zpráva zkopírována";
-"screen_room_no_permission_to_post" = "Nemáte oprávnění zveřejňovat příspěvky v této místnosti";
 "screen_room_notification_settings_allow_custom" = "Povolit vlastní nastavení";
 "screen_room_notification_settings_allow_custom_footnote" = "Zapnutím této funkce přepíšete výchozí nastavení";
 "screen_room_notification_settings_custom_settings_title" = "Upozornit mě v tomto chatu na";
@@ -582,8 +578,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Váš domovský server tuto možnost nepodporuje v šifrovaných místnostech, v této místnosti nebudete dostávat upozornění.";
 "screen_room_notification_settings_mode_all_messages" = "Všechny zprávy";
 "screen_room_notification_settings_room_custom_settings_title" = "V této místnosti mě upozornit na";
-"screen_room_reactions_show_less" = "Zobrazit méně";
-"screen_room_reactions_show_more" = "Zobrazit více";
 "screen_room_retry_send_menu_send_again_action" = "Odeslat znovu";
 "screen_room_retry_send_menu_title" = "Vaši zprávu se nepodařilo odeslat";
 "screen_room_roles_and_permissions_admins" = "Správci";
@@ -601,7 +595,14 @@
 "screen_room_roles_and_permissions_room_details" = "Podrobnosti místnosti";
 "screen_room_roles_and_permissions_title" = "Role a oprávnění";
 "screen_room_timeline_add_reaction" = "Přidat emoji";
+"screen_room_timeline_beginning_of_room" = "Toto je začátek %1$@.";
+"screen_room_timeline_beginning_of_room_no_name" = "Toto je začátek této konverzace.";
 "screen_room_timeline_less_reactions" = "Zobrazit méně";
+"screen_room_timeline_message_copied" = "Zpráva zkopírována";
+"screen_room_timeline_no_permission_to_post" = "Nemáte oprávnění zveřejňovat příspěvky v této místnosti";
+"screen_room_timeline_reactions_show_less" = "Zobrazit méně";
+"screen_room_timeline_reactions_show_more" = "Zobrazit více";
+"screen_room_timeline_read_marker_title" = "Nové";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ a ";
 "screen_room_typing_notification_plural_ios" = "píší";
 "screen_room_typing_notification_singular_ios" = "píše";

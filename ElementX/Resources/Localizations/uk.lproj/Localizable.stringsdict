@@ -182,24 +182,6 @@
 			<string>%d кімнат</string>
 		</dict>
 	</dict>
-	<key>room_timeline_state_changes</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%1$d зміна в кімнаті</string>
-			<key>few</key>
-			<string>%1$d зміни в кімнаті</string>
-			<key>many</key>
-			<string>%1$d змін у кімнаті</string>
-		</dict>
-	</dict>
 	<key>screen_app_lock_subtitle</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -252,6 +234,24 @@
 			<string>%1$d особи</string>
 			<key>many</key>
 			<string>%1$d осіб</string>
+		</dict>
+	</dict>
+	<key>screen_room_timeline_state_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d зміна в кімнаті</string>
+			<key>few</key>
+			<string>%1$d зміни в кімнаті</string>
+			<key>many</key>
+			<string>%1$d змін у кімнаті</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
