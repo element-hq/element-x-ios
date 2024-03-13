@@ -106,6 +106,7 @@ private extension RoomMembersListScreenViewModel {
                                        roomProxy: RoomProxyMock(with: .init(members: .allMembersAsAdmin)),
                                        mediaProvider: MockMediaProvider(),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                       appSettings: ServiceLocator.shared.settings)
+                                       appSettings: ServiceLocator.shared.settings,
+                                       analytics: ServiceLocator.shared.analytics)
     }
 }

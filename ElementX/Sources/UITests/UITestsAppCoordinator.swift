@@ -718,7 +718,9 @@ class MockScreen: Identifiable {
             let members: [RoomMemberProxyMock] = [.mockAlice, .mockBob, .mockCharlie]
             let coordinator = RoomMembersListScreenCoordinator(parameters: .init(mediaProvider: MockMediaProvider(),
                                                                                  roomProxy: RoomProxyMock(with: .init(name: "test", members: members)),
-                                                                                 appSettings: ServiceLocator.shared.settings))
+                                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                                 appSettings: ServiceLocator.shared.settings,
+                                                                                 analytics: ServiceLocator.shared.analytics))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMembersListScreenPendingInvites:
@@ -726,7 +728,9 @@ class MockScreen: Identifiable {
             let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
             let coordinator = RoomMembersListScreenCoordinator(parameters: .init(mediaProvider: MockMediaProvider(),
                                                                                  roomProxy: RoomProxyMock(with: .init(name: "test", members: members)),
-                                                                                 appSettings: ServiceLocator.shared.settings))
+                                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                                 appSettings: ServiceLocator.shared.settings,
+                                                                                 analytics: ServiceLocator.shared.analytics))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomNotificationSettingsDefaultSetting:
@@ -752,7 +756,8 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
             let coordinator = RoomRolesAndPermissionsFlowCoordinator(parameters: .init(roomProxy: RoomProxyMock(with: .init(members: .allMembersAsAdmin)),
                                                                                        navigationStackCoordinator: navigationStackCoordinator,
-                                                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController))
+                                                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                                       analytics: ServiceLocator.shared.analytics))
             retainedState.append(coordinator)
             coordinator.start()
             return navigationStackCoordinator

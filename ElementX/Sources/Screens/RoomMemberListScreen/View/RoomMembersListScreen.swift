@@ -183,6 +183,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
                                                                                    canUserInvite: false)),
                                               mediaProvider: MockMediaProvider(),
                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                              appSettings: ServiceLocator.shared.settings)
+                                              appSettings: ServiceLocator.shared.settings,
+                                              analytics: ServiceLocator.shared.analytics)
     }
 }

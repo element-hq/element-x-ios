@@ -23,8 +23,9 @@ typealias RoomChangePermissionsScreenViewModelType = StateStoreViewModel<RoomCha
 class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModelType, RoomChangePermissionsScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private var actionsSubject: PassthroughSubject<RoomChangePermissionsScreenViewModelAction, Never> = .init()
+    private let analytics: AnalyticsService
     
+    private var actionsSubject: PassthroughSubject<RoomChangePermissionsScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomChangePermissionsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -32,9 +33,11 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
     init(currentPermissions: RoomPermissions,
          group: RoomRolesAndPermissionsScreenPermissionsGroup,
          roomProxy: RoomProxyProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         analytics: AnalyticsService) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
+        self.analytics = analytics
         super.init(initialViewState: .init(currentPermissions: currentPermissions, group: group))
     }
     
@@ -64,13 +67,15 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
         }
         
         var changes = RoomPowerLevelChanges()
-        for setting in state.bindings.settings {
+        let changedSettings = state.bindings.settings.filter { state.currentPermissions[keyPath: $0.keyPath] != $0.value }
+        for setting in changedSettings {
             changes[keyPath: setting.rustKeyPath] = setting.value.rustPowerLevel
         }
         
         switch await roomProxy.applyPowerLevelChanges(changes) {
         case .success:
             MXLog.info("Success")
+            trackChanges(changedSettings)
             actionsSubject.send(.complete)
         case .failure:
             context.alertInfo = AlertInfo(id: .generic)
@@ -91,5 +96,23 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
     
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.indicatorID)
+    }
+    
+    // MARK: Analytics
+    
+    private func trackChanges(_ settings: [RoomPermissionsSetting]) {
+        for setting in settings {
+            switch setting.keyPath {
+            case \.ban: analytics.trackRoomModeration(action: .ChangePermissionsBanMembers)
+            case \.invite: analytics.trackRoomModeration(action: .ChangePermissionsInviteUsers)
+            case \.kick: analytics.trackRoomModeration(action: .ChangePermissionsKickMembers)
+            case \.redact: analytics.trackRoomModeration(action: .ChangePermissionsRedactMessages)
+            case \.eventsDefault: analytics.trackRoomModeration(action: .ChangePermissionsSendMessages)
+            case \.roomName: analytics.trackRoomModeration(action: .ChangePermissionsRoomName)
+            case \.roomAvatar: analytics.trackRoomModeration(action: .ChangePermissionsRoomAvatar)
+            case \.roomTopic: analytics.trackRoomModeration(action: .ChangePermissionsRoomTopic)
+            default: MXLog.warning("Unexpected change: \(setting.keyPath).")
+            }
+        }
     }
 }

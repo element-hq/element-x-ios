@@ -23,6 +23,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     private let roomProxy: RoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appSettings: AppSettings
+    private let analytics: AnalyticsService
     
     private var members: [RoomMemberProxyProtocol] = []
     
@@ -36,10 +37,12 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
          roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         analytics: AnalyticsService) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.appSettings = appSettings
+        self.analytics = analytics
         
         super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount,
                                            bindings: .init(mode: initialMode)),
@@ -182,6 +185,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         case .success:
             state.bindings.memberToManage = nil
             hideManageMemberIndicator(title: indicatorTitle)
+            analytics.trackRoomModeration(action: .KickMember)
         case .failure:
             showManageMemberFailure(title: indicatorTitle)
         }
@@ -195,6 +199,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         case .success:
             state.bindings.memberToManage = nil
             hideManageMemberIndicator(title: indicatorTitle)
+            analytics.trackRoomModeration(action: .BanMember)
         case .failure:
             showManageMemberFailure(title: indicatorTitle)
         }
@@ -208,6 +213,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         case .success:
             state.bindings.memberToManage = nil
             hideManageMemberIndicator(title: indicatorTitle)
+            analytics.trackRoomModeration(action: .UnbanMember)
         case .failure:
             showManageMemberFailure(title: indicatorTitle)
         }

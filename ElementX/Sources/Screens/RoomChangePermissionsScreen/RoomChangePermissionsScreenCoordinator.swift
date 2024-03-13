@@ -24,6 +24,7 @@ struct RoomChangePermissionsScreenCoordinatorParameters {
     let permissionsGroup: RoomRolesAndPermissionsScreenPermissionsGroup
     let roomProxy: RoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let analytics: AnalyticsService
 }
 
 enum RoomChangePermissionsScreenCoordinatorAction {
@@ -46,7 +47,8 @@ final class RoomChangePermissionsScreenCoordinator: CoordinatorProtocol {
         viewModel = RoomChangePermissionsScreenViewModel(currentPermissions: parameters.permissions,
                                                          group: parameters.permissionsGroup,
                                                          roomProxy: parameters.roomProxy,
-                                                         userIndicatorController: parameters.userIndicatorController)
+                                                         userIndicatorController: parameters.userIndicatorController,
+                                                         analytics: parameters.analytics)
     }
     
     func start() {
