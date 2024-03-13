@@ -41,6 +41,9 @@ class ClientProxy: ClientProxyProtocol {
     // periphery:ignore - required for instance retention in the rust codebase
     private var ignoredUsersListenerTaskHandle: TaskHandle?
     
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var verificationStateListenerTaskHandle: TaskHandle?
+    
     private var delegateHandle: TaskHandle?
     
     // These following summary providers both operate on the same allRooms() list but
@@ -111,6 +114,11 @@ class ClientProxy: ClientProxyProtocol {
         loadingStateSubject.asCurrentValuePublisher()
     }
     
+    private let verificationStateSubject = CurrentValueSubject<SessionVerificationState, Never>(.unknown)
+    var verificationStatePublisher: CurrentValuePublisher<SessionVerificationState, Never> {
+        verificationStateSubject.asCurrentValuePublisher()
+    }
+    
     init(client: ClientProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol,
          appSettings: AppSettings,
@@ -151,6 +159,25 @@ class ClientProxy: ClientProxyProtocol {
         ignoredUsersListenerTaskHandle = client.subscribeToIgnoredUsers(listener: IgnoredUsersListenerProxy { [weak self] ignoredUsers in
             self?.ignoredUsersSubject.send(ignoredUsers)
         })
+        
+        updateVerificationState(client.encryption().verificationState())
+        
+        verificationStateListenerTaskHandle = client.encryption().verificationStateListener(listener: VerificationStateListenerProxy { [weak self] verificationState in
+            self?.updateVerificationState(verificationState)
+        })
+    }
+    
+    private func updateVerificationState(_ verificationState: VerificationState) {
+        let verificationState: SessionVerificationState = switch verificationState {
+        case .unknown:
+            .unknown
+        case .unverified:
+            .unverified
+        case .verified:
+            .verified
+        }
+        
+        verificationStateSubject.send(verificationState)
     }
     
     var userID: String {
@@ -742,6 +769,18 @@ private class RoomListServiceSyncIndicatorListenerProxy: RoomListServiceSyncIndi
     
     func onUpdate(syncIndicator: RoomListServiceSyncIndicator) {
         onUpdateClosure(syncIndicator)
+    }
+}
+
+private class VerificationStateListenerProxy: VerificationStateListener {
+    private let onUpdateClosure: (VerificationState) -> Void
+
+    init(onUpdateClosure: @escaping (VerificationState) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(status: VerificationState) {
+        onUpdateClosure(status)
     }
 }
 

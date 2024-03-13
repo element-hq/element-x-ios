@@ -53,8 +53,12 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     func start() {
         guard let screenID = ProcessInfo.testScreenID else { fatalError("Unable to launch with unknown screen.") }
         
-        let mockScreen = MockScreen(id: screenID, windowManager: windowManager)
-        navigationRootCoordinator.setRootCoordinator(mockScreen.coordinator)
+        let mockScreen = MockScreen(id: screenID, windowManager: windowManager, navigationRootCoordinator: navigationRootCoordinator)
+        
+        if let coordinator = mockScreen.coordinator {
+            navigationRootCoordinator.setRootCoordinator(coordinator)
+        }
+        
         self.mockScreen = mockScreen
     }
     
@@ -71,8 +75,16 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
         
         // Set up the alternate window for the App Lock flow coordinator tests.
         guard let screenID = ProcessInfo.testScreenID, screenID == .appLockFlow || screenID == .appLockFlowDisabled else { return }
-        let screen = MockScreen(id: screenID == .appLockFlow ? .appLockFlowAlternateWindow : .appLockFlowDisabledAlternateWindow, windowManager: windowManager)
-        windowManager.alternateWindow.rootViewController = UIHostingController(rootView: screen.coordinator.toPresentable().statusBarHidden())
+        let screen = MockScreen(id: screenID == .appLockFlow ? .appLockFlowAlternateWindow : .appLockFlowDisabledAlternateWindow,
+                                windowManager: windowManager,
+                                navigationRootCoordinator: navigationRootCoordinator)
+        
+        guard let coordinator = screen.coordinator else {
+            fatalError()
+        }
+        
+        windowManager.alternateWindow.rootViewController = UIHostingController(rootView: coordinator.toPresentable().statusBarHidden())
+        
         alternateWindowMockScreen = screen
     }
 }
@@ -81,16 +93,20 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
 class MockScreen: Identifiable {
     let id: UITestsScreenIdentifier
     let windowManager: WindowManagerProtocol
+    let navigationRootCoordinator: NavigationRootCoordinator
     
     private var retainedState = [Any]()
     private var cancellables = Set<AnyCancellable>()
     
-    init(id: UITestsScreenIdentifier, windowManager: WindowManagerProtocol) {
+    init(id: UITestsScreenIdentifier,
+         windowManager: WindowManagerProtocol,
+         navigationRootCoordinator: NavigationRootCoordinator) {
         self.id = id
         self.windowManager = windowManager
+        self.navigationRootCoordinator = navigationRootCoordinator
     }
     
-    lazy var coordinator: CoordinatorProtocol = {
+    lazy var coordinator: CoordinatorProtocol? = {
         switch id {
         case .login:
             let navigationStackCoordinator = NavigationStackCoordinator()
@@ -132,17 +148,16 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .authenticationFlow:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),
-                                                        appLockService: AppLockServiceMock(),
-                                                        bugReportService: BugReportServiceMock(),
-                                                        navigationStackCoordinator: navigationStackCoordinator,
-                                                        appSettings: ServiceLocator.shared.settings,
-                                                        analytics: ServiceLocator.shared.analytics,
-                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
-            retainedState.append(coordinator)
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
+            let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: MockAuthenticationServiceProxy(),
+                                                                appLockService: AppLockServiceMock(),
+                                                                bugReportService: BugReportServiceMock(),
+                                                                navigationRootCoordinator: navigationRootCoordinator,
+                                                                appSettings: ServiceLocator.shared.settings,
+                                                                analytics: ServiceLocator.shared.analytics,
+                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
+            flowCoordinator.start()
+            retainedState.append(flowCoordinator)
+            return nil
         case .softLogout:
             let credentials = SoftLogoutScreenCredentials(userID: "@mock:matrix.org",
                                                           homeserverName: "matrix.org",
@@ -331,8 +346,8 @@ class MockScreen: Identifiable {
                                                                              notificationSettings: notificationSettings,
                                                                              isModallyPresented: false)
             return NotificationSettingsScreenCoordinator(parameters: parameters)
-        case .onboarding:
-            return OnboardingScreenCoordinator()
+        case .authenticationStartScreen:
+            return AuthenticationStartScreenCoordinator()
         case .roomPlainNoAvatar:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(name: "Some room name", avatarURL: nil)),
@@ -562,10 +577,9 @@ class MockScreen: Identifiable {
             
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             ServiceLocator.shared.settings.migratedAccounts[clientProxy.userID] = true
-            ServiceLocator.shared.settings.hasShownWelcomeScreen = true
             
             let flowCoordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
-                                                             navigationSplitCoordinator: navigationSplitCoordinator,
+                                                             navigationRootCoordinator: navigationRootCoordinator,
                                                              windowManager: windowManager,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                             appSettings: ServiceLocator.shared.settings),
@@ -578,7 +592,7 @@ class MockScreen: Identifiable {
             
             retainedState.append(flowCoordinator)
             
-            return navigationSplitCoordinator
+            return nil
         case .roomDetailsScreen:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let members: [RoomMemberProxyMock] = [.mockAlice, .mockBob, .mockCharlie]

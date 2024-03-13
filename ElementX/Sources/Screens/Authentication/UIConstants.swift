@@ -28,9 +28,7 @@ enum UIConstants {
     static let actionButtonBottomPadding: CGFloat = 24
     
     /// The padding used to the top of the view for breaker screens that don't have a navigation bar.
-    static let onboardingBreakerScreenTopPadding: CGFloat = 80
-
-    static let welcomeScreenTopPadding: CGFloat = 122
+    static let startScreenBreakerScreenTopPadding: CGFloat = 80
 
     /// The height to use for top/bottom spacers to pad the views to fit the `maxContentHeight`.
     static func spacerHeight(in geometry: GeometryProxy) -> CGFloat {

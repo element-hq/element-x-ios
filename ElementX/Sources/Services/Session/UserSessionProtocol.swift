@@ -21,13 +21,6 @@ enum UserSessionCallback {
     case didReceiveAuthError(isSoftLogout: Bool)
 }
 
-enum SessionVerificationState {
-    case unknown
-    case verified
-    case unverified
-    case unverifiedLastSession
-}
-
 struct SessionSecurityState: Equatable {
     let verificationState: SessionVerificationState
     let recoveryState: SecureBackupRecoveryState
@@ -43,7 +36,6 @@ protocol UserSessionProtocol {
     var voiceMessageMediaManager: VoiceMessageMediaManagerProtocol { get }
     
     var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> { get }
-    var sessionVerificationController: SessionVerificationControllerProxyProtocol? { get }
     
     var callbacks: PassthroughSubject<UserSessionCallback, Never> { get }
 }

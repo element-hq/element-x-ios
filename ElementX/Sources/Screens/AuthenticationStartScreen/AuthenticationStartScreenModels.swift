@@ -14,9 +14,23 @@
 // limitations under the License.
 //
 
-import XCTest
+import SwiftUI
 
-@testable import ElementX
+// MARK: - Coordinator
 
-@MainActor
-class WelcomeScreenScreenViewModelTests: XCTestCase { }
+enum AuthenticationStartScreenCoordinatorAction {
+    case login
+    case reportProblem
+}
+
+enum AuthenticationStartScreenViewModelAction {
+    case login
+    case reportProblem
+}
+
+struct AuthenticationStartScreenViewState: BindableState { }
+
+enum AuthenticationStartScreenViewAction {
+    case login
+    case reportProblem
+}

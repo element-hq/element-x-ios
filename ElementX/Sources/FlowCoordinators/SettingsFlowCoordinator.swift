@@ -131,7 +131,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .blockedUsers:
                     presentBlockedUsersScreen()
                 case .sessionVerification:
-                    presentSessionVerificationScreen()
+                    Task {
+                        await self.presentSessionVerificationScreen()
+                    }
                 case .accountSessions:
                     presentAccountSessionsListURL()
                 case .notifications:
@@ -211,8 +213,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
     
-    private func presentSessionVerificationScreen() {
-        guard let sessionVerificationController = parameters.userSession.sessionVerificationController else {
+    private func presentSessionVerificationScreen() async {
+        guard case let .success(sessionVerificationController) = await parameters.userSession.clientProxy.sessionVerificationControllerProxy() else {
             fatalError("The sessionVerificationController should aways be valid at this point")
         }
         

@@ -17,7 +17,7 @@
 import SwiftUI
 
 /// The app's logo styled to fit on various launch pages.
-struct OnboardingLogo: View {
+struct AuthenticationStartLogo: View {
     @Environment(\.colorScheme) private var colorScheme
     
     /// Set to `true` when using on top of `Asset.Images.launchBackground`

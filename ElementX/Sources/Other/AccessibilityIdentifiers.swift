@@ -27,7 +27,7 @@ enum A11yIdentifiers {
     static let changeServerScreen = ChangeServer()
     static let homeScreen = HomeScreen()
     static let loginScreen = LoginScreen()
-    static let onboardingScreen = OnboardingScreen()
+    static let authenticationStartScreen = AuthenticationStartScreen()
     static let reportContent = ReportContent()
     static let roomScreen = RoomScreen()
     static let roomDetailsScreen = RoomDetailsScreen()
@@ -42,7 +42,6 @@ enum A11yIdentifiers {
     static let createRoomScreen = CreateRoomScreen()
     static let invitesScreen = InvitesScreen()
     static let inviteUsersScreen = InviteUsersScreen()
-    static let welcomeScreen = WelcomeScreen()
     static let migrationScreen = MigrationScreen()
     static let notificationSettingsScreen = NotificationSettingsScreen()
     static let notificationSettingsEditScreen = NotificationSettingsEditScreen()
@@ -124,9 +123,9 @@ enum A11yIdentifiers {
         let unsupportedServer = "login-unsupported_server"
     }
     
-    struct OnboardingScreen {
-        let signIn = "onboarding-sign_in"
-        let hidden = "onboarding-hidden"
+    struct AuthenticationStartScreen {
+        let signIn = "authentication_start-sign_in"
+        let hidden = "authentication_start-hidden"
     }
     
     struct ReportContent {
@@ -258,10 +257,6 @@ enum A11yIdentifiers {
         func optionID(_ index: Int) -> String {
             "\(optionPrefix)-\(index)"
         }
-    }
-
-    struct WelcomeScreen {
-        let letsGo = "welcome_screen-lets_go"
     }
 
     struct MigrationScreen {

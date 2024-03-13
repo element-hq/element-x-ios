@@ -100,9 +100,9 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         showSavingIndicator()
         
         switch await roomProxy.resetPowerLevels() {
-        case .success(let success):
+        case .success:
             showSuccessIndicator()
-        case .failure(let failure):
+        case .failure:
             state.bindings.alertInfo = AlertInfo(id: .error)
         }
         

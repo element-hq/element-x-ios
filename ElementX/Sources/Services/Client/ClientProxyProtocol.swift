@@ -71,11 +71,19 @@ struct PusherConfiguration {
     let lang: String
 }
 
+enum SessionVerificationState {
+    case unknown
+    case verified
+    case unverified
+}
+
 // sourcery: AutoMockable
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> { get }
     
     var loadingStatePublisher: CurrentValuePublisher<ClientProxyLoadingState, Never> { get }
+    
+    var verificationStatePublisher: CurrentValuePublisher<SessionVerificationState, Never> { get }
     
     var userID: String { get }
 

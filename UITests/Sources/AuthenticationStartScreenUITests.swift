@@ -16,8 +16,10 @@
 
 import XCTest
 
-@testable import ElementX
-
-class OnboardingScreenViewModelTests: XCTestCase {
-    // Nothing to test, the view model has no mutable state.
+@MainActor
+class AuthenticationStartScreenUITests: XCTestCase {
+    func testInitialStateComponents() async throws {
+        let app = Application.launch(.onboarding)
+        try await app.assertScreenshot(.onboarding)
+    }
 }
