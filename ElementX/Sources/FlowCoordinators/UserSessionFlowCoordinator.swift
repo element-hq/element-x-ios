@@ -39,6 +39,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private let settingsFlowCoordinator: SettingsFlowCoordinator
     
+    private let onboardingFlowCoordinator: OnboardingFlowCoordinator
+    
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     
@@ -98,7 +100,23 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             navigationSplitCoordinator: navigationSplitCoordinator,
                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController))
         
+        onboardingFlowCoordinator = OnboardingFlowCoordinator(userSession: userSession,
+                                                              navigationStackCoordinator: detailNavigationStackCoordinator)
+        
         setupStateMachine()
+        
+        userSession.sessionSecurityStatePublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                guard let self else { return }
+                
+                if state.verificationState == .unverified {
+                    clearRoute(animated: false)
+                    onboardingFlowCoordinator.start()
+                }
+            }
+            .store(in: &cancellables)
         
         roomFlowCoordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -208,7 +226,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
 
     func clearRoute(animated: Bool) {
-        fatalError("not necessary as of right now")
+        roomFlowCoordinator.clearRoute(animated: animated)
     }
 
     // MARK: - Private

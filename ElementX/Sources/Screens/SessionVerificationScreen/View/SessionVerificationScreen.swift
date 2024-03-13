@@ -20,23 +20,20 @@ struct SessionVerificationScreen: View {
     @ObservedObject var context: SessionVerificationScreenViewModel.Context
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 32) {
-                    screenHeader
-                    Spacer()
-                    mainContent
-                }
-                .padding(.horizontal, 16)
-                .padding(.top, 24)
-                .frame(maxWidth: .infinity)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar { toolbarContent }
+        ScrollView {
+            VStack(spacing: 32) {
+                screenHeader
+                Spacer()
+                mainContent
             }
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .safeAreaInset(edge: .bottom) { actionButtons.padding() }
+            .padding(.horizontal, 16)
+            .padding(.top, 24)
+            .frame(maxWidth: .infinity)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { toolbarContent }
         }
-        .interactiveDismissDisabled() // Make sure dismissal goes through the state machine(s).
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .safeAreaInset(edge: .bottom) { actionButtons.padding() }
     }
     
     // MARK: - Private
@@ -44,7 +41,7 @@ struct SessionVerificationScreen: View {
     private var headerImageName: String {
         switch context.viewState.verificationState {
         case .initial:
-            return "macbook.and.iphone"
+            return "lock"
         case .cancelled:
             return "exclamationmark.shield"
         case .requestingVerification:
@@ -71,9 +68,14 @@ struct SessionVerificationScreen: View {
     @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
-            Image(systemName: headerImageName)
-                .heroImage()
-                .padding(.bottom, 16)
+            if context.viewState.verificationState == .initial {
+                HeroImage(icon: \.lockSolid)
+                    .padding(.bottom, 16)
+            } else {
+                Image(systemName: headerImageName)
+                    .heroImage()
+                    .padding(.bottom, 16)
+            }
             
             Text(context.viewState.title ?? "")
                 .font(.title2.bold())
