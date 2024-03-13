@@ -34,6 +34,7 @@ install_xcode_cloud_brew_dependencies () {
     
     if [ "$CI_WORKFLOW" = "Nightly" ]; then
         brew install imagemagick@6
+        brew link imagemagick@6 # imagemagick@6 is keg-only, which means it was not symlinked into /usr/local,
     fi
 }
 
@@ -49,6 +50,7 @@ setup_github_actions_environment() {
     
     if [ "$CI_WORKFLOW" = "PR_BUILD" ]; then
         brew install imagemagick@6
+        brew link imagemagick@6 # imagemagick@6 is keg-only, which means it was not symlinked into /usr/local,
     fi
     
     # brew "swiftlint" # Fails on the CI: `Target /usr/local/bin/swiftlint Target /usr/local/bin/swiftlint already exists`. Installed through https://github.com/actions/virtual-environments/blob/main/images/macos/macos-12-Readme.md#linters
