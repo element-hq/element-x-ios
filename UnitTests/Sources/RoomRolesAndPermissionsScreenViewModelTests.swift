@@ -28,25 +28,19 @@ class RoomRolesAndPermissionsScreenViewModelTests: XCTestCase {
     }
 
     func testEmptyCounters() {
-        roomProxy = RoomProxyMock(with: .init())
-        viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
-                                                           userIndicatorController: UserIndicatorControllerMock())
+        setupViewModel(members: .allMembers)
         XCTAssertEqual(context.viewState.administratorCount, 0)
         XCTAssertEqual(context.viewState.moderatorCount, 0)
     }
 
     func testFilledCounters() {
-        roomProxy = RoomProxyMock(with: .init(members: .allMembersAsAdmin))
-        viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
-                                                           userIndicatorController: UserIndicatorControllerMock())
+        setupViewModel(members: .allMembersAsAdmin)
         XCTAssertEqual(context.viewState.administratorCount, 2)
         XCTAssertEqual(context.viewState.moderatorCount, 1)
     }
     
     func testResetPermissions() async throws {
-        roomProxy = RoomProxyMock(with: .init(members: .allMembersAsAdmin))
-        viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
-                                                           userIndicatorController: UserIndicatorControllerMock())
+        setupViewModel(members: .allMembersAsAdmin)
         
         context.send(viewAction: .reset)
         XCTAssertNotNil(context.alertInfo)
@@ -59,9 +53,7 @@ class RoomRolesAndPermissionsScreenViewModelTests: XCTestCase {
     }
     
     func testDemoteToModerator() async throws {
-        roomProxy = RoomProxyMock(with: .init(members: .allMembersAsAdmin))
-        viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
-                                                           userIndicatorController: UserIndicatorControllerMock())
+        setupViewModel(members: .allMembersAsAdmin)
         
         context.send(viewAction: .editOwnUserRole)
         XCTAssertNotNil(context.alertInfo)
@@ -76,9 +68,7 @@ class RoomRolesAndPermissionsScreenViewModelTests: XCTestCase {
     }
     
     func testDemoteToMember() async throws {
-        roomProxy = RoomProxyMock(with: .init(members: .allMembersAsAdmin))
-        viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
-                                                           userIndicatorController: UserIndicatorControllerMock())
+        setupViewModel(members: .allMembersAsAdmin)
         
         context.send(viewAction: .editOwnUserRole)
         XCTAssertNotNil(context.alertInfo)
@@ -90,5 +80,12 @@ class RoomRolesAndPermissionsScreenViewModelTests: XCTestCase {
         XCTAssertTrue(roomProxy.updatePowerLevelsForUsersCalled)
         XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.first?.powerLevel,
                        RoomMemberDetails.Role.user.rustPowerLevel)
+    }
+    
+    private func setupViewModel(members: [RoomMemberProxyMock]) {
+        roomProxy = RoomProxyMock(with: .init(members: members))
+        viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
+                                                           userIndicatorController: UserIndicatorControllerMock(),
+                                                           analytics: ServiceLocator.shared.analytics)
     }
 }

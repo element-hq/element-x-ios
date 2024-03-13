@@ -28,8 +28,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
     }
 
     func testInitialStateAdministrators() {
-        setupRoomProxy()
-        viewModel = RoomChangeRolesScreenViewModel(mode: .administrator, roomProxy: roomProxy, userIndicatorController: UserIndicatorControllerMock())
+        setupViewModel(mode: .administrator)
         XCTAssertEqual(context.viewState.membersToPromote, [])
         XCTAssertEqual(context.viewState.membersToDemote, [])
         XCTAssertEqual(context.viewState.members, context.viewState.visibleMembers)
@@ -40,8 +39,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
     }
 
     func testInitialStateModerators() {
-        setupRoomProxy()
-        viewModel = RoomChangeRolesScreenViewModel(mode: .moderator, roomProxy: roomProxy, userIndicatorController: UserIndicatorControllerMock())
+        setupViewModel(mode: .moderator)
         XCTAssertEqual(context.viewState.membersToPromote, [])
         XCTAssertEqual(context.viewState.membersToDemote, [])
         XCTAssertEqual(context.viewState.members, context.viewState.visibleMembers)
@@ -150,8 +148,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
     
     func testSaveModeratorChanges() async throws {
         // Given the change roles view model for moderators.
-        setupRoomProxy()
-        viewModel = RoomChangeRolesScreenViewModel(mode: .moderator, roomProxy: roomProxy, userIndicatorController: UserIndicatorControllerMock())
+        setupViewModel(mode: .moderator)
         
         guard let firstUser = context.viewState.members.first(where: { !context.viewState.isMemberSelected($0) }),
               let existingModerator = context.viewState.membersWithRole.first else {
@@ -175,8 +172,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
     
     func testSavePromotedAdministrator() async throws {
         // Given the change roles view model for administrators.
-        setupRoomProxy()
-        viewModel = RoomChangeRolesScreenViewModel(mode: .administrator, roomProxy: roomProxy, userIndicatorController: UserIndicatorControllerMock())
+        setupViewModel(mode: .administrator)
         XCTAssertNil(context.alertInfo)
         
         guard let firstUser = context.viewState.members.first(where: { !context.viewState.isMemberSelected($0) }) else {
@@ -201,7 +197,11 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains(where: { $0.userID == firstUser.id && $0.powerLevel == 100 }), true)
     }
     
-    private func setupRoomProxy() {
+    private func setupViewModel(mode: RoomMemberDetails.Role) {
         roomProxy = RoomProxyMock(with: .init(members: .allMembersAsAdmin))
+        viewModel = RoomChangeRolesScreenViewModel(mode: mode,
+                                                   roomProxy: roomProxy,
+                                                   userIndicatorController: UserIndicatorControllerMock(),
+                                                   analytics: ServiceLocator.shared.analytics)
     }
 }
