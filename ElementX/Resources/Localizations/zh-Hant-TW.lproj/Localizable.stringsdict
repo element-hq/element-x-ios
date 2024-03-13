@@ -144,20 +144,6 @@
 			<string>%d 個聊天室</string>
 		</dict>
 	</dict>
-	<key>room_timeline_state_changes</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>other</key>
-			<string>%1$d 個聊天室變更</string>
-		</dict>
-	</dict>
 	<key>screen_app_lock_subtitle</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -198,6 +184,20 @@
 			<string>d</string>
 			<key>other</key>
 			<string>%1$d 位夥伴</string>
+		</dict>
+	</dict>
+	<key>screen_room_timeline_state_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%1$d 個聊天室變更</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>

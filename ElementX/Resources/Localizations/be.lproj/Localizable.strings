@@ -40,6 +40,7 @@
 "action_decline" = "Адхіліць";
 "action_delete_poll" = "Выдаліць апытанне";
 "action_disable" = "Адключыць";
+"action_discard" = "Discard";
 "action_done" = "Гатова";
 "action_edit" = "Рэдагаваць";
 "action_edit_poll" = "Рэдагаваць апытанне";
@@ -266,8 +267,6 @@
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ у %2$@ і %3$@";
 "preference_rageshake" = "Rageshake паведаміць пра памылку";
 "rageshake_detection_dialog_content" = "Падобна, што вы трасеце тэлефон. Жадаеце адкрыць экран паведамлення пра памылку?";
-"report_content_explanation" = "Гэтае паведамленне будзе перададзена адміністратару вашага хатняга сервера. Яны не змогуць прачытаць зашыфраваныя паведамленні.";
-"report_content_hint" = "Прычына, па якой вы паскардзіліся на гэты змест";
 "rich_text_editor_bullet_list" = "Пераключыць маркіраваны спіс";
 "rich_text_editor_close_formatting_options" = "Закрыць параметры фарматавання";
 "rich_text_editor_code_block" = "Пераключыць блок кода";
@@ -289,9 +288,6 @@
 "rich_text_editor_unindent" = "Без водступу";
 "rich_text_editor_url_placeholder" = "Спасылка";
 "rich_text_editor_a11y_add_attachment" = "Дадаць далучэнне";
-"room_timeline_beginning_of_room" = "Гэта пачатак %1$@.";
-"room_timeline_beginning_of_room_no_name" = "Гэта пачатак гэтай размовы.";
-"room_timeline_read_marker_title" = "Новы";
 "screen_advanced_settings_element_call_base_url" = "Базавы URL сервера званкоў Element";
 "screen_advanced_settings_element_call_base_url_description" = "Задайце свой сервер Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Адрас пазначаны няправільна, пераканайцеся, што вы ўказалі пратакол (http/https) і правільны адрас.";
@@ -492,6 +488,8 @@
 "screen_recovery_key_setup_success" = "Наладка аднаўлення прайшла паспяхова";
 "screen_recovery_key_setup_title" = "Наладзьце аднаўленне";
 "screen_report_content_block_user_hint" = "Адзначце, ці жадаеце вы схаваць усе бягучыя і будучыя паведамленні ад гэтага карыстальніка";
+"screen_report_content_explanation" = "Гэтае паведамленне будзе перададзена адміністратару вашага хатняга сервера. Яны не змогуць прачытаць зашыфраваныя паведамленні.";
+"screen_report_content_hint" = "Прычына, па якой вы паскардзіліся на гэты змест";
 "screen_room_attachment_source_camera" = "Камера";
 "screen_room_attachment_source_camera_video" = "Запісаць відэа";
 "screen_room_attachment_source_files" = "Далучэнне";
@@ -505,9 +503,9 @@
 "screen_room_change_permissions_invite_people" = "Запрасіць людзей";
 "screen_room_change_permissions_moderators" = "Адміністратары і мадэратары";
 "screen_room_change_permissions_remove_people" = "Выдаліць людзей";
-"screen_room_change_permissions_room_avatar" = "Змяніць аватар пакою";
+"screen_room_change_permissions_room_avatar" = "Змяніць аватар пакоя";
 "screen_room_change_permissions_room_name" = "Змяніць назву пакоя";
-"screen_room_change_permissions_room_topic" = "Змяніць тэму пакою";
+"screen_room_change_permissions_room_topic" = "Змяніць тэму пакоя";
 "screen_room_change_permissions_send_messages" = "Адправіць паведамленні";
 "screen_room_change_role_administrators_title" = "Рэдагаваць адміністратараў";
 "screen_room_change_role_confirm_add_admin_description" = "Вы не зможаце адмяніць гэта дзеянне. Вы прасоўваеце карыстальніка да таго ж узроўню магутнасці, што і вы.";
@@ -567,8 +565,6 @@
 "screen_room_member_list_role_moderator" = "Мадэратар";
 "screen_room_member_list_room_members_header_title" = "Карыстальнікі пакоя";
 "screen_room_member_list_unbanning_user" = "Разблакіроўка %1$@";
-"screen_room_message_copied" = "Паведамленне скапіравана";
-"screen_room_no_permission_to_post" = "У вас няма дазволу публікаваць паведамленні ў гэтым пакоі";
 "screen_room_notification_settings_allow_custom" = "Дазволіць карыстальніцкую наладу";
 "screen_room_notification_settings_allow_custom_footnote" = "Калі гэта ўключыць, ваша налада па змаўчанні будзе адменена";
 "screen_room_notification_settings_custom_settings_title" = "Апавяшчаць мяне ў гэтым чаце для";
@@ -582,8 +578,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ваш хатні сервер не падтрымлівае гэту опцыю ў зашыфраваных пакоях, вы не атрымаеце апавяшчэнне ў гэтым пакоі.";
 "screen_room_notification_settings_mode_all_messages" = "Усе паведамленні";
 "screen_room_notification_settings_room_custom_settings_title" = "У гэтым пакоі паведаміце мяне пра";
-"screen_room_reactions_show_less" = "Паказаць менш";
-"screen_room_reactions_show_more" = "Паказаць больш";
 "screen_room_retry_send_menu_send_again_action" = "Адправіць зноў";
 "screen_room_retry_send_menu_title" = "Не ўдалося адправіць ваша паведамленне";
 "screen_room_roles_and_permissions_admins" = "Адміністратары";
@@ -601,7 +595,14 @@
 "screen_room_roles_and_permissions_room_details" = "Дэталі пакоя";
 "screen_room_roles_and_permissions_title" = "Ролі і дазволы";
 "screen_room_timeline_add_reaction" = "Дадаць эмодзі";
+"screen_room_timeline_beginning_of_room" = "Гэта пачатак %1$@.";
+"screen_room_timeline_beginning_of_room_no_name" = "Гэта пачатак гэтай размовы.";
 "screen_room_timeline_less_reactions" = "Паказаць менш";
+"screen_room_timeline_message_copied" = "Паведамленне скапіравана";
+"screen_room_timeline_no_permission_to_post" = "У вас няма дазволу публікаваць паведамленні ў гэтым пакоі";
+"screen_room_timeline_reactions_show_less" = "Паказаць менш";
+"screen_room_timeline_reactions_show_more" = "Паказаць больш";
+"screen_room_timeline_read_marker_title" = "Новы";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ і";
 "screen_room_typing_notification_plural_ios" = "пішуць...";
 "screen_room_typing_notification_singular_ios" = "піша...";

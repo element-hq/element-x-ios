@@ -162,22 +162,6 @@
 			<string>%d salons</string>
 		</dict>
 	</dict>
-	<key>room_timeline_state_changes</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%1$d changement dans le salon</string>
-			<key>other</key>
-			<string>%1$d changements dans le salon</string>
-		</dict>
-	</dict>
 	<key>screen_app_lock_subtitle</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -224,6 +208,22 @@
 			<string>%1$d personne</string>
 			<key>other</key>
 			<string>%1$d personnes</string>
+		</dict>
+	</dict>
+	<key>screen_room_timeline_state_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d changement dans le salon</string>
+			<key>other</key>
+			<string>%1$d changements dans le salon</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>

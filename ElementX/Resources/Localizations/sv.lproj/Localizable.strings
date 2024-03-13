@@ -40,6 +40,7 @@
 "action_decline" = "Neka";
 "action_delete_poll" = "Delete Poll";
 "action_disable" = "Inaktivera";
+"action_discard" = "Discard";
 "action_done" = "Klar";
 "action_edit" = "Redigera";
 "action_edit_poll" = "Redigera omröstning";
@@ -266,8 +267,6 @@
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ i %2$@ och %3$@";
 "preference_rageshake" = "Raseriskaka för att rapportera bugg";
 "rageshake_detection_dialog_content" = "Du verkar skaka telefonen i frustration. Vill du öppna felrapporteringsskärmen?";
-"report_content_explanation" = "Det här meddelandet kommer att rapporteras till din hemservers administratör. Denne kommer inte att kunna läsa några krypterade meddelanden.";
-"report_content_hint" = "Anledning till att rapportera detta innehåll";
 "rich_text_editor_bullet_list" = "Växla punktlista";
 "rich_text_editor_close_formatting_options" = "Stäng formateringsalternativ";
 "rich_text_editor_code_block" = "Växla kodblock";
@@ -289,9 +288,6 @@
 "rich_text_editor_unindent" = "Ta bort indrag";
 "rich_text_editor_url_placeholder" = "Länk";
 "rich_text_editor_a11y_add_attachment" = "Lägg till bilaga";
-"room_timeline_beginning_of_room" = "Det här är början på %1$@.";
-"room_timeline_beginning_of_room_no_name" = "Detta är början på det här samtalet.";
-"room_timeline_read_marker_title" = "Nytt";
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
@@ -492,6 +488,8 @@
 "screen_recovery_key_setup_success" = "Recovery setup successful";
 "screen_recovery_key_setup_title" = "Set up recovery";
 "screen_report_content_block_user_hint" = "Markera om du vill dölja alla nuvarande och framtida meddelanden från denna användare";
+"screen_report_content_explanation" = "Det här meddelandet kommer att rapporteras till din hemservers administratör. Denne kommer inte att kunna läsa några krypterade meddelanden.";
+"screen_report_content_hint" = "Anledning till att rapportera detta innehåll";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Spela in video";
 "screen_room_attachment_source_files" = "Bilaga";
@@ -567,8 +565,6 @@
 "screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "Rumsmedlemmar";
 "screen_room_member_list_unbanning_user" = "Unbanning %1$@";
-"screen_room_message_copied" = "Meddelande kopierat";
-"screen_room_no_permission_to_post" = "Du är inte behörig att göra inlägg i det här rummet";
 "screen_room_notification_settings_allow_custom" = "Tillåt anpassad inställning";
 "screen_room_notification_settings_allow_custom_footnote" = "Om du aktiverar detta åsidosätts din standardinställning";
 "screen_room_notification_settings_custom_settings_title" = "Meddela mig i den här chatten för";
@@ -582,8 +578,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.";
 "screen_room_notification_settings_mode_all_messages" = "Alla meddelanden";
 "screen_room_notification_settings_room_custom_settings_title" = "I det här rummet, meddela mig för";
-"screen_room_reactions_show_less" = "Visa mindre";
-"screen_room_reactions_show_more" = "Visa mer";
 "screen_room_retry_send_menu_send_again_action" = "Skicka igen";
 "screen_room_retry_send_menu_title" = "Ditt meddelande kunde inte skickas";
 "screen_room_roles_and_permissions_admins" = "Admins";
@@ -601,7 +595,14 @@
 "screen_room_roles_and_permissions_room_details" = "Room details";
 "screen_room_roles_and_permissions_title" = "Roles and permissions";
 "screen_room_timeline_add_reaction" = "Lägg till emoji";
+"screen_room_timeline_beginning_of_room" = "Det här är början på %1$@.";
+"screen_room_timeline_beginning_of_room_no_name" = "Detta är början på det här samtalet.";
 "screen_room_timeline_less_reactions" = "Visa mindre";
+"screen_room_timeline_message_copied" = "Meddelande kopierat";
+"screen_room_timeline_no_permission_to_post" = "Du är inte behörig att göra inlägg i det här rummet";
+"screen_room_timeline_reactions_show_less" = "Visa mindre";
+"screen_room_timeline_reactions_show_more" = "Visa mer";
+"screen_room_timeline_read_marker_title" = "Nytt";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ and ";
 "screen_room_typing_notification_plural_ios" = " are typing";
 "screen_room_typing_notification_singular_ios" = " is typing";

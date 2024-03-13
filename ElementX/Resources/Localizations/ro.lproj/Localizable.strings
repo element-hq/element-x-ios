@@ -40,6 +40,7 @@
 "action_decline" = "Refuzați";
 "action_delete_poll" = "Ștergeți sondajul";
 "action_disable" = "Dezactivați";
+"action_discard" = "Discard";
 "action_done" = "Efectuat";
 "action_edit" = "Editați";
 "action_edit_poll" = "Editați sondajul";
@@ -266,8 +267,6 @@
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ în %2$@ și %3$@";
 "preference_rageshake" = "Rageshake pentru a raporta erori";
 "rageshake_detection_dialog_content" = "Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?";
-"report_content_explanation" = "Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat.";
-"report_content_hint" = "Motivul raportării acestui conținut";
 "rich_text_editor_bullet_list" = "Comutați lista cu puncte";
 "rich_text_editor_close_formatting_options" = "Închideți opțiunile de formatare";
 "rich_text_editor_code_block" = "Comutați blocul de cod";
@@ -289,9 +288,6 @@
 "rich_text_editor_unindent" = "Dez-identare";
 "rich_text_editor_url_placeholder" = "Link";
 "rich_text_editor_a11y_add_attachment" = "Adăugați un atașament";
-"room_timeline_beginning_of_room" = "Acesta este începutul conversației %1$@.";
-"room_timeline_beginning_of_room_no_name" = "Acesta este începutul acestei conversații.";
-"room_timeline_read_marker_title" = "Nou";
 "screen_advanced_settings_element_call_base_url" = "Adresa URL de bază Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Setați o adresă URL de bază personalizată pentru Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL invalid, vă rugăm să vă asigurați că includeți protocolul (http/https) și adresa corectă.";
@@ -492,6 +488,8 @@
 "screen_recovery_key_setup_success" = "Configurarea recuperării a reușit";
 "screen_recovery_key_setup_title" = "Configurați recuperarea";
 "screen_report_content_block_user_hint" = "Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator";
+"screen_report_content_explanation" = "Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat.";
+"screen_report_content_hint" = "Motivul raportării acestui conținut";
 "screen_room_attachment_source_camera" = "Cameră foto";
 "screen_room_attachment_source_camera_video" = "Înregistrați un videoclip";
 "screen_room_attachment_source_files" = "Atașament";
@@ -567,8 +565,6 @@
 "screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "Membrii camerei";
 "screen_room_member_list_unbanning_user" = "Unbanning %1$@";
-"screen_room_message_copied" = "Mesaj copiat";
-"screen_room_no_permission_to_post" = "Nu aveți permisiunea de a posta în această cameră";
 "screen_room_notification_settings_allow_custom" = "Permiteți setări personalizate";
 "screen_room_notification_settings_allow_custom_footnote" = "Activarea acestei opțiuni va anula setările implicite.";
 "screen_room_notification_settings_custom_settings_title" = "Anunțați-mă în acestă cameră pentru";
@@ -582,8 +578,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, nu veți primi notificări în această cameră.";
 "screen_room_notification_settings_mode_all_messages" = "Toate mesajele";
 "screen_room_notification_settings_room_custom_settings_title" = "În această cameră, anunțați-mă pentru";
-"screen_room_reactions_show_less" = "Afișați mai puțin";
-"screen_room_reactions_show_more" = "Afișați mai mult";
 "screen_room_retry_send_menu_send_again_action" = "Trimiteți din nou";
 "screen_room_retry_send_menu_title" = "Mesajul dvs. nu a putut fi trimis";
 "screen_room_roles_and_permissions_admins" = "Admins";
@@ -601,7 +595,14 @@
 "screen_room_roles_and_permissions_room_details" = "Room details";
 "screen_room_roles_and_permissions_title" = "Roles and permissions";
 "screen_room_timeline_add_reaction" = "Adăugați emoji";
+"screen_room_timeline_beginning_of_room" = "Acesta este începutul conversației %1$@.";
+"screen_room_timeline_beginning_of_room_no_name" = "Acesta este începutul acestei conversații.";
 "screen_room_timeline_less_reactions" = "Afișați mai puțin";
+"screen_room_timeline_message_copied" = "Mesaj copiat";
+"screen_room_timeline_no_permission_to_post" = "Nu aveți permisiunea de a posta în această cameră";
+"screen_room_timeline_reactions_show_less" = "Afișați mai puțin";
+"screen_room_timeline_reactions_show_more" = "Afișați mai mult";
+"screen_room_timeline_read_marker_title" = "Nou";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ și ";
 "screen_room_typing_notification_plural_ios" = " tastează";
 "screen_room_typing_notification_singular_ios" = " tastează";

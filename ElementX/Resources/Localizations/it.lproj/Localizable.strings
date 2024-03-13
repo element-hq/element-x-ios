@@ -40,6 +40,7 @@
 "action_decline" = "Rifiuta";
 "action_delete_poll" = "Elimina sondaggio";
 "action_disable" = "Disabilita";
+"action_discard" = "Discard";
 "action_done" = "Fine";
 "action_edit" = "Modifica";
 "action_edit_poll" = "Modifica sondaggio";
@@ -266,8 +267,6 @@
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ in %2$@ e %3$@";
 "preference_rageshake" = "Scuoti per segnalare un problema";
 "rageshake_detection_dialog_content" = "Sembra che tu stia scuotendo il telefono per la frustrazione. Vuoi aprire la schermata di segnalazione dei problemi?";
-"report_content_explanation" = "Questo messaggio verrà segnalato all'amministratore dell'homeserver. Questi non sarà in grado di leggere i messaggi cifrati.";
-"report_content_hint" = "Motivo della segnalazione di questo contenuto";
 "rich_text_editor_bullet_list" = "Attiva/disattiva l'elenco puntato";
 "rich_text_editor_close_formatting_options" = "Chiudi le opzioni di formattazione";
 "rich_text_editor_code_block" = "Attiva/disattiva il blocco di codice";
@@ -289,9 +288,6 @@
 "rich_text_editor_unindent" = "Rientro a sinistra";
 "rich_text_editor_url_placeholder" = "Collegamento";
 "rich_text_editor_a11y_add_attachment" = "Aggiungi allegato";
-"room_timeline_beginning_of_room" = "Questo è l'inizio di %1$@.";
-"room_timeline_beginning_of_room_no_name" = "Questo è l'inizio della conversazione.";
-"room_timeline_read_marker_title" = "Nuovo";
 "screen_advanced_settings_element_call_base_url" = "URL base di Element Call personalizzato";
 "screen_advanced_settings_element_call_base_url_description" = "Imposta un URL di base personalizzato per Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL non valido, assicurati di includere il protocollo (http/https) e l'indirizzo corretto.";
@@ -492,6 +488,8 @@
 "screen_recovery_key_setup_success" = "Configurazione del recupero completata";
 "screen_recovery_key_setup_title" = "Configura il recupero";
 "screen_report_content_block_user_hint" = "Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente";
+"screen_report_content_explanation" = "Questo messaggio verrà segnalato all'amministratore dell'homeserver. Questi non sarà in grado di leggere i messaggi cifrati.";
+"screen_report_content_hint" = "Motivo della segnalazione di questo contenuto";
 "screen_room_attachment_source_camera" = "Fotocamera";
 "screen_room_attachment_source_camera_video" = "Registra video";
 "screen_room_attachment_source_files" = "Allegato";
@@ -567,8 +565,6 @@
 "screen_room_member_list_role_moderator" = "Moderatore";
 "screen_room_member_list_room_members_header_title" = "Membri della stanza";
 "screen_room_member_list_unbanning_user" = "Riammissione di %1$@";
-"screen_room_message_copied" = "Messaggio copiato";
-"screen_room_no_permission_to_post" = "Non sei autorizzato a postare in questa stanza";
 "screen_room_notification_settings_allow_custom" = "Consenti impostazione personalizzata";
 "screen_room_notification_settings_allow_custom_footnote" = "L'attivazione di questa opzione sovrascriverà l'impostazione predefinita";
 "screen_room_notification_settings_custom_settings_title" = "Avvisami in questa chat per";
@@ -582,8 +578,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Il tuo homeserver non supporta questa opzione nelle stanze cifrate, quindi non riceverai notifiche in questa stanza.";
 "screen_room_notification_settings_mode_all_messages" = "Tutti i messaggi";
 "screen_room_notification_settings_room_custom_settings_title" = "In questa stanza, avvisami per";
-"screen_room_reactions_show_less" = "Mostra meno";
-"screen_room_reactions_show_more" = "Mostra di più";
 "screen_room_retry_send_menu_send_again_action" = "Invia di nuovo";
 "screen_room_retry_send_menu_title" = "Il tuo messaggio non è stato inviato";
 "screen_room_roles_and_permissions_admins" = "Amministratori";
@@ -601,7 +595,14 @@
 "screen_room_roles_and_permissions_room_details" = "Dettagli della stanza";
 "screen_room_roles_and_permissions_title" = "Ruoli e autorizzazioni";
 "screen_room_timeline_add_reaction" = "Aggiungi emoji";
+"screen_room_timeline_beginning_of_room" = "Questo è l'inizio di %1$@.";
+"screen_room_timeline_beginning_of_room_no_name" = "Questo è l'inizio della conversazione.";
 "screen_room_timeline_less_reactions" = "Mostra meno";
+"screen_room_timeline_message_copied" = "Messaggio copiato";
+"screen_room_timeline_no_permission_to_post" = "Non sei autorizzato a postare in questa stanza";
+"screen_room_timeline_reactions_show_less" = "Mostra meno";
+"screen_room_timeline_reactions_show_more" = "Mostra di più";
+"screen_room_timeline_read_marker_title" = "Nuovo";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ e ";
 "screen_room_typing_notification_plural_ios" = " stanno scrivendo";
 "screen_room_typing_notification_singular_ios" = " sta scrivendo";

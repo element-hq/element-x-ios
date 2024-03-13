@@ -40,6 +40,7 @@
 "action_decline" = "拒絕";
 "action_delete_poll" = "刪除投票";
 "action_disable" = "停用";
+"action_discard" = "Discard";
 "action_done" = "完成";
 "action_edit" = "編輯";
 "action_edit_poll" = "編輯投票";
@@ -266,8 +267,6 @@
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ in %2$@ and %3$@";
 "preference_rageshake" = "Rageshake to report bug";
 "rageshake_detection_dialog_content" = "You seem to be shaking the phone in frustration. Would you like to open the bug report screen?";
-"report_content_explanation" = "This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.";
-"report_content_hint" = "檢舉這個內容的原因";
 "rich_text_editor_bullet_list" = "切換項目編號";
 "rich_text_editor_close_formatting_options" = "Close formatting options";
 "rich_text_editor_code_block" = "切換程式碼區塊";
@@ -289,9 +288,6 @@
 "rich_text_editor_unindent" = "減少縮排";
 "rich_text_editor_url_placeholder" = "連結";
 "rich_text_editor_a11y_add_attachment" = "新增附件";
-"room_timeline_beginning_of_room" = "This is the beginning of %1$@.";
-"room_timeline_beginning_of_room_no_name" = "This is the beginning of this conversation.";
-"room_timeline_read_marker_title" = "新訊息";
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
@@ -492,6 +488,8 @@
 "screen_recovery_key_setup_success" = "Recovery setup successful";
 "screen_recovery_key_setup_title" = "Set up recovery";
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
+"screen_report_content_explanation" = "This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.";
+"screen_report_content_hint" = "檢舉這個內容的原因";
 "screen_room_attachment_source_camera" = "照相機";
 "screen_room_attachment_source_camera_video" = "錄影";
 "screen_room_attachment_source_files" = "附件";
@@ -567,8 +565,6 @@
 "screen_room_member_list_role_moderator" = "Moderator";
 "screen_room_member_list_room_members_header_title" = "聊天室成員";
 "screen_room_member_list_unbanning_user" = "Unbanning %1$@";
-"screen_room_message_copied" = "訊息已複製";
-"screen_room_no_permission_to_post" = "您沒有權限在此聊天室傳送訊息";
 "screen_room_notification_settings_allow_custom" = "Allow custom setting";
 "screen_room_notification_settings_allow_custom_footnote" = "Turning this on will override your default setting";
 "screen_room_notification_settings_custom_settings_title" = "Notify me in this chat for";
@@ -582,8 +578,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.";
 "screen_room_notification_settings_mode_all_messages" = "所有訊息";
 "screen_room_notification_settings_room_custom_settings_title" = "In this room, notify me for";
-"screen_room_reactions_show_less" = "較少";
-"screen_room_reactions_show_more" = "更多";
 "screen_room_retry_send_menu_send_again_action" = "重傳";
 "screen_room_retry_send_menu_title" = "無法傳送您的訊息";
 "screen_room_roles_and_permissions_admins" = "Admins";
@@ -601,7 +595,14 @@
 "screen_room_roles_and_permissions_room_details" = "Room details";
 "screen_room_roles_and_permissions_title" = "Roles and permissions";
 "screen_room_timeline_add_reaction" = "新增表情符號";
+"screen_room_timeline_beginning_of_room" = "This is the beginning of %1$@.";
+"screen_room_timeline_beginning_of_room_no_name" = "This is the beginning of this conversation.";
 "screen_room_timeline_less_reactions" = "較少";
+"screen_room_timeline_message_copied" = "訊息已複製";
+"screen_room_timeline_no_permission_to_post" = "您沒有權限在此聊天室傳送訊息";
+"screen_room_timeline_reactions_show_less" = "較少";
+"screen_room_timeline_reactions_show_more" = "更多";
+"screen_room_timeline_read_marker_title" = "新訊息";
 "screen_room_typing_many_members_first_component_ios" = "%1$@、%2$@ 和";
 "screen_room_typing_notification_plural_ios" = " 正在打字";
 "screen_room_typing_notification_singular_ios" = " 正在打字";

@@ -40,6 +40,7 @@
 "action_decline" = "Відхилити";
 "action_delete_poll" = "Видалити опитування";
 "action_disable" = "Вимкнути";
+"action_discard" = "Discard";
 "action_done" = "Готово";
 "action_edit" = "Редагувати";
 "action_edit_poll" = "Редагувати опитування";
@@ -266,8 +267,6 @@
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ у %2$@ та %3$@";
 "preference_rageshake" = "Повідомити про ваду за допомогою Rageshake";
 "rageshake_detection_dialog_content" = "Здається, ви роздратовано трясете телефоном. Бажаєте запустити вікно для звіту про помилку?";
-"report_content_explanation" = "Це повідомлення буде надіслано адміністратору вашого домашнього сервера. Він (вона) не зможе прочитати жодні зашифровані повідомлення.";
-"report_content_hint" = "Причина скарги на цей вміст";
 "rich_text_editor_bullet_list" = "Перемкнути маркований список";
 "rich_text_editor_close_formatting_options" = "Закрити параметри форматування";
 "rich_text_editor_code_block" = "Перемкнути блок коду";
@@ -289,9 +288,6 @@
 "rich_text_editor_unindent" = "Без відступу";
 "rich_text_editor_url_placeholder" = "Посилання";
 "rich_text_editor_a11y_add_attachment" = "Додати вкладення";
-"room_timeline_beginning_of_room" = "Це початок %1$@";
-"room_timeline_beginning_of_room_no_name" = "Це початок цієї розмови.";
-"room_timeline_read_marker_title" = "Нове";
 "screen_advanced_settings_element_call_base_url" = "Користувацька URL-адреса Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Встановіть URL-адресу для Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Неправильна URL-адреса, будь ласка, переконайтеся, що ви вказали протокол (http/https) та правильну адресу.";
@@ -492,6 +488,8 @@
 "screen_recovery_key_setup_success" = "Налаштування відновлення виконано успішно";
 "screen_recovery_key_setup_title" = "Налаштувати відновлення";
 "screen_report_content_block_user_hint" = "Перевірте, чи хочете Ви приховати всі поточні та майбутні повідомлення від цього користувача";
+"screen_report_content_explanation" = "Це повідомлення буде надіслано адміністратору вашого домашнього сервера. Він (вона) не зможе прочитати жодні зашифровані повідомлення.";
+"screen_report_content_hint" = "Причина скарги на цей вміст";
 "screen_room_attachment_source_camera" = "Камера";
 "screen_room_attachment_source_camera_video" = "Записати відео";
 "screen_room_attachment_source_files" = "Вкладення";
@@ -567,8 +565,6 @@
 "screen_room_member_list_role_moderator" = "Модератор";
 "screen_room_member_list_room_members_header_title" = "Учасники кімнати";
 "screen_room_member_list_unbanning_user" = "Розблокування %1$@";
-"screen_room_message_copied" = "Повідомлення скопійовано";
-"screen_room_no_permission_to_post" = "У Вас немає дозволу на публікацію в цій кімнаті";
 "screen_room_notification_settings_allow_custom" = "Дозволити користувальницькі налаштування";
 "screen_room_notification_settings_allow_custom_footnote" = "Увімкнення цього параметра змінить налаштування за замовчуванням";
 "screen_room_notification_settings_custom_settings_title" = "Повідомте мене в цьому чаті для";
@@ -582,8 +578,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви не отримаєте сповіщення в цій кімнаті.";
 "screen_room_notification_settings_mode_all_messages" = "Всі повідомлення";
 "screen_room_notification_settings_room_custom_settings_title" = "У цій кімнаті повідомляти мене про";
-"screen_room_reactions_show_less" = "Показувати менше";
-"screen_room_reactions_show_more" = "Показати більше";
 "screen_room_retry_send_menu_send_again_action" = "Надіслати знову";
 "screen_room_retry_send_menu_title" = "Ваше повідомлення не вдалося надіслати";
 "screen_room_roles_and_permissions_admins" = "Адміністратори";
@@ -601,7 +595,14 @@
 "screen_room_roles_and_permissions_room_details" = "Деталі кімнати";
 "screen_room_roles_and_permissions_title" = "Ролі та дозволи";
 "screen_room_timeline_add_reaction" = "Додати смайлики";
+"screen_room_timeline_beginning_of_room" = "Це початок %1$@";
+"screen_room_timeline_beginning_of_room_no_name" = "Це початок цієї розмови.";
 "screen_room_timeline_less_reactions" = "Показувати менше";
+"screen_room_timeline_message_copied" = "Повідомлення скопійовано";
+"screen_room_timeline_no_permission_to_post" = "У Вас немає дозволу на публікацію в цій кімнаті";
+"screen_room_timeline_reactions_show_less" = "Показувати менше";
+"screen_room_timeline_reactions_show_more" = "Показати більше";
+"screen_room_timeline_read_marker_title" = "Нове";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ та ";
 "screen_room_typing_notification_plural_ios" = " пишуть";
 "screen_room_typing_notification_singular_ios" = " пише";
