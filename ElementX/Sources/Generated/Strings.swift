@@ -1487,9 +1487,9 @@ internal enum L10n {
   internal static func screenRoomTypingNotification(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_typing_notification", p1)
   }
-  ///  are typing
+  ///  are typing...
   internal static var screenRoomTypingNotificationPluralIos: String { return L10n.tr("Localizable", "screen_room_typing_notification_plural_ios") }
-  ///  is typing
+  ///  is typing...
   internal static var screenRoomTypingNotificationSingularIos: String { return L10n.tr("Localizable", "screen_room_typing_notification_singular_ios") }
   /// %1$@ and %2$@
   internal static func screenRoomTypingTwoMembers(_ p1: Any, _ p2: Any) -> String {

@@ -604,8 +604,8 @@
 "screen_room_timeline_reactions_show_more" = "Afficher plus";
 "screen_room_timeline_read_marker_title" = "Nouveau";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ et ";
-"screen_room_typing_notification_plural_ios" = " écrivent";
-"screen_room_typing_notification_singular_ios" = " écrit";
+"screen_room_typing_notification_plural_ios" = " écrivent...";
+"screen_room_typing_notification_singular_ios" = " écrit...";
 "screen_room_typing_two_members" = "%1$@ et %2$@";
 "screen_room_voice_message_tooltip" = "Maintenir pour enregistrer";
 "screen_roomlist_a11y_create_message" = "Créer une nouvelle discussion ou un nouveau salon";
