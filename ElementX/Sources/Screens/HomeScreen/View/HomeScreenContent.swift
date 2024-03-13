@@ -111,15 +111,13 @@ struct HomeScreenContent: View {
         VStack(spacing: 0) {
             if !context.isSearchFieldFocused {
                 filters
+                    .frame(alignment: .top)
             }
             
-            switch context.viewState.securityBannerMode {
-            case .sessionVerification:
+            if context.viewState.securityBannerMode == .sessionVerification {
                 HomeScreenSessionVerificationBanner(context: context)
-            case .recoveryKeyConfirmation:
+            } else if context.viewState.securityBannerMode == .recoveryKeyConfirmation {
                 HomeScreenRecoveryKeyConfirmationBanner(context: context)
-            default:
-                EmptyView()
             }
             
             if context.viewState.hasPendingInvitations, !context.isSearchFieldFocused {
