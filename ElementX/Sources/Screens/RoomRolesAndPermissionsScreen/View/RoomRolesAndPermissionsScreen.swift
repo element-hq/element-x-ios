@@ -132,5 +132,6 @@ struct RoomRolesAndPermissionsScreen_Previews: PreviewProvider, TestablePreview 
         NavigationStack {
             RoomRolesAndPermissionsScreen(context: viewModel.context)
         }
+        .snapshot(delay: 0.2)
     }
 }
