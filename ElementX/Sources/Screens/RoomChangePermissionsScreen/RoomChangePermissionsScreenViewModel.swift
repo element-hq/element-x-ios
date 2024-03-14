@@ -49,6 +49,8 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
         switch viewAction {
         case .save:
             Task { await save() }
+        case .cancel:
+            confirmDiscardChanges()
         }
     }
     
@@ -81,6 +83,14 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
             context.alertInfo = AlertInfo(id: .generic)
             return
         }
+    }
+    
+    private func confirmDiscardChanges() {
+        state.bindings.alertInfo = AlertInfo(id: .discardChanges,
+                                             title: L10n.screenRoomChangeRoleUnsavedChangesTitle,
+                                             message: L10n.screenRoomChangeRoleUnsavedChangesDescription,
+                                             primaryButton: .init(title: L10n.actionSave) { Task { await self.save() } },
+                                             secondaryButton: .init(title: L10n.actionDiscard, role: .cancel) { self.actionsSubject.send(.complete) })
     }
     
     // MARK: Loading indicator

@@ -89,6 +89,8 @@ struct RoomChangeRolesScreenViewStateBindings {
 enum RoomChangeRolesScreenAlertType {
     /// A warning that a particular promotion can't be undone.
     case promotionWarning
+    /// A confirmation that the user would like to discard any unsaved changes.
+    case discardChanges
     /// The generic error message.
     case error
 }
@@ -100,4 +102,6 @@ enum RoomChangeRolesScreenViewAction {
     case demoteMember(RoomMemberDetails)
     /// Save all the changes that the user has made.
     case save
+    /// Discard any changes and hide the screen.
+    case cancel
 }

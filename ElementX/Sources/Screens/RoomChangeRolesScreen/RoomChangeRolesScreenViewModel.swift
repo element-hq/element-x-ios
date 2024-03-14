@@ -74,6 +74,8 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             } else {
                 Task { await save() }
             }
+        case .cancel:
+            confirmDiscardChanges()
         }
     }
     
@@ -146,6 +148,14 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         case .failure:
             context.alertInfo = AlertInfo(id: .error)
         }
+    }
+    
+    private func confirmDiscardChanges() {
+        state.bindings.alertInfo = AlertInfo(id: .discardChanges,
+                                             title: L10n.screenRoomChangeRoleUnsavedChangesTitle,
+                                             message: L10n.screenRoomChangeRoleUnsavedChangesDescription,
+                                             primaryButton: .init(title: L10n.actionSave) { Task { await self.save() } },
+                                             secondaryButton: .init(title: L10n.actionDiscard, role: .cancel) { self.actionsSubject.send(.complete) })
     }
     
     // MARK: Loading indicator

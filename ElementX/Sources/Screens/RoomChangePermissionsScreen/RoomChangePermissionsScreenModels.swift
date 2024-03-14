@@ -43,6 +43,8 @@ struct RoomChangePermissionsScreenViewStateBindings: BindableState {
 }
 
 enum RoomChangePermissionsScreenAlertType {
+    /// A confirmation that the user would like to discard any unsaved changes.
+    case discardChanges
     /// The generic error message.
     case generic
 }
@@ -50,6 +52,8 @@ enum RoomChangePermissionsScreenAlertType {
 enum RoomChangePermissionsScreenViewAction {
     /// Save the permissions.
     case save
+    /// Discard any changes and hide the screen.
+    case cancel
 }
 
 extension RoomChangePermissionsScreenViewState {
