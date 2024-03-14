@@ -28,10 +28,9 @@ struct IdentityConfirmationScreen: View {
             .padding(.horizontal, 16)
             .padding(.top, 24)
             .frame(maxWidth: .infinity)
-            .navigationBarTitleDisplayMode(.inline)
         }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .safeAreaInset(edge: .bottom) { actionButtons.padding() }
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
     }
     
     // MARK: - Private

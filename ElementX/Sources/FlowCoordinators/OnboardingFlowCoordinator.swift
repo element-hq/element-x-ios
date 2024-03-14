@@ -66,7 +66,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationStackCoordinator.setRootCoordinator(coordinator)
         
-        rootNavigationStackCoordinator.setFullScreenCoverCoordinator(navigationStackCoordinator)
+        rootNavigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator)
     }
     
     private func presentSessionVerification() async {

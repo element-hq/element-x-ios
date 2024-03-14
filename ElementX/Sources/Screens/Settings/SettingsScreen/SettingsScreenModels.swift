@@ -26,7 +26,6 @@ enum SettingsScreenViewModelAction {
     case reportBug
     case about
     case blockedUsers
-    case sessionVerification
     case secureBackup
     case accountSessionsList
     case notifications
@@ -37,7 +36,6 @@ enum SettingsScreenViewModelAction {
 
 enum SettingsScreenSecuritySectionMode {
     case none
-    case sessionVerification
     case secureBackup
 }
 
@@ -65,7 +63,6 @@ enum SettingsScreenViewAction {
     case reportBug
     case about
     case blockedUsers
-    case sessionVerification
     case secureBackup
     case accountSessionsList
     case notifications

@@ -81,11 +81,6 @@ struct SettingsScreen: View {
     private var accountSecuritySection: some View {
         Section {
             switch context.viewState.securitySectionMode {
-            case .sessionVerification:
-                ListRow(label: .default(title: L10n.actionCompleteVerification,
-                                        icon: \.checkCircle),
-                        details: context.viewState.showSecuritySectionBadge ? .icon(securitySectionBadge) : nil,
-                        kind: .button { context.send(viewAction: .sessionVerification) })
             case .secureBackup:
                 ListRow(label: .default(title: L10n.commonChatBackup,
                                         icon: \.key),

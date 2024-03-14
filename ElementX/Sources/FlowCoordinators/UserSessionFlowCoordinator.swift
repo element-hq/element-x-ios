@@ -262,13 +262,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 break
             case (.invitesScreen, .deselectRoom, .invitesScreen):
                 break
-
-            case (.roomList, .showSessionVerificationScreen, .sessionVerificationScreen):
-                Task {
-                    await self.presentSessionVerification(animated: animated)
-                }
-            case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .roomList):
-                break
                 
             case (.roomList, .showSettingsScreen, .settingsScreen):
                 break
@@ -352,8 +345,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     settingsFlowCoordinator.handleAppRoute(.settings, animated: true)
                 case .presentFeedbackScreen:
                     stateMachine.processEvent(.feedbackScreen)
-                case .presentSessionVerificationScreen:
-                    stateMachine.processEvent(.showSessionVerificationScreen)
                 case .presentSecureBackupSettings:
                     settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                 case .presentStartChatScreen:
@@ -416,36 +407,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         presentSecureBackupLogoutConfirmationScreen()
-    }
-    
-    // MARK: Session verification
-    
-    private func presentSessionVerification(animated: Bool) async {
-        guard case let .success(sessionVerificationController) = await userSession.clientProxy.sessionVerificationControllerProxy() else {
-            fatalError("The sessionVerificationController should aways be valid at this point")
-        }
-        
-        let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
-                                                                        recoveryState: userSession.sessionSecurityStatePublisher.value.recoveryState)
-        
-        let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .recoveryKey:
-                    settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
-                case .done:
-                    navigationSplitCoordinator.setSheetCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationSplitCoordinator.setSheetCoordinator(coordinator, animated: animated) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
-        }
     }
     
     // MARK: Start Chat

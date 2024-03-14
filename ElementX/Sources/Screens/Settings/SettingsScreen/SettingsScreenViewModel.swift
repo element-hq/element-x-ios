@@ -50,9 +50,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                 guard let self else { return }
                 
                 switch (securityState.verificationState, securityState.recoveryState) {
-                case (.unverified, _):
-                    state.showSecuritySectionBadge = true
-                    state.securitySectionMode = .sessionVerification
                 case (.verified, .disabled):
                     state.showSecuritySectionBadge = true
                     state.securitySectionMode = .secureBackup
@@ -107,8 +104,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.blockedUsers)
         case .logout:
             actionsSubject.send(.logout)
-        case .sessionVerification:
-            actionsSubject.send(.sessionVerification)
         case .secureBackup:
             actionsSubject.send(.secureBackup)
         case .notifications:
