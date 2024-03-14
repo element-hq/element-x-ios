@@ -28,10 +28,10 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(roomProxy: RoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
+    init(initialPermissions: RoomPermissions? = nil, roomProxy: RoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
-        super.init(initialViewState: RoomRolesAndPermissionsScreenViewState())
+        super.init(initialViewState: RoomRolesAndPermissionsScreenViewState(permissions: initialPermissions))
         
         // Automatically update the admin/moderator counts.
         roomProxy.membersPublisher
