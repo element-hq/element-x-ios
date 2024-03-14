@@ -683,6 +683,7 @@ class ClientProxy: ClientProxyProtocol {
                                                    .roomHistoryVisibility,
                                                    .roomJoinRules,
                                                    .roomPinnedEvents,
+                                                   .roomPowerLevels,
                                                    .roomServerAcl,
                                                    .roomTombstone,
                                                    .spaceChild,
