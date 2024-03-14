@@ -185,7 +185,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         case .success:
             state.bindings.memberToManage = nil
             hideManageMemberIndicator(title: indicatorTitle)
-            analytics.trackRoomModeration(action: .KickMember)
+            analytics.trackRoomModeration(action: .KickMember, role: nil)
         case .failure:
             showManageMemberFailure(title: indicatorTitle)
         }
@@ -199,7 +199,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         case .success:
             state.bindings.memberToManage = nil
             hideManageMemberIndicator(title: indicatorTitle)
-            analytics.trackRoomModeration(action: .BanMember)
+            analytics.trackRoomModeration(action: .BanMember, role: nil)
         case .failure:
             showManageMemberFailure(title: indicatorTitle)
         }
@@ -213,7 +213,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         case .success:
             state.bindings.memberToManage = nil
             hideManageMemberIndicator(title: indicatorTitle)
-            analytics.trackRoomModeration(action: .UnbanMember)
+            analytics.trackRoomModeration(action: .UnbanMember, role: nil)
         case .failure:
             showManageMemberFailure(title: indicatorTitle)
         }

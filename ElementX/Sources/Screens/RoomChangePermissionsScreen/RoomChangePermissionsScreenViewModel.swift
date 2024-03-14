@@ -103,14 +103,14 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
     private func trackChanges(_ settings: [RoomPermissionsSetting]) {
         for setting in settings {
             switch setting.keyPath {
-            case \.ban: analytics.trackRoomModeration(action: .ChangePermissionsBanMembers)
-            case \.invite: analytics.trackRoomModeration(action: .ChangePermissionsInviteUsers)
-            case \.kick: analytics.trackRoomModeration(action: .ChangePermissionsKickMembers)
-            case \.redact: analytics.trackRoomModeration(action: .ChangePermissionsRedactMessages)
-            case \.eventsDefault: analytics.trackRoomModeration(action: .ChangePermissionsSendMessages)
-            case \.roomName: analytics.trackRoomModeration(action: .ChangePermissionsRoomName)
-            case \.roomAvatar: analytics.trackRoomModeration(action: .ChangePermissionsRoomAvatar)
-            case \.roomTopic: analytics.trackRoomModeration(action: .ChangePermissionsRoomTopic)
+            case \.ban: analytics.trackRoomModeration(action: .ChangePermissionsBanMembers, role: setting.value)
+            case \.invite: analytics.trackRoomModeration(action: .ChangePermissionsInviteUsers, role: setting.value)
+            case \.kick: analytics.trackRoomModeration(action: .ChangePermissionsKickMembers, role: setting.value)
+            case \.redact: analytics.trackRoomModeration(action: .ChangePermissionsRedactMessages, role: setting.value)
+            case \.eventsDefault: analytics.trackRoomModeration(action: .ChangePermissionsSendMessages, role: setting.value)
+            case \.roomName: analytics.trackRoomModeration(action: .ChangePermissionsRoomName, role: setting.value)
+            case \.roomAvatar: analytics.trackRoomModeration(action: .ChangePermissionsRoomAvatar, role: setting.value)
+            case \.roomTopic: analytics.trackRoomModeration(action: .ChangePermissionsRoomTopic, role: setting.value)
             default: MXLog.warning("Unexpected change: \(setting.keyPath).")
             }
         }

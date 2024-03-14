@@ -109,7 +109,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
             _ = await infoTask.value
             await roomProxy.updateMembers()
             
-            analytics.trackChangeMemberRole(role)
+            analytics.trackRoomModeration(action: .ChangeMemberRole, role: role)
             
             actionsSubject.send(.demotedOwnUser)
             showSuccessIndicator()
@@ -145,7 +145,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         
         switch await roomProxy.resetPowerLevels() {
         case .success:
-            analytics.trackRoomModeration(action: .ResetPermissions)
+            analytics.trackRoomModeration(action: .ResetPermissions, role: nil)
             showSuccessIndicator()
         case .failure:
             state.bindings.alertInfo = AlertInfo(id: .error)

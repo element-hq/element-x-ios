@@ -167,11 +167,11 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
     
     private func trackChanges(promotionCount: Int, demotionCount: Int) {
         for _ in 0..<promotionCount {
-            analytics.trackChangeMemberRole(state.mode)
+            analytics.trackRoomModeration(action: .ChangeMemberRole, role: state.mode)
         }
         
         for _ in 0..<demotionCount {
-            analytics.trackChangeMemberRole(.user)
+            analytics.trackRoomModeration(action: .ChangeMemberRole, role: .user)
         }
     }
 }
