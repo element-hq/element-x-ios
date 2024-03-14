@@ -18,7 +18,7 @@ import XCTest
 
 extension XCUIApplication {
     func login(currentTestCase: XCTestCase) {
-        let getStartedButton = buttons[A11yIdentifiers.onboardingScreen.signIn]
+        let getStartedButton = buttons[A11yIdentifiers.authenticationStartScreen.signIn]
         
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 10.0))
         getStartedButton.tap()
@@ -128,7 +128,7 @@ extension XCUIApplication {
         alertLogoutButton.tap()
         
         // Check that we're back on the login screen
-        let getStartedButton = buttons[A11yIdentifiers.onboardingScreen.signIn]
+        let getStartedButton = buttons[A11yIdentifiers.authenticationStartScreen.signIn]
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 10.0))
     }
 }
