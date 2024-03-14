@@ -126,12 +126,12 @@ struct RoomRolesAndPermissionsScreen: View {
 // MARK: - Previews
 
 struct RoomRolesAndPermissionsScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: RoomProxyMock(with: .init(members: .allMembersAsAdmin)),
+    static let viewModel = RoomRolesAndPermissionsScreenViewModel(initialPermissions: RoomPermissions(powerLevels: .mock),
+                                                                  roomProxy: RoomProxyMock(with: .init(members: .allMembersAsAdmin)),
                                                                   userIndicatorController: UserIndicatorControllerMock())
     static var previews: some View {
         NavigationStack {
             RoomRolesAndPermissionsScreen(context: viewModel.context)
         }
-        .snapshot(delay: 0.2)
     }
 }
