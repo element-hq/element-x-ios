@@ -50,6 +50,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
+    // periphery:ignore - used to avoid deallocation
     private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)

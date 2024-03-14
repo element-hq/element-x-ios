@@ -61,15 +61,6 @@ struct RoomChangeRolesScreen: View {
         }
     }
     
-    private var noResultsContent: some View {
-        Text(L10n.commonNoResults)
-            .font(.compound.bodyLG)
-            .foregroundColor(.compound.textSecondary)
-            .frame(maxWidth: .infinity)
-            .listRowBackground(Color.clear)
-            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
-    }
-    
     @ViewBuilder
     private var membersSection: some View {
         if !context.viewState.visibleMembers.isEmpty {
