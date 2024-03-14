@@ -78,6 +78,7 @@ struct RoomChangePermissionsScreen_Previews: PreviewProvider, TestablePreview {
         RoomChangePermissionsScreenViewModel(currentPermissions: .init(powerLevels: .mock),
                                              group: group,
                                              roomProxy: RoomProxyMock(with: .init()),
-                                             userIndicatorController: UserIndicatorControllerMock())
+                                             userIndicatorController: UserIndicatorControllerMock(),
+                                             analytics: ServiceLocator.shared.analytics)
     }
 }

@@ -196,4 +196,10 @@ extension AnalyticsService {
     func trackPollEnd() {
         capture(event: AnalyticsEvent.PollEnd(doNotUse: nil))
     }
+    
+    /// Track a room moderation action.
+    func trackRoomModeration(action: AnalyticsEvent.RoomModeration.Action, role: RoomMemberDetails.Role?) {
+        let role = role.map(AnalyticsEvent.RoomModeration.Role.init)
+        capture(event: AnalyticsEvent.RoomModeration(action: action, role: role))
+    }
 }

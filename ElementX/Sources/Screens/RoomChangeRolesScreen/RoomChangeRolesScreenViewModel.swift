@@ -22,17 +22,22 @@ typealias RoomChangeRolesScreenViewModelType = StateStoreViewModel<RoomChangeRol
 class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomChangeRolesScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let analytics: AnalyticsService
     
     private let actionsSubject: PassthroughSubject<RoomChangeRolesScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomChangeRolesScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(mode: RoomMemberDetails.Role, roomProxy: RoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
+    init(mode: RoomMemberDetails.Role,
+         roomProxy: RoomProxyProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         analytics: AnalyticsService) {
         guard mode != .user else { fatalError("Invalid screen configuration: \(mode)") }
         
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
+        self.analytics = analytics
         
         super.init(initialViewState: RoomChangeRolesScreenViewState(mode: mode,
                                                                     members: [],
@@ -134,6 +139,9 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             _ = await infoTask.value
             await roomProxy.updateMembers()
             
+            trackChanges(promotionCount: promotingUpdates.count,
+                         demotionCount: demotingUpdates.count)
+            
             actionsSubject.send(.complete)
         case .failure:
             context.alertInfo = AlertInfo(id: .error)
@@ -153,5 +161,17 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
     
     private func hideSavingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.indicatorID)
+    }
+    
+    // MARK: Analytics
+    
+    private func trackChanges(promotionCount: Int, demotionCount: Int) {
+        for _ in 0..<promotionCount {
+            analytics.trackRoomModeration(action: .ChangeMemberRole, role: state.mode)
+        }
+        
+        for _ in 0..<demotionCount {
+            analytics.trackRoomModeration(action: .ChangeMemberRole, role: .user)
+        }
     }
 }

@@ -23,6 +23,7 @@ struct RoomChangeRolesScreenCoordinatorParameters {
     let mode: RoomMemberDetails.Role
     let roomProxy: RoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let analytics: AnalyticsService
 }
 
 enum RoomChangeRolesScreenCoordinatorAction {
@@ -45,7 +46,8 @@ final class RoomChangeRolesScreenCoordinator: CoordinatorProtocol {
         
         viewModel = RoomChangeRolesScreenViewModel(mode: parameters.mode,
                                                    roomProxy: parameters.roomProxy,
-                                                   userIndicatorController: parameters.userIndicatorController)
+                                                   userIndicatorController: parameters.userIndicatorController,
+                                                   analytics: parameters.analytics)
     }
     
     func start() {

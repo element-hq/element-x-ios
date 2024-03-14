@@ -592,10 +592,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             fatalError()
         }
         
-        let params = RoomMembersListScreenCoordinatorParameters(mediaProvider: userSession.mediaProvider,
-                                                                roomProxy: roomProxy,
-                                                                appSettings: appSettings)
-        let coordinator = RoomMembersListScreenCoordinator(parameters: params)
+        let parameters = RoomMembersListScreenCoordinatorParameters(mediaProvider: userSession.mediaProvider,
+                                                                    roomProxy: roomProxy,
+                                                                    userIndicatorController: userIndicatorController,
+                                                                    appSettings: appSettings,
+                                                                    analytics: analytics)
+        let coordinator = RoomMembersListScreenCoordinator(parameters: parameters)
         
         coordinator.actions
             .sink { [weak self] action in
@@ -1176,7 +1178,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = RoomRolesAndPermissionsFlowCoordinatorParameters(roomProxy: roomProxy,
                                                                           navigationStackCoordinator: navigationStackCoordinator,
-                                                                          userIndicatorController: userIndicatorController)
+                                                                          userIndicatorController: userIndicatorController,
+                                                                          analytics: analytics)
         let coordinator = RoomRolesAndPermissionsFlowCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action {

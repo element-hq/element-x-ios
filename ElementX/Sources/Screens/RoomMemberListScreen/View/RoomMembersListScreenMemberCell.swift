@@ -110,7 +110,8 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
                                                                                                members: members)),
                                                           mediaProvider: MockMediaProvider(),
                                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                          appSettings: ServiceLocator.shared.settings)
+                                                          appSettings: ServiceLocator.shared.settings,
+                                                          analytics: ServiceLocator.shared.analytics)
     static var previews: some View {
         VStack(spacing: 12) {
             Section("Invited/Joined") {

@@ -27,12 +27,14 @@ struct RoomRolesAndPermissionsFlowCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
     let userIndicatorController: UserIndicatorControllerProtocol
+    let analytics: AnalyticsService
 }
 
 class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
     private let roomProxy: RoomProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let analytics: AnalyticsService
     
     enum State: StateType {
         /// The state machine hasn't started.
@@ -74,6 +76,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         roomProxy = parameters.roomProxy
         navigationStackCoordinator = parameters.navigationStackCoordinator
         userIndicatorController = parameters.userIndicatorController
+        analytics = parameters.analytics
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
@@ -132,7 +135,9 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentRolesAndPermissionsScreen() {
-        let parameters = RoomRolesAndPermissionsScreenCoordinatorParameters(roomProxy: roomProxy, userIndicatorController: userIndicatorController)
+        let parameters = RoomRolesAndPermissionsScreenCoordinatorParameters(roomProxy: roomProxy,
+                                                                            userIndicatorController: userIndicatorController,
+                                                                            analytics: analytics)
         let coordinator = RoomRolesAndPermissionsScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [stateMachine] action in
             switch action {
@@ -159,7 +164,8 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: mode,
                                                                     roomProxy: roomProxy,
-                                                                    userIndicatorController: userIndicatorController)
+                                                                    userIndicatorController: userIndicatorController,
+                                                                    analytics: analytics)
         let coordinator = RoomChangeRolesScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
@@ -180,7 +186,8 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomChangePermissionsScreenCoordinatorParameters(permissions: permissions,
                                                                           permissionsGroup: group,
                                                                           roomProxy: roomProxy,
-                                                                          userIndicatorController: userIndicatorController)
+                                                                          userIndicatorController: userIndicatorController,
+                                                                          analytics: analytics)
         let coordinator = RoomChangePermissionsScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }

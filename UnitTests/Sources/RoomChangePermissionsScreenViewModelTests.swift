@@ -32,7 +32,8 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
         viewModel = RoomChangePermissionsScreenViewModel(currentPermissions: .init(powerLevels: .mock),
                                                          group: .roomDetails,
                                                          roomProxy: roomProxy,
-                                                         userIndicatorController: UserIndicatorControllerMock())
+                                                         userIndicatorController: UserIndicatorControllerMock(),
+                                                         analytics: ServiceLocator.shared.analytics)
     }
 
     func testChangeSetting() {
@@ -62,6 +63,7 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
         context.settings[index] = RoomPermissionsSetting(title: "", value: .user, keyPath: \.roomAvatar)
         XCTAssertEqual(context.settings[index].value, .user)
         XCTAssertTrue(context.viewState.hasChanges)
+        XCTAssertEqual(context.settings.count, 3)
         
         // When saving changes.
         context.send(viewAction: .save)
@@ -70,8 +72,8 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
         
         // Then the changes should be applied.
         XCTAssertTrue(roomProxy.applyPowerLevelChangesCalled)
-        XCTAssertEqual(roomProxy.applyPowerLevelChangesReceivedChanges, .init(roomName: 50, roomAvatar: 0, roomTopic: 50),
-                       "Only the changes for this screen should be applied, the others should be nil to remain unchanged.")
+        XCTAssertEqual(roomProxy.applyPowerLevelChangesReceivedChanges, .init(roomAvatar: 0),
+                       "Only the avatar setting should be applied. No other settings were changed so they should be nil to remain left alone.")
     }
     
     func testSaveNoChanges() async throws {

@@ -22,15 +22,17 @@ typealias RoomRolesAndPermissionsScreenViewModelType = StateStoreViewModel<RoomR
 class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewModelType, RoomRolesAndPermissionsScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let analytics: AnalyticsService
     
     private var actionsSubject: PassthroughSubject<RoomRolesAndPermissionsScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomRolesAndPermissionsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(initialPermissions: RoomPermissions? = nil, roomProxy: RoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
+    init(initialPermissions: RoomPermissions? = nil, roomProxy: RoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol, analytics: AnalyticsService) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
+        self.analytics = analytics
         super.init(initialViewState: RoomRolesAndPermissionsScreenViewState(permissions: initialPermissions))
         
         // Automatically update the admin/moderator counts.
@@ -107,6 +109,8 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
             _ = await infoTask.value
             await roomProxy.updateMembers()
             
+            analytics.trackRoomModeration(action: .ChangeMemberRole, role: role)
+            
             actionsSubject.send(.demotedOwnUser)
             showSuccessIndicator()
         case .failure:
@@ -141,6 +145,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         
         switch await roomProxy.resetPowerLevels() {
         case .success:
+            analytics.trackRoomModeration(action: .ResetPermissions, role: nil)
             showSuccessIndicator()
         case .failure:
             state.bindings.alertInfo = AlertInfo(id: .error)

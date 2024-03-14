@@ -22,6 +22,7 @@ import SwiftUI
 struct RoomRolesAndPermissionsScreenCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let analytics: AnalyticsService
 }
 
 enum RoomRolesAndPermissionsScreenCoordinatorAction {
@@ -41,7 +42,8 @@ final class RoomRolesAndPermissionsScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: RoomRolesAndPermissionsScreenCoordinatorParameters) {
         viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: parameters.roomProxy,
-                                                           userIndicatorController: parameters.userIndicatorController)
+                                                           userIndicatorController: parameters.userIndicatorController,
+                                                           analytics: parameters.analytics)
     }
     
     func start() {
