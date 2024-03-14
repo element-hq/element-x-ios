@@ -23,7 +23,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
-        app.buttons[A11yIdentifiers.onboardingScreen.signIn].tap()
+        app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
         
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
@@ -45,7 +45,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
-        app.buttons[A11yIdentifiers.onboardingScreen.signIn].tap()
+        app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
         
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
@@ -69,7 +69,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
-        app.buttons[A11yIdentifiers.onboardingScreen.signIn].tap()
+        app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
         
         // Server Confirmation: Tap change server button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.changeServer].tap()
