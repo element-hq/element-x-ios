@@ -40,7 +40,7 @@
 "action_decline" = "Ablehnen";
 "action_delete_poll" = "Umfrage löschen";
 "action_disable" = "Deaktivieren";
-"action_discard" = "Discard";
+"action_discard" = "Verwerfen";
 "action_done" = "Erledigt";
 "action_edit" = "Bearbeiten";
 "action_edit_poll" = "Umfrage bearbeiten";
@@ -604,7 +604,7 @@
 "screen_room_timeline_reactions_show_more" = "Mehr anzeigen";
 "screen_room_timeline_read_marker_title" = "Neu";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ und ";
-"screen_room_typing_notification_plural_ios" = " schreiben...";
+"screen_room_typing_notification_plural_ios" = " schreiben…";
 "screen_room_typing_notification_singular_ios" = " schreibt gerade…";
 "screen_room_typing_two_members" = "%1$@ und %2$@";
 "screen_room_voice_message_tooltip" = "Zum Aufnehmen gedrückt halten";

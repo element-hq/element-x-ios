@@ -604,8 +604,8 @@
 "screen_room_timeline_reactions_show_more" = "Tampilkan lebih banyak";
 "screen_room_timeline_read_marker_title" = "Baru";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ and ";
-"screen_room_typing_notification_plural_ios" = " are typing...";
-"screen_room_typing_notification_singular_ios" = " is typing...";
+"screen_room_typing_notification_plural_ios" = " are typing…";
+"screen_room_typing_notification_singular_ios" = " is typing…";
 "screen_room_typing_two_members" = "%1$@ and %2$@";
 "screen_room_voice_message_tooltip" = "Tahan untuk merekam";
 "screen_roomlist_a11y_create_message" = "Buat percakapan atau ruangan baru";
