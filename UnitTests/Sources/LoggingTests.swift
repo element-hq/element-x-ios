@@ -223,9 +223,9 @@ class LoggingTests: XCTestCase {
                                                    formatted: FormattedBody(format: .html, body: "<b>\(emoteString)</b>"))
         
         let pointer = Unmanaged.passRetained(NSURL(fileURLWithPath: "/tmp/file")).toOpaque()
-        let rustImageMessage = ImageMessageContent(body: "ImageString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
-        let rustVideoMessage = VideoMessageContent(body: "VideoString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
-        let rustFileMessage = FileMessageContent(body: "FileString", filename: "FileName", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        let rustImageMessage = ImageMessageContent(body: "ImageString", formatted: nil, filename: nil, source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        let rustVideoMessage = VideoMessageContent(body: "VideoString", formatted: nil, filename: nil, source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        let rustFileMessage = FileMessageContent(body: "FileString", formatted: nil, filename: "FileName", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
         
         // When logging that value
         MXLog.info(rustTextMessage)

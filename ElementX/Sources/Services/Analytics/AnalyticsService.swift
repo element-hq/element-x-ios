@@ -131,8 +131,15 @@ extension AnalyticsService {
         capture(event: AnalyticsEvent.Interaction(index: index, interactionType: .Touch, name: name))
     }
     
-    func trackError(context: String?, domain: AnalyticsEvent.Error.Domain, name: AnalyticsEvent.Error.Name) {
-        capture(event: AnalyticsEvent.Error(context: context, cryptoModule: .Rust, domain: domain, name: name))
+    /// Track the presentation of a screen
+    /// - Parameter context: To provide additional context or description for the error
+    /// - Parameter domain: The domain to which the error belongs to.
+    /// - Parameter name: The name of the error
+    /// - Parameter timeToDecryptMillis: The time it took to decrypt the event in milliseconds, needs to be used only to track UTD errors, otherwise if the error is nort related to UTD it should be nil.
+    /// Can be found in `UnableToDecryptInfo`. In case the `UnableToDecryptInfo` contains the value as nil, pass it as `-1`
+    func trackError(context: String?, domain: AnalyticsEvent.Error.Domain, name: AnalyticsEvent.Error.Name, timeToDecryptMillis: Int? = nil) {
+        // CryptoModule is deprecated
+        capture(event: AnalyticsEvent.Error(context: context, cryptoModule: nil, cryptoSDK: .Rust, domain: domain, name: name, timeToDecryptMillis: timeToDecryptMillis))
     }
     
     /// Track the creation of a room

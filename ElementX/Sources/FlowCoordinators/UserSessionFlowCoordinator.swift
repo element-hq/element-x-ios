@@ -143,11 +143,18 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         userSession.clientProxy.actionsPublisher
             .receive(on: DispatchQueue.main)
             .sink { action in
-                guard case .receivedDecryptionError = action else {
+                guard case let .receivedDecryptionError(info) = action else {
                     return
                 }
                 
-                analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError)
+                let timeToDecryptMs: Int
+                if let unsignedTimeToDecryptMs = info.timeToDecryptMs {
+                    timeToDecryptMs = Int(unsignedTimeToDecryptMs)
+                } else {
+                    timeToDecryptMs = -1
+                }
+            
+                analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
             }
             .store(in: &cancellables)
     }
