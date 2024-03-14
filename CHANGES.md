@@ -1,3 +1,9 @@
+## Changes in 1.5.12 (2024-03-14)
+
+Others
+
+- Stop showing that a user's role has changed in the room timeline. ([#2359](https://github.com/element-hq/element-x-ios/issues/2359))
+
 ## Changes in 1.5.11 (2024-03-12)
 
 ✨ Features
