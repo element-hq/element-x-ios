@@ -151,10 +151,6 @@ struct RoomStateEventStringBuilder {
             case (nil, true):
                 return L10n.stateEventRoomNameRemovedByYou
             }
-        case .roomPowerLevels(let users, let previous):
-            let newRoles = users.compactMap { userRoleChanged(userID: $0.key, powerLevel: $0.value, previous: previous?[$0.key]) }
-            guard !newRoles.isEmpty else { return nil }
-            return newRoles.formatted(.list(type: .and))
         case .roomThirdPartyInvite(let displayName):
             guard let displayName else {
                 MXLog.error("roomThirdPartyInvite undisplayable due to missing name.")
@@ -177,6 +173,8 @@ struct RoomStateEventStringBuilder {
             case (nil, true):
                 return L10n.stateEventRoomTopicRemovedByYou
             }
+        case .roomPowerLevels: // Long term we might show only the user changes, but we need an SDK filter to fix read receipts in that case.
+            break
         case .policyRuleRoom, .policyRuleServer, .policyRuleUser: // No strings available.
             break
         case .roomAliases, .roomCanonicalAlias: // Doesn't provide the alias.
@@ -197,27 +195,5 @@ struct RoomStateEventStringBuilder {
         
         MXLog.verbose("Filtering timeline item for state: \(state)")
         return nil
-    }
-    
-    private func userRoleChanged(userID: String, powerLevel: Int64, previous: Int64?) -> String? {
-        let previous = previous ?? 0 // TODO: Include the previous default in the SDK item.
-        
-        let role = suggestedRoleForPowerLevel(powerLevel: powerLevel)
-        let previousRole = suggestedRoleForPowerLevel(powerLevel: previous)
-        guard role != previousRole else { return nil }
-        
-        let isPromotion = powerLevel > previous
-        return switch (role, isPromotion) {
-        case (.user, false):
-            L10n.stateEventDemotedToMember(userID)
-        case (.moderator, true):
-            L10n.stateEventPromotedToModerator(userID)
-        case (.moderator, false):
-            L10n.stateEventDemotedToModerator(userID)
-        case (.administrator, true):
-            L10n.stateEventPromotedToAdministrator(userID)
-        default:
-            nil
-        }
     }
 }
