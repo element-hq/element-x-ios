@@ -22,6 +22,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let appLockService: AppLockServiceProtocol
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
+    private let notificationManager: NotificationManagerProtocol
     private let rootNavigationStackCoordinator: NavigationStackCoordinator
     private var navigationStackCoordinator: NavigationStackCoordinator!
     
@@ -31,6 +32,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         case identityConfirmed
         case appLockSetup
         case analyticsPrompt
+        case notificationPermissions
         case finished
     }
     
@@ -48,33 +50,38 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
          appLockService: AppLockServiceProtocol,
          analyticsService: AnalyticsService,
          appSettings: AppSettings,
+         notificationManager: NotificationManagerProtocol,
          navigationStackCoordinator: NavigationStackCoordinator) {
         self.userSession = userSession
         self.appLockService = appLockService
         self.analyticsService = analyticsService
         self.appSettings = appSettings
+        self.notificationManager = notificationManager
         
         rootNavigationStackCoordinator = navigationStackCoordinator
-        
         self.navigationStackCoordinator = NavigationStackCoordinator()
         
         stateMachine = .init(state: .initial)
     }
     
     var shouldStart: Bool {
-        guard stateMachine.state == .initial else {
-            return false
+        get async {
+            guard stateMachine.state == .initial else {
+                return false
+            }
+            
+            let requiresNotificationsSetup = await requiresNotificationsSetup
+            
+            return requiresVerification || requiresAppLockSetup || requiresAnalyticsSetup || requiresNotificationsSetup
         }
-        
-        return requiresVerification || requiresAppLockSetup || requiresAnalyticsSetup
     }
     
-    func start() {
-        guard shouldStart else {
+    func start() async {
+        guard await shouldStart else {
             fatalError("This flow coordinator shouldn't have been started")
         }
         
-        configureStateMachine()
+        await configureStateMachine()
         
         stateMachine.tryEvent(.next)
         
@@ -103,36 +110,55 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         analyticsService.shouldShowAnalyticsPrompt
     }
     
-    private func configureStateMachine() {
+    private var requiresNotificationsSetup: Bool {
+        get async {
+            await notificationManager.isAuthorized()
+        }
+    }
+    
+    private func configureStateMachine() async {
+        let requiresNotificationsSetup = await requiresNotificationsSetup
+        
         stateMachine.addRouteMapping { [weak self] _, fromState, _ in
             guard let self else {
                 return nil
             }
             
-            switch (fromState, requiresVerification, requiresAppLockSetup, requiresAnalyticsSetup) {
-            case (.initial, true, _, _):
+            switch (fromState, requiresVerification, requiresAppLockSetup, requiresAnalyticsSetup, requiresNotificationsSetup) {
+            case (.initial, true, _, _, _):
                 return .identityConfirmation
-            case (.initial, false, true, _):
+            case (.initial, false, true, _, _):
                 return .appLockSetup
-            case (.initial, false, false, true):
+            case (.initial, false, false, true, _):
                 return .analyticsPrompt
+            case (.initial, false, false, false, true):
+                return .notificationPermissions
                 
-            case (.identityConfirmation, _, _, _):
+            case (.identityConfirmation, _, _, _, _):
                 return .identityConfirmed
                 
-            case (.identityConfirmed, _, true, _):
+            case (.identityConfirmed, _, true, _, _):
                 return .appLockSetup
-            case (.identityConfirmed, _, false, true):
+            case (.identityConfirmed, _, false, true, _):
                 return .analyticsPrompt
-            case (.identityConfirmed, _, false, false):
+            case (.identityConfirmed, _, false, false, true):
+                return .notificationPermissions
+            case (.identityConfirmed, _, false, false, false):
                 return .finished
                 
-            case (.appLockSetup, _, _, true):
+            case (.appLockSetup, _, _, true, _):
                 return .analyticsPrompt
-            case (.appLockSetup, _, _, false):
+            case (.appLockSetup, _, _, false, true):
+                return .notificationPermissions
+            case (.appLockSetup, _, _, false, false):
                 return .finished
                 
-            case (.analyticsPrompt, _, _, _):
+            case (.analyticsPrompt, _, _, _, true):
+                return .notificationPermissions
+            case (.analyticsPrompt, _, _, _, false):
+                return .finished
+                
+            case (.notificationPermissions, _, _, _, _):
                 return .finished
             
             default:
@@ -152,6 +178,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 presentAppLockSetupFlow()
             case (_, _, .analyticsPrompt):
                 presentAnalyticsPromptScreen()
+            case (_, _, .notificationPermissions):
+                presentNotificationPermissionsScreen()
             case (_, _, .finished):
                 rootNavigationStackCoordinator.setSheetCoordinator(nil)
             default:
@@ -268,6 +296,22 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
 
     private func presentAnalyticsPromptScreen() {
         let coordinator = AnalyticsPromptScreenCoordinator(analytics: analyticsService, termsURL: appSettings.analyticsConfiguration.termsURL)
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .done:
+                    stateMachine.tryEvent(.next)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+    
+    private func presentNotificationPermissionsScreen() {
+        let coordinator = NotificationPermissionsScreenCoordinator(parameters: .init(notificationManager: notificationManager))
         
         coordinator.actions
             .sink { [weak self] action in

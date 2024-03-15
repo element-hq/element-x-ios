@@ -1,5 +1,5 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,12 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
-// periphery:ignore - markdown protocol
 @MainActor
-protocol FlowCoordinatorProtocol {
-    func start() async
-    func handleAppRoute(_ appRoute: AppRoute, animated: Bool)
-    func clearRoute(animated: Bool)
+protocol NotificationPermissionsScreenViewModelProtocol {
+    var actions: AnyPublisher<NotificationPermissionsScreenViewModelAction, Never> { get }
+    var context: NotificationPermissionsScreenViewModelType.Context { get }
 }

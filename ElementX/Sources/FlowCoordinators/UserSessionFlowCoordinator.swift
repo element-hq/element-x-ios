@@ -65,7 +65,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          bugReportService: BugReportServiceProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          appSettings: AppSettings,
-         analytics: AnalyticsService) {
+         analytics: AnalyticsService,
+         notificationManager: NotificationManagerProtocol) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationRootCoordinator = navigationRootCoordinator
@@ -104,6 +105,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                               appLockService: appLockService,
                                                               analyticsService: analytics,
                                                               appSettings: appSettings,
+                                                              notificationManager: notificationManager,
                                                               navigationStackCoordinator: detailNavigationStackCoordinator)
         
         setupStateMachine()
@@ -116,9 +118,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] _ in
                 guard let self else { return }
                 
-                if onboardingFlowCoordinator.shouldStart {
-                    clearRoute(animated: false)
-                    onboardingFlowCoordinator.start()
+                Task {
+                    if await self.onboardingFlowCoordinator.shouldStart {
+                        self.clearRoute(animated: false)
+                        await self.onboardingFlowCoordinator.start()
+                    }
                 }
             }
             .store(in: &cancellables)

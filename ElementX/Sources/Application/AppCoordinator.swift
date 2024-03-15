@@ -452,7 +452,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory(),
                                                                     appSettings: appSettings,
-                                                                    analytics: ServiceLocator.shared.analytics)
+                                                                    analytics: ServiceLocator.shared.analytics,
+                                                                    notificationManager: notificationManager)
         
         userSessionFlowCoordinator.actions
             .sink { [weak self] action in
@@ -556,7 +557,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     private func configureNotificationManager() {
         notificationManager.setUserSession(userSession)
-        notificationManager.requestAuthorization()
 
         appDelegateObserver = appDelegate.callbacks
             .receive(on: DispatchQueue.main)

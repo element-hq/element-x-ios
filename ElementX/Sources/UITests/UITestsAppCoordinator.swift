@@ -584,7 +584,8 @@ class MockScreen: Identifiable {
                                                              bugReportService: BugReportServiceMock(),
                                                              roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
                                                              appSettings: appSettings,
-                                                             analytics: ServiceLocator.shared.analytics)
+                                                             analytics: ServiceLocator.shared.analytics,
+                                                             notificationManager: NotificationManagerMock())
             
             flowCoordinator.start()
             
