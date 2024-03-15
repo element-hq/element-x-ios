@@ -35,6 +35,7 @@ struct RoomChangePermissionsScreen: View {
         .compoundList()
         .navigationTitle(context.viewState.title)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(context.viewState.hasChanges)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
     }
@@ -46,6 +47,14 @@ struct RoomChangePermissionsScreen: View {
                 context.send(viewAction: .save)
             }
             .disabled(!context.viewState.hasChanges)
+        }
+        
+        if context.viewState.hasChanges {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(L10n.actionCancel) {
+                    context.send(viewAction: .cancel)
+                }
+            }
         }
     }
 }

@@ -66,7 +66,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         case .editRoles(let role):
             actionsSubject.send(.editRoles(role))
         case .editOwnUserRole:
-            state.bindings.alertInfo = AlertInfo(id: .resetConfirmation,
+            state.bindings.alertInfo = AlertInfo(id: .editOwnRole,
                                                  title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
                                                  message: L10n.screenRoomChangeRoleConfirmDemoteSelfDescription,
                                                  primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },

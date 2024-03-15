@@ -19,7 +19,7 @@ import XCTest
 @MainActor
 class AuthenticationStartScreenUITests: XCTestCase {
     func testInitialStateComponents() async throws {
-        let app = Application.launch(.onboarding)
-        try await app.assertScreenshot(.onboarding)
+        let app = Application.launch(.authenticationStartScreen)
+        try await app.assertScreenshot(.authenticationStartScreen)
     }
 }
