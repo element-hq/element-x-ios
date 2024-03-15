@@ -116,7 +116,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                guard let self else { return }
+                guard let self, !ProcessInfo.isRunningIntegrationTests else { return }
                 
                 Task {
                     if await self.onboardingFlowCoordinator.shouldStart {
