@@ -101,17 +101,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController))
         
         onboardingFlowCoordinator = OnboardingFlowCoordinator(userSession: userSession,
+                                                              appLockService: appLockService,
+                                                              analyticsService: analytics,
+                                                              appSettings: appSettings,
                                                               navigationStackCoordinator: detailNavigationStackCoordinator)
         
         setupStateMachine()
         
         userSession.sessionSecurityStatePublisher
+            .map(\.verificationState)
+            .filter { $0 != .unknown }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] state in
+            .sink { [weak self] _ in
                 guard let self else { return }
                 
-                if state.verificationState == .unverified {
+                if onboardingFlowCoordinator.shouldStart {
                     clearRoute(animated: false)
                     onboardingFlowCoordinator.start()
                 }

@@ -30,7 +30,6 @@ struct SessionVerificationScreen: View {
             .padding(.top, 24)
             .frame(maxWidth: .infinity)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar { toolbarContent }
         }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .safeAreaInset(edge: .bottom) { actionButtons.padding() }
@@ -136,14 +135,6 @@ struct SessionVerificationScreen: View {
                 }
                 .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
-                
-                if context.viewState.showRecoveryOption {
-                    Button(L10n.screenSessionVerificationEnterRecoveryKey) {
-                        context.send(viewAction: .recoveryKey)
-                    }
-                    .buttonStyle(.compound(.plain))
-                    .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.enterRecoveryKey)
-                }
             }
         case .cancelled:
             Button(L10n.actionRetry) {
@@ -199,16 +190,6 @@ struct SessionVerificationScreen: View {
         }
     }
     
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            Button(L10n.actionCancel) {
-                context.send(viewAction: .close)
-            }
-            .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.close)
-        }
-    }
-    
     struct EmojiView: View {
         let emoji: SessionVerificationEmoji
         
@@ -246,7 +227,6 @@ struct SessionVerification_Previews: PreviewProvider, TestablePreview {
     
     static func sessionVerificationScreen(state: SessionVerificationScreenStateMachine.State) -> some View {
         let viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: SessionVerificationControllerProxyMock.configureMock(),
-                                                           recoveryState: .incomplete,
                                                            verificationState: state)
         
         return SessionVerificationScreen(context: viewModel.context)

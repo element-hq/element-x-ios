@@ -75,12 +75,6 @@ struct IdentityConfirmationScreen: View {
                 }
                 .buttonStyle(.compound(.primary))
                 
-                #warning("FIXME")
-                Button("Reset account", role: .destructive) {
-                    context.send(viewAction: .reset)
-                }
-                .buttonStyle(.compound(.plain))
-                
             case .recoveryAndVerification:
                 Button(L10n.actionStartVerification) {
                     context.send(viewAction: .otherDevice)

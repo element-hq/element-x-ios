@@ -20,4 +20,6 @@ import Combine
 protocol SessionVerificationScreenViewModelProtocol {
     var actions: AnyPublisher<SessionVerificationScreenViewModelAction, Never> { get }
     var context: SessionVerificationViewModelType.Context { get }
+    
+    func stop()
 }

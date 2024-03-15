@@ -28,6 +28,9 @@ enum SecureBackupRecoveryKeyScreenViewMode {
 }
 
 struct SecureBackupRecoveryKeyScreenViewState: BindableState {
+    /// Whether the screen is presented modally or within a navigation stack.
+    var isModallyPresented: Bool
+    
     let mode: SecureBackupRecoveryKeyScreenViewMode
     
     var recoveryKey: String?

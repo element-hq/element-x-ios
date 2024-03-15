@@ -51,8 +51,6 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
             actionsSubject.send(.otherDevice)
         case .recoveryKey:
             actionsSubject.send(.recoveryKey)
-        case .reset:
-            actionsSubject.send(.reset)
         }
     }
     

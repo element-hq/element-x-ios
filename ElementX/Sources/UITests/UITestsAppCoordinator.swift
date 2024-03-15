@@ -149,7 +149,6 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .authenticationFlow:
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: MockAuthenticationServiceProxy(),
-                                                                appLockService: AppLockServiceMock(),
                                                                 bugReportService: BugReportServiceMock(),
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appSettings: ServiceLocator.shared.settings,
@@ -567,8 +566,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .sessionVerification:
             var sessionVerificationControllerProxy = SessionVerificationControllerProxyMock.configureMock(requestDelay: .seconds(5))
-            let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy,
-                                                                            recoveryState: .unknown)
+            let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy)
             return SessionVerificationScreenCoordinator(parameters: parameters)
         case .userSessionScreen, .userSessionScreenReply, .userSessionScreenRTE:
             let appSettings: AppSettings = ServiceLocator.shared.settings

@@ -14,23 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
-enum IdentityConfirmationScreenViewModelAction {
-    case otherDevice
-    case recoveryKey
-}
-
-struct IdentityConfirmationScreenViewState: BindableState {
-    enum Mode {
-        case recoveryOnly
-        case recoveryAndVerification
-    }
-    
-    var mode = Mode.recoveryOnly
-}
-
-enum IdentityConfirmationScreenViewAction {
-    case otherDevice
-    case recoveryKey
+@MainActor
+protocol IdentityConfirmedScreenViewModelProtocol {
+    var actionsPublisher: AnyPublisher<IdentityConfirmedScreenViewModelAction, Never> { get }
+    var context: IdentityConfirmedScreenViewModelType.Context { get }
 }

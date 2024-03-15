@@ -14,16 +14,14 @@
 // limitations under the License.
 //
 
-import XCTest
+import Foundation
 
-@MainActor
-class IdentityConfirmationScreenUITests: XCTestCase {
-    func testScreen() async throws {
-        let app = Application.launch(.identityConfirmationScreen)
-        
-        let title = app.staticTexts["IdentityConfirmation title"]
-        XCTAssert(title.exists)
+enum IdentityConfirmedScreenViewModelAction {
+    case done
+}
 
-        try await app.assertScreenshot(.identityConfirmationScreen)
-    }
+struct IdentityConfirmedScreenViewState: BindableState { }
+
+enum IdentityConfirmedScreenViewAction {
+    case done
 }

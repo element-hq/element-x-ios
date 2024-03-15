@@ -101,7 +101,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if context.viewState.recoveryKey == nil {
+        if context.viewState.isModallyPresented == true, context.viewState.recoveryKey == nil {
             ToolbarItem(placement: .cancellationAction) {
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
@@ -235,6 +235,8 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
         let backupController = SecureBackupControllerMock()
         backupController.underlyingRecoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
         
-        return SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController, userIndicatorController: UserIndicatorControllerMock())
+        return SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController,
+                                                      userIndicatorController: UserIndicatorControllerMock(),
+                                                      isModallyPresented: true)
     }
 }

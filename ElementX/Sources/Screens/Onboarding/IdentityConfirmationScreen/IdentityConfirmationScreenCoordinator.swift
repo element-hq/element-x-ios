@@ -26,7 +26,6 @@ struct IdentityConfirmationScreenCoordinatorParameters {
 enum IdentityConfirmationScreenCoordinatorAction {
     case otherDevice
     case recoveryKey
-    case reset
 }
 
 final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
@@ -56,8 +55,6 @@ final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.otherDevice)
             case .recoveryKey:
                 actionsSubject.send(.recoveryKey)
-            case .reset:
-                actionsSubject.send(.reset)
             }
         }
         .store(in: &cancellables)
