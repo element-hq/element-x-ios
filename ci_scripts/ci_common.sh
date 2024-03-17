@@ -73,8 +73,9 @@ generate_what_to_test_notes() {
         TESTFLIGHT_DIR_PATH=TestFlight
         TESTFLIGHT_NOTES_FILE_NAME=WhatToTest.en-US.txt
 
-        # Xcode Cloud shallow clones the repo, we need to manually fetch the tags
-        git fetch --tags --quiet
+        # Xcode Cloud shallow clones the repo, we need to deepen it to fetch tags and commit history
+        # Instead of trying `--deepen=<depth>` just do a full unshallow to avoid future surprises
+        git fetch --unshallow --quiet
         
         LATEST_TAG=""
         if [ "$CI_WORKFLOW" = "Release" ]; then
