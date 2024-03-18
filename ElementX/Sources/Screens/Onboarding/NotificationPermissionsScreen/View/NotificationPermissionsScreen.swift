@@ -26,10 +26,11 @@ struct NotificationPermissionsScreen: View {
         } bottomContent: {
             buttons
         }
-        .background()
+        .background(Asset.Images.backgroundBottomLight.swiftUIImage.resizable().ignoresSafeArea())
         .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+        .interactiveDismissDisabled()
     }
     
     /// The main content of the screen that is shown inside the scroll view.
@@ -38,17 +39,17 @@ struct NotificationPermissionsScreen: View {
             HeroImage(icon: \.notificationsSolid)
                 .padding(.bottom, 8)
             
-            #warning("FIXME")
-            Text("Allow notifications and never miss a message")
+            Text(L10n.screenNotificationOptinTitle)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
             
-            #warning("FIXME")
-            Text("You can change your settings later.")
+            Text(L10n.screenNotificationOptinSubtitle)
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
+            
+            Asset.Images.alerts.swiftUIImage.resizable().aspectRatio(contentMode: .fit)
         }
     }
 

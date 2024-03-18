@@ -26,10 +26,11 @@ struct AnalyticsPromptScreen: View {
         } bottomContent: {
             buttons
         }
-        .background()
+        .background(Asset.Images.backgroundBottomLight.swiftUIImage.resizable().ignoresSafeArea())
         .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+        .interactiveDismissDisabled()
     }
     
     /// The main content of the screen that is shown inside the scroll view.

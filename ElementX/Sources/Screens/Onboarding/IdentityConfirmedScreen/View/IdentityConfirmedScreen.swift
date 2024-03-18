@@ -21,16 +21,16 @@ struct IdentityConfirmedScreen: View {
     @ObservedObject var context: IdentityConfirmedScreenViewModel.Context
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 32) {
-                screenHeader
-            }
-            .padding(.horizontal, 16)
-            .padding(.top, 24)
-            .frame(maxWidth: .infinity)
+        FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding) {
+            screenHeader
+        } bottomContent: {
+            actionButtons
         }
-        .safeAreaInset(edge: .bottom) { actionButtons.padding() }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .interactiveDismissDisabled()
     }
     
     // MARK: - Private
@@ -38,18 +38,16 @@ struct IdentityConfirmedScreen: View {
     @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
-            HeroImage(icon: \.checkCircle)
+            HeroImage(icon: \.checkCircle, style: .positive)
                 .padding(.bottom, 16)
             
-            #warning("FIXME")
-            Text("Device verified")
+            Text(L10n.screenIdentityConfirmedTitle)
                 .font(.title2.bold())
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
 
-            #warning("FIXME")
-            Text("Now you can read or send messages securely, and anyone you chat with can also trust this device.")
+            Text(L10n.screenIdentityConfirmedSubtitle)
                 .font(.subheadline)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)

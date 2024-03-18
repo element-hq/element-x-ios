@@ -72,7 +72,6 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
                     Spacer()
                         .frame(height: UIConstants.spacerHeight(in: geometry))
                 }
-                .background()
             }
         }
     }

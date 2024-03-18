@@ -398,6 +398,10 @@
 "screen_edit_profile_error_title" = "Unable to update profile";
 "screen_edit_profile_title" = "Edit profile";
 "screen_edit_profile_updating_details" = "Updating profile…";
+"screen_identity_confirmation_subtitle" = "Verify this device to set up secure messaging.";
+"screen_identity_confirmation_title" = "Confirm that it's you";
+"screen_identity_confirmed_subtitle" = "Now you can read or send messages securely, and anyone you chat with can also trust this device.";
+"screen_identity_confirmed_title" = "Device verified";
 "screen_invites_decline_chat_message" = "Are you sure you want to decline the invitation to join %1$@?";
 "screen_invites_decline_chat_title" = "Decline invite";
 "screen_invites_decline_direct_chat_message" = "Are you sure you want to decline this private chat with %1$@?";

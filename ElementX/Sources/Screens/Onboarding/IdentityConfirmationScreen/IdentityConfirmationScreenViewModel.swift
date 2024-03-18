@@ -65,11 +65,6 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
             return
         }
         
-        if isOnlyDeviceLeft, sessionSecurityState.recoveryState == .disabled {
-            MXLog.error("Sir, This Is A Wendy's")
-            return
-        }
-     
         state.mode = isOnlyDeviceLeft ? .recoveryOnly : .recoveryAndVerification
     }
 }

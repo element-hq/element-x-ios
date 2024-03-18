@@ -21,16 +21,16 @@ struct IdentityConfirmationScreen: View {
     @ObservedObject var context: IdentityConfirmationScreenViewModel.Context
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 32) {
-                screenHeader
-            }
-            .padding(.horizontal, 16)
-            .padding(.top, 24)
-            .frame(maxWidth: .infinity)
+        FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding) {
+            screenHeader
+        } bottomContent: {
+            actionButtons
         }
-        .safeAreaInset(edge: .bottom) { actionButtons.padding() }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .interactiveDismissDisabled()
     }
     
     // MARK: - Private
@@ -41,15 +41,13 @@ struct IdentityConfirmationScreen: View {
             HeroImage(icon: \.lockSolid)
                 .padding(.bottom, 16)
             
-            #warning("FIXME")
-            Text("Confirm that it's you")
+            Text(L10n.screenIdentityConfirmationTitle)
                 .font(.title2.bold())
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
 
-            #warning("FIXME")
-            Text("Verify this device to set up secure messaging.")
+            Text(L10n.screenIdentityConfirmationSubtitle)
                 .font(.subheadline)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
