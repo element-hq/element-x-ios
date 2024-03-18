@@ -498,11 +498,11 @@
 "screen_room_attachment_source_poll" = "Sondage";
 "screen_room_attachment_text_formatting" = "Formatage du texte";
 "screen_room_change_permissions_administrators" = "Administrateurs seulement";
-"screen_room_change_permissions_ban_people" = "Bannir les membres";
-"screen_room_change_permissions_delete_messages" = "Supprimer les messages";
-"screen_room_change_permissions_invite_people" = "Inviter des membres";
+"screen_room_change_permissions_ban_people" = "Bannir des participants";
+"screen_room_change_permissions_delete_messages" = "Supprimer des messages";
+"screen_room_change_permissions_invite_people" = "Inviter des participants";
 "screen_room_change_permissions_moderators" = "Administrateurs et modérateurs";
-"screen_room_change_permissions_remove_people" = "Retirer des membres";
+"screen_room_change_permissions_remove_people" = "Exclure des participants";
 "screen_room_change_permissions_room_avatar" = "Changer l'avatar du salon";
 "screen_room_change_permissions_room_name" = "Changer le nom du salon";
 "screen_room_change_permissions_room_topic" = "Changer le sujet du salon";

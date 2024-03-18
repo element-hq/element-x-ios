@@ -541,7 +541,7 @@
 "screen_room_member_details_block_alert_description" = "Blockierte Benutzer können Dir keine Nachrichten senden und alle ihre alten Nachrichten werden ausgeblendet. Die Blockierung kann jederzeit aufgehoben werden.";
 "screen_room_member_details_block_user" = "Benutzer blockieren";
 "screen_room_member_details_unblock_alert_action" = "Blockierung aufheben";
-"screen_room_member_details_unblock_alert_description" = "Du kannst dann wieder alle Nachrichten von ihnen sehen.";
+"screen_room_member_details_unblock_alert_description" = "Der Nutzer kann dir wieder Nachrichten senden & alle Nachrichten des Nutzers werden wieder angezeigt.";
 "screen_room_member_details_unblock_user" = "Blockierung aufheben";
 "screen_room_member_list_ban_member_confirmation_action" = "Sperren";
 "screen_room_member_list_ban_member_confirmation_description" = "Sie können dem Raum nicht mehr beitreten, selbst wenn sie eingeladen werden.";
@@ -585,14 +585,14 @@
 "screen_room_roles_and_permissions_change_role_demote_to_member" = "Zum Mitglied herabstufen";
 "screen_room_roles_and_permissions_change_role_demote_to_moderator" = "Zum Moderator herabstufen";
 "screen_room_roles_and_permissions_member_moderation" = "Moderation der Mitglieder";
-"screen_room_roles_and_permissions_messages_and_content" = "Nachrichten und Inhalte";
+"screen_room_roles_and_permissions_messages_and_content" = "Nachrichten senden & löschen";
 "screen_room_roles_and_permissions_moderators" = "Moderatoren";
 "screen_room_roles_and_permissions_permissions_header" = "Berechtigungen";
 "screen_room_roles_and_permissions_reset" = "Rollen und Berechtigungen zurücksetzen";
 "screen_room_roles_and_permissions_reset_confirm_description" = "Sobald Sie die Berechtigungen zurücksetzen, verlieren Sie die aktuellen Einstellungen.";
 "screen_room_roles_and_permissions_reset_confirm_title" = "Berechtigungen zurücksetzen?";
 "screen_room_roles_and_permissions_roles_header" = "Rollen";
-"screen_room_roles_and_permissions_room_details" = "Raumdetails";
+"screen_room_roles_and_permissions_room_details" = "Raumdetails anpassen";
 "screen_room_roles_and_permissions_title" = "Rollen und Berechtigungen";
 "screen_room_timeline_add_reaction" = "Emoji hinzufügen";
 "screen_room_timeline_beginning_of_room" = "Dies ist der Anfang von %1$@.";
@@ -763,7 +763,7 @@
 "screen_analytics_settings_read_terms" = "Du kannst alle unsere Bedingungen lesen %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "hier";
 "screen_blocked_users_unblock_alert_action" = "Blockierung aufheben";
-"screen_blocked_users_unblock_alert_description" = "Du kannst dann wieder alle Nachrichten von ihnen sehen.";
+"screen_blocked_users_unblock_alert_description" = "Der Nutzer kann dir wieder Nachrichten senden & alle Nachrichten des Nutzers werden wieder angezeigt.";
 "screen_blocked_users_unblock_alert_title" = "Blockierung aufheben";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ ist bei der letzten Nutzung abgestürzt. Möchtest du einen Absturzbericht mit uns teilen?";
 "screen_create_room_add_people_title" = "Personen einladen";
@@ -773,7 +773,7 @@
 "screen_dm_details_block_alert_description" = "Blockierte Benutzer können Dir keine Nachrichten senden und alle ihre alten Nachrichten werden ausgeblendet. Die Blockierung kann jederzeit aufgehoben werden.";
 "screen_dm_details_block_user" = "Benutzer blockieren";
 "screen_dm_details_unblock_alert_action" = "Blockierung aufheben";
-"screen_dm_details_unblock_alert_description" = "Du kannst dann wieder alle Nachrichten von ihnen sehen.";
+"screen_dm_details_unblock_alert_description" = "Der Nutzer kann dir wieder Nachrichten senden & alle Nachrichten des Nutzers werden wieder angezeigt.";
 "screen_dm_details_unblock_user" = "Blockierung aufheben";
 "screen_edit_poll_delete_confirmation_title" = "Umfrage löschen";
 "screen_edit_poll_title" = "Umfrage bearbeiten";
@@ -782,8 +782,8 @@
 "screen_room_attachment_source_camera_photo" = "Foto aufnehmen";
 "screen_room_change_permissions_everyone" = "Alle";
 "screen_room_change_permissions_member_moderation" = "Moderation der Mitglieder";
-"screen_room_change_permissions_messages_and_content" = "Nachrichten und Inhalte";
-"screen_room_change_permissions_room_details" = "Raumdetails";
+"screen_room_change_permissions_messages_and_content" = "Nachrichten senden & löschen";
+"screen_room_change_permissions_room_details" = "Raumdetails anpassen";
 "screen_room_details_invite_people_title" = "Personen einladen";
 "screen_room_details_leave_conversation_title" = "Unterhaltung verlassen";
 "screen_room_details_leave_room_title" = "Raum verlassen";

@@ -499,7 +499,7 @@
 "screen_room_attachment_text_formatting" = "Szövegformázás";
 "screen_room_change_permissions_administrators" = "Csak rendszergazdák";
 "screen_room_change_permissions_ban_people" = "Emberek kitiltása";
-"screen_room_change_permissions_delete_messages" = "Üzenetek törlése";
+"screen_room_change_permissions_delete_messages" = "Üzenetek eltávolítása";
 "screen_room_change_permissions_invite_people" = "Emberek meghívása";
 "screen_room_change_permissions_moderators" = "Rendszergazdák és moderátorok";
 "screen_room_change_permissions_remove_people" = "Emberek eltávolítása";
@@ -604,8 +604,8 @@
 "screen_room_timeline_reactions_show_more" = "Több megjelenítése";
 "screen_room_timeline_read_marker_title" = "Új";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ és ";
-"screen_room_typing_notification_plural_ios" = " éppen ír";
-"screen_room_typing_notification_singular_ios" = " éppen ír";
+"screen_room_typing_notification_plural_ios" = " éppen ír…";
+"screen_room_typing_notification_singular_ios" = " éppen ír…";
 "screen_room_typing_two_members" = "%1$@ és %2$@";
 "screen_room_voice_message_tooltip" = "Tartsa a rögzítéshez";
 "screen_roomlist_a11y_create_message" = "Új beszélgetés vagy szoba létrehozása";

@@ -40,7 +40,7 @@
 "action_decline" = "Отклонить";
 "action_delete_poll" = "Удалить опрос";
 "action_disable" = "Отключить";
-"action_discard" = "Discard";
+"action_discard" = "Отменить";
 "action_done" = "Готово";
 "action_edit" = "Редактировать";
 "action_edit_poll" = "Редактировать опрос";
@@ -603,9 +603,9 @@
 "screen_room_timeline_reactions_show_less" = "Показать меньше";
 "screen_room_timeline_reactions_show_more" = "Показать больше";
 "screen_room_timeline_read_marker_title" = "Новый";
-"screen_room_typing_many_members_first_component_ios" = "%1$@ и %2$@";
-"screen_room_typing_notification_plural_ios" = "печатают";
-"screen_room_typing_notification_singular_ios" = "печатает";
+"screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ и ";
+"screen_room_typing_notification_plural_ios" = "печатают…";
+"screen_room_typing_notification_singular_ios" = "печатает…";
 "screen_room_typing_two_members" = "%1$@ и %2$@";
 "screen_room_voice_message_tooltip" = "Удерживайте для записи";
 "screen_roomlist_a11y_create_message" = "Создайте новую беседу или комнату";

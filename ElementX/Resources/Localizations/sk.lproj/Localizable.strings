@@ -604,8 +604,8 @@
 "screen_room_timeline_reactions_show_more" = "Zobraziť viac";
 "screen_room_timeline_read_marker_title" = "Nové";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ a ";
-"screen_room_typing_notification_plural_ios" = " píšu";
-"screen_room_typing_notification_singular_ios" = " píše";
+"screen_room_typing_notification_plural_ios" = " píšu…";
+"screen_room_typing_notification_singular_ios" = " píše…";
 "screen_room_typing_two_members" = "%1$@ a %2$@";
 "screen_room_voice_message_tooltip" = "Podržaním nahrajte";
 "screen_roomlist_a11y_create_message" = "Vytvorte novú konverzáciu alebo miestnosť";
