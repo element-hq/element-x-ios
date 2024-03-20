@@ -19,7 +19,7 @@ import Foundation
 // periphery:ignore - markdown protocol
 @MainActor
 protocol FlowCoordinatorProtocol {
-    func start() async
+    func start()
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool)
     func clearRoute(animated: Bool)
 }

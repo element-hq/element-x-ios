@@ -100,6 +100,8 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         
-        return IdentityConfirmationScreenViewModel(userSession: userSession, appSettings: ServiceLocator.shared.settings)
+        return IdentityConfirmationScreenViewModel(userSession: userSession,
+                                                   appSettings: ServiceLocator.shared.settings,
+                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

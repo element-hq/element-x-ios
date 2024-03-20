@@ -27,7 +27,11 @@ final class AppSettings {
         case lastLoginDate
         case migratedAccounts
         case timelineStyle
+        
         case analyticsConsentState
+        case hasRunNotificationPermissionsOnboarding
+        case hasRunIdentityConfirmationOnboarding
+        
         case enableNotifications
         case enableInAppNotifications
         case pusherProfileTag
@@ -59,9 +63,14 @@ final class AppSettings {
     
     #if IS_MAIN_APP
         
-    static func reset() {
+    static func resetAllSettings() {
         MXLog.warning("Resetting the AppSettings.")
         store.removePersistentDomain(forName: suiteName)
+    }
+    
+    static func resetSessionSpecificSettings() {
+        MXLog.warning("Resetting the user session specific AppSettings.")
+        store.removeObject(forKey: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding.rawValue)
     }
     
     static func configureWithSuiteName(_ name: String) {
@@ -212,6 +221,12 @@ final class AppSettings {
     /// Whether the user has opted in to send analytics.
     @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))
     var analyticsConsentState
+    
+    @UserPreference(key: UserDefaultsKeys.hasRunNotificationPermissionsOnboarding, defaultValue: false, storageType: .userDefaults(store))
+    var hasRunNotificationPermissionsOnboarding
+    
+    @UserPreference(key: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding, defaultValue: false, storageType: .userDefaults(store))
+    var hasRunIdentityConfirmationOnboarding
     
     // MARK: - Home Screen
     

@@ -42,7 +42,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         
         AppSettings.configureWithSuiteName("io.element.elementx.uitests")
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         ServiceLocator.shared.register(appSettings: AppSettings())
         ServiceLocator.shared.register(bugReportService: BugReportServiceMock())
         ServiceLocator.shared.register(analytics: AnalyticsService(client: AnalyticsClientMock(),
@@ -585,7 +585,8 @@ class MockScreen: Identifiable {
                                                              roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
                                                              appSettings: appSettings,
                                                              analytics: ServiceLocator.shared.analytics,
-                                                             notificationManager: NotificationManagerMock())
+                                                             notificationManager: NotificationManagerMock(),
+                                                             isNewLogin: false)
             
             flowCoordinator.start()
             

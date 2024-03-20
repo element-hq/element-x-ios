@@ -31,7 +31,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let windowManager: WindowManagerProtocol
     private let bugReportService: BugReportServiceProtocol
     private let appSettings: AppSettings
-    private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     
@@ -54,7 +53,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
 
     private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
     
-    var actions: AnyPublisher<UserSessionFlowCoordinatorAction, Never> {
+    private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<UserSessionFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -66,7 +66,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
-         notificationManager: NotificationManagerProtocol) {
+         notificationManager: NotificationManagerProtocol,
+         isNewLogin: Bool) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationRootCoordinator = navigationRootCoordinator
@@ -106,26 +107,27 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                               analyticsService: analytics,
                                                               appSettings: appSettings,
                                                               notificationManager: notificationManager,
-                                                              navigationStackCoordinator: detailNavigationStackCoordinator)
+                                                              navigationStackCoordinator: detailNavigationStackCoordinator,
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                              isNewLogin: isNewLogin)
         
         setupStateMachine()
         
-        userSession.sessionSecurityStatePublisher
-            .map(\.verificationState)
-            .filter { $0 != .unknown }
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self, !ProcessInfo.isRunningIntegrationTests else { return }
-                
-                Task {
-                    if await self.onboardingFlowCoordinator.shouldStart {
-                        self.clearRoute(animated: false)
-                        await self.onboardingFlowCoordinator.start()
-                    }
+        if !isNewLogin {
+            userSession.sessionSecurityStatePublisher
+                .map(\.verificationState)
+                .filter { $0 != .unknown }
+                .removeDuplicates()
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] _ in
+                    guard let self else { return }
+                    
+                    attemptStartingOnboarding()
                 }
-            }
-            .store(in: &cancellables)
+                .store(in: &cancellables)
+        } else {
+            appSettings.hasRunIdentityConfirmationOnboarding = false
+        }
         
         roomFlowCoordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -240,6 +242,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
 
     // MARK: - Private
     
+    func attemptStartingOnboarding() {
+        if onboardingFlowCoordinator.shouldStart {
+            clearRoute(animated: false)
+            onboardingFlowCoordinator.start()
+        }
+    }
+    
     private func clearPresentedSheets(animated: Bool, completion: @escaping () -> Void) {
         if navigationSplitCoordinator.sheetCoordinator == nil {
             completion()
@@ -261,6 +270,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .start, .roomList):
                 presentHomeScreen()
+                attemptStartingOnboarding()
                 
             case(.roomList, .selectRoom, .roomList):
                 break

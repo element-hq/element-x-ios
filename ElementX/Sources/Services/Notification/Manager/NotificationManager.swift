@@ -65,11 +65,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             }
             .store(in: &cancellables)
     }
-    
-    func isAuthorized() async -> Bool {
-        await notificationCenter.authorizationStatus() == .notDetermined
-    }
-    
+        
     func requestAuthorization() {
         guard appSettings.enableNotifications, !userSession.isNil else { return }
         Task {

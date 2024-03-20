@@ -1832,23 +1832,6 @@ class NotificationManagerMock: NotificationManagerProtocol {
         setUserSessionReceivedInvocations.append(userSession)
         setUserSessionClosure?(userSession)
     }
-    //MARK: - isAuthorized
-
-    var isAuthorizedCallsCount = 0
-    var isAuthorizedCalled: Bool {
-        return isAuthorizedCallsCount > 0
-    }
-    var isAuthorizedReturnValue: Bool!
-    var isAuthorizedClosure: (() async -> Bool)?
-
-    func isAuthorized() async -> Bool {
-        isAuthorizedCallsCount += 1
-        if let isAuthorizedClosure = isAuthorizedClosure {
-            return await isAuthorizedClosure()
-        } else {
-            return isAuthorizedReturnValue
-        }
-    }
     //MARK: - requestAuthorization
 
     var requestAuthorizationCallsCount = 0

@@ -31,8 +31,6 @@ struct SessionVerificationScreen: View {
         }
         .background()
         .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
         .interactiveDismissDisabled()
     }
     

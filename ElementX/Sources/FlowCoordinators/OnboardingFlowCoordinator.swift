@@ -15,6 +15,7 @@
 //
 
 import Combine
+import Foundation
 import SwiftState
 
 class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
@@ -24,6 +25,9 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let appSettings: AppSettings
     private let notificationManager: NotificationManagerProtocol
     private let rootNavigationStackCoordinator: NavigationStackCoordinator
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    private let isNewLogin: Bool
+    
     private var navigationStackCoordinator: NavigationStackCoordinator!
     
     enum State: StateType {
@@ -51,12 +55,16 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
          analyticsService: AnalyticsService,
          appSettings: AppSettings,
          notificationManager: NotificationManagerProtocol,
-         navigationStackCoordinator: NavigationStackCoordinator) {
+         navigationStackCoordinator: NavigationStackCoordinator,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         isNewLogin: Bool) {
         self.userSession = userSession
         self.appLockService = appLockService
         self.analyticsService = analyticsService
         self.appSettings = appSettings
         self.notificationManager = notificationManager
+        self.userIndicatorController = userIndicatorController
+        self.isNewLogin = isNewLogin
         
         rootNavigationStackCoordinator = navigationStackCoordinator
         self.navigationStackCoordinator = NavigationStackCoordinator()
@@ -65,27 +73,23 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     var shouldStart: Bool {
-        get async {
-            guard stateMachine.state == .initial else {
-                return false
-            }
-            
-            let requiresNotificationsSetup = await requiresNotificationsSetup
-            
-            return requiresVerification || requiresAppLockSetup || requiresAnalyticsSetup || requiresNotificationsSetup
+        guard stateMachine.state == .initial, !ProcessInfo.isRunningIntegrationTests else {
+            return false
         }
+        
+        return isNewLogin || requiresVerification || requiresAppLockSetup || requiresAnalyticsSetup || requiresNotificationsSetup
     }
     
-    func start() async {
-        guard await shouldStart else {
+    func start() {
+        guard shouldStart else {
             fatalError("This flow coordinator shouldn't have been started")
         }
         
-        await configureStateMachine()
+        configureStateMachine()
         
         stateMachine.tryEvent(.next)
         
-        rootNavigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator)
+        rootNavigationStackCoordinator.setFullScreenCoverCoordinator(navigationStackCoordinator, animated: !isNewLogin)
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -99,7 +103,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private var requiresVerification: Bool {
-        userSession.sessionSecurityStatePublisher.value.verificationState == .unverified
+        !appSettings.hasRunIdentityConfirmationOnboarding || userSession.sessionSecurityStatePublisher.value.verificationState == .unverified
     }
     
     private var requiresAppLockSetup: Bool {
@@ -111,13 +115,11 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private var requiresNotificationsSetup: Bool {
-        get async {
-            await notificationManager.isAuthorized()
-        }
+        !appSettings.hasRunNotificationPermissionsOnboarding
     }
     
-    private func configureStateMachine() async {
-        let requiresNotificationsSetup = await requiresNotificationsSetup
+    private func configureStateMachine() {
+        let requiresNotificationsSetup = requiresNotificationsSetup
         
         stateMachine.addRouteMapping { [weak self] _, fromState, _ in
             guard let self else {
@@ -181,7 +183,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             case (_, _, .notificationPermissions):
                 presentNotificationPermissionsScreen()
             case (_, _, .finished):
-                rootNavigationStackCoordinator.setSheetCoordinator(nil)
+                rootNavigationStackCoordinator.setFullScreenCoverCoordinator(nil)
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -194,7 +196,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentIdentityConfirmationScreen() {
         let parameters = IdentityConfirmationScreenCoordinatorParameters(userSession: userSession,
-                                                                         appSettings: appSettings)
+                                                                         appSettings: appSettings,
+                                                                         userIndicatorController: userIndicatorController)
         
         let coordinator = IdentityConfirmationScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
@@ -211,7 +214,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator.setRootCoordinator(coordinator)
+        presentCoordinator(coordinator)
     }
     
     private func presentSessionVerificationScreen() async {
@@ -229,12 +232,13 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .done:
+                    appSettings.hasRunIdentityConfirmationOnboarding = true
                     stateMachine.tryEvent(.next)
                 }
             }
             .store(in: &cancellables)
         
-        navigationStackCoordinator.push(coordinator)
+        presentCoordinator(coordinator)
     }
     
     private func presentRecoveryKeyScreen() {
@@ -250,6 +254,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .recoveryFixed:
+                    appSettings.hasRunIdentityConfirmationOnboarding = true
                     stateMachine.tryEvent(.next)
                 default:
                     fatalError("Other flows shouldn't be possible")
@@ -257,7 +262,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        navigationStackCoordinator.push(coordinator)
+        presentCoordinator(coordinator)
     }
     
     private func presentIdentityConfirmedScreen() {
@@ -273,7 +278,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        navigationStackCoordinator.setRootCoordinator(coordinator)
+        presentCoordinator(coordinator)
     }
     
     private func presentAppLockSetupFlow() {
@@ -304,12 +309,13 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .done:
+                    appSettings.hasRunNotificationPermissionsOnboarding = true
                     stateMachine.tryEvent(.next)
                 }
             }
             .store(in: &cancellables)
         
-        navigationStackCoordinator.setRootCoordinator(coordinator)
+        presentCoordinator(coordinator)
     }
     
     private func presentNotificationPermissionsScreen() {
@@ -325,6 +331,14 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        navigationStackCoordinator.setRootCoordinator(coordinator)
+        presentCoordinator(coordinator)
+    }
+    
+    private func presentCoordinator(_ coordinator: CoordinatorProtocol) {
+        if navigationStackCoordinator.rootCoordinator == nil {
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+        } else {
+            navigationStackCoordinator.push(coordinator)
+        }
     }
 }

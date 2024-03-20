@@ -39,6 +39,5 @@ protocol NotificationManagerProtocol: AnyObject {
     func showLocalNotification(with title: String, subtitle: String?) async
     func setUserSession(_ userSession: UserSessionProtocol?)
     
-    func isAuthorized() async -> Bool
     func requestAuthorization()
 }

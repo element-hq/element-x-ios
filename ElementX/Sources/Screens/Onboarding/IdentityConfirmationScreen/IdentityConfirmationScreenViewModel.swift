@@ -21,23 +21,25 @@ typealias IdentityConfirmationScreenViewModelType = StateStoreViewModel<Identity
 
 class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelType, IdentityConfirmationScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<IdentityConfirmationScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<IdentityConfirmationScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, appSettings: AppSettings) {
+    init(userSession: UserSessionProtocol, appSettings: AppSettings, userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
+        self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: IdentityConfirmationScreenViewState(learnMoreURL: appSettings.encryptionURL))
+        
+        updateWithSessionSecurityState(userSession.sessionSecurityStatePublisher.value)
         
         userSession.sessionSecurityStatePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
-                Task {
-                    await self?.updateWithSessionSecurityState(state)
-                }
+                self?.updateWithSessionSecurityState(state)
             }
             .store(in: &cancellables)
     }
@@ -56,15 +58,36 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
     
     // MARK: - Private
     
-    private func updateWithSessionSecurityState(_ sessionSecurityState: SessionSecurityState) async {
-        guard sessionSecurityState.verificationState == .unverified else {
-            return
+    private func updateWithSessionSecurityState(_ sessionSecurityState: SessionSecurityState) {
+        Task {
+            if sessionSecurityState.verificationState == .unknown {
+                showLoadingIndicator()
+            } else {
+                hideLoadingIndicator()
+            }
+            
+            guard sessionSecurityState.verificationState == .unverified else {
+                return
+            }
+            
+            guard case let .success(isOnlyDeviceLeft) = await userSession.clientProxy.isOnlyDeviceLeft() else {
+                return
+            }
+            
+            state.mode = isOnlyDeviceLeft ? .recoveryOnly : .recoveryAndVerification
         }
-        
-        guard case let .success(isOnlyDeviceLeft) = await userSession.clientProxy.isOnlyDeviceLeft() else {
-            return
-        }
-        
-        state.mode = isOnlyDeviceLeft ? .recoveryOnly : .recoveryAndVerification
+    }
+    
+    private static let loadingIndicatorIdentifier = "AppCoordinatorLoading"
+    
+    private func showLoadingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

@@ -40,8 +40,6 @@ struct SecureBackupRecoveryKeyScreen: View {
         .toolbar(.visible, for: .navigationBar)
         .background()
         .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
-        .navigationBarHidden(context.viewState.isModallyPresented ? false : true)
-        .navigationBarBackButtonHidden(context.viewState.isModallyPresented ? false : true)
         .interactiveDismissDisabled()
         .alert(item: $context.alertInfo)
     }
