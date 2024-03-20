@@ -20,19 +20,20 @@ struct SessionVerificationScreen: View {
     @ObservedObject var context: SessionVerificationScreenViewModel.Context
     
     var body: some View {
-        ScrollView {
+        FullscreenDialog {
             VStack(spacing: 32) {
                 screenHeader
                 Spacer()
                 mainContent
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 24)
-            .frame(maxWidth: .infinity)
-            .navigationBarTitleDisplayMode(.inline)
+        } bottomContent: {
+            actionButtons
         }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-        .safeAreaInset(edge: .bottom) { actionButtons.padding() }
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .interactiveDismissDisabled()
     }
     
     // MARK: - Private
@@ -150,7 +151,7 @@ struct SessionVerificationScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.startSasVerification)
         
         case .showingChallenge:
-            VStack(spacing: 30) {
+            VStack(spacing: 32) {
                 Button(L10n.screenSessionVerificationTheyMatch) {
                     context.send(viewAction: .accept)
                 }
@@ -165,7 +166,7 @@ struct SessionVerificationScreen: View {
             }
             
         case .acceptingChallenge:
-            VStack(spacing: 30) {
+            VStack(spacing: 32) {
                 Button { context.send(viewAction: .accept) } label: {
                     HStack(spacing: 16) {
                         ProgressView()

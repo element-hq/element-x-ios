@@ -24,7 +24,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     private let textFieldIdentifier = "textFieldIdentifier"
     
     var body: some View {
-        ScrollView {
+        FullscreenDialog {
             ScrollViewReader { reader in
                 mainContent
                     .padding(16)
@@ -33,17 +33,16 @@ struct SecureBackupRecoveryKeyScreen: View {
                         reader.scrollTo(textFieldIdentifier)
                     }
             }
-        }
-        .safeAreaInset(edge: .bottom) {
+        } bottomContent: {
             footer
-                .padding([.horizontal, .bottom], 16)
-                .padding(.top, 8)
-                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         }
-        .interactiveDismissDisabled()
         .toolbar { toolbar }
         .toolbar(.visible, for: .navigationBar)
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .navigationBarHidden(context.viewState.isModallyPresented ? false : true)
+        .navigationBarBackButtonHidden(context.viewState.isModallyPresented ? false : true)
+        .interactiveDismissDisabled()
         .alert(item: $context.alertInfo)
     }
     

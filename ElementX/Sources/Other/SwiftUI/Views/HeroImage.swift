@@ -28,7 +28,7 @@ struct HeroImage: View {
         var foregroundColor: Color {
             switch self {
             case .normal:
-                return .compound.iconSecondaryAlpha
+                return .compound.iconPrimary
             case .positive:
                 return .compound.iconSuccessPrimary
             }
