@@ -22,10 +22,23 @@ struct RoomDirectorySearchCell: View {
     let imageProvider: ImageProviderProtocol?
     
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    
+    // If no topic is available we show the room id but only if the room ID isn't already shown as the title
+    var description: String? {
+        if let topic = result.topic {
+            return topic
+        }
+        
+        if result.name == nil {
+            return nil
+        }
+        
+        return result.roomID
+    }
 
     var body: some View {
         ListRow(label: .avatar(title: result.name ?? result.roomID,
-                               description: result.topic,
+                               description: description,
                                icon: avatar), kind: .label)
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
