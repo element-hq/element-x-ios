@@ -26,6 +26,7 @@ struct NotificationPermissionsScreen: View {
         } bottomContent: {
             buttons
         }
+        .background()
         .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
