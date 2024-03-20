@@ -24,6 +24,7 @@ struct RoomDirectorySearchScreenViewState: BindableState {
     // TODO: Localise
     let title = "Room directory"
     var searchResults: [RoomDirectorySearchResult] = []
+    var isLoading = false
     
     var bindings = RoomDirectorySearchScreenViewStateindings()
 }

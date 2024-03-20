@@ -284,7 +284,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.roomModerationEnabled, defaultValue: false, storageType: .userDefaults(store))
     var roomModerationEnabled
     
-    @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: true, storageType: .volatile)
+    @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .volatile)
     var publicSearchEnabled
     
     #endif

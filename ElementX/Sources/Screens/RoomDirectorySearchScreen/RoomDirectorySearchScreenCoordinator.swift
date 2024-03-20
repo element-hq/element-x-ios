@@ -22,6 +22,7 @@ import SwiftUI
 struct RoomDirectorySearchScreenCoordinatorParameters {
     let roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol
     let imageProvider: ImageProviderProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum RoomDirectorySearchScreenCoordinatorAction {
@@ -39,7 +40,7 @@ final class RoomDirectorySearchScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomDirectorySearchScreenCoordinatorParameters) {
-        viewModel = RoomDirectorySearchScreenViewModel(roomDirectorySearch: parameters.roomDirectorySearchProxy, imageProvider: parameters.imageProvider)
+        viewModel = RoomDirectorySearchScreenViewModel(roomDirectorySearch: parameters.roomDirectorySearchProxy, userIndicatorController: parameters.userIndicatorController, imageProvider: parameters.imageProvider)
     }
     
     func start() {

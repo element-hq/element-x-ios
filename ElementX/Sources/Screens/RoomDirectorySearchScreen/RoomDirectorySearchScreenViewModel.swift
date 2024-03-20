@@ -21,14 +21,18 @@ typealias RoomDirectorySearchScreenViewModelType = StateStoreViewModel<RoomDirec
 
 class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType, RoomDirectorySearchScreenViewModelProtocol {
     private let roomDirectorySearch: RoomDirectorySearchProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<RoomDirectorySearchScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomDirectorySearchScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(roomDirectorySearch: RoomDirectorySearchProxyProtocol, imageProvider: ImageProviderProtocol) {
+    init(roomDirectorySearch: RoomDirectorySearchProxyProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         imageProvider: ImageProviderProtocol) {
         self.roomDirectorySearch = roomDirectorySearch
+        self.userIndicatorController = userIndicatorController
         super.init(initialViewState: RoomDirectorySearchScreenViewState(), imageProvider: imageProvider)
         
         roomDirectorySearch.resultsPublisher
@@ -36,9 +40,16 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
             .weakAssign(to: \.state.searchResults, on: self)
             .store(in: &cancellables)
         
-        Task {
-            await roomDirectorySearch.search(query: nil)
-        }
+        context.$viewState.map(\.bindings.searchString)
+            // only listen to the search string when is not loading
+            .combineLatest(context.$viewState.map(\.isLoading)
+                .filter { $0 == false })
+            .map(\.0)
+            .debounceTextQueriesAndRemoveDuplicates()
+            .sink { [weak self] query in
+                self?.search(query: query)
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -55,4 +66,22 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
     }
     
     private func joinRoom(roomID: String) { }
+    
+    private func search(query: String?) {
+        guard !state.isLoading else {
+            return
+        }
+        
+        state.isLoading = true
+        Task {
+            switch await roomDirectorySearch.search(query: query) {
+            case .success:
+                break
+            case .failure:
+                // TODO: Localise/find right error
+                userIndicatorController.submitIndicator(.init(title: "Error"))
+            }
+            state.isLoading = false
+        }
+    }
 }

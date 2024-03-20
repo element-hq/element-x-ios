@@ -36,6 +36,13 @@ struct RoomDirectorySearchScreen: View {
             .searchable(text: $context.searchString, placement: .navigationBarDrawer(displayMode: .always))
             .navigationTitle(context.viewState.title)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(L10n.actionCancel) {
+                        context.send(viewAction: .dismiss)
+                    }
+                }
+            }
         }
     }
 }
@@ -43,7 +50,7 @@ struct RoomDirectorySearchScreen: View {
 // MARK: - Previews
 
 struct RoomDirectorySearchScreenScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomDirectorySearchScreenViewModel(roomDirectorySearch: RoomDirectorySearchProxyMock(), imageProvider: MockMediaProvider())
+    static let viewModel = RoomDirectorySearchScreenViewModel(roomDirectorySearch: RoomDirectorySearchProxyMock(), userIndicatorController: UserIndicatorControllerMock(), imageProvider: MockMediaProvider())
     static var previews: some View {
         RoomDirectorySearchScreen(context: viewModel.context)
     }
