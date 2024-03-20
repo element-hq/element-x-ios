@@ -21,12 +21,11 @@ struct NotificationPermissionsScreen: View {
     @ObservedObject var context: NotificationPermissionsScreenViewModel.Context
     
     var body: some View {
-        FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding) {
+        FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding, showBackgroundGradient: true) {
             mainContent
         } bottomContent: {
             buttons
         }
-        .background(Asset.Images.backgroundBottomLight.swiftUIImage.resizable().ignoresSafeArea())
         .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
@@ -49,17 +48,14 @@ struct NotificationPermissionsScreen: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
             
-            Asset.Images.alerts.swiftUIImage.resizable().aspectRatio(contentMode: .fit)
+            Asset.Images.notificationsPromptGraphic.swiftUIImage.resizable().aspectRatio(contentMode: .fit)
         }
     }
 
     private var buttons: some View {
         VStack(spacing: 16) {
-            Button { context.send(viewAction: .enable) } label: {
-                Text(L10n.actionOk)
-                    .font(.compound.bodyLGSemibold)
-            }
-            .buttonStyle(.compound(.primary))
+            Button(L10n.actionOk) { context.send(viewAction: .enable) }
+                .buttonStyle(.compound(.primary))
             
             Button { context.send(viewAction: .notNow) } label: {
                 Text(L10n.actionNotNow)

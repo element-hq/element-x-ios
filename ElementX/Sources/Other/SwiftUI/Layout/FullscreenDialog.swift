@@ -33,6 +33,8 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
     /// The spacing between the content and the buttons.
     var spacing: CGFloat = 16
     
+    var showBackgroundGradient = false
+    
     /// The main content shown at the top of the layout.
     @ViewBuilder var content: () -> Content
     /// The content shown at the bottom of the layout.
@@ -62,22 +64,32 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
             }
             .scrollBounceBehavior(.basedOnSize)
             .safeAreaInset(edge: .bottom) {
-                VStack(spacing: 0) {
-                    bottomContent()
-                        .readableFrame()
-                        .padding(.horizontal, horizontalPadding)
-                        .padding(.top, spacing)
-                        .padding(.bottom, UIConstants.actionButtonBottomPadding)
-                    
-                    Spacer()
-                        .frame(height: UIConstants.spacerHeight(in: geometry))
+                if showBackgroundGradient {
+                    adjustedBottomContent(geometry: geometry)
+                        .background(Asset.Images.backgroundBottom.swiftUIImage.resizable().ignoresSafeArea())
+                } else {
+                    adjustedBottomContent(geometry: geometry)
+                        .background()
                 }
             }
         }
     }
     
+    private func adjustedBottomContent(geometry: GeometryProxy) -> some View {
+        VStack(spacing: 0) {
+            bottomContent()
+                .readableFrame()
+                .padding(.horizontal, horizontalPadding)
+                .padding(.top, spacing)
+                .padding(.bottom, UIConstants.actionButtonBottomPadding)
+            
+            Spacer()
+                .frame(height: UIConstants.spacerHeight(in: geometry))
+        }
+    }
+    
     /// A continuously scrolling layout used for accessibility font sizes.
-    var accessibilityLayout: some View {
+    private var accessibilityLayout: some View {
         GeometryReader { geometry in
             ScrollView {
                 VStack(spacing: 0) {

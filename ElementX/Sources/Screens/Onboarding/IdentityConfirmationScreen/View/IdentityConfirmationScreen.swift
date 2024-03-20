@@ -42,24 +42,21 @@ struct IdentityConfirmationScreen: View {
                 .padding(.bottom, 16)
             
             Text(L10n.screenIdentityConfirmationTitle)
-                .font(.title2.bold())
+                .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
 
             Text(L10n.screenIdentityConfirmationSubtitle)
-                .font(.subheadline)
+                .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
             
-            Button {
-                UIApplication.shared.open("https://element.io/help#encryption")
-            } label: {
-                Text(L10n.actionLearnMore)
-                    .font(.compound.bodyLGSemibold)
-                    .foregroundColor(.compound.textPrimary)
-                    .padding(.top, 16)
+            Button(L10n.actionLearnMore) {
+                UIApplication.shared.open(context.viewState.learnMoreURL)
             }
+            .buttonStyle(.compound(.plain))
+            .padding(.top, 16)
         }
     }
     
@@ -103,6 +100,6 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
                                           mediaProvider: MockMediaProvider(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         
-        return IdentityConfirmationScreenViewModel(userSession: userSession)
+        return IdentityConfirmationScreenViewModel(userSession: userSession, appSettings: ServiceLocator.shared.settings)
     }
 }

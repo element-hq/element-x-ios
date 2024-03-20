@@ -28,6 +28,7 @@ struct IdentityConfirmationScreenViewState: BindableState {
     }
     
     var mode = Mode.recoveryOnly
+    let learnMoreURL: URL
 }
 
 enum IdentityConfirmationScreenViewAction {

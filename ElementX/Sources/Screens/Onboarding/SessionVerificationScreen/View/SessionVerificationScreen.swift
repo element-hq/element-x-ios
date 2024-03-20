@@ -77,14 +77,14 @@ struct SessionVerificationScreen: View {
             }
             
             Text(context.viewState.title ?? "")
-                .font(.title2.bold())
+                .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
                 .accessibilityIdentifier(context.viewState.titleAccessibilityIdentifier)
 
             Text(context.viewState.message)
-                .font(.subheadline)
+                .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
         }

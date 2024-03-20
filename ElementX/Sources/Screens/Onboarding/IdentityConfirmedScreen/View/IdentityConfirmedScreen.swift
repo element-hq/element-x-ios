@@ -42,13 +42,13 @@ struct IdentityConfirmedScreen: View {
                 .padding(.bottom, 16)
             
             Text(L10n.screenIdentityConfirmedTitle)
-                .font(.title2.bold())
+                .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
 
             Text(L10n.screenIdentityConfirmedSubtitle)
-                .font(.subheadline)
+                .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
         }

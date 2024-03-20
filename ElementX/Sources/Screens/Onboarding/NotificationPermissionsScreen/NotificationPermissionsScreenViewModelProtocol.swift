@@ -18,6 +18,6 @@ import Combine
 
 @MainActor
 protocol NotificationPermissionsScreenViewModelProtocol {
-    var actions: AnyPublisher<NotificationPermissionsScreenViewModelAction, Never> { get }
+    var actionsPublisher: AnyPublisher<NotificationPermissionsScreenViewModelAction, Never> { get }
     var context: NotificationPermissionsScreenViewModelType.Context { get }
 }

@@ -21,6 +21,7 @@ import SwiftUI
 
 struct IdentityConfirmationScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
+    let appSettings: AppSettings
 }
 
 enum IdentityConfirmationScreenCoordinatorAction {
@@ -42,7 +43,7 @@ final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
     init(parameters: IdentityConfirmationScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = IdentityConfirmationScreenViewModel(userSession: parameters.userSession)
+        viewModel = IdentityConfirmationScreenViewModel(userSession: parameters.userSession, appSettings: parameters.appSettings)
     }
     
     func start() {

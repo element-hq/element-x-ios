@@ -97,9 +97,8 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                 HStack(spacing: 8) {
                     TimelineSenderAvatarView(timelineItem: timelineItem)
                     Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
-                        .font(.subheadline)
+                        .font(.compound.bodyMDSemibold)
                         .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
-                        .fontWeight(.semibold)
                         .lineLimit(1)
                 }
                 .onTapGesture {

@@ -120,7 +120,9 @@ final class AppSettings {
     let privacyURL: URL = "https://element.io/privacy"
     /// An email address that should be used for support requests.
     let supportEmailAddress = "support@element.io"
-    // A URL where users can go read more about the chat backup.
+    /// A URL where users can go read more about encryption in general.
+    let encryptionURL: URL = "https://element.io/help#encryption"
+    /// A URL where users can go read more about the chat backup.
     let chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
     
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))

@@ -23,7 +23,7 @@ class NotificationPermissionsScreenViewModel: NotificationPermissionsScreenViewM
     private let notificationManager: NotificationManagerProtocol
     
     private var actionsSubject: PassthroughSubject<NotificationPermissionsScreenViewModelAction, Never> = .init()
-    var actions: AnyPublisher<NotificationPermissionsScreenViewModelAction, Never> {
+    var actionsPublisher: AnyPublisher<NotificationPermissionsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     

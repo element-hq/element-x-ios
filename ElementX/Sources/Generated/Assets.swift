@@ -31,10 +31,9 @@ internal enum Asset {
     internal static let grabber = ColorAsset(name: "colors/grabber")
   }
   internal enum Images {
-    internal static let alerts = ImageAsset(name: "images/Alerts")
     internal static let appLogo = ImageAsset(name: "images/app-logo")
     internal static let serverSelectionIcon = ImageAsset(name: "images/server-selection-icon")
-    internal static let backgroundBottomLight = ImageAsset(name: "images/background-bottom-light")
+    internal static let backgroundBottom = ImageAsset(name: "images/background-bottom")
     internal static let closeRte = ImageAsset(name: "images/close-rte")
     internal static let composerAttachment = ImageAsset(name: "images/composer-attachment")
     internal static let stopRecording = ImageAsset(name: "images/stop-recording")
@@ -43,6 +42,7 @@ internal enum Asset {
     internal static let locationMarkerShape = ImageAsset(name: "images/location-marker-shape")
     internal static let mediaPause = ImageAsset(name: "images/media-pause")
     internal static let mediaPlay = ImageAsset(name: "images/media-play")
+    internal static let notificationsPromptGraphic = ImageAsset(name: "images/notifications-prompt-graphic")
     internal static let waitingGradient = ImageAsset(name: "images/waiting-gradient")
   }
 }

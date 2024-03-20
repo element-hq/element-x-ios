@@ -41,7 +41,7 @@ final class NotificationPermissionsScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.actions
+        viewModel.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
                 

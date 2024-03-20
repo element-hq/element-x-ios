@@ -27,10 +27,10 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol) {
+    init(userSession: UserSessionProtocol, appSettings: AppSettings) {
         self.userSession = userSession
         
-        super.init(initialViewState: IdentityConfirmationScreenViewState())
+        super.init(initialViewState: IdentityConfirmationScreenViewState(learnMoreURL: appSettings.encryptionURL))
         
         userSession.sessionSecurityStatePublisher
             .receive(on: DispatchQueue.main)
