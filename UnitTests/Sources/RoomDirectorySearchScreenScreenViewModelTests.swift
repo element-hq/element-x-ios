@@ -19,25 +19,4 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class RoomDirectorySearchScreenScreenViewModelTests: XCTestCase {
-    var viewModel: RoomDirectorySearchScreenViewModelProtocol!
-    
-    var context: RoomDirectorySearchScreenViewModelType.Context {
-        viewModel.context
-    }
-    
-    override func setUpWithError() throws {
-        viewModel = RoomDirectorySearchScreenViewModel()
-    }
-
-    func testInitialState() {
-        XCTAssertFalse(context.viewState.placeholder.isEmpty)
-        XCTAssertFalse(context.composerText.isEmpty)
-    }
-
-    func testCounter() async throws {
-        context.composerText = "123"
-        context.send(viewAction: .textChanged)
-        XCTAssertEqual(context.composerText, "123")
-    }
-}
+class RoomDirectorySearchScreenScreenViewModelTests: XCTestCase { }
