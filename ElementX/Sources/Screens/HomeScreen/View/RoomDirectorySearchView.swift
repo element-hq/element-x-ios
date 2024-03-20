@@ -22,8 +22,7 @@ struct RoomDirectorySearchView: View {
     
     var body: some View {
         Button(action: onTap) {
-            // TODO: Localise
-            Label("Room directory", icon: \.listBulleted)
+            Label(L10n.screenRoomDirectorySearchTitle, icon: \.listBulleted)
         }
         .buttonStyle(.compound(.secondary))
         .padding(.horizontal, 16)

@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2024 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,26 +14,18 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 
-enum RoomDirectorySearchScreenViewModelAction {
-    case dismiss
+struct RoomDirectorySearchProxyMockConfiguration {
+    let results: [RoomDirectorySearchResult]
 }
 
-struct RoomDirectorySearchScreenViewState: BindableState {
-    let title = L10n.screenRoomDirectorySearchTitle
-    var searchResults: [RoomDirectorySearchResult] = []
-    var isLoading = false
-    
-    var bindings = RoomDirectorySearchScreenViewStateindings()
-}
-
-struct RoomDirectorySearchScreenViewStateindings {
-    var isSearching = false
-    var searchString = ""
-}
-
-enum RoomDirectorySearchScreenViewAction {
-    case dismiss
-    case join(roomID: String)
+extension RoomDirectorySearchProxyMock {
+    convenience init(configuration: RoomDirectorySearchProxyMockConfiguration) {
+        self.init()
+        resultsPublisher = CurrentValueSubject(configuration.results).asCurrentValuePublisher()
+        searchQueryReturnValue = .success(())
+        nextPageReturnValue = .success(())
+    }
 }

@@ -67,6 +67,8 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
     
     private func joinRoom(roomID: String) { }
     
+    private static let errorID = "roomDirectorySearchViewModelLoadingError"
+    
     private func search(query: String?) {
         guard !state.isLoading else {
             return
@@ -78,8 +80,10 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
             case .success:
                 break
             case .failure:
-                // TODO: Localise/find right error
-                userIndicatorController.submitIndicator(.init(title: "Error"))
+                userIndicatorController.submitIndicator(UserIndicator(id: Self.errorID,
+                                                                      type: .toast,
+                                                                      title: L10n.screenRoomDirectorySearchLoadingError,
+                                                                      iconName: "xmark"))
             }
             state.isLoading = false
         }

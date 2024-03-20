@@ -49,6 +49,6 @@ struct RoomDirectorySearchCell: View {
 
 struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomDirectorySearchCell(result: .init(roomID: "X", name: "Test tile", topic: "test description", avatarURL: nil, canBeJoined: false), imageProvider: MockMediaProvider())
+        RoomDirectorySearchCell(result: .init(roomID: "tes_id", name: "Test title", topic: "test description", avatarURL: nil, canBeJoined: false), imageProvider: MockMediaProvider())
     }
 }

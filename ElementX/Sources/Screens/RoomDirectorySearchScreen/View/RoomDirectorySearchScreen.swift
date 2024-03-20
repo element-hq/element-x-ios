@@ -50,8 +50,21 @@ struct RoomDirectorySearchScreen: View {
 // MARK: - Previews
 
 struct RoomDirectorySearchScreenScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomDirectorySearchScreenViewModel(roomDirectorySearch: RoomDirectorySearchProxyMock(), userIndicatorController: UserIndicatorControllerMock(), imageProvider: MockMediaProvider())
+    static let viewModel = RoomDirectorySearchScreenViewModel(roomDirectorySearch: RoomDirectorySearchProxyMock(configuration: .init(results: [.init(roomID: "test_1",
+                                                                                                                                                     name: "Test 1",
+                                                                                                                                                     topic: "Test description 1",
+                                                                                                                                                     avatarURL: nil,
+                                                                                                                                                     canBeJoined: true),
+        .init(roomID: "test_2",
+              name: "Test 2",
+              topic: "Test description 2",
+              avatarURL: URL.documentsDirectory,
+              canBeJoined: false)])),
+    userIndicatorController: UserIndicatorControllerMock(),
+    imageProvider: MockMediaProvider())
+    
     static var previews: some View {
         RoomDirectorySearchScreen(context: viewModel.context)
+            .snapshot(delay: 1.0)
     }
 }
