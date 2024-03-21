@@ -19,6 +19,5 @@ import Foundation
 @MainActor
 protocol RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
-                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                     secureBackupController: SecureBackupControllerProtocol) -> RoomTimelineControllerProtocol
+                                     timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol
 }

@@ -31,13 +31,12 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     }
 
     init(sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol,
-         recoveryState: SecureBackupRecoveryState,
          verificationState: SessionVerificationScreenStateMachine.State = .initial) {
         self.sessionVerificationControllerProxy = sessionVerificationControllerProxy
         
         stateMachine = SessionVerificationScreenStateMachine()
         
-        super.init(initialViewState: .init(showRecoveryOption: recoveryState == .incomplete, verificationState: verificationState))
+        super.init(initialViewState: .init(verificationState: verificationState))
         
         setupStateMachine()
         
@@ -71,27 +70,24 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     
     override func process(viewAction: SessionVerificationScreenViewAction) {
         switch viewAction {
-        case .recoveryKey:
-            actionsSubject.send(.recoveryKey)
         case .requestVerification:
             stateMachine.processEvent(.requestVerification)
         case .startSasVerification:
             stateMachine.processEvent(.startSasVerification)
         case .restart:
             stateMachine.processEvent(.restart)
-        case .close:
-            guard stateMachine.state == .initial ||
-                stateMachine.state == .verified ||
-                stateMachine.state == .cancelled else {
-                stateMachine.processEvent(.cancel)
-                return
-            }
-            
-            actionsSubject.send(.finished)
         case .accept:
             stateMachine.processEvent(.acceptChallenge)
         case .decline:
             stateMachine.processEvent(.declineChallenge)
+        }
+    }
+    
+    func stop() {
+        let uncancellableStates: [SessionVerificationScreenStateMachine.State] = [.initial, .verified, .cancelled]
+        
+        if !uncancellableStates.contains(stateMachine.state) {
+            stateMachine.processEvent(.cancel)
         }
     }
     
@@ -115,11 +111,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
             case (_, .cancel, .cancelling):
                 cancelVerification()
             case (_, _, .verified):
-                // Dismiss the success screen automatically.
-                Task {
-                    try? await Task.sleep(for: .seconds(2))
-                    self.actionsSubject.send(.finished)
-                }
+                actionsSubject.send(.finished)
             default:
                 break
             }

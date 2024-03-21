@@ -24,10 +24,13 @@ final class AppSettings {
         case seenInvites
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
-        case lastLoginDate
         case migratedAccounts
         case timelineStyle
+        
         case analyticsConsentState
+        case hasRunNotificationPermissionsOnboarding
+        case hasRunIdentityConfirmationOnboarding
+        
         case enableNotifications
         case enableInAppNotifications
         case pusherProfileTag
@@ -59,9 +62,14 @@ final class AppSettings {
     
     #if IS_MAIN_APP
         
-    static func reset() {
+    static func resetAllSettings() {
         MXLog.warning("Resetting the AppSettings.")
         store.removePersistentDomain(forName: suiteName)
+    }
+    
+    static func resetSessionSpecificSettings() {
+        MXLog.warning("Resetting the user session specific AppSettings.")
+        store.removeObject(forKey: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding.rawValue)
     }
     
     static func configureWithSuiteName(_ name: String) {
@@ -120,7 +128,9 @@ final class AppSettings {
     let privacyURL: URL = "https://element.io/privacy"
     /// An email address that should be used for support requests.
     let supportEmailAddress = "support@element.io"
-    // A URL where users can go read more about the chat backup.
+    /// A URL where users can go read more about encryption in general.
+    let encryptionURL: URL = "https://element.io/help#encryption"
+    /// A URL where users can go read more about the chat backup.
     let chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
     
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
@@ -153,13 +163,6 @@ final class AppSettings {
         
         return url
     }()
-
-    /// The date that the call to `/login` completed successfully. This is used to put
-    /// a hard wall on the history of encrypted messages until we have key backup.
-    ///
-    /// Not a multi-account aware setting as key backup will come before multi-account.
-    @UserPreference(key: UserDefaultsKeys.lastLoginDate, defaultValue: nil, storageType: .userDefaults(store))
-    var lastLoginDate: Date?
     
     /// A dictionary of accounts that have performed an initial sync through their proxy.
     ///
@@ -210,6 +213,12 @@ final class AppSettings {
     /// Whether the user has opted in to send analytics.
     @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))
     var analyticsConsentState
+    
+    @UserPreference(key: UserDefaultsKeys.hasRunNotificationPermissionsOnboarding, defaultValue: false, storageType: .userDefaults(store))
+    var hasRunNotificationPermissionsOnboarding
+    
+    @UserPreference(key: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding, defaultValue: false, storageType: .userDefaults(store))
+    var hasRunIdentityConfirmationOnboarding
     
     // MARK: - Home Screen
     

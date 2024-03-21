@@ -34,10 +34,18 @@ extension ProcessInfo {
         false
         #endif
     }
+    
+    static var isRunningIntegrationTests: Bool {
+        #if DEBUG
+        processInfo.environment["IS_RUNNING_INTEGRATION_TESTS"] == "1"
+        #else
+        false
+        #endif
+    }
 
     /// Flag indicating whether the app is running the UI tests or unit tests.
     static var isRunningTests: Bool {
-        isRunningUITests || isRunningUnitTests
+        isRunningUITests || isRunningUnitTests || isRunningIntegrationTests
     }
     
     /// The identifier of the screen to be loaded when running UI tests.

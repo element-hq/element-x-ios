@@ -22,12 +22,21 @@ struct SecureBackupKeyBackupScreen: View {
     @ObservedObject var context: SecureBackupKeyBackupScreenViewModel.Context
     
     var body: some View {
-        mainContent
-            .padding()
-            .interactiveDismissDisabled()
-            .toolbar { toolbar }
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .alert(item: $context.alertInfo)
+        FullscreenDialog {
+            mainContent
+        } bottomContent: {
+            Button(role: .destructive) {
+                context.send(viewAction: .toggleBackup)
+            } label: {
+                Text(L10n.screenChatBackupKeyBackupActionDisable)
+            }
+            .buttonStyle(.compound(.primary))
+        }
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .interactiveDismissDisabled()
+        .toolbar { toolbar }
+        .alert(item: $context.alertInfo)
     }
     
     @ViewBuilder
@@ -71,15 +80,6 @@ struct SecureBackupKeyBackupScreen: View {
                         .foregroundColor(.compound.iconCriticalPrimary)
                 }
             }
-            
-            Spacer()
-            
-            Button(role: .destructive) {
-                context.send(viewAction: .toggleBackup)
-            } label: {
-                Text(L10n.screenChatBackupKeyBackupActionDisable)
-            }
-            .buttonStyle(.compound(.primary))
         }
     }
     

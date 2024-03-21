@@ -82,7 +82,7 @@ class BlockedUsersScreenViewModel: BlockedUsersScreenViewModelType, BlockedUsers
     
     // MARK: Loading indicator
     
-    private static let loadingIndicatorIdentifier = "BlockedUsersLoading"
+    private static let loadingIndicatorIdentifier = "\(BlockedUsersScreenViewModel.self)-Loading"
     
     private func showLoadingIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

@@ -14,10 +14,14 @@
 // limitations under the License.
 //
 
-import Combine
+import Foundation
 
-@MainActor
-protocol SessionVerificationScreenViewModelProtocol {
-    var actions: AnyPublisher<SessionVerificationScreenViewModelAction, Never> { get }
-    var context: SessionVerificationViewModelType.Context { get }
+enum IdentityConfirmedScreenViewModelAction {
+    case done
+}
+
+struct IdentityConfirmedScreenViewState: BindableState { }
+
+enum IdentityConfirmedScreenViewAction {
+    case done
 }

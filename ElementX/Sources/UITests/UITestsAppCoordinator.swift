@@ -42,7 +42,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         
         AppSettings.configureWithSuiteName("io.element.elementx.uitests")
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         ServiceLocator.shared.register(appSettings: AppSettings())
         ServiceLocator.shared.register(bugReportService: BugReportServiceMock())
         ServiceLocator.shared.register(analytics: AnalyticsService(client: AnalyticsClientMock(),
@@ -149,7 +149,6 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .authenticationFlow:
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: MockAuthenticationServiceProxy(),
-                                                                appLockService: AppLockServiceMock(),
                                                                 bugReportService: BugReportServiceMock(),
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appSettings: ServiceLocator.shared.settings,
@@ -567,8 +566,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .sessionVerification:
             var sessionVerificationControllerProxy = SessionVerificationControllerProxyMock.configureMock(requestDelay: .seconds(5))
-            let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy,
-                                                                            recoveryState: .unknown)
+            let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy)
             return SessionVerificationScreenCoordinator(parameters: parameters)
         case .userSessionScreen, .userSessionScreenReply, .userSessionScreenRTE:
             let appSettings: AppSettings = ServiceLocator.shared.settings
@@ -586,7 +584,9 @@ class MockScreen: Identifiable {
                                                              bugReportService: BugReportServiceMock(),
                                                              roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
                                                              appSettings: appSettings,
-                                                             analytics: ServiceLocator.shared.analytics)
+                                                             analytics: ServiceLocator.shared.analytics,
+                                                             notificationManager: NotificationManagerMock(),
+                                                             isNewLogin: false)
             
             flowCoordinator.start()
             

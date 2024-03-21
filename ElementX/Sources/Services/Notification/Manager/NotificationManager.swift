@@ -64,15 +64,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                 self?.enableNotifications(newValue)
             }
             .store(in: &cancellables)
-        
-        // Request authorization uppon UIApplication.didBecomeActiveNotification notification
-        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
-            .sink { [weak self] _ in
-                self?.requestAuthorization()
-            }
-            .store(in: &cancellables)
     }
-    
+        
     func requestAuthorization() {
         guard appSettings.enableNotifications, !userSession.isNil else { return }
         Task {

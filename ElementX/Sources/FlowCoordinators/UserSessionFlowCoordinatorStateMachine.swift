@@ -27,9 +27,6 @@ class UserSessionFlowCoordinatorStateMachine {
         case roomList(selectedRoomID: String?)
                 
         /// Showing the session verification flows
-        case sessionVerificationScreen(selectedRoomID: String?)
-
-        /// Showing the session verification flows
         case feedbackScreen(selectedRoomID: String?)
         
         /// Showing the settings screen
@@ -69,11 +66,6 @@ class UserSessionFlowCoordinatorStateMachine {
         case feedbackScreen
         /// The feedback screen has been dismissed
         case dismissedFeedbackScreen
-        
-        /// Request the start of the session verification flow
-        case showSessionVerificationScreen
-        /// Session verification has finished
-        case dismissedSessionVerificationScreen
         
         /// Request the start of the start chat flow
         case showStartChatScreen
@@ -124,11 +116,6 @@ class UserSessionFlowCoordinatorStateMachine {
             case (.roomList(let selectedRoomID), .feedbackScreen):
                 return .feedbackScreen(selectedRoomID: selectedRoomID)
             case (.feedbackScreen(let selectedRoomID), .dismissedFeedbackScreen):
-                return .roomList(selectedRoomID: selectedRoomID)
-                
-            case (.roomList(let selectedRoomID), .showSessionVerificationScreen):
-                return .sessionVerificationScreen(selectedRoomID: selectedRoomID)
-            case (.sessionVerificationScreen(let selectedRoomID), .dismissedSessionVerificationScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
                 
             case (.roomList(let selectedRoomID), .showStartChatScreen):

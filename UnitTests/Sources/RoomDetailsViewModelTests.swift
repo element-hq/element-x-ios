@@ -43,7 +43,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                                                                 mentionBuilder: MentionBuilder()),
                                                appSettings: ServiceLocator.shared.settings)
         
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
     }
     
     func testLeaveRoomTappedWhenPublic() async throws {

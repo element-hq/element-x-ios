@@ -434,8 +434,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
-                                                                                           timelineItemFactory: timelineItemFactory,
-                                                                                           secureBackupController: userSession.clientProxy.secureBackupController)
+                                                                                           timelineItemFactory: timelineItemFactory)
         self.timelineController = timelineController
         
         analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
@@ -918,8 +917,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
         let roomTimelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
-                                                                                               timelineItemFactory: timelineItemFactory,
-                                                                                               secureBackupController: userSession.clientProxy.secureBackupController)
+                                                                                               timelineItemFactory: timelineItemFactory)
         
         let parameters = RoomPollsHistoryScreenCoordinatorParameters(roomProxy: roomProxy,
                                                                      pollInteractionHandler: PollInteractionHandler(analyticsService: analytics, roomProxy: roomProxy),

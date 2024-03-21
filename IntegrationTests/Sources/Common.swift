@@ -65,31 +65,11 @@ extension XCUIApplication {
         // Wait for login to finish
         currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: usernameTextField)
         currentTestCase.waitForExpectations(timeout: 300.0)
-        
-        // Handle analytics prompt screen
-        if staticTexts[A11yIdentifiers.analyticsPromptScreen.title].waitForExistence(timeout: 10.0) {
-            // Wait for login and then handle save password sheet
-            let savePasswordButton = buttons["Save Password"]
-            if savePasswordButton.waitForExistence(timeout: 10.0) {
-                savePasswordButton.tap()
-            }
-            
-            let enableButton = buttons[A11yIdentifiers.analyticsPromptScreen.enable]
-            XCTAssertTrue(enableButton.waitForExistence(timeout: 10.0))
-            enableButton.tap()
-        }
-        
+                
         // This might come in a different order, wait for both.
         let savePasswordButton = buttons["Save Password"]
         if savePasswordButton.waitForExistence(timeout: 10.0) {
             savePasswordButton.tap()
-        }
-        
-        // Handle the notifications permission alert https://stackoverflow.com/a/58171074/730924
-        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        let notificationAlertDeclineButton = springboard.buttons.element(boundBy: 0)
-        if notificationAlertDeclineButton.waitForExistence(timeout: 10.0) {
-            notificationAlertDeclineButton.tap()
         }
         
         // Migration screen may be shown as an overlay.

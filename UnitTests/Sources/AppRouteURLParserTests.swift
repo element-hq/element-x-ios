@@ -23,7 +23,7 @@ class AppRouteURLParserTests: XCTestCase {
     var appRouteURLParser: AppRouteURLParser!
     
     override func setUp() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         appSettings = AppSettings()
         appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
     }

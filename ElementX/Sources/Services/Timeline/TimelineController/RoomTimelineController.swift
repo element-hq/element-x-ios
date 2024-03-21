@@ -24,7 +24,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let appSettings: AppSettings
-    private let secureBackupController: SecureBackupControllerProtocol
     private let serialDispatchQueue: DispatchQueue
     
     private var cancellables = Set<AnyCancellable>()
@@ -39,13 +38,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     init(roomProxy: RoomProxyProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
-         appSettings: AppSettings,
-         secureBackupController: SecureBackupControllerProtocol) {
+         appSettings: AppSettings) {
         self.roomProxy = roomProxy
         timelineProvider = roomProxy.timeline.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.appSettings = appSettings
-        self.secureBackupController = secureBackupController
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
         timelineProvider
@@ -253,7 +250,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         var canBackPaginate = !roomProxy.timeline.timelineStartReached
         var isBackPaginating = false
-        var lastEncryptedHistoryItemIndex: Int?
         
         let collapsibleChunks = timelineProvider.itemProxies.groupBy { isItemCollapsible($0) }
         
@@ -263,10 +259,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             let items = collapsibleChunk.compactMap { itemProxy in
                 
                 let timelineItem = buildTimelineItem(for: itemProxy)
-                
-                if timelineItem is EncryptedHistoryRoomTimelineItem {
-                    canBackPaginate = false
-                }
                 
                 return timelineItem
             }
@@ -282,35 +274,25 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                     continue
                 }
                 
-                if timelineItem is EncryptedHistoryRoomTimelineItem {
-                    lastEncryptedHistoryItemIndex = newTimelineItems.endIndex
-                }
-
                 newTimelineItems.append(timelineItem)
             } else {
                 newTimelineItems.append(CollapsibleTimelineItem(items: items))
             }
         }
         
-        if let lastEncryptedHistoryItemIndex {
-            // Remove everything up to the last encrypted history item.
-            // It only contains encrypted messages, state changes and date separators.
-            newTimelineItems.removeFirst(lastEncryptedHistoryItemIndex)
-        } else {
-            // Otherwise check if we need to add anything to the top of the timeline.
-            switch timelineProvider.backPaginationState {
-            case .timelineStartReached:
-                if !roomProxy.isEncryptedOneToOneRoom {
-                    let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.name)
-                    newTimelineItems.insert(timelineStart, at: 0)
-                }
-                canBackPaginate = false
-            case .paginating:
-                newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(), at: 0)
-                isBackPaginating = true
-            case .idle:
-                break
+        // Check if we need to add anything to the top of the timeline.
+        switch timelineProvider.backPaginationState {
+        case .timelineStartReached:
+            if !roomProxy.isEncryptedOneToOneRoom {
+                let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.name)
+                newTimelineItems.insert(timelineStart, at: 0)
             }
+            canBackPaginate = false
+        case .paginating:
+            newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(), at: 0)
+            isBackPaginating = true
+        case .idle:
+            break
         }
         
         DispatchQueue.main.sync {
@@ -326,17 +308,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         switch itemProxy {
         case .event(let eventTimelineItem):
             let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem, isDM: roomProxy.isEncryptedOneToOneRoom)
-            
-            // When backup is enabled just show the timeline items, they will most likely
-            // resolve eventually. If we don't know the backup state then we assume the session is not verified yet,
-            // otherwise we just treat it as fully disabled.
-            if secureBackupController.keyBackupState.value != .enabled {
-                if timelineItem is EncryptedRoomTimelineItem, isItemInEncryptionHistory(eventTimelineItem) {
-                    return EncryptedHistoryRoomTimelineItem(id: eventTimelineItem.id,
-                                                            isSessionVerified: secureBackupController.keyBackupState.value != .unknown)
-                }
-            }
-            
+                        
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
                 // Avoid fetching this over and over again as it changes states if it keeps failing to load
                 // Errors will be handled again on appearance
@@ -358,14 +330,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return nil
         }
     }
-    
-    /// Whether or not a specific item is part of the room's history that can't be decrypted due
-    /// to the lack of key-backup. This is handled differently so we only show a single item.
-    private func isItemInEncryptionHistory(_ itemProxy: EventTimelineItemProxy) -> Bool {
-        guard roomProxy.isEncrypted, let lastLoginDate = appSettings.lastLoginDate else { return false }
-        return itemProxy.timestamp < lastLoginDate
-    }
-    
+        
     private func isItemCollapsible(_ item: TimelineItemProxy) -> Bool {
         if !appSettings.shouldCollapseRoomStateEvents {
             return false

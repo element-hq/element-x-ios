@@ -25,7 +25,7 @@ class AppLockServiceTests: XCTestCase {
     var service: AppLockService!
     
     override func setUp() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         appSettings = AppSettings()
         
         keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
@@ -36,7 +36,7 @@ class AppLockServiceTests: XCTestCase {
     }
     
     override func tearDown() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
     }
     
     // MARK: - PIN Code

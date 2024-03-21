@@ -83,7 +83,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         MXLog.info("\(appName) \(appVersion) (\(appBuild))")
         
         if ProcessInfo.processInfo.environment["RESET_APP_SETTINGS"].map(Bool.init) == true {
-            AppSettings.reset()
+            AppSettings.resetAllSettings()
         }
         
         self.appDelegate = appDelegate
@@ -154,11 +154,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        if appSettings.appLockIsMandatory, !appLockFlowCoordinator.appLockService.isEnabled {
-            stateMachine.processEvent(.startWithAppLockSetup)
-        } else {
-            stateMachine.processEvent(.startWithExistingSession)
-        }
+        stateMachine.processEvent(.startWithExistingSession)
     }
 
     func stop() {
@@ -319,13 +315,21 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 appSettings.migratedAccounts[userID] = true
             }
         }
+        
+        if oldVersion < Version(1, 6, 0) {
+            MXLog.info("Migrating to v1.6.0, marking identity confirmation onboarding as ran.")
+            if !userSessionStore.userIDs.isEmpty {
+                appSettings.hasRunIdentityConfirmationOnboarding = true
+                appSettings.hasRunNotificationPermissionsOnboarding = true
+            }
+        }
     }
     
     /// Clears the keychain, app support directory etc ready for a fresh use.
     /// - Parameter includingSettings: Whether to additionally wipe the user's app settings too.
     private func wipeUserData(includingSettings: Bool = false) {
         if includingSettings {
-            AppSettings.reset()
+            AppSettings.resetAllSettings()
             appLockFlowCoordinator.appLockService.disable()
         }
         userSessionStore.reset()
@@ -339,20 +343,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             case (.initial, .startWithAuthentication, .signedOut):
                 startAuthentication()
             case (.signedOut, .createdUserSession, .signedIn):
-                setupUserSession()
+                setupUserSession(isNewLogin: true)
             case (.initial, .startWithExistingSession, .restoringSession):
                 restoreUserSession()
             case (.restoringSession, .failedRestoringSession, .signedOut):
                 showLoginErrorToast()
                 presentSplashScreen()
             case (.restoringSession, .createdUserSession, .signedIn):
-                setupUserSession()
-            
-            case (.initial, .startWithAppLockSetup, .mandatoryAppLockSetup):
-                startMandatoryAppLockSetup()
-            case (.mandatoryAppLockSetup, .appLockSetupComplete, .restoringSession):
-                restoreUserSession()
-            
+                setupUserSession(isNewLogin: false)
+                        
             case (.signingOut, .signOut, .signingOut):
                 // We can ignore signOut when already in the process of signing out,
                 // such as the SDK sending an authError due to token invalidation.
@@ -397,7 +396,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                encryptionKeyProvider: EncryptionKeyProvider(),
                                                                appSettings: appSettings)
         authenticationFlowCoordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
-                                                                      appLockService: appLockFlowCoordinator.appLockService,
                                                                       bugReportService: ServiceLocator.shared.bugReportService,
                                                                       navigationRootCoordinator: navigationRootCoordinator,
                                                                       appSettings: appSettings,
@@ -450,7 +448,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    private func setupUserSession() {
+    private func setupUserSession(isNewLogin: Bool) {
         guard let userSession else {
             fatalError("User session not setup")
         }
@@ -462,9 +460,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory(),
                                                                     appSettings: appSettings,
-                                                                    analytics: ServiceLocator.shared.analytics)
+                                                                    analytics: ServiceLocator.shared.analytics,
+                                                                    notificationManager: notificationManager,
+                                                                    isNewLogin: isNewLogin)
         
-        userSessionFlowCoordinator.actions
+        userSessionFlowCoordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
                 
@@ -487,32 +487,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             userSessionFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
         }
     }
-    
-    /// Used to add a PIN code to an existing session that somehow missed out mandatory PIN setup.
-    private func startMandatoryAppLockSetup() {
-        MXLog.info("Mandatory App Lock enabled but no PIN is set. Showing the setup flow.")
         
-        let navigationCoordinator = NavigationStackCoordinator()
-        let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .onboarding,
-                                                      appLockService: appLockFlowCoordinator.appLockService,
-                                                      navigationStackCoordinator: navigationCoordinator)
-        coordinator.actions.sink { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .complete:
-                stateMachine.processEvent(.appLockSetupComplete)
-                appLockSetupFlowCoordinator = nil
-            case .forceLogout:
-                fatalError("Creating a PIN shouldn't be able to fail in this way")
-            }
-        }
-        .store(in: &cancellables)
-        
-        appLockSetupFlowCoordinator = coordinator
-        navigationRootCoordinator.setRootCoordinator(navigationCoordinator)
-        coordinator.start()
-    }
-    
     private func logout(isSoft: Bool) {
         guard let userSession else {
             fatalError("User session not setup")
@@ -543,6 +518,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             // Regardless of the result, clear user data
             userSessionStore.logout(userSession: userSession)
             tearDownUserSession()
+            
+            AppSettings.resetSessionSpecificSettings()
             
             // Reset analytics
             ServiceLocator.shared.analytics.optOut()
@@ -591,7 +568,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     private func configureNotificationManager() {
         notificationManager.setUserSession(userSession)
-        notificationManager.requestAuthorization()
 
         appDelegateObserver = appDelegate.callbacks
             .receive(on: DispatchQueue.main)
@@ -689,7 +665,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     // MARK: Toasts and loading indicators
     
-    private static let loadingIndicatorIdentifier = "AppCoordinatorLoading"
+    private static let loadingIndicatorIdentifier = "\(AppCoordinator.self)-Loading"
     
     private func showLoadingIndicator() {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

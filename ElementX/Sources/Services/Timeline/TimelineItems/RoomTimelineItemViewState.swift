@@ -60,7 +60,6 @@ enum RoomTimelineItemType: Equatable {
     case sticker(StickerRoomTimelineItem)
     case unsupported(UnsupportedRoomTimelineItem)
     case timelineStart(TimelineStartRoomTimelineItem)
-    case encryptedHistory(EncryptedHistoryRoomTimelineItem)
     case state(StateRoomTimelineItem)
     case group(CollapsibleTimelineItem)
     case location(LocationRoomTimelineItem)
@@ -100,8 +99,6 @@ enum RoomTimelineItemType: Equatable {
             self = .unsupported(item)
         case let item as TimelineStartRoomTimelineItem:
             self = .timelineStart(item)
-        case let item as EncryptedHistoryRoomTimelineItem:
-            self = .encryptedHistory(item)
         case let item as StateRoomTimelineItem:
             self = .state(item)
         case let item as CollapsibleTimelineItem:
@@ -136,7 +133,6 @@ enum RoomTimelineItemType: Equatable {
              .sticker(let item as RoomTimelineItemProtocol),
              .unsupported(let item as RoomTimelineItemProtocol),
              .timelineStart(let item as RoomTimelineItemProtocol),
-             .encryptedHistory(let item as RoomTimelineItemProtocol),
              .state(let item as RoomTimelineItemProtocol),
              .group(let item as RoomTimelineItemProtocol),
              .location(let item as RoomTimelineItemProtocol),

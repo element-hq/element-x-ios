@@ -18,13 +18,11 @@ import Combine
 import SwiftUI
 
 enum SessionVerificationScreenCoordinatorAction {
-    case recoveryKey
     case done
 }
 
 struct SessionVerificationScreenCoordinatorParameters {
     let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
-    let recoveryState: SecureBackupRecoveryState
 }
 
 final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
@@ -38,8 +36,7 @@ final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: SessionVerificationScreenCoordinatorParameters) {
-        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy,
-                                                       recoveryState: parameters.recoveryState)
+        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy)
     }
     
     // MARK: - Public
@@ -50,13 +47,15 @@ final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .recoveryKey:
-                    actionsSubject.send(.recoveryKey)
                 case .finished:
                     actionsSubject.send(.done)
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    func stop() {
+        viewModel.stop()
     }
     
     func toPresentable() -> AnyView {

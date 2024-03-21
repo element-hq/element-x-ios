@@ -46,7 +46,8 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
                 let navigationStackCoordinator = NavigationStackCoordinator()
                 
                 let recoveryKeyCoordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: .init(secureBackupController: parameters.secureBackupController,
-                                                                                                        userIndicatorController: parameters.userIndicatorController))
+                                                                                                        userIndicatorController: parameters.userIndicatorController,
+                                                                                                        isModallyPresented: true))
                 
                 recoveryKeyCoordinator.actions.sink { [weak self] action in
                     guard let self else { return }

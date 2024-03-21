@@ -28,11 +28,15 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(secureBackupController: SecureBackupControllerProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
+    init(secureBackupController: SecureBackupControllerProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         isModallyPresented: Bool) {
         self.secureBackupController = secureBackupController
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: .init(mode: secureBackupController.recoveryState.value.viewMode, bindings: .init()))
+        super.init(initialViewState: .init(isModallyPresented: isModallyPresented,
+                                           mode: secureBackupController.recoveryState.value.viewMode,
+                                           bindings: .init()))
         
         secureBackupController.recoveryState
             .receive(on: DispatchQueue.main)

@@ -41,7 +41,7 @@ class HomeScreenViewModelTests: XCTestCase {
     }
     
     override func tearDown() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
     }
     
     func testSelectRoom() async throws {

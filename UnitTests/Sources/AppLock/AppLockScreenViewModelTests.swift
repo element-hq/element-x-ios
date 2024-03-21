@@ -28,7 +28,7 @@ class AppLockScreenViewModelTests: XCTestCase {
     var context: AppLockScreenViewModelType.Context { viewModel.context }
     
     override func setUp() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         appSettings = AppSettings()
         keychainController = KeychainControllerMock()
         appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
@@ -36,7 +36,7 @@ class AppLockScreenViewModelTests: XCTestCase {
     }
     
     override func tearDown() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
     }
     
     func testUnlock() async throws {

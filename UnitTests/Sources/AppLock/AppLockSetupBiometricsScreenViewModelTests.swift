@@ -26,7 +26,7 @@ class AppLockSetupBiometricsScreenViewModelTests: XCTestCase {
     var context: AppLockSetupBiometricsScreenViewModelType.Context { viewModel.context }
     
     override func setUp() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         
         appLockService = AppLockServiceMock()
         appLockService.underlyingIsEnabled = true
@@ -36,7 +36,7 @@ class AppLockSetupBiometricsScreenViewModelTests: XCTestCase {
     }
     
     override func tearDown() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
     }
 
     func testAllow() async throws {

@@ -86,7 +86,7 @@ class SecureBackupKeyBackupScreenViewModel: SecureBackupKeyBackupScreenViewModel
         }
     }
     
-    private static let loadingIndicatorIdentifier = "SecureBackupKeyBackupScreenLoading"
+    private static let loadingIndicatorIdentifier = "\(SecureBackupKeyBackupScreenViewModel.self)-Loading"
     
     private func showLoadingIndicator() {
         userIndicatorController?.submitIndicator(.init(id: Self.loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))

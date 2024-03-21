@@ -103,16 +103,13 @@ struct HomeScreenContent: View {
     }
     
     @ViewBuilder
-    /// The session verification banner and invites button if either are needed.
     private var topSection: some View {
         VStack(spacing: 0) {
             if !context.isSearchFieldFocused {
                 RoomListFiltersView(state: $context.filtersState)
             }
             
-            if context.viewState.securityBannerMode == .sessionVerification {
-                HomeScreenSessionVerificationBanner(context: context)
-            } else if context.viewState.securityBannerMode == .recoveryKeyConfirmation {
+            if context.viewState.securityBannerMode == .recoveryKeyConfirmation {
                 HomeScreenRecoveryKeyConfirmationBanner(context: context)
             }
             

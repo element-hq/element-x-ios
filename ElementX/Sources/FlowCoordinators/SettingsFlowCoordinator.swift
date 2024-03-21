@@ -130,10 +130,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentLegalInformationScreen()
                 case .blockedUsers:
                     presentBlockedUsersScreen()
-                case .sessionVerification:
-                    Task {
-                        await self.presentSessionVerificationScreen()
-                    }
                 case .accountSessions:
                     presentAccountSessionsListURL()
                 case .notifications:
@@ -212,35 +208,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                           userIndicatorController: parameters.userIndicatorController))
         navigationStackCoordinator.push(coordinator)
     }
-    
-    private func presentSessionVerificationScreen() async {
-        guard case let .success(sessionVerificationController) = await parameters.userSession.clientProxy.sessionVerificationControllerProxy() else {
-            fatalError("The sessionVerificationController should aways be valid at this point")
-        }
         
-        let verificationParameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
-                                                                                    recoveryState: parameters.userSession.sessionSecurityStatePublisher.value.recoveryState)
-        let coordinator = SessionVerificationScreenCoordinator(parameters: verificationParameters)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .recoveryKey:
-                    navigationStackCoordinator.setSheetCoordinator(nil)
-                    handleAppRoute(.chatBackupSettings, animated: true)
-                case .done:
-                    navigationStackCoordinator.setSheetCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-
-        navigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
-            self?.navigationStackCoordinator.setSheetCoordinator(nil)
-        }
-    }
-    
     private func presentNotificationSettings() {
         let notificationParameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                                                      userSession: parameters.userSession,

@@ -22,7 +22,6 @@ enum HomeScreenViewModelAction {
     case presentRoom(roomIdentifier: String)
     case presentRoomDetails(roomIdentifier: String)
     case roomLeft(roomIdentifier: String)
-    case presentSessionVerificationScreen
     case presentSecureBackupSettings
     case presentSettingsScreen
     case presentFeedbackScreen
@@ -39,9 +38,7 @@ enum HomeScreenViewAction {
     case confirmLeaveRoom(roomIdentifier: String)
     case showSettings
     case startChat
-    case verifySession
     case confirmRecoveryKey
-    case skipSessionVerification
     case skipRecoveryKeyConfirmation
     case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
     case selectInvites
@@ -74,7 +71,6 @@ enum HomeScreenRoomListMode: CustomStringConvertible {
 enum SecurityBannerMode {
     case none
     case dismissed
-    case sessionVerification
     case recoveryKeyConfirmation
 }
 

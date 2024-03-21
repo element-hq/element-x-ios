@@ -24,7 +24,7 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorControllerMock.default)
         
         AppSettings.configureWithSuiteName("io.element.elementx.unittests")
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         ServiceLocator.shared.register(appSettings: AppSettings())
         ServiceLocator.shared.register(bugReportService: BugReportServiceMock())
         ServiceLocator.shared.register(analytics: AnalyticsService(client: AnalyticsClientMock(),

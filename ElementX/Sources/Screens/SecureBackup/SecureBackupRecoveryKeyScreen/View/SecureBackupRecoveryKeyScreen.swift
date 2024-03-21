@@ -24,7 +24,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     private let textFieldIdentifier = "textFieldIdentifier"
     
     var body: some View {
-        ScrollView {
+        FullscreenDialog {
             ScrollViewReader { reader in
                 mainContent
                     .padding(16)
@@ -33,17 +33,14 @@ struct SecureBackupRecoveryKeyScreen: View {
                         reader.scrollTo(textFieldIdentifier)
                     }
             }
-        }
-        .safeAreaInset(edge: .bottom) {
+        } bottomContent: {
             footer
-                .padding([.horizontal, .bottom], 16)
-                .padding(.top, 8)
-                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         }
-        .interactiveDismissDisabled()
         .toolbar { toolbar }
         .toolbar(.visible, for: .navigationBar)
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .interactiveDismissDisabled()
         .alert(item: $context.alertInfo)
     }
     
@@ -101,7 +98,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if context.viewState.recoveryKey == nil {
+        if context.viewState.isModallyPresented == true, context.viewState.recoveryKey == nil {
             ToolbarItem(placement: .cancellationAction) {
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
@@ -235,6 +232,8 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
         let backupController = SecureBackupControllerMock()
         backupController.underlyingRecoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
         
-        return SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController, userIndicatorController: UserIndicatorControllerMock())
+        return SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController,
+                                                      userIndicatorController: UserIndicatorControllerMock(),
+                                                      isModallyPresented: true)
     }
 }

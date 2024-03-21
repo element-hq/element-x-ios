@@ -171,7 +171,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     
     // MARK: Loading indicator
     
-    private static let loadingIndicatorIdentifier = "CreateRoomLoading"
+    private static let loadingIndicatorIdentifier = "\(CreateRoomViewModel.self)-Loading"
     
     private func showLoadingIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

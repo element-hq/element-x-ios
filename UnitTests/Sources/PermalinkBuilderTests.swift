@@ -22,7 +22,7 @@ class PermalinkBuilderTests: XCTestCase {
     
     override func setUp() {
         AppSettings.configureWithSuiteName("io.element.elementx.unitests")
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         appSettings = AppSettings()
     }
     

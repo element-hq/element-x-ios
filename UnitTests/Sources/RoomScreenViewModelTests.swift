@@ -25,7 +25,7 @@ class RoomScreenViewModelTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()
 
     override func setUp() async throws {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         cancellables.removeAll()
         userIndicatorControllerMock = UserIndicatorControllerMock.default
     }

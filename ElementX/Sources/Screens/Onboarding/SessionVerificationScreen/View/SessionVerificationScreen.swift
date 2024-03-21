@@ -20,23 +20,18 @@ struct SessionVerificationScreen: View {
     @ObservedObject var context: SessionVerificationScreenViewModel.Context
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 32) {
-                    screenHeader
-                    Spacer()
-                    mainContent
-                }
-                .padding(.horizontal, 16)
-                .padding(.top, 24)
-                .frame(maxWidth: .infinity)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar { toolbarContent }
+        FullscreenDialog {
+            VStack(spacing: 32) {
+                screenHeader
+                Spacer()
+                mainContent
             }
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .safeAreaInset(edge: .bottom) { actionButtons.padding() }
+        } bottomContent: {
+            actionButtons
         }
-        .interactiveDismissDisabled() // Make sure dismissal goes through the state machine(s).
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .interactiveDismissDisabled()
     }
     
     // MARK: - Private
@@ -44,7 +39,7 @@ struct SessionVerificationScreen: View {
     private var headerImageName: String {
         switch context.viewState.verificationState {
         case .initial:
-            return "macbook.and.iphone"
+            return "lock"
         case .cancelled:
             return "exclamationmark.shield"
         case .requestingVerification:
@@ -71,19 +66,24 @@ struct SessionVerificationScreen: View {
     @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
-            Image(systemName: headerImageName)
-                .heroImage()
-                .padding(.bottom, 16)
+            if context.viewState.verificationState == .initial {
+                HeroImage(icon: \.lockSolid)
+                    .padding(.bottom, 16)
+            } else {
+                Image(systemName: headerImageName)
+                    .heroImage()
+                    .padding(.bottom, 16)
+            }
             
             Text(context.viewState.title ?? "")
-                .font(.title2.bold())
+                .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
                 .accessibilityIdentifier(context.viewState.titleAccessibilityIdentifier)
 
             Text(context.viewState.message)
-                .font(.subheadline)
+                .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
         }
@@ -134,14 +134,6 @@ struct SessionVerificationScreen: View {
                 }
                 .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
-                
-                if context.viewState.showRecoveryOption {
-                    Button(L10n.screenSessionVerificationEnterRecoveryKey) {
-                        context.send(viewAction: .recoveryKey)
-                    }
-                    .buttonStyle(.compound(.plain))
-                    .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.enterRecoveryKey)
-                }
             }
         case .cancelled:
             Button(L10n.actionRetry) {
@@ -157,9 +149,9 @@ struct SessionVerificationScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.startSasVerification)
         
         case .showingChallenge:
-            VStack(spacing: 30) {
-                Button { context.send(viewAction: .accept) } label: {
-                    Label(L10n.screenSessionVerificationTheyMatch, systemImage: "checkmark")
+            VStack(spacing: 32) {
+                Button(L10n.screenSessionVerificationTheyMatch) {
+                    context.send(viewAction: .accept)
                 }
                 .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
@@ -172,12 +164,12 @@ struct SessionVerificationScreen: View {
             }
             
         case .acceptingChallenge:
-            VStack(spacing: 30) {
+            VStack(spacing: 32) {
                 Button { context.send(viewAction: .accept) } label: {
                     HStack(spacing: 16) {
                         ProgressView()
                             .tint(.compound.textOnSolidPrimary)
-                        Label(L10n.screenSessionVerificationTheyMatch, systemImage: "checkmark")
+                        Text(L10n.screenSessionVerificationTheyMatch)
                     }
                 }
                 .buttonStyle(.compound(.primary))
@@ -194,16 +186,6 @@ struct SessionVerificationScreen: View {
 
         default:
             EmptyView()
-        }
-    }
-    
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            Button(L10n.actionCancel) {
-                context.send(viewAction: .close)
-            }
-            .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.close)
         }
     }
     
@@ -244,7 +226,6 @@ struct SessionVerification_Previews: PreviewProvider, TestablePreview {
     
     static func sessionVerificationScreen(state: SessionVerificationScreenStateMachine.State) -> some View {
         let viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: SessionVerificationControllerProxyMock.configureMock(),
-                                                           recoveryState: .incomplete,
                                                            verificationState: state)
         
         return SessionVerificationScreen(context: viewModel.context)

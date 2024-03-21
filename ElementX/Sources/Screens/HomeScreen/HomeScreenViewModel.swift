@@ -70,11 +70,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 guard let self else { return }
                 
                 switch (securityState.verificationState, securityState.recoveryState) {
-                case (.unverified, _):
-                    state.requiresExtraAccountSetup = true
-                    if state.securityBannerMode != .dismissed {
-                        state.securityBannerMode = .sessionVerification
-                    }
                 case (.verified, .disabled):
                     state.requiresExtraAccountSetup = true
                     state.securityBannerMode = .none
@@ -134,12 +129,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             leaveRoom(roomId: roomIdentifier)
         case .showSettings:
             actionsSubject.send(.presentSettingsScreen)
-        case .verifySession:
-            actionsSubject.send(.presentSessionVerificationScreen)
         case .confirmRecoveryKey:
             actionsSubject.send(.presentSecureBackupSettings)
-        case .skipSessionVerification:
-            state.securityBannerMode = .dismissed
         case .skipRecoveryKeyConfirmation:
             state.securityBannerMode = .dismissed
         case .updateVisibleItemRange(let range, let isScrolling):

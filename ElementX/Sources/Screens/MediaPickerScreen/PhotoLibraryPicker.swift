@@ -62,7 +62,7 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         
         // MARK: PHPickerViewControllerDelegate
         
-        private static let loadingIndicatorIdentifier = "PhotoLibraryPickerLoadingIndicator"
+        private static let loadingIndicatorIdentifier = "\(PhotoLibraryPicker.self)-Loading"
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             guard let provider = results.first?.itemProvider,

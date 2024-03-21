@@ -24,7 +24,6 @@ protocol AuthenticationFlowCoordinatorDelegate: AnyObject {
 
 class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProxyProtocol
-    private let appLockService: AppLockServiceProtocol
     private let bugReportService: BugReportServiceProtocol
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationStackCoordinator: NavigationStackCoordinator
@@ -36,23 +35,18 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private var oidcPresenter: OIDCAuthenticationPresenter?
     
-    // periphery: ignore - used to store the coordinator to avoid deallocation
-    private var appLockFlowCoordinator: AppLockSetupFlowCoordinator?
-    
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     
     weak var delegate: AuthenticationFlowCoordinatorDelegate?
     
     init(authenticationService: AuthenticationServiceProxyProtocol,
-         appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
-        self.appLockService = appLockService
         self.bugReportService = bugReportService
         self.navigationRootCoordinator = navigationRootCoordinator
         self.appSettings = appSettings
@@ -108,7 +102,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func showReportProblemScreen() {
         bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(navigationStackCoordinator),
-                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                              userIndicatorController: userIndicatorController,
                                                                               bugReportService: bugReportService,
                                                                               userID: nil,
                                                                               deviceID: nil))
@@ -265,58 +259,10 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func userHasSignedIn(userSession: UserSessionProtocol) {
-        appSettings.lastLoginDate = .now
-        
-        if appSettings.appLockIsMandatory, !appLockService.isEnabled {
-            showAppLockSetupFlow(userSession: userSession)
-        } else if analytics.shouldShowAnalyticsPrompt {
-            showAnalyticsPrompt(userSession: userSession)
-        } else {
-            delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
-        }
+        delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
     }
     
-    private func showAppLockSetupFlow(userSession: UserSessionProtocol) {
-        let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .onboarding,
-                                                      appLockService: appLockService,
-                                                      navigationStackCoordinator: navigationStackCoordinator)
-        coordinator.actions.sink { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .complete:
-                appLockFlowCoordinator = nil
-                if analytics.shouldShowAnalyticsPrompt {
-                    showAnalyticsPrompt(userSession: userSession)
-                } else {
-                    delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
-                }
-            case .forceLogout:
-                fatalError("The PIN creation flow should not fail.")
-            }
-        }
-        .store(in: &cancellables)
-        
-        appLockFlowCoordinator = coordinator
-        coordinator.start()
-    }
-
-    private func showAnalyticsPrompt(userSession: UserSessionProtocol) {
-        let coordinator = AnalyticsPromptScreenCoordinator(analytics: analytics, termsURL: appSettings.analyticsConfiguration.termsURL)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .done:
-                    delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationStackCoordinator.push(coordinator)
-    }
-    
-    private static let loadingIndicatorIdentifier = "authenticationFlowCoordinatorLoading"
+    private static let loadingIndicatorIdentifier = "\(AuthenticationFlowCoordinator.self)-Loading"
     
     private func startLoading() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

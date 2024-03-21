@@ -21,7 +21,7 @@ struct AnalyticsPromptScreen: View {
     @ObservedObject var context: AnalyticsPromptScreenViewModel.Context
     
     var body: some View {
-        FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding) {
+        FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding, showBackgroundGradient: true) {
             mainContent
         } bottomContent: {
             buttons
@@ -30,6 +30,7 @@ struct AnalyticsPromptScreen: View {
         .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+        .interactiveDismissDisabled()
     }
     
     /// The main content of the screen that is shown inside the scroll view.
@@ -88,12 +89,9 @@ struct AnalyticsPromptScreen: View {
     /// The stack of enable/disable buttons.
     private var buttons: some View {
         VStack(spacing: 16) {
-            Button { context.send(viewAction: .enable) } label: {
-                Text(L10n.actionOk)
-                    .font(.compound.bodyLGSemibold)
-            }
-            .buttonStyle(.compound(.primary))
-            .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.enable)
+            Button(L10n.actionOk) { context.send(viewAction: .enable) }
+                .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.enable)
             
             Button { context.send(viewAction: .disable) } label: {
                 Text(L10n.actionNotNow)

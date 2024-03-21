@@ -22,26 +22,21 @@ struct SecureBackupLogoutConfirmationScreen: View {
     @ObservedObject var context: SecureBackupLogoutConfirmationScreenViewModel.Context
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    header
-                    content
-                }
-                .padding()
+        FullscreenDialog {
+            VStack(spacing: 16) {
+                HeroImage(icon: \.keyOffSolid)
+                content
             }
-            .toolbar { toolbar }
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .safeAreaInset(edge: .bottom) { footer.padding() }
-            .alert(item: $context.alertInfo)
+            .padding()
+        } bottomContent: {
+            footer.padding()
         }
+        .toolbar { toolbar }
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .alert(item: $context.alertInfo)
     }
-    
-    @ViewBuilder
-    private var header: some View {
-        HeroImage(icon: \.keyOffSolid)
-    }
-    
+        
     @ViewBuilder
     private var content: some View {
         Text(title)
@@ -62,21 +57,23 @@ struct SecureBackupLogoutConfirmationScreen: View {
     
     @ViewBuilder
     private var footer: some View {
-        if context.viewState.mode == .saveRecoveryKey {
-            Button {
-                context.send(viewAction: .settings)
+        VStack(spacing: 16.0) {
+            if context.viewState.mode == .saveRecoveryKey {
+                Button {
+                    context.send(viewAction: .settings)
+                } label: {
+                    Text(L10n.commonSettings)
+                }
+                .buttonStyle(.compound(.primary))
+            }
+            
+            Button(role: .destructive) {
+                context.send(viewAction: .logout)
             } label: {
-                Text(L10n.commonSettings)
+                Text(L10n.actionSignout)
             }
             .buttonStyle(.compound(.primary))
         }
-        
-        Button(role: .destructive) {
-            context.send(viewAction: .logout)
-        } label: {
-            Text(L10n.actionSignout)
-        }
-        .buttonStyle(.compound(.primary))
     }
     
     @ToolbarContentBuilder
@@ -88,7 +85,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
         }
     }
     
-    var title: String {
+    private var title: String {
         switch context.viewState.mode {
         case .saveRecoveryKey:
             return L10n.screenSignoutSaveRecoveryKeyTitle
@@ -99,7 +96,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
         }
     }
     
-    var subtitle: String {
+    private var subtitle: String {
         switch context.viewState.mode {
         case .saveRecoveryKey:
             return L10n.screenSignoutSaveRecoveryKeySubtitle

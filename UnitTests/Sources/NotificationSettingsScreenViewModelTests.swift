@@ -28,7 +28,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
     private var notificationSettingsProxy: NotificationSettingsProxyMock!
 
     @MainActor override func setUpWithError() throws {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
 
         userNotificationCenter = UserNotificationCenterMock()
         userNotificationCenter.authorizationStatusReturnValue = .authorized

@@ -90,7 +90,7 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private static let loadingIndicatorIdentifier = "BugReportLoading"
+    private static let loadingIndicatorIdentifier = "\(BugReportScreenCoordinator.self)-Loading"
     
     private func startLoading(label: String = L10n.commonLoading, progressPublisher: CurrentValuePublisher<Double, Never>) {
         parameters.userIndicatorController?.submitIndicator(

@@ -62,7 +62,7 @@ struct DocumentPicker: UIViewControllerRepresentable {
             documentPicker.callback(.cancel)
         }
         
-        private static let loadingIndicatorIdentifier = "DocumentPickerLoadingIndicator"
+        private static let loadingIndicatorIdentifier = "\(DocumentPicker.self)-Loading"
         
         func documentPicker(_ picker: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
             guard let url = urls.first else {

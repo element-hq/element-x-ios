@@ -31,13 +31,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let windowManager: WindowManagerProtocol
     private let bugReportService: BugReportServiceProtocol
     private let appSettings: AppSettings
-    private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     
     private let roomFlowCoordinator: RoomFlowCoordinator
     
     private let settingsFlowCoordinator: SettingsFlowCoordinator
+    
+    private let onboardingFlowCoordinator: OnboardingFlowCoordinator
     
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
@@ -52,7 +53,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
 
     private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
     
-    var actions: AnyPublisher<UserSessionFlowCoordinatorAction, Never> {
+    private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<UserSessionFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -63,7 +65,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          bugReportService: BugReportServiceProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          appSettings: AppSettings,
-         analytics: AnalyticsService) {
+         analytics: AnalyticsService,
+         notificationManager: NotificationManagerProtocol,
+         isNewLogin: Bool) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationRootCoordinator = navigationRootCoordinator
@@ -98,7 +102,28 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             navigationSplitCoordinator: navigationSplitCoordinator,
                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController))
         
+        onboardingFlowCoordinator = OnboardingFlowCoordinator(userSession: userSession,
+                                                              appLockService: appLockService,
+                                                              analyticsService: analytics,
+                                                              appSettings: appSettings,
+                                                              notificationManager: notificationManager,
+                                                              navigationStackCoordinator: detailNavigationStackCoordinator,
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                              isNewLogin: isNewLogin)
+        
         setupStateMachine()
+        
+        userSession.sessionSecurityStatePublisher
+            .map(\.verificationState)
+            .filter { $0 != .unknown }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                
+                attemptStartingOnboarding()
+            }
+            .store(in: &cancellables)
         
         roomFlowCoordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -208,10 +233,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
 
     func clearRoute(animated: Bool) {
-        fatalError("not necessary as of right now")
+        roomFlowCoordinator.clearRoute(animated: animated)
     }
 
     // MARK: - Private
+    
+    func attemptStartingOnboarding() {
+        if onboardingFlowCoordinator.shouldStart {
+            clearRoute(animated: false)
+            onboardingFlowCoordinator.start()
+        }
+    }
     
     private func clearPresentedSheets(animated: Bool, completion: @escaping () -> Void) {
         if navigationSplitCoordinator.sheetCoordinator == nil {
@@ -234,6 +266,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .start, .roomList):
                 presentHomeScreen()
+                attemptStartingOnboarding()
                 
             case(.roomList, .selectRoom, .roomList):
                 break
@@ -243,13 +276,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.invitesScreen, .selectRoom, .invitesScreen):
                 break
             case (.invitesScreen, .deselectRoom, .invitesScreen):
-                break
-
-            case (.roomList, .showSessionVerificationScreen, .sessionVerificationScreen):
-                Task {
-                    await self.presentSessionVerification(animated: animated)
-                }
-            case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .roomList):
                 break
                 
             case (.roomList, .showSettingsScreen, .settingsScreen):
@@ -334,8 +360,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     settingsFlowCoordinator.handleAppRoute(.settings, animated: true)
                 case .presentFeedbackScreen:
                     stateMachine.processEvent(.feedbackScreen)
-                case .presentSessionVerificationScreen:
-                    stateMachine.processEvent(.showSessionVerificationScreen)
                 case .presentSecureBackupSettings:
                     settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                 case .presentStartChatScreen:
@@ -398,36 +422,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         presentSecureBackupLogoutConfirmationScreen()
-    }
-    
-    // MARK: Session verification
-    
-    private func presentSessionVerification(animated: Bool) async {
-        guard case let .success(sessionVerificationController) = await userSession.clientProxy.sessionVerificationControllerProxy() else {
-            fatalError("The sessionVerificationController should aways be valid at this point")
-        }
-        
-        let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
-                                                                        recoveryState: userSession.sessionSecurityStatePublisher.value.recoveryState)
-        
-        let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .recoveryKey:
-                    settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
-                case .done:
-                    navigationSplitCoordinator.setSheetCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationSplitCoordinator.setSheetCoordinator(coordinator, animated: animated) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
-        }
     }
     
     // MARK: Start Chat
