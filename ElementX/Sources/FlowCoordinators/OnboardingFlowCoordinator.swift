@@ -103,12 +103,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private var requiresVerification: Bool {
-        #if DEBUG
-        false
-        #else
         // We want to make sure onboarding finishes but also every time the user becomes unverified (e.g. account reset)
         !appSettings.hasRunIdentityConfirmationOnboarding || userSession.sessionSecurityStatePublisher.value.verificationState == .unverified
-        #endif
     }
     
     private var requiresAppLockSetup: Bool {
@@ -213,6 +209,9 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 }
             case .recoveryKey:
                 presentRecoveryKeyScreen()
+            case .skip:
+                appSettings.hasRunIdentityConfirmationOnboarding = true
+                stateMachine.tryEvent(.next)
             }
         }
         .store(in: &cancellables)

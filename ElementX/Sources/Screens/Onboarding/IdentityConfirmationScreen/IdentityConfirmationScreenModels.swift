@@ -19,6 +19,8 @@ import Foundation
 enum IdentityConfirmationScreenViewModelAction {
     case otherDevice
     case recoveryKey
+    /// Only possible in debug builds.
+    case skip
 }
 
 struct IdentityConfirmationScreenViewState: BindableState {
@@ -34,4 +36,6 @@ struct IdentityConfirmationScreenViewState: BindableState {
 enum IdentityConfirmationScreenViewAction {
     case otherDevice
     case recoveryKey
+    /// Only possible in debug builds.
+    case skip
 }

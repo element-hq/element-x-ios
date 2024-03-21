@@ -81,6 +81,13 @@ struct IdentityConfirmationScreen: View {
                 }
                 .buttonStyle(.compound(.plain))
             }
+            
+            #if DEBUG
+            Button(L10n.actionSkip) {
+                context.send(viewAction: .skip)
+            }
+            .buttonStyle(.compound(.plain))
+            #endif
         }
     }
 }
