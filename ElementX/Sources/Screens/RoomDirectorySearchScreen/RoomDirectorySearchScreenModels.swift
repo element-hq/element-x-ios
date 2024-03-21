@@ -21,7 +21,6 @@ enum RoomDirectorySearchScreenViewModelAction {
 }
 
 struct RoomDirectorySearchScreenViewState: BindableState {
-    let title = L10n.screenRoomDirectorySearchTitle
     var searchResults: [RoomDirectorySearchResult] = []
     var isLoading = false
     

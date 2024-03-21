@@ -40,21 +40,16 @@ struct RoomDirectorySearchCell: View {
         ListRow(label: .avatar(title: result.name ?? result.roomID,
                                description: description,
                                icon: avatar), kind: .label)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
     }
     
-    @ViewBuilder @MainActor
+    @ViewBuilder
     var avatar: some View {
-        if dynamicTypeSize < .accessibility3 {
-            LoadableAvatarImage(url: result.avatarURL,
-                                name: result.name,
-                                contentID: result.id,
-                                avatarSize: .room(on: .roomDirectorySearch),
-                                imageProvider: imageProvider)
-                .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
-                .accessibilityHidden(true)
-        }
+        LoadableAvatarImage(url: result.avatarURL,
+                            name: result.name,
+                            contentID: result.id,
+                            avatarSize: .room(on: .roomDirectorySearch),
+                            imageProvider: imageProvider)
+            .accessibilityHidden(true)
     }
 }
 

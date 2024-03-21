@@ -31,10 +31,11 @@ struct RoomDirectorySearchScreen: View {
             }
             .listStyle(.plain)
             .environment(\.defaultMinListRowHeight, 48)
+            .scrollContentBackground(.hidden)
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .isSearching($context.isSearching)
             .searchable(text: $context.searchString, placement: .navigationBarDrawer(displayMode: .always))
-            .navigationTitle(context.viewState.title)
+            .navigationTitle(L10n.screenRoomDirectorySearchTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
