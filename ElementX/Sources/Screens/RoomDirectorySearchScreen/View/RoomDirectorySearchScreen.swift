@@ -51,12 +51,14 @@ struct RoomDirectorySearchScreen: View {
 // MARK: - Previews
 
 struct RoomDirectorySearchScreenScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomDirectorySearchScreenViewModel(roomDirectorySearch: RoomDirectorySearchProxyMock(configuration: .init(results: [.init(roomID: "test_1",
+    static let viewModel = RoomDirectorySearchScreenViewModel(roomDirectorySearch: RoomDirectorySearchProxyMock(configuration: .init(results: [.init(id: "test_1",
+                                                                                                                                                     alias: "#test_1:example.com",
                                                                                                                                                      name: "Test 1",
                                                                                                                                                      topic: "Test description 1",
                                                                                                                                                      avatarURL: nil,
                                                                                                                                                      canBeJoined: true),
-        .init(roomID: "test_2",
+        .init(id: "test_2",
+              alias: "#test_2:example.com",
               name: "Test 2",
               topic: "Test description 2",
               avatarURL: URL.documentsDirectory,

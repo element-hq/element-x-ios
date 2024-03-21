@@ -24,7 +24,7 @@ struct RoomDirectorySearchScreenViewState: BindableState {
     var searchResults: [RoomDirectorySearchResult] = []
     var isLoading = false
     
-    var bindings = RoomDirectorySearchScreenViewStateindings()
+    var bindings = RoomDirectorySearchScreenViewStateBindings()
 }
 
 struct RoomDirectorySearchScreenViewStateBindings {

@@ -150,7 +150,8 @@ final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
     }
     
     private func buildResultForRoomDescription(_ value: RoomDescription) -> RoomDirectorySearchResult {
-        RoomDirectorySearchResult(roomID: value.roomId,
+        RoomDirectorySearchResult(id: value.roomId,
+                                  alias: value.alias,
                                   name: value.name,
                                   topic: value.topic,
                                   avatarURL: value.avatarUrl.flatMap(URL.init(string:)),

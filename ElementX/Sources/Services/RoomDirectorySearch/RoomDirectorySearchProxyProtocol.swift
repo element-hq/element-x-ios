@@ -30,13 +30,10 @@ enum RoomDirectorySearchError: Error {
 }
 
 struct RoomDirectorySearchResult: Identifiable {
-    let roomID: String
+    let id: String
+    let alias: String?
     let name: String?
     let topic: String?
     let avatarURL: URL?
     let canBeJoined: Bool
-    
-    var id: String {
-        roomID
-    }
 }
