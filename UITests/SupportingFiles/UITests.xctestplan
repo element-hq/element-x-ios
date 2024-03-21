@@ -7,14 +7,6 @@
         "language" : "en",
         "region" : "GB"
       }
-    },
-    {
-      "id" : "04E7AF54-391D-42D4-8193-7AD50C685639",
-      "name" : "Pseudolanguage",
-      "options" : {
-        "language" : "IDELaunchSchemeLanguageDoubleLocalizedStrings",
-        "region" : "DE"
-      }
     }
   ],
   "defaultOptions" : {
