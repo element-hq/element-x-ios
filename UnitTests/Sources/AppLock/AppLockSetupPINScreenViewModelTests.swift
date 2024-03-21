@@ -27,13 +27,13 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
     var context: AppLockSetupPINScreenViewModelType.Context { viewModel.context }
     
     override func setUp() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         keychainController = KeychainControllerMock()
         appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
     }
     
     override func tearDown() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
     }
 
     func testCreatePIN() async throws {

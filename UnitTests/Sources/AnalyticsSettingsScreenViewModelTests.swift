@@ -25,11 +25,11 @@ class AnalyticsSettingsScreenViewModelTests: XCTestCase {
     private var context: AnalyticsSettingsScreenViewModelType.Context!
     
     override func tearDown() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
     }
     
     @MainActor override func setUpWithError() throws {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         appSettings = AppSettings()
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false

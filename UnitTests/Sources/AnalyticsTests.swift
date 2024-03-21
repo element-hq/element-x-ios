@@ -24,7 +24,7 @@ class AnalyticsTests: XCTestCase {
     private var bugReportService: BugReportServiceMock!
     
     override func setUp() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         appSettings = AppSettings()
         
         bugReportService = BugReportServiceMock()
@@ -38,7 +38,7 @@ class AnalyticsTests: XCTestCase {
     }
     
     override func tearDown() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
     }
     
     func testAnalyticsPromptNewUser() {

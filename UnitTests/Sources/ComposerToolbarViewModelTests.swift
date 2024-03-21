@@ -28,7 +28,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     private var completionSuggestionServiceMock: CompletionSuggestionServiceMock!
 
     override func setUp() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         appSettings = AppSettings()
         appSettings.richTextEditorEnabled = true
         ServiceLocator.shared.register(appSettings: appSettings)
@@ -42,7 +42,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
     
     override func tearDown() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
     }
 
     func testComposerFocus() {

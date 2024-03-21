@@ -37,7 +37,7 @@ final class NotificationManagerTests: XCTestCase {
     private var appSettings: AppSettings { ServiceLocator.shared.settings }
 
     override func setUp() {
-        AppSettings.reset()
+        AppSettings.resetAllSettings()
         notificationCenter = UserNotificationCenterMock()
         notificationCenter.requestAuthorizationOptionsReturnValue = true
         
