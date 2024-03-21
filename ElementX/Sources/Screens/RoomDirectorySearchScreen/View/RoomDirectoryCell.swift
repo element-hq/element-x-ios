@@ -20,11 +20,8 @@ import SwiftUI
 struct RoomDirectorySearchCell: View {
     let result: RoomDirectorySearchResult
     let imageProvider: ImageProviderProtocol?
-    
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    
-    // If no topic is available we show the room id but only if the room ID isn't already shown as the title
-    var description: String? {
+        
+    private var description: String? {
         if let topic = result.topic {
             return topic
         }
@@ -44,8 +41,7 @@ struct RoomDirectorySearchCell: View {
                                icon: avatar), kind: .label)
     }
     
-    @ViewBuilder
-    var avatar: some View {
+    private var avatar: some View {
         LoadableAvatarImage(url: result.avatarURL,
                             name: result.name,
                             contentID: result.id,
