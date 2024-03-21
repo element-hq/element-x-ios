@@ -20,7 +20,6 @@ struct HomeScreenContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     @ObservedObject var context: HomeScreenViewModel.Context
-    @State private var topSectionFrame: CGRect = .zero
     let scrollViewAdapter: ScrollViewAdapter
     
     var body: some View {
@@ -53,18 +52,16 @@ struct HomeScreenContent: View {
                             .layoutPriority(1)
                     }
                 case .rooms:
-                    // Showing empty views in pinned headers makes the room list spasm when reaching the top
-                    LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+                    LazyVStack(spacing: 0) {
                         Section {
                             if context.viewState.shouldShowEmptyFilterState {
                                 RoomListFiltersEmptyStateView(state: context.filtersState)
-                                    .frame(height: geometry.size.height - topSectionFrame.height)
+                                    .frame(height: geometry.size.height)
                             } else {
                                 HomeScreenRoomList(context: context)
                             }
                         } header: {
                             topSection
-                                .readFrame($topSectionFrame)
                         }
                     }
                     .isSearching($context.isSearchFieldFocused)
@@ -110,8 +107,7 @@ struct HomeScreenContent: View {
     private var topSection: some View {
         VStack(spacing: 0) {
             if !context.isSearchFieldFocused {
-                filters
-                    .frame(alignment: .top)
+                RoomListFiltersView(state: $context.filtersState)
             }
             
             if context.viewState.securityBannerMode == .sessionVerification {
@@ -129,10 +125,6 @@ struct HomeScreenContent: View {
             }
         }
         .background(Color.compound.bgCanvasDefault)
-    }
-    
-    private var filters: some View {
-        RoomListFiltersView(state: $context.filtersState)
     }
     
     @ViewBuilder
