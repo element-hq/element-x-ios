@@ -631,6 +631,7 @@
 "screen_roomlist_main_space_title" = "Chats";
 "screen_roomlist_mark_as_read" = "Mark as read";
 "screen_roomlist_mark_as_unread" = "Mark as unread";
+"screen_roomlist_room_directory_button_title" = "Browse all rooms";
 "screen_server_confirmation_change_server" = "Change account provider";
 "screen_server_confirmation_message_login_element_dot_io" = "A private server for Element employees.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix is an open network for secure, decentralised communication.";
