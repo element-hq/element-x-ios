@@ -259,8 +259,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func userHasSignedIn(userSession: UserSessionProtocol) {
-        appSettings.lastLoginDate = .now
-        
         delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
     }
     

@@ -24,7 +24,6 @@ final class AppSettings {
         case seenInvites
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
-        case lastLoginDate
         case migratedAccounts
         case timelineStyle
         
@@ -164,13 +163,6 @@ final class AppSettings {
         
         return url
     }()
-
-    /// The date that the call to `/login` completed successfully. This is used to put
-    /// a hard wall on the history of encrypted messages until we have key backup.
-    ///
-    /// Not a multi-account aware setting as key backup will come before multi-account.
-    @UserPreference(key: UserDefaultsKeys.lastLoginDate, defaultValue: nil, storageType: .userDefaults(store))
-    var lastLoginDate: Date?
     
     /// A dictionary of accounts that have performed an initial sync through their proxy.
     ///

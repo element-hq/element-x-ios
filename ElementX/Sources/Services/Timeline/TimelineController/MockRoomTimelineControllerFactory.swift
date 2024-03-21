@@ -18,8 +18,7 @@ import Foundation
 
 struct MockRoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
-                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                     secureBackupController: SecureBackupControllerProtocol) -> RoomTimelineControllerProtocol {
+                                     timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol {
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
         return timelineController
