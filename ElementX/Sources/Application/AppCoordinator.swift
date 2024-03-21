@@ -320,6 +320,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             MXLog.info("Migrating to v1.6.0, marking identity confirmation onboarding as ran.")
             if !userSessionStore.userIDs.isEmpty {
                 appSettings.hasRunIdentityConfirmationOnboarding = true
+                appSettings.hasRunNotificationPermissionsOnboarding = true
             }
         }
     }

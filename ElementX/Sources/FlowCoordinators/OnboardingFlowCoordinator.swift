@@ -309,7 +309,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .done:
-                    appSettings.hasRunNotificationPermissionsOnboarding = true
                     stateMachine.tryEvent(.next)
                 }
             }
@@ -326,6 +325,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .done:
+                    appSettings.hasRunNotificationPermissionsOnboarding = true
                     stateMachine.tryEvent(.next)
                 }
             }
