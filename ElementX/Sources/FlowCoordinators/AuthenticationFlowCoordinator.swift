@@ -262,7 +262,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
     }
     
-    private static let loadingIndicatorIdentifier = "authenticationFlowCoordinatorLoading"
+    private static let loadingIndicatorIdentifier = "\(AuthenticationFlowCoordinator.self)-Loading"
     
     private func startLoading() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

@@ -190,7 +190,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     
     // MARK: Loading indicator
     
-    private static let loadingIndicatorIdentifier = "StartChatCoordinatorLoading"
+    private static let loadingIndicatorIdentifier = "\(StartChatScreenCoordinator.self)-Loading"
     
     private func showLoadingIndicator() {
         parameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

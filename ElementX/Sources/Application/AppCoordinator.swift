@@ -665,7 +665,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     // MARK: Toasts and loading indicators
     
-    private static let loadingIndicatorIdentifier = "AppCoordinatorLoading"
+    private static let loadingIndicatorIdentifier = "\(AppCoordinator.self)-Loading"
     
     private func showLoadingIndicator() {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

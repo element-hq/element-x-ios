@@ -104,7 +104,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private static let loadingIndicatorIdentifier = "SoftLogoutLoading"
+    private static let loadingIndicatorIdentifier = "\(SoftLogoutScreenCoordinator.self)-Loading"
     
     /// Show an activity indicator whilst loading.
     @MainActor private func startLoading() {

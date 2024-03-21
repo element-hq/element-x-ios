@@ -103,6 +103,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private var requiresVerification: Bool {
+        // We want to make sure onboarding finishes but also every time the user becomes unverified (e.g. account reset)
         !appSettings.hasRunIdentityConfirmationOnboarding || userSession.sessionSecurityStatePublisher.value.verificationState == .unverified
     }
     
@@ -119,8 +120,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func configureStateMachine() {
-        let requiresNotificationsSetup = requiresNotificationsSetup
-        
         stateMachine.addRouteMapping { [weak self] _, fromState, _ in
             guard let self else {
                 return nil

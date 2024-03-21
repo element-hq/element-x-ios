@@ -171,7 +171,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     
     // MARK: Loading indicator
     
-    private static let loadingIndicatorIdentifier = "RoomMemberLoading"
+    private static let loadingIndicatorIdentifier = "\(RoomMemberDetailsScreenViewModel.self)-Loading"
     
     private func showMemberLoadingIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

@@ -102,7 +102,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         }
     }
     
-    private static let loadingIndicatorIdentifier = "MediaUploadPreviewLoading"
+    private static let loadingIndicatorIdentifier = "\(MediaUploadPreviewScreenViewModel.self)-Loading"
     
     private func startLoading(progressPublisher: CurrentValuePublisher<Double, Never>) {
         userIndicatorController.submitIndicator(

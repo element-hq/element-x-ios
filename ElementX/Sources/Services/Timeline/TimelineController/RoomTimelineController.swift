@@ -280,7 +280,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
         }
         
-        // Otherwise check if we need to add anything to the top of the timeline.
+        // Check if we need to add anything to the top of the timeline.
         switch timelineProvider.backPaginationState {
         case .timelineStartReached:
             if !roomProxy.isEncryptedOneToOneRoom {

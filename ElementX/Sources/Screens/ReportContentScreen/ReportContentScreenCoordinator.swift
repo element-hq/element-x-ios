@@ -82,7 +82,7 @@ final class ReportContentScreenCoordinator: CoordinatorProtocol {
 
     // MARK: - Private
 
-    private static let loadingIndicatorIdentifier = "ReportContentLoading"
+    private static let loadingIndicatorIdentifier = "\(ReportContentScreenCoordinator.self)-Loading"
 
     private func startLoading() {
         parameters.userIndicatorController.submitIndicator(

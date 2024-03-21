@@ -145,7 +145,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     
     // MARK: Loading indicator
     
-    private static let loadingIndicatorIdentifier = "StartChatLoading"
+    private static let loadingIndicatorIdentifier = "\(StartChatScreenViewModel.self)-Loading"
     
     private func showLoadingIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

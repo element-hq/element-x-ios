@@ -113,21 +113,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         setupStateMachine()
         
-        if !isNewLogin {
-            userSession.sessionSecurityStatePublisher
-                .map(\.verificationState)
-                .filter { $0 != .unknown }
-                .removeDuplicates()
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] _ in
-                    guard let self else { return }
-                    
-                    attemptStartingOnboarding()
-                }
-                .store(in: &cancellables)
-        } else {
-            appSettings.hasRunIdentityConfirmationOnboarding = false
-        }
+        userSession.sessionSecurityStatePublisher
+            .map(\.verificationState)
+            .filter { $0 != .unknown }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                
+                attemptStartingOnboarding()
+            }
+            .store(in: &cancellables)
         
         roomFlowCoordinator.actions.sink { [weak self] action in
             guard let self else { return }

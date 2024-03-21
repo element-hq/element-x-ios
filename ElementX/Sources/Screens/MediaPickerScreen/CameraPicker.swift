@@ -63,7 +63,7 @@ struct CameraPicker: UIViewControllerRepresentable {
             self.cameraPicker = cameraPicker
         }
         
-        private static let loadingIndicatorIdentifier = "CameraPickerLoadingIndicator"
+        private static let loadingIndicatorIdentifier = "\(CameraPicker.self)-Loading"
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             picker.delegate = nil
