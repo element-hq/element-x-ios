@@ -41,7 +41,7 @@ class UserSessionFlowCoordinatorStateMachine {
         // Showing the logout flows
         case logoutConfirmationScreen(selectedRoomID: String?)
         
-        // Show Room Directory Search screen
+        // Showing Room Directory Search screen
         case roomDirectorySearchScreen(selectedRoomID: String?)
     }
     
