@@ -48,7 +48,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.1.50
+    exactVersion: 1.1.51
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
@@ -67,7 +67,7 @@ packages:
     # path: ../swift-ogg
   WysiwygComposer:
     url: https://github.com/matrix-org/matrix-wysiwyg-composer-swift
-    exactVersion: 2.33.0
+    exactVersion: 2.34.0
     # path: ../matrix-wysiwyg/platforms/ios/lib/WysiwygComposer
   
   # External dependencies

@@ -47,6 +47,12 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("Room Directory Search") {
+                Toggle(isOn: $context.publicSearchEnabled) {
+                    Text("Public rooms search")
+                }
+            }
+            
             Section("Element Call") {
                 TextField(context.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
                     .submitLabel(.done)

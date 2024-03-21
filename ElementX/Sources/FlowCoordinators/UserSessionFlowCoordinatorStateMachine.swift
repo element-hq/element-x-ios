@@ -40,6 +40,9 @@ class UserSessionFlowCoordinatorStateMachine {
         
         // Showing the logout flows
         case logoutConfirmationScreen(selectedRoomID: String?)
+        
+        // Showing Room Directory Search screen
+        case roomDirectorySearchScreen(selectedRoomID: String?)
     }
     
     struct EventUserInfo {
@@ -81,6 +84,9 @@ class UserSessionFlowCoordinatorStateMachine {
         case showLogoutConfirmationScreen
         /// Logout has been cancelled
         case dismissedLogoutConfirmationScreen
+        
+        case showRoomDirectorySearchScreen
+        case dismissedRoomDirectorySearchScreen(joinedRoomID: String?)
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -134,6 +140,14 @@ class UserSessionFlowCoordinatorStateMachine {
             case (.roomList(let selectedRoomID), .showLogoutConfirmationScreen):
                 return .logoutConfirmationScreen(selectedRoomID: selectedRoomID)
             case (.logoutConfirmationScreen(let selectedRoomID), .dismissedLogoutConfirmationScreen):
+                return .roomList(selectedRoomID: selectedRoomID)
+                
+            case (.roomList(let selectedRoomID), .showRoomDirectorySearchScreen):
+                return .roomDirectorySearchScreen(selectedRoomID: selectedRoomID)
+            case (.roomDirectorySearchScreen(let selectedRoomID), .dismissedRoomDirectorySearchScreen(let joinedRoomID)):
+                if let joinedRoomID {
+                    return .roomList(selectedRoomID: joinedRoomID)
+                }
                 return .roomList(selectedRoomID: selectedRoomID)
                 
             default:

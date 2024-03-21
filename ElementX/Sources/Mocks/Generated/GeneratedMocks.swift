@@ -1131,6 +1131,23 @@ class ClientProxyMock: ClientProxyProtocol {
             return profileForReturnValue
         }
     }
+    //MARK: - roomDirectorySearchProxy
+
+    var roomDirectorySearchProxyCallsCount = 0
+    var roomDirectorySearchProxyCalled: Bool {
+        return roomDirectorySearchProxyCallsCount > 0
+    }
+    var roomDirectorySearchProxyReturnValue: RoomDirectorySearchProxyProtocol!
+    var roomDirectorySearchProxyClosure: (() -> RoomDirectorySearchProxyProtocol)?
+
+    func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol {
+        roomDirectorySearchProxyCallsCount += 1
+        if let roomDirectorySearchProxyClosure = roomDirectorySearchProxyClosure {
+            return roomDirectorySearchProxyClosure()
+        } else {
+            return roomDirectorySearchProxyReturnValue
+        }
+    }
     //MARK: - ignoreUser
 
     var ignoreUserCallsCount = 0
@@ -2242,6 +2259,52 @@ class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
             return await endPollPollStartIDClosure(pollStartID)
         } else {
             return endPollPollStartIDReturnValue
+        }
+    }
+}
+class RoomDirectorySearchProxyMock: RoomDirectorySearchProxyProtocol {
+    var resultsPublisher: CurrentValuePublisher<[RoomDirectorySearchResult], Never> {
+        get { return underlyingResultsPublisher }
+        set(value) { underlyingResultsPublisher = value }
+    }
+    var underlyingResultsPublisher: CurrentValuePublisher<[RoomDirectorySearchResult], Never>!
+
+    //MARK: - search
+
+    var searchQueryCallsCount = 0
+    var searchQueryCalled: Bool {
+        return searchQueryCallsCount > 0
+    }
+    var searchQueryReceivedQuery: String?
+    var searchQueryReceivedInvocations: [String?] = []
+    var searchQueryReturnValue: Result<Void, RoomDirectorySearchError>!
+    var searchQueryClosure: ((String?) async -> Result<Void, RoomDirectorySearchError>)?
+
+    func search(query: String?) async -> Result<Void, RoomDirectorySearchError> {
+        searchQueryCallsCount += 1
+        searchQueryReceivedQuery = query
+        searchQueryReceivedInvocations.append(query)
+        if let searchQueryClosure = searchQueryClosure {
+            return await searchQueryClosure(query)
+        } else {
+            return searchQueryReturnValue
+        }
+    }
+    //MARK: - nextPage
+
+    var nextPageCallsCount = 0
+    var nextPageCalled: Bool {
+        return nextPageCallsCount > 0
+    }
+    var nextPageReturnValue: Result<Void, RoomDirectorySearchError>!
+    var nextPageClosure: (() async -> Result<Void, RoomDirectorySearchError>)?
+
+    func nextPage() async -> Result<Void, RoomDirectorySearchError> {
+        nextPageCallsCount += 1
+        if let nextPageClosure = nextPageClosure {
+            return await nextPageClosure()
+        } else {
+            return nextPageReturnValue
         }
     }
 }

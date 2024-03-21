@@ -310,6 +310,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.logoutConfirmationScreen, .dismissedLogoutConfirmationScreen, .roomList):
                 break
                 
+            case (.roomList, .showRoomDirectorySearchScreen, .roomDirectorySearchScreen):
+                presentRoomDirectorySearch()
+            case (.roomDirectorySearchScreen, .dismissedRoomDirectorySearchScreen, .roomList):
+                dismissRoomDirectorySearch()
+                
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -370,6 +375,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.showInvitesScreen)
                 case .presentGlobalSearch:
                     presentGlobalSearch()
+                case .presentRoomDirectorySearch:
+                    stateMachine.processEvent(.showRoomDirectorySearchScreen)
                 }
             }
             .store(in: &cancellables)
@@ -565,5 +572,27 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         windowManager.hideGlobalSearch()
         
         globalSearchScreenCoordinator = nil
+    }
+    
+    // MARK: Room Directory Search
+    
+    private func presentRoomDirectorySearch() {
+        let coordinator = RoomDirectorySearchScreenCoordinator(parameters: .init(roomDirectorySearchProxy: userSession.clientProxy.roomDirectorySearchProxy(),
+                                                                                 imageProvider: userSession.mediaProvider,
+                                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            switch action {
+            case .dismiss:
+                self?.stateMachine.processEvent(.dismissedRoomDirectorySearchScreen(joinedRoomID: nil))
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationSplitCoordinator.setFullScreenCoverCoordinator(coordinator)
+    }
+    
+    private func dismissRoomDirectorySearch() {
+        navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
     }
 }

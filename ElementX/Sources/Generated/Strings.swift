@@ -1311,6 +1311,10 @@ internal enum L10n {
   internal static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
   /// Updating room…
   internal static var screenRoomDetailsUpdatingRoom: String { return L10n.tr("Localizable", "screen_room_details_updating_room") }
+  /// Failed loading
+  internal static var screenRoomDirectorySearchLoadingError: String { return L10n.tr("Localizable", "screen_room_directory_search_loading_error") }
+  /// Room directory
+  internal static var screenRoomDirectorySearchTitle: String { return L10n.tr("Localizable", "screen_room_directory_search_title") }
   /// Message history is currently unavailable.
   internal static var screenRoomEncryptedHistoryBanner: String { return L10n.tr("Localizable", "screen_room_encrypted_history_banner") }
   /// Message history is unavailable in this room. Verify this device to see your message history.
@@ -1543,6 +1547,8 @@ internal enum L10n {
   internal static var screenRoomlistMarkAsRead: String { return L10n.tr("Localizable", "screen_roomlist_mark_as_read") }
   /// Mark as unread
   internal static var screenRoomlistMarkAsUnread: String { return L10n.tr("Localizable", "screen_roomlist_mark_as_unread") }
+  /// Browse all rooms
+  internal static var screenRoomlistRoomDirectoryButtonTitle: String { return L10n.tr("Localizable", "screen_roomlist_room_directory_button_title") }
   /// Change account provider
   internal static var screenServerConfirmationChangeServer: String { return L10n.tr("Localizable", "screen_server_confirmation_change_server") }
   /// A private server for Element employees.

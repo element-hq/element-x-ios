@@ -130,8 +130,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "e6b350d257aeb7395e003c3d0c26ae65c2e2e349",
-        "version" : "1.1.50"
+        "revision" : "6f8e4535e11e848a513bd12027cfb5e3faa89f30",
+        "version" : "1.1.51"
       }
     },
     {
@@ -139,8 +139,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-wysiwyg-composer-swift",
       "state" : {
-        "revision" : "35119f128237dd76a60f34d1508b1341ec652e53",
-        "version" : "2.33.0"
+        "revision" : "f28fe8b5ade7496ebb09d5e36708a40de838c84d",
+        "version" : "2.34.0"
       }
     },
     {

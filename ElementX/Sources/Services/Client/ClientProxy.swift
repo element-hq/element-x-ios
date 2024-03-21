@@ -541,6 +541,10 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol {
+        RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch())
+    }
+    
     // MARK: - Ignored users
     
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
