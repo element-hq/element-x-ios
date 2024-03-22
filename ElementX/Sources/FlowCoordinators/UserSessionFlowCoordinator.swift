@@ -31,10 +31,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let windowManager: WindowManagerProtocol
     private let bugReportService: BugReportServiceProtocol
     private let appSettings: AppSettings
+    private let analytics: AnalyticsService
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     
-    private let roomFlowCoordinator: RoomFlowCoordinator
+    // periphery:ignore - retaining purpose
+    private var roomFlowCoordinator: RoomFlowCoordinator?
+    private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     
     private let settingsFlowCoordinator: SettingsFlowCoordinator
     
@@ -73,7 +76,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         self.navigationRootCoordinator = navigationRootCoordinator
         self.windowManager = windowManager
         self.bugReportService = bugReportService
+        self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.appSettings = appSettings
+        self.analytics = analytics
         
         navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         
@@ -81,16 +86,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         
         navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
-        
-        roomFlowCoordinator = RoomFlowCoordinator(userSession: userSession,
-                                                  roomTimelineControllerFactory: roomTimelineControllerFactory,
-                                                  navigationStackCoordinator: detailNavigationStackCoordinator,
-                                                  navigationSplitCoordinator: navigationSplitCoordinator,
-                                                  emojiProvider: EmojiProvider(),
-                                                  appSettings: appSettings,
-                                                  analytics: analytics,
-                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                  orientationManager: windowManager)
                 
         settingsFlowCoordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
                                                                             windowManager: windowManager,
@@ -124,28 +119,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 attemptStartingOnboarding()
             }
             .store(in: &cancellables)
-        
-        roomFlowCoordinator.actions.sink { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .presentedRoom(let roomID):
-                analytics.signpost.beginRoomFlow(roomID)
-                
-                let availableInvitesCount = userSession.clientProxy.inviteSummaryProvider?.roomListPublisher.value.count ?? 0
-                if case .invitesScreen = stateMachine.state, availableInvitesCount == 1 {
-                    dismissInvitesList(animated: true)
-                }
-                
-                stateMachine.processEvent(.selectRoom(roomID: roomID))
-            case .dismissedRoom:
-                stateMachine.processEvent(.deselectRoom)
-                analytics.signpost.endRoomFlow()
-            case .presentCallScreen(let roomProxy):
-                presentCallScreen(roomProxy: roomProxy)
-            }
-        }
-        .store(in: &cancellables)
         
         settingsFlowCoordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -202,11 +175,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             
             switch appRoute {
             case .room(let roomID):
-                Task {
-                    await self.handleRoomRoute(roomID: roomID, animated: animated)
-                }
-            case .roomDetails, .roomList, .roomMemberDetails:
-                self.roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+                Task { await self.handleRoomRoute(roomID: roomID, animated: animated) }
+            case .roomDetails(let roomID):
+                stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: true), userInfo: .init(animated: animated))
+            case .roomList, .roomMemberDetails:
+                self.roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             case .genericCallLink(let url):
                 self.navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
             case .oidcCallback:
@@ -221,11 +194,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         switch await userSession.clientProxy.roomForIdentifier(roomID)?.membership {
         case .invited:
             if UIDevice.current.isPhone {
-                roomFlowCoordinator.clearRoute(animated: animated)
+                roomFlowCoordinator?.clearRoute(animated: animated)
             }
             stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
         case .joined:
-            roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: animated)
+            stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false), userInfo: .init(animated: animated))
         case .left, .none:
             // Do nothing but maybe we should ask design to have some kind of error state
             break
@@ -233,7 +206,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
 
     func clearRoute(animated: Bool) {
-        roomFlowCoordinator.clearRoute(animated: animated)
+        roomFlowCoordinator?.handleAppRoute(.roomList, animated: animated)
     }
 
     // MARK: - Private
@@ -268,15 +241,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 presentHomeScreen()
                 attemptStartingOnboarding()
                 
-            case(.roomList, .selectRoom, .roomList):
-                break
+            case(.roomList(let currentRoomID), .selectRoom(let roomID, let showingRoomDetails), .roomList):
+                Task { await self.presentRoomFlow(roomID: roomID, showingRoomDetails: showingRoomDetails, animated: animated) }
             case(.roomList, .deselectRoom, .roomList):
-                break
+                tidyUpRoomFlow(animated: animated)
                 
             case (.invitesScreen, .selectRoom, .invitesScreen):
                 break
             case (.invitesScreen, .deselectRoom, .invitesScreen):
-                break
+                tidyUpRoomFlow(animated: animated)
                 
             case (.roomList, .showSettingsScreen, .settingsScreen):
                 break
@@ -353,13 +326,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .presentRoom(let roomID):
-                    roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: true)
+                    stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false))
                 case .presentRoomDetails(let roomID):
-                    roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
+                    stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: true))
                 case .roomLeft(let roomID):
                     if case .roomList(selectedRoomID: let selectedRoomID) = stateMachine.state,
                        selectedRoomID == roomID {
-                        roomFlowCoordinator.handleAppRoute(.roomList, animated: true)
+                        clearRoute(animated: true)
                     }
                 case .presentSettingsScreen:
                     settingsFlowCoordinator.handleAppRoute(.settings, animated: true)
@@ -431,6 +404,62 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         presentSecureBackupLogoutConfirmationScreen()
     }
     
+    // MARK: Room Flow
+    
+    private func presentRoomFlow(roomID: String, showingRoomDetails: Bool, animated: Bool) async {
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            MXLog.error("Invalid room ID: \(roomID)")
+            return
+        }
+        
+        let coordinator = await RoomFlowCoordinator(roomProxy: roomProxy,
+                                                    userSession: userSession,
+                                                    roomTimelineControllerFactory: roomTimelineControllerFactory,
+                                                    navigationStackCoordinator: detailNavigationStackCoordinator,
+                                                    navigationSplitCoordinator: navigationSplitCoordinator,
+                                                    emojiProvider: EmojiProvider(),
+                                                    appSettings: appSettings,
+                                                    analytics: analytics,
+                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                    orientationManager: windowManager)
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .complete:
+                stateMachine.processEvent(.deselectRoom)
+            case .presentRoom(let roomID):
+                stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false))
+            case .presentCallScreen(let roomProxy):
+                presentCallScreen(roomProxy: roomProxy)
+            }
+        }
+        .store(in: &cancellables)
+        
+        roomFlowCoordinator = coordinator
+        
+        if navigationSplitCoordinator.detailCoordinator !== detailNavigationStackCoordinator {
+            navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator, animated: animated)
+        }
+        
+        if showingRoomDetails {
+            coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: animated)
+        } else {
+            coordinator.handleAppRoute(.room(roomID: roomID), animated: animated)
+        }
+        
+        let availableInvitesCount = userSession.clientProxy.inviteSummaryProvider?.roomListPublisher.value.count ?? 0
+        if case .invitesScreen = stateMachine.state, availableInvitesCount == 1 {
+            dismissInvitesList(animated: true)
+        }
+    }
+    
+    private func tidyUpRoomFlow(animated: Bool) {
+        navigationSplitCoordinator.setDetailCoordinator(nil, animated: animated)
+        roomFlowCoordinator = nil
+    }
+    
     // MARK: Start Chat
     
     private func presentStartChat(animated: Bool) {
@@ -451,7 +480,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
             case .openRoom(let roomID):
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
-                self.roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: true)
+                self.stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false))
             }
         }
         .store(in: &cancellables)
@@ -473,7 +502,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 switch action {
                 case .openRoom(let roomID):
-                    self?.roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: true)
+                    self?.stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false))
                 }
             }
             .store(in: &cancellables)

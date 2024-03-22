@@ -56,7 +56,7 @@ class UserSessionFlowCoordinatorStateMachine {
         
         /// Request presentation for a particular room
         /// - Parameter roomID:the room identifier
-        case selectRoom(roomID: String)
+        case selectRoom(roomID: String, showingRoomDetails: Bool)
         /// The room screen has been dismissed
         case deselectRoom
         
@@ -105,9 +105,9 @@ class UserSessionFlowCoordinatorStateMachine {
 
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (fromState, event) {
-            case (.roomList, .selectRoom(let roomID)):
+            case (.roomList, .selectRoom(let roomID, _)):
                 return .roomList(selectedRoomID: roomID)
-            case (.invitesScreen, .selectRoom(let roomID)):
+            case (.invitesScreen, .selectRoom(let roomID, _)):
                 return .invitesScreen(selectedRoomID: roomID)
             case (.roomList, .deselectRoom):
                 return .roomList(selectedRoomID: nil)
