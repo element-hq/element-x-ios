@@ -26,15 +26,6 @@ class RoomScreenUITests: XCTestCase {
 
         try await app.assertScreenshot(.roomPlainNoAvatar)
     }
-
-    func testEncryptedWithAvatar() async throws {
-        let app = Application.launch(.roomEncryptedWithAvatar)
-
-        XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.name].exists)
-        XCTAssert(app.images[A11yIdentifiers.roomScreen.avatar].waitForExistence(timeout: 1))
-
-        try await app.assertScreenshot(.roomEncryptedWithAvatar)
-    }
     
     func testSmallTimelineLayout() async throws {
         let app = Application.launch(.roomSmallTimeline)

@@ -17,75 +17,42 @@
 import Foundation
 
 enum UITestsScreenIdentifier: String {
-    case login
-    case serverConfirmationLogin
-    case serverConfirmationRegister
-    case serverSelection
-    case serverSelectionNonModal
-    case authenticationFlow
-    case softLogout
-    case waitlist
-    case analyticsPrompt
-    case analyticsSettingsScreen
-    case templateScreen
     case appLockFlow
     case appLockFlowAlternateWindow
     case appLockFlowDisabled
     case appLockFlowDisabledAlternateWindow
     case appLockSetupFlow
-    case appLockSetupFlowUnlock
     case appLockSetupFlowMandatory
-    case home
-    case settings
+    case appLockSetupFlowUnlock
+    case authenticationFlow
     case bugReport
-    case bugReportWithScreenshot
-    case notificationSettingsScreen
-    case notificationSettingsScreenMismatchConfiguration
-    case authenticationStartScreen
+    case createPoll
+    case createRoom
+    case createRoomNoUsers
+    case invites
+    case roomLayoutBottom
+    case roomLayoutMiddle
+    case roomLayoutTop
+    case roomMembersListScreenPendingInvites
     case roomPlainNoAvatar
-    case roomEncryptedWithAvatar
+    case roomRolesAndPermissionsFlow
     case roomSmallTimeline
-    case roomSmallTimelineWithReactions
-    case roomSmallTimelineWithReadReceipts
     case roomSmallTimelineIncomingAndSmallPagination
     case roomSmallTimelineLargePagination
-    case roomLayoutTop
-    case roomLayoutMiddle
-    case roomLayoutBottom
+    case roomSmallTimelineWithReactions
+    case roomSmallTimelineWithReadReceipts
     case roomWithDisclosedPolls
-    case roomWithUndisclosedPolls
     case roomWithOutgoingPolls
+    case roomWithUndisclosedPolls
+    case serverSelection
     case sessionVerification
+    case startChat
+    case startChatWithSearchResults
+    case templateScreen
     case userSessionScreen
     case userSessionScreenReply
     case userSessionScreenRTE
-    case roomDetailsScreen
-    case roomDetailsScreenWithRoomAvatar
-    case roomDetailsScreenWithEmptyTopic
-    case roomDetailsScreenWithInvite
-    case roomDetailsScreenDmDetails
-    case roomEditDetails
-    case roomEditDetailsReadOnly
-    case roomMembersListScreen
-    case roomMembersListScreenPendingInvites
-    case roomMemberDetailsAccountOwner
-    case roomMemberDetails
-    case roomMemberDetailsIgnoredUser
-    case roomNotificationSettingsDefaultSetting
-    case roomNotificationSettingsCustomSetting
-    case roomRolesAndPermissionsFlow
-    case reportContent
-    case startChat
-    case startChatWithSearchResults
-    case invites
-    case invitesWithBadges
-    case invitesNoInvites
-    case inviteUsers
-    case createRoom
-    case createRoomNoUsers
-    case createPoll
-    case roomPollsHistoryEmptyLoadMore
-    case roomPollsHistoryLoadMore
+    case login
 }
 
 extension UITestsScreenIdentifier: CustomStringConvertible {

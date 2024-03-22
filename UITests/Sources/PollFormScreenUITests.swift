@@ -26,15 +26,15 @@ class PollFormScreenUITests: XCTestCase {
     func testFilledPoll() async throws {
         let app = Application.launch(.createPoll)
         let questionTextField = app.textViews[A11yIdentifiers.pollFormScreen.question]
-        questionTextField.coordinate(withNormalizedOffset: .init(dx: 0.5, dy: 0.5)).tap() // Tap isn't registered without the offset.
+        questionTextField.forceTap()
         questionTextField.typeText("Do you like polls?")
 
         let option1TextField = app.textViews[A11yIdentifiers.pollFormScreen.optionID(0)]
-        option1TextField.tap()
+        option1TextField.forceTap()
         option1TextField.typeText("Yes")
 
         let option2TextField = app.textViews[A11yIdentifiers.pollFormScreen.optionID(1)]
-        option2TextField.tap()
+        option2TextField.forceTap()
         option2TextField.typeText("No")
         
         // Dismiss the keyboard

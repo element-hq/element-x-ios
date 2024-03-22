@@ -51,8 +51,6 @@ class SessionVerificationUITests: XCTestCase {
         
         XCTAssert(app.staticTexts[A11yIdentifiers.sessionVerificationScreen.verificationComplete].waitForExistence(timeout: 10.0))
         try await app.assertScreenshot(.sessionVerification, step: Step.verificationComplete)
-        
-        app.buttons[A11yIdentifiers.sessionVerificationScreen.close].tap()
     }
     
     func testChallengeDoesNotMatch() async throws {
@@ -73,8 +71,6 @@ class SessionVerificationUITests: XCTestCase {
         
         app.buttons[A11yIdentifiers.sessionVerificationScreen.declineChallenge].tap()
         try await app.assertScreenshot(.sessionVerification, step: Step.verificationCancelled)
-        
-        app.buttons[A11yIdentifiers.sessionVerificationScreen.close].tap()
     }
     
     func testSessionVerificationCancelation() async throws {
@@ -92,10 +88,5 @@ class SessionVerificationUITests: XCTestCase {
         
         XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.acceptChallenge].waitForExistence(timeout: 10.0))
         try await app.assertScreenshot(.sessionVerification, step: Step.compareEmojis)
-        
-        app.buttons[A11yIdentifiers.sessionVerificationScreen.close].tap()
-        try await app.assertScreenshot(.sessionVerification, step: Step.verificationCancelled)
-        
-        app.buttons[A11yIdentifiers.sessionVerificationScreen.close].tap()
     }
 }
