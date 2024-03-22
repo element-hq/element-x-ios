@@ -28,6 +28,8 @@ struct IdentityConfirmationScreenCoordinatorParameters {
 enum IdentityConfirmationScreenCoordinatorAction {
     case otherDevice
     case recoveryKey
+    /// Only possible in debug builds.
+    case skip
 }
 
 final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
@@ -59,6 +61,8 @@ final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.otherDevice)
             case .recoveryKey:
                 actionsSubject.send(.recoveryKey)
+            case .skip:
+                actionsSubject.send(.skip)
             }
         }
         .store(in: &cancellables)
