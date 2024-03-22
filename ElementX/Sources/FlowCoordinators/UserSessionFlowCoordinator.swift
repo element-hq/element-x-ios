@@ -177,7 +177,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .room(let roomID):
                 Task { await self.handleRoomRoute(roomID: roomID, animated: animated) }
             case .roomDetails(let roomID):
-                stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: true), userInfo: .init(animated: animated))
+                if stateMachine.state.selectedRoomID == roomID {
+                    roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+                } else {
+                    stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: true), userInfo: .init(animated: animated))
+                }
             case .roomList, .roomMemberDetails:
                 self.roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             case .genericCallLink(let url):

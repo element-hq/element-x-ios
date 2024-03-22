@@ -38,11 +38,27 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Showing invites list screen
         case invitesScreen(selectedRoomID: String?)
         
-        // Showing the logout flows
+        /// Showing the logout flows
         case logoutConfirmationScreen(selectedRoomID: String?)
         
-        // Showing Room Directory Search screen
+        /// Showing Room Directory Search screen
         case roomDirectorySearchScreen(selectedRoomID: String?)
+        
+        /// The selected room ID from the state if available.
+        var selectedRoomID: String? {
+            switch self {
+            case .initial:
+                nil
+            case .roomList(let selectedRoomID),
+                 .feedbackScreen(let selectedRoomID),
+                 .settingsScreen(let selectedRoomID),
+                 .startChatScreen(let selectedRoomID),
+                 .invitesScreen(let selectedRoomID),
+                 .logoutConfirmationScreen(let selectedRoomID),
+                 .roomDirectorySearchScreen(let selectedRoomID):
+                selectedRoomID
+            }
+        }
     }
     
     struct EventUserInfo {
