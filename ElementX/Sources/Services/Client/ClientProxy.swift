@@ -509,16 +509,14 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
-
+    
     func setPusher(with configuration: PusherConfiguration) async throws {
-        try await Task.dispatch(on: .global()) {
-            try self.client.setPusher(identifiers: configuration.identifiers,
-                                      kind: configuration.kind,
-                                      appDisplayName: configuration.appDisplayName,
-                                      deviceDisplayName: configuration.deviceDisplayName,
-                                      profileTag: configuration.profileTag,
-                                      lang: configuration.lang)
-        }
+        try await client.setPusher(identifiers: configuration.identifiers,
+                                   kind: configuration.kind,
+                                   appDisplayName: configuration.appDisplayName,
+                                   deviceDisplayName: configuration.deviceDisplayName,
+                                   profileTag: configuration.profileTag,
+                                   lang: configuration.lang)
     }
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
