@@ -20,6 +20,14 @@ import SwiftUI
 struct IdentityConfirmationScreen: View {
     @ObservedObject var context: IdentityConfirmationScreenViewModel.Context
     
+    var shouldShowSkipButton: Bool {
+        #if DEBUG
+        !ProcessInfo.isRunningTests
+        #else
+        false
+        #endif
+    }
+    
     var body: some View {
         FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding) {
             screenHeader
@@ -82,12 +90,12 @@ struct IdentityConfirmationScreen: View {
                 .buttonStyle(.compound(.plain))
             }
             
-            #if DEBUG
-            Button(L10n.actionSkip) {
-                context.send(viewAction: .skip)
+            if shouldShowSkipButton {
+                Button(L10n.actionSkip) {
+                    context.send(viewAction: .skip)
+                }
+                .buttonStyle(.compound(.plain))
             }
-            .buttonStyle(.compound(.plain))
-            #endif
         }
     }
 }
