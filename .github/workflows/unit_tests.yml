@@ -14,15 +14,19 @@ jobs:
     runs-on: macos-14
 
     concurrency:
-      # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
-      # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
-      group: ${{ github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
+      # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ format('unit-tests-{0}', github.ref) }}
       cancel-in-progress: true
 
     steps:
       - uses: nschloe/action-cached-lfs-checkout@v1.2.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: irgaly/xcode-cache@v1
+        with:
+          key: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.ref }}
+          restore-keys: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.ref }}
 
       - uses: actions/cache@v3
         with:
