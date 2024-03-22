@@ -46,6 +46,8 @@ extension XCUIApplication {
         if let step {
             snapshotName += "-\(step)"
         }
+        
+        snapshotName += "-\(deviceName)-\(localeCode)"
 
         // Sometimes the CI might be too slow to load the content so let's wait the delay time
         try await Task.sleep(for: delay)
@@ -56,24 +58,19 @@ extension XCUIApplication {
             snapshot = snapshot.inset(by: insets)
         }
 
-        let failure = verifySnapshot(matching: snapshot,
+        let failure = verifySnapshot(of: snapshot,
                                      as: .image(precision: precision,
                                                 perceptualPrecision: 0.98,
                                                 scale: nil),
-                                     named: snapshotName,
-                                     testName: testName)
-
+                                     testName: snapshotName)
+        
         if let failure,
            !failure.contains("No reference was found on disk."),
            !failure.contains("to test against the newly-recorded snapshot") {
             XCTFail(failure)
         }
     }
-
-    private var testName: String {
-        localeCode + "-" + deviceName
-    }
-
+    
     private var deviceName: String {
         var name = UIDevice.current.name
         
