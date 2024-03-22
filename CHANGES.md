@@ -1,3 +1,19 @@
+## Changes in 1.6.0 (2024-03-22)
+
+✨ Features
+
+- Introduce a new notification permissions screen as part of the onboarding flows ([#2593](https://github.com/element-hq/element-x-ios/issues/2593))
+
+🙌 Improvements
+
+- Move session verification to the onboarding flows, make it mandatory ([#2592](https://github.com/element-hq/element-x-ios/issues/2592))
+- Remove the outdated welcome screen ([#2594](https://github.com/element-hq/element-x-ios/issues/2594))
+- Update onboarding flows to consolidate identity confirmation, analytics consent and notification permissions ([#2595](https://github.com/element-hq/element-x-ios/issues/2595))
+
+🚧 In development 🚧
+
+- Room directory search to search public rooms can now be accessed and used for searching, with no pagination yet. Only available in nightly. ([#2585](https://github.com/element-hq/element-x-ios/pull/2585))
+
 ## Changes in 1.5.12 (2024-03-14)
 
 Others
