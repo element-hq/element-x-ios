@@ -123,6 +123,26 @@ class SDKClientMock: SDKClientProtocol {
             return createRoomRequestReturnValue
         }
     }
+    //MARK: - deletePusher
+
+    public var deletePusherIdentifiersThrowableError: Error?
+    public var deletePusherIdentifiersCallsCount = 0
+    public var deletePusherIdentifiersCalled: Bool {
+        return deletePusherIdentifiersCallsCount > 0
+    }
+    public var deletePusherIdentifiersReceivedIdentifiers: PusherIdentifiers?
+    public var deletePusherIdentifiersReceivedInvocations: [PusherIdentifiers] = []
+    public var deletePusherIdentifiersClosure: ((PusherIdentifiers) async throws -> Void)?
+
+    public func deletePusher(identifiers: PusherIdentifiers) async throws {
+        if let error = deletePusherIdentifiersThrowableError {
+            throw error
+        }
+        deletePusherIdentifiersCallsCount += 1
+        deletePusherIdentifiersReceivedIdentifiers = identifiers
+        deletePusherIdentifiersReceivedInvocations.append(identifiers)
+        try await deletePusherIdentifiersClosure?(identifiers)
+    }
     //MARK: - deviceId
 
     public var deviceIdThrowableError: Error?
@@ -403,6 +423,31 @@ class SDKClientMock: SDKClientProtocol {
             return ignoredUsersReturnValue
         }
     }
+    //MARK: - joinRoomById
+
+    public var joinRoomByIdRoomIdThrowableError: Error?
+    public var joinRoomByIdRoomIdCallsCount = 0
+    public var joinRoomByIdRoomIdCalled: Bool {
+        return joinRoomByIdRoomIdCallsCount > 0
+    }
+    public var joinRoomByIdRoomIdReceivedRoomId: String?
+    public var joinRoomByIdRoomIdReceivedInvocations: [String] = []
+    public var joinRoomByIdRoomIdReturnValue: Room!
+    public var joinRoomByIdRoomIdClosure: ((String) async throws -> Room)?
+
+    public func joinRoomById(roomId: String) async throws -> Room {
+        if let error = joinRoomByIdRoomIdThrowableError {
+            throw error
+        }
+        joinRoomByIdRoomIdCallsCount += 1
+        joinRoomByIdRoomIdReceivedRoomId = roomId
+        joinRoomByIdRoomIdReceivedInvocations.append(roomId)
+        if let joinRoomByIdRoomIdClosure = joinRoomByIdRoomIdClosure {
+            return try await joinRoomByIdRoomIdClosure(roomId)
+        } else {
+            return joinRoomByIdRoomIdReturnValue
+        }
+    }
     //MARK: - login
 
     public var loginUsernamePasswordInitialDeviceNameDeviceIdThrowableError: Error?
@@ -655,16 +700,16 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedArguments: (identifiers: PusherIdentifiers, kind: PusherKind, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String)?
     public var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations: [(identifiers: PusherIdentifiers, kind: PusherKind, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String)] = []
-    public var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure: ((PusherIdentifiers, PusherKind, String, String, String?, String) throws -> Void)?
+    public var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure: ((PusherIdentifiers, PusherKind, String, String, String?, String) async throws -> Void)?
 
-    public func setPusher(identifiers: PusherIdentifiers, kind: PusherKind, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String) throws {
+    public func setPusher(identifiers: PusherIdentifiers, kind: PusherKind, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String) async throws {
         if let error = setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangThrowableError {
             throw error
         }
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCallsCount += 1
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedArguments = (identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang)
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang))
-        try setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure?(identifiers, kind, appDisplayName, deviceDisplayName, profileTag, lang)
+        try await setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure?(identifiers, kind, appDisplayName, deviceDisplayName, profileTag, lang)
     }
     //MARK: - subscribeToIgnoredUsers
 
