@@ -416,7 +416,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     userSession: userSession,
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                     navigationStackCoordinator: detailNavigationStackCoordinator,
-                                                    navigationSplitCoordinator: navigationSplitCoordinator,
                                                     emojiProvider: EmojiProvider(),
                                                     appSettings: appSettings,
                                                     analytics: analytics,

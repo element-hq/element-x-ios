@@ -44,7 +44,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
-    private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let emojiProvider: EmojiProviderProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
@@ -73,7 +72,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
          userSession: UserSessionProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
-         navigationSplitCoordinator: NavigationSplitCoordinator,
          emojiProvider: EmojiProviderProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
@@ -83,7 +81,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         self.userSession = userSession
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.navigationStackCoordinator = navigationStackCoordinator
-        self.navigationSplitCoordinator = navigationSplitCoordinator
         self.emojiProvider = emojiProvider
         self.appSettings = appSettings
         self.analytics = analytics
@@ -694,7 +691,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                    description: nil,
                                                                    zoomLevel: 15,
                                                                    assetType: isUserLocation ? .sender : .pin)
-                    self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    self.navigationStackCoordinator.setSheetCoordinator(nil)
                 }
                 
                 self.analytics.trackComposer(inThread: false,
@@ -703,7 +700,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                              messageType: isUserLocation ? .LocationUser : .LocationPin,
                                              startsThread: nil)
             case .close:
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                self.navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)
@@ -726,7 +723,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     return
                 }
 
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                self.navigationStackCoordinator.setSheetCoordinator(nil)
 
                 switch action {
                 case .cancel:
@@ -744,7 +741,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
 
-        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissPollForm)
         }
     }
