@@ -100,15 +100,15 @@ lane :ui_tests do |options|
   reset_simulator_contents()
   
   create_simulator_if_necessary(
-    name: "iPhone 14 (16.4)",
-    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-14",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-16-4"
+    name: "iPhone 15 (17.2)",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-15",
+    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-17-2"
   )
   
   create_simulator_if_necessary(
-    name: "iPad (9th generation)",
-    type: "com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-16-4"
+    name: "iPad (10th generation)",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation",
+    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-17-2"
   )
 
   if options[:test_name]
@@ -119,7 +119,7 @@ lane :ui_tests do |options|
 
   run_tests(
     scheme: "UITests",
-    devices: ["iPhone 14", "iPad (9th generation)"],
+    devices: ["iPhone 15", "iPad (10th generation)"],
     ensure_devices_found: true,
     prelaunch_simulator: true,
     result_bundle: true,
