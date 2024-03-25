@@ -49,7 +49,9 @@ struct RoomMembersListScreen: View {
                     .background(.compound.bgCanvasDefault)
             }
         }
-        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
+        .searchable(text: $context.searchQuery,
+                    placement: .navigationBarDrawer(displayMode: .always),
+                    prompt: L10n.commonSearchForSomeone)
         .compoundSearchField()
         .autocorrectionDisabled()
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
