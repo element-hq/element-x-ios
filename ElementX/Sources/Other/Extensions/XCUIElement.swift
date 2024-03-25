@@ -18,7 +18,7 @@ import XCTest
 
 extension XCUIElement {
     func clearAndTypeText(_ text: String) {
-        tap()
+        forceTap()
         
         guard let currentValue = value as? String else {
             XCTFail("Tried to clear and type text into a non string value")
@@ -34,11 +34,7 @@ extension XCUIElement {
     }
     
     func forceTap() {
-        if isHittable {
-            tap()
-        } else {
-            let coordinate: XCUICoordinate = coordinate(withNormalizedOffset: .init(dx: 0.5, dy: 0.5))
-            coordinate.tap()
-        }
+        let coordinate: XCUICoordinate = coordinate(withNormalizedOffset: .init(dx: 0.5, dy: 0.5))
+        coordinate.tap()
     }
 }

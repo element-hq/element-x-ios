@@ -19,6 +19,8 @@ import XCTest
 
 enum Application {
     static func launch(_ identifier: UITestsScreenIdentifier, disableTimelineAccessibility: Bool = true) -> XCUIApplication {
+        checkEnvironments()
+        
         let app = XCUIApplication()
         
         var launchEnvironment = [
@@ -33,6 +35,22 @@ enum Application {
         app.launch()
         return app
     }
+    
+    private static func checkEnvironments() {
+        let requirediPhoneSimulator = "iPhone15,4" // iPhone 15
+        let requirediPadSimulator = "iPad13,18" // iPad (10th generation)
+        let requiredOSVersion = 17
+        
+        let osVersion = ProcessInfo().operatingSystemVersion
+        guard osVersion.majorVersion == requiredOSVersion else {
+            fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
+        }
+        
+        guard let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"],
+              deviceModel == requirediPhoneSimulator || deviceModel == requirediPadSimulator else {
+            fatalError("Switch to using \(requirediPhoneSimulator) or \(requirediPadSimulator) for these tests.")
+        }
+    }
 }
 
 extension XCUIApplication {
@@ -46,6 +64,8 @@ extension XCUIApplication {
         if let step {
             snapshotName += "-\(step)"
         }
+        
+        snapshotName += "-\(deviceName)-\(localeCode)"
 
         // Sometimes the CI might be too slow to load the content so let's wait the delay time
         try await Task.sleep(for: delay)
@@ -56,24 +76,21 @@ extension XCUIApplication {
             snapshot = snapshot.inset(by: insets)
         }
 
-        let failure = verifySnapshot(matching: snapshot,
+        let failure = verifySnapshot(of: snapshot,
                                      as: .image(precision: precision,
                                                 perceptualPrecision: 0.98,
                                                 scale: nil),
-                                     named: snapshotName,
-                                     testName: testName)
-
+                                     // use any kind of suffix here to snapshot the same file multiple times and avoid countering on the library side
+                                     named: "UI",
+                                     testName: snapshotName)
+        
         if let failure,
            !failure.contains("No reference was found on disk."),
            !failure.contains("to test against the newly-recorded snapshot") {
             XCTFail(failure)
         }
     }
-
-    private var testName: String {
-        localeCode + "-" + deviceName
-    }
-
+    
     private var deviceName: String {
         var name = UIDevice.current.name
         

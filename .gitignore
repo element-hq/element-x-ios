@@ -32,18 +32,8 @@ towncrier.toml.tmp
 version_changes.md
 
 build
-Tools/Scripts/element-android
 /vendor/
 
 ## macOS Files
 .DS_Store
 ._*
-
-## Temporary Screenshots
-# ignore all
-/UITests/Sources/__Snapshots__/Application/*
-# but keep the references
-!/UITests/Sources/__Snapshots__/Application/en-GB-iPad-9th-generation.*.png
-!/UITests/Sources/__Snapshots__/Application/pseudo-iPad-9th-generation.*.png
-!/UITests/Sources/__Snapshots__/Application/en-GB-iPhone-14.*.png
-!/UITests/Sources/__Snapshots__/Application/pseudo-iPhone-14.*.png

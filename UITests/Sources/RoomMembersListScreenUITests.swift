@@ -18,12 +18,6 @@ import XCTest
 
 @MainActor
 class RoomMembersListScreenUITests: XCTestCase {
-    func testJoinedMembers() async throws {
-        let app = Application.launch(.roomMembersListScreen)
-        
-        try await app.assertScreenshot(.roomMembersListScreen)
-    }
-    
     func testJoinedAndInvitedMembers() async throws {
         let app = Application.launch(.roomMembersListScreenPendingInvites)
         

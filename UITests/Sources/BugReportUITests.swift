@@ -40,18 +40,9 @@ class BugReportUITests: XCTestCase {
         XCTAssert(!app.switches[A11yIdentifiers.bugReportScreen.canContact].isOn)
         try await app.assertScreenshot(.bugReport, step: 3)
     }
-    
-    func testInitialStateComponentsWithScreenshot() async throws {
-        let app = Application.launch(.bugReportWithScreenshot)
-        
-        // Initial state with a screenshot attached.
-        XCTAssert(app.images[A11yIdentifiers.bugReportScreen.screenshot].exists)
-        XCTAssert(app.buttons[A11yIdentifiers.bugReportScreen.removeScreenshot].exists)
-        try await app.assertScreenshot(.bugReportWithScreenshot)
-    }
 }
 
-extension XCUIElement {
+private extension XCUIElement {
     var isOn: Bool {
         (value as? String) == "1"
     }

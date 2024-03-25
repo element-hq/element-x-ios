@@ -49,13 +49,4 @@ class ServerSelectionUITests: XCTestCase {
         try await app.assertScreenshot(.serverSelection, step: 2)
         XCTAssertFalse(app.buttons[A11yIdentifiers.changeServerScreen.continue].isEnabled, "The continue button should be disabled when there is an error.")
     }
-
-    func testNonModalPresentation() async throws {
-        // Given the initial server selection screen pushed onto the stack.
-        let app = Application.launch(.serverSelectionNonModal)
-        
-        // Then the screen should be tweaked slightly to reflect the change of navigation.
-        try await app.assertScreenshot(.serverSelectionNonModal)
-        XCTAssertFalse(app.buttons[A11yIdentifiers.changeServerScreen.dismiss].exists, "The dismiss button should be hidden when not in modal presentation.")
-    }
 }

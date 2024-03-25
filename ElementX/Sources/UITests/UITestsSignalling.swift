@@ -141,7 +141,10 @@ enum UITestsSignalling {
             }
             
             var rawValue: String {
-                guard let data = try? JSONEncoder().encode(self),
+                let encoder = JSONEncoder()
+                encoder.outputFormatting = .sortedKeys
+                
+                guard let data = try? encoder.encode(self),
                       let string = String(data: data, encoding: .utf8) else {
                     return "unknown"
                 }

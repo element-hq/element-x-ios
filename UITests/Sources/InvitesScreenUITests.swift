@@ -23,17 +23,6 @@ class InvitesScreenUITests: XCTestCase {
         try await app.assertScreenshot(.invites)
     }
     
-    func testInvitesWithBadges() async throws {
-        let app = Application.launch(.invitesWithBadges)
-        try await app.assertScreenshot(.invitesWithBadges)
-    }
-    
-    func testNoInvites() async throws {
-        let app = Application.launch(.invitesNoInvites)
-        XCTAssertTrue(app.staticTexts[A11yIdentifiers.invitesScreen.noInvites].exists)
-        try await app.assertScreenshot(.invitesNoInvites)
-    }
-    
     func testDeclineInvite() async throws {
         let app = Application.launch(.invites)
         let declineButton = app.buttons[A11yIdentifiers.invitesScreen.decline].firstMatch

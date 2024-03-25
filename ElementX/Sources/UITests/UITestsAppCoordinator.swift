@@ -115,36 +115,11 @@ class MockScreen: Identifiable {
                                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .serverConfirmationLogin:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = ServerConfirmationScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(homeserver: .mockMatrixDotOrg),
-                                                                                    authenticationFlow: .login))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .serverConfirmationRegister:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = ServerConfirmationScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(homeserver: .mockOIDC),
-                                                                                    authenticationFlow: .register))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
         case .serverSelection:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                                  isModallyPresented: true))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .serverSelectionNonModal:
-            return ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                      isModallyPresented: false))
-        case .analyticsPrompt:
-            return AnalyticsPromptScreenCoordinator(analytics: ServiceLocator.shared.analytics,
-                                                    termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
-        case .analyticsSettingsScreen:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: ServiceLocator.shared.settings,
-                                                                                   analytics: ServiceLocator.shared.analytics))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .authenticationFlow:
@@ -157,27 +132,6 @@ class MockScreen: Identifiable {
             flowCoordinator.start()
             retainedState.append(flowCoordinator)
             return nil
-        case .softLogout:
-            let credentials = SoftLogoutScreenCredentials(userID: "@mock:matrix.org",
-                                                          homeserverName: "matrix.org",
-                                                          userDisplayName: "mock",
-                                                          deviceID: "ABCDEFGH")
-            return SoftLogoutScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                 credentials: credentials,
-                                                                 keyBackupNeeded: false,
-                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController))
-        case .waitlist:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let credentials = WaitlistScreenCredentials(username: "alice",
-                                                        password: "password",
-                                                        initialDeviceName: nil,
-                                                        deviceID: nil,
-                                                        homeserver: .mockMatrixDotOrg)
-            let coordinator = WaitlistScreenCoordinator(parameters: .init(credentials: credentials,
-                                                                          authenticationService: MockAuthenticationServiceProxy(),
-                                                                          userIndicatorController: ServiceLocator.shared.userIndicatorController))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
         case .templateScreen:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = TemplateScreenCoordinator(parameters: .init())
@@ -269,31 +223,6 @@ class MockScreen: Identifiable {
             retainedState.append(flowCoordinator)
             
             return navigationStackCoordinator
-        case .home:
-            let userID = "@mock:matrix.org"
-            
-            ServiceLocator.shared.settings.migratedAccounts[userID] = true
-            
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let session = MockUserSession(clientProxy: ClientProxyMock(.init(userID: userID)),
-                                          mediaProvider: MockMediaProvider(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
-            let coordinator = HomeScreenCoordinator(parameters: .init(userSession: session,
-                                                                      attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder()),
-                                                                      bugReportService: BugReportServiceMock(),
-                                                                      navigationStackCoordinator: navigationStackCoordinator,
-                                                                      selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher()))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .settings:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
-            let coordinator = SettingsScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy,
-                                                                                                       mediaProvider: MockMediaProvider(),
-                                                                                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
-                                                                          appSettings: ServiceLocator.shared.settings))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
         case .bugReport:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = BugReportScreenCoordinator(parameters: .init(bugReportService: BugReportServiceMock(),
@@ -304,65 +233,9 @@ class MockScreen: Identifiable {
                                                                            isModallyPresented: true))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .bugReportWithScreenshot:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = BugReportScreenCoordinator(parameters: .init(bugReportService: BugReportServiceMock(),
-                                                                           userID: "@mock:client.com",
-                                                                           deviceID: nil,
-                                                                           userIndicatorController: nil,
-                                                                           screenshot: Asset.Images.appLogo.image,
-                                                                           isModallyPresented: false))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .notificationSettingsScreen:
-            let userNotificationCenter = UserNotificationCenterMock()
-            userNotificationCenter.authorizationStatusReturnValue = .denied
-            let session = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "@mock:matrix.org")),
-                                          mediaProvider: MockMediaProvider(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
-            let parameters = NotificationSettingsScreenCoordinatorParameters(userSession: session,
-                                                                             userNotificationCenter: userNotificationCenter,
-                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init()),
-                                                                             isModallyPresented: false)
-            return NotificationSettingsScreenCoordinator(parameters: parameters)
-        case .notificationSettingsScreenMismatchConfiguration:
-            let userNotificationCenter = UserNotificationCenterMock()
-            userNotificationCenter.authorizationStatusReturnValue = .denied
-            let session = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "@mock:matrix.org")),
-                                          mediaProvider: MockMediaProvider(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
-            let notificationSettings = NotificationSettingsProxyMock(with: .init())
-            notificationSettings.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
-                switch (isEncrypted, isOneToOne) {
-                case (true, _):
-                    return .allMessages
-                case (false, _):
-                    return .mentionsAndKeywordsOnly
-                }
-            }
-            let parameters = NotificationSettingsScreenCoordinatorParameters(userSession: session,
-                                                                             userNotificationCenter: userNotificationCenter,
-                                                                             notificationSettings: notificationSettings,
-                                                                             isModallyPresented: false)
-            return NotificationSettingsScreenCoordinator(parameters: parameters)
-        case .authenticationStartScreen:
-            return AuthenticationStartScreenCoordinator()
         case .roomPlainNoAvatar:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(name: "Some room name", avatarURL: nil)),
-                                                             timelineController: MockRoomTimelineController(),
-                                                             mediaProvider: MockMediaProvider(),
-                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                                             emojiProvider: EmojiProvider(),
-                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
-                                                             appSettings: ServiceLocator.shared.settings)
-            let coordinator = RoomScreenCoordinator(parameters: parameters)
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomEncryptedWithAvatar:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(name: "Some room name", avatarURL: URL.picturesDirectory)),
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -571,6 +444,9 @@ class MockScreen: Identifiable {
         case .userSessionScreen, .userSessionScreenReply, .userSessionScreenRTE:
             let appSettings: AppSettings = ServiceLocator.shared.settings
             appSettings.richTextEditorEnabled = id == .userSessionScreenRTE
+            appSettings.hasRunIdentityConfirmationOnboarding = true
+            appSettings.hasRunNotificationPermissionsOnboarding = true
+            appSettings.analyticsConsentState = .optedOut
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
             
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
@@ -593,136 +469,6 @@ class MockScreen: Identifiable {
             retainedState.append(flowCoordinator)
             
             return nil
-        case .roomDetailsScreen:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let members: [RoomMemberProxyMock] = [.mockAlice, .mockBob, .mockCharlie]
-            let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
-                                                      name: "Room",
-                                                      isEncrypted: true,
-                                                      members: members,
-                                                      canUserInvite: false))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                             clientProxy: ClientProxyMock(.init()),
-                                                                             mediaProvider: MockMediaProvider(),
-                                                                             analyticsService: ServiceLocator.shared.analytics,
-                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init()),
-                                                                             attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                                              mentionBuilder: MentionBuilder()),
-                                                                             appSettings: ServiceLocator.shared.settings))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomDetailsScreenWithRoomAvatar:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let members: [RoomMemberProxyMock] = [.mockAlice, .mockBob, .mockCharlie]
-            let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
-                                                      name: "Room",
-                                                      topic: "Bacon ipsum dolor amet commodo incididunt ribeye dolore cupidatat short ribs.",
-                                                      avatarURL: URL.picturesDirectory,
-                                                      isEncrypted: true,
-                                                      canonicalAlias: "#mock:room.org",
-                                                      members: members,
-                                                      canUserInvite: false))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                             clientProxy: ClientProxyMock(.init()),
-                                                                             mediaProvider: MockMediaProvider(),
-                                                                             analyticsService: ServiceLocator.shared.analytics,
-                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init()),
-                                                                             attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                                              mentionBuilder: MentionBuilder()),
-                                                                             appSettings: ServiceLocator.shared.settings))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomDetailsScreenWithEmptyTopic:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let members: [RoomMemberProxyMock] = [.mockMeAdmin, .mockBob, .mockCharlie]
-            let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
-                                                      name: "Room",
-                                                      topic: nil,
-                                                      avatarURL: URL.picturesDirectory,
-                                                      isDirect: false,
-                                                      isEncrypted: true,
-                                                      canonicalAlias: "#mock:room.org",
-                                                      members: members,
-                                                      canUserInvite: false))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                             clientProxy: ClientProxyMock(.init()),
-                                                                             mediaProvider: MockMediaProvider(),
-                                                                             analyticsService: ServiceLocator.shared.analytics,
-                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init()),
-                                                                             attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                                              mentionBuilder: MentionBuilder()),
-                                                                             appSettings: ServiceLocator.shared.settings))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomDetailsScreenWithInvite:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let owner: RoomMemberProxyMock = .mockMe
-            let members: [RoomMemberProxyMock] = [owner, .mockBob, .mockCharlie]
-            let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
-                                                      name: "Room",
-                                                      isEncrypted: true,
-                                                      members: members,
-                                                      canUserInvite: true))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                             clientProxy: ClientProxyMock(.init()),
-                                                                             mediaProvider: MockMediaProvider(),
-                                                                             analyticsService: ServiceLocator.shared.analytics,
-                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init()),
-                                                                             attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                                              mentionBuilder: MentionBuilder()),
-                                                                             appSettings: ServiceLocator.shared.settings))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomDetailsScreenDmDetails:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let members: [RoomMemberProxyMock] = [.mockMe, .mockDan]
-            let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
-                                                      name: "Room",
-                                                      topic: "test",
-                                                      isDirect: true,
-                                                      isEncrypted: true,
-                                                      members: members,
-                                                      canUserInvite: false))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                             clientProxy: ClientProxyMock(.init()),
-                                                                             mediaProvider: MockMediaProvider(),
-                                                                             analyticsService: ServiceLocator.shared.analytics,
-                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init()),
-                                                                             attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                                              mentionBuilder: MentionBuilder()),
-                                                                             appSettings: ServiceLocator.shared.settings))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomEditDetails, .roomEditDetailsReadOnly:
-            let members: [RoomMemberProxyMock] = id == .roomEditDetails ? [.mockMeAdmin] : [.mockMe]
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
-                                                      name: "Room",
-                                                      topic: "What a cool topic!",
-                                                      avatarURL: .picturesDirectory,
-                                                      members: members))
-            let coordinator = RoomDetailsEditScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                                 mediaProvider: MockMediaProvider(),
-                                                                                 navigationStackCoordinator: navigationStackCoordinator,
-                                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                                 orientationManager: OrientationManagerMock()))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomMembersListScreen:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let members: [RoomMemberProxyMock] = [.mockAlice, .mockBob, .mockCharlie]
-            let coordinator = RoomMembersListScreenCoordinator(parameters: .init(mediaProvider: MockMediaProvider(),
-                                                                                 roomProxy: RoomProxyMock(with: .init(name: "test", members: members)),
-                                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                                 appSettings: ServiceLocator.shared.settings,
-                                                                                 analytics: ServiceLocator.shared.analytics))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
         case .roomMembersListScreenPendingInvites:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
@@ -731,24 +477,6 @@ class MockScreen: Identifiable {
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                                  appSettings: ServiceLocator.shared.settings,
                                                                                  analytics: ServiceLocator.shared.analytics))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomNotificationSettingsDefaultSetting:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
-            let coordinator = RoomNotificationSettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
-                                                                                          notificationSettingsProxy: NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .allMessages)),
-                                                                                          roomProxy: RoomProxyMock(with: .init(name: "test", members: members)),
-                                                                                          displayAsUserDefinedRoomSettings: false))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomNotificationSettingsCustomSetting:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
-            let coordinator = RoomNotificationSettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
-                                                                                          notificationSettingsProxy: NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .mentionsAndKeywordsOnly)),
-                                                                                          roomProxy: RoomProxyMock(with: .init(name: "test", members: members)),
-                                                                                          displayAsUserDefinedRoomSettings: false))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomRolesAndPermissionsFlow:
@@ -760,15 +488,6 @@ class MockScreen: Identifiable {
                                                                                        analytics: ServiceLocator.shared.analytics))
             retainedState.append(coordinator)
             coordinator.start()
-            return navigationStackCoordinator
-        case .reportContent:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = ReportContentScreenCoordinator(parameters: .init(eventID: "test",
-                                                                               senderID: RoomMemberProxyMock.mockAlice.userID,
-                                                                               roomProxy: RoomProxyMock(with: .init(name: "test")),
-                                                                               clientProxy: ClientProxyMock(.init()),
-                                                                               userIndicatorController: UserIndicatorControllerMock()))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .startChat:
             let navigationStackCoordinator = NavigationStackCoordinator()
@@ -798,67 +517,6 @@ class MockScreen: Identifiable {
                                                                            userDiscoveryService: userDiscoveryMock))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .roomMemberDetailsAccountOwner:
-            let member = RoomMemberProxyMock.mockMe
-            let roomProxy = RoomProxyMock(with: .init(name: ""))
-            roomProxy.getMemberUserIDReturnValue = .success(member)
-            
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(userID: member.userID,
-                                                                                   roomProxy: roomProxy,
-                                                                                   clientProxy: ClientProxyMock(.init()),
-                                                                                   mediaProvider: MockMediaProvider(),
-                                                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomMemberDetails:
-            let member = RoomMemberProxyMock.mockAlice
-            let roomProxy = RoomProxyMock(with: .init(name: ""))
-            roomProxy.getMemberUserIDReturnValue = .success(member)
-            
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(userID: member.userID,
-                                                                                   roomProxy: roomProxy,
-                                                                                   clientProxy: ClientProxyMock(.init()),
-                                                                                   mediaProvider: MockMediaProvider(),
-                                                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomMemberDetailsIgnoredUser:
-            let member = RoomMemberProxyMock.mockIgnored
-            let roomProxy = RoomProxyMock(with: .init(name: ""))
-            roomProxy.getMemberUserIDReturnValue = .success(member)
-            
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(userID: member.userID,
-                                                                                   roomProxy: roomProxy,
-                                                                                   clientProxy: ClientProxyMock(.init()),
-                                                                                   mediaProvider: MockMediaProvider(),
-                                                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .invitesWithBadges:
-            ServiceLocator.shared.settings.seenInvites = Set([RoomSummary].mockInvites.dropFirst(1).compactMap(\.id))
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
-            
-            clientProxy.roomForIdentifierClosure = { identifier in
-                switch identifier {
-                case "someAwesomeRoomId1":
-                    return RoomProxyMock(with: .init(name: "First room"))
-                case "someAwesomeRoomId2":
-                    return RoomProxyMock(with: .init(name: "Second room"))
-                default:
-                    return nil
-                }
-            }
-            
-            let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockInvites)))
-            clientProxy.inviteSummaryProvider = summaryProvider
-            
-            let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
         case .invites:
             ServiceLocator.shared.settings.seenInvites = Set([RoomSummary].mockInvites.compactMap(\.id))
             let navigationStackCoordinator = NavigationStackCoordinator()
@@ -879,43 +537,6 @@ class MockScreen: Identifiable {
             clientProxy.inviteSummaryProvider = summaryProvider
             
             let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .invitesNoInvites:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
-            let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .inviteUsers:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let userDiscoveryMock = UserDiscoveryServiceMock()
-            userDiscoveryMock.searchProfilesWithReturnValue = .success([])
-            let mediaProvider = MockMediaProvider()
-            let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
-            let members: [RoomMemberProxyMock] = []
-            let roomProxy = RoomProxyMock(with: .init(name: "test", members: members))
-            let roomType: InviteUsersScreenRoomType = id == .inviteUsers ? .draft : .room(roomProxy: roomProxy)
-            let coordinator = InviteUsersScreenCoordinator(parameters: .init(selectedUsers: usersSubject.asCurrentValuePublisher(),
-                                                                             roomType: roomType,
-                                                                             mediaProvider: mediaProvider,
-                                                                             userDiscoveryService: userDiscoveryMock,
-                                                                             userIndicatorController: UserIndicatorControllerMock()))
-            coordinator.actions.sink { action in
-                switch action {
-                case .toggleUser(let user):
-                    var selectedUsers = usersSubject.value
-                    if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
-                        selectedUsers.remove(at: index)
-                    } else {
-                        selectedUsers.append(user)
-                    }
-                    usersSubject.send(selectedUsers)
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .createRoom:
@@ -948,40 +569,6 @@ class MockScreen: Identifiable {
         case .createPoll:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomPollsHistoryEmptyLoadMore:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let interactionHandler = PollInteractionHandlerMock()
-            let roomTimelineController = MockRoomTimelineController()
-            roomTimelineController.backPaginationResponses = [
-                [],
-                []
-            ]
-            let roomProxyMockConfiguration = RoomProxyMockConfiguration(name: "Polls")
-            roomProxyMockConfiguration.timeline.timelineStartReached = false
-            let parameters = RoomPollsHistoryScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: roomProxyMockConfiguration),
-                                                                         pollInteractionHandler: interactionHandler,
-                                                                         roomTimelineController: roomTimelineController)
-            let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .roomPollsHistoryLoadMore:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let interactionHandler = PollInteractionHandlerMock()
-            let roomTimelineController = MockRoomTimelineController()
-
-            let poll = PollRoomTimelineItem.mock(poll: .emptyDisclosed, isEditable: true)
-            roomTimelineController.timelineItems = [poll]
-            let date: Date! = DateComponents(calendar: .current, timeZone: .gmt, year: 2023, month: 12, day: 1, hour: 12).date
-            roomTimelineController.timelineItemsTimestamp = [poll.id: date]
-            
-            let roomProxyMockConfiguration = RoomProxyMockConfiguration(name: "Polls")
-            roomProxyMockConfiguration.timeline.timelineStartReached = false
-            let parameters = RoomPollsHistoryScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: roomProxyMockConfiguration),
-                                                                         pollInteractionHandler: interactionHandler,
-                                                                         roomTimelineController: roomTimelineController)
-            let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         }
