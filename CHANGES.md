@@ -1,3 +1,9 @@
+## Changes in 1.6.1 (2024-03-25)
+
+🐛 Bugfixes
+
+- Fix a bug where the new messages in a room weren't always shown until your re-opened the room. ([#2605](https://github.com/element-hq/element-x-ios/pull/2605))
+
 ## Changes in 1.6.0 (2024-03-22)
 
 ✨ Features
