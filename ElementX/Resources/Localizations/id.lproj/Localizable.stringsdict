@@ -208,10 +208,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
 			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@, %2$@, dan %3$d lainnya</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members_second_component_ios</key>
@@ -224,10 +222,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d other</string>
 			<key>other</key>
-			<string>%d others</string>
+			<string>%d lainnya</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -240,10 +236,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@ is typing</string>
 			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ sedang mengetik</string>
 		</dict>
 	</dict>
 </dict>

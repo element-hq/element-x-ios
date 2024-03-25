@@ -999,6 +999,10 @@ internal enum L10n {
   internal static var screenIdentityConfirmedSubtitle: String { return L10n.tr("Localizable", "screen_identity_confirmed_subtitle") }
   /// Device verified
   internal static var screenIdentityConfirmedTitle: String { return L10n.tr("Localizable", "screen_identity_confirmed_title") }
+  /// Use another device
+  internal static var screenIdentityUseAnotherDevice: String { return L10n.tr("Localizable", "screen_identity_use_another_device") }
+  /// Waiting on other device...
+  internal static var screenIdentityWaitingOnOtherDevice: String { return L10n.tr("Localizable", "screen_identity_waiting_on_other_device") }
   /// Are you sure you want to decline the invitation to join %1$@?
   internal static func screenInvitesDeclineChatMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_decline_chat_message", String(describing: p1))

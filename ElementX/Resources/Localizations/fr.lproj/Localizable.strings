@@ -398,6 +398,12 @@
 "screen_edit_profile_error_title" = "Impossible de mettre à jour le profil";
 "screen_edit_profile_title" = "Modifier le profil";
 "screen_edit_profile_updating_details" = "Mise à jour du profil...";
+"screen_identity_confirmation_subtitle" = "Vérifier cette session pour configurer votre messagerie sécurisée.";
+"screen_identity_confirmation_title" = "Confirmez votre identité";
+"screen_identity_confirmed_subtitle" = "Vous pouvez désormais lire ou envoyer des messages en toute sécurité, et toute personne avec qui vous discutez peut également faire confiance à cette session.";
+"screen_identity_confirmed_title" = "Session vérifiée";
+"screen_identity_use_another_device" = "Utiliser une autre session";
+"screen_identity_waiting_on_other_device" = "En attente d’une autre session...";
 "screen_invites_decline_chat_message" = "Êtes-vous sûr de vouloir décliner l’invitation à rejoindre %1$@ ?";
 "screen_invites_decline_chat_title" = "Refuser l’invitation";
 "screen_invites_decline_direct_chat_message" = "Êtes-vous sûr de vouloir refuser cette discussion privée avec %1$@ ?";
@@ -532,6 +538,8 @@
 "screen_room_details_notification_title" = "Notifications";
 "screen_room_details_share_room_title" = "Partager le salon";
 "screen_room_details_updating_room" = "Mise à jour du salon…";
+"screen_room_directory_search_loading_error" = "Échec du chargement";
+"screen_room_directory_search_title" = "Annuaire des salons";
 "screen_room_encrypted_history_banner" = "L’historique des messages n’est actuellement pas disponible dans ce salon";
 "screen_room_encrypted_history_banner_unverified" = "L’historique de la discussion n’est pas disponible. Vérifiez cette session pour accéder à l’historique.";
 "screen_room_error_failed_retrieving_user_details" = "Impossible de récupérer les détails de l’utilisateur";
@@ -588,9 +596,9 @@
 "screen_room_roles_and_permissions_messages_and_content" = "Messages et contenus";
 "screen_room_roles_and_permissions_moderators" = "Modérateurs";
 "screen_room_roles_and_permissions_permissions_header" = "Autorisations";
-"screen_room_roles_and_permissions_reset" = "Réinitialisation des permissions";
-"screen_room_roles_and_permissions_reset_confirm_description" = "La réinitialisation des permissions entraîne la perte des réglages actuels.";
-"screen_room_roles_and_permissions_reset_confirm_title" = "Réinitialisation des permissions?";
+"screen_room_roles_and_permissions_reset" = "Réinitialisation des autorisations";
+"screen_room_roles_and_permissions_reset_confirm_description" = "La réinitialisation des autorisations entraîne la perte des réglages actuels.";
+"screen_room_roles_and_permissions_reset_confirm_title" = "Réinitialisation des autorisations?";
 "screen_room_roles_and_permissions_roles_header" = "Rôles";
 "screen_room_roles_and_permissions_room_details" = "Détails du salon";
 "screen_room_roles_and_permissions_title" = "Rôles et autorisations";
@@ -625,6 +633,7 @@
 "screen_roomlist_main_space_title" = "Conversations";
 "screen_roomlist_mark_as_read" = "Marquer comme lu";
 "screen_roomlist_mark_as_unread" = "Marquer comme non lu";
+"screen_roomlist_room_directory_button_title" = "Parcourir tous les salons";
 "screen_server_confirmation_change_server" = "Changer de fournisseur de compte";
 "screen_server_confirmation_message_login_element_dot_io" = "Un serveur privé pour les employés d’Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix est un réseau ouvert pour une communication sécurisée et décentralisée.";
@@ -654,7 +663,7 @@
 "screen_share_open_apple_maps" = "Ouvrir dans Apple Maps";
 "screen_share_open_google_maps" = "Ouvrir dans Google Maps";
 "screen_share_open_osm_maps" = "Ouvrir dans OpenStreetMap";
-"screen_share_this_location_action" = "Partager cet position";
+"screen_share_this_location_action" = "Partager cette position";
 "screen_signed_out_reason_1" = "Le mot de passe de votre compte a été modifié sur un autre appareil";
 "screen_signed_out_reason_2" = "Cette session a été supprimée depuis un autre appareil";
 "screen_signed_out_reason_3" = "L’administrateur de votre serveur a révoqué votre accès.";

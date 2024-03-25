@@ -40,7 +40,7 @@
 "action_decline" = "拒絕";
 "action_delete_poll" = "刪除投票";
 "action_disable" = "停用";
-"action_discard" = "Discard";
+"action_discard" = "捨棄";
 "action_done" = "完成";
 "action_edit" = "編輯";
 "action_edit_poll" = "編輯投票";
@@ -49,7 +49,7 @@
 "action_enter_pin" = "輸入 PIN 碼";
 "action_forgot_password" = "忘記密碼？";
 "action_forward" = "轉寄";
-"action_go_back" = "Go back";
+"action_go_back" = "返回";
 "action_invite" = "邀請";
 "action_invite_friends" = "邀請夥伴";
 "action_invite_friends_to_app" = "邀請朋友使用 %1$@";
@@ -58,7 +58,7 @@
 "action_join" = "加入";
 "action_learn_more" = "了解更多";
 "action_leave" = "離開";
-"action_leave_conversation" = "Leave conversation";
+"action_leave_conversation" = "離開對話";
 "action_leave_room" = "離開聊天室";
 "action_manage_account" = "管理帳號";
 "action_manage_devices" = "管理裝置";
@@ -76,7 +76,7 @@
 "action_reply_in_thread" = "在討論串中回覆";
 "action_report_bug" = "回報程式錯誤";
 "action_report_content" = "檢舉內容";
-"action_reset" = "Reset";
+"action_reset" = "重設";
 "action_retry" = "再試一次";
 "action_retry_decryption" = "再次嘗試解密";
 "action_save" = "儲存";
@@ -105,7 +105,7 @@
 "common_analytics" = "分析";
 "common_appearance" = "外觀";
 "common_audio" = "音訊";
-"common_blocked_users" = "Blocked users";
+"common_blocked_users" = "封鎖的使用者";
 "common_bubbles" = "泡泡";
 "common_call_invite" = "Call in progress (unsupported)";
 "common_chat_backup" = "聊天室備份";
@@ -124,7 +124,7 @@
 "common_error" = "錯誤";
 "common_everyone" = "所有人";
 "common_face_id_ios" = "Face ID";
-"common_failed" = "Failed";
+"common_failed" = "失敗";
 "common_favourite" = "我的最愛";
 "common_favourited" = "我的最愛";
 "common_file" = "檔案";
@@ -167,7 +167,7 @@
 "common_room_name" = "聊天室名稱";
 "common_room_name_placeholder" = "範例：您的計畫名稱";
 "common_saved_changes" = "Saved changes";
-"common_saving" = "Saving";
+"common_saving" = "儲存中";
 "common_screen_lock" = "螢幕鎖定";
 "common_search_for_someone" = "搜尋使用者";
 "common_search_results" = "搜尋結果";
@@ -215,15 +215,15 @@
 "dialog_permission_camera" = "為了讓應用程式使用相機，請到系統設定中開啟權限。";
 "dialog_permission_generic" = "請到系統設定中開啟權限。";
 "dialog_permission_location_description_ios" = "在「設定」->「位置」中開啟權限。";
-"dialog_permission_location_title_ios" = "%1$@ does not have access to your location.";
+"dialog_permission_location_title_ios" = "%1$@ 沒有權限存取您的位置。";
 "dialog_permission_microphone" = "為了讓應用程式使用麥克風，請到系統設定中開啟權限。";
 "dialog_permission_microphone_description_ios" = "Grant access so you can record and send messages with audio.";
-"dialog_permission_microphone_title_ios" = "%1$@ needs permission to access your microphone.";
+"dialog_permission_microphone_title_ios" = "%1$@ 需要權限存取麥克風。";
 "dialog_permission_notification" = "為了讓應用程式顯示通知，請到系統設定中開啟權限。";
 "dialog_title_confirmation" = "確認";
 "dialog_title_warning" = "警告";
-"dialog_unsaved_changes_description_ios" = "Your changes won’t be saved";
-"dialog_unsaved_changes_title" = "Save changes?";
+"dialog_unsaved_changes_description_ios" = "您的變更不會儲存";
+"dialog_unsaved_changes_title" = "是否儲存變更？";
 "emoji_picker_category_activity" = "活動";
 "emoji_picker_category_flags" = "旗幟";
 "emoji_picker_category_foods" = "食物與飲料";
@@ -235,7 +235,7 @@
 "error_failed_creating_the_permalink" = "無法建立永久連結";
 "error_failed_loading_map" = "%1$@無法載入地圖。請稍後再試。";
 "error_failed_loading_messages" = "無法載入訊息";
-"error_failed_locating_user" = "%1$@無法取得您的位置。請稍後再試。";
+"error_failed_locating_user" = "%1$@ 無法取得您的位置。請稍後再試。";
 "error_failed_uploading_voice_message" = "無法上傳語音訊息。";
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "有些訊息尚未傳送";
@@ -291,7 +291,7 @@
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
-"screen_room_mentions_at_room_subtitle" = "Notify the whole room";
+"screen_room_mentions_at_room_subtitle" = "通知整個聊天室";
 "screen_account_provider_change" = "更改帳號提供者";
 "screen_account_provider_form_hint" = "家伺服器位址";
 "screen_account_provider_form_notice" = "輸入關鍵字或網域名稱。";
@@ -398,6 +398,12 @@
 "screen_edit_profile_error_title" = "無法更新個人檔案";
 "screen_edit_profile_title" = "編輯個人檔案";
 "screen_edit_profile_updating_details" = "正在更新個人檔案...";
+"screen_identity_confirmation_subtitle" = "Verify this device to set up secure messaging.";
+"screen_identity_confirmation_title" = "Confirm that it's you";
+"screen_identity_confirmed_subtitle" = "Now you can read or send messages securely, and anyone you chat with can also trust this device.";
+"screen_identity_confirmed_title" = "裝置已認證";
+"screen_identity_use_another_device" = "使用另一個裝置";
+"screen_identity_waiting_on_other_device" = "正在等待其他裝置......";
 "screen_invites_decline_chat_message" = "Are you sure you want to decline the invitation to join %1$@?";
 "screen_invites_decline_chat_title" = "Decline invite";
 "screen_invites_decline_direct_chat_message" = "Are you sure you want to decline this private chat with %1$@?";
@@ -532,6 +538,8 @@
 "screen_room_details_notification_title" = "通知";
 "screen_room_details_share_room_title" = "分享聊天室";
 "screen_room_details_updating_room" = "正在更新聊天室...";
+"screen_room_directory_search_loading_error" = "Failed loading";
+"screen_room_directory_search_title" = "Room directory";
 "screen_room_encrypted_history_banner" = "Message history is currently unavailable.";
 "screen_room_encrypted_history_banner_unverified" = "Message history is unavailable in this room. Verify this device to see your message history.";
 "screen_room_error_failed_retrieving_user_details" = "Could not retrieve user details";
@@ -604,8 +612,8 @@
 "screen_room_timeline_reactions_show_more" = "更多";
 "screen_room_timeline_read_marker_title" = "新訊息";
 "screen_room_typing_many_members_first_component_ios" = "%1$@、%2$@ 和";
-"screen_room_typing_notification_plural_ios" = " 正在打字";
-"screen_room_typing_notification_singular_ios" = " 正在打字";
+"screen_room_typing_notification_plural_ios" = " 正在打字...";
+"screen_room_typing_notification_singular_ios" = " 正在打字...";
 "screen_room_typing_two_members" = "%1$@ 和 %2$@";
 "screen_room_voice_message_tooltip" = "Hold to record";
 "screen_roomlist_a11y_create_message" = "建立新的對話或聊天室";
@@ -625,6 +633,7 @@
 "screen_roomlist_main_space_title" = "所有聊天室";
 "screen_roomlist_mark_as_read" = "Mark as read";
 "screen_roomlist_mark_as_unread" = "Mark as unread";
+"screen_roomlist_room_directory_button_title" = "Browse all rooms";
 "screen_server_confirmation_change_server" = "更改帳號提供者";
 "screen_server_confirmation_message_login_element_dot_io" = "A private server for Element employees.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix 是一個開放網路，為了安全且去中心化的通訊而生。";
@@ -785,7 +794,7 @@
 "screen_room_change_permissions_messages_and_content" = "Messages and content";
 "screen_room_change_permissions_room_details" = "Room details";
 "screen_room_details_invite_people_title" = "邀請夥伴";
-"screen_room_details_leave_conversation_title" = "Leave conversation";
+"screen_room_details_leave_conversation_title" = "離開對話";
 "screen_room_details_leave_room_title" = "離開聊天室";
 "screen_room_details_roles_and_permissions" = "Roles and permissions";
 "screen_room_details_room_name_label" = "聊天室名稱";

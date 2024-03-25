@@ -398,6 +398,12 @@
 "screen_edit_profile_error_title" = "Nepodarilo sa aktualizovať profil";
 "screen_edit_profile_title" = "Upraviť profil";
 "screen_edit_profile_updating_details" = "Aktualizácia profilu...";
+"screen_identity_confirmation_subtitle" = "Ak chcete nastaviť zabezpečené správy, overte toto zariadenie.";
+"screen_identity_confirmation_title" = "Potvrďte, že ste to vy";
+"screen_identity_confirmed_subtitle" = "Teraz môžete bezpečne čítať alebo odosielať správy a tomuto zariadeniu môže dôverovať aj ktokoľvek, s kým konverzujete.";
+"screen_identity_confirmed_title" = "Zariadenie overené";
+"screen_identity_use_another_device" = "Použiť iné zariadenie";
+"screen_identity_waiting_on_other_device" = "Čaká sa na druhom zariadení...";
 "screen_invites_decline_chat_message" = "Naozaj chcete odmietnuť pozvánku na pripojenie do %1$@?";
 "screen_invites_decline_chat_title" = "Odmietnuť pozvanie";
 "screen_invites_decline_direct_chat_message" = "Naozaj chcete odmietnuť túto súkromnú konverzáciu s %1$@?";
@@ -532,6 +538,8 @@
 "screen_room_details_notification_title" = "Oznámenia";
 "screen_room_details_share_room_title" = "Zdieľať miestnosť";
 "screen_room_details_updating_room" = "Aktualizácia miestnosti...";
+"screen_room_directory_search_loading_error" = "Načítanie zlyhalo";
+"screen_room_directory_search_title" = "Adresár miestností";
 "screen_room_encrypted_history_banner" = "História správ v tejto miestnosti nie je momentálne k dispozícii";
 "screen_room_encrypted_history_banner_unverified" = "História správ nie je v tejto miestnosti k dispozícii. Ak chcete zobraziť históriu správ, overte toto zariadenie.";
 "screen_room_error_failed_retrieving_user_details" = "Nepodarilo sa získať údaje o používateľovi";
@@ -625,6 +633,7 @@
 "screen_roomlist_main_space_title" = "Všetky konverzácie";
 "screen_roomlist_mark_as_read" = "Označiť ako prečítané";
 "screen_roomlist_mark_as_unread" = "Označiť ako neprečítané";
+"screen_roomlist_room_directory_button_title" = "Prehliadať všetky miestnosti";
 "screen_server_confirmation_change_server" = "Zmeniť poskytovateľa účtu";
 "screen_server_confirmation_message_login_element_dot_io" = "Súkromný server pre zamestnancov spoločnosti Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu.";

@@ -40,7 +40,7 @@
 "action_decline" = "Відхилити";
 "action_delete_poll" = "Видалити опитування";
 "action_disable" = "Вимкнути";
-"action_discard" = "Discard";
+"action_discard" = "Скасувати";
 "action_done" = "Готово";
 "action_edit" = "Редагувати";
 "action_edit_poll" = "Редагувати опитування";
@@ -49,7 +49,7 @@
 "action_enter_pin" = "Введіть PIN-код";
 "action_forgot_password" = "Забули пароль?";
 "action_forward" = "Переслати";
-"action_go_back" = "Go back";
+"action_go_back" = "Повернутися назад";
 "action_invite" = "Запросити";
 "action_invite_friends" = "Запросити людей";
 "action_invite_friends_to_app" = "Запросити людей до %1$@";
@@ -73,7 +73,7 @@
 "action_react" = "Реакція";
 "action_remove" = "Вилучити";
 "action_reply" = "Відповісти";
-"action_reply_in_thread" = "Відповісти в темі";
+"action_reply_in_thread" = "Відповісти в гілці";
 "action_report_bug" = "Повідомити про помилку";
 "action_report_content" = "Повідомити про вміст";
 "action_reset" = "Скинути";
@@ -398,6 +398,12 @@
 "screen_edit_profile_error_title" = "Неможливо оновити профіль";
 "screen_edit_profile_title" = "Редагувати профіль";
 "screen_edit_profile_updating_details" = "Оновлення профілю...";
+"screen_identity_confirmation_subtitle" = "Перевірте цей пристрій, щоб налаштувати безпечний обмін повідомленнями.";
+"screen_identity_confirmation_title" = "Підтвердіть, що це ви";
+"screen_identity_confirmed_subtitle" = "Тепер ви можете безпечно читати або надсилати повідомлення, і кожен, з ким ви спілкуєтесь, також може довіряти цьому пристрою.";
+"screen_identity_confirmed_title" = "Пристрій перевірено";
+"screen_identity_use_another_device" = "Use another device";
+"screen_identity_waiting_on_other_device" = "Waiting on other device...";
 "screen_invites_decline_chat_message" = "Ви впевнені, що хочете відхилити запрошення приєднатися до %1$@?";
 "screen_invites_decline_chat_title" = "Відхилити запрошення";
 "screen_invites_decline_direct_chat_message" = "Ви дійсно хочете відмовитися від приватного чату з %1$@?";
@@ -532,6 +538,8 @@
 "screen_room_details_notification_title" = "Сповіщення";
 "screen_room_details_share_room_title" = "Поділитися кімнатою";
 "screen_room_details_updating_room" = "Оновлення кімнати...";
+"screen_room_directory_search_loading_error" = "Не вдалося завантажити";
+"screen_room_directory_search_title" = "Каталог кімнат";
 "screen_room_encrypted_history_banner" = "Історія повідомлень наразі недоступна.";
 "screen_room_encrypted_history_banner_unverified" = "Історія повідомлень недоступна в цій кімнаті. Перевірте цей пристрій, щоб побачити історію повідомлень.";
 "screen_room_error_failed_retrieving_user_details" = "Не вдалося отримати дані користувача";
@@ -604,7 +612,7 @@
 "screen_room_timeline_reactions_show_more" = "Показати більше";
 "screen_room_timeline_read_marker_title" = "Нове";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ та ";
-"screen_room_typing_notification_plural_ios" = " пишуть";
+"screen_room_typing_notification_plural_ios" = " пишуть...";
 "screen_room_typing_notification_singular_ios" = " пише";
 "screen_room_typing_two_members" = "%1$@ та %2$@";
 "screen_room_voice_message_tooltip" = "Тримати, щоб записати";
@@ -625,6 +633,7 @@
 "screen_roomlist_main_space_title" = "Усі чати";
 "screen_roomlist_mark_as_read" = "Позначити як прочитане";
 "screen_roomlist_mark_as_unread" = "Позначити як непрочитане";
+"screen_roomlist_room_directory_button_title" = "Browse all rooms";
 "screen_server_confirmation_change_server" = "Змінити провайдера облікового запису";
 "screen_server_confirmation_message_login_element_dot_io" = "Приватний сервер для співробітників Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix — це відкрита мережа для безпечної, децентралізованої комунікації.";
@@ -691,16 +700,16 @@
 "state_event_avatar_changed_too" = "(аватар теж було змінено)";
 "state_event_avatar_url_changed" = "%1$@ змінив (-ла) свій аватар";
 "state_event_avatar_url_changed_by_you" = "Ви змінили свій аватар";
-"state_event_demoted_to_member" = "%1$@ was demoted to member";
-"state_event_demoted_to_moderator" = "%1$@ was demoted to moderator";
+"state_event_demoted_to_member" = "%1$@ був понижений до члена";
+"state_event_demoted_to_moderator" = "%1$@ був понижений до модератора";
 "state_event_display_name_changed_from" = "%1$@ змінив (-ла) своє імʼя з %2$@ на %3$@";
 "state_event_display_name_changed_from_by_you" = "Ви змінили своє ім'я з %1$@ на %2$@";
 "state_event_display_name_removed" = "%1$@ видалив (-ла) своє ім'я (було %2$@)";
 "state_event_display_name_removed_by_you" = "Ви видалили своє ім'я (було%1$@)";
 "state_event_display_name_set" = "%1$@ змінив (-ла) своє ім'я на %2$@";
 "state_event_display_name_set_by_you" = "Ви змінили своє імʼя на %1$@";
-"state_event_promoted_to_administrator" = "%1$@ was promoted to admin";
-"state_event_promoted_to_moderator" = "%1$@ was promoted to moderator";
+"state_event_promoted_to_administrator" = "%1$@ був підвищений до адміністратора";
+"state_event_promoted_to_moderator" = "%1$@ був підвищений до модератора";
 "state_event_room_avatar_changed" = "%1$@ змінив (-ла) аватар кімнати";
 "state_event_room_avatar_changed_by_you" = "Ви змінили аватар кімнати";
 "state_event_room_avatar_removed" = "%1$@ видалив (-ла) аватар кімнати";
