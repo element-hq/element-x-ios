@@ -68,14 +68,19 @@ class RoomFlowCoordinatorTests: XCTestCase {
     func testNoOp() async throws {
         try await process(route: .roomDetails(roomID: "1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
+        let detailsCoordinator = navigationStackCoordinator.rootCoordinator
+        
         roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
         await Task.yield()
+        
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
+        XCTAssert(navigationStackCoordinator.rootCoordinator === detailsCoordinator)
     }
     
     func testPushDetails() async throws {
         try await process(route: .room(roomID: "1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
         try await process(route: .roomDetails(roomID: "1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)

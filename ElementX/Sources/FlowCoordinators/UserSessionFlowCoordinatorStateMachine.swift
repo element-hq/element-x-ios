@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import SwiftState
 
@@ -111,6 +112,11 @@ class UserSessionFlowCoordinatorStateMachine {
         stateMachine.state
     }
     
+    var stateSubject = PassthroughSubject<State, Never>()
+    var statePublisher: AnyPublisher<State, Never> {
+        stateSubject.eraseToAnyPublisher()
+    }
+    
     init() {
         stateMachine = StateMachine(state: .initial)
         configure()
@@ -177,6 +183,10 @@ class UserSessionFlowCoordinatorStateMachine {
             } else {
                 MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
             }
+        }
+        
+        addTransitionHandler { [weak self] context in
+            self?.stateSubject.send(context.toState)
         }
     }
     

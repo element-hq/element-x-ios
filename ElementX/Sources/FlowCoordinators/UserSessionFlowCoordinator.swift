@@ -61,6 +61,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    /// For testing purposes.
+    var statePublisher: AnyPublisher<UserSessionFlowCoordinatorStateMachine.State, Never> { stateMachine.statePublisher }
+    
     init(userSession: UserSessionProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
          windowManager: WindowManagerProtocol,
