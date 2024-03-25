@@ -19,9 +19,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: nschloe/action-cached-lfs-checkout@v1.2.1
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: nschloe/action-cached-lfs-checkout@v1
 
       - uses: irgaly/xcode-cache@v1
         with:
