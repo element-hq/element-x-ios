@@ -165,7 +165,7 @@
 "common_rich_text_editor" = "Редактор форматированного текста";
 "common_room" = "Комната";
 "common_room_name" = "Название комнаты";
-"common_room_name_placeholder" = "например, название вашего проекта";
+"common_room_name_placeholder" = "напр., название вашего проекта";
 "common_saved_changes" = "Сохраненные изменения";
 "common_saving" = "Сохранение";
 "common_screen_lock" = "Блокировка экрана";
@@ -398,6 +398,12 @@
 "screen_edit_profile_error_title" = "Невозможно обновить профиль";
 "screen_edit_profile_title" = "Редактировать профиль";
 "screen_edit_profile_updating_details" = "Обновление профиля…";
+"screen_identity_confirmation_subtitle" = "Подтвердите это устройство, чтобы настроить безопасный обмен сообщениями.";
+"screen_identity_confirmation_title" = "Подтвердите, что это вы";
+"screen_identity_confirmed_subtitle" = "Теперь вы можете безопасно читать и отправлять сообщения, и все, с кем вы общаетесь в чате, также могут доверять этому устройству.";
+"screen_identity_confirmed_title" = "Устройство проверено";
+"screen_identity_use_another_device" = "Use another device";
+"screen_identity_waiting_on_other_device" = "Waiting on other device...";
 "screen_invites_decline_chat_message" = "Вы уверены, что хотите отклонить приглашение в %1$@?";
 "screen_invites_decline_chat_title" = "Отклонить приглашение";
 "screen_invites_decline_direct_chat_message" = "Вы уверены, что хотите отказаться от личного общения с %1$@?";
@@ -532,6 +538,8 @@
 "screen_room_details_notification_title" = "Уведомления";
 "screen_room_details_share_room_title" = "Поделиться комнатой";
 "screen_room_details_updating_room" = "Обновление комнаты…";
+"screen_room_directory_search_loading_error" = "Сбой загрузки";
+"screen_room_directory_search_title" = "Каталог комнат";
 "screen_room_encrypted_history_banner" = "В настоящее время история сообщений недоступна в этой комнате.";
 "screen_room_encrypted_history_banner_unverified" = "История сообщений в этой комнате недоступна. Проверьте это устройство, чтобы увидеть историю сообщений.";
 "screen_room_error_failed_retrieving_user_details" = "Не удалось получить данные о пользователе";
@@ -604,8 +612,8 @@
 "screen_room_timeline_reactions_show_more" = "Показать больше";
 "screen_room_timeline_read_marker_title" = "Новый";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ и ";
-"screen_room_typing_notification_plural_ios" = "печатают…";
-"screen_room_typing_notification_singular_ios" = "печатает…";
+"screen_room_typing_notification_plural_ios" = " печатают…";
+"screen_room_typing_notification_singular_ios" = " печатает…";
 "screen_room_typing_two_members" = "%1$@ и %2$@";
 "screen_room_voice_message_tooltip" = "Удерживайте для записи";
 "screen_roomlist_a11y_create_message" = "Создайте новую беседу или комнату";
@@ -625,6 +633,7 @@
 "screen_roomlist_main_space_title" = "Все чаты";
 "screen_roomlist_mark_as_read" = "Пометить как прочитанное";
 "screen_roomlist_mark_as_unread" = "Пометить как непрочитанное";
+"screen_roomlist_room_directory_button_title" = "Просмотреть все комнаты";
 "screen_server_confirmation_change_server" = "Сменить учетную запись";
 "screen_server_confirmation_message_login_element_dot_io" = "Частный сервер для сотрудников Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix — это открытая сеть для безопасной децентрализованной связи.";

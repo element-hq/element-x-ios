@@ -398,6 +398,12 @@
 "screen_edit_profile_error_title" = "Profil kann nicht aktualisiert werden";
 "screen_edit_profile_title" = "Profil bearbeiten";
 "screen_edit_profile_updating_details" = "Profil wird aktualisiert...";
+"screen_identity_confirmation_subtitle" = "Verifiziere dieses Gerät, um sicheres Messaging einzurichten.";
+"screen_identity_confirmation_title" = "Bestätige, dass du es bist";
+"screen_identity_confirmed_subtitle" = "Du kannst nun verschlüsselte Nachrichten lesen oder versenden.";
+"screen_identity_confirmed_title" = "Gerät verifiziert";
+"screen_identity_use_another_device" = "Ein anderes Gerät verwenden";
+"screen_identity_waiting_on_other_device" = "Bitte warten bis das andere Gerät bereit ist.";
 "screen_invites_decline_chat_message" = "Möchtest du die Einladung zum Betreten von %1$@ wirklich ablehnen?";
 "screen_invites_decline_chat_title" = "Einladung ablehnen";
 "screen_invites_decline_direct_chat_message" = "Bist du sicher, dass du diese Direktnachricht von %1$@ ablehnen möchtest?";
@@ -499,7 +505,7 @@
 "screen_room_attachment_text_formatting" = "Textformatierung";
 "screen_room_change_permissions_administrators" = "Nur Administratoren";
 "screen_room_change_permissions_ban_people" = "Mitglieder sperren";
-"screen_room_change_permissions_delete_messages" = "Nachrichten löschen";
+"screen_room_change_permissions_delete_messages" = "Nachrichten anderer Mitgliedern löschen";
 "screen_room_change_permissions_invite_people" = "Personen einladen";
 "screen_room_change_permissions_moderators" = "Administratoren und Moderatoren";
 "screen_room_change_permissions_remove_people" = "Personen entfernen";
@@ -532,6 +538,8 @@
 "screen_room_details_notification_title" = "Benachrichtigungen";
 "screen_room_details_share_room_title" = "Raum teilen";
 "screen_room_details_updating_room" = "Raum wird aktualisiert…";
+"screen_room_directory_search_loading_error" = "Fehler beim Laden";
+"screen_room_directory_search_title" = "Raumverzeichnis";
 "screen_room_encrypted_history_banner" = "Der Nachrichtenverlauf ist derzeit in diesem Raum nicht verfügbar";
 "screen_room_encrypted_history_banner_unverified" = "Der Nachrichtenverlauf ist in diesem Raum nicht verfügbar. Verifiziere dieses Gerät, um deinen Nachrichtenverlauf zu sehen.";
 "screen_room_error_failed_retrieving_user_details" = "Benutzerdetails konnten nicht abgerufen werden";
@@ -625,6 +633,7 @@
 "screen_roomlist_main_space_title" = "Chats";
 "screen_roomlist_mark_as_read" = "Als gelesen markieren";
 "screen_roomlist_mark_as_unread" = "Als ungelesen markieren";
+"screen_roomlist_room_directory_button_title" = "Alle Räume durchsuchen";
 "screen_server_confirmation_change_server" = "Kontoanbieter wechseln";
 "screen_server_confirmation_message_login_element_dot_io" = "Ein privater Server für die Mitarbeiter von Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix ist ein offenes Netzwerk für eine sichere, dezentrale Kommunikation.";

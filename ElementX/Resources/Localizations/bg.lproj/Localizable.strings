@@ -398,6 +398,12 @@
 "screen_edit_profile_error_title" = "Не може да се обнови профила";
 "screen_edit_profile_title" = "Редактиране на профила";
 "screen_edit_profile_updating_details" = "Обновяване на профила…";
+"screen_identity_confirmation_subtitle" = "Verify this device to set up secure messaging.";
+"screen_identity_confirmation_title" = "Confirm that it's you";
+"screen_identity_confirmed_subtitle" = "Now you can read or send messages securely, and anyone you chat with can also trust this device.";
+"screen_identity_confirmed_title" = "Device verified";
+"screen_identity_use_another_device" = "Use another device";
+"screen_identity_waiting_on_other_device" = "Waiting on other device...";
 "screen_invites_decline_chat_message" = "Сигурни ли сте, че искате да отхвърлите поканата за присъединяване в %1$@?";
 "screen_invites_decline_chat_title" = "Отказване на покана";
 "screen_invites_decline_direct_chat_message" = "Are you sure you want to decline this private chat with %1$@?";
@@ -532,6 +538,8 @@
 "screen_room_details_notification_title" = "Известия";
 "screen_room_details_share_room_title" = "Споделяне на стаята";
 "screen_room_details_updating_room" = "Обновяване на стаята…";
+"screen_room_directory_search_loading_error" = "Failed loading";
+"screen_room_directory_search_title" = "Room directory";
 "screen_room_encrypted_history_banner" = "Хронологията на съобщенията не е налична в момента.";
 "screen_room_encrypted_history_banner_unverified" = "Message history is unavailable in this room. Verify this device to see your message history.";
 "screen_room_error_failed_retrieving_user_details" = "Could not retrieve user details";
@@ -625,6 +633,7 @@
 "screen_roomlist_main_space_title" = "Всички чатове";
 "screen_roomlist_mark_as_read" = "Отбелязване като прочетено";
 "screen_roomlist_mark_as_unread" = "Отбелязване като непрочетено";
+"screen_roomlist_room_directory_button_title" = "Browse all rooms";
 "screen_server_confirmation_change_server" = "Промяна на доставчика на акаунт";
 "screen_server_confirmation_message_login_element_dot_io" = "A private server for Element employees.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix е отворена мрежа за сигурна, децентрализирана комуникация.";

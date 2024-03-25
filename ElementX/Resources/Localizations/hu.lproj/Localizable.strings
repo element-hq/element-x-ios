@@ -398,6 +398,12 @@
 "screen_edit_profile_error_title" = "Nem sikerült frissíteni a profilt";
 "screen_edit_profile_title" = "Profil szerkesztése";
 "screen_edit_profile_updating_details" = "Profil frissítése…";
+"screen_identity_confirmation_subtitle" = "A biztonságos üzenetkezelés beállításához ellenőrizze ezt az eszközt.";
+"screen_identity_confirmation_title" = "Erősítse meg, hogy Ön az";
+"screen_identity_confirmed_subtitle" = "Mostantól biztonságosan olvashat vagy küldhet üzeneteket, és bármelyik csevegőpartnere megbízhat ebben az eszközben.";
+"screen_identity_confirmed_title" = "Eszköz ellenőrizve";
+"screen_identity_use_another_device" = "Use another device";
+"screen_identity_waiting_on_other_device" = "Waiting on other device...";
 "screen_invites_decline_chat_message" = "Biztos, hogy elutasítja a meghívást, hogy csatlakozzon ehhez: %1$@?";
 "screen_invites_decline_chat_title" = "Meghívás elutasítása";
 "screen_invites_decline_direct_chat_message" = "Biztos, hogy elutasítja ezt a privát csevegést vele: %1$@?";
@@ -532,6 +538,8 @@
 "screen_room_details_notification_title" = "Értesítések";
 "screen_room_details_share_room_title" = "Szoba megosztása";
 "screen_room_details_updating_room" = "Szoba frissítése…";
+"screen_room_directory_search_loading_error" = "Failed loading";
+"screen_room_directory_search_title" = "Room directory";
 "screen_room_encrypted_history_banner" = "Az üzenetelőzmények jelenleg nem érhetők el.";
 "screen_room_encrypted_history_banner_unverified" = "Az üzenetelőzmények nem érhetők el ebben a szobában. Ellenőrizze ezt az eszközt, hogy lássa az előzményeket.";
 "screen_room_error_failed_retrieving_user_details" = "Nem sikerült letölteni a felhasználói adatokat";
@@ -625,6 +633,7 @@
 "screen_roomlist_main_space_title" = "Összes csevegés";
 "screen_roomlist_mark_as_read" = "Megjelölés olvasottként";
 "screen_roomlist_mark_as_unread" = "Megjelölés olvasatlanként";
+"screen_roomlist_room_directory_button_title" = "Browse all rooms";
 "screen_server_confirmation_change_server" = "Fiókszolgáltató módosítása";
 "screen_server_confirmation_message_login_element_dot_io" = "Egy privát kiszolgáló az Element alkalmazottai számára.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz.";

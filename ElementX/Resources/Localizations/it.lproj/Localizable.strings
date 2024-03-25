@@ -398,6 +398,12 @@
 "screen_edit_profile_error_title" = "Impossibile aggiornare il profilo";
 "screen_edit_profile_title" = "Modifica profilo";
 "screen_edit_profile_updating_details" = "Aggiornamento del profilo…";
+"screen_identity_confirmation_subtitle" = "Verify this device to set up secure messaging.";
+"screen_identity_confirmation_title" = "Confirm that it's you";
+"screen_identity_confirmed_subtitle" = "Now you can read or send messages securely, and anyone you chat with can also trust this device.";
+"screen_identity_confirmed_title" = "Device verified";
+"screen_identity_use_another_device" = "Use another device";
+"screen_identity_waiting_on_other_device" = "Waiting on other device...";
 "screen_invites_decline_chat_message" = "Vuoi davvero rifiutare l'invito ad entrare in %1$@?";
 "screen_invites_decline_chat_title" = "Rifiuta l'invito";
 "screen_invites_decline_direct_chat_message" = "Vuoi davvero rifiutare questa conversazione privata con %1$@?";
@@ -532,6 +538,8 @@
 "screen_room_details_notification_title" = "Notifiche";
 "screen_room_details_share_room_title" = "Condividi stanza";
 "screen_room_details_updating_room" = "Aggiornamento della stanza…";
+"screen_room_directory_search_loading_error" = "Failed loading";
+"screen_room_directory_search_title" = "Room directory";
 "screen_room_encrypted_history_banner" = "La cronologia dei messaggi non è attualmente disponibile.";
 "screen_room_encrypted_history_banner_unverified" = "La cronologia dei messaggi non è disponibile in questa stanza. Verifica questo dispositivo per vedere la cronologia dei messaggi.";
 "screen_room_error_failed_retrieving_user_details" = "Impossibile recuperare i dettagli dell'utente";
@@ -625,6 +633,7 @@
 "screen_roomlist_main_space_title" = "Tutte le conversazioni";
 "screen_roomlist_mark_as_read" = "Segna come letto";
 "screen_roomlist_mark_as_unread" = "Segna come non letto";
+"screen_roomlist_room_directory_button_title" = "Browse all rooms";
 "screen_server_confirmation_change_server" = "Cambia fornitore dell'account";
 "screen_server_confirmation_message_login_element_dot_io" = "Un server privato per i dipendenti di Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix è una rete aperta per comunicazioni sicure e decentralizzate.";
