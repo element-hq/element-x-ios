@@ -83,7 +83,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
     
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
         state.members = members.sorted().compactMap { member in
-            guard member.membership == .join else { return nil }
+            guard member.membership == .join || member.membership == .invite else { return nil }
             return RoomMemberDetails(withProxy: member)
         }
     }
