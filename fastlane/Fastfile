@@ -135,7 +135,7 @@ lane :integration_tests do
   create_simulator_if_necessary(
     name: "iPhone 15 Pro",
     type: "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-15-2"
+    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-17-2"
   )
 
   run_tests(

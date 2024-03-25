@@ -30,6 +30,7 @@ enum UITestsScreenIdentifier: String {
     case createRoom
     case createRoomNoUsers
     case invites
+    case login
     case roomLayoutBottom
     case roomLayoutMiddle
     case roomLayoutTop
@@ -52,7 +53,6 @@ enum UITestsScreenIdentifier: String {
     case userSessionScreen
     case userSessionScreenReply
     case userSessionScreenRTE
-    case login
 }
 
 extension UITestsScreenIdentifier: CustomStringConvertible {

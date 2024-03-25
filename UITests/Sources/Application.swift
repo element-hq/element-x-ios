@@ -19,6 +19,8 @@ import XCTest
 
 enum Application {
     static func launch(_ identifier: UITestsScreenIdentifier, disableTimelineAccessibility: Bool = true) -> XCUIApplication {
+        checkEnvironments()
+        
         let app = XCUIApplication()
         
         var launchEnvironment = [
@@ -32,6 +34,22 @@ enum Application {
         app.launchEnvironment = launchEnvironment
         app.launch()
         return app
+    }
+    
+    private static func checkEnvironments() {
+        let requirediPhoneSimulator = "iPhone15,4" // iPhone 15
+        let requirediPadSimulator = "iPad13,18" // iPad (10th generation)
+        let requiredOSVersion = 17
+        
+        let osVersion = ProcessInfo().operatingSystemVersion
+        guard osVersion.majorVersion == requiredOSVersion else {
+            fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
+        }
+        
+        guard let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"],
+              deviceModel == requirediPhoneSimulator || deviceModel == requirediPadSimulator else {
+            fatalError("Switch to using \(requirediPhoneSimulator) or \(requirediPadSimulator) for these tests.")
+        }
     }
 }
 
@@ -62,6 +80,8 @@ extension XCUIApplication {
                                      as: .image(precision: precision,
                                                 perceptualPrecision: 0.98,
                                                 scale: nil),
+                                     // use any kind of suffix here to snapshot the same file multiple times and avoid countering on the library side
+                                     named: "UI",
                                      testName: snapshotName)
         
         if let failure,
