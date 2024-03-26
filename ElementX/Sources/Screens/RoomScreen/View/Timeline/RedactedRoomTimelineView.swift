@@ -22,7 +22,7 @@ struct RedactedRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Label(timelineItem.body, systemImage: "trash")
+            Label(timelineItem.body, icon: \.delete, iconSize: .small, relativeTo: .compound.bodyLG)
                 .labelStyle(RoomTimelineViewLabelStyle())
                 .imageScale(.small) // Smaller icon so that the bubble remains rounded on the outside.
         }

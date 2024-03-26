@@ -81,6 +81,11 @@ struct TimelineReplyView: View {
                               plainBody: question,
                               formattedBody: nil,
                               icon: .init(kind: .icon(\.polls), cornerRadii: iconCornerRadii))
+                case .redacted:
+                    ReplyView(sender: sender,
+                              plainBody: L10n.commonMessageRemoved,
+                              formattedBody: nil,
+                              icon: .init(kind: .icon(\.delete), cornerRadii: iconCornerRadii))
                 }
             default:
                 LoadingReplyView()
@@ -295,7 +300,11 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                 eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithAtRoomMention))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
-                                                                eventContent: .poll(question: "Do you like polls?")))
+                                                                eventContent: .poll(question: "Do you like polls?"))),
+            
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                eventContent: .redacted))
         ]
     }
     
@@ -305,7 +314,9 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                 previewItems[index]
             }
         }
+        .padding()
         .environmentObject(viewModel.context)
         .snapshot(delay: 0.2) // Allow member names to load.
+        .previewLayout(.sizeThatFits)
     }
 }

@@ -645,6 +645,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 replyContent = .poll(question: question)
             case .sticker(let body, _, _):
                 replyContent = .message(.text(.init(body: body)))
+            case .redactedMessage:
+                replyContent = .redacted
             default:
                 replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
             }
