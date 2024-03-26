@@ -17,11 +17,12 @@
 import Foundation
 
 enum RoomDirectorySearchScreenViewModelAction {
+    case joined(roomID: String)
     case dismiss
 }
 
 struct RoomDirectorySearchScreenViewState: BindableState {
-    var searchResults: [RoomDirectorySearchResult] = []
+    var rooms: [RoomDirectorySearchResult] = []
     var isLoading = false
     
     var bindings = RoomDirectorySearchScreenViewStateBindings()
@@ -35,4 +36,5 @@ struct RoomDirectorySearchScreenViewStateBindings {
 enum RoomDirectorySearchScreenViewAction {
     case dismiss
     case join(roomID: String)
+    case reachedBottom
 }

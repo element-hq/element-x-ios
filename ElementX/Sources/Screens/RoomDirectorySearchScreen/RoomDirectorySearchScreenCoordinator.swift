@@ -18,12 +18,13 @@ import Combine
 import SwiftUI
 
 struct RoomDirectorySearchScreenCoordinatorParameters {
-    let roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol
+    let clientProxy: ClientProxyProtocol
     let imageProvider: ImageProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum RoomDirectorySearchScreenCoordinatorAction {
+    case joined(roomID: String)
     case dismiss
 }
 
@@ -31,22 +32,26 @@ final class RoomDirectorySearchScreenCoordinator: CoordinatorProtocol {
     private let viewModel: RoomDirectorySearchScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<RoomDirectorySearchScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomDirectorySearchScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init(parameters: RoomDirectorySearchScreenCoordinatorParameters) {
-        viewModel = RoomDirectorySearchScreenViewModel(roomDirectorySearch: parameters.roomDirectorySearchProxy, userIndicatorController: parameters.userIndicatorController, imageProvider: parameters.imageProvider)
+        viewModel = RoomDirectorySearchScreenViewModel(clientProxy: parameters.clientProxy,
+                                                       userIndicatorController: parameters.userIndicatorController,
+                                                       imageProvider: parameters.imageProvider)
     }
     
     func start() {
         viewModel.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
+            case .joined(let roomID):
+                actionsSubject.send(.joined(roomID: roomID))
             case .dismiss:
-                self.actionsSubject.send(.dismiss)
+                actionsSubject.send(.dismiss)
             }
         }
         .store(in: &cancellables)

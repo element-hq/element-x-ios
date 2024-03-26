@@ -24,8 +24,22 @@ struct RoomDirectorySearchScreen: View {
         NavigationStack {
             List {
                 Section {
-                    ForEach(context.viewState.searchResults) {
-                        RoomDirectorySearchCell(result: $0, imageProvider: context.imageProvider)
+                    ForEach(context.viewState.rooms) { room in
+                        RoomDirectorySearchCell(result: room, imageProvider: context.imageProvider) {
+                            context.send(viewAction: .join(roomID: room.id))
+                        }
+                    }
+                } footer: {
+                    VStack(spacing: 0) {
+                        if context.viewState.isLoading {
+                            ProgressView()
+                                .frame(maxWidth: .infinity)
+                        }
+                        
+                        emptyRectangle
+                            .onAppear {
+                                context.send(viewAction: .reachedBottom)
+                            }
                     }
                 }
             }
@@ -46,25 +60,33 @@ struct RoomDirectorySearchScreen: View {
             }
         }
     }
+    
+    // The greedy size of Rectangle can create an issue with the navigation bar when the search is highlighted, so is best to use a fixed frame instead of hidden() or EmptyView()
+    private var emptyRectangle: some View {
+        Rectangle()
+            .frame(width: 0, height: 0)
+    }
 }
 
 // MARK: - Previews
 
 struct RoomDirectorySearchScreenScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomDirectorySearchScreenViewModel(roomDirectorySearch: RoomDirectorySearchProxyMock(configuration: .init(results: [.init(id: "test_1",
-                                                                                                                                                     alias: "#test_1:example.com",
-                                                                                                                                                     name: "Test 1",
-                                                                                                                                                     topic: "Test description 1",
-                                                                                                                                                     avatarURL: nil,
-                                                                                                                                                     canBeJoined: true),
-        .init(id: "test_2",
-              alias: "#test_2:example.com",
-              name: "Test 2",
-              topic: "Test description 2",
-              avatarURL: URL.documentsDirectory,
-              canBeJoined: false)])),
-    userIndicatorController: UserIndicatorControllerMock(),
-    imageProvider: MockMediaProvider())
+    static let viewModel: RoomDirectorySearchScreenViewModel = {
+        let results = [RoomDirectorySearchResult(id: "test_1",
+                                                 alias: "#test_1:example.com",
+                                                 name: "Test 1",
+                                                 topic: "Test description 1",
+                                                 avatarURL: nil,
+                                                 canBeJoined: true)]
+        
+        let roomDirectorySearchProxy = RoomDirectorySearchProxyMock(configuration: .init(results: results))
+        
+        let clientProxy = ClientProxyMock(.init(roomDirectorySearchProxy: roomDirectorySearchProxy))
+        
+        return RoomDirectorySearchScreenViewModel(clientProxy: clientProxy,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  imageProvider: MockMediaProvider())
+    }()
     
     static var previews: some View {
         RoomDirectorySearchScreen(context: viewModel.context)

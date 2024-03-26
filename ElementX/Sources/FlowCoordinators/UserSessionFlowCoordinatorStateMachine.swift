@@ -86,7 +86,8 @@ class UserSessionFlowCoordinatorStateMachine {
         case dismissedLogoutConfirmationScreen
         
         case showRoomDirectorySearchScreen
-        case dismissedRoomDirectorySearchScreen(joinedRoomID: String?)
+        
+        case dismissedRoomDirectorySearchScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -144,10 +145,7 @@ class UserSessionFlowCoordinatorStateMachine {
                 
             case (.roomList(let selectedRoomID), .showRoomDirectorySearchScreen):
                 return .roomDirectorySearchScreen(selectedRoomID: selectedRoomID)
-            case (.roomDirectorySearchScreen(let selectedRoomID), .dismissedRoomDirectorySearchScreen(let joinedRoomID)):
-                if let joinedRoomID {
-                    return .roomList(selectedRoomID: joinedRoomID)
-                }
+            case (.roomDirectorySearchScreen(let selectedRoomID), .dismissedRoomDirectorySearchScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
                 
             default:

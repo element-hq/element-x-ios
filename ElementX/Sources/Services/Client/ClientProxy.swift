@@ -342,6 +342,19 @@ class ClientProxy: ClientProxyProtocol {
         return await waitForRoomSummary(with: result, name: name)
     }
     
+    func joinRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
+        do {
+            let _ = try await client.joinRoomById(roomId: roomID)
+            
+            // Wait for the room to appear in the room lists to avoid issues downstream
+            let _ = await waitForRoomSummary(with: .success(roomID), name: nil, timeout: 30)
+            
+            return .success(())
+        } catch {
+            return .failure(.failedJoiningRoom)
+        }
+    }
+    
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError> {
         guard let mimeType = media.mimeType else { return .failure(ClientProxyError.mediaFileError) }
         do {
@@ -356,8 +369,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     /// Await the room to be available in the room summary list
-    /// - Parameter result: the result of a room creation Task with the `roomID`.
-    private func waitForRoomSummary(with result: Result<String, ClientProxyError>, name: String?) async -> Result<String, ClientProxyError> {
+    private func waitForRoomSummary(with result: Result<String, ClientProxyError>, name: String?, timeout: Int = 10) async -> Result<String, ClientProxyError> {
         guard case .success(let roomID) = result else { return result }
         let runner = ExpiringTaskRunner { [weak self] in
             guard let roomLists = self?.roomSummaryProvider?.roomListPublisher.values else {
@@ -373,8 +385,8 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
         
-        // we want to ignore the timeout error, and return the .success case because the room it was properly created already, we are only waiting for it to appear
-        try? await runner.run(timeout: .seconds(10))
+        // we want to ignore the timeout error, and return the .success case because the room was properly created/joined already, we are only waiting for it to appear
+        try? await runner.run(timeout: .seconds(timeout))
         return result
     }
     
