@@ -31,6 +31,11 @@ protocol RoomMemberProxyProtocol: AnyObject {
 }
 
 extension RoomMemberProxyProtocol {
+    /// The member is active in the room (joined or invited).
+    var isActive: Bool {
+        membership == .join || membership == .invite
+    }
+    
     var permalink: URL? {
         try? PermalinkBuilder.permalinkTo(userIdentifier: userID,
                                           baseURL: ServiceLocator.shared.settings.permalinkBaseURL)
