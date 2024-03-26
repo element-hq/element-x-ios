@@ -22,7 +22,7 @@ import UserNotifications
 enum RoomFlowCoordinatorAction: Equatable {
     case presentRoom(roomID: String)
     case presentCallScreen(roomProxy: RoomProxyProtocol)
-    case complete
+    case finished
     
     static func == (lhs: RoomFlowCoordinatorAction, rhs: RoomFlowCoordinatorAction) -> Bool {
         switch (lhs, rhs) {
@@ -30,7 +30,7 @@ enum RoomFlowCoordinatorAction: Equatable {
             lhsRoomID == rhsRoomID
         case (.presentCallScreen(let lhsRoomProxy), .presentCallScreen(let rhsRoomProxy)):
             lhsRoomProxy.id == rhsRoomProxy.id
-        case (.complete, .complete):
+        case (.finished, .finished):
             true
         default:
             false
@@ -458,7 +458,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         timelineController = nil
         
-        actionsSubject.send(.complete)
+        actionsSubject.send(.finished)
         analytics.signpost.endRoomFlow()
     }
     

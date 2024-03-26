@@ -251,12 +251,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case(.roomList(let currentRoomID), .selectRoom(let roomID, let showingRoomDetails), .roomList):
                 Task { await self.presentRoomFlow(roomID: roomID, showingRoomDetails: showingRoomDetails, animated: animated) }
             case(.roomList, .deselectRoom, .roomList):
-                tidyUpRoomFlow(animated: animated)
+                tearDownRoomFlow(animated: animated)
                 
             case (.invitesScreen, .selectRoom, .invitesScreen):
                 break
             case (.invitesScreen, .deselectRoom, .invitesScreen):
-                tidyUpRoomFlow(animated: animated)
+                tearDownRoomFlow(animated: animated)
                 
             case (.roomList, .showSettingsScreen, .settingsScreen):
                 break
@@ -433,7 +433,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .complete:
+            case .finished:
                 stateMachine.processEvent(.deselectRoom)
             case .presentRoom(let roomID):
                 stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false))
@@ -461,7 +461,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func tidyUpRoomFlow(animated: Bool) {
+    private func tearDownRoomFlow(animated: Bool) {
+        // THIS MUST BE CALLED *AFTER* THE FLOW HAS TIDIED UP THE STACK OR IT CAN CAUSE A CRASH.
         navigationSplitCoordinator.setDetailCoordinator(nil, animated: animated)
         roomFlowCoordinator = nil
     }

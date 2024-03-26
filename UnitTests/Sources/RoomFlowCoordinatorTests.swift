@@ -53,7 +53,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         try await process(route: .room(roomID: "1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
-        try await process(route: .roomList, expectedAction: .complete)
+        try await process(route: .roomList, expectedAction: .finished)
         XCTAssertNil(navigationStackCoordinator.rootCoordinator)
     }
     
@@ -61,7 +61,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         try await process(route: .roomDetails(roomID: "1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         
-        try await process(route: .roomList, expectedAction: .complete)
+        try await process(route: .roomList, expectedAction: .finished)
         XCTAssertNil(navigationStackCoordinator.rootCoordinator)
     }
     
