@@ -28,17 +28,17 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
     var actionsPublisher: AnyPublisher<RoomDirectorySearchScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-    
-    @CancellableTask
-    private var dataLoadingTask: Task<Void, Never>?
-    
+        
     init(clientProxy: ClientProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          imageProvider: ImageProviderProtocol) {
         self.clientProxy = clientProxy
         roomDirectorySearchProxy = clientProxy.roomDirectorySearchProxy()
         self.userIndicatorController = userIndicatorController
+        
         super.init(initialViewState: RoomDirectorySearchScreenViewState(), imageProvider: imageProvider)
+        
+        state.rooms = roomDirectorySearchProxy.resultsPublisher.value
         
         roomDirectorySearchProxy.resultsPublisher
             .receive(on: DispatchQueue.main)
@@ -101,7 +101,7 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
         
         state.rooms = []
         state.isLoading = true
-        dataLoadingTask = Task {
+        Task {
             switch await roomDirectorySearchProxy.search(query: query) {
             case .success:
                 break
@@ -116,7 +116,7 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
     }
     
     private func loadNextPage() {
-        dataLoadingTask = Task {
+        Task {
             state.isLoading = true
             let _ = await roomDirectorySearchProxy.nextPage()
             state.isLoading = false
