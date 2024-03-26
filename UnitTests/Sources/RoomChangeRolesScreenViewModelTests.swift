@@ -32,7 +32,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.membersToPromote, [])
         XCTAssertEqual(context.viewState.membersToDemote, [])
         XCTAssertEqual(context.viewState.members, context.viewState.visibleMembers)
-        XCTAssertEqual(context.viewState.membersWithRole.count, 1)
+        XCTAssertEqual(context.viewState.membersWithRole.count, 2)
         XCTAssertEqual(context.viewState.membersWithRole.first?.id, RoomMemberProxyMock.mockAdmin.userID)
         XCTAssertFalse(context.viewState.hasChanges)
         XCTAssertFalse(context.viewState.isSearching)
