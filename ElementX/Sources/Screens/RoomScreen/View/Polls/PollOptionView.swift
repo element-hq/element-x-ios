@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct PollOptionView: View {
@@ -41,7 +42,8 @@ struct PollOptionView: View {
                     if showVotes {
                         if isFinalWinningOption {
                             HStack(spacing: 4) {
-                                Asset.Images.pollWinner.swiftUIImage
+                                CompoundIcon(asset: Asset.Images.pollWinner)
+                                    .foregroundColor(.compound.iconAccentTertiary)
                                 
                                 Text(L10n.commonPollVotesCount(pollOption.votes))
                                     .font(.compound.bodySMSemibold)
