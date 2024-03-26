@@ -116,13 +116,3 @@ enum RoomMembersListScreenViewAction {
 enum RoomMembersListScreenAlertType: Hashable {
     case unbanConfirmation(RoomMemberDetails)
 }
-
-private extension RoomMemberDetails {
-    func matches(searchQuery: String) -> Bool {
-        guard !searchQuery.isEmpty else {
-            return true
-        }
-        
-        return id.localizedCaseInsensitiveContains(searchQuery) || name?.localizedCaseInsensitiveContains(searchQuery) ?? false
-    }
-}

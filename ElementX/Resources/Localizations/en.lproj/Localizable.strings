@@ -794,6 +794,9 @@
 "screen_room_change_permissions_member_moderation" = "Member moderation";
 "screen_room_change_permissions_messages_and_content" = "Messages and content";
 "screen_room_change_permissions_room_details" = "Room details";
+"screen_room_change_role_section_administrators" = "Admins";
+"screen_room_change_role_section_moderators" = "Moderators";
+"screen_room_change_role_section_users" = "Members";
 "screen_room_details_invite_people_title" = "Invite people";
 "screen_room_details_leave_conversation_title" = "Leave conversation";
 "screen_room_details_leave_room_title" = "Leave room";

@@ -40,7 +40,9 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         self.analytics = analytics
         
         super.init(initialViewState: RoomChangeRolesScreenViewState(mode: mode,
-                                                                    members: [],
+                                                                    administrators: [],
+                                                                    moderators: [],
+                                                                    users: [],
                                                                     bindings: .init()))
         
         roomProxy.membersPublisher
@@ -82,10 +84,27 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
     // MARK: - Private
     
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
-        state.members = members.sorted().compactMap { member in
-            guard member.isActive else { return nil }
-            return RoomMemberDetails(withProxy: member)
+        var administrators = [RoomMemberDetails]()
+        var moderators = [RoomMemberDetails]()
+        var users = [RoomMemberDetails]()
+        
+        for member in members.sorted() {
+            guard member.isActive else { continue }
+            let memberDetails = RoomMemberDetails(withProxy: member)
+            
+            switch member.role {
+            case .administrator:
+                administrators.append(memberDetails)
+            case .moderator:
+                moderators.append(memberDetails)
+            case .user:
+                users.append(memberDetails)
+            }
         }
+        
+        state.administrators = administrators
+        state.moderators = moderators
+        state.users = users
     }
     
     private func toggleMember(_ member: RoomMemberDetails) {

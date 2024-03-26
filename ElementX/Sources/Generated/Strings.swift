@@ -1269,6 +1269,12 @@ internal enum L10n {
   }
   /// Edit Moderators
   internal static var screenRoomChangeRoleModeratorsTitle: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_title") }
+  /// Admins
+  internal static var screenRoomChangeRoleSectionAdministrators: String { return L10n.tr("Localizable", "screen_room_change_role_section_administrators") }
+  /// Moderators
+  internal static var screenRoomChangeRoleSectionModerators: String { return L10n.tr("Localizable", "screen_room_change_role_section_moderators") }
+  /// Members
+  internal static var screenRoomChangeRoleSectionUsers: String { return L10n.tr("Localizable", "screen_room_change_role_section_users") }
   /// You have unsaved changes.
   internal static var screenRoomChangeRoleUnsavedChangesDescription: String { return L10n.tr("Localizable", "screen_room_change_role_unsaved_changes_description") }
   /// Save changes?

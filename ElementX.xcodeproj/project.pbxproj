@@ -843,6 +843,7 @@
 		CCBEC2100CAF2EEBE9DB4156 /* TemplateScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40B98B098B6F0371B750B3 /* TemplateScreenModels.swift */; };
 		CD0088B763CD970CF1CBF8CB /* DateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5E97E9615A158C76B2AB77 /* DateTests.swift */; };
 		CD6A72B65D3B6076F4045C30 /* PHGPostHogConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B891A6DA826E2461DBB40F /* PHGPostHogConfiguration.swift */; };
+		CDAE3A37D4DF136F9D07DB61 /* RoomChangeRolesScreenSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF710CB1C31F8938EAA3A7D /* RoomChangeRolesScreenSection.swift */; };
 		CDCA8A559E098503DDE29477 /* AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C6FBF97B6EED3D4FA5EFF /* AttributedStringBuilder.swift */; };
 		CE1694C7BB93C3311524EF28 /* Untranslated.strings in Resources */ = {isa = PBXBuildFile; fileRef = D2F7194F440375338F8E2487 /* Untranslated.strings */; };
 		CE6F237360875D3D573FD0B2 /* RoomNotificationSettingsProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B522BD637845AB9570B10 /* RoomNotificationSettingsProxy.swift */; };
@@ -2009,6 +2010,7 @@
 		E9D059BFE329BE09B6D96A9F /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ro; path = ro.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		EA4D639E27D5882A6A71AECF /* GlobalSearchScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchScreenViewModelTests.swift; sourceTree = "<group>"; };
 		EA880E78AF4BD24E45A7808C /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EAF710CB1C31F8938EAA3A7D /* RoomChangeRolesScreenSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomChangeRolesScreenSection.swift; sourceTree = "<group>"; };
 		EB3B237387B8288A5A938F1B /* UserAgentBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentBuilderTests.swift; sourceTree = "<group>"; };
 		EB63761D9F9CE8B23CBD6179 /* PollFormScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollFormScreenModels.swift; sourceTree = "<group>"; };
 		EB76A9AFC6CCAD4998D9B045 /* IdentityConfirmationScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConfirmationScreenViewModel.swift; sourceTree = "<group>"; };
@@ -3217,6 +3219,7 @@
 			children = (
 				6B2A421198FD20AAAED20004 /* RoomChangeRolesScreen.swift */,
 				23E6EB7960BC9D0F7396B3BD /* RoomChangeRolesScreenRow.swift */,
+				EAF710CB1C31F8938EAA3A7D /* RoomChangeRolesScreenSection.swift */,
 				3D9B45D584D232CB9E5C7734 /* RoomChangeRolesScreenSelectedItem.swift */,
 			);
 			path = View;
@@ -6121,6 +6124,7 @@
 				244407B18B2F2D6466BA5961 /* RoomChangeRolesScreenCoordinator.swift in Sources */,
 				7FF6E1FBE6E9517FD29A1D8E /* RoomChangeRolesScreenModels.swift in Sources */,
 				7F941B063C94E1718DFC2CF3 /* RoomChangeRolesScreenRow.swift in Sources */,
+				CDAE3A37D4DF136F9D07DB61 /* RoomChangeRolesScreenSection.swift in Sources */,
 				BD6685592716CA957D7BAAC4 /* RoomChangeRolesScreenSelectedItem.swift in Sources */,
 				3EC5A41F9FB7DD63A4DC6144 /* RoomChangeRolesScreenViewModel.swift in Sources */,
 				4E36A66E0EDA74BF3A036FD0 /* RoomChangeRolesScreenViewModelProtocol.swift in Sources */,

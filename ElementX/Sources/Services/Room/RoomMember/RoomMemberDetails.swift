@@ -29,6 +29,11 @@ struct RoomMemberDetails: Identifiable, Hashable {
     
     enum Role { case administrator, moderator, user }
     let role: Role
+    
+    func matches(searchQuery: String) -> Bool {
+        guard !searchQuery.isEmpty else { return true }
+        return id.localizedStandardContains(searchQuery) || name?.localizedStandardContains(searchQuery) == true
+    }
 }
 
 extension RoomMemberDetails {
