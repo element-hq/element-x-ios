@@ -19,6 +19,8 @@ import SwiftUI
 
 struct RoomMembersListManageMemberSheet: View {
     let member: RoomMemberDetails
+    let actions: [RoomMembersListScreenManagementDetails.Action]
+    
     @ObservedObject var context: RoomMembersListScreenViewModel.Context
     
     @State private var isPresentingBanConfirmation = false
@@ -38,7 +40,7 @@ struct RoomMembersListManageMemberSheet: View {
                             context.send(viewAction: .showMemberDetails(member))
                         })
                 
-                if context.viewState.canKickUsers, !member.isBanned {
+                if actions.contains(.kick) {
                     ListRow(label: .default(title: L10n.screenRoomMemberListManageMemberRemove,
                                             icon: \.close),
                             kind: .button {
@@ -46,7 +48,7 @@ struct RoomMembersListManageMemberSheet: View {
                             })
                 }
                 
-                if context.viewState.canBanUsers, !member.isBanned {
+                if actions.contains(.ban) {
                     ListRow(label: .default(title: L10n.screenRoomMemberListManageMemberBan,
                                             icon: \.block,
                                             role: .destructive),
@@ -76,11 +78,13 @@ struct RoomMembersListManageMemberSheet_Previews: PreviewProvider, TestablePrevi
     
     static var previews: some View {
         RoomMembersListManageMemberSheet(member: .init(withProxy: RoomMemberProxyMock.mockDan),
+                                         actions: [.kick, .ban],
                                          context: viewModel.context)
             .previewDisplayName("Joined")
             .snapshot(delay: 0.2)
         
         RoomMembersListManageMemberSheet(member: .init(withProxy: RoomMemberProxyMock.mockBanned[3]),
+                                         actions: [],
                                          context: viewModel.context)
             .previewDisplayName("Banned")
             .snapshot(delay: 0.2)
@@ -94,6 +98,7 @@ struct RoomMembersListManageMemberSheetLive_Previews: PreviewProvider {
         Color.clear
             .sheet(isPresented: .constant(true)) {
                 RoomMembersListManageMemberSheet(member: .init(withProxy: RoomMemberProxyMock.mockDan),
+                                                 actions: [.kick, .ban],
                                                  context: viewModel.context)
             }
             .previewDisplayName("Sheet")
