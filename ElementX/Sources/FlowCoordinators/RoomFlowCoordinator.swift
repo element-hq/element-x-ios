@@ -64,10 +64,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private var timelineController: RoomTimelineControllerProtocol?
     
-    deinit {
-        roomProxy.unsubscribeFromUpdates()
-    }
-    
     init(roomProxy: RoomProxyProtocol,
          userSession: UserSessionProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
@@ -87,7 +83,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         self.userIndicatorController = userIndicatorController
         self.orientationManager = orientationManager
         
-        // Maybe this should happen outside, not sure?
+        // The SDK needs to handle multiple subscription calls before we can start adding child room flows.
         let subscriptionTask = Task { await roomProxy.subscribeForUpdates() }
         
         setupStateMachine()
@@ -456,6 +452,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.popToRoot(animated: false)
         navigationStackCoordinator.setRootCoordinator(nil, animated: false)
         
+        roomProxy.unsubscribeFromUpdates()
         timelineController = nil
         
         actionsSubject.send(.finished)
