@@ -156,32 +156,37 @@ struct RoomDetailsEditScreen: View {
 // MARK: - Previews
 
 struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomDetailsEditScreenViewModel(roomProxy: RoomProxyMock(with: .init(id: "test_id",
-                                                                                               name: "Room",
-                                                                                               members: [.mockMeAdmin])),
-                                                          mediaProvider: MockMediaProvider(),
-                                                          userIndicatorController: UserIndicatorControllerMock.default)
+    static let editableViewModel = {
+        let roomProxy = RoomProxyMock(with: .init(id: "test_id",
+                                                  name: "Room",
+                                                  members: [.mockMeAdmin]))
+        
+        return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
+                                              mediaProvider: MockMediaProvider(),
+                                              userIndicatorController: UserIndicatorControllerMock.default)
+    }()
     
     static let readOnlyViewModel = {
-        let accountOwner = RoomMemberProxyMock.mockMe
-        return RoomDetailsEditScreenViewModel(roomProxy: RoomProxyMock(with: .init(id: "test_id",
-                                                                                   name: "Room",
-                                                                                   members: [.mockMe])),
+        let roomProxy = RoomProxyMock(with: .init(id: "test_id",
+                                                  name: "Room",
+                                                  members: [.mockAlice]))
+        
+        return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
                                               mediaProvider: MockMediaProvider(),
                                               userIndicatorController: UserIndicatorControllerMock.default)
     }()
     
     static var previews: some View {
         NavigationStack {
-            RoomDetailsEditScreen(context: viewModel.context)
-        }
-        .previewDisplayName("Normal")
-        .snapshot(delay: 0.25)
-        
-        NavigationStack {
             RoomDetailsEditScreen(context: readOnlyViewModel.context)
         }
         .previewDisplayName("Read only")
+        .snapshot(delay: 0.25)
+        
+        NavigationStack {
+            RoomDetailsEditScreen(context: editableViewModel.context)
+        }
+        .previewDisplayName("Editable")
         .snapshot(delay: 0.25)
     }
 }
