@@ -31,7 +31,9 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         setupViewModel(mode: .administrator)
         XCTAssertEqual(context.viewState.membersToPromote, [])
         XCTAssertEqual(context.viewState.membersToDemote, [])
-        XCTAssertEqual(context.viewState.members, context.viewState.visibleMembers)
+        XCTAssertEqual(context.viewState.administrators, context.viewState.visibleAdministrators)
+        XCTAssertEqual(context.viewState.moderators, context.viewState.visibleModerators)
+        XCTAssertEqual(context.viewState.users, context.viewState.visibleUsers)
         XCTAssertEqual(context.viewState.membersWithRole.count, 2)
         XCTAssertEqual(context.viewState.membersWithRole.first?.id, RoomMemberProxyMock.mockAdmin.userID)
         XCTAssertFalse(context.viewState.hasChanges)
@@ -42,7 +44,9 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         setupViewModel(mode: .moderator)
         XCTAssertEqual(context.viewState.membersToPromote, [])
         XCTAssertEqual(context.viewState.membersToDemote, [])
-        XCTAssertEqual(context.viewState.members, context.viewState.visibleMembers)
+        XCTAssertEqual(context.viewState.administrators, context.viewState.visibleAdministrators)
+        XCTAssertEqual(context.viewState.moderators, context.viewState.visibleModerators)
+        XCTAssertEqual(context.viewState.users, context.viewState.visibleUsers)
         XCTAssertEqual(context.viewState.membersWithRole.count, 1)
         XCTAssertEqual(context.viewState.membersWithRole.first?.id, RoomMemberProxyMock.mockModerator.userID)
         XCTAssertFalse(context.viewState.hasChanges)
@@ -51,7 +55,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
     
     func testToggleUserOn() {
         testInitialStateModerators()
-        guard let firstUser = context.viewState.members.first(where: { !context.viewState.isMemberSelected($0) }) else {
+        guard let firstUser = context.viewState.users.first(where: { !context.viewState.isMemberSelected($0) }) else {
             XCTFail("There should be a regular user available to promote.")
             return
         }
@@ -150,7 +154,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         // Given the change roles view model for moderators.
         setupViewModel(mode: .moderator)
         
-        guard let firstUser = context.viewState.members.first(where: { !context.viewState.isMemberSelected($0) }),
+        guard let firstUser = context.viewState.users.first(where: { !context.viewState.isMemberSelected($0) }),
               let existingModerator = context.viewState.membersWithRole.first else {
             XCTFail("There should be a regular user and a moderator to begin with.")
             return
@@ -175,7 +179,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         setupViewModel(mode: .administrator)
         XCTAssertNil(context.alertInfo)
         
-        guard let firstUser = context.viewState.members.first(where: { !context.viewState.isMemberSelected($0) }) else {
+        guard let firstUser = context.viewState.users.first(where: { !context.viewState.isMemberSelected($0) }) else {
             XCTFail("There should be a regular user to begin with.")
             return
         }

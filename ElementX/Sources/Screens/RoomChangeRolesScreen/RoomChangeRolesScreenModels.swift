@@ -24,11 +24,11 @@ enum RoomChangeRolesScreenViewModelAction {
 struct RoomChangeRolesScreenViewState: BindableState {
     /// The screen's current mode (which role we are promoting/demoting users to/from.
     let mode: RoomMemberDetails.Role
-    /// All of the room's admins..
+    /// All of the room's members who are currently admins.
     var administrators: [RoomMemberDetails]
-    /// All of the room's moderators.
+    /// All of the room's members who are currently moderators.
     var moderators: [RoomMemberDetails]
-    /// All of the room's regular users.
+    /// All of the room's members who are currently neither an admin or moderator.
     var users: [RoomMemberDetails]
     
     var bindings: RoomChangeRolesScreenViewStateBindings
