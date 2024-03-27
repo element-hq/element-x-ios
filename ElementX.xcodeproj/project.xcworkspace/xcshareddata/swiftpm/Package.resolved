@@ -1,4 +1,5 @@
 {
+  "originHash" : "349f51b7ba9107cd4f4010fdddc3cafb0c7fe4b5f5ef84db05dc7e846c225369",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -139,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-wysiwyg-composer-swift",
       "state" : {
-        "revision" : "f28fe8b5ade7496ebb09d5e36708a40de838c84d",
-        "version" : "2.34.0"
+        "revision" : "7625628d5e6d46551a557d4812ea362b4af5cf89",
+        "version" : "2.35.0"
       }
     },
     {
@@ -279,5 +280,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
