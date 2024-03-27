@@ -28,10 +28,20 @@ struct RoomChangeRolesScreenRow: View {
     let action: () -> Void
     
     var body: some View {
-        ListRow(label: .avatar(title: member.name ?? member.id,
+        ListRow(label: .avatar(title: memberName,
                                description: member.name == nil ? nil : member.id,
                                icon: avatar),
-                kind: isEnabled ? .multiSelection(isSelected: isSelected, action: action) : .label)
+                kind: .multiSelection(isSelected: isSelected, action: action))
+    }
+    
+    var memberName: String {
+        let name = member.name ?? member.id
+        
+        return if member.isInvited {
+            L10n.screenRoomChangeRoleInvitedMemberName(name)
+        } else {
+            name
+        }
     }
     
     var avatar: LoadableAvatarImage {
@@ -54,6 +64,11 @@ struct RoomChangeRolesScreenRow_Previews: PreviewProvider, TestablePreview {
                                      action: action)
             
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock.mockBob),
+                                     imageProvider: MockMediaProvider(),
+                                     isSelected: false,
+                                     action: action)
+            
+            RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock.mockInvited),
                                      imageProvider: MockMediaProvider(),
                                      isSelected: false,
                                      action: action)

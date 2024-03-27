@@ -19,6 +19,15 @@ import Foundation
 enum RoomMembersListScreenViewModelAction {
     case selectMember(_ member: RoomMemberProxyProtocol)
     case invite
+    
+    var isSelectMember: Bool {
+        switch self {
+        case .selectMember:
+            true
+        default:
+            false
+        }
+    }
 }
 
 /// The different modes that the screen can be in.
@@ -54,7 +63,7 @@ struct RoomMembersListScreenViewState: BindableState {
         self.bannedMembers = bannedMembers
         self.bindings = bindings
     }
-
+    
     var visibleJoinedMembers: [RoomMemberDetails] {
         joinedMembers
             .filter { $0.matches(searchQuery: bindings.searchQuery) }
@@ -76,10 +85,23 @@ struct RoomMembersListScreenViewStateBindings {
     /// The current mode the screen is in.
     var mode: RoomMembersListScreenMode = .members
     /// A selected member to kick, ban, promote etc.
-    var memberToManage: RoomMemberDetails?
+    var memberToManage: RoomMembersListScreenManagementDetails?
 
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomMembersListScreenAlertType>?
+}
+
+/// Information about managing a particular room member.
+struct RoomMembersListScreenManagementDetails: Identifiable {
+    var id: String { member.id }
+    
+    /// The member that is being managed.
+    let member: RoomMemberDetails
+    
+    /// A management action that can be performed on the member.
+    enum Action { case kick, ban }
+    /// The management actions available for `member`.
+    let actions: [Action]
 }
 
 enum RoomMembersListScreenViewAction {
@@ -93,14 +115,4 @@ enum RoomMembersListScreenViewAction {
 
 enum RoomMembersListScreenAlertType: Hashable {
     case unbanConfirmation(RoomMemberDetails)
-}
-
-private extension RoomMemberDetails {
-    func matches(searchQuery: String) -> Bool {
-        guard !searchQuery.isEmpty else {
-            return true
-        }
-        
-        return id.localizedCaseInsensitiveContains(searchQuery) || name?.localizedCaseInsensitiveContains(searchQuery) ?? false
-    }
 }

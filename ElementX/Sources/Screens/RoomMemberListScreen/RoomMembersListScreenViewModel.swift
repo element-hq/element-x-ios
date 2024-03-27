@@ -149,18 +149,32 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     }
     
     private func selectMember(_ member: RoomMemberDetails) {
-        if appSettings.roomModerationEnabled, state.canKickUsers || state.canBanUsers {
-            if member.isBanned {
-                state.bindings.alertInfo = AlertInfo(id: .unbanConfirmation(member),
-                                                     title: L10n.screenRoomMemberListManageMemberUnbanTitle,
-                                                     message: L10n.screenRoomMemberListManageMemberUnbanMessage,
-                                                     primaryButton: .init(title: L10n.screenRoomMemberListManageMemberUnbanAction) { [weak self] in
-                                                         self?.context.send(viewAction: .unbanMember(member))
-                                                     },
-                                                     secondaryButton: .init(title: L10n.actionCancel, role: .cancel) { })
-            } else {
-                state.bindings.memberToManage = member
-            }
+        guard appSettings.roomModerationEnabled else {
+            showMemberDetails(member)
+            return
+        }
+        
+        if member.isBanned { // No need to check canBan here, banned users are only shown when it is true.
+            state.bindings.alertInfo = AlertInfo(id: .unbanConfirmation(member),
+                                                 title: L10n.screenRoomMemberListManageMemberUnbanTitle,
+                                                 message: L10n.screenRoomMemberListManageMemberUnbanMessage,
+                                                 primaryButton: .init(title: L10n.screenRoomMemberListManageMemberUnbanAction) { [weak self] in
+                                                     self?.context.send(viewAction: .unbanMember(member))
+                                                 },
+                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel) { })
+            return
+        }
+        
+        var actions = [RoomMembersListScreenManagementDetails.Action]()
+        if state.canKickUsers, member.role != .administrator {
+            actions.append(.kick)
+        }
+        if state.canBanUsers, member.role != .administrator {
+            actions.append(.ban)
+        }
+        
+        if !actions.isEmpty {
+            state.bindings.memberToManage = .init(member: member, actions: actions)
         } else {
             showMemberDetails(member)
         }

@@ -53,7 +53,7 @@ extension RoomMemberProxyMock {
     
     static var mockMeAdmin: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@me:matrix.org",
-                                        displayName: "Me admin",
+                                        displayName: "Me",
                                         avatarURL: URL.picturesDirectory,
                                         membership: .join,
                                         powerLevel: 100,

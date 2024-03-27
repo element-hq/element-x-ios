@@ -56,34 +56,20 @@ struct RoomChangeRolesScreen: View {
                     }
                 }
                 
-                membersSection
+                RoomChangeRolesScreenSection(members: context.viewState.administrators,
+                                             title: L10n.screenRoomChangeRoleSectionAdministrators,
+                                             context: context)
+                RoomChangeRolesScreenSection(members: context.viewState.moderators,
+                                             title: L10n.screenRoomChangeRoleSectionModerators,
+                                             context: context)
+                RoomChangeRolesScreenSection(members: context.viewState.users,
+                                             title: L10n.screenRoomChangeRoleSectionUsers,
+                                             context: context)
             }
-        }
-    }
-    
-    @ViewBuilder
-    private var membersSection: some View {
-        if !context.viewState.visibleMembers.isEmpty {
-            Section {
-                ForEach(context.viewState.visibleMembers, id: \.id) { member in
-                    RoomChangeRolesScreenRow(member: member,
-                                             imageProvider: context.imageProvider,
-                                             isSelected: context.viewState.isMemberSelected(member)) {
-                        context.send(viewAction: .toggleMember(member))
-                    }
-                    .disabled(member.role == .administrator)
-                }
-            } header: {
-                Text(L10n.screenRoomMemberListRoomMembersHeaderTitle)
-                    .compoundListSectionHeader()
-            }
-        } else {
-            Section.empty
         }
     }
     
     @ScaledMetric private var cellWidth: CGFloat = 72
-
     private var membersWithRoleSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             ScrollViewReader { scrollView in

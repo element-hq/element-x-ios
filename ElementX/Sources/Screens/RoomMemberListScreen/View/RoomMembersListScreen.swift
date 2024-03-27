@@ -49,13 +49,15 @@ struct RoomMembersListScreen: View {
                     .background(.compound.bgCanvasDefault)
             }
         }
-        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
+        .searchable(text: $context.searchQuery,
+                    placement: .navigationBarDrawer(displayMode: .always),
+                    prompt: L10n.commonSearchForSomeone)
         .compoundSearchField()
         .autocorrectionDisabled()
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
         .sheet(item: $context.memberToManage) {
-            RoomMembersListManageMemberSheet(member: $0, context: context)
+            RoomMembersListManageMemberSheet(member: $0.member, actions: $0.actions, context: context)
         }
         .alert(item: $context.alertInfo)
         .toolbar { toolbar }

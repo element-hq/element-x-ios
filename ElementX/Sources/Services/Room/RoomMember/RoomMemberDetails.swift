@@ -23,11 +23,17 @@ struct RoomMemberDetails: Identifiable, Hashable {
     let avatarURL: URL?
     let permalink: URL?
     
+    var isInvited: Bool
     var isIgnored: Bool
     var isBanned: Bool
     
     enum Role { case administrator, moderator, user }
     let role: Role
+    
+    func matches(searchQuery: String) -> Bool {
+        guard !searchQuery.isEmpty else { return true }
+        return id.localizedStandardContains(searchQuery) || name?.localizedStandardContains(searchQuery) == true
+    }
 }
 
 extension RoomMemberDetails {
@@ -37,6 +43,7 @@ extension RoomMemberDetails {
         avatarURL = proxy.avatarURL
         permalink = proxy.permalink
         
+        isInvited = proxy.membership == .invite
         isIgnored = proxy.isIgnored
         isBanned = proxy.membership == .ban
         role = .init(proxy.role)
@@ -48,6 +55,7 @@ extension RoomMemberDetails {
         avatarURL = nil
         permalink = nil
         
+        isInvited = false
         isIgnored = false
         isBanned = false
         role = .user

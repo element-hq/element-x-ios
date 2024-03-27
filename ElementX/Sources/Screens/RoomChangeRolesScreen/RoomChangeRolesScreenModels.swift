@@ -24,8 +24,13 @@ enum RoomChangeRolesScreenViewModelAction {
 struct RoomChangeRolesScreenViewState: BindableState {
     /// The screen's current mode (which role we are promoting/demoting users to/from.
     let mode: RoomMemberDetails.Role
-    /// All of the room's members.
-    var members: [RoomMemberDetails]
+    /// All of the room's members who are currently admins.
+    var administrators: [RoomMemberDetails]
+    /// All of the room's members who are currently moderators.
+    var moderators: [RoomMemberDetails]
+    /// All of the room's members who are currently neither an admin or moderator.
+    var users: [RoomMemberDetails]
+    
     var bindings: RoomChangeRolesScreenViewStateBindings
     
     /// The members selected for promotion to the current role.
@@ -48,19 +53,24 @@ struct RoomChangeRolesScreenViewState: BindableState {
         }
     }
     
-    /// The visible members in the screen (after searching).
-    var visibleMembers: [RoomMemberDetails] {
-        guard !bindings.searchQuery.isEmpty else { return members }
-        
-        return members.filter { member in
-            member.name?.localizedStandardContains(bindings.searchQuery) == true
-                || member.id.localizedStandardContains(bindings.searchQuery)
-        }
+    /// The visible admins in the screen (after searching).
+    var visibleAdministrators: [RoomMemberDetails] {
+        administrators.filter { $0.matches(searchQuery: bindings.searchQuery) }
+    }
+    
+    /// The visible mods in the screen (after searching).
+    var visibleModerators: [RoomMemberDetails] {
+        moderators.filter { $0.matches(searchQuery: bindings.searchQuery) }
+    }
+    
+    /// The visible regular users in the screen (after searching).
+    var visibleUsers: [RoomMemberDetails] {
+        users.filter { $0.matches(searchQuery: bindings.searchQuery) }
     }
     
     /// All of the members who will gain/keep this screen's role after saving any changes.
     var membersWithRole: [RoomMemberDetails] {
-        members.filter(isMemberSelected)
+        administrators.filter(isMemberSelected) + moderators.filter(isMemberSelected) + users.filter(isMemberSelected)
     }
     
     /// Whether or not any changes have been made to the members.

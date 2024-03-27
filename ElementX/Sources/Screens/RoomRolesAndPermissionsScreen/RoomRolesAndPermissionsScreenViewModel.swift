@@ -94,8 +94,8 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
     // MARK: - Members
     
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
-        state.administratorCount = members.filter { $0.role == .administrator }.count
-        state.moderatorCount = members.filter { $0.role == .moderator }.count
+        state.administratorCount = members.filter { $0.role == .administrator && $0.isActive }.count
+        state.moderatorCount = members.filter { $0.role == .moderator && $0.isActive }.count
     }
     
     private func updateOwnRole(_ role: RoomMemberDetails.Role) async {
