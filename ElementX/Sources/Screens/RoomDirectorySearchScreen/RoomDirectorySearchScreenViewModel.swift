@@ -20,24 +20,29 @@ import SwiftUI
 typealias RoomDirectorySearchScreenViewModelType = StateStoreViewModel<RoomDirectorySearchScreenViewState, RoomDirectorySearchScreenViewAction>
 
 class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType, RoomDirectorySearchScreenViewModelProtocol {
-    private let roomDirectorySearch: RoomDirectorySearchProxyProtocol
+    private let clientProxy: ClientProxyProtocol
+    private let roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<RoomDirectorySearchScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomDirectorySearchScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-    
-    init(roomDirectorySearch: RoomDirectorySearchProxyProtocol,
+        
+    init(clientProxy: ClientProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          imageProvider: ImageProviderProtocol) {
-        self.roomDirectorySearch = roomDirectorySearch
+        self.clientProxy = clientProxy
+        roomDirectorySearchProxy = clientProxy.roomDirectorySearchProxy()
         self.userIndicatorController = userIndicatorController
+        
         super.init(initialViewState: RoomDirectorySearchScreenViewState(), imageProvider: imageProvider)
         
-        roomDirectorySearch.resultsPublisher
+        state.rooms = roomDirectorySearchProxy.resultsPublisher.value
+        
+        roomDirectorySearchProxy.resultsPublisher
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.searchResults, on: self)
+            .weakAssign(to: \.state.rooms, on: self)
             .store(in: &cancellables)
         
         context.$viewState.map(\.bindings.searchString)
@@ -62,10 +67,30 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
             actionsSubject.send(.dismiss)
         case .join(roomID: let roomID):
             joinRoom(roomID: roomID)
+        case .reachedBottom:
+            loadNextPage()
         }
     }
     
-    private func joinRoom(roomID: String) { }
+    // MARK: - Private
+    
+    private func joinRoom(roomID: String) {
+        showLoadingIndicator()
+        
+        Task {
+            defer {
+                hideLoadingIndicator()
+            }
+            
+            switch await clientProxy.joinRoom(roomID) {
+            case .success:
+                actionsSubject.send(.joined(roomID: roomID))
+            case .failure(let error):
+                MXLog.error("Failed joining room with error: \(error)")
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
+        }
+    }
     
     private static let errorID = "roomDirectorySearchViewModelLoadingError"
     
@@ -74,9 +99,10 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
             return
         }
         
+        state.rooms = []
         state.isLoading = true
         Task {
-            switch await roomDirectorySearch.search(query: query) {
+            switch await roomDirectorySearchProxy.search(query: query) {
             case .success:
                 break
             case .failure:
@@ -87,5 +113,26 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
             }
             state.isLoading = false
         }
+    }
+    
+    private func loadNextPage() {
+        Task {
+            state.isLoading = true
+            let _ = await roomDirectorySearchProxy.nextPage()
+            state.isLoading = false
+        }
+    }
+    
+    private static let loadingIndicatorIdentifier = "\(RoomDirectorySearchScreenViewModel.self)-Loading"
+    
+    private func showLoadingIndicator() {
+        userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorIdentifier,
+                                                      type: .modal,
+                                                      title: L10n.commonLoading,
+                                                      persistent: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

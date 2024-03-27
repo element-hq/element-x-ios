@@ -577,14 +577,19 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Room Directory Search
     
     private func presentRoomDirectorySearch() {
-        let coordinator = RoomDirectorySearchScreenCoordinator(parameters: .init(roomDirectorySearchProxy: userSession.clientProxy.roomDirectorySearchProxy(),
+        let coordinator = RoomDirectorySearchScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
                                                                                  imageProvider: userSession.mediaProvider,
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
             switch action {
+            case .joined(let roomID):
+                stateMachine.processEvent(.dismissedRoomDirectorySearchScreen)
+                handleAppRoute(.room(roomID: roomID), animated: true)
             case .dismiss:
-                self?.stateMachine.processEvent(.dismissedRoomDirectorySearchScreen(joinedRoomID: nil))
+                stateMachine.processEvent(.dismissedRoomDirectorySearchScreen)
             }
         }
         .store(in: &cancellables)

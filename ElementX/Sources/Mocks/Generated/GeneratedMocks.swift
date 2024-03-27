@@ -898,6 +898,27 @@ class ClientProxyMock: ClientProxyProtocol {
             return createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReturnValue
         }
     }
+    //MARK: - joinRoom
+
+    var joinRoomCallsCount = 0
+    var joinRoomCalled: Bool {
+        return joinRoomCallsCount > 0
+    }
+    var joinRoomReceivedRoomID: String?
+    var joinRoomReceivedInvocations: [String] = []
+    var joinRoomReturnValue: Result<Void, ClientProxyError>!
+    var joinRoomClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func joinRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
+        joinRoomCallsCount += 1
+        joinRoomReceivedRoomID = roomID
+        joinRoomReceivedInvocations.append(roomID)
+        if let joinRoomClosure = joinRoomClosure {
+            return await joinRoomClosure(roomID)
+        } else {
+            return joinRoomReturnValue
+        }
+    }
     //MARK: - uploadMedia
 
     var uploadMediaCallsCount = 0

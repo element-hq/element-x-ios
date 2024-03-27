@@ -21,6 +21,7 @@ struct ClientProxyMockConfiguration {
     var userID: String = RoomMemberProxyMock.mockMe.userID
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol? = RoomSummaryProviderMock(.init())
+    var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
 }
 
 extension ClientProxyMock {
@@ -35,6 +36,8 @@ extension ClientProxyMock {
         roomSummaryProvider = configuration.roomSummaryProvider
         alternateRoomSummaryProvider = RoomSummaryProviderMock(.init())
         inviteSummaryProvider = RoomSummaryProviderMock(.init())
+        
+        roomDirectorySearchProxyReturnValue = configuration.roomDirectorySearchProxy
         
         actionsPublisher = PassthroughSubject<ClientProxyAction, Never>().eraseToAnyPublisher()
         loadingStatePublisher = CurrentValuePublisher<ClientProxyLoadingState, Never>(.notLoading)
