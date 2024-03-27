@@ -402,8 +402,8 @@
 "screen_identity_confirmation_title" = "Подтвердите, что это вы";
 "screen_identity_confirmed_subtitle" = "Теперь вы можете безопасно читать и отправлять сообщения, и все, с кем вы общаетесь в чате, также могут доверять этому устройству.";
 "screen_identity_confirmed_title" = "Устройство проверено";
-"screen_identity_use_another_device" = "Use another device";
-"screen_identity_waiting_on_other_device" = "Waiting on other device...";
+"screen_identity_use_another_device" = "Используйте другое устройство";
+"screen_identity_waiting_on_other_device" = "Ожидание на другом устройстве...";
 "screen_invites_decline_chat_message" = "Вы уверены, что хотите отклонить приглашение в %1$@?";
 "screen_invites_decline_chat_title" = "Отклонить приглашение";
 "screen_invites_decline_direct_chat_message" = "Вы уверены, что хотите отказаться от личного общения с %1$@?";
@@ -519,6 +519,7 @@
 "screen_room_change_role_confirm_demote_self_action" = "Понизить уровень";
 "screen_room_change_role_confirm_demote_self_description" = "Вы не сможете отменить это изменение, так как понижаете себя статус. Если вы являетесь последним привилегированным пользователем в комнате, восстановить привилегии будет невозможно.";
 "screen_room_change_role_confirm_demote_self_title" = "Понизить свой уровень?";
+"screen_room_change_role_invited_member_name" = "%1$@ (Ожидание)";
 "screen_room_change_role_moderators_title" = "Редактировать роль модераторов";
 "screen_room_change_role_unsaved_changes_description" = "У вас есть несохраненные изменения.";
 "screen_room_change_role_unsaved_changes_title" = "Сохранить изменения?";
@@ -793,6 +794,9 @@
 "screen_room_change_permissions_member_moderation" = "Модерация участников";
 "screen_room_change_permissions_messages_and_content" = "Сообщения и содержание";
 "screen_room_change_permissions_room_details" = "Информация о комнате";
+"screen_room_change_role_section_administrators" = "Администраторы";
+"screen_room_change_role_section_moderators" = "Модераторы";
+"screen_room_change_role_section_users" = "Участники";
 "screen_room_details_invite_people_title" = "Пригласить друзей";
 "screen_room_details_leave_conversation_title" = "Покинуть беседу";
 "screen_room_details_leave_room_title" = "Покинуть комнату";

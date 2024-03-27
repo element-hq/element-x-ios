@@ -49,11 +49,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d карыстальнік</string>
+			<string>%1$d удзельнік</string>
 			<key>few</key>
-			<string>%1$d карыстальнікаў</string>
+			<string>%1$d удзельніка</string>
 			<key>many</key>
-			<string>%1$d карыстальнікаў</string>
+			<string>%1$d удзельнікаў</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>

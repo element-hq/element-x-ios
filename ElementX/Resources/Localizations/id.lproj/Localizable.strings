@@ -519,6 +519,7 @@
 "screen_room_change_role_confirm_demote_self_action" = "Turunkan";
 "screen_room_change_role_confirm_demote_self_description" = "Anda tidak akan dapat mengurungkan perubahan ini karena Anda sedang menurunkan Anda sendiri, jika Anda merupakan pengguna dengan hak khusus dalam ruangan maka tidak akan memungkinkan untuk mendapatkan hak tersebut lagi.";
 "screen_room_change_role_confirm_demote_self_title" = "Turunkan Anda sendiri?";
+"screen_room_change_role_invited_member_name" = "%1$@ (Pending)";
 "screen_room_change_role_moderators_title" = "Sunting Moderator";
 "screen_room_change_role_unsaved_changes_description" = "Anda memiliki perubahan yang belum disimpan.";
 "screen_room_change_role_unsaved_changes_title" = "Simpan perubahan?";
@@ -793,6 +794,9 @@
 "screen_room_change_permissions_member_moderation" = "Moderasi anggota";
 "screen_room_change_permissions_messages_and_content" = "Pesan dan konten";
 "screen_room_change_permissions_room_details" = "Detail ruangan";
+"screen_room_change_role_section_administrators" = "Admin";
+"screen_room_change_role_section_moderators" = "Moderator";
+"screen_room_change_role_section_users" = "Anggota";
 "screen_room_details_invite_people_title" = "Undang orang-orang";
 "screen_room_details_leave_conversation_title" = "Tinggalkan percakapan";
 "screen_room_details_leave_room_title" = "Tinggalkan ruangan";
