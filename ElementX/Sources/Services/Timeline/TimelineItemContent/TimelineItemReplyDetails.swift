@@ -26,4 +26,5 @@ enum TimelineItemReplyDetails: Hashable {
 enum TimelineEventContent: Hashable {
     case message(EventBasedMessageTimelineItemContentType)
     case poll(question: String)
+    case redacted
 }
