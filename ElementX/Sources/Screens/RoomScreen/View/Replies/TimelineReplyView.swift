@@ -316,7 +316,8 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
         }
         .padding()
         .environmentObject(viewModel.context)
-        .snapshot(delay: 0.2) // Allow member names to load.
+        // Allow member names to load. Reduce precission as the `imageSource` randomly renders slightly differently
+        .snapshot(delay: 0.2, precision: 0.98)
         .previewLayout(.sizeThatFits)
     }
 }
