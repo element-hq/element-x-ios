@@ -84,12 +84,14 @@ extension ClientProxyMock {
             guard let room = self?.roomSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }) else {
                 return nil
             }
+            
+            let roomID = room.id ?? UUID().uuidString
         
             switch room {
             case .empty:
                 return await RoomProxyMock(with: .init(name: "Empty room"))
             case .filled(let details), .invalidated(let details):
-                return await RoomProxyMock(with: .init(name: details.name))
+                return await RoomProxyMock(with: .init(id: roomID, name: details.name))
             }
         }
     }

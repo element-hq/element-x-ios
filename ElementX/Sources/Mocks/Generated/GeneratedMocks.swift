@@ -4351,4 +4351,109 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
         }
     }
 }
+class WindowManagerMock: WindowManagerProtocol {
+    weak var delegate: WindowManagerDelegate?
+    var mainWindow: UIWindow!
+    var overlayWindow: UIWindow!
+    var globalSearchWindow: UIWindow!
+    var alternateWindow: UIWindow!
+    var windows: [UIWindow] = []
+
+    //MARK: - configure
+
+    var configureWithCallsCount = 0
+    var configureWithCalled: Bool {
+        return configureWithCallsCount > 0
+    }
+    var configureWithReceivedWindowScene: UIWindowScene?
+    var configureWithReceivedInvocations: [UIWindowScene] = []
+    var configureWithClosure: ((UIWindowScene) -> Void)?
+
+    func configure(with windowScene: UIWindowScene) {
+        configureWithCallsCount += 1
+        configureWithReceivedWindowScene = windowScene
+        configureWithReceivedInvocations.append(windowScene)
+        configureWithClosure?(windowScene)
+    }
+    //MARK: - switchToMain
+
+    var switchToMainCallsCount = 0
+    var switchToMainCalled: Bool {
+        return switchToMainCallsCount > 0
+    }
+    var switchToMainClosure: (() -> Void)?
+
+    func switchToMain() {
+        switchToMainCallsCount += 1
+        switchToMainClosure?()
+    }
+    //MARK: - switchToAlternate
+
+    var switchToAlternateCallsCount = 0
+    var switchToAlternateCalled: Bool {
+        return switchToAlternateCallsCount > 0
+    }
+    var switchToAlternateClosure: (() -> Void)?
+
+    func switchToAlternate() {
+        switchToAlternateCallsCount += 1
+        switchToAlternateClosure?()
+    }
+    //MARK: - showGlobalSearch
+
+    var showGlobalSearchCallsCount = 0
+    var showGlobalSearchCalled: Bool {
+        return showGlobalSearchCallsCount > 0
+    }
+    var showGlobalSearchClosure: (() -> Void)?
+
+    func showGlobalSearch() {
+        showGlobalSearchCallsCount += 1
+        showGlobalSearchClosure?()
+    }
+    //MARK: - hideGlobalSearch
+
+    var hideGlobalSearchCallsCount = 0
+    var hideGlobalSearchCalled: Bool {
+        return hideGlobalSearchCallsCount > 0
+    }
+    var hideGlobalSearchClosure: (() -> Void)?
+
+    func hideGlobalSearch() {
+        hideGlobalSearchCallsCount += 1
+        hideGlobalSearchClosure?()
+    }
+    //MARK: - setOrientation
+
+    var setOrientationCallsCount = 0
+    var setOrientationCalled: Bool {
+        return setOrientationCallsCount > 0
+    }
+    var setOrientationReceivedOrientation: UIInterfaceOrientationMask?
+    var setOrientationReceivedInvocations: [UIInterfaceOrientationMask] = []
+    var setOrientationClosure: ((UIInterfaceOrientationMask) -> Void)?
+
+    func setOrientation(_ orientation: UIInterfaceOrientationMask) {
+        setOrientationCallsCount += 1
+        setOrientationReceivedOrientation = orientation
+        setOrientationReceivedInvocations.append(orientation)
+        setOrientationClosure?(orientation)
+    }
+    //MARK: - lockOrientation
+
+    var lockOrientationCallsCount = 0
+    var lockOrientationCalled: Bool {
+        return lockOrientationCallsCount > 0
+    }
+    var lockOrientationReceivedOrientation: UIInterfaceOrientationMask?
+    var lockOrientationReceivedInvocations: [UIInterfaceOrientationMask] = []
+    var lockOrientationClosure: ((UIInterfaceOrientationMask) -> Void)?
+
+    func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
+        lockOrientationCallsCount += 1
+        lockOrientationReceivedOrientation = orientation
+        lockOrientationReceivedInvocations.append(orientation)
+        lockOrientationClosure?(orientation)
+    }
+}
 // swiftlint:enable all

@@ -68,6 +68,7 @@ extension RoomProxyMock {
         timeline = configuration.timeline
         
         ownUserID = configuration.ownUserID
+        membership = .joined
         
         membersPublisher = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()

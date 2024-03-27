@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import SwiftState
 
@@ -38,11 +39,27 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Showing invites list screen
         case invitesScreen(selectedRoomID: String?)
         
-        // Showing the logout flows
+        /// Showing the logout flows
         case logoutConfirmationScreen(selectedRoomID: String?)
         
-        // Showing Room Directory Search screen
+        /// Showing Room Directory Search screen
         case roomDirectorySearchScreen(selectedRoomID: String?)
+        
+        /// The selected room ID from the state if available.
+        var selectedRoomID: String? {
+            switch self {
+            case .initial:
+                nil
+            case .roomList(let selectedRoomID),
+                 .feedbackScreen(let selectedRoomID),
+                 .settingsScreen(let selectedRoomID),
+                 .startChatScreen(let selectedRoomID),
+                 .invitesScreen(let selectedRoomID),
+                 .logoutConfirmationScreen(let selectedRoomID),
+                 .roomDirectorySearchScreen(let selectedRoomID):
+                selectedRoomID
+            }
+        }
     }
     
     struct EventUserInfo {
@@ -56,7 +73,7 @@ class UserSessionFlowCoordinatorStateMachine {
         
         /// Request presentation for a particular room
         /// - Parameter roomID:the room identifier
-        case selectRoom(roomID: String)
+        case selectRoom(roomID: String, showingRoomDetails: Bool)
         /// The room screen has been dismissed
         case deselectRoom
         
@@ -96,6 +113,11 @@ class UserSessionFlowCoordinatorStateMachine {
         stateMachine.state
     }
     
+    var stateSubject = PassthroughSubject<State, Never>()
+    var statePublisher: AnyPublisher<State, Never> {
+        stateSubject.eraseToAnyPublisher()
+    }
+    
     init() {
         stateMachine = StateMachine(state: .initial)
         configure()
@@ -106,9 +128,9 @@ class UserSessionFlowCoordinatorStateMachine {
 
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (fromState, event) {
-            case (.roomList, .selectRoom(let roomID)):
+            case (.roomList, .selectRoom(let roomID, _)):
                 return .roomList(selectedRoomID: roomID)
-            case (.invitesScreen, .selectRoom(let roomID)):
+            case (.invitesScreen, .selectRoom(let roomID, _)):
                 return .invitesScreen(selectedRoomID: roomID)
             case (.roomList, .deselectRoom):
                 return .roomList(selectedRoomID: nil)
@@ -159,6 +181,10 @@ class UserSessionFlowCoordinatorStateMachine {
             } else {
                 MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
             }
+        }
+        
+        addTransitionHandler { [weak self] context in
+            self?.stateSubject.send(context.toState)
         }
     }
     

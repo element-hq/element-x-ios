@@ -20,35 +20,35 @@ import SwiftState
 import UserNotifications
 
 enum RoomFlowCoordinatorAction: Equatable {
-    case presentedRoom(String)
-    case dismissedRoom
+    case presentRoom(roomID: String)
     case presentCallScreen(roomProxy: RoomProxyProtocol)
+    case finished
     
     static func == (lhs: RoomFlowCoordinatorAction, rhs: RoomFlowCoordinatorAction) -> Bool {
         switch (lhs, rhs) {
-        case (.presentedRoom(let lhsRoomID), .presentedRoom(let rhsRoomID)):
-            return lhsRoomID == rhsRoomID
-        case (.dismissedRoom, .dismissedRoom):
-            return true
+        case (.presentRoom(let lhsRoomID), .presentRoom(let rhsRoomID)):
+            lhsRoomID == rhsRoomID
         case (.presentCallScreen(let lhsRoomProxy), .presentCallScreen(let rhsRoomProxy)):
-            return lhsRoomProxy.id == rhsRoomProxy.id
+            lhsRoomProxy.id == rhsRoomProxy.id
+        case (.finished, .finished):
+            true
         default:
-            return false
+            false
         }
     }
 }
 
 // swiftlint:disable file_length
 class RoomFlowCoordinator: FlowCoordinatorProtocol {
-    private let orientationManager: OrientationManagerProtocol
+    private let roomProxy: RoomProxyProtocol
     private let userSession: UserSessionProtocol
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
-    private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let emojiProvider: EmojiProviderProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let orientationManager: OrientationManagerProtocol
     
     // periphery:ignore - used to avoid deallocation
     private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
@@ -62,34 +62,35 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var roomProxy: RoomProxyProtocol? {
-        didSet {
-            oldValue?.unsubscribeFromUpdates()
-        }
-    }
-    
     private var timelineController: RoomTimelineControllerProtocol?
     
-    init(userSession: UserSessionProtocol,
+    init(roomProxy: RoomProxyProtocol,
+         userSession: UserSessionProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
-         navigationSplitCoordinator: NavigationSplitCoordinator,
          emojiProvider: EmojiProviderProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         orientationManager: OrientationManagerProtocol) {
+         orientationManager: OrientationManagerProtocol) async {
+        self.roomProxy = roomProxy
         self.userSession = userSession
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.navigationStackCoordinator = navigationStackCoordinator
-        self.navigationSplitCoordinator = navigationSplitCoordinator
         self.emojiProvider = emojiProvider
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.orientationManager = orientationManager
         
+        // The SDK needs to handle multiple subscription calls before we can start adding child room flows.
+        let subscriptionTask = Task { await roomProxy.subscribeForUpdates() }
+        
         setupStateMachine()
+        
+        analytics.signpost.beginRoomFlow(roomProxy.id)
+        
+        _ = await subscriptionTask.result
     }
         
     // MARK: - FlowCoordinatorProtocol
@@ -101,18 +102,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         switch appRoute {
         case .room(let roomID):
-            if case .room(let identifier) = stateMachine.state,
-               roomID == identifier {
-                return
-            }
-            
-            stateMachine.tryEvent(.presentRoom(roomID: roomID), userInfo: EventUserInfo(animated: animated))
+            guard roomID == roomProxy.id else { fatalError("Navigation route doesn't belong to this room flow.") }
+            stateMachine.tryEvent(.presentRoom, userInfo: EventUserInfo(animated: animated))
         case .roomDetails(let roomID):
-            stateMachine.tryEvent(.presentRoomDetails(roomID: roomID), userInfo: EventUserInfo(animated: animated))
+            guard roomID == roomProxy.id else { fatalError("Navigation route doesn't belong to this room flow.") }
+            stateMachine.tryEvent(.presentRoomDetails, userInfo: EventUserInfo(animated: animated))
         case .roomList:
             stateMachine.tryEvent(.dismissRoom, userInfo: EventUserInfo(animated: animated))
         case .roomMemberDetails(let userID):
-            stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
+            stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: EventUserInfo(animated: animated))
         case .genericCallLink, .oidcCallback, .settings, .chatBackupSettings:
             break
         }
@@ -131,107 +129,105 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func setupStateMachine() {
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (fromState, event) {
-            case (_, .presentRoom(let roomID)):
-                return .room(roomID: roomID)
+            case (_, .presentRoom):
+                return .room
             case (.room, .dismissRoom):
-                return .initial
+                return .complete
                 
-            case (.initial, .presentRoomDetails(let roomID)):
-                return .roomDetails(roomID: roomID, isRoot: true)
-            case (.room(let currentRoomID), .presentRoomDetails(let roomID)):
-                return .roomDetails(roomID: roomID, isRoot: roomID != currentRoomID)
-            case (.roomDetails(let currentRoomID, _), .presentRoomDetails(let roomID)):
-                return .roomDetails(roomID: roomID, isRoot: roomID != currentRoomID)
-            case (.roomDetails(let roomID, _), .dismissRoomDetails):
-                return .room(roomID: roomID)
+            case (.initial, .presentRoomDetails):
+                return .roomDetails(isRoot: true)
+            case (.room, .presentRoomDetails):
+                return .roomDetails(isRoot: false)
+            case (.roomDetails, .dismissRoomDetails):
+                return .room
             case (.roomDetails, .dismissRoom):
-                return .initial
+                return .complete
                 
-            case (.roomDetails(let roomID, _), .presentRoomDetailsEditScreen):
-                return .roomDetailsEditScreen(roomID: roomID)
-            case (.roomDetailsEditScreen(let roomID), .dismissRoomDetailsEditScreen):
-                return .roomDetails(roomID: roomID, isRoot: false)
+            case (.roomDetails, .presentRoomDetailsEditScreen):
+                return .roomDetailsEditScreen
+            case (.roomDetailsEditScreen, .dismissRoomDetailsEditScreen):
+                return .roomDetails(isRoot: false)
                 
-            case (.roomDetails(let roomID, _), .presentNotificationSettingsScreen):
-                return .notificationSettings(roomID: roomID)
-            case (.notificationSettings(let roomID), .dismissNotificationSettingsScreen):
-                return .roomDetails(roomID: roomID, isRoot: false)
+            case (.roomDetails, .presentNotificationSettingsScreen):
+                return .notificationSettings
+            case (.notificationSettings, .dismissNotificationSettingsScreen):
+                return .roomDetails(isRoot: false)
                 
-            case (.notificationSettings(let roomID), .presentGlobalNotificationSettingsScreen):
-                return .globalNotificationSettings(roomID: roomID)
-            case (.globalNotificationSettings(let roomID), .dismissGlobalNotificationSettingsScreen):
-                return .notificationSettings(roomID: roomID)
+            case (.notificationSettings, .presentGlobalNotificationSettingsScreen):
+                return .globalNotificationSettings
+            case (.globalNotificationSettings, .dismissGlobalNotificationSettingsScreen):
+                return .notificationSettings
                 
-            case (.roomDetails(let roomID, _), .presentRoomMembersList):
-                return .roomMembersList(roomID: roomID)
-            case (.roomMembersList(let roomID), .dismissRoomMembersList):
-                return .roomDetails(roomID: roomID, isRoot: false)
+            case (.roomDetails, .presentRoomMembersList):
+                return .roomMembersList
+            case (.roomMembersList, .dismissRoomMembersList):
+                return .roomDetails(isRoot: false)
 
-            case (.room(let roomID), .presentRoomMemberDetails(userID: let userID)):
-                return .roomMemberDetails(roomID: roomID, userID: userID, fromRoomMembersList: false)
-            case (.roomMembersList(let roomID), .presentRoomMemberDetails(userID: let userID)):
-                return .roomMemberDetails(roomID: roomID, userID: userID, fromRoomMembersList: true)
-            case (.roomMemberDetails(let roomID, _, let fromRoomMembersList), .dismissRoomMemberDetails):
-                return fromRoomMembersList ? .roomMembersList(roomID: roomID) : .room(roomID: roomID)
+            case (.room, .presentRoomMemberDetails(userID: let userID)):
+                return .roomMemberDetails(userID: userID, fromRoomMembersList: false)
+            case (.roomMembersList, .presentRoomMemberDetails(userID: let userID)):
+                return .roomMemberDetails(userID: userID, fromRoomMembersList: true)
+            case (.roomMemberDetails(_, let fromRoomMembersList), .dismissRoomMemberDetails):
+                return fromRoomMembersList ? .roomMembersList : .room
                 
-            case (.roomDetails(let roomID, _), .presentInviteUsersScreen):
-                return .inviteUsersScreen(roomID: roomID, fromRoomMembersList: false)
-            case (.roomMembersList(let roomID), .presentInviteUsersScreen):
-                return .inviteUsersScreen(roomID: roomID, fromRoomMembersList: true)
-            case (.inviteUsersScreen(let roomID, let fromRoomMembersList), .dismissInviteUsersScreen):
-                return fromRoomMembersList ? .roomMembersList(roomID: roomID) : .roomDetails(roomID: roomID, isRoot: false)
+            case (.roomDetails, .presentInviteUsersScreen):
+                return .inviteUsersScreen(fromRoomMembersList: false)
+            case (.roomMembersList, .presentInviteUsersScreen):
+                return .inviteUsersScreen(fromRoomMembersList: true)
+            case (.inviteUsersScreen(let fromRoomMembersList), .dismissInviteUsersScreen):
+                return fromRoomMembersList ? .roomMembersList : .roomDetails(isRoot: false)
                 
-            case (.room(let roomID), .presentReportContent(let itemID, let senderID)):
-                return .reportContent(roomID: roomID, itemID: itemID, senderID: senderID)
-            case (.reportContent(let roomID, _, _), .dismissReportContent):
-                return .room(roomID: roomID)
+            case (.room, .presentReportContent(let itemID, let senderID)):
+                return .reportContent(itemID: itemID, senderID: senderID)
+            case (.reportContent, .dismissReportContent):
+                return .room
                 
-            case (.room(let roomID), .presentMediaUploadPicker(let source)):
-                return .mediaUploadPicker(roomID: roomID, source: source)
-            case (.mediaUploadPicker(let roomID, _), .dismissMediaUploadPicker):
-                return .room(roomID: roomID)
+            case (.room, .presentMediaUploadPicker(let source)):
+                return .mediaUploadPicker(source: source)
+            case (.mediaUploadPicker, .dismissMediaUploadPicker):
+                return .room
                 
-            case (.mediaUploadPicker(let roomID, _), .presentMediaUploadPreview(let fileURL)):
-                return .mediaUploadPreview(roomID: roomID, fileURL: fileURL)
-            case (.room(let roomID), .presentMediaUploadPreview(let fileURL)):
-                return .mediaUploadPreview(roomID: roomID, fileURL: fileURL)
-            case (.mediaUploadPreview(let roomID, _), .dismissMediaUploadPreview):
-                return .room(roomID: roomID)
+            case (.mediaUploadPicker, .presentMediaUploadPreview(let fileURL)):
+                return .mediaUploadPreview(fileURL: fileURL)
+            case (.room, .presentMediaUploadPreview(let fileURL)):
+                return .mediaUploadPreview(fileURL: fileURL)
+            case (.mediaUploadPreview, .dismissMediaUploadPreview):
+                return .room
                 
-            case (.room(let roomID), .presentEmojiPicker(let itemID, let selectedEmoji)):
-                return .emojiPicker(roomID: roomID, itemID: itemID, selectedEmojis: selectedEmoji)
-            case (.emojiPicker(let roomID, _, _), .dismissEmojiPicker):
-                return .room(roomID: roomID)
+            case (.room, .presentEmojiPicker(let itemID, let selectedEmoji)):
+                return .emojiPicker(itemID: itemID, selectedEmojis: selectedEmoji)
+            case (.emojiPicker, .dismissEmojiPicker):
+                return .room
 
-            case (.room(let roomID), .presentMessageForwarding(let itemID)):
-                return .messageForwarding(roomID: roomID, itemID: itemID)
-            case (.messageForwarding(let roomID, _), .dismissMessageForwarding):
-                return .room(roomID: roomID)
+            case (.room, .presentMessageForwarding(let itemID)):
+                return .messageForwarding(itemID: itemID)
+            case (.messageForwarding, .dismissMessageForwarding):
+                return .room
 
-            case (.room(let roomID), .presentMapNavigator):
-                return .mapNavigator(roomID: roomID)
-            case (.mapNavigator(let roomID), .dismissMapNavigator):
-                return .room(roomID: roomID)
+            case (.room, .presentMapNavigator):
+                return .mapNavigator
+            case (.mapNavigator, .dismissMapNavigator):
+                return .room
             
-            case (.room(let roomID), .presentPollForm):
-                return .pollForm(roomID: roomID)
-            case (.pollForm(let roomID), .dismissPollForm):
-                return .room(roomID: roomID)
+            case (.room, .presentPollForm):
+                return .pollForm
+            case (.pollForm, .dismissPollForm):
+                return .room
             
-            case (.roomDetails(let roomID, _), .presentPollsHistory):
-                return .pollsHistory(roomID: roomID)
-            case (.pollsHistory(let roomID), .dismissPollsHistory):
-                return .roomDetails(roomID: roomID, isRoot: false)
+            case (.roomDetails, .presentPollsHistory):
+                return .pollsHistory
+            case (.pollsHistory, .dismissPollsHistory):
+                return .roomDetails(isRoot: false)
             
-            case (.pollsHistory(let roomID), .presentPollForm):
-                return .pollsHistoryForm(roomID: roomID)
-            case (.pollsHistoryForm(let roomID), .dismissPollForm):
-                return .pollsHistory(roomID: roomID)
+            case (.pollsHistory, .presentPollForm):
+                return .pollsHistoryForm
+            case (.pollsHistoryForm, .dismissPollForm):
+                return .pollsHistory
             
-            case (.roomDetails(let roomID, _), .presentRolesAndPermissionsScreen):
-                return .rolesAndPermissions(roomID: roomID)
-            case (.rolesAndPermissions(let roomID), .dismissRolesAndPermissionsScreen):
-                return .roomDetails(roomID: roomID, isRoot: false)
+            case (.roomDetails, .presentRolesAndPermissionsScreen):
+                return .rolesAndPermissions
+            case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen):
+                return .roomDetails(isRoot: false)
             
             default:
                 return nil
@@ -244,25 +240,19 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             let animated = (context.userInfo as? EventUserInfo)?.animated ?? true
             
             switch (context.fromState, context.event, context.toState) {
-            case (.roomDetails(roomID: let currentRoomID, true), .presentRoom(let roomID), .room) where currentRoomID == roomID:
-                dismissRoom(animated: animated)
-                presentRoom(roomID, animated: animated)
-            case (_, .presentRoom(let roomID), .room):
-                let destinationRoomProxy = (context.userInfo as? EventUserInfo)?.destinationRoomProxy
-                presentRoom(roomID, animated: animated, destinationRoomProxy: destinationRoomProxy)
-            case (.room, .dismissRoom, .initial):
-                dismissRoom(animated: animated)
+            case (_, .presentRoom, .room):
+                Task { await self.presentRoom(animated: animated) }
+            case (.room, .dismissRoom, .complete):
+                dismissFlow(animated: animated)
             
-            case (.roomDetails(let currentRoomID, _), .presentRoomDetails, .roomDetails(let roomID, _)) where currentRoomID == roomID:
-                break
-            case (.initial, .presentRoomDetails, .roomDetails(let roomID, let isRoot)),
-                 (.room, .presentRoomDetails, .roomDetails(let roomID, let isRoot)),
-                 (.roomDetails, .presentRoomDetails, .roomDetails(let roomID, let isRoot)):
-                self.presentRoomDetails(roomID: roomID, isRoot: isRoot, animated: animated)
+            case (.initial, .presentRoomDetails, .roomDetails(let isRoot)),
+                 (.room, .presentRoomDetails, .roomDetails(let isRoot)),
+                 (.roomDetails, .presentRoomDetails, .roomDetails(let isRoot)):
+                Task { await self.presentRoomDetails(isRoot: isRoot, animated: animated) }
             case (.roomDetails, .dismissRoomDetails, .room):
                 break
-            case (.roomDetails, .dismissRoom, .initial):
-                dismissRoom(animated: animated)
+            case (.roomDetails, .dismissRoom, .complete):
+                dismissFlow(animated: animated)
                 
             case (.roomDetails, .presentRoomDetailsEditScreen, .roomDetailsEditScreen):
                 presentRoomDetailsEditScreen()
@@ -284,12 +274,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomMembersList, .dismissRoomMembersList, .roomDetails):
                 break
                 
-            case (.room, .presentRoomMemberDetails, .roomMemberDetails(_, let userID, _)):
+            case (.room, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
                 presentRoomMemberDetails(userID: userID)
             case (.roomMemberDetails, .dismissRoomMemberDetails, .room):
                 break
                 
-            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(_, let userID, _)):
+            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
                 presentRoomMemberDetails(userID: userID)
             case (.roomMemberDetails, .dismissRoomMemberDetails, .roomMembersList):
                 break
@@ -304,24 +294,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.inviteUsersScreen, .dismissInviteUsersScreen, .roomMembersList):
                 break
                 
-            case (.room, .presentReportContent, .reportContent(_, let itemID, let senderID)):
+            case (.room, .presentReportContent, .reportContent(let itemID, let senderID)):
                 presentReportContent(for: itemID, from: senderID)
             case (.reportContent, .dismissReportContent, .room):
                 break
                 
-            case (.room, .presentMediaUploadPicker, .mediaUploadPicker(_, let source)):
+            case (.room, .presentMediaUploadPicker, .mediaUploadPicker(let source)):
                 presentMediaUploadPickerWithSource(source)
             case (.mediaUploadPicker, .dismissMediaUploadPicker, .room):
                 break
                 
-            case (.mediaUploadPicker, .presentMediaUploadPreview, .mediaUploadPreview(_, let fileURL)):
+            case (.mediaUploadPicker, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL)):
                 presentMediaUploadPreviewScreen(for: fileURL)
-            case (.room, .presentMediaUploadPreview, .mediaUploadPreview(_, let fileURL)):
+            case (.room, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL)):
                 presentMediaUploadPreviewScreen(for: fileURL)
             case (.mediaUploadPreview, .dismissMediaUploadPreview, .room):
                 break
                 
-            case (.room, .presentEmojiPicker, .emojiPicker(_, let itemID, let selectedEmoji)):
+            case (.room, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji)):
                 presentEmojiPicker(for: itemID, selectedEmoji: selectedEmoji)
             case (.emojiPicker, .dismissEmojiPicker, .room):
                 break
@@ -385,41 +375,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     ///   - destinationRoomProxy: an optional already build roomProxy for the target room. It is currently used when
     ///   forwarding messages so that we can take advantage of the local echo
     ///   and have the message already there when presenting the room
-    private func presentRoom(_ roomID: String, animated: Bool, destinationRoomProxy: RoomProxyProtocol? = nil) {
-        Task {
-            await asyncPresentRoom(roomID, animated: animated, destinationRoomProxy: destinationRoomProxy)
-        }
-    }
-    
-    private func asyncPresentRoom(_ roomID: String, animated: Bool, destinationRoomProxy: RoomProxyProtocol? = nil) async {
+    private func presentRoom(animated: Bool) async {
         // If any sheets are presented dismiss them, rely on their dismissal callbacks to transition the state machine
         // through the correct states before presenting the room
         navigationStackCoordinator.setSheetCoordinator(nil)
-        
-        if let roomProxy, roomProxy.id == roomID {
-            navigationStackCoordinator.popToRoot()
-            return
-        }
-        
-        let roomProxy: RoomProxyProtocol
-        
-        if let destinationRoomProxy {
-            roomProxy = destinationRoomProxy
-        } else {
-            guard let proxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
-                MXLog.error("Invalid room identifier: \(roomID)")
-                stateMachine.tryEvent(.dismissRoom)
-                return
-            }
-            
-            roomProxy = proxy
-        }
-        
-        await roomProxy.subscribeForUpdates()
-        
-        actionsSubject.send(.presentedRoom(roomID))
-        
-        self.roomProxy = roomProxy
         
         Task {
             // Flag the room as read on entering, the timeline will take care of the read receipts
@@ -456,7 +415,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .presentRoomDetails:
-                    stateMachine.tryEvent(.presentRoomDetails(roomID: roomID))
+                    stateMachine.tryEvent(.presentRoomDetails)
                 case .presentReportContent(let itemID, let senderID):
                     stateMachine.tryEvent(.presentReportContent(itemID: itemID, senderID: senderID))
                 case .presentMediaUploadPicker(let source):
@@ -476,10 +435,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentMessageForwarding(let itemID):
                     stateMachine.tryEvent(.presentMessageForwarding(itemID: itemID))
                 case .presentCallScreen:
-                    guard let roomProxy = self.roomProxy else {
-                        fatalError()
-                    }
-                    
                     actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
                 }
             }
@@ -489,49 +444,22 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             // Move the state machine to no room selected if the room currently being dismissed
             // is the same as the one selected in the state machine.
             // This generally happens when popping the room screen while in a compact layout
-            switch self?.stateMachine.state {
-            case let .room(selectedRoomID) where selectedRoomID == roomID:
-                self?.stateMachine.tryEvent(.dismissRoom)
-            default:
-                break
-            }
-        }
-        
-        if navigationSplitCoordinator.detailCoordinator == nil {
-            navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator, animated: animated)
+            self?.stateMachine.tryEvent(.dismissRoom)
         }
     }
     
-    private func dismissRoom(animated: Bool) {
-        // DON'T CHANGE THE ORDER IN WHICH POP AND SET ARE DONE, IT CAN CAUSE A CRASH
+    private func dismissFlow(animated: Bool) {
         navigationStackCoordinator.popToRoot(animated: false)
-        navigationSplitCoordinator.setDetailCoordinator(nil, animated: animated)
-        roomProxy = nil
+        navigationStackCoordinator.setRootCoordinator(nil, animated: false)
+        
+        roomProxy.unsubscribeFromUpdates()
         timelineController = nil
         
-        actionsSubject.send(.dismissedRoom)
+        actionsSubject.send(.finished)
+        analytics.signpost.endRoomFlow()
     }
     
-    private func presentRoomDetails(roomID: String, isRoot: Bool, animated: Bool) {
-        Task {
-            await asyncPresentRoomDetails(roomID: roomID, isRoot: isRoot, animated: animated)
-        }
-    }
-    
-    private func asyncPresentRoomDetails(roomID: String, isRoot: Bool, animated: Bool) async {
-        if isRoot {
-            roomProxy = await userSession.clientProxy.roomForIdentifier(roomID)
-            await roomProxy?.subscribeForUpdates()
-        } else {
-            await asyncPresentRoom(roomID, animated: animated)
-        }
-        
-        guard let roomProxy else {
-            MXLog.error("Invalid room identifier: \(roomID)")
-            stateMachine.tryEvent(.dismissRoom)
-            return
-        }
-        
+    private func presentRoomDetails(isRoot: Bool, animated: Bool) async {
         let params = RoomDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
                                                             clientProxy: userSession.clientProxy,
                                                             mediaProvider: userSession.mediaProvider,
@@ -547,7 +475,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             
             switch action {
             case .leftRoom:
-                dismissRoom(animated: animated)
+                stateMachine.tryEvent(.dismissRoom)
             case .presentRoomMembersList:
                 stateMachine.tryEvent(.presentRoomMembersList)
             case .presentRoomDetailsEditScreen:
@@ -566,17 +494,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         if isRoot {
             navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
-                guard let self else { return }
-                if case .roomDetails(let detailsRoomID, _) = stateMachine.state, detailsRoomID == roomID {
-                    stateMachine.tryEvent(.dismissRoom)
-                }
+                self?.stateMachine.tryEvent(.dismissRoom) // This seems wrong but it isn't, Maybe the event should be called dismissFlow?
             }
-            
-            if navigationSplitCoordinator.detailCoordinator == nil {
-                navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator, animated: animated)
-            }
-            
-            actionsSubject.send(.presentedRoom(roomID))
         } else {
             navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
                 guard let self else { return }
@@ -588,10 +507,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentRoomMembersList() {
-        guard let roomProxy else {
-            fatalError()
-        }
-        
         let parameters = RoomMembersListScreenCoordinatorParameters(mediaProvider: userSession.mediaProvider,
                                                                     roomProxy: roomProxy,
                                                                     userIndicatorController: userIndicatorController,
@@ -618,10 +533,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentRoomDetailsEditScreen() {
-        guard let roomProxy else {
-            fatalError()
-        }
-        
         let stackCoordinator = NavigationStackCoordinator()
         
         let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(roomProxy: roomProxy,
@@ -647,7 +558,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentReportContent(for itemID: TimelineItemIdentifier, from senderID: String) {
-        guard let roomProxy, let eventID = itemID.eventID else {
+        guard let eventID = itemID.eventID else {
             fatalError()
         }
         
@@ -707,10 +618,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
 
     private func presentMediaUploadPreviewScreen(for url: URL) {
-        guard let roomProxy else {
-            fatalError()
-        }
-        
         let stackCoordinator = NavigationStackCoordinator()
 
         let parameters = MediaUploadPreviewScreenCoordinatorParameters(userIndicatorController: userIndicatorController,
@@ -776,12 +683,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .selectedLocation(let geoURI, let isUserLocation):
                 Task {
-                    _ = await self.roomProxy?.timeline.sendLocation(body: geoURI.bodyMessage,
-                                                                    geoURI: geoURI,
-                                                                    description: nil,
-                                                                    zoomLevel: 15,
-                                                                    assetType: isUserLocation ? .sender : .pin)
-                    self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    _ = await self.roomProxy.timeline.sendLocation(body: geoURI.bodyMessage,
+                                                                   geoURI: geoURI,
+                                                                   description: nil,
+                                                                   zoomLevel: 15,
+                                                                   assetType: isUserLocation ? .sender : .pin)
+                    self.navigationStackCoordinator.setSheetCoordinator(nil)
                 }
                 
                 self.analytics.trackComposer(inThread: false,
@@ -790,7 +697,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                              messageType: isUserLocation ? .LocationUser : .LocationPin,
                                              startsThread: nil)
             case .close:
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                self.navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)
@@ -813,7 +720,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     return
                 }
 
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                self.navigationStackCoordinator.setSheetCoordinator(nil)
 
                 switch action {
                 case .cancel:
@@ -831,18 +738,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
 
-        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissPollForm)
         }
     }
     
     private func createPoll(question: String, options: [String], pollKind: Poll.Kind) {
         Task {
-            guard let roomProxy = self.roomProxy else {
-                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-                return
-            }
-
             let result = await roomProxy.timeline.createPoll(question: question, answers: options, pollKind: pollKind)
 
             self.analytics.trackComposer(inThread: false,
@@ -864,11 +766,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func editPoll(pollStartID: String, question: String, options: [String], pollKind: Poll.Kind) {
         Task {
-            guard let roomProxy = self.roomProxy else {
-                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-                return
-            }
-
             let result = await roomProxy.timeline.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind)
             
             switch result {
@@ -882,7 +779,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func deletePoll(mode: PollFormMode) {
         Task {
-            guard case .edit(let pollStartID, _) = mode, let roomProxy = self.roomProxy else {
+            guard case .edit(let pollStartID, _) = mode else {
                 self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
                 return
             }
@@ -905,10 +802,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func asyncPresentRoomPollsHistory() async {
-        guard let roomProxy else {
-            fatalError()
-        }
-                
         let userID = userSession.clientProxy.userID
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
@@ -940,10 +833,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentRoomMemberDetails(userID: String) {
-        guard let roomProxy else {
-            fatalError()
-        }
-        
         let params = RoomMemberDetailsScreenCoordinatorParameters(userID: userID,
                                                                   roomProxy: roomProxy,
                                                                   clientProxy: userSession.clientProxy,
@@ -968,12 +857,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(userID)
                     switch currentDirectRoom {
                     case .success(.some(let roomID)):
-                        stateMachine.tryEvent(.presentRoom(roomID: roomID))
+                        actionsSubject.send(.presentRoom(roomID: roomID))
                     case .success(nil):
                         switch await userSession.clientProxy.createDirectRoom(with: userID, expectedRoomName: displayName) {
                         case .success(let roomID):
                             analytics.trackCreatedRoom(isDM: true)
-                            stateMachine.tryEvent(.presentRoom(roomID: roomID))
+                            actionsSubject.send(.presentRoom(roomID: roomID))
                         case .failure:
                             userIndicatorController.alertInfo = .init(id: UUID())
                         }
@@ -993,7 +882,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentMessageForwarding(for itemID: TimelineItemIdentifier) {
-        guard let roomProxy, let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider, let eventID = itemID.eventID else {
+        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider, let eventID = itemID.eventID else {
             fatalError()
         }
         
@@ -1028,12 +917,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func forward(eventID: String, toRoomID roomID: String) async {
-        guard let roomProxy else {
-            MXLog.error("Failed retrieving current room with id: \(roomID)")
-            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            return
-        }
-        
         guard let messageEventContent = roomProxy.timeline.messageEventContent(for: eventID) else {
             MXLog.error("Failed retrieving forwarded message event content for eventID: \(eventID)")
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
@@ -1052,14 +935,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        stateMachine.tryEvent(.presentRoom(roomID: roomID), userInfo: EventUserInfo(animated: true, destinationRoomProxy: targetRoomProxy))
+        // This will become a child flow and we can pass the proxy down afterwards.
+        
+        actionsSubject.send(.presentRoom(roomID: roomID))
     }
     
     private func presentNotificationSettingsScreen() {
-        guard let roomProxy else {
-            fatalError()
-        }
-        
         let parameters = RoomNotificationSettingsScreenCoordinatorParameters(notificationSettingsProxy: userSession.clientProxy.notificationSettings,
                                                                              roomProxy: roomProxy,
                                                                              displayAsUserDefinedRoomSettings: false)
@@ -1101,10 +982,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentInviteUsersScreen() {
-        guard let roomProxy else {
-            fatalError()
-        }
-        
         let selectedUsersSubject: CurrentValueSubject<[UserProfileProxy], Never> = .init([])
         
         let stackCoordinator = NavigationStackCoordinator()
@@ -1173,8 +1050,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentRolesAndPermissionsScreen() {
-        guard let roomProxy else { fatalError() }
-        
         let parameters = RoomRolesAndPermissionsFlowCoordinatorParameters(roomProxy: roomProxy,
                                                                           navigationStackCoordinator: navigationStackCoordinator,
                                                                           userIndicatorController: userIndicatorController,
@@ -1208,39 +1083,41 @@ private extension RoomFlowCoordinator {
 
     enum State: StateType {
         case initial
-        case room(roomID: String)
-        case roomDetails(roomID: String, isRoot: Bool)
-        case roomDetailsEditScreen(roomID: String)
-        case notificationSettings(roomID: String)
-        case globalNotificationSettings(roomID: String)
-        case roomMembersList(roomID: String)
-        case roomMemberDetails(roomID: String, userID: String, fromRoomMembersList: Bool)
-        case inviteUsersScreen(roomID: String, fromRoomMembersList: Bool)
-        case mediaUploadPicker(roomID: String, source: MediaPickerScreenSource)
-        case mediaUploadPreview(roomID: String, fileURL: URL)
-        case emojiPicker(roomID: String, itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
-        case mapNavigator(roomID: String)
-        case messageForwarding(roomID: String, itemID: TimelineItemIdentifier)
-        case reportContent(roomID: String, itemID: TimelineItemIdentifier, senderID: String)
-        case pollForm(roomID: String)
-        case pollsHistory(roomID: String)
-        case pollsHistoryForm(roomID: String)
-        case rolesAndPermissions(roomID: String)
+        case room
+        case roomDetails(isRoot: Bool)
+        case roomDetailsEditScreen
+        case notificationSettings
+        case globalNotificationSettings
+        case roomMembersList
+        case roomMemberDetails(userID: String, fromRoomMembersList: Bool)
+        case inviteUsersScreen(fromRoomMembersList: Bool)
+        case mediaUploadPicker(source: MediaPickerScreenSource)
+        case mediaUploadPreview(fileURL: URL)
+        case emojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
+        case mapNavigator
+        case messageForwarding(itemID: TimelineItemIdentifier)
+        case reportContent(itemID: TimelineItemIdentifier, senderID: String)
+        case pollForm
+        case pollsHistory
+        case pollsHistoryForm
+        case rolesAndPermissions
+        
+        /// The flow is complete and is handing control of the stack back to its parent.
+        case complete
     }
     
     struct EventUserInfo {
         let animated: Bool
-        var destinationRoomProxy: RoomProxyProtocol?
     }
 
     enum Event: EventType {
-        case presentRoom(roomID: String)
+        case presentRoom
         case dismissRoom
         
         case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
         case dismissReportContent
         
-        case presentRoomDetails(roomID: String)
+        case presentRoomDetails
         case dismissRoomDetails
         
         case presentRoomDetailsEditScreen
