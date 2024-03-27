@@ -519,6 +519,7 @@
 "screen_room_change_role_confirm_demote_self_action" = "Zurückstufen";
 "screen_room_change_role_confirm_demote_self_description" = "Du stufst dich selbst herab. Diese Änderung kann nicht rückgängig gemacht werden. Wenn du der letzte Benutzer mit dieser Rolle bist, ist es nicht möglich, diese Rolle wiederzuerlangen.";
 "screen_room_change_role_confirm_demote_self_title" = "Möchtest Du Dich selbst herabstufen?";
+"screen_room_change_role_invited_member_name" = "%1$@ (Ausstehend)";
 "screen_room_change_role_moderators_title" = "Moderatoren bearbeiten";
 "screen_room_change_role_unsaved_changes_description" = "Du hast nicht gespeicherte Änderungen.";
 "screen_room_change_role_unsaved_changes_title" = "Änderungen speichern?";
@@ -613,7 +614,7 @@
 "screen_room_timeline_read_marker_title" = "Neu";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ und ";
 "screen_room_typing_notification_plural_ios" = " schreiben…";
-"screen_room_typing_notification_singular_ios" = " schreibt gerade…";
+"screen_room_typing_notification_singular_ios" = " schreibt…";
 "screen_room_typing_two_members" = "%1$@ und %2$@";
 "screen_room_voice_message_tooltip" = "Zum Aufnehmen gedrückt halten";
 "screen_roomlist_a11y_create_message" = "Eine neue Unterhaltung oder einen neuen Raum erstellen";
@@ -793,6 +794,9 @@
 "screen_room_change_permissions_member_moderation" = "Moderation der Mitglieder";
 "screen_room_change_permissions_messages_and_content" = "Nachrichten senden & löschen";
 "screen_room_change_permissions_room_details" = "Raumdetails anpassen";
+"screen_room_change_role_section_administrators" = "Administratoren";
+"screen_room_change_role_section_moderators" = "Moderatoren";
+"screen_room_change_role_section_users" = "Mitglieder";
 "screen_room_details_invite_people_title" = "Personen einladen";
 "screen_room_details_leave_conversation_title" = "Unterhaltung verlassen";
 "screen_room_details_leave_room_title" = "Raum verlassen";

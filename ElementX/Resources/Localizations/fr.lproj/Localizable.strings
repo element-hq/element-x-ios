@@ -519,6 +519,7 @@
 "screen_room_change_role_confirm_demote_self_action" = "Rétrograder";
 "screen_room_change_role_confirm_demote_self_description" = "Vous ne pourrez pas annuler ce changement car vous vous rétrogradez, si vous êtes le dernier utilisateur privilégié du salon il sera impossible de retrouver les privilèges.";
 "screen_room_change_role_confirm_demote_self_title" = "Vous rétrograder ?";
+"screen_room_change_role_invited_member_name" = "%1$@ (Pending)";
 "screen_room_change_role_moderators_title" = "Modifier les modérateurs";
 "screen_room_change_role_unsaved_changes_description" = "Vous avez des modifications non-enregistrées.";
 "screen_room_change_role_unsaved_changes_title" = "Enregistrer les modifications?";
@@ -793,6 +794,9 @@
 "screen_room_change_permissions_member_moderation" = "Administration des membres";
 "screen_room_change_permissions_messages_and_content" = "Messages et contenus";
 "screen_room_change_permissions_room_details" = "Détails du salon";
+"screen_room_change_role_section_administrators" = "Administrateurs";
+"screen_room_change_role_section_moderators" = "Modérateurs";
+"screen_room_change_role_section_users" = "Membres";
 "screen_room_details_invite_people_title" = "Inviter des amis";
 "screen_room_details_leave_conversation_title" = "Quitter la discussion";
 "screen_room_details_leave_room_title" = "Quitter le salon";

@@ -519,6 +519,7 @@
 "screen_room_change_role_confirm_demote_self_action" = "Lefokozás";
 "screen_room_change_role_confirm_demote_self_description" = "Ezt a változtatást nem fogja tudni visszavonni, mivel lefokozza magát, ha Ön az utolsó jogosultságokkal rendelkező felhasználó a szobában, akkor lehetetlen lesz visszaszerezni a jogosultságokat.";
 "screen_room_change_role_confirm_demote_self_title" = "Lefokozza magát?";
+"screen_room_change_role_invited_member_name" = "%1$@ (Pending)";
 "screen_room_change_role_moderators_title" = "Moderátorok szerkesztése";
 "screen_room_change_role_unsaved_changes_description" = "Mentetlen módosításai vannak.";
 "screen_room_change_role_unsaved_changes_title" = "Menti a változtatásokat?";
@@ -793,6 +794,9 @@
 "screen_room_change_permissions_member_moderation" = "Tagok moderálása";
 "screen_room_change_permissions_messages_and_content" = "Üzenetek és tartalom";
 "screen_room_change_permissions_room_details" = "Szoba részletei";
+"screen_room_change_role_section_administrators" = "Rendszergazdák";
+"screen_room_change_role_section_moderators" = "Moderátorok";
+"screen_room_change_role_section_users" = "Tagok";
 "screen_room_details_invite_people_title" = "Ismerősök meghívása";
 "screen_room_details_leave_conversation_title" = "Beszélgetés elhagyása";
 "screen_room_details_leave_room_title" = "Szoba elhagyása";

@@ -519,6 +519,7 @@
 "screen_room_change_role_confirm_demote_self_action" = "Demote";
 "screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
 "screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
+"screen_room_change_role_invited_member_name" = "%1$@ (Pending)";
 "screen_room_change_role_moderators_title" = "Edit Moderators";
 "screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
 "screen_room_change_role_unsaved_changes_title" = "Save changes?";
@@ -793,6 +794,9 @@
 "screen_room_change_permissions_member_moderation" = "Member moderation";
 "screen_room_change_permissions_messages_and_content" = "Messages and content";
 "screen_room_change_permissions_room_details" = "Room details";
+"screen_room_change_role_section_administrators" = "Admins";
+"screen_room_change_role_section_moderators" = "Moderators";
+"screen_room_change_role_section_users" = "Membri";
 "screen_room_details_invite_people_title" = "Invitați prieteni";
 "screen_room_details_leave_conversation_title" = "Părăsiți conversația";
 "screen_room_details_leave_room_title" = "Părăsiți camera";

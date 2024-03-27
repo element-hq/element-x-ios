@@ -519,6 +519,7 @@
 "screen_room_change_role_confirm_demote_self_action" = "Declassa";
 "screen_room_change_role_confirm_demote_self_description" = "Non potrai annullare questa modifica perché ti stai declassando, se sei l'ultimo utente privilegiato nella stanza, sarà impossibile riottenere i privilegi.";
 "screen_room_change_role_confirm_demote_self_title" = "Declassare te stesso?";
+"screen_room_change_role_invited_member_name" = "%1$@ (Pending)";
 "screen_room_change_role_moderators_title" = "Modifica moderatori";
 "screen_room_change_role_unsaved_changes_description" = "Hai delle modifiche non salvate.";
 "screen_room_change_role_unsaved_changes_title" = "Salvare le modifiche?";
@@ -793,6 +794,9 @@
 "screen_room_change_permissions_member_moderation" = "Moderazione dei membri";
 "screen_room_change_permissions_messages_and_content" = "Messaggi e contenuti";
 "screen_room_change_permissions_room_details" = "Dettagli della stanza";
+"screen_room_change_role_section_administrators" = "Amministratori";
+"screen_room_change_role_section_moderators" = "Moderatori";
+"screen_room_change_role_section_users" = "Membri";
 "screen_room_details_invite_people_title" = "Invita persone";
 "screen_room_details_leave_conversation_title" = "Abbandona la conversazione";
 "screen_room_details_leave_room_title" = "Esci dalla stanza";

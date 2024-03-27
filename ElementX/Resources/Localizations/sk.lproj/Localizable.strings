@@ -519,6 +519,7 @@
 "screen_room_change_role_confirm_demote_self_action" = "Znížiť";
 "screen_room_change_role_confirm_demote_self_description" = "Túto zmenu nebudete môcť vrátiť späť, pretože znižujete svoju úroveň. Ak ste posledným privilegovaným používateľom v miestnosti, nebude možné získať znova oprávnenia.";
 "screen_room_change_role_confirm_demote_self_title" = "Znížiť svoju úroveň?";
+"screen_room_change_role_invited_member_name" = "%1$@ (Pending)";
 "screen_room_change_role_moderators_title" = "Upraviť moderátorov";
 "screen_room_change_role_unsaved_changes_description" = "Máte neuložené zmeny.";
 "screen_room_change_role_unsaved_changes_title" = "Uložiť zmeny?";
@@ -793,6 +794,9 @@
 "screen_room_change_permissions_member_moderation" = "Moderovanie členov";
 "screen_room_change_permissions_messages_and_content" = "Správy a obsah";
 "screen_room_change_permissions_room_details" = "Podrobnosti o miestnosti";
+"screen_room_change_role_section_administrators" = "Správcovia";
+"screen_room_change_role_section_moderators" = "Moderátori";
+"screen_room_change_role_section_users" = "Členovia";
 "screen_room_details_invite_people_title" = "Pozvať ľudí";
 "screen_room_details_leave_conversation_title" = "Opustiť konverzáciu";
 "screen_room_details_leave_room_title" = "Opustiť miestnosť";

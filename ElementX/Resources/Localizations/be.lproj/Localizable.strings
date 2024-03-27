@@ -148,7 +148,7 @@
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "або";
 "common_password" = "Пароль";
-"common_people" = "Людзі";
+"common_people" = "Удзельнікі";
 "common_permalink" = "Пастаянная спасылка";
 "common_permission" = "Дазвол";
 "common_poll_total_votes" = "Усяго галасоў: %1$@";
@@ -229,7 +229,7 @@
 "emoji_picker_category_foods" = "Ежа & Напоі";
 "emoji_picker_category_nature" = "Жывёлы & Прырода";
 "emoji_picker_category_objects" = "Аб'екты";
-"emoji_picker_category_people" = "Усмешкі & Людзі";
+"emoji_picker_category_people" = "Усмешкі & Удзельнікі";
 "emoji_picker_category_places" = "Падарожжы & Месцы";
 "emoji_picker_category_symbols" = "Сімвалы";
 "error_failed_creating_the_permalink" = "Не атрымалася стварыць пастаянную спасылку";
@@ -519,6 +519,7 @@
 "screen_room_change_role_confirm_demote_self_action" = "Паніжэнне ўзроўню";
 "screen_room_change_role_confirm_demote_self_description" = "Вы не зможаце адмяніць гэтае змяненне, бо паніжаеце сябе. Калі вы апошні адміністратар у пакоі, вярнуць права будзе немагчыма.";
 "screen_room_change_role_confirm_demote_self_title" = "Панізіць сябе?";
+"screen_room_change_role_invited_member_name" = "%1$@ (У чаканні)";
 "screen_room_change_role_moderators_title" = "Рэдагаваць мадэратараў";
 "screen_room_change_role_unsaved_changes_description" = "У вас ёсць незахаваныя змены.";
 "screen_room_change_role_unsaved_changes_title" = "Захаваць змены?";
@@ -793,6 +794,9 @@
 "screen_room_change_permissions_member_moderation" = "Мадэрацыя ўдзельнікаў";
 "screen_room_change_permissions_messages_and_content" = "Паведамленні і змест";
 "screen_room_change_permissions_room_details" = "Дэталі пакоя";
+"screen_room_change_role_section_administrators" = "Адміністратары";
+"screen_room_change_role_section_moderators" = "Мадэратары";
+"screen_room_change_role_section_users" = "Удзельнікі";
 "screen_room_details_invite_people_title" = "Запрасіць карыстальникаў";
 "screen_room_details_leave_conversation_title" = "Пакінуць размову";
 "screen_room_details_leave_room_title" = "Пакінуць пакой";
@@ -802,7 +806,7 @@
 "screen_room_details_topic_title" = "Тэма";
 "screen_room_error_failed_processing_media" = "Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз.";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Толькі згадванні і ключавыя словы";
-"screen_roomlist_filter_people" = "Людзі";
+"screen_roomlist_filter_people" = "Удзельнікі";
 "screen_signout_confirmation_dialog_submit" = "Выйсці";
 "screen_signout_confirmation_dialog_title" = "Выйсці";
 "screen_signout_preference_item" = "Выйсці";
