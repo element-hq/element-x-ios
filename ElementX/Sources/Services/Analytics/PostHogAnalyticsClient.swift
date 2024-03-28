@@ -25,6 +25,11 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     /// Any user properties to be included with the next captured event.
     private(set) var pendingUserProperties: AnalyticsEvent.UserProperties?
     
+    /// Super Properties are properties associated with events that are set once and then sent with every capture call, be it a $screen, an autocaptured button click, or anything else.
+    /// It is different from user properties that will be attached to the user and not events.
+    /// Not persisted for now, should be set on start.
+    private var superProperties: [String: Any] = [:]
+    
     var isRunning: Bool { postHog?.enabled ?? false }
     
     func start(analyticsConfiguration: AnalyticsConfiguration) {
@@ -34,7 +39,9 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
         if postHog == nil {
             postHog = PHGPostHog(configuration: configuration)
         }
-        
+        // Add super property cryptoSDK to the captured events, to allow easy
+        // filtering of events across different client by using same filter.
+        superProperties["cryptoSDK"] = "Rust"
         postHog?.enable()
     }
     
@@ -52,12 +59,12 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     
     func capture(_ event: AnalyticsEventProtocol) {
         guard isRunning else { return }
-        postHog?.capture(event.eventName, properties: attachUserProperties(to: event.properties))
+        postHog?.capture(event.eventName, properties: attachUserProperties(to: attachSuperProperties(to: event.properties)))
     }
     
     func screen(_ event: AnalyticsScreenProtocol) {
         guard isRunning else { return }
-        postHog?.screen(event.screenName.rawValue, properties: attachUserProperties(to: event.properties))
+        postHog?.screen(event.screenName.rawValue, properties: attachUserProperties(to: attachSuperProperties(to: event.properties)))
     }
     
     func updateUserProperties(_ userProperties: AnalyticsEvent.UserProperties) {
@@ -87,6 +94,18 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
         // As user properties overwrite old ones via $set, compactMap the dictionary to avoid resetting any missing properties
         properties["$set"] = userProperties.properties.compactMapValues { $0 }
         pendingUserProperties = nil
+        return properties
+    }
+    
+    /// Attach super properties to events.
+    /// If the property is already set on the event, the already set value will be kept.
+    private func attachSuperProperties(to properties: [String: Any]) -> [String: Any] {
+        var properties = properties
+        superProperties.forEach { (key: String, value: Any) in
+            if properties[key] == nil {
+                properties[key] = value
+            }
+        }
         return properties
     }
 }
