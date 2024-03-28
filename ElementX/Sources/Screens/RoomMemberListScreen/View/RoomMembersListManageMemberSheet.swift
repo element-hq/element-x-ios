@@ -61,7 +61,7 @@ struct RoomMembersListManageMemberSheet: View {
         .compoundList()
         .scrollBounceBehavior(.basedOnSize)
         .presentationDragIndicator(.visible)
-        .presentationDetents([.large, .fraction(0.54)]) // TODO: Use the ideal height somehow?
+        .presentationDetents([.large, .fraction(0.54)]) // Maybe find a way to use the ideal height somehow?
         .alert(L10n.screenRoomMemberListBanMemberConfirmationTitle, isPresented: $isPresentingBanConfirmation) {
             Button(L10n.actionCancel, role: .cancel) { }
             Button(L10n.screenRoomMemberListBanMemberConfirmationAction) {

@@ -248,7 +248,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 presentHomeScreen()
                 attemptStartingOnboarding()
                 
-            case(.roomList(let currentRoomID), .selectRoom(let roomID, let showingRoomDetails), .roomList):
+            case(.roomList, .selectRoom(let roomID, let showingRoomDetails), .roomList):
                 Task { await self.presentRoomFlow(roomID: roomID, showingRoomDetails: showingRoomDetails, animated: animated) }
             case(.roomList, .deselectRoom, .roomList):
                 tearDownRoomFlow(animated: animated)
