@@ -39,6 +39,7 @@ enum ClientProxyLoadingState {
 
 enum ClientProxyError: Error {
     case sdkError(Error)
+    
     case invalidMedia
     case failedUploadingMedia(Error, MatrixErrorCode)
 }
@@ -147,4 +148,12 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError>
     
     func unignoreUser(_ userID: String) async -> Result<Void, ClientProxyError>
+    
+    // MARK: - Recently visited rooms
+    
+    func trackRecentlyVisitedRoom(_ roomID: String) async -> Result<Void, ClientProxyError>
+    
+    func recentlyVisitedRooms() async -> Result<[String], ClientProxyError>
+    
+    func recentConversationCounterparts() async -> [UserProfileProxy]
 }

@@ -21,28 +21,42 @@ import SwiftUI
 typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreenViewState, InviteUsersScreenViewAction>
 
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
+    private let clientProxy: ClientProxyProtocol
     private let roomType: InviteUsersScreenRoomType
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
-    private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
+    private var suggestedUsers = [UserProfileProxy]()
     
+    private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<InviteUsersScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
-         roomType: InviteUsersScreenRoomType,
+    init(clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
-        self.roomType = roomType
+         userIndicatorController: UserIndicatorControllerProtocol,
+         selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
+         roomType: InviteUsersScreenRoomType) {
+        self.clientProxy = clientProxy
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
+        
+        self.roomType = roomType
+        
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), imageProvider: mediaProvider)
                 
         setupSubscriptions(selectedUsers: selectedUsers)
         fetchMembersIfNeeded()
+        
+        Task {
+            suggestedUsers = await clientProxy.recentConversationCounterparts()
+            
+            if state.usersSection.type == .suggestions {
+                state.usersSection = .init(type: .suggestions, users: suggestedUsers)
+            }
+        }
     }
     
     // MARK: - Public
@@ -127,29 +141,28 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private func fetchUsers() {
         guard searchQuery.count >= 3 else {
-            state.usersSection = .init(type: .suggestions, users: [])
+            state.usersSection = .init(type: .suggestions, users: suggestedUsers)
             return
         }
         
         state.isSearching = true
+        
         fetchUsersTask = Task {
             let result = await userDiscoveryService.searchProfiles(with: searchQuery)
+            
             guard !Task.isCancelled else { return }
-            handleResult(for: .searchResult, result: result)
+            
+            state.isSearching = false
+            
+            switch result {
+            case .success(let users):
+                state.usersSection = .init(type: .searchResult, users: users)
+            case .failure:
+                break
+            }
         }
     }
-    
-    private func handleResult(for sectionType: UserDiscoverySectionType, result: Result<[UserProfileProxy], UserDiscoveryErrorType>) {
-        state.isSearching = false
         
-        switch result {
-        case .success(let users):
-            state.usersSection = .init(type: sectionType, users: users)
-        case .failure:
-            break
-        }
-    }
-    
     private var searchQuery: String {
         context.searchQuery
     }

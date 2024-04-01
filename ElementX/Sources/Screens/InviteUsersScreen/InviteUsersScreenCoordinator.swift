@@ -18,11 +18,13 @@ import Combine
 import SwiftUI
 
 struct InviteUsersScreenCoordinatorParameters {
-    let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>
-    let roomType: InviteUsersScreenRoomType
+    let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    
+    let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>
+    let roomType: InviteUsersScreenRoomType
 }
 
 enum InviteUsersScreenCoordinatorAction {
@@ -42,11 +44,12 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: InviteUsersScreenCoordinatorParameters) {
-        viewModel = InviteUsersScreenViewModel(selectedUsers: parameters.selectedUsers,
-                                               roomType: parameters.roomType,
+        viewModel = InviteUsersScreenViewModel(clientProxy: parameters.clientProxy,
                                                mediaProvider: parameters.mediaProvider,
                                                userDiscoveryService: parameters.userDiscoveryService,
-                                               userIndicatorController: parameters.userIndicatorController)
+                                               userIndicatorController: parameters.userIndicatorController,
+                                               selectedUsers: parameters.selectedUsers,
+                                               roomType: parameters.roomType)
     }
     
     func start() {

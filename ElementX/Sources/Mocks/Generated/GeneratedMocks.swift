@@ -1211,6 +1211,61 @@ class ClientProxyMock: ClientProxyProtocol {
             return unignoreUserReturnValue
         }
     }
+    //MARK: - trackRecentlyVisitedRoom
+
+    var trackRecentlyVisitedRoomCallsCount = 0
+    var trackRecentlyVisitedRoomCalled: Bool {
+        return trackRecentlyVisitedRoomCallsCount > 0
+    }
+    var trackRecentlyVisitedRoomReceivedRoomID: String?
+    var trackRecentlyVisitedRoomReceivedInvocations: [String] = []
+    var trackRecentlyVisitedRoomReturnValue: Result<Void, ClientProxyError>!
+    var trackRecentlyVisitedRoomClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func trackRecentlyVisitedRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
+        trackRecentlyVisitedRoomCallsCount += 1
+        trackRecentlyVisitedRoomReceivedRoomID = roomID
+        trackRecentlyVisitedRoomReceivedInvocations.append(roomID)
+        if let trackRecentlyVisitedRoomClosure = trackRecentlyVisitedRoomClosure {
+            return await trackRecentlyVisitedRoomClosure(roomID)
+        } else {
+            return trackRecentlyVisitedRoomReturnValue
+        }
+    }
+    //MARK: - recentlyVisitedRooms
+
+    var recentlyVisitedRoomsCallsCount = 0
+    var recentlyVisitedRoomsCalled: Bool {
+        return recentlyVisitedRoomsCallsCount > 0
+    }
+    var recentlyVisitedRoomsReturnValue: Result<[String], ClientProxyError>!
+    var recentlyVisitedRoomsClosure: (() async -> Result<[String], ClientProxyError>)?
+
+    func recentlyVisitedRooms() async -> Result<[String], ClientProxyError> {
+        recentlyVisitedRoomsCallsCount += 1
+        if let recentlyVisitedRoomsClosure = recentlyVisitedRoomsClosure {
+            return await recentlyVisitedRoomsClosure()
+        } else {
+            return recentlyVisitedRoomsReturnValue
+        }
+    }
+    //MARK: - recentConversationCounterparts
+
+    var recentConversationCounterpartsCallsCount = 0
+    var recentConversationCounterpartsCalled: Bool {
+        return recentConversationCounterpartsCallsCount > 0
+    }
+    var recentConversationCounterpartsReturnValue: [UserProfileProxy]!
+    var recentConversationCounterpartsClosure: (() async -> [UserProfileProxy])?
+
+    func recentConversationCounterparts() async -> [UserProfileProxy] {
+        recentConversationCounterpartsCallsCount += 1
+        if let recentConversationCounterpartsClosure = recentConversationCounterpartsClosure {
+            return await recentConversationCounterpartsClosure()
+        } else {
+            return recentConversationCounterpartsReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?
