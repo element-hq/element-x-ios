@@ -38,7 +38,7 @@ struct RoomDetailsScreenViewState: BindableState {
     
     let isEncrypted: Bool
     let isDirect: Bool
-    let permalink: URL?
+    var permalink: URL?
 
     var topic: AttributedString?
     var topicSummary: AttributedString?

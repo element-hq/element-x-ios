@@ -208,17 +208,18 @@ class RoomScreenInteractionHandler {
                 MXLog.error("Cannot edit item with id: \(timelineItem.id)")
             }
         case .copyPermalink:
-            do {
-                guard let eventID = eventTimelineItem.id.eventID else {
-                    actionsSubject.send(.displayError(.alert(L10n.errorFailedCreatingThePermalink)))
-                    break
-                }
-
-                let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventID, roomIdentifier: timelineController.roomID,
-                                                                 baseURL: appSettings.permalinkBaseURL)
-                UIPasteboard.general.url = permalink
-            } catch {
+            guard let eventID = eventTimelineItem.id.eventID else {
                 actionsSubject.send(.displayError(.alert(L10n.errorFailedCreatingThePermalink)))
+                return
+            }
+            
+            Task {
+                guard case let .success(permalinkURL) = await roomProxy.matrixToEventPermalink(eventID) else {
+                    actionsSubject.send(.displayError(.alert(L10n.errorFailedCreatingThePermalink)))
+                    return
+                }
+                
+                UIPasteboard.general.url = permalinkURL
             }
         case .redact:
             Task {

@@ -59,13 +59,18 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         super.init(initialViewState: .init(details: roomProxy.details,
                                            isEncrypted: roomProxy.isEncrypted,
                                            isDirect: roomProxy.isDirect,
-                                           permalink: roomProxy.permalink,
                                            topic: topic,
                                            topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
                                            joinedMembersCount: roomProxy.joinedMembersCount,
                                            notificationSettingsState: .loading,
                                            bindings: .init()),
                    imageProvider: mediaProvider)
+        
+        Task {
+            if case let .success(permalinkURL) = await roomProxy.matrixToPermalink() {
+                state.permalink = permalinkURL
+            }
+        }
         
         updateRoomInfo()
         Task { await updatePowerLevelPermissions() }

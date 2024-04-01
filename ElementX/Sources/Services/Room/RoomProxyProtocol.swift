@@ -19,6 +19,7 @@ import Foundation
 import MatrixRustSDK
 
 enum RoomProxyError: Error, Equatable {
+    case generic(String?)
     case failedRedactingEvent
     case failedReportingContent
     case failedRetrievingMember
@@ -139,6 +140,12 @@ protocol RoomProxyProtocol {
     func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError>
     
     func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol
+    
+    // MARK: - Permalinks
+    
+    func matrixToPermalink() async -> Result<URL, RoomProxyError>
+    
+    func matrixToEventPermalink(_ eventID: String) async -> Result<URL, RoomProxyError>
 }
 
 extension RoomProxyProtocol {
@@ -148,20 +155,7 @@ extension RoomProxyProtocol {
                     avatarURL: avatarURL,
                     canonicalAlias: canonicalAlias)
     }
-    
-    var permalink: URL? {
-        if let canonicalAlias, let link = try? PermalinkBuilder.permalinkTo(roomAlias: canonicalAlias,
-                                                                            baseURL: ServiceLocator.shared.settings.permalinkBaseURL) {
-            return link
-        } else if let link = try? PermalinkBuilder.permalinkTo(roomIdentifier: id,
-                                                               baseURL: ServiceLocator.shared.settings.permalinkBaseURL) {
-            return link
-        } else {
-            MXLog.error("Failed to build permalink for Room: \(id)")
-            return nil
-        }
-    }
-    
+        
     // Avoids to duplicate the same logic around in the app
     // Probably this should be done in rust.
     var roomTitle: String {

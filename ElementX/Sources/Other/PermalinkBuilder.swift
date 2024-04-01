@@ -92,6 +92,7 @@ enum PermalinkBuilder {
         return url
     }
     
+    @available(*, deprecated, message: "Use a room's `matrixToPermalink` method instead")
     static func permalinkTo(roomIdentifier: String, baseURL: URL) throws -> URL {
         guard MatrixEntityRegex.isMatrixRoomIdentifier(roomIdentifier) else {
             throw PermalinkBuilderError.invalidRoomIdentifier
@@ -100,6 +101,7 @@ enum PermalinkBuilder {
         return try permalinkTo(roomIdentifierOrAlias: roomIdentifier, baseURL: baseURL)
     }
     
+    @available(*, deprecated, message: "Use a room's `matrixToPermalink` method instead")
     static func permalinkTo(roomAlias: String, baseURL: URL) throws -> URL {
         guard MatrixEntityRegex.isMatrixRoomAlias(roomAlias) else {
             throw PermalinkBuilderError.invalidRoomAlias
@@ -108,6 +110,7 @@ enum PermalinkBuilder {
         return try permalinkTo(roomIdentifierOrAlias: roomAlias, baseURL: baseURL)
     }
     
+    @available(*, deprecated, message: "Use a room's `matrixToEventPermalink` method instead")
     static func permalinkTo(eventIdentifier: String, roomIdentifier: String, baseURL: URL) throws -> URL {
         guard MatrixEntityRegex.isMatrixEventIdentifier(eventIdentifier) else {
             throw PermalinkBuilderError.invalidEventIdentifier
