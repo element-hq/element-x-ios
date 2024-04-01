@@ -73,6 +73,10 @@ extension ClientProxyMock {
         ignoreUserReturnValue = .success(())
         unignoreUserReturnValue = .success(())
         
+        trackRecentlyVisitedRoomReturnValue = .success(())
+        recentlyVisitedRoomsReturnValue = .success([])
+        recentConversationCounterpartsReturnValue = []
+        
         loadMediaContentForSourceThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         loadMediaFileForSourceBodyThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)

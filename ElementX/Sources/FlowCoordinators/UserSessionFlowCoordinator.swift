@@ -460,6 +460,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         if case .invitesScreen = stateMachine.state, availableInvitesCount == 1 {
             dismissInvitesList(animated: true)
         }
+        
+        Task {
+            await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
+        }
     }
     
     private func tearDownRoomFlow(animated: Bool) {

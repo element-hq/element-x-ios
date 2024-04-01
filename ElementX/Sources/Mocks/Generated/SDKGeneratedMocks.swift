@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.1.7 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.1.8 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -342,6 +342,27 @@ class SDKClientMock: SDKClientProtocol {
             return try getProfileUserIdClosure(userId)
         } else {
             return getProfileUserIdReturnValue
+        }
+    }
+    //MARK: - getRecentlyVisitedRooms
+
+    public var getRecentlyVisitedRoomsThrowableError: Error?
+    public var getRecentlyVisitedRoomsCallsCount = 0
+    public var getRecentlyVisitedRoomsCalled: Bool {
+        return getRecentlyVisitedRoomsCallsCount > 0
+    }
+    public var getRecentlyVisitedRoomsReturnValue: [String]!
+    public var getRecentlyVisitedRoomsClosure: (() async throws -> [String])?
+
+    public func getRecentlyVisitedRooms() async throws -> [String] {
+        if let error = getRecentlyVisitedRoomsThrowableError {
+            throw error
+        }
+        getRecentlyVisitedRoomsCallsCount += 1
+        if let getRecentlyVisitedRoomsClosure = getRecentlyVisitedRoomsClosure {
+            return try await getRecentlyVisitedRoomsClosure()
+        } else {
+            return getRecentlyVisitedRoomsReturnValue
         }
     }
     //MARK: - getSessionVerificationController
@@ -748,6 +769,26 @@ class SDKClientMock: SDKClientProtocol {
         } else {
             return syncServiceReturnValue
         }
+    }
+    //MARK: - trackRecentlyVisitedRoom
+
+    public var trackRecentlyVisitedRoomRoomThrowableError: Error?
+    public var trackRecentlyVisitedRoomRoomCallsCount = 0
+    public var trackRecentlyVisitedRoomRoomCalled: Bool {
+        return trackRecentlyVisitedRoomRoomCallsCount > 0
+    }
+    public var trackRecentlyVisitedRoomRoomReceivedRoom: String?
+    public var trackRecentlyVisitedRoomRoomReceivedInvocations: [String] = []
+    public var trackRecentlyVisitedRoomRoomClosure: ((String) async throws -> Void)?
+
+    public func trackRecentlyVisitedRoom(room: String) async throws {
+        if let error = trackRecentlyVisitedRoomRoomThrowableError {
+            throw error
+        }
+        trackRecentlyVisitedRoomRoomCallsCount += 1
+        trackRecentlyVisitedRoomRoomReceivedRoom = room
+        trackRecentlyVisitedRoomRoomReceivedInvocations.append(room)
+        try await trackRecentlyVisitedRoomRoomClosure?(room)
     }
     //MARK: - unignoreUser
 

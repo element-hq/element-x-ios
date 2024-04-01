@@ -25,8 +25,9 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     
-    private let actionsSubject: PassthroughSubject<StartChatScreenViewModelAction, Never> = .init()
+    private var suggestedUsers = [UserProfileProxy]()
     
+    private let actionsSubject: PassthroughSubject<StartChatScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<StartChatScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -43,6 +44,14 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         super.init(initialViewState: StartChatScreenViewState(userID: userSession.userID), imageProvider: userSession.mediaProvider)
         
         setupBindings()
+        
+        Task {
+            suggestedUsers = await userSession.clientProxy.recentConversationCounterparts()
+            
+            if state.usersSection.type == .suggestions {
+                state.usersSection = .init(type: .suggestions, users: suggestedUsers)
+            }
+        }
     }
     
     // MARK: - Public
@@ -89,25 +98,24 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     
     private func fetchUsers() {
         guard context.searchQuery.count >= 3 else {
-            state.usersSection = .init(type: .suggestions, users: [])
+            state.usersSection = .init(type: .suggestions, users: suggestedUsers)
             return
         }
+        
         fetchUsersTask = Task {
             let result = await userDiscoveryService.searchProfiles(with: context.searchQuery)
+            
             guard !Task.isCancelled else { return }
-            handleResult(for: .searchResult, result: result)
+            
+            switch result {
+            case .success(let users):
+                state.usersSection = .init(type: .searchResult, users: users)
+            case .failure:
+                break
+            }
         }
     }
-    
-    private func handleResult(for sectionType: UserDiscoverySectionType, result: Result<[UserProfileProxy], UserDiscoveryErrorType>) {
-        switch result {
-        case .success(let users):
-            state.usersSection = .init(type: sectionType, users: users)
-        case .failure:
-            state.bindings.alertInfo = AlertInfo(id: .unknown)
-        }
-    }
-    
+        
     private func createDirectRoom(with user: UserProfileProxy) async {
         defer {
             hideLoadingIndicator()

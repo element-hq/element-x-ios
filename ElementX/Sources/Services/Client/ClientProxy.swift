@@ -574,7 +574,7 @@ class ClientProxy: ClientProxyProtocol {
         RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch())
     }
     
-    // MARK: - Ignored users
+    // MARK: Ignored users
     
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
         do {
@@ -596,7 +596,58 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    // MARK: Private
+    // MARK: Recently visited rooms
+    
+    func trackRecentlyVisitedRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
+        do {
+            try await client.trackRecentlyVisitedRoom(room: roomID)
+            return .success(())
+        } catch {
+            MXLog.error("Failed tracking recently visited room: \(roomID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func recentlyVisitedRooms() async -> Result<[String], ClientProxyError> {
+        do {
+            let result = try await client.getRecentlyVisitedRooms()
+            return .success(result)
+        } catch {
+            MXLog.error("Failed retrieving recently visited rooms with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func recentConversationCounterparts() async -> [UserProfileProxy] {
+        let maxResultsToReturn = 5
+        
+        guard case let .success(roomIdentifiers) = await recentlyVisitedRooms() else {
+            return []
+        }
+        
+        var users = [UserProfileProxy]()
+        
+        for roomID in roomIdentifiers {
+            guard let room = await roomForIdentifier(roomID),
+                  room.isDirect,
+                  let members = await room.members() else {
+                continue
+            }
+            
+            for member in members where member.isActive && member.userID != userID {
+                users.append(.init(userID: member.userID, displayName: member.displayName, avatarURL: member.avatarURL))
+                
+                // Return early to avoid unnecessary work
+                if users.count >= maxResultsToReturn {
+                    return users
+                }
+            }
+        }
+        
+        return users
+    }
+    
+    // MARK: - Private
 
     private func loadUserAvatarURLFromCache() {
         loadCachedAvatarURLTask = Task {
