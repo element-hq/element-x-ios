@@ -838,7 +838,7 @@ internal enum L10n {
   internal static var screenBlockedUsersUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_blocked_users_unblock_alert_description") }
   /// Unblock user
   internal static var screenBlockedUsersUnblockAlertTitle: String { return L10n.tr("Localizable", "screen_blocked_users_unblock_alert_title") }
-  /// Unblocking...
+  /// Unblocking…
   internal static var screenBlockedUsersUnblocking: String { return L10n.tr("Localizable", "screen_blocked_users_unblocking") }
   /// Attach screenshot
   internal static var screenBugReportAttachScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_attach_screenshot") }
@@ -1001,7 +1001,7 @@ internal enum L10n {
   internal static var screenIdentityConfirmedTitle: String { return L10n.tr("Localizable", "screen_identity_confirmed_title") }
   /// Use another device
   internal static var screenIdentityUseAnotherDevice: String { return L10n.tr("Localizable", "screen_identity_use_another_device") }
-  /// Waiting on other device...
+  /// Waiting on other device…
   internal static var screenIdentityWaitingOnOtherDevice: String { return L10n.tr("Localizable", "screen_identity_waiting_on_other_device") }
   /// Are you sure you want to decline the invitation to join %1$@?
   internal static func screenInvitesDeclineChatMessage(_ p1: Any) -> String {
@@ -1167,7 +1167,7 @@ internal enum L10n {
   internal static var screenRecoveryKeyConfirmErrorTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_title") }
   /// Enter the 48 character code.
   internal static var screenRecoveryKeyConfirmKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_description") }
-  /// Enter...
+  /// Enter…
   internal static var screenRecoveryKeyConfirmKeyPlaceholder: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_placeholder") }
   /// Recovery key confirmed
   internal static var screenRecoveryKeyConfirmSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_success") }
@@ -1393,7 +1393,7 @@ internal enum L10n {
   internal static var screenRoomMemberListModeMembers: String { return L10n.tr("Localizable", "screen_room_member_list_mode_members") }
   /// Pending
   internal static var screenRoomMemberListPendingHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_pending_header_title") }
-  /// Removing %1$@...
+  /// Removing %1$@…
   internal static func screenRoomMemberListRemovingUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_member_list_removing_user", String(describing: p1))
   }
@@ -1929,6 +1929,108 @@ internal enum L10n {
   internal static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   internal static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
+  /// Troubleshoot
+  internal static var troubleshootNotificationsEntryPointSection: String { return L10n.tr("Localizable", "troubleshoot_notifications_entry_point_section") }
+  /// Troubleshoot notifications
+  internal static var troubleshootNotificationsEntryPointTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_entry_point_title") }
+  /// Run tests
+  internal static var troubleshootNotificationsScreenAction: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_action") }
+  /// Run tests again
+  internal static var troubleshootNotificationsScreenActionAgain: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_action_again") }
+  /// Some tests failed. Please check the details.
+  internal static var troubleshootNotificationsScreenFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_failure") }
+  /// Run the tests to detect any issue in your configuration that may make notifications not behave as expected.
+  internal static var troubleshootNotificationsScreenNotice: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_notice") }
+  /// Attempt to fix
+  internal static var troubleshootNotificationsScreenQuickFixAction: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_quick_fix_action") }
+  /// All tests passed successfully.
+  internal static var troubleshootNotificationsScreenSuccess: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_success") }
+  /// Troubleshoot notifications
+  internal static var troubleshootNotificationsScreenTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_title") }
+  /// Some tests require your attention. Please check the details.
+  internal static var troubleshootNotificationsScreenWaiting: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_waiting") }
+  /// Check that the application can show notifications.
+  internal static var troubleshootNotificationsTestCheckPermissionDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_check_permission_description") }
+  /// Check permissions
+  internal static var troubleshootNotificationsTestCheckPermissionTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_check_permission_title") }
+  /// Get the name of the current provider.
+  internal static var troubleshootNotificationsTestCurrentPushProviderDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_description") }
+  /// No push providers selected.
+  internal static var troubleshootNotificationsTestCurrentPushProviderFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_failure") }
+  /// Current push provider: %1$@.
+  internal static func troubleshootNotificationsTestCurrentPushProviderSuccess(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_success", String(describing: p1))
+  }
+  /// Current push provider
+  internal static var troubleshootNotificationsTestCurrentPushProviderTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_title") }
+  /// Ensure that the application has at least one push provider.
+  internal static var troubleshootNotificationsTestDetectPushProviderDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_detect_push_provider_description") }
+  /// No push providers found.
+  internal static var troubleshootNotificationsTestDetectPushProviderFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_detect_push_provider_failure") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func troubleshootNotificationsTestDetectPushProviderSuccess(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "troubleshoot_notifications_test_detect_push_provider_success", p1)
+  }
+  /// Detect push providers
+  internal static var troubleshootNotificationsTestDetectPushProviderTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_detect_push_provider_title") }
+  /// Check that the application can display notification.
+  internal static var troubleshootNotificationsTestDisplayNotificationDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_description") }
+  /// The notification has not been clicked.
+  internal static var troubleshootNotificationsTestDisplayNotificationFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_failure") }
+  /// Cannot display the notification.
+  internal static var troubleshootNotificationsTestDisplayNotificationPermissionFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_permission_failure") }
+  /// The notification has been clicked!
+  internal static var troubleshootNotificationsTestDisplayNotificationSuccess: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_success") }
+  /// Display notification
+  internal static var troubleshootNotificationsTestDisplayNotificationTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_title") }
+  /// Please click on the notification to continue the test.
+  internal static var troubleshootNotificationsTestDisplayNotificationWaiting: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_waiting") }
+  /// Ensure that Firebase is available.
+  internal static var troubleshootNotificationsTestFirebaseAvailabilityDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_availability_description") }
+  /// Firebase is not available.
+  internal static var troubleshootNotificationsTestFirebaseAvailabilityFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_availability_failure") }
+  /// Firebase is available.
+  internal static var troubleshootNotificationsTestFirebaseAvailabilitySuccess: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_availability_success") }
+  /// Check Firebase
+  internal static var troubleshootNotificationsTestFirebaseAvailabilityTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_availability_title") }
+  /// Ensure that Firebase token is available.
+  internal static var troubleshootNotificationsTestFirebaseTokenDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_token_description") }
+  /// Firebase token is not known.
+  internal static var troubleshootNotificationsTestFirebaseTokenFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_token_failure") }
+  /// Firebase token: %1$@.
+  internal static func troubleshootNotificationsTestFirebaseTokenSuccess(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_token_success", String(describing: p1))
+  }
+  /// Check Firebase token
+  internal static var troubleshootNotificationsTestFirebaseTokenTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_token_title") }
+  /// Ensure that the application is receiving push.
+  internal static var troubleshootNotificationsTestPushLoopBackDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_description") }
+  /// Error: pusher has rejected the request.
+  internal static var troubleshootNotificationsTestPushLoopBackFailure1: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_failure_1") }
+  /// Error: %1$@.
+  internal static func troubleshootNotificationsTestPushLoopBackFailure2(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_failure_2", String(describing: p1))
+  }
+  /// Error, cannot test push.
+  internal static var troubleshootNotificationsTestPushLoopBackFailure3: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_failure_3") }
+  /// Error, timeout waiting for push.
+  internal static var troubleshootNotificationsTestPushLoopBackFailure4: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_failure_4") }
+  /// Push loop back took %1$d ms.
+  internal static func troubleshootNotificationsTestPushLoopBackSuccess(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_success", p1)
+  }
+  /// Test Push loop back
+  internal static var troubleshootNotificationsTestPushLoopBackTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_title") }
+  /// Ensure that UnifiedPush distributors are available.
+  internal static var troubleshootNotificationsTestUnifiedPushDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_description") }
+  /// No push distributors found.
+  internal static var troubleshootNotificationsTestUnifiedPushFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_failure") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func troubleshootNotificationsTestUnifiedPushSuccess(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_success", p1)
+  }
+  /// Check UnifiedPush
+  internal static var troubleshootNotificationsTestUnifiedPushTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_title") }
 
   internal enum Action {
     /// Load more

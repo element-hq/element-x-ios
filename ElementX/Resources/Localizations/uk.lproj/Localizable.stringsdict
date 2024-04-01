@@ -308,5 +308,37 @@
 			<string>%1$@ пишуть</string>
 		</dict>
 	</dict>
+	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Found %1$d push provider: %2$@</string>
+			<key>other</key>
+			<string>Found %1$d push providers: %2$@</string>
+		</dict>
+	</dict>
+	<key>troubleshoot_notifications_test_unified_push_success</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d distributor found: %2$@.</string>
+			<key>other</key>
+			<string>%1$d distributors found: %2$@.</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

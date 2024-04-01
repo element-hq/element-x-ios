@@ -308,5 +308,41 @@
 			<string>%1$@ píšu</string>
 		</dict>
 	</dict>
+	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Nájdený %1$d poskytovateľ služby push: %2$@</string>
+			<key>few</key>
+			<string>Nájdení %1$d poskytovatelia služby push: %2$@</string>
+			<key>other</key>
+			<string>Nájdených %1$d poskytovateľov služby push: %2$@</string>
+		</dict>
+	</dict>
+	<key>troubleshoot_notifications_test_unified_push_success</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d nájdený distribútor: %2$@.</string>
+			<key>few</key>
+			<string>%1$d nájdení distribútori: %2$@.</string>
+			<key>other</key>
+			<string>%1$d nájdených distribútorov: %2$@.</string>
+		</dict>
+	</dict>
 </dict>
 </plist>
