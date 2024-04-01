@@ -3146,6 +3146,44 @@ class RoomProxyMock: RoomProxyProtocol {
             return elementCallWidgetDriverReturnValue
         }
     }
+    //MARK: - matrixToPermalink
+
+    var matrixToPermalinkCallsCount = 0
+    var matrixToPermalinkCalled: Bool {
+        return matrixToPermalinkCallsCount > 0
+    }
+    var matrixToPermalinkReturnValue: Result<URL, RoomProxyError>!
+    var matrixToPermalinkClosure: (() async -> Result<URL, RoomProxyError>)?
+
+    func matrixToPermalink() async -> Result<URL, RoomProxyError> {
+        matrixToPermalinkCallsCount += 1
+        if let matrixToPermalinkClosure = matrixToPermalinkClosure {
+            return await matrixToPermalinkClosure()
+        } else {
+            return matrixToPermalinkReturnValue
+        }
+    }
+    //MARK: - matrixToEventPermalink
+
+    var matrixToEventPermalinkCallsCount = 0
+    var matrixToEventPermalinkCalled: Bool {
+        return matrixToEventPermalinkCallsCount > 0
+    }
+    var matrixToEventPermalinkReceivedEventID: String?
+    var matrixToEventPermalinkReceivedInvocations: [String] = []
+    var matrixToEventPermalinkReturnValue: Result<URL, RoomProxyError>!
+    var matrixToEventPermalinkClosure: ((String) async -> Result<URL, RoomProxyError>)?
+
+    func matrixToEventPermalink(_ eventID: String) async -> Result<URL, RoomProxyError> {
+        matrixToEventPermalinkCallsCount += 1
+        matrixToEventPermalinkReceivedEventID = eventID
+        matrixToEventPermalinkReceivedInvocations.append(eventID)
+        if let matrixToEventPermalinkClosure = matrixToEventPermalinkClosure {
+            return await matrixToEventPermalinkClosure(eventID)
+        } else {
+            return matrixToEventPermalinkReturnValue
+        }
+    }
 }
 class RoomSummaryProviderMock: RoomSummaryProviderProtocol {
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {

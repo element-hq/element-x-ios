@@ -528,6 +528,40 @@ class RoomProxy: RoomProxyProtocol {
     func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol {
         ElementCallWidgetDriver(room: room)
     }
+    
+    // MARK: - Permalinks
+    
+    func matrixToPermalink() async -> Result<URL, RoomProxyError> {
+        do {
+            let urlString = try await room.matrixToPermalink()
+            
+            guard let url = URL(string: urlString) else {
+                MXLog.error("Invalid permalink URL string: \(urlString)")
+                return .failure(.generic("Invalid permalink URL string: \(urlString)"))
+            }
+            
+            return .success(url)
+        } catch {
+            MXLog.error("Failed creating permalink for roomID: \(id) with error: \(error)")
+            return .failure(.generic(error.localizedDescription))
+        }
+    }
+    
+    func matrixToEventPermalink(_ eventID: String) async -> Result<URL, RoomProxyError> {
+        do {
+            let urlString = try await room.matrixToEventPermalink(eventId: eventID)
+            
+            guard let url = URL(string: urlString) else {
+                MXLog.error("Invalid permalink URL string: \(urlString)")
+                return .failure(.generic("Invalid permalink URL string: \(urlString)"))
+            }
+            
+            return .success(url)
+        } catch {
+            MXLog.error("Failed creating permalink for eventID: \(eventID) with error: \(error)")
+            return .failure(.generic(error.localizedDescription))
+        }
+    }
 
     // MARK: - Private
     
