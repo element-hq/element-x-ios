@@ -40,6 +40,9 @@ class AppLockSetupUITests: XCTestCase {
     func testCreateFlow() async throws {
         app = Application.launch(.appLockSetupFlow)
         
+        // Wait for the keyboard to push the sheet up before snapshotting
+        try await Task.sleep(for: .seconds(0.5))
+        
         // Create PIN screen.
         try await app.assertScreenshot(.appLockSetupFlow, step: Step.createPIN)
         

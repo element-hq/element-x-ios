@@ -66,9 +66,12 @@ extension XCUIApplication {
         currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: usernameTextField)
         currentTestCase.waitForExpectations(timeout: 300.0)
                 
-        // This might come in a different order, wait for both.
+        // Handle the password saving dialog
         let savePasswordButton = buttons["Save Password"]
         if savePasswordButton.waitForExistence(timeout: 10.0) {
+            // Tapping the sheet button while animating upwards fails. Wait for it to settle
+            sleep(1)
+            
             savePasswordButton.tap()
         }
         
