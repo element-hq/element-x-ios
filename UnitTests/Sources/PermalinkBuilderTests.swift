@@ -57,6 +57,17 @@ class PermalinkBuilderTests: XCTestCase {
         }
     }
     
+    func testMautrixBridgePermalink() throws {
+        let roomId = "!mautrix-signal-v6:maunium.net"
+        
+        do {
+            let permalink = try PermalinkBuilder.permalinkTo(roomIdentifier: roomId, baseURL: appSettings.permalinkBaseURL)
+            XCTAssertEqual(permalink, URL(string: "\(appSettings.permalinkBaseURL)/#/!mautrix-signal-v6%3Amaunium.net"))
+        } catch {
+            XCTFail("Room identifier must be valid: \(error)")
+        }
+    }
+    
     func testInvalidRoomIdentifier() {
         do {
             _ = try PermalinkBuilder.permalinkTo(roomIdentifier: "This1sN0tV4lid!@#$%^&*()", baseURL: appSettings.permalinkBaseURL)

@@ -41,6 +41,7 @@ class MatrixEntityRegexTests: XCTestCase {
 
     func testRoomId() {
         XCTAssertTrue(MatrixEntityRegex.isMatrixRoomIdentifier("!pMBteVpcoJRdCJxDmn:matrix.org"))
+        XCTAssertTrue(MatrixEntityRegex.isMatrixRoomIdentifier("!pMBte-Vpco-JRdCJxDmn:matrix.org"))
         XCTAssertFalse(MatrixEntityRegex.isMatrixRoomIdentifier("pMBteVpcoJRdCJxDmn:matrix.org"))
         XCTAssertFalse(MatrixEntityRegex.isMatrixRoomIdentifier("!pMBteVpcoJRdCJxDmn.matrix.org"))
     }
