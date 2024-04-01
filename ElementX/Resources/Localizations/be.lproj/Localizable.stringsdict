@@ -69,7 +69,7 @@
 			<key>one</key>
 			<string>%d голас</string>
 			<key>few</key>
-			<string>%d галасоў</string>
+			<string>%d галасы</string>
 			<key>many</key>
 			<string>%d галасоў</string>
 		</dict>
@@ -87,7 +87,7 @@
 			<key>one</key>
 			<string>%1$@: %2$d паведамленне</string>
 			<key>few</key>
-			<string>%1$@: %2$d паведамленняў</string>
+			<string>%1$@: %2$d паведамлення</string>
 			<key>many</key>
 			<string>%1$@: %2$d паведамленняў</string>
 		</dict>
@@ -105,7 +105,7 @@
 			<key>one</key>
 			<string>%d апавяшчэнне</string>
 			<key>few</key>
-			<string>%d апавяшчэнняў</string>
+			<string>%d апавяшчэння</string>
 			<key>many</key>
 			<string>%d апавяшчэнняў</string>
 		</dict>
@@ -123,7 +123,7 @@
 			<key>one</key>
 			<string>%d запрашэнне</string>
 			<key>few</key>
-			<string>%d запрашэнняў</string>
+			<string>%d запрашэння</string>
 			<key>many</key>
 			<string>%d запрашэнняў</string>
 		</dict>
@@ -141,7 +141,7 @@
 			<key>one</key>
 			<string>%d новае паведамленне</string>
 			<key>few</key>
-			<string>%d новых паведамленняў</string>
+			<string>%d новых паведамлення</string>
 			<key>many</key>
 			<string>%d новых паведамленняў</string>
 		</dict>
@@ -159,7 +159,7 @@
 			<key>one</key>
 			<string>%d непрачытанае апавяшчэнне</string>
 			<key>few</key>
-			<string>%d непрачытаных апавяшчэнняў</string>
+			<string>%d непрачытаных апавяшчэння</string>
 			<key>many</key>
 			<string>%d непрачытаных апавяшчэнняў</string>
 		</dict>
@@ -177,7 +177,7 @@
 			<key>one</key>
 			<string>%d пакой</string>
 			<key>few</key>
-			<string>%d пакояў</string>
+			<string>%d пакоя</string>
 			<key>many</key>
 			<string>%d пакояў</string>
 		</dict>
@@ -195,7 +195,7 @@
 			<key>one</key>
 			<string>У вас %1$d спроба разблакіроўкі</string>
 			<key>few</key>
-			<string>У вас %1$d спроб разблакіроўкі</string>
+			<string>У вас %1$d спробы разблакіроўкі</string>
 			<key>many</key>
 			<string>У вас %1$d спроб разблакіроўкі</string>
 		</dict>
@@ -213,7 +213,7 @@
 			<key>one</key>
 			<string>Няправільны PIN-код. У вас застаўся %1$d шанец</string>
 			<key>few</key>
-			<string>Няправільны PIN-код. У вас застаўася %1$d шанцаў</string>
+			<string>Няправільны PIN-код. У вас застаўася %1$d шанца</string>
 			<key>many</key>
 			<string>Няправільны PIN-код. У вас застаўася %1$d шанцаў</string>
 		</dict>
@@ -231,7 +231,7 @@
 			<key>one</key>
 			<string>%1$d карыстальнік</string>
 			<key>few</key>
-			<string>%1$d карыстальнікаў</string>
+			<string>%1$d карыстальніка</string>
 			<key>many</key>
 			<string>%1$d карыстальнікаў</string>
 		</dict>
@@ -249,7 +249,7 @@
 			<key>one</key>
 			<string>%1$d змена ў пакоі</string>
 			<key>few</key>
-			<string>%1$d змен у пакоі</string>
+			<string>%1$d змены ў пакоі</string>
 			<key>many</key>
 			<string>%1$d змен у пакоі</string>
 		</dict>
@@ -287,7 +287,7 @@
 			<key>few</key>
 			<string>%d іншыя</string>
 			<key>many</key>
-			<string>%d іншыя</string>
+			<string>%d іншых</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -306,6 +306,42 @@
 			<string>%1$@ пішуць</string>
 			<key>many</key>
 			<string>%1$@ пішуць</string>
+		</dict>
+	</dict>
+	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Знайшлі %1$d пастаўшчыка push-апавяшчэнняў: %2$@</string>
+			<key>few</key>
+			<string>Знайшлі %1$d пастаўшчыкоў push-апавяшчэнняў: %2$@</string>
+			<key>many</key>
+			<string>Знайшлі %1$d пастаўшчыкоў push-апавяшчэнняў: %2$@</string>
+		</dict>
+	</dict>
+	<key>troubleshoot_notifications_test_unified_push_success</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d знойдзены размеркавальнік: %2$@.</string>
+			<key>few</key>
+			<string>%1$d знойдзена размеркавальніка: %2$@.</string>
+			<key>many</key>
+			<string>%1$d знойдзена размеркавальнікаў: %2$@.</string>
 		</dict>
 	</dict>
 </dict>

@@ -1,5 +1,5 @@
 "NSCameraUsageDescription" = "A képek vagy videók készítéséhez és üzenetként való elküldéséhez az Element X számára hozzáférést kell biztosítania a kamerához.";
 "NSFaceIDUsageDescription" = "A Face ID segítségével elérheti az alkalmazást.";
-"NSLocationWhenInUseUsageDescription" = "Engedélyezd a tartózkodási hely hozzáférést, hogy az Element X megoszthassa a tartózkodási helyedet.";
+"NSLocationWhenInUseUsageDescription" = "Engedélyezze a tartózkodási helyhez való hozzáférést, hogy az Element X megoszthassa a tartózkodási helyét.";
 "NSMicrophoneUsageDescription" = "A hangüzenetek készítéséhez és elküldéséhez az Element X számára hozzáférést kell biztosítania a mikrofonhoz.";
 "NSPhotoLibraryUsageDescription" = "Lehetővé teszi a fényképek és videók könyvtárba mentését.";
