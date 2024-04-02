@@ -5307,7 +5307,7 @@
 				6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */,
 				9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */,
-				945C99D66CE013061F6A3C71 /* XCRemoteSwiftPackageReference "matrix-wysiwyg-composer-swift" */,
+				44FA555384AD79668D886043 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -7131,6 +7131,14 @@
 				kind = branch;
 			};
 		};
+		44FA555384AD79668D886043 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/matrix-org/matrix-rich-text-editor-swift";
+			requirement = {
+				kind = exactVersion;
+				version = 2.35.0;
+			};
+		};
 		4C34425923978C97409A3EF2 /* XCRemoteSwiftPackageReference "DSWaveformImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dmrschmidt/DSWaveformImage";
@@ -7177,14 +7185,6 @@
 			requirement = {
 				kind = upToNextMinorVersion;
 				minimumVersion = 1.0.0;
-			};
-		};
-		945C99D66CE013061F6A3C71 /* XCRemoteSwiftPackageReference "matrix-wysiwyg-composer-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/matrix-org/matrix-wysiwyg-composer-swift";
-			requirement = {
-				kind = exactVersion;
-				version = 2.35.0;
 			};
 		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
@@ -7564,7 +7564,7 @@
 		};
 		CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 945C99D66CE013061F6A3C71 /* XCRemoteSwiftPackageReference "matrix-wysiwyg-composer-swift" */;
+			package = 44FA555384AD79668D886043 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */;
 			productName = WysiwygComposer;
 		};
 		CCE5BF78B125320CBF3BB834 /* PostHog */ = {

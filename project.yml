@@ -66,7 +66,7 @@ packages:
     minorVersion: 0.0.2
     # path: ../swift-ogg
   WysiwygComposer:
-    url: https://github.com/matrix-org/matrix-wysiwyg-composer-swift
+    url: https://github.com/matrix-org/matrix-rich-text-editor-swift
     exactVersion: 2.35.0
     # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
   
