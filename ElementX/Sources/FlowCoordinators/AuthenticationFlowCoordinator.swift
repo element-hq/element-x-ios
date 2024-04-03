@@ -80,15 +80,18 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func showStartScreen() {
-        let coordinator = AuthenticationStartScreenCoordinator()
+        let coordinator = AuthenticationStartScreenCoordinator(parameters: .init(appSettings: appSettings))
         
         coordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }
                 
                 switch action {
-                case .login:
+                case .loginManually:
                     Task { await self.startAuthentication() }
+                case .loginWithQR:
+                    // TODO: Implement QR code login navigation
+                    break
                 case .reportProblem:
                     showReportProblemScreen()
                 }

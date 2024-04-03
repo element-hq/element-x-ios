@@ -19,18 +19,23 @@ import SwiftUI
 // MARK: - Coordinator
 
 enum AuthenticationStartScreenCoordinatorAction {
-    case login
+    case loginManually
+    case loginWithQR
     case reportProblem
 }
 
 enum AuthenticationStartScreenViewModelAction {
-    case login
+    case loginManually
+    case loginWithQR
     case reportProblem
 }
 
-struct AuthenticationStartScreenViewState: BindableState { }
+struct AuthenticationStartScreenViewState: BindableState {
+    var isQRCodeLoginEnabled = false
+}
 
 enum AuthenticationStartScreenViewAction {
-    case login
+    case loginManually
+    case loginWithQR
     case reportProblem
 }

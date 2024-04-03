@@ -125,6 +125,7 @@ enum A11yIdentifiers {
     
     struct AuthenticationStartScreen {
         let signIn = "authentication_start-sign_in"
+        let signInWithQr = "authentication_start-sign_in_with_qr"
         let hidden = "authentication_start-hidden"
     }
     

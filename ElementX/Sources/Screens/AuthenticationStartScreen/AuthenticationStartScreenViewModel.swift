@@ -20,20 +20,27 @@ import SwiftUI
 typealias AuthenticationStartScreenViewModelType = StateStoreViewModel<AuthenticationStartScreenViewState, AuthenticationStartScreenViewAction>
 
 class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType, AuthenticationStartScreenViewModelProtocol {
+    private let appSettings: AppSettings
     private var actionsSubject: PassthroughSubject<AuthenticationStartScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<AuthenticationStartScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init() {
+    init(appSettings: AppSettings) {
+        self.appSettings = appSettings
         super.init(initialViewState: AuthenticationStartScreenViewState())
+        appSettings.$qrCodeLoginEnabled
+            .weakAssign(to: \.state.isQRCodeLoginEnabled, on: self)
+            .store(in: &cancellables)
     }
 
     override func process(viewAction: AuthenticationStartScreenViewAction) {
         switch viewAction {
-        case .login:
-            actionsSubject.send(.login)
+        case .loginManually:
+            actionsSubject.send(.loginManually)
+        case .loginWithQR:
+            actionsSubject.send(.loginWithQR)
         case .reportProblem:
             actionsSubject.send(.reportProblem)
         }
