@@ -538,6 +538,7 @@
 "screen_room_details_notification_mode_default" = "Default";
 "screen_room_details_notification_title" = "Notifications";
 "screen_room_details_share_room_title" = "Share room";
+"screen_room_details_title" = "Room info";
 "screen_room_details_updating_room" = "Updating room…";
 "screen_room_directory_search_loading_error" = "Failed loading";
 "screen_room_directory_search_title" = "Room directory";
@@ -549,6 +550,7 @@
 "screen_room_member_details_block_alert_action" = "Block";
 "screen_room_member_details_block_alert_description" = "Blocked users won't be able to send you messages and all their messages will be hidden. You can unblock them anytime.";
 "screen_room_member_details_block_user" = "Block user";
+"screen_room_member_details_title" = "Profile";
 "screen_room_member_details_unblock_alert_action" = "Unblock";
 "screen_room_member_details_unblock_alert_description" = "You'll be able to see all messages from them again.";
 "screen_room_member_details_unblock_user" = "Unblock user";
