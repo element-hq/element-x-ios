@@ -27,7 +27,7 @@ protocol PillAttachmentViewProviderDelegate: AnyObject {
     func invalidateTextAttachmentsDisplay()
 }
 
-final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
+final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCoding {
     private weak var delegate: PillAttachmentViewProviderDelegate?
     
     // MARK: - Override
