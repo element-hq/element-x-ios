@@ -1,0 +1,1 @@
+The message composer now correctly recognises when it is empty after deleting a space or a new line.

@@ -7136,7 +7136,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-rich-text-editor-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 2.35.0;
+				version = 2.36.0;
 			};
 		};
 		4C34425923978C97409A3EF2 /* XCRemoteSwiftPackageReference "DSWaveformImage" */ = {

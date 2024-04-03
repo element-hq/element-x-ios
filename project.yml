@@ -67,7 +67,7 @@ packages:
     # path: ../swift-ogg
   WysiwygComposer:
     url: https://github.com/matrix-org/matrix-rich-text-editor-swift
-    exactVersion: 2.35.0
+    exactVersion: 2.36.0
     # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
   
   # External dependencies
