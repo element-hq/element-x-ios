@@ -377,12 +377,14 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static var previews: some View {
-        RoomDetailsScreen(context: genericRoomViewModel.context)
-            .previewDisplayName("Generic Room")
+        RoomDetailsScreen(context: simpleRoomViewModel.context)
+            .previewDisplayName("Simple Room")
+            .snapshot(delay: 2)
         RoomDetailsScreen(context: dmRoomViewModel.context)
             .previewDisplayName("DM Room")
             .snapshot(delay: 0.25)
-        RoomDetailsScreen(context: simpleRoomViewModel.context)
-            .previewDisplayName("Simple Room")
+        RoomDetailsScreen(context: genericRoomViewModel.context)
+            .previewDisplayName("Generic Room")
+            .snapshot(delay: 0.25)
     }
 }
