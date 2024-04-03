@@ -40,6 +40,7 @@ final class NotificationManagerTests: XCTestCase {
         AppSettings.resetAllSettings()
         notificationCenter = UserNotificationCenterMock()
         notificationCenter.requestAuthorizationOptionsReturnValue = true
+        notificationCenter.authorizationStatusReturnValue = .authorized
         
         notificationManager = NotificationManager(notificationCenter: notificationCenter, appSettings: appSettings)
         notificationManager.start()
