@@ -259,7 +259,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                     appSettings.hasRunIdentityConfirmationOnboarding = true
                     stateMachine.tryEvent(.next)
                 case .showResetKeyInfo:
-                    self.presentResetRecoveryKeyScreen()
+                    presentResetRecoveryKeyScreen()
                 default:
                     fatalError("Other flows shouldn't be possible")
                 }
