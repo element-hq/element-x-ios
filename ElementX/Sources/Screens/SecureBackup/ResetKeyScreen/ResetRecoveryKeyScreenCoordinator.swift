@@ -19,14 +19,11 @@
 import Combine
 import SwiftUI
 
-struct ResetRecoveryKeyScreenCoordinatorParameters { }
-
 enum ResetRecoveryKeyScreenCoordinatorAction {
     case cancel
 }
 
 final class ResetRecoveryKeyScreenCoordinator: CoordinatorProtocol {
-    private let parameters: ResetRecoveryKeyScreenCoordinatorParameters
     private let viewModel: ResetRecoveryKeyScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -36,9 +33,7 @@ final class ResetRecoveryKeyScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: ResetRecoveryKeyScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
+    init() {
         viewModel = ResetRecoveryKeyScreenViewModel()
     }
     

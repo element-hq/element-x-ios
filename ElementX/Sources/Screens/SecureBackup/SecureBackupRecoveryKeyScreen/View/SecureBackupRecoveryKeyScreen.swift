@@ -82,9 +82,9 @@ struct SecureBackupRecoveryKeyScreen: View {
                 context.send(viewAction: .resetKey)
             } label: {
                 Text(L10n.screenIdentityConfirmationCreateNewRecoveryKey)
+                    .padding(.vertical, 14)
             }
             .buttonStyle(.compound(.plain))
-            .padding(.vertical, 14)
         }
     }
     

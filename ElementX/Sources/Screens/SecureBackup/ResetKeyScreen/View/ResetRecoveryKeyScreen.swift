@@ -20,14 +20,14 @@ import SwiftUI
 struct ResetRecoveryKeyScreen: View {
     @ObservedObject var context: ResetRecoveryKeyScreenViewModel.Context
     
-    private var listItem3AttributedText: AttributedString {
+    private let listItem3AttributedText = {
         let boldPlaceholder = "{bold}"
         var finalString = AttributedString(L10n.screenCreateNewRecoveryKeyListItem3(boldPlaceholder))
         var boldString = AttributedString(L10n.screenCreateNewRecoveryKeyListItem3ResetAll)
         boldString.bold()
         finalString.replace(boldPlaceholder, with: boldString)
         return finalString
-    }
+    }()
     
     var body: some View {
         NavigationStack {
@@ -64,57 +64,52 @@ struct ResetRecoveryKeyScreen: View {
     
     private var list: some View {
         VStack(alignment: .leading, spacing: 24) {
-            Label(title: { Text(L10n.screenCreateNewRecoveryKeyListItem1) },
-                  icon: {
-                      Image(systemSymbol: ._1Circle)
-                          .imageScale(.large)
-                          .fontWeight(.light)
-                          .foregroundColor(.compound.textPlaceholder)
-                  })
-                  .foregroundColor(.compound.textPrimary)
-                  .font(.compound.bodyMD)
+            Label { Text(L10n.screenCreateNewRecoveryKeyListItem1) } icon: {
+                Image(systemSymbol: ._1Circle)
+                    .imageScale(.large)
+                    .fontWeight(.light)
+                    .foregroundColor(.compound.textPlaceholder)
+            }
+            .foregroundColor(.compound.textPrimary)
+            .font(.compound.bodyMD)
             
-            Label(title: { Text(L10n.screenCreateNewRecoveryKeyListItem2) },
-                  icon: {
-                      Image(systemSymbol: ._2Circle)
-                          .imageScale(.large)
-                          .fontWeight(.light)
-                          .foregroundColor(.compound.textPlaceholder)
-                  })
-                  .foregroundColor(.compound.textPrimary)
-                  .font(.compound.bodyMD)
+            Label { Text(L10n.screenCreateNewRecoveryKeyListItem2) } icon: {
+                Image(systemSymbol: ._2Circle)
+                    .imageScale(.large)
+                    .fontWeight(.light)
+                    .foregroundColor(.compound.textPlaceholder)
+            }
+            .foregroundColor(.compound.textPrimary)
+            .font(.compound.bodyMD)
             
-            Label(title: {
-                      Text(listItem3AttributedText)
-                  },
-                  icon: {
-                      Image(systemSymbol: ._3Circle)
-                          .imageScale(.large)
-                          .fontWeight(.light)
-                          .foregroundColor(.compound.textPlaceholder)
-                  })
-                  .foregroundColor(.compound.textPrimary)
-                  .font(.compound.bodyMD)
+            Label {
+                Text(listItem3AttributedText)
+            } icon: {
+                Image(systemSymbol: ._3Circle)
+                    .imageScale(.large)
+                    .fontWeight(.light)
+                    .foregroundColor(.compound.textPlaceholder)
+            }
+            .foregroundColor(.compound.textPrimary)
+            .font(.compound.bodyMD)
             
-            Label(title: { Text(L10n.screenCreateNewRecoveryKeyListItem4) },
-                  icon: {
-                      Image(systemSymbol: ._4Circle)
-                          .imageScale(.large)
-                          .fontWeight(.light)
-                          .foregroundColor(.compound.textPlaceholder)
-                  })
-                  .foregroundColor(.compound.textPrimary)
-                  .font(.compound.bodyMD)
+            Label { Text(L10n.screenCreateNewRecoveryKeyListItem4) } icon: {
+                Image(systemSymbol: ._4Circle)
+                    .imageScale(.large)
+                    .fontWeight(.light)
+                    .foregroundColor(.compound.textPlaceholder)
+            }
+            .foregroundColor(.compound.textPrimary)
+            .font(.compound.bodyMD)
             
-            Label(title: { Text(L10n.screenCreateNewRecoveryKeyListItem5) },
-                  icon: {
-                      Image(systemSymbol: ._5Circle)
-                          .imageScale(.large)
-                          .fontWeight(.light)
-                          .foregroundColor(.compound.textPlaceholder)
-                  })
-                  .foregroundColor(.compound.textPrimary)
-                  .font(.compound.bodyMD)
+            Label { Text(L10n.screenCreateNewRecoveryKeyListItem5) } icon: {
+                Image(systemSymbol: ._5Circle)
+                    .imageScale(.large)
+                    .fontWeight(.light)
+                    .foregroundColor(.compound.textPlaceholder)
+            }
+            .foregroundColor(.compound.textPrimary)
+            .font(.compound.bodyMD)
         }
     }
     

@@ -109,7 +109,7 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
     }
     
     private func showResetRecoveryKeyScreen(navigationStackCoordinator: NavigationStackCoordinator) {
-        let coordinator = ResetRecoveryKeyScreenCoordinator(parameters: .init())
+        let coordinator = ResetRecoveryKeyScreenCoordinator()
         coordinator.actionsPublisher.sink { action in
             switch action {
             case .cancel:

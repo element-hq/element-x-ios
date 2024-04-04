@@ -270,7 +270,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentResetRecoveryKeyScreen() {
-        let coordinator = ResetRecoveryKeyScreenCoordinator(parameters: .init())
+        let coordinator = ResetRecoveryKeyScreenCoordinator()
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action {
             case .cancel:
