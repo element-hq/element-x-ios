@@ -421,6 +421,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         let coordinator = await RoomFlowCoordinator(roomProxy: roomProxy,
                                                     userSession: userSession,
+                                                    isChildFlow: false,
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                     navigationStackCoordinator: detailNavigationStackCoordinator,
                                                     emojiProvider: EmojiProvider(),

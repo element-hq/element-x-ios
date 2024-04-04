@@ -61,6 +61,7 @@ struct RoomDetailsScreen: View {
                 }
             }
         }
+        .navigationTitle(L10n.screenRoomDetailsTitle)
         .track(screen: .RoomDetails)
         .interactiveQuickLook(item: $context.mediaPreviewItem, shouldHideControls: true)
     }
