@@ -110,12 +110,9 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                                bannedMembers: roomMembersDetails.bannedMembers,
                                bindings: state.bindings)
             
-            async let canInviteUsers = roomProxy.canUserInvite(userID: roomProxy.ownUserID)
-            async let canKickUsers = roomProxy.canUserKick(userID: roomProxy.ownUserID)
-            async let canBanUsers = roomProxy.canUserBan(userID: roomProxy.ownUserID)
-            self.state.canInviteUsers = await canInviteUsers == .success(true)
-            self.state.canKickUsers = await canKickUsers == .success(true)
-            self.state.canBanUsers = await canBanUsers == .success(true)
+            self.state.canInviteUsers = await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true
+            self.state.canKickUsers = await (try? roomProxy.canUserKick(userID: roomProxy.ownUserID).get()) == true
+            self.state.canBanUsers = await (try? roomProxy.canUserBan(userID: roomProxy.ownUserID).get()) == true
             
             hideLoader()
         }

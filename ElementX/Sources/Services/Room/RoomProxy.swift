@@ -168,7 +168,8 @@ class RoomProxy: RoomProxyProtocol {
                 try self.room.redact(eventId: eventID, reason: nil)
                 return .success(())
             } catch {
-                return .failure(.failedRedactingEvent)
+                MXLog.error("Failed redacting eventID: \(eventID) with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -184,7 +185,8 @@ class RoomProxy: RoomProxyProtocol {
                 try self.room.reportContent(eventId: eventID, score: nil, reason: reason)
                 return .success(())
             } catch {
-                return .failure(.failedReportingContent)
+                MXLog.error("Failed reporting eventID: \(eventID) with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -198,7 +200,7 @@ class RoomProxy: RoomProxyProtocol {
                 membersSubject.value = members.map(RoomMemberProxy.init)
             }
         } catch {
-            MXLog.error("[RoomProxy] Failed to update members using no sync API: \(error)")
+            MXLog.error("[RoomProxy] Failed updating members using no sync API: \(error)")
         }
         
         do {
@@ -208,7 +210,7 @@ class RoomProxy: RoomProxyProtocol {
                 membersSubject.value = members.map(RoomMemberProxy.init)
             }
         } catch {
-            MXLog.error("[RoomProxy] Failed to update members using sync API: \(error)")
+            MXLog.error("[RoomProxy] Failed updating members using sync API: \(error)")
         }
     }
 
@@ -226,7 +228,8 @@ class RoomProxy: RoomProxyProtocol {
             let member = try await room.member(userId: userID)
             return .success(RoomMemberProxy(member: member))
         } catch {
-            return .failure(.failedRetrievingMember)
+            MXLog.error("Failed retrieving member \(userID) with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
 
@@ -241,8 +244,8 @@ class RoomProxy: RoomProxyProtocol {
                 try self.room.leave()
                 return .success(())
             } catch {
-                MXLog.error("Failed to leave the room: \(error)")
-                return .failure(.failedLeavingRoom)
+                MXLog.error("Failed leaving room with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -252,7 +255,8 @@ class RoomProxy: RoomProxyProtocol {
             do {
                 return try .success(self.room.leave())
             } catch {
-                return .failure(.failedRejectingInvite)
+                MXLog.error("Failed rejecting invitiation with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -263,7 +267,8 @@ class RoomProxy: RoomProxyProtocol {
                 try self.room.join()
                 return .success(())
             } catch {
-                return .failure(.failedAcceptingInvite)
+                MXLog.error("Failed accepting invitation with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -275,7 +280,7 @@ class RoomProxy: RoomProxyProtocol {
                 return try .success(self.room.inviteUserById(userId: userID))
             } catch {
                 MXLog.error("Failed inviting user \(userID) with error: \(error)")
-                return .failure(.failedInvitingUser)
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -285,7 +290,8 @@ class RoomProxy: RoomProxyProtocol {
             do {
                 return try .success(self.room.setName(name: name))
             } catch {
-                return .failure(.failedSettingRoomName)
+                MXLog.error("Failed setting name with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -295,7 +301,8 @@ class RoomProxy: RoomProxyProtocol {
             do {
                 return try .success(self.room.setTopic(topic: topic))
             } catch {
-                return .failure(.failedSettingRoomTopic)
+                MXLog.error("Failed setting topic with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -305,7 +312,8 @@ class RoomProxy: RoomProxyProtocol {
             do {
                 return try .success(self.room.removeAvatar())
             } catch {
-                return .failure(.failedRemovingAvatar)
+                MXLog.error("Failed removing avatar with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -313,14 +321,16 @@ class RoomProxy: RoomProxyProtocol {
     func uploadAvatar(media: MediaInfo) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             guard case let .image(imageURL, _, _) = media, let mimeType = media.mimeType else {
-                return .failure(.failedUploadingAvatar)
+                MXLog.error("Failed uploading avatar, invalid media: \(media)")
+                return .failure(.invalidMedia)
             }
 
             do {
                 let data = try Data(contentsOf: imageURL)
                 return try .success(self.room.uploadAvatar(mimeType: mimeType, data: data, mediaInfo: nil))
             } catch {
-                return .failure(.failedUploadingAvatar)
+                MXLog.error("Failed uploading avatar with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -331,7 +341,7 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed marking room \(id) as read with error: \(error)")
-            return .failure(.failedMarkingAsRead)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -343,7 +353,7 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed sending typing notice with error: \(error)")
-            return .failure(.failedSendingTypingNotice)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -357,7 +367,7 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed marking room \(id) as unread: \(isUnread) with error: \(error)")
-            return .failure(.failedFlaggingAsUnread)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -367,7 +377,7 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed flagging room \(id) as favourite with error: \(error)")
-            return .failure(.failedFlaggingAsFavourite)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -378,7 +388,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.getPowerLevels())
         } catch {
             MXLog.error("Failed building the current power level settings: \(error)")
-            return .failure(.failedCheckingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -387,7 +397,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.applyPowerLevelChanges(changes: changes))
         } catch {
             MXLog.error("Failed applying the power level changes: \(error)")
-            return .failure(.failedSettingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -396,7 +406,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.resetPowerLevels())
         } catch {
             MXLog.error("Failed resetting the power levels: \(error)")
-            return .failure(.failedSettingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -405,7 +415,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.suggestedRoleForUser(userId: userID))
         } catch {
             MXLog.error("Failed getting a user's role: \(error)")
-            return .failure(.failedCheckingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -415,7 +425,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.updatePowerLevelsForUsers(updates: updates))
         } catch {
             MXLog.error("Failed updating user power levels changes: \(error)")
-            return .failure(.failedSettingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -424,7 +434,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.canUserSendState(userId: userID, stateEvent: event))
         } catch {
             MXLog.error("Failed checking if the user can send \(event) with error: \(error)")
-            return .failure(.failedCheckingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -433,7 +443,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.canUserInvite(userId: userID))
         } catch {
             MXLog.error("Failed checking if the user can invite with error: \(error)")
-            return .failure(.failedCheckingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -442,7 +452,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.canUserRedactOther(userId: userID))
         } catch {
             MXLog.error("Failed checking if the user can redact others with error: \(error)")
-            return .failure(.failedCheckingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -451,7 +461,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.canUserRedactOwn(userId: userID))
         } catch {
             MXLog.error("Failed checking if the user can redact self with error: \(error)")
-            return .failure(.failedCheckingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -460,7 +470,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.canUserKick(userId: userID))
         } catch {
             MXLog.error("Failed checking if the user can kick with error: \(error)")
-            return .failure(.failedCheckingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -469,7 +479,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.canUserBan(userId: userID))
         } catch {
             MXLog.error("Failed checking if the user can ban with error: \(error)")
-            return .failure(.failedCheckingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -478,7 +488,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.canUserTriggerRoomNotification(userId: userID))
         } catch {
             MXLog.error("Failed checking if the user can trigger room notification with error: \(error)")
-            return .failure(.failedCheckingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -490,7 +500,7 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed kicking \(userID) with error: \(error)")
-            return .failure(.failedModeration)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -500,7 +510,7 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed banning \(userID) with error: \(error)")
-            return .failure(.failedModeration)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -510,7 +520,7 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed unbanning \(userID) with error: \(error)")
-            return .failure(.failedModeration)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -521,7 +531,7 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.canUserSendState(userId: userID, stateEvent: .callMember))
         } catch {
             MXLog.error("Failed checking if the user can trigger room notification with error: \(error)")
-            return .failure(.failedCheckingPermission)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -536,14 +546,14 @@ class RoomProxy: RoomProxyProtocol {
             let urlString = try await room.matrixToPermalink()
             
             guard let url = URL(string: urlString) else {
-                MXLog.error("Invalid permalink URL string: \(urlString)")
-                return .failure(.generic("Invalid permalink URL string: \(urlString)"))
+                MXLog.error("Failed creating permalink for roomID: \(id), invalid permalink URL string: \(urlString)")
+                return .failure(.invalidURL)
             }
             
             return .success(url)
         } catch {
             MXLog.error("Failed creating permalink for roomID: \(id) with error: \(error)")
-            return .failure(.generic(error.localizedDescription))
+            return .failure(.sdkError(error))
         }
     }
     
@@ -552,14 +562,14 @@ class RoomProxy: RoomProxyProtocol {
             let urlString = try await room.matrixToEventPermalink(eventId: eventID)
             
             guard let url = URL(string: urlString) else {
-                MXLog.error("Invalid permalink URL string: \(urlString)")
-                return .failure(.generic("Invalid permalink URL string: \(urlString)"))
+                MXLog.error("Failed creating permalink for eventID: \(eventID), invalid permalink URL string: \(urlString)")
+                return .failure(.invalidURL)
             }
             
             return .success(url)
         } catch {
             MXLog.error("Failed creating permalink for eventID: \(eventID) with error: \(error)")
-            return .failure(.generic(error.localizedDescription))
+            return .failure(.sdkError(error))
         }
     }
 

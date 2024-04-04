@@ -119,7 +119,7 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
             userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
             
             guard let roomProxy = await clientProxy.roomForIdentifier(roomID) else {
-                displayError(.failedAcceptingInvite)
+                displayError()
                 return
             }
             
@@ -127,8 +127,8 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
             case .success:
                 actionsSubject.send(.openRoom(withIdentifier: roomID))
                 analytics.trackJoinedRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, activeMemberCount: UInt(roomProxy.activeMembersCount))
-            case .failure(let error):
-                displayError(error)
+            case .failure:
+                displayError()
             }
         }
     }
@@ -143,20 +143,19 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
             userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
             
             guard let roomProxy = await clientProxy.roomForIdentifier(roomID) else {
-                displayError(.failedRejectingInvite)
+                displayError()
                 return
             }
             
             let result = await roomProxy.rejectInvitation()
             
-            if case .failure(let error) = result {
-                displayError(error)
+            if case .failure = result {
+                displayError()
             }
         }
     }
     
-    private func displayError(_ error: RoomProxyError) {
-        MXLog.error("Failed to accept/decline invite: \(error)")
+    private func displayError() {
         state.bindings.alertInfo = .init(id: true,
                                          title: L10n.commonError,
                                          message: L10n.errorUnknown)
