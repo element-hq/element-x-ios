@@ -64,6 +64,12 @@ struct SecureBackupRecoveryKeyScreen: View {
         case .setupRecovery, .changeRecovery:
             recoveryCreatedActionButtons
         case .fixRecovery:
+            incompleteVerificationActionButtons
+        }
+    }
+    
+    private var incompleteVerificationActionButtons: some View {
+        VStack(spacing: 16) {
             Button {
                 context.send(viewAction: .confirmKey)
             } label: {
@@ -71,6 +77,14 @@ struct SecureBackupRecoveryKeyScreen: View {
             }
             .buttonStyle(.compound(.primary))
             .disabled(context.confirmationRecoveryKey.isEmpty)
+            
+            Button {
+                context.send(viewAction: .resetKey)
+            } label: {
+                Text(L10n.screenIdentityConfirmationCreateNewRecoveryKey)
+            }
+            .buttonStyle(.compound(.plain))
+            .padding(.vertical, 14)
         }
     }
     
@@ -127,7 +141,7 @@ struct SecureBackupRecoveryKeyScreen: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonRecoveryKey)
                 .foregroundColor(.compound.textPrimary)
-                .font(.compound.bodySM)
+                .font(.compound.bodySMSemibold)
             
             Group {
                 if context.viewState.recoveryKey == nil {
@@ -180,7 +194,7 @@ struct SecureBackupRecoveryKeyScreen: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonRecoveryKey)
                 .foregroundColor(.compound.textPrimary)
-                .font(.compound.bodySM)
+                .font(.compound.bodySMSemibold)
             
             SecureField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey)
                 .textContentType(.password) // Not ideal but stops random suggestions

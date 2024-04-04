@@ -364,7 +364,7 @@ internal enum L10n {
   internal static var commonReaction: String { return L10n.tr("Localizable", "common_reaction") }
   /// Reactions
   internal static var commonReactions: String { return L10n.tr("Localizable", "common_reactions") }
-  /// Recovery key
+  /// Recovery key or passcode
   internal static var commonRecoveryKey: String { return L10n.tr("Localizable", "common_recovery_key") }
   /// Refreshing…
   internal static var commonRefreshing: String { return L10n.tr("Localizable", "common_refreshing") }
@@ -919,6 +919,22 @@ internal enum L10n {
   internal static func screenChatBackupRecoveryActionSetupDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup_description", String(describing: p1))
   }
+  /// Open Element in a desktop device
+  internal static var screenCreateNewRecoveryKeyListItem1: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_1") }
+  /// Sign into your account again
+  internal static var screenCreateNewRecoveryKeyListItem2: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_2") }
+  /// When asked to verify your device, select %1$@
+  internal static func screenCreateNewRecoveryKeyListItem3(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_3", String(describing: p1))
+  }
+  /// “Reset all”
+  internal static var screenCreateNewRecoveryKeyListItem3ResetAll: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_3_reset_all") }
+  /// Follow the instructions to create a new recovery key
+  internal static var screenCreateNewRecoveryKeyListItem4: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_4") }
+  /// Save your new recovery key in a password manager or encrypted note
+  internal static var screenCreateNewRecoveryKeyListItem5: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_5") }
+  /// Reset the encryption for your account using another device
+  internal static var screenCreateNewRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_title") }
   /// Add option
   internal static var screenCreatePollAddOptionBtn: String { return L10n.tr("Localizable", "screen_create_poll_add_option_btn") }
   /// Show results only after poll ends
@@ -991,6 +1007,8 @@ internal enum L10n {
   internal static var screenEditProfileTitle: String { return L10n.tr("Localizable", "screen_edit_profile_title") }
   /// Updating profile…
   internal static var screenEditProfileUpdatingDetails: String { return L10n.tr("Localizable", "screen_edit_profile_updating_details") }
+  /// Create a new recovery key
+  internal static var screenIdentityConfirmationCreateNewRecoveryKey: String { return L10n.tr("Localizable", "screen_identity_confirmation_create_new_recovery_key") }
   /// Verify this device to set up secure messaging.
   internal static var screenIdentityConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_identity_confirmation_subtitle") }
   /// Confirm that it's you
@@ -1159,19 +1177,21 @@ internal enum L10n {
   internal static var screenRecoveryKeyChangeSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_change_success") }
   /// Change recovery key?
   internal static var screenRecoveryKeyChangeTitle: String { return L10n.tr("Localizable", "screen_recovery_key_change_title") }
-  /// Enter your recovery key to confirm access to your chat backup.
+  /// Create new recovery key
+  internal static var screenRecoveryKeyConfirmCreateNewRecoveryKey: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_create_new_recovery_key") }
+  /// Make sure nobody can see this screen!
   internal static var screenRecoveryKeyConfirmDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_description") }
   /// Please try again to confirm access to your chat backup.
   internal static var screenRecoveryKeyConfirmErrorContent: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_content") }
   /// Incorrect recovery key
   internal static var screenRecoveryKeyConfirmErrorTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_title") }
-  /// Enter the 48 character code.
+  /// If you have a recovery passphrase or secret passphrase/key, this will work too.
   internal static var screenRecoveryKeyConfirmKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_description") }
   /// Enter…
   internal static var screenRecoveryKeyConfirmKeyPlaceholder: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_placeholder") }
   /// Recovery key confirmed
   internal static var screenRecoveryKeyConfirmSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_success") }
-  /// Enter your recovery key
+  /// Enter your recovery key or passcode
   internal static var screenRecoveryKeyConfirmTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_title") }
   /// Copied recovery key
   internal static var screenRecoveryKeyCopiedToClipboard: String { return L10n.tr("Localizable", "screen_recovery_key_copied_to_clipboard") }
@@ -1321,6 +1341,8 @@ internal enum L10n {
   internal static var screenRoomDetailsSecurityTitle: String { return L10n.tr("Localizable", "screen_room_details_security_title") }
   /// Share room
   internal static var screenRoomDetailsShareRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_share_room_title") }
+  /// Room info
+  internal static var screenRoomDetailsTitle: String { return L10n.tr("Localizable", "screen_room_details_title") }
   /// Topic
   internal static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
   /// Updating room…
@@ -1347,6 +1369,8 @@ internal enum L10n {
   internal static var screenRoomMemberDetailsBlockAlertDescription: String { return L10n.tr("Localizable", "screen_room_member_details_block_alert_description") }
   /// Block user
   internal static var screenRoomMemberDetailsBlockUser: String { return L10n.tr("Localizable", "screen_room_member_details_block_user") }
+  /// Profile
+  internal static var screenRoomMemberDetailsTitle: String { return L10n.tr("Localizable", "screen_room_member_details_title") }
   /// Unblock
   internal static var screenRoomMemberDetailsUnblockAlertAction: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_alert_action") }
   /// You'll be able to see all messages from them again.

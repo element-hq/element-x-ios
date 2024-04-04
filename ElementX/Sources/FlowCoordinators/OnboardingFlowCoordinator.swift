@@ -258,6 +258,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 case .recoveryFixed:
                     appSettings.hasRunIdentityConfirmationOnboarding = true
                     stateMachine.tryEvent(.next)
+                case .showResetKeyInfo:
+                    self.presentResetRecoveryKeyScreen()
                 default:
                     fatalError("Other flows shouldn't be possible")
                 }
@@ -265,6 +267,18 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         presentCoordinator(coordinator)
+    }
+    
+    private func presentResetRecoveryKeyScreen() {
+        let coordinator = ResetRecoveryKeyScreenCoordinator(parameters: .init())
+        coordinator.actionsPublisher.sink { [weak self] action in
+            switch action {
+            case .cancel:
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        navigationStackCoordinator.setSheetCoordinator(coordinator)
     }
     
     private func presentIdentityConfirmedScreen() {

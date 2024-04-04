@@ -24,6 +24,7 @@ struct HeroImage: View {
     enum Style {
         case normal
         case positive
+        case subtle
         
         var foregroundColor: Color {
             switch self {
@@ -31,6 +32,8 @@ struct HeroImage: View {
                 return .compound.iconPrimary
             case .positive:
                 return .compound.iconSuccessPrimary
+            case .subtle:
+                return .compound.iconSecondary
             }
         }
         
@@ -40,6 +43,8 @@ struct HeroImage: View {
                 return .compound.bgSubtleSecondary
             case .positive:
                 return .compound.bgSuccessSubtle
+            case .subtle:
+                return .compound.bgSubtlePrimary
             }
         }
     }

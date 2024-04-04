@@ -19,6 +19,7 @@ import Foundation
 enum SecureBackupRecoveryKeyScreenViewModelAction {
     case done(mode: SecureBackupRecoveryKeyScreenViewMode)
     case cancel
+    case showResetKeyInfo
 }
 
 enum SecureBackupRecoveryKeyScreenViewMode {
@@ -82,6 +83,7 @@ enum SecureBackupRecoveryKeyScreenViewAction {
     case copyKey
     case keySaved
     case confirmKey
+    case resetKey
     case done
     case cancel
 }
