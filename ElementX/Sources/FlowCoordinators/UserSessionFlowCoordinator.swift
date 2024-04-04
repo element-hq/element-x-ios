@@ -421,6 +421,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         let coordinator = await RoomFlowCoordinator(roomProxy: roomProxy,
                                                     userSession: userSession,
+                                                    isChildFlow: false,
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                     navigationStackCoordinator: detailNavigationStackCoordinator,
                                                     emojiProvider: EmojiProvider(),
@@ -458,6 +459,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let availableInvitesCount = userSession.clientProxy.inviteSummaryProvider?.roomListPublisher.value.count ?? 0
         if case .invitesScreen = stateMachine.state, availableInvitesCount == 1 {
             dismissInvitesList(animated: true)
+        }
+        
+        Task {
+            await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
         }
     }
     

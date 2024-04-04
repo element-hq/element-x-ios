@@ -110,33 +110,6 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             .store(in: &cancellables)
     }
     
-    private func displayError(_ type: ClientProxyError) {
-        switch type {
-        case .failedCreatingRoom:
-            state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
-                                                 title: L10n.commonError,
-                                                 message: L10n.screenStartChatErrorStartingChat)
-        case .failedSearchingUsers:
-            state.bindings.alertInfo = AlertInfo(id: .unknown)
-        case .failedUploadingMedia(let matrixError):
-            switch matrixError {
-            case .fileTooLarge:
-                // waiting for proper copy
-                state.bindings.alertInfo = AlertInfo(id: .fileTooLarge)
-            default:
-                state.bindings.alertInfo = AlertInfo(id: .failedUploadingMedia)
-            }
-        case .mediaFileError:
-            state.bindings.alertInfo = AlertInfo(id: .mediaFileError)
-        default:
-            break
-        }
-    }
-    
-    private var clientProxy: ClientProxyProtocol {
-        userSession.clientProxy
-    }
-    
     private func createRoom() async {
         defer {
             hideLoadingIndicator()
@@ -145,27 +118,42 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         
         let avatarURL: URL?
         if let media = createRoomParameters.avatarImageMedia {
-            switch await clientProxy.uploadMedia(media) {
+            switch await userSession.clientProxy.uploadMedia(media) {
             case .success(let url):
                 avatarURL = URL(string: url)
             case .failure(let error):
-                displayError(error)
+                switch error {
+                case .failedUploadingMedia(_, let errorCode):
+                    switch errorCode {
+                    case .fileTooLarge:
+                        state.bindings.alertInfo = AlertInfo(id: .fileTooLarge)
+                    default:
+                        state.bindings.alertInfo = AlertInfo(id: .failedUploadingMedia)
+                    }
+                case .invalidMedia:
+                    state.bindings.alertInfo = AlertInfo(id: .mediaFileError)
+                default:
+                    state.bindings.alertInfo = AlertInfo(id: .unknown)
+                }
+                
                 return
             }
         } else {
             avatarURL = nil
         }
-
-        switch await clientProxy.createRoom(name: createRoomParameters.name,
-                                            topic: createRoomParameters.topic,
-                                            isRoomPrivate: createRoomParameters.isRoomPrivate,
-                                            userIDs: state.selectedUsers.map(\.userID),
-                                            avatarURL: avatarURL) {
+        
+        switch await userSession.clientProxy.createRoom(name: createRoomParameters.name,
+                                                        topic: createRoomParameters.topic,
+                                                        isRoomPrivate: createRoomParameters.isRoomPrivate,
+                                                        userIDs: state.selectedUsers.map(\.userID),
+                                                        avatarURL: avatarURL) {
         case .success(let roomId):
             analytics.trackCreatedRoom(isDM: false)
             actionsSubject.send(.openRoom(withIdentifier: roomId))
-        case .failure(let failure):
-            displayError(failure)
+        case .failure:
+            state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
+                                                 title: L10n.commonError,
+                                                 message: L10n.screenStartChatErrorStartingChat)
         }
     }
     

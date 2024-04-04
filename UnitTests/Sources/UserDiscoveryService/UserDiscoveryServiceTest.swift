@@ -71,7 +71,7 @@ class UserDiscoveryServiceTest: XCTestCase {
     }
     
     func testLocalResultShowsOnSearchError() async {
-        clientProxy.searchUsersSearchTermLimitReturnValue = .failure(.failedSearchingUsers)
+        clientProxy.searchUsersSearchTermLimitReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         clientProxy.profileForReturnValue = .success(.init(userID: "@some:matrix.org"))
         
         let results = await (try? search(query: "@a:b.com").get()) ?? []
@@ -81,7 +81,7 @@ class UserDiscoveryServiceTest: XCTestCase {
     }
     
     func testSearchErrorTriggers() async {
-        clientProxy.searchUsersSearchTermLimitReturnValue = .failure(.failedSearchingUsers)
+        clientProxy.searchUsersSearchTermLimitReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         clientProxy.profileForReturnValue = .success(.init(userID: "@some:matrix.org"))
         
         switch await search(query: "some query") {
@@ -108,7 +108,7 @@ class UserDiscoveryServiceTest: XCTestCase {
     
     func testSearchResultsShowWhenGetProfileFails() async {
         clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: searchResults, limited: true))
-        clientProxy.profileForReturnValue = .failure(.failedGettingUserProfile)
+        clientProxy.profileForReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         
         let results = await (try? search(query: "@a:b.com").get()) ?? []
         

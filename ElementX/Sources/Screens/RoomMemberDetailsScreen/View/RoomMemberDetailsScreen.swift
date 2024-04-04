@@ -23,6 +23,7 @@ struct RoomMemberDetailsScreen: View {
     var body: some View {
         content
             .compoundList()
+            .navigationTitle(L10n.screenRoomMemberDetailsTitle)
             .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
             .alert(item: $context.alertInfo)
             .track(screen: .User)

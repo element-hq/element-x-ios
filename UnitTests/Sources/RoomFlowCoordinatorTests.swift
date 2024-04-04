@@ -25,31 +25,9 @@ class RoomFlowCoordinatorTests: XCTestCase {
     var navigationStackCoordinator: NavigationStackCoordinator!
     var cancellables = Set<AnyCancellable>()
     
-    override func setUp() async throws {
-        cancellables.removeAll()
-        let clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
-        let mediaProvider = MockMediaProvider()
-        let voiceMessageMediaManager = VoiceMessageMediaManagerMock()
-        let userSession = MockUserSession(clientProxy: clientProxy,
-                                          mediaProvider: mediaProvider,
-                                          voiceMessageMediaManager: voiceMessageMediaManager)
-        
-        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
-        navigationStackCoordinator = NavigationStackCoordinator()
-        navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator)
-        
-        roomFlowCoordinator = await RoomFlowCoordinator(roomProxy: RoomProxyMock(with: .init(id: "1")),
-                                                        userSession: userSession,
-                                                        roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
-                                                        navigationStackCoordinator: navigationStackCoordinator,
-                                                        emojiProvider: EmojiProvider(),
-                                                        appSettings: ServiceLocator.shared.settings,
-                                                        analytics: ServiceLocator.shared.analytics,
-                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                        orientationManager: OrientationManagerMock())
-    }
-    
     func testRoomPresentation() async throws {
+        await setupViewModel()
+        
         try await process(route: .room(roomID: "1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
@@ -58,6 +36,8 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testRoomDetailsPresentation() async throws {
+        await setupViewModel()
+        
         try await process(route: .roomDetails(roomID: "1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         
@@ -66,6 +46,8 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testNoOp() async throws {
+        await setupViewModel()
+        
         try await process(route: .roomDetails(roomID: "1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         let detailsCoordinator = navigationStackCoordinator.rootCoordinator
@@ -78,6 +60,8 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testPushDetails() async throws {
+        await setupViewModel()
+        
         try await process(route: .room(roomID: "1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
@@ -86,6 +70,24 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
+    }
+    
+    func testChildFlowTearDown() async throws {
+        await setupViewModel(asChildFlow: true)
+        navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
+        
+        try await process(route: .room(roomID: "1"))
+        try await process(route: .roomDetails(roomID: "1"))
+        XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2)
+        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is RoomDetailsScreenCoordinator)
+        
+        try await process(route: .roomList, expectedAction: .finished)
+        XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2, "A child room flow should leave its parent to clean up the stack.")
+        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator, "A child room flow should leave its parent to clean up the stack.")
+        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is RoomDetailsScreenCoordinator, "A child room flow should leave its parent to clean up the stack.")
     }
     
     // MARK: - Private
@@ -117,5 +119,30 @@ class RoomFlowCoordinatorTests: XCTestCase {
         for fulfillment in fulfillments {
             try await fulfillment.fulfill()
         }
+    }
+    
+    private func setupViewModel(asChildFlow: Bool = false) async {
+        cancellables.removeAll()
+        let clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+        let mediaProvider = MockMediaProvider()
+        let voiceMessageMediaManager = VoiceMessageMediaManagerMock()
+        let userSession = MockUserSession(clientProxy: clientProxy,
+                                          mediaProvider: mediaProvider,
+                                          voiceMessageMediaManager: voiceMessageMediaManager)
+        
+        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
+        navigationStackCoordinator = NavigationStackCoordinator()
+        navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator)
+        
+        roomFlowCoordinator = await RoomFlowCoordinator(roomProxy: RoomProxyMock(with: .init(id: "1")),
+                                                        userSession: userSession,
+                                                        isChildFlow: asChildFlow,
+                                                        roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
+                                                        navigationStackCoordinator: navigationStackCoordinator,
+                                                        emojiProvider: EmojiProvider(),
+                                                        appSettings: ServiceLocator.shared.settings,
+                                                        analytics: ServiceLocator.shared.analytics,
+                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                        orientationManager: OrientationManagerMock())
     }
 }

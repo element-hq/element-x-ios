@@ -18,26 +18,11 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-enum RoomProxyError: Error, Equatable {
-    case generic(String?)
-    case failedRedactingEvent
-    case failedReportingContent
-    case failedRetrievingMember
-    case failedLeavingRoom
-    case failedAcceptingInvite
-    case failedRejectingInvite
-    case failedInvitingUser
-    case failedSettingRoomName
-    case failedSettingRoomTopic
-    case failedRemovingAvatar
-    case failedUploadingAvatar
-    case failedCheckingPermission
-    case failedSettingPermission
-    case failedFlaggingAsUnread
-    case failedMarkingAsRead
-    case failedSendingTypingNotice
-    case failedFlaggingAsFavourite
-    case failedModeration
+enum RoomProxyError: Error {
+    case sdkError(Error)
+    
+    case invalidURL
+    case invalidMedia
 }
 
 enum RoomProxyAction {

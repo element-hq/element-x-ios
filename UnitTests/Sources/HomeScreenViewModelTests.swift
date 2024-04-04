@@ -105,7 +105,7 @@ class HomeScreenViewModelTests: XCTestCase {
     func testLeaveRoomError() async throws {
         let mockRoomId = "1"
         let room: RoomProxyMock = .init(with: .init(id: mockRoomId, name: "Some room"))
-        room.leaveRoomClosure = { .failure(.failedLeavingRoom) }
+        room.leaveRoomClosure = { .failure(.sdkError(ClientProxyMockError.generic)) }
         
         clientProxy.roomForIdentifierClosure = { _ in room }
 

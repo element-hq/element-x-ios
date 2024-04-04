@@ -38,22 +38,10 @@ enum ClientProxyLoadingState {
 }
 
 enum ClientProxyError: Error {
-    case failedCreatingRoom
-    case failedRetrievingDirectRoom
-    case failedRetrievingUserDisplayName
-    case failedRetrievingUserAvatarURL
-    case failedSettingUserDisplayName
-    case failedRetrievingSessionVerificationController
-    case failedLoadingMedia
-    case mediaFileError
-    case failedUploadingMedia(MatrixErrorCode)
-    case failedSearchingUsers
-    case failedGettingUserProfile
-    case failedSettingUserAvatar
-    case failedCheckingIsLastDevice(Error?)
-    case failedIgnoringUser
-    case failedUnignoringUser
-    case failedJoiningRoom
+    case sdkError(Error)
+    
+    case invalidMedia
+    case failedUploadingMedia(Error, MatrixErrorCode)
 }
 
 enum SlidingSyncConstants {
@@ -160,4 +148,12 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError>
     
     func unignoreUser(_ userID: String) async -> Result<Void, ClientProxyError>
+    
+    // MARK: - Recently visited rooms
+    
+    func trackRecentlyVisitedRoom(_ roomID: String) async -> Result<Void, ClientProxyError>
+    
+    func recentlyVisitedRooms() async -> Result<[String], ClientProxyError>
+    
+    func recentConversationCounterparts() async -> [UserProfileProxy]
 }

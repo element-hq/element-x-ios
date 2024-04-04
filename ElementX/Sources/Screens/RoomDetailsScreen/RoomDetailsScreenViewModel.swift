@@ -178,15 +178,15 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     private func updatePowerLevelPermissions() async {
-        async let canInviteUsers = roomProxy.canUserInvite(userID: roomProxy.ownUserID) == .success(true)
-        // Can't use async let because the mocks aren't thread safe when calling the same method 🤦‍♂️
-        state.canEditRoomName = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName) == .success(true)
-        state.canEditRoomTopic = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic) == .success(true)
-        state.canEditRoomAvatar = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar) == .success(true)
+        state.canEditRoomName = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName).get()) == true
+        state.canEditRoomTopic = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic).get()) == true
+        state.canEditRoomAvatar = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar).get()) == true
+        
         if appSettings.roomModerationEnabled {
-            state.canEditRolesOrPermissions = await roomProxy.suggestedRole(for: roomProxy.ownUserID) == .success(.administrator)
+            state.canEditRolesOrPermissions = await (try? roomProxy.suggestedRole(for: roomProxy.ownUserID).get()) == .administrator
         }
-        state.canInviteUsers = await canInviteUsers
+        
+        state.canInviteUsers = await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true
     }
     
     private func setupNotificationSettingsSubscription() {

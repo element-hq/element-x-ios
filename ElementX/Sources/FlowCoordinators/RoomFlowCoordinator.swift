@@ -42,6 +42,7 @@ enum RoomFlowCoordinatorAction: Equatable {
 class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let roomProxy: RoomProxyProtocol
     private let userSession: UserSessionProtocol
+    private let isChildFlow: Bool
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let emojiProvider: EmojiProviderProtocol
@@ -52,6 +53,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     // periphery:ignore - used to avoid deallocation
     private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
+    // periphery:ignore - used to avoid deallocation
+    private var childRoomFlowCoordinator: RoomFlowCoordinator?
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
     
@@ -66,6 +69,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     init(roomProxy: RoomProxyProtocol,
          userSession: UserSessionProtocol,
+         isChildFlow: Bool,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          emojiProvider: EmojiProviderProtocol,
@@ -75,6 +79,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
          orientationManager: OrientationManagerProtocol) async {
         self.roomProxy = roomProxy
         self.userSession = userSession
+        self.isChildFlow = isChildFlow
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.navigationStackCoordinator = navigationStackCoordinator
         self.emojiProvider = emojiProvider
@@ -229,6 +234,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen):
                 return .roomDetails(isRoot: false)
             
+            // Child flow
+            
+            case (_, .presentChildRoom(let roomID)):
+                return .presentingChild(childRoomID: roomID, previousState: fromState)
+            case (.presentingChild(_, let previousState), .dismissChildRoom):
+                return previousState
+            
             default:
                 return nil
             }
@@ -346,6 +358,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen, .roomDetails):
                 rolesAndPermissionsFlowCoordinator = nil
             
+            // Child flow
+            case (_, .presentChildRoom(let roomID), .presentingChild):
+                Task { await self.presentChildFlow(for: roomID) }
+            case (.presentingChild, .dismissChildRoom, _):
+                childRoomFlowCoordinator = nil
+            
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -370,11 +388,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     /// Updates the navigation stack so it displays the timeline for the given room
     /// - Parameters:
-    ///   - roomID: the identifier of the room that is to be presented
     ///   - animated: whether it should animate the transition
-    ///   - destinationRoomProxy: an optional already build roomProxy for the target room. It is currently used when
-    ///   forwarding messages so that we can take advantage of the local echo
-    ///   and have the message already there when presenting the room
     private func presentRoom(animated: Bool) async {
         // If any sheets are presented dismiss them, rely on their dismissal callbacks to transition the state machine
         // through the correct states before presenting the room
@@ -440,17 +454,27 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
-            // Move the state machine to no room selected if the room currently being dismissed
-            // is the same as the one selected in the state machine.
-            // This generally happens when popping the room screen while in a compact layout
-            self?.stateMachine.tryEvent(.dismissRoom)
+        if !isChildFlow {
+            navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
+                self?.stateMachine.tryEvent(.dismissRoom)
+            }
+        } else {
+            navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
+                self?.stateMachine.tryEvent(.dismissRoom)
+            }
         }
     }
     
     private func dismissFlow(animated: Bool) {
-        navigationStackCoordinator.popToRoot(animated: false)
-        navigationStackCoordinator.setRootCoordinator(nil, animated: false)
+        childRoomFlowCoordinator?.handleAppRoute(.roomList, animated: animated)
+        
+        if isChildFlow {
+            // We don't support dismissing a child flow by itself, only the entire chain.
+            MXLog.info("Leaving navigation clean-up to the parent flow.")
+        } else {
+            navigationStackCoordinator.popToRoot(animated: false)
+            navigationStackCoordinator.setRootCoordinator(nil, animated: false)
+        }
         
         roomProxy.unsubscribeFromUpdates()
         timelineController = nil
@@ -857,12 +881,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(userID)
                     switch currentDirectRoom {
                     case .success(.some(let roomID)):
-                        actionsSubject.send(.presentRoom(roomID: roomID))
+                        stateMachine.tryEvent(.presentChildRoom(roomID: roomID))
                     case .success(nil):
                         switch await userSession.clientProxy.createDirectRoom(with: userID, expectedRoomName: displayName) {
                         case .success(let roomID):
                             analytics.trackCreatedRoom(isDM: true)
-                            actionsSubject.send(.presentRoom(roomID: roomID))
+                            stateMachine.tryEvent(.presentChildRoom(roomID: roomID))
                         case .failure:
                             userIndicatorController.alertInfo = .init(id: UUID())
                         }
@@ -935,9 +959,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        // This will become a child flow and we can pass the proxy down afterwards.
-        
-        actionsSubject.send(.presentRoom(roomID: roomID))
+        // We don't need to worry about passing in the room proxy as timelines are
+        // cached. The local echo will be visible when fetching the room by its ID.
+        stateMachine.tryEvent(.presentChildRoom(roomID: roomID))
     }
     
     private func presentNotificationSettingsScreen() {
@@ -985,11 +1009,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let selectedUsersSubject: CurrentValueSubject<[UserProfileProxy], Never> = .init([])
         
         let stackCoordinator = NavigationStackCoordinator()
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: .init(selectedUsersSubject),
-                                                                      roomType: .room(roomProxy: roomProxy),
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(clientProxy: userSession.clientProxy,
                                                                       mediaProvider: userSession.mediaProvider,
                                                                       userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
-                                                                      userIndicatorController: userIndicatorController)
+                                                                      userIndicatorController: userIndicatorController,
+                                                                      selectedUsers: .init(selectedUsersSubject),
+                                                                      roomType: .room(roomProxy: roomProxy))
         
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         stackCoordinator.setRootCoordinator(coordinator)
@@ -1066,6 +1091,44 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         rolesAndPermissionsFlowCoordinator = coordinator
         coordinator.start()
     }
+    
+    // MARK: - Child Flow
+    
+    private func presentChildFlow(for roomID: String) async {
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            MXLog.error("Child flow requested for missing room.")
+            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            stateMachine.tryEvent(.dismissChildRoom)
+            return
+        }
+        
+        let coordinator = await RoomFlowCoordinator(roomProxy: roomProxy,
+                                                    userSession: userSession,
+                                                    isChildFlow: true,
+                                                    roomTimelineControllerFactory: roomTimelineControllerFactory,
+                                                    navigationStackCoordinator: navigationStackCoordinator,
+                                                    emojiProvider: emojiProvider,
+                                                    appSettings: appSettings,
+                                                    analytics: analytics,
+                                                    userIndicatorController: userIndicatorController,
+                                                    orientationManager: orientationManager)
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .presentRoom(let roomID):
+                actionsSubject.send(.presentRoom(roomID: roomID))
+            case .presentCallScreen(let roomProxy):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+            case .finished:
+                stateMachine.tryEvent(.dismissChildRoom)
+            }
+        }
+        .store(in: &cancellables)
+        
+        childRoomFlowCoordinator = coordinator
+        coordinator.handleAppRoute(.room(roomID: roomID), animated: true)
+    }
 }
 
 private extension RoomFlowCoordinator {
@@ -1081,7 +1144,7 @@ private extension RoomFlowCoordinator {
         }
     }
 
-    enum State: StateType {
+    indirect enum State: StateType {
         case initial
         case room
         case roomDetails(isRoot: Bool)
@@ -1102,6 +1165,8 @@ private extension RoomFlowCoordinator {
         case pollsHistoryForm
         case rolesAndPermissions
         
+        /// A child flow is in progress.
+        case presentingChild(childRoomID: String, previousState: State)
         /// The flow is complete and is handing control of the stack back to its parent.
         case complete
     }
@@ -1161,6 +1226,10 @@ private extension RoomFlowCoordinator {
         
         case presentRolesAndPermissionsScreen
         case dismissRolesAndPermissionsScreen
+        
+        // Child room flow events
+        case presentChildRoom(roomID: String)
+        case dismissChildRoom
     }
 }
 

@@ -24,6 +24,10 @@ struct ClientProxyMockConfiguration {
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
 }
 
+enum ClientProxyMockError: Error {
+    case generic
+}
+
 extension ClientProxyMock {
     convenience init(_ configuration: ClientProxyMockConfiguration) {
         self.init()
@@ -53,25 +57,29 @@ extension ClientProxyMock {
         
         isOnlyDeviceLeftReturnValue = .success(false)
         accountURLActionReturnValue = "https://matrix.org/account"
-        directRoomForUserIDReturnValue = .failure(.failedRetrievingDirectRoom)
-        createDirectRoomWithExpectedRoomNameReturnValue = .failure(.failedCreatingRoom)
-        createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReturnValue = .failure(.failedCreatingRoom)
-        uploadMediaReturnValue = .failure(.failedUploadingMedia(.unknown))
-        loadUserDisplayNameReturnValue = .failure(.failedRetrievingUserDisplayName)
-        setUserDisplayNameReturnValue = .failure(.failedSettingUserDisplayName)
-        loadUserAvatarURLReturnValue = .failure(.failedRetrievingUserAvatarURL)
-        setUserAvatarMediaReturnValue = .failure(.failedSettingUserAvatar)
-        removeUserAvatarReturnValue = .failure(.failedSettingUserAvatar)
+        directRoomForUserIDReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        createDirectRoomWithExpectedRoomNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        loadUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        loadUserAvatarURLReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        setUserAvatarMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        removeUserAvatarReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         logoutReturnValue = nil
         searchUsersSearchTermLimitReturnValue = .success(.init(results: [], limited: false))
         profileForReturnValue = .success(.init(userID: "@a:b.com", displayName: "Some user"))
-        sessionVerificationControllerProxyReturnValue = .failure(.failedRetrievingSessionVerificationController)
+        sessionVerificationControllerProxyReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         ignoreUserReturnValue = .success(())
         unignoreUserReturnValue = .success(())
         
-        loadMediaContentForSourceThrowableError = ClientProxyError.failedLoadingMedia
-        loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.failedLoadingMedia
-        loadMediaFileForSourceBodyThrowableError = ClientProxyError.failedLoadingMedia
+        trackRecentlyVisitedRoomReturnValue = .success(())
+        recentlyVisitedRoomsReturnValue = .success([])
+        recentConversationCounterpartsReturnValue = []
+        
+        loadMediaContentForSourceThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        loadMediaFileForSourceBodyThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         
         secureBackupController = {
             let secureBackupController = SecureBackupControllerMock()
