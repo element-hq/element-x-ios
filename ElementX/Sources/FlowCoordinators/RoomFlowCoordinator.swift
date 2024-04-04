@@ -469,6 +469,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         childRoomFlowCoordinator?.handleAppRoute(.roomList, animated: animated)
         
         if isChildFlow {
+            // We don't support dismissing a child flow by itself, only the entire chain.
             MXLog.info("Leaving navigation clean-up to the parent flow.")
         } else {
             navigationStackCoordinator.popToRoot(animated: false)
