@@ -20,7 +20,16 @@ enum ResetRecoveryKeyScreenViewModelAction {
     case cancel
 }
 
-struct ResetRecoveryKeyScreenViewState: BindableState { }
+struct ResetRecoveryKeyScreenViewState: BindableState {
+    let listItem3AttributedText = {
+        let boldPlaceholder = "{bold}"
+        var finalString = AttributedString(L10n.screenCreateNewRecoveryKeyListItem3(boldPlaceholder))
+        var boldString = AttributedString(L10n.screenCreateNewRecoveryKeyListItem3ResetAll)
+        boldString.bold()
+        finalString.replace(boldPlaceholder, with: boldString)
+        return finalString
+    }()
+}
 
 enum ResetRecoveryKeyScreenViewAction {
     case cancel
