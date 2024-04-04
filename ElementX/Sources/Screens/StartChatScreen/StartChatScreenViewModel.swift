@@ -56,35 +56,22 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         case .selectUser(let user):
             showLoadingIndicator()
             Task {
-                let currentDirectRoom = await clientProxy.directRoomForUserID(user.userID)
+                let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(user.userID)
                 switch currentDirectRoom {
                 case .success(.some(let roomId)):
                     self.hideLoadingIndicator()
                     self.actionsSubject.send(.openRoom(withIdentifier: roomId))
-                case .success(nil):
+                case .success:
                     await self.createDirectRoom(with: user)
-                case .failure(let failure):
+                case .failure:
                     self.hideLoadingIndicator()
-                    self.displayError(failure)
+                    self.displayError()
                 }
             }
         }
     }
     
     // MARK: - Private
-    
-    private func displayError(_ type: ClientProxyError) {
-        switch type {
-        case .failedCreatingRoom, .failedRetrievingDirectRoom:
-            state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
-                                                 title: L10n.commonError,
-                                                 message: L10n.screenStartChatErrorStartingChat)
-        case .failedSearchingUsers:
-            state.bindings.alertInfo = AlertInfo(id: .unknown)
-        default:
-            break
-        }
-    }
     
     private func setupBindings() {
         context.$viewState
@@ -101,12 +88,12 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private var fetchUsersTask: Task<Void, Never>?
     
     private func fetchUsers() {
-        guard searchQuery.count >= 3 else {
+        guard context.searchQuery.count >= 3 else {
             state.usersSection = .init(type: .suggestions, users: [])
             return
         }
         fetchUsersTask = Task {
-            let result = await userDiscoveryService.searchProfiles(with: searchQuery)
+            let result = await userDiscoveryService.searchProfiles(with: context.searchQuery)
             guard !Task.isCancelled else { return }
             handleResult(for: .searchResult, result: result)
         }
@@ -117,7 +104,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         case .success(let users):
             state.usersSection = .init(type: sectionType, users: users)
         case .failure:
-            break
+            state.bindings.alertInfo = AlertInfo(id: .unknown)
         }
     }
     
@@ -126,23 +113,21 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             hideLoadingIndicator()
         }
         showLoadingIndicator()
-        switch await clientProxy.createDirectRoom(with: user.userID, expectedRoomName: user.displayName) {
+        switch await userSession.clientProxy.createDirectRoom(with: user.userID, expectedRoomName: user.displayName) {
         case .success(let roomId):
             analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.openRoom(withIdentifier: roomId))
-        case .failure(let failure):
-            displayError(failure)
+        case .failure:
+            displayError()
         }
     }
     
-    private var clientProxy: ClientProxyProtocol {
-        userSession.clientProxy
+    private func displayError() {
+        state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
+                                             title: L10n.commonError,
+                                             message: L10n.screenStartChatErrorStartingChat)
     }
-    
-    private var searchQuery: String {
-        context.searchQuery
-    }
-    
+        
     // MARK: Loading indicator
     
     private static let loadingIndicatorIdentifier = "\(StartChatScreenViewModel.self)-Loading"

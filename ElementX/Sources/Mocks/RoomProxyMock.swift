@@ -49,6 +49,10 @@ struct RoomProxyMockConfiguration {
     var canUserJoinCall = true
 }
 
+enum RoomProxyMockError: Error {
+    case generic
+}
+
 extension RoomProxyMock {
     @MainActor
     convenience init(with configuration: RoomProxyMockConfiguration) {
@@ -83,7 +87,7 @@ extension RoomProxyMock {
         setTopicClosure = { _ in .success(()) }
         getMemberUserIDClosure = { [weak self] userID in
             guard let member = self?.membersPublisher.value.first(where: { $0.userID == userID }) else {
-                return .failure(.failedRetrievingMember)
+                return .failure(.sdkError(RoomProxyMockError.generic))
             }
             return .success(member)
         }
@@ -98,7 +102,7 @@ extension RoomProxyMock {
         resetPowerLevelsReturnValue = .success(.mock)
         suggestedRoleForClosure = { [weak self] userID in
             guard case .success(let member) = await self?.getMember(userID: userID) else {
-                return .failure(.failedCheckingPermission)
+                return .failure(.sdkError(RoomProxyMockError.generic))
             }
             return .success(member.role)
         }

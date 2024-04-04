@@ -216,7 +216,7 @@ class ClientProxy: ClientProxyProtocol {
             return .success(result)
         } catch {
             MXLog.error("Failed checking isLastDevice with error: \(error)")
-            return .failure(.failedCheckingIsLastDevice(error))
+            return .failure(.sdkError(error))
         }
     }
 
@@ -293,7 +293,8 @@ class ClientProxy: ClientProxyProtocol {
                 let roomID = try self.client.getDmRoom(userId: userID)?.id()
                 return .success(roomID)
             } catch {
-                return .failure(.failedRetrievingDirectRoom)
+                MXLog.error("Failed retrieving direct room for userID: \(userID) with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -313,7 +314,8 @@ class ClientProxy: ClientProxyProtocol {
                 let result = try self.client.createRoom(request: parameters)
                 return .success(result)
             } catch {
-                return .failure(.failedCreatingRoom)
+                MXLog.error("Failed creating direct room for userID: \(userID) with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
         
@@ -335,7 +337,8 @@ class ClientProxy: ClientProxyProtocol {
                 let roomID = try self.client.createRoom(request: parameters)
                 return .success(roomID)
             } catch {
-                return .failure(.failedCreatingRoom)
+                MXLog.error("Failed creating room with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
         
@@ -351,20 +354,27 @@ class ClientProxy: ClientProxyProtocol {
             
             return .success(())
         } catch {
-            return .failure(.failedJoiningRoom)
+            MXLog.error("Failed joining roomID: \(roomID) with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError> {
-        guard let mimeType = media.mimeType else { return .failure(ClientProxyError.mediaFileError) }
+        guard let mimeType = media.mimeType else {
+            MXLog.error("Failed uploading media, invalid mime type: \(media)")
+            return .failure(ClientProxyError.invalidMedia)
+        }
+        
         do {
             let data = try Data(contentsOf: media.url)
             let matrixUrl = try await client.uploadMedia(mimeType: mimeType, data: data, progressWatcher: nil)
             return .success(matrixUrl)
         } catch let error as ClientError {
-            return .failure(ClientProxyError.failedUploadingMedia(error.code))
+            MXLog.error("Failed uploading media with error: \(error)")
+            return .failure(ClientProxyError.failedUploadingMedia(error, error.code))
         } catch {
-            return .failure(ClientProxyError.mediaFileError)
+            MXLog.error("Failed uploading media with error: \(error)")
+            return .failure(ClientProxyError.sdkError(error))
         }
     }
     
@@ -435,7 +445,8 @@ class ClientProxy: ClientProxyProtocol {
                 self.userDisplayNameSubject.send(displayName)
                 return .success(())
             } catch {
-                return .failure(.failedRetrievingUserDisplayName)
+                MXLog.error("Failed loading user display name with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -449,7 +460,8 @@ class ClientProxy: ClientProxyProtocol {
                 }
                 return .success(())
             } catch {
-                return .failure(.failedSettingUserDisplayName)
+                MXLog.error("Failed setting user display name with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -462,7 +474,8 @@ class ClientProxy: ClientProxyProtocol {
                 self.userAvatarURLSubject.send(urlString.flatMap(URL.init))
                 return .success(())
             } catch {
-                return .failure(.failedRetrievingUserAvatarURL)
+                MXLog.error("Failed loading user avatar URL with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -470,7 +483,8 @@ class ClientProxy: ClientProxyProtocol {
     func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError> {
         await Task.dispatch(on: .global()) {
             guard case let .image(imageURL, _, _) = media, let mimeType = media.mimeType else {
-                return .failure(.failedSettingUserAvatar)
+                MXLog.error("Failed uploading, invalid media: \(media)")
+                return .failure(.invalidMedia)
             }
             
             do {
@@ -481,7 +495,8 @@ class ClientProxy: ClientProxyProtocol {
                 }
                 return .success(())
             } catch {
-                return .failure(.failedSettingUserAvatar)
+                MXLog.error("Failed setting user avatar with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -495,7 +510,8 @@ class ClientProxy: ClientProxyProtocol {
                 }
                 return .success(())
             } catch {
-                return .failure(.failedSettingUserAvatar)
+                MXLog.error("Failed removing user avatar with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -506,7 +522,8 @@ class ClientProxy: ClientProxyProtocol {
                 let sessionVerificationController = try self.client.getSessionVerificationController()
                 return .success(SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController))
             } catch {
-                return .failure(.failedRetrievingSessionVerificationController)
+                MXLog.error("Failed retrieving session verification controller proxy with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -536,7 +553,8 @@ class ClientProxy: ClientProxyProtocol {
             do {
                 return try .success(.init(sdkResults: self.client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
             } catch {
-                return .failure(.failedSearchingUsers)
+                MXLog.error("Failed searching users with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -546,7 +564,8 @@ class ClientProxy: ClientProxyProtocol {
             do {
                 return try .success(.init(sdkUserProfile: self.client.getProfile(userId: userID)))
             } catch {
-                return .failure(.failedGettingUserProfile)
+                MXLog.error("Failed retrieving profile for userID: \(userID) with error: \(error)")
+                return .failure(.sdkError(error))
             }
         }
     }
@@ -563,7 +582,7 @@ class ClientProxy: ClientProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed ignoring user with error: \(error)")
-            return .failure(.failedIgnoringUser)
+            return .failure(.sdkError(error))
         }
     }
     
@@ -573,7 +592,7 @@ class ClientProxy: ClientProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed unignoring user with error: \(error)")
-            return .failure(.failedUnignoringUser)
+            return .failure(.sdkError(error))
         }
     }
     

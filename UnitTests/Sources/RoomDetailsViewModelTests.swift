@@ -138,7 +138,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             defer {
                 expectation.fulfill()
             }
-            return .failure(.failedLeavingRoom)
+            return .failure(.sdkError(ClientProxyMockError.generic))
         }
         context.send(viewAction: .confirmLeave)
         await fulfillment(of: [expectation])
@@ -207,7 +207,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         let recipient = RoomMemberProxyMock.mockDan
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.ignoreUserReturnValue = .failure(.failedIgnoringUser)
+        clientProxy.ignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                clientProxy: clientProxy,
@@ -276,7 +276,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         let recipient = RoomMemberProxyMock.mockIgnored
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.unignoreUserReturnValue = .failure(.failedUnignoringUser)
+        clientProxy.unignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         roomProxyMock = RoomProxyMock(with: .init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                clientProxy: clientProxy,

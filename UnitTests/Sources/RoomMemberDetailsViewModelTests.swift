@@ -87,7 +87,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
     func testIgnoreFailure() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.ignoreUserReturnValue = .failure(.failedIgnoringUser)
+        clientProxy.ignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
                                                      clientProxy: clientProxy,
@@ -158,7 +158,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
     func testUnignoreFailure() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.unignoreUserReturnValue = .failure(.failedUnignoringUser)
+        clientProxy.unignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
                                                      clientProxy: clientProxy,

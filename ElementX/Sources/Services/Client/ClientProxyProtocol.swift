@@ -38,22 +38,9 @@ enum ClientProxyLoadingState {
 }
 
 enum ClientProxyError: Error {
-    case failedCreatingRoom
-    case failedRetrievingDirectRoom
-    case failedRetrievingUserDisplayName
-    case failedRetrievingUserAvatarURL
-    case failedSettingUserDisplayName
-    case failedRetrievingSessionVerificationController
-    case failedLoadingMedia
-    case mediaFileError
-    case failedUploadingMedia(MatrixErrorCode)
-    case failedSearchingUsers
-    case failedGettingUserProfile
-    case failedSettingUserAvatar
-    case failedCheckingIsLastDevice(Error?)
-    case failedIgnoringUser
-    case failedUnignoringUser
-    case failedJoiningRoom
+    case sdkError(Error)
+    case invalidMedia
+    case failedUploadingMedia(Error, MatrixErrorCode)
 }
 
 enum SlidingSyncConstants {
