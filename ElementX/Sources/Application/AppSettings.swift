@@ -54,6 +54,7 @@ final class AppSettings {
         case markAsFavouriteEnabled
         case roomModerationEnabled
         case publicSearchEnabled
+        case qrCodeLoginEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -286,6 +287,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .volatile)
     var publicSearchEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.qrCodeLoginEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var qrCodeLoginEnabled
     
     #endif
     

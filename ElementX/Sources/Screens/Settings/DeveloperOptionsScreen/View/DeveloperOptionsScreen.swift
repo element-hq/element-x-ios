@@ -53,6 +53,12 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("QR Code") {
+                Toggle(isOn: $context.qrCodeLoginEnabled) {
+                    Text("QR code login")
+                }
+            }
+            
             Section("Element Call") {
                 TextField(context.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
                     .submitLabel(.done)

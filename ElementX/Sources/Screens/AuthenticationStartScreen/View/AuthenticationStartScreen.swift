@@ -94,9 +94,17 @@ struct AuthenticationStartScreen: View {
     
     /// The main action buttons.
     var buttons: some View {
-        VStack(spacing: 12) {
-            Button { context.send(viewAction: .login) } label: {
-                Text(L10n.actionContinue)
+        VStack(spacing: 16) {
+            if context.viewState.isQRCodeLoginEnabled {
+                Button { context.send(viewAction: .loginManually) } label: {
+                    Label(L10n.screenOnboardingSignInWithQrCode, icon: \.qrCode)
+                }
+                .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.signInWithQr)
+            }
+            
+            Button { context.send(viewAction: .loginManually) } label: {
+                Text(context.viewState.isQRCodeLoginEnabled ? L10n.screenOnboardingSignInManually : L10n.actionContinue)
             }
             .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.signIn)
@@ -109,7 +117,10 @@ struct AuthenticationStartScreen: View {
 // MARK: - Previews
 
 struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = AuthenticationStartScreenViewModel()
+    static let viewModel = {
+        ServiceLocator.shared.settings.qrCodeLoginEnabled = true
+        return AuthenticationStartScreenViewModel(appSettings: ServiceLocator.shared.settings)
+    }()
     
     static var previews: some View {
         AuthenticationStartScreen(context: viewModel.context)
