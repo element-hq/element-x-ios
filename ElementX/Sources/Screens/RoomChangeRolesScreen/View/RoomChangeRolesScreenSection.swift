@@ -23,13 +23,17 @@ struct RoomChangeRolesScreenSection: View {
     
     @ObservedObject var context: RoomChangeRolesScreenViewModel.Context
     
+    var isAdminsSectionForModeratorsMode: Bool {
+        context.viewState.mode == .moderator && title == L10n.screenRoomChangeRoleSectionAdministrators
+    }
+    
     var body: some View {
         if !members.isEmpty {
             Section {
                 ForEach(members, id: \.id) { member in
                     RoomChangeRolesScreenRow(member: member,
                                              imageProvider: context.imageProvider,
-                                             isSelected: context.viewState.isMemberSelected(member)) {
+                                             isSelected: isMemberSelected(member)) {
                         context.send(viewAction: .toggleMember(member))
                     }
                     .disabled(member.role == .administrator)
@@ -37,7 +41,17 @@ struct RoomChangeRolesScreenSection: View {
             } header: {
                 Text(title)
                     .compoundListSectionHeader()
+            } footer: {
+                if isAdminsSectionForModeratorsMode {
+                    Text(L10n.screenRoomChangeRoleModeratorsAdminSectionFooter)
+                        .compoundListSectionFooter()
+                }
             }
         }
+    }
+    
+    private func isMemberSelected(_ member: RoomMemberDetails) -> Bool {
+        // We always show administrators as selected, even on the moderators screen.
+        member.role == .administrator || context.viewState.isMemberSelected(member)
     }
 }
