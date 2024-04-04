@@ -100,6 +100,8 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                                                  guard let self else { return }
                                                  actionsSubject.send(.done(mode: context.viewState.mode))
                                              }))
+        case .resetKey:
+            actionsSubject.send(.showResetKeyInfo)
         }
     }
 }

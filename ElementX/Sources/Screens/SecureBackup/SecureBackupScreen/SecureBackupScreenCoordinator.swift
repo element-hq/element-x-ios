@@ -51,18 +51,20 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
                 
                 recoveryKeyCoordinator.actions.sink { [weak self] action in
                     guard let self else { return }
-                    
-                    parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
-                    
                     switch action {
                     case .cancel:
                         break
                     case .recoverySetUp:
                         showSuccessIndicator(title: L10n.screenRecoveryKeySetupSuccess)
+                        parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
                     case .recoveryChanged:
                         showSuccessIndicator(title: L10n.screenRecoveryKeyChangeSuccess)
+                        parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
                     case .recoveryFixed:
                         showSuccessIndicator(title: L10n.screenRecoveryKeyConfirmSuccess)
+                        parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
+                    case .showResetKeyInfo:
+                        showResetRecoveryKeyScreen(navigationStackCoordinator: navigationStackCoordinator)
                     }
                 }
                 .store(in: &cancellables)
@@ -104,5 +106,17 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
                                                                  title: title,
                                                                  iconName: "checkmark",
                                                                  persistent: false))
+    }
+    
+    private func showResetRecoveryKeyScreen(navigationStackCoordinator: NavigationStackCoordinator) {
+        let coordinator = ResetRecoveryKeyScreenCoordinator()
+        coordinator.actionsPublisher.sink { action in
+            switch action {
+            case .cancel:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        navigationStackCoordinator.setSheetCoordinator(coordinator)
     }
 }

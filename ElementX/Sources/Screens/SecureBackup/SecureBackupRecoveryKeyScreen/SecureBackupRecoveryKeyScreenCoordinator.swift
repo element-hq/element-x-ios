@@ -28,6 +28,7 @@ enum SecureBackupRecoveryKeyScreenCoordinatorAction {
     case recoverySetUp
     case recoveryChanged
     case recoveryFixed
+    case showResetKeyInfo
 }
 
 final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
@@ -62,6 +63,8 @@ final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
                 case .fixRecovery:
                     self.actionsSubject.send(.recoveryFixed)
                 }
+            case .showResetKeyInfo:
+                self.actionsSubject.send(.showResetKeyInfo)
             }
         }
         .store(in: &cancellables)
