@@ -58,6 +58,7 @@ struct RoomChangeRolesScreen: View {
                 
                 RoomChangeRolesScreenSection(members: context.viewState.administrators,
                                              title: L10n.screenRoomChangeRoleSectionAdministrators,
+                                             isAdministratorsSection: true,
                                              context: context)
                 RoomChangeRolesScreenSection(members: context.viewState.moderators,
                                              title: L10n.screenRoomChangeRoleSectionModerators,

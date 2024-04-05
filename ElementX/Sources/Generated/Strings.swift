@@ -1287,6 +1287,8 @@ internal enum L10n {
   internal static func screenRoomChangeRoleInvitedMemberName(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_change_role_invited_member_name", String(describing: p1))
   }
+  /// Admins automatically have moderator privileges
+  internal static var screenRoomChangeRoleModeratorsAdminSectionFooter: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_admin_section_footer") }
   /// Edit Moderators
   internal static var screenRoomChangeRoleModeratorsTitle: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_title") }
   /// Admins
