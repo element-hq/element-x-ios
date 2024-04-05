@@ -84,15 +84,16 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
             .sink { [weak self] roomSummaries in
                 guard let self else { return }
                 
-                let invites: [InvitesScreenRoomDetails] = roomSummaries.compactMap { summary in
+                self.appSettings.seenInvites = Set(roomSummaries.compactMap(\.id))
+                
+                MXLog.info("Updated seen invites: \(self.appSettings.seenInvites)")
+                
+                self.state.invites = roomSummaries.compactMap { summary in
                     guard case .filled(let details) = summary else {
                         return nil
                     }
                     return InvitesScreenRoomDetails(roomDetails: details, isUnread: !self.previouslySeenInvites.contains(details.id))
                 }
-                
-                self.state.invites = invites
-                self.appSettings.seenInvites = Set(invites.map(\.roomDetails.id))
             }
             .store(in: &cancellables)
     }

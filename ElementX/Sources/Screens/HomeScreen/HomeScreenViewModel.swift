@@ -262,14 +262,22 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         inviteSummaryProvider.roomListPublisher
             .combineLatest(appSettings.$seenInvites)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] summaries, readInvites in
+            .sink { [weak self] summaries, seenInvites in
                 self?.state.hasPendingInvitations = !summaries.isEmpty
-                self?.state.hasUnreadPendingInvitations = summaries.contains(where: {
-                    guard let roomId = $0.id else {
+                
+                let invites = summaries.compactMap(\.id)
+                
+                let unreadInvites = summaries.filter { summary in
+                    guard let roomID = summary.id else {
                         return false
                     }
-                    return !readInvites.contains(roomId)
-                })
+                    
+                    return !seenInvites.contains(roomID)
+                }
+                
+                MXLog.info("Received invite list update - invites: \(invites), seenInvites: \(seenInvites), unreadInvites: \(unreadInvites)")
+                
+                self?.state.hasUnreadPendingInvitations = !unreadInvites.isEmpty
             }
             .store(in: &cancellables)
     }
