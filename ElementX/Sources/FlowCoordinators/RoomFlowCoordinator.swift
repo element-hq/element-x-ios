@@ -1010,11 +1010,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let stackCoordinator = NavigationStackCoordinator()
         let inviteParameters = InviteUsersScreenCoordinatorParameters(clientProxy: userSession.clientProxy,
+                                                                      selectedUsers: .init(selectedUsersSubject),
+                                                                      roomType: .room(roomProxy: roomProxy),
                                                                       mediaProvider: userSession.mediaProvider,
                                                                       userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
-                                                                      userIndicatorController: userIndicatorController,
-                                                                      selectedUsers: .init(selectedUsersSubject),
-                                                                      roomType: .room(roomProxy: roomProxy))
+                                                                      userIndicatorController: userIndicatorController)
         
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         stackCoordinator.setRootCoordinator(coordinator)
