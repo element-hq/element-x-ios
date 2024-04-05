@@ -34,16 +34,15 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     init(clientProxy: ClientProxyProtocol,
+         selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
+         roomType: InviteUsersScreenRoomType,
          mediaProvider: MediaProviderProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
-         roomType: InviteUsersScreenRoomType) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
+        self.roomType = roomType
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
-        
-        self.roomType = roomType
         
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), imageProvider: mediaProvider)
                 

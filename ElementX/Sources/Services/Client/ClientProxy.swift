@@ -16,8 +16,10 @@
 
 import Combine
 import CryptoKit
+import Foundation
+import OrderedCollections
+
 import MatrixRustSDK
-import SwiftUI
 
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
@@ -625,7 +627,7 @@ class ClientProxy: ClientProxyProtocol {
             return []
         }
         
-        var users = [UserProfileProxy]()
+        var users: OrderedSet<UserProfileProxy> = []
         
         for roomID in roomIdentifiers {
             guard let room = await roomForIdentifier(roomID),
@@ -639,12 +641,12 @@ class ClientProxy: ClientProxyProtocol {
                 
                 // Return early to avoid unnecessary work
                 if users.count >= maxResultsToReturn {
-                    return users
+                    return users.elements
                 }
             }
         }
         
-        return users
+        return users.elements
     }
     
     // MARK: - Private

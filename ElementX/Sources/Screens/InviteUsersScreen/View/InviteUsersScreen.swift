@@ -161,11 +161,11 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
         return InviteUsersScreenViewModel(clientProxy: ClientProxyMock(.init()),
+                                          selectedUsers: .init([]),
+                                          roomType: .draft,
                                           mediaProvider: MockMediaProvider(),
                                           userDiscoveryService: userDiscoveryService,
-                                          userIndicatorController: UserIndicatorControllerMock(),
-                                          selectedUsers: .init([]),
-                                          roomType: .draft)
+                                          userIndicatorController: UserIndicatorControllerMock())
     }()
     
     static var previews: some View {
