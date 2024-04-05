@@ -20,12 +20,9 @@ import SwiftUI
 struct RoomChangeRolesScreenSection: View {
     let members: [RoomMemberDetails]
     let title: String
+    var isAdministratorsSection = false
     
     @ObservedObject var context: RoomChangeRolesScreenViewModel.Context
-    
-    var isAdminsSectionForModeratorsMode: Bool {
-        context.viewState.mode == .moderator && title == L10n.screenRoomChangeRoleSectionAdministrators
-    }
     
     var body: some View {
         if !members.isEmpty {
@@ -42,7 +39,7 @@ struct RoomChangeRolesScreenSection: View {
                 Text(title)
                     .compoundListSectionHeader()
             } footer: {
-                if isAdminsSectionForModeratorsMode {
+                if isAdministratorsSection, context.viewState.mode == .moderator {
                     Text(L10n.screenRoomChangeRoleModeratorsAdminSectionFooter)
                         .compoundListSectionFooter()
                 }
