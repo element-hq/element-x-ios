@@ -2338,7 +2338,7 @@ class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
         }
     }
 }
-class QRCodeLoginControllerMock: QRCodeLoginControllerProtocol {
+class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
 
     //MARK: - requestAuthorizationIfNeeded
 

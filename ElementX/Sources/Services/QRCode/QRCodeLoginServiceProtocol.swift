@@ -15,6 +15,6 @@
 //
 
 // sourcery: AutoMockable
-protocol QRCodeLoginControllerProtocol {
+protocol QRCodeLoginServiceProtocol {
     func requestAuthorizationIfNeeded() async -> Bool
 }

@@ -90,7 +90,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 case .loginManually:
                     Task { await self.startAuthentication() }
                 case .loginWithQR:
-                    startQrCodeLogin()
+                    startQRCodeLogin()
                 case .reportProblem:
                     showReportProblemScreen()
                 }
@@ -102,8 +102,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         navigationRootCoordinator.setRootCoordinator(navigationStackCoordinator)
     }
     
-    private func startQrCodeLogin() {
-        let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(qrCodeLoginController: QRCodeLoginController()))
+    private func startQRCodeLogin() {
+        let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(qrCodeLoginService: QRCodeLoginService()))
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else {
                 return

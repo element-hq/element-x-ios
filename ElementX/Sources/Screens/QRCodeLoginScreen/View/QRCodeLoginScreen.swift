@@ -78,7 +78,7 @@ struct QRCodeLoginScreen: View {
 // MARK: - Previews
 
 struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = QRCodeLoginScreenViewModel(qrCodeLoginController: QRCodeLoginControllerMock())
+    static let viewModel = QRCodeLoginScreenViewModel(qrCodeLoginService: QRCodeLoginServiceMock())
     static var previews: some View {
         QRCodeLoginScreen(context: viewModel.context)
             .previewDisplayName("Initial")

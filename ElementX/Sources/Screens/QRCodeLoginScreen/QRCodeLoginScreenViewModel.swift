@@ -21,15 +21,15 @@ import SwiftUI
 typealias QRCodeLoginScreenViewModelType = StateStoreViewModel<QRCodeLoginScreenViewState, QRCodeLoginScreenViewAction>
 
 class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScreenViewModelProtocol {
-    private let qrCodeLoginController: QRCodeLoginControllerProtocol
+    private let qrCodeLoginService: QRCodeLoginServiceProtocol
     
     private let actionsSubject: PassthroughSubject<QRCodeLoginScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<QRCodeLoginScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(qrCodeLoginController: QRCodeLoginControllerProtocol) {
-        self.qrCodeLoginController = qrCodeLoginController
+    init(qrCodeLoginService: QRCodeLoginServiceProtocol) {
+        self.qrCodeLoginService = qrCodeLoginService
         super.init(initialViewState: QRCodeLoginScreenViewState())
     }
     
@@ -45,17 +45,6 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
     
     private func startScanIfPossible() async {
-        let status = AVCaptureDevice.authorizationStatus(for: .video)
-        
-        // Determine if the user previously authorized camera access.
-        var isAuthorized = status == .authorized
-        
-        // If the system hasn't determined the user's authorization status,
-        // explicitly prompt them for approval.
-        if status == .notDetermined {
-            isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
-        }
-        
-        state.state = isAuthorized ? .scanning : .error(.noCameraPermission)
+        state.state = await qrCodeLoginService.requestAuthorizationIfNeeded() ? .scanning : .error(.noCameraPermission)
     }
 }

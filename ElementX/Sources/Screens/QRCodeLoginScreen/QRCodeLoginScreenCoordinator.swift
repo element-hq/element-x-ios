@@ -20,7 +20,7 @@ import Combine
 import SwiftUI
 
 struct QRCodeLoginScreenCoordinatorParameters {
-    let qrCodeLoginController: QRCodeLoginControllerProtocol
+    let qrCodeLoginService: QRCodeLoginServiceProtocol
 }
 
 enum QRCodeLoginScreenCoordinatorAction {
@@ -38,7 +38,7 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: QRCodeLoginScreenCoordinatorParameters) {
-        viewModel = QRCodeLoginScreenViewModel(qrCodeLoginController: parameters.qrCodeLoginController)
+        viewModel = QRCodeLoginScreenViewModel(qrCodeLoginService: parameters.qrCodeLoginService)
     }
     
     func start() {

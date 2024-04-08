@@ -16,7 +16,7 @@
 
 import AVFoundation
 
-final class QRCodeLoginController: QRCodeLoginControllerProtocol {
+final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     func requestAuthorizationIfNeeded() async -> Bool {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
         
