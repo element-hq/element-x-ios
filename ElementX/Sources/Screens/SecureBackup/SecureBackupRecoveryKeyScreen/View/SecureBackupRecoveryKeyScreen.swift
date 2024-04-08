@@ -54,6 +54,26 @@ struct SecureBackupRecoveryKeyScreen: View {
             case .fixRecovery:
                 header
                 confirmRecoveryKeySection
+            case .unknown:
+                header
+            }
+        }
+    }
+    
+    private var header: some View {
+        VStack(spacing: 16) {
+            HeroImage(icon: \.keySolid)
+            
+            Text(context.viewState.title)
+                .foregroundColor(.compound.textPrimary)
+                .font(.compound.headingMDBold)
+                .multilineTextAlignment(.center)
+            
+            if let subtitle = context.viewState.subtitle {
+                Text(subtitle)
+                    .foregroundColor(.compound.textSecondary)
+                    .font(.compound.bodyMD)
+                    .multilineTextAlignment(.center)
             }
         }
     }
@@ -65,6 +85,8 @@ struct SecureBackupRecoveryKeyScreen: View {
             recoveryCreatedActionButtons
         case .fixRecovery:
             incompleteVerificationActionButtons
+        case .unknown:
+            EmptyView()
         }
     }
     
@@ -121,22 +143,6 @@ struct SecureBackupRecoveryKeyScreen: View {
         }
     }
     
-    private var header: some View {
-        VStack(spacing: 16) {
-            HeroImage(icon: \.keySolid)
-            
-            Text(context.viewState.title)
-                .foregroundColor(.compound.textPrimary)
-                .font(.compound.headingMDBold)
-                .multilineTextAlignment(.center)
-            
-            Text(context.viewState.subtitle)
-                .foregroundColor(.compound.textSecondary)
-                .font(.compound.bodyMD)
-                .multilineTextAlignment(.center)
-        }
-    }
-    
     private var generateRecoveryKeySection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonRecoveryKey)
@@ -172,16 +178,18 @@ struct SecureBackupRecoveryKeyScreen: View {
             .background(Color.compound.bgSubtleSecondaryLevel0)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             
-            Label {
-                Text(context.viewState.recoveryKeySubtitle)
-                    .foregroundColor(.compound.textSecondary)
-                    .font(.compound.bodySM)
-            } icon: {
-                if context.viewState.recoveryKey == nil {
-                    CompoundIcon(\.infoSolid, size: .small, relativeTo: .compound.bodySM)
+            if let subtitle = context.viewState.recoveryKeySubtitle {
+                Label {
+                    Text(subtitle)
+                        .foregroundColor(.compound.textSecondary)
+                        .font(.compound.bodySM)
+                } icon: {
+                    if context.viewState.recoveryKey == nil {
+                        CompoundIcon(\.infoSolid, size: .small, relativeTo: .compound.bodySM)
+                    }
                 }
+                .labelStyle(.custom(spacing: 8, alignment: .top))
             }
-            .labelStyle(.custom(spacing: 8, alignment: .top))
         }
     }
     
@@ -211,9 +219,11 @@ struct SecureBackupRecoveryKeyScreen: View {
                     context.send(viewAction: .confirmKey)
                 }
             
-            Text(context.viewState.recoveryKeySubtitle)
-                .foregroundColor(.compound.textSecondary)
-                .font(.compound.bodySM)
+            if let subtitle = context.viewState.recoveryKeySubtitle {
+                Text(subtitle)
+                    .foregroundColor(.compound.textSecondary)
+                    .font(.compound.bodySM)
+            }
         }
     }
 }
@@ -224,6 +234,7 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
     static let setupViewModel = viewModel(recoveryState: .enabled)
     static let notSetUpViewModel = viewModel(recoveryState: .disabled)
     static let incompleteViewModel = viewModel(recoveryState: .incomplete)
+    static let unknownViewModel = viewModel(recoveryState: .unknown)
     
     static var previews: some View {
         NavigationStack {
@@ -240,6 +251,11 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
             SecureBackupRecoveryKeyScreen(context: incompleteViewModel.context)
         }
         .previewDisplayName("Incomplete")
+        
+        NavigationStack {
+            SecureBackupRecoveryKeyScreen(context: unknownViewModel.context)
+        }
+        .previewDisplayName("Unknown")
     }
     
     static func viewModel(recoveryState: SecureBackupRecoveryState) -> SecureBackupRecoveryKeyScreenViewModelType {

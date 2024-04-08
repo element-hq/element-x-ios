@@ -179,6 +179,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             switch appRoute {
             case .room(let roomID):
                 Task { await self.handleRoomRoute(roomID: roomID, animated: animated) }
+            case .childRoom(let roomID):
+                if let roomFlowCoordinator {
+                    roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+                } else {
+                    Task { await self.handleRoomRoute(roomID: roomID, animated: animated) }
+                }
             case .roomDetails(let roomID):
                 if stateMachine.state.selectedRoomID == roomID {
                     roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
