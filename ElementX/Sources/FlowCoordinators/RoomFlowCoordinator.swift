@@ -109,13 +109,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         case .room(let roomID):
             guard roomID == roomProxy.id else { fatalError("Navigation route doesn't belong to this room flow.") }
             stateMachine.tryEvent(.presentRoom, userInfo: EventUserInfo(animated: animated))
+        case .childRoom(let roomID):
+            if let childRoomFlowCoordinator {
+                childRoomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.tryEvent(.presentChildRoom(roomID: roomID), userInfo: EventUserInfo(animated: animated))
+            }
         case .roomDetails(let roomID):
             guard roomID == roomProxy.id else { fatalError("Navigation route doesn't belong to this room flow.") }
             stateMachine.tryEvent(.presentRoomDetails, userInfo: EventUserInfo(animated: animated))
         case .roomList:
             stateMachine.tryEvent(.dismissRoom, userInfo: EventUserInfo(animated: animated))
         case .roomMemberDetails(let userID):
-            stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: EventUserInfo(animated: animated))
+            // Always assume this will be presented on the child, external permalinks to a user won't be as a room member.
+            if let childRoomFlowCoordinator {
+                childRoomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: EventUserInfo(animated: animated))
+            }
         case .genericCallLink, .oidcCallback, .settings, .chatBackupSettings:
             break
         }

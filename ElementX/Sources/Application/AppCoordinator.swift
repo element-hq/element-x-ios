@@ -176,7 +176,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         )
     }
     
-    func handleDeepLink(_ url: URL) -> Bool {
+    func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool {
         // Parse into an AppRoute to redirect these in a type safe way.
         
         if let route = appRouteURLParser.route(from: url) {
@@ -193,8 +193,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 } else {
                     navigationRootCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)))
                 }
-            case .roomMemberDetails, .room:
+            case .roomMemberDetails:
                 userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
+            case .room(let roomID):
+                if isExternalURL {
+                    userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
+                } else {
+                    userSessionFlowCoordinator?.handleAppRoute(.childRoom(roomID: roomID), animated: true)
+                }
             default:
                 break
             }

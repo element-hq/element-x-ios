@@ -40,14 +40,14 @@ struct Application: App {
             appCoordinator.toPresentable()
                 .statusBarHidden(shouldHideStatusBar)
                 .environment(\.openURL, OpenURLAction { url in
-                    if appCoordinator.handleDeepLink(url) {
+                    if appCoordinator.handleDeepLink(url, isExternalURL: false) {
                         return .handled
                     }
 
                     return .systemAction
                 })
                 .onOpenURL {
-                    if !appCoordinator.handleDeepLink($0) {
+                    if !appCoordinator.handleDeepLink($0, isExternalURL: true) {
                         openURLInSystemBrowser($0)
                     }
                 }
