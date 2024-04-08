@@ -19,25 +19,4 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class QRCodeLoginScreenViewModelTests: XCTestCase {
-    var viewModel: QRCodeLoginScreenViewModelProtocol!
-    
-    var context: QRCodeLoginScreenViewModelType.Context {
-        viewModel.context
-    }
-    
-    override func setUpWithError() throws {
-        viewModel = QRCodeLoginScreenViewModel()
-    }
-
-    func testInitialState() {
-        XCTAssertFalse(context.viewState.placeholder.isEmpty)
-        XCTAssertFalse(context.composerText.isEmpty)
-    }
-
-    func testCounter() async throws {
-        context.composerText = "123"
-        context.send(viewAction: .textChanged)
-        XCTAssertEqual(context.composerText, "123")
-    }
-}
+class QRCodeLoginScreenViewModelTests: XCTestCase { }
