@@ -374,6 +374,13 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Ваша резервна копія чату наразі не синхронізована.";
 "screen_chat_backup_recovery_action_setup" = "Налаштувати відновлення";
 "screen_chat_backup_recovery_action_setup_description" = "Отримайте доступ до своїх зашифрованих повідомлень, якщо ви втратите всі свої пристрої або вийшли з %1$@ системи.";
+"screen_create_new_recovery_key_list_item_1" = "Open Element in a desktop device";
+"screen_create_new_recovery_key_list_item_2" = "Sign into your account again";
+"screen_create_new_recovery_key_list_item_3" = "When asked to verify your device, select %1$@";
+"screen_create_new_recovery_key_list_item_3_reset_all" = "“Reset all”";
+"screen_create_new_recovery_key_list_item_4" = "Follow the instructions to create a new recovery key";
+"screen_create_new_recovery_key_list_item_5" = "Save your new recovery key in a password manager or encrypted note";
+"screen_create_new_recovery_key_title" = "Reset the encryption for your account using another device";
 "screen_create_poll_add_option_btn" = "Додати варіант";
 "screen_create_poll_anonymous_desc" = "Показувати результати тільки після закінчення опитування";
 "screen_create_poll_anonymous_headline" = "Приховати голоси";
@@ -398,6 +405,7 @@
 "screen_edit_profile_error_title" = "Неможливо оновити профіль";
 "screen_edit_profile_title" = "Редагувати профіль";
 "screen_edit_profile_updating_details" = "Оновлення профілю...";
+"screen_identity_confirmation_create_new_recovery_key" = "Create a new recovery key";
 "screen_identity_confirmation_subtitle" = "Перевірте цей пристрій, щоб налаштувати безпечний обмін повідомленнями.";
 "screen_identity_confirmation_title" = "Підтвердіть, що це ви";
 "screen_identity_confirmed_subtitle" = "Тепер ви можете безпечно читати або надсилати повідомлення, і кожен, з ким ви спілкуєтесь, також може довіряти цьому пристрою.";
@@ -473,10 +481,12 @@
 "screen_recovery_key_change_generate_key_description" = "Переконайтеся, що ви можете зберігати ключ відновлення в безпечному місці";
 "screen_recovery_key_change_success" = "Ключ відновлення змінено";
 "screen_recovery_key_change_title" = "Змінити ключ відновлення?";
+"screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
 "screen_recovery_key_confirm_description" = "Введіть ключ відновлення, щоб підтвердити доступ до резервної копії чату.";
 "screen_recovery_key_confirm_error_content" = "Будь ласка, спробуйте ще раз, щоб підтвердити доступ до резервної копії чату.";
 "screen_recovery_key_confirm_error_title" = "Неправильний ключ відновлення";
 "screen_recovery_key_confirm_key_description" = "Введіть код із 48 символів.";
+"screen_recovery_key_confirm_key_label" = "Recovery key or passcode";
 "screen_recovery_key_confirm_key_placeholder" = "Ввести...";
 "screen_recovery_key_confirm_success" = "Ключ відновлення підтверджено";
 "screen_recovery_key_confirm_title" = "Підтвердіть ключ відновлення";
@@ -520,6 +530,7 @@
 "screen_room_change_role_confirm_demote_self_description" = "Ви не зможете скасувати цю зміну, оскільки ви знижуєте себе, якщо ви останній привілейований користувач у кімнаті, відновити привілеї буде неможливо.";
 "screen_room_change_role_confirm_demote_self_title" = "Понизити себе?";
 "screen_room_change_role_invited_member_name" = "%1$@ (Pending)";
+"screen_room_change_role_moderators_admin_section_footer" = "Admins automatically have moderator privileges";
 "screen_room_change_role_moderators_title" = "Керувати модераторами";
 "screen_room_change_role_unsaved_changes_description" = "У вас є не збережені зміни.";
 "screen_room_change_role_unsaved_changes_title" = "Зберегти зміни?";
@@ -538,6 +549,7 @@
 "screen_room_details_notification_mode_default" = "За замовчуванням";
 "screen_room_details_notification_title" = "Сповіщення";
 "screen_room_details_share_room_title" = "Поділитися кімнатою";
+"screen_room_details_title" = "Room info";
 "screen_room_details_updating_room" = "Оновлення кімнати...";
 "screen_room_directory_search_loading_error" = "Не вдалося завантажити";
 "screen_room_directory_search_title" = "Каталог кімнат";
@@ -549,6 +561,7 @@
 "screen_room_member_details_block_alert_action" = "Заблокувати";
 "screen_room_member_details_block_alert_description" = "Заблоковані користувачі не зможуть надсилати Вам повідомлення, і всі їхні повідомлення будуть приховані. Ви можете розблокувати їх у будь-який час.";
 "screen_room_member_details_block_user" = "Заблокувати користувача";
+"screen_room_member_details_title" = "Profile";
 "screen_room_member_details_unblock_alert_action" = "Розблокувати";
 "screen_room_member_details_unblock_alert_description" = "Ви знову зможете бачити всі повідомлення від них.";
 "screen_room_member_details_unblock_user" = "Розблокувати користувача";
@@ -623,6 +636,8 @@
 "screen_roomlist_filter_favourites" = "Улюблені";
 "screen_roomlist_filter_favourites_empty_state_subtitle" = "Ви можете додати чат до улюблених у налаштуваннях чату.\nНаразі ви можете зняти фільтри, щоб побачити інші ваші чати";
 "screen_roomlist_filter_favourites_empty_state_title" = "Ви ще не маєте улюблених чатів";
+"screen_roomlist_filter_invites" = "Invites";
+"screen_roomlist_filter_invites_empty_state_title" = "You don't have any pending invites.";
 "screen_roomlist_filter_low_priority" = "Низький пріоритет";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Ви можете зняти фільтри, щоб побачити інші ваші чати";
 "screen_roomlist_filter_mixed_empty_state_title" = "Ви не маєте чатів для цієї категорії";

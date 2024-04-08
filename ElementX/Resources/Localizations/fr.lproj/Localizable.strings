@@ -374,6 +374,13 @@
 "screen_chat_backup_recovery_action_confirm_description" = "La sauvegarde des discussions est désynchronisée.";
 "screen_chat_backup_recovery_action_setup" = "Configurer la récupération";
 "screen_chat_backup_recovery_action_setup_description" = "Accédez à vos messages chiffrés si vous perdez tous vos appareils ou que vous êtes déconnectés de %1$@ partout.";
+"screen_create_new_recovery_key_list_item_1" = "Open Element in a desktop device";
+"screen_create_new_recovery_key_list_item_2" = "Sign into your account again";
+"screen_create_new_recovery_key_list_item_3" = "When asked to verify your device, select %1$@";
+"screen_create_new_recovery_key_list_item_3_reset_all" = "“Reset all”";
+"screen_create_new_recovery_key_list_item_4" = "Follow the instructions to create a new recovery key";
+"screen_create_new_recovery_key_list_item_5" = "Save your new recovery key in a password manager or encrypted note";
+"screen_create_new_recovery_key_title" = "Reset the encryption for your account using another device";
 "screen_create_poll_add_option_btn" = "Ajouter une option";
 "screen_create_poll_anonymous_desc" = "Afficher les résultats uniquement après la fin du sondage";
 "screen_create_poll_anonymous_headline" = "Masquer les votes";
@@ -398,6 +405,7 @@
 "screen_edit_profile_error_title" = "Impossible de mettre à jour le profil";
 "screen_edit_profile_title" = "Modifier le profil";
 "screen_edit_profile_updating_details" = "Mise à jour du profil...";
+"screen_identity_confirmation_create_new_recovery_key" = "Create a new recovery key";
 "screen_identity_confirmation_subtitle" = "Vérifier cette session pour configurer votre messagerie sécurisée.";
 "screen_identity_confirmation_title" = "Confirmez votre identité";
 "screen_identity_confirmed_subtitle" = "Vous pouvez désormais lire ou envoyer des messages en toute sécurité, et toute personne avec qui vous discutez peut également faire confiance à cette session.";
@@ -473,10 +481,12 @@
 "screen_recovery_key_change_generate_key_description" = "Assurez-vous de conserver la clé dans un endroit sûr.";
 "screen_recovery_key_change_success" = "Clé de récupération modifée";
 "screen_recovery_key_change_title" = "Changer la clé de récupération?";
+"screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
 "screen_recovery_key_confirm_description" = "Saisissez votre clé de récupération pour accéder à l’historique de vos discussions.";
 "screen_recovery_key_confirm_error_content" = "Veuillez réessayer pour accéder à votre historique chiffré.";
 "screen_recovery_key_confirm_error_title" = "Clé de récupération incorrecte";
 "screen_recovery_key_confirm_key_description" = "Saisissez la clé à 48 caractères.";
+"screen_recovery_key_confirm_key_label" = "Recovery key or passcode";
 "screen_recovery_key_confirm_key_placeholder" = "Saisissez la clé ici…";
 "screen_recovery_key_confirm_success" = "Clé de récupération confirmée";
 "screen_recovery_key_confirm_title" = "Confirmez votre clé de récupération";
@@ -520,6 +530,7 @@
 "screen_room_change_role_confirm_demote_self_description" = "Vous ne pourrez pas annuler ce changement car vous vous rétrogradez, si vous êtes le dernier utilisateur privilégié du salon il sera impossible de retrouver les privilèges.";
 "screen_room_change_role_confirm_demote_self_title" = "Vous rétrograder ?";
 "screen_room_change_role_invited_member_name" = "%1$@ (En attente)";
+"screen_room_change_role_moderators_admin_section_footer" = "Admins automatically have moderator privileges";
 "screen_room_change_role_moderators_title" = "Modifier les modérateurs";
 "screen_room_change_role_unsaved_changes_description" = "Vous avez des modifications non-enregistrées.";
 "screen_room_change_role_unsaved_changes_title" = "Enregistrer les modifications?";
@@ -538,6 +549,7 @@
 "screen_room_details_notification_mode_default" = "Défaut";
 "screen_room_details_notification_title" = "Notifications";
 "screen_room_details_share_room_title" = "Partager le salon";
+"screen_room_details_title" = "Room info";
 "screen_room_details_updating_room" = "Mise à jour du salon…";
 "screen_room_directory_search_loading_error" = "Échec du chargement";
 "screen_room_directory_search_title" = "Annuaire des salons";
@@ -549,6 +561,7 @@
 "screen_room_member_details_block_alert_action" = "Bloquer";
 "screen_room_member_details_block_alert_description" = "Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment.";
 "screen_room_member_details_block_user" = "Bloquer l’utilisateur";
+"screen_room_member_details_title" = "Profile";
 "screen_room_member_details_unblock_alert_action" = "Débloquer";
 "screen_room_member_details_unblock_alert_description" = "Vous pourrez à nouveau voir tous ses messages.";
 "screen_room_member_details_unblock_user" = "Débloquer l’utilisateur";
@@ -623,6 +636,8 @@
 "screen_roomlist_filter_favourites" = "Favoris";
 "screen_roomlist_filter_favourites_empty_state_subtitle" = "Vous pouvez ajouter une discussion aux favoris depuis les paramètres de la discussion.\nEn attendant, vous pouvez désélectionner des filtres pour voir vos autres salons.";
 "screen_roomlist_filter_favourites_empty_state_title" = "Vous n’avez pas encore de discussions favorites";
+"screen_roomlist_filter_invites" = "Invites";
+"screen_roomlist_filter_invites_empty_state_title" = "You don't have any pending invites.";
 "screen_roomlist_filter_low_priority" = "Priorité basse";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Veuillez désélectionner des filtres pour voir vos discussions";
 "screen_roomlist_filter_mixed_empty_state_title" = "Vous n’avez pas de discussions pour cette sélection";

@@ -374,6 +374,13 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Резервното копие на чатовете ви в момента не е синхронизирано.";
 "screen_chat_backup_recovery_action_setup" = "Set up recovery";
 "screen_chat_backup_recovery_action_setup_description" = "Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.";
+"screen_create_new_recovery_key_list_item_1" = "Open Element in a desktop device";
+"screen_create_new_recovery_key_list_item_2" = "Sign into your account again";
+"screen_create_new_recovery_key_list_item_3" = "When asked to verify your device, select %1$@";
+"screen_create_new_recovery_key_list_item_3_reset_all" = "“Reset all”";
+"screen_create_new_recovery_key_list_item_4" = "Follow the instructions to create a new recovery key";
+"screen_create_new_recovery_key_list_item_5" = "Save your new recovery key in a password manager or encrypted note";
+"screen_create_new_recovery_key_title" = "Reset the encryption for your account using another device";
 "screen_create_poll_add_option_btn" = "Добавяне на опция";
 "screen_create_poll_anonymous_desc" = "Показване на резултатите само след приключване на анкетата";
 "screen_create_poll_anonymous_headline" = "Скриване на гласовете";
@@ -398,6 +405,7 @@
 "screen_edit_profile_error_title" = "Не може да се обнови профила";
 "screen_edit_profile_title" = "Редактиране на профила";
 "screen_edit_profile_updating_details" = "Обновяване на профила…";
+"screen_identity_confirmation_create_new_recovery_key" = "Create a new recovery key";
 "screen_identity_confirmation_subtitle" = "Verify this device to set up secure messaging.";
 "screen_identity_confirmation_title" = "Confirm that it's you";
 "screen_identity_confirmed_subtitle" = "Now you can read or send messages securely, and anyone you chat with can also trust this device.";
@@ -473,10 +481,12 @@
 "screen_recovery_key_change_generate_key_description" = "Make sure you can store your recovery key somewhere safe";
 "screen_recovery_key_change_success" = "Recovery key changed";
 "screen_recovery_key_change_title" = "Промяна на ключа за възстановяване?";
+"screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
 "screen_recovery_key_confirm_description" = "Въведете ключа си за възстановяване, за да потвърдите достъпа до резервното копие на чатовете си.";
 "screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your chat backup.";
 "screen_recovery_key_confirm_error_title" = "Неправилен ключ за възстановяване";
 "screen_recovery_key_confirm_key_description" = "Въведете 48-символния код.";
+"screen_recovery_key_confirm_key_label" = "Recovery key or passcode";
 "screen_recovery_key_confirm_key_placeholder" = "Въведете...";
 "screen_recovery_key_confirm_success" = "Ключът за възстановяване е потвърден";
 "screen_recovery_key_confirm_title" = "Потвърдете ключа си за възстановяване";
@@ -520,6 +530,7 @@
 "screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
 "screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_change_role_invited_member_name" = "%1$@ (Pending)";
+"screen_room_change_role_moderators_admin_section_footer" = "Admins automatically have moderator privileges";
 "screen_room_change_role_moderators_title" = "Edit Moderators";
 "screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
 "screen_room_change_role_unsaved_changes_title" = "Save changes?";
@@ -538,6 +549,7 @@
 "screen_room_details_notification_mode_default" = "По подразбиране";
 "screen_room_details_notification_title" = "Известия";
 "screen_room_details_share_room_title" = "Споделяне на стаята";
+"screen_room_details_title" = "Room info";
 "screen_room_details_updating_room" = "Обновяване на стаята…";
 "screen_room_directory_search_loading_error" = "Failed loading";
 "screen_room_directory_search_title" = "Room directory";
@@ -549,6 +561,7 @@
 "screen_room_member_details_block_alert_action" = "Блокиране";
 "screen_room_member_details_block_alert_description" = "Blocked users won't be able to send you messages and all their messages will be hidden. You can unblock them anytime.";
 "screen_room_member_details_block_user" = "Блокиране на потребителя";
+"screen_room_member_details_title" = "Profile";
 "screen_room_member_details_unblock_alert_action" = "Отблокиране";
 "screen_room_member_details_unblock_alert_description" = "You'll be able to see all messages from them again.";
 "screen_room_member_details_unblock_user" = "Отблокиране на потребителя";
@@ -623,6 +636,8 @@
 "screen_roomlist_filter_favourites" = "Favourites";
 "screen_roomlist_filter_favourites_empty_state_subtitle" = "You can add a chat to your favourites in the chat settings.\nFor now, you can deselect filters in order to see your other chats";
 "screen_roomlist_filter_favourites_empty_state_title" = "You don’t have favourite chats yet";
+"screen_roomlist_filter_invites" = "Invites";
+"screen_roomlist_filter_invites_empty_state_title" = "You don't have any pending invites.";
 "screen_roomlist_filter_low_priority" = "Нисък приоритет";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "You can deselect filters in order to see your other chats";
 "screen_roomlist_filter_mixed_empty_state_title" = "You don’t have chats for this selection";

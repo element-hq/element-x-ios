@@ -156,7 +156,7 @@
 "common_privacy_policy" = "Datenschutz­erklärung";
 "common_reaction" = "Reaktion";
 "common_reactions" = "Reaktionen";
-"common_recovery_key" = "Wiederherstellungsschlüssel";
+"common_recovery_key" = "Wiederherstellungsschlüssel oder Passcode";
 "common_refreshing" = "Wird erneuert...";
 "common_replying_to" = "%1$@ antworten";
 "common_report_a_bug" = "Einen Fehler melden";
@@ -374,6 +374,13 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Dein Chat-Backup ist derzeit nicht synchronisiert.";
 "screen_chat_backup_recovery_action_setup" = "Wiederherstellung einrichten";
 "screen_chat_backup_recovery_action_setup_description" = "Erhalte Zugriff auf deine verschlüsselten Nachrichten, wenn du alle deine Geräte verlierst oder von %1$@ überall abgemeldet bist.";
+"screen_create_new_recovery_key_list_item_1" = "Öffne <b>Element</b> auf einem <b>Desktop-Gerät</b>";
+"screen_create_new_recovery_key_list_item_2" = "Melde dich erneut bei deinem Konto an";
+"screen_create_new_recovery_key_list_item_3" = "Wenn du aufgefordert wirst dein Gerät zu verifizieren, wähle \"%1$@\".";
+"screen_create_new_recovery_key_list_item_3_reset_all" = "Alles zurücksetzen";
+"screen_create_new_recovery_key_list_item_4" = "Folge den Anweisungen, um einen neuen Wiederherstellungsschlüssel zu erstellen";
+"screen_create_new_recovery_key_list_item_5" = "Speichere deinen neuen <b>Wiederherstellungsschlüssel</b> in einem Passwortmanager oder einer verschlüsselten Notiz";
+"screen_create_new_recovery_key_title" = "Erstelle einen neuen <b>Wiederherstellungsschlüssel</b> mit einem anderen Gerät";
 "screen_create_poll_add_option_btn" = "Option hinzufügen";
 "screen_create_poll_anonymous_desc" = "Ergebnisse erst nach Ende der Umfrage anzeigen";
 "screen_create_poll_anonymous_headline" = "Anonyme Umfrage";
@@ -398,6 +405,7 @@
 "screen_edit_profile_error_title" = "Profil kann nicht aktualisiert werden";
 "screen_edit_profile_title" = "Profil bearbeiten";
 "screen_edit_profile_updating_details" = "Profil wird aktualisiert...";
+"screen_identity_confirmation_create_new_recovery_key" = "Erstelle einen neuen Wiederherstellungsschlüssel";
 "screen_identity_confirmation_subtitle" = "Verifiziere dieses Gerät, um sicheres Messaging einzurichten.";
 "screen_identity_confirmation_title" = "Bestätige, dass du es bist";
 "screen_identity_confirmed_subtitle" = "Du kannst nun verschlüsselte Nachrichten lesen oder versenden.";
@@ -473,13 +481,15 @@
 "screen_recovery_key_change_generate_key_description" = "Stelle sicher, dass du deinen Wiederherstellungsschlüssel an einem sicheren Ort aufbewahren kannst";
 "screen_recovery_key_change_success" = "Wiederherstellungsschlüssel geändert";
 "screen_recovery_key_change_title" = "Wiederherstellungsschlüssel ändern?";
-"screen_recovery_key_confirm_description" = "Gib deinen Wiederherstellungsschlüssel ein, um den Zugriff auf dein Chat-Backup zu bestätigen.";
+"screen_recovery_key_confirm_create_new_recovery_key" = "Neuen <b>Wiederherstellungsschlüssel</b> erstellen";
+"screen_recovery_key_confirm_description" = "Sorge dafür, dass niemand diesen Bildschirm sehen kann!";
 "screen_recovery_key_confirm_error_content" = "Bitte versuche es noch einmal, um den Zugriff auf dein Chat-Backup zu bestätigen.";
 "screen_recovery_key_confirm_error_title" = "Falscher Wiederherstellungsschlüssel";
-"screen_recovery_key_confirm_key_description" = "Gib den 48-stelligen Code ein.";
+"screen_recovery_key_confirm_key_description" = "Dies funktioniert auch mit einer Wiederherstellungspassphrase oder einer geheime Passphrase/einem geheimen Schlüssel.";
+"screen_recovery_key_confirm_key_label" = "Recovery key or passcode";
 "screen_recovery_key_confirm_key_placeholder" = "Eingeben...";
 "screen_recovery_key_confirm_success" = "Wiederherstellungsschlüssel bestätigt";
-"screen_recovery_key_confirm_title" = "Wiederherstellungsschlüssel bestätigen.";
+"screen_recovery_key_confirm_title" = "Wiederherstellungsschlüssel oder Passcode bestätigen";
 "screen_recovery_key_copied_to_clipboard" = "Wiederherstellungsschlüssel kopiert";
 "screen_recovery_key_generating_key" = "Generieren…";
 "screen_recovery_key_save_action" = "Wiederherstellungsschlüssel speichern";
@@ -520,6 +530,7 @@
 "screen_room_change_role_confirm_demote_self_description" = "Du stufst dich selbst herab. Diese Änderung kann nicht rückgängig gemacht werden. Wenn du der letzte Benutzer mit dieser Rolle bist, ist es nicht möglich, diese Rolle wiederzuerlangen.";
 "screen_room_change_role_confirm_demote_self_title" = "Möchtest Du Dich selbst herabstufen?";
 "screen_room_change_role_invited_member_name" = "%1$@ (Ausstehend)";
+"screen_room_change_role_moderators_admin_section_footer" = "Administratoren haben automatisch Moderatorenrechte";
 "screen_room_change_role_moderators_title" = "Moderatoren bearbeiten";
 "screen_room_change_role_unsaved_changes_description" = "Du hast nicht gespeicherte Änderungen.";
 "screen_room_change_role_unsaved_changes_title" = "Änderungen speichern?";
@@ -538,6 +549,7 @@
 "screen_room_details_notification_mode_default" = "Standard";
 "screen_room_details_notification_title" = "Benachrichtigungen";
 "screen_room_details_share_room_title" = "Raum teilen";
+"screen_room_details_title" = "Raum Informationen";
 "screen_room_details_updating_room" = "Raum wird aktualisiert…";
 "screen_room_directory_search_loading_error" = "Fehler beim Laden";
 "screen_room_directory_search_title" = "Raumverzeichnis";
@@ -549,6 +561,7 @@
 "screen_room_member_details_block_alert_action" = "Blockieren";
 "screen_room_member_details_block_alert_description" = "Blockierte Benutzer können Dir keine Nachrichten senden und alle ihre alten Nachrichten werden ausgeblendet. Die Blockierung kann jederzeit aufgehoben werden.";
 "screen_room_member_details_block_user" = "Benutzer blockieren";
+"screen_room_member_details_title" = "Profil";
 "screen_room_member_details_unblock_alert_action" = "Blockierung aufheben";
 "screen_room_member_details_unblock_alert_description" = "Der Nutzer kann dir wieder Nachrichten senden & alle Nachrichten des Nutzers werden wieder angezeigt.";
 "screen_room_member_details_unblock_user" = "Blockierung aufheben";
@@ -623,6 +636,8 @@
 "screen_roomlist_filter_favourites" = "Favoriten";
 "screen_roomlist_filter_favourites_empty_state_subtitle" = "In den Chat-Einstellungen kannst du einen Chat als Favorit hinzufügen.\nUm deine anderen Chats zu sehen wähle diesen Filter ab.";
 "screen_roomlist_filter_favourites_empty_state_title" = "Du hast noch keine Chats als Favorit markiert.";
+"screen_roomlist_filter_invites" = "Invites";
+"screen_roomlist_filter_invites_empty_state_title" = "You don't have any pending invites.";
 "screen_roomlist_filter_low_priority" = "Niedrige Priorität";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Wähle Filter ab, um Deine Chats zu sehen.";
 "screen_roomlist_filter_mixed_empty_state_title" = "Du hast keine Chats für diese Auswahl";
