@@ -147,7 +147,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch (fromState, event) {
             case (_, .presentRoom):
                 return .room
-            case (.room, .dismissRoom):
+            case (_, .dismissRoom):
                 return .complete
                 
             case (.initial, .presentRoomDetails):
@@ -156,8 +156,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .roomDetails(isRoot: false)
             case (.roomDetails, .dismissRoomDetails):
                 return .room
-            case (.roomDetails, .dismissRoom):
-                return .complete
                 
             case (.roomDetails, .presentRoomDetailsEditScreen):
                 return .roomDetailsEditScreen
@@ -265,7 +263,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (_, .presentRoom, .room):
                 Task { await self.presentRoom(animated: animated) }
-            case (.room, .dismissRoom, .complete):
+            case (_, .dismissRoom, .complete):
                 dismissFlow(animated: animated)
             
             case (.initial, .presentRoomDetails, .roomDetails(let isRoot)),
@@ -274,8 +272,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 Task { await self.presentRoomDetails(isRoot: isRoot, animated: animated) }
             case (.roomDetails, .dismissRoomDetails, .room):
                 break
-            case (.roomDetails, .dismissRoom, .complete):
-                dismissFlow(animated: animated)
                 
             case (.roomDetails, .presentRoomDetailsEditScreen, .roomDetailsEditScreen):
                 presentRoomDetailsEditScreen()

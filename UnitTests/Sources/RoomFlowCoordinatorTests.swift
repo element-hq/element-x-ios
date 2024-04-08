@@ -72,6 +72,30 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
     }
     
+    func testChildRoomFlow() async throws {
+        await setupViewModel()
+        
+        try await process(route: .room(roomID: "1"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        
+        try await process(route: .childRoom(roomID: "2"))
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
+        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        
+        try await process(route: .childRoom(roomID: "3"))
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2)
+        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        XCTAssert(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
+        
+        try await process(route: .roomList, expectedAction: .finished)
+        XCTAssertNil(navigationStackCoordinator.rootCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+    }
+    
+    /// Tests the child flow teardown in isolation of it's parent.
     func testChildFlowTearDown() async throws {
         await setupViewModel(asChildFlow: true)
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
