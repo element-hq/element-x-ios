@@ -34,6 +34,7 @@ class ResetRecoveryKeyScreenViewModel: ResetRecoveryKeyScreenViewModelType, Rese
     override func process(viewAction: ResetRecoveryKeyScreenViewAction) {
         switch viewAction {
         case .cancel:
+            // We might also need to display first an alert and do a logOut API call in some cases
             actionsSubject.send(.cancel)
         }
     }

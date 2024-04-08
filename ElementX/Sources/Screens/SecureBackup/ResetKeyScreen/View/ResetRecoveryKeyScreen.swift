@@ -38,7 +38,7 @@ struct ResetRecoveryKeyScreen: View {
     private var mainContent: some View {
         VStack(spacing: 40) {
             header
-            list
+            SFNumberedListView(items: context.viewState.listItems)
         }
     }
     
@@ -50,65 +50,6 @@ struct ResetRecoveryKeyScreen: View {
                 .foregroundColor(.compound.textPrimary)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
-        }
-    }
-    
-    private var list: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            Label {
-                Text(L10n.screenCreateNewRecoveryKeyListItem1)
-            } icon: {
-                Image(systemSymbol: ._1Circle)
-                    .imageScale(.large)
-                    .fontWeight(.light)
-                    .foregroundColor(.compound.textPlaceholder)
-            }
-            .foregroundColor(.compound.textPrimary)
-            .font(.compound.bodyMD)
-            
-            Label {
-                Text(L10n.screenCreateNewRecoveryKeyListItem2)
-            } icon: {
-                Image(systemSymbol: ._2Circle)
-                    .imageScale(.large)
-                    .fontWeight(.light)
-                    .foregroundColor(.compound.textPlaceholder)
-            }
-            .foregroundColor(.compound.textPrimary)
-            .font(.compound.bodyMD)
-            
-            Label {
-                Text(context.viewState.listItem3AttributedText)
-            } icon: {
-                Image(systemSymbol: ._3Circle)
-                    .imageScale(.large)
-                    .fontWeight(.light)
-                    .foregroundColor(.compound.textPlaceholder)
-            }
-            .foregroundColor(.compound.textPrimary)
-            .font(.compound.bodyMD)
-            
-            Label {
-                Text(L10n.screenCreateNewRecoveryKeyListItem4)
-            } icon: {
-                Image(systemSymbol: ._4Circle)
-                    .imageScale(.large)
-                    .fontWeight(.light)
-                    .foregroundColor(.compound.textPlaceholder)
-            }
-            .foregroundColor(.compound.textPrimary)
-            .font(.compound.bodyMD)
-            
-            Label {
-                Text(L10n.screenCreateNewRecoveryKeyListItem5)
-            } icon: {
-                Image(systemSymbol: ._5Circle)
-                    .imageScale(.large)
-                    .fontWeight(.light)
-                    .foregroundColor(.compound.textPlaceholder)
-            }
-            .foregroundColor(.compound.textPrimary)
-            .font(.compound.bodyMD)
         }
     }
     

@@ -1167,6 +1167,24 @@ internal enum L10n {
   internal static var screenPollsHistoryFilterPast: String { return L10n.tr("Localizable", "screen_polls_history_filter_past") }
   /// Polls
   internal static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
+  /// Open Element on a desktop device
+  internal static var screenQrCodeLoginInitialStateItem1: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_1") }
+  /// Click on your avatar
+  internal static var screenQrCodeLoginInitialStateItem2: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_2") }
+  /// Select %1$@
+  internal static func screenQrCodeLoginInitialStateItem3(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_3", String(describing: p1))
+  }
+  /// “Link new device”
+  internal static var screenQrCodeLoginInitialStateItem3Action: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_3_action") }
+  /// Select %1$@
+  internal static func screenQrCodeLoginInitialStateItem4(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_4", String(describing: p1))
+  }
+  /// “Show QR code”
+  internal static var screenQrCodeLoginInitialStateItem4Action: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_4_action") }
+  /// Open Element on another device to get the QR code
+  internal static var screenQrCodeLoginInitialStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_title") }
   /// Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.
   internal static var screenRecoveryKeyChangeDescription: String { return L10n.tr("Localizable", "screen_recovery_key_change_description") }
   /// Generate a new recovery key
@@ -1185,7 +1203,7 @@ internal enum L10n {
   internal static var screenRecoveryKeyConfirmErrorContent: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_content") }
   /// Incorrect recovery key
   internal static var screenRecoveryKeyConfirmErrorTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_title") }
-  /// If you have a recovery passphrase or secret passphrase/key, this will work too.
+  /// If you have a security key or security phrase, this will work too.
   internal static var screenRecoveryKeyConfirmKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_description") }
   /// Recovery key or passcode
   internal static var screenRecoveryKeyConfirmKeyLabel: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_label") }

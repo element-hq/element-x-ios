@@ -96,7 +96,7 @@ struct AuthenticationStartScreen: View {
     var buttons: some View {
         VStack(spacing: 16) {
             if context.viewState.isQRCodeLoginEnabled {
-                Button { context.send(viewAction: .loginManually) } label: {
+                Button { context.send(viewAction: .loginWithQR) } label: {
                     Label(L10n.screenOnboardingSignInWithQrCode, icon: \.qrCode)
                 }
                 .buttonStyle(.compound(.primary))

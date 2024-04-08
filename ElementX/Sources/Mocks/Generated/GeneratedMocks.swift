@@ -2338,6 +2338,26 @@ class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
         }
     }
 }
+class QRCodeLoginControllerMock: QRCodeLoginControllerProtocol {
+
+    //MARK: - requestAuthorizationIfNeeded
+
+    var requestAuthorizationIfNeededCallsCount = 0
+    var requestAuthorizationIfNeededCalled: Bool {
+        return requestAuthorizationIfNeededCallsCount > 0
+    }
+    var requestAuthorizationIfNeededReturnValue: Bool!
+    var requestAuthorizationIfNeededClosure: (() async -> Bool)?
+
+    func requestAuthorizationIfNeeded() async -> Bool {
+        requestAuthorizationIfNeededCallsCount += 1
+        if let requestAuthorizationIfNeededClosure = requestAuthorizationIfNeededClosure {
+            return await requestAuthorizationIfNeededClosure()
+        } else {
+            return requestAuthorizationIfNeededReturnValue
+        }
+    }
+}
 class RoomDirectorySearchProxyMock: RoomDirectorySearchProxyProtocol {
     var resultsPublisher: CurrentValuePublisher<[RoomDirectorySearchResult], Never> {
         get { return underlyingResultsPublisher }
