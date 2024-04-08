@@ -51,6 +51,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var elementCallBaseURL: URL { get set }
     var publicSearchEnabled: Bool { get set }
     var qrCodeLoginEnabled: Bool { get set }
+    var roomListInvitesEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

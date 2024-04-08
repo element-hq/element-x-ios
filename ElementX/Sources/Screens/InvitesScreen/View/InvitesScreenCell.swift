@@ -181,6 +181,8 @@ private extension InvitesScreenRoomDetails {
         inviter.userID = "@jack:somewhere.com"
         
         let dmRoom = RoomSummaryDetails(id: "@someone:somewhere.com",
+                                        isInvite: false,
+                                        inviter: inviter,
                                         name: "Some Guy",
                                         isDirect: true,
                                         avatarURL: nil,
@@ -191,7 +193,6 @@ private extension InvitesScreenRoomDetails {
                                         unreadNotificationsCount: 0,
                                         notificationMode: nil,
                                         canonicalAlias: "#footest:somewhere.org",
-                                        inviter: inviter,
                                         hasOngoingCall: false,
                                         isMarkedUnread: false,
                                         isFavourite: false)
@@ -205,6 +206,8 @@ private extension InvitesScreenRoomDetails {
         inviter.avatarURL = avatarURL
         
         let dmRoom = RoomSummaryDetails(id: "@someone:somewhere.com",
+                                        isInvite: false,
+                                        inviter: inviter,
                                         name: "Awesome Room",
                                         isDirect: false,
                                         avatarURL: avatarURL,
@@ -215,7 +218,6 @@ private extension InvitesScreenRoomDetails {
                                         unreadNotificationsCount: 0,
                                         notificationMode: nil,
                                         canonicalAlias: alias,
-                                        inviter: inviter,
                                         hasOngoingCall: false,
                                         isMarkedUnread: false,
                                         isFavourite: false)

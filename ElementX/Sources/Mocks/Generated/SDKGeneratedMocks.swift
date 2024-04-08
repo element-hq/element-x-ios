@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.1.8 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.2 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -478,16 +478,16 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var loginUsernamePasswordInitialDeviceNameDeviceIdReceivedArguments: (username: String, password: String, initialDeviceName: String?, deviceId: String?)?
     public var loginUsernamePasswordInitialDeviceNameDeviceIdReceivedInvocations: [(username: String, password: String, initialDeviceName: String?, deviceId: String?)] = []
-    public var loginUsernamePasswordInitialDeviceNameDeviceIdClosure: ((String, String, String?, String?) throws -> Void)?
+    public var loginUsernamePasswordInitialDeviceNameDeviceIdClosure: ((String, String, String?, String?) async throws -> Void)?
 
-    public func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) throws {
+    public func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async throws {
         if let error = loginUsernamePasswordInitialDeviceNameDeviceIdThrowableError {
             throw error
         }
         loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount += 1
         loginUsernamePasswordInitialDeviceNameDeviceIdReceivedArguments = (username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId)
         loginUsernamePasswordInitialDeviceNameDeviceIdReceivedInvocations.append((username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId))
-        try loginUsernamePasswordInitialDeviceNameDeviceIdClosure?(username, password, initialDeviceName, deviceId)
+        try await loginUsernamePasswordInitialDeviceNameDeviceIdClosure?(username, password, initialDeviceName, deviceId)
     }
     //MARK: - logout
 

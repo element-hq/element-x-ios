@@ -30,6 +30,8 @@ struct RoomListFiltersEmptyStateView: View {
                 return L10n.screenRoomlistFilterRoomsEmptyStateTitle
             case .favourites:
                 return L10n.screenRoomlistFilterFavouritesEmptyStateTitle
+            case .invites:
+                return L10n.screenRoomlistFilterInvitesEmptyStateTitle
             }
         }
         return L10n.screenRoomlistFilterMixedEmptyStateTitle
