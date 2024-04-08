@@ -240,6 +240,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let notificationMode = roomInfo.userDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
         let details = RoomSummaryDetails(id: roomInfo.id,
+                                         isInvite: roomInfo.membership == .invited,
+                                         inviter: inviterProxy,
                                          name: roomInfo.name ?? roomInfo.id,
                                          isDirect: roomInfo.isDirect,
                                          avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
@@ -250,7 +252,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),
                                          notificationMode: notificationMode,
                                          canonicalAlias: roomInfo.canonicalAlias,
-                                         inviter: inviterProxy,
                                          hasOngoingCall: roomInfo.hasRoomCall,
                                          isMarkedUnread: roomInfo.isMarkedUnread,
                                          isFavourite: roomInfo.isFavourite)

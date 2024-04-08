@@ -31,6 +31,8 @@ class HomeScreenRoomTests: XCTestCase {
                           notificationMode: RoomNotificationModeProxy,
                           hasOngoingCall: Bool) {
         roomSummaryDetails = RoomSummaryDetails(id: "Test room",
+                                                isInvite: false,
+                                                inviter: nil,
                                                 name: "Test room",
                                                 isDirect: false,
                                                 avatarURL: nil,
@@ -41,7 +43,6 @@ class HomeScreenRoomTests: XCTestCase {
                                                 unreadNotificationsCount: unreadNotificationsCount,
                                                 notificationMode: notificationMode,
                                                 canonicalAlias: nil,
-                                                inviter: nil,
                                                 hasOngoingCall: hasOngoingCall,
                                                 isMarkedUnread: isMarkedUnread,
                                                 isFavourite: false)

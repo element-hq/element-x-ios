@@ -29,6 +29,15 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     case people
     case rooms
     case favourites
+    case invites
+    
+    static var availableFilters: [RoomListFilter] {
+        if ServiceLocator.shared.settings.roomListInvitesEnabled {
+            return RoomListFilter.allCases
+        } else {
+            return RoomListFilter.allCases.filter { !($0 == .invites) }
+        }
+    }
     
     var localizedName: String {
         switch self {
@@ -40,20 +49,24 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return L10n.screenRoomlistFilterUnreads
         case .favourites:
             return L10n.screenRoomlistFilterFavourites
+        case .invites:
+            return L10n.screenRoomlistFilterInvites
         }
     }
     
-    var incompatibleFilter: RoomListFilter? {
+    var incompatibleFilters: [RoomListFilter] {
         switch self {
         case .people:
-            return .rooms
+            return [.rooms, .invites]
         case .rooms:
-            return .people
+            return [.people, .invites]
         case .unreads:
-            return nil
+            return [.invites]
         case .favourites:
             // When we will have Low Priority we may need to return it here
-            return nil
+            return [.invites]
+        case .invites:
+            return [.rooms, .people, .unreads, .favourites]
         }
     }
     
@@ -67,6 +80,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return .unread
         case .favourites:
             return .favourite
+        case .invites:
+            return .invite
         }
     }
 }
@@ -79,13 +94,13 @@ struct RoomListFiltersState {
     }
     
     var availableFilters: [RoomListFilter] {
-        var availableFilters = OrderedSet(RoomListFilter.allCases)
+        var availableFilters = OrderedSet(RoomListFilter.availableFilters)
+        
         for filter in activeFilters {
             availableFilters.remove(filter)
-            if let incompatibleFilter = filter.incompatibleFilter {
-                availableFilters.remove(incompatibleFilter)
-            }
+            filter.incompatibleFilters.forEach { availableFilters.remove($0) }
         }
+        
         return availableFilters.elements
     }
     
@@ -94,10 +109,12 @@ struct RoomListFiltersState {
     }
     
     mutating func activateFilter(_ filter: RoomListFilter) {
-        if let incompatibleFilter = filter.incompatibleFilter,
-           activeFilters.contains(incompatibleFilter) {
-            fatalError("[RoomListFiltersState] adding mutually exclusive filters is not allowed")
+        filter.incompatibleFilters.forEach { incompatibleFilter in
+            if activeFilters.contains(incompatibleFilter) {
+                fatalError("[RoomListFiltersState] adding mutually exclusive filters is not allowed")
+            }
         }
+        
         // We always want the most recently enabled filter to be at the bottom of the others.
         activeFilters.append(filter)
     }

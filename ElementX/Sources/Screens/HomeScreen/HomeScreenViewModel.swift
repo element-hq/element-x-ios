@@ -183,6 +183,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
         case .selectRoomDirectorySearch:
             actionsSubject.send(.presentRoomDirectorySearch)
+        case .acceptInvite(let roomIdentifier):
+            Task {
+                await acceptInvite(roomID: roomIdentifier)
+            }
+        case .declineInvite(let roomIdentifier):
+            showDeclineInviteConfirmationAlert(roomID: roomIdentifier)
         }
     }
     
@@ -445,5 +451,70 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 actionsSubject.send(.roomLeft(roomIdentifier: roomId))
             }
         }
+    }
+    
+    // MARK: Invites
+    
+    private func acceptInvite(roomID: String) async {
+        defer {
+            userIndicatorController.retractIndicatorWithId(roomID)
+        }
+        
+        userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
+        
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            displayError()
+            return
+        }
+        
+        switch await roomProxy.acceptInvitation() {
+        case .success:
+            actionsSubject.send(.presentRoom(roomIdentifier: roomID))
+            analyticsService.trackJoinedRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, activeMemberCount: UInt(roomProxy.activeMembersCount))
+        case .failure:
+            displayError()
+        }
+    }
+    
+    private func showDeclineInviteConfirmationAlert(roomID: String) {
+        guard let room = state.rooms.first(where: { $0.id == roomID }) else {
+            displayError()
+            return
+        }
+        
+        let roomPlaceholder = room.isDirect ? (room.inviter?.displayName ?? room.name) : room.name
+        let title = room.isDirect ? L10n.screenInvitesDeclineDirectChatTitle : L10n.screenInvitesDeclineChatTitle
+        let message = room.isDirect ? L10n.screenInvitesDeclineDirectChatMessage(roomPlaceholder) : L10n.screenInvitesDeclineChatMessage(roomPlaceholder)
+        
+        state.bindings.alertInfo = .init(id: UUID(),
+                                         title: title,
+                                         message: message,
+                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                         secondaryButton: .init(title: L10n.actionDecline, role: .destructive, action: { Task { await self.declineInvite(roomID: room.id) } }))
+    }
+    
+    private func declineInvite(roomID: String) async {
+        defer {
+            userIndicatorController.retractIndicatorWithId(roomID)
+        }
+        
+        userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
+        
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            displayError()
+            return
+        }
+        
+        let result = await roomProxy.rejectInvitation()
+        
+        if case .failure = result {
+            displayError()
+        }
+    }
+    
+    private func displayError() {
+        state.bindings.alertInfo = .init(id: UUID(),
+                                         title: L10n.commonError,
+                                         message: L10n.errorUnknown)
     }
 }

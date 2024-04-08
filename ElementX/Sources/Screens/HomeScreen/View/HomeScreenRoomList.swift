@@ -35,10 +35,13 @@ struct HomeScreenRoomList: View {
     @ViewBuilder
     private var content: some View {
         ForEach(context.viewState.visibleRooms) { room in
-            if room.isPlaceholder {
+            switch room.type {
+            case .placeholder:
                 HomeScreenRoomCell(room: room, context: context, isSelected: false)
                     .redacted(reason: .placeholder)
-            } else {
+            case .invite:
+                HomeScreenInviteCell(room: room, context: context)
+            case .room:
                 let isSelected = context.viewState.selectedRoomID == room.id
                 
                 HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)

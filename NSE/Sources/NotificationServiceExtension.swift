@@ -102,7 +102,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             if let existingSession = userSessions[credentials.userID] {
                 userSession = existingSession
             } else {
-                userSession = try NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController)
+                userSession = try await NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController)
                 userSessions[credentials.userID] = userSession
             }
             

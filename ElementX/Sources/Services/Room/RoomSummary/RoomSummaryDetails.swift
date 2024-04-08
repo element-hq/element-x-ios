@@ -19,6 +19,10 @@ import MatrixRustSDK
 
 struct RoomSummaryDetails {
     let id: String
+    
+    let isInvite: Bool
+    let inviter: RoomMemberProxyProtocol?
+    
     let name: String
     let isDirect: Bool
     let avatarURL: URL?
@@ -29,7 +33,7 @@ struct RoomSummaryDetails {
     let unreadNotificationsCount: UInt
     let notificationMode: RoomNotificationModeProxy?
     let canonicalAlias: String?
-    let inviter: RoomMemberProxyProtocol?
+    
     let hasOngoingCall: Bool
     
     let isMarkedUnread: Bool
@@ -70,6 +74,7 @@ extension RoomSummaryDetails {
         inviter = nil
         hasOngoingCall = false
         
+        isInvite = false
         isMarkedUnread = false
         isFavourite = false
     }

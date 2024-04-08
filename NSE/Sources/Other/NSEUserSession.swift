@@ -26,7 +26,7 @@ final class NSEUserSession {
                                                                                backgroundTaskService: nil)
     private let delegateHandle: TaskHandle?
 
-    init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate) throws {
+    init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate) async throws {
         userID = credentials.userID
         if credentials.restorationToken.passphrase != nil {
             MXLog.info("Restoring client with encrypted store.")
@@ -47,7 +47,7 @@ final class NSEUserSession {
             clientBuilder = clientBuilder.proxy(url: proxy)
         }
         
-        baseClient = try clientBuilder.build()
+        baseClient = try await clientBuilder.build()
         delegateHandle = baseClient.setDelegate(delegate: ClientDelegateWrapper())
         try baseClient.restoreSession(session: credentials.restorationToken.session)
         

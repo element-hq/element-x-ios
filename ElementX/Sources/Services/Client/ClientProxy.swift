@@ -676,6 +676,7 @@ class ClientProxy: ClientProxyProtocol {
                 .syncService()
                 .withCrossProcessLock(appIdentifier: "MainApp")
                 .withUtdHook(delegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
+                .withUnifiedInvitesInRoomList(withUnifiedInvites: appSettings.roomListInvitesEnabled)
                 .finish()
             let roomListService = syncService.roomListService()
             

@@ -78,6 +78,7 @@ enum PermalinkBuilder {
         return nil
     }
     
+    @available(*, deprecated, message: "Use a room's `matrixToPermalink` method instead")
     static func permalinkTo(userIdentifier: String, baseURL: URL) throws -> URL {
         guard MatrixEntityRegex.isMatrixUserIdentifier(userIdentifier) else {
             throw PermalinkBuilderError.invalidUserIdentifier

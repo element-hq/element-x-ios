@@ -87,6 +87,8 @@ class LoggingTests: XCTestCase {
         let roomName = "Private Conversation"
         let lastMessage = "Secret information"
         let roomSummary = RoomSummaryDetails(id: "myroomid",
+                                             isInvite: false,
+                                             inviter: nil,
                                              name: roomName,
                                              isDirect: true,
                                              avatarURL: nil,
@@ -97,7 +99,6 @@ class LoggingTests: XCTestCase {
                                              unreadNotificationsCount: 0,
                                              notificationMode: nil,
                                              canonicalAlias: nil,
-                                             inviter: nil,
                                              hasOngoingCall: false,
                                              isMarkedUnread: false,
                                              isFavourite: false)
