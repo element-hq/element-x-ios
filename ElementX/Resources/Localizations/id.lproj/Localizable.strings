@@ -179,7 +179,7 @@
 "common_server_not_supported" = "Server tidak didukung";
 "common_server_url" = "URL Server";
 "common_settings" = "Pengaturan";
-"common_shared_location" = "Membagikan lokasi";
+"common_shared_location" = "Lokasi terbagi";
 "common_signing_out" = "Mengeluarkan dari akun";
 "common_starting_chat" = "Memulai obrolan...";
 "common_sticker" = "Stiker";
@@ -374,6 +374,13 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Pencadangan percakapan Anda saat ini tidak tersinkron.";
 "screen_chat_backup_recovery_action_setup" = "Siapkan pemulihan";
 "screen_chat_backup_recovery_action_setup_description" = "Dapatkan akses ke pesan terenkripsi Anda jika Anda kehilangan semua perangkat Anda atau keluar dari %1$@ di mana pun.";
+"screen_create_new_recovery_key_list_item_1" = "Buka Element di perangkat desktop";
+"screen_create_new_recovery_key_list_item_2" = "Masuk ke akun Anda lagi";
+"screen_create_new_recovery_key_list_item_3" = "Saat diminta untuk memverifikasi perangkat Anda, pilih %1$@";
+"screen_create_new_recovery_key_list_item_3_reset_all" = "“Atur ulang semua”";
+"screen_create_new_recovery_key_list_item_4" = "Ikuti petunjuk untuk membuat kunci pemulihan baru";
+"screen_create_new_recovery_key_list_item_5" = "Simpan kunci pemulihan baru Anda dalam pengelola kata sandi atau catatan terenkripsi";
+"screen_create_new_recovery_key_title" = "Atur ulang enkripsi untuk akun Anda menggunakan perangkat lain";
 "screen_create_poll_add_option_btn" = "Tambahkan opsi";
 "screen_create_poll_anonymous_desc" = "Tampilkan hasil hanya setelah pemungutan suara berakhir";
 "screen_create_poll_anonymous_headline" = "Pemungutan suara anonim";
@@ -398,6 +405,7 @@
 "screen_edit_profile_error_title" = "Tidak dapat memperbarui profil";
 "screen_edit_profile_title" = "Sunting profil";
 "screen_edit_profile_updating_details" = "Memperbarui profil…";
+"screen_identity_confirmation_create_new_recovery_key" = "Buat kunci pemulihan baru";
 "screen_identity_confirmation_subtitle" = "Verifikasi perangkat ini untuk menyiapkan perpesanan aman.";
 "screen_identity_confirmation_title" = "Konfirmasi bahwa ini Anda";
 "screen_identity_confirmed_subtitle" = "Sekarang Anda dapat membaca atau mengirim pesan dengan aman, dan siapa pun yang mengobrol dengan Anda juga dapat mempercayai perangkat ini.";
@@ -473,13 +481,15 @@
 "screen_recovery_key_change_generate_key_description" = "Pastikan Anda dapat menyimpan kunci pemulihan Anda di tempat yang aman";
 "screen_recovery_key_change_success" = "Kunci pemulihan diganti";
 "screen_recovery_key_change_title" = "Ubah kunci pemulihan?";
-"screen_recovery_key_confirm_description" = "Masukkan kunci pemulihan Anda untuk mengonfirmasi akses ke cadangan percakapan Anda.";
+"screen_recovery_key_confirm_create_new_recovery_key" = "Buat kunci pemulihan baru";
+"screen_recovery_key_confirm_description" = "Pastikan tidak ada yang bisa melihat layar ini!";
 "screen_recovery_key_confirm_error_content" = "Silakan coba lagi untuk mengonfirmasi akses ke cadangan percakapan Anda.";
 "screen_recovery_key_confirm_error_title" = "Kunci pemulihan salah";
-"screen_recovery_key_confirm_key_description" = "Masukkan kode 48 karakter.";
+"screen_recovery_key_confirm_key_description" = "Jika Anda memiliki frasa sandi pemulihan atau frasa/kunci sandi rahasia, ini juga dapat digunakan.";
+"screen_recovery_key_confirm_key_label" = "Kunci pemulihan atau kode sandi";
 "screen_recovery_key_confirm_key_placeholder" = "Masukkan...";
 "screen_recovery_key_confirm_success" = "Kunci pemulihan dikonfirmasi";
-"screen_recovery_key_confirm_title" = "Konfirmasi kunci pemulihan Anda";
+"screen_recovery_key_confirm_title" = "Konfirmasi kunci pemulihan atau kode sandi Anda";
 "screen_recovery_key_copied_to_clipboard" = "Kunci pemulihan disalin";
 "screen_recovery_key_generating_key" = "Membuat…";
 "screen_recovery_key_save_action" = "Simpan kunci pemulihan";
@@ -520,6 +530,7 @@
 "screen_room_change_role_confirm_demote_self_description" = "Anda tidak akan dapat mengurungkan perubahan ini karena Anda sedang menurunkan Anda sendiri, jika Anda merupakan pengguna dengan hak khusus dalam ruangan maka tidak akan memungkinkan untuk mendapatkan hak tersebut lagi.";
 "screen_room_change_role_confirm_demote_self_title" = "Turunkan Anda sendiri?";
 "screen_room_change_role_invited_member_name" = "%1$@ (Tertunda)";
+"screen_room_change_role_moderators_admin_section_footer" = "Admin secara otomatis memiliki hak moderator";
 "screen_room_change_role_moderators_title" = "Sunting Moderator";
 "screen_room_change_role_unsaved_changes_description" = "Anda memiliki perubahan yang belum disimpan.";
 "screen_room_change_role_unsaved_changes_title" = "Simpan perubahan?";
@@ -538,6 +549,7 @@
 "screen_room_details_notification_mode_default" = "Bawaan";
 "screen_room_details_notification_title" = "Pemberitahuan";
 "screen_room_details_share_room_title" = "Bagikan ruangan";
+"screen_room_details_title" = "Info ruangan";
 "screen_room_details_updating_room" = "Memperbarui ruangan…";
 "screen_room_directory_search_loading_error" = "Gagal memuat";
 "screen_room_directory_search_title" = "Direktori ruangan";
@@ -549,6 +561,7 @@
 "screen_room_member_details_block_alert_action" = "Blokir";
 "screen_room_member_details_block_alert_description" = "Pengguna yang diblokir tidak akan dapat mengirim Anda pesan dan semua pesan mereka akan disembunyikan. Anda dapat membuka blokirnya kapan saja.";
 "screen_room_member_details_block_user" = "Blokir pengguna";
+"screen_room_member_details_title" = "Profil";
 "screen_room_member_details_unblock_alert_action" = "Buka blokir";
 "screen_room_member_details_unblock_alert_description" = "Anda akan dapat melihat semua pesan dari mereka lagi.";
 "screen_room_member_details_unblock_user" = "Buka blokir pengguna";
@@ -623,6 +636,8 @@
 "screen_roomlist_filter_favourites" = "Favorit";
 "screen_roomlist_filter_favourites_empty_state_subtitle" = "Anda dapat menambahkan percakapan ke favorit Anda dalam pengaturan percakapan.\nUntuk sementara, Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain";
 "screen_roomlist_filter_favourites_empty_state_title" = "Anda belum memiliki percakapan favorit";
+"screen_roomlist_filter_invites" = "Undangan";
+"screen_roomlist_filter_invites_empty_state_title" = "Anda tidak memiliki undangan yang tertunda.";
 "screen_roomlist_filter_low_priority" = "Prioritas Rendah";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain";
 "screen_roomlist_filter_mixed_empty_state_title" = "Anda tidak memiliki percakapan untuk pemilihan ini";

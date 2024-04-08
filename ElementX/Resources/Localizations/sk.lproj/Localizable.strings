@@ -374,6 +374,13 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Vaša záloha konverzácie nie je momentálne synchronizovaná.";
 "screen_chat_backup_recovery_action_setup" = "Nastaviť obnovovanie";
 "screen_chat_backup_recovery_action_setup_description" = "Získajte prístup k vašim šifrovaným správam aj keď stratíte všetky svoje zariadenia alebo sa odhlásite zo všetkých %1$@ zariadení.";
+"screen_create_new_recovery_key_list_item_1" = "Otvoriť Element v stolnom počítači";
+"screen_create_new_recovery_key_list_item_2" = "Znova sa prihláste do svojho účtu";
+"screen_create_new_recovery_key_list_item_3" = "Keď sa zobrazí výzva na overenie vášho zariadenia, vyberte %1$@";
+"screen_create_new_recovery_key_list_item_3_reset_all" = "\"Obnoviť všetko\"";
+"screen_create_new_recovery_key_list_item_4" = "Postupujte podľa pokynov na vytvorenie nového kľúča na obnovenie";
+"screen_create_new_recovery_key_list_item_5" = "Uložte si nový kľúč na obnovenie do správcu hesiel alebo do zašifrovanej poznámky";
+"screen_create_new_recovery_key_title" = "Obnovte šifrovanie vášho účtu pomocou iného zariadenia";
 "screen_create_poll_add_option_btn" = "Pridať možnosť";
 "screen_create_poll_anonymous_desc" = "Zobraziť výsledky až po skončení ankety";
 "screen_create_poll_anonymous_headline" = "Anonymná anketa";
@@ -398,6 +405,7 @@
 "screen_edit_profile_error_title" = "Nepodarilo sa aktualizovať profil";
 "screen_edit_profile_title" = "Upraviť profil";
 "screen_edit_profile_updating_details" = "Aktualizácia profilu...";
+"screen_identity_confirmation_create_new_recovery_key" = "Vytvoriť nový kľúč na obnovenie";
 "screen_identity_confirmation_subtitle" = "Ak chcete nastaviť zabezpečené správy, overte toto zariadenie.";
 "screen_identity_confirmation_title" = "Potvrďte, že ste to vy";
 "screen_identity_confirmed_subtitle" = "Teraz môžete bezpečne čítať alebo odosielať správy a tomuto zariadeniu môže dôverovať aj ktokoľvek, s kým konverzujete.";
@@ -473,13 +481,15 @@
 "screen_recovery_key_change_generate_key_description" = "Uistite sa, že kľúč na obnovenie môžete uložiť niekde v bezpečí";
 "screen_recovery_key_change_success" = "Kľúč na obnovenie bol zmenený";
 "screen_recovery_key_change_title" = "Zmeniť kľúč na obnovenie?";
-"screen_recovery_key_confirm_description" = "Zadajte kľúč na obnovenie a potvrďte prístup k zálohe konverzácie.";
+"screen_recovery_key_confirm_create_new_recovery_key" = "Vytvoriť nový kľúč na obnovenie";
+"screen_recovery_key_confirm_description" = "Uistite sa, že túto obrazovku nikto nevidí!";
 "screen_recovery_key_confirm_error_content" = "Skúste prosím znova potvrdiť prístup k vašej zálohe konverzácie.";
 "screen_recovery_key_confirm_error_title" = "Nesprávny kľúč na obnovenie";
-"screen_recovery_key_confirm_key_description" = "Zadajte 48-znakový kód.";
+"screen_recovery_key_confirm_key_description" = "Ak máte frázu na obnovenie alebo tajné heslo/kľúč, bude to tiež fungovať.";
+"screen_recovery_key_confirm_key_label" = "Kľúč na obnovenie alebo prístupový kód";
 "screen_recovery_key_confirm_key_placeholder" = "Zadať...";
 "screen_recovery_key_confirm_success" = "Kľúč na obnovu potvrdený";
-"screen_recovery_key_confirm_title" = "Potvrďte kľúč na obnovenie";
+"screen_recovery_key_confirm_title" = "Zadajte kľúč na obnovenie alebo prístupový kód";
 "screen_recovery_key_copied_to_clipboard" = "Skopírovaný kľúč na obnovenie";
 "screen_recovery_key_generating_key" = "Generovanie...";
 "screen_recovery_key_save_action" = "Uložiť kľúč na obnovenie";
@@ -520,6 +530,7 @@
 "screen_room_change_role_confirm_demote_self_description" = "Túto zmenu nebudete môcť vrátiť späť, pretože znižujete svoju úroveň. Ak ste posledným privilegovaným používateľom v miestnosti, nebude možné získať znova oprávnenia.";
 "screen_room_change_role_confirm_demote_self_title" = "Znížiť svoju úroveň?";
 "screen_room_change_role_invited_member_name" = "%1$@ (Čaká sa)";
+"screen_room_change_role_moderators_admin_section_footer" = "Správcovia majú automaticky oprávnenia moderátora";
 "screen_room_change_role_moderators_title" = "Upraviť moderátorov";
 "screen_room_change_role_unsaved_changes_description" = "Máte neuložené zmeny.";
 "screen_room_change_role_unsaved_changes_title" = "Uložiť zmeny?";
@@ -538,6 +549,7 @@
 "screen_room_details_notification_mode_default" = "Predvolené";
 "screen_room_details_notification_title" = "Oznámenia";
 "screen_room_details_share_room_title" = "Zdieľať miestnosť";
+"screen_room_details_title" = "Informácie o miestnosti";
 "screen_room_details_updating_room" = "Aktualizácia miestnosti...";
 "screen_room_directory_search_loading_error" = "Načítanie zlyhalo";
 "screen_room_directory_search_title" = "Adresár miestností";
@@ -549,6 +561,7 @@
 "screen_room_member_details_block_alert_action" = "Zablokovať";
 "screen_room_member_details_block_alert_description" = "Blokovaní používatelia vám nebudú môcť posielať správy a všetky ich správy budú skryté. Môžete ich kedykoľvek odblokovať.";
 "screen_room_member_details_block_user" = "Zablokovať používateľa";
+"screen_room_member_details_title" = "Profil";
 "screen_room_member_details_unblock_alert_action" = "Odblokovať";
 "screen_room_member_details_unblock_alert_description" = "Všetky správy od nich budete môcť opäť vidieť.";
 "screen_room_member_details_unblock_user" = "Odblokovať používateľa";
@@ -623,6 +636,8 @@
 "screen_roomlist_filter_favourites" = "Obľúbené";
 "screen_roomlist_filter_favourites_empty_state_subtitle" = "Môžete pridať konverzáciu medzi obľúbené v nastaveniach konverzácie.\nZatiaľ môžete zrušiť výber filtrov, aby ste videli ostatné konverzácie";
 "screen_roomlist_filter_favourites_empty_state_title" = "Zatiaľ nemáte obľúbené konverzácie";
+"screen_roomlist_filter_invites" = "Pozvánky";
+"screen_roomlist_filter_invites_empty_state_title" = "Nemáte žiadne čakajúce pozvánky.";
 "screen_roomlist_filter_low_priority" = "Nízka priorita";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie";
 "screen_roomlist_filter_mixed_empty_state_title" = "Nemáte konverzácie pre tento výber";

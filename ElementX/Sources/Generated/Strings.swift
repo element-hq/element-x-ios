@@ -364,7 +364,7 @@ internal enum L10n {
   internal static var commonReaction: String { return L10n.tr("Localizable", "common_reaction") }
   /// Reactions
   internal static var commonReactions: String { return L10n.tr("Localizable", "common_reactions") }
-  /// Recovery key or passcode
+  /// Recovery key
   internal static var commonRecoveryKey: String { return L10n.tr("Localizable", "common_recovery_key") }
   /// Refreshing…
   internal static var commonRefreshing: String { return L10n.tr("Localizable", "common_refreshing") }
@@ -1187,6 +1187,8 @@ internal enum L10n {
   internal static var screenRecoveryKeyConfirmErrorTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_title") }
   /// If you have a recovery passphrase or secret passphrase/key, this will work too.
   internal static var screenRecoveryKeyConfirmKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_description") }
+  /// Recovery key or passcode
+  internal static var screenRecoveryKeyConfirmKeyLabel: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_label") }
   /// Enter…
   internal static var screenRecoveryKeyConfirmKeyPlaceholder: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_placeholder") }
   /// Recovery key confirmed
@@ -1562,6 +1564,10 @@ internal enum L10n {
   internal static var screenRoomlistFilterFavouritesEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_favourites_empty_state_subtitle") }
   /// You don’t have favourite chats yet
   internal static var screenRoomlistFilterFavouritesEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_favourites_empty_state_title") }
+  /// Invites
+  internal static var screenRoomlistFilterInvites: String { return L10n.tr("Localizable", "screen_roomlist_filter_invites") }
+  /// You don't have any pending invites.
+  internal static var screenRoomlistFilterInvitesEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_invites_empty_state_title") }
   /// Low Priority
   internal static var screenRoomlistFilterLowPriority: String { return L10n.tr("Localizable", "screen_roomlist_filter_low_priority") }
   /// You can deselect filters in order to see your other chats

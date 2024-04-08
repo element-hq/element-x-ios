@@ -120,7 +120,7 @@
 "common_editing" = "Redigerar";
 "common_emote" = "* %1$@ %2$@";
 "common_encryption_enabled" = "Kryptering aktiverad";
-"common_enter_your_pin" = "Enter your PIN";
+"common_enter_your_pin" = "Ange din PIN-kod";
 "common_error" = "Fel";
 "common_everyone" = "Alla";
 "common_face_id_ios" = "Face ID";
@@ -168,7 +168,7 @@
 "common_room_name_placeholder" = "t.ex. ditt projektnamn";
 "common_saved_changes" = "Saved changes";
 "common_saving" = "Saving";
-"common_screen_lock" = "Screen lock";
+"common_screen_lock" = "Skärmlås";
 "common_search_for_someone" = "Sök efter någon";
 "common_search_results" = "Sökresultat";
 "common_security" = "Säkerhet";
@@ -196,7 +196,7 @@
 "common_unable_to_decrypt" = "Kan inte avkryptera";
 "common_unable_to_invite_message" = "Inbjudan kunde inte skickas till en eller flera användare.";
 "common_unable_to_invite_title" = "Kunde inte skicka inbjudningar";
-"common_unlock" = "Unlock";
+"common_unlock" = "Lås upp";
 "common_unmute" = "Avtysta";
 "common_unsupported_event" = "Händelse som inte stöds";
 "common_username" = "Användarnamn";
@@ -319,14 +319,14 @@
 "screen_app_lock_biometric_unlock" = "biometric unlock";
 "screen_app_lock_biometric_unlock_reason_ios" = "Authentication is needed to access your app";
 "screen_app_lock_forgot_pin" = "Forgot PIN?";
-"screen_app_lock_settings_change_pin" = "Change PIN code";
-"screen_app_lock_settings_enable_biometric_unlock" = "Allow biometric unlock";
-"screen_app_lock_settings_enable_face_id_ios" = "Allow Face ID";
-"screen_app_lock_settings_enable_optic_id_ios" = "Allow Optic ID";
-"screen_app_lock_settings_enable_touch_id_ios" = "Allow Touch ID";
-"screen_app_lock_settings_remove_pin" = "Remove PIN";
-"screen_app_lock_settings_remove_pin_alert_message" = "Are you sure you want to remove PIN?";
-"screen_app_lock_settings_remove_pin_alert_title" = "Remove PIN?";
+"screen_app_lock_settings_change_pin" = "Byt PIN-kod";
+"screen_app_lock_settings_enable_biometric_unlock" = "Tillåt biometrisk upplåsning";
+"screen_app_lock_settings_enable_face_id_ios" = "Tillåt Face ID";
+"screen_app_lock_settings_enable_optic_id_ios" = "Tillåt Optic ID";
+"screen_app_lock_settings_enable_touch_id_ios" = "Tillåt Touch ID";
+"screen_app_lock_settings_remove_pin" = "Ta bort PIN-kod";
+"screen_app_lock_settings_remove_pin_alert_message" = "Är du säker på att du vill ta bort PIN-koden?";
+"screen_app_lock_settings_remove_pin_alert_title" = "Ta bort PIN-koden?";
 "screen_app_lock_setup_biometric_unlock_allow_title" = "Allow %1$@";
 "screen_app_lock_setup_biometric_unlock_skip" = "I’d rather use PIN";
 "screen_app_lock_setup_biometric_unlock_subtitle" = "Save yourself some time and use %1$@ to unlock the app each time";
@@ -374,6 +374,13 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Din chattsäkerhetskopia är för närvarande osynkroniserad.";
 "screen_chat_backup_recovery_action_setup" = "Ställ in återställning";
 "screen_chat_backup_recovery_action_setup_description" = "Få tillgång till dina krypterade meddelanden om du tappar bort alla dina enheter eller blir utloggad ur %1$@ överallt.";
+"screen_create_new_recovery_key_list_item_1" = "Open Element in a desktop device";
+"screen_create_new_recovery_key_list_item_2" = "Sign into your account again";
+"screen_create_new_recovery_key_list_item_3" = "When asked to verify your device, select %1$@";
+"screen_create_new_recovery_key_list_item_3_reset_all" = "“Reset all”";
+"screen_create_new_recovery_key_list_item_4" = "Follow the instructions to create a new recovery key";
+"screen_create_new_recovery_key_list_item_5" = "Save your new recovery key in a password manager or encrypted note";
+"screen_create_new_recovery_key_title" = "Reset the encryption for your account using another device";
 "screen_create_poll_add_option_btn" = "Lägg till alternativ";
 "screen_create_poll_anonymous_desc" = "Visa resultat först efter att omröstningen avslutats";
 "screen_create_poll_anonymous_headline" = "Dölj röster";
@@ -398,6 +405,7 @@
 "screen_edit_profile_error_title" = "Kunde inte uppdatera profilen";
 "screen_edit_profile_title" = "Redigera profil";
 "screen_edit_profile_updating_details" = "Uppdaterar profil …";
+"screen_identity_confirmation_create_new_recovery_key" = "Create a new recovery key";
 "screen_identity_confirmation_subtitle" = "Verify this device to set up secure messaging.";
 "screen_identity_confirmation_title" = "Confirm that it's you";
 "screen_identity_confirmed_subtitle" = "Now you can read or send messages securely, and anyone you chat with can also trust this device.";
@@ -473,10 +481,12 @@
 "screen_recovery_key_change_generate_key_description" = "Se till att du kan lagra din återställningsnyckel någonstans säkert";
 "screen_recovery_key_change_success" = "Återställningsnyckel ändrad";
 "screen_recovery_key_change_title" = "Byt återställningsnyckel?";
+"screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
 "screen_recovery_key_confirm_description" = "Ange din återställningsnyckel för att bekräfta åtkomst till din chattsäkerhetskopia.";
 "screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your chat backup.";
 "screen_recovery_key_confirm_error_title" = "Incorrect recovery key";
 "screen_recovery_key_confirm_key_description" = "Ange koden på 48 tecken.";
+"screen_recovery_key_confirm_key_label" = "Recovery key or passcode";
 "screen_recovery_key_confirm_key_placeholder" = "Ange …";
 "screen_recovery_key_confirm_success" = "Återställningsnyckel bekräftad";
 "screen_recovery_key_confirm_title" = "Ange din återställningsnyckel";
@@ -520,6 +530,7 @@
 "screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
 "screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_change_role_invited_member_name" = "%1$@ (Pending)";
+"screen_room_change_role_moderators_admin_section_footer" = "Admins automatically have moderator privileges";
 "screen_room_change_role_moderators_title" = "Edit Moderators";
 "screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
 "screen_room_change_role_unsaved_changes_title" = "Save changes?";
@@ -538,6 +549,7 @@
 "screen_room_details_notification_mode_default" = "Förval";
 "screen_room_details_notification_title" = "Aviseringar";
 "screen_room_details_share_room_title" = "Dela rum";
+"screen_room_details_title" = "Room info";
 "screen_room_details_updating_room" = "Uppdaterar rummet …";
 "screen_room_directory_search_loading_error" = "Failed loading";
 "screen_room_directory_search_title" = "Room directory";
@@ -549,6 +561,7 @@
 "screen_room_member_details_block_alert_action" = "Blockera";
 "screen_room_member_details_block_alert_description" = "Blockerade användare kommer inte att kunna skicka meddelanden till dig och alla deras meddelanden kommer att döljas. Du kan avblockera dem när som helst.";
 "screen_room_member_details_block_user" = "Blockera användare";
+"screen_room_member_details_title" = "Profile";
 "screen_room_member_details_unblock_alert_action" = "Avblockera";
 "screen_room_member_details_unblock_alert_description" = "Du kommer att kunna se alla meddelanden från dem igen.";
 "screen_room_member_details_unblock_user" = "Avblockera användare";
@@ -623,6 +636,8 @@
 "screen_roomlist_filter_favourites" = "Favourites";
 "screen_roomlist_filter_favourites_empty_state_subtitle" = "You can add a chat to your favourites in the chat settings.\nFor now, you can deselect filters in order to see your other chats";
 "screen_roomlist_filter_favourites_empty_state_title" = "You don’t have favourite chats yet";
+"screen_roomlist_filter_invites" = "Invites";
+"screen_roomlist_filter_invites_empty_state_title" = "You don't have any pending invites.";
 "screen_roomlist_filter_low_priority" = "Low Priority";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "You can deselect filters in order to see your other chats";
 "screen_roomlist_filter_mixed_empty_state_title" = "You don’t have chats for this selection";

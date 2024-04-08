@@ -374,6 +374,13 @@
 "screen_chat_backup_recovery_action_confirm_description" = "A csevegéselőzményei nincsenek szinkronban.";
 "screen_chat_backup_recovery_action_setup" = "Helyreállítás beállítása";
 "screen_chat_backup_recovery_action_setup_description" = "Szerezzen hozzáférést a titkosított üzeneteihez, ha elvesztette az összes eszközét, vagy ha mindenütt kijelentkezett az %1$@ből.";
+"screen_create_new_recovery_key_list_item_1" = "Nyissa meg az Elementet egy asztali eszközön";
+"screen_create_new_recovery_key_list_item_2" = "Jelentkezzen be újra a fiókjába";
+"screen_create_new_recovery_key_list_item_3" = "Amikor az eszköz ellenőrzését kéri, válassza ezt a lehetőséget: %1$@";
+"screen_create_new_recovery_key_list_item_3_reset_all" = "„Minden visszaállítása”";
+"screen_create_new_recovery_key_list_item_4" = "Kövesse az utasításokat egy új helyreállítási kulcs létrehozásához";
+"screen_create_new_recovery_key_list_item_5" = "Mentse az új helyreállítási kulcsot egy jelszókezelőbe vagy egy titkosított jegyzetbe.";
+"screen_create_new_recovery_key_title" = "A fiók titkosításának visszaállítása egy másik eszköz használatával";
 "screen_create_poll_add_option_btn" = "Lehetőség hozzáadása";
 "screen_create_poll_anonymous_desc" = "Eredmények megjelenítése csak a szavazás befejezése után";
 "screen_create_poll_anonymous_headline" = "Szavazatok elrejtése";
@@ -398,6 +405,7 @@
 "screen_edit_profile_error_title" = "Nem sikerült frissíteni a profilt";
 "screen_edit_profile_title" = "Profil szerkesztése";
 "screen_edit_profile_updating_details" = "Profil frissítése…";
+"screen_identity_confirmation_create_new_recovery_key" = "Új helyreállítási kulcs létrehozása";
 "screen_identity_confirmation_subtitle" = "A biztonságos üzenetkezelés beállításához ellenőrizze ezt az eszközt.";
 "screen_identity_confirmation_title" = "Erősítse meg, hogy Ön az";
 "screen_identity_confirmed_subtitle" = "Mostantól biztonságosan olvashat vagy küldhet üzeneteket, és bármelyik csevegőpartnere megbízhat ebben az eszközben.";
@@ -473,13 +481,15 @@
 "screen_recovery_key_change_generate_key_description" = "Gondoskodjon arról, hogy biztonságos helyen tárolja a helyreállítási kulcsát";
 "screen_recovery_key_change_success" = "Helyreállítási kulcs lecserélve";
 "screen_recovery_key_change_title" = "Módosítja a helyreállítási kulcsot?";
-"screen_recovery_key_confirm_description" = "Adja meg a helyreállítási kulcsát, hogy megerősítse a csevegések biztonsági mentéséhez való hozzáférését.";
+"screen_recovery_key_confirm_create_new_recovery_key" = "Új helyreállítási kulcs létrehozása";
+"screen_recovery_key_confirm_description" = "Győződjön meg arról, hogy senki sem látja ezt a képernyőt!";
 "screen_recovery_key_confirm_error_content" = "Próbálja meg újra megerősíteni a csevegés biztonsági mentéséhez való hozzáférését.";
 "screen_recovery_key_confirm_error_title" = "Helytelen helyreállítási kulcs";
-"screen_recovery_key_confirm_key_description" = "Adja meg a 48 karakteres kódot.";
+"screen_recovery_key_confirm_key_description" = "Ha van helyreállítási kulcsa vagy titkos jelmondata/kulcsa, akkor ez is fog működni.";
+"screen_recovery_key_confirm_key_label" = "Helyreállítási kulcs vagy jelkód";
 "screen_recovery_key_confirm_key_placeholder" = "Megadás…";
 "screen_recovery_key_confirm_success" = "Helyreállítási kulcs megerősítve";
-"screen_recovery_key_confirm_title" = "Erősítse meg a helyreállítási kulcsát";
+"screen_recovery_key_confirm_title" = "Adja meg a helyreállítási kulcsát vagy a jelkódját";
 "screen_recovery_key_copied_to_clipboard" = "Helyreállítási kulcs másolva";
 "screen_recovery_key_generating_key" = "Előállítás…";
 "screen_recovery_key_save_action" = "Helyreállítási kulcs mentése";
@@ -520,6 +530,7 @@
 "screen_room_change_role_confirm_demote_self_description" = "Ezt a változtatást nem fogja tudni visszavonni, mivel lefokozza magát, ha Ön az utolsó jogosultságokkal rendelkező felhasználó a szobában, akkor lehetetlen lesz visszaszerezni a jogosultságokat.";
 "screen_room_change_role_confirm_demote_self_title" = "Lefokozza magát?";
 "screen_room_change_role_invited_member_name" = "%1$@ (függőben)";
+"screen_room_change_role_moderators_admin_section_footer" = "Az adminisztrátorok automatikusan moderátori jogosultságokkal rendelkeznek";
 "screen_room_change_role_moderators_title" = "Moderátorok szerkesztése";
 "screen_room_change_role_unsaved_changes_description" = "Mentetlen módosításai vannak.";
 "screen_room_change_role_unsaved_changes_title" = "Menti a változtatásokat?";
@@ -538,6 +549,7 @@
 "screen_room_details_notification_mode_default" = "Alapértelmezett";
 "screen_room_details_notification_title" = "Értesítések";
 "screen_room_details_share_room_title" = "Szoba megosztása";
+"screen_room_details_title" = "Szobainformációk";
 "screen_room_details_updating_room" = "Szoba frissítése…";
 "screen_room_directory_search_loading_error" = "Sikertelen betöltés";
 "screen_room_directory_search_title" = "Szobakatalógus";
@@ -549,6 +561,7 @@
 "screen_room_member_details_block_alert_action" = "Letiltás";
 "screen_room_member_details_block_alert_description" = "A letiltott felhasználók nem fognak tudni üzeneteket küldeni, és az összes üzenetük rejtve lesz. Bármikor feloldhatja a letiltásukat.";
 "screen_room_member_details_block_user" = "Felhasználó letiltása";
+"screen_room_member_details_title" = "Profil";
 "screen_room_member_details_unblock_alert_action" = "Letiltás feloldása";
 "screen_room_member_details_unblock_alert_description" = "Újra láthatja az összes üzenetét.";
 "screen_room_member_details_unblock_user" = "Felhasználó kitiltásának feloldása";
@@ -623,6 +636,8 @@
 "screen_roomlist_filter_favourites" = "Kedvencek";
 "screen_roomlist_filter_favourites_empty_state_subtitle" = "A csevegési beállításokban csevegéseket adhat hozzá a kedvencekhez.\nEgyelőre törölheti a szűrőket a többi csevegés megtekintéséhez.";
 "screen_roomlist_filter_favourites_empty_state_title" = "Még nincsenek kedvenc csevegései";
+"screen_roomlist_filter_invites" = "Meghívások";
+"screen_roomlist_filter_invites_empty_state_title" = "Nincsenek függőben lévő meghívásai.";
 "screen_roomlist_filter_low_priority" = "Alacsony prioritás";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez";
 "screen_roomlist_filter_mixed_empty_state_title" = "Ehhez a kiválasztáshoz nem tartoznak csevegések";

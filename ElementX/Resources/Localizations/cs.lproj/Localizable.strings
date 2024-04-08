@@ -156,7 +156,7 @@
 "common_privacy_policy" = "Zásady ochrany osobních údajů";
 "common_reaction" = "Reakce";
 "common_reactions" = "Reakce";
-"common_recovery_key" = "Klíč pro obnovu";
+"common_recovery_key" = "Klíč pro obnovení";
 "common_refreshing" = "Obnovování...";
 "common_replying_to" = "Odpověď na %1$@";
 "common_report_a_bug" = "Nahlásit chybu";
@@ -374,6 +374,13 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Vaše záloha chatu není aktuálně synchronizována.";
 "screen_chat_backup_recovery_action_setup" = "Nastavení obnovy";
 "screen_chat_backup_recovery_action_setup_description" = "Získejte přístup ke svým zašifrovaným zprávám, pokud ztratíte všechna zařízení nebo jste všude odhlášeni z %1$@.";
+"screen_create_new_recovery_key_list_item_1" = "Otevřít Element na stolním počítači";
+"screen_create_new_recovery_key_list_item_2" = "Znovu se přihlaste ke svému účtu";
+"screen_create_new_recovery_key_list_item_3" = "Když budete vyzváni k ověření vašeho zařízení, vyberte %1$@";
+"screen_create_new_recovery_key_list_item_3_reset_all" = "\"Resetovat vše\"";
+"screen_create_new_recovery_key_list_item_4" = "Postupujte podle pokynů k vytvoření nového obnovovacího klíče";
+"screen_create_new_recovery_key_list_item_5" = "Uložte nový klíč pro obnovení do správce hesel nebo do zašifrované poznámky";
+"screen_create_new_recovery_key_title" = "Obnovte šifrování účtu pomocí jiného zařízení";
 "screen_create_poll_add_option_btn" = "Přidat volbu";
 "screen_create_poll_anonymous_desc" = "Zobrazit výsledky až po skončení hlasování";
 "screen_create_poll_anonymous_headline" = "Anonymní hlasování";
@@ -398,6 +405,7 @@
 "screen_edit_profile_error_title" = "Nelze aktualizovat profil";
 "screen_edit_profile_title" = "Upravit profil";
 "screen_edit_profile_updating_details" = "Aktualizace profilu...";
+"screen_identity_confirmation_create_new_recovery_key" = "Vytvoření nového klíče pro obnovení";
 "screen_identity_confirmation_subtitle" = "Ověřte toto zařízení a nastavte zabezpečené zasílání zpráv.";
 "screen_identity_confirmation_title" = "Potvrďte, že jste to vy";
 "screen_identity_confirmed_subtitle" = "Nyní můžete bezpečně číst nebo odesílat zprávy, a kdokoli, s kým chatujete, může tomuto zařízení důvěřovat.";
@@ -473,10 +481,12 @@
 "screen_recovery_key_change_generate_key_description" = "Ujistěte se, že můžete klíč pro obnovení uložit někde v bezpečí";
 "screen_recovery_key_change_success" = "Klíč pro obnovení byl změněn";
 "screen_recovery_key_change_title" = "Změnit klíč pro obnovení?";
-"screen_recovery_key_confirm_description" = "Zadejte klíč pro obnovení a potvrďte přístup k záloze chatu.";
+"screen_recovery_key_confirm_create_new_recovery_key" = "Vytvořit nový klíč pro obnovení";
+"screen_recovery_key_confirm_description" = "Ujistěte se, že tuto obrazovku nikdo nevidí!";
 "screen_recovery_key_confirm_error_content" = "Zkuste prosím znovu potvrdit přístup k záloze chatu.";
 "screen_recovery_key_confirm_error_title" = "Nesprávný klíč pro obnovení";
-"screen_recovery_key_confirm_key_description" = "Zadejte kód o délce 48 znaků.";
+"screen_recovery_key_confirm_key_description" = "Pokud máte frázi pro obnovení nebo tajnou přístupovou frázi/klíč, bude to fungovat také.";
+"screen_recovery_key_confirm_key_label" = "Klíč pro obnovení nebo přístupový kód";
 "screen_recovery_key_confirm_key_placeholder" = "Zadejte...";
 "screen_recovery_key_confirm_success" = "Klíč pro obnovení potvrzen";
 "screen_recovery_key_confirm_title" = "Potvrďte klíč pro obnovení";
@@ -520,6 +530,7 @@
 "screen_room_change_role_confirm_demote_self_description" = "Tuto změnu nebudete moci vrátit zpět, protože sami degradujete, pokud jste posledním privilegovaným uživatelem v místnosti, nebude možné znovu získat oprávnění.";
 "screen_room_change_role_confirm_demote_self_title" = "Degradovat se?";
 "screen_room_change_role_invited_member_name" = "%1$@ (čekající)";
+"screen_room_change_role_moderators_admin_section_footer" = "Správci mají automaticky oprávnění moderátora";
 "screen_room_change_role_moderators_title" = "Upravit moderátory";
 "screen_room_change_role_unsaved_changes_description" = "Máte neuložené změny.";
 "screen_room_change_role_unsaved_changes_title" = "Uložit změny?";
@@ -538,6 +549,7 @@
 "screen_room_details_notification_mode_default" = "Výchozí";
 "screen_room_details_notification_title" = "Oznámení";
 "screen_room_details_share_room_title" = "Sdílet místnost";
+"screen_room_details_title" = "Informace o místnosti";
 "screen_room_details_updating_room" = "Aktualizace místnosti...";
 "screen_room_directory_search_loading_error" = "Načítání se nezdařilo";
 "screen_room_directory_search_title" = "Adresář místností";
@@ -549,6 +561,7 @@
 "screen_room_member_details_block_alert_action" = "Zablokovat";
 "screen_room_member_details_block_alert_description" = "Blokovaní uživatelé vám nebudou moci posílat zprávy a všechny jejich zprávy budou skryty. Můžete je kdykoli odblokovat.";
 "screen_room_member_details_block_user" = "Zablokovat uživatele";
+"screen_room_member_details_title" = "Profil";
 "screen_room_member_details_unblock_alert_action" = "Odblokovat";
 "screen_room_member_details_unblock_alert_description" = "Znovu uvidíte všechny zprávy od nich.";
 "screen_room_member_details_unblock_user" = "Odblokovat uživatele";
@@ -623,6 +636,8 @@
 "screen_roomlist_filter_favourites" = "Oblíbené";
 "screen_roomlist_filter_favourites_empty_state_subtitle" = "V nastavení chatu můžete přidat chat k oblíbeným.\nProzatím můžete zrušit výběr filtrů, abyste viděli své další chaty";
 "screen_roomlist_filter_favourites_empty_state_title" = "Zatím nemáte oblíbené chaty";
+"screen_roomlist_filter_invites" = "Pozvánky";
+"screen_roomlist_filter_invites_empty_state_title" = "Nemáte žádné nevyřízené pozvánky.";
 "screen_roomlist_filter_low_priority" = "Nízká priorita";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Můžete zrušit výběr filtrů, abyste viděli své další chaty";
 "screen_roomlist_filter_mixed_empty_state_title" = "Nemáte chaty pro tento výběr";

@@ -374,6 +374,13 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Backup-ul pentru chat nu este sincronizat în prezent.";
 "screen_chat_backup_recovery_action_setup" = "Configurați recuperarea";
 "screen_chat_backup_recovery_action_setup_description" = "Obțineți acces la mesajele dumneavoastră criptate dacă vă pierdeți toate dispozitivele sau sunteți deconectat de la %1$@ peste tot.";
+"screen_create_new_recovery_key_list_item_1" = "Open Element in a desktop device";
+"screen_create_new_recovery_key_list_item_2" = "Sign into your account again";
+"screen_create_new_recovery_key_list_item_3" = "When asked to verify your device, select %1$@";
+"screen_create_new_recovery_key_list_item_3_reset_all" = "“Reset all”";
+"screen_create_new_recovery_key_list_item_4" = "Follow the instructions to create a new recovery key";
+"screen_create_new_recovery_key_list_item_5" = "Save your new recovery key in a password manager or encrypted note";
+"screen_create_new_recovery_key_title" = "Reset the encryption for your account using another device";
 "screen_create_poll_add_option_btn" = "Adăugați o opțiune";
 "screen_create_poll_anonymous_desc" = "Afișați rezultatele numai după încheierea sondajului";
 "screen_create_poll_anonymous_headline" = "Sondaj anonim";
@@ -398,6 +405,7 @@
 "screen_edit_profile_error_title" = "Nu s-a putut actualiza profilul";
 "screen_edit_profile_title" = "Editați profilul";
 "screen_edit_profile_updating_details" = "Se actualizează profilul...";
+"screen_identity_confirmation_create_new_recovery_key" = "Create a new recovery key";
 "screen_identity_confirmation_subtitle" = "Verify this device to set up secure messaging.";
 "screen_identity_confirmation_title" = "Confirm that it's you";
 "screen_identity_confirmed_subtitle" = "Now you can read or send messages securely, and anyone you chat with can also trust this device.";
@@ -473,10 +481,12 @@
 "screen_recovery_key_change_generate_key_description" = "Asigurați-vă că puteți stoca cheia de recuperare undeva în siguranță";
 "screen_recovery_key_change_success" = "Cheia de recuperare a fost schimbată";
 "screen_recovery_key_change_title" = "Schimbați cheia de recuperare?";
+"screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
 "screen_recovery_key_confirm_description" = "Introduceți cheia de recuperare pentru a confirma accesul la backup.";
 "screen_recovery_key_confirm_error_content" = "Vă rugăm să încercați din nou să confirmați accesul la backup.";
 "screen_recovery_key_confirm_error_title" = "Cheie de recuperare incorectă";
 "screen_recovery_key_confirm_key_description" = "Introduceți codul de 48 de caractere.";
+"screen_recovery_key_confirm_key_label" = "Recovery key or passcode";
 "screen_recovery_key_confirm_key_placeholder" = "Introduceți...";
 "screen_recovery_key_confirm_success" = "Cheia de recuperare confirmată";
 "screen_recovery_key_confirm_title" = "Confirmați cheia de recuperare";
@@ -520,6 +530,7 @@
 "screen_room_change_role_confirm_demote_self_description" = "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.";
 "screen_room_change_role_confirm_demote_self_title" = "Demote yourself?";
 "screen_room_change_role_invited_member_name" = "%1$@ (Pending)";
+"screen_room_change_role_moderators_admin_section_footer" = "Admins automatically have moderator privileges";
 "screen_room_change_role_moderators_title" = "Edit Moderators";
 "screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
 "screen_room_change_role_unsaved_changes_title" = "Save changes?";
@@ -538,6 +549,7 @@
 "screen_room_details_notification_mode_default" = "Implicit";
 "screen_room_details_notification_title" = "Notificări";
 "screen_room_details_share_room_title" = "Partajați camera";
+"screen_room_details_title" = "Room info";
 "screen_room_details_updating_room" = "Se actualizează camera…";
 "screen_room_directory_search_loading_error" = "Failed loading";
 "screen_room_directory_search_title" = "Room directory";
@@ -549,6 +561,7 @@
 "screen_room_member_details_block_alert_action" = "Blocați";
 "screen_room_member_details_block_alert_description" = "Utilizatorii blocați nu vă vor putea trimite mesaje și toate mesajele lor vor fi ascunse. Puteți anula această acțiune oricând.";
 "screen_room_member_details_block_user" = "Blocați utilizatorul";
+"screen_room_member_details_title" = "Profile";
 "screen_room_member_details_unblock_alert_action" = "Deblocați";
 "screen_room_member_details_unblock_alert_description" = "La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta.";
 "screen_room_member_details_unblock_user" = "Deblocați utilizatorul";
@@ -623,6 +636,8 @@
 "screen_roomlist_filter_favourites" = "Favorite";
 "screen_roomlist_filter_favourites_empty_state_subtitle" = "You can add a chat to your favourites in the chat settings.\nFor now, you can deselect filters in order to see your other chats";
 "screen_roomlist_filter_favourites_empty_state_title" = "You don’t have favourite chats yet";
+"screen_roomlist_filter_invites" = "Invites";
+"screen_roomlist_filter_invites_empty_state_title" = "You don't have any pending invites.";
 "screen_roomlist_filter_low_priority" = "Prioritate scăzută";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "You can deselect filters in order to see your other chats";
 "screen_roomlist_filter_mixed_empty_state_title" = "You don’t have chats for this selection";
