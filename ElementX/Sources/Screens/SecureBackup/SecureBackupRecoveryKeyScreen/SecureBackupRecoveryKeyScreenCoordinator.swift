@@ -62,6 +62,8 @@ final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
                     self.actionsSubject.send(.recoveryChanged)
                 case .fixRecovery:
                     self.actionsSubject.send(.recoveryFixed)
+                case .unknown:
+                    fatalError()
                 }
             case .showResetKeyInfo:
                 self.actionsSubject.send(.showResetKeyInfo)

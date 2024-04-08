@@ -116,7 +116,7 @@ extension SecureBackupRecoveryState {
         case .incomplete:
             return .fixRecovery
         default:
-            fatalError("Invalid recovery state")
+            return .unknown
         }
     }
 }
