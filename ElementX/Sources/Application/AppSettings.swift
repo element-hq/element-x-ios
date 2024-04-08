@@ -52,7 +52,6 @@ final class AppSettings {
         case roomListFiltersEnabled
         case markAsUnreadEnabled
         case markAsFavouriteEnabled
-        case roomModerationEnabled
         case publicSearchEnabled
         case qrCodeLoginEnabled
     }
@@ -281,9 +280,6 @@ final class AppSettings {
     var sharePresence
     
     // MARK: - Feature Flags
-    
-    @UserPreference(key: UserDefaultsKeys.roomModerationEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var roomModerationEnabled
     
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .volatile)
     var publicSearchEnabled

@@ -27,7 +27,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
-    private let appSettings: AppSettings
 
     private var dmRecipient: RoomMemberProxyProtocol?
     
@@ -43,8 +42,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
          analyticsService: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
-         attributedStringBuilder: AttributedStringBuilderProtocol,
-         appSettings: AppSettings) {
+         attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
@@ -52,7 +50,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         self.userIndicatorController = userIndicatorController
         self.notificationSettingsProxy = notificationSettingsProxy
         self.attributedStringBuilder = attributedStringBuilder
-        self.appSettings = appSettings
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.topic)
         
@@ -181,11 +178,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.canEditRoomName = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName).get()) == true
         state.canEditRoomTopic = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic).get()) == true
         state.canEditRoomAvatar = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar).get()) == true
-        
-        if appSettings.roomModerationEnabled {
-            state.canEditRolesOrPermissions = await (try? roomProxy.suggestedRole(for: roomProxy.ownUserID).get()) == .administrator
-        }
-        
+        state.canEditRolesOrPermissions = await (try? roomProxy.suggestedRole(for: roomProxy.ownUserID).get()) == .administrator
         state.canInviteUsers = await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true
     }
     
