@@ -109,13 +109,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         case .room(let roomID):
             guard roomID == roomProxy.id else { fatalError("Navigation route doesn't belong to this room flow.") }
             stateMachine.tryEvent(.presentRoom, userInfo: EventUserInfo(animated: animated))
+        case .childRoom(let roomID):
+            if case .presentingChild = stateMachine.state, let childRoomFlowCoordinator {
+                childRoomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.tryEvent(.presentChildRoom(roomID: roomID), userInfo: EventUserInfo(animated: animated))
+            }
         case .roomDetails(let roomID):
             guard roomID == roomProxy.id else { fatalError("Navigation route doesn't belong to this room flow.") }
             stateMachine.tryEvent(.presentRoomDetails, userInfo: EventUserInfo(animated: animated))
         case .roomList:
             stateMachine.tryEvent(.dismissRoom, userInfo: EventUserInfo(animated: animated))
         case .roomMemberDetails(let userID):
-            stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: EventUserInfo(animated: animated))
+            // Always assume this will be presented on the child, external permalinks to a user aren't for a room member.
+            if case .presentingChild = stateMachine.state, let childRoomFlowCoordinator {
+                childRoomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: EventUserInfo(animated: animated))
+            }
         case .genericCallLink, .oidcCallback, .settings, .chatBackupSettings:
             break
         }
@@ -136,7 +147,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch (fromState, event) {
             case (_, .presentRoom):
                 return .room
-            case (.room, .dismissRoom):
+            case (_, .dismissRoom):
                 return .complete
                 
             case (.initial, .presentRoomDetails):
@@ -145,8 +156,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .roomDetails(isRoot: false)
             case (.roomDetails, .dismissRoomDetails):
                 return .room
-            case (.roomDetails, .dismissRoom):
-                return .complete
                 
             case (.roomDetails, .presentRoomDetailsEditScreen):
                 return .roomDetailsEditScreen
@@ -254,7 +263,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (_, .presentRoom, .room):
                 Task { await self.presentRoom(animated: animated) }
-            case (.room, .dismissRoom, .complete):
+            case (_, .dismissRoom, .complete):
                 dismissFlow(animated: animated)
             
             case (.initial, .presentRoomDetails, .roomDetails(let isRoot)),
@@ -263,8 +272,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 Task { await self.presentRoomDetails(isRoot: isRoot, animated: animated) }
             case (.roomDetails, .dismissRoomDetails, .room):
                 break
-            case (.roomDetails, .dismissRoom, .complete):
-                dismissFlow(animated: animated)
                 
             case (.roomDetails, .presentRoomDetailsEditScreen, .roomDetailsEditScreen):
                 presentRoomDetailsEditScreen()

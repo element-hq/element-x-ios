@@ -17,13 +17,24 @@
 import Foundation
 
 enum AppRoute: Equatable {
+    /// The callback used to complete login with OIDC.
     case oidcCallback(url: URL)
+    /// The app's home screen.
     case roomList
+    /// A room, shown as the root of the stack (popping any child rooms).
     case room(roomID: String)
+    /// A room, pushed as a child of any existing rooms on the stack.
+    case childRoom(roomID: String)
+    /// The information about a particular room.
     case roomDetails(roomID: String)
+    /// The profile of a member within the current room.
+    /// (This can be specialised into 2 routes when we support user permalinks).
     case roomMemberDetails(userID: String)
+    /// An Element Call link generated outside of a chat room.
     case genericCallLink(url: URL)
+    /// The settings screen.
     case settings
+    /// The setting screen for key backup.
     case chatBackupSettings
 }
 

@@ -38,7 +38,7 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
         AnyView(ProgressView("Running Unit Tests"))
     }
     
-    func handleDeepLink(_ url: URL) -> Bool {
+    func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool {
         fatalError("Not implemented.")
     }
 }
