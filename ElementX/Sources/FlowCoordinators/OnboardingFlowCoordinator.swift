@@ -261,7 +261,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 case .showResetKeyInfo:
                     presentResetRecoveryKeyScreen()
                 default:
-                    fatalError("Other flows shouldn't be possible")
+                    MXLog.error("Unexpected recovery action: \(action)")
                 }
             }
             .store(in: &cancellables)
