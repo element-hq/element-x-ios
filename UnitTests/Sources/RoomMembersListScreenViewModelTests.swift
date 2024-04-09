@@ -290,7 +290,6 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         viewModel = .init(roomProxy: roomProxy,
                           mediaProvider: MockMediaProvider(),
                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                          appSettings: ServiceLocator.shared.settings,
                           analytics: ServiceLocator.shared.analytics)
     }
 }
