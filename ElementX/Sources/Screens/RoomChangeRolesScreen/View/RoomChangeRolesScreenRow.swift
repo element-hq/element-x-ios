@@ -19,8 +19,6 @@ import MatrixRustSDK
 import SwiftUI
 
 struct RoomChangeRolesScreenRow: View {
-    @Environment(\.isEnabled) private var isEnabled
-    
     let member: RoomMemberDetails
     let imageProvider: ImageProviderProtocol?
     
