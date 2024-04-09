@@ -475,7 +475,6 @@ class MockScreen: Identifiable {
             let coordinator = RoomMembersListScreenCoordinator(parameters: .init(mediaProvider: MockMediaProvider(),
                                                                                  roomProxy: RoomProxyMock(with: .init(name: "test", members: members)),
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                                 appSettings: ServiceLocator.shared.settings,
                                                                                  analytics: ServiceLocator.shared.analytics))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator

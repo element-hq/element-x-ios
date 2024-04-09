@@ -320,8 +320,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
-                                                                                           mentionBuilder: MentionBuilder()),
-                                          appSettings: ServiceLocator.shared.settings)
+                                                                                           mentionBuilder: MentionBuilder()))
     }()
     
     static let dmRoomViewModel = {
@@ -347,8 +346,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
-                                                                                           mentionBuilder: MentionBuilder()),
-                                          appSettings: ServiceLocator.shared.settings)
+                                                                                           mentionBuilder: MentionBuilder()))
     }()
     
     static let simpleRoomViewModel = {
@@ -373,8 +371,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
-                                                                                           mentionBuilder: MentionBuilder()),
-                                          appSettings: ServiceLocator.shared.settings)
+                                                                                           mentionBuilder: MentionBuilder()))
     }()
     
     static var previews: some View {

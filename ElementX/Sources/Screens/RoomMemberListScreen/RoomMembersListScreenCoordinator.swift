@@ -21,7 +21,6 @@ struct RoomMembersListScreenCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
     let roomProxy: RoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let appSettings: AppSettings
     let analytics: AnalyticsService
 }
 
@@ -44,7 +43,6 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
         viewModel = RoomMembersListScreenViewModel(roomProxy: parameters.roomProxy,
                                                    mediaProvider: parameters.mediaProvider,
                                                    userIndicatorController: parameters.userIndicatorController,
-                                                   appSettings: parameters.appSettings,
                                                    analytics: parameters.analytics)
     }
     

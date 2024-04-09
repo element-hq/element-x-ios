@@ -286,14 +286,10 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     }
     
     private func setup(with members: [RoomMemberProxyMock]) {
-        AppSettings.resetAllSettings()
-        ServiceLocator.shared.settings.roomModerationEnabled = true
-        
         roomProxy = RoomProxyMock(with: .init(name: "test", members: members))
         viewModel = .init(roomProxy: roomProxy,
                           mediaProvider: MockMediaProvider(),
                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                          appSettings: ServiceLocator.shared.settings,
                           analytics: ServiceLocator.shared.analytics)
     }
 }

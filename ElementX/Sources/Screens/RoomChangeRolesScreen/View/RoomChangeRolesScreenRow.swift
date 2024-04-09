@@ -19,8 +19,6 @@ import MatrixRustSDK
 import SwiftUI
 
 struct RoomChangeRolesScreenRow: View {
-    @Environment(\.isEnabled) private var isEnabled
-    
     let member: RoomMemberDetails
     let imageProvider: ImageProviderProtocol?
     
@@ -28,20 +26,11 @@ struct RoomChangeRolesScreenRow: View {
     let action: () -> Void
     
     var body: some View {
-        ListRow(label: .avatar(title: memberName,
+        ListRow(label: .avatar(title: member.name ?? member.id,
+                               status: member.isInvited ? L10n.screenRoomMemberListPendingHeaderTitle : nil,
                                description: member.name == nil ? nil : member.id,
                                icon: avatar),
                 kind: .multiSelection(isSelected: isSelected, action: action))
-    }
-    
-    var memberName: String {
-        let name = member.name ?? member.id
-        
-        return if member.isInvited {
-            L10n.screenRoomChangeRoleInvitedMemberName(name)
-        } else {
-            name
-        }
     }
     
     var avatar: LoadableAvatarImage {
