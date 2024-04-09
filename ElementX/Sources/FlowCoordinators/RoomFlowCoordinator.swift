@@ -112,8 +112,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         case .childRoom(let roomID):
             if case .presentingChild = stateMachine.state, let childRoomFlowCoordinator {
                 childRoomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-            } else {
+            } else if roomID != roomProxy.id {
                 stateMachine.tryEvent(.presentChildRoom(roomID: roomID), userInfo: EventUserInfo(animated: animated))
+            } else {
+                MXLog.info("Ignoring presentation of the same room as a child of this one.")
             }
         case .roomDetails(let roomID):
             guard roomID == roomProxy.id else { fatalError("Navigation route doesn't belong to this room flow.") }
