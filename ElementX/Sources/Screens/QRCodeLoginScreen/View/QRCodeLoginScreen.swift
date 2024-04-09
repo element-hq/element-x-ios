@@ -132,13 +132,13 @@ struct QRCodeLoginScreen: View {
                             
                             Text(L10n.screenQrCodeLoginInvalidScanStateSubtitle)
                         }
+                        .font(.compound.bodyMDSemibold)
+                        .foregroundColor(.compound.textCriticalPrimary)
+                        
+                        Text(L10n.screenQrCodeLoginInvalidScanStateDescription)
+                            .foregroundColor(.compound.textSecondary)
+                            .font(.compound.bodySM)
                     }
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundColor(.compound.textCriticalPrimary)
-                    
-                    Text(L10n.screenQrCodeLoginInvalidScanStateDescription)
-                        .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodySM)
                 }
             }
         }
