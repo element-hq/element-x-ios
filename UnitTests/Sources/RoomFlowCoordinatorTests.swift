@@ -80,12 +80,10 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
         try await process(route: .childRoom(roomID: "2"))
-        try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         
         try await process(route: .childRoom(roomID: "3"))
-        try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2)
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         XCTAssert(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
@@ -122,7 +120,6 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
         try await process(route: .childRoom(roomID: "2"))
-        try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         
@@ -132,11 +129,38 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssert(navigationStackCoordinator.stackCoordinators.last is RoomMemberDetailsScreenCoordinator)
     }
     
+    func testChildRoomIgnoresDirectDuplicate() async throws {
+        await setupViewModel()
+        
+        try await process(route: .room(roomID: "1"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        
+        try await process(route: .childRoom(roomID: "1"))
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0,
+                       "A room flow shouldn't present a direct child for the same room.")
+        
+        try await process(route: .childRoom(roomID: "2"))
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
+        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        
+        try await process(route: .childRoom(roomID: "1"))
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2,
+                       "Presenting the same room multiple times should be allowed when it's not a direct child of itself.")
+        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+        XCTAssert(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
+    }
+    
     // MARK: - Private
     
     private func process(route: AppRoute) async throws {
         roomFlowCoordinator.handleAppRoute(route, animated: true)
-        await Task.yield()
+        if case .childRoom = route {
+            // A single yield isn't enough when creating the new flow coordinator.
+            try await Task.sleep(for: .milliseconds(100))
+        } else {
+            await Task.yield()
+        }
     }
     
     private func process(route: AppRoute, expectedAction: RoomFlowCoordinatorAction) async throws {
