@@ -698,6 +698,8 @@
 		A6D4C5EEA85A6A0ABA1559D6 /* RoomDetailsEditScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D09C79746BDCD9173EB3A7 /* RoomDetailsEditScreenModels.swift */; };
 		A6DEC1ADEC8FEEC206A0FA37 /* AttributedStringBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F37B5DA798C9AE436F2C2C /* AttributedStringBuilderProtocol.swift */; };
 		A6F345328CCC5C9B0DAE2257 /* LogViewerScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB05221D7D941CC82DC8480 /* LogViewerScreenViewModel.swift */; };
+		A7215B2C2BC56F95005DDAC4 /* QRCodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7215B2B2BC56F95005DDAC4 /* QRCodeScannerView.swift */; };
+		A7215B2E2BC575B8005DDAC4 /* QRCodeLoginServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7215B2D2BC575B8005DDAC4 /* QRCodeLoginServiceMock.swift */; };
 		A722F426FD81FC67706BB1E0 /* CustomLayoutLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42236480CF0431535EBE8387 /* CustomLayoutLabelStyle.swift */; };
 		A74438ED16F8683A4B793E6A /* AnalyticsSettingsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCE3FAF40932AC7C7639AC4 /* AnalyticsSettingsScreenViewModel.swift */; };
 		A7D48E44D485B143AADDB77D /* Strings+Untranslated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18F6CE4D694D21E4EA9B25 /* Strings+Untranslated.swift */; };
@@ -1750,6 +1752,8 @@
 		A65F140F9FE5E8D4DAEFF354 /* RoomProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomProxy.swift; sourceTree = "<group>"; };
 		A6B891A6DA826E2461DBB40F /* PHGPostHogConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHGPostHogConfiguration.swift; sourceTree = "<group>"; };
 		A6C11AD9813045E44F950410 /* ElementCallWidgetDriverProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementCallWidgetDriverProtocol.swift; sourceTree = "<group>"; };
+		A7215B2B2BC56F95005DDAC4 /* QRCodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerView.swift; sourceTree = "<group>"; };
+		A7215B2D2BC575B8005DDAC4 /* QRCodeLoginServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeLoginServiceMock.swift; sourceTree = "<group>"; };
 		A73A07BAEDD74C48795A996A /* AsyncSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncSequence.swift; sourceTree = "<group>"; };
 		A7C4EA55DA62F9D0F984A2AE /* CollapsibleTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleTimelineItem.swift; sourceTree = "<group>"; };
 		A7D452AF7B5F7E3A0A7DB54C /* SessionVerificationScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationScreenViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -2667,6 +2671,7 @@
 				AAD01F7FC2BBAC7351948595 /* UserProfile+Mock.swift */,
 				B23135B06B044CB811139D2F /* Generated */,
 				E5E545F92D01588360A9BAC5 /* SDK */,
+				A7215B2D2BC575B8005DDAC4 /* QRCodeLoginServiceMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -4612,6 +4617,7 @@
 			isa = PBXGroup;
 			children = (
 				BFA9EA59D5C0DA1BFC7B3621 /* QRCodeLoginScreen.swift */,
+				A7215B2B2BC56F95005DDAC4 /* QRCodeScannerView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -5784,6 +5790,7 @@
 				54C774874BED4A8FAD1F22FE /* AnalyticsConfiguration.swift in Sources */,
 				8DDC6F28C797D8685F2F8E32 /* AnalyticsConsentState.swift in Sources */,
 				24A1BBADAC43DC3F3A7347DA /* AnalyticsPromptScreen.swift in Sources */,
+				A7215B2E2BC575B8005DDAC4 /* QRCodeLoginServiceMock.swift in Sources */,
 				DCFE7CB3B9A104330BBB96AD /* AnalyticsPromptScreenCoordinator.swift in Sources */,
 				6DC8E43BA04AC2AC4EB2EB97 /* AnalyticsPromptScreenModels.swift in Sources */,
 				DB65401349C143DFF883E2B0 /* AnalyticsPromptScreenViewModel.swift in Sources */,
@@ -5832,6 +5839,7 @@
 				9F30A18B50D13B10D8444984 /* ApplicationMock.swift in Sources */,
 				74604ACFDBE7F54260E7B617 /* ApplicationProtocol.swift in Sources */,
 				61A36B9BB2ADE36CEFF5E98C /* Array.swift in Sources */,
+				A7215B2C2BC56F95005DDAC4 /* QRCodeScannerView.swift in Sources */,
 				90EB25D13AE6EEF034BDE9D2 /* Assets.swift in Sources */,
 				273AB64B9A26B61C51858867 /* AsyncSequence.swift in Sources */,
 				D7CDBAE82782BD0529DECB5F /* AttributedString.swift in Sources */,

@@ -36,13 +36,15 @@ struct QRCodeLoginScreen: View {
         switch context.viewState.state {
         case .initial:
             initialContent
-        case .scanning, .error:
+        case .scanning:
+            qrScanContent
+        case .error:
             // TODO: Handle states
             EmptyView()
         }
     }
     
-    var initialContent: some View {
+    private var initialContent: some View {
         FullscreenDialog {
             VStack(alignment: .leading, spacing: 40) {
                 VStack(spacing: 16) {
@@ -64,6 +66,27 @@ struct QRCodeLoginScreen: View {
             .buttonStyle(.compound(.primary))
         }
     }
+    
+    private var qrScanContent: some View {
+        FullscreenDialog {
+            VStack(spacing: 40) {
+                VStack(spacing: 16) {
+                    HeroImage(icon: \.switchCameraSolid, style: .subtle)
+                    
+                    Text("Scan the QR code")
+                        .foregroundColor(.compound.textPrimary)
+                        .font(.compound.headingMDBold)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.horizontal, 24)
+                
+                QRCodeScannerView()
+                    .aspectRatio(1.0, contentMode: .fill)
+            }
+        } bottomContent: {
+            EmptyView()
+        }
+    }
         
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
@@ -78,9 +101,15 @@ struct QRCodeLoginScreen: View {
 // MARK: - Previews
 
 struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = QRCodeLoginScreenViewModel(qrCodeLoginService: QRCodeLoginServiceMock())
+    static let initialStateViewModel = QRCodeLoginScreenViewModel.mock(state: .initial)
+    
+    static let scanningStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scanning)
+    
     static var previews: some View {
-        QRCodeLoginScreen(context: viewModel.context)
+        QRCodeLoginScreen(context: initialStateViewModel.context)
             .previewDisplayName("Initial")
+        
+        QRCodeLoginScreen(context: scanningStateViewModel.context)
+            .previewDisplayName("Scanning")
     }
 }
