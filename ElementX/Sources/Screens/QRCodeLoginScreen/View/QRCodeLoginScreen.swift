@@ -20,6 +20,23 @@ import SwiftUI
 struct QRCodeLoginScreen: View {
     @ObservedObject var context: QRCodeLoginScreenViewModel.Context
     
+    @State private var qrFrame = CGRect.zero
+    private let dashRatio: CGFloat = 80.0 / 312.0
+    private let emptyRatio: CGFloat = 232.0 / 312.0
+    private let dashPhaseRatio: CGFloat = 40.0 / 312.0
+    
+    private var dashLenght: CGFloat {
+        qrFrame.height * dashRatio
+    }
+    
+    private var emptyLenght: CGFloat {
+        qrFrame.height * emptyRatio
+    }
+    
+    private var dashPhase: CGFloat {
+        qrFrame.height * dashPhaseRatio
+    }
+    
     var body: some View {
         NavigationStack {
             mainContent
@@ -36,7 +53,7 @@ struct QRCodeLoginScreen: View {
         switch context.viewState.state {
         case .initial:
             initialContent
-        case .scanning:
+        case .scan:
             qrScanContent
         case .error:
             // TODO: Handle states
@@ -71,21 +88,72 @@ struct QRCodeLoginScreen: View {
         FullscreenDialog {
             VStack(spacing: 40) {
                 VStack(spacing: 16) {
-                    HeroImage(icon: \.switchCameraSolid, style: .subtle)
+                    HeroImage(icon: \.takePhotoSolid, style: .subtle)
                     
-                    Text("Scan the QR code")
+                    Text(L10n.screenQrCodeLoginScanningStateTitle)
                         .foregroundColor(.compound.textPrimary)
                         .font(.compound.headingMDBold)
                         .multilineTextAlignment(.center)
                 }
-                .padding(.horizontal, 24)
                 
-                QRCodeScannerView()
-                    .aspectRatio(1.0, contentMode: .fill)
+                qrScanner
             }
         } bottomContent: {
-            EmptyView()
+            qrScanFooter
         }
+        .padding(.horizontal, 24)
+    }
+    
+    @ViewBuilder
+    private var qrScanFooter: some View {
+        if case let .scan(scanState) = context.viewState.state {
+            switch scanState {
+            case .connecting:
+                VStack(spacing: 4) {
+                    ProgressView()
+                    Text(L10n.screenQrCodeLoginConnectingSubtitle)
+                }
+            case .scanning:
+                // Just here to keep the spacing consistent between states
+                Button("") { }
+                    .buttonStyle(.compound(.primary))
+                    .hidden()
+            case .invalid:
+                VStack(spacing: 16) {
+                    Button(L10n.screenQrCodeLoginInvalidScanStateRetryButton) {
+                        // TODO: Implement try again
+                    }
+                    .buttonStyle(.compound(.primary))
+                    
+                    VStack(spacing: 0) {
+                        HStack(spacing: 10) {
+                            CompoundIcon(\.error, size: .medium, relativeTo: .compound.bodyMDSemibold)
+                                .accessibilityLabel(L10n.commonSendingFailed)
+                            
+                            Text(L10n.screenQrCodeLoginInvalidScanStateSubtitle)
+                        }
+                    }
+                    .font(.compound.bodyMDSemibold)
+                    .foregroundColor(.compound.textCriticalPrimary)
+                    
+                    Text(L10n.screenQrCodeLoginInvalidScanStateDescription)
+                        .foregroundColor(.compound.textSecondary)
+                        .font(.compound.bodySM)
+                }
+            }
+        }
+    }
+
+    private var qrScanner: some View {
+        QRCodeScannerView()
+            .aspectRatio(1.0, contentMode: .fill)
+            .frame(maxWidth: 312)
+            .readFrame($qrFrame)
+            .background(.compound.bgCanvasDefault)
+            .overlay(
+                Rectangle()
+                    .stroke(.compound.textPrimary, style: StrokeStyle(lineWidth: 4.0, lineCap: .square, dash: [dashLenght, emptyLenght], dashPhase: dashPhase))
+            )
     }
         
     @ToolbarContentBuilder
@@ -103,7 +171,11 @@ struct QRCodeLoginScreen: View {
 struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     static let initialStateViewModel = QRCodeLoginScreenViewModel.mock(state: .initial)
     
-    static let scanningStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scanning)
+    static let scanningStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanning))
+    
+    static let connectingStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.connecting))
+    
+    static let invalidStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.invalid))
     
     static var previews: some View {
         QRCodeLoginScreen(context: initialStateViewModel.context)
@@ -111,5 +183,11 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
         
         QRCodeLoginScreen(context: scanningStateViewModel.context)
             .previewDisplayName("Scanning")
+        
+        QRCodeLoginScreen(context: connectingStateViewModel.context)
+            .previewDisplayName("Connecting")
+        
+        QRCodeLoginScreen(context: invalidStateViewModel.context)
+            .previewDisplayName("Invalid")
     }
 }

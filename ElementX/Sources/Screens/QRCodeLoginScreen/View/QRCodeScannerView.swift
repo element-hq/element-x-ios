@@ -30,7 +30,7 @@ struct QRCodeScannerView: UIViewControllerRepresentable {
 
 final class QRScannerController: UIViewController {
     private var captureSession = AVCaptureSession()
-    private var videoPreviewLayer: AVCaptureVideoPreviewLayer!
+    private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     private var qrCodeFrameView: UIView?
  
     var delegate: AVCaptureMetadataOutputObjectsDelegate?
@@ -68,14 +68,20 @@ final class QRScannerController: UIViewController {
         captureMetadataOutput.metadataObjectTypes = [.qr]
  
         // Initialize the video preview layer and add it as a sublayer to the viewPreview view's layer.
-        videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        videoPreviewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        videoPreviewLayer.frame = view.layer.bounds
-        view.layer.addSublayer(videoPreviewLayer)
+        let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        videoPreviewLayer = previewLayer
+        videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        videoPreviewLayer?.frame = view.layer.bounds
+        view.layer.addSublayer(previewLayer)
  
         // Start video capture.
         DispatchQueue.global(qos: .background).async {
             self.captureSession.startRunning()
         }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        videoPreviewLayer?.frame = view.layer.bounds
     }
 }

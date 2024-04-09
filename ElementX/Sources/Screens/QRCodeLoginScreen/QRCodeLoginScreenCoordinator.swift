@@ -21,6 +21,7 @@ import SwiftUI
 
 struct QRCodeLoginScreenCoordinatorParameters {
     let qrCodeLoginService: QRCodeLoginServiceProtocol
+    let orientationManager: OrientationManagerProtocol
 }
 
 enum QRCodeLoginScreenCoordinatorAction {
@@ -29,6 +30,7 @@ enum QRCodeLoginScreenCoordinatorAction {
 
 final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
     private let viewModel: QRCodeLoginScreenViewModelProtocol
+    private let orientationManager: OrientationManagerProtocol
     
     private var cancellables = Set<AnyCancellable>()
  
@@ -39,6 +41,7 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: QRCodeLoginScreenCoordinatorParameters) {
         viewModel = QRCodeLoginScreenViewModel(qrCodeLoginService: parameters.qrCodeLoginService)
+        orientationManager = parameters.orientationManager
     }
     
     func start() {
@@ -52,6 +55,13 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
+        
+        orientationManager.setOrientation(.portrait)
+        orientationManager.lockOrientation(.portrait)
+    }
+    
+    func stop() {
+        orientationManager.lockOrientation(.all)
     }
         
     func toPresentable() -> AnyView {

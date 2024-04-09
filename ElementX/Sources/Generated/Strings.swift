@@ -1039,6 +1039,18 @@ internal enum L10n {
   internal static func screenInvitesInvitedYou(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1), String(describing: p2))
   }
+  /// Join room
+  internal static var screenJoinRoomJoinAction: String { return L10n.tr("Localizable", "screen_join_room_join_action") }
+  /// Knock to join
+  internal static var screenJoinRoomKnockAction: String { return L10n.tr("Localizable", "screen_join_room_knock_action") }
+  /// Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.
+  internal static var screenJoinRoomSubtitleKnock: String { return L10n.tr("Localizable", "screen_join_room_subtitle_knock") }
+  /// You must be a member of this room to view the message history.
+  internal static var screenJoinRoomSubtitleNoPreview: String { return L10n.tr("Localizable", "screen_join_room_subtitle_no_preview") }
+  /// Want to join this room?
+  internal static var screenJoinRoomTitleKnock: String { return L10n.tr("Localizable", "screen_join_room_title_knock") }
+  /// Preview is not available
+  internal static var screenJoinRoomTitleNoPreview: String { return L10n.tr("Localizable", "screen_join_room_title_no_preview") }
   /// Turn off
   internal static var screenKeyBackupDisableConfirmationActionTurnOff: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_action_turn_off") }
   /// You will lose your encrypted messages if you are signed out of all devices.
@@ -1167,6 +1179,8 @@ internal enum L10n {
   internal static var screenPollsHistoryFilterPast: String { return L10n.tr("Localizable", "screen_polls_history_filter_past") }
   /// Polls
   internal static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
+  /// Establishing connection
+  internal static var screenQrCodeLoginConnectingSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_connecting_subtitle") }
   /// Open Element on a desktop device
   internal static var screenQrCodeLoginInitialStateItem1: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_1") }
   /// Click on your avatar
@@ -1185,6 +1199,14 @@ internal enum L10n {
   internal static var screenQrCodeLoginInitialStateItem4Action: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_4_action") }
   /// Open Element on another device to get the QR code
   internal static var screenQrCodeLoginInitialStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_title") }
+  /// Use the QR code shown on the other device.
+  internal static var screenQrCodeLoginInvalidScanStateDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_invalid_scan_state_description") }
+  /// Try Again
+  internal static var screenQrCodeLoginInvalidScanStateRetryButton: String { return L10n.tr("Localizable", "screen_qr_code_login_invalid_scan_state_retry_button") }
+  /// Wrong QR code
+  internal static var screenQrCodeLoginInvalidScanStateSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_invalid_scan_state_subtitle") }
+  /// Scan the QR code
+  internal static var screenQrCodeLoginScanningStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_scanning_state_title") }
   /// Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.
   internal static var screenRecoveryKeyChangeDescription: String { return L10n.tr("Localizable", "screen_recovery_key_change_description") }
   /// Generate a new recovery key

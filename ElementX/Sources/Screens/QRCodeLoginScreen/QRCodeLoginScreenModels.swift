@@ -58,10 +58,16 @@ enum QRCodeLoginScreenViewAction {
 
 enum QRCodeLoginState {
     case initial
-    case scanning
+    case scan(QRCodeLoginScanningState)
     case error(QRCodeLoginErrorState)
     
     enum QRCodeLoginErrorState {
         case noCameraPermission
+    }
+    
+    enum QRCodeLoginScanningState {
+        case scanning
+        case connecting
+        case invalid
     }
 }

@@ -45,7 +45,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
     
     private func startScanIfPossible() async {
-        state.state = await qrCodeLoginService.requestAuthorizationIfNeeded() ? .scanning : .error(.noCameraPermission)
+        state.state = await qrCodeLoginService.requestAuthorizationIfNeeded() ? .scan(.scanning) : .error(.noCameraPermission)
     }
     
     /// Only for mocking initial states
