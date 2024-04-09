@@ -1,3 +1,29 @@
+## Changes in 1.6.2 (2024-04-09)
+
+✨ Features
+
+- Implement public room search list pagination and room joining ([#2518](https://github.com/element-hq/element-x-ios/issues/2518))
+- Added a view that explains how to reset your recovery key in case the user forgot it. ([#2647](https://github.com/element-hq/element-x-ios/issues/2647))
+
+🙌 Improvements
+
+- Allow a room to push another room onto the navigation stack instead of replacing itself. ([#2587](https://github.com/element-hq/element-x-ios/issues/2587))
+- Add trophy icon next to the winning poll option ([#2609](https://github.com/element-hq/element-x-ios/issues/2609))
+
+🐛 Bugfixes
+
+- Fix ReplyView when its content has been redacted. ([#2396](https://github.com/element-hq/element-x-ios/issues/2396))
+- The message composer now correctly recognises when it is empty after deleting a space or a new line. ([#2538](https://github.com/element-hq/element-x-ios/issues/2538))
+- Fix pushers not being registered on re-login after recent Onboarding changes ([#2602](https://github.com/element-hq/element-x-ios/issues/2602))
+- Fix room permalink building, allow dashes in room identifiers ([#2618](https://github.com/element-hq/element-x-ios/issues/2618))
+- Prevent crashes when mentioning users when running on the Mac ([#2627](https://github.com/element-hq/element-x-ios/issues/2627))
+
+🚧 In development 🚧
+
+- Bug fixes on the moderation feature. ([#2608](https://github.com/element-hq/element-x-ios/pull/2608))
+- QR Code login view first step implemented. ([#2667](https://github.com/element-hq/element-x-ios/pull/2667))
+- Added an FF for QR code login, and a CTA in the auth screen, to start the flow. ([#2621](https://github.com/element-hq/element-x-ios/issues/2621))
+
 ## Changes in 1.6.1 (2024-03-25)
 
 🐛 Bugfixes

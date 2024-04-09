@@ -1,1 +1,0 @@
-Added a view that explains how to reset your recovery key in case the user forgot it.
