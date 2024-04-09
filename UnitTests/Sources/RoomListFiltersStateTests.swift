@@ -28,7 +28,7 @@ final class RoomListFiltersStateTests: XCTestCase {
     func testInitialState() {
         XCTAssertFalse(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases.filter { $0 != .invites })
     }
     
     func testSetAndUnsetFilters() {
@@ -39,7 +39,7 @@ final class RoomListFiltersStateTests: XCTestCase {
         state.deactivateFilter(.unreads)
         XCTAssertFalse(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases.filter { $0 != .invites })
     }
     
     func testMutuallyExclusiveFilters() {
@@ -51,7 +51,7 @@ final class RoomListFiltersStateTests: XCTestCase {
         state.deactivateFilter(.people)
         XCTAssertFalse(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases.filter { $0 != .invites })
         
         state.activateFilter(.rooms)
         XCTAssertTrue(state.isFiltering)
@@ -80,7 +80,7 @@ final class RoomListFiltersStateTests: XCTestCase {
         state.clearFilters()
         XCTAssertFalse(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases.filter { $0 != .invites })
     }
     
     func testOrder() {
@@ -90,7 +90,7 @@ final class RoomListFiltersStateTests: XCTestCase {
 
         state.deactivateFilter(.favourites)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases.filter { $0 != .invites })
         
         state.activateFilter(.rooms)
         XCTAssertEqual(state.activeFilters, [.rooms])

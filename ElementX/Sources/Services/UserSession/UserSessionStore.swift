@@ -135,11 +135,12 @@ class UserSessionStore: UserSessionStoreProtocol {
         let completeBuilder = builder
         
         do {
-            let client: Client = try await Task.dispatch(on: .global()) {
-                let client = try completeBuilder.build()
+            let client = try await completeBuilder.build()
+            
+            try await Task.dispatch(on: .global()) {
                 try client.restoreSession(session: credentials.restorationToken.session)
-                return client
             }
+            
             return await .success(setupProxyForClient(client))
         } catch {
             MXLog.error("Failed restoring login with error: \(error)")

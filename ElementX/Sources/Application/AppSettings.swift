@@ -47,14 +47,9 @@ final class AppSettings {
         
         // Feature flags
         case shouldCollapseRoomStateEvents
-        case userSuggestionsEnabled
-        case mentionsBadgeEnabled
-        case roomListFiltersEnabled
-        case markAsUnreadEnabled
-        case markAsFavouriteEnabled
-        case roomModerationEnabled
         case publicSearchEnabled
         case qrCodeLoginEnabled
+        case roomListInvitesEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -282,14 +277,14 @@ final class AppSettings {
     
     // MARK: - Feature Flags
     
-    @UserPreference(key: UserDefaultsKeys.roomModerationEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var roomModerationEnabled
-    
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .volatile)
     var publicSearchEnabled
     
     @UserPreference(key: UserDefaultsKeys.qrCodeLoginEnabled, defaultValue: false, storageType: .userDefaults(store))
     var qrCodeLoginEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.roomListInvitesEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var roomListInvitesEnabled
     
     #endif
     

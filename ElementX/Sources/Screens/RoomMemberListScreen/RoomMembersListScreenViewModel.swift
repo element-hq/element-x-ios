@@ -22,7 +22,6 @@ typealias RoomMembersListScreenViewModelType = StateStoreViewModel<RoomMembersLi
 class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMembersListScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let appSettings: AppSettings
     private let analytics: AnalyticsService
     
     private var members: [RoomMemberProxyProtocol] = []
@@ -37,11 +36,9 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
          roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         appSettings: AppSettings,
          analytics: AnalyticsService) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
-        self.appSettings = appSettings
         self.analytics = analytics
         
         super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount,
@@ -146,11 +143,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     }
     
     private func selectMember(_ member: RoomMemberDetails) {
-        guard appSettings.roomModerationEnabled else {
-            showMemberDetails(member)
-            return
-        }
-        
         if member.isBanned { // No need to check canBan here, banned users are only shown when it is true.
             state.bindings.alertInfo = AlertInfo(id: .unbanConfirmation(member),
                                                  title: L10n.screenRoomMemberListManageMemberUnbanTitle,

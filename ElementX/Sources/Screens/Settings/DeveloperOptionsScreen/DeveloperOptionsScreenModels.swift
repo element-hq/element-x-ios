@@ -48,10 +48,10 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var otlpTracingEnabled: Bool { get set }
     var shouldCollapseRoomStateEvents: Bool { get set }
     var hideUnreadMessagesBadge: Bool { get set }
-    var roomModerationEnabled: Bool { get set }
     var elementCallBaseURL: URL { get set }
     var publicSearchEnabled: Bool { get set }
     var qrCodeLoginEnabled: Bool { get set }
+    var roomListInvitesEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

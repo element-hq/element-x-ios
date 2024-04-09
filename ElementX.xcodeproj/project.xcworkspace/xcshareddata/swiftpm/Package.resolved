@@ -14,7 +14,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "6d42477c54a1dae128e0cb3645e3d00a53a5736c"
+        "revision" : "5c8ee9be606768ad228d61aa3508df515f208908"
       }
     },
     {
@@ -139,8 +139,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "1d47d496ca46e123e102e64d45635fab73de3d78",
-        "version" : "1.1.56"
+        "revision" : "e50657b5d9672d09e4ab0a6e8a3f8939eed49e04",
+        "version" : "1.1.57"
       }
     },
     {

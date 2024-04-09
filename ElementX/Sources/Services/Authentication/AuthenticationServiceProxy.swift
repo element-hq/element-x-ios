@@ -64,9 +64,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         do {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
-            try await Task.dispatch(on: .global()) {
-                try self.authenticationService.configureHomeserver(serverNameOrHomeserverUrl: homeserverAddress)
-            }
+            try await authenticationService.configureHomeserver(serverNameOrHomeserverUrl: homeserverAddress)
             
             if let details = authenticationService.homeserverDetails() {
                 if details.supportsOidcLogin() {
@@ -94,9 +92,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     
     func urlForOIDCLogin() async -> Result<OIDCAuthenticationDataProxy, AuthenticationServiceError> {
         do {
-            let oidcData = try await Task.dispatch(on: .global()) {
-                try self.authenticationService.urlForOidcLogin()
-            }
+            let oidcData = try await authenticationService.urlForOidcLogin()
             return .success(OIDCAuthenticationDataProxy(underlyingData: oidcData))
         } catch {
             MXLog.error("Failed to get URL for OIDC login: \(error)")
@@ -106,9 +102,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     
     func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         do {
-            let client = try await Task.dispatch(on: .global()) {
-                try self.authenticationService.loginWithOidcCallback(authenticationData: data.underlyingData, callbackUrl: callbackURL.absoluteString)
-            }
+            let client = try await authenticationService.loginWithOidcCallback(authenticationData: data.underlyingData, callbackUrl: callbackURL.absoluteString)
             return await userSession(for: client)
         } catch AuthenticationError.OidcCancelled {
             return .failure(.oidcError(.userCancellation))
@@ -120,12 +114,10 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         do {
-            let client = try await Task.dispatch(on: .global()) {
-                try self.authenticationService.login(username: username,
-                                                     password: password,
-                                                     initialDeviceName: initialDeviceName,
-                                                     deviceId: deviceID)
-            }
+            let client = try await authenticationService.login(username: username,
+                                                               password: password,
+                                                               initialDeviceName: initialDeviceName,
+                                                               deviceId: deviceID)
             
             let refreshToken = try? await Task.dispatch(on: .global()) {
                 try client.session().refreshToken

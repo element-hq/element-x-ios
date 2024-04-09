@@ -21,11 +21,6 @@ jobs:
     steps:
       - uses: nschloe/action-cached-lfs-checkout@v1
 
-      - uses: irgaly/xcode-cache@v1
-        with:
-          key: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.ref }}
-          restore-keys: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.ref }}
-
       - uses: actions/cache@v3
         with:
           path: vendor/bundle

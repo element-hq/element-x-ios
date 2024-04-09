@@ -32,18 +32,14 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Room") {
-                Toggle(isOn: $context.roomModerationEnabled) {
-                    Text("Moderation")
-                }
-                Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
-                    Text("Collapse room state events")
-                }
-            }
-            
             Section("Room List") {
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
                     Text("Hide grey dots")
+                }
+                
+                Toggle(isOn: $context.roomListInvitesEnabled) {
+                    Text("Room list invites")
+                    Text("Requires app reboot and, after disabling the feature, a cache clear.")
                 }
             }
             
@@ -56,6 +52,12 @@ struct DeveloperOptionsScreen: View {
             Section("QR Code") {
                 Toggle(isOn: $context.qrCodeLoginEnabled) {
                     Text("QR code login")
+                }
+            }
+            
+            Section("Room") {
+                Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
+                    Text("Collapse room state events")
                 }
             }
             

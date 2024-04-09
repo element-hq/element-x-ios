@@ -500,8 +500,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                             userIndicatorController: userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
                                                             attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL,
-                                                                                                             mentionBuilder: MentionBuilder()),
-                                                            appSettings: appSettings)
+                                                                                                             mentionBuilder: MentionBuilder()))
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -543,7 +542,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomMembersListScreenCoordinatorParameters(mediaProvider: userSession.mediaProvider,
                                                                     roomProxy: roomProxy,
                                                                     userIndicatorController: userIndicatorController,
-                                                                    appSettings: appSettings,
                                                                     analytics: analytics)
         let coordinator = RoomMembersListScreenCoordinator(parameters: parameters)
         

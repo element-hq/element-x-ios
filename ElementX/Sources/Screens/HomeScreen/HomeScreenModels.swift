@@ -48,6 +48,9 @@ enum HomeScreenViewAction {
     case markRoomAsRead(roomIdentifier: String)
     case markRoomAsFavourite(roomIdentifier: String, isFavourite: Bool)
     case selectRoomDirectorySearch
+    
+    case acceptInvite(roomIdentifier: String)
+    case declineInvite(roomIdentifier: String)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -130,6 +133,18 @@ struct HomeScreenViewStateBindings {
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {
+    enum RoomType {
+        case placeholder
+        case room
+        case invite
+    }
+    
+    struct InviterDetails: Equatable {
+        let userID: String
+        let displayName: String?
+        let avatarURL: URL?
+    }
+    
     static let placeholderLastMessage = AttributedString("Hidden last message")
         
     /// The list item identifier can be a real room identifier, a custom one for invalidated entries
@@ -139,9 +154,9 @@ struct HomeScreenRoom: Identifiable, Equatable {
     /// The real room identifier this item points to
     let roomId: String?
     
-    var name = ""
+    let type: RoomType
     
-    var badges: Badges
+    let badges: Badges
     struct Badges: Equatable {
         let isDotShown: Bool
         let isMentionShown: Bool
@@ -149,28 +164,38 @@ struct HomeScreenRoom: Identifiable, Equatable {
         let isCallShown: Bool
     }
     
+    let name: String
+    
+    let isDirect: Bool
+    
     let isHighlighted: Bool
     
     let isFavourite: Bool
     
-    var timestamp: String?
+    let timestamp: String?
     
-    var lastMessage: AttributedString?
+    let lastMessage: AttributedString?
     
-    var avatarURL: URL?
+    let avatarURL: URL?
     
-    var isPlaceholder = false
+    let inviter: InviterDetails?
+    
+    let canonicalAlias: String?
     
     static func placeholder() -> HomeScreenRoom {
         HomeScreenRoom(id: UUID().uuidString,
                        roomId: nil,
-                       name: "Placeholder room name",
+                       type: .placeholder,
                        badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, isCallShown: false),
+                       name: "Placeholder room name",
+                       isDirect: false,
                        isHighlighted: false,
                        isFavourite: false,
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
-                       isPlaceholder: true)
+                       avatarURL: nil,
+                       inviter: nil,
+                       canonicalAlias: nil)
     }
 }
 
@@ -186,17 +211,28 @@ extension HomeScreenRoom {
         let isCallShown = details.hasOngoingCall
         let isHighlighted = details.isMarkedUnread || (!details.isMuted && (details.hasUnreadNotifications || details.hasUnreadMentions))
         
+        var inviter: InviterDetails?
+        if let roomMemberProxy = details.inviter {
+            inviter = .init(userID: roomMemberProxy.userID,
+                            displayName: roomMemberProxy.displayName,
+                            avatarURL: roomMemberProxy.avatarURL)
+        }
+        
         self.init(id: identifier,
                   roomId: details.id,
-                  name: details.name,
+                  type: details.isInvite ? .invite : .room,
                   badges: .init(isDotShown: isDotShown,
                                 isMentionShown: isMentionShown,
                                 isMuteShown: isMuteShown,
                                 isCallShown: isCallShown),
+                  name: details.name,
+                  isDirect: details.isDirect,
                   isHighlighted: isHighlighted,
                   isFavourite: details.isFavourite,
                   timestamp: details.lastMessageFormattedTimestamp,
                   lastMessage: details.lastMessage,
-                  avatarURL: details.avatarURL)
+                  avatarURL: details.avatarURL,
+                  inviter: inviter,
+                  canonicalAlias: details.canonicalAlias)
     }
 }
