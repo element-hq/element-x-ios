@@ -476,6 +476,13 @@
 "screen_polls_history_filter_ongoing" = "Ongoing";
 "screen_polls_history_filter_past" = "Past";
 "screen_polls_history_title" = "Polls";
+"screen_qr_code_login_initial_state_item_1" = "Open Element on a desktop device";
+"screen_qr_code_login_initial_state_item_2" = "Click on your avatar";
+"screen_qr_code_login_initial_state_item_3" = "Select %1$@";
+"screen_qr_code_login_initial_state_item_3_action" = "“Link new device”";
+"screen_qr_code_login_initial_state_item_4" = "Select %1$@";
+"screen_qr_code_login_initial_state_item_4_action" = "“Show QR code”";
+"screen_qr_code_login_initial_state_title" = "Open Element on another device to get the QR code";
 "screen_recovery_key_change_description" = "Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.";
 "screen_recovery_key_change_generate_key" = "Generate a new recovery key";
 "screen_recovery_key_change_generate_key_description" = "Make sure you can store your recovery key somewhere safe";
@@ -485,7 +492,7 @@
 "screen_recovery_key_confirm_description" = "Make sure nobody can see this screen!";
 "screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your chat backup.";
 "screen_recovery_key_confirm_error_title" = "Incorrect recovery key";
-"screen_recovery_key_confirm_key_description" = "If you have a recovery passphrase or secret passphrase/key, this will work too.";
+"screen_recovery_key_confirm_key_description" = "If you have a security key or security phrase, this will work too.";
 "screen_recovery_key_confirm_key_label" = "Recovery key or passcode";
 "screen_recovery_key_confirm_key_placeholder" = "Enter…";
 "screen_recovery_key_confirm_success" = "Recovery key confirmed";

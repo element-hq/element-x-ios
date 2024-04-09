@@ -21,7 +21,7 @@ enum ResetRecoveryKeyScreenViewModelAction {
 }
 
 struct ResetRecoveryKeyScreenViewState: BindableState {
-    let listItem3AttributedText = {
+    private let listItem3AttributedText = {
         let boldPlaceholder = "{bold}"
         var finalString = AttributedString(L10n.screenCreateNewRecoveryKeyListItem3(boldPlaceholder))
         var boldString = AttributedString(L10n.screenCreateNewRecoveryKeyListItem3ResetAll)
@@ -29,6 +29,16 @@ struct ResetRecoveryKeyScreenViewState: BindableState {
         finalString.replace(boldPlaceholder, with: boldString)
         return finalString
     }()
+    
+    var listItems: [AttributedString] {
+        [
+            AttributedString(L10n.screenCreateNewRecoveryKeyListItem1),
+            AttributedString(L10n.screenCreateNewRecoveryKeyListItem2),
+            listItem3AttributedText,
+            AttributedString(L10n.screenCreateNewRecoveryKeyListItem4),
+            AttributedString(L10n.screenCreateNewRecoveryKeyListItem5)
+        ]
+    }
 }
 
 enum ResetRecoveryKeyScreenViewAction {
