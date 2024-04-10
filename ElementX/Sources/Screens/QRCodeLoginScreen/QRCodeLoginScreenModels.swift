@@ -43,7 +43,7 @@ struct QRCodeLoginScreenViewState: BindableState {
     
     var listItems: [AttributedString] {
         [
-            AttributedString(L10n.screenQrCodeLoginInitialStateItem1),
+            AttributedString(L10n.screenQrCodeLoginInitialStateItem1(InfoPlistReader.main.productionAppName)),
             AttributedString(L10n.screenQrCodeLoginInitialStateItem2),
             listItem3AttributedText,
             listItem4AttributedText

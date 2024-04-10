@@ -123,5 +123,7 @@
 	<string>${OTLP_TRACING_URL}</string>
 	<key>otlpTracingUsername</key>
 	<string>${OTLP_TRACING_USERNAME}</string>
+	<key>productionAppName</key>
+	<string>$(PRODUCTION_APP_NAME)</string>
 </dict>
 </plist>

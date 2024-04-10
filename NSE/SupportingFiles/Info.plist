@@ -33,5 +33,7 @@
 	<string>$(BASE_BUNDLE_IDENTIFIER)</string>
 	<key>keychainAccessGroupIdentifier</key>
 	<string>$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
+	<key>productionAppName</key>
+	<string>$(PRODUCTION_APP_NAME)</string>
 </dict>
 </plist>
