@@ -27,7 +27,7 @@ struct QRCodeLoginScreen: View {
                 .toolbar { toolbar }
                 .toolbar(.visible, for: .navigationBar)
                 .background()
-                .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgSubtleSecondary))
+                .backgroundStyle(.compound.bgSubtleSecondary)
                 .interactiveDismissDisabled()
         }
     }

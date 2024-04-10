@@ -41,7 +41,7 @@ struct PlaceholderScreen: View {
                 }
             }
             .background()
-            .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+            .backgroundStyle(.compound.bgCanvasDefault)
             .ignoresSafeArea(edges: .top) // Remain vertically centred even if there's a navigation bar.
             .ignoresSafeArea(.keyboard) // Specifically for the lock screen, but make sense everywhere.
     }
