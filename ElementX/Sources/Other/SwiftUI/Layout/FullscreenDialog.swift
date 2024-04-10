@@ -25,6 +25,7 @@ import SwiftUI
 /// environment value, so make sure to set this to match the screen's background.
 struct FullscreenDialog<Content: View, BottomContent: View>: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.backgroundStyle) private var backgroundStyle
     
     /// Padding applied to the top of the content automatically. Use `UIConstants` for preset values.
     var topPadding: CGFloat = UIConstants.titleTopPaddingToNavigationBar
@@ -33,18 +34,41 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
     /// The spacing between the content and the buttons.
     var spacing: CGFloat = 16
     
-    var showBackgroundGradient = false
+    /// The type of background that should be shown behind the content. This
+    /// will be hidden if the main content extends behind the bottom content.
+    var background: FullscreenDialogBackground?
     
     /// The main content shown at the top of the layout.
     @ViewBuilder var content: () -> Content
     /// The content shown at the bottom of the layout.
     @ViewBuilder var bottomContent: () -> BottomContent
     
-    var body: some View {
-        if dynamicTypeSize < .accessibility1 {
-            standardLayout
+    /// Whether or not the screen should show its background.
+    @State private var showsBackground = true
+    /// The background style given to the bottom content.
+    private var bottomContentBackgroundStyle: AnyShapeStyle? {
+        if background != nil, showsBackground {
+            AnyShapeStyle(Color.clear)
         } else {
-            accessibilityLayout
+            backgroundStyle
+        }
+    }
+    
+    var body: some View {
+        ZStack {
+            if let background, showsBackground {
+                Spacer()
+                    .background(alignment: .bottom) {
+                        background.image
+                    }
+                    .ignoresSafeArea()
+            }
+            
+            if dynamicTypeSize < .accessibility1 {
+                standardLayout
+            } else {
+                accessibilityLayout
+            }
         }
     }
     
@@ -64,28 +88,20 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
             }
             .scrollBounceBehavior(.basedOnSize)
             .safeAreaInset(edge: .bottom) {
-                if showBackgroundGradient {
-                    adjustedBottomContent(geometry: geometry)
-                        .background(Asset.Images.backgroundBottom.swiftUIImage.resizable().ignoresSafeArea())
-                } else {
-                    adjustedBottomContent(geometry: geometry)
-                        .background()
+                VStack(spacing: 0) {
+                    bottomContent()
+                        .readableFrame()
+                        .padding(.horizontal, horizontalPadding)
+                        .padding(.top, spacing)
+                        .padding(.bottom, UIConstants.actionButtonBottomPadding)
+                    
+                    Spacer()
+                        .frame(height: UIConstants.spacerHeight(in: geometry))
                 }
+                .background(bottomContentBackgroundStyle ?? AnyShapeStyle(Color.clear))
             }
         }
-    }
-    
-    private func adjustedBottomContent(geometry: GeometryProxy) -> some View {
-        VStack(spacing: 0) {
-            bottomContent()
-                .readableFrame()
-                .padding(.horizontal, horizontalPadding)
-                .padding(.top, spacing)
-                .padding(.bottom, UIConstants.actionButtonBottomPadding)
-            
-            Spacer()
-                .frame(height: UIConstants.spacerHeight(in: geometry))
-        }
+        .introspect(.scrollView, on: .supportedVersions, customize: updateBackgroundVisibility)
     }
     
     /// A continuously scrolling layout used for accessibility font sizes.
@@ -116,6 +132,48 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
             .scrollBounceBehavior(.basedOnSize)
         }
     }
+    
+    func updateBackgroundVisibility(scrollView: UIScrollView) {
+        guard dynamicTypeSize < .accessibility1 else {
+            showsBackground = true
+            return
+        }
+        let insetHeight = scrollView.adjustedContentInset.top + scrollView.adjustedContentInset.bottom
+        let availableHeight = scrollView.frame.height - insetHeight
+        showsBackground = scrollView.contentSize.height < availableHeight
+    }
+}
+
+/// The different types of background supported by the `FullscreenDialog` view.
+enum FullscreenDialogBackground {
+    /// The bottom gradient from the FTUE flow.
+    case gradient
+    /// The subtle bloom from the room discovery and permalink flows.
+    case bloom
+    
+    private var asset: ImageAsset {
+        switch self {
+        case .gradient:
+            Asset.Images.backgroundBottom
+        case .bloom:
+            Asset.Images.joinRoomBackground
+        }
+    }
+    
+    private var capInsets: EdgeInsets {
+        switch self {
+        case .gradient:
+            EdgeInsets(top: 0, leading: 0, bottom: 250, trailing: 0)
+        case .bloom:
+            EdgeInsets() // This one covers the entire screen.
+        }
+    }
+    
+    /// The image that represents the background.
+    var image: Image {
+        Image(asset: asset)
+            .resizable(capInsets: capInsets)
+    }
 }
 
 struct FullscreenDialog_Previews: PreviewProvider, TestablePreview {
@@ -126,7 +184,26 @@ struct FullscreenDialog_Previews: PreviewProvider, TestablePreview {
             buttons
         }
         .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .backgroundStyle(.compound.bgCanvasDefault)
+        .previewDisplayName("Plain")
+        
+        FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .gradient) {
+            content
+        } bottomContent: {
+            buttons
+        }
+        .background()
+        .backgroundStyle(.compound.bgCanvasDefault)
+        .previewDisplayName("Gradient")
+        
+        FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .bloom) {
+            content
+        } bottomContent: {
+            buttons
+        }
+        .background()
+        .backgroundStyle(.compound.bgCanvasDefault)
+        .previewDisplayName("Bloom")
     }
     
     private static var content: some View {

@@ -26,7 +26,7 @@ struct ServerConfirmationScreen: View {
             buttons
         }
         .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .backgroundStyle(.compound.bgCanvasDefault)
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
         }

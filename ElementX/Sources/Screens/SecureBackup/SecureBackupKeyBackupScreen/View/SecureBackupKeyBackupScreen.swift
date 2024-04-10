@@ -33,7 +33,7 @@ struct SecureBackupKeyBackupScreen: View {
             .buttonStyle(.compound(.primary))
         }
         .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .backgroundStyle(.compound.bgCanvasDefault)
         .interactiveDismissDisabled()
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)

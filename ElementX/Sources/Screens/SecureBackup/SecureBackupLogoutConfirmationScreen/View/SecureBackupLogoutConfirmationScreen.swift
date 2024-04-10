@@ -33,7 +33,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
         }
         .toolbar { toolbar }
         .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .backgroundStyle(.compound.bgCanvasDefault)
         .alert(item: $context.alertInfo)
     }
         

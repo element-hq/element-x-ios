@@ -30,7 +30,7 @@ struct SessionVerificationScreen: View {
             actionButtons
         }
         .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .backgroundStyle(.compound.bgCanvasDefault)
         .interactiveDismissDisabled()
     }
     
