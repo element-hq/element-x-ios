@@ -45,6 +45,18 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
     
     private func startScanIfPossible() async {
-        state.state = await qrCodeLoginService.requestAuthorizationIfNeeded() ? .scanning : .error(.noCameraPermission)
+        state.state = await qrCodeLoginService.requestAuthorizationIfNeeded() ? .scan(.scanning) : .error(.noCameraPermission)
+    }
+    
+    /// Only for mocking initial states
+    fileprivate init(state: QRCodeLoginState) {
+        qrCodeLoginService = QRCodeLoginServiceMock(configuration: .init())
+        super.init(initialViewState: .init(state: state))
+    }
+}
+
+extension QRCodeLoginScreenViewModel {
+    static func mock(state: QRCodeLoginState) -> QRCodeLoginScreenViewModel {
+        QRCodeLoginScreenViewModel(state: state)
     }
 }

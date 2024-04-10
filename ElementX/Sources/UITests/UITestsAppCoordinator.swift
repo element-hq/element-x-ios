@@ -128,7 +128,8 @@ class MockScreen: Identifiable {
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appSettings: ServiceLocator.shared.settings,
                                                                 analytics: ServiceLocator.shared.analytics,
-                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                orientationManager: windowManager)
             flowCoordinator.start()
             retainedState.append(flowCoordinator)
             return nil

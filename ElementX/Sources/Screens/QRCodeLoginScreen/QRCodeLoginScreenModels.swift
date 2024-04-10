@@ -56,12 +56,24 @@ enum QRCodeLoginScreenViewAction {
     case startScan
 }
 
-enum QRCodeLoginState {
+enum QRCodeLoginState: Equatable {
+    /// Initial state where the user is informed how to perform the scan
     case initial
-    case scanning
+    /// The camera is scanning
+    case scan(QRCodeLoginScanningState)
+    /// Any full screen error state
     case error(QRCodeLoginErrorState)
     
-    enum QRCodeLoginErrorState {
+    enum QRCodeLoginErrorState: Equatable {
         case noCameraPermission
+    }
+    
+    enum QRCodeLoginScanningState: Equatable {
+        /// the qr code is scanning
+        case scanning
+        /// the qr code has been detected and is being processed
+        case connecting
+        /// the qr code has been processed and is invalid
+        case invalid
     }
 }

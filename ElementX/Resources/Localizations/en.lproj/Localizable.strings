@@ -418,6 +418,12 @@
 "screen_invites_decline_direct_chat_title" = "Decline chat";
 "screen_invites_empty_list" = "No Invites";
 "screen_invites_invited_you" = "%1$@ (%2$@) invited you";
+"screen_join_room_join_action" = "Join room";
+"screen_join_room_knock_action" = "Knock to join";
+"screen_join_room_subtitle_knock" = "Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.";
+"screen_join_room_subtitle_no_preview" = "You must be a member of this room to view the message history.";
+"screen_join_room_title_knock" = "Want to join this room?";
+"screen_join_room_title_no_preview" = "Preview is not available";
 "screen_key_backup_disable_confirmation_action_turn_off" = "Turn off";
 "screen_key_backup_disable_confirmation_description" = "You will lose your encrypted messages if you are signed out of all devices.";
 "screen_key_backup_disable_confirmation_title" = "Are you sure you want to turn off backup?";
@@ -476,6 +482,7 @@
 "screen_polls_history_filter_ongoing" = "Ongoing";
 "screen_polls_history_filter_past" = "Past";
 "screen_polls_history_title" = "Polls";
+"screen_qr_code_login_connecting_subtitle" = "Establishing connection";
 "screen_qr_code_login_initial_state_item_1" = "Open Element on a desktop device";
 "screen_qr_code_login_initial_state_item_2" = "Click on your avatar";
 "screen_qr_code_login_initial_state_item_3" = "Select %1$@";
@@ -483,6 +490,10 @@
 "screen_qr_code_login_initial_state_item_4" = "Select %1$@";
 "screen_qr_code_login_initial_state_item_4_action" = "“Show QR code”";
 "screen_qr_code_login_initial_state_title" = "Open Element on another device to get the QR code";
+"screen_qr_code_login_invalid_scan_state_description" = "Use the QR code shown on the other device.";
+"screen_qr_code_login_invalid_scan_state_retry_button" = "Try Again";
+"screen_qr_code_login_invalid_scan_state_subtitle" = "Wrong QR code";
+"screen_qr_code_login_scanning_state_title" = "Scan the QR code";
 "screen_recovery_key_change_description" = "Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.";
 "screen_recovery_key_change_generate_key" = "Generate a new recovery key";
 "screen_recovery_key_change_generate_key_description" = "Make sure you can store your recovery key somewhere safe";
