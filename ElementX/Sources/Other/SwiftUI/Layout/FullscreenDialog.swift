@@ -57,7 +57,7 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
     var body: some View {
         ZStack {
             if let background, showsBackground {
-                Spacer()
+                Color.clear
                     .background(alignment: .bottom) {
                         background.image
                     }
