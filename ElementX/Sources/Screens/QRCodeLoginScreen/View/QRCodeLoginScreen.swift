@@ -20,6 +20,7 @@ import SwiftUI
 struct QRCodeLoginScreen: View {
     @ObservedObject var context: QRCodeLoginScreenViewModel.Context
     @State private var qrFrame = CGRect.zero
+    @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
         NavigationStack {
@@ -27,7 +28,7 @@ struct QRCodeLoginScreen: View {
                 .toolbar { toolbar }
                 .toolbar(.visible, for: .navigationBar)
                 .background()
-                .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgSubtleSecondary))
+                .backgroundStyle(.compound.bgSubtleSecondary)
                 .interactiveDismissDisabled()
         }
     }
@@ -40,8 +41,7 @@ struct QRCodeLoginScreen: View {
         case .scan:
             qrScanContent
         case .error:
-            // TODO: Handle error states
-            EmptyView()
+            errorContent
         }
     }
     
@@ -51,7 +51,7 @@ struct QRCodeLoginScreen: View {
                 VStack(spacing: 16) {
                     HeroImage(icon: \.computer, style: .subtle)
                     
-                    Text(L10n.screenQrCodeLoginInitialStateTitle)
+                    Text(L10n.screenQrCodeLoginInitialStateTitle(""))
                         .foregroundColor(.compound.textPrimary)
                         .font(.compound.headingMDBold)
                         .multilineTextAlignment(.center)
@@ -107,7 +107,7 @@ struct QRCodeLoginScreen: View {
             case .invalid:
                 VStack(spacing: 16) {
                     Button(L10n.screenQrCodeLoginInvalidScanStateRetryButton) {
-                        // TODO: Implement try again
+                        context.send(viewAction: .startScan)
                     }
                     .buttonStyle(.compound(.primary))
                     
@@ -125,7 +125,7 @@ struct QRCodeLoginScreen: View {
             }
         }
     }
-
+    
     private var qrScanner: some View {
         QRCodeScannerView()
             .aspectRatio(1.0, contentMode: .fill)
@@ -136,13 +136,105 @@ struct QRCodeLoginScreen: View {
                 QRScannerViewOverlay(length: qrFrame.height)
             )
     }
-        
+    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
             Button(L10n.actionCancel) {
                 context.send(viewAction: .cancel)
             }
+        }
+    }
+        
+    @ViewBuilder
+    private var errorContent: some View {
+        if case let .error(errorState) = context.viewState.state {
+            FullscreenDialog {
+                errorContentHeader(errorState: errorState)
+            } bottomContent: {
+                errorContentFooter(errorState: errorState)
+            }
+            .padding(.horizontal, 24)
+        }
+    }
+    
+    @ViewBuilder
+    private func errorContentHeader(errorState: QRCodeLoginState.QRCodeLoginErrorState) -> some View {
+        switch errorState {
+        case .noCameraPermission:
+            VStack(spacing: 16) {
+                HeroImage(icon: \.takePhotoSolid, style: .subtle)
+                
+                VStack(spacing: 8) {
+                    Text(L10n.screenQrCodeLoginNoCameraPermissionStateTitle)
+                        .foregroundColor(.compound.textPrimary)
+                        .font(.compound.headingMDBold)
+                        .multilineTextAlignment(.center)
+                    
+                    Text(L10n.screenQrCodeLoginNoCameraPermissionStateDescription)
+                        .foregroundColor(.compound.textSecondary)
+                        .font(.compound.bodyMD)
+                        .multilineTextAlignment(.center)
+                }
+            }
+        case .connectionNotSecure:
+            VStack(spacing: 40) {
+                VStack(spacing: 16) {
+                    HeroImage(icon: \.error, style: .critical)
+                    
+                    VStack(spacing: 8) {
+                        Text(L10n.screenQrCodeLoginConnectionNoteSecureStateTitle)
+                            .foregroundColor(.compound.textPrimary)
+                            .font(.compound.headingMDBold)
+                            .multilineTextAlignment(.center)
+                        
+                        Text(L10n.screenQrCodeLoginConnectionNoteSecureStateDescription)
+                            .foregroundColor(.compound.textSecondary)
+                            .font(.compound.bodyMD)
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                
+                VStack(spacing: 24) {
+                    Text(L10n.screenQrCodeLoginConnectionNoteSecureStateListHeader)
+                        .foregroundColor(.compound.textPrimary)
+                        .font(.compound.bodyLGSemibold)
+                        .multilineTextAlignment(.center)
+                    
+                    SFNumberedListView(items: context.viewState.connectionNotSecureListItems)
+                }
+            }
+        case .unknown:
+            VStack(spacing: 16) {
+                HeroImage(icon: \.error, style: .critical)
+                
+                VStack(spacing: 8) {
+                    Text(L10n.commonSomethingWentWrong)
+                        .foregroundColor(.compound.textPrimary)
+                        .font(.compound.headingMDBold)
+                        .multilineTextAlignment(.center)
+                    
+                    Text(L10n.screenQrCodeLoginUnknownErrorDescription)
+                        .foregroundColor(.compound.textSecondary)
+                        .font(.compound.bodyMD)
+                        .multilineTextAlignment(.center)
+                }
+            }
+        }
+    }
+    
+    private func errorContentFooter(errorState: QRCodeLoginState.QRCodeLoginErrorState) -> some View {
+        switch errorState {
+        case .noCameraPermission:
+            Button(L10n.screenQrCodeLoginNoCameraPermissionButton) {
+                context.send(viewAction: .openSettings)
+            }
+            .buttonStyle(.compound(.primary))
+        case .connectionNotSecure, .unknown:
+            Button(L10n.screenQrCodeLoginStartOverButton) {
+                context.send(viewAction: .startScan)
+            }
+            .buttonStyle(.compound(.primary))
         }
     }
 }
@@ -183,6 +275,12 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     
     static let invalidStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.invalid))
     
+    static let noCameraPermissionStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.noCameraPermission))
+    
+    static let connectionNotSecureStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.connectionNotSecure))
+    
+    static let unknownErrorStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.unknown))
+    
     static var previews: some View {
         QRCodeLoginScreen(context: initialStateViewModel.context)
             .previewDisplayName("Initial")
@@ -195,5 +293,14 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
         
         QRCodeLoginScreen(context: invalidStateViewModel.context)
             .previewDisplayName("Invalid")
+        
+        QRCodeLoginScreen(context: noCameraPermissionStateViewModel.context)
+            .previewDisplayName("No Camera Permission")
+        
+        QRCodeLoginScreen(context: connectionNotSecureStateViewModel.context)
+            .previewDisplayName("Connection not secure")
+        
+        QRCodeLoginScreen(context: unknownErrorStateViewModel.context)
+            .previewDisplayName("Unknown error")
     }
 }

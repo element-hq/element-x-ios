@@ -25,6 +25,7 @@ struct HeroImage: View {
         case normal
         case positive
         case subtle
+        case critical
         
         var foregroundColor: Color {
             switch self {
@@ -34,6 +35,8 @@ struct HeroImage: View {
                 return .compound.iconSuccessPrimary
             case .subtle:
                 return .compound.iconSecondary
+            case .critical:
+                return .compound.iconCriticalPrimary
             }
         }
         
@@ -45,6 +48,8 @@ struct HeroImage: View {
                 return .compound.bgSuccessSubtle
             case .subtle:
                 return .compound.bgSubtlePrimary
+            case .critical:
+                return .compound.bgCanvasDefault
             }
         }
     }

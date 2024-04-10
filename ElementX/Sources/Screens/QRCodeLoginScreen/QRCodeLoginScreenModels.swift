@@ -23,7 +23,7 @@ enum QRCodeLoginScreenViewModelAction {
 struct QRCodeLoginScreenViewState: BindableState {
     var state: QRCodeLoginState = .initial
     
-    private let listItem3AttributedText = {
+    private let initialStateListItem3AttributedText = {
         let boldPlaceholder = "{bold}"
         var finalString = AttributedString(L10n.screenQrCodeLoginInitialStateItem3(boldPlaceholder))
         var boldString = AttributedString(L10n.screenQrCodeLoginInitialStateItem3Action)
@@ -32,7 +32,7 @@ struct QRCodeLoginScreenViewState: BindableState {
         return finalString
     }()
     
-    private let listItem4AttributedText = {
+    private let initialStateListItem4AttributedText = {
         let boldPlaceholder = "{bold}"
         var finalString = AttributedString(L10n.screenQrCodeLoginInitialStateItem4(boldPlaceholder))
         var boldString = AttributedString(L10n.screenQrCodeLoginInitialStateItem4Action)
@@ -41,19 +41,24 @@ struct QRCodeLoginScreenViewState: BindableState {
         return finalString
     }()
     
-    var listItems: [AttributedString] {
-        [
-            AttributedString(L10n.screenQrCodeLoginInitialStateItem1),
-            AttributedString(L10n.screenQrCodeLoginInitialStateItem2),
-            listItem3AttributedText,
-            listItem4AttributedText
-        ]
-    }
+    private(set) lazy var initialStateListItems = [
+        AttributedString(L10n.screenQrCodeLoginInitialStateItem1),
+        AttributedString(L10n.screenQrCodeLoginInitialStateItem2),
+        initialStateListItem3AttributedText,
+        initialStateListItem4AttributedText
+    ]
+    
+    private(set) lazy var connectionNotSecureListItems = [
+        AttributedString(L10n.screenQrCodeLoginConnectionNoteSecureStateListItem1),
+        AttributedString(L10n.screenQrCodeLoginConnectionNoteSecureStateListItem2),
+        AttributedString(L10n.screenQrCodeLoginConnectionNoteSecureStateListItem3)
+    ]
 }
 
 enum QRCodeLoginScreenViewAction {
     case cancel
     case startScan
+    case openSettings
 }
 
 enum QRCodeLoginState: Equatable {
@@ -66,6 +71,8 @@ enum QRCodeLoginState: Equatable {
     
     enum QRCodeLoginErrorState: Equatable {
         case noCameraPermission
+        case connectionNotSecure
+        case unknown
     }
     
     enum QRCodeLoginScanningState: Equatable {
