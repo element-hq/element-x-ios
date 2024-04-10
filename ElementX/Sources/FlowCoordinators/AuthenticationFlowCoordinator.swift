@@ -30,7 +30,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let windowManager: WindowManagerProtocol
+    private let orientationManager: OrientationManagerProtocol
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -47,14 +47,14 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         windowManager: WindowManagerProtocol) {
+         orientationManager: WindowManagerProtocol) {
         self.authenticationService = authenticationService
         self.bugReportService = bugReportService
         self.navigationRootCoordinator = navigationRootCoordinator
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
-        self.windowManager = windowManager
+        self.orientationManager = orientationManager
         
         navigationStackCoordinator = NavigationStackCoordinator()
     }
@@ -107,7 +107,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startQRCodeLogin() {
         let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(qrCodeLoginService: QRCodeLoginService(),
-                                                                         orientationManager: windowManager))
+                                                                         orientationManager: orientationManager))
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else {
                 return

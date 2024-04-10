@@ -75,7 +75,7 @@ final class QRScannerController: UIViewController {
         view.layer.addSublayer(previewLayer)
  
         // Start video capture.
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInitiated).async {
             self.captureSession.startRunning()
         }
     }

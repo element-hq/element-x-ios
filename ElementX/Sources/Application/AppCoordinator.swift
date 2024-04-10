@@ -407,7 +407,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                       appSettings: appSettings,
                                                                       analytics: ServiceLocator.shared.analytics,
                                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                      windowManager: windowManager)
+                                                                      orientationManager: windowManager)
         authenticationFlowCoordinator?.delegate = self
         
         authenticationFlowCoordinator?.start()

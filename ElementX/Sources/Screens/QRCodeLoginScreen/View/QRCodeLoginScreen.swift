@@ -19,23 +19,7 @@ import SwiftUI
 
 struct QRCodeLoginScreen: View {
     @ObservedObject var context: QRCodeLoginScreenViewModel.Context
-    
     @State private var qrFrame = CGRect.zero
-    private let dashRatio: CGFloat = 80.0 / 312.0
-    private let emptyRatio: CGFloat = 232.0 / 312.0
-    private let dashPhaseRatio: CGFloat = 40.0 / 312.0
-    
-    private var dashLenght: CGFloat {
-        qrFrame.height * dashRatio
-    }
-    
-    private var emptyLenght: CGFloat {
-        qrFrame.height * emptyRatio
-    }
-    
-    private var dashPhase: CGFloat {
-        qrFrame.height * dashPhaseRatio
-    }
     
     var body: some View {
         NavigationStack {
@@ -56,7 +40,7 @@ struct QRCodeLoginScreen: View {
         case .scan:
             qrScanContent
         case .error:
-            // TODO: Handle states
+            // TODO: Handle error states
             EmptyView()
         }
     }
@@ -112,9 +96,11 @@ struct QRCodeLoginScreen: View {
                 VStack(spacing: 4) {
                     ProgressView()
                     Text(L10n.screenQrCodeLoginConnectingSubtitle)
+                        .foregroundColor(.compound.textSecondary)
+                        .font(.compound.bodySM)
                 }
             case .scanning:
-                // Just here to keep the spacing consistent between states
+                // To keep the spacing consistent between states
                 Button("") { }
                     .buttonStyle(.compound(.primary))
                     .hidden()
@@ -126,14 +112,10 @@ struct QRCodeLoginScreen: View {
                     .buttonStyle(.compound(.primary))
                     
                     VStack(spacing: 0) {
-                        HStack(spacing: 10) {
-                            CompoundIcon(\.error, size: .medium, relativeTo: .compound.bodyMDSemibold)
-                                .accessibilityLabel(L10n.commonSendingFailed)
-                            
-                            Text(L10n.screenQrCodeLoginInvalidScanStateSubtitle)
-                        }
-                        .font(.compound.bodyMDSemibold)
-                        .foregroundColor(.compound.textCriticalPrimary)
+                        Label(L10n.screenQrCodeLoginInvalidScanStateSubtitle, icon: \.error, iconSize: .medium, relativeTo: .compound.bodyMDSemibold)
+                            .labelStyle(.custom(spacing: 10))
+                            .font(.compound.bodyMDSemibold)
+                            .foregroundColor(.compound.textCriticalPrimary)
                         
                         Text(L10n.screenQrCodeLoginInvalidScanStateDescription)
                             .foregroundColor(.compound.textSecondary)
@@ -151,8 +133,7 @@ struct QRCodeLoginScreen: View {
             .readFrame($qrFrame)
             .background(.compound.bgCanvasDefault)
             .overlay(
-                Rectangle()
-                    .stroke(.compound.textPrimary, style: StrokeStyle(lineWidth: 4.0, lineCap: .square, dash: [dashLenght, emptyLenght], dashPhase: dashPhase))
+                QRScannerViewOverlay(length: qrFrame.height)
             )
     }
         
@@ -163,6 +144,31 @@ struct QRCodeLoginScreen: View {
                 context.send(viewAction: .cancel)
             }
         }
+    }
+}
+
+private struct QRScannerViewOverlay: View {
+    let length: CGFloat
+    
+    private let dashRatio: CGFloat = 80.0 / 312.0
+    private let emptyRatio: CGFloat = 232.0 / 312.0
+    private let dashPhaseRatio: CGFloat = 40.0 / 312.0
+    
+    private var dashLength: CGFloat {
+        length * dashRatio
+    }
+    
+    private var emptyLength: CGFloat {
+        length * emptyRatio
+    }
+    
+    private var dashPhase: CGFloat {
+        length * dashPhaseRatio
+    }
+    
+    var body: some View {
+        Rectangle()
+            .stroke(.compound.textPrimary, style: StrokeStyle(lineWidth: 4.0, lineCap: .square, dash: [dashLength, emptyLength], dashPhase: dashPhase))
     }
 }
 
