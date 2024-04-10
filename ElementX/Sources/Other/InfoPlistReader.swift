@@ -23,6 +23,7 @@ struct InfoPlistReader {
         static let keychainAccessGroupIdentifier = "keychainAccessGroupIdentifier"
         static let bundleShortVersion = "CFBundleShortVersionString"
         static let bundleDisplayName = "CFBundleDisplayName"
+        static let productionAppName = "productionAppName"
         static let mapLibreAPIKey = "mapLibreAPIKey"
         static let utExportedTypeDeclarationsKey = "UTExportedTypeDeclarations"
         static let utTypeIdentifierKey = "UTTypeIdentifier"
@@ -93,6 +94,11 @@ struct InfoPlistReader {
     /// Bundle display name of the target
     var bundleDisplayName: String {
         infoPlistValue(forKey: Keys.bundleDisplayName)
+    }
+    
+    /// The name of the non-X app when it becomes production ready.
+    var productionAppName: String {
+        infoPlistValue(forKey: Keys.productionAppName)
     }
 
     // MARK: - MapLibre

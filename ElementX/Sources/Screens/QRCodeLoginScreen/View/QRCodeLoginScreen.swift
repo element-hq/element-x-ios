@@ -51,7 +51,7 @@ struct QRCodeLoginScreen: View {
                 VStack(spacing: 16) {
                     HeroImage(icon: \.computer, style: .subtle)
                     
-                    Text(L10n.screenQrCodeLoginInitialStateTitle(""))
+                    Text(L10n.screenQrCodeLoginInitialStateTitle(InfoPlistReader.main.productionAppName))
                         .foregroundColor(.compound.textPrimary)
                         .font(.compound.headingMDBold)
                         .multilineTextAlignment(.center)

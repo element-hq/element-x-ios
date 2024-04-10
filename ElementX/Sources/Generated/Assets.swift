@@ -38,6 +38,7 @@ internal enum Asset {
     internal static let composerAttachment = ImageAsset(name: "images/composer-attachment")
     internal static let stopRecording = ImageAsset(name: "images/stop-recording")
     internal static let settingsIconWithBadge = ImageAsset(name: "images/settings-icon-with-badge")
+    internal static let joinRoomBackground = ImageAsset(name: "images/join-room-background")
     internal static let launchBackground = ImageAsset(name: "images/launch-background")
     internal static let locationMarkerShape = ImageAsset(name: "images/location-marker-shape")
     internal static let mediaPause = ImageAsset(name: "images/media-pause")

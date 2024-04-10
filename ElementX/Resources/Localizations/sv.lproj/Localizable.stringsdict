@@ -173,9 +173,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
+			<string>Du har %1$d försök att låsa upp</string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>Du har %1$d försök att låsa upp</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -189,9 +189,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Wrong PIN. You have %1$d more chance</string>
+			<string>Fel PIN-kod. Du har %1$d försök kvar</string>
 			<key>other</key>
-			<string>Wrong PIN. You have %1$d more chances</string>
+			<string>Fel PIN-kod. Du har %1$d försök kvar</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>

@@ -35,7 +35,7 @@ struct IdentityConfirmationScreen: View {
             actionButtons
         }
         .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .backgroundStyle(.compound.bgCanvasDefault)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .interactiveDismissDisabled()

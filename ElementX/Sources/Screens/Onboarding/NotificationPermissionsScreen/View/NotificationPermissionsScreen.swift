@@ -21,13 +21,13 @@ struct NotificationPermissionsScreen: View {
     @ObservedObject var context: NotificationPermissionsScreenViewModel.Context
     
     var body: some View {
-        FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding, showBackgroundGradient: true) {
+        FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding, background: .gradient) {
             mainContent
         } bottomContent: {
             buttons
         }
         .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
+        .backgroundStyle(.compound.bgCanvasDefault)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .interactiveDismissDisabled()

@@ -79,6 +79,7 @@ targets:
         appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
         baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
         keychainAccessGroupIdentifier: $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
+        productionAppName: $(PRODUCTION_APP_NAME)
         ITSAppUsesNonExemptEncryption: false
         NSUserActivityTypes: [
           INSendMessageIntent
