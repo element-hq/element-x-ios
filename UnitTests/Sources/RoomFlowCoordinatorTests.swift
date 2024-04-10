@@ -155,12 +155,8 @@ class RoomFlowCoordinatorTests: XCTestCase {
     
     private func process(route: AppRoute) async throws {
         roomFlowCoordinator.handleAppRoute(route, animated: true)
-        if case .childRoom = route {
-            // A single yield isn't enough when creating the new flow coordinator.
-            try await Task.sleep(for: .milliseconds(100))
-        } else {
-            await Task.yield()
-        }
+        // A single yield isn't enough when creating the new flow coordinator.
+        try await Task.sleep(for: .milliseconds(100))
     }
     
     private func process(route: AppRoute, expectedAction: RoomFlowCoordinatorAction) async throws {
