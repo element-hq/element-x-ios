@@ -212,10 +212,14 @@ final class NotificationManagerTests: XCTestCase {
         }
         // No interaction if the object is nil or of the wrong type
         NotificationCenter.default.post(name: .roomMarkedAsRead, object: nil)
+        try? await Task.sleep(for: .seconds(0.25)) // Wait for the notification to be delivered
+        
         XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 0)
         XCTAssertEqual(notificationCenter.removeDeliveredNotificationsWithIdentifiersCallsCount, 0)
 
         NotificationCenter.default.post(name: .roomMarkedAsRead, object: 1)
+        try? await Task.sleep(for: .seconds(0.25)) // Wait for the notification to be delivered
+        
         XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 0)
         XCTAssertEqual(notificationCenter.removeDeliveredNotificationsWithIdentifiersCallsCount, 0)
 
@@ -226,7 +230,10 @@ final class NotificationManagerTests: XCTestCase {
         notificationCenter.removeDeliveredNotificationsWithIdentifiersClosure = { _ in
             expectation.fulfill()
         }
+        
         NotificationCenter.default.post(name: .roomMarkedAsRead, object: "RoomID")
+        try? await Task.sleep(for: .seconds(0.25)) // Wait for the notification to be delivered
+        
         await fulfillment(of: [expectation])
         XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 1)
         XCTAssertEqual(notificationCenter.removeDeliveredNotificationsWithIdentifiersCallsCount, 1)
@@ -238,7 +245,10 @@ final class NotificationManagerTests: XCTestCase {
         notificationCenter.removeDeliveredNotificationsWithIdentifiersClosure = { _ in
             expectation.fulfill()
         }
+        
         NotificationCenter.default.post(name: .invitesScreenAppeared, object: nil)
+        try? await Task.sleep(for: .seconds(0.25)) // Wait for the notification to be delivered
+        
         await fulfillment(of: [expectation])
         XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 1)
         XCTAssertEqual(notificationCenter.removeDeliveredNotificationsWithIdentifiersCallsCount, 1)
