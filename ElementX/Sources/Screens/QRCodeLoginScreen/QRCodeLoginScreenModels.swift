@@ -23,7 +23,7 @@ enum QRCodeLoginScreenViewModelAction {
 struct QRCodeLoginScreenViewState: BindableState {
     var state: QRCodeLoginState = .initial
     
-    private let initialStateListItem3AttributedText = {
+    private static let initialStateListItem3AttributedText = {
         let boldPlaceholder = "{bold}"
         var finalString = AttributedString(L10n.screenQrCodeLoginInitialStateItem3(boldPlaceholder))
         var boldString = AttributedString(L10n.screenQrCodeLoginInitialStateItem3Action)
@@ -32,7 +32,7 @@ struct QRCodeLoginScreenViewState: BindableState {
         return finalString
     }()
     
-    private let initialStateListItem4AttributedText = {
+    private static let initialStateListItem4AttributedText = {
         let boldPlaceholder = "{bold}"
         var finalString = AttributedString(L10n.screenQrCodeLoginInitialStateItem4(boldPlaceholder))
         var boldString = AttributedString(L10n.screenQrCodeLoginInitialStateItem4Action)
@@ -41,14 +41,14 @@ struct QRCodeLoginScreenViewState: BindableState {
         return finalString
     }()
     
-    private(set) lazy var initialStateListItems = [
-        AttributedString(L10n.screenQrCodeLoginInitialStateItem1),
+    let initialStateListItems = [
+        AttributedString(L10n.screenQrCodeLoginInitialStateItem1(InfoPlistReader.main.productionAppName)),
         AttributedString(L10n.screenQrCodeLoginInitialStateItem2),
         initialStateListItem3AttributedText,
         initialStateListItem4AttributedText
     ]
     
-    private(set) lazy var connectionNotSecureListItems = [
+    let connectionNotSecureListItems = [
         AttributedString(L10n.screenQrCodeLoginConnectionNoteSecureStateListItem1),
         AttributedString(L10n.screenQrCodeLoginConnectionNoteSecureStateListItem2),
         AttributedString(L10n.screenQrCodeLoginConnectionNoteSecureStateListItem3)

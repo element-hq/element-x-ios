@@ -20,7 +20,6 @@ import SwiftUI
 struct QRCodeLoginScreen: View {
     @ObservedObject var context: QRCodeLoginScreenViewModel.Context
     @State private var qrFrame = CGRect.zero
-    @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
         NavigationStack {
@@ -58,7 +57,7 @@ struct QRCodeLoginScreen: View {
                 }
                 .padding(.horizontal, 24)
                 
-                SFNumberedListView(items: context.viewState.listItems)
+                SFNumberedListView(items: context.viewState.initialStateListItems)
             }
         } bottomContent: {
             Button(L10n.actionContinue) {
