@@ -45,7 +45,30 @@ import {{ import }}
         {% call methodThrowableErrorDeclaration method %}
     {% endif %}
     {% if not method.isInitializer %}
-    {% call accessLevel method.accessLevel %}{% call staticSpecifier method %}var {% call swiftifyMethodName method.selectorName %}CallsCount = 0
+    var {% call swiftifyMethodName method.selectorName %}UnderlyingCallsCount = 0
+    {% call accessLevel method.accessLevel %}{% call staticSpecifier method %}var {% call swiftifyMethodName method.selectorName %}CallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return {% call swiftifyMethodName method.selectorName %}UnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = {% call swiftifyMethodName method.selectorName %}UnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                {% call swiftifyMethodName method.selectorName %}UnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    {% call swiftifyMethodName method.selectorName %}UnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     {% call accessLevel method.accessLevel %}{% call staticSpecifier method %}var {% call swiftifyMethodName method.selectorName %}Called: Bool {
         return {% call swiftifyMethodName method.selectorName %}CallsCount > 0
     }
@@ -63,7 +86,31 @@ import {{ import }}
     {% call accessLevel method.accessLevel %}{% call staticSpecifier method %}var {% call swiftifyMethodName method.selectorName %}ReceivedInvocations: [({% for param in method.parameters %}{{ param.name }}: {{ param.unwrappedTypeName if param.typeAttributes.escaping else param.typeName }}{{ ', ' if not forloop.last }}{% endfor %})] = []
     {% endif %}
     {% if not method.returnTypeName.isVoid and not method.isInitializer %}
-    {% call accessLevel method.accessLevel %}{% call staticSpecifier method %}var {% call swiftifyMethodName method.selectorName %}ReturnValue: {{ '(' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ method.returnTypeName }}{{ ')' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ '!' if not method.isOptionalReturnType }}
+
+    var {% call swiftifyMethodName method.selectorName %}UnderlyingReturnValue: {{ '(' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ method.returnTypeName }}{{ ')' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ '!' if not method.isOptionalReturnType }}
+    {% call accessLevel method.accessLevel %}{% call staticSpecifier method %}var {% call swiftifyMethodName method.selectorName %}ReturnValue: {{ '(' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ method.returnTypeName }}{{ ')' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ '!' if not method.isOptionalReturnType }} {
+        get {
+            if Thread.isMainThread {
+                return {% call swiftifyMethodName method.selectorName %}UnderlyingReturnValue
+            } else {
+                var returnValue: {{ method.returnTypeName }}? = nil
+                DispatchQueue.main.sync {
+                    returnValue = {% call swiftifyMethodName method.selectorName %}UnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                {% call swiftifyMethodName method.selectorName %}UnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    {% call swiftifyMethodName method.selectorName %}UnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     {% endif %}
     {% call methodClosureDeclaration method %}
 

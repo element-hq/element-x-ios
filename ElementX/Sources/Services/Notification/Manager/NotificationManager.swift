@@ -23,17 +23,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
     private let appSettings: AppSettings
     
-    private var userSession: UserSessionProtocol? {
-        didSet {
-            // If notification permissions were given previously then attempt re-registering
-            // for remote notifications on startup. Otherwise let the onboarding flow handle it
-            Task { @MainActor in
-                if await self.notificationCenter.authorizationStatus() == .authorized {
-                    self.delegate?.registerForRemoteNotifications()
-                }
-            }
-        }
-    }
+    private var userSession: UserSessionProtocol?
     
     private var cancellables = Set<AnyCancellable>()
     private var notificationsEnabled = false
@@ -103,6 +93,18 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
 
     func setUserSession(_ userSession: UserSessionProtocol?) {
         self.userSession = userSession
+        
+        // If notification permissions were given previously then attempt re-registering
+        // for remote notifications on startup. Otherwise let the onboarding flow handle it
+        Task { [weak self] in
+            guard let self else { return }
+            
+            if await notificationCenter.authorizationStatus() == .authorized {
+                await MainActor.run {
+                    delegate?.registerForRemoteNotifications()
+                }
+            }
+        }
     }
 
     func registrationFailed(with error: Error) {
