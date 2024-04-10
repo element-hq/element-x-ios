@@ -32,7 +32,7 @@ struct ResetRecoveryKeyScreenViewState: BindableState {
     
     var listItems: [AttributedString] {
         [
-            AttributedString(L10n.screenCreateNewRecoveryKeyListItem1),
+            AttributedString(L10n.screenCreateNewRecoveryKeyListItem1(InfoPlistReader.main.productionAppName)),
             AttributedString(L10n.screenCreateNewRecoveryKeyListItem2),
             listItem3AttributedText,
             AttributedString(L10n.screenCreateNewRecoveryKeyListItem4),

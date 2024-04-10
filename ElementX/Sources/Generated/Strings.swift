@@ -416,6 +416,8 @@ internal enum L10n {
   internal static var commonSharedLocation: String { return L10n.tr("Localizable", "common_shared_location") }
   /// Signing out
   internal static var commonSigningOut: String { return L10n.tr("Localizable", "common_signing_out") }
+  /// Something went wrong
+  internal static var commonSomethingWentWrong: String { return L10n.tr("Localizable", "common_something_went_wrong") }
   /// Starting chat…
   internal static var commonStartingChat: String { return L10n.tr("Localizable", "common_starting_chat") }
   /// Sticker
@@ -919,8 +921,10 @@ internal enum L10n {
   internal static func screenChatBackupRecoveryActionSetupDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup_description", String(describing: p1))
   }
-  /// Open Element in a desktop device
-  internal static var screenCreateNewRecoveryKeyListItem1: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_1") }
+  /// Open %1$@ in a desktop device
+  internal static func screenCreateNewRecoveryKeyListItem1(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_1", String(describing: p1))
+  }
   /// Sign into your account again
   internal static var screenCreateNewRecoveryKeyListItem2: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_2") }
   /// When asked to verify your device, select %1$@
@@ -957,8 +961,6 @@ internal enum L10n {
   internal static var screenCreatePollTitle: String { return L10n.tr("Localizable", "screen_create_poll_title") }
   /// New room
   internal static var screenCreateRoomActionCreateRoom: String { return L10n.tr("Localizable", "screen_create_room_action_create_room") }
-  /// Invite people to Element
-  internal static var screenCreateRoomActionInvitePeople: String { return L10n.tr("Localizable", "screen_create_room_action_invite_people") }
   /// Invite people
   internal static var screenCreateRoomAddPeopleTitle: String { return L10n.tr("Localizable", "screen_create_room_add_people_title") }
   /// An error occurred when creating the room
@@ -1161,8 +1163,10 @@ internal enum L10n {
   internal static var screenOnboardingSignInWithQrCode: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_with_qr_code") }
   /// Create account
   internal static var screenOnboardingSignUp: String { return L10n.tr("Localizable", "screen_onboarding_sign_up") }
-  /// Welcome to the fastest Element ever. Supercharged for speed and simplicity.
-  internal static var screenOnboardingWelcomeMessage: String { return L10n.tr("Localizable", "screen_onboarding_welcome_message") }
+  /// Welcome to the fastest %1$@ ever. Supercharged for speed and simplicity.
+  internal static func screenOnboardingWelcomeMessage(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_onboarding_welcome_message", String(describing: p1))
+  }
   /// Welcome to %1$@. Supercharged, for speed and simplicity.
   internal static func screenOnboardingWelcomeSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_subtitle", String(describing: p1))
@@ -1181,8 +1185,22 @@ internal enum L10n {
   internal static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
   /// Establishing connection
   internal static var screenQrCodeLoginConnectingSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_connecting_subtitle") }
-  /// Open Element on a desktop device
-  internal static var screenQrCodeLoginInitialStateItem1: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_1") }
+  /// A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.
+  internal static var screenQrCodeLoginConnectionNoteSecureStateDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_description") }
+  /// What now?
+  internal static var screenQrCodeLoginConnectionNoteSecureStateListHeader: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_list_header") }
+  /// Try signing in again with a QR code in case this was a network problem
+  internal static var screenQrCodeLoginConnectionNoteSecureStateListItem1: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_list_item_1") }
+  /// If you encounter the same problem, try a different wifi network or use your mobile data instead of wifi
+  internal static var screenQrCodeLoginConnectionNoteSecureStateListItem2: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_list_item_2") }
+  /// If that doesn’t work, sign in manually
+  internal static var screenQrCodeLoginConnectionNoteSecureStateListItem3: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_list_item_3") }
+  /// Connection not secure
+  internal static var screenQrCodeLoginConnectionNoteSecureStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_title") }
+  /// Open %1$@ on a desktop device
+  internal static func screenQrCodeLoginInitialStateItem1(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_1", String(describing: p1))
+  }
   /// Click on your avatar
   internal static var screenQrCodeLoginInitialStateItem2: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_2") }
   /// Select %1$@
@@ -1197,16 +1215,28 @@ internal enum L10n {
   }
   /// “Show QR code”
   internal static var screenQrCodeLoginInitialStateItem4Action: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_4_action") }
-  /// Open Element on another device to get the QR code
-  internal static var screenQrCodeLoginInitialStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_title") }
+  /// Open %1$@ on another device to get the QR code
+  internal static func screenQrCodeLoginInitialStateTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_qr_code_login_initial_state_title", String(describing: p1))
+  }
   /// Use the QR code shown on the other device.
   internal static var screenQrCodeLoginInvalidScanStateDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_invalid_scan_state_description") }
-  /// Try Again
+  /// Try again
   internal static var screenQrCodeLoginInvalidScanStateRetryButton: String { return L10n.tr("Localizable", "screen_qr_code_login_invalid_scan_state_retry_button") }
   /// Wrong QR code
   internal static var screenQrCodeLoginInvalidScanStateSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_invalid_scan_state_subtitle") }
+  /// Go to camera settings
+  internal static var screenQrCodeLoginNoCameraPermissionButton: String { return L10n.tr("Localizable", "screen_qr_code_login_no_camera_permission_button") }
+  /// You need to give permission for Element to use your device’s camera in order to continue.
+  internal static var screenQrCodeLoginNoCameraPermissionStateDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_no_camera_permission_state_description") }
+  /// Allow camera access to scan the QR code
+  internal static var screenQrCodeLoginNoCameraPermissionStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_no_camera_permission_state_title") }
   /// Scan the QR code
   internal static var screenQrCodeLoginScanningStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_scanning_state_title") }
+  /// Start over
+  internal static var screenQrCodeLoginStartOverButton: String { return L10n.tr("Localizable", "screen_qr_code_login_start_over_button") }
+  /// An unexpected error occurred. Please try again.
+  internal static var screenQrCodeLoginUnknownErrorDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_unknown_error_description") }
   /// Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.
   internal static var screenRecoveryKeyChangeDescription: String { return L10n.tr("Localizable", "screen_recovery_key_change_description") }
   /// Generate a new recovery key
