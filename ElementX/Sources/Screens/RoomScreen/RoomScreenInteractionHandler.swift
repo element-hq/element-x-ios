@@ -619,8 +619,7 @@ class RoomScreenInteractionHandler {
     }
     
     private func openSystemSettings() {
-        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-        application.open(url)
+        application.openAppSettings()
     }
     
     private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
