@@ -24,7 +24,7 @@ struct RoomDirectorySearchView: View {
         Button(action: onTap) {
             Label(L10n.screenRoomlistRoomDirectoryButtonTitle, icon: \.listBulleted)
         }
-        .buttonStyle(.compound(.secondary))
+        .buttonStyle(.compound(.super))
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
     }
