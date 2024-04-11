@@ -40,7 +40,8 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: QRCodeLoginScreenCoordinatorParameters) {
-        viewModel = QRCodeLoginScreenViewModel(qrCodeLoginService: parameters.qrCodeLoginService)
+        viewModel = QRCodeLoginScreenViewModel(qrCodeLoginService: parameters.qrCodeLoginService,
+                                               application: UIApplication.shared)
         orientationManager = parameters.orientationManager
     }
     

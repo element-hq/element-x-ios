@@ -24,6 +24,8 @@ protocol ApplicationProtocol {
     func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier)
     
     func open(_ url: URL)
+    
+    func openAppSettings()
 
     var backgroundTimeRemaining: TimeInterval { get }
 
@@ -33,5 +35,12 @@ protocol ApplicationProtocol {
 extension UIApplication: ApplicationProtocol {
     func open(_ url: URL) {
         open(url, options: [:], completionHandler: nil)
+    }
+    
+    func openAppSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else {
+            return
+        }
+        open(url)
     }
 }

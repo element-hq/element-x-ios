@@ -901,6 +901,18 @@ class ApplicationMock: ApplicationProtocol {
         openReceivedInvocations.append(url)
         openClosure?(url)
     }
+    //MARK: - openAppSettings
+
+    var openAppSettingsCallsCount = 0
+    var openAppSettingsCalled: Bool {
+        return openAppSettingsCallsCount > 0
+    }
+    var openAppSettingsClosure: (() -> Void)?
+
+    func openAppSettings() {
+        openAppSettingsCallsCount += 1
+        openAppSettingsClosure?()
+    }
 }
 class AudioConverterMock: AudioConverterProtocol {
 
