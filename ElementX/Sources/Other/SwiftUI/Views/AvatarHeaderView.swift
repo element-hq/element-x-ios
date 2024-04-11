@@ -58,6 +58,22 @@ struct AvatarHeaderView<Footer: View>: View {
         self.onAvatarTap = onAvatarTap
         self.footer = footer
     }
+    
+    init(user: UserProfileProxy,
+         avatarSize: AvatarSize,
+         imageProvider: ImageProviderProtocol? = nil,
+         onAvatarTap: (() -> Void)? = nil,
+         @ViewBuilder footer: @escaping () -> Footer) {
+        id = user.userID
+        name = user.displayName
+        subtitle = user.displayName == nil ? nil : user.userID
+        avatarURL = user.avatarURL
+        
+        self.avatarSize = avatarSize
+        self.imageProvider = imageProvider
+        self.onAvatarTap = onAvatarTap
+        self.footer = footer
+    }
 
     var body: some View {
         VStack(spacing: 8.0) {
