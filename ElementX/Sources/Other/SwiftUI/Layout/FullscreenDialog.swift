@@ -135,12 +135,21 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
     
     func updateBackgroundVisibility(scrollView: UIScrollView) {
         guard dynamicTypeSize < .accessibility1 else {
-            showsBackground = true
+            if !showsBackground {
+                showsBackground = true
+            }
             return
         }
-        let insetHeight = scrollView.adjustedContentInset.top + scrollView.adjustedContentInset.bottom
-        let availableHeight = scrollView.frame.height - insetHeight
-        showsBackground = scrollView.contentSize.height < availableHeight
+        
+        DispatchQueue.main.async { // Don't modify the state during a view update.
+            let insetHeight = scrollView.adjustedContentInset.top + scrollView.adjustedContentInset.bottom
+            let availableHeight = scrollView.frame.height - insetHeight
+            let shouldShowBackground = scrollView.contentSize.height < availableHeight
+            
+            if showsBackground != shouldShowBackground {
+                showsBackground = shouldShowBackground
+            }
+        }
     }
 }
 
