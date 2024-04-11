@@ -139,7 +139,14 @@ struct RoomScreen: View {
         // .principal + .primaryAction works better than .navigation leading + trailing
         // as the latter disables interaction in the action button for rooms with long names
         ToolbarItem(placement: .principal) {
-            RoomHeaderView(context: context)
+            RoomHeaderView(roomID: context.viewState.roomID,
+                           roomName: context.viewState.roomTitle,
+                           avatarURL: context.viewState.roomAvatarURL,
+                           imageProvider: context.imageProvider)
+                // Using a button stops it from getting truncated in the navigation bar
+                .onTapGesture {
+                    context.send(viewAction: .displayRoomDetails)
+                }
         }
         
         if !ProcessInfo.processInfo.isiOSAppOnMac {
