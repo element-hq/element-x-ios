@@ -16,15 +16,22 @@
 
 import SwiftUI
 
+enum PINDigitFieldSize {
+    case small
+    case medium
+}
+
 /// A text field that enables secure entry of a numerical PIN code.
 /// The view itself handles validation and the base text field type.
 struct PINTextField: View {
     @Binding var pinCode: String
     var isSecure = false
+    var maxLength = 4
+    var size = PINDigitFieldSize.medium
     
     var body: some View {
         textField
-            .textFieldStyle(PINTextFieldStyle(pinCode: pinCode, isSecure: isSecure))
+            .textFieldStyle(PINTextFieldStyle(pinCode: pinCode, isSecure: isSecure, maxLength: maxLength, size: size))
             .keyboardType(.numberPad)
             .accessibilityIdentifier(A11yIdentifiers.appLockSetupPINScreen.textField)
             .onChange(of: pinCode) { newValue in
@@ -47,7 +54,7 @@ struct PINTextField: View {
     
     func sanitize(_ pinCode: String) -> String {
         var sanitized = pinCode
-        if sanitized.count > 4 { sanitized = String(pinCode.prefix(4)) }
+        if sanitized.count > maxLength { sanitized = String(pinCode.prefix(maxLength)) }
         return sanitized.filter(\.isNumber)
     }
 }
@@ -55,14 +62,15 @@ struct PINTextField: View {
 /// A text field style for displaying individual digits of a PIN code.
 private struct PINTextFieldStyle: TextFieldStyle {
     @FocusState private var isFocussed
-    
     let pinCode: String
     let isSecure: Bool
+    let maxLength: Int
+    let size: PINDigitFieldSize
     
     func _body(configuration: TextField<_Label>) -> some View {
         HStack(spacing: 8) {
-            ForEach(0..<4) { index in
-                PINDigitField(digit: digit(index))
+            ForEach(0..<maxLength, id: \.self) { index in
+                PINDigitField(digit: digit(index), size: size)
             }
         }
         .overlay {
@@ -84,21 +92,36 @@ private struct PINTextFieldStyle: TextFieldStyle {
 /// A single digit shown within the text field style.
 private struct PINDigitField: View {
     let digit: Character?
+    let size: PINDigitFieldSize
+    
+    private var cornerRadius: CGFloat {
+        switch size {
+        case .small: return 14
+        case .medium: return 8
+        }
+    }
+    
+    private var edge: CGFloat {
+        switch size {
+        case .small: return 44
+        case .medium: return 48
+        }
+    }
     
     var body: some View {
         ZStack {
             if let digit {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .fill(Color.compound.bgSubtlePrimary)
                 Text(String(digit))
                     .font(.compound.headingMDBold)
             } else {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .inset(by: 0.5)
                     .stroke(Color.compound.iconPrimary, lineWidth: 1)
             }
         }
-        .frame(width: 48, height: 48)
+        .frame(width: edge, height: edge)
     }
 }
 
@@ -113,15 +136,20 @@ struct PINTextField_Previews: PreviewProvider, TestablePreview {
             PreviewWrapper(pinCode: "", isSecure: true)
             PreviewWrapper(pinCode: "12", isSecure: true)
             PreviewWrapper(pinCode: "1234", isSecure: true)
+                .padding(.bottom)
+            
+            PreviewWrapper(pinCode: "123456", isSecure: false, maxLength: 6)
+            PreviewWrapper(pinCode: "12", isSecure: false, maxLength: 2)
         }
     }
     
     struct PreviewWrapper: View {
         @State var pinCode = ""
         let isSecure: Bool
+        var maxLength = 4
         
         var body: some View {
-            PINTextField(pinCode: $pinCode, isSecure: isSecure)
+            PINTextField(pinCode: $pinCode, isSecure: isSecure, maxLength: maxLength)
         }
     }
 }

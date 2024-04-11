@@ -39,6 +39,8 @@ struct QRCodeLoginScreen: View {
             initialContent
         case .scan:
             qrScanContent
+        case .displayCode:
+            displayCodeContent
         case .error:
             errorContent
         }
@@ -64,6 +66,70 @@ struct QRCodeLoginScreen: View {
                 context.send(viewAction: .startScan)
             }
             .buttonStyle(.compound(.primary))
+        }
+    }
+    
+    @ViewBuilder
+    private var displayCodeContent: some View {
+        if case let .displayCode(displayCodeState) = context.viewState.state {
+            FullscreenDialog {
+                VStack(spacing: 32) {
+                    VStack(spacing: 40) {
+                        displayCodeHeader(state: displayCodeState)
+                        PINTextField(pinCode: .constant(displayCodeState.code),
+                                     maxLength: displayCodeState.code.count,
+                                     size: .small)
+                            .disabled(true)
+                    }
+                    VStack(spacing: 4) {
+                        ProgressView()
+                        Text(L10n.screenQrCodeLoginVerifyCodeLoading)
+                            .foregroundColor(.compound.textSecondary)
+                            .font(.compound.bodySM)
+                    }
+                }
+            } bottomContent: {
+                Button(L10n.actionCancel) {
+                    context.send(viewAction: .cancel)
+                }
+                .buttonStyle(.compound(.secondary))
+            }
+            .padding(.horizontal, 24)
+        }
+    }
+    
+    private func displayCodeHeader(state: QRCodeLoginState.QRCodeLoginDisplayCodeState) -> some View {
+        VStack(spacing: 16) {
+            switch state {
+            case .deviceCode:
+                HeroImage(icon: \.computer, style: .subtle)
+                
+                VStack(spacing: 8) {
+                    Text(L10n.screenQrCodeLoginDeviceCodeTitle)
+                        .foregroundColor(.compound.textPrimary)
+                        .font(.compound.headingMDBold)
+                        .multilineTextAlignment(.center)
+                    
+                    Text(L10n.screenQrCodeLoginDeviceCodeSubtitle)
+                        .foregroundColor(.compound.textSecondary)
+                        .font(.compound.bodyMD)
+                        .multilineTextAlignment(.center)
+                }
+            case .verificationCode:
+                HeroImage(icon: \.lock, style: .subtle)
+                
+                VStack(spacing: 8) {
+                    Text(L10n.screenQrCodeLoginVerifyCodeTitle)
+                        .foregroundColor(.compound.textPrimary)
+                        .font(.compound.headingMDBold)
+                        .multilineTextAlignment(.center)
+                    
+                    Text(L10n.screenQrCodeLoginVerifyCodeSubtitle)
+                        .foregroundColor(.compound.textSecondary)
+                        .font(.compound.bodyMD)
+                        .multilineTextAlignment(.center)
+                }
+            }
         }
     }
     
@@ -139,8 +205,10 @@ struct QRCodeLoginScreen: View {
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button(L10n.actionCancel) {
-                context.send(viewAction: .cancel)
+            if !context.viewState.state.isDisplayingCode {
+                Button(L10n.actionCancel) {
+                    context.send(viewAction: .cancel)
+                }
             }
         }
     }
@@ -280,6 +348,10 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     
     static let unknownErrorStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.unknown))
     
+    static let deviceCodeStateViewModel = QRCodeLoginScreenViewModel.mock(state: .displayCode(.deviceCode("12")))
+    
+    static let verificationCodeStateViewModel = QRCodeLoginScreenViewModel.mock(state: .displayCode(.verificationCode("123456")))
+    
     static var previews: some View {
         QRCodeLoginScreen(context: initialStateViewModel.context)
             .previewDisplayName("Initial")
@@ -301,5 +373,11 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
         
         QRCodeLoginScreen(context: unknownErrorStateViewModel.context)
             .previewDisplayName("Unknown error")
+        
+        QRCodeLoginScreen(context: deviceCodeStateViewModel.context)
+            .previewDisplayName("Device code")
+        
+        QRCodeLoginScreen(context: verificationCodeStateViewModel.context)
+            .previewDisplayName("Verification code")
     }
 }

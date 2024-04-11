@@ -66,6 +66,8 @@ enum QRCodeLoginState: Equatable {
     case initial
     /// The camera is scanning
     case scan(QRCodeLoginScanningState)
+    /// Codes are being shown
+    case displayCode(QRCodeLoginDisplayCodeState)
     /// Any full screen error state
     case error(QRCodeLoginErrorState)
     
@@ -82,5 +84,28 @@ enum QRCodeLoginState: Equatable {
         case connecting
         /// the qr code has been processed and is invalid
         case invalid
+    }
+    
+    enum QRCodeLoginDisplayCodeState: Equatable {
+        case deviceCode(String)
+        case verificationCode(String)
+        
+        var code: String {
+            switch self {
+            case .deviceCode(let code):
+                return code
+            case .verificationCode(let code):
+                return code
+            }
+        }
+    }
+    
+    var isDisplayingCode: Bool {
+        switch self {
+        case .displayCode:
+            return true
+        default:
+            return false
+        }
     }
 }

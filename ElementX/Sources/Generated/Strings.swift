@@ -1197,6 +1197,10 @@ internal enum L10n {
   internal static var screenQrCodeLoginConnectionNoteSecureStateListItem3: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_list_item_3") }
   /// Connection not secure
   internal static var screenQrCodeLoginConnectionNoteSecureStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_title") }
+  /// You’ll be asked to enter the two digits shown below.
+  internal static var screenQrCodeLoginDeviceCodeSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_subtitle") }
+  /// Enter number on your device
+  internal static var screenQrCodeLoginDeviceCodeTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_title") }
   /// Open %1$@ on a desktop device
   internal static func screenQrCodeLoginInitialStateItem1(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_1", String(describing: p1))
@@ -1237,6 +1241,12 @@ internal enum L10n {
   internal static var screenQrCodeLoginStartOverButton: String { return L10n.tr("Localizable", "screen_qr_code_login_start_over_button") }
   /// An unexpected error occurred. Please try again.
   internal static var screenQrCodeLoginUnknownErrorDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_unknown_error_description") }
+  /// Waiting for your other device
+  internal static var screenQrCodeLoginVerifyCodeLoading: String { return L10n.tr("Localizable", "screen_qr_code_login_verify_code_loading") }
+  /// Your account provider may ask for the following code to verify the sign in.
+  internal static var screenQrCodeLoginVerifyCodeSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_verify_code_subtitle") }
+  /// Your verification code
+  internal static var screenQrCodeLoginVerifyCodeTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_verify_code_title") }
   /// Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.
   internal static var screenRecoveryKeyChangeDescription: String { return L10n.tr("Localizable", "screen_recovery_key_change_description") }
   /// Generate a new recovery key

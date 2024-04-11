@@ -903,7 +903,30 @@ class ApplicationMock: ApplicationProtocol {
     }
     //MARK: - openAppSettings
 
-    var openAppSettingsCallsCount = 0
+    var openAppSettingsUnderlyingCallsCount = 0
+    var openAppSettingsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return openAppSettingsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = openAppSettingsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                openAppSettingsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    openAppSettingsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     var openAppSettingsCalled: Bool {
         return openAppSettingsCallsCount > 0
     }
