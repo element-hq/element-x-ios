@@ -39,7 +39,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
                                                      roomProxy: roomProxyMock,
                                                      clientProxy: ClientProxyMock(.init()),
                                                      mediaProvider: MockMediaProvider(),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                     analytics: ServiceLocator.shared.analytics)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
@@ -55,7 +56,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
                                                      roomProxy: roomProxyMock,
                                                      clientProxy: ClientProxyMock(.init()),
                                                      mediaProvider: MockMediaProvider(),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                     analytics: ServiceLocator.shared.analytics)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
@@ -92,7 +94,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
                                                      roomProxy: roomProxyMock,
                                                      clientProxy: clientProxy,
                                                      mediaProvider: MockMediaProvider(),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                     analytics: ServiceLocator.shared.analytics)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
@@ -128,7 +131,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
                                                      roomProxy: roomProxyMock,
                                                      clientProxy: ClientProxyMock(.init()),
                                                      mediaProvider: MockMediaProvider(),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                     analytics: ServiceLocator.shared.analytics)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
@@ -163,7 +167,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
                                                      roomProxy: roomProxyMock,
                                                      clientProxy: clientProxy,
                                                      mediaProvider: MockMediaProvider(),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                     analytics: ServiceLocator.shared.analytics)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
@@ -198,7 +203,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
                                                      roomProxy: roomProxyMock,
                                                      clientProxy: ClientProxyMock(.init()),
                                                      mediaProvider: MockMediaProvider(),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                     analytics: ServiceLocator.shared.analytics)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()
@@ -214,7 +220,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
                                                      roomProxy: roomProxyMock,
                                                      clientProxy: ClientProxyMock(.init()),
                                                      mediaProvider: MockMediaProvider(),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                     analytics: ServiceLocator.shared.analytics)
         
         let waitForMemberToLoad = deferFulfillment(context.$viewState) { $0.memberDetails != nil }
         try await waitForMemberToLoad.fulfill()

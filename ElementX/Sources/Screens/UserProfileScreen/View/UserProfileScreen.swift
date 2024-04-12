@@ -30,6 +30,8 @@ struct UserProfileScreen: View {
         }
         .compoundList()
         .navigationTitle(L10n.screenRoomMemberDetailsTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
         .alert(item: $context.alertInfo)
         .track(screen: .User)
         .interactiveQuickLook(item: $context.mediaPreviewItem, shouldHideControls: true)
@@ -73,6 +75,17 @@ struct UserProfileScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
         }
     }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        if context.viewState.isPresentedModally {
+            ToolbarItem(placement: .confirmationAction) {
+                Button(L10n.actionDone) {
+                    context.send(viewAction: .dismiss)
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Previews
@@ -92,8 +105,10 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(userID: String) -> UserProfileScreenViewModel {
         UserProfileScreenViewModel(userID: userID,
+                                   isPresentedModally: false,
                                    clientProxy: ClientProxyMock(.init()),
                                    mediaProvider: MockMediaProvider(),
-                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                   analytics: ServiceLocator.shared.analytics)
     }
 }

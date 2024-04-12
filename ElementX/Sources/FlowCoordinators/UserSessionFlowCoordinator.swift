@@ -195,6 +195,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             case .roomList, .roomMemberDetails:
                 self.roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+            case .userProfile(let userID):
+                stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
             case .genericCallLink(let url):
                 self.navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
             case .oidcCallback:
@@ -302,6 +304,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 presentRoomDirectorySearch()
             case (.roomDirectorySearchScreen, .dismissedRoomDirectorySearchScreen, .roomList):
                 dismissRoomDirectorySearch()
+            
+            case (_, .showUserProfileScreen(let userID), .userProfileScreen):
+                presentUserProfileScreen(userID: userID, animated: animated)
+            case (.userProfileScreen, .dismissedUserProfileScreen, .roomList):
+                break
                 
             default:
                 fatalError("Unknown transition: \(context)")
@@ -653,5 +660,37 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func dismissRoomDirectorySearch() {
         navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
+    }
+    
+    // MARK: User Profile
+    
+    private func presentUserProfileScreen(userID: String, animated: Bool) {
+        clearRoute(animated: animated)
+        
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
+                                                                isPresentedModally: true,
+                                                                clientProxy: userSession.clientProxy,
+                                                                mediaProvider: userSession.mediaProvider,
+                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                analytics: analytics)
+        let coordinator = UserProfileScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .openDirectChat(let roomID):
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false))
+            case .dismiss:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.setRootCoordinator(coordinator, animated: false)
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedUserProfileScreen)
+        }
     }
 }

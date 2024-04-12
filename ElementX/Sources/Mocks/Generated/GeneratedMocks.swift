@@ -2077,6 +2077,74 @@ class ClientProxyMock: ClientProxyProtocol {
             return accountURLActionReturnValue
         }
     }
+    //MARK: - directRoomCreatingIfNeeded
+
+    var directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingCallsCount = 0
+    var directRoomCreatingIfNeededWithExpectedRoomNameCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var directRoomCreatingIfNeededWithExpectedRoomNameCalled: Bool {
+        return directRoomCreatingIfNeededWithExpectedRoomNameCallsCount > 0
+    }
+    var directRoomCreatingIfNeededWithExpectedRoomNameReceivedArguments: (userID: String, expectedRoomName: String?)?
+    var directRoomCreatingIfNeededWithExpectedRoomNameReceivedInvocations: [(userID: String, expectedRoomName: String?)] = []
+
+    var directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingReturnValue: Result<(roomID: String, isNewRoom: Bool), ClientProxyError>!
+    var directRoomCreatingIfNeededWithExpectedRoomNameReturnValue: Result<(roomID: String, isNewRoom: Bool), ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingReturnValue
+            } else {
+                var returnValue: Result<(roomID: String, isNewRoom: Bool), ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var directRoomCreatingIfNeededWithExpectedRoomNameClosure: ((String, String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError>)?
+
+    func directRoomCreatingIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError> {
+        directRoomCreatingIfNeededWithExpectedRoomNameCallsCount += 1
+        directRoomCreatingIfNeededWithExpectedRoomNameReceivedArguments = (userID: userID, expectedRoomName: expectedRoomName)
+        directRoomCreatingIfNeededWithExpectedRoomNameReceivedInvocations.append((userID: userID, expectedRoomName: expectedRoomName))
+        if let directRoomCreatingIfNeededWithExpectedRoomNameClosure = directRoomCreatingIfNeededWithExpectedRoomNameClosure {
+            return await directRoomCreatingIfNeededWithExpectedRoomNameClosure(userID, expectedRoomName)
+        } else {
+            return directRoomCreatingIfNeededWithExpectedRoomNameReturnValue
+        }
+    }
     //MARK: - directRoomForUserID
 
     var directRoomForUserIDUnderlyingCallsCount = 0

@@ -24,6 +24,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     private let clientProxy: ClientProxyProtocol
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let analytics: AnalyticsService
     
     private var actionsSubject: PassthroughSubject<RoomMemberDetailsScreenViewModelAction, Never> = .init()
     
@@ -37,11 +38,13 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
          roomProxy: RoomProxyProtocol,
          clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         analytics: AnalyticsService) {
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
         self.userIndicatorController = userIndicatorController
+        self.analytics = analytics
         
         let initialViewState = RoomMemberDetailsScreenViewState(userID: userID, bindings: .init())
         
@@ -85,13 +88,9 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         case .unignoreConfirmed:
             Task { await unignoreUser() }
         case .displayAvatar:
-            displayFullScreenAvatar()
+            Task { await displayFullScreenAvatar() }
         case .openDirectChat:
-            guard let roomMemberProxy else {
-                fatalError()
-            }
-            
-            actionsSubject.send(.openDirectChat(displayName: roomMemberProxy.displayName))
+            Task { await openDirectChat() }
         }
     }
 
@@ -145,7 +144,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
     }
     
-    private func displayFullScreenAvatar() {
+    private func displayFullScreenAvatar() async {
         guard let roomMemberProxy else {
             fatalError()
         }
@@ -156,16 +155,32 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         
         let loadingIndicatorIdentifier = "roomMemberAvatarLoadingIndicator"
         userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
-        
-        Task {
-            defer {
-                userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
-            }
+        defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
             
-            // We don't actually know the mime type here, assume it's an image.
-            if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: avatarURL, mimeType: "image/jpeg")) {
-                state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomMemberProxy.displayName)
+        // We don't actually know the mime type here, assume it's an image.
+        if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: avatarURL, mimeType: "image/jpeg")) {
+            state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomMemberProxy.displayName)
+        }
+    }
+    
+    private func openDirectChat() async {
+        guard let roomMemberProxy else { fatalError() }
+        
+        let loadingIndicatorIdentifier = "openDirectChatLoadingIndicator"
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
+        defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
+        
+        switch await clientProxy.directRoomCreatingIfNeeded(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
+        case .success((let roomID, let isNewRoom)):
+            if isNewRoom {
+                analytics.trackCreatedRoom(isDM: true)
             }
+            actionsSubject.send(.openDirectChat(roomID: roomID))
+        case .failure(let failure):
+            state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)
         }
     }
     

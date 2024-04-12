@@ -129,6 +129,8 @@ final class AppSettings {
     let encryptionURL: URL = "https://element.io/help#encryption"
     /// A URL where users can go read more about the chat backup.
     let chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
+    /// Any domains that Element web may be hosted on - used for handling links.
+    let elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
     
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
     var appAppearance: AppAppearance
