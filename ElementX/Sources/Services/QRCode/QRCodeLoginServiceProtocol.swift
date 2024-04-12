@@ -14,7 +14,15 @@
 // limitations under the License.
 //
 
+import Combine
+import Foundation
+
+import MatrixRustSDK
+
 // sourcery: AutoMockable
 protocol QRCodeLoginServiceProtocol {
+    var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> { get }
+    
     func requestAuthorizationIfNeeded() async -> Bool
+    func scan(data: Data) async throws
 }

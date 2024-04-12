@@ -53,6 +53,12 @@ struct QRCodeLoginScreenViewState: BindableState {
         AttributedString(L10n.screenQrCodeLoginConnectionNoteSecureStateListItem2),
         AttributedString(L10n.screenQrCodeLoginConnectionNoteSecureStateListItem3)
     ]
+    
+    var bindings = QRCodeLoginScreenViewStateBindings()
+}
+
+struct QRCodeLoginScreenViewStateBindings {
+    var qrResult: Data?
 }
 
 enum QRCodeLoginScreenViewAction {

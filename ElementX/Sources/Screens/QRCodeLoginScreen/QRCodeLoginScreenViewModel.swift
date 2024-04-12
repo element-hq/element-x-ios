@@ -34,6 +34,28 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         self.qrCodeLoginService = qrCodeLoginService
         self.application = application
         super.init(initialViewState: QRCodeLoginScreenViewState())
+        
+        context.$viewState
+            .compactMap(\.bindings.qrResult)
+            .removeDuplicates()
+            .sink { [weak self] qrData in
+                Task {
+                    do {
+                        MXLog.info("Scanning QR code: \(String(data: qrData, encoding: .utf8))")
+                        try await qrCodeLoginService.scan(data: qrData)
+                    } catch {
+                        MXLog.error("Failed to scan the QR code:\(error)")
+                        self?.state.state = .error(.unknown)
+                    }
+                }
+            }
+            .store(in: &cancellables)
+        
+        qrCodeLoginService.qrLoginProgressPublisher
+            .sink { progress in
+                MXLog.info(progress)
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Public

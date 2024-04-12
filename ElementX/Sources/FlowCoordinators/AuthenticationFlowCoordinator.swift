@@ -31,6 +31,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let orientationManager: OrientationManagerProtocol
+    private let qrCodeLoginService: QRCodeLoginServiceProtocol
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -42,6 +43,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     weak var delegate: AuthenticationFlowCoordinatorDelegate?
     
     init(authenticationService: AuthenticationServiceProxyProtocol,
+         qrCodeLoginService: QRCodeLoginServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
          appSettings: AppSettings,
@@ -55,6 +57,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.orientationManager = orientationManager
+        self.qrCodeLoginService = qrCodeLoginService
         
         navigationStackCoordinator = NavigationStackCoordinator()
     }
@@ -106,7 +109,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func startQRCodeLogin() {
-        let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(qrCodeLoginService: QRCodeLoginService(),
+        let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(qrCodeLoginService: qrCodeLoginService,
                                                                          orientationManager: orientationManager))
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else {

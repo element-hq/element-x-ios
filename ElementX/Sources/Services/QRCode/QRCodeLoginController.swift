@@ -15,8 +15,43 @@
 //
 
 import AVFoundation
+import Combine
+
+import MatrixRustSDK
 
 final class QRCodeLoginService: QRCodeLoginServiceProtocol {
+    private let oidcConfiguration: OidcConfiguration
+    private let encryptionKeyProvider: EncryptionKeyProviderProtocol
+    private let userSessionStore: UserSessionStoreProtocol
+    private var client: Client?
+    
+    private let qrLoginProgressSubject = PassthroughSubject<QrLoginProgress, Never>()
+    var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
+        qrLoginProgressSubject.eraseToAnyPublisher()
+    }
+    
+    init(oidcConfiguration: OidcConfiguration,
+         encryptionKeyProvider: EncryptionKeyProviderProtocol,
+         userSessionStore: UserSessionStoreProtocol) {
+        self.oidcConfiguration = oidcConfiguration
+        self.encryptionKeyProvider = encryptionKeyProvider
+        self.userSessionStore = userSessionStore
+    }
+    
+    func scan(data: Data) async throws {
+        let qrData = try QrCodeData.fromBytes(bytes: data)
+        let listener = QrLoginProgressListenerProxy { [weak self] in self?.qrLoginProgressSubject.send($0) }
+    
+        client = try await ClientBuilder()
+            .basePath(path: userSessionStore.baseDirectory.path(percentEncoded: false))
+            .passphrase(passphrase: encryptionKeyProvider.generateKey().base64EncodedString())
+            .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
+            .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
+                                           sessionDelegate: userSessionStore.clientSessionDelegate)
+            .serverVersions(versions: ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"]) // FIXME: Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
+            .buildWithQrCode(qrCodeData: qrData, oidcConfiguration: oidcConfiguration, progressListener: listener)
+    }
+    
     func requestAuthorizationIfNeeded() async -> Bool {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
         
@@ -33,5 +68,17 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         }
         
         return isAuthorized
+    }
+}
+
+final class QrLoginProgressListenerProxy: QrLoginProgressListener {
+    private let onUpdateClosure: (QrLoginProgress) -> Void
+    
+    init(onUpdateClosure: @escaping (QrLoginProgress) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(state: QrLoginProgress) {
+        onUpdateClosure(state)
     }
 }

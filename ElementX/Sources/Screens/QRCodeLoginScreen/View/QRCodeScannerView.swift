@@ -19,13 +19,46 @@ import SwiftUI
 import UIKit
 
 struct QRCodeScannerView: UIViewControllerRepresentable {
+    @Binding var result: Data?
+    
     func makeUIViewController(context: Context) -> QRScannerController {
         let controller = QRScannerController()
- 
+        controller.delegate = context.coordinator
         return controller
     }
  
     func updateUIViewController(_ uiViewController: QRScannerController, context: Context) { }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator($result)
+    }
+    
+    final class Coordinator: NSObject, AVCaptureMetadataOutputObjectsDelegate {
+        @Binding var scanResult: Data?
+     
+        init(_ scanResult: Binding<Data?>) {
+            _scanResult = scanResult
+        }
+     
+        func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+            // Check if the metadataObjects array is not nil and it contains at least one object.
+            if metadataObjects.count == 0 {
+                scanResult = nil
+                return
+            }
+     
+            // Get the metadata object.
+            if let metadataObj = metadataObjects[0] as? AVMetadataMachineReadableCodeObject {
+                if metadataObj.type == AVMetadataObject.ObjectType.qr,
+                   let result = metadataObj.descriptor as? CIQRCodeDescriptor {
+                    let data = result.errorCorrectedPayload
+                    MXLog.info(metadataObj.stringValue ?? "")
+                    scanResult = data
+                    MXLog.info("QRCodeScannerView: scanned \(data)")
+                }
+            }
+        }
+    }
 }
 
 final class QRScannerController: UIViewController {

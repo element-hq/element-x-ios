@@ -6408,6 +6408,11 @@ class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
     }
 }
 class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
+    var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
+        get { return underlyingQrLoginProgressPublisher }
+        set(value) { underlyingQrLoginProgressPublisher = value }
+    }
+    var underlyingQrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never>!
 
     //MARK: - requestAuthorizationIfNeeded
 
@@ -6472,6 +6477,49 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
         } else {
             return requestAuthorizationIfNeededReturnValue
         }
+    }
+    //MARK: - scan
+
+    var scanDataThrowableError: Error?
+    var scanDataUnderlyingCallsCount = 0
+    var scanDataCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return scanDataUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = scanDataUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                scanDataUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    scanDataUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var scanDataCalled: Bool {
+        return scanDataCallsCount > 0
+    }
+    var scanDataReceivedData: Data?
+    var scanDataReceivedInvocations: [Data] = []
+    var scanDataClosure: ((Data) async throws -> Void)?
+
+    func scan(data: Data) async throws {
+        if let error = scanDataThrowableError {
+            throw error
+        }
+        scanDataCallsCount += 1
+        scanDataReceivedData = data
+        scanDataReceivedInvocations.append(data)
+        try await scanDataClosure?(data)
     }
 }
 class RoomDirectorySearchProxyMock: RoomDirectorySearchProxyProtocol {
