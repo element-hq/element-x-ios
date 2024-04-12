@@ -336,11 +336,6 @@ class RoomScreenViewModelTests: XCTestCase {
         let arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
         XCTAssertEqual(arguments?.eventID, "t3")
         XCTAssertEqual(arguments?.type, .read)
-        
-        // And the notifications should be cleared.
-        XCTAssertEqual(notificationCenter.postNameObjectReceivedArguments?.aName, .roomMarkedAsRead)
-        let roomID = notificationCenter.postNameObjectReceivedArguments?.anObject as? String
-        XCTAssertEqual(roomID, roomProxy.id)
     }
     
     func testSendMoreReadReceipts() async throws {

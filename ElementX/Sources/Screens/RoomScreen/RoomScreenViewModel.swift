@@ -415,12 +415,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func sendReadReceiptIfNeeded(for lastVisibleItemID: TimelineItemIdentifier) async {
         guard application.applicationState == .active else { return }
-        
-        // Clear any notifications from notification center.
-        if lastVisibleItemID.timelineID == state.timelineViewState.timelineIDs.last {
-            notificationCenter.post(name: .roomMarkedAsRead, object: roomProxy.id)
-        }
-        
+                
         await timelineController.sendReadReceipt(for: lastVisibleItemID)
     }
 

@@ -57,8 +57,6 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
             accept(invite: invite)
         case .decline(let invite):
             startDeclineFlow(invite: invite)
-        case .appeared:
-            notificationCenterProtocol.post(name: .invitesScreenAppeared, object: nil)
         }
     }
     

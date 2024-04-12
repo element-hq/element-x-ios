@@ -32,6 +32,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let bugReportService: BugReportServiceProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
+    private let notificationManager: NotificationManagerProtocol
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     
@@ -82,6 +83,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.appSettings = appSettings
         self.analytics = analytics
+        self.notificationManager = notificationManager
         
         navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         
@@ -467,7 +469,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         Task {
-            await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
+            let _ = await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
+            
+            await notificationManager.removeDeliveredMessageNotifications(for: roomID)
         }
     }
     
@@ -526,6 +530,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         sidebarNavigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedInvitesScreen)
+        }
+        
+        Task {
+            await notificationManager.removeDeliveredInviteNotifications()
         }
     }
     

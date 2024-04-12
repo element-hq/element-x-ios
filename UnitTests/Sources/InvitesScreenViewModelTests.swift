@@ -85,14 +85,6 @@ class InvitesScreenViewModelTests: XCTestCase {
         context.send(viewAction: .decline(.init(roomDetails: details, isUnread: false)))
         XCTAssertNotNil(context.alertInfo)
     }
-
-    func testHasAppeared() async {
-        setupViewModel()
-        context.send(viewAction: .appeared)
-
-        await Task.yield()
-        XCTAssertEqual(mockNotificationCenter.postNameObjectReceivedArguments?.aName, .invitesScreenAppeared)
-    }
     
     // MARK: - Private
     

@@ -5329,6 +5329,80 @@ class NotificationManagerMock: NotificationManagerProtocol {
         requestAuthorizationCallsCount += 1
         requestAuthorizationClosure?()
     }
+    //MARK: - removeDeliveredMessageNotifications
+
+    var removeDeliveredMessageNotificationsForUnderlyingCallsCount = 0
+    var removeDeliveredMessageNotificationsForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeDeliveredMessageNotificationsForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeDeliveredMessageNotificationsForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeDeliveredMessageNotificationsForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeDeliveredMessageNotificationsForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var removeDeliveredMessageNotificationsForCalled: Bool {
+        return removeDeliveredMessageNotificationsForCallsCount > 0
+    }
+    var removeDeliveredMessageNotificationsForReceivedRoomID: String?
+    var removeDeliveredMessageNotificationsForReceivedInvocations: [String] = []
+    var removeDeliveredMessageNotificationsForClosure: ((String) async -> Void)?
+
+    func removeDeliveredMessageNotifications(for roomID: String) async {
+        removeDeliveredMessageNotificationsForCallsCount += 1
+        removeDeliveredMessageNotificationsForReceivedRoomID = roomID
+        removeDeliveredMessageNotificationsForReceivedInvocations.append(roomID)
+        await removeDeliveredMessageNotificationsForClosure?(roomID)
+    }
+    //MARK: - removeDeliveredInviteNotifications
+
+    var removeDeliveredInviteNotificationsUnderlyingCallsCount = 0
+    var removeDeliveredInviteNotificationsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeDeliveredInviteNotificationsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeDeliveredInviteNotificationsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeDeliveredInviteNotificationsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeDeliveredInviteNotificationsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var removeDeliveredInviteNotificationsCalled: Bool {
+        return removeDeliveredInviteNotificationsCallsCount > 0
+    }
+    var removeDeliveredInviteNotificationsClosure: (() async -> Void)?
+
+    func removeDeliveredInviteNotifications() async {
+        removeDeliveredInviteNotificationsCallsCount += 1
+        await removeDeliveredInviteNotificationsClosure?()
+    }
 }
 class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
     var callbacks: PassthroughSubject<NotificationSettingsProxyCallback, Never> {
