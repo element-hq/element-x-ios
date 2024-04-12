@@ -60,7 +60,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         switch await clientProxy.joinRoom(state.roomID) {
         case .success:
             actionsSubject.send(.joined)
-        case .failure(let error):
+        case .failure:
             state.bindings.alertInfo = .init(id: .joinFailed)
         }
     }

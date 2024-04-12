@@ -23,6 +23,8 @@ import Combine
 class UserSessionFlowCoordinatorTests: XCTestCase {
     var userSessionFlowCoordinator: UserSessionFlowCoordinator!
     var navigationRootCoordinator: NavigationRootCoordinator!
+    var notificationManager: NotificationManagerMock!
+    
     var cancellables = Set<AnyCancellable>()
     
     var detailCoordinator: CoordinatorProtocol? {
@@ -45,6 +47,8 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         
         navigationRootCoordinator = NavigationRootCoordinator()
         
+        notificationManager = NotificationManagerMock()
+        
         userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 windowManager: WindowManagerMock(),
@@ -53,7 +57,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
                                                                 roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
                                                                 appSettings: ServiceLocator.shared.settings,
                                                                 analytics: ServiceLocator.shared.analytics,
-                                                                notificationManager: NotificationManagerMock(),
+                                                                notificationManager: notificationManager,
                                                                 isNewLogin: false)
         
         let deferred = deferFulfillment(userSessionFlowCoordinator.statePublisher) { $0 == .roomList(selectedRoomID: nil) }
@@ -81,6 +85,8 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         try await process(route: .roomList, expectedState: .roomList(selectedRoomID: nil))
         XCTAssertNil(detailNavigationStack?.rootCoordinator)
         XCTAssertNil(detailCoordinator)
+        
+        XCTAssertEqual(notificationManager.removeDeliveredMessageNotificationsForReceivedInvocations, ["1", "1", "2"])
     }
     
     func testRoomDetailsPresentation() async throws {
