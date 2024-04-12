@@ -17,6 +17,7 @@
 import Foundation
 
 enum RoomMemberDetailsScreenViewModelAction {
+    case openUserProfile
     case openDirectChat(displayName: String?)
 }
 
