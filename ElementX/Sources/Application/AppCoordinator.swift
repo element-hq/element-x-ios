@@ -196,6 +196,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             case .roomMemberDetails:
                 userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
             case .room(let roomID):
+                // check that the room is joined here, if not use a joinRoom route.
                 if isExternalURL {
                     userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
                 } else {

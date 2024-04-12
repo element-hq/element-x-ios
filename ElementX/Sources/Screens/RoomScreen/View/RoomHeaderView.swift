@@ -19,72 +19,47 @@ import Foundation
 import SwiftUI
 
 struct RoomHeaderView: View {
-    @ObservedObject var context: RoomScreenViewModel.Context
-
+    let roomID: String
+    let roomName: String
+    let avatarURL: URL?
+    
+    let imageProvider: ImageProviderProtocol?
+    
     var body: some View {
         HStack(spacing: 12) {
             roomAvatar
                 .accessibilityHidden(true)
-            Text(context.viewState.roomTitle)
+            Text(roomName)
                 .font(.compound.bodyLGSemibold)
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
         }
         // Leading align whilst using the principal toolbar position.
         .frame(maxWidth: .infinity, alignment: .leading)
-        // Using a button stops it from getting truncated in the navigation bar
-        .onTapGesture {
-            context.send(viewAction: .displayRoomDetails)
-        }
     }
-
-    @ViewBuilder private var roomAvatar: some View {
-        LoadableAvatarImage(url: context.viewState.roomAvatarURL,
-                            name: context.viewState.roomTitle,
-                            contentID: context.viewState.roomID,
+    
+    private var roomAvatar: some View {
+        LoadableAvatarImage(url: avatarURL,
+                            name: roomName,
+                            contentID: roomID,
                             avatarSize: .room(on: .timeline),
-                            imageProvider: context.imageProvider)
+                            imageProvider: imageProvider)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)
     }
 }
 
 struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        bodyPlain
-        bodyEncrypted
-    }
-
-    @ViewBuilder
-    static var bodyPlain: some View {
-        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Some Room name", avatarURL: URL.picturesDirectory)),
-                                            timelineController: MockRoomTimelineController(),
-                                            mediaProvider: MockMediaProvider(),
-                                            mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                            application: ApplicationMock.default,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            notificationCenter: NotificationCenterMock())
-
-        RoomHeaderView(context: viewModel.context)
+        RoomHeaderView(roomID: "1",
+                       roomName: "Some Room name",
+                       avatarURL: URL.picturesDirectory,
+                       imageProvider: MockMediaProvider())
             .previewLayout(.sizeThatFits)
             .padding()
-    }
-    
-    @ViewBuilder
-    static var bodyEncrypted: some View {
-        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Some Room name")),
-                                            timelineController: MockRoomTimelineController(),
-                                            mediaProvider: MockMediaProvider(),
-                                            mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                            application: ApplicationMock.default,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            notificationCenter: NotificationCenterMock())
-
-        RoomHeaderView(context: viewModel.context)
+        
+        RoomHeaderView(roomID: "1",
+                       roomName: "Some Room name",
+                       avatarURL: nil,
+                       imageProvider: MockMediaProvider())
             .previewLayout(.sizeThatFits)
             .padding()
     }

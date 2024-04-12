@@ -93,6 +93,7 @@ enum RoomAvatarSizeOnScreen {
     case details
     case notificationSettings
     case roomDirectorySearch
+    case joinRoom
 
     var value: CGFloat {
         switch self {
@@ -110,6 +111,8 @@ enum RoomAvatarSizeOnScreen {
             return 52
         case .details:
             return 70
+        case .joinRoom:
+            return 96
         }
     }
 }

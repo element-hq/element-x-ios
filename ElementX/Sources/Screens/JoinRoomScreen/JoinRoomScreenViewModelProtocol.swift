@@ -1,5 +1,5 @@
 //
-// Copyright 2024 New Vector Ltd
+// Copyright 2022 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,24 +14,10 @@
 // limitations under the License.
 //
 
-import Compound
-import SwiftUI
+import Combine
 
-struct RoomDirectorySearchView: View {
-    let onTap: () -> Void
-    
-    var body: some View {
-        Button(action: onTap) {
-            Label(L10n.screenRoomlistRoomDirectoryButtonTitle, icon: \.listBulleted)
-        }
-        .buttonStyle(.compound(.super))
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-    }
-}
-    
-struct RoomDirectorySearchView_Previews: PreviewProvider, TestablePreview {
-    static var previews: some View {
-        RoomDirectorySearchView { }
-    }
+@MainActor
+protocol JoinRoomScreenViewModelProtocol {
+    var actionsPublisher: AnyPublisher<JoinRoomScreenViewModelAction, Never> { get }
+    var context: JoinRoomScreenViewModelType.Context { get }
 }
