@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import MatrixRustSDK
 import SwiftUI
 
 final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
@@ -129,8 +130,7 @@ struct MessageText: UIViewRepresentable {
 
     final class Coordinator: NSObject, UITextViewDelegate {
         var openURLAction: OpenURLAction
-        let permalinkBaseURL = ServiceLocator.shared.settings.permalinkBaseURL
-        
+
         init(openURLAction: OpenURLAction) {
             self.openURLAction = openURLAction
         }
@@ -146,7 +146,7 @@ struct MessageText: UIViewRepresentable {
                 return false
             case .preview:
                 // We don't want to show a URL preview for permalinks
-                return PermalinkBuilder.detectPermalink(in: URL, baseURL: permalinkBaseURL) == nil
+                return parseMatrixEntityFrom(uri: URL.absoluteString) == nil
             default:
                 return true
             }
@@ -157,7 +157,7 @@ struct MessageText: UIViewRepresentable {
             switch textItem.content {
             case let .link(url):
                 // We don't want to show a URL preview for permalinks
-                let isPermalink = PermalinkBuilder.detectPermalink(in: url, baseURL: permalinkBaseURL) != nil
+                let isPermalink = parseMatrixEntityFrom(uri: url.absoluteString) != nil
                 return .init(preview: isPermalink ? nil : .default, menu: defaultMenu)
             default:
                 return nil
@@ -197,7 +197,7 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
     
     private static let htmlStringWithList = "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n"
 
-    private static let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder())
+    private static let attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
     
     static var attachmentPreview: some View {
         MessageText(attributedString: attributedStringWithAttachment)

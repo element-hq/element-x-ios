@@ -289,8 +289,6 @@ final class AppSettings {
     #endif
     
     // MARK: - Shared
-    
-    let permalinkBaseURL: URL = "https://matrix.to"
         
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
     var logLevel

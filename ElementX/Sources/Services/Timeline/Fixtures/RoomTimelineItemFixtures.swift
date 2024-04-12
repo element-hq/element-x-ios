@@ -97,8 +97,7 @@ enum RoomTimelineItemFixtures {
                              isThreaded: false,
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "",
-                                            formattedBody: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                   mentionBuilder: MentionBuilder())
+                                            formattedBody: AttributedStringBuilder(mentionBuilder: MentionBuilder())
                                                 .fromHTML("Hol' up <blockquote>New home office set up!</blockquote>That's amazing! Congrats 🥳")))
     ]
     

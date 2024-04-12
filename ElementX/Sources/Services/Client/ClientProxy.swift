@@ -681,7 +681,6 @@ class ClientProxy: ClientProxyProtocol {
             let roomListService = syncService.roomListService()
             
             let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
-                                                                                                                               permalinkBaseURL: appSettings.permalinkBaseURL,
                                                                                                                                mentionBuilder: PlainMentionBuilder()))
             let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
                                                             messageEventStringBuilder: roomMessageEventStringBuilder)

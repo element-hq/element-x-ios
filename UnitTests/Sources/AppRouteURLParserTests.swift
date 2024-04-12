@@ -111,7 +111,7 @@ class AppRouteURLParserTests: XCTestCase {
     
     func testMatrixUserURL() {
         let userID = "@test:matrix.org"
-        guard let url = URL(string: "\(appSettings.permalinkBaseURL)/#/\(userID)") else {
+        guard let url = URL(string: "https://matrix.to/#/\(userID)") else {
             XCTFail("Invalid url")
             return
         }
@@ -123,7 +123,7 @@ class AppRouteURLParserTests: XCTestCase {
     
     func testMatrixRoomIdentifierURL() {
         let id = "!abcdefghijklmnopqrstuvwxyz1234567890:matrix.org"
-        guard let url = URL(string: "\(appSettings.permalinkBaseURL)/#/\(id)") else {
+        guard let url = URL(string: "https://matrix.to/#/\(id)") else {
             XCTFail("Invalid url")
             return
         }

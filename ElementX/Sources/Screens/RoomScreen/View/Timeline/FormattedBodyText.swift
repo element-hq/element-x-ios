@@ -209,7 +209,7 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             "<p>test</p>\n<p>test</p>"
         ]
         
-        let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder())
+        let attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
         
         ScrollView {
             VStack(alignment: .leading, spacing: 24.0) {

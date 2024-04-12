@@ -37,8 +37,7 @@ extension RoomMemberProxyProtocol {
     }
     
     var permalink: URL? {
-        try? PermalinkBuilder.permalinkTo(userIdentifier: userID,
-                                          baseURL: ServiceLocator.shared.settings.permalinkBaseURL)
+        try? URL(string: matrixToUserPermalink(userId: userID))
     }
     
     /// The name used for sorting the member alphabetically. This will be the displayname if,
