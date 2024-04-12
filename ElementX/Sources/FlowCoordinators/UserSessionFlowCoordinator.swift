@@ -326,8 +326,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentHomeScreen() {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
-                                                         attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                          mentionBuilder: MentionBuilder()),
+                                                         attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                          bugReportService: bugReportService,
                                                          navigationStackCoordinator: detailNavigationStackCoordinator,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher())

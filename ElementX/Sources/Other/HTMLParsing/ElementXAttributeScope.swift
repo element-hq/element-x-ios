@@ -36,19 +36,27 @@ enum RoomAliasAttribute: AttributedStringKey {
     static var name = "MXRoomAliasAttribute"
 }
 
+enum EventOnRoomIDAttribute: AttributedStringKey {
+    struct Value: Hashable {
+        let roomID: String
+        let eventID: String
+    }
+    
+    static var name = "MXEventOnRoomIDAttribute"
+}
+
+enum EventOnRoomAliasAttribute: AttributedStringKey {
+    struct Value: Hashable {
+        let alias: String
+        let eventID: String
+    }
+    
+    static var name = "MXEventOnRoomAliasAttribute"
+}
+
 enum AllUsersMentionAttribute: AttributedStringKey {
     typealias Value = Bool
     static var name = "MXAllUsersMentionAttribute"
-}
-
-struct EventIDAttributeValue: Hashable {
-    let roomID: String
-    let eventID: String
-}
-
-enum EventIDAttribute: AttributedStringKey {
-    typealias Value = EventIDAttributeValue
-    static var name = "MXEventIDAttribute"
 }
 
 // periphery: ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
@@ -59,7 +67,8 @@ extension AttributeScopes {
         let userID: UserIDAttribute
         let roomID: RoomIDAttribute
         let roomAlias: RoomAliasAttribute
-        let eventID: EventIDAttribute
+        let eventOnRoomID: EventOnRoomIDAttribute
+        let eventOnRoomAlias: EventOnRoomAliasAttribute
         
         let allUsersMention: AllUsersMentionAttribute
         

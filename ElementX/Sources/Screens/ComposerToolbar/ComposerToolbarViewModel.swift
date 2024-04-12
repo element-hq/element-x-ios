@@ -17,6 +17,7 @@
 import Combine
 import Foundation
 import GameKit
+import MatrixRustSDK
 import SwiftUI
 import WysiwygComposer
 
@@ -210,7 +211,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func setupMentionsHandling(mentionDisplayHelper: MentionDisplayHelper) {
         wysiwygViewModel.mentionDisplayHelper = mentionDisplayHelper
         
-        let attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", permalinkBaseURL: appSettings.permalinkBaseURL, mentionBuilder: MentionBuilder())
+        let attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: MentionBuilder())
         
         wysiwygViewModel.mentionReplacer = ComposerMentionReplacer { urlString, string in
             let attributedString: NSMutableAttributedString
@@ -231,7 +232,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func handleSuggestion(_ suggestion: SuggestionItem) {
         switch suggestion {
         case let .user(item):
-            guard let url = try? PermalinkBuilder.permalinkTo(userIdentifier: item.id, baseURL: appSettings.permalinkBaseURL) else {
+            guard let url = try? URL(string: matrixToUserPermalink(userId: item.id)) else {
                 MXLog.error("Could not build user permalink")
                 return
             }

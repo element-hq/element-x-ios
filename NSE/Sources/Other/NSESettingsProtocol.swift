@@ -17,8 +17,6 @@
 import Foundation
 
 protocol NSESettingsProtocol {
-    var permalinkBaseURL: URL { get }
-    
     var logLevel: TracingConfiguration.LogLevel { get }
 }
 

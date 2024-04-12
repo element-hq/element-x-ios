@@ -41,8 +41,7 @@ import UserNotifications
 // database, logging, etc. are only ever setup once per *process*
 
 private let settings: NSESettingsProtocol = AppSettings()
-private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: settings.permalinkBaseURL,
-                                                                                                                                                                              mentionBuilder: PlainMentionBuilder())))
+private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder())))
 private let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
 private var userSessions = [String: NSEUserSession]()

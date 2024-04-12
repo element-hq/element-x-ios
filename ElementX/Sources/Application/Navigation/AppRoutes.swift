@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 enum AppRoute: Equatable {
     /// The callback used to complete login with OIDC.
@@ -43,7 +44,7 @@ struct AppRouteURLParser {
     
     init(appSettings: AppSettings) {
         urlParsers = [
-            MatrixPermalinkParser(appSettings: appSettings),
+            MatrixPermalinkParser(),
             OIDCCallbackURLParser(appSettings: appSettings),
             ElementCallURLParser()
         ]
@@ -121,13 +122,15 @@ struct ElementCallURLParser: URLParser {
 }
 
 struct MatrixPermalinkParser: URLParser {
-    let appSettings: AppSettings
-    
     func route(from url: URL) -> AppRoute? {
-        switch PermalinkBuilder.detectPermalink(in: url, baseURL: appSettings.permalinkBaseURL) {
-        case .userIdentifier(let userID):
+        guard let matrixEntity = parseMatrixEntityFrom(uri: url.absoluteString) else {
+            return nil
+        }
+        
+        switch matrixEntity.id {
+        case .user(let userID):
             return .roomMemberDetails(userID: userID)
-        case .roomIdentifier(let roomID):
+        case .room(let roomID):
             return .room(roomID: roomID)
         default:
             return nil
