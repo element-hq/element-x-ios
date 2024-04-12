@@ -21,19 +21,6 @@ struct RoomMemberDetailsScreen: View {
     @ObservedObject var context: RoomMemberDetailsScreenViewModel.Context
     
     var body: some View {
-        content
-            .compoundList()
-            .navigationTitle(L10n.screenRoomMemberDetailsTitle)
-            .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
-            .alert(item: $context.alertInfo)
-            .track(screen: .User)
-            .interactiveQuickLook(item: $context.mediaPreviewItem, shouldHideControls: true)
-    }
-    
-    // MARK: - Private
-    
-    @ViewBuilder
-    private var content: some View {
         Form {
             headerSection
             
@@ -42,7 +29,15 @@ struct RoomMemberDetailsScreen: View {
                 blockUserSection
             }
         }
+        .compoundList()
+        .navigationTitle(L10n.screenRoomMemberDetailsTitle)
+        .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
+        .alert(item: $context.alertInfo)
+        .track(screen: .User)
+        .interactiveQuickLook(item: $context.mediaPreviewItem, shouldHideControls: true)
     }
+    
+    // MARK: - Private
     
     @ViewBuilder
     private var headerSection: some View {
@@ -63,7 +58,7 @@ struct RoomMemberDetailsScreen: View {
                 }
             }
         } else {
-            AvatarHeaderView(member: .init(loading: context.viewState.userID),
+            AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
                              avatarSize: .user(on: .memberDetails),
                              imageProvider: context.imageProvider,
                              footer: { })

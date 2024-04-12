@@ -59,8 +59,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
                 state.memberDetails = RoomMemberDetails(withProxy: member)
                 state.isOwnMemberDetails = member.userID == roomProxy.ownUserID
             case .failure(let error):
-                state.bindings.alertInfo = .init(id: .unknown)
-                MXLog.error("[RoomFlowCoordinator] Failed to get member: \(error)")
+                MXLog.warning("Failed to find member: \(error)")
+                actionsSubject.send(.openUserProfile)
             }
         }
     }

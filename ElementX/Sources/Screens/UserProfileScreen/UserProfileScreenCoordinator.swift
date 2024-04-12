@@ -17,44 +17,39 @@
 import Combine
 import SwiftUI
 
-struct RoomMemberDetailsScreenCoordinatorParameters {
+struct UserProfileScreenCoordinatorParameters {
     let userID: String
-    let roomProxy: RoomProxyProtocol
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
-enum RoomMemberDetailsScreenCoordinatorAction {
-    case openUserProfile
+enum UserProfileScreenCoordinatorAction {
     case openDirectChat(displayName: String?)
 }
 
-final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
-    private var viewModel: RoomMemberDetailsScreenViewModelProtocol
-
-    private let actionsSubject: PassthroughSubject<RoomMemberDetailsScreenCoordinatorAction, Never> = .init()
+final class UserProfileScreenCoordinator: CoordinatorProtocol {
+    private var viewModel: UserProfileScreenViewModelProtocol
+    
     private var cancellables = Set<AnyCancellable>()
     
-    var actions: AnyPublisher<RoomMemberDetailsScreenCoordinatorAction, Never> {
+    private let actionsSubject: PassthroughSubject<UserProfileScreenCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<UserProfileScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
-    init(parameters: RoomMemberDetailsScreenCoordinatorParameters) {
-        viewModel = RoomMemberDetailsScreenViewModel(userID: parameters.userID,
-                                                     roomProxy: parameters.roomProxy,
-                                                     clientProxy: parameters.clientProxy,
-                                                     mediaProvider: parameters.mediaProvider,
-                                                     userIndicatorController: parameters.userIndicatorController)
+    
+    init(parameters: UserProfileScreenCoordinatorParameters) {
+        viewModel = UserProfileScreenViewModel(userID: parameters.userID,
+                                               clientProxy: parameters.clientProxy,
+                                               mediaProvider: parameters.mediaProvider,
+                                               userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {
-        viewModel.actions.sink { [weak self] action in
+        viewModel.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             
             switch action {
-            case .openUserProfile:
-                actionsSubject.send(.openUserProfile)
             case .openDirectChat(let displayName):
                 actionsSubject.send(.openDirectChat(displayName: displayName))
             }
@@ -65,8 +60,8 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
     func stop() {
         viewModel.stop()
     }
-
+    
     func toPresentable() -> AnyView {
-        AnyView(RoomMemberDetailsScreen(context: viewModel.context))
+        AnyView(UserProfileScreen(context: viewModel.context))
     }
 }
