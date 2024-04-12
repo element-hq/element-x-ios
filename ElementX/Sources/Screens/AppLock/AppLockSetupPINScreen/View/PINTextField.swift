@@ -16,18 +16,13 @@
 
 import SwiftUI
 
-enum PINDigitFieldSize {
-    case small
-    case medium
-}
-
 /// A text field that enables secure entry of a numerical PIN code.
 /// The view itself handles validation and the base text field type.
 struct PINTextField: View {
     @Binding var pinCode: String
     var isSecure = false
     var maxLength = 4
-    var size = PINDigitFieldSize.medium
+    var size = PINDigitField.Size.medium
     
     var body: some View {
         textField
@@ -65,7 +60,7 @@ private struct PINTextFieldStyle: TextFieldStyle {
     let pinCode: String
     let isSecure: Bool
     let maxLength: Int
-    let size: PINDigitFieldSize
+    let size: PINDigitField.Size
     
     func _body(configuration: TextField<_Label>) -> some View {
         HStack(spacing: 8) {
@@ -90,9 +85,14 @@ private struct PINTextFieldStyle: TextFieldStyle {
 }
 
 /// A single digit shown within the text field style.
-private struct PINDigitField: View {
+struct PINDigitField: View {
+    enum Size {
+        case small
+        case medium
+    }
+    
     let digit: Character?
-    let size: PINDigitFieldSize
+    let size: Size
     
     private var cornerRadius: CGFloat {
         switch size {
@@ -138,8 +138,8 @@ struct PINTextField_Previews: PreviewProvider, TestablePreview {
             PreviewWrapper(pinCode: "1234", isSecure: true)
                 .padding(.bottom)
             
-            PreviewWrapper(pinCode: "123456", isSecure: false, maxLength: 6)
-            PreviewWrapper(pinCode: "12", isSecure: false, maxLength: 2)
+            PreviewWrapper(pinCode: "123456", isSecure: false, maxLength: 6, size: .small)
+            PreviewWrapper(pinCode: "12", isSecure: false, maxLength: 2, size: .small)
         }
     }
     
@@ -147,9 +147,10 @@ struct PINTextField_Previews: PreviewProvider, TestablePreview {
         @State var pinCode = ""
         let isSecure: Bool
         var maxLength = 4
+        var size: PINDigitField.Size = .medium
         
         var body: some View {
-            PINTextField(pinCode: $pinCode, isSecure: isSecure, maxLength: maxLength)
+            PINTextField(pinCode: $pinCode, isSecure: isSecure, maxLength: maxLength, size: size)
         }
     }
 }
