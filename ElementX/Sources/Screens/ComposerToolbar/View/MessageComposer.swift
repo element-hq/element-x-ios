@@ -22,6 +22,7 @@ typealias EnterKeyHandler = () -> Void
 typealias PasteHandler = (NSItemProvider) -> Void
 
 struct MessageComposer: View {
+    @Binding var plainText: String
     let composerView: WysiwygComposerView
     let mode: RoomScreenComposerMode
     let showResizeGrabber: Bool
@@ -32,6 +33,7 @@ struct MessageComposer: View {
     let editCancellationAction: () -> Void
     let onAppearAction: () -> Void
     
+    @State private var isMultiline = false
     @State private var composerTranslation: CGFloat = 0
     private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
     
@@ -66,19 +68,31 @@ struct MessageComposer: View {
     private var mainContent: some View {
         VStack(alignment: .leading, spacing: -6) {
             header
-            Color.clear
-                .overlay(alignment: .top) {
-                    composerView
-                        .clipped()
-                        .readFrame($composerFrame)
-                }
-                .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
-                       alignment: .top)
-                .tint(.compound.iconAccentTertiary)
-                .padding(.vertical, 10)
-                .onAppear {
-                    onAppearAction()
-                }
+            
+            if ServiceLocator.shared.settings.richTextEditorEnabled {
+                Color.clear
+                    .overlay(alignment: .top) {
+                        composerView
+                            .clipped()
+                            .readFrame($composerFrame)
+                    }
+                    .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
+                           alignment: .top)
+                    .tint(.compound.iconAccentTertiary)
+                    .padding(.vertical, 10)
+                    .onAppear {
+                        onAppearAction()
+                    }
+            } else {
+                MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
+                                         text: $plainText,
+                                         isMultiline: $isMultiline,
+                                         maxHeight: 300,
+                                         enterKeyHandler: sendAction,
+                                         pasteHandler: pasteAction)
+                    .tint(.compound.iconAccentTertiary)
+                    .padding(.vertical, 10)
+            }
         }
     }
 
@@ -212,7 +226,8 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                                keyCommands: nil,
                                                pasteHandler: nil)
         
-        return MessageComposer(composerView: composerView,
+        return MessageComposer(plainText: .constant(content),
+                               composerView: composerView,
                                mode: mode,
                                showResizeGrabber: false,
                                isExpanded: .constant(false),
