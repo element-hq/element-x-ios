@@ -160,7 +160,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
 
     private var tag: String {
-        "[NSE][\(Unmanaged.passUnretained(self).toOpaque())][\(Unmanaged.passUnretained(Thread.current).toOpaque())]"
+        "[NSE][\(Unmanaged.passUnretained(self).toOpaque())][\(Unmanaged.passUnretained(Thread.current).toOpaque())][\(ProcessInfo.processInfo.processIdentifier)]"
     }
 
     private func cleanUp() {
