@@ -1,3 +1,13 @@
+## Changes in 1.6.3 (2024-04-15)
+
+🙌 Improvements
+
+- Add a UserProfileScreen to handle permalinks for users that aren't in the current room. ([#2634](https://github.com/element-hq/element-x-ios/issues/2634))
+
+🚧 In development 🚧
+
+- QR Code login screen displays now the camera view. ([#2674](https://github.com/element-hq/element-x-ios/pull/2674))
+
 ## Changes in 1.6.2 (2024-04-09)
 
 ✨ Features
