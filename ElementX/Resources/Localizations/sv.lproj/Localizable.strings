@@ -489,6 +489,8 @@
 "screen_qr_code_login_connection_note_secure_state_list_item_2" = "If you encounter the same problem, try a different wifi network or use your mobile data instead of wifi";
 "screen_qr_code_login_connection_note_secure_state_list_item_3" = "If that doesn’t work, sign in manually";
 "screen_qr_code_login_connection_note_secure_state_title" = "Connection not secure";
+"screen_qr_code_login_device_code_subtitle" = "You’ll be asked to enter the two digits shown below.";
+"screen_qr_code_login_device_code_title" = "Enter number on your device";
 "screen_qr_code_login_initial_state_item_1" = "Open %1$@ on a desktop device";
 "screen_qr_code_login_initial_state_item_2" = "Click on your avatar";
 "screen_qr_code_login_initial_state_item_3" = "Select %1$@";
@@ -504,6 +506,9 @@
 "screen_qr_code_login_scanning_state_title" = "Scan the QR code";
 "screen_qr_code_login_start_over_button" = "Start over";
 "screen_qr_code_login_unknown_error_description" = "An unexpected error occurred. Please try again.";
+"screen_qr_code_login_verify_code_loading" = "Waiting for your other device";
+"screen_qr_code_login_verify_code_subtitle" = "Your account provider may ask for the following code to verify the sign in.";
+"screen_qr_code_login_verify_code_title" = "Your verification code";
 "screen_recovery_key_change_description" = "Få en ny återställningsnyckel om du har tappat bort din befintliga. När du har bytt din återställningsnyckel fungerar din gamla inte längre.";
 "screen_recovery_key_change_generate_key" = "Generera en ny återställningsnyckel";
 "screen_recovery_key_change_generate_key_description" = "Se till att du kan lagra din återställningsnyckel någonstans säkert";
