@@ -58,7 +58,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
     private let font = UIFont.preferredFont(forTextStyle: .body)
 
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
-        let textView = ElementTextView()
+        // Need to use TextKit 1 for mentions
+        let textView = ElementTextView(usingTextLayoutManager: false)
         textView.isMultiline = $isMultiline
         textView.delegate = context.coordinator
         textView.elementDelegate = context.coordinator
