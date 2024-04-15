@@ -7,7 +7,7 @@ on:
 
 jobs:
   open-translations-pr:
-    runs-on: macos-13
+    runs-on: macos-14
     # Skip in forks
     if: github.repository == 'element-hq/element-x-ios'
     steps:
