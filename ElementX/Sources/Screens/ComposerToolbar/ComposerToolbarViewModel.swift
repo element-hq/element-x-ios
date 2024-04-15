@@ -121,18 +121,20 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
         case .sendMessage:
             guard !state.sendButtonDisabled else { return }
-
+            
             switch state.composerMode {
             case .previewVoiceMessage:
                 actionsSubject.send(.voiceMessage(.send))
             default:
-                let sendHTML = appSettings.richTextEditorEnabled
-                actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
-                                                 html: sendHTML ? wysiwygViewModel.content.html : nil,
-                                                 mode: state.composerMode,
-                                                 intentionalMentions: wysiwygViewModel
-                                                     .getMentionsState()
-                                                     .toIntentionalMentions()))
+                if ServiceLocator.shared.settings.richTextEditorEnabled {
+                    let sendHTML = appSettings.richTextEditorEnabled
+                    actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
+                                                     html: sendHTML ? wysiwygViewModel.content.html : nil,
+                                                     mode: state.composerMode,
+                                                     intentionalMentions: wysiwygViewModel.getMentionsState().toIntentionalMentions()))
+                } else {
+                    actionsSubject.send(.sendMessage(plain: context.composerPlainText, html: nil, mode: state.composerMode, intentionalMentions: .empty))
+                }
             }
         case .cancelReply:
             set(mode: .default)
@@ -260,12 +262,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(text: String) {
-        wysiwygViewModel.textView.flushPills()
-        
-        if appSettings.richTextEditorEnabled {
+        if ServiceLocator.shared.settings.richTextEditorEnabled {
+            wysiwygViewModel.textView.flushPills()
+            
             wysiwygViewModel.setHtmlContent(text)
         } else {
-            wysiwygViewModel.setMarkdownContent(text)
+            state.bindings.composerPlainText = text
         }
     }
 

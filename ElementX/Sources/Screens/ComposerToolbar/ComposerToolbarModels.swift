@@ -91,7 +91,11 @@ struct ComposerToolbarViewState: BindableState {
         case .previewVoiceMessage:
             return true
         default:
-            return !composerEmpty
+            if ServiceLocator.shared.settings.richTextEditorEnabled {
+                return !composerEmpty
+            } else {
+                return !bindings.composerPlainText.isEmpty
+            }
         }
     }
     
@@ -99,7 +103,12 @@ struct ComposerToolbarViewState: BindableState {
         if case .previewVoiceMessage = composerMode {
             return false
         }
-        return composerEmpty
+        
+        if ServiceLocator.shared.settings.richTextEditorEnabled {
+            return composerEmpty
+        } else {
+            return bindings.composerPlainText.isEmpty
+        }
     }
     
     var isVoiceMessageModeActivated: Bool {
@@ -113,6 +122,7 @@ struct ComposerToolbarViewState: BindableState {
 }
 
 struct ComposerToolbarViewStateBindings {
+    var composerPlainText = ""
     var composerFocused = false
     var composerActionsEnabled = false
     var composerExpanded = false
