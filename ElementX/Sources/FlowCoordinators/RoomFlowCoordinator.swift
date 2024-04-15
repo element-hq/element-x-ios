@@ -129,7 +129,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: EventUserInfo(animated: animated))
             }
-        case .genericCallLink, .oidcCallback, .settings, .chatBackupSettings:
+        case .userProfile, .genericCallLink, .oidcCallback, .settings, .chatBackupSettings:
             break
         }
     }
@@ -875,7 +875,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                   roomProxy: roomProxy,
                                                                   clientProxy: userSession.clientProxy,
                                                                   mediaProvider: userSession.mediaProvider,
-                                                                  userIndicatorController: userIndicatorController)
+                                                                  userIndicatorController: userIndicatorController,
+                                                                  analytics: analytics)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
@@ -883,8 +884,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .openUserProfile:
                 stateMachine.tryEvent(.presentUserProfile(userID: userID))
-            case .openDirectChat(let displayName):
-                openDirectChat(with: userID, displayName: displayName)
+            case .openDirectChat(let roomID):
+                stateMachine.tryEvent(.presentChildRoom(roomID: roomID))
             }
         }
         .store(in: &cancellables)
@@ -896,16 +897,20 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func replaceRoomMemberDetailsWithUserProfile(userID: String) {
         let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
+                                                                isPresentedModally: false,
                                                                 clientProxy: userSession.clientProxy,
                                                                 mediaProvider: userSession.mediaProvider,
-                                                                userIndicatorController: userIndicatorController)
+                                                                userIndicatorController: userIndicatorController,
+                                                                analytics: analytics)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             
             switch action {
-            case .openDirectChat(let displayName):
-                openDirectChat(with: userID, displayName: displayName)
+            case .openDirectChat(let roomID):
+                stateMachine.tryEvent(.presentChildRoom(roomID: roomID))
+            case .dismiss:
+                break // Not supported when pushed.
             }
         }
         .store(in: &cancellables)
@@ -914,37 +919,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.pop(animated: false)
         navigationStackCoordinator.push(coordinator, animated: false) { [weak self] in
             self?.stateMachine.tryEvent(.dismissUserProfile)
-        }
-    }
-    
-    private func openDirectChat(with userID: String, displayName: String?) {
-        let loadingIndicatorIdentifier = "OpenDirectChatLoadingIndicator"
-        
-        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier,
-                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                              title: L10n.commonLoading,
-                                                              persistent: true))
-        
-        Task { [weak self] in
-            guard let self else { return }
-            
-            let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(userID)
-            switch currentDirectRoom {
-            case .success(.some(let roomID)):
-                stateMachine.tryEvent(.presentChildRoom(roomID: roomID))
-            case .success(nil):
-                switch await userSession.clientProxy.createDirectRoom(with: userID, expectedRoomName: displayName) {
-                case .success(let roomID):
-                    analytics.trackCreatedRoom(isDM: true)
-                    stateMachine.tryEvent(.presentChildRoom(roomID: roomID))
-                case .failure:
-                    userIndicatorController.alertInfo = .init(id: UUID())
-                }
-            case .failure:
-                userIndicatorController.alertInfo = .init(id: UUID())
-            }
-            
-            userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
         }
     }
     

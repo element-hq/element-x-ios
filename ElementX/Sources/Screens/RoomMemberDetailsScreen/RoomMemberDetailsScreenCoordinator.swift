@@ -23,11 +23,12 @@ struct RoomMemberDetailsScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let analytics: AnalyticsService
 }
 
 enum RoomMemberDetailsScreenCoordinatorAction {
     case openUserProfile
-    case openDirectChat(displayName: String?)
+    case openDirectChat(roomID: String)
 }
 
 final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
@@ -45,7 +46,8 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
                                                      roomProxy: parameters.roomProxy,
                                                      clientProxy: parameters.clientProxy,
                                                      mediaProvider: parameters.mediaProvider,
-                                                     userIndicatorController: parameters.userIndicatorController)
+                                                     userIndicatorController: parameters.userIndicatorController,
+                                                     analytics: parameters.analytics)
     }
     
     func start() {
@@ -55,8 +57,8 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .openUserProfile:
                 actionsSubject.send(.openUserProfile)
-            case .openDirectChat(let displayName):
-                actionsSubject.send(.openDirectChat(displayName: displayName))
+            case .openDirectChat(let roomID):
+                actionsSubject.send(.openDirectChat(roomID: roomID))
             }
         }
         .store(in: &cancellables)

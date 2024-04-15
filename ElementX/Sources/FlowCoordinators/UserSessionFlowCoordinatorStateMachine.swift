@@ -27,7 +27,7 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Showing the home screen. The `selectedRoomID` represents the timeline shown on the detail panel (if any)
         case roomList(selectedRoomID: String?)
                 
-        /// Showing the session verification flows
+        /// Showing the feedback screen.
         case feedbackScreen(selectedRoomID: String?)
         
         /// Showing the settings screen
@@ -45,10 +45,13 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Showing Room Directory Search screen
         case roomDirectorySearchScreen(selectedRoomID: String?)
         
+        /// Showing the user profile screen. This screen clears the navigation.
+        case userProfileScreen
+        
         /// The selected room ID from the state if available.
         var selectedRoomID: String? {
             switch self {
-            case .initial:
+            case .initial, .userProfileScreen:
                 nil
             case .roomList(let selectedRoomID),
                  .feedbackScreen(let selectedRoomID),
@@ -102,9 +105,15 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Logout has been cancelled
         case dismissedLogoutConfirmationScreen
         
+        /// Request presentation of the room directory search screen.
         case showRoomDirectorySearchScreen
-        
+        /// The room directory search screen has been dismissed.
         case dismissedRoomDirectorySearchScreen
+        
+        /// Request presentation of the user profile screen.
+        case showUserProfileScreen(userID: String)
+        /// The user profile screen has been dismissed.
+        case dismissedUserProfileScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -169,6 +178,11 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .roomDirectorySearchScreen(selectedRoomID: selectedRoomID)
             case (.roomDirectorySearchScreen(let selectedRoomID), .dismissedRoomDirectorySearchScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
+            
+            case (_, .showUserProfileScreen):
+                return .userProfileScreen
+            case (.userProfileScreen, .dismissedUserProfileScreen):
+                return .roomList(selectedRoomID: nil)
                 
             default:
                 return nil

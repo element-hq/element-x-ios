@@ -17,12 +17,14 @@
 import Foundation
 
 enum UserProfileScreenViewModelAction {
-    case openDirectChat(displayName: String?)
+    case openDirectChat(roomID: String)
+    case dismiss
 }
 
 struct UserProfileScreenViewState: BindableState {
     let userID: String
     let isOwnUser: Bool
+    let isPresentedModally: Bool
     
     var userProfile: UserProfileProxy?
     var permalink: URL?
@@ -40,8 +42,10 @@ struct UserProfileScreenViewStateBindings {
 enum UserProfileScreenViewAction {
     case displayAvatar
     case openDirectChat
+    case dismiss
 }
 
 enum UserProfileScreenError: Hashable {
+    case failedOpeningDirectChat
     case unknown
 }

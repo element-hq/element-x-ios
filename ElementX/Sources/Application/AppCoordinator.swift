@@ -193,8 +193,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 } else {
                     navigationRootCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)))
                 }
-            case .roomMemberDetails:
-                userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
+            case .userProfile(let userID):
+                if isExternalURL {
+                    userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
+                } else {
+                    userSessionFlowCoordinator?.handleAppRoute(.roomMemberDetails(userID: userID), animated: true)
+                }
             case .room(let roomID):
                 // check that the room is joined here, if not use a joinRoom route.
                 if isExternalURL {

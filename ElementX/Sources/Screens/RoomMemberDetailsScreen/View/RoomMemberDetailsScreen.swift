@@ -114,41 +114,9 @@ struct RoomMemberDetailsScreen: View {
 // MARK: - Previews
 
 struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
-    static let otherUserViewModel = {
-        let member = RoomMemberProxyMock.mockDan
-        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
-        roomProxyMock.getMemberUserIDReturnValue = .success(member)
-        
-        return RoomMemberDetailsScreenViewModel(userID: member.userID,
-                                                roomProxy: roomProxyMock,
-                                                clientProxy: ClientProxyMock(.init()),
-                                                mediaProvider: MockMediaProvider(),
-                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
-    }()
-
-    static let accountOwnerViewModel = {
-        let member = RoomMemberProxyMock.mockMe
-        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
-        roomProxyMock.getMemberUserIDReturnValue = .success(member)
-        
-        return RoomMemberDetailsScreenViewModel(userID: member.userID,
-                                                roomProxy: roomProxyMock,
-                                                clientProxy: ClientProxyMock(.init()),
-                                                mediaProvider: MockMediaProvider(),
-                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
-    }()
-
-    static let ignoredUserViewModel = {
-        let member = RoomMemberProxyMock.mockIgnored
-        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
-        roomProxyMock.getMemberUserIDReturnValue = .success(member)
-        
-        return RoomMemberDetailsScreenViewModel(userID: member.userID,
-                                                roomProxy: roomProxyMock,
-                                                clientProxy: ClientProxyMock(.init()),
-                                                mediaProvider: MockMediaProvider(),
-                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
-    }()
+    static let otherUserViewModel = makeViewModel(member: .mockDan)
+    static let accountOwnerViewModel = makeViewModel(member: .mockMe)
+    static let ignoredUserViewModel = makeViewModel(member: .mockIgnored)
     
     static var previews: some View {
         RoomMemberDetailsScreen(context: otherUserViewModel.context)
@@ -160,5 +128,17 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         RoomMemberDetailsScreen(context: ignoredUserViewModel.context)
             .previewDisplayName("Ignored User")
             .snapshot(delay: 0.25)
+    }
+    
+    static func makeViewModel(member: RoomMemberProxyMock) -> RoomMemberDetailsScreenViewModel {
+        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
+        roomProxyMock.getMemberUserIDReturnValue = .success(member)
+        
+        return RoomMemberDetailsScreenViewModel(userID: member.userID,
+                                                roomProxy: roomProxyMock,
+                                                clientProxy: ClientProxyMock(.init()),
+                                                mediaProvider: MockMediaProvider(),
+                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                analytics: ServiceLocator.shared.analytics)
     }
 }

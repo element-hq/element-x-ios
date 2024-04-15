@@ -289,6 +289,23 @@ class ClientProxy: ClientProxyProtocol {
         try? client.accountUrl(action: action).flatMap(URL.init(string:))
     }
     
+    func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError> {
+        let currentDirectRoom = await directRoomForUserID(userID)
+        switch currentDirectRoom {
+        case .success(.some(let roomID)):
+            return .success((roomID: roomID, isNewRoom: false))
+        case .success(.none):
+            switch await createDirectRoom(with: userID, expectedRoomName: expectedRoomName) {
+            case .success(let roomID):
+                return .success((roomID: roomID, isNewRoom: true))
+            case .failure(let error):
+                return .failure(.sdkError(error))
+            }
+        case .failure(let error):
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {

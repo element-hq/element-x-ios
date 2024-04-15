@@ -118,7 +118,7 @@ class AppRouteURLParserTests: XCTestCase {
         
         let route = appRouteURLParser.route(from: url)
         
-        XCTAssertEqual(route, .roomMemberDetails(userID: userID))
+        XCTAssertEqual(route, .userProfile(userID: userID))
     }
     
     func testMatrixRoomIdentifierURL() {
@@ -131,5 +131,29 @@ class AppRouteURLParserTests: XCTestCase {
         let route = appRouteURLParser.route(from: url)
         
         XCTAssertEqual(route, .room(roomID: id))
+    }
+    
+    func testWebRoomIDURL() {
+        let id = "!abcdefghijklmnopqrstuvwxyz1234567890:matrix.org"
+        guard let url = URL(string: "https://app.element.io/#/room/\(id)") else {
+            XCTFail("URL invalid")
+            return
+        }
+        
+        let route = appRouteURLParser.route(from: url)
+        
+        XCTAssertEqual(route, .room(roomID: id))
+    }
+    
+    func testWebUserIDURL() {
+        let id = "@alice:matrix.org"
+        guard let url = URL(string: "https://develop.element.io/#/user/\(id)") else {
+            XCTFail("URL invalid")
+            return
+        }
+        
+        let route = appRouteURLParser.route(from: url)
+        
+        XCTAssertEqual(route, .userProfile(userID: id))
     }
 }

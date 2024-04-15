@@ -27,14 +27,9 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     
     var cancellables = Set<AnyCancellable>()
     
-    var detailCoordinator: CoordinatorProtocol? {
-        let navigationSplitCoordinator = navigationRootCoordinator.rootCoordinator as? NavigationSplitCoordinator
-        return navigationSplitCoordinator?.detailCoordinator
-    }
-    
-    var detailNavigationStack: NavigationStackCoordinator? {
-        detailCoordinator as? NavigationStackCoordinator
-    }
+    var splitCoordinator: NavigationSplitCoordinator? { navigationRootCoordinator.rootCoordinator as? NavigationSplitCoordinator }
+    var detailCoordinator: CoordinatorProtocol? { splitCoordinator?.detailCoordinator }
+    var detailNavigationStack: NavigationStackCoordinator? { detailCoordinator as? NavigationStackCoordinator }
     
     override func setUp() async throws {
         cancellables.removeAll()
@@ -155,6 +150,21 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         try await process(route: .room(roomID: "1"), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
+    }
+    
+    func testUserProfileClearsStack() async throws {
+        try await process(route: .roomDetails(roomID: "1"), expectedState: .roomList(selectedRoomID: "1"))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
+        XCTAssertNotNil(detailCoordinator)
+        XCTAssertNil(splitCoordinator?.sheetCoordinator)
+        
+        try await process(route: .userProfile(userID: "alice"), expectedState: .userProfileScreen)
+        XCTAssertNil(detailNavigationStack?.rootCoordinator)
+        guard let sheetStackCoordinator = splitCoordinator?.sheetCoordinator as? NavigationStackCoordinator else {
+            XCTFail("There should be a navigation stack presented as a sheet.")
+            return
+        }
+        XCTAssertTrue(sheetStackCoordinator.rootCoordinator is UserProfileScreenCoordinator)
     }
     
     // MARK: - Private
