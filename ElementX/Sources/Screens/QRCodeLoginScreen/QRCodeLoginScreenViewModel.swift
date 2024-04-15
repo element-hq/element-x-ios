@@ -41,11 +41,12 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             .sink { [weak self] qrData in
                 Task {
                     do {
-                        MXLog.info("Scanning QR code: \(String(data: qrData, encoding: .utf8))")
+                        MXLog.info("Scanning QR code: \(qrData)")
                         try await qrCodeLoginService.scan(data: qrData)
+                        self?.state.state = .scan(.connecting)
                     } catch {
                         MXLog.error("Failed to scan the QR code:\(error)")
-                        self?.state.state = .error(.unknown)
+                        self?.state.state = .scan(.invalid)
                     }
                 }
             }
@@ -53,7 +54,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         
         qrCodeLoginService.qrLoginProgressPublisher
             .sink { progress in
-                MXLog.info(progress)
+                MXLog.info("QR Login Progress changed to: \(progress)")
             }
             .store(in: &cancellables)
     }
@@ -72,6 +73,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
     
     private func startScanIfPossible() async {
+        state.bindings.qrResult = nil
         state.state = await qrCodeLoginService.requestAuthorizationIfNeeded() ? .scan(.scanning) : .error(.noCameraPermission)
     }
     

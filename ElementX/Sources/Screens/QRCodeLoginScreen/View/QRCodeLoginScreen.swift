@@ -192,7 +192,7 @@ struct QRCodeLoginScreen: View {
     }
     
     private var qrScanner: some View {
-        QRCodeScannerView(result: $context.qrResult)
+        QRCodeScannerView(result: $context.qrResult, isScanning: context.viewState.state.isScanning)
             .aspectRatio(1.0, contentMode: .fill)
             .frame(maxWidth: 312)
             .readFrame($qrFrame)

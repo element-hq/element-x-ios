@@ -20,6 +20,7 @@ import UIKit
 
 struct QRCodeScannerView: UIViewControllerRepresentable {
     @Binding var result: Data?
+    var isScanning: Bool
     
     func makeUIViewController(context: Context) -> QRScannerController {
         let controller = QRScannerController()
@@ -27,7 +28,13 @@ struct QRCodeScannerView: UIViewControllerRepresentable {
         return controller
     }
  
-    func updateUIViewController(_ uiViewController: QRScannerController, context: Context) { }
+    func updateUIViewController(_ uiViewController: QRScannerController, context: Context) {
+        if isScanning {
+            uiViewController.startScan()
+        } else {
+            uiViewController.stopScan()
+        }
+    }
     
     func makeCoordinator() -> Coordinator {
         Coordinator($result)
@@ -42,21 +49,17 @@ struct QRCodeScannerView: UIViewControllerRepresentable {
      
         func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
             // Check if the metadataObjects array is not nil and it contains at least one object.
-            if metadataObjects.count == 0 {
+            guard metadataObjects.count > 0,
+                  let metadataObj = metadataObjects[0] as? AVMetadataMachineReadableCodeObject,
+                  metadataObj.type == AVMetadataObject.ObjectType.qr,
+                  let data = metadataObj.binaryValue else {
                 scanResult = nil
+                MXLog.info("QRCodeScannerView: invalid qr scan")
                 return
             }
-     
-            // Get the metadata object.
-            if let metadataObj = metadataObjects[0] as? AVMetadataMachineReadableCodeObject {
-                if metadataObj.type == AVMetadataObject.ObjectType.qr,
-                   let result = metadataObj.descriptor as? CIQRCodeDescriptor {
-                    let data = result.errorCorrectedPayload
-                    MXLog.info(metadataObj.stringValue ?? "")
-                    scanResult = data
-                    MXLog.info("QRCodeScannerView: scanned \(data)")
-                }
-            }
+            
+            scanResult = data
+            MXLog.info("QRCodeScannerView: scanned \(data)")
         }
     }
 }
@@ -66,8 +69,8 @@ final class QRScannerController: UIViewController {
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     private var qrCodeFrameView: UIView?
  
-    var delegate: AVCaptureMetadataOutputObjectsDelegate?
- 
+    weak var delegate: AVCaptureMetadataOutputObjectsDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
  
@@ -106,15 +109,26 @@ final class QRScannerController: UIViewController {
         videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
         videoPreviewLayer?.frame = view.layer.bounds
         view.layer.addSublayer(previewLayer)
- 
-        // Start video capture.
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.captureSession.startRunning()
-        }
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         videoPreviewLayer?.frame = view.layer.bounds
+    }
+    
+    func startScan() {
+        // Start video capture.
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.captureSession.startRunning()
+            MXLog.info("QRCodeScannerView: catpure session started")
+        }
+    }
+    
+    func stopScan() {
+        // Stop video capture.
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.captureSession.stopRunning()
+            MXLog.info("QRCodeScannerView: catpure session stopped")
+        }
     }
 }

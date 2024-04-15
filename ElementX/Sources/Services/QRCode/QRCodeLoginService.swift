@@ -24,6 +24,7 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     private let encryptionKeyProvider: EncryptionKeyProviderProtocol
     private let userSessionStore: UserSessionStoreProtocol
     private var client: Client?
+    private var listener: QrLoginProgressListenerProxy?
     
     private let qrLoginProgressSubject = PassthroughSubject<QrLoginProgress, Never>()
     var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
@@ -40,7 +41,10 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     
     func scan(data: Data) async throws {
         let qrData = try QrCodeData.fromBytes(bytes: data)
-        let listener = QrLoginProgressListenerProxy { [weak self] in self?.qrLoginProgressSubject.send($0) }
+        let listener = QrLoginProgressListenerProxy { [weak self] progress in
+            self?.qrLoginProgressSubject.send(progress)
+        }
+        self.listener = listener
     
         client = try await ClientBuilder()
             .basePath(path: userSessionStore.baseDirectory.path(percentEncoded: false))
