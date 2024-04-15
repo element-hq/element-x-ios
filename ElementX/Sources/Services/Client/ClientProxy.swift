@@ -289,7 +289,7 @@ class ClientProxy: ClientProxyProtocol {
         try? client.accountUrl(action: action).flatMap(URL.init(string:))
     }
     
-    func directRoomCreatingIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError> {
+    func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError> {
         let currentDirectRoom = await directRoomForUserID(userID)
         switch currentDirectRoom {
         case .success(.some(let roomID)):

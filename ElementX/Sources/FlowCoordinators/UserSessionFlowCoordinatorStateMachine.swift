@@ -179,7 +179,7 @@ class UserSessionFlowCoordinatorStateMachine {
             case (.roomDirectorySearchScreen(let selectedRoomID), .dismissedRoomDirectorySearchScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
             
-            case (_, .showUserProfileScreen(let userID)):
+            case (_, .showUserProfileScreen):
                 return .userProfileScreen
             case (.userProfileScreen, .dismissedUserProfileScreen):
                 return .roomList(selectedRoomID: nil)

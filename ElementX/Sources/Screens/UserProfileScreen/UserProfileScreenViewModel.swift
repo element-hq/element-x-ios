@@ -107,13 +107,13 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         showLoadingIndicator(allowsInteraction: false)
         defer { hideLoadingIndicator() }
             
-        switch await clientProxy.directRoomCreatingIfNeeded(with: userProfile.userID, expectedRoomName: userProfile.displayName) {
+        switch await clientProxy.createDirectRoomIfNeeded(with: userProfile.userID, expectedRoomName: userProfile.displayName) {
         case .success((let roomID, let isNewRoom)):
             if isNewRoom {
                 analytics.trackCreatedRoom(isDM: true)
             }
             actionsSubject.send(.openDirectChat(roomID: roomID))
-        case .failure(let failure):
+        case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)
         }
     }

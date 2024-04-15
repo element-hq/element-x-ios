@@ -2077,17 +2077,17 @@ class ClientProxyMock: ClientProxyProtocol {
             return accountURLActionReturnValue
         }
     }
-    //MARK: - directRoomCreatingIfNeeded
+    //MARK: - createDirectRoomIfNeeded
 
-    var directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingCallsCount = 0
-    var directRoomCreatingIfNeededWithExpectedRoomNameCallsCount: Int {
+    var createDirectRoomIfNeededWithExpectedRoomNameUnderlyingCallsCount = 0
+    var createDirectRoomIfNeededWithExpectedRoomNameCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingCallsCount
+                return createDirectRoomIfNeededWithExpectedRoomNameUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingCallsCount
+                    returnValue = createDirectRoomIfNeededWithExpectedRoomNameUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -2095,29 +2095,29 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingCallsCount = newValue
+                createDirectRoomIfNeededWithExpectedRoomNameUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingCallsCount = newValue
+                    createDirectRoomIfNeededWithExpectedRoomNameUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var directRoomCreatingIfNeededWithExpectedRoomNameCalled: Bool {
-        return directRoomCreatingIfNeededWithExpectedRoomNameCallsCount > 0
+    var createDirectRoomIfNeededWithExpectedRoomNameCalled: Bool {
+        return createDirectRoomIfNeededWithExpectedRoomNameCallsCount > 0
     }
-    var directRoomCreatingIfNeededWithExpectedRoomNameReceivedArguments: (userID: String, expectedRoomName: String?)?
-    var directRoomCreatingIfNeededWithExpectedRoomNameReceivedInvocations: [(userID: String, expectedRoomName: String?)] = []
+    var createDirectRoomIfNeededWithExpectedRoomNameReceivedArguments: (userID: String, expectedRoomName: String?)?
+    var createDirectRoomIfNeededWithExpectedRoomNameReceivedInvocations: [(userID: String, expectedRoomName: String?)] = []
 
-    var directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingReturnValue: Result<(roomID: String, isNewRoom: Bool), ClientProxyError>!
-    var directRoomCreatingIfNeededWithExpectedRoomNameReturnValue: Result<(roomID: String, isNewRoom: Bool), ClientProxyError>! {
+    var createDirectRoomIfNeededWithExpectedRoomNameUnderlyingReturnValue: Result<(roomID: String, isNewRoom: Bool), ClientProxyError>!
+    var createDirectRoomIfNeededWithExpectedRoomNameReturnValue: Result<(roomID: String, isNewRoom: Bool), ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingReturnValue
+                return createDirectRoomIfNeededWithExpectedRoomNameUnderlyingReturnValue
             } else {
                 var returnValue: Result<(roomID: String, isNewRoom: Bool), ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingReturnValue
+                    returnValue = createDirectRoomIfNeededWithExpectedRoomNameUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -2125,24 +2125,24 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingReturnValue = newValue
+                createDirectRoomIfNeededWithExpectedRoomNameUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    directRoomCreatingIfNeededWithExpectedRoomNameUnderlyingReturnValue = newValue
+                    createDirectRoomIfNeededWithExpectedRoomNameUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var directRoomCreatingIfNeededWithExpectedRoomNameClosure: ((String, String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError>)?
+    var createDirectRoomIfNeededWithExpectedRoomNameClosure: ((String, String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError>)?
 
-    func directRoomCreatingIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError> {
-        directRoomCreatingIfNeededWithExpectedRoomNameCallsCount += 1
-        directRoomCreatingIfNeededWithExpectedRoomNameReceivedArguments = (userID: userID, expectedRoomName: expectedRoomName)
-        directRoomCreatingIfNeededWithExpectedRoomNameReceivedInvocations.append((userID: userID, expectedRoomName: expectedRoomName))
-        if let directRoomCreatingIfNeededWithExpectedRoomNameClosure = directRoomCreatingIfNeededWithExpectedRoomNameClosure {
-            return await directRoomCreatingIfNeededWithExpectedRoomNameClosure(userID, expectedRoomName)
+    func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError> {
+        createDirectRoomIfNeededWithExpectedRoomNameCallsCount += 1
+        createDirectRoomIfNeededWithExpectedRoomNameReceivedArguments = (userID: userID, expectedRoomName: expectedRoomName)
+        createDirectRoomIfNeededWithExpectedRoomNameReceivedInvocations.append((userID: userID, expectedRoomName: expectedRoomName))
+        if let createDirectRoomIfNeededWithExpectedRoomNameClosure = createDirectRoomIfNeededWithExpectedRoomNameClosure {
+            return await createDirectRoomIfNeededWithExpectedRoomNameClosure(userID, expectedRoomName)
         } else {
-            return directRoomCreatingIfNeededWithExpectedRoomNameReturnValue
+            return createDirectRoomIfNeededWithExpectedRoomNameReturnValue
         }
     }
     //MARK: - directRoomForUserID

@@ -173,13 +173,13 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
                                                               persistent: true))
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
         
-        switch await clientProxy.directRoomCreatingIfNeeded(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
+        switch await clientProxy.createDirectRoomIfNeeded(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
         case .success((let roomID, let isNewRoom)):
             if isNewRoom {
                 analytics.trackCreatedRoom(isDM: true)
             }
             actionsSubject.send(.openDirectChat(roomID: roomID))
-        case .failure(let failure):
+        case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)
         }
     }
