@@ -53,7 +53,7 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
                     guard let self else { return }
                     switch action {
                     case .cancel:
-                        break
+                        parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
                     case .recoverySetUp:
                         showSuccessIndicator(title: L10n.screenRecoveryKeySetupSuccess)
                         parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
