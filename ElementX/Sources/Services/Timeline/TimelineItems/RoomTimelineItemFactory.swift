@@ -640,7 +640,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             
             switch timelineItem.kind() {
             case .message:
-                return timelineItemReplyDetails(for: timelineItem.asMessage()?.msgtype(), sender: sender)
+                return timelineItemReplyDetails(sender: sender, eventID: details.eventId, messageType: timelineItem.asMessage()?.msgtype())
             case .poll(let question, _, _, _, _, _, _):
                 replyContent = .poll(question: question)
             case .sticker(let body, _, _):
@@ -651,13 +651,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
             }
             
-            return .loaded(sender: sender, eventContent: replyContent)
+            return .loaded(sender: sender, eventID: details.eventId, eventContent: replyContent)
         case let .error(message):
             return .error(eventID: details.eventId, message: message)
         }
     }
     
-    private func timelineItemReplyDetails(for messageType: MessageType?, sender: TimelineItemSender) -> TimelineItemReplyDetails {
+    private func timelineItemReplyDetails(sender: TimelineItemSender, eventID: String, messageType: MessageType?) -> TimelineItemReplyDetails {
         let replyContent: EventBasedMessageTimelineItemContentType
         
         switch messageType {
@@ -685,7 +685,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
         }
         
-        return .loaded(sender: sender, eventContent: .message(replyContent))
+        return .loaded(sender: sender,
+                       eventID: eventID,
+                       eventContent: .message(replyContent))
     }
 }
 

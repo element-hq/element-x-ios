@@ -172,6 +172,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.displayCallScreen)
         case .showReadReceipts(itemID: let itemID):
             showReadReceipts(for: itemID)
+        case .focusOnEventID(let eventID):
+            // TODO: .. something
+            break
         }
     }
 

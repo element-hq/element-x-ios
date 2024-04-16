@@ -199,18 +199,32 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static let replyTypes: [TimelineItemReplyDetails] = [
-        .loaded(sender: .init(id: "Dave"), eventContent: .message(.audio(.init(body: "Audio: Ride the lightning", duration: 100, waveform: nil, source: nil, contentType: nil)))),
-        .loaded(sender: .init(id: "James"), eventContent: .message(.emote(.init(body: "Emote: James thinks he's the phantom lord")))),
-        .loaded(sender: .init(id: "Robert"), eventContent: .message(.file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil)))),
-        .loaded(sender: .init(id: "Cliff"), eventContent: .message(.image(.init(body: "Image: Pushead",
-                                                                                source: .init(url: .picturesDirectory, mimeType: nil),
-                                                                                thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
-        .loaded(sender: .init(id: "Jason"), eventContent: .message(.notice(.init(body: "Notice: Too far gone?")))),
-        .loaded(sender: .init(id: "Kirk"), eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
-        .loaded(sender: .init(id: "Lars"), eventContent: .message(.video(.init(body: "Video: Through the never",
-                                                                               duration: 100,
-                                                                               source: nil,
-                                                                               thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
+        .loaded(sender: .init(id: "Dave"),
+                eventID: "123",
+                eventContent: .message(.audio(.init(body: "Audio: Ride the lightning", duration: 100, waveform: nil, source: nil, contentType: nil)))),
+        .loaded(sender: .init(id: "James"),
+                eventID: "123",
+                eventContent: .message(.emote(.init(body: "Emote: James thinks he's the phantom lord")))),
+        .loaded(sender: .init(id: "Robert"),
+                eventID: "123",
+                eventContent: .message(.file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil)))),
+        .loaded(sender: .init(id: "Cliff"),
+                eventID: "123",
+                eventContent: .message(.image(.init(body: "Image: Pushead",
+                                                    source: .init(url: .picturesDirectory, mimeType: nil),
+                                                    thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
+        .loaded(sender: .init(id: "Jason"),
+                eventID: "123",
+                eventContent: .message(.notice(.init(body: "Notice: Too far gone?")))),
+        .loaded(sender: .init(id: "Kirk"),
+                eventID: "123",
+                eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
+        .loaded(sender: .init(id: "Lars"),
+                eventID: "123",
+                eventContent: .message(.video(.init(body: "Video: Through the never",
+                                                    duration: 100,
+                                                    source: nil,
+                                                    thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
         .loading(eventID: "")
     ]
     
@@ -247,6 +261,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
             
             messageComposer(mode: .reply(itemID: .random,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
+                                                               eventID: "123",
                                                                eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
                                          isThread: false))
         }

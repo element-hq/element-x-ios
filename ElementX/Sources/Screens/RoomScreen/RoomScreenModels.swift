@@ -76,8 +76,10 @@ enum RoomScreenViewAudioAction {
 
 enum RoomScreenViewAction {
     case displayRoomDetails
+    
     case itemAppeared(itemID: TimelineItemIdentifier)
     case itemDisappeared(itemID: TimelineItemIdentifier)
+    
     case itemTapped(itemID: TimelineItemIdentifier)
     case toggleReaction(key: String, itemID: TimelineItemIdentifier)
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
@@ -104,6 +106,8 @@ enum RoomScreenViewAction {
     case audio(RoomScreenViewAudioAction)
     
     case presentCall
+    
+    case focusOnEventID(String)
 }
 
 enum RoomScreenComposerAction {
