@@ -322,7 +322,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
                 let dateString = date.formatted(date: .complete, time: .omitted)
                 
-                return SeparatorRoomTimelineItem(id: .init(timelineID: timelineID), text: dateString)
+                return SeparatorRoomTimelineItem(id: .init(timelineID: dateString), text: dateString)
             case .readMarker:
                 return ReadMarkerRoomTimelineItem(id: .init(timelineID: timelineID))
             }
