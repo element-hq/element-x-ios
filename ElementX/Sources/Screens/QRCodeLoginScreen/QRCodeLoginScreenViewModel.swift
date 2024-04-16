@@ -36,8 +36,10 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         super.init(initialViewState: QRCodeLoginScreenViewState())
         
         context.$viewState
-            .compactMap(\.bindings.qrResult)
+            // not using compactMap before remove duplicates because if there is an error, and the same code needs to be rescanned the transition to nil to clean the state would get ignored.
+            .map(\.bindings.qrResult)
             .removeDuplicates()
+            .compactMap { $0 }
             .sink { [weak self] qrData in
                 Task {
                     do {

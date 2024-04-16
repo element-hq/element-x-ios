@@ -55,7 +55,6 @@ extension AVMetadataMachineReadableCodeObject {
     }
 
     private func removeQrProtocolData(_ input: Data) -> Data? {
-        MXLog.info(input.map { String(format: "%02x", $0) }.joined())
         var halves = input.halfBytes()
         var batch = takeBatch(&halves)
         var output = batch
