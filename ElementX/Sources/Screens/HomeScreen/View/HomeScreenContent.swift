@@ -113,7 +113,7 @@ struct HomeScreenContent: View {
                 HomeScreenRecoveryKeyConfirmationBanner(context: context)
             }
             
-            if context.viewState.hasPendingInvitations, !context.isSearchFieldFocused {
+            if context.viewState.hasPendingInvitations, !context.isSearchFieldFocused, !ServiceLocator.shared.settings.roomListInvitesEnabled {
                 HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
                     context.send(viewAction: .selectInvites)
                 }
