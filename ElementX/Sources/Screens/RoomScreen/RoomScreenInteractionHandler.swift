@@ -230,8 +230,12 @@ class RoomScreenInteractionHandler {
                 }
             }
         case .reply:
+            guard let eventID = eventTimelineItem.id.eventID else {
+                return
+            }
+            
             let replyInfo = buildReplyInfo(for: eventTimelineItem)
-            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventContent: replyInfo.type)
+            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventID: eventID, eventContent: replyInfo.type)
             
             actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails, isThread: replyInfo.isThread))))
         case .forward(let itemID):

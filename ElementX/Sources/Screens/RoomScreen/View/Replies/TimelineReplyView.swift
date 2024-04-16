@@ -29,7 +29,7 @@ struct TimelineReplyView: View {
     var body: some View {
         if let timelineItemReplyDetails {
             switch timelineItemReplyDetails {
-            case .loaded(let sender, let content):
+            case .loaded(let sender, _, let content):
                 switch content {
                 case .message(let content):
                     switch content {
@@ -131,38 +131,6 @@ struct TimelineReplyView: View {
         
         var icon: Icon?
         
-        var isTextOnly: Bool {
-            icon == nil
-        }
-        
-        /// The string shown as the message preview.
-        ///
-        /// This converts the formatted body to a plain string to remove formatting
-        /// and render with a consistent font size. This conversion is done to avoid
-        /// showing markdown characters in the preview for messages with formatting.
-        var messagePreview: String {
-            guard let formattedBody,
-                  let attributedString = try? NSMutableAttributedString(formattedBody, including: \.elementX) else {
-                return plainBody
-            }
-            
-            let range = NSRange(location: 0, length: attributedString.length)
-            attributedString.enumerateAttributes(in: range) { attributes, range, _ in
-                if let userID = attributes[.MatrixUserID] as? String {
-                    if let displayName = context.viewState.members[userID]?.displayName {
-                        attributedString.replaceCharacters(in: range, with: "@\(displayName)")
-                    } else {
-                        attributedString.replaceCharacters(in: range, with: userID)
-                    }
-                }
-                
-                if attributes[.MatrixAllUsersMention] as? Bool == true {
-                    attributedString.replaceCharacters(in: range, with: PillConstants.atRoom)
-                }
-            }
-            return attributedString.string
-        }
-        
         var body: some View {
             HStack(spacing: 8) {
                 iconView
@@ -183,7 +151,7 @@ struct TimelineReplyView: View {
                         .tint(.compound.textLinkExternal)
                         .lineLimit(2)
                 }
-                .padding(.leading, isTextOnly ? 8 : 0)
+                .padding(.leading, icon == nil ? 8 : 0)
                 .padding(.trailing, 8)
             }
         }
@@ -216,6 +184,34 @@ struct TimelineReplyView: View {
                 }
             }
         }
+        
+        /// The string shown as the message preview.
+        ///
+        /// This converts the formatted body to a plain string to remove formatting
+        /// and render with a consistent font size. This conversion is done to avoid
+        /// showing markdown characters in the preview for messages with formatting.
+        private var messagePreview: String {
+            guard let formattedBody,
+                  let attributedString = try? NSMutableAttributedString(formattedBody, including: \.elementX) else {
+                return plainBody
+            }
+            
+            let range = NSRange(location: 0, length: attributedString.length)
+            attributedString.enumerateAttributes(in: range) { attributes, range, _ in
+                if let userID = attributes[.MatrixUserID] as? String {
+                    if let displayName = context.viewState.members[userID]?.displayName {
+                        attributedString.replaceCharacters(in: range, with: "@\(displayName)")
+                    } else {
+                        attributedString.replaceCharacters(in: range, with: userID)
+                    }
+                }
+                
+                if attributes[.MatrixAllUsersMention] as? Bool == true {
+                    attributedString.replaceCharacters(in: range, with: PillConstants.atRoom)
+                }
+            }
+            return attributedString.string
+        }
     }
 }
 
@@ -244,18 +240,22 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
                                                                 eventContent: .message(.text(.init(body: "This is a reply"))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
                                                                 eventContent: .message(.emote(.init(body: "says hello"))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                eventID: "123",
                                                                 eventContent: .message(.notice(.init(body: "Hello world"))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
                                                                 eventContent: .message(.audio(.init(body: "Some audio",
                                                                                                     duration: 0,
                                                                                                     waveform: nil,
@@ -264,6 +264,7 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
                                                                 eventContent: .message(.file(.init(body: "Some file",
                                                                                                    source: nil,
                                                                                                    thumbnailSource: nil,
@@ -271,22 +272,26 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
                                                                 eventContent: .message(.image(.init(body: "Some image",
                                                                                                     source: imageSource,
                                                                                                     thumbnailSource: imageSource))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
                                                                 eventContent: .message(.video(.init(body: "Some video",
                                                                                                     duration: 0,
                                                                                                     source: nil,
                                                                                                     thumbnailSource: imageSource))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
                                                                 eventContent: .message(.location(.init(body: ""))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
                                                                 eventContent: .message(.voice(.init(body: "Some voice message",
                                                                                                     duration: 0,
                                                                                                     waveform: nil,
@@ -294,16 +299,20 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                                                     contentType: nil))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                eventID: "123",
                                                                 eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithMention))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                eventID: "123",
                                                                 eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithAtRoomMention))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                eventID: "123",
                                                                 eventContent: .poll(question: "Do you like polls?"))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                eventID: "123",
                                                                 eventContent: .redacted))
         ]
     }
