@@ -22,9 +22,11 @@ import Foundation
 extension AVMetadataMachineReadableCodeObject {
     var binaryValue: Data? {
         switch type {
-        // TODO: Add cases for PDF417 and DataMatrix
         case .qr:
-            return removeQrProtocolData(binaryValueWithProtocol!)
+            guard let binaryValueWithProtocol else {
+                return nil
+            }
+            return removeQrProtocolData(binaryValueWithProtocol)
         case .aztec:
             guard let string = stringValue
             else { return nil }
@@ -35,7 +37,7 @@ extension AVMetadataMachineReadableCodeObject {
     }
 
     var binaryValueWithProtocol: Data? {
-        guard let descriptor = descriptor else {
+        guard let descriptor else {
             return nil
         }
         switch type {
@@ -53,6 +55,7 @@ extension AVMetadataMachineReadableCodeObject {
     }
 
     private func removeQrProtocolData(_ input: Data) -> Data? {
+        MXLog.info(input.map { String(format: "%02x", $0) }.joined())
         var halves = input.halfBytes()
         var batch = takeBatch(&halves)
         var output = batch
@@ -71,7 +74,7 @@ extension AVMetadataMachineReadableCodeObject {
         let mode = input.remove(at: 0)
         var output = [UInt8]()
         switch mode.value {
-        // TODO: If there is not only binary in the QRCode, then cases should be added here.
+        // If there is not only binary in the QRCode, then cases should be added here.
         case 0x04: // Binary
             let charactersCount: UInt16
             if characterCountLength == 8 {
@@ -114,8 +117,9 @@ private extension [HalfByte] {
 private extension Data {
     func halfBytes() -> [HalfByte] {
         var result = [HalfByte]()
-        forEach
-            { (byte: UInt8) in result.append(contentsOf: byte.halfBytes()) }
+        forEach { (byte: UInt8) in
+            result.append(contentsOf: byte.halfBytes())
+        }
         return result
     }
 
