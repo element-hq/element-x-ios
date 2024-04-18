@@ -533,7 +533,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         if !isChildFlow {
-            navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
+            navigationStackCoordinator.setRootCoordinator(coordinator, animated: false) { [weak self] in
                 self?.stateMachine.tryEvent(.dismissFlow)
             }
         } else {
