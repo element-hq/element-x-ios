@@ -9,13 +9,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - accountData
 
     public var accountDataEventTypeThrowableError: Error?
-    public var accountDataEventTypeCallsCount = 0
+    var accountDataEventTypeUnderlyingCallsCount = 0
+    public var accountDataEventTypeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return accountDataEventTypeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = accountDataEventTypeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                accountDataEventTypeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    accountDataEventTypeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var accountDataEventTypeCalled: Bool {
         return accountDataEventTypeCallsCount > 0
     }
     public var accountDataEventTypeReceivedEventType: String?
     public var accountDataEventTypeReceivedInvocations: [String] = []
-    public var accountDataEventTypeReturnValue: String?
+
+    var accountDataEventTypeUnderlyingReturnValue: String?
+    public var accountDataEventTypeReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return accountDataEventTypeUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = accountDataEventTypeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                accountDataEventTypeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    accountDataEventTypeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var accountDataEventTypeClosure: ((String) throws -> String?)?
 
     public func accountData(eventType: String) throws -> String? {
@@ -34,13 +81,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - accountUrl
 
     public var accountUrlActionThrowableError: Error?
-    public var accountUrlActionCallsCount = 0
+    var accountUrlActionUnderlyingCallsCount = 0
+    public var accountUrlActionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return accountUrlActionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = accountUrlActionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                accountUrlActionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    accountUrlActionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var accountUrlActionCalled: Bool {
         return accountUrlActionCallsCount > 0
     }
     public var accountUrlActionReceivedAction: AccountManagementAction?
     public var accountUrlActionReceivedInvocations: [AccountManagementAction?] = []
-    public var accountUrlActionReturnValue: String?
+
+    var accountUrlActionUnderlyingReturnValue: String?
+    public var accountUrlActionReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return accountUrlActionUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = accountUrlActionUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                accountUrlActionUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    accountUrlActionUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var accountUrlActionClosure: ((AccountManagementAction?) throws -> String?)?
 
     public func accountUrl(action: AccountManagementAction?) throws -> String? {
@@ -59,11 +153,58 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - avatarUrl
 
     public var avatarUrlThrowableError: Error?
-    public var avatarUrlCallsCount = 0
+    var avatarUrlUnderlyingCallsCount = 0
+    public var avatarUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return avatarUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = avatarUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                avatarUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    avatarUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var avatarUrlCalled: Bool {
         return avatarUrlCallsCount > 0
     }
-    public var avatarUrlReturnValue: String?
+
+    var avatarUrlUnderlyingReturnValue: String?
+    public var avatarUrlReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return avatarUrlUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = avatarUrlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                avatarUrlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    avatarUrlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var avatarUrlClosure: (() throws -> String?)?
 
     public func avatarUrl() throws -> String? {
@@ -80,11 +221,58 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - cachedAvatarUrl
 
     public var cachedAvatarUrlThrowableError: Error?
-    public var cachedAvatarUrlCallsCount = 0
+    var cachedAvatarUrlUnderlyingCallsCount = 0
+    public var cachedAvatarUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return cachedAvatarUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = cachedAvatarUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                cachedAvatarUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    cachedAvatarUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var cachedAvatarUrlCalled: Bool {
         return cachedAvatarUrlCallsCount > 0
     }
-    public var cachedAvatarUrlReturnValue: String?
+
+    var cachedAvatarUrlUnderlyingReturnValue: String?
+    public var cachedAvatarUrlReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return cachedAvatarUrlUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = cachedAvatarUrlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                cachedAvatarUrlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    cachedAvatarUrlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var cachedAvatarUrlClosure: (() throws -> String?)?
 
     public func cachedAvatarUrl() throws -> String? {
@@ -101,13 +289,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - createRoom
 
     public var createRoomRequestThrowableError: Error?
-    public var createRoomRequestCallsCount = 0
+    var createRoomRequestUnderlyingCallsCount = 0
+    public var createRoomRequestCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return createRoomRequestUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = createRoomRequestUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                createRoomRequestUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    createRoomRequestUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var createRoomRequestCalled: Bool {
         return createRoomRequestCallsCount > 0
     }
     public var createRoomRequestReceivedRequest: CreateRoomParameters?
     public var createRoomRequestReceivedInvocations: [CreateRoomParameters] = []
-    public var createRoomRequestReturnValue: String!
+
+    var createRoomRequestUnderlyingReturnValue: String!
+    public var createRoomRequestReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return createRoomRequestUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = createRoomRequestUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                createRoomRequestUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    createRoomRequestUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var createRoomRequestClosure: ((CreateRoomParameters) throws -> String)?
 
     public func createRoom(request: CreateRoomParameters) throws -> String {
@@ -126,7 +361,30 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - deletePusher
 
     public var deletePusherIdentifiersThrowableError: Error?
-    public var deletePusherIdentifiersCallsCount = 0
+    var deletePusherIdentifiersUnderlyingCallsCount = 0
+    public var deletePusherIdentifiersCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deletePusherIdentifiersUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deletePusherIdentifiersUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deletePusherIdentifiersUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deletePusherIdentifiersUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var deletePusherIdentifiersCalled: Bool {
         return deletePusherIdentifiersCallsCount > 0
     }
@@ -146,11 +404,58 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - deviceId
 
     public var deviceIdThrowableError: Error?
-    public var deviceIdCallsCount = 0
+    var deviceIdUnderlyingCallsCount = 0
+    public var deviceIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deviceIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deviceIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deviceIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deviceIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var deviceIdCalled: Bool {
         return deviceIdCallsCount > 0
     }
-    public var deviceIdReturnValue: String!
+
+    var deviceIdUnderlyingReturnValue: String!
+    public var deviceIdReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return deviceIdUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deviceIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deviceIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deviceIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var deviceIdClosure: (() throws -> String)?
 
     public func deviceId() throws -> String {
@@ -167,11 +472,58 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - displayName
 
     public var displayNameThrowableError: Error?
-    public var displayNameCallsCount = 0
+    var displayNameUnderlyingCallsCount = 0
+    public var displayNameCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return displayNameUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = displayNameUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                displayNameUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    displayNameUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var displayNameCalled: Bool {
         return displayNameCallsCount > 0
     }
-    public var displayNameReturnValue: String!
+
+    var displayNameUnderlyingReturnValue: String!
+    public var displayNameReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return displayNameUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = displayNameUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                displayNameUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    displayNameUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var displayNameClosure: (() throws -> String)?
 
     public func displayName() throws -> String {
@@ -187,11 +539,58 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - encryption
 
-    public var encryptionCallsCount = 0
+    var encryptionUnderlyingCallsCount = 0
+    public var encryptionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return encryptionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = encryptionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                encryptionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    encryptionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var encryptionCalled: Bool {
         return encryptionCallsCount > 0
     }
-    public var encryptionReturnValue: Encryption!
+
+    var encryptionUnderlyingReturnValue: Encryption!
+    public var encryptionReturnValue: Encryption! {
+        get {
+            if Thread.isMainThread {
+                return encryptionUnderlyingReturnValue
+            } else {
+                var returnValue: Encryption? = nil
+                DispatchQueue.main.sync {
+                    returnValue = encryptionUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                encryptionUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    encryptionUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var encryptionClosure: (() -> Encryption)?
 
     public func encryption() -> Encryption {
@@ -205,13 +604,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - getDmRoom
 
     public var getDmRoomUserIdThrowableError: Error?
-    public var getDmRoomUserIdCallsCount = 0
+    var getDmRoomUserIdUnderlyingCallsCount = 0
+    public var getDmRoomUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getDmRoomUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getDmRoomUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getDmRoomUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getDmRoomUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var getDmRoomUserIdCalled: Bool {
         return getDmRoomUserIdCallsCount > 0
     }
     public var getDmRoomUserIdReceivedUserId: String?
     public var getDmRoomUserIdReceivedInvocations: [String] = []
-    public var getDmRoomUserIdReturnValue: Room?
+
+    var getDmRoomUserIdUnderlyingReturnValue: Room?
+    public var getDmRoomUserIdReturnValue: Room? {
+        get {
+            if Thread.isMainThread {
+                return getDmRoomUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: Room?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getDmRoomUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getDmRoomUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getDmRoomUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var getDmRoomUserIdClosure: ((String) throws -> Room?)?
 
     public func getDmRoom(userId: String) throws -> Room? {
@@ -230,13 +676,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - getMediaContent
 
     public var getMediaContentMediaSourceThrowableError: Error?
-    public var getMediaContentMediaSourceCallsCount = 0
+    var getMediaContentMediaSourceUnderlyingCallsCount = 0
+    public var getMediaContentMediaSourceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getMediaContentMediaSourceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getMediaContentMediaSourceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getMediaContentMediaSourceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getMediaContentMediaSourceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var getMediaContentMediaSourceCalled: Bool {
         return getMediaContentMediaSourceCallsCount > 0
     }
     public var getMediaContentMediaSourceReceivedMediaSource: MediaSource?
     public var getMediaContentMediaSourceReceivedInvocations: [MediaSource] = []
-    public var getMediaContentMediaSourceReturnValue: Data!
+
+    var getMediaContentMediaSourceUnderlyingReturnValue: Data!
+    public var getMediaContentMediaSourceReturnValue: Data! {
+        get {
+            if Thread.isMainThread {
+                return getMediaContentMediaSourceUnderlyingReturnValue
+            } else {
+                var returnValue: Data? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getMediaContentMediaSourceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getMediaContentMediaSourceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getMediaContentMediaSourceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var getMediaContentMediaSourceClosure: ((MediaSource) async throws -> Data)?
 
     public func getMediaContent(mediaSource: MediaSource) async throws -> Data {
@@ -255,13 +748,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - getMediaFile
 
     public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirThrowableError: Error?
-    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCallsCount = 0
+    var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingCallsCount = 0
+    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCalled: Bool {
         return getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCallsCount > 0
     }
     public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedArguments: (mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?)?
     public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedInvocations: [(mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?)] = []
-    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReturnValue: MediaFileHandle!
+
+    var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingReturnValue: MediaFileHandle!
+    public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReturnValue: MediaFileHandle! {
+        get {
+            if Thread.isMainThread {
+                return getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingReturnValue
+            } else {
+                var returnValue: MediaFileHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure: ((MediaSource, String?, String, Bool, String?) async throws -> MediaFileHandle)?
 
     public func getMediaFile(mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?) async throws -> MediaFileHandle {
@@ -280,13 +820,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - getMediaThumbnail
 
     public var getMediaThumbnailMediaSourceWidthHeightThrowableError: Error?
-    public var getMediaThumbnailMediaSourceWidthHeightCallsCount = 0
+    var getMediaThumbnailMediaSourceWidthHeightUnderlyingCallsCount = 0
+    public var getMediaThumbnailMediaSourceWidthHeightCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getMediaThumbnailMediaSourceWidthHeightUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getMediaThumbnailMediaSourceWidthHeightUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getMediaThumbnailMediaSourceWidthHeightUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getMediaThumbnailMediaSourceWidthHeightUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var getMediaThumbnailMediaSourceWidthHeightCalled: Bool {
         return getMediaThumbnailMediaSourceWidthHeightCallsCount > 0
     }
     public var getMediaThumbnailMediaSourceWidthHeightReceivedArguments: (mediaSource: MediaSource, width: UInt64, height: UInt64)?
     public var getMediaThumbnailMediaSourceWidthHeightReceivedInvocations: [(mediaSource: MediaSource, width: UInt64, height: UInt64)] = []
-    public var getMediaThumbnailMediaSourceWidthHeightReturnValue: Data!
+
+    var getMediaThumbnailMediaSourceWidthHeightUnderlyingReturnValue: Data!
+    public var getMediaThumbnailMediaSourceWidthHeightReturnValue: Data! {
+        get {
+            if Thread.isMainThread {
+                return getMediaThumbnailMediaSourceWidthHeightUnderlyingReturnValue
+            } else {
+                var returnValue: Data? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getMediaThumbnailMediaSourceWidthHeightUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getMediaThumbnailMediaSourceWidthHeightUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getMediaThumbnailMediaSourceWidthHeightUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var getMediaThumbnailMediaSourceWidthHeightClosure: ((MediaSource, UInt64, UInt64) async throws -> Data)?
 
     public func getMediaThumbnail(mediaSource: MediaSource, width: UInt64, height: UInt64) async throws -> Data {
@@ -304,11 +891,58 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - getNotificationSettings
 
-    public var getNotificationSettingsCallsCount = 0
+    var getNotificationSettingsUnderlyingCallsCount = 0
+    public var getNotificationSettingsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getNotificationSettingsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getNotificationSettingsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getNotificationSettingsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getNotificationSettingsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var getNotificationSettingsCalled: Bool {
         return getNotificationSettingsCallsCount > 0
     }
-    public var getNotificationSettingsReturnValue: NotificationSettings!
+
+    var getNotificationSettingsUnderlyingReturnValue: NotificationSettings!
+    public var getNotificationSettingsReturnValue: NotificationSettings! {
+        get {
+            if Thread.isMainThread {
+                return getNotificationSettingsUnderlyingReturnValue
+            } else {
+                var returnValue: NotificationSettings? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getNotificationSettingsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getNotificationSettingsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getNotificationSettingsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var getNotificationSettingsClosure: (() -> NotificationSettings)?
 
     public func getNotificationSettings() -> NotificationSettings {
@@ -322,13 +956,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - getProfile
 
     public var getProfileUserIdThrowableError: Error?
-    public var getProfileUserIdCallsCount = 0
+    var getProfileUserIdUnderlyingCallsCount = 0
+    public var getProfileUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getProfileUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getProfileUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getProfileUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getProfileUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var getProfileUserIdCalled: Bool {
         return getProfileUserIdCallsCount > 0
     }
     public var getProfileUserIdReceivedUserId: String?
     public var getProfileUserIdReceivedInvocations: [String] = []
-    public var getProfileUserIdReturnValue: UserProfile!
+
+    var getProfileUserIdUnderlyingReturnValue: UserProfile!
+    public var getProfileUserIdReturnValue: UserProfile! {
+        get {
+            if Thread.isMainThread {
+                return getProfileUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: UserProfile? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getProfileUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getProfileUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getProfileUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var getProfileUserIdClosure: ((String) throws -> UserProfile)?
 
     public func getProfile(userId: String) throws -> UserProfile {
@@ -347,11 +1028,58 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - getRecentlyVisitedRooms
 
     public var getRecentlyVisitedRoomsThrowableError: Error?
-    public var getRecentlyVisitedRoomsCallsCount = 0
+    var getRecentlyVisitedRoomsUnderlyingCallsCount = 0
+    public var getRecentlyVisitedRoomsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getRecentlyVisitedRoomsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRecentlyVisitedRoomsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRecentlyVisitedRoomsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRecentlyVisitedRoomsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var getRecentlyVisitedRoomsCalled: Bool {
         return getRecentlyVisitedRoomsCallsCount > 0
     }
-    public var getRecentlyVisitedRoomsReturnValue: [String]!
+
+    var getRecentlyVisitedRoomsUnderlyingReturnValue: [String]!
+    public var getRecentlyVisitedRoomsReturnValue: [String]! {
+        get {
+            if Thread.isMainThread {
+                return getRecentlyVisitedRoomsUnderlyingReturnValue
+            } else {
+                var returnValue: [String]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRecentlyVisitedRoomsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRecentlyVisitedRoomsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRecentlyVisitedRoomsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var getRecentlyVisitedRoomsClosure: (() async throws -> [String])?
 
     public func getRecentlyVisitedRooms() async throws -> [String] {
@@ -365,14 +1093,133 @@ class SDKClientMock: SDKClientProtocol {
             return getRecentlyVisitedRoomsReturnValue
         }
     }
+    //MARK: - getRoomPreview
+
+    public var getRoomPreviewRoomIdOrAliasThrowableError: Error?
+    var getRoomPreviewRoomIdOrAliasUnderlyingCallsCount = 0
+    public var getRoomPreviewRoomIdOrAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getRoomPreviewRoomIdOrAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomPreviewRoomIdOrAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomPreviewRoomIdOrAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomPreviewRoomIdOrAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    public var getRoomPreviewRoomIdOrAliasCalled: Bool {
+        return getRoomPreviewRoomIdOrAliasCallsCount > 0
+    }
+    public var getRoomPreviewRoomIdOrAliasReceivedRoomIdOrAlias: String?
+    public var getRoomPreviewRoomIdOrAliasReceivedInvocations: [String] = []
+
+    var getRoomPreviewRoomIdOrAliasUnderlyingReturnValue: RoomPreview!
+    public var getRoomPreviewRoomIdOrAliasReturnValue: RoomPreview! {
+        get {
+            if Thread.isMainThread {
+                return getRoomPreviewRoomIdOrAliasUnderlyingReturnValue
+            } else {
+                var returnValue: RoomPreview? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomPreviewRoomIdOrAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomPreviewRoomIdOrAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomPreviewRoomIdOrAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    public var getRoomPreviewRoomIdOrAliasClosure: ((String) async throws -> RoomPreview)?
+
+    public func getRoomPreview(roomIdOrAlias: String) async throws -> RoomPreview {
+        if let error = getRoomPreviewRoomIdOrAliasThrowableError {
+            throw error
+        }
+        getRoomPreviewRoomIdOrAliasCallsCount += 1
+        getRoomPreviewRoomIdOrAliasReceivedRoomIdOrAlias = roomIdOrAlias
+        getRoomPreviewRoomIdOrAliasReceivedInvocations.append(roomIdOrAlias)
+        if let getRoomPreviewRoomIdOrAliasClosure = getRoomPreviewRoomIdOrAliasClosure {
+            return try await getRoomPreviewRoomIdOrAliasClosure(roomIdOrAlias)
+        } else {
+            return getRoomPreviewRoomIdOrAliasReturnValue
+        }
+    }
     //MARK: - getSessionVerificationController
 
     public var getSessionVerificationControllerThrowableError: Error?
-    public var getSessionVerificationControllerCallsCount = 0
+    var getSessionVerificationControllerUnderlyingCallsCount = 0
+    public var getSessionVerificationControllerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getSessionVerificationControllerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getSessionVerificationControllerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getSessionVerificationControllerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getSessionVerificationControllerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var getSessionVerificationControllerCalled: Bool {
         return getSessionVerificationControllerCallsCount > 0
     }
-    public var getSessionVerificationControllerReturnValue: SessionVerificationController!
+
+    var getSessionVerificationControllerUnderlyingReturnValue: SessionVerificationController!
+    public var getSessionVerificationControllerReturnValue: SessionVerificationController! {
+        get {
+            if Thread.isMainThread {
+                return getSessionVerificationControllerUnderlyingReturnValue
+            } else {
+                var returnValue: SessionVerificationController? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getSessionVerificationControllerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getSessionVerificationControllerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getSessionVerificationControllerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var getSessionVerificationControllerClosure: (() throws -> SessionVerificationController)?
 
     public func getSessionVerificationController() throws -> SessionVerificationController {
@@ -388,11 +1235,58 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - homeserver
 
-    public var homeserverCallsCount = 0
+    var homeserverUnderlyingCallsCount = 0
+    public var homeserverCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return homeserverUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = homeserverUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                homeserverUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    homeserverUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var homeserverCalled: Bool {
         return homeserverCallsCount > 0
     }
-    public var homeserverReturnValue: String!
+
+    var homeserverUnderlyingReturnValue: String!
+    public var homeserverReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return homeserverUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = homeserverUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                homeserverUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    homeserverUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var homeserverClosure: (() -> String)?
 
     public func homeserver() -> String {
@@ -406,7 +1300,30 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - ignoreUser
 
     public var ignoreUserUserIdThrowableError: Error?
-    public var ignoreUserUserIdCallsCount = 0
+    var ignoreUserUserIdUnderlyingCallsCount = 0
+    public var ignoreUserUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return ignoreUserUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = ignoreUserUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                ignoreUserUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    ignoreUserUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var ignoreUserUserIdCalled: Bool {
         return ignoreUserUserIdCallsCount > 0
     }
@@ -426,11 +1343,58 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - ignoredUsers
 
     public var ignoredUsersThrowableError: Error?
-    public var ignoredUsersCallsCount = 0
+    var ignoredUsersUnderlyingCallsCount = 0
+    public var ignoredUsersCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return ignoredUsersUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = ignoredUsersUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                ignoredUsersUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    ignoredUsersUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var ignoredUsersCalled: Bool {
         return ignoredUsersCallsCount > 0
     }
-    public var ignoredUsersReturnValue: [String]!
+
+    var ignoredUsersUnderlyingReturnValue: [String]!
+    public var ignoredUsersReturnValue: [String]! {
+        get {
+            if Thread.isMainThread {
+                return ignoredUsersUnderlyingReturnValue
+            } else {
+                var returnValue: [String]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = ignoredUsersUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                ignoredUsersUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    ignoredUsersUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var ignoredUsersClosure: (() async throws -> [String])?
 
     public func ignoredUsers() async throws -> [String] {
@@ -447,13 +1411,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - joinRoomById
 
     public var joinRoomByIdRoomIdThrowableError: Error?
-    public var joinRoomByIdRoomIdCallsCount = 0
+    var joinRoomByIdRoomIdUnderlyingCallsCount = 0
+    public var joinRoomByIdRoomIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return joinRoomByIdRoomIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinRoomByIdRoomIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinRoomByIdRoomIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinRoomByIdRoomIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var joinRoomByIdRoomIdCalled: Bool {
         return joinRoomByIdRoomIdCallsCount > 0
     }
     public var joinRoomByIdRoomIdReceivedRoomId: String?
     public var joinRoomByIdRoomIdReceivedInvocations: [String] = []
-    public var joinRoomByIdRoomIdReturnValue: Room!
+
+    var joinRoomByIdRoomIdUnderlyingReturnValue: Room!
+    public var joinRoomByIdRoomIdReturnValue: Room! {
+        get {
+            if Thread.isMainThread {
+                return joinRoomByIdRoomIdUnderlyingReturnValue
+            } else {
+                var returnValue: Room? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinRoomByIdRoomIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinRoomByIdRoomIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinRoomByIdRoomIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var joinRoomByIdRoomIdClosure: ((String) async throws -> Room)?
 
     public func joinRoomById(roomId: String) async throws -> Room {
@@ -472,7 +1483,30 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - login
 
     public var loginUsernamePasswordInitialDeviceNameDeviceIdThrowableError: Error?
-    public var loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount = 0
+    var loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = 0
+    public var loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var loginUsernamePasswordInitialDeviceNameDeviceIdCalled: Bool {
         return loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount > 0
     }
@@ -492,11 +1526,58 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - logout
 
     public var logoutThrowableError: Error?
-    public var logoutCallsCount = 0
+    var logoutUnderlyingCallsCount = 0
+    public var logoutCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return logoutUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = logoutUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                logoutUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    logoutUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var logoutCalled: Bool {
         return logoutCallsCount > 0
     }
-    public var logoutReturnValue: String?
+
+    var logoutUnderlyingReturnValue: String?
+    public var logoutReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return logoutUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = logoutUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                logoutUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    logoutUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var logoutClosure: (() throws -> String?)?
 
     public func logout() throws -> String? {
@@ -513,13 +1594,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - notificationClient
 
     public var notificationClientProcessSetupThrowableError: Error?
-    public var notificationClientProcessSetupCallsCount = 0
+    var notificationClientProcessSetupUnderlyingCallsCount = 0
+    public var notificationClientProcessSetupCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return notificationClientProcessSetupUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = notificationClientProcessSetupUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                notificationClientProcessSetupUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    notificationClientProcessSetupUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var notificationClientProcessSetupCalled: Bool {
         return notificationClientProcessSetupCallsCount > 0
     }
     public var notificationClientProcessSetupReceivedProcessSetup: NotificationProcessSetup?
     public var notificationClientProcessSetupReceivedInvocations: [NotificationProcessSetup] = []
-    public var notificationClientProcessSetupReturnValue: NotificationClientBuilder!
+
+    var notificationClientProcessSetupUnderlyingReturnValue: NotificationClientBuilder!
+    public var notificationClientProcessSetupReturnValue: NotificationClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return notificationClientProcessSetupUnderlyingReturnValue
+            } else {
+                var returnValue: NotificationClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = notificationClientProcessSetupUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                notificationClientProcessSetupUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    notificationClientProcessSetupUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var notificationClientProcessSetupClosure: ((NotificationProcessSetup) throws -> NotificationClientBuilder)?
 
     public func notificationClient(processSetup: NotificationProcessSetup) throws -> NotificationClientBuilder {
@@ -538,7 +1666,30 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - removeAvatar
 
     public var removeAvatarThrowableError: Error?
-    public var removeAvatarCallsCount = 0
+    var removeAvatarUnderlyingCallsCount = 0
+    public var removeAvatarCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeAvatarUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeAvatarUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeAvatarUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeAvatarUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var removeAvatarCalled: Bool {
         return removeAvatarCallsCount > 0
     }
@@ -551,10 +1702,105 @@ class SDKClientMock: SDKClientProtocol {
         removeAvatarCallsCount += 1
         try removeAvatarClosure?()
     }
+    //MARK: - resolveRoomAlias
+
+    public var resolveRoomAliasRoomAliasThrowableError: Error?
+    var resolveRoomAliasRoomAliasUnderlyingCallsCount = 0
+    public var resolveRoomAliasRoomAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resolveRoomAliasRoomAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resolveRoomAliasRoomAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resolveRoomAliasRoomAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resolveRoomAliasRoomAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    public var resolveRoomAliasRoomAliasCalled: Bool {
+        return resolveRoomAliasRoomAliasCallsCount > 0
+    }
+    public var resolveRoomAliasRoomAliasReceivedRoomAlias: String?
+    public var resolveRoomAliasRoomAliasReceivedInvocations: [String] = []
+
+    var resolveRoomAliasRoomAliasUnderlyingReturnValue: String!
+    public var resolveRoomAliasRoomAliasReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return resolveRoomAliasRoomAliasUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resolveRoomAliasRoomAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resolveRoomAliasRoomAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resolveRoomAliasRoomAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    public var resolveRoomAliasRoomAliasClosure: ((String) async throws -> String)?
+
+    public func resolveRoomAlias(roomAlias: String) async throws -> String {
+        if let error = resolveRoomAliasRoomAliasThrowableError {
+            throw error
+        }
+        resolveRoomAliasRoomAliasCallsCount += 1
+        resolveRoomAliasRoomAliasReceivedRoomAlias = roomAlias
+        resolveRoomAliasRoomAliasReceivedInvocations.append(roomAlias)
+        if let resolveRoomAliasRoomAliasClosure = resolveRoomAliasRoomAliasClosure {
+            return try await resolveRoomAliasRoomAliasClosure(roomAlias)
+        } else {
+            return resolveRoomAliasRoomAliasReturnValue
+        }
+    }
     //MARK: - restoreSession
 
     public var restoreSessionSessionThrowableError: Error?
-    public var restoreSessionSessionCallsCount = 0
+    var restoreSessionSessionUnderlyingCallsCount = 0
+    public var restoreSessionSessionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return restoreSessionSessionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = restoreSessionSessionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                restoreSessionSessionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    restoreSessionSessionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var restoreSessionSessionCalled: Bool {
         return restoreSessionSessionCallsCount > 0
     }
@@ -573,11 +1819,58 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - roomDirectorySearch
 
-    public var roomDirectorySearchCallsCount = 0
+    var roomDirectorySearchUnderlyingCallsCount = 0
+    public var roomDirectorySearchCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomDirectorySearchUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomDirectorySearchUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomDirectorySearchUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomDirectorySearchUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var roomDirectorySearchCalled: Bool {
         return roomDirectorySearchCallsCount > 0
     }
-    public var roomDirectorySearchReturnValue: RoomDirectorySearch!
+
+    var roomDirectorySearchUnderlyingReturnValue: RoomDirectorySearch!
+    public var roomDirectorySearchReturnValue: RoomDirectorySearch! {
+        get {
+            if Thread.isMainThread {
+                return roomDirectorySearchUnderlyingReturnValue
+            } else {
+                var returnValue: RoomDirectorySearch? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomDirectorySearchUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomDirectorySearchUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomDirectorySearchUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var roomDirectorySearchClosure: (() -> RoomDirectorySearch)?
 
     public func roomDirectorySearch() -> RoomDirectorySearch {
@@ -590,11 +1883,58 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - rooms
 
-    public var roomsCallsCount = 0
+    var roomsUnderlyingCallsCount = 0
+    public var roomsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var roomsCalled: Bool {
         return roomsCallsCount > 0
     }
-    public var roomsReturnValue: [Room]!
+
+    var roomsUnderlyingReturnValue: [Room]!
+    public var roomsReturnValue: [Room]! {
+        get {
+            if Thread.isMainThread {
+                return roomsUnderlyingReturnValue
+            } else {
+                var returnValue: [Room]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var roomsClosure: (() -> [Room])?
 
     public func rooms() -> [Room] {
@@ -608,13 +1948,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - searchUsers
 
     public var searchUsersSearchTermLimitThrowableError: Error?
-    public var searchUsersSearchTermLimitCallsCount = 0
+    var searchUsersSearchTermLimitUnderlyingCallsCount = 0
+    public var searchUsersSearchTermLimitCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return searchUsersSearchTermLimitUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = searchUsersSearchTermLimitUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                searchUsersSearchTermLimitUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    searchUsersSearchTermLimitUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var searchUsersSearchTermLimitCalled: Bool {
         return searchUsersSearchTermLimitCallsCount > 0
     }
     public var searchUsersSearchTermLimitReceivedArguments: (searchTerm: String, limit: UInt64)?
     public var searchUsersSearchTermLimitReceivedInvocations: [(searchTerm: String, limit: UInt64)] = []
-    public var searchUsersSearchTermLimitReturnValue: SearchUsersResults!
+
+    var searchUsersSearchTermLimitUnderlyingReturnValue: SearchUsersResults!
+    public var searchUsersSearchTermLimitReturnValue: SearchUsersResults! {
+        get {
+            if Thread.isMainThread {
+                return searchUsersSearchTermLimitUnderlyingReturnValue
+            } else {
+                var returnValue: SearchUsersResults? = nil
+                DispatchQueue.main.sync {
+                    returnValue = searchUsersSearchTermLimitUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                searchUsersSearchTermLimitUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    searchUsersSearchTermLimitUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var searchUsersSearchTermLimitClosure: ((String, UInt64) throws -> SearchUsersResults)?
 
     public func searchUsers(searchTerm: String, limit: UInt64) throws -> SearchUsersResults {
@@ -633,11 +2020,58 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - session
 
     public var sessionThrowableError: Error?
-    public var sessionCallsCount = 0
+    var sessionUnderlyingCallsCount = 0
+    public var sessionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sessionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var sessionCalled: Bool {
         return sessionCallsCount > 0
     }
-    public var sessionReturnValue: Session!
+
+    var sessionUnderlyingReturnValue: Session!
+    public var sessionReturnValue: Session! {
+        get {
+            if Thread.isMainThread {
+                return sessionUnderlyingReturnValue
+            } else {
+                var returnValue: Session? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var sessionClosure: (() throws -> Session)?
 
     public func session() throws -> Session {
@@ -654,7 +2088,30 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - setAccountData
 
     public var setAccountDataEventTypeContentThrowableError: Error?
-    public var setAccountDataEventTypeContentCallsCount = 0
+    var setAccountDataEventTypeContentUnderlyingCallsCount = 0
+    public var setAccountDataEventTypeContentCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setAccountDataEventTypeContentUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setAccountDataEventTypeContentUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setAccountDataEventTypeContentUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setAccountDataEventTypeContentUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var setAccountDataEventTypeContentCalled: Bool {
         return setAccountDataEventTypeContentCallsCount > 0
     }
@@ -673,13 +2130,60 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - setDelegate
 
-    public var setDelegateDelegateCallsCount = 0
+    var setDelegateDelegateUnderlyingCallsCount = 0
+    public var setDelegateDelegateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setDelegateDelegateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setDelegateDelegateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setDelegateDelegateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setDelegateDelegateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var setDelegateDelegateCalled: Bool {
         return setDelegateDelegateCallsCount > 0
     }
     public var setDelegateDelegateReceivedDelegate: ClientDelegate?
     public var setDelegateDelegateReceivedInvocations: [ClientDelegate?] = []
-    public var setDelegateDelegateReturnValue: TaskHandle?
+
+    var setDelegateDelegateUnderlyingReturnValue: TaskHandle?
+    public var setDelegateDelegateReturnValue: TaskHandle? {
+        get {
+            if Thread.isMainThread {
+                return setDelegateDelegateUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setDelegateDelegateUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setDelegateDelegateUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setDelegateDelegateUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var setDelegateDelegateClosure: ((ClientDelegate?) -> TaskHandle?)?
 
     public func setDelegate(delegate: ClientDelegate?) -> TaskHandle? {
@@ -695,7 +2199,30 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - setDisplayName
 
     public var setDisplayNameNameThrowableError: Error?
-    public var setDisplayNameNameCallsCount = 0
+    var setDisplayNameNameUnderlyingCallsCount = 0
+    public var setDisplayNameNameCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setDisplayNameNameUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setDisplayNameNameUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setDisplayNameNameUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setDisplayNameNameUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var setDisplayNameNameCalled: Bool {
         return setDisplayNameNameCallsCount > 0
     }
@@ -715,7 +2242,30 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - setPusher
 
     public var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangThrowableError: Error?
-    public var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCallsCount = 0
+    var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount = 0
+    public var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCalled: Bool {
         return setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCallsCount > 0
     }
@@ -734,13 +2284,60 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - subscribeToIgnoredUsers
 
-    public var subscribeToIgnoredUsersListenerCallsCount = 0
+    var subscribeToIgnoredUsersListenerUnderlyingCallsCount = 0
+    public var subscribeToIgnoredUsersListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToIgnoredUsersListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToIgnoredUsersListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToIgnoredUsersListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToIgnoredUsersListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var subscribeToIgnoredUsersListenerCalled: Bool {
         return subscribeToIgnoredUsersListenerCallsCount > 0
     }
     public var subscribeToIgnoredUsersListenerReceivedListener: IgnoredUsersListener?
     public var subscribeToIgnoredUsersListenerReceivedInvocations: [IgnoredUsersListener] = []
-    public var subscribeToIgnoredUsersListenerReturnValue: TaskHandle!
+
+    var subscribeToIgnoredUsersListenerUnderlyingReturnValue: TaskHandle!
+    public var subscribeToIgnoredUsersListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToIgnoredUsersListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToIgnoredUsersListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToIgnoredUsersListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToIgnoredUsersListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var subscribeToIgnoredUsersListenerClosure: ((IgnoredUsersListener) -> TaskHandle)?
 
     public func subscribeToIgnoredUsers(listener: IgnoredUsersListener) -> TaskHandle {
@@ -755,11 +2352,58 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - syncService
 
-    public var syncServiceCallsCount = 0
+    var syncServiceUnderlyingCallsCount = 0
+    public var syncServiceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return syncServiceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = syncServiceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                syncServiceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    syncServiceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var syncServiceCalled: Bool {
         return syncServiceCallsCount > 0
     }
-    public var syncServiceReturnValue: SyncServiceBuilder!
+
+    var syncServiceUnderlyingReturnValue: SyncServiceBuilder!
+    public var syncServiceReturnValue: SyncServiceBuilder! {
+        get {
+            if Thread.isMainThread {
+                return syncServiceUnderlyingReturnValue
+            } else {
+                var returnValue: SyncServiceBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = syncServiceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                syncServiceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    syncServiceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var syncServiceClosure: (() -> SyncServiceBuilder)?
 
     public func syncService() -> SyncServiceBuilder {
@@ -773,7 +2417,30 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - trackRecentlyVisitedRoom
 
     public var trackRecentlyVisitedRoomRoomThrowableError: Error?
-    public var trackRecentlyVisitedRoomRoomCallsCount = 0
+    var trackRecentlyVisitedRoomRoomUnderlyingCallsCount = 0
+    public var trackRecentlyVisitedRoomRoomCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return trackRecentlyVisitedRoomRoomUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = trackRecentlyVisitedRoomRoomUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                trackRecentlyVisitedRoomRoomUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    trackRecentlyVisitedRoomRoomUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var trackRecentlyVisitedRoomRoomCalled: Bool {
         return trackRecentlyVisitedRoomRoomCallsCount > 0
     }
@@ -793,7 +2460,30 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - unignoreUser
 
     public var unignoreUserUserIdThrowableError: Error?
-    public var unignoreUserUserIdCallsCount = 0
+    var unignoreUserUserIdUnderlyingCallsCount = 0
+    public var unignoreUserUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return unignoreUserUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unignoreUserUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unignoreUserUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unignoreUserUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var unignoreUserUserIdCalled: Bool {
         return unignoreUserUserIdCallsCount > 0
     }
@@ -813,7 +2503,30 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - uploadAvatar
 
     public var uploadAvatarMimeTypeDataThrowableError: Error?
-    public var uploadAvatarMimeTypeDataCallsCount = 0
+    var uploadAvatarMimeTypeDataUnderlyingCallsCount = 0
+    public var uploadAvatarMimeTypeDataCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return uploadAvatarMimeTypeDataUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = uploadAvatarMimeTypeDataUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                uploadAvatarMimeTypeDataUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    uploadAvatarMimeTypeDataUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var uploadAvatarMimeTypeDataCalled: Bool {
         return uploadAvatarMimeTypeDataCallsCount > 0
     }
@@ -833,13 +2546,60 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - uploadMedia
 
     public var uploadMediaMimeTypeDataProgressWatcherThrowableError: Error?
-    public var uploadMediaMimeTypeDataProgressWatcherCallsCount = 0
+    var uploadMediaMimeTypeDataProgressWatcherUnderlyingCallsCount = 0
+    public var uploadMediaMimeTypeDataProgressWatcherCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return uploadMediaMimeTypeDataProgressWatcherUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = uploadMediaMimeTypeDataProgressWatcherUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                uploadMediaMimeTypeDataProgressWatcherUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    uploadMediaMimeTypeDataProgressWatcherUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var uploadMediaMimeTypeDataProgressWatcherCalled: Bool {
         return uploadMediaMimeTypeDataProgressWatcherCallsCount > 0
     }
     public var uploadMediaMimeTypeDataProgressWatcherReceivedArguments: (mimeType: String, data: Data, progressWatcher: ProgressWatcher?)?
     public var uploadMediaMimeTypeDataProgressWatcherReceivedInvocations: [(mimeType: String, data: Data, progressWatcher: ProgressWatcher?)] = []
-    public var uploadMediaMimeTypeDataProgressWatcherReturnValue: String!
+
+    var uploadMediaMimeTypeDataProgressWatcherUnderlyingReturnValue: String!
+    public var uploadMediaMimeTypeDataProgressWatcherReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return uploadMediaMimeTypeDataProgressWatcherUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = uploadMediaMimeTypeDataProgressWatcherUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                uploadMediaMimeTypeDataProgressWatcherUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    uploadMediaMimeTypeDataProgressWatcherUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var uploadMediaMimeTypeDataProgressWatcherClosure: ((String, Data, ProgressWatcher?) async throws -> String)?
 
     public func uploadMedia(mimeType: String, data: Data, progressWatcher: ProgressWatcher?) async throws -> String {
@@ -858,11 +2618,58 @@ class SDKClientMock: SDKClientProtocol {
     //MARK: - userId
 
     public var userIdThrowableError: Error?
-    public var userIdCallsCount = 0
+    var userIdUnderlyingCallsCount = 0
+    public var userIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return userIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = userIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                userIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    userIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     public var userIdCalled: Bool {
         return userIdCallsCount > 0
     }
-    public var userIdReturnValue: String!
+
+    var userIdUnderlyingReturnValue: String!
+    public var userIdReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return userIdUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = userIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                userIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    userIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
     public var userIdClosure: (() throws -> String)?
 
     public func userId() throws -> String {
