@@ -65,32 +65,14 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
         switch viewAction {
         case .dismiss:
             actionsSubject.send(.dismiss)
-        case .join(roomID: let roomID):
-            joinRoom(roomID: roomID)
+        case .select(roomID: let roomID):
+            actionsSubject.send(.select(roomID: roomID))
         case .reachedBottom:
             loadNextPage()
         }
     }
     
     // MARK: - Private
-    
-    private func joinRoom(roomID: String) {
-        showLoadingIndicator()
-        
-        Task {
-            defer {
-                hideLoadingIndicator()
-            }
-            
-            switch await clientProxy.joinRoom(roomID) {
-            case .success:
-                actionsSubject.send(.joined(roomID: roomID))
-            case .failure(let error):
-                MXLog.error("Failed joining room with error: \(error)")
-                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-            }
-        }
-    }
     
     private static let errorID = "roomDirectorySearchViewModelLoadingError"
     
@@ -121,18 +103,5 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
             let _ = await roomDirectorySearchProxy.nextPage()
             state.isLoading = false
         }
-    }
-    
-    private static let loadingIndicatorIdentifier = "\(RoomDirectorySearchScreenViewModel.self)-Loading"
-    
-    private func showLoadingIndicator() {
-        userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorIdentifier,
-                                                      type: .modal,
-                                                      title: L10n.commonLoading,
-                                                      persistent: true))
-    }
-    
-    private func hideLoadingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

@@ -25,27 +25,34 @@ struct HomeScreenInviteCell: View {
     let context: HomeScreenViewModel.Context
     
     var body: some View {
-        HStack(alignment: .top, spacing: 16) {
-            if dynamicTypeSize < .accessibility3 {
-                LoadableAvatarImage(url: room.avatarURL,
-                                    name: title,
-                                    contentID: room.id,
-                                    avatarSize: .custom(52),
-                                    imageProvider: context.imageProvider)
-                    .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
-                    .accessibilityHidden(true)
+        Button {
+            if let roomId = room.roomId {
+                context.send(viewAction: .selectRoom(roomIdentifier: roomId))
             }
-            
-            mainContent
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom, 16)
-                .padding(.trailing, 16)
-                .overlay(alignment: .bottom) {
-                    separator
+        } label: {
+            HStack(alignment: .top, spacing: 16) {
+                if dynamicTypeSize < .accessibility3 {
+                    LoadableAvatarImage(url: room.avatarURL,
+                                        name: title,
+                                        contentID: room.id,
+                                        avatarSize: .custom(52),
+                                        imageProvider: context.imageProvider)
+                        .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
+                        .accessibilityHidden(true)
                 }
+                
+                mainContent
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 16)
+                    .padding(.trailing, 16)
+                    .multilineTextAlignment(.leading)
+                    .overlay(alignment: .bottom) {
+                        separator
+                    }
+            }
+            .padding(.top, 12)
+            .padding(.leading, 16)
         }
-        .padding(.top, 12)
-        .padding(.leading, 16)
     }
     
     // MARK: - Private

@@ -183,12 +183,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             
             switch appRoute {
             case .room(let roomID):
-                Task { await self.handleRoomRoute(roomID: roomID, animated: animated) }
+                stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false), userInfo: .init(animated: animated))
             case .childRoom(let roomID):
                 if let roomFlowCoordinator {
                     roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
                 } else {
-                    Task { await self.handleRoomRoute(roomID: roomID, animated: animated) }
+                    stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false), userInfo: .init(animated: animated))
                 }
             case .roomDetails(let roomID):
                 if stateMachine.state.selectedRoomID == roomID {
@@ -196,12 +196,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 } else {
                     stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: true), userInfo: .init(animated: animated))
                 }
-            case .roomList, .roomMemberDetails:
-                self.roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+            case .roomList:
+                roomFlowCoordinator?.clearRoute(animated: animated)
+            case .roomMemberDetails:
+                roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             case .userProfile(let userID):
                 stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
             case .genericCallLink(let url):
-                self.navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
+                navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
             case .oidcCallback:
                 break
             case .settings, .chatBackupSettings:
@@ -210,23 +212,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func handleRoomRoute(roomID: String, animated: Bool) async {
-        switch await userSession.clientProxy.roomForIdentifier(roomID)?.membership {
-        case .invited:
-            if UIDevice.current.isPhone {
-                roomFlowCoordinator?.clearRoute(animated: animated)
-            }
-            stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
-        case .joined:
-            stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false), userInfo: .init(animated: animated))
-        case .left, .none:
-            // Do nothing but maybe we should ask design to have some kind of error state
-            break
-        }
-    }
-
     func clearRoute(animated: Bool) {
-        roomFlowCoordinator?.handleAppRoute(.roomList, animated: animated)
+        roomFlowCoordinator?.clearRoute(animated: animated)
     }
 
     // MARK: - Private
@@ -262,14 +249,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 attemptStartingOnboarding()
                 
             case(.roomList, .selectRoom(let roomID, let showingRoomDetails), .roomList):
-                Task { await self.presentRoomFlow(roomID: roomID, showingRoomDetails: showingRoomDetails, animated: animated) }
+                Task { await self.startRoomFlow(roomID: roomID, showingRoomDetails: showingRoomDetails, animated: animated) }
             case(.roomList, .deselectRoom, .roomList):
-                tearDownRoomFlow(animated: animated)
+                dismissRoomFlow(animated: animated)
                 
             case (.invitesScreen, .selectRoom, .invitesScreen):
                 break
             case (.invitesScreen, .deselectRoom, .invitesScreen):
-                tearDownRoomFlow(animated: animated)
+                dismissRoomFlow(animated: animated)
                 
             case (.roomList, .showSettingsScreen, .settingsScreen):
                 break
@@ -350,9 +337,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .presentRoom(let roomID):
-                    stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false))
+                    handleAppRoute(.room(roomID: roomID), animated: true)
                 case .presentRoomDetails(let roomID):
-                    stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: true))
+                    handleAppRoute(.roomDetails(roomID: roomID), animated: true)
                 case .roomLeft(let roomID):
                     if case .roomList(selectedRoomID: let selectedRoomID) = stateMachine.state,
                        selectedRoomID == roomID {
@@ -430,13 +417,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: Room Flow
     
-    private func presentRoomFlow(roomID: String, showingRoomDetails: Bool, animated: Bool) async {
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            MXLog.error("Invalid room ID: \(roomID)")
-            return
-        }
-        
-        let coordinator = await RoomFlowCoordinator(roomProxy: roomProxy,
+    private func startRoomFlow(roomID: String, showingRoomDetails: Bool, animated: Bool) async {
+        let coordinator = await RoomFlowCoordinator(roomID: roomID,
                                                     userSession: userSession,
                                                     isChildFlow: false,
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
@@ -486,7 +468,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func tearDownRoomFlow(animated: Bool) {
+    private func dismissRoomFlow(animated: Bool) {
         // THIS MUST BE CALLED *AFTER* THE FLOW HAS TIDIED UP THE STACK OR IT CAN CAUSE A CRASH.
         navigationSplitCoordinator.setDetailCoordinator(nil, animated: animated)
         roomFlowCoordinator = nil
@@ -650,7 +632,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .joined(let roomID):
+            case .select(let roomID):
                 stateMachine.processEvent(.dismissedRoomDirectorySearchScreen)
                 handleAppRoute(.room(roomID: roomID), animated: true)
             case .dismiss:

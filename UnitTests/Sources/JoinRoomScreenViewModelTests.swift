@@ -36,11 +36,14 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     
     private func setupViewModel(throwing: Bool = false) {
         let clientProxy = ClientProxyMock(.init())
+        
         clientProxy.joinRoomReturnValue = throwing ? .failure(.sdkError(ClientProxyMockError.generic)) : .success(())
+        
+        clientProxy.roomPreviewForIdentifierReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        
         viewModel = JoinRoomScreenViewModel(roomID: "1",
-                                            roomName: "Room Name",
-                                            avatarURL: nil,
-                                            interaction: .join,
-                                            clientProxy: clientProxy)
+                                            clientProxy: clientProxy,
+                                            mediaProvider: MockMediaProvider(),
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }
