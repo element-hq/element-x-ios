@@ -433,6 +433,8 @@ private struct NavigationSplitCoordinatorView: View {
         .navigationDestination(for: NavigationModule.self) { module in
             module.coordinator?.toPresentable()
         }
+        .animation(.elementDefault, value: navigationSplitCoordinator.sidebarModule)
+        .animation(.elementDefault, value: navigationSplitCoordinator.detailModule)
     }
 }
 
@@ -721,5 +723,6 @@ private struct NavigationStackCoordinatorView: View {
         .fullScreenCover(item: $navigationStackCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
         }
+        .animation(.elementDefault, value: navigationStackCoordinator.rootModule)
     }
 }
