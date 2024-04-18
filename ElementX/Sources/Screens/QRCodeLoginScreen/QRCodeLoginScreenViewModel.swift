@@ -41,11 +41,11 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             .removeDuplicates()
             .compactMap { $0 }
             .sink { [weak self] qrData in
+                self?.state.state = .scan(.connecting)
                 Task {
                     do {
                         MXLog.info("Scanning QR code: \(qrData)")
                         try await qrCodeLoginService.scan(data: qrData)
-                        self?.state.state = .scan(.connecting)
                     } catch {
                         MXLog.error("Failed to scan the QR code:\(error)")
                         self?.state.state = .scan(.invalid)
