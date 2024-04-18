@@ -21,6 +21,8 @@ import UIKit
 import MatrixRustSDK
 
 class RoomProxy: RoomProxyProtocol {
+    private static var subscriptionCountPerRoom: [String: Int] = [:]
+    
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
@@ -89,6 +91,7 @@ class RoomProxy: RoomProxyProtocol {
                                                         RequiredState(key: "m.room.join_rules", value: "")],
                                         timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit))
         roomListItem.subscribe(settings: settings)
+        Self.subscriptionCountPerRoom[roomListItem.id()] = (Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0) + 1
         
         await timeline.subscribeForUpdates()
         
@@ -98,7 +101,11 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func unsubscribeFromUpdates() {
-        roomListItem.unsubscribe()
+        Self.subscriptionCountPerRoom[roomListItem.id()] = max(0, (Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0) - 1)
+        
+        if Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0 <= 0 {
+            roomListItem.unsubscribe()
+        }
     }
 
     lazy var id: String = room.id()
