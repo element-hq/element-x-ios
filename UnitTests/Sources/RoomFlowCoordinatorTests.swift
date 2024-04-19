@@ -186,8 +186,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is JoinRoomScreenCoordinator)
         
         try await clearRoute(expectedActions: [.finished])
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1, "A child room flow should leave its parent to clean up the stack.")
-        XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is JoinRoomScreenCoordinator, "A child room flow should leave its parent to clean up the stack.")
+        XCTAssertNil(navigationStackCoordinator.stackCoordinators.last, "A child room flow should remove the join room scren on dismissal")
         
         navigationStackCoordinator.popToRoot()
         
@@ -280,14 +279,14 @@ class RoomFlowCoordinatorTests: XCTestCase {
         navigationStackCoordinator = NavigationStackCoordinator()
         navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator)
         
-        let roomId = switch roomType {
+        let roomID = switch roomType {
         case .invited(let roomID):
             roomID
         default:
             "1"
         }
         
-        roomFlowCoordinator = await RoomFlowCoordinator(roomID: roomId,
+        roomFlowCoordinator = await RoomFlowCoordinator(roomID: roomID,
                                                         userSession: userSession,
                                                         isChildFlow: asChildFlow,
                                                         roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),

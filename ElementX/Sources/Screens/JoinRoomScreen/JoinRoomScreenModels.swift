@@ -47,9 +47,10 @@ struct JoinRoomScreenViewState: BindableState {
             return .join
         }
         
-        if roomDetails.canKnock {
-            return .knock
-        }
+        // Knocking is not supported yet, treat it as .unknown
+        // if roomDetails.canKnock {
+        //     return .knock
+        // }
         
         return .unknown
     }

@@ -54,7 +54,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private var roomProxy: RoomProxyProtocol!
     
-    // periphery:ignore - used to avoid deallocation
     private weak var joinRoomScreenCoordinator: JoinRoomScreenCoordinator?
     
     // periphery:ignore - used to avoid deallocation
@@ -125,15 +124,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             guard roomID == self.roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
             
             Task {
-                guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
-                    return
+                if roomProxy == nil {
+                    guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+                        return
+                    }
+                    
+                    await storeAndSubscribeToRoomProxy(roomProxy)
                 }
                 
-                guard roomProxy.membership == .joined else {
-                    fatalError("Requesting room details for an unjoined room")
-                }
-                
-                await storeAndSubscribeToRoomProxy(roomProxy)
                 stateMachine.tryEvent(.presentRoomDetails, userInfo: EventUserInfo(animated: animated))
             }
         case .roomMemberDetails(let userID):
@@ -184,9 +182,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
+        guard roomProxy.membership == .joined else {
+            fatalError("Requesting room details for an unjoined room")
+        }
+        
         self.roomProxy = roomProxy
         
-        // TODO: handle multiple subscription calls before when adding child room flows.
         await roomProxy.subscribeForUpdates()
     }
     
@@ -599,15 +600,17 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         if isChildFlow {
             // We don't support dismissing a child flow by itself, only the entire chain.
-            MXLog.info("Leaving navigation clean-up to the parent flow.")
+            MXLog.info("Leaving the rest of the navigation clean-up to the parent flow.")
+            
+            if joinRoomScreenCoordinator != nil {
+                navigationStackCoordinator.pop()
+            }
         } else {
             navigationStackCoordinator.popToRoot(animated: false)
             navigationStackCoordinator.setRootCoordinator(nil, animated: false)
         }
         
-        if let roomProxy {
-            roomProxy.unsubscribeFromUpdates()
-        }
+        roomProxy?.unsubscribeFromUpdates()
         
         timelineController = nil
         

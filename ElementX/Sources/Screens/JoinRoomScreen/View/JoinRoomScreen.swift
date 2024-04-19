@@ -121,11 +121,11 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Unknown")
         .snapshot(delay: 0.25)
         
-        NavigationStack {
-            JoinRoomScreen(context: knockViewModel.context)
-        }
-        .previewDisplayName("Knock")
-        .snapshot(delay: 0.25)
+//        NavigationStack {
+//            JoinRoomScreen(context: knockViewModel.context)
+//        }
+//        .previewDisplayName("Knock")
+//        .snapshot(delay: 0.25)
         
         NavigationStack {
             JoinRoomScreen(context: joinViewModel.context)

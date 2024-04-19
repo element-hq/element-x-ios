@@ -943,20 +943,11 @@ private class IgnoredUsersListenerProxy: IgnoredUsersListener {
 
 private extension RoomPreviewDetails {
     init(_ roomPreview: RoomPreview) {
-        var avatarURL: URL?
-        
-        if let avatarURLString = roomPreview.avatarUrl {
-            avatarURL = URL(string: avatarURLString)
-            
-            let source = mediaSourceFromUrl(url: avatarURLString)
-            MXLog.error("Source: \(source)")
-        }
-        
         self = RoomPreviewDetails(roomID: roomPreview.roomId,
                                   name: roomPreview.name,
                                   canonicalAlias: roomPreview.canonicalAlias,
                                   topic: roomPreview.topic,
-                                  avatarURL: avatarURL,
+                                  avatarURL: roomPreview.avatarUrl.flatMap(URL.init(string:)),
                                   memberCount: UInt(roomPreview.numJoinedMembers),
                                   isHistoryWorldReadable: roomPreview.isHistoryWorldReadable,
                                   isJoined: roomPreview.isJoined,
