@@ -22,7 +22,7 @@ typealias QRCodeLoginScreenViewModelType = StateStoreViewModel<QRCodeLoginScreen
 
 class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScreenViewModelProtocol {
     private let qrCodeLoginService: QRCodeLoginServiceProtocol
-    private let application: ApplicationProtocol
+    private let appMediator: AppMediatorProtocol
     
     private let actionsSubject: PassthroughSubject<QRCodeLoginScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<QRCodeLoginScreenViewModelAction, Never> {
@@ -30,9 +30,9 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
 
     init(qrCodeLoginService: QRCodeLoginServiceProtocol,
-         application: ApplicationProtocol) {
+         appMediator: AppMediatorProtocol) {
         self.qrCodeLoginService = qrCodeLoginService
-        self.application = application
+        self.appMediator = appMediator
         super.init(initialViewState: QRCodeLoginScreenViewState())
     }
     
@@ -45,7 +45,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         case .startScan:
             Task { await startScanIfPossible() }
         case .openSettings:
-            application.openAppSettings()
+            appMediator.openAppSettings()
         }
     }
     
@@ -56,7 +56,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     /// Only for mocking initial states
     fileprivate init(state: QRCodeLoginState) {
         qrCodeLoginService = QRCodeLoginServiceMock(configuration: .init())
-        application = ApplicationMock()
+        appMediator = AppMediatorMock.default
         super.init(initialViewState: .init(state: state))
     }
 }

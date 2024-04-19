@@ -46,6 +46,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let emojiProvider: EmojiProviderProtocol
+    private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -73,6 +74,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          emojiProvider: EmojiProviderProtocol,
+         appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
@@ -83,6 +85,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.navigationStackCoordinator = navigationStackCoordinator
         self.emojiProvider = emojiProvider
+        self.appMediator = appMediator
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
@@ -439,7 +442,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                          emojiProvider: emojiProvider,
                                                          completionSuggestionService: completionSuggestionService,
+                                                         appMediator: appMediator,
                                                          appSettings: appSettings)
+        
         let coordinator = RoomScreenCoordinator(parameters: parameters)
         coordinator.actions
             .sink { [weak self] action in
@@ -714,7 +719,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMapNavigator(interactionMode: StaticLocationInteractionMode) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode)
+        let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode, appMediator: appMediator)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
@@ -1126,6 +1131,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                     navigationStackCoordinator: navigationStackCoordinator,
                                                     emojiProvider: emojiProvider,
+                                                    appMediator: appMediator,
                                                     appSettings: appSettings,
                                                     analytics: analytics,
                                                     userIndicatorController: userIndicatorController,

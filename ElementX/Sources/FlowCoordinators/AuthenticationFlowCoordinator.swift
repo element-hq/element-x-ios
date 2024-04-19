@@ -27,6 +27,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let bugReportService: BugReportServiceProtocol
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationStackCoordinator: NavigationStackCoordinator
+    private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -44,6 +45,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     init(authenticationService: AuthenticationServiceProxyProtocol,
          bugReportService: BugReportServiceProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
+         appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
@@ -51,6 +53,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         self.authenticationService = authenticationService
         self.bugReportService = bugReportService
         self.navigationRootCoordinator = navigationRootCoordinator
+        self.appMediator = appMediator
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
@@ -107,7 +110,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startQRCodeLogin() {
         let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(qrCodeLoginService: QRCodeLoginService(),
-                                                                         orientationManager: orientationManager))
+                                                                         orientationManager: orientationManager,
+                                                                         appMediator: appMediator))
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else {
                 return

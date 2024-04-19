@@ -126,6 +126,7 @@ class MockScreen: Identifiable {
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: MockAuthenticationServiceProxy(),
                                                                 bugReportService: BugReportServiceMock(),
                                                                 navigationRootCoordinator: navigationRootCoordinator,
+                                                                appMediator: AppMediatorMock.default,
                                                                 appSettings: ServiceLocator.shared.settings,
                                                                 analytics: ServiceLocator.shared.analytics,
                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -243,6 +244,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -258,6 +260,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -273,6 +276,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -288,6 +292,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -306,6 +311,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
@@ -324,6 +330,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
@@ -342,6 +349,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
@@ -361,6 +369,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
@@ -379,6 +388,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
@@ -397,6 +407,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
@@ -415,6 +426,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
@@ -433,6 +445,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
@@ -460,6 +473,7 @@ class MockScreen: Identifiable {
                                                                                             appSettings: ServiceLocator.shared.settings),
                                                              bugReportService: BugReportServiceMock(),
                                                              roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
+                                                             appMediator: AppMediatorMock.default,
                                                              appSettings: appSettings,
                                                              analytics: ServiceLocator.shared.analytics,
                                                              notificationManager: NotificationManagerMock(),

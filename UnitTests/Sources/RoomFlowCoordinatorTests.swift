@@ -202,6 +202,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
                                                         roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
                                                         navigationStackCoordinator: navigationStackCoordinator,
                                                         emojiProvider: EmojiProvider(),
+                                                        appMediator: AppMediatorMock.default,
                                                         appSettings: ServiceLocator.shared.settings,
                                                         analytics: ServiceLocator.shared.analytics,
                                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,

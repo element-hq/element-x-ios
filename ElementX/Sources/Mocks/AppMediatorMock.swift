@@ -16,21 +16,21 @@
 
 import UIKit
 
-extension ApplicationMock {
-    static var `default`: ApplicationProtocol {
-        ApplicationMock(withState: .active,
+extension AppMediatorMock {
+    static var `default`: AppMediatorProtocol {
+        AppMediatorMock(withState: .active,
                         backgroundTimeRemaining: 10,
                         allowTasks: true)
     }
-
-    static var mockBroken: ApplicationProtocol {
-        ApplicationMock(withState: .inactive,
+    
+    static var mockBroken: AppMediatorProtocol {
+        AppMediatorMock(withState: .inactive,
                         backgroundTimeRemaining: 0,
                         allowTasks: false)
     }
-
-    static var mockAboutToSuspend: ApplicationProtocol {
-        ApplicationMock(withState: .background,
+    
+    static var mockAboutToSuspend: AppMediatorProtocol {
+        AppMediatorMock(withState: .background,
                         backgroundTimeRemaining: 2,
                         allowTasks: false)
     }
@@ -42,7 +42,7 @@ extension ApplicationMock {
                      allowTasks: Bool) {
         self.init()
         
-        underlyingApplicationState = applicationState
+        underlyingAppState = applicationState
         underlyingBackgroundTimeRemaining = backgroundTimeRemaining
         
         beginBackgroundTaskWithNameExpirationHandlerClosure = { _, handler in

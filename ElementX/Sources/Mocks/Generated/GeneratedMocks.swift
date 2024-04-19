@@ -747,17 +747,17 @@ class AppLockServiceMock: AppLockServiceProtocol {
         }
     }
 }
-class ApplicationMock: ApplicationProtocol {
+class AppMediatorMock: AppMediatorProtocol {
     var backgroundTimeRemaining: TimeInterval {
         get { return underlyingBackgroundTimeRemaining }
         set(value) { underlyingBackgroundTimeRemaining = value }
     }
     var underlyingBackgroundTimeRemaining: TimeInterval!
-    var applicationState: UIApplication.State {
-        get { return underlyingApplicationState }
-        set(value) { underlyingApplicationState = value }
+    var appState: UIApplication.State {
+        get { return underlyingAppState }
+        set(value) { underlyingAppState = value }
     }
-    var underlyingApplicationState: UIApplication.State!
+    var underlyingAppState: UIApplication.State!
 
     //MARK: - beginBackgroundTask
 

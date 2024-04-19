@@ -50,6 +50,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
                                                                 appLockService: AppLockServiceMock(),
                                                                 bugReportService: BugReportServiceMock(),
                                                                 roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
+                                                                appMediator: AppMediatorMock.default,
                                                                 appSettings: ServiceLocator.shared.settings,
                                                                 analytics: ServiceLocator.shared.analytics,
                                                                 notificationManager: notificationManager,

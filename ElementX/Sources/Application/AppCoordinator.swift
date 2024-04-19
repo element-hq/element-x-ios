@@ -24,6 +24,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
+    private let appMediator: AppMediator
     private let appSettings: AppSettings
     private let appDelegate: AppDelegate
 
@@ -65,6 +66,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     init(appDelegate: AppDelegate) {
         windowManager = WindowManager(appDelegate: appDelegate)
+        appMediator = AppMediator(windowManager: windowManager)
+        
         Self.setupEnvironmentVariables()
         
         let appSettings = AppSettings()
@@ -100,9 +103,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
 
-        backgroundTaskService = UIKitBackgroundTaskService {
-            UIApplication.shared
-        }
+        backgroundTaskService = UIKitBackgroundTaskService(appMediator: appMediator)
 
         let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
@@ -409,6 +410,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         authenticationFlowCoordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
                                                                       bugReportService: ServiceLocator.shared.bugReportService,
                                                                       navigationRootCoordinator: navigationRootCoordinator,
+                                                                      appMediator: appMediator,
                                                                       appSettings: appSettings,
                                                                       analytics: ServiceLocator.shared.analytics,
                                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -471,6 +473,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                     appLockService: appLockFlowCoordinator.appLockService,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory(),
+                                                                    appMediator: appMediator,
                                                                     appSettings: appSettings,
                                                                     analytics: ServiceLocator.shared.analytics,
                                                                     notificationManager: notificationManager,
@@ -645,7 +648,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private func handleAppRoute(_ appRoute: AppRoute) {
         if let userSessionFlowCoordinator {
-            userSessionFlowCoordinator.handleAppRoute(appRoute, animated: UIApplication.shared.applicationState == .active)
+            userSessionFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
         } else {
             storedAppRoute = appRoute
         }

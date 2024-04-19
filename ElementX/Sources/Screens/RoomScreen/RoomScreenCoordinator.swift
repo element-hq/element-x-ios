@@ -27,6 +27,7 @@ struct RoomScreenCoordinatorParameters {
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let emojiProvider: EmojiProviderProtocol
     let completionSuggestionService: CompletionSuggestionServiceProtocol
+    let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
 }
 
@@ -63,7 +64,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                         mediaPlayerProvider: parameters.mediaPlayerProvider,
                                         voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                        application: UIApplication.shared,
+                                        appMediator: parameters.appMediator,
                                         appSettings: parameters.appSettings,
                                         analyticsService: ServiceLocator.shared.analytics,
                                         notificationCenter: NotificationCenter.default)

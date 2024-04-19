@@ -17,7 +17,6 @@
 import Foundation
 import UIKit
 
-/// UIKitBackgroundTask is a concrete implementation of BackgroundTaskProtocol using UIApplication background task.
 class UIKitBackgroundTask: BackgroundTaskProtocol {
     let name: String
     var isRunning: Bool {
@@ -30,28 +29,21 @@ class UIKitBackgroundTask: BackgroundTaskProtocol {
         Date().timeIntervalSince(startDate) * 1000
     }
 
-    private let application: ApplicationProtocol
+    private let appMediator: AppMediatorProtocol
     private var identifier: UIBackgroundTaskIdentifier = .invalid
     private var useCounter = 0
     private let startDate = Date()
 
-    /// Initializes and starts a new background task
-    /// - Parameters:
-    ///   - name: name
-    ///   - isReusable: flag indicating the task is reusable
-    ///   - application: application instance
-    ///   - expirationHandler: expiration handler
     init?(name: String,
           isReusable: Bool,
-          application: ApplicationProtocol,
+          appMediator: AppMediatorProtocol,
           expirationHandler: BackgroundTaskExpirationHandler?) {
         self.name = name
         self.isReusable = isReusable
-        self.application = application
+        self.appMediator = appMediator
         self.expirationHandler = expirationHandler
 
-        // attempt to start
-        identifier = application.beginBackgroundTask(withName: name) { [weak self] in
+        identifier = appMediator.beginBackgroundTask(withName: name) { [weak self] in
             guard let self else { return }
             self.stop()
             self.expirationHandler?(self)
@@ -59,13 +51,11 @@ class UIKitBackgroundTask: BackgroundTaskProtocol {
 
         if identifier == .invalid {
             MXLog.error("Do not start background task: \(name), as OS declined")
-            //  call expiration handler immediately
             expirationHandler?(self)
             return nil
         }
 
         if isReusable {
-            //  creation itself is a use
             reuse()
         }
 
@@ -94,7 +84,7 @@ class UIKitBackgroundTask: BackgroundTaskProtocol {
         if identifier != .invalid {
             MXLog.verbose("End background task #\(identifier.rawValue) - \(name) after \(readableElapsedTime)")
 
-            application.endBackgroundTask(identifier)
+            appMediator.endBackgroundTask(identifier)
             identifier = .invalid
         }
     }

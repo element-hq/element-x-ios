@@ -96,7 +96,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
                                                mediaPlayerProvider: MediaPlayerProviderMock(),
                                                voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               application: ApplicationMock.default,
+                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings,
                                                analyticsService: ServiceLocator.shared.analytics,
                                                notificationCenter: NotificationCenterMock())
