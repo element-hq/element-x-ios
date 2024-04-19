@@ -1093,6 +1093,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentRolesAndPermissionsScreen() {
         let parameters = RoomRolesAndPermissionsFlowCoordinatorParameters(roomProxy: roomProxy,
+                                                                          mediaProvider: userSession.mediaProvider,
                                                                           navigationStackCoordinator: navigationStackCoordinator,
                                                                           userIndicatorController: userIndicatorController,
                                                                           analytics: analytics)
