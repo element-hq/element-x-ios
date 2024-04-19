@@ -501,7 +501,7 @@
 "screen_qr_code_login_invalid_scan_state_description" = "Use the QR code shown on the other device.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Wrong QR code";
 "screen_qr_code_login_no_camera_permission_button" = "Go to camera settings";
-"screen_qr_code_login_no_camera_permission_state_description" = "You need to give permission for Element to use your device’s camera in order to continue.";
+"screen_qr_code_login_no_camera_permission_state_description" = "You need to give permission for %1$@ to use your device’s camera in order to continue.";
 "screen_qr_code_login_no_camera_permission_state_title" = "Allow camera access to scan the QR code";
 "screen_qr_code_login_scanning_state_title" = "Scan the QR code";
 "screen_qr_code_login_start_over_button" = "Start over";
@@ -539,6 +539,7 @@
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
 "screen_report_content_explanation" = "This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.";
 "screen_report_content_hint" = "Reason for reporting this content";
+"screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
 "screen_room_attachment_source_camera" = "Камера";
 "screen_room_attachment_source_camera_video" = "Запис на видео";
 "screen_room_attachment_source_files" = "Прикачен файл";

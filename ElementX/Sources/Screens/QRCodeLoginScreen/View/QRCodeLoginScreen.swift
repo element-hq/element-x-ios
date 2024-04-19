@@ -238,7 +238,7 @@ struct QRCodeLoginScreen: View {
                         .font(.compound.headingMDBold)
                         .multilineTextAlignment(.center)
                     
-                    Text(L10n.screenQrCodeLoginNoCameraPermissionStateDescription)
+                    Text(L10n.screenQrCodeLoginNoCameraPermissionStateDescription(InfoPlistReader.main.productionAppName))
                         .foregroundColor(.compound.textSecondary)
                         .font(.compound.bodyMD)
                         .multilineTextAlignment(.center)

@@ -1231,8 +1231,10 @@ internal enum L10n {
   internal static var screenQrCodeLoginInvalidScanStateSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_invalid_scan_state_subtitle") }
   /// Go to camera settings
   internal static var screenQrCodeLoginNoCameraPermissionButton: String { return L10n.tr("Localizable", "screen_qr_code_login_no_camera_permission_button") }
-  /// You need to give permission for Element to use your device’s camera in order to continue.
-  internal static var screenQrCodeLoginNoCameraPermissionStateDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_no_camera_permission_state_description") }
+  /// You need to give permission for %1$@ to use your device’s camera in order to continue.
+  internal static func screenQrCodeLoginNoCameraPermissionStateDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_qr_code_login_no_camera_permission_state_description", String(describing: p1))
+  }
   /// Allow camera access to scan the QR code
   internal static var screenQrCodeLoginNoCameraPermissionStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_no_camera_permission_state_title") }
   /// Scan the QR code
@@ -1309,6 +1311,8 @@ internal enum L10n {
   internal static var screenReportContentExplanation: String { return L10n.tr("Localizable", "screen_report_content_explanation") }
   /// Reason for reporting this content
   internal static var screenReportContentHint: String { return L10n.tr("Localizable", "screen_report_content_hint") }
+  /// Failed to resolve room alias.
+  internal static var screenRoomAliasResolverResolveAliasFailure: String { return L10n.tr("Localizable", "screen_room_alias_resolver_resolve_alias_failure") }
   /// Camera
   internal static var screenRoomAttachmentSourceCamera: String { return L10n.tr("Localizable", "screen_room_attachment_source_camera") }
   /// Take photo
