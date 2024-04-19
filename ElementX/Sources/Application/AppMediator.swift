@@ -18,14 +18,32 @@ import UIKit
 
 class AppMediator: AppMediatorProtocol {
     private let windowManager: WindowManagerProtocol
+    
+    init(windowManager: WindowManagerProtocol) {
+        self.windowManager = windowManager
+    }
         
     // UIApplication.State won't update if we store this e.g. in the constructor
     private var application: UIApplication {
         UIApplication.shared
     }
+
+    @MainActor
+    var appState: UIApplication.State {
+        switch application.applicationState {
+        case .active:
+            windowManager.mainWindow.traitCollection.activeAppearance == .active ? .active : .inactive
+        case .inactive:
+            .inactive
+        case .background:
+            .background
+        default:
+            .inactive
+        }
+    }
     
-    init(windowManager: WindowManagerProtocol) {
-        self.windowManager = windowManager
+    var backgroundTimeRemaining: TimeInterval {
+        application.backgroundTimeRemaining
     }
     
     func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
@@ -47,22 +65,8 @@ class AppMediator: AppMediatorProtocol {
         
         open(url)
     }
-
-    var backgroundTimeRemaining: TimeInterval {
-        application.backgroundTimeRemaining
-    }
-
-    @MainActor
-    var appState: UIApplication.State {
-        switch application.applicationState {
-        case .active:
-            windowManager.mainWindow.traitCollection.activeAppearance == .active ? .active : .inactive
-        case .inactive:
-            .inactive
-        case .background:
-            .background
-        default:
-            .inactive
-        }
+    
+    func setIdleTimerDisabled(_ disabled: Bool) {
+        application.isIdleTimerDisabled = disabled
     }
 }

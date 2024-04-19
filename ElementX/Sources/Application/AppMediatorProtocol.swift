@@ -19,6 +19,10 @@ import UIKit
 
 // sourcery: AutoMockable
 protocol AppMediatorProtocol {
+    var appState: UIApplication.State { get }
+    
+    var backgroundTimeRemaining: TimeInterval { get }
+    
     func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier
 
     func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier)
@@ -26,10 +30,8 @@ protocol AppMediatorProtocol {
     func open(_ url: URL)
     
     func openAppSettings()
-
-    var backgroundTimeRemaining: TimeInterval { get }
-
-    var appState: UIApplication.State { get }
+    
+    func setIdleTimerDisabled(_ disabled: Bool)
 }
 
 extension UIApplication.State: CustomStringConvertible {

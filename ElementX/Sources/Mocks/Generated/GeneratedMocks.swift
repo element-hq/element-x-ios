@@ -748,16 +748,16 @@ class AppLockServiceMock: AppLockServiceProtocol {
     }
 }
 class AppMediatorMock: AppMediatorProtocol {
-    var backgroundTimeRemaining: TimeInterval {
-        get { return underlyingBackgroundTimeRemaining }
-        set(value) { underlyingBackgroundTimeRemaining = value }
-    }
-    var underlyingBackgroundTimeRemaining: TimeInterval!
     var appState: UIApplication.State {
         get { return underlyingAppState }
         set(value) { underlyingAppState = value }
     }
     var underlyingAppState: UIApplication.State!
+    var backgroundTimeRemaining: TimeInterval {
+        get { return underlyingBackgroundTimeRemaining }
+        set(value) { underlyingBackgroundTimeRemaining = value }
+    }
+    var underlyingBackgroundTimeRemaining: TimeInterval!
 
     //MARK: - beginBackgroundTask
 
@@ -935,6 +935,45 @@ class AppMediatorMock: AppMediatorProtocol {
     func openAppSettings() {
         openAppSettingsCallsCount += 1
         openAppSettingsClosure?()
+    }
+    //MARK: - setIdleTimerDisabled
+
+    var setIdleTimerDisabledUnderlyingCallsCount = 0
+    var setIdleTimerDisabledCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setIdleTimerDisabledUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setIdleTimerDisabledUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setIdleTimerDisabledUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setIdleTimerDisabledUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setIdleTimerDisabledCalled: Bool {
+        return setIdleTimerDisabledCallsCount > 0
+    }
+    var setIdleTimerDisabledReceivedDisabled: Bool?
+    var setIdleTimerDisabledReceivedInvocations: [Bool] = []
+    var setIdleTimerDisabledClosure: ((Bool) -> Void)?
+
+    func setIdleTimerDisabled(_ disabled: Bool) {
+        setIdleTimerDisabledCallsCount += 1
+        setIdleTimerDisabledReceivedDisabled = disabled
+        setIdleTimerDisabledReceivedInvocations.append(disabled)
+        setIdleTimerDisabledClosure?(disabled)
     }
 }
 class AudioConverterMock: AudioConverterProtocol {
