@@ -50,7 +50,12 @@ class RoomScreenInteractionHandler {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var voiceMessageRecorderObserver: AnyCancellable?
+    private var voiceMessageRecorderObserver: AnyCancellable? {
+        didSet {
+            appMediator.setIdleTimerDisabled(voiceMessageRecorderObserver != nil)
+        }
+    }
+    
     private var canCurrentUserRedactOthers = false
     private var canCurrentUserRedactSelf = false
     private var resumeVoiceMessagePlaybackAfterScrubbing = false
@@ -405,6 +410,7 @@ class RoomScreenInteractionHandler {
     
     func stopRecordingVoiceMessage() async {
         await voiceMessageRecorder.stopRecording()
+        voiceMessageRecorderObserver = nil
     }
     
     func cancelRecordingVoiceMessage() async {
