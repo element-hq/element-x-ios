@@ -56,7 +56,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default,
+                                            appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: NotificationCenterMock())
@@ -93,7 +93,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default,
+                                            appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: NotificationCenterMock())
@@ -128,7 +128,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default,
+                                            appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: NotificationCenterMock())
@@ -160,7 +160,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default,
+                                            appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: NotificationCenterMock())
@@ -192,7 +192,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default,
+                                            appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: NotificationCenterMock())
@@ -221,7 +221,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default,
+                                            appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: NotificationCenterMock())
@@ -249,7 +249,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default,
+                                            appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: NotificationCenterMock())
@@ -277,7 +277,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default,
+                                            appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: NotificationCenterMock())
@@ -305,7 +305,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default,
+                                            appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: NotificationCenterMock())
@@ -425,7 +425,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default,
+                                            appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: notificationCenter)
@@ -451,7 +451,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock.default,
+                                            appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             notificationCenter: NotificationCenterMock())

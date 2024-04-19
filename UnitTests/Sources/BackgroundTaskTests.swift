@@ -24,19 +24,9 @@ class BackgroundTaskTests: XCTestCase {
         static let bgTaskName = "test"
     }
 
-    func testInAnExtension() {
-        let service = UIKitBackgroundTaskService {
-            nil
-        }
-        let task = service.startBackgroundTask(withName: Constants.bgTaskName)
-
-        XCTAssertNil(task, "Task should not be created")
-    }
-
     func testInitAndStop() {
-        let service = UIKitBackgroundTaskService {
-            ApplicationMock.default
-        }
+        let service = UIKitBackgroundTaskService(appMediator: AppMediatorMock.default)
+
         guard let task = service.startBackgroundTask(withName: Constants.bgTaskName) else {
             XCTFail("Failed to setup test conditions")
             return
@@ -52,9 +42,7 @@ class BackgroundTaskTests: XCTestCase {
     }
 
     func testNotReusableInit() {
-        let service = UIKitBackgroundTaskService {
-            ApplicationMock.default
-        }
+        let service = UIKitBackgroundTaskService(appMediator: AppMediatorMock.default)
 
         //  create two not reusable task with the same name
         guard let task1 = service.startBackgroundTask(withName: Constants.bgTaskName),
@@ -69,9 +57,7 @@ class BackgroundTaskTests: XCTestCase {
     }
 
     func testReusableInit() {
-        let service = UIKitBackgroundTaskService {
-            ApplicationMock.default
-        }
+        let service = UIKitBackgroundTaskService(appMediator: AppMediatorMock.default)
 
         //  create two reusable task with the same name
         guard let task1 = service.startBackgroundTask(withName: Constants.bgTaskName, isReusable: true),
@@ -90,9 +76,7 @@ class BackgroundTaskTests: XCTestCase {
     }
 
     func testMultipleStops() {
-        let service = UIKitBackgroundTaskService {
-            ApplicationMock.default
-        }
+        let service = UIKitBackgroundTaskService(appMediator: AppMediatorMock.default)
 
         //  create two reusable task with the same name
         guard let task = service.startBackgroundTask(withName: Constants.bgTaskName, isReusable: true),
@@ -113,9 +97,7 @@ class BackgroundTaskTests: XCTestCase {
     }
 
     func testNotValidReuse() {
-        let service = UIKitBackgroundTaskService {
-            ApplicationMock.default
-        }
+        let service = UIKitBackgroundTaskService(appMediator: AppMediatorMock.default)
 
         //  create two reusable task with the same name
         guard let task = service.startBackgroundTask(withName: Constants.bgTaskName, isReusable: true) else {
@@ -135,9 +117,7 @@ class BackgroundTaskTests: XCTestCase {
     }
 
     func testValidReuse() {
-        let service = UIKitBackgroundTaskService {
-            ApplicationMock.default
-        }
+        let service = UIKitBackgroundTaskService(appMediator: AppMediatorMock.default)
 
         //  create two reusable task with the same name
         guard let task = service.startBackgroundTask(withName: Constants.bgTaskName, isReusable: true) else {
@@ -161,9 +141,7 @@ class BackgroundTaskTests: XCTestCase {
     }
 
     func testBrokenApp() {
-        let service = UIKitBackgroundTaskService {
-            ApplicationMock.mockBroken
-        }
+        let service = UIKitBackgroundTaskService(appMediator: AppMediatorMock.mockBroken)
 
         //  create two reusable task with the same name
         let task = service.startBackgroundTask(withName: Constants.bgTaskName)
@@ -172,9 +150,7 @@ class BackgroundTaskTests: XCTestCase {
     }
 
     func testNoTimeApp() {
-        let service = UIKitBackgroundTaskService {
-            ApplicationMock.mockAboutToSuspend
-        }
+        let service = UIKitBackgroundTaskService(appMediator: AppMediatorMock.mockAboutToSuspend)
 
         //  create two reusable task with the same name
         let task = service.startBackgroundTask(withName: Constants.bgTaskName)

@@ -40,7 +40,7 @@ class RoomScreenInteractionHandler {
     private let voiceMessageRecorder: VoiceMessageRecorderProtocol
     private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let application: ApplicationProtocol
+    private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let pollInteractionHandler: PollInteractionHandlerProtocol
@@ -62,7 +62,7 @@ class RoomScreenInteractionHandler {
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          voiceMessageRecorder: VoiceMessageRecorderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         application: ApplicationProtocol,
+         appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analyticsService: AnalyticsService) {
         self.roomProxy = roomProxy
@@ -72,7 +72,7 @@ class RoomScreenInteractionHandler {
         self.voiceMessageMediaManager = voiceMessageMediaManager
         self.voiceMessageRecorder = voiceMessageRecorder
         self.userIndicatorController = userIndicatorController
-        self.application = application
+        self.appMediator = appMediator
         self.appSettings = appSettings
         self.analyticsService = analyticsService
         pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService, roomProxy: roomProxy)
@@ -623,7 +623,7 @@ class RoomScreenInteractionHandler {
     }
     
     private func openSystemSettings() {
-        application.openAppSettings()
+        appMediator.openAppSettings()
     }
     
     private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {

@@ -19,28 +19,17 @@ import UIKit
 
 /// /// UIKitBackgroundTaskService is a concrete implementation of BackgroundTaskServiceProtocol using a given `ApplicationProtocol`  instance.
 class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
-    private let applicationBlock: () -> ApplicationProtocol?
+    private let appMediator: AppMediatorProtocol
     private var reusableTasks = NSMapTable<NSString, UIKitBackgroundTask>(keyOptions: .strongMemory, valueOptions: .weakMemory)
-
-    private var application: ApplicationProtocol? {
-        applicationBlock()
-    }
-
-    /// Initializer
-    /// - Parameter applicationBlock: block returning the application instance to use. Defaults to a block returning `UIApplication.extensionSafeShared`.
-    init(withApplicationBlock applicationBlock: @escaping () -> ApplicationProtocol? = { UIApplication.extensionSafeShared }) {
-        self.applicationBlock = applicationBlock
+    
+    init(appMediator: AppMediatorProtocol) {
+        self.appMediator = appMediator
     }
 
     func startBackgroundTask(withName name: String,
                              isReusable: Bool,
                              expirationHandler: (() -> Void)?) -> BackgroundTaskProtocol? {
-        guard let application else {
-            MXLog.error("Do not start background task: \(name). Application is nil")
-            return nil
-        }
-
-        if avoidStartingNewTasks(for: application) {
+        if shouldAvoidStartingNewTasks() {
             MXLog.error("Do not start background task: \(name), as not enough time exists")
             //  call expiration handler immediately
             expirationHandler?()
@@ -56,7 +45,7 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
             } else {
                 if let newTask = UIKitBackgroundTask(name: name,
                                                      isReusable: isReusable,
-                                                     application: application,
+                                                     appMediator: appMediator,
                                                      expirationHandler: { [weak self] task in
                                                          guard let self else { return }
                                                          self.reusableTasks.removeObject(forKey: task.name as NSString)
@@ -70,7 +59,7 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
         } else {
             if let newTask = UIKitBackgroundTask(name: name,
                                                  isReusable: isReusable,
-                                                 application: application,
+                                                 appMediator: appMediator,
                                                  expirationHandler: { _ in
                                                      expirationHandler?()
                                                  }) {
@@ -79,8 +68,8 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
             }
         }
 
-        let appState = application.applicationState
-        let remainingTime = readableBackgroundTimeRemaining(application.backgroundTimeRemaining)
+        let appState = appMediator.appState
+        let remainingTime = readableBackgroundTimeRemaining(appMediator.backgroundTimeRemaining)
 
         MXLog.verbose("Background task \(name) \(created ? "started" : "reused") with app state: \(appState) and estimated background time remaining: \(remainingTime)")
 
@@ -95,9 +84,9 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
         }
     }
 
-    private func avoidStartingNewTasks(for application: ApplicationProtocol) -> Bool {
-        if application.applicationState == .background,
-           application.backgroundTimeRemaining < .backgroundTimeRemainingThresholdToStartTasks {
+    private func shouldAvoidStartingNewTasks() -> Bool {
+        if appMediator.appState == .background,
+           appMediator.backgroundTimeRemaining < .backgroundTimeRemainingThresholdToStartTasks {
             return true
         }
         return false
@@ -106,28 +95,4 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
 
 private extension TimeInterval {
     static let backgroundTimeRemainingThresholdToStartTasks: TimeInterval = 5
-}
-
-private extension UIApplication {
-    /// Application instance extension-safe. Will be `nil` on app extensions.
-    static var extensionSafeShared: UIApplication? {
-        let selector = NSSelectorFromString("sharedApplication")
-        guard responds(to: selector) else { return nil }
-        return perform(selector).takeUnretainedValue() as? UIApplication
-    }
-}
-
-extension UIApplication.State: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .active:
-            return "active"
-        case .inactive:
-            return "inactive"
-        case .background:
-            return "background"
-        @unknown default:
-            return "unknown"
-        }
-    }
 }

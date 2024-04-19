@@ -30,6 +30,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let windowManager: WindowManagerProtocol
     private let bugReportService: BugReportServiceProtocol
+    private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let notificationManager: NotificationManagerProtocol
@@ -71,6 +72,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
+         appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
          notificationManager: NotificationManagerProtocol,
@@ -81,6 +83,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         self.windowManager = windowManager
         self.bugReportService = bugReportService
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
+        self.appMediator = appMediator
         self.appSettings = appSettings
         self.analytics = analytics
         self.notificationManager = notificationManager
@@ -439,6 +442,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                     navigationStackCoordinator: detailNavigationStackCoordinator,
                                                     emojiProvider: EmojiProvider(),
+                                                    appMediator: appMediator,
                                                     appSettings: appSettings,
                                                     analytics: analytics,
                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,

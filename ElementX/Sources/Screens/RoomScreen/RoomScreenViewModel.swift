@@ -32,7 +32,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let timelineController: RoomTimelineControllerProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let application: ApplicationProtocol
+    private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let notificationCenter: NotificationCenterProtocol
@@ -54,7 +54,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         application: ApplicationProtocol,
+         appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
          notificationCenter: NotificationCenterProtocol) {
@@ -64,7 +64,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.appSettings = appSettings
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
-        self.application = application
+        self.appMediator = appMediator
         self.notificationCenter = notificationCenter
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
@@ -76,7 +76,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                                     voiceMessageMediaManager: voiceMessageMediaManager,
                                                                     voiceMessageRecorder: voiceMessageRecorder,
                                                                     userIndicatorController: userIndicatorController,
-                                                                    application: application,
+                                                                    appMediator: appMediator,
                                                                     appSettings: appSettings,
                                                                     analyticsService: analyticsService)
         
@@ -417,7 +417,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func sendReadReceiptIfNeeded(for lastVisibleItemID: TimelineItemIdentifier) async {
-        guard application.applicationState == .active else { return }
+        guard appMediator.appState == .active else { return }
                 
         await timelineController.sendReadReceipt(for: lastVisibleItemID)
     }
@@ -659,7 +659,7 @@ extension RoomScreenViewModel {
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          application: ApplicationMock.default,
+                                          appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
                                           notificationCenter: NotificationCenterMock())

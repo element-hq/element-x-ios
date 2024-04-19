@@ -19,6 +19,7 @@ import SwiftUI
 
 struct StaticLocationScreenCoordinatorParameters {
     let interactionMode: StaticLocationInteractionMode
+    let appMediator: AppMediatorProtocol
 }
 
 enum StaticLocationScreenCoordinatorAction {
@@ -27,7 +28,8 @@ enum StaticLocationScreenCoordinatorAction {
 }
 
 final class StaticLocationScreenCoordinator: CoordinatorProtocol {
-    let viewModel: StaticLocationScreenViewModelProtocol
+    private let parameters: StaticLocationScreenCoordinatorParameters
+    private let viewModel: StaticLocationScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<StaticLocationScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -37,6 +39,8 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: StaticLocationScreenCoordinatorParameters) {
+        self.parameters = parameters
+        
         viewModel = StaticLocationScreenViewModel(interactionMode: parameters.interactionMode)
     }
     
@@ -49,7 +53,7 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
             case .close:
                 actionsSubject.send(.close)
             case .openSystemSettings:
-                UIApplication.shared.openAppSettings()
+                parameters.appMediator.openAppSettings()
             case .sendLocation(let geoURI, let isUserLocation):
                 actionsSubject.send(.selectedLocation(geoURI, isUserLocation: isUserLocation))
             }

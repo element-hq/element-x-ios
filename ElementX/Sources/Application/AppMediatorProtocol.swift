@@ -18,7 +18,7 @@ import Foundation
 import UIKit
 
 // sourcery: AutoMockable
-protocol ApplicationProtocol {
+protocol AppMediatorProtocol {
     func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier
 
     func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier)
@@ -29,18 +29,35 @@ protocol ApplicationProtocol {
 
     var backgroundTimeRemaining: TimeInterval { get }
 
-    var applicationState: UIApplication.State { get }
+    var appState: UIApplication.State { get }
 }
 
-extension UIApplication: ApplicationProtocol {
-    func open(_ url: URL) {
-        open(url, options: [:], completionHandler: nil)
-    }
-    
-    func openAppSettings() {
-        guard let url = URL(string: UIApplication.openSettingsURLString) else {
-            return
+extension UIApplication.State: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .active:
+            return "active"
+        case .inactive:
+            return "inactive"
+        case .background:
+            return "background"
+        @unknown default:
+            return "unknown"
         }
-        open(url)
+    }
+}
+
+extension UIUserInterfaceActiveAppearance: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .active:
+            return "active"
+        case .inactive:
+            return "inactive"
+        case .unspecified:
+            return "unspecified"
+        @unknown default:
+            return "unknown"
+        }
     }
 }
