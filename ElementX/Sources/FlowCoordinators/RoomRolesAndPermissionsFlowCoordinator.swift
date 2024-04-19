@@ -25,6 +25,7 @@ enum RoomRolesAndPermissionsFlowCoordinatorAction: Equatable {
 
 struct RoomRolesAndPermissionsFlowCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
+    let mediaProvider: MediaProviderProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
@@ -33,6 +34,7 @@ struct RoomRolesAndPermissionsFlowCoordinatorParameters {
 class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
     private let roomProxy: RoomProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
+    private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
     
@@ -75,6 +77,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
     init(parameters: RoomRolesAndPermissionsFlowCoordinatorParameters) {
         roomProxy = parameters.roomProxy
         navigationStackCoordinator = parameters.navigationStackCoordinator
+        mediaProvider = parameters.mediaProvider
         userIndicatorController = parameters.userIndicatorController
         analytics = parameters.analytics
         
@@ -164,6 +167,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: mode,
                                                                     roomProxy: roomProxy,
+                                                                    mediaProvider: mediaProvider,
                                                                     userIndicatorController: userIndicatorController,
                                                                     analytics: analytics)
         let coordinator = RoomChangeRolesScreenCoordinator(parameters: parameters)
