@@ -26,7 +26,7 @@ struct RoomDirectorySearchScreen: View {
                 Section {
                     ForEach(context.viewState.rooms) { room in
                         RoomDirectorySearchCell(result: room, imageProvider: context.imageProvider) {
-                            context.send(viewAction: .join(roomID: room.id))
+                            context.send(viewAction: .select(roomID: room.id))
                         }
                     }
                 } footer: {

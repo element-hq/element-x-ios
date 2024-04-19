@@ -456,6 +456,16 @@ class ClientProxy: ClientProxyProtocol {
                                room: room,
                                backgroundTaskService: backgroundTaskService)
     }
+    
+    func roomPreviewForIdentifier(_ identifier: String) async -> Result<RoomPreviewDetails, ClientProxyError> {
+        do {
+            let roomPreview = try await client.getRoomPreview(roomIdOrAlias: identifier)
+            return .success(.init(roomPreview))
+        } catch {
+            MXLog.error("Failed retrieving preview for room: \(identifier) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
@@ -928,5 +938,21 @@ private class IgnoredUsersListenerProxy: IgnoredUsersListener {
     
     func call(ignoredUserIds: [String]) {
         onUpdateClosure(ignoredUserIds)
+    }
+}
+
+private extension RoomPreviewDetails {
+    init(_ roomPreview: RoomPreview) {
+        self = RoomPreviewDetails(roomID: roomPreview.roomId,
+                                  name: roomPreview.name,
+                                  canonicalAlias: roomPreview.canonicalAlias,
+                                  topic: roomPreview.topic,
+                                  avatarURL: roomPreview.avatarUrl.flatMap(URL.init(string:)),
+                                  memberCount: UInt(roomPreview.numJoinedMembers),
+                                  isHistoryWorldReadable: roomPreview.isHistoryWorldReadable,
+                                  isJoined: roomPreview.isJoined,
+                                  isInvited: roomPreview.isInvited,
+                                  isPublic: roomPreview.isPublic,
+                                  canKnock: roomPreview.canKnock)
     }
 }

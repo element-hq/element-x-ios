@@ -2553,6 +2553,74 @@ class ClientProxyMock: ClientProxyProtocol {
             return roomForIdentifierReturnValue
         }
     }
+    //MARK: - roomPreviewForIdentifier
+
+    var roomPreviewForIdentifierUnderlyingCallsCount = 0
+    var roomPreviewForIdentifierCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomPreviewForIdentifierUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomPreviewForIdentifierUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomPreviewForIdentifierUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomPreviewForIdentifierUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var roomPreviewForIdentifierCalled: Bool {
+        return roomPreviewForIdentifierCallsCount > 0
+    }
+    var roomPreviewForIdentifierReceivedIdentifier: String?
+    var roomPreviewForIdentifierReceivedInvocations: [String] = []
+
+    var roomPreviewForIdentifierUnderlyingReturnValue: Result<RoomPreviewDetails, ClientProxyError>!
+    var roomPreviewForIdentifierReturnValue: Result<RoomPreviewDetails, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return roomPreviewForIdentifierUnderlyingReturnValue
+            } else {
+                var returnValue: Result<RoomPreviewDetails, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomPreviewForIdentifierUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomPreviewForIdentifierUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomPreviewForIdentifierUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var roomPreviewForIdentifierClosure: ((String) async -> Result<RoomPreviewDetails, ClientProxyError>)?
+
+    func roomPreviewForIdentifier(_ identifier: String) async -> Result<RoomPreviewDetails, ClientProxyError> {
+        roomPreviewForIdentifierCallsCount += 1
+        roomPreviewForIdentifierReceivedIdentifier = identifier
+        roomPreviewForIdentifierReceivedInvocations.append(identifier)
+        if let roomPreviewForIdentifierClosure = roomPreviewForIdentifierClosure {
+            return await roomPreviewForIdentifierClosure(identifier)
+        } else {
+            return roomPreviewForIdentifierReturnValue
+        }
+    }
     //MARK: - loadUserDisplayName
 
     var loadUserDisplayNameUnderlyingCallsCount = 0

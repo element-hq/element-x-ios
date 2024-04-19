@@ -40,12 +40,18 @@ struct HomeScreenInviteCell: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom, 16)
                 .padding(.trailing, 16)
+                .multilineTextAlignment(.leading)
                 .overlay(alignment: .bottom) {
                     separator
                 }
         }
         .padding(.top, 12)
         .padding(.leading, 16)
+        .onTapGesture {
+            if let roomId = room.roomId {
+                context.send(viewAction: .selectRoom(roomIdentifier: roomId))
+            }
+        }
     }
     
     // MARK: - Private

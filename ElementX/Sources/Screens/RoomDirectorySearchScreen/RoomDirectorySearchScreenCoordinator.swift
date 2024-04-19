@@ -24,7 +24,7 @@ struct RoomDirectorySearchScreenCoordinatorParameters {
 }
 
 enum RoomDirectorySearchScreenCoordinatorAction {
-    case joined(roomID: String)
+    case select(roomID: String)
     case dismiss
 }
 
@@ -48,8 +48,8 @@ final class RoomDirectorySearchScreenCoordinator: CoordinatorProtocol {
         viewModel.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .joined(let roomID):
-                actionsSubject.send(.joined(roomID: roomID))
+            case .select(let roomID):
+                actionsSubject.send(.select(roomID: roomID))
             case .dismiss:
                 actionsSubject.send(.dismiss)
             }

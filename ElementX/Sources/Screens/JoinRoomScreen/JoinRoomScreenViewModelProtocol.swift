@@ -20,4 +20,6 @@ import Combine
 protocol JoinRoomScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<JoinRoomScreenViewModelAction, Never> { get }
     var context: JoinRoomScreenViewModelType.Context { get }
+    
+    func stop()
 }
