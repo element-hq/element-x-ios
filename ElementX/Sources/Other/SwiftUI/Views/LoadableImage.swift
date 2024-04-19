@@ -102,6 +102,8 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
          imageProvider: ImageProviderProtocol?,
          transformer: @escaping (AnyView) -> TransformerView,
          placeholder: @escaping () -> PlaceholderView) {
+        assert(imageProvider != nil, "Missing image provider, make sure one has been supplied to the view model.")
+        
         self.mediaSource = mediaSource
         self.mediaType = mediaType
         self.blurhash = blurhash
