@@ -19,10 +19,16 @@ import Foundation
 
 import MatrixRustSDK
 
+enum QRCodeLoginServiceError: Error {
+    case clientNotInitialised
+    case failedLoggingIn
+    case qrDecodeError
+}
+
 // sourcery: AutoMockable
 protocol QRCodeLoginServiceProtocol {
     var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> { get }
     
     func requestAuthorizationIfNeeded() async -> Bool
-    func scan(data: Data) async throws
+    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError>
 }

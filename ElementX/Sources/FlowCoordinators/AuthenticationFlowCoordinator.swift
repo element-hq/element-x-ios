@@ -118,6 +118,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .cancel:
                 navigationStackCoordinator.setSheetCoordinator(nil)
+            case .done(let userSession):
+                self.userHasSignedIn(userSession: userSession)
             }
         }
         .store(in: &cancellables)

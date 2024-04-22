@@ -23,55 +23,20 @@ typealias QRCodeLoginScreenViewModelType = StateStoreViewModel<QRCodeLoginScreen
 class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScreenViewModelProtocol {
     private let qrCodeLoginService: QRCodeLoginServiceProtocol
     private let application: ApplicationProtocol
-    
+        
     private let actionsSubject: PassthroughSubject<QRCodeLoginScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<QRCodeLoginScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+    
+    private var scanTask: Task<Void, Never>?
 
     init(qrCodeLoginService: QRCodeLoginServiceProtocol,
          application: ApplicationProtocol) {
         self.qrCodeLoginService = qrCodeLoginService
         self.application = application
         super.init(initialViewState: QRCodeLoginScreenViewState())
-        
-        context.$viewState
-            // not using compactMap before remove duplicates because if there is an error, and the same code needs to be rescanned the transition to nil to clean the state would get ignored.
-            .map(\.bindings.qrResult)
-            .removeDuplicates()
-            .compactMap { $0 }
-            .sink { [weak self] qrData in
-                self?.state.state = .scan(.connecting)
-                Task {
-                    do {
-                        MXLog.info("Scanning QR code: \(qrData)")
-                        try await qrCodeLoginService.scan(data: qrData)
-                    } catch {
-                        MXLog.error("Failed to scan the QR code:\(error)")
-                        self?.state.state = .scan(.invalid)
-                    }
-                }
-            }
-            .store(in: &cancellables)
-        
-        qrCodeLoginService.qrLoginProgressPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] progress in
-                MXLog.info("QR Login Progress changed to: \(progress)")
-
-                guard let self,
-                      state.state != .scan(.invalid) else {
-                    return
-                }
-                
-                switch progress {
-                case .establishingSecureChannel(let code):
-                    self.state.state = .displayCode(.deviceCode("\(code)"))
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
+        setupSubscriptions()
     }
     
     // MARK: - Public
@@ -85,6 +50,67 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         case .openSettings:
             application.openAppSettings()
         }
+    }
+    
+    // MARK: - Private
+    
+    private func setupSubscriptions() {
+        context.$viewState
+            // not using compactMap before remove duplicates because if there is an error, and the same code needs to be rescanned the transition to nil to clean the state would get ignored.
+            .map(\.bindings.qrResult)
+            .removeDuplicates()
+            .compactMap { $0 }
+            .sink { [weak self] qrData in
+                guard let self, scanTask == nil else {
+                    return
+                }
+                
+                state.state = .scan(.connecting)
+                
+                scanTask = Task { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    
+                    defer {
+                        scanTask = nil
+                    }
+                    
+                    MXLog.info("Scanning QR code: \(qrData)")
+                    switch await qrCodeLoginService.loginWithQRCode(data: qrData) {
+                    case let .success(session):
+                        MXLog.info("QR Login completed")
+                        actionsSubject.send(.done(userSession: session))
+                    case .failure(let error):
+                        // TODO: The error are flattened now, but here we should return all the possible errors not only the decode error ones, but also the connection related ones.
+                        MXLog.error("Failed to scan the QR code:\(error)")
+                        state.state = .scan(.invalid)
+                    }
+                }
+            }
+            .store(in: &cancellables)
+        
+        qrCodeLoginService.qrLoginProgressPublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] progress in
+                MXLog.info("QR Login Progress changed to: \(progress)")
+
+                guard let self,
+                      state.state != .scan(.invalid) else {
+                    return
+                }
+                
+                switch progress {
+                case .establishingSecureChannel(let code):
+                    self.state.state = .displayCode(.deviceCode(String(format: "%02d", code)))
+                case .waitingForToken(let code):
+                    self.state.state = .displayCode(.verificationCode(code))
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func startScanIfPossible() async {

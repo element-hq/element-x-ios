@@ -53,7 +53,6 @@ struct QRCodeScannerView: UIViewControllerRepresentable {
                   let metadataObj = metadataObjects[0] as? AVMetadataMachineReadableCodeObject,
                   metadataObj.type == AVMetadataObject.ObjectType.qr,
                   let data = metadataObj.binaryValue else {
-                scanResult = nil
                 MXLog.info("QRCodeScannerView: invalid qr scan")
                 return
             }

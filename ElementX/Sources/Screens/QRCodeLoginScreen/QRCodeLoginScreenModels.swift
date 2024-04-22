@@ -18,6 +18,7 @@ import Foundation
 
 enum QRCodeLoginScreenViewModelAction {
     case cancel
+    case done(userSession: UserSessionProtocol)
 }
 
 struct QRCodeLoginScreenViewState: BindableState {

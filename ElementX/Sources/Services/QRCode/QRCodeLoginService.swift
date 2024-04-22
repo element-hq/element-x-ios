@@ -21,7 +21,7 @@ import MatrixRustSDK
 
 final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     private let oidcConfiguration: OidcConfiguration
-    private let encryptionKeyProvider: EncryptionKeyProviderProtocol
+    private let passphrase: String
     private let userSessionStore: UserSessionStoreProtocol
     private var client: Client?
     private var listener: QrLoginProgressListenerProxy?
@@ -35,25 +35,30 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
          userSessionStore: UserSessionStoreProtocol) {
         self.oidcConfiguration = oidcConfiguration
-        self.encryptionKeyProvider = encryptionKeyProvider
         self.userSessionStore = userSessionStore
+        passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
     }
     
-    func scan(data: Data) async throws {
-        let qrData = try QrCodeData.fromBytes(bytes: data)
-        let listener = QrLoginProgressListenerProxy { [weak self] progress in
-            self?.qrLoginProgressSubject.send(progress)
+    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
+        do {
+            let qrData = try QrCodeData.fromBytes(bytes: data)
+            let listener = QrLoginProgressListenerProxy { [weak self] progress in
+                self?.qrLoginProgressSubject.send(progress)
+            }
+            self.listener = listener
+            
+            let client = try await ClientBuilder()
+                .basePath(path: userSessionStore.baseDirectory.path(percentEncoded: false))
+                .passphrase(passphrase: passphrase)
+                .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
+                .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
+                                               sessionDelegate: userSessionStore.clientSessionDelegate)
+                .serverVersions(versions: ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"]) // FIXME: Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
+                .buildWithQrCode(qrCodeData: qrData, oidcConfiguration: oidcConfiguration, progressListener: listener)
+            return await login(client: client)
+        } catch {
+            return .failure(.qrDecodeError)
         }
-        self.listener = listener
-    
-        client = try await ClientBuilder()
-            .basePath(path: userSessionStore.baseDirectory.path(percentEncoded: false))
-            .passphrase(passphrase: encryptionKeyProvider.generateKey().base64EncodedString())
-            .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
-            .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
-                                           sessionDelegate: userSessionStore.clientSessionDelegate)
-            .serverVersions(versions: ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"]) // FIXME: Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
-            .buildWithQrCode(qrCodeData: qrData, oidcConfiguration: oidcConfiguration, progressListener: listener)
     }
     
     func requestAuthorizationIfNeeded() async -> Bool {
@@ -72,6 +77,15 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         }
         
         return isAuthorized
+    }
+    
+    private func login(client: Client) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
+        switch await userSessionStore.userSession(for: client, passphrase: passphrase) {
+        case .success(let session):
+            return .success(session)
+        case .failure:
+            return .failure(.failedLoggingIn)
+        }
     }
 }
 

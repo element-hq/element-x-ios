@@ -6478,18 +6478,17 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
             return requestAuthorizationIfNeededReturnValue
         }
     }
-    //MARK: - scan
+    //MARK: - loginWithQRCode
 
-    var scanDataThrowableError: Error?
-    var scanDataUnderlyingCallsCount = 0
-    var scanDataCallsCount: Int {
+    var loginWithQRCodeDataUnderlyingCallsCount = 0
+    var loginWithQRCodeDataCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return scanDataUnderlyingCallsCount
+                return loginWithQRCodeDataUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = scanDataUnderlyingCallsCount
+                    returnValue = loginWithQRCodeDataUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -6497,29 +6496,55 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
         }
         set {
             if Thread.isMainThread {
-                scanDataUnderlyingCallsCount = newValue
+                loginWithQRCodeDataUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    scanDataUnderlyingCallsCount = newValue
+                    loginWithQRCodeDataUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var scanDataCalled: Bool {
-        return scanDataCallsCount > 0
+    var loginWithQRCodeDataCalled: Bool {
+        return loginWithQRCodeDataCallsCount > 0
     }
-    var scanDataReceivedData: Data?
-    var scanDataReceivedInvocations: [Data] = []
-    var scanDataClosure: ((Data) async throws -> Void)?
+    var loginWithQRCodeDataReceivedData: Data?
+    var loginWithQRCodeDataReceivedInvocations: [Data] = []
 
-    func scan(data: Data) async throws {
-        if let error = scanDataThrowableError {
-            throw error
+    var loginWithQRCodeDataUnderlyingReturnValue: Result<UserSessionProtocol, QRCodeLoginServiceError>!
+    var loginWithQRCodeDataReturnValue: Result<UserSessionProtocol, QRCodeLoginServiceError>! {
+        get {
+            if Thread.isMainThread {
+                return loginWithQRCodeDataUnderlyingReturnValue
+            } else {
+                var returnValue: Result<UserSessionProtocol, QRCodeLoginServiceError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginWithQRCodeDataUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
         }
-        scanDataCallsCount += 1
-        scanDataReceivedData = data
-        scanDataReceivedInvocations.append(data)
-        try await scanDataClosure?(data)
+        set {
+            if Thread.isMainThread {
+                loginWithQRCodeDataUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginWithQRCodeDataUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loginWithQRCodeDataClosure: ((Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError>)?
+
+    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
+        loginWithQRCodeDataCallsCount += 1
+        loginWithQRCodeDataReceivedData = data
+        loginWithQRCodeDataReceivedInvocations.append(data)
+        if let loginWithQRCodeDataClosure = loginWithQRCodeDataClosure {
+            return await loginWithQRCodeDataClosure(data)
+        } else {
+            return loginWithQRCodeDataReturnValue
+        }
     }
 }
 class RoomDirectorySearchProxyMock: RoomDirectorySearchProxyProtocol {

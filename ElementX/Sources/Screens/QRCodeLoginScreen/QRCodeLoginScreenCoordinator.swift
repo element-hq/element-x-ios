@@ -26,6 +26,7 @@ struct QRCodeLoginScreenCoordinatorParameters {
 
 enum QRCodeLoginScreenCoordinatorAction {
     case cancel
+    case done(userSession: UserSessionProtocol)
 }
 
 final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
@@ -53,6 +54,8 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .cancel:
                 self.actionsSubject.send(.cancel)
+            case .done(let userSession):
+                self.actionsSubject.send(.done(userSession: userSession))
             }
         }
         .store(in: &cancellables)
