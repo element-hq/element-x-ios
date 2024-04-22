@@ -196,16 +196,21 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 }
             case .userProfile(let userID):
                 if isExternalURL {
-                    userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
+                    handleAppRoute(route)
                 } else {
-                    userSessionFlowCoordinator?.handleAppRoute(.roomMemberDetails(userID: userID), animated: true)
+                    handleAppRoute(.roomMemberDetails(userID: userID))
                 }
             case .room(let roomID):
-                // check that the room is joined here, if not use a joinRoom route.
                 if isExternalURL {
-                    userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
+                    handleAppRoute(route)
                 } else {
-                    userSessionFlowCoordinator?.handleAppRoute(.childRoom(roomID: roomID), animated: true)
+                    handleAppRoute(.childRoom(roomID: roomID))
+                }
+            case .roomAlias(let alias):
+                if isExternalURL {
+                    handleAppRoute(route)
+                } else {
+                    handleAppRoute(.childRoomAlias(alias))
                 }
             default:
                 break
@@ -261,7 +266,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        // Handle here the account switching when available
         handleAppRoute(.room(roomID: roomID))
     }
     

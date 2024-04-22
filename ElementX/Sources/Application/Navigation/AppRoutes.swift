@@ -24,8 +24,12 @@ enum AppRoute: Equatable {
     case roomList
     /// A room, shown as the root of the stack (popping any child rooms).
     case room(roomID: String)
+    /// A room, shown as the root of the stack (popping any child rooms).
+    case roomAlias(String)
     /// A room, pushed as a child of any existing rooms on the stack.
     case childRoom(roomID: String)
+    /// A room, pushed as a child of any existing rooms on the stack.
+    case childRoomAlias(String)
     /// The information about a particular room.
     case roomDetails(roomID: String)
     /// The profile of a member within the current room.
@@ -125,6 +129,8 @@ struct MatrixPermalinkParser: URLParser {
         switch parseMatrixEntityFrom(uri: url.absoluteString)?.id {
         case .room(let id):
             return .room(roomID: id)
+        case .roomAlias(let alias):
+            return .roomAlias(alias)
         case .user(let id):
             return .userProfile(userID: id)
         default:
