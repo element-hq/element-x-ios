@@ -539,7 +539,7 @@
 "screen_report_content_block_user_hint" = "Отметьте, хотите ли вы скрыть все текущие и будущие сообщения от этого пользователя";
 "screen_report_content_explanation" = "Это сообщение будет передано администратору вашего домашнего сервера. Они не смогут прочитать зашифрованные сообщения.";
 "screen_report_content_hint" = "Причина, по которой вы пожаловались на этот контент";
-"screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
+"screen_room_alias_resolver_resolve_alias_failure" = "Не удалось определить псевдоним комнаты.";
 "screen_room_attachment_source_camera" = "Камера";
 "screen_room_attachment_source_camera_video" = "Записать видео";
 "screen_room_attachment_source_files" = "Вложение";

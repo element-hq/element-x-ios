@@ -539,7 +539,7 @@
 "screen_report_content_block_user_hint" = "Centang jika Anda ingin menyembunyikan semua pesan saat ini dan yang akan datang dari pengguna ini";
 "screen_report_content_explanation" = "Pesan ini akan dilaporkan ke administrator homeserver Anda. Mereka tidak akan dapat membaca pesan terenkripsi apa pun.";
 "screen_report_content_hint" = "Alasan melaporkan konten ini";
-"screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
+"screen_room_alias_resolver_resolve_alias_failure" = "Gagal menyelesaikan alias ruangan.";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Rekam video";
 "screen_room_attachment_source_files" = "Lampiran";

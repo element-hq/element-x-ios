@@ -210,7 +210,7 @@
 "common_poll_summary" = "Анкета: %1$@";
 "common_something_went_wrong" = "Something went wrong";
 "common_verify_device" = "Потвърждаване на устройството";
-"confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup.";
+"confirm_recovery_key_banner_message" = "Резервното копие на чатовете ви в момента не е синхронизирано. Въведете ключа си за възстановяване, за да потвърдите достъпа до резервното копие на чатовете си.";
 "confirm_recovery_key_banner_title" = "Потвърдете ключа си за възстановяване";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
@@ -515,12 +515,12 @@
 "screen_recovery_key_change_success" = "Recovery key changed";
 "screen_recovery_key_change_title" = "Промяна на ключа за възстановяване?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
-"screen_recovery_key_confirm_description" = "Въведете ключа си за възстановяване, за да потвърдите достъпа до резервното копие на чатовете си.";
+"screen_recovery_key_confirm_description" = "Уверете се, че никой не може да види този екран!";
 "screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your chat backup.";
 "screen_recovery_key_confirm_error_title" = "Неправилен ключ за възстановяване";
 "screen_recovery_key_confirm_key_description" = "Въведете 48-символния код.";
 "screen_recovery_key_confirm_key_label" = "Recovery key or passcode";
-"screen_recovery_key_confirm_key_placeholder" = "Въведете...";
+"screen_recovery_key_confirm_key_placeholder" = "Въведете…";
 "screen_recovery_key_confirm_success" = "Ключът за възстановяване е потвърден";
 "screen_recovery_key_confirm_title" = "Потвърдете ключа си за възстановяване";
 "screen_recovery_key_copied_to_clipboard" = "Копиран ключ за възстановяване";
@@ -660,8 +660,8 @@
 "screen_room_timeline_reactions_show_more" = "Показване на повече";
 "screen_room_timeline_read_marker_title" = "New";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ и ";
-"screen_room_typing_notification_plural_ios" = " пишат";
-"screen_room_typing_notification_singular_ios" = " пише";
+"screen_room_typing_notification_plural_ios" = " пишат…";
+"screen_room_typing_notification_singular_ios" = " пише…";
 "screen_room_typing_two_members" = "%1$@ и %2$@";
 "screen_room_voice_message_tooltip" = "Hold to record";
 "screen_roomlist_a11y_create_message" = "Създаване на нов разговор или стая";
