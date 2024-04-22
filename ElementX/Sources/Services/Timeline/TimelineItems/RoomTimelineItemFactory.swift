@@ -626,13 +626,15 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case let .ready(timelineItem, senderID, senderProfile):
             let sender: TimelineItemSender
             switch senderProfile {
-            case let .ready(displayName, _, avatarUrl):
+            case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
                 sender = TimelineItemSender(id: senderID,
                                             displayName: displayName,
+                                            isDisplayNameAmbiguous: isDisplayNameAmbiguous,
                                             avatarURL: avatarUrl.flatMap(URL.init(string:)))
             default:
                 sender = TimelineItemSender(id: senderID,
                                             displayName: nil,
+                                            isDisplayNameAmbiguous: false,
                                             avatarURL: nil)
             }
             

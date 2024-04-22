@@ -21,11 +21,13 @@ struct TimelineItemSender: Identifiable, Hashable {
     
     let id: String
     let displayName: String?
+    let isDisplayNameAmbiguous: Bool
     let avatarURL: URL?
     
-    init(id: String, displayName: String? = nil, avatarURL: URL? = nil) {
+    init(id: String, displayName: String? = nil, isDisplayNameAmbiguous: Bool = false, avatarURL: URL? = nil) {
         self.id = id
         self.displayName = displayName
+        self.isDisplayNameAmbiguous = isDisplayNameAmbiguous
         self.avatarURL = avatarURL
     }
 }
