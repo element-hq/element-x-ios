@@ -55,8 +55,21 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             .store(in: &cancellables)
         
         qrCodeLoginService.qrLoginProgressPublisher
-            .sink { progress in
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] progress in
                 MXLog.info("QR Login Progress changed to: \(progress)")
+
+                guard let self,
+                      state.state != .scan(.invalid) else {
+                    return
+                }
+                
+                switch progress {
+                case .establishingSecureChannel(let code):
+                    self.state.state = .displayCode(.deviceCode("\(code)"))
+                default:
+                    break
+                }
             }
             .store(in: &cancellables)
     }
