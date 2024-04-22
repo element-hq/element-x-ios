@@ -20,7 +20,7 @@ import MatrixRustSDK
 import SwiftUI
 import Version
 
-class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, WindowManagerDelegate {
+class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, SecureWindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
@@ -58,7 +58,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var clientProxyObserver: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
     
-    let windowManager: WindowManagerProtocol
+    let windowManager: SecureWindowManagerProtocol
     let notificationManager: NotificationManagerProtocol
 
     private let appRouteURLParser: AppRouteURLParser
@@ -226,7 +226,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     // MARK: - WindowManagerDelegate
     
-    func windowManagerDidConfigureWindows(_ windowManager: WindowManagerProtocol) {
+    func windowManagerDidConfigureWindows(_ windowManager: SecureWindowManagerProtocol) {
         windowManager.alternateWindow.rootViewController = UIHostingController(rootView: appLockFlowCoordinator.toPresentable())
         ServiceLocator.shared.userIndicatorController.window = windowManager.overlayWindow
     }

@@ -16,17 +16,28 @@
 
 import SwiftUI
 
-protocol WindowManagerDelegate: AnyObject {
+protocol SecureWindowManagerDelegate: AnyObject {
     /// The window manager has configured its windows.
-    func windowManagerDidConfigureWindows(_ windowManager: WindowManagerProtocol)
+    func windowManagerDidConfigureWindows(_ windowManager: SecureWindowManagerProtocol)
 }
 
 @MainActor
+protocol SecureWindowManagerProtocol: WindowManagerProtocol {
+    /// Configures the window manager to operate on the supplied scene.
+    func configure(with windowScene: UIWindowScene)
+    
+    /// Shows the main and overlay window combo, hiding the alternate window.
+    func switchToMain()
+    
+    /// Shows the alternate window, hiding the main and overlay combo.
+    func switchToAlternate()
+}
+
 /// A window manager that supports switching between a main app window with an overlay and
 /// an alternate window to switch contexts whilst also preserving the main view hierarchy.
 /// Heavily inspired by https://www.fivestars.blog/articles/swiftui-windows/
 protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
-    var delegate: WindowManagerDelegate? { get set }
+    var delegate: SecureWindowManagerDelegate? { get set }
     
     /// The app's main window (we only support a single scene).
     var mainWindow: UIWindow! { get }
@@ -39,15 +50,6 @@ protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     
     /// All the windows being managed
     var windows: [UIWindow] { get }
-    
-    /// Configures the window manager to operate on the supplied scene.
-    func configure(with windowScene: UIWindowScene)
-    
-    /// Shows the main and overlay window combo, hiding the alternate window.
-    func switchToMain()
-    
-    /// Shows the alternate window, hiding the main and overlay combo.
-    func switchToAlternate()
     
     /// Makes the global search window key. Used to get automatic text field focus.
     func showGlobalSearch()

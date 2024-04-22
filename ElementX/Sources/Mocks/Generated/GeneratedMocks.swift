@@ -12981,122 +12981,13 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     }
 }
 class WindowManagerMock: WindowManagerProtocol {
-    weak var delegate: WindowManagerDelegate?
+    weak var delegate: SecureWindowManagerDelegate?
     var mainWindow: UIWindow!
     var overlayWindow: UIWindow!
     var globalSearchWindow: UIWindow!
     var alternateWindow: UIWindow!
     var windows: [UIWindow] = []
 
-    //MARK: - configure
-
-    var configureWithUnderlyingCallsCount = 0
-    var configureWithCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return configureWithUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = configureWithUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                configureWithUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    configureWithUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var configureWithCalled: Bool {
-        return configureWithCallsCount > 0
-    }
-    var configureWithReceivedWindowScene: UIWindowScene?
-    var configureWithReceivedInvocations: [UIWindowScene] = []
-    var configureWithClosure: ((UIWindowScene) -> Void)?
-
-    func configure(with windowScene: UIWindowScene) {
-        configureWithCallsCount += 1
-        configureWithReceivedWindowScene = windowScene
-        configureWithReceivedInvocations.append(windowScene)
-        configureWithClosure?(windowScene)
-    }
-    //MARK: - switchToMain
-
-    var switchToMainUnderlyingCallsCount = 0
-    var switchToMainCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return switchToMainUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = switchToMainUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                switchToMainUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    switchToMainUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var switchToMainCalled: Bool {
-        return switchToMainCallsCount > 0
-    }
-    var switchToMainClosure: (() -> Void)?
-
-    func switchToMain() {
-        switchToMainCallsCount += 1
-        switchToMainClosure?()
-    }
-    //MARK: - switchToAlternate
-
-    var switchToAlternateUnderlyingCallsCount = 0
-    var switchToAlternateCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return switchToAlternateUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = switchToAlternateUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                switchToAlternateUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    switchToAlternateUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var switchToAlternateCalled: Bool {
-        return switchToAlternateCallsCount > 0
-    }
-    var switchToAlternateClosure: (() -> Void)?
-
-    func switchToAlternate() {
-        switchToAlternateCallsCount += 1
-        switchToAlternateClosure?()
-    }
     //MARK: - showGlobalSearch
 
     var showGlobalSearchUnderlyingCallsCount = 0
