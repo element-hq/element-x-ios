@@ -18,7 +18,10 @@ import Foundation
 import UIKit
 
 // sourcery: AutoMockable
+@MainActor
 protocol AppMediatorProtocol {
+    var windowManager: WindowManagerProtocol { get }
+    
     var appState: UIApplication.State { get }
     
     var backgroundTimeRemaining: TimeInterval { get }

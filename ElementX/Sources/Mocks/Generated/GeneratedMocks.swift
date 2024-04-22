@@ -748,6 +748,11 @@ class AppLockServiceMock: AppLockServiceProtocol {
     }
 }
 class AppMediatorMock: AppMediatorProtocol {
+    var windowManager: WindowManagerProtocol {
+        get { return underlyingWindowManager }
+        set(value) { underlyingWindowManager = value }
+    }
+    var underlyingWindowManager: WindowManagerProtocol!
     var appState: UIApplication.State {
         get { return underlyingAppState }
         set(value) { underlyingAppState = value }

@@ -19,6 +19,7 @@ import Foundation
 typealias BackgroundTaskExpirationHandler = (BackgroundTaskProtocol) -> Void
 
 /// BackgroundTaskProtocol is the protocol describing a background task regardless of the platform used.
+@MainActor
 protocol BackgroundTaskProtocol: AnyObject {
     /// Name of the background task for debug.
     var name: String { get }

@@ -20,14 +20,11 @@ import UIKit
 struct MediaProvider: MediaProviderProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let imageCache: Kingfisher.ImageCache
-    private let backgroundTaskService: BackgroundTaskServiceProtocol?
     
     init(mediaLoader: MediaLoaderProtocol,
-         imageCache: Kingfisher.ImageCache,
-         backgroundTaskService: BackgroundTaskServiceProtocol?) {
+         imageCache: Kingfisher.ImageCache) {
         self.mediaLoader = mediaLoader
         self.imageCache = imageCache
-        self.backgroundTaskService = backgroundTaskService
     }
     
     // MARK: Images
@@ -43,11 +40,6 @@ struct MediaProvider: MediaProviderProtocol {
     func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
         if let image = imageFromSource(source, size: size) {
             return .success(image)
-        }
-        
-        let loadImageBgTask = await backgroundTaskService?.startBackgroundTask(withName: "LoadImage: \(source.url.hashValue)")
-        defer {
-            loadImageBgTask?.stop()
         }
         
         let cacheKey = cacheKeyForURL(source.url, size: size)
@@ -92,9 +84,6 @@ struct MediaProvider: MediaProviderProtocol {
     // MARK: Files
     
     func loadFileFromSource(_ source: MediaSourceProxy, body: String?) async -> Result<MediaFileHandleProxy, MediaProviderError> {
-        let loadFileBgTask = await backgroundTaskService?.startBackgroundTask(withName: "LoadFile: \(source.url.hashValue)")
-        defer { loadFileBgTask?.stop() }
-        
         do {
             let file = try await mediaLoader.loadMediaFileForSource(source, body: body)
             return .success(file)

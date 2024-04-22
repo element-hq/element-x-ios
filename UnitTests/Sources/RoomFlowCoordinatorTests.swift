@@ -295,8 +295,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
                                                         appMediator: AppMediatorMock.default,
                                                         appSettings: ServiceLocator.shared.settings,
                                                         analytics: ServiceLocator.shared.analytics,
-                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                        orientationManager: OrientationManagerMock())
+                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }
 

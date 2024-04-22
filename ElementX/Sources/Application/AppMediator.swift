@@ -17,7 +17,7 @@
 import UIKit
 
 class AppMediator: AppMediatorProtocol {
-    private let windowManager: WindowManagerProtocol
+    let windowManager: WindowManagerProtocol
     
     init(windowManager: WindowManagerProtocol) {
         self.windowManager = windowManager

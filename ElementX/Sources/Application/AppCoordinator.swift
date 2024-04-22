@@ -107,8 +107,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
         let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-        userSessionStore = UserSessionStore(keychainController: keychainController,
-                                            backgroundTaskService: backgroundTaskService)
+        userSessionStore = UserSessionStore(keychainController: keychainController)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -413,8 +412,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                       appMediator: appMediator,
                                                                       appSettings: appSettings,
                                                                       analytics: ServiceLocator.shared.analytics,
-                                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                      orientationManager: windowManager)
+                                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         authenticationFlowCoordinator?.delegate = self
         
         authenticationFlowCoordinator?.start()
@@ -469,7 +467,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
                                                                     navigationRootCoordinator: navigationRootCoordinator,
-                                                                    windowManager: windowManager,
                                                                     appLockService: appLockFlowCoordinator.appLockService,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory(),

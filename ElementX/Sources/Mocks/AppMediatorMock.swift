@@ -44,6 +44,7 @@ extension AppMediatorMock {
         
         underlyingAppState = applicationState
         underlyingBackgroundTimeRemaining = backgroundTimeRemaining
+        underlyingWindowManager = WindowManagerMock()
         
         beginBackgroundTaskWithNameExpirationHandlerClosure = { _, handler in
             guard allowTasks else {

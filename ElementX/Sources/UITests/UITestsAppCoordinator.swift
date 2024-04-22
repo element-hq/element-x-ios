@@ -129,8 +129,7 @@ class MockScreen: Identifiable {
                                                                 appMediator: AppMediatorMock.default,
                                                                 appSettings: ServiceLocator.shared.settings,
                                                                 analytics: ServiceLocator.shared.analytics,
-                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                orientationManager: windowManager)
+                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
             flowCoordinator.start()
             retainedState.append(flowCoordinator)
             return nil
@@ -468,7 +467,6 @@ class MockScreen: Identifiable {
             
             let flowCoordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
                                                              navigationRootCoordinator: navigationRootCoordinator,
-                                                             windowManager: windowManager,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                             appSettings: ServiceLocator.shared.settings),
                                                              bugReportService: BugReportServiceMock(),
