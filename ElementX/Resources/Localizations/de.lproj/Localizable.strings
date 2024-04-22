@@ -539,7 +539,7 @@
 "screen_report_content_block_user_hint" = "Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest";
 "screen_report_content_explanation" = "Diese Meldung wird an den Administrator deines Homeservers weitergeleitet. Dieser kann keine verschlüsselten Nachrichten lesen.";
 "screen_report_content_hint" = "Grund für die Meldung dieses Inhalts";
-"screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
+"screen_room_alias_resolver_resolve_alias_failure" = "Der Raum-Alias konnte nicht ermittelt werden.";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Video aufnehmen";
 "screen_room_attachment_source_files" = "Anhang";
