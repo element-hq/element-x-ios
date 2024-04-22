@@ -428,7 +428,7 @@
 "screen_key_backup_disable_confirmation_description" = "Du verlierst deine verschlüsselten Nachrichten, wenn du auf allen Geräten abgemeldet bist.";
 "screen_key_backup_disable_confirmation_title" = "Bist du sicher, dass du das Backup ausschalten willst?";
 "screen_key_backup_disable_description" = "Wenn du das Backup ausschaltest, wird dein aktuelles Backup des Verschlüsselungsschlüssels entfernt und andere Sicherheitsfunktionen werden deaktiviert. In diesem Fall wirst du:";
-"screen_key_backup_disable_description_point_1" = "Kein verschlüsselter Nachrichtenverlauf auf neuen Geräten";
+"screen_key_backup_disable_description_point_1" = "Keine Historie für verschlüsselte Nachrichten auf neuen Geräten";
 "screen_key_backup_disable_description_point_2" = "Du verlierst den Zugriff auf deine verschlüsselten Nachrichten, wenn du dich überall von %1$@ abmeldest";
 "screen_key_backup_disable_title" = "Bist du sicher, dass du das Backup ausschalten willst?";
 "screen_login_error_deactivated_account" = "Dieses Konto wurde deaktiviert.";
@@ -489,8 +489,8 @@
 "screen_qr_code_login_connection_note_secure_state_list_item_2" = "Wenn das Problem bestehen bleibt, versuche es mit einem anderen WLAN-Netzwerk oder verwende deine mobilen Daten statt WLAN.";
 "screen_qr_code_login_connection_note_secure_state_list_item_3" = "Wenn das nicht funktioniert, melde dich manuell an";
 "screen_qr_code_login_connection_note_secure_state_title" = "Die Verbindung ist nicht sicher";
-"screen_qr_code_login_device_code_subtitle" = "You’ll be asked to enter the two digits shown below.";
-"screen_qr_code_login_device_code_title" = "Enter number on your device";
+"screen_qr_code_login_device_code_subtitle" = "Du wirst aufgefordert, die beiden unten abgebildeten Ziffern einzugeben.";
+"screen_qr_code_login_device_code_title" = "Nummer auf deinem Gerät eingeben";
 "screen_qr_code_login_initial_state_item_1" = "%1$@ auf einem Desktop-Gerät öffnen";
 "screen_qr_code_login_initial_state_item_2" = "Klick auf deinen Avatar";
 "screen_qr_code_login_initial_state_item_3" = "Wähle %1$@";
@@ -501,14 +501,14 @@
 "screen_qr_code_login_invalid_scan_state_description" = "Verwende den QR-Code, der auf dem anderen Gerät angezeigt wird.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Falscher QR-Code";
 "screen_qr_code_login_no_camera_permission_button" = "Gehe zu den Kameraeinstellungen";
-"screen_qr_code_login_no_camera_permission_state_description" = "Du musst Element die Erlaubnis erteilen, die Kamera deines Geräts zu verwenden, um fortzufahren.";
+"screen_qr_code_login_no_camera_permission_state_description" = "Du musst %1$@ die Erlaubnis erteilen, die Kamera deines Geräts zu verwenden, um fortzufahren.";
 "screen_qr_code_login_no_camera_permission_state_title" = "Erlaube Zugriff auf die Kamera zum Scannen des QR-Codes";
 "screen_qr_code_login_scanning_state_title" = "QR-Code scannen";
 "screen_qr_code_login_start_over_button" = "Neu beginnen";
 "screen_qr_code_login_unknown_error_description" = "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.";
-"screen_qr_code_login_verify_code_loading" = "Waiting for your other device";
-"screen_qr_code_login_verify_code_subtitle" = "Your account provider may ask for the following code to verify the sign in.";
-"screen_qr_code_login_verify_code_title" = "Your verification code";
+"screen_qr_code_login_verify_code_loading" = "Warten auf dein anderes Gerät";
+"screen_qr_code_login_verify_code_subtitle" = "Dein Account-Provider kann nach dem folgenden Code fragen, um die Anmeldung zu bestätigen.";
+"screen_qr_code_login_verify_code_title" = "Dein Verifizierungscode";
 "screen_recovery_key_change_description" = "Besorge dir einen neuen Wiederherstellungsschlüssel, wenn du deinen alten verloren hast. Nachdem du deinen Wiederherstellungsschlüssel geändert hast, funktioniert dein alter Schlüssel nicht mehr.";
 "screen_recovery_key_change_generate_key" = "Erstelle einen neuen Wiederherstellungsschlüssel";
 "screen_recovery_key_change_generate_key_description" = "Stelle sicher, dass du deinen Wiederherstellungsschlüssel an einem sicheren Ort aufbewahren kannst";
@@ -539,6 +539,7 @@
 "screen_report_content_block_user_hint" = "Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest";
 "screen_report_content_explanation" = "Diese Meldung wird an den Administrator deines Homeservers weitergeleitet. Dieser kann keine verschlüsselten Nachrichten lesen.";
 "screen_report_content_hint" = "Grund für die Meldung dieses Inhalts";
+"screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Video aufnehmen";
 "screen_room_attachment_source_files" = "Anhang";

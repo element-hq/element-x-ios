@@ -208,7 +208,7 @@
 "common_waiting_for_decryption_key" = "En attente de la clé de déchiffrement";
 "common_poll_end_confirmation" = "Êtes-vous sûr de vouloir mettre fin à ce sondage ?";
 "common_poll_summary" = "Sondage : %1$@";
-"common_something_went_wrong" = "Something went wrong";
+"common_something_went_wrong" = "Une erreur s'est produite";
 "common_verify_device" = "Vérifier la session";
 "confirm_recovery_key_banner_message" = "La sauvegarde des conversations est désynchronisée. Vous devez confirmer la clé de récupération pour accéder à votre historique.";
 "confirm_recovery_key_banner_title" = "Confirmer votre clé de récupération";
@@ -427,7 +427,7 @@
 "screen_key_backup_disable_confirmation_action_turn_off" = "Désactiver";
 "screen_key_backup_disable_confirmation_description" = "Vous perdrez vos messages chiffrés si vous vous déconnectez de toutes vos sessions.";
 "screen_key_backup_disable_confirmation_title" = "Êtes-vous certain de vouloir désactiver la sauvegarde?";
-"screen_key_backup_disable_description" = "Désactiver la sauvegarde supprimera votre clé de récupération actuelle et désactivera d’autres mesures de sécurité. Dans ce cas, vous:";
+"screen_key_backup_disable_description" = "Désactiver la sauvegarde supprimera votre clé de récupération actuelle et désactivera d’autres mesures de sécurité. Dans ce cas:";
 "screen_key_backup_disable_description_point_1" = "Pas d’accès à l’historique des discussions chiffrées sur vos nouveaux appareils";
 "screen_key_backup_disable_description_point_2" = "Perte de l’accès à vos messages chiffrés si vous êtes déconnectés de %1$@ partout";
 "screen_key_backup_disable_title" = "Êtes-vous certain de vouloir désactiver la sauvegarde?";
@@ -501,7 +501,7 @@
 "screen_qr_code_login_invalid_scan_state_description" = "Scannez le QR code affiché sur l'autre appareil.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "QR code erroné";
 "screen_qr_code_login_no_camera_permission_button" = "Go to camera settings";
-"screen_qr_code_login_no_camera_permission_state_description" = "You need to give permission for Element to use your device’s camera in order to continue.";
+"screen_qr_code_login_no_camera_permission_state_description" = "You need to give permission for %1$@ to use your device’s camera in order to continue.";
 "screen_qr_code_login_no_camera_permission_state_title" = "Allow camera access to scan the QR code";
 "screen_qr_code_login_scanning_state_title" = "Scannez le QR code";
 "screen_qr_code_login_start_over_button" = "Start over";
@@ -539,6 +539,7 @@
 "screen_report_content_block_user_hint" = "Cochez si vous souhaitez masquer tous les messages actuels et futurs de cet utilisateur.";
 "screen_report_content_explanation" = "Ce message sera signalé à l’administrateur de votre serveur d’accueil. Il ne pourra lire aucun message chiffré.";
 "screen_report_content_hint" = "Raison du signalement de ce contenu";
+"screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
 "screen_room_attachment_source_camera" = "Appareil photo";
 "screen_room_attachment_source_camera_video" = "Enregistrer une vidéo";
 "screen_room_attachment_source_files" = "Pièce jointe";
