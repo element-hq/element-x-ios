@@ -46,7 +46,6 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         
         userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
                                                                 navigationRootCoordinator: navigationRootCoordinator,
-                                                                windowManager: WindowManagerMock(),
                                                                 appLockService: AppLockServiceMock(),
                                                                 bugReportService: BugReportServiceMock(),
                                                                 roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),

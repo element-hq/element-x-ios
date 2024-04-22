@@ -97,8 +97,6 @@ targets:
     - path: ../../ElementX/Sources/Other/TestablePreview.swift
     - path: ../../ElementX/Sources/Other/Pills/PlainMentionBuilder.swift
     - path: ../../ElementX/Sources/Other/Pills/PillConstants.swift
-    - path: ../../ElementX/Sources/Services/BackgroundTasks/BackgroundTaskProtocol.swift
-    - path: ../../ElementX/Sources/Services/BackgroundTasks/BackgroundTaskServiceProtocol.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
     - path: ../../ElementX/Sources/Services/Media/Provider

@@ -28,7 +28,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationSplitCoordinator: NavigationSplitCoordinator
-    private let windowManager: WindowManagerProtocol
     private let bugReportService: BugReportServiceProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
@@ -68,7 +67,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     init(userSession: UserSessionProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
-         windowManager: WindowManagerProtocol,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
@@ -80,7 +78,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationRootCoordinator = navigationRootCoordinator
-        self.windowManager = windowManager
         self.bugReportService = bugReportService
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.appMediator = appMediator
@@ -96,7 +93,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
                 
         settingsFlowCoordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
-                                                                            windowManager: windowManager,
+                                                                            windowManager: appMediator.windowManager,
                                                                             appLockService: appLockService,
                                                                             bugReportService: bugReportService,
                                                                             notificationSettings: userSession.clientProxy.notificationSettings,
@@ -427,8 +424,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     appMediator: appMediator,
                                                     appSettings: appSettings,
                                                     analytics: analytics,
-                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                    orientationManager: windowManager)
+                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -480,7 +476,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let startChatNavigationStackCoordinator = NavigationStackCoordinator()
 
         let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
-        let parameters = StartChatScreenCoordinatorParameters(orientationManager: windowManager,
+        let parameters = StartChatScreenCoordinatorParameters(orientationManager: appMediator.windowManager,
                                                               userSession: userSession,
                                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                               navigationStackCoordinator: startChatNavigationStackCoordinator,
@@ -609,14 +605,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         let hostingController = UIHostingController(rootView: coordinator.toPresentable())
         hostingController.view.backgroundColor = .clear
-        windowManager.globalSearchWindow.rootViewController = hostingController
+        appMediator.windowManager.globalSearchWindow.rootViewController = hostingController
 
-        windowManager.showGlobalSearch()
+        appMediator.windowManager.showGlobalSearch()
     }
     
     private func dismissGlobalSearch() {
-        windowManager.globalSearchWindow.rootViewController = nil
-        windowManager.hideGlobalSearch()
+        appMediator.windowManager.globalSearchWindow.rootViewController = nil
+        appMediator.windowManager.hideGlobalSearch()
         
         globalSearchScreenCoordinator = nil
     }

@@ -19,7 +19,7 @@ import MatrixRustSDK
 import SwiftUI
 import UIKit
 
-class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
+class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate {
     private let navigationRootCoordinator: NavigationRootCoordinator
     
     // periphery:ignore - retaining purpose
@@ -28,7 +28,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
     // periphery:ignore - retaining purpose
     private var alternateWindowMockScreen: MockScreen?
     
-    let windowManager: WindowManagerProtocol
+    let windowManager: SecureWindowManagerProtocol
     
     init(appDelegate: AppDelegate) {
         windowManager = WindowManager(appDelegate: appDelegate)
@@ -70,7 +70,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
         fatalError("Not implemented.")
     }
     
-    func windowManagerDidConfigureWindows(_ windowManager: WindowManagerProtocol) {
+    func windowManagerDidConfigureWindows(_ windowManager: SecureWindowManagerProtocol) {
         ServiceLocator.shared.userIndicatorController.window = windowManager.overlayWindow
         
         // Set up the alternate window for the App Lock flow coordinator tests.
@@ -92,14 +92,14 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, WindowManagerDelegate {
 @MainActor
 class MockScreen: Identifiable {
     let id: UITestsScreenIdentifier
-    let windowManager: WindowManagerProtocol
+    let windowManager: SecureWindowManagerProtocol
     let navigationRootCoordinator: NavigationRootCoordinator
     
     private var retainedState = [Any]()
     private var cancellables = Set<AnyCancellable>()
     
     init(id: UITestsScreenIdentifier,
-         windowManager: WindowManagerProtocol,
+         windowManager: SecureWindowManagerProtocol,
          navigationRootCoordinator: NavigationRootCoordinator) {
         self.id = id
         self.windowManager = windowManager
@@ -129,8 +129,7 @@ class MockScreen: Identifiable {
                                                                 appMediator: AppMediatorMock.default,
                                                                 appSettings: ServiceLocator.shared.settings,
                                                                 analytics: ServiceLocator.shared.analytics,
-                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                orientationManager: windowManager)
+                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
             flowCoordinator.start()
             retainedState.append(flowCoordinator)
             return nil
@@ -468,7 +467,6 @@ class MockScreen: Identifiable {
             
             let flowCoordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
                                                              navigationRootCoordinator: navigationRootCoordinator,
-                                                             windowManager: windowManager,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                             appSettings: ServiceLocator.shared.settings),
                                                              bugReportService: BugReportServiceMock(),

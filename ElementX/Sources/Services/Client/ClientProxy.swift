@@ -23,7 +23,6 @@ import MatrixRustSDK
 
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let appSettings: AppSettings
     private let networkMonitor: NetworkMonitorProtocol
     
@@ -122,11 +121,9 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     init(client: ClientProtocol,
-         backgroundTaskService: BackgroundTaskServiceProtocol,
          appSettings: AppSettings,
          networkMonitor: NetworkMonitorProtocol) async {
         self.client = client
-        self.backgroundTaskService = backgroundTaskService
         self.appSettings = appSettings
         self.networkMonitor = networkMonitor
         
@@ -134,8 +131,7 @@ class ClientProxy: ClientProxyProtocol {
         
         mediaLoader = MediaLoader(client: client)
         
-        notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings(),
-                                                         backgroundTaskService: backgroundTaskService)
+        notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
 
@@ -425,8 +421,7 @@ class ClientProxy: ClientProxyProtocol {
         
         if let roomListItem, let room {
             return await RoomProxy(roomListItem: roomListItem,
-                                   room: room,
-                                   backgroundTaskService: backgroundTaskService)
+                                   room: room)
         }
         
         // Else wait for the visible rooms list to go into fully loaded
@@ -453,8 +448,7 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         return await RoomProxy(roomListItem: roomListItem,
-                               room: room,
-                               backgroundTaskService: backgroundTaskService)
+                               room: room)
     }
     
     func roomPreviewForIdentifier(_ identifier: String) async -> Result<RoomPreviewDetails, ClientProxyError> {

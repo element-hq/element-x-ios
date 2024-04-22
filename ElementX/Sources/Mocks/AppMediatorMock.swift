@@ -18,44 +18,11 @@ import UIKit
 
 extension AppMediatorMock {
     static var `default`: AppMediatorProtocol {
-        AppMediatorMock(withState: .active,
-                        backgroundTimeRemaining: 10,
-                        allowTasks: true)
-    }
-    
-    static var mockBroken: AppMediatorProtocol {
-        AppMediatorMock(withState: .inactive,
-                        backgroundTimeRemaining: 0,
-                        allowTasks: false)
-    }
-    
-    static var mockAboutToSuspend: AppMediatorProtocol {
-        AppMediatorMock(withState: .background,
-                        backgroundTimeRemaining: 2,
-                        allowTasks: false)
-    }
-    
-    private static var bgTaskIdentifier = 0
-
-    convenience init(withState applicationState: UIApplication.State,
-                     backgroundTimeRemaining: TimeInterval,
-                     allowTasks: Bool) {
-        self.init()
+        let mock = AppMediatorMock()
         
-        underlyingAppState = applicationState
-        underlyingBackgroundTimeRemaining = backgroundTimeRemaining
+        mock.underlyingAppState = .active
+        mock.underlyingWindowManager = WindowManagerMock()
         
-        beginBackgroundTaskWithNameExpirationHandlerClosure = { _, handler in
-            guard allowTasks else {
-                return .invalid
-            }
-            Self.bgTaskIdentifier += 1
-
-            let identifier = UIBackgroundTaskIdentifier(rawValue: Self.bgTaskIdentifier)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                handler?()
-            }
-            return identifier
-        }
+        return mock
     }
 }

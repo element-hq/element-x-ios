@@ -20,10 +20,7 @@ import MatrixRustSDK
 
 final class TimelineProxy: TimelineProxyProtocol {
     private let timeline: Timeline
-    private var sendMessageBackgroundTask: BackgroundTaskProtocol?
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
     
-    private let backgroundTaskName = "SendRoomEvent"
     private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.low_priority", qos: .utility)
     private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
     private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
@@ -54,9 +51,8 @@ final class TimelineProxy: TimelineProxyProtocol {
         roomTimelineObservationToken?.cancel()
     }
     
-    init(timeline: Timeline, backgroundTaskService: BackgroundTaskServiceProtocol) {
+    init(timeline: Timeline) {
         self.timeline = timeline
-        self.backgroundTaskService = backgroundTaskService
     }
     
     func subscribeForUpdates() async {
@@ -84,11 +80,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     func cancelSend(transactionID: String) async {
         MXLog.info("Cancelling sending for transaction ID: \(transactionID)")
         
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.timeline.cancelSend(txnId: transactionID)
             MXLog.info("Finished cancelling sending for transaction ID: \(transactionID)")
@@ -101,11 +92,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Editing message with original event ID: \(eventID)")
 
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
         let messageContent = buildMessageContentFor(message,
                                                     html: html,
                                                     intentionalMentions: intentionalMentions.toRustMentions())
@@ -198,11 +184,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     func retrySend(transactionID: String) async {
         MXLog.info("Retrying sending for transactionID: \(transactionID)")
         
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.timeline.retrySend(txnId: transactionID)
             MXLog.info("Finished retrying sending for transactionID: \(transactionID)")
@@ -214,11 +195,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending audio")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         let handle = timeline.sendAudio(url: url.path(percentEncoded: false), audioInfo: audioInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
@@ -244,11 +220,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                   progressSubject: CurrentValueSubject<Double, Never>?,
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending file")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         let handle = timeline.sendFile(url: url.path(percentEncoded: false), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
@@ -276,11 +247,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending image")
         
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
         let handle = timeline.sendImage(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), imageInfo: imageInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
@@ -307,11 +273,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                       assetType: AssetType?) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending location")
         
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.timeline.sendLocation(body: body,
                                        geoUri: geoURI.string,
@@ -333,11 +294,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending video")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         let handle = timeline.sendVideo(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), videoInfo: videoInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
@@ -364,11 +320,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                           progressSubject: CurrentValueSubject<Double, Never>?,
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending voice message")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         let handle = timeline.sendVoiceMessage(url: url.path(percentEncoded: false), audioInfo: audioInfo, waveform: waveform, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
@@ -397,11 +348,6 @@ final class TimelineProxy: TimelineProxyProtocol {
             MXLog.info("Sending reply to eventID: \(eventID)")
         } else {
             MXLog.info("Sending message")
-        }
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
         }
         
         let messageContent = buildMessageContentFor(message,
@@ -436,12 +382,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending message content")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
+                
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.timeline.send(msg: messageContent)
             
@@ -455,11 +396,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError> {
         MXLog.verbose("Sending read receipt for eventID: \(eventID)")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         return await Task.dispatch(on: lowPriorityDispatchQueue) {
             do {
@@ -475,11 +411,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Toggling reaction for eventID: \(eventID)")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {

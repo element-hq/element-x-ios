@@ -36,13 +36,11 @@ private final class WeakNotificationSettingsProxy: NotificationSettingsDelegate 
 
 final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     private(set) var notificationSettings: MatrixRustSDK.NotificationSettingsProtocol
-    private let backgroundTaskService: BackgroundTaskServiceProtocol?
     
     let callbacks = PassthroughSubject<NotificationSettingsProxyCallback, Never>()
 
-    init(notificationSettings: MatrixRustSDK.NotificationSettingsProtocol, backgroundTaskService: BackgroundTaskServiceProtocol?) {
+    init(notificationSettings: MatrixRustSDK.NotificationSettingsProtocol) {
         self.notificationSettings = notificationSettings
-        self.backgroundTaskService = backgroundTaskService
         notificationSettings.setDelegate(delegate: WeakNotificationSettingsProxy(proxy: self))
     }
     
@@ -52,9 +50,6 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func setNotificationMode(roomId: String, mode: RoomNotificationModeProxy) async throws {
-        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setNotificationMode")
-        defer { backgroundTask?.stop() }
-        
         try await notificationSettings.setRoomNotificationMode(roomId: roomId, mode: mode.roomNotificationMode)
         await updatedSettings()
     }
@@ -70,9 +65,6 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
 
     func setDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy) async throws {
-        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setDefaultRoomNotificationMode")
-        defer { backgroundTask?.stop() }
-
         do {
             try await notificationSettings.setDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne, mode: mode.roomNotificationMode)
         } catch NotificationSettingsError.RuleNotFound(let ruleId) {
@@ -86,17 +78,11 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func restoreDefaultNotificationMode(roomId: String) async throws {
-        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "restoreDefaultNotificationMode")
-        defer { backgroundTask?.stop() }
-
         try await notificationSettings.restoreDefaultRoomNotificationMode(roomId: roomId)
         await updatedSettings()
     }
        
     func unmuteRoom(roomId: String, isEncrypted: Bool, isOneToOne: Bool) async throws {
-        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "unmuteRoom")
-        defer { backgroundTask?.stop() }
-
         try await notificationSettings.unmuteRoom(roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne)
         await updatedSettings()
     }
@@ -106,9 +92,6 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func setRoomMentionEnabled(enabled: Bool) async throws {
-        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setRoomMentionEnabled")
-        defer { backgroundTask?.stop() }
-
         try await notificationSettings.setRoomMentionEnabled(enabled: enabled)
         await updatedSettings()
     }
@@ -118,9 +101,6 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func setCallEnabled(enabled: Bool) async throws {
-        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setCallEnabled")
-        defer { backgroundTask?.stop() }
-
         try await notificationSettings.setCallEnabled(enabled: enabled)
         await updatedSettings()
     }
@@ -130,9 +110,6 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func setInviteForMeEnabled(enabled: Bool) async throws {
-        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setInviteForMeEnabled")
-        defer { backgroundTask?.stop() }
-
         try await notificationSettings.setInviteForMeEnabled(enabled: enabled)
         await updatedSettings()
     }

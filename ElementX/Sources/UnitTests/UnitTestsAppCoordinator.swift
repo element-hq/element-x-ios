@@ -17,7 +17,7 @@
 import SwiftUI
 
 class UnitTestsAppCoordinator: AppCoordinatorProtocol {
-    let windowManager: WindowManagerProtocol
+    let windowManager: SecureWindowManagerProtocol
     
     init(appDelegate: AppDelegate) {
         windowManager = WindowManager(appDelegate: appDelegate)

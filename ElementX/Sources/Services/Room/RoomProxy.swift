@@ -26,12 +26,8 @@ class RoomProxy: RoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
-    private let backgroundTaskName = "SendRoomEvent"
     
     private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
-    
-    private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
@@ -60,13 +56,12 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     init?(roomListItem: RoomListItemProtocol,
-          room: RoomProtocol,
-          backgroundTaskService: BackgroundTaskServiceProtocol) async {
+          room: RoomProtocol) async {
         self.roomListItem = roomListItem
         self.room = room
-        self.backgroundTaskService = backgroundTaskService
+        
         do {
-            timeline = try await TimelineProxy(timeline: room.timeline(), backgroundTaskService: backgroundTaskService)
+            timeline = try await TimelineProxy(timeline: room.timeline())
         } catch {
             MXLog.error("Failed creating timeline with error: \(error)")
             return nil
@@ -165,12 +160,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
                 try self.room.redact(eventId: eventID, reason: nil)
                 return .success(())
@@ -180,14 +170,9 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
-
+    
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
                 try self.room.reportContent(eventId: eventID, score: nil, reason: reason)
                 return .success(())
@@ -226,11 +211,6 @@ class RoomProxy: RoomProxyProtocol {
             return .success(member)
         }
         
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
         do {
             let member = try await room.member(userId: userID)
             return .success(RoomMemberProxy(member: member))
@@ -239,14 +219,9 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
+    
     func leaveRoom() async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: .global()) {
+        await Task.dispatch(on: .global()) {
             do {
                 try self.room.leave()
                 return .success(())

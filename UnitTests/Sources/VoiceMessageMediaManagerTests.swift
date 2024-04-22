@@ -32,8 +32,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         voiceMessageCache = VoiceMessageCacheMock()
         mediaProvider = MockMediaProvider()
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
-                                                            voiceMessageCache: voiceMessageCache,
-                                                            backgroundTaskService: MockBackgroundTaskService())
+                                                            voiceMessageCache: voiceMessageCache)
     }
     
     func testLoadVoiceMessageFromSourceUnsupportedMedia() async throws {
@@ -65,8 +64,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
                                                             voiceMessageCache: voiceMessageCache,
-                                                            audioConverter: AudioConverterMock(),
-                                                            backgroundTaskService: MockBackgroundTaskService())
+                                                            audioConverter: AudioConverterMock())
         
         do {
             _ = try await voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
@@ -119,8 +117,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
                                                             voiceMessageCache: voiceMessageCache,
-                                                            audioConverter: audioConverter,
-                                                            backgroundTaskService: MockBackgroundTaskService())
+                                                            audioConverter: audioConverter)
         let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
         
         // The file must have been converted
@@ -155,8 +152,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
 
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
                                                             voiceMessageCache: voiceMessageCache,
-                                                            audioConverter: audioConverter,
-                                                            backgroundTaskService: MockBackgroundTaskService())
+                                                            audioConverter: audioConverter)
         
         let mediaSource = MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
         for _ in 0..<10 {

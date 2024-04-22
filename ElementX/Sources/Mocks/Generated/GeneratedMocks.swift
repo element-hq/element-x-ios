@@ -748,28 +748,28 @@ class AppLockServiceMock: AppLockServiceProtocol {
     }
 }
 class AppMediatorMock: AppMediatorProtocol {
+    var windowManager: WindowManagerProtocol {
+        get { return underlyingWindowManager }
+        set(value) { underlyingWindowManager = value }
+    }
+    var underlyingWindowManager: WindowManagerProtocol!
     var appState: UIApplication.State {
         get { return underlyingAppState }
         set(value) { underlyingAppState = value }
     }
     var underlyingAppState: UIApplication.State!
-    var backgroundTimeRemaining: TimeInterval {
-        get { return underlyingBackgroundTimeRemaining }
-        set(value) { underlyingBackgroundTimeRemaining = value }
-    }
-    var underlyingBackgroundTimeRemaining: TimeInterval!
 
     //MARK: - beginBackgroundTask
 
-    var beginBackgroundTaskWithNameExpirationHandlerUnderlyingCallsCount = 0
-    var beginBackgroundTaskWithNameExpirationHandlerCallsCount: Int {
+    var beginBackgroundTaskExpirationHandlerUnderlyingCallsCount = 0
+    var beginBackgroundTaskExpirationHandlerCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return beginBackgroundTaskWithNameExpirationHandlerUnderlyingCallsCount
+                return beginBackgroundTaskExpirationHandlerUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = beginBackgroundTaskWithNameExpirationHandlerUnderlyingCallsCount
+                    returnValue = beginBackgroundTaskExpirationHandlerUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -777,27 +777,27 @@ class AppMediatorMock: AppMediatorProtocol {
         }
         set {
             if Thread.isMainThread {
-                beginBackgroundTaskWithNameExpirationHandlerUnderlyingCallsCount = newValue
+                beginBackgroundTaskExpirationHandlerUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    beginBackgroundTaskWithNameExpirationHandlerUnderlyingCallsCount = newValue
+                    beginBackgroundTaskExpirationHandlerUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var beginBackgroundTaskWithNameExpirationHandlerCalled: Bool {
-        return beginBackgroundTaskWithNameExpirationHandlerCallsCount > 0
+    var beginBackgroundTaskExpirationHandlerCalled: Bool {
+        return beginBackgroundTaskExpirationHandlerCallsCount > 0
     }
 
-    var beginBackgroundTaskWithNameExpirationHandlerUnderlyingReturnValue: UIBackgroundTaskIdentifier!
-    var beginBackgroundTaskWithNameExpirationHandlerReturnValue: UIBackgroundTaskIdentifier! {
+    var beginBackgroundTaskExpirationHandlerUnderlyingReturnValue: UIBackgroundTaskIdentifier!
+    var beginBackgroundTaskExpirationHandlerReturnValue: UIBackgroundTaskIdentifier! {
         get {
             if Thread.isMainThread {
-                return beginBackgroundTaskWithNameExpirationHandlerUnderlyingReturnValue
+                return beginBackgroundTaskExpirationHandlerUnderlyingReturnValue
             } else {
                 var returnValue: UIBackgroundTaskIdentifier? = nil
                 DispatchQueue.main.sync {
-                    returnValue = beginBackgroundTaskWithNameExpirationHandlerUnderlyingReturnValue
+                    returnValue = beginBackgroundTaskExpirationHandlerUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -805,22 +805,22 @@ class AppMediatorMock: AppMediatorProtocol {
         }
         set {
             if Thread.isMainThread {
-                beginBackgroundTaskWithNameExpirationHandlerUnderlyingReturnValue = newValue
+                beginBackgroundTaskExpirationHandlerUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    beginBackgroundTaskWithNameExpirationHandlerUnderlyingReturnValue = newValue
+                    beginBackgroundTaskExpirationHandlerUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var beginBackgroundTaskWithNameExpirationHandlerClosure: ((String?, (() -> Void)?) -> UIBackgroundTaskIdentifier)?
+    var beginBackgroundTaskExpirationHandlerClosure: (((() -> Void)?) -> UIBackgroundTaskIdentifier)?
 
-    func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
-        beginBackgroundTaskWithNameExpirationHandlerCallsCount += 1
-        if let beginBackgroundTaskWithNameExpirationHandlerClosure = beginBackgroundTaskWithNameExpirationHandlerClosure {
-            return beginBackgroundTaskWithNameExpirationHandlerClosure(taskName, handler)
+    func beginBackgroundTask(expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
+        beginBackgroundTaskExpirationHandlerCallsCount += 1
+        if let beginBackgroundTaskExpirationHandlerClosure = beginBackgroundTaskExpirationHandlerClosure {
+            return beginBackgroundTaskExpirationHandlerClosure(handler)
         } else {
-            return beginBackgroundTaskWithNameExpirationHandlerReturnValue
+            return beginBackgroundTaskExpirationHandlerReturnValue
         }
     }
     //MARK: - endBackgroundTask
@@ -12976,122 +12976,12 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     }
 }
 class WindowManagerMock: WindowManagerProtocol {
-    weak var delegate: WindowManagerDelegate?
     var mainWindow: UIWindow!
     var overlayWindow: UIWindow!
     var globalSearchWindow: UIWindow!
     var alternateWindow: UIWindow!
     var windows: [UIWindow] = []
 
-    //MARK: - configure
-
-    var configureWithUnderlyingCallsCount = 0
-    var configureWithCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return configureWithUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = configureWithUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                configureWithUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    configureWithUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var configureWithCalled: Bool {
-        return configureWithCallsCount > 0
-    }
-    var configureWithReceivedWindowScene: UIWindowScene?
-    var configureWithReceivedInvocations: [UIWindowScene] = []
-    var configureWithClosure: ((UIWindowScene) -> Void)?
-
-    func configure(with windowScene: UIWindowScene) {
-        configureWithCallsCount += 1
-        configureWithReceivedWindowScene = windowScene
-        configureWithReceivedInvocations.append(windowScene)
-        configureWithClosure?(windowScene)
-    }
-    //MARK: - switchToMain
-
-    var switchToMainUnderlyingCallsCount = 0
-    var switchToMainCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return switchToMainUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = switchToMainUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                switchToMainUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    switchToMainUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var switchToMainCalled: Bool {
-        return switchToMainCallsCount > 0
-    }
-    var switchToMainClosure: (() -> Void)?
-
-    func switchToMain() {
-        switchToMainCallsCount += 1
-        switchToMainClosure?()
-    }
-    //MARK: - switchToAlternate
-
-    var switchToAlternateUnderlyingCallsCount = 0
-    var switchToAlternateCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return switchToAlternateUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = switchToAlternateUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                switchToAlternateUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    switchToAlternateUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var switchToAlternateCalled: Bool {
-        return switchToAlternateCallsCount > 0
-    }
-    var switchToAlternateClosure: (() -> Void)?
-
-    func switchToAlternate() {
-        switchToAlternateCallsCount += 1
-        switchToAlternateClosure?()
-    }
     //MARK: - showGlobalSearch
 
     var showGlobalSearchUnderlyingCallsCount = 0

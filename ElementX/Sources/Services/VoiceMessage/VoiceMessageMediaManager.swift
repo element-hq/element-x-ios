@@ -30,7 +30,6 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
     private let voiceMessageCache: VoiceMessageCacheProtocol
     private let audioConverter: AudioConverterProtocol
     
-    private let backgroundTaskService: BackgroundTaskServiceProtocol?
     private let processingQueue: DispatchQueue
     private var conversionRequests = [MediaSourceProxy: VoiceMessageConversionRequest]()
     
@@ -39,13 +38,11 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
     init(mediaProvider: MediaProviderProtocol,
          voiceMessageCache: VoiceMessageCacheProtocol = VoiceMessageCache(),
          audioConverter: AudioConverterProtocol = AudioConverter(),
-         processingQueue: DispatchQueue = .global(),
-         backgroundTaskService: BackgroundTaskServiceProtocol?) {
+         processingQueue: DispatchQueue = .global()) {
         self.mediaProvider = mediaProvider
         self.voiceMessageCache = voiceMessageCache
         self.audioConverter = audioConverter
         self.processingQueue = processingQueue
-        self.backgroundTaskService = backgroundTaskService
     }
 
     deinit {
@@ -53,9 +50,6 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
     }
     
     func loadVoiceMessageFromSource(_ source: MediaSourceProxy, body: String?) async throws -> URL {
-        let loadFileBgTask = await backgroundTaskService?.startBackgroundTask(withName: "LoadFile: \(source.url.hashValue)")
-        defer { loadFileBgTask?.stop() }
-
         guard let mimeType = source.mimeType, mimeType.starts(with: supportedVoiceMessageMimeType) else {
             throw VoiceMessageMediaManagerError.unsupportedMimeTye
         }

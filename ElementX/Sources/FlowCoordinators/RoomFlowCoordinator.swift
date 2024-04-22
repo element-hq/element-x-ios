@@ -50,7 +50,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let orientationManager: OrientationManagerProtocol
     
     private var roomProxy: RoomProxyProtocol!
     
@@ -81,8 +80,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         orientationManager: OrientationManagerProtocol) async {
+         userIndicatorController: UserIndicatorControllerProtocol) async {
         self.roomID = roomID
         self.userSession = userSession
         self.isChildFlow = isChildFlow
@@ -93,7 +91,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
-        self.orientationManager = orientationManager
         
         setupStateMachine()
         
@@ -695,7 +692,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                    mediaProvider: userSession.mediaProvider,
                                                                                    navigationStackCoordinator: stackCoordinator,
                                                                                    userIndicatorController: userIndicatorController,
-                                                                                   orientationManager: orientationManager)
+                                                                                   orientationManager: appMediator.windowManager)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
         roomDetailsEditCoordinator.actions.sink { [weak self] action in
@@ -752,7 +749,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: userIndicatorController,
                                                                   source: source,
-                                                                  orientationManager: orientationManager) { [weak self] action in
+                                                                  orientationManager: appMediator.windowManager) { [weak self] action in
             guard let self else {
                 return
             }
@@ -1239,8 +1236,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                     appMediator: appMediator,
                                                     appSettings: appSettings,
                                                     analytics: analytics,
-                                                    userIndicatorController: userIndicatorController,
-                                                    orientationManager: orientationManager)
+                                                    userIndicatorController: userIndicatorController)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             
