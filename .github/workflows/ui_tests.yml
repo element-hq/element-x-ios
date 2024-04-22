@@ -10,6 +10,8 @@ on:
   schedule:
     - cron:  '0 0,12 * * 1-5'
 
+  pull_request:
+
 jobs:
   tests:
     name: Tests
