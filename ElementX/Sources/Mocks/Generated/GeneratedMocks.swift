@@ -3361,6 +3361,74 @@ class ClientProxyMock: ClientProxyProtocol {
             return roomDirectorySearchProxyReturnValue
         }
     }
+    //MARK: - resolveRoomAlias
+
+    var resolveRoomAliasUnderlyingCallsCount = 0
+    var resolveRoomAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resolveRoomAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resolveRoomAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resolveRoomAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resolveRoomAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var resolveRoomAliasCalled: Bool {
+        return resolveRoomAliasCallsCount > 0
+    }
+    var resolveRoomAliasReceivedAlias: String?
+    var resolveRoomAliasReceivedInvocations: [String] = []
+
+    var resolveRoomAliasUnderlyingReturnValue: String?
+    var resolveRoomAliasReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return resolveRoomAliasUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resolveRoomAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resolveRoomAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resolveRoomAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var resolveRoomAliasClosure: ((String) async -> String?)?
+
+    func resolveRoomAlias(_ alias: String) async -> String? {
+        resolveRoomAliasCallsCount += 1
+        resolveRoomAliasReceivedAlias = alias
+        resolveRoomAliasReceivedInvocations.append(alias)
+        if let resolveRoomAliasClosure = resolveRoomAliasClosure {
+            return await resolveRoomAliasClosure(alias)
+        } else {
+            return resolveRoomAliasReturnValue
+        }
+    }
     //MARK: - ignoreUser
 
     var ignoreUserUnderlyingCallsCount = 0

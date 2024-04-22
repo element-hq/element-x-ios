@@ -138,7 +138,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: EventUserInfo(animated: animated))
             }
-        case .roomList, .userProfile, .genericCallLink, .oidcCallback, .settings, .chatBackupSettings:
+        case .roomAlias, .childRoomAlias, .roomList, .userProfile, .genericCallLink, .oidcCallback, .settings, .chatBackupSettings:
             break
         }
     }

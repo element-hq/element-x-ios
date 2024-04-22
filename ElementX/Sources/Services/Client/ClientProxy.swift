@@ -597,6 +597,15 @@ class ClientProxy: ClientProxyProtocol {
         RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch())
     }
     
+    func resolveRoomAlias(_ alias: String) async -> String? {
+        do {
+            return try await client.resolveRoomAlias(roomAlias: alias)
+        } catch {
+            MXLog.error("Failed resolving room alias: \(alias) with error: \(error)")
+            return nil
+        }
+    }
+    
     // MARK: Ignored users
     
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {

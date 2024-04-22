@@ -21,6 +21,7 @@ import Combine
 
 @MainActor
 class UserSessionFlowCoordinatorTests: XCTestCase {
+    var clientProxy: ClientProxyMock!
     var userSessionFlowCoordinator: UserSessionFlowCoordinator!
     var navigationRootCoordinator: NavigationRootCoordinator!
     var notificationManager: NotificationManagerMock!
@@ -33,7 +34,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     
     override func setUp() async throws {
         cancellables.removeAll()
-        let clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+        clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         let mediaProvider = MockMediaProvider()
         let voiceMessageMediaManager = VoiceMessageMediaManagerMock()
         let userSession = MockUserSession(clientProxy: clientProxy,
@@ -72,6 +73,34 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         try await process(route: .room(roomID: "1"), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
+        
+        try await process(route: .room(roomID: "2"), expectedState: .roomList(selectedRoomID: "2"))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertNotNil(detailCoordinator)
+        
+        try await process(route: .roomList, expectedState: .roomList(selectedRoomID: nil))
+        XCTAssertNil(detailNavigationStack?.rootCoordinator)
+        XCTAssertNil(detailCoordinator)
+        
+        XCTAssertEqual(notificationManager.removeDeliveredMessageNotificationsForReceivedInvocations, ["1", "1", "2"])
+    }
+    
+    func testRoomAliasPresentation() async throws {
+        clientProxy.resolveRoomAliasReturnValue = "1"
+        
+        try await process(route: .roomAlias("#alias:matrix.org"), expectedState: .roomList(selectedRoomID: "1"))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertNotNil(detailCoordinator)
+        
+        try await process(route: .roomList, expectedState: .roomList(selectedRoomID: nil))
+        XCTAssertNil(detailNavigationStack?.rootCoordinator)
+        XCTAssertNil(detailCoordinator)
+        
+        try await process(route: .room(roomID: "1"), expectedState: .roomList(selectedRoomID: "1"))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertNotNil(detailCoordinator)
+        
+        clientProxy.resolveRoomAliasReturnValue = "2"
         
         try await process(route: .room(roomID: "2"), expectedState: .roomList(selectedRoomID: "2"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)

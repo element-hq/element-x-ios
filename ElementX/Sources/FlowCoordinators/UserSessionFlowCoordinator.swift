@@ -175,37 +175,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - FlowCoordinatorProtocol
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
-        clearPresentedSheets(animated: animated) { [weak self] in
-            guard let self else { return }
-            
-            switch appRoute {
-            case .room(let roomID):
-                stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false), userInfo: .init(animated: animated))
-            case .childRoom(let roomID):
-                if let roomFlowCoordinator {
-                    roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-                } else {
-                    stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false), userInfo: .init(animated: animated))
-                }
-            case .roomDetails(let roomID):
-                if stateMachine.state.selectedRoomID == roomID {
-                    roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-                } else {
-                    stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: true), userInfo: .init(animated: animated))
-                }
-            case .roomList:
-                roomFlowCoordinator?.clearRoute(animated: animated)
-            case .roomMemberDetails:
-                roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-            case .userProfile(let userID):
-                stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
-            case .genericCallLink(let url):
-                navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
-            case .oidcCallback:
-                break
-            case .settings, .chatBackupSettings:
-                settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-            }
+        Task {
+            await asyncHandleAppRoute(appRoute, animated: animated)
         }
     }
     
@@ -215,6 +186,60 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
 
     // MARK: - Private
     
+    func asyncHandleAppRoute(_ appRoute: AppRoute, animated: Bool) async {
+        showLoadingIndicator(delay: .seconds(0.25))
+        defer {
+            hideLoadingIndicator()
+        }
+        
+        await clearPresentedSheets(animated: animated)
+        
+        switch appRoute {
+        case .room(let roomID):
+            stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false), userInfo: .init(animated: animated))
+        case .roomAlias(let alias):
+            guard let roomID = await userSession.clientProxy.resolveRoomAlias(alias) else {
+                return
+            }
+            
+            stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false), userInfo: .init(animated: animated))
+        case .childRoom(let roomID):
+            if let roomFlowCoordinator {
+                roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false), userInfo: .init(animated: animated))
+            }
+        case .childRoomAlias(let alias):
+            guard let roomID = await userSession.clientProxy.resolveRoomAlias(alias) else {
+                return
+            }
+            
+            if let roomFlowCoordinator {
+                roomFlowCoordinator.handleAppRoute(.childRoom(roomID: roomID), animated: animated)
+            } else {
+                stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false), userInfo: .init(animated: animated))
+            }
+        case .roomDetails(let roomID):
+            if stateMachine.state.selectedRoomID == roomID {
+                roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: true), userInfo: .init(animated: animated))
+            }
+        case .roomList:
+            roomFlowCoordinator?.clearRoute(animated: animated)
+        case .roomMemberDetails:
+            roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+        case .userProfile(let userID):
+            stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
+        case .genericCallLink(let url):
+            navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
+        case .oidcCallback:
+            break
+        case .settings, .chatBackupSettings:
+            settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+        }
+    }
+    
     func attemptStartingOnboarding() {
         if onboardingFlowCoordinator.shouldStart {
             clearRoute(animated: false)
@@ -222,18 +247,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func clearPresentedSheets(animated: Bool, completion: @escaping () -> Void) {
+    private func clearPresentedSheets(animated: Bool) async {
         if navigationSplitCoordinator.sheetCoordinator == nil {
-            completion()
             return
         }
         
         navigationSplitCoordinator.setSheetCoordinator(nil, animated: animated)
         
         // Prevents system crashes when presenting a sheet if another one was already shown
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-            completion()
-        }
+        try? await Task.sleep(for: .seconds(0.25))
     }
     
     private func setupStateMachine() {
@@ -674,5 +696,21 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedUserProfileScreen)
         }
+    }
+    
+    // MARK: Toasts and loading indicators
+    
+    private static let loadingIndicatorIdentifier = "\(UserSessionFlowCoordinator.self)-Loading"
+    
+    private func showLoadingIndicator(delay: Duration? = nil) {
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                                    type: .modal,
+                                                                                    title: L10n.commonLoading,
+                                                                                    persistent: true),
+                                                                      delay: delay)
+    }
+    
+    private func hideLoadingIndicator() {
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }
