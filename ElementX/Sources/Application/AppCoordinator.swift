@@ -29,7 +29,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appDelegate: AppDelegate
 
     /// Common background task to continue long-running tasks in the background.
-    private var backgroundTask: BackgroundTaskProtocol?
+    private var backgroundTask: UIBackgroundTaskIdentifier?
 
     private var isSuspended = false
     
@@ -50,9 +50,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
-    
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
-
     private var appDelegateObserver: AnyCancellable?
     private var userSessionObserver: AnyCancellable?
     private var clientProxyObserver: AnyCancellable?
@@ -102,8 +99,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         stateMachine = AppCoordinatorStateMachine()
                 
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
-
-        backgroundTaskService = UIKitBackgroundTaskService(appMediator: appMediator)
 
         let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
@@ -767,14 +762,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         guard backgroundTask == nil else {
             return
         }
-
-        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
+        
+        backgroundTask = appMediator.beginBackgroundTask { [weak self] in
             guard let self else { return }
             
             stopSync()
             
-            backgroundTask?.stop()
-            backgroundTask = nil
+            if let backgroundTask {
+                appMediator.endBackgroundTask(backgroundTask)
+                self.backgroundTask = nil
+            }
         }
 
         isSuspended = true
@@ -788,8 +785,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func applicationDidBecomeActive() {
         MXLog.info("Application did become active")
         
-        backgroundTask?.stop()
-        backgroundTask = nil
+        if let backgroundTask {
+            appMediator.endBackgroundTask(backgroundTask)
+            self.backgroundTask = nil
+        }
 
         if isSuspended {
             startSync()

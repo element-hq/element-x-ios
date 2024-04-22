@@ -24,9 +24,7 @@ protocol AppMediatorProtocol {
     
     var appState: UIApplication.State { get }
     
-    var backgroundTimeRemaining: TimeInterval { get }
-    
-    func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier
+    func beginBackgroundTask(expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier
 
     func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier)
     

@@ -28,7 +28,6 @@ class AppMediator: AppMediatorProtocol {
         UIApplication.shared
     }
 
-    @MainActor
     var appState: UIApplication.State {
         switch application.applicationState {
         case .active:
@@ -42,12 +41,8 @@ class AppMediator: AppMediatorProtocol {
         }
     }
     
-    var backgroundTimeRemaining: TimeInterval {
-        application.backgroundTimeRemaining
-    }
-    
-    func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
-        application.beginBackgroundTask(withName: taskName, expirationHandler: handler)
+    func beginBackgroundTask(expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
+        application.beginBackgroundTask(expirationHandler: handler)
     }
 
     func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier) {

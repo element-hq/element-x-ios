@@ -23,6 +23,8 @@ protocol SecureWindowManagerDelegate: AnyObject {
 
 @MainActor
 protocol SecureWindowManagerProtocol: WindowManagerProtocol {
+    var delegate: SecureWindowManagerDelegate? { get set }
+    
     /// Configures the window manager to operate on the supplied scene.
     func configure(with windowScene: UIWindowScene)
     
@@ -37,8 +39,6 @@ protocol SecureWindowManagerProtocol: WindowManagerProtocol {
 /// an alternate window to switch contexts whilst also preserving the main view hierarchy.
 /// Heavily inspired by https://www.fivestars.blog/articles/swiftui-windows/
 protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
-    var delegate: SecureWindowManagerDelegate? { get set }
-    
     /// The app's main window (we only support a single scene).
     var mainWindow: UIWindow! { get }
     /// Presented on top of the main window, to display e.g. user indicators.

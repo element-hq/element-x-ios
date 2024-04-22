@@ -758,23 +758,18 @@ class AppMediatorMock: AppMediatorProtocol {
         set(value) { underlyingAppState = value }
     }
     var underlyingAppState: UIApplication.State!
-    var backgroundTimeRemaining: TimeInterval {
-        get { return underlyingBackgroundTimeRemaining }
-        set(value) { underlyingBackgroundTimeRemaining = value }
-    }
-    var underlyingBackgroundTimeRemaining: TimeInterval!
 
     //MARK: - beginBackgroundTask
 
-    var beginBackgroundTaskWithNameExpirationHandlerUnderlyingCallsCount = 0
-    var beginBackgroundTaskWithNameExpirationHandlerCallsCount: Int {
+    var beginBackgroundTaskExpirationHandlerUnderlyingCallsCount = 0
+    var beginBackgroundTaskExpirationHandlerCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return beginBackgroundTaskWithNameExpirationHandlerUnderlyingCallsCount
+                return beginBackgroundTaskExpirationHandlerUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = beginBackgroundTaskWithNameExpirationHandlerUnderlyingCallsCount
+                    returnValue = beginBackgroundTaskExpirationHandlerUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -782,27 +777,27 @@ class AppMediatorMock: AppMediatorProtocol {
         }
         set {
             if Thread.isMainThread {
-                beginBackgroundTaskWithNameExpirationHandlerUnderlyingCallsCount = newValue
+                beginBackgroundTaskExpirationHandlerUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    beginBackgroundTaskWithNameExpirationHandlerUnderlyingCallsCount = newValue
+                    beginBackgroundTaskExpirationHandlerUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var beginBackgroundTaskWithNameExpirationHandlerCalled: Bool {
-        return beginBackgroundTaskWithNameExpirationHandlerCallsCount > 0
+    var beginBackgroundTaskExpirationHandlerCalled: Bool {
+        return beginBackgroundTaskExpirationHandlerCallsCount > 0
     }
 
-    var beginBackgroundTaskWithNameExpirationHandlerUnderlyingReturnValue: UIBackgroundTaskIdentifier!
-    var beginBackgroundTaskWithNameExpirationHandlerReturnValue: UIBackgroundTaskIdentifier! {
+    var beginBackgroundTaskExpirationHandlerUnderlyingReturnValue: UIBackgroundTaskIdentifier!
+    var beginBackgroundTaskExpirationHandlerReturnValue: UIBackgroundTaskIdentifier! {
         get {
             if Thread.isMainThread {
-                return beginBackgroundTaskWithNameExpirationHandlerUnderlyingReturnValue
+                return beginBackgroundTaskExpirationHandlerUnderlyingReturnValue
             } else {
                 var returnValue: UIBackgroundTaskIdentifier? = nil
                 DispatchQueue.main.sync {
-                    returnValue = beginBackgroundTaskWithNameExpirationHandlerUnderlyingReturnValue
+                    returnValue = beginBackgroundTaskExpirationHandlerUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -810,22 +805,22 @@ class AppMediatorMock: AppMediatorProtocol {
         }
         set {
             if Thread.isMainThread {
-                beginBackgroundTaskWithNameExpirationHandlerUnderlyingReturnValue = newValue
+                beginBackgroundTaskExpirationHandlerUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    beginBackgroundTaskWithNameExpirationHandlerUnderlyingReturnValue = newValue
+                    beginBackgroundTaskExpirationHandlerUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var beginBackgroundTaskWithNameExpirationHandlerClosure: ((String?, (() -> Void)?) -> UIBackgroundTaskIdentifier)?
+    var beginBackgroundTaskExpirationHandlerClosure: (((() -> Void)?) -> UIBackgroundTaskIdentifier)?
 
-    func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
-        beginBackgroundTaskWithNameExpirationHandlerCallsCount += 1
-        if let beginBackgroundTaskWithNameExpirationHandlerClosure = beginBackgroundTaskWithNameExpirationHandlerClosure {
-            return beginBackgroundTaskWithNameExpirationHandlerClosure(taskName, handler)
+    func beginBackgroundTask(expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
+        beginBackgroundTaskExpirationHandlerCallsCount += 1
+        if let beginBackgroundTaskExpirationHandlerClosure = beginBackgroundTaskExpirationHandlerClosure {
+            return beginBackgroundTaskExpirationHandlerClosure(handler)
         } else {
-            return beginBackgroundTaskWithNameExpirationHandlerReturnValue
+            return beginBackgroundTaskExpirationHandlerReturnValue
         }
     }
     //MARK: - endBackgroundTask
@@ -12981,7 +12976,6 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     }
 }
 class WindowManagerMock: WindowManagerProtocol {
-    weak var delegate: SecureWindowManagerDelegate?
     var mainWindow: UIWindow!
     var overlayWindow: UIWindow!
     var globalSearchWindow: UIWindow!
