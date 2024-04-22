@@ -338,7 +338,7 @@
 "screen_app_lock_setup_pin_context" = "Lock %1$@ to add extra security to your chats.\n\nChoose something memorable. If you forget this PIN, you will be logged out of the app.";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Please enter the same PIN twice";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PINs don't match";
-"screen_app_lock_signout_alert_message" = "You’ll need to re-login and create a new PIN to proceed";
+"screen_app_lock_signout_alert_message" = "Du måste logga in igen och skapa en ny PIN-kod för att fortsätta";
 "screen_app_lock_signout_alert_title" = "Du blir utloggad";
 "screen_blocked_users_empty" = "You have no blocked users";
 "screen_blocked_users_unblocking" = "Unblocking…";
@@ -501,7 +501,7 @@
 "screen_qr_code_login_invalid_scan_state_description" = "Use the QR code shown on the other device.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Wrong QR code";
 "screen_qr_code_login_no_camera_permission_button" = "Go to camera settings";
-"screen_qr_code_login_no_camera_permission_state_description" = "You need to give permission for Element to use your device’s camera in order to continue.";
+"screen_qr_code_login_no_camera_permission_state_description" = "You need to give permission for %1$@ to use your device’s camera in order to continue.";
 "screen_qr_code_login_no_camera_permission_state_title" = "Allow camera access to scan the QR code";
 "screen_qr_code_login_scanning_state_title" = "Scan the QR code";
 "screen_qr_code_login_start_over_button" = "Start over";
@@ -539,6 +539,7 @@
 "screen_report_content_block_user_hint" = "Markera om du vill dölja alla nuvarande och framtida meddelanden från denna användare";
 "screen_report_content_explanation" = "Det här meddelandet kommer att rapporteras till din hemservers administratör. Denne kommer inte att kunna läsa några krypterade meddelanden.";
 "screen_report_content_hint" = "Anledning till att rapportera detta innehåll";
+"screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Spela in video";
 "screen_room_attachment_source_files" = "Bilaga";

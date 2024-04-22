@@ -501,7 +501,7 @@
 "screen_qr_code_login_invalid_scan_state_description" = "Use the QR code shown on the other device.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Wrong QR code";
 "screen_qr_code_login_no_camera_permission_button" = "Go to camera settings";
-"screen_qr_code_login_no_camera_permission_state_description" = "You need to give permission for Element to use your device’s camera in order to continue.";
+"screen_qr_code_login_no_camera_permission_state_description" = "You need to give permission for %1$@ to use your device’s camera in order to continue.";
 "screen_qr_code_login_no_camera_permission_state_title" = "Allow camera access to scan the QR code";
 "screen_qr_code_login_scanning_state_title" = "Scan the QR code";
 "screen_qr_code_login_start_over_button" = "Start over";
@@ -539,6 +539,7 @@
 "screen_report_content_block_user_hint" = "Перевірте, чи хочете Ви приховати всі поточні та майбутні повідомлення від цього користувача";
 "screen_report_content_explanation" = "Це повідомлення буде надіслано адміністратору вашого домашнього сервера. Він (вона) не зможе прочитати жодні зашифровані повідомлення.";
 "screen_report_content_hint" = "Причина скарги на цей вміст";
+"screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
 "screen_room_attachment_source_camera" = "Камера";
 "screen_room_attachment_source_camera_video" = "Записати відео";
 "screen_room_attachment_source_files" = "Вкладення";

@@ -489,8 +489,8 @@
 "screen_qr_code_login_connection_note_secure_state_list_item_2" = "Если вы столкнулись с той же проблемой, попробуйте сменить точку доступа Wi-Fi или используйте мобильные данные";
 "screen_qr_code_login_connection_note_secure_state_list_item_3" = "Если это не помогло, войдите вручную";
 "screen_qr_code_login_connection_note_secure_state_title" = "Соединение не защищено";
-"screen_qr_code_login_device_code_subtitle" = "You’ll be asked to enter the two digits shown below.";
-"screen_qr_code_login_device_code_title" = "Enter number on your device";
+"screen_qr_code_login_device_code_subtitle" = "Вам будет предложено ввести две цифры, показанные ниже.";
+"screen_qr_code_login_device_code_title" = "Введите номер на своем устройстве";
 "screen_qr_code_login_initial_state_item_1" = "Откройте %1$@ на настольном устройстве";
 "screen_qr_code_login_initial_state_item_2" = "Нажмите на свое изображение";
 "screen_qr_code_login_initial_state_item_3" = "Выбрать %1$@";
@@ -501,14 +501,14 @@
 "screen_qr_code_login_invalid_scan_state_description" = "Используйте QR-код, показанный на другом устройстве.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Неверный QR-код";
 "screen_qr_code_login_no_camera_permission_button" = "Перейдите в настройки камеры";
-"screen_qr_code_login_no_camera_permission_state_description" = "Чтобы продолжить, вам необходимо разрешить Element использовать камеру вашего устройства.";
+"screen_qr_code_login_no_camera_permission_state_description" = "Чтобы продолжить, вам необходимо разрешить %1$@ использовать камеру вашего устройства.";
 "screen_qr_code_login_no_camera_permission_state_title" = "Разрешите доступ к камере для сканирования QR-кода";
 "screen_qr_code_login_scanning_state_title" = "Сканировать QR-код";
 "screen_qr_code_login_start_over_button" = "Начать заново";
 "screen_qr_code_login_unknown_error_description" = "Произошла непредвиденная ошибка. Пожалуйста, попробуйте еще раз.";
-"screen_qr_code_login_verify_code_loading" = "Waiting for your other device";
-"screen_qr_code_login_verify_code_subtitle" = "Your account provider may ask for the following code to verify the sign in.";
-"screen_qr_code_login_verify_code_title" = "Your verification code";
+"screen_qr_code_login_verify_code_loading" = "В ожидании другого устройства";
+"screen_qr_code_login_verify_code_subtitle" = "Поставщик учетной записи может запросить следующий код для подтверждения входа.";
+"screen_qr_code_login_verify_code_title" = "Ваш код подтверждения";
 "screen_recovery_key_change_description" = "Получите новый ключ восстановления, если вы потеряли существующий. После смены ключа восстановления старый ключ больше не будет работать.";
 "screen_recovery_key_change_generate_key" = "Создать новый <b>ключ восстановления</b>";
 "screen_recovery_key_change_generate_key_description" = "Убедитесь, что вы можете хранить ключ восстановления в безопасном месте";
@@ -539,6 +539,7 @@
 "screen_report_content_block_user_hint" = "Отметьте, хотите ли вы скрыть все текущие и будущие сообщения от этого пользователя";
 "screen_report_content_explanation" = "Это сообщение будет передано администратору вашего домашнего сервера. Они не смогут прочитать зашифрованные сообщения.";
 "screen_report_content_hint" = "Причина, по которой вы пожаловались на этот контент";
+"screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
 "screen_room_attachment_source_camera" = "Камера";
 "screen_room_attachment_source_camera_video" = "Записать видео";
 "screen_room_attachment_source_files" = "Вложение";

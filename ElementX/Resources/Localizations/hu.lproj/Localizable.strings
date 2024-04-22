@@ -428,7 +428,7 @@
 "screen_key_backup_disable_confirmation_description" = "Ha kijelentkezik az összes eszközéről, akkor elveszti a titkosított üzeneteit.";
 "screen_key_backup_disable_confirmation_title" = "Biztos, hogy kikapcsolja a biztonsági mentéseket?";
 "screen_key_backup_disable_description" = "A biztonsági mentés kikapcsolása eltávolítja a jelenlegi titkosítási kulcsának mentését, és kikapcsol más biztonsági funkciókat is. Ebben az esetben:";
-"screen_key_backup_disable_description_point_1" = "Nem lesznek meg a titkosított üzenetelőzményei az új eszközein";
+"screen_key_backup_disable_description_point_1" = "Nem lesznek meg a titkosított üzenetek előzményei az új eszközein";
 "screen_key_backup_disable_description_point_2" = "Elveszti a titkosított üzenetei hozzáférését, ha mindenhol kilép az %1$@ből";
 "screen_key_backup_disable_title" = "Biztos, hogy kikapcsolja a biztonsági mentéseket?";
 "screen_login_error_deactivated_account" = "Ez a fiók deaktiválva lett.";
@@ -489,8 +489,8 @@
 "screen_qr_code_login_connection_note_secure_state_list_item_2" = "Ha ugyanezzel a problémával találkozik, próbálkozzon másik Wi-Fi-hálózattal, vagy a Wi-Fi helyett használja a mobil-adatkapcsolatát";
 "screen_qr_code_login_connection_note_secure_state_list_item_3" = "Ha ez nem működik, jelentkezzen be kézileg";
 "screen_qr_code_login_connection_note_secure_state_title" = "A kapcsolat nem biztonságos";
-"screen_qr_code_login_device_code_subtitle" = "You’ll be asked to enter the two digits shown below.";
-"screen_qr_code_login_device_code_title" = "Enter number on your device";
+"screen_qr_code_login_device_code_subtitle" = "A rendszer kérni fogja, hogy adja meg az alábbi két számjegyet.";
+"screen_qr_code_login_device_code_title" = "Adja meg a számot az eszközén";
 "screen_qr_code_login_initial_state_item_1" = "Nyissa meg az %1$@et egy asztali eszközön";
 "screen_qr_code_login_initial_state_item_2" = "Kattintson a profilképére";
 "screen_qr_code_login_initial_state_item_3" = "Válassza ezt: %1$@";
@@ -501,14 +501,14 @@
 "screen_qr_code_login_invalid_scan_state_description" = "Használja a másik eszközön látható QR-kódot.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Hibás QR-kód";
 "screen_qr_code_login_no_camera_permission_button" = "Ugrás a kamerabeállításokhoz";
-"screen_qr_code_login_no_camera_permission_state_description" = "A folytatáshoz engedélyeznie kell, hogy az Element használhassa az eszköz kameráját.";
+"screen_qr_code_login_no_camera_permission_state_description" = "A folytatáshoz engedélyeznie kell, hogy az %1$@ használhassa az eszköz kameráját.";
 "screen_qr_code_login_no_camera_permission_state_title" = "Engedélyezze a kamera elérését a QR-kód beolvasásához";
 "screen_qr_code_login_scanning_state_title" = "Olvassa be a QR-kódot";
 "screen_qr_code_login_start_over_button" = "Újrakezdés";
 "screen_qr_code_login_unknown_error_description" = "Váratlan hiba történt. Próbálja meg újra.";
-"screen_qr_code_login_verify_code_loading" = "Waiting for your other device";
-"screen_qr_code_login_verify_code_subtitle" = "Your account provider may ask for the following code to verify the sign in.";
-"screen_qr_code_login_verify_code_title" = "Your verification code";
+"screen_qr_code_login_verify_code_loading" = "Várakozás a másik eszközre";
+"screen_qr_code_login_verify_code_subtitle" = "A fiókszolgáltatója kérheti a következő kódot a bejelentkezése ellenőrzéséhez.";
+"screen_qr_code_login_verify_code_title" = "Az Ön ellenőrzőkódja";
 "screen_recovery_key_change_description" = "Szerezzen új helyreállítási kulcsot, ha elvesztette a meglévőt. A helyreállítása kulcsa módosítása után a régi már nem fog működni.";
 "screen_recovery_key_change_generate_key" = "Új helyreállítási kulcs előállítása";
 "screen_recovery_key_change_generate_key_description" = "Gondoskodjon arról, hogy biztonságos helyen tárolja a helyreállítási kulcsát";
@@ -539,6 +539,7 @@
 "screen_report_content_block_user_hint" = "Jelölje be, ha el akarja rejteni az összes jelenlegi és jövőbeli üzenetet ettől a felhasználótól";
 "screen_report_content_explanation" = "Ez az üzenet jelentve lesz a Matrix-kiszolgáló adminisztrátorának. Nem fogja tudni elolvasni a titkosított üzeneteket.";
 "screen_report_content_hint" = "A tartalom jelentésének oka";
+"screen_room_alias_resolver_resolve_alias_failure" = "Nem sikerült a szoba álnevének feloldása.";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Videó rögzítése";
 "screen_room_attachment_source_files" = "Melléklet";
