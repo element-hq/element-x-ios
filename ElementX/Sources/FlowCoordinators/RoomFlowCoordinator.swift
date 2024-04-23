@@ -19,6 +19,7 @@ import SwiftState
 import SwiftUI
 import UserNotifications
 
+// swiftlint:disable file_length
 enum RoomFlowCoordinatorAction: Equatable {
     case presentRoom(roomID: String)
     case presentCallScreen(roomProxy: RoomProxyProtocol)
@@ -38,7 +39,7 @@ enum RoomFlowCoordinatorAction: Equatable {
     }
 }
 
-// swiftlint:disable file_length
+// swiftlint:disable:next type_body_length
 class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let roomID: String
     private let userSession: UserSessionProtocol
@@ -104,6 +105,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        guard stateMachine.state != .complete else {
+            fatalError("This flow coordinator is `finished` ☠️")
+        }
+        
         switch appRoute {
         case .room(let roomID):
             Task {
@@ -324,7 +329,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 dismissFlow(animated: animated)
             
             case (_, .presentRoom, .room):
-                Task { await self.presentRoom(animated: animated) }
+                Task { await self.presentRoom(fromState: context.fromState, animated: animated) }
             case (_, .dismissFlow, .complete):
                 dismissFlow(animated: animated)
             
@@ -463,10 +468,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     /// Updates the navigation stack so it displays the timeline for the given room
     /// - Parameters:
     ///   - animated: whether it should animate the transition
-    private func presentRoom(animated: Bool) async {
+    private func presentRoom(fromState: State, animated: Bool) async {
         // If any sheets are presented dismiss them, rely on their dismissal callbacks to transition the state machine
         // through the correct states before presenting the room
         navigationStackCoordinator.setSheetCoordinator(nil)
+        
+        // Handle selecting the same room again
+        if !isChildFlow {
+            // First unwind the navigation stack
+            navigationStackCoordinator.popToRoot(animated: animated)
+            
+            // And then decide if the room actually needs to be presented again
+            switch fromState {
+            case .initial, .roomDetails(isRoot: true), .joinRoomScreen:
+                break
+            default:
+                return // The room is already on the stack, no need to present it again
+            }
+        }
         
         Task {
             // Flag the room as read on entering, the timeline will take care of the read receipts
@@ -649,7 +668,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         if isRoot {
             navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
-                self?.stateMachine.tryEvent(.dismissFlow)
+                guard let self else { return }
+                if stateMachine.state != .room { // The root has been replaced by a room
+                    stateMachine.tryEvent(.dismissFlow)
+                }
             }
         } else {
             navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
