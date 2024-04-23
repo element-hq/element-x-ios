@@ -102,8 +102,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 }
                 
                 switch progress {
-                case .establishingSecureChannel(let code):
-                    self.state.state = .displayCode(.deviceCode(String(format: "%02d", code)))
+                case .establishingSecureChannel(_, let stringCode):
+                    self.state.state = .displayCode(.deviceCode(stringCode))
                 case .waitingForToken(let code):
                     self.state.state = .displayCode(.verificationCode(code))
                 default:
