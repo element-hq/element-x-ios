@@ -61,6 +61,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
         // Need to use TextKit 1 for mentions
         let textView = ElementTextView(usingTextLayoutManager: false)
         textView.isMultiline = $isMultiline
+        textView.delegate = context.coordinator
+        textView.elementDelegate = context.coordinator
         textView.textColor = .compound.textPrimary
         textView.isEditable = true
         textView.font = font
@@ -73,9 +75,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.keyboardType = .default
 
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        
-        textView.delegate = context.coordinator
-        textView.elementDelegate = context.coordinator
 
         return textView
     }
@@ -91,14 +90,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
     }
 
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
-        // Attempted fix for element-hq/element-x-ios/issues/2653 which we can't reproduce
-        // but it feels like the degate doesn't get called and the binding doesn't update upwards
-        // The textView is changed but none of the UI depending on the binding are.
-        if let textView = textView as? ElementTextView {
-            textView.delegate = context.coordinator
-            textView.elementDelegate = context.coordinator
-        }
-        
         if textView.text != text {
             textView.text = text
 
