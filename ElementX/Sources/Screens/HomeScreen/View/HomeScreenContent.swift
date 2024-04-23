@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct HomeScreenContent: View {
@@ -54,10 +55,7 @@ struct HomeScreenContent: View {
                 case .rooms:
                     LazyVStack(spacing: 0) {
                         Section {
-                            if context.viewState.shouldShowEmptyFilterState {
-                                RoomListFiltersEmptyStateView(state: context.filtersState)
-                                    .frame(height: geometry.size.height)
-                            } else {
+                            if !context.viewState.shouldShowEmptyFilterState {
                                 HomeScreenRoomList(context: context)
                             }
                         } header: {
@@ -88,12 +86,19 @@ struct HomeScreenContent: View {
             .onChange(of: context.viewState.visibleRooms) { _ in
                 updateVisibleRange()
             }
-            .background(
-                Button("", action: {
+            .background {
+                Button("") {
                     context.send(viewAction: .globalSearch)
-                })
+                }
                 .keyboardShortcut(KeyEquivalent("k"), modifiers: [.command])
-            )
+            }
+            .overlay {
+                if context.viewState.shouldShowEmptyFilterState {
+                    RoomListFiltersEmptyStateView(state: context.filtersState)
+                        .background(.compound.bgCanvasDefault)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
             .scrollDismissesKeyboard(.immediately)
             .scrollDisabled(context.viewState.roomListMode == .skeletons)
             .scrollBounceBehavior(context.viewState.roomListMode == .empty ? .basedOnSize : .automatic)
@@ -104,24 +109,29 @@ struct HomeScreenContent: View {
     
     @ViewBuilder
     private var topSection: some View {
-        VStack(spacing: 0) {
-            if !context.isSearchFieldFocused {
-                RoomListFiltersView(state: $context.filtersState)
-            }
-            
-            if context.viewState.securityBannerMode == .recoveryKeyConfirmation {
-                HomeScreenRecoveryKeyConfirmationBanner(context: context)
-            }
-            
-            if context.viewState.hasPendingInvitations, !context.isSearchFieldFocused, !ServiceLocator.shared.settings.roomListInvitesEnabled {
-                HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
-                    context.send(viewAction: .selectInvites)
+        // An empty VStack causes glitches within the room list
+        if context.viewState.shouldShowFilters ||
+            context.viewState.shouldShowRecoveryKeyConfirmationBanner ||
+            context.viewState.shouldShowInvitesButton {
+            VStack(spacing: 0) {
+                if context.viewState.shouldShowFilters {
+                    RoomListFiltersView(state: $context.filtersState)
                 }
-                .accessibilityIdentifier(A11yIdentifiers.homeScreen.invites)
-                .frame(maxWidth: .infinity, alignment: .trailing)
+                
+                if context.viewState.shouldShowRecoveryKeyConfirmationBanner {
+                    HomeScreenRecoveryKeyConfirmationBanner(context: context)
+                }
+                
+                if context.viewState.shouldShowInvitesButton {
+                    HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
+                        context.send(viewAction: .selectInvites)
+                    }
+                    .accessibilityIdentifier(A11yIdentifiers.homeScreen.invites)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                }
             }
+            .background(Color.compound.bgCanvasDefault)
         }
-        .background(Color.compound.bgCanvasDefault)
     }
     
     @ViewBuilder
