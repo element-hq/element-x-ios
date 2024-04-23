@@ -15,8 +15,8 @@
 //
 
 import Combine
-import Foundation
 import SwiftState
+import SwiftUI
 import UserNotifications
 
 enum RoomFlowCoordinatorAction: Equatable {
@@ -530,7 +530,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         if !isChildFlow {
-            navigationStackCoordinator.setRootCoordinator(coordinator, animated: false) { [weak self] in
+            let animated = UIDevice.current.userInterfaceIdiom == .phone ? animated : false
+            navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
                 self?.stateMachine.tryEvent(.dismissFlow)
             }
         } else {
