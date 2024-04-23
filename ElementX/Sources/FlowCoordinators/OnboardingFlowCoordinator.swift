@@ -87,9 +87,9 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         
         configureStateMachine()
         
-        stateMachine.tryEvent(.next)
-        
         rootNavigationStackCoordinator.setFullScreenCoverCoordinator(navigationStackCoordinator, animated: !isNewLogin)
+
+        stateMachine.tryEvent(.next)
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -134,6 +134,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 return .analyticsPrompt
             case (.initial, false, false, false, true):
                 return .notificationPermissions
+            case (.initial, false, false, false, false):
+                return .finished
                 
             case (.identityConfirmation, _, _, _, _):
                 return .identityConfirmed
