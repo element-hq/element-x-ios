@@ -162,6 +162,8 @@ class RoomFlowCoordinatorTests: XCTestCase {
         try await clearRoute(expectedActions: [.finished])
         XCTAssertNil(navigationStackCoordinator.rootCoordinator)
         
+        await setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
+        
         try await process(route: .room(roomID: "InvitedRoomID"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
@@ -188,7 +190,8 @@ class RoomFlowCoordinatorTests: XCTestCase {
         try await clearRoute(expectedActions: [.finished])
         XCTAssertNil(navigationStackCoordinator.stackCoordinators.last, "A child room flow should remove the join room scren on dismissal")
         
-        navigationStackCoordinator.popToRoot()
+        await setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
+        navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
         try await process(route: .room(roomID: "InvitedRoomID"))
         XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
