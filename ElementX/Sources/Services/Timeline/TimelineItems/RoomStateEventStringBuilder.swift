@@ -26,48 +26,47 @@ struct RoomStateEventStringBuilder {
             return nil
         }
         
-        let senderName = sender.displayName ?? sender.id
         let senderIsYou = isOutgoing
         let memberIsYou = member == userID
         
         switch change {
         case .joined:
-            return memberIsYou ? L10n.stateEventRoomJoinByYou : L10n.stateEventRoomJoin(member)
+            return memberIsYou ? L10n.stateEventRoomJoinByYou : L10n.stateEventRoomJoin(sender.disambiguatedDisplayName)
         case .left:
-            return memberIsYou ? L10n.stateEventRoomLeaveByYou : L10n.stateEventRoomLeave(member)
+            return memberIsYou ? L10n.stateEventRoomLeaveByYou : L10n.stateEventRoomLeave(sender.disambiguatedDisplayName)
         case .banned, .kickedAndBanned:
-            return senderIsYou ? L10n.stateEventRoomBanByYou(member) : L10n.stateEventRoomBan(senderName, member)
+            return senderIsYou ? L10n.stateEventRoomBanByYou(member) : L10n.stateEventRoomBan(sender.disambiguatedDisplayName, member)
         case .unbanned:
-            return senderIsYou ? L10n.stateEventRoomUnbanByYou(member) : L10n.stateEventRoomUnban(senderName, member)
+            return senderIsYou ? L10n.stateEventRoomUnbanByYou(member) : L10n.stateEventRoomUnban(sender.disambiguatedDisplayName, member)
         case .kicked:
-            return senderIsYou ? L10n.stateEventRoomRemoveByYou(member) : L10n.stateEventRoomRemove(senderName, member)
+            return senderIsYou ? L10n.stateEventRoomRemoveByYou(member) : L10n.stateEventRoomRemove(sender.disambiguatedDisplayName, member)
         case .invited:
             if senderIsYou {
-                return L10n.stateEventRoomInviteByYou(member)
+                return L10n.stateEventRoomInviteByYou(sender.disambiguatedDisplayName)
             } else if memberIsYou {
-                return L10n.stateEventRoomInviteYou(senderName)
+                return L10n.stateEventRoomInviteYou(sender.disambiguatedDisplayName)
             } else {
-                return L10n.stateEventRoomInvite(senderName, member)
+                return L10n.stateEventRoomInvite(sender.disambiguatedDisplayName, member)
             }
         case .invitationAccepted:
-            return memberIsYou ? L10n.stateEventRoomInviteAcceptedByYou : L10n.stateEventRoomInviteAccepted(member)
+            return memberIsYou ? L10n.stateEventRoomInviteAcceptedByYou : L10n.stateEventRoomInviteAccepted(sender.disambiguatedDisplayName)
         case .invitationRejected:
-            return memberIsYou ? L10n.stateEventRoomRejectByYou : L10n.stateEventRoomReject(member)
+            return memberIsYou ? L10n.stateEventRoomRejectByYou : L10n.stateEventRoomReject(sender.disambiguatedDisplayName)
         case .invitationRevoked:
-            return senderIsYou ? L10n.stateEventRoomThirdPartyRevokedInviteByYou(member) : L10n.stateEventRoomThirdPartyRevokedInvite(sender, member)
+            return senderIsYou ? L10n.stateEventRoomThirdPartyRevokedInviteByYou(member) : L10n.stateEventRoomThirdPartyRevokedInvite(sender.disambiguatedDisplayName, member)
         case .knocked:
             return memberIsYou ? L10n.stateEventRoomKnockByYou : L10n.stateEventRoomKnock(member)
         case .knockAccepted:
-            return senderIsYou ? L10n.stateEventRoomKnockAcceptedByYou(senderName) : L10n.stateEventRoomKnockAccepted(senderName, member)
+            return senderIsYou ? L10n.stateEventRoomKnockAcceptedByYou(sender.disambiguatedDisplayName) : L10n.stateEventRoomKnockAccepted(sender.disambiguatedDisplayName, member)
         case .knockRetracted:
             return memberIsYou ? L10n.stateEventRoomKnockRetractedByYou : L10n.stateEventRoomKnockRetracted(member)
         case .knockDenied:
             if senderIsYou {
-                return L10n.stateEventRoomKnockDeniedByYou(member)
+                return L10n.stateEventRoomKnockDeniedByYou(sender.disambiguatedDisplayName)
             } else if memberIsYou {
-                return L10n.stateEventRoomKnockDeniedYou(senderName)
+                return L10n.stateEventRoomKnockDeniedYou(sender.disambiguatedDisplayName)
             } else {
-                return L10n.stateEventRoomKnockDenied(senderName, member)
+                return L10n.stateEventRoomKnockDenied(sender.disambiguatedDisplayName, member)
             }
         case .none, .error, .notImplemented: // Not useful information for the user.
             MXLog.verbose("Filtering timeline item for membership change: \(change)")
@@ -122,30 +121,28 @@ struct RoomStateEventStringBuilder {
     }
     
     func buildString(for state: OtherState, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
-        let senderName = sender.displayName ?? sender.id
-        
         switch state {
         case .roomAvatar(let url):
             switch (url, isOutgoing) {
             case (.some, false):
-                return L10n.stateEventRoomAvatarChanged(senderName)
+                return L10n.stateEventRoomAvatarChanged(sender.disambiguatedDisplayName)
             case (nil, false):
-                return L10n.stateEventRoomAvatarRemoved(senderName)
+                return L10n.stateEventRoomAvatarRemoved(sender.disambiguatedDisplayName)
             case (.some, true):
                 return L10n.stateEventRoomAvatarChangedByYou
             case (nil, true):
                 return L10n.stateEventRoomAvatarRemovedByYou
             }
         case .roomCreate:
-            return isOutgoing ? L10n.stateEventRoomCreatedByYou : L10n.stateEventRoomCreated(senderName)
+            return isOutgoing ? L10n.stateEventRoomCreatedByYou : L10n.stateEventRoomCreated(sender.disambiguatedDisplayName)
         case .roomEncryption:
             return L10n.commonEncryptionEnabled
         case .roomName(let name):
             switch (name, isOutgoing) {
             case (.some(let name), false):
-                return L10n.stateEventRoomNameChanged(senderName, name)
+                return L10n.stateEventRoomNameChanged(sender.disambiguatedDisplayName, name)
             case (nil, false):
-                return L10n.stateEventRoomNameRemoved(senderName)
+                return L10n.stateEventRoomNameRemoved(sender.disambiguatedDisplayName)
             case (.some(let name), true):
                 return L10n.stateEventRoomNameChangedByYou(name)
             case (nil, true):
@@ -160,14 +157,14 @@ struct RoomStateEventStringBuilder {
             if isOutgoing {
                 return L10n.stateEventRoomThirdPartyInviteByYou(displayName)
             } else {
-                return L10n.stateEventRoomThirdPartyInvite(senderName, displayName)
+                return L10n.stateEventRoomThirdPartyInvite(sender.disambiguatedDisplayName, displayName)
             }
         case .roomTopic(let topic):
             switch (topic, isOutgoing) {
             case (.some(let topic), false):
-                return L10n.stateEventRoomTopicChanged(senderName, topic)
+                return L10n.stateEventRoomTopicChanged(sender.disambiguatedDisplayName, topic)
             case (nil, false):
-                return L10n.stateEventRoomTopicRemoved(senderName)
+                return L10n.stateEventRoomTopicRemoved(sender.disambiguatedDisplayName)
             case (.some(let name), true):
                 return L10n.stateEventRoomTopicChangedByYou(name)
             case (nil, true):

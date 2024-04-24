@@ -30,24 +30,22 @@ struct RoomEventStringBuilder {
         let sender = eventItemProxy.sender
         let isOutgoing = eventItemProxy.isOwn
         
-        let senderDisplayName = sender.displayName ?? sender.id
-        
         switch eventItemProxy.content.kind() {
         case .unableToDecrypt:
-            return prefix(L10n.commonDecryptionError, with: senderDisplayName)
+            return prefix(L10n.commonDecryptionError, with: sender.disambiguatedDisplayName)
         case .redactedMessage:
-            return prefix(L10n.commonMessageRemoved, with: senderDisplayName)
+            return prefix(L10n.commonMessageRemoved, with: sender.disambiguatedDisplayName)
         case .sticker:
-            return prefix(L10n.commonSticker, with: senderDisplayName)
+            return prefix(L10n.commonSticker, with: sender.disambiguatedDisplayName)
         case .failedToParseMessageLike, .failedToParseState:
-            return prefix(L10n.commonUnsupportedEvent, with: senderDisplayName)
+            return prefix(L10n.commonUnsupportedEvent, with: sender.disambiguatedDisplayName)
         case .message:
             guard let messageContent = eventItemProxy.content.asMessage() else {
                 fatalError("Invalid message timeline item: \(eventItemProxy)")
             }
             
             let messageType = messageContent.msgtype()
-            return messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: senderDisplayName, prefixWithSenderName: true)
+            return messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: sender.disambiguatedDisplayName, prefixWithSenderName: true)
         case .state(_, let state):
             return stateEventStringBuilder
                 .buildString(for: state, sender: sender, isOutgoing: isOutgoing)
@@ -66,9 +64,9 @@ struct RoomEventStringBuilder {
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
         case .poll(let question, _, _, _, _, _, _):
-            return prefix(L10n.commonPollSummary(question), with: senderDisplayName)
+            return prefix(L10n.commonPollSummary(question), with: sender.disambiguatedDisplayName)
         case .callInvite:
-            return prefix(L10n.commonCallInvite, with: senderDisplayName)
+            return prefix(L10n.commonCallInvite, with: sender.disambiguatedDisplayName)
         }
     }
     
