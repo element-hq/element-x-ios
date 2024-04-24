@@ -342,6 +342,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 appSettings.hasRunNotificationPermissionsOnboarding = true
             }
         }
+        
+        if oldVersion < Version(1, 6, 7) {
+            RustTracing.deleteLogFiles()
+            MXLog.info("Migrating to v1.6.7, log files have been wiped")
+        }
     }
     
     /// Clears the keychain, app support directory etc ready for a fresh use.
