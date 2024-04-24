@@ -303,8 +303,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.emojiPicker, .dismissEmojiPicker):
                 return .room
 
-            case (.room, .presentMessageForwarding(let itemID)):
-                return .messageForwarding(itemID: itemID)
+            case (.room, .presentMessageForwarding(let forwardingItem)):
+                return .messageForwarding(forwardingItem: forwardingItem)
             case (.messageForwarding, .dismissMessageForwarding):
                 return .room
 
@@ -435,8 +435,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.emojiPicker, .dismissEmojiPicker, .room):
                 break
                 
-            case (.room, .presentMessageForwarding(let itemID), .messageForwarding):
-                presentMessageForwarding(for: itemID)
+            case (.room, .presentMessageForwarding(let forwardingItem), .messageForwarding):
+                presentMessageForwarding(with: forwardingItem)
             case (.messageForwarding, .dismissMessageForwarding, .room):
                 break
 
@@ -579,8 +579,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)))
                 case .presentRoomMemberDetails(userID: let userID):
                     stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
-                case .presentMessageForwarding(let itemID):
-                    stateMachine.tryEvent(.presentMessageForwarding(itemID: itemID))
+                case .presentMessageForwarding(let forwardingItem):
+                    stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
                 case .presentCallScreen:
                     actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
                 }
@@ -1100,16 +1100,18 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentMessageForwarding(for itemID: TimelineItemIdentifier) {
-        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider, let eventID = itemID.eventID else {
+    private func presentMessageForwarding(with forwardingItem: MessageForwardingItem) {
+        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
             fatalError()
         }
         
         let stackCoordinator = NavigationStackCoordinator()
         
-        let parameters = MessageForwardingScreenCoordinatorParameters(roomSummaryProvider: roomSummaryProvider,
+        let parameters = MessageForwardingScreenCoordinatorParameters(forwardingItem: forwardingItem,
+                                                                      clientProxy: userSession.clientProxy,
+                                                                      roomSummaryProvider: roomSummaryProvider,
                                                                       mediaProvider: userSession.mediaProvider,
-                                                                      sourceRoomID: roomProxy.id)
+                                                                      userIndicatorController: userIndicatorController)
         let coordinator = MessageForwardingScreenCoordinator(parameters: parameters)
         
         coordinator.actions.sink { [weak self] action in
@@ -1118,12 +1120,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
-            case .send(let roomID):
+            case .sent(let roomID):
                 navigationStackCoordinator.setSheetCoordinator(nil)
-                
-                Task {
-                    await self.forward(eventID: eventID, toRoomID: roomID)
-                }
+                // Timelines are cached - the local echo will be visible when fetching the room by its ID.
+                stateMachine.tryEvent(.startChildFlow(roomID: roomID, entryPoint: .room))
             }
         }
         .store(in: &cancellables)
@@ -1133,30 +1133,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMessageForwarding)
         }
-    }
-    
-    private func forward(eventID: String, toRoomID roomID: String) async {
-        guard let messageEventContent = await roomProxy.timeline.messageEventContent(for: eventID) else {
-            MXLog.error("Failed retrieving forwarded message event content for eventID: \(eventID)")
-            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            return
-        }
-        
-        guard let targetRoomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            MXLog.error("Failed retrieving room to forward to with id: \(roomID)")
-            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            return
-        }
-        
-        if case .failure(let error) = await targetRoomProxy.timeline.sendMessageEventContent(messageEventContent) {
-            MXLog.error("Failed forwarding message with error: \(error)")
-            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            return
-        }
-        
-        // We don't need to worry about passing in the room proxy as timelines are
-        // cached. The local echo will be visible when fetching the room by its ID.
-        stateMachine.tryEvent(.startChildFlow(roomID: roomID, entryPoint: .room))
     }
     
     private func presentNotificationSettingsScreen() {
@@ -1356,7 +1332,7 @@ private extension RoomFlowCoordinator {
         case mediaUploadPreview(fileURL: URL)
         case emojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
         case mapNavigator
-        case messageForwarding(itemID: TimelineItemIdentifier)
+        case messageForwarding(forwardingItem: MessageForwardingItem)
         case reportContent(itemID: TimelineItemIdentifier, senderID: String)
         case pollForm
         case pollsHistory
@@ -1419,7 +1395,7 @@ private extension RoomFlowCoordinator {
         case presentMapNavigator(interactionMode: StaticLocationInteractionMode)
         case dismissMapNavigator
         
-        case presentMessageForwarding(itemID: TimelineItemIdentifier)
+        case presentMessageForwarding(forwardingItem: MessageForwardingItem)
         case dismissMessageForwarding
 
         case presentPollForm(mode: PollFormMode)

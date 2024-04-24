@@ -18,14 +18,16 @@ import Combine
 import SwiftUI
 
 struct MessageForwardingScreenCoordinatorParameters {
+    let forwardingItem: MessageForwardingItem
+    let clientProxy: ClientProxyProtocol
     let roomSummaryProvider: RoomSummaryProviderProtocol
     let mediaProvider: MediaProviderProtocol
-    let sourceRoomID: String
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum MessageForwardingScreenCoordinatorAction {
     case dismiss
-    case send(roomID: String)
+    case sent(roomID: String)
 }
 
 final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
@@ -38,9 +40,11 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: MessageForwardingScreenCoordinatorParameters) {
-        viewModel = MessageForwardingScreenViewModel(roomSummaryProvider: parameters.roomSummaryProvider,
-                                                     mediaProvider: parameters.mediaProvider,
-                                                     sourceRoomID: parameters.sourceRoomID)
+        viewModel = MessageForwardingScreenViewModel(forwardingItem: parameters.forwardingItem,
+                                                     clientProxy: parameters.clientProxy,
+                                                     roomSummaryProvider: parameters.roomSummaryProvider,
+                                                     userIndicatorController: parameters.userIndicatorController,
+                                                     mediaProvider: parameters.mediaProvider)
     }
     
     func start() {
@@ -48,8 +52,8 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .dismiss:
                 self?.actionsSubject.send(.dismiss)
-            case .send(let roomID):
-                self?.actionsSubject.send(.send(roomID: roomID))
+            case .sent(let roomID):
+                self?.actionsSubject.send(.sent(roomID: roomID))
             }
         }
         .store(in: &cancellables)

@@ -227,6 +227,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
+    func messageEventContent(for itemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
+        guard let eventID = itemID.eventID else {
+            MXLog.warning("The item doesn't have an event ID.")
+            return nil
+        }
+        return await activeTimeline.messageEventContent(for: eventID)
+    }
+    
     // Handle this parallel to the timeline items so we're not forced
     // to bundle the Rust side objects within them
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo {
