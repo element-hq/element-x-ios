@@ -156,8 +156,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 } else {
                     timeToDecryptMs = -1
                 }
-            
-                analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
+                
+                switch info.cause {
+                case .unknown:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
+                case .membership:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .HistoricalMessage, timeToDecryptMillis: timeToDecryptMs)
+                }
             }
             .store(in: &cancellables)
     }
