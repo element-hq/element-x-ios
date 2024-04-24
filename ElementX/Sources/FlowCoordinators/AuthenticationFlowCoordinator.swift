@@ -119,6 +119,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             case .cancel:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .done(let userSession):
+                navigationStackCoordinator.setSheetCoordinator(nil)
                 self.userHasSignedIn(userSession: userSession)
             }
         }
