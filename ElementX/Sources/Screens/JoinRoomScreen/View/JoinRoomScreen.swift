@@ -72,9 +72,6 @@ struct JoinRoomScreen: View {
                         .lineLimit(3)
                 }
             }
-            
-            Image(asset: Asset.Images.joinRoomGraphic)
-                .padding(.top, 40)
         }
     }
     
