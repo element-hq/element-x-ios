@@ -20,8 +20,8 @@ import UIKit
 
 enum RoomTimelineControllerCallback {
     case updatedTimelineItems
-    case canBackPaginate(Bool)
-    case isBackPaginating(Bool)
+    case paginationState(PaginationState)
+    case isLive(Bool)
 }
 
 enum RoomTimelineControllerAction {
@@ -45,9 +45,11 @@ protocol RoomTimelineControllerProtocol {
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async
     
-    func paginateBackwards(requestSize: UInt) async -> Result<Void, RoomTimelineControllerError>
+    func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, RoomTimelineControllerError>
+    func focusLive()
     
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError>
+    func paginateBackwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError>
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError>
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async
     

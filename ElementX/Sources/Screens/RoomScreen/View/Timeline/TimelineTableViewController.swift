@@ -15,6 +15,7 @@
 //
 
 import Combine
+import Compound
 import SwiftUI
 
 import OrderedCollections
@@ -52,32 +53,70 @@ class TypingMembersObservableObject: ObservableObject {
 /// extra keyboard handling magic that wasn't playing well with SwiftUI (as of iOS 16.1).
 /// Also this TableViewController uses a **flipped tableview**
 class TimelineTableViewController: UIViewController {
-    private let coordinator: UITimelineView.Coordinator
+    private let coordinator: TimelineView.Coordinator
     private let tableView = UITableView(frame: .zero, style: .plain)
     
     var timelineStyle: TimelineStyle
     var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>() {
         didSet {
+            if !isLive, isDraggingScrollView {
+                // Forward pagination doesn't play well with the user scrolling, so we wait for it to stop.
+                hasPendingItems = true
+                return
+            }
+            
             applySnapshot()
 
             if timelineItemsDictionary.isEmpty {
-                paginateBackwardsPublisher.send()
+                paginatePublisher.send()
             }
             
             sendLastVisibleItemReadReceipt()
         }
     }
     
-    /// Whether or not the timeline has more messages to back paginate.
-    var canBackPaginate = true
+    /// There are pending items in `timelineItemsDictionary` that haven't been applied to the data source.
+    var hasPendingItems = false
     
-    /// Whether or not the timeline is waiting for more messages to be added to the top.
-    var isBackPaginating = false {
+    /// The user is dragging the scroll view (or it is still decelerating after a drag).
+    var isDraggingScrollView = false {
         didSet {
-            // Paginate again if the threshold hasn't been satisfied.
-            paginateBackwardsPublisher.send(())
+            if !isDraggingScrollView, hasPendingItems {
+                hasPendingItems = false
+                applySnapshot()
+            }
         }
     }
+    
+    /// Whether or not the current timeline is live or built around an event ID.
+    var isLive = true {
+        didSet {
+            // Update isScrolledToBottom when switching back to a live timeline.
+            if isLive { scrollViewDidScroll(tableView) }
+        }
+    }
+    
+    /// The state of pagination (in both directions) of the current timeline.
+    var paginationState: PaginationState = .default {
+        didSet {
+            // Paginate again if the threshold hasn't been satisfied.
+            paginatePublisher.send(())
+        }
+    }
+    
+    /// The ID of the focussed event if opening the room to an event permalink.
+    var focussedEventID: String? {
+        didSet {
+            guard let focussedEventID else { return }
+            
+            focussedEventNeedsDisplay = true
+            scrollToItem(eventID: focussedEventID, animated: false)
+        }
+    }
+
+    /// Whether the timeline should scroll to `focussedEventID` when that item is added to the data source.
+    /// This is necessary as the focussed event can be set before the timeline builder has built its item.
+    var focussedEventNeedsDisplay = false
     
     /// Used to hold an observable object that the typing indicator can use
     let typingMembers = TypingMembersObservableObject(members: [])
@@ -103,12 +142,13 @@ class TimelineTableViewController: UIViewController {
     /// A publisher used to throttle back pagination requests.
     ///
     /// Our view actions get wrapped in a `Task` so it is possible that a second call in
-    /// quick succession can execute before ``isBackPaginating`` becomes `true`.
-    private let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
+    /// quick succession can execute before ``paginationState`` acknowledges that
+    /// pagination is in progress.
+    private let paginatePublisher = PassthroughSubject<Void, Never>()
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
     
-    init(coordinator: UITimelineView.Coordinator,
+    init(coordinator: TimelineView.Coordinator,
          timelineStyle: TimelineStyle,
          isScrolledToBottom: Binding<Bool>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>) {
@@ -133,14 +173,17 @@ class TimelineTableViewController: UIViewController {
         
         scrollToBottomPublisher
             .sink { [weak self] _ in
-                self?.scrollToBottom(animated: true)
+                guard let self else { return }
+                
+                scrollToNewestItem(animated: true)
+                coordinator.send(viewAction: .clearFocussedEvent)
             }
             .store(in: &cancellables)
         
-        paginateBackwardsPublisher
+        paginatePublisher
             .collect(.byTime(DispatchQueue.main, 0.1))
             .sink { [weak self] _ in
-                self?.paginateBackwardsIfNeeded()
+                self?.paginateIfNeeded()
             }
             .store(in: &cancellables)
         
@@ -164,7 +207,7 @@ class TimelineTableViewController: UIViewController {
         guard !hasAppearedOnce else { return }
         tableView.contentOffset.y = -1
         hasAppearedOnce = true
-        paginateBackwardsPublisher.send()
+        paginatePublisher.send()
     }
     
     override func viewWillLayoutSubviews() {
@@ -210,6 +253,7 @@ class TimelineTableViewController: UIViewController {
                 guard let viewState else {
                     return cell
                 }
+                
                 cell.contentConfiguration = UIHostingConfiguration {
                     RoomTimelineItemView(viewState: viewState)
                         .id(id)
@@ -217,7 +261,7 @@ class TimelineTableViewController: UIViewController {
                         .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
                         .environment(\.roomContext, coordinator.context)
                 }
-                .margins(.all, self.timelineStyle.rowInsets)
+                .margins(.all, 0) // Margins are handled in the stylers
                 .minSize(height: 1)
                 .background(Color.clear)
                 
@@ -257,42 +301,67 @@ class TimelineTableViewController: UIViewController {
         let currentSnapshot = dataSource.snapshot()
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
         
-        // We only animate when new items come at the end of the timeline, ignoring transitions through empty.
-        let animated = currentSnapshot.sectionIdentifiers.contains(.main) &&
-            snapshot.sectionIdentifiers.contains(.main) &&
-            currentSnapshot.numberOfItems(inSection: .main) > 0 &&
-            snapshot.numberOfItems(inSection: .main) > 0 &&
-            snapshot.itemIdentifiers(inSection: .main).first != currentSnapshot.itemIdentifiers(inSection: .main).first
+        // We only animate when new items come at the end of a live timeline, ignoring transitions through empty.
+        let newestItemIdentifier = snapshot.mainItemIdentifiers.first
+        let currentNewestItemIdentifier = currentSnapshot.mainItemIdentifiers.first
+        let newestItemIDChanged = snapshot.numberOfMainItems > 0 && currentSnapshot.numberOfMainItems > 0 && newestItemIdentifier != currentNewestItemIdentifier
+        let animated = isLive && newestItemIDChanged
+        
+        let layout: Layout? = if !isLive, newestItemIDChanged {
+            snapshotLayout()
+        } else {
+            nil
+        }
         
         dataSource.apply(snapshot, animatingDifferences: animated)
+        
+        if let focussedEventID, focussedEventNeedsDisplay {
+            scrollToItem(eventID: focussedEventID, animated: false)
+        } else if let layout {
+            restoreLayout(layout)
+        }
     }
     
-    /// Scrolls to the bottom of the timeline.
-    private func scrollToBottom(animated: Bool) {
+    /// Scrolls to the newest item in the timeline.
+    private func scrollToNewestItem(animated: Bool) {
         guard !timelineItemsIDs.isEmpty else {
             return
         }
         tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
     }
 
-    /// Scrolls to the top of the timeline.
-    private func scrollToTop(animated: Bool) {
+    /// Scrolls to the oldest item in the timeline.
+    private func scrollToOldestItem(animated: Bool) {
         guard !timelineItemsIDs.isEmpty else {
             return
         }
         tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 1), at: .bottom, animated: animated)
     }
     
-    /// Checks whether or a backwards pagination is needed and requests one if so.
+    /// Scrolls to the item with the corresponding event ID if loaded in the timeline.
+    private func scrollToItem(eventID: String, animated: Bool) {
+        if let kvPair = timelineItemsDictionary.first(where: { $0.value.identifier.eventID == focussedEventID }),
+           let indexPath = dataSource?.indexPath(for: kvPair.key) {
+            tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
+            focussedEventNeedsDisplay = false
+        }
+    }
+    
+    /// Checks whether or not pagination is needed in either direction and requests one if so.
     ///
-    /// Prefer not to call this directly, instead using ``paginateBackwardsPublisher`` to throttle requests.
-    private func paginateBackwardsIfNeeded() {
-        guard canBackPaginate,
-              !isBackPaginating,
-              tableView.contentOffset.y > tableView.contentSize.height - tableView.visibleSize.height * 2.0
-        else { return }
+    /// **Note:** Prefer not to call this directly, instead using ``paginatePublisher`` to throttle requests.
+    private func paginateIfNeeded() {
+        guard !hasPendingItems else { return }
         
-        coordinator.send(viewAction: .paginateBackwards)
+        if paginationState.backward == .idle,
+           tableView.contentOffset.y > tableView.contentSize.height - tableView.visibleSize.height * 2.0 {
+            coordinator.send(viewAction: .paginateBackwards)
+        }
+        if !isLive,
+           paginationState.forward == .idle,
+           tableView.contentOffset.y < tableView.visibleSize.height {
+            coordinator.send(viewAction: .paginateForwards)
+        }
     }
     
     private func sendLastVisibleItemReadReceipt() {
@@ -316,7 +385,7 @@ class TimelineTableViewController: UIViewController {
 
 extension TimelineTableViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        paginateBackwardsPublisher.send(())
+        paginatePublisher.send(())
         
         // Dispatch to fix runtime warning about making changes during a view update.
         DispatchQueue.main.async { [weak self] in
@@ -335,18 +404,26 @@ extension TimelineTableViewController: UITableViewDelegate {
             scrollView.contentOffset.y = -1
         }
     }
-
+    
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        scrollToTop(animated: true)
+        scrollToOldestItem(animated: true)
         return false
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isDraggingScrollView = true
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         sendLastVisibleItemReadReceipt()
+        if !decelerate {
+            isDraggingScrollView = false
+        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         sendLastVisibleItemReadReceipt()
+        isDraggingScrollView = false
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
@@ -354,12 +431,75 @@ extension TimelineTableViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - Layout Types
+// MARK: - Layout
 
 extension TimelineTableViewController {
     /// The sections of the table view used in the diffable data source.
     enum TimelineSection {
         case main
         case typingIndicator
+    }
+    
+    /// A representation of the table's layout based on a particular item.
+    private struct Layout {
+        let id: TimelineItemIdentifier
+        let frame: CGRect
+    }
+    
+    /// The current layout of the table, based on the newest timeline item.
+    private func snapshotLayout() -> Layout? {
+        guard let newestItemID = newestVisibleItemID(),
+              let newestCellFrame = cellFrame(for: newestItemID.timelineID) else {
+            return nil
+        }
+        return Layout(id: newestItemID, frame: newestCellFrame)
+    }
+    
+    /// Restores the timeline's layout from an old snapshot.
+    private func restoreLayout(_ layout: Layout) {
+        if let indexPath = dataSource?.indexPath(for: layout.id.timelineID) {
+            // Scroll the item into view.
+            tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+            
+            // Remove any unwanted offset that was added by scrollToRow.
+            if let frame = cellFrame(for: layout.id.timelineID) {
+                let deltaY = frame.maxY - layout.frame.maxY
+                if deltaY != 0 {
+                    tableView.contentOffset.y -= deltaY
+                }
+            }
+        }
+    }
+    
+    /// Returns the frame of the cell for a particular timeline item.
+    private func cellFrame(for id: String) -> CGRect? {
+        guard let timelineCell = tableView.visibleCells.first(where: { ($0 as? TimelineItemCell)?.item?.id == id }) else {
+            return nil
+        }
+        
+        return tableView.convert(timelineCell.frame, to: tableView.superview)
+    }
+    
+    /// The item ID of the newest visible item in the timeline.
+    private func newestVisibleItemID() -> TimelineItemIdentifier? {
+        guard let timelineCell = tableView.visibleCells.first(where: {
+            guard let cell = $0 as? TimelineItemCell else { return false }
+            return !(cell.item?.type is PaginationIndicatorRoomTimelineItem)
+        }) else {
+            return nil
+        }
+        return (timelineCell as? TimelineItemCell)?.item?.identifier
+    }
+}
+
+private extension NSDiffableDataSourceSnapshot<TimelineTableViewController.TimelineSection, String> {
+    var numberOfMainItems: Int {
+        guard sectionIdentifiers.contains(.main) else { return 0 }
+        return numberOfItems(inSection: .main)
+    }
+    
+    var mainItemIdentifiers: [String] {
+        guard sectionIdentifiers.contains(.main) else { return [] }
+        return itemIdentifiers(inSection: .main)
     }
 }

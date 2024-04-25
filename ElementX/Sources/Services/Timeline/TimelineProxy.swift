@@ -25,21 +25,22 @@ final class TimelineProxy: TimelineProxyProtocol {
     private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
     private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
     
-    private var backPaginationStateObservationToken: TaskHandle?
+    private var backPaginationStatusObservationToken: TaskHandle?
     private var roomTimelineObservationToken: TaskHandle?
     
     // periphery:ignore - retaining purpose
     private var timelineListener: RoomTimelineListener?
-   
-    private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
+    
+    private let backPaginationStatusSubject = CurrentValueSubject<BackPaginationStatus, Never>(.idle)
+    private let forwardPaginationStatusSubject = CurrentValueSubject<BackPaginationStatus, Never>(.timelineStartReached)
     private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
-   
-    private(set) var timelineStartReached = false
     
     private let actionsSubject = PassthroughSubject<TimelineProxyAction, Never>()
     var actions: AnyPublisher<TimelineProxyAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+    
+    let isLive: Bool
    
     private var innerTimelineProvider: RoomTimelineProviderProtocol!
     var timelineProvider: RoomTimelineProviderProtocol {
@@ -47,12 +48,13 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     deinit {
-        backPaginationStateObservationToken?.cancel()
+        backPaginationStatusObservationToken?.cancel()
         roomTimelineObservationToken?.cancel()
     }
     
-    init(timeline: Timeline) {
+    init(timeline: Timeline, isLive: Bool) {
         self.timeline = timeline
+        self.isLive = isLive
     }
     
     func subscribeForUpdates() async {
@@ -70,11 +72,17 @@ final class TimelineProxy: TimelineProxyProtocol {
         let result = await timeline.addListener(listener: timelineListener)
         roomTimelineObservationToken = result.itemsStream
         
-        subscribeToBackpagination()
+        let paginationStatePublisher = backPaginationStatusSubject
+            .combineLatest(forwardPaginationStatusSubject)
+            .map { PaginationState(backward: $0.0, forward: $0.1) }
+            .eraseToAnyPublisher()
+        
+        subscribeToPagination()
         
         innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
+                                                           isLive: isLive,
                                                            updatePublisher: timelineUpdatesSubject.eraseToAnyPublisher(),
-                                                           backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
+                                                           paginationStatePublisher: paginationStatePublisher)
     }
     
     func cancelSend(transactionID: String) async {
@@ -138,38 +146,43 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func paginateBackwards(requestSize: UInt) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Paginating backwards with requestSize: \(requestSize)")
+    func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Paginating backwards")
         
         do {
-            try await Task.dispatch(on: .global()) {
-                try self.timeline.paginateBackwards(opts: .simpleRequest(eventLimit: UInt16(requestSize), waitForToken: true))
-            }
-            
-            MXLog.info("Finished paginating backwards with requestSize: \(requestSize)")
+            _ = try timeline.paginateBackwards(opts: .simpleRequest(eventLimit: requestSize, waitForToken: true))
+            MXLog.info("Finished paginating backwards")
             
             return .success(())
         } catch {
-            MXLog.error("Failed paginating backwards with requestSize: \(requestSize) with error: \(error)")
+            MXLog.error("Failed paginating backwards with error: \(error)")
             return .failure(.failedPaginatingBackwards)
         }
     }
     
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Paginating backwards with requestSize: \(requestSize), untilNumberOfItems: \(untilNumberOfItems)")
-        
-        do {
-            try await Task.dispatch(on: .global()) {
-                try self.timeline.paginateBackwards(opts: .untilNumItems(eventLimit: UInt16(requestSize), items: UInt16(untilNumberOfItems), waitForToken: true))
-            }
-            
-            MXLog.info("Finished paginating backwards with requestSize: \(requestSize), untilNumberOfItems: \(untilNumberOfItems)")
-            
-            return .success(())
-        } catch {
-            MXLog.error("Finished paginating backwards with requestSize: \(requestSize), untilNumberOfItems: \(untilNumberOfItems) with error: \(error)")
-            return .failure(.failedPaginatingBackwards)
-        }
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+        .failure(.failedPaginatingBackwards)
+        // This extra check is necessary as forwards pagination status doesn't support subscribing.
+        // We need it to make sure we send a valid status after a failure.
+//        guard forwardPaginationStatusSubject.value == .idle else {
+//            MXLog.error("Attempting to paginate forwards when already at the end.")
+//            return .failure(.failedPaginatingBackwards)
+//        }
+//
+//        MXLog.info("Paginating forwards")
+//        forwardPaginationStatusSubject.send(.paginating)
+//
+//        do {
+//            let timelineEndReached = try await timeline.paginateForwards(numEvents: requestSize)
+//            MXLog.info("Finished paginating forwards")
+//
+//            forwardPaginationStatusSubject.send(timelineEndReached ? .timelineEndReached : .idle)
+//            return .success(())
+//        } catch {
+//            MXLog.error("Failed paginating forwards with error: \(error)")
+//            forwardPaginationStatusSubject.send(.idle)
+//            return .failure(.failedPaginatingBackwards)
+//        }
     }
     
     func retryDecryption(for sessionID: String) async {
@@ -536,18 +549,18 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    private func subscribeToBackpagination() {
-        let listener = RoomBackpaginationStatusListener { [weak self] status in
-            if status == .timelineStartReached {
-                self?.timelineStartReached = true
-            }
-            self?.backPaginationStateSubject.send(status)
+    private func subscribeToPagination() {
+        let backPaginationListener = RoomPaginationStatusListener { [weak self] status in
+            self?.backPaginationStatusSubject.send(status)
         }
         do {
-            backPaginationStateObservationToken = try timeline.subscribeToBackPaginationStatus(listener: listener)
+            backPaginationStatusObservationToken = try timeline.subscribeToBackPaginationStatus(listener: backPaginationListener)
         } catch {
-            MXLog.error("Failed to subscribe to back pagination state with error: \(error)")
+            MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
         }
+        
+        // Forward pagination doesn't support observation, set the initial state ourself.
+        forwardPaginationStatusSubject.send(isLive ? .timelineStartReached : .idle)
     }
 }
 
@@ -563,7 +576,7 @@ private final class RoomTimelineListener: TimelineListener {
     }
 }
 
-private final class RoomBackpaginationStatusListener: BackPaginationStatusListener {
+private final class RoomPaginationStatusListener: BackPaginationStatusListener {
     private let onUpdateClosure: (BackPaginationStatus) -> Void
 
     init(_ onUpdateClosure: @escaping (BackPaginationStatus) -> Void) {

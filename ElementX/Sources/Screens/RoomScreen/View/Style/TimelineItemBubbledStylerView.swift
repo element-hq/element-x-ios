@@ -22,12 +22,14 @@ import Compound
 struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
+    @Environment(\.focussedEventID) private var focussedEventID
     
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
 
     private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
+    private var isFocussed: Bool { timelineItem.id.eventID == focussedEventID }
     
     /// The base padding applied to bubbles on either side.
     ///
@@ -71,6 +73,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .padding(.leading, bubbleAvatarPadding)
             }
         }
+        .padding(TimelineStyle.bubbles.rowInsets)
+        .highlightedTimelineItem(isFocussed)
     }
     
     @ViewBuilder

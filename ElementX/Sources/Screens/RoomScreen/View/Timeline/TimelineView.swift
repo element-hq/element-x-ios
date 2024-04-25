@@ -18,7 +18,7 @@ import SwiftUI
 import WysiwygComposer
 
 /// A table view wrapper that displays the timeline of a room.
-struct UITimelineView: UIViewControllerRepresentable {
+struct TimelineView: UIViewControllerRepresentable {
     @EnvironmentObject private var viewModelContext: RoomScreenViewModel.Context
     @Environment(\.timelineStyle) private var timelineStyle
     
@@ -56,11 +56,14 @@ struct UITimelineView: UIViewControllerRepresentable {
             if tableViewController.timelineItemsDictionary != context.viewState.timelineViewState.itemsDictionary {
                 tableViewController.timelineItemsDictionary = context.viewState.timelineViewState.itemsDictionary
             }
-            if tableViewController.canBackPaginate != context.viewState.timelineViewState.canBackPaginate {
-                tableViewController.canBackPaginate = context.viewState.timelineViewState.canBackPaginate
+            if tableViewController.paginationState != context.viewState.timelineViewState.paginationState {
+                tableViewController.paginationState = context.viewState.timelineViewState.paginationState
             }
-            if tableViewController.isBackPaginating != context.viewState.timelineViewState.isBackPaginating {
-                tableViewController.isBackPaginating = context.viewState.timelineViewState.isBackPaginating
+            if tableViewController.isLive != context.viewState.timelineViewState.isLive {
+                tableViewController.isLive = context.viewState.timelineViewState.isLive
+            }
+            if tableViewController.focussedEventID != context.viewState.timelineViewState.focussedEventID {
+                tableViewController.focussedEventID = context.viewState.timelineViewState.focussedEventID
             }
             
             if tableViewController.typingMembers.members != context.viewState.typingMembers {
@@ -76,7 +79,7 @@ struct UITimelineView: UIViewControllerRepresentable {
 
 // MARK: - Previews
 
-struct UITimelineView_Previews: PreviewProvider, TestablePreview {
+struct TimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Preview room")),
                                                timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),

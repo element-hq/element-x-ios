@@ -44,15 +44,28 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
             fatalError("Failure setting up signalling: \(error)")
         }
     }
+    
+    private(set) var focusOnEventCallCount = 0
+    func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
+        focusOnEventCallCount += 1
+        callbacks.send(.isLive(false))
+        return .success(())
+    }
+    
+    private(set) var focusLiveCallCount = 0
+    func focusLive() {
+        focusLiveCallCount += 1
+        callbacks.send(.isLive(true))
+    }
 
-    func paginateBackwards(requestSize: UInt) async -> Result<Void, RoomTimelineControllerError> {
+    func paginateBackwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
         try? await simulateBackPagination()
         return .success(())
     }
-
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        callbacks.send(.canBackPaginate(false))
-        return .success(())
+    
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
+        // try? await simulateForwardPagination()
+        .success(())
     }
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async {
@@ -152,13 +165,12 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// Prepends the next chunk of items to the `timelineItems` array.
     private func simulateBackPagination() async throws {
         guard !backPaginationResponses.isEmpty else { return }
-        callbacks.send(.isBackPaginating(true))
+        callbacks.send(.paginationState(PaginationState(backward: .paginating, forward: .timelineStartReached)))
         
         let newItems = backPaginationResponses.removeFirst()
         timelineItems.insert(contentsOf: newItems, at: 0)
         callbacks.send(.updatedTimelineItems)
-        callbacks.send(.isBackPaginating(false))
-        callbacks.send(.canBackPaginate(!backPaginationResponses.isEmpty))
+        callbacks.send(.paginationState(PaginationState(backward: .idle, forward: .timelineStartReached)))
         
         try client?.send(.success)
     }

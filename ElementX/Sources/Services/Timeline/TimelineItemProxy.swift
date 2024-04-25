@@ -46,7 +46,7 @@ enum TimelineItemProxy {
     
     init(item: MatrixRustSDK.TimelineItem) {
         if let eventItem = item.asEvent() {
-            self = .event(EventTimelineItemProxy(item: eventItem, id: item.uniqueId()))
+            self = .event(EventTimelineItemProxy(item: eventItem, id: String(item.uniqueId())))
         } else if let virtualItem = item.asVirtual() {
             self = .virtual(virtualItem, timelineID: String(item.uniqueId()))
         } else {
@@ -67,9 +67,9 @@ class EventTimelineItemProxy {
     let item: MatrixRustSDK.EventTimelineItem
     let id: TimelineItemIdentifier
     
-    init(item: MatrixRustSDK.EventTimelineItem, id: UInt64) {
+    init(item: MatrixRustSDK.EventTimelineItem, id: String) {
         self.item = item
-        self.id = TimelineItemIdentifier(timelineID: String(id), eventID: item.eventId(), transactionID: item.transactionId())
+        self.id = TimelineItemIdentifier(timelineID: id, eventID: item.eventId(), transactionID: item.transactionId())
     }
     
     lazy var deliveryStatus: TimelineItemDeliveryStatus? = {
