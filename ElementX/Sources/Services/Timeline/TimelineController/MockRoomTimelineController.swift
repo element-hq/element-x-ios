@@ -170,7 +170,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         let newItems = backPaginationResponses.removeFirst()
         timelineItems.insert(contentsOf: newItems, at: 0)
         callbacks.send(.updatedTimelineItems)
-        callbacks.send(.paginationState(PaginationState(backward: .idle, forward: .timelineStartReached)))
+        callbacks.send(.paginationState(PaginationState(backward: backPaginationResponses.isEmpty ? .timelineStartReached : .idle,
+                                                        forward: .timelineStartReached)))
         
         try client?.send(.success)
     }
