@@ -31,8 +31,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     // periphery:ignore - retaining purpose
     private var timelineListener: RoomTimelineListener?
     
-    private let backPaginationStatusSubject = CurrentValueSubject<BackPaginationStatus, Never>(.idle)
-    private let forwardPaginationStatusSubject = CurrentValueSubject<BackPaginationStatus, Never>(.timelineStartReached)
+    private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.idle)
+    private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
     
     private let actionsSubject = PassthroughSubject<TimelineProxyAction, Never>()
@@ -150,7 +150,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Paginating backwards")
         
         do {
-            _ = try timeline.paginateBackwards(opts: .simpleRequest(eventLimit: requestSize, waitForToken: true))
+            _ = try await timeline.paginateBackwards(numEvents: requestSize)
             MXLog.info("Finished paginating backwards")
             
             return .success(())
@@ -161,28 +161,27 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
-        .failure(.failedPaginatingBackwards)
         // This extra check is necessary as forwards pagination status doesn't support subscribing.
         // We need it to make sure we send a valid status after a failure.
-//        guard forwardPaginationStatusSubject.value == .idle else {
-//            MXLog.error("Attempting to paginate forwards when already at the end.")
-//            return .failure(.failedPaginatingBackwards)
-//        }
-//
-//        MXLog.info("Paginating forwards")
-//        forwardPaginationStatusSubject.send(.paginating)
-//
-//        do {
-//            let timelineEndReached = try await timeline.paginateForwards(numEvents: requestSize)
-//            MXLog.info("Finished paginating forwards")
-//
-//            forwardPaginationStatusSubject.send(timelineEndReached ? .timelineEndReached : .idle)
-//            return .success(())
-//        } catch {
-//            MXLog.error("Failed paginating forwards with error: \(error)")
-//            forwardPaginationStatusSubject.send(.idle)
-//            return .failure(.failedPaginatingBackwards)
-//        }
+        guard forwardPaginationStatusSubject.value == .idle else {
+            MXLog.error("Attempting to paginate forwards when already at the end.")
+            return .failure(.failedPaginatingBackwards)
+        }
+
+        MXLog.info("Paginating forwards")
+        forwardPaginationStatusSubject.send(.paginating)
+
+        do {
+            let timelineEndReached = try await timeline.focusedPaginateForwards(numEvents: 16)
+            MXLog.info("Finished paginating forwards")
+
+            forwardPaginationStatusSubject.send(timelineEndReached ? .timelineEndReached : .idle)
+            return .success(())
+        } catch {
+            MXLog.error("Failed paginating forwards with error: \(error)")
+            forwardPaginationStatusSubject.send(.idle)
+            return .failure(.failedPaginatingBackwards)
+        }
     }
     
     func retryDecryption(for sessionID: String) async {
@@ -560,7 +559,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
         
         // Forward pagination doesn't support observation, set the initial state ourself.
-        forwardPaginationStatusSubject.send(isLive ? .timelineStartReached : .idle)
+        forwardPaginationStatusSubject.send(isLive ? .timelineEndReached : .idle)
     }
 }
 
@@ -576,14 +575,14 @@ private final class RoomTimelineListener: TimelineListener {
     }
 }
 
-private final class RoomPaginationStatusListener: BackPaginationStatusListener {
-    private let onUpdateClosure: (BackPaginationStatus) -> Void
+private final class RoomPaginationStatusListener: PaginationStatusListener {
+    private let onUpdateClosure: (PaginationStatus) -> Void
 
-    init(_ onUpdateClosure: @escaping (BackPaginationStatus) -> Void) {
+    init(_ onUpdateClosure: @escaping (PaginationStatus) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
 
-    func onUpdate(status: BackPaginationStatus) {
+    func onUpdate(status: PaginationStatus) {
         onUpdateClosure(status)
     }
 }

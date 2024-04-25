@@ -44,7 +44,7 @@ struct RoomProxyMockConfiguration {
         mock.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
         
         let timelineProvider = RoomTimelineProviderMock()
-        timelineProvider.paginationState = .init(backward: timelineStartReached ? .timelineStartReached : .idle, forward: .timelineStartReached)
+        timelineProvider.paginationState = .init(backward: timelineStartReached ? .timelineEndReached : .idle, forward: .timelineEndReached)
         timelineProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
         mock.underlyingTimelineProvider = timelineProvider
         return mock

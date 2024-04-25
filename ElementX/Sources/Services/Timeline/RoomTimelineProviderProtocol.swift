@@ -19,9 +19,9 @@ import Foundation
 import MatrixRustSDK
 
 struct PaginationState: Equatable {
-    static var `default` = PaginationState(backward: .idle, forward: .timelineStartReached)
-    let backward: BackPaginationStatus
-    let forward: BackPaginationStatus
+    static var `default` = PaginationState(backward: .idle, forward: .timelineEndReached)
+    let backward: PaginationStatus
+    let forward: PaginationStatus
 }
 
 @MainActor

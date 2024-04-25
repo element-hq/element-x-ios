@@ -162,11 +162,15 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                             _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
         var encryptionType = EncryptedRoomTimelineItem.EncryptionType.unknown
         switch encryptedMessage {
-        case .megolmV1AesSha2(let sessionId):
-            encryptionType = .megolmV1AesSha2(sessionId: sessionId)
+        case .megolmV1AesSha2(let sessionID, let cause):
+            let cause: EncryptedRoomTimelineItem.UTDCause = switch cause {
+            case .unknown: .unknown
+            case .membership: .membership
+            }
+            encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: cause)
         case .olmV1Curve25519AesSha2(let senderKey):
             encryptionType = .olmV1Curve25519AesSha2(senderKey: senderKey)
-        default:
+        case .unknown:
             break
         }
         

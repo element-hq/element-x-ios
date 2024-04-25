@@ -160,14 +160,13 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
-        .failure(.sdkError(RoomProxyMockError.generic))
-//        do {
-//            let timeline = try await room.timelineFocusedOnEvent(eventId: eventID, numContextEvents: numberOfEvents, internalIdPrefix: UUID().uuidString)
-//            return .success(TimelineProxy(timeline: timeline, isLive: false))
-//        } catch {
-//            MXLog.error("Failed to create a timeline focussed on: \(eventID) with error: \(error)")
-//            return .failure(.sdkError(error))
-//        }
+        do {
+            let timeline = try await room.timelineFocusedOnEvent(eventId: eventID, numContextEvents: numberOfEvents, internalIdPrefix: UUID().uuidString)
+            return .success(TimelineProxy(timeline: timeline, isLive: false))
+        } catch {
+            MXLog.error("Failed to create a timeline focussed on: \(eventID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
     }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
