@@ -17,7 +17,7 @@ import SwiftUI
 
 struct MessageComposerTextField: View {
     let placeholder: String
-    @Binding var text: String
+    @Binding var text: NSAttributedString
     @Binding var isMultiline: Bool
 
     let maxHeight: CGFloat
@@ -36,7 +36,7 @@ struct MessageComposerTextField: View {
 
     @ViewBuilder
     private var placeholderView: some View {
-        if text.isEmpty {
+        if text.string.isEmpty {
             Text(placeholder)
                 .foregroundColor(.compound.textPlaceholder)
                 .accessibilityHidden(true)
@@ -47,7 +47,7 @@ struct MessageComposerTextField: View {
 private struct UITextViewWrapper: UIViewRepresentable {
     typealias UIViewType = UITextView
 
-    @Binding var text: String
+    @Binding var text: NSAttributedString
     @Binding var isMultiline: Bool
 
     let maxHeight: CGFloat
@@ -90,10 +90,10 @@ private struct UITextViewWrapper: UIViewRepresentable {
     }
 
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
-        if textView.text != text {
-            textView.text = text
+        if textView.attributedText != text {
+            textView.attributedText = text
 
-            if text.isEmpty {
+            if text.string.isEmpty {
                 // text cleared, probably because the written text is sent
                 // reload keyboard type
                 if textView.isFirstResponder {
@@ -114,14 +114,14 @@ private struct UITextViewWrapper: UIViewRepresentable {
     }
 
     final class Coordinator: NSObject, UITextViewDelegate, ElementTextViewDelegate {
-        private var text: Binding<String>
+        private var text: Binding<NSAttributedString>
 
         private let maxHeight: CGFloat
 
         private let enterKeyHandler: EnterKeyHandler
         private let pasteHandler: PasteHandler
 
-        init(text: Binding<String>,
+        init(text: Binding<NSAttributedString>,
              maxHeight: CGFloat,
              enterKeyHandler: @escaping EnterKeyHandler,
              pasteHandler: @escaping PasteHandler) {
@@ -132,7 +132,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
 
         func textViewDidChange(_ textView: UITextView) {
-            text.wrappedValue = textView.text
+            text.wrappedValue = textView.attributedText
         }
 
         func textViewDidReceiveEnterKeyPress(_ textView: UITextView) {
@@ -227,11 +227,11 @@ struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
     }
 
     struct PreviewWrapper: View {
-        @State var text: String
+        @State var text: NSAttributedString
         @State var isMultiline: Bool
 
         init(text: String) {
-            _text = .init(initialValue: text)
+            _text = .init(initialValue: .init(string: ""))
             _isMultiline = .init(initialValue: false)
         }
 

@@ -22,7 +22,7 @@ typealias EnterKeyHandler = () -> Void
 typealias PasteHandler = (NSItemProvider) -> Void
 
 struct MessageComposer: View {
-    @Binding var plainText: String
+    @Binding var plainComposerText: NSAttributedString
     let composerView: WysiwygComposerView
     let mode: RoomScreenComposerMode
     let showResizeGrabber: Bool
@@ -85,7 +85,7 @@ struct MessageComposer: View {
                     }
             } else {
                 MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
-                                         text: $plainText,
+                                         text: $plainComposerText,
                                          isMultiline: $isMultiline,
                                          maxHeight: 300,
                                          enterKeyHandler: sendAction,
@@ -228,11 +228,11 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         .loading(eventID: "")
     ]
     
-    static func messageComposer(_ content: String = "",
+    static func messageComposer(_ content: NSAttributedString = .init(string: ""),
                                 mode: RoomScreenComposerMode = .default) -> MessageComposer {
         let viewModel = WysiwygComposerViewModel(minHeight: 22,
                                                  maxExpandedHeight: 250)
-        viewModel.setMarkdownContent(content)
+        viewModel.setMarkdownContent(content.string)
         
         let composerView = WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
                                                viewModel: viewModel,
@@ -240,7 +240,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                                keyCommands: nil,
                                                pasteHandler: nil)
         
-        return MessageComposer(plainText: .constant(content),
+        return MessageComposer(plainComposerText: .constant(content),
                                composerView: composerView,
                                mode: mode,
                                showResizeGrabber: false,
@@ -256,7 +256,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 8) {
             messageComposer()
             
-            messageComposer("Some message",
+            messageComposer(.init(string: "Some message"),
                             mode: .edit(originalItemId: .random))
             
             messageComposer(mode: .reply(itemID: .random,

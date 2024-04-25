@@ -133,7 +133,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                                                      mode: state.composerMode,
                                                      intentionalMentions: wysiwygViewModel.getMentionsState().toIntentionalMentions()))
                 } else {
-                    actionsSubject.send(.sendMessage(plain: context.composerPlainText, html: nil, mode: state.composerMode, intentionalMentions: .empty))
+                    actionsSubject.send(.sendMessage(plain: context.plainComposerText.string, html: nil, mode: state.composerMode, intentionalMentions: .empty))
                 }
             }
         case .cancelReply:
@@ -267,7 +267,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             
             wysiwygViewModel.setHtmlContent(text)
         } else {
-            state.bindings.composerPlainText = text
+            state.bindings.plainComposerText = .init(string: text)
         }
     }
 

@@ -162,7 +162,7 @@ struct ComposerToolbar: View {
     }
     
     private var messageComposer: some View {
-        MessageComposer(plainText: $context.composerPlainText,
+        MessageComposer(plainComposerText: $context.plainComposerText,
                         composerView: composerView,
                         mode: context.viewState.composerMode,
                         showResizeGrabber: context.viewState.bindings.composerActionsEnabled,
