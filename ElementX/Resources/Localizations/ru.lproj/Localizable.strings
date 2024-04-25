@@ -151,6 +151,7 @@
 "common_people" = "Люди";
 "common_permalink" = "Постоянная ссылка";
 "common_permission" = "Разрешение";
+"common_please_wait" = "Please wait…";
 "common_poll_total_votes" = "Всего голосов: %1$@";
 "common_poll_undisclosed_text" = "Результаты будут показаны после завершения опроса";
 "common_privacy_policy" = "Политика конфиденциальности";
@@ -206,9 +207,11 @@
 "common_voice_message" = "Голосовое сообщение";
 "common_waiting" = "Ожидание…";
 "common_waiting_for_decryption_key" = "Ожидание ключа расшифровки";
+"common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "Вы действительно хотите завершить данный опрос?";
 "common_poll_summary" = "Опрос: %1$@";
 "common_something_went_wrong" = "Что-то пошло не так";
+"common_unable_to_decrypt_no_access" = "You don't have access to this message";
 "common_verify_device" = "Подтверждение устройства";
 "confirm_recovery_key_banner_message" = "В настоящее время резервная копия вашего чата не синхронизирована. Требуется подтвердить вашим ключом восстановления, чтобы сохранить доступ к резервной копии чата.";
 "confirm_recovery_key_banner_title" = "Введите <b>ключ восстановления</b>";
@@ -420,6 +423,8 @@
 "screen_invites_invited_you" = "%1$@ (%2$@) пригласил вас";
 "screen_join_room_join_action" = "Присоединиться к комнате";
 "screen_join_room_knock_action" = "Постучите, чтобы присоединиться";
+"screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
+"screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
 "screen_join_room_subtitle_knock" = "Нажмите кнопку ниже и администратор комнаты получит уведомление. После одобрения вы сможете присоединиться к обсуждению.";
 "screen_join_room_subtitle_no_preview" = "Вы должны быть участником этой комнаты, чтобы просмотреть историю сообщений.";
 "screen_join_room_title_knock" = "Хотите присоединиться к этой комнате?";
@@ -521,6 +526,7 @@
 "screen_recovery_key_confirm_key_description" = "Если у вас есть пароль для восстановления или секретный пароль/ключ, это тоже сработает.";
 "screen_recovery_key_confirm_key_label" = "<b>Ключ восстановления</b> или пароль";
 "screen_recovery_key_confirm_key_placeholder" = "Вход…";
+"screen_recovery_key_confirm_lost_recovery_key" = "Lost your recovery key?";
 "screen_recovery_key_confirm_success" = "<b>Ключ восстановления</b> подтвержден";
 "screen_recovery_key_confirm_title" = "Подтвердите <b>ключ восстановления</b>";
 "screen_recovery_key_copied_to_clipboard" = "<b>Ключ восстановления</b> скопирован";

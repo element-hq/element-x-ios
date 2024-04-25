@@ -151,6 +151,7 @@
 "common_people" = "Orang";
 "common_permalink" = "Tautan Permanen";
 "common_permission" = "Perizinan";
+"common_please_wait" = "Please wait…";
 "common_poll_total_votes" = "Total suara: %1$@";
 "common_poll_undisclosed_text" = "Hasil akan terlihat setelah pemungutan suara berakhir";
 "common_privacy_policy" = "Kebijakan privasi";
@@ -206,9 +207,11 @@
 "common_voice_message" = "Pesan suara";
 "common_waiting" = "Menunggu…";
 "common_waiting_for_decryption_key" = "Menunggu pesan ini";
+"common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "Apakah Anda yakin ingin mengakhiri pemungutan suara ini?";
 "common_poll_summary" = "Pemungutan suara: %1$@";
 "common_something_went_wrong" = "Ada yang salah";
+"common_unable_to_decrypt_no_access" = "You don't have access to this message";
 "common_verify_device" = "Verifikasi perangkat";
 "confirm_recovery_key_banner_message" = "Cadangan percakapan Anda saat ini tidak tersinkron. Anda perlu mengonfirmasi kunci pemulihan Anda untuk tetap memiliki akses ke cadangan percakapan Anda.";
 "confirm_recovery_key_banner_title" = "Konfirmasi kunci pemulihan Anda";
@@ -420,6 +423,8 @@
 "screen_invites_invited_you" = "%1$@ (%2$@) mengundang Anda";
 "screen_join_room_join_action" = "Gabung dengan ruangan";
 "screen_join_room_knock_action" = "Ketuk untuk bergabung";
+"screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
+"screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
 "screen_join_room_subtitle_knock" = "Klik tombol di bawah ini dan administrator kamar akan diberi tahu. Anda akan dapat bergabung dengan percakapan setelah disetujui.";
 "screen_join_room_subtitle_no_preview" = "Anda harus menjadi anggota ruangan ini untuk melihat riwayat pesan.";
 "screen_join_room_title_knock" = "Ingin bergabung dengan ruangan ini?";
@@ -521,6 +526,7 @@
 "screen_recovery_key_confirm_key_description" = "Jika Anda memiliki kunci keamanan atau frasa keamanan, ini juga bisa digunakan.";
 "screen_recovery_key_confirm_key_label" = "Kunci pemulihan atau kode sandi";
 "screen_recovery_key_confirm_key_placeholder" = "Masukkan...";
+"screen_recovery_key_confirm_lost_recovery_key" = "Lost your recovery key?";
 "screen_recovery_key_confirm_success" = "Kunci pemulihan dikonfirmasi";
 "screen_recovery_key_confirm_title" = "Konfirmasi kunci pemulihan atau kode sandi Anda";
 "screen_recovery_key_copied_to_clipboard" = "Kunci pemulihan disalin";
@@ -777,7 +783,7 @@
 "state_event_room_join_by_you" = "Anda bergabung ke ruangan";
 "state_event_room_knock" = "%1$@ meminta untuk bergabung";
 "state_event_room_knock_accepted" = "%1$@ memperbolehkan %2$@ untuk bergabung";
-"state_event_room_knock_accepted_by_you" = "%1$@ memperbolehkan Anda untuk bergabung";
+"state_event_room_knock_accepted_by_you" = "Anda memperbolehkan %1$@ untuk bergabung";
 "state_event_room_knock_by_you" = "Anda meminta untuk bergabung";
 "state_event_room_knock_denied" = "%1$@ menolak permintaan %2$@ untuk bergabung";
 "state_event_room_knock_denied_by_you" = "Anda menolak permintaan %1$@ untuk bergabung";

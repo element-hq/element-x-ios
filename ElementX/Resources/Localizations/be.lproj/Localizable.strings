@@ -151,6 +151,7 @@
 "common_people" = "Людзі";
 "common_permalink" = "Пастаянная спасылка";
 "common_permission" = "Дазвол";
+"common_please_wait" = "Калі ласка, пачакайце…";
 "common_poll_total_votes" = "Усяго галасоў: %1$@";
 "common_poll_undisclosed_text" = "Вынікі будуць паказаны пасля завяршэння апытання";
 "common_privacy_policy" = "Палітыка прыватнасці";
@@ -206,9 +207,11 @@
 "common_voice_message" = "Галасавое паведамленне";
 "common_waiting" = "Чакаем…";
 "common_waiting_for_decryption_key" = "Чакаю гэтага паведамлення";
+"common_no_room_name" = "Няма назвы пакоя";
 "common_poll_end_confirmation" = "Вы ўпэўнены, што хочаце скончыць гэтае апытанне?";
 "common_poll_summary" = "Апытанне: %1$@";
 "common_something_went_wrong" = "Нешта пайшло не так";
+"common_unable_to_decrypt_no_access" = "У вас няма доступу да гэтага паведамлення";
 "common_verify_device" = "Праверце прыладу";
 "confirm_recovery_key_banner_message" = "Ваша рэзервовая копія чата зараз не сінхранізавана. Вам трэба пацвердзіць ключ аднаўлення, каб захаваць доступ да рэзервовай копіі чата.";
 "confirm_recovery_key_banner_title" = "Увядзіце ключ аднаўлення";
@@ -420,6 +423,8 @@
 "screen_invites_invited_you" = "%1$@ (%2$@) запрасіў вас";
 "screen_join_room_join_action" = "Далучыцца да пакоя";
 "screen_join_room_knock_action" = "Націсніце, каб далучыцца";
+"screen_join_room_space_not_supported_description" = "%1$@ пакуль не падтрымлівае прасторы. Вы можаце атрымаць доступ да прастор праз вэб-старонку.";
+"screen_join_room_space_not_supported_title" = "Прасторы пакуль не падтрымліваюцца";
 "screen_join_room_subtitle_knock" = "Націсніце кнопку ніжэй, і адміністратар пакоя атрымае апавяшчэнне. Вы зможаце далучыцца да размовы пасля зацвярджэння.";
 "screen_join_room_subtitle_no_preview" = "Вы павінны быць удзельнікам гэтага пакоя каб прагледзець гісторыю паведамленняў.";
 "screen_join_room_title_knock" = "Вы хочаце далучыцца да гэтага пакоя?";
@@ -482,15 +487,15 @@
 "screen_polls_history_filter_ongoing" = "Бягучыя";
 "screen_polls_history_filter_past" = "Мінулыя";
 "screen_polls_history_title" = "Апытанні";
-"screen_qr_code_login_connecting_subtitle" = "Устанаўленне злучэння";
+"screen_qr_code_login_connecting_subtitle" = "Ўсталяванне бяспечнага злучэння";
 "screen_qr_code_login_connection_note_secure_state_description" = "Не атрымалася ўсталяваць бяспечнае злучэнне з новай прыладай. Існуючыя прылады па-ранейшаму ў бяспецы, і вам не трэба турбавацца пра іх.";
 "screen_qr_code_login_connection_note_secure_state_list_header" = "Што зараз?";
 "screen_qr_code_login_connection_note_secure_state_list_item_1" = "Паспрабуйце зноў увайсці ў сістэму з дапамогай QR-кода, калі гэта была сеткавая праблема";
 "screen_qr_code_login_connection_note_secure_state_list_item_2" = "Калі вы сутыкнуліся з той жа праблемай, паспрабуйце іншую сетку Wi-Fi або скарыстайцеся мабільнымі дадзенымі замест Wi-Fi.";
 "screen_qr_code_login_connection_note_secure_state_list_item_3" = "Калі гэта не дапамагло, увайдзіце ўручную";
 "screen_qr_code_login_connection_note_secure_state_title" = "Злучэнне небяспечнае";
-"screen_qr_code_login_device_code_subtitle" = "Вам будзе прапанавана ўвесці дзве лічбы, паказаныя ніжэй.";
-"screen_qr_code_login_device_code_title" = "Увядзіце нумар на прыладзе";
+"screen_qr_code_login_device_code_subtitle" = "Вам будзе прапанавана ўвесці дзве лічбы, паказаныя на гэтай прыладзе.";
+"screen_qr_code_login_device_code_title" = "Увядзіце наступны нумар на іншай прыладзе.";
 "screen_qr_code_login_initial_state_item_1" = "Адкрыйце %1$@ на настольнай прыладзе";
 "screen_qr_code_login_initial_state_item_2" = "Націсніце на свой аватар";
 "screen_qr_code_login_initial_state_item_3" = "Выберыце %1$@";
@@ -521,8 +526,9 @@
 "screen_recovery_key_confirm_key_description" = "Калі ў вас ёсць ключ аднаўлення або парольная фраза, гэта таксама будзе працаваць.";
 "screen_recovery_key_confirm_key_label" = "Ключ аднаўлення або код доступу";
 "screen_recovery_key_confirm_key_placeholder" = "Увесці...";
+"screen_recovery_key_confirm_lost_recovery_key" = "Страцілі ключ аднаўлення?";
 "screen_recovery_key_confirm_success" = "Ключ аднаўлення пацверджаны";
-"screen_recovery_key_confirm_title" = "Увядзіце ключ аднаўлення або код доступу";
+"screen_recovery_key_confirm_title" = "Увядзіце ключ аднаўлення";
 "screen_recovery_key_copied_to_clipboard" = "Ключ аднаўлення скапіраваны";
 "screen_recovery_key_generating_key" = "Стварэнне…";
 "screen_recovery_key_save_action" = "Захаваць ключ аднаўлення";
@@ -777,7 +783,7 @@
 "state_event_room_join_by_you" = "Вы далучыліся да пакоя";
 "state_event_room_knock" = "%1$@ прасіў(-ла) далучыцца";
 "state_event_room_knock_accepted" = "%1$@ дазволіў(-ла) %2$@ далучыцца";
-"state_event_room_knock_accepted_by_you" = "%1$@ дазволіў(-ла) вам далучыцца";
+"state_event_room_knock_accepted_by_you" = "Вы дазволілі %1$@ далучыцца";
 "state_event_room_knock_by_you" = "Вы прасілі далучыцца";
 "state_event_room_knock_denied" = "%1$@ адхіліў(-ла) %2$@ запыт на далучэнне";
 "state_event_room_knock_denied_by_you" = "Вы адхілілі %1$@ запыт на далучэнне";

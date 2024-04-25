@@ -285,9 +285,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Found %1$d push provider: %2$@</string>
+			<string>Provider %1$d push trovato: %2$@</string>
 			<key>other</key>
-			<string>Found %1$d push providers: %2$@</string>
+			<string>Provider %1$d push trovati: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
