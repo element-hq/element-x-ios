@@ -100,13 +100,15 @@ class EventTimelineItemProxy {
         let profile = item.senderProfile()
         
         switch profile {
-        case let .ready(displayName, _, avatarUrl):
+        case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
             return .init(id: item.sender(),
                          displayName: displayName,
+                         isDisplayNameAmbiguous: isDisplayNameAmbiguous,
                          avatarURL: avatarUrl.flatMap(URL.init(string:)))
         default:
             return .init(id: item.sender(),
                          displayName: nil,
+                         isDisplayNameAmbiguous: false,
                          avatarURL: nil)
         }
     }()

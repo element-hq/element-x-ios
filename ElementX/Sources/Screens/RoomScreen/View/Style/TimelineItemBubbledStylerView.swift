@@ -78,11 +78,19 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         if shouldShowSenderDetails {
             HStack(alignment: .top, spacing: 4) {
                 TimelineSenderAvatarView(timelineItem: timelineItem)
-                Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
-                    .font(.compound.bodySMSemibold)
-                    .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
-                    .lineLimit(1)
-                    .scaledPadding(.vertical, 3)
+                HStack(alignment: .center, spacing: 4) {
+                    Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
+                        .font(.compound.bodySMSemibold)
+                        .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
+                    
+                    if timelineItem.sender.displayName != nil, timelineItem.sender.isDisplayNameAmbiguous {
+                        Text(timelineItem.sender.id)
+                            .font(.compound.bodyXS)
+                            .foregroundColor(.compound.textSecondary)
+                    }
+                }
+                .lineLimit(1)
+                .scaledPadding(.vertical, 3)
             }
             // sender info are read inside the `TimelineAccessibilityModifier`
             .accessibilityHidden(true)
