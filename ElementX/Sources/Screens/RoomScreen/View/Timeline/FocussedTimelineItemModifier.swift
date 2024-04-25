@@ -46,3 +46,40 @@ private struct HighlightedTimelineItemModifier: ViewModifier {
             }
     }
 }
+
+struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePreview {
+    static var previews: some View {
+        ScrollView {
+            VStack(spacing: 16) {
+                Bubble(text: "Hello 👋")
+                    .highlightedTimelineItem(true)
+                
+                Bubble(text: "Not highlighted")
+                    .highlightedTimelineItem(false)
+                
+                Bubble(text: """
+                       Bacon ipsum dolor amet brisket bacon hamburger filet mignon ham hock, capicola meatloaf corned beef tongue. Ribeye filet mignon shoulder drumstick doner shank. Landjaeger shankle chislic brisket short loin pig. Frankfurter sirloin jerky bresaola tri-tip cow buffalo. Beef tongue shankle venison, sirloin boudin biltong ham hock corned beef. Sirloin shankle pork belly, strip steak pancetta brisket flank ribeye cow chislic. Pork ham landjaeger, pastrami beef sausage capicola meatball.
+                       
+                       Cow brisket bresaola, burgdoggen cupim turducken sirloin andouille shankle sausage jerky chicken pig. Tail capicola landjaeger frankfurter. Kevin pancetta brisket spare ribs, sausage chuck tail pork. Ground round boudin chuck tri-tip corned beef. Pork belly ham bresaola tail, pork chop meatloaf biltong filet mignon strip steak ribeye boudin shoulder frankfurter.
+                       """,
+                       isOutgoing: true)
+                    .highlightedTimelineItem(true)
+            }
+        }
+    }
+    
+    struct Bubble: View {
+        let text: String
+        var isOutgoing = false
+        
+        var body: some View {
+            Text(text)
+                .padding(10)
+                .background(isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming,
+                            in: RoundedRectangle(cornerRadius: 12))
+                .padding(isOutgoing ? .leading : .trailing, 40)
+                .frame(maxWidth: .infinity, alignment: isOutgoing ? .trailing : .leading)
+                .padding(12)
+        }
+    }
+}
