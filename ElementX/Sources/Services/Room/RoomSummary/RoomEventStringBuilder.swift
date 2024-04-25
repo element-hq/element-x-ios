@@ -18,34 +18,35 @@ import Foundation
 import MatrixRustSDK
 
 struct RoomEventStringBuilder {
-    private let stateEventStringBuilder: RoomStateEventStringBuilder
-    private let messageEventStringBuilder: RoomMessageEventStringBuilder
-    
-    init(stateEventStringBuilder: RoomStateEventStringBuilder, messageEventStringBuilder: RoomMessageEventStringBuilder) {
-        self.stateEventStringBuilder = stateEventStringBuilder
-        self.messageEventStringBuilder = messageEventStringBuilder
-    }
+    let stateEventStringBuilder: RoomStateEventStringBuilder
+    let messageEventStringBuilder: RoomMessageEventStringBuilder
+    let shouldDisambiguateDisplayNames: Bool
     
     func buildAttributedString(for eventItemProxy: EventTimelineItemProxy) -> AttributedString? {
         let sender = eventItemProxy.sender
         let isOutgoing = eventItemProxy.isOwn
+        let displayName = if shouldDisambiguateDisplayNames {
+            sender.disambiguatedDisplayName ?? sender.id
+        } else {
+            sender.displayName ?? sender.id
+        }
         
         switch eventItemProxy.content.kind() {
         case .unableToDecrypt:
-            return prefix(L10n.commonDecryptionError, with: sender.disambiguatedDisplayName)
+            return prefix(L10n.commonDecryptionError, with: displayName)
         case .redactedMessage:
-            return prefix(L10n.commonMessageRemoved, with: sender.disambiguatedDisplayName)
+            return prefix(L10n.commonMessageRemoved, with: displayName)
         case .sticker:
-            return prefix(L10n.commonSticker, with: sender.disambiguatedDisplayName)
+            return prefix(L10n.commonSticker, with: displayName)
         case .failedToParseMessageLike, .failedToParseState:
-            return prefix(L10n.commonUnsupportedEvent, with: sender.disambiguatedDisplayName)
+            return prefix(L10n.commonUnsupportedEvent, with: displayName)
         case .message:
             guard let messageContent = eventItemProxy.content.asMessage() else {
                 fatalError("Invalid message timeline item: \(eventItemProxy)")
             }
             
             let messageType = messageContent.msgtype()
-            return messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: sender.disambiguatedDisplayName, prefixWithSenderName: true)
+            return messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName, prefixWithSenderName: true)
         case .state(_, let state):
             return stateEventStringBuilder
                 .buildString(for: state, sender: sender, isOutgoing: isOutgoing)
@@ -64,9 +65,9 @@ struct RoomEventStringBuilder {
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
         case .poll(let question, _, _, _, _, _, _):
-            return prefix(L10n.commonPollSummary(question), with: sender.disambiguatedDisplayName)
+            return prefix(L10n.commonPollSummary(question), with: displayName)
         case .callInvite:
-            return prefix(L10n.commonCallInvite, with: sender.disambiguatedDisplayName)
+            return prefix(L10n.commonCallInvite, with: displayName)
         }
     }
     

@@ -30,10 +30,10 @@ struct TimelineItemSender: Identifiable, Hashable {
         self.isDisplayNameAmbiguous = isDisplayNameAmbiguous
         self.avatarURL = avatarURL
     }
-    
-    var disambiguatedDisplayName: String {
+        
+    var disambiguatedDisplayName: String? {
         guard let displayName else {
-            return id
+            return nil
         }
         
         return isDisplayNameAmbiguous ? "\(displayName) (\(id))" : displayName

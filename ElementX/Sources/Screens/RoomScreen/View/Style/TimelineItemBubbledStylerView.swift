@@ -85,7 +85,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     
                     if timelineItem.sender.displayName != nil, timelineItem.sender.isDisplayNameAmbiguous {
                         Text(timelineItem.sender.id)
-                            .font(.compound.bodySM)
+                            .font(.compound.bodyXS)
                             .foregroundColor(.compound.textSecondary)
                     }
                 }
