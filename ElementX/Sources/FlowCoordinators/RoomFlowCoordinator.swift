@@ -182,11 +182,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         switch roomProxy.membership {
         case .joined:
             await storeAndSubscribeToRoomProxy(roomProxy)
-            if let focussedEventID {
-                stateMachine.tryEvent(.presentRoomFocusedOnEvent(eventID: focussedEventID), userInfo: EventUserInfo(animated: animated))
-            } else {
-                stateMachine.tryEvent(.presentRoom, userInfo: EventUserInfo(animated: animated))
-            }
+            stateMachine.tryEvent(.presentRoom(focussedEventID: focussedEventID), userInfo: EventUserInfo(animated: animated))
         default:
             stateMachine.tryEvent(.presentJoinRoomScreen, userInfo: EventUserInfo(animated: animated))
         }
@@ -230,8 +226,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .complete
                 
             case (_, .presentRoom):
-                return .room
-            case (.initial, .presentRoomFocusedOnEvent(let eventID)):
                 return .room
             case (_, .dismissFlow):
                 return .complete
@@ -357,10 +351,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (_, .dismissJoinRoomScreen, .complete):
                 dismissFlow(animated: animated)
             
-            case (_, .presentRoom, .room):
-                Task { await self.presentRoom(fromState: context.fromState, animated: animated) }
-            case (.initial, .presentRoomFocusedOnEvent(let eventID), .room):
-                Task { await self.presentRoom(fromState: context.fromState, focussedEventID: eventID, animated: animated) }
+            case (_, .presentRoom(let focussedEventID), .room):
+                Task { await self.presentRoom(fromState: context.fromState, focussedEventID: focussedEventID, animated: animated) }
             case (_, .dismissFlow, .complete):
                 dismissFlow(animated: animated)
             
@@ -619,7 +611,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                         
                         if let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) {
                             await storeAndSubscribeToRoomProxy(roomProxy)
-                            stateMachine.tryEvent(.presentRoom, userInfo: EventUserInfo(animated: animated))
+                            stateMachine.tryEvent(.presentRoom(focussedEventID: nil), userInfo: EventUserInfo(animated: animated))
                             
                             analytics.trackJoinedRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, activeMemberCount: UInt(roomProxy.activeMembersCount))
                         } else {
@@ -1371,8 +1363,7 @@ private extension RoomFlowCoordinator {
         case presentJoinRoomScreen
         case dismissJoinRoomScreen
         
-        case presentRoom
-        case presentRoomFocusedOnEvent(eventID: String)
+        case presentRoom(focussedEventID: String?)
         case dismissFlow
         
         case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
@@ -1427,7 +1418,6 @@ private extension RoomFlowCoordinator {
         case dismissRolesAndPermissionsScreen
         
         // Child room flow events
-        enum ChildRoomFocus: Hashable { case eventID(String) }
         case startChildFlow(roomID: String, entryPoint: RoomFlowCoordinatorEntryPoint)
         case dismissChildFlow
     }
