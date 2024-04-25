@@ -328,6 +328,8 @@ internal enum L10n {
   internal static var commonMute: String { return L10n.tr("Localizable", "common_mute") }
   /// No results
   internal static var commonNoResults: String { return L10n.tr("Localizable", "common_no_results") }
+  /// No room name
+  internal static var commonNoRoomName: String { return L10n.tr("Localizable", "common_no_room_name") }
   /// Offline
   internal static var commonOffline: String { return L10n.tr("Localizable", "common_offline") }
   /// Optic ID
@@ -342,6 +344,8 @@ internal enum L10n {
   internal static var commonPermalink: String { return L10n.tr("Localizable", "common_permalink") }
   /// Permission
   internal static var commonPermission: String { return L10n.tr("Localizable", "common_permission") }
+  /// Please wait…
+  internal static var commonPleaseWait: String { return L10n.tr("Localizable", "common_please_wait") }
   /// Are you sure you want to end this poll?
   internal static var commonPollEndConfirmation: String { return L10n.tr("Localizable", "common_poll_end_confirmation") }
   /// Poll: %1$@
@@ -444,6 +448,8 @@ internal enum L10n {
   internal static var commonTouchIdIos: String { return L10n.tr("Localizable", "common_touch_id_ios") }
   /// Unable to decrypt
   internal static var commonUnableToDecrypt: String { return L10n.tr("Localizable", "common_unable_to_decrypt") }
+  /// You don't have access to this message
+  internal static var commonUnableToDecryptNoAccess: String { return L10n.tr("Localizable", "common_unable_to_decrypt_no_access") }
   /// Invites couldn't be sent to one or more users.
   internal static var commonUnableToInviteMessage: String { return L10n.tr("Localizable", "common_unable_to_invite_message") }
   /// Unable to send invite(s)
@@ -1045,6 +1051,12 @@ internal enum L10n {
   internal static var screenJoinRoomJoinAction: String { return L10n.tr("Localizable", "screen_join_room_join_action") }
   /// Knock to join
   internal static var screenJoinRoomKnockAction: String { return L10n.tr("Localizable", "screen_join_room_knock_action") }
+  /// %1$@ does not support spaces yet. You can access spaces on web.
+  internal static func screenJoinRoomSpaceNotSupportedDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_join_room_space_not_supported_description", String(describing: p1))
+  }
+  /// Spaces are not supported yet
+  internal static var screenJoinRoomSpaceNotSupportedTitle: String { return L10n.tr("Localizable", "screen_join_room_space_not_supported_title") }
   /// Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.
   internal static var screenJoinRoomSubtitleKnock: String { return L10n.tr("Localizable", "screen_join_room_subtitle_knock") }
   /// You must be a member of this room to view the message history.
@@ -1183,7 +1195,7 @@ internal enum L10n {
   internal static var screenPollsHistoryFilterPast: String { return L10n.tr("Localizable", "screen_polls_history_filter_past") }
   /// Polls
   internal static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
-  /// Establishing connection
+  /// Establishing a secure connection
   internal static var screenQrCodeLoginConnectingSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_connecting_subtitle") }
   /// A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.
   internal static var screenQrCodeLoginConnectionNoteSecureStateDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_description") }
@@ -1197,9 +1209,9 @@ internal enum L10n {
   internal static var screenQrCodeLoginConnectionNoteSecureStateListItem3: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_list_item_3") }
   /// Connection not secure
   internal static var screenQrCodeLoginConnectionNoteSecureStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_title") }
-  /// You’ll be asked to enter the two digits shown below.
+  /// You’ll be asked to enter the two digits shown on this device.
   internal static var screenQrCodeLoginDeviceCodeSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_subtitle") }
-  /// Enter number on your device
+  /// Enter the number below on your other device
   internal static var screenQrCodeLoginDeviceCodeTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_title") }
   /// Open %1$@ on a desktop device
   internal static func screenQrCodeLoginInitialStateItem1(_ p1: Any) -> String {
@@ -1273,9 +1285,11 @@ internal enum L10n {
   internal static var screenRecoveryKeyConfirmKeyLabel: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_label") }
   /// Enter…
   internal static var screenRecoveryKeyConfirmKeyPlaceholder: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_placeholder") }
+  /// Lost your recovery key?
+  internal static var screenRecoveryKeyConfirmLostRecoveryKey: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_lost_recovery_key") }
   /// Recovery key confirmed
   internal static var screenRecoveryKeyConfirmSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_success") }
-  /// Enter your recovery key or passcode
+  /// Enter your recovery key
   internal static var screenRecoveryKeyConfirmTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_title") }
   /// Copied recovery key
   internal static var screenRecoveryKeyCopiedToClipboard: String { return L10n.tr("Localizable", "screen_recovery_key_copied_to_clipboard") }
@@ -1935,7 +1949,7 @@ internal enum L10n {
   internal static func stateEventRoomKnockAccepted(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock_accepted", String(describing: p1), String(describing: p2))
   }
-  /// %1$@ allowed you to join
+  /// You allowed %1$@ to join
   internal static func stateEventRoomKnockAcceptedByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock_accepted_by_you", String(describing: p1))
   }
