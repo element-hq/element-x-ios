@@ -36,6 +36,10 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     private var client: UITestsSignalling.Client?
     
     init(listenForSignals: Bool = false) {
+        callbacks.send(.paginationState(PaginationState(backward: backPaginationResponses.isEmpty ? .timelineStartReached : .idle,
+                                                        forward: .timelineStartReached)))
+        callbacks.send(.isLive(true))
+        
         guard listenForSignals else { return }
         
         do {
@@ -59,7 +63,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     }
 
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
-        try? await simulateBackPagination()
+        callbacks.send(.paginationState(PaginationState(backward: .paginating, forward: .timelineStartReached)))
         return .success(())
     }
     
@@ -164,14 +168,16 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     /// Prepends the next chunk of items to the `timelineItems` array.
     private func simulateBackPagination() async throws {
+        defer {
+            callbacks.send(.paginationState(PaginationState(backward: backPaginationResponses.isEmpty ? .timelineStartReached : .idle,
+                                                            forward: .timelineStartReached)))
+        }
+        
         guard !backPaginationResponses.isEmpty else { return }
-        callbacks.send(.paginationState(PaginationState(backward: .paginating, forward: .timelineStartReached)))
         
         let newItems = backPaginationResponses.removeFirst()
         timelineItems.insert(contentsOf: newItems, at: 0)
         callbacks.send(.updatedTimelineItems)
-        callbacks.send(.paginationState(PaginationState(backward: backPaginationResponses.isEmpty ? .timelineStartReached : .idle,
-                                                        forward: .timelineStartReached)))
         
         try client?.send(.success)
     }
