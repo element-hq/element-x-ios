@@ -21,6 +21,7 @@ import WysiwygComposer
 
 struct RoomScreenCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
+    var focussedEventID: String?
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
@@ -59,6 +60,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: RoomScreenCoordinatorParameters) {
         viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
+                                        focussedEventID: parameters.focussedEventID,
                                         timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,
                                         mediaPlayerProvider: parameters.mediaPlayerProvider,
@@ -127,6 +129,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 viewModel.process(composerAction: action)
             }
             .store(in: &cancellables)
+    }
+    
+    func focusOnEvent(eventID: String) {
+        Task { await viewModel.focusOnEvent(eventID: eventID) }
     }
     
     func stop() {

@@ -75,8 +75,9 @@ class UserSessionFlowCoordinatorStateMachine {
         case start
         
         /// Request presentation for a particular room
-        /// - Parameter roomID:the room identifier
-        case selectRoom(roomID: String, showingRoomDetails: Bool)
+        /// - Parameter roomID: The room identifier
+        /// - Parameter entryPoint: The starting point for the presented room.
+        case selectRoom(roomID: String, entryPoint: RoomFlowCoordinatorEntryPoint)
         /// The room screen has been dismissed
         case deselectRoom
         

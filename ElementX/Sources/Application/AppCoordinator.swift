@@ -206,6 +206,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 } else {
                     handleAppRoute(.childRoomAlias(alias))
                 }
+            case .event(let roomID, let eventID):
+                if isExternalURL {
+                    handleAppRoute(route)
+                } else {
+                    handleAppRoute(.childEvent(roomID: roomID, eventID: eventID))
+                }
+            case .eventOnRoomAlias(let alias, let eventID):
+                if isExternalURL {
+                    handleAppRoute(route)
+                } else {
+                    handleAppRoute(.childEventOnRoomAlias(alias: alias, eventID: eventID))
+                }
             default:
                 break
             }

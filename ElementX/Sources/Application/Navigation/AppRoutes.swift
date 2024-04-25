@@ -24,16 +24,24 @@ enum AppRoute: Equatable {
     case roomList
     /// A room, shown as the root of the stack (popping any child rooms).
     case room(roomID: String)
-    /// A room, shown as the root of the stack (popping any child rooms).
+    /// The same as ``room`` but using a room alias.
     case roomAlias(String)
     /// A room, pushed as a child of any existing rooms on the stack.
     case childRoom(roomID: String)
-    /// A room, pushed as a child of any existing rooms on the stack.
+    /// The same as ``childRoom`` but using a room alias.
     case childRoomAlias(String)
     /// The information about a particular room.
     case roomDetails(roomID: String)
     /// The profile of a member within the current room.
     case roomMemberDetails(userID: String)
+    /// An event within a room, shown as the root of the stack (popping any child rooms).
+    case event(roomID: String, eventID: String)
+    /// The same as ``event`` but using a room alias.
+    case eventOnRoomAlias(alias: String, eventID: String)
+    /// An event within a room, either within the last child on the stack or pushing a new child if needed.
+    case childEvent(roomID: String, eventID: String)
+    /// The same as ``childEvent`` but using a room alias.
+    case childEventOnRoomAlias(alias: String, eventID: String)
     /// The profile of a matrix user (outside of a room).
     case userProfile(userID: String)
     /// An Element Call link generated outside of a chat room.
@@ -133,6 +141,12 @@ struct MatrixPermalinkParser: URLParser {
             return .roomAlias(alias)
         case .user(let id):
             return .userProfile(userID: id)
+        case .eventOnRoomId(let roomID, let eventID):
+            // return .event(roomID: roomID, eventID: eventID)
+            return nil
+        case .eventOnRoomAlias(let alias, let eventID):
+            // return .eventOnRoomAlias(alias: alias, eventID: eventID)
+            return nil
         default:
             return nil
         }
