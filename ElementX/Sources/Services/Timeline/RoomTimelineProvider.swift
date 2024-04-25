@@ -38,7 +38,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             .eraseToAnyPublisher()
     }
     
-    var isLive: Bool
+    private(set) var isLive: Bool
     
     private let membershipChangeSubject = PassthroughSubject<Void, Never>()
     var membershipChangePublisher: AnyPublisher<Void, Never> {

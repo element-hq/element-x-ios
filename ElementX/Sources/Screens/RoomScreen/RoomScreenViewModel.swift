@@ -25,7 +25,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private enum Constants {
         static let paginationEventLimit: UInt16 = 20
         static let detachedTimelineSize: UInt16 = 100
-        static let focusIndicatorID = "RoomScreenFocusIndicator"
+        static let focusTimelineToastIndicatorID = "RoomScreenFocusTimelineToastIndicator"
         static let toastErrorID = "RoomScreenToastError"
     }
 
@@ -235,7 +235,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .success:
             state.timelineViewState.focussedEventID = eventID
         case .failure(let error):
-            MXLog.error("It went wrong: \(error)")
+            MXLog.error("Failed to focus on event \(eventID)")
             displayError(.toast(L10n.commonFailed))
         }
     }
@@ -243,9 +243,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
     
     private func focusLive() {
-        showFocusLoadingIndicator()
-        defer { hideFocusLoadingIndicator() }
-        
         timelineController.focusLive()
         state.timelineViewState.focussedEventID = nil
     }
@@ -699,14 +696,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - User Indicators
     
     private func showFocusLoadingIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: Constants.focusIndicatorID,
+        userIndicatorController.submitIndicator(UserIndicator(id: Constants.focusTimelineToastIndicatorID,
                                                               type: .toast(progress: .indeterminate),
                                                               title: L10n.commonLoading,
                                                               persistent: true))
     }
     
     private func hideFocusLoadingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Constants.focusIndicatorID)
+        userIndicatorController.retractIndicatorWithId(Constants.focusTimelineToastIndicatorID)
     }
     
     private func displayError(_ type: RoomScreenErrorType) {

@@ -108,8 +108,14 @@ enum RoomScreenViewAction {
     
     case presentCall
     
+    /// Focus the timeline onto the specified event ID (switching to a detached timeline if needed).
     case focusOnEventID(String)
+    /// Switch back to a live timeline (from a detached one).
     case focusLive
+    /// Remove the highlighted event without switching timeline.
+    ///
+    /// This is useful when returning to the bottom of the live timeline
+    ///  if `focusOnEventID` didn't use a detached timeline.
     case clearFocussedEvent
 }
 
