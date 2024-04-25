@@ -209,6 +209,23 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
     }
     
+    func testEventRoute() async throws {
+        await setupRoomFlowCoordinator()
+        
+        try await process(route: .event(roomID: "1", eventID: "1"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        
+        try await process(route: .event(roomID: "1", eventID: "2"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        
+        try await process(route: .childEvent(roomID: "2", eventID: "3"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
+        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
+    }
+    
     // MARK: - Private
     
     private func process(route: AppRoute) async throws {

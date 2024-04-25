@@ -21,7 +21,7 @@ import UIKit
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
     private let roomProxy: RoomProxyProtocol
-    private let timelineProvider: RoomTimelineProviderProtocol
+    private let liveTimelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let appSettings: AppSettings
     private let serialDispatchQueue: DispatchQueue
@@ -29,6 +29,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
+    
+    private var activeTimeline: TimelineProxyProtocol
+    private var activeTimelineProvider: RoomTimelineProviderProtocol {
+        didSet {
+            configureActiveTimelineProvider(clearExistingItems: true)
+        }
+    }
     
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
 
@@ -40,34 +47,39 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          appSettings: AppSettings) {
         self.roomProxy = roomProxy
-        timelineProvider = roomProxy.timeline.timelineProvider
+        liveTimelineProvider = roomProxy.timeline.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.appSettings = appSettings
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
-        timelineProvider
-            .updatePublisher
-            .receive(on: serialDispatchQueue)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                
-                self.updateTimelineItems()
-            }
-            .store(in: &cancellables)
-        
-        // Inform the world that the initial items are loading from the store
-        callbacks.send(.isBackPaginating(true))
-        serialDispatchQueue.async {
-            self.updateTimelineItems()
-            self.callbacks.send(.isBackPaginating(false))
-        }
+        activeTimeline = roomProxy.timeline
+        activeTimelineProvider = liveTimelineProvider
+        configureActiveTimelineProvider()
         
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
     
-    func paginateBackwards(requestSize: UInt) async -> Result<Void, RoomTimelineControllerError> {
+    func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
+        switch await roomProxy.timelineFocusedOnEvent(eventID: eventID, numberOfEvents: timelineSize) {
+        case .success(let timeline):
+            await timeline.subscribeForUpdates()
+            activeTimeline = timeline
+            activeTimelineProvider = timeline.timelineProvider
+            return .success(())
+        case .failure:
+            return .failure(.generic)
+        }
+    }
+    
+    func focusLive() {
+        activeTimeline = roomProxy.timeline
+        activeTimelineProvider = liveTimelineProvider
+        callbacks.send(.isLive(true))
+    }
+    
+    func paginateBackwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
         MXLog.info("Started back pagination request")
-        switch await roomProxy.timeline.paginateBackwards(requestSize: requestSize) {
+        switch await activeTimeline.paginateBackwards(requestSize: requestSize) {
         case .success:
             MXLog.info("Finished back pagination request")
             return .success(())
@@ -77,14 +89,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        MXLog.info("Started back pagination request")
-        switch await roomProxy.timeline.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
+        MXLog.info("Started forward pagination request")
+        switch await activeTimeline.paginateForwards(requestSize: requestSize) {
         case .success:
-            MXLog.info("Finished back pagination request")
+            MXLog.info("Finished forward pagination request")
             return .success(())
         case .failure(let error):
-            MXLog.error("Failed back pagination request with error: \(error)")
+            MXLog.error("Failed forward pagination request with error: \(error)")
             return .failure(.generic)
         }
     }
@@ -149,7 +161,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
 
-        switch await roomProxy.timeline.toggleReaction(reaction, to: eventID) {
+        switch await activeTimeline.toggleReaction(reaction, to: eventID) {
         case .success:
             MXLog.info("Finished toggling reaction")
         case .failure(let error):
@@ -169,10 +181,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             await cancelSending(itemID: itemID)
             await sendMessage(newMessage, html: html, intentionalMentions: intentionalMentions)
         } else if let eventID = itemID.eventID {
-            switch await roomProxy.timeline.editMessage(newMessage,
-                                                        html: html,
-                                                        original: eventID,
-                                                        intentionalMentions: intentionalMentions) {
+            switch await activeTimeline.editMessage(newMessage,
+                                                    html: html,
+                                                    original: eventID,
+                                                    intentionalMentions: intentionalMentions) {
             case .success:
                 MXLog.info("Finished editing message")
             case .failure(let error):
@@ -199,7 +211,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     // Handle this parallel to the timeline items so we're not forced
     // to bundle the Rust side objects within them
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo {
-        for timelineItemProxy in timelineProvider.itemProxies {
+        for timelineItemProxy in activeTimelineProvider.itemProxies {
             switch timelineItemProxy {
             case .event(let item):
                 if item.id == itemID {
@@ -214,7 +226,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func retryDecryption(for sessionID: String) async {
-        await roomProxy.timeline.retryDecryption(for: sessionID)
+        await activeTimeline.retryDecryption(for: sessionID)
     }
     
     func retrySending(itemID: TimelineItemIdentifier) async {
@@ -239,19 +251,46 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     // MARK: - Private
     
-    @objc private func contentSizeCategoryDidChange() {
-        // Recompute all attributed strings on content size changes -> DynamicType support
-        serialDispatchQueue.async {
-            self.updateTimelineItems()
+    /// The cancellable used to update the timeline items.
+    private var updateTimelineItemsCancellable: AnyCancellable?
+    
+    /// Configures the controller to listen to `activeTimeline` for events.
+    /// - Parameter clearExistingItems: Whether or not to clear any existing items before loading the timeline's contents.
+    private func configureActiveTimelineProvider(clearExistingItems: Bool = false) {
+        updateTimelineItemsCancellable = activeTimelineProvider
+            .updatePublisher
+            .receive(on: serialDispatchQueue)
+            .sink { [weak self] items, paginationState in
+                self?.updateTimelineItems(itemProxies: items, paginationState: paginationState)
+            }
+        
+        // Inform the world that the initial items are loading from the store
+        callbacks.send(.paginationState(.init(backward: .paginating, forward: .paginating)))
+        callbacks.send(.isLive(activeTimelineProvider.isLive))
+        
+        if clearExistingItems {
+            // Transition through empty to prevent animations.
+            timelineItems.removeAll()
+            callbacks.send(.updatedTimelineItems)
+        }
+        
+        serialDispatchQueue.async { [activeTimelineProvider] in
+            self.updateTimelineItems(itemProxies: activeTimelineProvider.itemProxies, paginationState: activeTimelineProvider.paginationState)
+            self.callbacks.send(.paginationState(.init(backward: .idle, forward: .idle)))
         }
     }
     
-    private func updateTimelineItems() {
+    @objc private func contentSizeCategoryDidChange() {
+        // Recompute all attributed strings on content size changes -> DynamicType support
+        serialDispatchQueue.async { [activeTimelineProvider] in
+            self.updateTimelineItems(itemProxies: activeTimelineProvider.itemProxies, paginationState: activeTimelineProvider.paginationState)
+        }
+    }
+    
+    private func updateTimelineItems(itemProxies: [TimelineItemProxy], paginationState: PaginationState) {
         var newTimelineItems = [RoomTimelineItemProtocol]()
-        var canBackPaginate = !roomProxy.timeline.timelineStartReached
-        var isBackPaginating = false
         
-        let collapsibleChunks = timelineProvider.itemProxies.groupBy { isItemCollapsible($0) }
+        let collapsibleChunks = itemProxies.groupBy { isItemCollapsible($0) }
         
         for (index, collapsibleChunk) in collapsibleChunks.enumerated() {
             let isLastItem = index == collapsibleChunks.indices.last
@@ -281,17 +320,22 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         // Check if we need to add anything to the top of the timeline.
-        switch timelineProvider.backPaginationState {
+        switch paginationState.backward {
         case .timelineStartReached:
             if !roomProxy.isEncryptedOneToOneRoom {
                 let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.name)
                 newTimelineItems.insert(timelineStart, at: 0)
             }
-            canBackPaginate = false
         case .paginating:
-            newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(), at: 0)
-            isBackPaginating = true
+            newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(position: .start), at: 0)
         case .idle:
+            break
+        }
+        
+        switch paginationState.forward {
+        case .paginating:
+            newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(position: .end), at: newTimelineItems.count)
+        case .idle, .timelineStartReached:
             break
         }
         
@@ -300,8 +344,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         callbacks.send(.updatedTimelineItems)
-        callbacks.send(.canBackPaginate(canBackPaginate))
-        callbacks.send(.isBackPaginating(isBackPaginating))
+        callbacks.send(.paginationState(paginationState))
     }
     
     private func buildTimelineItem(for itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
@@ -355,10 +398,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
 
         switch timelineItem.replyDetails {
         case .notLoaded:
-            roomProxy.timeline.fetchDetails(for: eventID)
+            activeTimeline.fetchDetails(for: eventID)
         case .error:
             if refetchOnError {
-                roomProxy.timeline.fetchDetails(for: eventID)
+                activeTimeline.fetchDetails(for: eventID)
             }
         default:
             break
@@ -366,7 +409,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
-        for itemProxy in roomProxy.timeline.timelineProvider.itemProxies {
+        for itemProxy in activeTimelineProvider.itemProxies {
             switch itemProxy {
             case .event(let eventTimelineItemProxy):
                 if eventTimelineItemProxy.id == itemID {

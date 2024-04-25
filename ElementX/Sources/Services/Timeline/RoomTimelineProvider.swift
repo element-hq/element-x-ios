@@ -22,9 +22,9 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
     private let serialDispatchQueue: DispatchQueue
 
-    private let backPaginationStateSubject = CurrentValueSubject<BackPaginationStatus, Never>(.idle)
-    var backPaginationState: BackPaginationStatus {
-        backPaginationStateSubject.value
+    private let paginationStateSubject = CurrentValueSubject<PaginationState, Never>(.default)
+    var paginationState: PaginationState {
+        paginationStateSubject.value
     }
 
     private let itemProxiesSubject: CurrentValueSubject<[TimelineItemProxy], Never>
@@ -32,12 +32,13 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         itemProxiesSubject.value
     }
 
-    var updatePublisher: AnyPublisher<Void, Never> {
+    var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
         itemProxiesSubject
-            .combineLatest(backPaginationStateSubject)
-            .map { _, _ in () }
+            .combineLatest(paginationStateSubject)
             .eraseToAnyPublisher()
     }
+    
+    private(set) var isLive: Bool
     
     private let membershipChangeSubject = PassthroughSubject<Void, Never>()
     var membershipChangePublisher: AnyPublisher<Void, Never> {
@@ -46,10 +47,12 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     }
 
     init(currentItems: [TimelineItem],
+         isLive: Bool,
          updatePublisher: AnyPublisher<[TimelineDiff], Never>,
-         backPaginationStatePublisher: AnyPublisher<BackPaginationStatus, Never>) {
+         paginationStatePublisher: AnyPublisher<PaginationState, Never>) {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>(currentItems.map(TimelineItemProxy.init))
+        self.isLive = isLive
         
         // Manually call it here as the didSet doesn't work from constructors
         itemProxiesSubject.send(itemProxies)
@@ -59,8 +62,10 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             .sink { [weak self] in self?.updateItemsWithDiffs($0) }
             .store(in: &cancellables)
 
-        backPaginationStatePublisher
-            .sink { [weak self] in self?.backPaginationStateSubject.send($0) }
+        paginationStatePublisher
+            .sink { [weak self] in
+                self?.paginationStateSubject.send($0)
+            }
             .store(in: &cancellables)
     }
     

@@ -196,6 +196,44 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         XCTAssertTrue(sheetStackCoordinator.rootCoordinator is UserProfileScreenCoordinator)
     }
     
+    func testRoomClearsStack() async throws {
+        try await process(route: .room(roomID: "1"), expectedState: .roomList(selectedRoomID: "1"))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
+        XCTAssertNotNil(detailCoordinator)
+        
+        userSessionFlowCoordinator.handleAppRoute(.childRoom(roomID: "2"), animated: true)
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 1)
+        XCTAssertTrue(detailNavigationStack?.stackCoordinators.first is RoomScreenCoordinator)
+        XCTAssertNotNil(detailCoordinator)
+        
+        try await process(route: .room(roomID: "3"), expectedState: .roomList(selectedRoomID: "3"))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
+        XCTAssertNotNil(detailCoordinator)
+    }
+    
+    func testEventRoutes() async throws {
+        try await process(route: .event(roomID: "1", eventID: "1"), expectedState: .roomList(selectedRoomID: "1"))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
+        XCTAssertNotNil(detailCoordinator)
+        
+        userSessionFlowCoordinator.handleAppRoute(.childEvent(roomID: "2", eventID: "2"), animated: true)
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 1)
+        XCTAssertTrue(detailNavigationStack?.stackCoordinators.first is RoomScreenCoordinator)
+        XCTAssertNotNil(detailCoordinator)
+        
+        try await process(route: .event(roomID: "3", eventID: "3"), expectedState: .roomList(selectedRoomID: "3"))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
+        XCTAssertNotNil(detailCoordinator)
+    }
+    
     // MARK: - Private
     
     private func process(route: AppRoute, expectedState: UserSessionFlowCoordinatorStateMachine.State) async throws {

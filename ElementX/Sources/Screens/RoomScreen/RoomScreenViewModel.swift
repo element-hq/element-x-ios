@@ -23,8 +23,9 @@ typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, Roo
 
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private enum Constants {
-        static let backPaginationEventLimit: UInt = 20
-        static let backPaginationPageSize: UInt = 50
+        static let paginationEventLimit: UInt16 = 20
+        static let detachedTimelineSize: UInt16 = 100
+        static let focusTimelineToastIndicatorID = "RoomScreenFocusTimelineToastIndicator"
         static let toastErrorID = "RoomScreenToastError"
     }
 
@@ -47,6 +48,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private var paginateBackwardsTask: Task<Void, Never>?
+    private var paginateForwardsTask: Task<Void, Never>?
 
     init(roomProxy: RoomProxyProtocol,
          focussedEventID: String? = nil,
@@ -86,6 +88,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomAvatarURL: roomProxy.avatarURL,
                                                          timelineStyle: appSettings.timelineStyle,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
+                                                         timelineViewState: TimelineViewState(focussedEventID: focussedEventID),
                                                          ownUserID: roomProxy.ownUserID,
                                                          hasOngoingCall: roomProxy.hasOngoingCall,
                                                          bindings: .init(reactionsCollapsed: [:])),
@@ -170,6 +173,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await timelineController.cancelSending(itemID: itemID) }
         case .paginateBackwards:
             paginateBackwards()
+        case .paginateForwards:
+            paginateForwards()
         case .poll(let pollAction):
             processPollAction(pollAction)
         case .audio(let audioAction):
@@ -179,8 +184,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .showReadReceipts(itemID: let itemID):
             showReadReceipts(for: itemID)
         case .focusOnEventID(let eventID):
-            // TODO: .. something
-            break
+            Task { await focusOnEvent(eventID: eventID) }
+        case .focusLive:
+            focusLive()
+        case .clearFocussedEvent:
+            state.timelineViewState.focussedEventID = nil
         }
     }
 
@@ -214,9 +222,30 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    func focusOnEvent(eventID: String) async { }
+    func focusOnEvent(eventID: String) async {
+        if state.timelineViewState.hasLoadedItem(with: eventID) {
+            state.timelineViewState.focussedEventID = eventID
+            return
+        }
+        
+        showFocusLoadingIndicator()
+        defer { hideFocusLoadingIndicator() }
+        
+        switch await timelineController.focusOnEvent(eventID, timelineSize: Constants.detachedTimelineSize) {
+        case .success:
+            state.timelineViewState.focussedEventID = eventID
+        case .failure(let error):
+            MXLog.error("Failed to focus on event \(eventID)")
+            displayError(.toast(L10n.commonFailed))
+        }
+    }
     
     // MARK: - Private
+    
+    private func focusLive() {
+        timelineController.focusLive()
+        state.timelineViewState.focussedEventID = nil
+    }
     
     private func attach(_ attachment: ComposerAttachmentType) {
         switch attachment {
@@ -297,14 +326,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
                 switch callback {
                 case .updatedTimelineItems:
-                    self.buildTimelineViews()
-                case .canBackPaginate(let canBackPaginate):
-                    if self.state.timelineViewState.canBackPaginate != canBackPaginate {
-                        self.state.timelineViewState.canBackPaginate = canBackPaginate
+                    buildTimelineViews()
+                case .paginationState(let paginationState):
+                    if state.timelineViewState.paginationState != paginationState {
+                        state.timelineViewState.paginationState = paginationState
                     }
-                case .isBackPaginating(let isBackPaginating):
-                    if self.state.timelineViewState.isBackPaginating != isBackPaginating {
-                        self.state.timelineViewState.isBackPaginating = isBackPaginating
+                case .isLive(let isLive):
+                    if state.timelineViewState.isLive != isLive {
+                        state.timelineViewState.isLive = isLive
+                        
+                        // Remove the event highlight *only* when transitioning from non-live to live.
+                        if isLive, state.timelineViewState.focussedEventID != nil {
+                            state.timelineViewState.focussedEventID = nil
+                        }
                     }
                 }
             }
@@ -414,13 +448,38 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return
             }
 
-            switch await timelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit, untilNumberOfItems: Constants.backPaginationPageSize) {
+            switch await timelineController.paginateBackwards(requestSize: Constants.paginationEventLimit) {
             case .failure:
                 displayError(.toast(L10n.errorFailedLoadingMessages))
             default:
                 break
             }
             paginateBackwardsTask = nil
+        }
+    }
+    
+    private func paginateForwards() {
+        guard paginateForwardsTask == nil else {
+            return
+        }
+
+        paginateForwardsTask = Task { [weak self] in
+            guard let self else {
+                return
+            }
+
+            switch await timelineController.paginateForwards(requestSize: Constants.paginationEventLimit) {
+            case .failure:
+                displayError(.toast(L10n.errorFailedLoadingMessages))
+            default:
+                break
+            }
+            
+            if state.timelineViewState.paginationState.forward == .timelineStartReached {
+                focusLive()
+            }
+            
+            paginateForwardsTask = nil
         }
     }
     
@@ -636,6 +695,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - User Indicators
     
+    private func showFocusLoadingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Constants.focusTimelineToastIndicatorID,
+                                                              type: .toast(progress: .indeterminate),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
+    }
+    
+    private func hideFocusLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Constants.focusTimelineToastIndicatorID)
+    }
+    
     private func displayError(_ type: RoomScreenErrorType) {
         switch type {
         case .alert(let message):
@@ -662,6 +732,7 @@ private extension RoomProxyProtocol {
 
 extension RoomScreenViewModel {
     static let mock = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Preview room")),
+                                          focussedEventID: nil,
                                           timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -674,14 +745,23 @@ extension RoomScreenViewModel {
 }
 
 private struct RoomContextKey: EnvironmentKey {
-    @MainActor
-    static let defaultValue = RoomScreenViewModel.mock.context
+    @MainActor static let defaultValue = RoomScreenViewModel.mock.context
+}
+
+private struct FocussedEventID: EnvironmentKey {
+    static let defaultValue: String? = nil
 }
 
 extension EnvironmentValues {
-    /// Used to access and inject and access the room context without observing it
+    /// Used to access and inject the room context without observing it
     var roomContext: RoomScreenViewModel.Context {
         get { self[RoomContextKey.self] }
         set { self[RoomContextKey.self] = newValue }
+    }
+    
+    /// An event ID which will be non-nil when a timeline item should show as focussed.
+    var focussedEventID: String? {
+        get { self[FocussedEventID.self] }
+        set { self[FocussedEventID.self] = newValue }
     }
 }

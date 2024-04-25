@@ -7137,6 +7137,74 @@ class RoomProxyMock: RoomProxyProtocol {
         unsubscribeFromUpdatesCallsCount += 1
         unsubscribeFromUpdatesClosure?()
     }
+    //MARK: - timelineFocusedOnEvent
+
+    var timelineFocusedOnEventEventIDNumberOfEventsUnderlyingCallsCount = 0
+    var timelineFocusedOnEventEventIDNumberOfEventsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return timelineFocusedOnEventEventIDNumberOfEventsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = timelineFocusedOnEventEventIDNumberOfEventsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                timelineFocusedOnEventEventIDNumberOfEventsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    timelineFocusedOnEventEventIDNumberOfEventsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var timelineFocusedOnEventEventIDNumberOfEventsCalled: Bool {
+        return timelineFocusedOnEventEventIDNumberOfEventsCallsCount > 0
+    }
+    var timelineFocusedOnEventEventIDNumberOfEventsReceivedArguments: (eventID: String, numberOfEvents: UInt16)?
+    var timelineFocusedOnEventEventIDNumberOfEventsReceivedInvocations: [(eventID: String, numberOfEvents: UInt16)] = []
+
+    var timelineFocusedOnEventEventIDNumberOfEventsUnderlyingReturnValue: Result<TimelineProxyProtocol, RoomProxyError>!
+    var timelineFocusedOnEventEventIDNumberOfEventsReturnValue: Result<TimelineProxyProtocol, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return timelineFocusedOnEventEventIDNumberOfEventsUnderlyingReturnValue
+            } else {
+                var returnValue: Result<TimelineProxyProtocol, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = timelineFocusedOnEventEventIDNumberOfEventsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                timelineFocusedOnEventEventIDNumberOfEventsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    timelineFocusedOnEventEventIDNumberOfEventsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var timelineFocusedOnEventEventIDNumberOfEventsClosure: ((String, UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError>)?
+
+    func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
+        timelineFocusedOnEventEventIDNumberOfEventsCallsCount += 1
+        timelineFocusedOnEventEventIDNumberOfEventsReceivedArguments = (eventID: eventID, numberOfEvents: numberOfEvents)
+        timelineFocusedOnEventEventIDNumberOfEventsReceivedInvocations.append((eventID: eventID, numberOfEvents: numberOfEvents))
+        if let timelineFocusedOnEventEventIDNumberOfEventsClosure = timelineFocusedOnEventEventIDNumberOfEventsClosure {
+            return await timelineFocusedOnEventEventIDNumberOfEventsClosure(eventID, numberOfEvents)
+        } else {
+            return timelineFocusedOnEventEventIDNumberOfEventsReturnValue
+        }
+    }
     //MARK: - redact
 
     var redactUnderlyingCallsCount = 0
@@ -9585,17 +9653,22 @@ class RoomSummaryProviderMock: RoomSummaryProviderProtocol {
     }
 }
 class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
-    var updatePublisher: AnyPublisher<Void, Never> {
+    var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
         get { return underlyingUpdatePublisher }
         set(value) { underlyingUpdatePublisher = value }
     }
-    var underlyingUpdatePublisher: AnyPublisher<Void, Never>!
+    var underlyingUpdatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never>!
     var itemProxies: [TimelineItemProxy] = []
-    var backPaginationState: BackPaginationStatus {
-        get { return underlyingBackPaginationState }
-        set(value) { underlyingBackPaginationState = value }
+    var paginationState: PaginationState {
+        get { return underlyingPaginationState }
+        set(value) { underlyingPaginationState = value }
     }
-    var underlyingBackPaginationState: BackPaginationStatus!
+    var underlyingPaginationState: PaginationState!
+    var isLive: Bool {
+        get { return underlyingIsLive }
+        set(value) { underlyingIsLive = value }
+    }
+    var underlyingIsLive: Bool!
     var membershipChangePublisher: AnyPublisher<Void, Never> {
         get { return underlyingMembershipChangePublisher }
         set(value) { underlyingMembershipChangePublisher = value }
@@ -10338,16 +10411,16 @@ class TimelineProxyMock: TimelineProxyProtocol {
         set(value) { underlyingActions = value }
     }
     var underlyingActions: AnyPublisher<TimelineProxyAction, Never>!
+    var isLive: Bool {
+        get { return underlyingIsLive }
+        set(value) { underlyingIsLive = value }
+    }
+    var underlyingIsLive: Bool!
     var timelineProvider: RoomTimelineProviderProtocol {
         get { return underlyingTimelineProvider }
         set(value) { underlyingTimelineProvider = value }
     }
     var underlyingTimelineProvider: RoomTimelineProviderProtocol!
-    var timelineStartReached: Bool {
-        get { return underlyingTimelineStartReached }
-        set(value) { underlyingTimelineStartReached = value }
-    }
-    var underlyingTimelineStartReached: Bool!
 
     //MARK: - subscribeForUpdates
 
@@ -10705,8 +10778,8 @@ class TimelineProxyMock: TimelineProxyProtocol {
     var paginateBackwardsRequestSizeCalled: Bool {
         return paginateBackwardsRequestSizeCallsCount > 0
     }
-    var paginateBackwardsRequestSizeReceivedRequestSize: UInt?
-    var paginateBackwardsRequestSizeReceivedInvocations: [UInt] = []
+    var paginateBackwardsRequestSizeReceivedRequestSize: UInt16?
+    var paginateBackwardsRequestSizeReceivedInvocations: [UInt16] = []
 
     var paginateBackwardsRequestSizeUnderlyingReturnValue: Result<Void, TimelineProxyError>!
     var paginateBackwardsRequestSizeReturnValue: Result<Void, TimelineProxyError>! {
@@ -10732,9 +10805,9 @@ class TimelineProxyMock: TimelineProxyProtocol {
             }
         }
     }
-    var paginateBackwardsRequestSizeClosure: ((UInt) async -> Result<Void, TimelineProxyError>)?
+    var paginateBackwardsRequestSizeClosure: ((UInt16) async -> Result<Void, TimelineProxyError>)?
 
-    func paginateBackwards(requestSize: UInt) async -> Result<Void, TimelineProxyError> {
+    func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
         paginateBackwardsRequestSizeCallsCount += 1
         paginateBackwardsRequestSizeReceivedRequestSize = requestSize
         paginateBackwardsRequestSizeReceivedInvocations.append(requestSize)
@@ -10744,17 +10817,17 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return paginateBackwardsRequestSizeReturnValue
         }
     }
-    //MARK: - paginateBackwards
+    //MARK: - paginateForwards
 
-    var paginateBackwardsRequestSizeUntilNumberOfItemsUnderlyingCallsCount = 0
-    var paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount: Int {
+    var paginateForwardsRequestSizeUnderlyingCallsCount = 0
+    var paginateForwardsRequestSizeCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return paginateBackwardsRequestSizeUntilNumberOfItemsUnderlyingCallsCount
+                return paginateForwardsRequestSizeUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = paginateBackwardsRequestSizeUntilNumberOfItemsUnderlyingCallsCount
+                    returnValue = paginateForwardsRequestSizeUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -10762,29 +10835,29 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                paginateBackwardsRequestSizeUntilNumberOfItemsUnderlyingCallsCount = newValue
+                paginateForwardsRequestSizeUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    paginateBackwardsRequestSizeUntilNumberOfItemsUnderlyingCallsCount = newValue
+                    paginateForwardsRequestSizeUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var paginateBackwardsRequestSizeUntilNumberOfItemsCalled: Bool {
-        return paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount > 0
+    var paginateForwardsRequestSizeCalled: Bool {
+        return paginateForwardsRequestSizeCallsCount > 0
     }
-    var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments: (requestSize: UInt, untilNumberOfItems: UInt)?
-    var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations: [(requestSize: UInt, untilNumberOfItems: UInt)] = []
+    var paginateForwardsRequestSizeReceivedRequestSize: UInt16?
+    var paginateForwardsRequestSizeReceivedInvocations: [UInt16] = []
 
-    var paginateBackwardsRequestSizeUntilNumberOfItemsUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue: Result<Void, TimelineProxyError>! {
+    var paginateForwardsRequestSizeUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var paginateForwardsRequestSizeReturnValue: Result<Void, TimelineProxyError>! {
         get {
             if Thread.isMainThread {
-                return paginateBackwardsRequestSizeUntilNumberOfItemsUnderlyingReturnValue
+                return paginateForwardsRequestSizeUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, TimelineProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = paginateBackwardsRequestSizeUntilNumberOfItemsUnderlyingReturnValue
+                    returnValue = paginateForwardsRequestSizeUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -10792,24 +10865,24 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                paginateBackwardsRequestSizeUntilNumberOfItemsUnderlyingReturnValue = newValue
+                paginateForwardsRequestSizeUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    paginateBackwardsRequestSizeUntilNumberOfItemsUnderlyingReturnValue = newValue
+                    paginateForwardsRequestSizeUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var paginateBackwardsRequestSizeUntilNumberOfItemsClosure: ((UInt, UInt) async -> Result<Void, TimelineProxyError>)?
+    var paginateForwardsRequestSizeClosure: ((UInt16) async -> Result<Void, TimelineProxyError>)?
 
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError> {
-        paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount += 1
-        paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments = (requestSize: requestSize, untilNumberOfItems: untilNumberOfItems)
-        paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations.append((requestSize: requestSize, untilNumberOfItems: untilNumberOfItems))
-        if let paginateBackwardsRequestSizeUntilNumberOfItemsClosure = paginateBackwardsRequestSizeUntilNumberOfItemsClosure {
-            return await paginateBackwardsRequestSizeUntilNumberOfItemsClosure(requestSize, untilNumberOfItems)
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+        paginateForwardsRequestSizeCallsCount += 1
+        paginateForwardsRequestSizeReceivedRequestSize = requestSize
+        paginateForwardsRequestSizeReceivedInvocations.append(requestSize)
+        if let paginateForwardsRequestSizeClosure = paginateForwardsRequestSizeClosure {
+            return await paginateForwardsRequestSizeClosure(requestSize)
         } else {
-            return paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue
+            return paginateForwardsRequestSizeReturnValue
         }
     }
     //MARK: - sendAudio

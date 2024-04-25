@@ -89,7 +89,6 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         ScrollView {
             VStack(spacing: 8) {
                 states
-                    .padding(.horizontal)
             }
         }
         .environmentObject(viewModel.context)
@@ -98,7 +97,6 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         ScrollView {
             VStack(spacing: 0) {
                 states
-                    .padding(.horizontal)
             }
         }
         .environment(\.timelineStyle, .plain)

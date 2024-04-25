@@ -20,10 +20,13 @@ import SwiftUI
 struct TimelineItemPlainStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
+    @Environment(\.focussedEventID) private var focussedEventID
     
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
+    
+    private var isFocussed: Bool { focussedEventID != nil && timelineItem.id.eventID == focussedEventID }
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 0) {
@@ -38,6 +41,8 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             TimelineItemStatusView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus)
                 .environmentObject(context)
         }
+        .padding(TimelineStyle.plain.rowInsets)
+        .highlightedTimelineItem(isFocussed)
     }
     
     @ViewBuilder
@@ -151,7 +156,6 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
                 RoomTimelineItemView(viewState: .init(item: item, groupStyle: .single))
-                    .padding(TimelineStyle.plain.rowInsets) // Insets added in the table view cells
             }
         }
         .environment(\.timelineStyle, .plain)

@@ -92,17 +92,18 @@ struct RoomScreen: View {
     }
 
     private var timeline: some View {
-        UITimelineView()
+        TimelineView()
             .id(context.viewState.roomID)
             .environmentObject(context)
             .environment(\.timelineStyle, context.viewState.timelineStyle)
+            .environment(\.focussedEventID, context.viewState.timelineViewState.focussedEventID)
             .overlay(alignment: .bottomTrailing) {
                 scrollToBottomButton
             }
     }
     
     private var scrollToBottomButton: some View {
-        Button { context.viewState.timelineViewState.scrollToBottomPublisher.send(()) } label: {
+        Button(action: scrollToBottom) {
             Image(systemName: "chevron.down")
                 .font(.compound.bodyLG)
                 .fontWeight(.semibold)
@@ -117,9 +118,21 @@ struct RoomScreen: View {
                 }
                 .padding()
         }
-        .opacity(context.isScrolledToBottom ? 0.0 : 1.0)
-        .accessibilityHidden(context.isScrolledToBottom)
-        .animation(.elementDefault, value: context.isScrolledToBottom)
+        .opacity(isAtBottomAndLive ? 0.0 : 1.0)
+        .accessibilityHidden(isAtBottomAndLive)
+        .animation(.elementDefault, value: isAtBottomAndLive)
+    }
+    
+    private var isAtBottomAndLive: Bool {
+        context.isScrolledToBottom && context.viewState.timelineViewState.isLive
+    }
+    
+    private func scrollToBottom() {
+        if context.viewState.timelineViewState.isLive {
+            context.viewState.timelineViewState.scrollToBottomPublisher.send(())
+        } else {
+            context.send(viewAction: .focusLive)
+        }
     }
     
     @ViewBuilder

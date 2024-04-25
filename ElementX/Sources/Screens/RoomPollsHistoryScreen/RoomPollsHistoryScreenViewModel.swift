@@ -23,7 +23,7 @@ typealias RoomPollsHistoryScreenViewModelType = StateStoreViewModel<RoomPollsHis
 
 class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, RoomPollsHistoryScreenViewModelProtocol {
     private enum Constants {
-        static let backPaginationEventLimit: UInt = 250
+        static let backPaginationEventLimit: UInt16 = 250
     }
     
     private let pollInteractionHandler: PollInteractionHandlerProtocol
@@ -82,11 +82,12 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
                 switch callback {
                 case .updatedTimelineItems:
                     self.updatePollsList(filter: state.bindings.filter)
-                case .canBackPaginate(let canBackPaginate):
+                case .paginationState(let paginationState):
+                    let canBackPaginate = paginationState.backward != .timelineStartReached
                     if self.state.canBackPaginate != canBackPaginate {
                         self.state.canBackPaginate = canBackPaginate
                     }
-                case .isBackPaginating:
+                case .isLive:
                     break
                 }
             }
