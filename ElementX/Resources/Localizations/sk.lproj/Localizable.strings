@@ -206,9 +206,12 @@
 "common_voice_message" = "Hlasová správa";
 "common_waiting" = "Čaká sa…";
 "common_waiting_for_decryption_key" = "Čaká sa na dešifrovací kľúč";
+"common.please_wait" = "Prosím, počkajte...";
+"common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "Ste si istí, že chcete ukončiť túto anketu?";
 "common_poll_summary" = "Anketa: %1$@";
 "common_something_went_wrong" = "Niečo sa pokazilo";
+"common_unable_to_decrypt_no_access" = "Nemáte prístup k tejto správe";
 "common_verify_device" = "Overiť zariadenie";
 "confirm_recovery_key_banner_message" = "Vaša záloha konverzácie nie je momentálne synchronizovaná. Na zachovanie prístupu k zálohe konverzácie musíte potvrdiť svoj kľúč na obnovu.";
 "confirm_recovery_key_banner_title" = "Potvrďte svoj kľúč na obnovenie";
@@ -420,6 +423,8 @@
 "screen_invites_invited_you" = "%1$@ (%2$@) vás pozval/a";
 "screen_join_room_join_action" = "Pripojiť sa do miestnosti";
 "screen_join_room_knock_action" = "Zaklopaním sa pripojíte";
+"screen_join_room_space_not_supported_description" = "%1$@ zatiaľ nepodporuje priestory. K priestorom môžete pristupovať na webe.";
+"screen_join_room_space_not_supported_title" = "Priestory zatiaľ nie sú podporované";
 "screen_join_room_subtitle_knock" = "Kliknite na tlačidlo nižšie a správca miestnosti bude informovaný. Po schválení sa budete môcť pripojiť ku konverzácii.";
 "screen_join_room_subtitle_no_preview" = "Ak chcete zobraziť históriu správ, musíte byť členom tejto miestnosti.";
 "screen_join_room_title_knock" = "Chcete sa pripojiť do tejto miestnosti?";
@@ -489,8 +494,8 @@
 "screen_qr_code_login_connection_note_secure_state_list_item_2" = "Ak narazíte na rovnaký problém, vyskúšajte inú sieť Wi-Fi alebo namiesto siete Wi-Fi použite mobilné dáta";
 "screen_qr_code_login_connection_note_secure_state_list_item_3" = "Ak to nefunguje, prihláste sa manuálne";
 "screen_qr_code_login_connection_note_secure_state_title" = "Pripojenie nie je bezpečené";
-"screen_qr_code_login_device_code_subtitle" = "Budete vyzvaní na zadanie dvoch číslic uvedených nižšie.";
-"screen_qr_code_login_device_code_title" = "Zadajte číslo na svojom zariadení";
+"screen_qr_code_login_device_code_subtitle" = "Budete požiadaní o zadanie dvoch číslic zobrazených na tomto zariadení.";
+"screen_qr_code_login_device_code_title" = "Zadajte nižšie uvedené číslo na vašom druhom zariadení";
 "screen_qr_code_login_initial_state_item_1" = "Otvorte %1$@ na stolnom zariadení";
 "screen_qr_code_login_initial_state_item_2" = "Kliknite na svoj obrázok";
 "screen_qr_code_login_initial_state_item_3" = "Vyberte %1$@";
@@ -521,8 +526,9 @@
 "screen_recovery_key_confirm_key_description" = "Ak máte bezpečnostný kľúč alebo bezpečnostnú frázu, bude to fungovať tiež.";
 "screen_recovery_key_confirm_key_label" = "Kľúč na obnovenie alebo prístupový kód";
 "screen_recovery_key_confirm_key_placeholder" = "Zadať...";
+"screen_recovery_key_confirm_lost_recovery_key" = "Stratili ste kľúč na obnovenie?";
 "screen_recovery_key_confirm_success" = "Kľúč na obnovu potvrdený";
-"screen_recovery_key_confirm_title" = "Zadajte kľúč na obnovenie alebo prístupový kód";
+"screen_recovery_key_confirm_title" = "Zadajte kľúč na obnovenie";
 "screen_recovery_key_copied_to_clipboard" = "Skopírovaný kľúč na obnovenie";
 "screen_recovery_key_generating_key" = "Generovanie...";
 "screen_recovery_key_save_action" = "Uložiť kľúč na obnovenie";
@@ -777,7 +783,7 @@
 "state_event_room_join_by_you" = "Vstúpili ste do miestnosti";
 "state_event_room_knock" = "%1$@ požiadal o pripojenie";
 "state_event_room_knock_accepted" = "%1$@ umožnil/a používateľovi %2$@ pripojiť sa";
-"state_event_room_knock_accepted_by_you" = "%1$@ vám umožnil/a pripojiť sa";
+"state_event_room_knock_accepted_by_you" = "Povolili ste používateľovi %1$@, aby sa pripojil";
 "state_event_room_knock_by_you" = "Požiadali ste o pripojenie";
 "state_event_room_knock_denied" = "%1$@ odmietol/a žiadosť používateľa %2$@ o vstup";
 "state_event_room_knock_denied_by_you" = "Odmietli ste žiadosť používateľa %1$@ o pripojenie";

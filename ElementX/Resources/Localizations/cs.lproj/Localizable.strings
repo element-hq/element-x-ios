@@ -206,9 +206,12 @@
 "common_voice_message" = "Hlasová zpráva";
 "common_waiting" = "Čekání...";
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
+"common.please_wait" = "Počkejte prosím...";
+"common_no_room_name" = "Žádný název místnosti";
 "common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
 "common_poll_summary" = "Hlasování: %1$@";
 "common_something_went_wrong" = "Něco se pokazilo";
+"common_unable_to_decrypt_no_access" = "Nemáte přístup k této zprávě";
 "common_verify_device" = "Ověřit zařízení";
 "confirm_recovery_key_banner_message" = "Vaše záloha chatu není aktuálně synchronizována. Abyste si zachovali přístup k záloze chatu, musíte potvrdit klíč pro obnovení.";
 "confirm_recovery_key_banner_title" = "Potvrďte klíč pro obnovení";
@@ -420,6 +423,8 @@
 "screen_invites_invited_you" = "%1$@ (%2$@) vás pozval(a)";
 "screen_join_room_join_action" = "Připojit se do místnosti";
 "screen_join_room_knock_action" = "Zaklepejte a připojte se";
+"screen_join_room_space_not_supported_description" = "%1$@ zatím nepodporuje prostory. Prostory můžete používat na webu.";
+"screen_join_room_space_not_supported_title" = "Prostory zatím nejsou podporovány";
 "screen_join_room_subtitle_knock" = "Klikněte na tlačítko níže a správce místnosti bude informován. Po schválení se budete moci připojit ke konverzaci.";
 "screen_join_room_subtitle_no_preview" = "Pro zobrazení historie zpráv musíte být členem této místnosti.";
 "screen_join_room_title_knock" = "Chcete se připojit k této místnosti?";
@@ -482,7 +487,7 @@
 "screen_polls_history_filter_ongoing" = "Probíhající";
 "screen_polls_history_filter_past" = "Minulé";
 "screen_polls_history_title" = "Hlasování";
-"screen_qr_code_login_connecting_subtitle" = "Navazování spojení";
+"screen_qr_code_login_connecting_subtitle" = "Navazování zabezpečeného spojení";
 "screen_qr_code_login_connection_note_secure_state_description" = "K novému zařízení se nepodařilo navázat bezpečné připojení. Vaše stávající zařízení jsou stále v bezpečí a nemusíte se o ně obávat.";
 "screen_qr_code_login_connection_note_secure_state_list_header" = "Co teď?";
 "screen_qr_code_login_connection_note_secure_state_list_item_1" = "Zkuste se znovu přihlásit pomocí QR kódu v případě, že se jednalo o problém se sítí";
@@ -490,7 +495,7 @@
 "screen_qr_code_login_connection_note_secure_state_list_item_3" = "Pokud to nefunguje, přihlaste se ručně";
 "screen_qr_code_login_connection_note_secure_state_title" = "Připojení není zabezpečené";
 "screen_qr_code_login_device_code_subtitle" = "Budete požádáni o zadání dvou níže uvedených číslic.";
-"screen_qr_code_login_device_code_title" = "Zadejte číslo na svém zařízení";
+"screen_qr_code_login_device_code_title" = "Zadejte níže uvedené číslo na svém dalším zařízení";
 "screen_qr_code_login_initial_state_item_1" = "Otevřete %1$@ na stolním počítači";
 "screen_qr_code_login_initial_state_item_2" = "Klikněte na svůj avatar";
 "screen_qr_code_login_initial_state_item_3" = "Vybrat %1$@";
@@ -521,8 +526,9 @@
 "screen_recovery_key_confirm_key_description" = "Pokud máte bezpečnostní klíč nebo bezpečnostní frázi, bude to fungovat také.";
 "screen_recovery_key_confirm_key_label" = "Klíč pro obnovení nebo přístupový kód";
 "screen_recovery_key_confirm_key_placeholder" = "Zadejte...";
+"screen_recovery_key_confirm_lost_recovery_key" = "Ztratili jste klíč pro obnovení?";
 "screen_recovery_key_confirm_success" = "Klíč pro obnovení potvrzen";
-"screen_recovery_key_confirm_title" = "Potvrďte klíč pro obnovení";
+"screen_recovery_key_confirm_title" = "Zadejte klíč pro obnovení";
 "screen_recovery_key_copied_to_clipboard" = "Klíč pro obnovení zkopírován";
 "screen_recovery_key_generating_key" = "Generování...";
 "screen_recovery_key_save_action" = "Uložit klíč pro obnovení";
@@ -539,7 +545,7 @@
 "screen_report_content_block_user_hint" = "Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele";
 "screen_report_content_explanation" = "Tato zpráva bude nahlášena správci vašeho domovského serveru. Nebude si moci přečíst žádné šifrované zprávy.";
 "screen_report_content_hint" = "Důvod nahlášení tohoto obsahu";
-"screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
+"screen_room_alias_resolver_resolve_alias_failure" = "Nepodařilo se přeložit alias místnosti.";
 "screen_room_attachment_source_camera" = "Fotoaparát";
 "screen_room_attachment_source_camera_video" = "Natočit video";
 "screen_room_attachment_source_files" = "Příloha";
@@ -777,7 +783,7 @@
 "state_event_room_join_by_you" = "Vstoupili jste do místnosti";
 "state_event_room_knock" = "%1$@ požádal(a) o vstup";
 "state_event_room_knock_accepted" = "%1$@ povolil(a) vstoupit %2$@";
-"state_event_room_knock_accepted_by_you" = "%1$@ vám povolil(a) vstoupit";
+"state_event_room_knock_accepted_by_you" = "Povolili jste %1$@ vstoupit";
 "state_event_room_knock_by_you" = "Požádali jste o vstup";
 "state_event_room_knock_denied" = "%1$@ zamítl(a) žádost %2$@ o vstup";
 "state_event_room_knock_denied_by_you" = "Zamítli jste žádost %1$@ o vstup";
