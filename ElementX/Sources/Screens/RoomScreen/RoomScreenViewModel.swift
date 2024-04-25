@@ -49,6 +49,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private var paginateBackwardsTask: Task<Void, Never>?
 
     init(roomProxy: RoomProxyProtocol,
+         focussedEventID: String? = nil,
          timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
@@ -89,6 +90,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          hasOngoingCall: roomProxy.hasOngoingCall,
                                                          bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
+        
+        // This may change to load the detached timeline directly.
+        if let focussedEventID {
+            Task { await focusOnEvent(eventID: focussedEventID) }
+        }
         
         setupSubscriptions()
         setupDirectRoomSubscriptionsIfNeeded()
@@ -207,6 +213,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }
     }
+    
+    func focusOnEvent(eventID: String) async { }
     
     // MARK: - Private
     

@@ -74,9 +74,11 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Start the user session flows.
         case start
         
+        enum SelectRoomFocus: Hashable { case roomDetails, eventID(String) }
         /// Request presentation for a particular room
-        /// - Parameter roomID:the room identifier
-        case selectRoom(roomID: String, showingRoomDetails: Bool)
+        /// - Parameter roomID: The room identifier
+        /// - Parameter entryPoint: The starting point for the presented room.
+        case selectRoom(roomID: String, entryPoint: RoomFlowCoordinatorEntryPoint)
         /// The room screen has been dismissed
         case deselectRoom
         
