@@ -36,8 +36,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     private var client: UITestsSignalling.Client?
     
     init(listenForSignals: Bool = false) {
-        callbacks.send(.paginationState(PaginationState(backward: backPaginationResponses.isEmpty ? .timelineStartReached : .idle,
-                                                        forward: .timelineStartReached)))
+        callbacks.send(.paginationState(PaginationState(backward: .idle, forward: .timelineStartReached)))
         callbacks.send(.isLive(true))
         
         guard listenForSignals else { return }
@@ -64,6 +63,11 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
 
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
         callbacks.send(.paginationState(PaginationState(backward: .paginating, forward: .timelineStartReached)))
+        
+        if client == nil {
+            try? await simulateBackPagination()
+        }
+        
         return .success(())
     }
     
