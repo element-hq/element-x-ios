@@ -64,7 +64,6 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     sender: .init(id: "", displayName: "Alice"),
                                                                     content: .init(body: "This is a message"))), groupStyle: .single))
         }
-        .padding(.horizontal, 8)
         .environmentObject(viewModel.context)
     }
 }

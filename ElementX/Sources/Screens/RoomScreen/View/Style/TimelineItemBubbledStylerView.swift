@@ -29,7 +29,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
-    private var isFocussed: Bool { timelineItem.id.eventID == focussedEventID }
+    private var isFocussed: Bool { focussedEventID != nil && timelineItem.id.eventID == focussedEventID }
     
     /// The base padding applied to bubbles on either side.
     ///
@@ -532,8 +532,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(viewModel.state.timelineViewState.itemViewStates) { viewState in
                     RoomTimelineItemView(viewState: viewState)
-                        .padding(TimelineStyle.bubbles.rowInsets)
-                    // Insets added in the table view cells
                 }
             }
         }

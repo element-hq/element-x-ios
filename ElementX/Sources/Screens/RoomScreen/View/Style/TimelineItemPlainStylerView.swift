@@ -26,7 +26,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
     
-    private var isFocussed: Bool { timelineItem.id.eventID == focussedEventID }
+    private var isFocussed: Bool { focussedEventID != nil && timelineItem.id.eventID == focussedEventID }
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 0) {
@@ -156,7 +156,6 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
                 RoomTimelineItemView(viewState: .init(item: item, groupStyle: .single))
-                    .padding(TimelineStyle.plain.rowInsets) // Insets added in the table view cells
             }
         }
         .environment(\.timelineStyle, .plain)
