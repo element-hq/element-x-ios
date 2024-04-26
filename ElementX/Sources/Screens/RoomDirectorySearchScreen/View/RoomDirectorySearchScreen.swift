@@ -34,13 +34,20 @@ struct RoomDirectorySearchScreen: View {
                         if context.viewState.isLoading {
                             ProgressView()
                                 .frame(maxWidth: .infinity)
+                        } else if context.viewState.rooms.isEmpty {
+                            Text(L10n.commonNoResults)
+                                .font(.compound.bodyLG)
+                                .foregroundColor(.compound.textSecondary)
+                                .frame(maxWidth: .infinity)
+                                .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
+                        } else {
+                            emptyRectangle
+                                .onAppear {
+                                    context.send(viewAction: .reachedBottom)
+                                }
                         }
-                        
-                        emptyRectangle
-                            .onAppear {
-                                context.send(viewAction: .reachedBottom)
-                            }
                     }
+                    .listRowSeparator(.hidden)
                 }
             }
             .listStyle(.plain)
@@ -70,7 +77,7 @@ struct RoomDirectorySearchScreen: View {
 
 // MARK: - Previews
 
-struct RoomDirectorySearchScreenScreen_Previews: PreviewProvider, TestablePreview {
+struct RoomDirectorySearchScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel: RoomDirectorySearchScreenViewModel = {
         let results = [RoomDirectorySearchResult(id: "test_1",
                                                  alias: "#test_1:example.com",
