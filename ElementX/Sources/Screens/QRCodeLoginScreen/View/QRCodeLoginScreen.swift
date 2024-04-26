@@ -86,6 +86,7 @@ struct QRCodeLoginScreen: View {
                         Text(L10n.screenQrCodeLoginVerifyCodeLoading)
                             .foregroundColor(.compound.textSecondary)
                             .font(.compound.bodySM)
+                            .multilineTextAlignment(.center)
                     }
                 }
             } bottomContent: {
@@ -163,6 +164,7 @@ struct QRCodeLoginScreen: View {
                     Text(L10n.screenQrCodeLoginConnectingSubtitle)
                         .foregroundColor(.compound.textSecondary)
                         .font(.compound.bodySM)
+                        .multilineTextAlignment(.center)
                 }
             case .scanning:
                 // To keep the spacing consistent between states
