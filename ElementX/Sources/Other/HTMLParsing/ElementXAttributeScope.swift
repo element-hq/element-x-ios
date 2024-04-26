@@ -26,6 +26,11 @@ enum UserIDAttribute: AttributedStringKey {
     static var name = "MXUserIDAttribute"
 }
 
+enum UserDisplayNameAttribute: AttributedStringKey {
+    typealias Value = String
+    static var name = "MXUserDisplayNameAttribute"
+}
+
 enum RoomIDAttribute: AttributedStringKey {
     typealias Value = String
     static var name = "MXRoomIDAttribute"
@@ -65,6 +70,7 @@ extension AttributeScopes {
         let blockquote: BlockquoteAttribute
         
         let userID: UserIDAttribute
+        let userDisplayName: UserDisplayNameAttribute
         let roomID: RoomIDAttribute
         let roomAlias: RoomAliasAttribute
         let eventOnRoomID: EventOnRoomIDAttribute

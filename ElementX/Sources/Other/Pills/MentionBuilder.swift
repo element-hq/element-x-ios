@@ -18,7 +18,7 @@ import Foundation
 import UIKit
 
 struct MentionBuilder: MentionBuilderProtocol {
-    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String) {
+    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String, userDisplayName: String?) {
         let attributes = attributedString.attributes(at: 0, longestEffectiveRange: nil, in: range)
         let font = attributes[.font] as? UIFont ?? .preferredFont(forTextStyle: .body)
         let blockquote = attributes[.MatrixBlockquote]
@@ -26,7 +26,12 @@ struct MentionBuilder: MentionBuilderProtocol {
         
         let attachmentData = PillTextAttachmentData(type: .user(userID: userID), font: font)
         guard let attachment = PillTextAttachment(attachmentData: attachmentData) else {
-            attributedString.addAttributes([.MatrixUserID: userID], range: range)
+            attributedString.addAttribute(.MatrixUserID, value: userID, range: range)
+            
+            if let userDisplayName {
+                attributedString.addAttribute(.MatrixUserDisplayName, value: userDisplayName, range: range)
+            }
+            
             return
         }
         
