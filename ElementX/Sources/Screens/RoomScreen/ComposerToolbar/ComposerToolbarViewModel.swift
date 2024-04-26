@@ -125,10 +125,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             case .previewVoiceMessage:
                 actionsSubject.send(.voiceMessage(.send))
             default:
-                if ServiceLocator.shared.settings.richTextEditorEnabled {
-                    let sendHTML = appSettings.richTextEditorEnabled
+                if context.composerActionsEnabled {
                     actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
-                                                     html: sendHTML ? wysiwygViewModel.content.html : nil,
+                                                     html: wysiwygViewModel.content.html,
                                                      mode: state.composerMode,
                                                      intentionalMentions: wysiwygViewModel.getMentionsState().toIntentionalMentions()))
                 } else {
@@ -162,6 +161,17 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             processVoiceMessageAction(voiceMessageAction)
         case .plainComposerTextChanged:
             completionSuggestionService.processTextMessage(state.bindings.plainComposerText.string)
+        case .didToggleFormattingOptions:
+            if context.composerActionsEnabled {
+                DispatchQueue.main.async {
+                    self.wysiwygViewModel.textView.flushPills()
+                    self.wysiwygViewModel.setMarkdownContent(self.context.plainComposerText.string)
+                }
+            } else {
+                context.plainComposerText = NSAttributedString(string: wysiwygViewModel.attributedContent.text.string,
+                                                               attributes: [.font: UIFont.preferredFont(forTextStyle: .body),
+                                                                            .foregroundColor: UIColor(.compound.textPrimary)])
+            }
         }
     }
 
@@ -297,7 +307,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 return
             }
             
-            if appSettings.richTextEditorEnabled {
+            if context.composerActionsEnabled {
                 wysiwygViewModel.setMention(url: url.absoluteString, name: item.displayName ?? item.id, mentionType: .user)
             } else {
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
@@ -305,7 +315,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 state.bindings.plainComposerText = attributedString
             }
         case .allUsers:
-            if appSettings.richTextEditorEnabled {
+            if context.composerActionsEnabled {
                 wysiwygViewModel.setAtRoomMention()
             } else {
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
@@ -333,7 +343,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(text: String) {
-        if ServiceLocator.shared.settings.richTextEditorEnabled {
+        if context.composerActionsEnabled {
             wysiwygViewModel.textView.flushPills()
             
             wysiwygViewModel.setHtmlContent(text)

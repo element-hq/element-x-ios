@@ -272,18 +272,10 @@ class RoomScreenInteractionHandler {
     private func processEditMessageEvent(_ messageTimelineItem: EventBasedMessageTimelineItemProtocol) {
         let text: String
         switch messageTimelineItem.contentType {
-        case .text(let textItem):
-            if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = textItem.formattedBodyHTMLString {
-                text = formattedBodyHTMLString
-            } else {
-                text = messageTimelineItem.body
-            }
-        case .emote(let emoteItem):
-            if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = emoteItem.formattedBodyHTMLString {
-                text = "/me " + formattedBodyHTMLString
-            } else {
-                text = "/me " + messageTimelineItem.body
-            }
+        case .text:
+            text = messageTimelineItem.body
+        case .emote:
+            text = "/me " + messageTimelineItem.body
         default:
             text = messageTimelineItem.body
         }

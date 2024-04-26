@@ -37,7 +37,6 @@ final class AppSettings {
         case logLevel
         case otlpTracingEnabled
         case viewSourceEnabled
-        case richTextEditorEnabled
         case appAppearance
         case sharePresence
         case hideUnreadMessagesBadge
@@ -235,9 +234,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: false, storageType: .userDefaults(store))
     var viewSourceEnabled
 
-    @UserPreference(key: UserDefaultsKeys.richTextEditorEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var richTextEditorEnabled
-    
     // MARK: - Element Call
     
     @UserPreference(key: UserDefaultsKeys.elementCallBaseURL, defaultValue: "https://call.element.io", storageType: .userDefaults(store))
