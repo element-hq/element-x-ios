@@ -163,8 +163,20 @@ class RoomProxy: RoomProxyProtocol {
         do {
             let timeline = try await room.timelineFocusedOnEvent(eventId: eventID, numContextEvents: numberOfEvents, internalIdPrefix: UUID().uuidString)
             return .success(TimelineProxy(timeline: timeline, isLive: false))
+        } catch let error as FocusEventError {
+            switch error {
+            case .InvalidEventId(_, let error):
+                MXLog.error("Invalid event \(eventID) Error: \(error)")
+                return .failure(.eventNotFound)
+            case .EventNotFound:
+                MXLog.error("Event \(eventID) not found.")
+                return .failure(.eventNotFound)
+            case .Other(let message):
+                MXLog.error("Failed to create a timeline focussed on event \(eventID) Error: \(message)")
+                return .failure(.sdkError(error))
+            }
         } catch {
-            MXLog.error("Failed to create a timeline focussed on: \(eventID) with error: \(error)")
+            MXLog.error("Unexpected error: \(error)")
             return .failure(.sdkError(error))
         }
     }

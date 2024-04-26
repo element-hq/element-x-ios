@@ -23,6 +23,7 @@ enum RoomProxyError: Error {
     
     case invalidURL
     case invalidMedia
+    case eventNotFound
 }
 
 enum RoomProxyAction {

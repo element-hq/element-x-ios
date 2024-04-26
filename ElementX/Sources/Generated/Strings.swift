@@ -546,6 +546,8 @@ internal enum L10n {
   }
   /// Failed to upload your voice message.
   internal static var errorFailedUploadingVoiceMessage: String { return L10n.tr("Localizable", "error_failed_uploading_voice_message") }
+  /// Message not found
+  internal static var errorMessageNotFound: String { return L10n.tr("Localizable", "error_message_not_found") }
   /// No compatible app was found to handle this action.
   internal static var errorNoCompatibleAppFound: String { return L10n.tr("Localizable", "error_no_compatible_app_found") }
   /// Some messages have not been sent

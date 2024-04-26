@@ -234,9 +234,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         switch await timelineController.focusOnEvent(eventID, timelineSize: Constants.detachedTimelineSize) {
         case .success:
             state.timelineViewState.focussedEventID = eventID
-        case .failure:
+        case .failure(let error):
             MXLog.error("Failed to focus on event \(eventID)")
-            displayError(.toast(L10n.commonFailed))
+            
+            if case .eventNotFound = error {
+                displayError(.toast(L10n.errorMessageNotFound))
+            } else {
+                displayError(.toast(L10n.commonFailed))
+            }
         }
     }
     

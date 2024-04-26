@@ -32,6 +32,7 @@ enum RoomTimelineControllerAction {
 
 enum RoomTimelineControllerError: Error {
     case generic
+    case eventNotFound
 }
 
 @MainActor
