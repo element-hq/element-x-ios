@@ -265,7 +265,8 @@ struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
         @State var isMultiline: Bool
 
         init(text: String) {
-            _text = .init(initialValue: .init(string: ""))
+            _text = .init(initialValue: .init(string: text, attributes: [.font: UIFont.preferredFont(forTextStyle: .body),
+                                                                         .foregroundColor: UIColor(.compound.textPrimary)]))
             _isMultiline = .init(initialValue: false)
         }
 
