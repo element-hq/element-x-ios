@@ -34,12 +34,13 @@ struct ComposerToolbar: View {
         VStack(spacing: 8) {
             topBar
             
-            if verticalSizeClass != .compact,
-               context.composerExpanded {
-                suggestionView
-                    .padding(.leading, -5)
-                    .padding(.trailing, -8)
-                
+            if context.composerActionsEnabled {
+                if verticalSizeClass != .compact,
+                   context.composerExpanded {
+                    suggestionView
+                        .padding(.leading, -5)
+                        .padding(.trailing, -8)
+                }
                 bottomBar
             }
         }
