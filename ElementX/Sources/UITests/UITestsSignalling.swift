@@ -27,11 +27,13 @@ enum UITestsSignal: Codable, Equatable {
     case success
     
     case timeline(Timeline)
-    enum Timeline: Codable {
+    enum Timeline: Codable, Equatable {
         /// Ask the app to back paginate.
         case paginate
         /// Ask the app to simulate an incoming message.
         case incomingMessage
+        /// Ask the app to simulate focussing on an event ID.
+        case focusOnEvent(String)
     }
     
     /// Posts a notification.

@@ -109,6 +109,25 @@ class RoomScreenUITests: XCTestCase {
         
         try await app.assertScreenshot(.roomLayoutBottom, step: 1)
     }
+    
+    func testTimelineLayoutHighlightExisting() async throws {
+        let client = try UITestsSignalling.Client(mode: .tests)
+        
+        let app = Application.launch(.roomLayoutHighlight)
+        
+        await client.waitForApp()
+        defer { try? client.stop() }
+        
+        // Some time for the timeline to settle.
+        try await Task.sleep(for: .seconds(1))
+        // When tapping a permalink to an item in the timeline.
+        try await performOperation(.focusOnEvent("$5"), using: client)
+        // Some time for the timeline to settle.
+        try await Task.sleep(for: .seconds(1))
+        
+        // Then the item should become highlighted.
+        try await app.assertScreenshot(.roomLayoutHighlight, step: 0)
+    }
 
     func testTimelineReadReceipts() async throws {
         let app = Application.launch(.roomSmallTimelineWithReadReceipts)
