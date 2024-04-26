@@ -122,7 +122,9 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 // Since the qr code login flow includes verification
                 appSettings.hasRunIdentityConfirmationOnboarding = true
-                userHasSignedIn(userSession: userSession)
+                DispatchQueue.main.async {
+                    self.userHasSignedIn(userSession: userSession)
+                }
             }
         }
         .store(in: &cancellables)
