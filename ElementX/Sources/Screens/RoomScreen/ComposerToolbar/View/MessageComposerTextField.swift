@@ -45,7 +45,7 @@ struct MessageComposerTextField: View {
 }
 
 private struct UITextViewWrapper: UIViewRepresentable {
-    typealias UIViewType = UITextView
+    @Environment(\.roomContext) private var roomContext
 
     @Binding var text: NSAttributedString
     @Binding var isMultiline: Bool
@@ -60,6 +60,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
         // Need to use TextKit 1 for mentions
         let textView = ElementTextView(usingTextLayoutManager: false)
+        textView.roomContext = roomContext
+        
         textView.isMultiline = $isMultiline
         textView.delegate = context.coordinator
         textView.elementDelegate = context.coordinator
@@ -75,7 +77,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.keyboardType = .default
 
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-
+        
         return textView
     }
 
@@ -92,7 +94,11 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
         if textView.attributedText != text {
             textView.attributedText = text
-
+            
+            // Prevent the textView from randomly using the tint color
+            textView.typingAttributes = [.font: font,
+                                         .foregroundColor: UIColor(.compound.textPrimary)]
+            
             if text.string.isEmpty {
                 // text cleared, probably because the written text is sent
                 // reload keyboard type
@@ -155,10 +161,13 @@ private protocol ElementTextViewDelegate: AnyObject {
     func textView(_ textView: UITextView, didReceivePasteWith provider: NSItemProvider)
 }
 
-private class ElementTextView: UITextView {
-    weak var elementDelegate: ElementTextViewDelegate?
-
+private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
+    var roomContext: RoomScreenViewModel.Context?
     var isMultiline: Binding<Bool>?
+    
+    weak var elementDelegate: ElementTextViewDelegate?
+    
+    private var pillViews = NSHashTable<UIView>.weakObjects()
 
     override var keyCommands: [UIKeyCommand]? {
         [UIKeyCommand(input: "\r", modifierFlags: .shift, action: #selector(shiftEnterKeyPressed)),
@@ -214,6 +223,31 @@ private class ElementTextView: UITextView {
         }
 
         elementDelegate?.textView(self, didReceivePasteWith: provider)
+    }
+    
+    // MARK: PillAttachmentViewProviderDelegate
+    
+    func invalidateTextAttachmentsDisplay() {
+        attributedText.enumerateAttribute(.attachment,
+                                          in: NSRange(location: 0, length: attributedText.length),
+                                          options: []) { value, range, _ in
+            guard value != nil else {
+                return
+            }
+            self.layoutManager.invalidateDisplay(forCharacterRange: range)
+        }
+    }
+    
+    func registerPillView(_ pillView: UIView) {
+        pillViews.add(pillView)
+    }
+
+    func flushPills() {
+        for view in pillViews.allObjects {
+            view.alpha = 0.0
+            view.removeFromSuperview()
+        }
+        pillViews.removeAllObjects()
     }
 }
 

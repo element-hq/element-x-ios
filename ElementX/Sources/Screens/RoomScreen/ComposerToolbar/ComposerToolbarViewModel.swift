@@ -27,6 +27,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let appSettings: AppSettings
+    
+    private let mentionBuilder: MentionBuilderProtocol
+    private let attributedStringBuilder: AttributedStringBuilderProtocol
+    
     private var hasAppeard = false
 
     private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
@@ -47,6 +51,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.appSettings = appSettings
+        
+        mentionBuilder = MentionBuilder()
+        attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: mentionBuilder)
         
         super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview, duration: 0),
                                                               audioRecorderState: .init(),
@@ -125,7 +132,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                                                      mode: state.composerMode,
                                                      intentionalMentions: wysiwygViewModel.getMentionsState().toIntentionalMentions()))
                 } else {
-                    actionsSubject.send(.sendMessage(plain: context.plainComposerText.string, html: nil, mode: state.composerMode, intentionalMentions: .empty))
+                    sendPlainComposerText()
                 }
             }
         case .cancelReply:
@@ -180,6 +187,58 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     // MARK: - Private
     
+    private func sendPlainComposerText() {
+        let attributedString = NSMutableAttributedString(attributedString: context.plainComposerText)
+
+        var shouldMakeAnotherPass = false
+        var userIDs = Set<String>()
+        var containsAtRoom = false
+        
+        repeat { // Don't enumerate and mutate at the same time, big no no
+            shouldMakeAnotherPass = false
+            attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, stop in
+                guard let value else { return }
+                
+                shouldMakeAnotherPass = true
+                
+                // Remove the attribute so it doesn't get inherited by the new string
+                attributedString.removeAttribute(.link, range: range)
+                
+                guard let userID = attributedString.attribute(.MatrixUserID, at: range.location, effectiveRange: nil) as? String else {
+                    return
+                }
+                
+                let displayName = attributedString.attribute(.MatrixUserDisplayName, at: range.location, effectiveRange: nil)
+                
+                attributedString.replaceCharacters(in: range, with: "[\(displayName ?? userID)](\(value))")
+                userIDs.insert(userID)
+                
+                stop.pointee = true
+            }
+        } while shouldMakeAnotherPass
+        
+        repeat {
+            shouldMakeAnotherPass = false
+            attributedString.enumerateAttribute(.MatrixAllUsersMention, in: .init(location: 0, length: attributedString.length), options: []) { value, range, stop in
+                guard value != nil else { return }
+                
+                shouldMakeAnotherPass = true
+                
+                // Remove the attribute so it doesn't get inherited by the new string
+                attributedString.removeAttribute(.MatrixAllUsersMention, range: range)
+                
+                attributedString.replaceCharacters(in: range, with: PillConstants.atRoom)
+                containsAtRoom = true
+                
+                stop.pointee = true
+            }
+        } while shouldMakeAnotherPass
+        
+        actionsSubject.send(.sendMessage(plain: attributedString.string, html: nil,
+                                         mode: state.composerMode,
+                                         intentionalMentions: .init(userIDs: userIDs, atRoom: containsAtRoom)))
+    }
+    
     private func processVoiceMessageAction(_ action: ComposerToolbarVoiceMessageAction) {
         switch action {
         case .startRecording:
@@ -207,9 +266,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func setupMentionsHandling(mentionDisplayHelper: MentionDisplayHelper) {
         wysiwygViewModel.mentionDisplayHelper = mentionDisplayHelper
         
-        let attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: MentionBuilder())
-        
-        wysiwygViewModel.mentionReplacer = ComposerMentionReplacer { urlString, string in
+        wysiwygViewModel.mentionReplacer = ComposerMentionReplacer { [weak self] urlString, string in
+            guard let self else {
+                return NSMutableAttributedString(string: string)
+            }
+            
             let attributedString: NSMutableAttributedString
             // This is the all room mention special case
             if urlString == PillConstants.composerAtRoomURLString {
@@ -217,6 +278,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             } else {
                 attributedString = NSMutableAttributedString(string: string, attributes: [.link: URL(string: urlString) as Any])
             }
+            
             attributedStringBuilder.detectPermalinks(attributedString)
             
             // In RTE mentions don't need to be handled as links
@@ -232,9 +294,22 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 MXLog.error("Could not build user permalink")
                 return
             }
-            wysiwygViewModel.setMention(url: url.absoluteString, name: item.displayName ?? item.id, mentionType: .user)
+            
+            if appSettings.richTextEditorEnabled {
+                wysiwygViewModel.setMention(url: url.absoluteString, name: item.displayName ?? item.id, mentionType: .user)
+            } else {
+                let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
+                mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: item.id, userDisplayName: item.displayName)
+                state.bindings.plainComposerText = attributedString
+            }
         case .allUsers:
-            wysiwygViewModel.setAtRoomMention()
+            if appSettings.richTextEditorEnabled {
+                wysiwygViewModel.setAtRoomMention()
+            } else {
+                let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
+                mentionBuilder.handleAllUsersMention(for: attributedString, in: suggestion.range)
+                state.bindings.plainComposerText = attributedString
+            }
         }
     }
 

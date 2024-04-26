@@ -814,7 +814,6 @@
 		C26DB49C06C00B5DF1A991A5 /* InviteUsersScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1454CF3AABD242F55C8A2615 /* InviteUsersScreenModels.swift */; };
 		C2879369106A419A5071F1F8 /* VoiceMessageRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B0A96B8FE4849227945067 /* VoiceMessageRecorder.swift */; };
 		C287BE1802AD432F3D848D8E /* InvitesScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF81D7F2A6BA9DE3F6F8D9D /* InvitesScreenViewModel.swift */; };
-		C29C0FE12A3BF1B9E03232AE /* CompletionSuggestionModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A94AA0CCABC1D8AA0527E12 /* CompletionSuggestionModels.swift */; };
 		C32765D740C81AD4C42E8F50 /* CreateRoomFlowParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935C2FB18EFB8EEE96B26330 /* CreateRoomFlowParameters.swift */; };
 		C3317EF833AB4060988DF098 /* SAS.strings in Resources */ = {isa = PBXBuildFile; fileRef = 135FC689EA39AE1D34153B58 /* SAS.strings */; };
 		C3522917C0C367C403429EEC /* CoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B251F5B4511D1CA0BA8361FE /* CoordinatorProtocol.swift */; };
@@ -1232,7 +1231,6 @@
 		1A18F6CE4D694D21E4EA9B25 /* Strings+Untranslated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strings+Untranslated.swift"; sourceTree = "<group>"; };
 		1A4D29F2683F5772AC72406F /* MapTilerStaticMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerStaticMap.swift; sourceTree = "<group>"; };
 		1A7ED2EF5BDBAD2A7DBC4636 /* GeoURITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoURITests.swift; sourceTree = "<group>"; };
-		1A94AA0CCABC1D8AA0527E12 /* CompletionSuggestionModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionSuggestionModels.swift; sourceTree = "<group>"; };
 		1AB58EF0176D4CFB1040DA22 /* WaitlistScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistScreenViewModel.swift; sourceTree = "<group>"; };
 		1ABDE6F66532CBEB0E016F94 /* RoomProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomProxyMock.swift; sourceTree = "<group>"; };
 		1B2AC540DE619B36832A5DB5 /* LocationRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRoomTimelineItem.swift; sourceTree = "<group>"; };
@@ -2973,7 +2971,6 @@
 		44B4B5DB07E5C7871873548F /* ComposerToolbar */ = {
 			isa = PBXGroup;
 			children = (
-				1A94AA0CCABC1D8AA0527E12 /* CompletionSuggestionModels.swift */,
 				3A12D3D8138F1B71AFA7C858 /* CompletionSuggestionService.swift */,
 				9ECF11669EF253E98AA2977A /* CompletionSuggestionServiceProtocol.swift */,
 				4D3A7375AB22721C436EB056 /* ComposerToolbarModels.swift */,
@@ -5961,7 +5958,6 @@
 				0DC815CA24E1BD7F408F37D3 /* CollapsibleTimelineItem.swift in Sources */,
 				663E198678778F7426A9B27D /* Collection.swift in Sources */,
 				24B7CD41342C143117ADA768 /* Comparable.swift in Sources */,
-				C29C0FE12A3BF1B9E03232AE /* CompletionSuggestionModels.swift in Sources */,
 				19DF5600A7F547B22DD7872A /* CompletionSuggestionService.swift in Sources */,
 				EAB3C1F0BC7F671ED8BDF82D /* CompletionSuggestionServiceProtocol.swift in Sources */,
 				16E4F1B8B9BFE1367F96DDA7 /* CompletionSuggestionView.swift in Sources */,
