@@ -103,7 +103,7 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     private static func expectedItemWith(timestamp: String, isOutgoing: Bool, senderId: String) -> EncryptedRoomTimelineItem {
         EncryptedRoomTimelineItem(id: .random,
-                                  body: "You don't have access to this message",
+                                  body: L10n.commonUnableToDecryptNoAccess,
                                   encryptionType: .megolmV1AesSha2(sessionID: "foo", cause: .membership),
                                   timestamp: timestamp,
                                   isOutgoing: isOutgoing,
