@@ -321,7 +321,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         // Check if we need to add anything to the top of the timeline.
         switch paginationState.backward {
-        case .timelineStartReached:
+        case .timelineEndReached:
             if !roomProxy.isEncryptedOneToOneRoom {
                 let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.name)
                 newTimelineItems.insert(timelineStart, at: 0)
@@ -335,7 +335,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         switch paginationState.forward {
         case .paginating:
             newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(position: .end), at: newTimelineItems.count)
-        case .idle, .timelineStartReached:
+        case .idle, .timelineEndReached:
             break
         }
         

@@ -142,11 +142,9 @@ struct MatrixPermalinkParser: URLParser {
         case .user(let id):
             return .userProfile(userID: id)
         case .eventOnRoomId(let roomID, let eventID):
-            // return .event(roomID: roomID, eventID: eventID)
-            return nil
+            return .event(roomID: roomID, eventID: eventID)
         case .eventOnRoomAlias(let alias, let eventID):
-            // return .eventOnRoomAlias(alias: alias, eventID: eventID)
-            return nil
+            return .eventOnRoomAlias(alias: alias, eventID: eventID)
         default:
             return nil
         }

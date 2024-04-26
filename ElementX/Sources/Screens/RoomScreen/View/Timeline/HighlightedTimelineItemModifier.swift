@@ -47,6 +47,7 @@ private struct HighlightedTimelineItemModifier: ViewModifier {
     }
 }
 
+// swiftlint:disable line_length
 struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ScrollView {
@@ -83,3 +84,5 @@ struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePrevie
         }
     }
 }
+
+// swiftlint:enable line_length

@@ -234,7 +234,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         switch await timelineController.focusOnEvent(eventID, timelineSize: Constants.detachedTimelineSize) {
         case .success:
             state.timelineViewState.focussedEventID = eventID
-        case .failure(let error):
+        case .failure:
             MXLog.error("Failed to focus on event \(eventID)")
             displayError(.toast(L10n.commonFailed))
         }
@@ -475,7 +475,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 break
             }
             
-            if state.timelineViewState.paginationState.forward == .timelineStartReached {
+            if state.timelineViewState.paginationState.forward == .timelineEndReached {
                 focusLive()
             }
             
