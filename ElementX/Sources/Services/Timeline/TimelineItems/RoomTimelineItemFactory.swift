@@ -161,13 +161,17 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                             _ encryptedMessage: EncryptedMessage,
                                             _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
         var encryptionType = EncryptedRoomTimelineItem.EncryptionType.unknown
+        var errorLabel = L10n.commonWaitingForDecryptionKey
         switch encryptedMessage {
         case .megolmV1AesSha2(let sessionID, let cause):
-            let cause: EncryptedRoomTimelineItem.UTDCause = switch cause {
-            case .unknown: .unknown
-            case .membership: .membership
+            switch cause {
+            case .unknown:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .unknown)
+                errorLabel = L10n.commonWaitingForDecryptionKey
+            case .membership:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .membership)
+                errorLabel = L10n.commonUnableToDecryptNoAccess
             }
-            encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: cause)
         case .olmV1Curve25519AesSha2(let senderKey):
             encryptionType = .olmV1Curve25519AesSha2(senderKey: senderKey)
         case .unknown:
@@ -175,7 +179,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
         
         return EncryptedRoomTimelineItem(id: eventItemProxy.id,
-                                         body: L10n.commonWaitingForDecryptionKey,
+                                         body: errorLabel,
                                          encryptionType: encryptionType,
                                          timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                          isOutgoing: isOutgoing,

@@ -139,7 +139,17 @@ extension AnalyticsService {
     /// Can be found in `UnableToDecryptInfo`. In case the `UnableToDecryptInfo` contains the value as nil, pass it as `-1`
     func trackError(context: String?, domain: AnalyticsEvent.Error.Domain, name: AnalyticsEvent.Error.Name, timeToDecryptMillis: Int? = nil) {
         // CryptoModule is deprecated
-        capture(event: AnalyticsEvent.Error(context: context, cryptoModule: nil, cryptoSDK: .Rust, domain: domain, name: name, timeToDecryptMillis: timeToDecryptMillis))
+        capture(event: AnalyticsEvent.Error(context: context,
+                                            cryptoModule: .Rust,
+                                            cryptoSDK: .Rust,
+                                            domain: domain,
+                                            eventLocalAgeMillis: nil,
+                                            isFederated: nil,
+                                            isMatrixDotOrg: nil,
+                                            name: name,
+                                            timeToDecryptMillis: timeToDecryptMillis,
+                                            userTrustsOwnIdentity: nil,
+                                            wasVisibleToUser: nil))
     }
     
     /// Track the creation of a room

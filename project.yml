@@ -57,7 +57,7 @@ packages:
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    minorVersion: 0.14.0
+    minorVersion: 0.20.0
     # path: ../matrix-analytics-events
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
