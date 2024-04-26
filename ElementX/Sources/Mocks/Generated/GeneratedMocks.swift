@@ -3985,6 +3985,45 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
     }
     var underlyingSuggestionsPublisher: AnyPublisher<[SuggestionItem], Never>!
 
+    //MARK: - processTextMessage
+
+    var processTextMessageUnderlyingCallsCount = 0
+    var processTextMessageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return processTextMessageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = processTextMessageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                processTextMessageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    processTextMessageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var processTextMessageCalled: Bool {
+        return processTextMessageCallsCount > 0
+    }
+    var processTextMessageReceivedTextMessage: String?
+    var processTextMessageReceivedInvocations: [String?] = []
+    var processTextMessageClosure: ((String?) -> Void)?
+
+    func processTextMessage(_ textMessage: String?) {
+        processTextMessageCallsCount += 1
+        processTextMessageReceivedTextMessage = textMessage
+        processTextMessageReceivedInvocations.append(textMessage)
+        processTextMessageClosure?(textMessage)
+    }
     //MARK: - setSuggestionTrigger
 
     var setSuggestionTriggerUnderlyingCallsCount = 0
@@ -4014,11 +4053,11 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
     var setSuggestionTriggerCalled: Bool {
         return setSuggestionTriggerCallsCount > 0
     }
-    var setSuggestionTriggerReceivedSuggestionTrigger: SuggestionPattern?
-    var setSuggestionTriggerReceivedInvocations: [SuggestionPattern?] = []
-    var setSuggestionTriggerClosure: ((SuggestionPattern?) -> Void)?
+    var setSuggestionTriggerReceivedSuggestionTrigger: SuggestionTrigger?
+    var setSuggestionTriggerReceivedInvocations: [SuggestionTrigger?] = []
+    var setSuggestionTriggerClosure: ((SuggestionTrigger?) -> Void)?
 
-    func setSuggestionTrigger(_ suggestionTrigger: SuggestionPattern?) {
+    func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {
         setSuggestionTriggerCallsCount += 1
         setSuggestionTriggerReceivedSuggestionTrigger = suggestionTrigger
         setSuggestionTriggerReceivedInvocations.append(suggestionTrigger)

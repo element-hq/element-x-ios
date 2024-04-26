@@ -56,6 +56,8 @@ enum ComposerToolbarViewAction {
     case selectedSuggestion(_ suggestion: SuggestionItem)
     
     case voiceMessage(ComposerToolbarVoiceMessageAction)
+    
+    case plainComposerTextChanged
 }
 
 enum ComposerAttachmentType {

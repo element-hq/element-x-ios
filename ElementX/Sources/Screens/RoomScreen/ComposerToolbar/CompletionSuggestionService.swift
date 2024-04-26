@@ -17,40 +17,53 @@
 import Combine
 import Foundation
 
+private enum SuggestionTriggerPattern: Character {
+    case at = "@"
+}
+
 final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     private let roomProxy: RoomProxyProtocol
     private var canMentionAllUsers = false
     private(set) var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> = Empty().eraseToAnyPublisher()
     
-    private let suggestionTriggerSubject = CurrentValueSubject<SuggestionPattern?, Never>(nil)
+    private let suggestionTriggerSubject = CurrentValueSubject<SuggestionTrigger?, Never>(nil)
     
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
+        
         suggestionsPublisher = suggestionTriggerSubject
             .combineLatest(roomProxy.membersPublisher)
-            .map { [weak self, ownUserID = roomProxy.ownUserID] suggestionPattern, members -> [SuggestionItem] in
+            .map { [weak self, ownUserID = roomProxy.ownUserID] suggestionTrigger, members -> [SuggestionItem] in
                 guard let self,
-                      let suggestionPattern else {
+                      let suggestionTrigger else {
                     return []
                 }
                 
-                switch suggestionPattern.type {
+                switch suggestionTrigger.type {
                 case .user:
                     var membersSuggestion = members
                         .compactMap { member -> SuggestionItem? in
                             guard member.userID != ownUserID,
                                   member.membership == .join,
-                                  Self.isIncluded(searchText: suggestionPattern.text, userID: member.userID, displayName: member.displayName) else {
+                                  Self.shouldIncludeMember(userID: member.userID, displayName: member.displayName, searchText: suggestionTrigger.text) else {
                                 return nil
                             }
-                            return SuggestionItem.user(item: .init(id: member.userID, displayName: member.displayName, avatarURL: member.avatarURL))
+                            return SuggestionItem.user(item: .init(id: member.userID,
+                                                                   displayName: member.displayName,
+                                                                   avatarURL: member.avatarURL,
+                                                                   range: suggestionTrigger.range))
                         }
+                    
                     if self.canMentionAllUsers,
                        !self.roomProxy.isEncryptedOneToOneRoom,
-                       Self.isIncluded(searchText: suggestionPattern.text, userID: PillConstants.atRoom, displayName: PillConstants.everyone) {
+                       Self.shouldIncludeMember(userID: PillConstants.atRoom, displayName: PillConstants.everyone, searchText: suggestionTrigger.text) {
                         membersSuggestion
-                            .insert(SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: self.roomProxy.avatarURL)), at: 0)
+                            .insert(SuggestionItem.allUsers(item: .init(id: PillConstants.atRoom,
+                                                                        displayName: PillConstants.everyone,
+                                                                        avatarURL: self.roomProxy.avatarURL,
+                                                                        range: suggestionTrigger.range)), at: 0)
                     }
+                    
                     return membersSuggestion
                 }
             }
@@ -69,11 +82,36 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         }
     }
     
-    func setSuggestionTrigger(_ suggestionTrigger: SuggestionPattern?) {
+    func processTextMessage(_ textMessage: String?) {
+        setSuggestionTrigger(detectTriggerInText(textMessage))
+    }
+    
+    func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {
         suggestionTriggerSubject.value = suggestionTrigger
     }
     
-    private static func isIncluded(searchText: String, userID: String, displayName: String?) -> Bool {
+    // MARK: - Private
+    
+    private func detectTriggerInText(_ text: String?) -> SuggestionTrigger? {
+        guard let text else {
+            return nil
+        }
+        
+        let components = text.components(separatedBy: .whitespaces)
+        
+        guard var lastComponent = components.last,
+              let range = text.range(of: lastComponent, options: .backwards),
+              lastComponent.count > 0,
+              let suggestionKey = SuggestionTriggerPattern(rawValue: lastComponent.removeFirst()),
+              // If a second character exists and is the same as the key it shouldn't trigger.
+              lastComponent.first != suggestionKey.rawValue else {
+            return nil
+        }
+        
+        return .init(type: .user, text: lastComponent, range: NSRange(range, in: text))
+    }
+    
+    private static func shouldIncludeMember(userID: String, displayName: String?, searchText: String) -> Bool {
         // If the search text is empty give back all the results
         guard !searchText.isEmpty else {
             return true

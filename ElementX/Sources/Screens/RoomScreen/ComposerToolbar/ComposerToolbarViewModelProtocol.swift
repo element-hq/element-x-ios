@@ -16,15 +16,6 @@
 
 import Combine
 
-struct SuggestionPattern: Equatable {
-    enum SuggestionType: Equatable {
-        case user
-    }
-    
-    let type: SuggestionType
-    let text: String
-}
-
 // periphery: ignore - markdown protocol
 protocol ComposerToolbarViewModelProtocol {
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> { get }

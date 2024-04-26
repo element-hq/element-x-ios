@@ -105,8 +105,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
     
     func testSuggestions() {
-        let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
-                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
+        let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init())),
+                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory, range: .init()))]
         let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions))
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
@@ -122,11 +122,11 @@ class ComposerToolbarViewModelTests: XCTestCase {
         wysiwygViewModel.setMarkdownContent("#not_implemented_yay")
         
         // The first one is nil because when initialised the view model is empty
-        XCTAssertEqual(completionSuggestionServiceMock.setSuggestionTriggerReceivedInvocations, [nil, .init(type: .user, text: "test"), nil])
+        XCTAssertEqual(completionSuggestionServiceMock.setSuggestionTriggerReceivedInvocations, [nil, .init(type: .user, text: "test", range: .init(location: 0, length: 5)), nil])
     }
     
     func testSelectedUserSuggestion() {
-        let suggestion = SuggestionItem.user(item: .init(id: "@test:matrix.org", displayName: "Test", avatarURL: nil))
+        let suggestion = SuggestionItem.user(item: .init(id: "@test:matrix.org", displayName: "Test", avatarURL: nil, range: .init()))
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
         XCTAssertEqual(wysiwygViewModel.content.html, "<a href=\"https://matrix.to/#/@test:matrix.org\">Test</a> ")
@@ -146,7 +146,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.send(viewAction: .composerAppeared)
         await Task.yield()
         let userID = "@test:matrix.org"
-        let suggestion = SuggestionItem.user(item: .init(id: userID, displayName: "Test", avatarURL: nil))
+        let suggestion = SuggestionItem.user(item: .init(id: userID, displayName: "Test", avatarURL: nil, range: .init()))
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
         let attachment = wysiwygViewModel.textView.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) as? PillTextAttachment
@@ -183,18 +183,10 @@ class ComposerToolbarViewModelTests: XCTestCase {
         
         try await deferred.fulfill()
     }
-    
-    func testSuggestionsAreIgnoredWhenRTEDisabled() async throws {
-        appSettings.richTextEditorEnabled = false
-        let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
-                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
-        let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions))
-        viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
-                                             completionSuggestionService: mockCompletionSuggestionService,
-                                             mediaProvider: MockMediaProvider(),
-                                             appSettings: ServiceLocator.shared.settings,
-                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
-        
-        XCTAssertEqual(viewModel.state.suggestions, [])
+}
+
+private extension MentionSuggestionItem {
+    static func allUsersMention(roomAvatar: URL?) -> Self {
+        MentionSuggestionItem(id: PillConstants.atRoom, displayName: PillConstants.everyone, avatarURL: roomAvatar, range: .init())
     }
 }

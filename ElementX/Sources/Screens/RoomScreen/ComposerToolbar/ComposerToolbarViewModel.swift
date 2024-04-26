@@ -95,14 +95,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .store(in: &cancellables)
         
         completionSuggestionService.suggestionsPublisher
-            .combineLatest(appSettings.$richTextEditorEnabled)
-            .map { suggestions, richTextEditorEnabled in
-                // We ignore user suggestions when RTE is disabled since mentions would not work
-                guard richTextEditorEnabled else {
-                    return []
-                }
-                return suggestions
-            }
             .weakAssign(to: \.state.suggestions, on: self)
             .store(in: &cancellables)
         
@@ -159,6 +151,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             handleSuggestion(suggestion)
         case .voiceMessage(let voiceMessageAction):
             processVoiceMessageAction(voiceMessageAction)
+        case .plainComposerTextChanged:
+            completionSuggestionService.processTextMessage(state.bindings.plainComposerText.string)
         }
     }
 
