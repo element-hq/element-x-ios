@@ -33,20 +33,11 @@ struct QRCodeLoginScreenViewState: BindableState {
         return finalString
     }()
     
-    private static let initialStateListItem4AttributedText = {
-        let boldPlaceholder = "{bold}"
-        var finalString = AttributedString(L10n.screenQrCodeLoginInitialStateItem4(boldPlaceholder))
-        var boldString = AttributedString(L10n.screenQrCodeLoginInitialStateItem4Action)
-        boldString.bold()
-        finalString.replace(boldPlaceholder, with: boldString)
-        return finalString
-    }()
-    
     let initialStateListItems = [
         AttributedString(L10n.screenQrCodeLoginInitialStateItem1(InfoPlistReader.main.productionAppName)),
         AttributedString(L10n.screenQrCodeLoginInitialStateItem2),
         initialStateListItem3AttributedText,
-        initialStateListItem4AttributedText
+        AttributedString(L10n.screenQrCodeLoginInitialStateItem4)
     ]
     
     let connectionNotSecureListItems = [
