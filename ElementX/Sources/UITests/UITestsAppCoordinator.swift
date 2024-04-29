@@ -95,6 +95,8 @@ class MockScreen: Identifiable {
     let windowManager: SecureWindowManagerProtocol
     let navigationRootCoordinator: NavigationRootCoordinator
     
+    private var client: UITestsSignalling.Client?
+    
     private var retainedState = [Any]()
     private var cancellables = Set<AnyCancellable>()
     
@@ -392,6 +394,37 @@ class MockScreen: Identifiable {
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomLayoutHighlight:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            
+            let timelineController = MockRoomTimelineController()
+            timelineController.timelineItems = RoomTimelineItemFixtures.permalinkChunk
+            let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(name: "Timeline highlight", avatarURL: URL.picturesDirectory)),
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                                             emojiProvider: EmojiProvider(),
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             appMediator: AppMediatorMock.default,
+                                                             appSettings: ServiceLocator.shared.settings)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            
+            do {
+                let client = try UITestsSignalling.Client(mode: .app)
+                client.signals.sink { [weak self] signal in
+                    guard case .timeline(.focusOnEvent(let eventID)) = signal else { return }
+                    coordinator.focusOnEvent(eventID: eventID)
+                    try? client.send(.success)
+                }
+                .store(in: &cancellables)
+            } catch {
+                fatalError("Failure setting up signalling: \(error)")
+            }
+            
+            self.client = client
             return navigationStackCoordinator
         case .roomWithDisclosedPolls:
             let navigationStackCoordinator = NavigationStackCoordinator()

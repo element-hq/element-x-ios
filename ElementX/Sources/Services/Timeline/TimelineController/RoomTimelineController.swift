@@ -66,8 +66,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             activeTimeline = timeline
             activeTimelineProvider = timeline.timelineProvider
             return .success(())
-        case .failure:
-            return .failure(.generic)
+        case .failure(let error):
+            if case .eventNotFound = error {
+                return .failure(.eventNotFound)
+            } else {
+                return .failure(.generic)
+            }
         }
     }
     

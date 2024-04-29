@@ -241,11 +241,19 @@ enum RoomTimelineItemFixtures {
     static var outgoingPolls: [RoomTimelineItemProtocol] {
         [PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: true), isOutgoing: true)]
     }
+    
+    static var permalinkChunk: [RoomTimelineItemProtocol] {
+        (1...20).map { index in
+            TextRoomTimelineItem(id: .init(timelineID: "\(index)", eventID: "$\(index)"),
+                                 text: "Message ID \(index)",
+                                 senderDisplayName: index > 10 ? "Alice" : "Bob")
+        }
+    }
 }
 
 private extension TextRoomTimelineItem {
-    init(text: String, senderDisplayName: String) {
-        self.init(id: .random,
+    init(id: TimelineItemIdentifier? = nil, text: String, senderDisplayName: String) {
+        self.init(id: id ?? .random,
                   timestamp: "10:47 am",
                   isOutgoing: senderDisplayName == "Alice",
                   isEditable: false,
