@@ -41,6 +41,8 @@ struct RoomDirectorySearchScreen: View {
                                 .frame(maxWidth: .infinity)
                                 .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
                         } else {
+                            // This needs to be in the else as when you start a search, the results are cleared making the footer visible.
+                            // We only want to trigger the pagination when the state is not loading.
                             emptyRectangle
                                 .onAppear {
                                     context.send(viewAction: .reachedBottom)
