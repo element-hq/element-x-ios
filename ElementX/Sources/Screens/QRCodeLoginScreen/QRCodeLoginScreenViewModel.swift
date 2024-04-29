@@ -63,32 +63,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             // this needs to be received on the main actor or the state change for connecting won't work properly
             .receive(on: DispatchQueue.main)
             .sink { [weak self] qrData in
-                guard let self, scanTask == nil else {
-                    return
-                }
-                
-                state.state = .scan(.connecting)
-                
-                scanTask = Task { [weak self] in
-                    guard let self else {
-                        return
-                    }
-                    
-                    defer {
-                        scanTask = nil
-                    }
-                    
-                    MXLog.info("Scanning QR code: \(qrData)")
-                    switch await qrCodeLoginService.loginWithQRCode(data: qrData) {
-                    case let .success(session):
-                        MXLog.info("QR Login completed")
-                        actionsSubject.send(.done(userSession: session))
-                    case .failure(let error):
-                        // TODO: The error are flattened now, but here we should return all the possible errors not only the decode error ones, but also the connection related ones.
-                        MXLog.error("Failed to scan the QR code:\(error)")
-                        state.state = .scan(.invalid)
-                    }
-                }
+                self?.handleScan(qrData: qrData)
             }
             .store(in: &cancellables)
         
@@ -99,6 +74,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 MXLog.info("QR Login Progress changed to: \(progress)")
 
                 guard let self,
+                      // Let's not advance the state if the current state is already invalid
                       state.state != .scan(.invalid) else {
                     return
                 }
@@ -120,6 +96,35 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         state.state = await qrCodeLoginService.requestAuthorizationIfNeeded() ? .scan(.scanning) : .error(.noCameraPermission)
     }
     
+    private func handleScan(qrData: Data) {
+        guard scanTask == nil else {
+            return
+        }
+        
+        state.state = .scan(.connecting)
+        
+        scanTask = Task { [weak self] in
+            guard let self else {
+                return
+            }
+            
+            defer {
+                scanTask = nil
+            }
+            
+            MXLog.info("Scanning QR code: \(qrData)")
+            switch await qrCodeLoginService.loginWithQRCode(data: qrData) {
+            case let .success(session):
+                MXLog.info("QR Login completed")
+                actionsSubject.send(.done(userSession: session))
+            case .failure(let error):
+                // TODO: The error are flattened now, but here we should return all the possible errors not only the decode error ones, but also the connection related ones.
+                MXLog.error("Failed to scan the QR code:\(error)")
+                state.state = .scan(.invalid)
+            }
+        }
+    }
+        
     /// Only for mocking initial states
     fileprivate init(state: QRCodeLoginState) {
         qrCodeLoginService = QRCodeLoginServiceMock(configuration: .init())
