@@ -498,20 +498,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         // through the correct states before presenting the room
         navigationStackCoordinator.setSheetCoordinator(nil)
         
-        // Handle selecting the same room again
-        if !isChildFlow {
-            // First unwind the navigation stack
-            navigationStackCoordinator.popToRoot(animated: animated)
-            
-            // And then decide if the room actually needs to be presented again
-            switch fromState {
-            case .initial, .roomDetails(isRoot: true), .joinRoomScreen:
-                break
-            default:
-                return // The room is already on the stack, no need to present it again
-            }
-        }
-        
         Task {
             // Flag the room as read on entering, the timeline will take care of the read receipts
             await roomProxy.flagAsUnread(false)

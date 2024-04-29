@@ -271,19 +271,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.initial, .start, .roomList):
                 presentHomeScreen()
                 attemptStartingOnboarding()
-            case(.roomList(let selectedRoomID), .selectRoom(let roomID, let entryPoint), .roomList):
-                if selectedRoomID == roomID {
-                    if let roomFlowCoordinator {
-                        let route: AppRoute = switch entryPoint {
-                        case .room: .room(roomID: roomID)
-                        case .eventID(let eventID): .event(roomID: roomID, eventID: eventID)
-                        case .roomDetails: .roomDetails(roomID: roomID)
-                        }
-                        roomFlowCoordinator.handleAppRoute(route, animated: animated)
-                    }
-                } else {
-                    Task { await self.startRoomFlow(roomID: roomID, entryPoint: entryPoint, animated: animated) }
-                }
+            case(.roomList, .selectRoom(let roomID, let entryPoint), .roomList):
+                Task { await self.startRoomFlow(roomID: roomID, entryPoint: entryPoint, animated: animated) }
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
                 

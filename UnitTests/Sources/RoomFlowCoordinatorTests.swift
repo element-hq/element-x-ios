@@ -216,7 +216,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
-        try await process(route: .event(roomID: "1", eventID: "2"))
+        try await process(route: .childEvent(roomID: "1", eventID: "2"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
