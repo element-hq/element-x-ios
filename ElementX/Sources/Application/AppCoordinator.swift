@@ -20,15 +20,16 @@ import MatrixRustSDK
 import SwiftUI
 import Version
 
-class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, WindowManagerDelegate {
+class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, SecureWindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
+    private let appMediator: AppMediator
     private let appSettings: AppSettings
     private let appDelegate: AppDelegate
 
     /// Common background task to continue long-running tasks in the background.
-    private var backgroundTask: BackgroundTaskProtocol?
+    private var backgroundTask: UIBackgroundTaskIdentifier?
 
     private var isSuspended = false
     
@@ -49,15 +50,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
-    
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
-
     private var appDelegateObserver: AnyCancellable?
     private var userSessionObserver: AnyCancellable?
     private var clientProxyObserver: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
     
-    let windowManager: WindowManagerProtocol
+    let windowManager: SecureWindowManagerProtocol
     let notificationManager: NotificationManagerProtocol
 
     private let appRouteURLParser: AppRouteURLParser
@@ -65,6 +63,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     init(appDelegate: AppDelegate) {
         windowManager = WindowManager(appDelegate: appDelegate)
+        appMediator = AppMediator(windowManager: windowManager)
+        
         Self.setupEnvironmentVariables()
         
         let appSettings = AppSettings()
@@ -100,14 +100,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
 
-        backgroundTaskService = UIKitBackgroundTaskService {
-            UIApplication.shared
-        }
-
         let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-        userSessionStore = UserSessionStore(keychainController: keychainController,
-                                            backgroundTaskService: backgroundTaskService)
+        userSessionStore = UserSessionStore(keychainController: keychainController)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -193,14 +188,35 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 } else {
                     navigationRootCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)))
                 }
-            case .roomMemberDetails:
-                userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
-            case .room(let roomID):
-                // check that the room is joined here, if not use a joinRoom route.
+            case .userProfile(let userID):
                 if isExternalURL {
-                    userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
+                    handleAppRoute(route)
                 } else {
-                    userSessionFlowCoordinator?.handleAppRoute(.childRoom(roomID: roomID), animated: true)
+                    handleAppRoute(.roomMemberDetails(userID: userID))
+                }
+            case .room(let roomID):
+                if isExternalURL {
+                    handleAppRoute(route)
+                } else {
+                    handleAppRoute(.childRoom(roomID: roomID))
+                }
+            case .roomAlias(let alias):
+                if isExternalURL {
+                    handleAppRoute(route)
+                } else {
+                    handleAppRoute(.childRoomAlias(alias))
+                }
+            case .event(let roomID, let eventID):
+                if isExternalURL {
+                    handleAppRoute(route)
+                } else {
+                    handleAppRoute(.childEvent(roomID: roomID, eventID: eventID))
+                }
+            case .eventOnRoomAlias(let alias, let eventID):
+                if isExternalURL {
+                    handleAppRoute(route)
+                } else {
+                    handleAppRoute(.childEventOnRoomAlias(alias: alias, eventID: eventID))
                 }
             default:
                 break
@@ -222,7 +238,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     // MARK: - WindowManagerDelegate
     
-    func windowManagerDidConfigureWindows(_ windowManager: WindowManagerProtocol) {
+    func windowManagerDidConfigureWindows(_ windowManager: SecureWindowManagerProtocol) {
         windowManager.alternateWindow.rootViewController = UIHostingController(rootView: appLockFlowCoordinator.toPresentable())
         ServiceLocator.shared.userIndicatorController.window = windowManager.overlayWindow
     }
@@ -256,7 +272,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        // Handle here the account switching when available
         handleAppRoute(.room(roomID: roomID))
     }
     
@@ -411,10 +426,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                       qrCodeLoginService: qrCodeLoginService,
                                                                       bugReportService: ServiceLocator.shared.bugReportService,
                                                                       navigationRootCoordinator: navigationRootCoordinator,
+                                                                      appMediator: appMediator,
                                                                       appSettings: appSettings,
                                                                       analytics: ServiceLocator.shared.analytics,
-                                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                      orientationManager: windowManager)
+                                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         authenticationFlowCoordinator?.delegate = self
         
         authenticationFlowCoordinator?.start()
@@ -469,10 +484,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
                                                                     navigationRootCoordinator: navigationRootCoordinator,
-                                                                    windowManager: windowManager,
                                                                     appLockService: appLockFlowCoordinator.appLockService,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory(),
+                                                                    appMediator: appMediator,
                                                                     appSettings: appSettings,
                                                                     analytics: ServiceLocator.shared.analytics,
                                                                     notificationManager: notificationManager,
@@ -647,7 +662,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private func handleAppRoute(_ appRoute: AppRoute) {
         if let userSessionFlowCoordinator {
-            userSessionFlowCoordinator.handleAppRoute(appRoute, animated: UIApplication.shared.applicationState == .active)
+            userSessionFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
         } else {
             storedAppRoute = appRoute
         }
@@ -769,14 +784,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         guard backgroundTask == nil else {
             return
         }
-
-        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
+        
+        backgroundTask = appMediator.beginBackgroundTask { [weak self] in
             guard let self else { return }
             
             stopSync()
             
-            backgroundTask?.stop()
-            backgroundTask = nil
+            if let backgroundTask {
+                appMediator.endBackgroundTask(backgroundTask)
+                self.backgroundTask = nil
+            }
         }
 
         isSuspended = true
@@ -790,8 +807,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func applicationDidBecomeActive() {
         MXLog.info("Application did become active")
         
-        backgroundTask?.stop()
-        backgroundTask = nil
+        if let backgroundTask {
+            appMediator.endBackgroundTask(backgroundTask)
+            self.backgroundTask = nil
+        }
 
         if isSuspended {
             startSync()

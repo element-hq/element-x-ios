@@ -204,55 +204,6 @@ final class NotificationManagerTests: XCTestCase {
         await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
         XCTAssertTrue(notificationTappedDelegateCalled)
     }
-
-    func test_MessageNotificationsRemoval() async throws {
-        notificationCenter.deliveredNotificationsClosure = {
-            XCTFail("deliveredNotifications should not be called if the object is nil or of the wrong type")
-            return []
-        }
-        // No interaction if the object is nil or of the wrong type
-        NotificationCenter.default.post(name: .roomMarkedAsRead, object: nil)
-        try? await Task.sleep(for: .seconds(0.25)) // Wait for the notification to be delivered
-        
-        XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 0)
-        XCTAssertEqual(notificationCenter.removeDeliveredNotificationsWithIdentifiersCallsCount, 0)
-
-        NotificationCenter.default.post(name: .roomMarkedAsRead, object: 1)
-        try? await Task.sleep(for: .seconds(0.25)) // Wait for the notification to be delivered
-        
-        XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 0)
-        XCTAssertEqual(notificationCenter.removeDeliveredNotificationsWithIdentifiersCallsCount, 0)
-
-        // The center calls the delivered and the removal functions when an id is passed
-        notificationCenter.deliveredNotificationsClosure = nil
-        notificationCenter.deliveredNotificationsReturnValue = []
-        let expectation = expectation(description: "Notification should be removed")
-        notificationCenter.removeDeliveredNotificationsWithIdentifiersClosure = { _ in
-            expectation.fulfill()
-        }
-        
-        NotificationCenter.default.post(name: .roomMarkedAsRead, object: "RoomID")
-        try? await Task.sleep(for: .seconds(0.25)) // Wait for the notification to be delivered
-        
-        await fulfillment(of: [expectation])
-        XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 1)
-        XCTAssertEqual(notificationCenter.removeDeliveredNotificationsWithIdentifiersCallsCount, 1)
-    }
-
-    func test_InvitesNotificationsRemoval() async {
-        let expectation = expectation(description: "Notification should be removed")
-        notificationCenter.deliveredNotificationsReturnValue = []
-        notificationCenter.removeDeliveredNotificationsWithIdentifiersClosure = { _ in
-            expectation.fulfill()
-        }
-        
-        NotificationCenter.default.post(name: .invitesScreenAppeared, object: nil)
-        try? await Task.sleep(for: .seconds(0.25)) // Wait for the notification to be delivered
-        
-        await fulfillment(of: [expectation])
-        XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 1)
-        XCTAssertEqual(notificationCenter.removeDeliveredNotificationsWithIdentifiersCallsCount, 1)
-    }
 }
 
 extension NotificationManagerTests: NotificationManagerDelegate {

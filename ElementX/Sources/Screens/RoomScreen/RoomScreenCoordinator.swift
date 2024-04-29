@@ -21,12 +21,14 @@ import WysiwygComposer
 
 struct RoomScreenCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
+    var focussedEventID: String?
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let emojiProvider: EmojiProviderProtocol
     let completionSuggestionService: CompletionSuggestionServiceProtocol
+    let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
 }
 
@@ -58,12 +60,13 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: RoomScreenCoordinatorParameters) {
         viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
+                                        focussedEventID: parameters.focussedEventID,
                                         timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,
                                         mediaPlayerProvider: parameters.mediaPlayerProvider,
                                         voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                        application: UIApplication.shared,
+                                        appMediator: parameters.appMediator,
                                         appSettings: parameters.appSettings,
                                         analyticsService: ServiceLocator.shared.analytics,
                                         notificationCenter: NotificationCenter.default)
@@ -126,6 +129,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 viewModel.process(composerAction: action)
             }
             .store(in: &cancellables)
+    }
+    
+    func focusOnEvent(eventID: String) {
+        Task { await viewModel.focusOnEvent(eventID: eventID) }
     }
     
     func stop() {

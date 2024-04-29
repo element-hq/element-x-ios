@@ -76,12 +76,15 @@ enum RoomScreenViewAudioAction {
 
 enum RoomScreenViewAction {
     case displayRoomDetails
+    
     case itemAppeared(itemID: TimelineItemIdentifier)
     case itemDisappeared(itemID: TimelineItemIdentifier)
+    
     case itemTapped(itemID: TimelineItemIdentifier)
     case toggleReaction(key: String, itemID: TimelineItemIdentifier)
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards
+    case paginateForwards
     
     case timelineItemMenu(itemID: TimelineItemIdentifier)
     case timelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
@@ -104,6 +107,16 @@ enum RoomScreenViewAction {
     case audio(RoomScreenViewAudioAction)
     
     case presentCall
+    
+    /// Focus the timeline onto the specified event ID (switching to a detached timeline if needed).
+    case focusOnEventID(String)
+    /// Switch back to a live timeline (from a detached one).
+    case focusLive
+    /// Remove the highlighted event without switching timeline.
+    ///
+    /// This is useful when returning to the bottom of the live timeline
+    ///  if `focusOnEventID` didn't use a detached timeline.
+    case clearFocussedEvent
 }
 
 enum RoomScreenComposerAction {
@@ -123,7 +136,7 @@ struct RoomScreenViewState: BindableState {
     var showReadReceipts = false
     var timelineStyle: TimelineStyle
     var isEncryptedOneToOneRoom = false
-    var timelineViewState = TimelineViewState() // check the doc before changing this
+    var timelineViewState: TimelineViewState // check the doc before changing this
 
     var ownUserID: String
     
@@ -213,8 +226,10 @@ struct RoomMemberState {
 /// Used as the state for the TimelineView, to avoid having the context continuously refresh the list of items on each small change.
 /// Is also nice to have this as a wrapper for any state that is directly connected to the timeline.
 struct TimelineViewState {
-    var canBackPaginate = true
-    var isBackPaginating = true
+    var isLive = true
+    var paginationState = PaginationState.default
+    
+    var focussedEventID: String?
     
     // These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
@@ -227,5 +242,9 @@ struct TimelineViewState {
     
     var itemViewStates: [RoomTimelineItemViewState] {
         itemsDictionary.values.elements
+    }
+    
+    func hasLoadedItem(with eventID: String) -> Bool {
+        itemViewStates.contains { $0.identifier.eventID == eventID }
     }
 }

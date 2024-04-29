@@ -22,12 +22,14 @@ import Compound
 struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
+    @Environment(\.focussedEventID) private var focussedEventID
     
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
 
     private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
+    private var isFocussed: Bool { focussedEventID != nil && timelineItem.id.eventID == focussedEventID }
     
     /// The base padding applied to bubbles on either side.
     ///
@@ -71,6 +73,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .padding(.leading, bubbleAvatarPadding)
             }
         }
+        .padding(TimelineStyle.bubbles.rowInsets)
+        .highlightedTimelineItem(isFocussed)
     }
     
     @ViewBuilder
@@ -78,11 +82,19 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         if shouldShowSenderDetails {
             HStack(alignment: .top, spacing: 4) {
                 TimelineSenderAvatarView(timelineItem: timelineItem)
-                Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
-                    .font(.compound.bodySMSemibold)
-                    .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
-                    .lineLimit(1)
-                    .scaledPadding(.vertical, 3)
+                HStack(alignment: .center, spacing: 4) {
+                    Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
+                        .font(.compound.bodySMSemibold)
+                        .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
+                    
+                    if timelineItem.sender.displayName != nil, timelineItem.sender.isDisplayNameAmbiguous {
+                        Text(timelineItem.sender.id)
+                            .font(.compound.bodyXS)
+                            .foregroundColor(.compound.textSecondary)
+                    }
+                }
+                .lineLimit(1)
+                .scaledPadding(.vertical, 3)
             }
             // sender info are read inside the `TimelineAccessibilityModifier`
             .accessibilityHidden(true)
@@ -220,9 +232,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         .padding(.leading, 4)
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 }
+                
                 if let replyDetails = messageTimelineItem.replyDetails {
                     // The rendered reply bubble with a greedy width. The custom layout prevents
                     // the infinite width from increasing the overall width of the view.
+                    
                     TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(4.0)
@@ -230,6 +244,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         .background(Color.compound.bgCanvasDefault)
                         .cornerRadius(8)
                         .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                        .onTapGesture {
+                            context.send(viewAction: .focusOnEventID(replyDetails.eventID))
+                        }
                     
                     // Add a fixed width reply bubble that is used for layout calculations but won't be rendered.
                     TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
@@ -418,6 +435,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "A long message that should be on multiple lines."),
                                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                   eventID: "123",
                                                                                                    eventContent: .message(.text(.init(body: "Short"))))),
                                                   groupStyle: .single))
 
@@ -434,6 +452,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                      source: nil,
                                                                      contentType: nil),
                                                       replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                            eventID: "123",
                                                                             eventContent: .message(.text(.init(body: "Short"))))))
             
             FileRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
@@ -448,6 +467,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                     thumbnailSource: nil,
                                                                     contentType: nil),
                                                      replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                           eventID: "123",
                                                                            eventContent: .message(.text(.init(body: "Short"))))))
             ImageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
                                                       timestamp: "10:42",
@@ -458,6 +478,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                       sender: .init(id: ""),
                                                       content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil),
                                                       replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                            eventID: "123",
                                                                             eventContent: .message(.text(.init(body: "Short"))))))
             LocationRoomTimelineView(timelineItem: .init(id: .random,
                                                          timestamp: "Now",
@@ -471,6 +492,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                                       longitude: 12.496366),
                                                                         description: "Location description description description description description description description description"),
                                                          replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                               eventID: "123",
                                                                                eventContent: .message(.text(.init(body: "Short"))))))
             LocationRoomTimelineView(timelineItem: .init(id: .random,
                                                          timestamp: "Now",
@@ -482,6 +504,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                          content: .init(body: "Fallback geo uri description",
                                                                         geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
                                                          replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                               eventID: "123",
                                                                                eventContent: .message(.text(.init(body: "Short"))))))
             
             VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
@@ -497,6 +520,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                             source: nil,
                                                                             contentType: nil),
                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                   eventID: "123",
                                                                                    eventContent: .message(.text(.init(body: "Short"))))),
                                          playerState: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 10, waveform: EstimatedWaveform.mockWaveform))
         }
@@ -508,8 +532,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(viewModel.state.timelineViewState.itemViewStates) { viewState in
                     RoomTimelineItemView(viewState: viewState)
-                        .padding(TimelineStyle.bubbles.rowInsets)
-                    // Insets added in the table view cells
                 }
             }
         }
@@ -528,6 +550,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "A long message that should be on multiple lines."),
                                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                   eventID: "123",
                                                                                                    eventContent: .message(.text(.init(body: "Short"))))),
                                                   groupStyle: .single))
 
@@ -540,6 +563,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "Short message"),
                                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                   eventID: "123",
                                                                                                    eventContent: .message(.text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout."))))),
                                                   groupStyle: .single))
         }

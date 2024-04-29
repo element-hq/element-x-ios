@@ -20,10 +20,13 @@ import SwiftUI
 struct TimelineItemPlainStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
+    @Environment(\.focussedEventID) private var focussedEventID
     
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
+    
+    private var isFocussed: Bool { focussedEventID != nil && timelineItem.id.eventID == focussedEventID }
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 0) {
@@ -38,6 +41,8 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             TimelineItemStatusView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus)
                 .environmentObject(context)
         }
+        .padding(TimelineStyle.plain.rowInsets)
+        .highlightedTimelineItem(isFocussed)
     }
     
     @ViewBuilder
@@ -52,7 +57,11 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                         Rectangle()
                             .foregroundColor(.compound.iconTertiary)
                             .frame(width: 4.0)
+                        
                         TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
+                            .onTapGesture {
+                                context.send(viewAction: .focusOnEventID(replyDetails.eventID))
+                            }
                     }
                 }
             }
@@ -142,6 +151,27 @@ struct TimelineItemPlainStylerView<Content: View>: View {
 struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
+    static var previews: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
+                let item = MockRoomTimelineController().timelineItems[index]
+                RoomTimelineItemView(viewState: .init(item: item, groupStyle: .single))
+            }
+        }
+        .environment(\.timelineStyle, .plain)
+        .environmentObject(viewModel.context)
+        .previewLayout(.sizeThatFits)
+        
+        threads
+            .padding()
+            .environment(\.timelineStyle, .plain)
+            .previewDisplayName("Threads")
+        
+        replies
+            .environment(\.timelineStyle, .plain)
+            .previewDisplayName("Replies")
+    }
+    
     // These akwats include a reply
     static var threads: some View {
         ScrollView {
@@ -154,6 +184,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "A long message that should be on multiple lines."),
                                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                   eventID: "123",
                                                                                                    eventContent: .message(.text(.init(body: "Short"))))),
                                                   groupStyle: .single))
             
@@ -170,6 +201,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
                                                                      source: nil,
                                                                      contentType: nil),
                                                       replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                            eventID: "123",
                                                                             eventContent: .message(.text(.init(body: "Short"))))))
             FileRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
                                                      timestamp: "10:42",
@@ -183,6 +215,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
                                                                     thumbnailSource: nil,
                                                                     contentType: nil),
                                                      replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                           eventID: "123",
                                                                            eventContent: .message(.text(.init(body: "Short"))))))
             ImageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
                                                       timestamp: "10:42",
@@ -193,6 +226,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
                                                       sender: .init(id: ""),
                                                       content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil),
                                                       replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                            eventID: "123",
                                                                             eventContent: .message(.text(.init(body: "Short"))))))
             LocationRoomTimelineView(timelineItem: .init(id: .random,
                                                          timestamp: "Now",
@@ -206,6 +240,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
                                                                                       longitude: 12.496366),
                                                                         description: "Location description description description description description description description description"),
                                                          replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                               eventID: "123",
                                                                                eventContent: .message(.text(.init(body: "Short"))))))
             LocationRoomTimelineView(timelineItem: .init(id: .random,
                                                          timestamp: "Now",
@@ -217,6 +252,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
                                                          content: .init(body: "Fallback geo uri description",
                                                                         geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
                                                          replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                               eventID: "123",
                                                                                eventContent: .message(.text(.init(body: "Short"))))))
             VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
                                                              timestamp: "10:42",
@@ -231,27 +267,41 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
                                                                             source: nil,
                                                                             contentType: nil),
                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                   eventID: "123",
                                                                                    eventContent: .message(.text(.init(body: "Short"))))),
                                          playerState: AudioPlayerState(id: .timelineItemIdentifier(.init(timelineID: "")), duration: 10, waveform: EstimatedWaveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
     }
     
-    static var previews: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
-                let item = MockRoomTimelineController().timelineItems[index]
-                RoomTimelineItemView(viewState: .init(item: item, groupStyle: .single))
-                    .padding(TimelineStyle.plain.rowInsets) // Insets added in the table view cells
-            }
+    static var replies: some View {
+        ScrollView {
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             isThreaded: false,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "A long message that should be on multiple lines."),
+                                                                             replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                   eventID: "123",
+                                                                                                   eventContent: .message(.text(.init(body: "Short"))))),
+                                                  groupStyle: .single))
+            
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             isThreaded: false,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "Short message"),
+                                                                             replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                   eventID: "123",
+                                                                                                   eventContent: .message(.text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout."))))),
+                                                  groupStyle: .single))
         }
-        .environment(\.timelineStyle, .plain)
         .environmentObject(viewModel.context)
-        .previewLayout(.sizeThatFits)
-        
-        threads
-            .padding()
-            .environment(\.timelineStyle, .plain)
-            .previewDisplayName("Threads")
     }
 }

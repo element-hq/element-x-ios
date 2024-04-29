@@ -17,10 +17,10 @@
 import Combine
 import SwiftUI
 
-class WindowManager: WindowManagerProtocol {
+class WindowManager: SecureWindowManagerProtocol {
     private let appDelegate: AppDelegate
     weak var windowScene: UIWindowScene?
-    weak var delegate: WindowManagerDelegate?
+    weak var delegate: SecureWindowManagerDelegate?
     
     private(set) var mainWindow: UIWindow!
     private(set) var overlayWindow: UIWindow!

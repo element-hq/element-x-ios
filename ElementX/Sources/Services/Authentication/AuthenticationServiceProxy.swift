@@ -25,16 +25,9 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
-        
-    init(userSessionStore: UserSessionStoreProtocol,
-         encryptionKeyProvider: EncryptionKeyProviderProtocol,
-         appSettings: AppSettings) {
-        let passphrase = appSettings.isDevelopmentBuild ? encryptionKeyProvider.generateKey().base64EncodedString() : nil
-        if passphrase != nil {
-            MXLog.info("Testing database encryption in development build.")
-        }
-        
-        self.passphrase = passphrase
+    
+    init(userSessionStore: UserSessionStoreProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, appSettings: AppSettings) {
+        passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
         self.userSessionStore = userSessionStore
         
         homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress,

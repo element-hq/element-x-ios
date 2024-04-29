@@ -41,11 +41,9 @@ import UserNotifications
 // database, logging, etc. are only ever setup once per *process*
 
 private let settings: NSESettingsProtocol = AppSettings()
-private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: settings.permalinkBaseURL,
-                                                                                                                                                                              mentionBuilder: PlainMentionBuilder())))
+private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder())))
 private let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-private var userSessions = [String: NSEUserSession]()
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
     private var handler: ((UNNotificationContent) -> Void)?
@@ -71,9 +69,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         NSELogger.configure(logLevel: settings.logLevel)
 
-        NSELogger.logMemory(with: tag)
-
         MXLog.info("\(tag) #########################################")
+        NSELogger.logMemory(with: tag)
         MXLog.info("\(tag) Payload came: \(request.content.userInfo)")
 
         Task {
@@ -98,13 +95,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
         do {
-            let userSession: NSEUserSession
-            if let existingSession = userSessions[credentials.userID] {
-                userSession = existingSession
-            } else {
-                userSession = try await NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController)
-                userSessions[credentials.userID] = userSession
-            }
+            // This function might be run concurrently and from different processes, let the SDK handle race conditions
+            // on fetching user sessions
+            let userSession = try await NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController)
             
             guard let itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId) else {
                 MXLog.info("\(tag) no notification for the event, discard")
@@ -167,7 +160,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
 
     private var tag: String {
-        "[NSE][\(Unmanaged.passUnretained(self).toOpaque())][\(Unmanaged.passUnretained(Thread.current).toOpaque())]"
+        "[NSE][\(Unmanaged.passUnretained(self).toOpaque())][\(Unmanaged.passUnretained(Thread.current).toOpaque())][\(ProcessInfo.processInfo.processIdentifier)]"
     }
 
     private func cleanUp() {

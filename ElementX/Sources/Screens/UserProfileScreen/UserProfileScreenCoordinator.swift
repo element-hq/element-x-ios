@@ -19,13 +19,16 @@ import SwiftUI
 
 struct UserProfileScreenCoordinatorParameters {
     let userID: String
+    let isPresentedModally: Bool
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let analytics: AnalyticsService
 }
 
 enum UserProfileScreenCoordinatorAction {
-    case openDirectChat(displayName: String?)
+    case openDirectChat(roomID: String)
+    case dismiss
 }
 
 final class UserProfileScreenCoordinator: CoordinatorProtocol {
@@ -40,9 +43,11 @@ final class UserProfileScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: UserProfileScreenCoordinatorParameters) {
         viewModel = UserProfileScreenViewModel(userID: parameters.userID,
+                                               isPresentedModally: parameters.isPresentedModally,
                                                clientProxy: parameters.clientProxy,
                                                mediaProvider: parameters.mediaProvider,
-                                               userIndicatorController: parameters.userIndicatorController)
+                                               userIndicatorController: parameters.userIndicatorController,
+                                               analytics: parameters.analytics)
     }
     
     func start() {
@@ -50,8 +55,10 @@ final class UserProfileScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .openDirectChat(let displayName):
-                actionsSubject.send(.openDirectChat(displayName: displayName))
+            case .openDirectChat(let roomID):
+                actionsSubject.send(.openDirectChat(roomID: roomID))
+            case .dismiss:
+                actionsSubject.send(.dismiss)
             }
         }
         .store(in: &cancellables)

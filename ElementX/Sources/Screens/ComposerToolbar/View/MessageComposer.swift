@@ -22,6 +22,7 @@ typealias EnterKeyHandler = () -> Void
 typealias PasteHandler = (NSItemProvider) -> Void
 
 struct MessageComposer: View {
+    @Binding var plainText: String
     let composerView: WysiwygComposerView
     let mode: RoomScreenComposerMode
     let showResizeGrabber: Bool
@@ -32,6 +33,7 @@ struct MessageComposer: View {
     let editCancellationAction: () -> Void
     let onAppearAction: () -> Void
     
+    @State private var isMultiline = false
     @State private var composerTranslation: CGFloat = 0
     private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
     
@@ -66,19 +68,31 @@ struct MessageComposer: View {
     private var mainContent: some View {
         VStack(alignment: .leading, spacing: -6) {
             header
-            Color.clear
-                .overlay(alignment: .top) {
-                    composerView
-                        .clipped()
-                        .readFrame($composerFrame)
-                }
-                .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
-                       alignment: .top)
-                .tint(.compound.iconAccentTertiary)
-                .padding(.vertical, 10)
-                .onAppear {
-                    onAppearAction()
-                }
+            
+            if ServiceLocator.shared.settings.richTextEditorEnabled {
+                Color.clear
+                    .overlay(alignment: .top) {
+                        composerView
+                            .clipped()
+                            .readFrame($composerFrame)
+                    }
+                    .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
+                           alignment: .top)
+                    .tint(.compound.iconAccentTertiary)
+                    .padding(.vertical, 10)
+                    .onAppear {
+                        onAppearAction()
+                    }
+            } else {
+                MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
+                                         text: $plainText,
+                                         isMultiline: $isMultiline,
+                                         maxHeight: 300,
+                                         enterKeyHandler: sendAction,
+                                         pasteHandler: pasteAction)
+                    .tint(.compound.iconAccentTertiary)
+                    .padding(.vertical, 10)
+            }
         }
     }
 
@@ -185,18 +199,32 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static let replyTypes: [TimelineItemReplyDetails] = [
-        .loaded(sender: .init(id: "Dave"), eventContent: .message(.audio(.init(body: "Audio: Ride the lightning", duration: 100, waveform: nil, source: nil, contentType: nil)))),
-        .loaded(sender: .init(id: "James"), eventContent: .message(.emote(.init(body: "Emote: James thinks he's the phantom lord")))),
-        .loaded(sender: .init(id: "Robert"), eventContent: .message(.file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil)))),
-        .loaded(sender: .init(id: "Cliff"), eventContent: .message(.image(.init(body: "Image: Pushead",
-                                                                                source: .init(url: .picturesDirectory, mimeType: nil),
-                                                                                thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
-        .loaded(sender: .init(id: "Jason"), eventContent: .message(.notice(.init(body: "Notice: Too far gone?")))),
-        .loaded(sender: .init(id: "Kirk"), eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
-        .loaded(sender: .init(id: "Lars"), eventContent: .message(.video(.init(body: "Video: Through the never",
-                                                                               duration: 100,
-                                                                               source: nil,
-                                                                               thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
+        .loaded(sender: .init(id: "Dave"),
+                eventID: "123",
+                eventContent: .message(.audio(.init(body: "Audio: Ride the lightning", duration: 100, waveform: nil, source: nil, contentType: nil)))),
+        .loaded(sender: .init(id: "James"),
+                eventID: "123",
+                eventContent: .message(.emote(.init(body: "Emote: James thinks he's the phantom lord")))),
+        .loaded(sender: .init(id: "Robert"),
+                eventID: "123",
+                eventContent: .message(.file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil)))),
+        .loaded(sender: .init(id: "Cliff"),
+                eventID: "123",
+                eventContent: .message(.image(.init(body: "Image: Pushead",
+                                                    source: .init(url: .picturesDirectory, mimeType: nil),
+                                                    thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
+        .loaded(sender: .init(id: "Jason"),
+                eventID: "123",
+                eventContent: .message(.notice(.init(body: "Notice: Too far gone?")))),
+        .loaded(sender: .init(id: "Kirk"),
+                eventID: "123",
+                eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
+        .loaded(sender: .init(id: "Lars"),
+                eventID: "123",
+                eventContent: .message(.video(.init(body: "Video: Through the never",
+                                                    duration: 100,
+                                                    source: nil,
+                                                    thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
         .loading(eventID: "")
     ]
     
@@ -212,7 +240,8 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                                keyCommands: nil,
                                                pasteHandler: nil)
         
-        return MessageComposer(composerView: composerView,
+        return MessageComposer(plainText: .constant(content),
+                               composerView: composerView,
                                mode: mode,
                                showResizeGrabber: false,
                                isExpanded: .constant(false),
@@ -232,6 +261,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
             
             messageComposer(mode: .reply(itemID: .random,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
+                                                               eventID: "123",
                                                                eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
                                          isThread: false))
         }

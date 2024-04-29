@@ -23,6 +23,7 @@ enum RoomProxyError: Error {
     
     case invalidURL
     case invalidMedia
+    case eventNotFound
 }
 
 enum RoomProxyAction {
@@ -63,6 +64,8 @@ protocol RoomProxyProtocol {
     func subscribeForUpdates() async
     
     func unsubscribeFromUpdates()
+    
+    func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
     

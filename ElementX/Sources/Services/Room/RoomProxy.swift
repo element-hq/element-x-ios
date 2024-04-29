@@ -21,15 +21,13 @@ import UIKit
 import MatrixRustSDK
 
 class RoomProxy: RoomProxyProtocol {
+    private static var subscriptionCountPerRoom: [String: Int] = [:]
+    
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
-    private let backgroundTaskName = "SendRoomEvent"
     
     private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
-    
-    private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
@@ -53,55 +51,11 @@ class RoomProxy: RoomProxyProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    lazy var id: String = room.id()
+    
     var ownUserID: String {
         room.ownUserId()
     }
-
-    init?(roomListItem: RoomListItemProtocol,
-          room: RoomProtocol,
-          backgroundTaskService: BackgroundTaskServiceProtocol) async {
-        self.roomListItem = roomListItem
-        self.room = room
-        self.backgroundTaskService = backgroundTaskService
-        do {
-            timeline = try await TimelineProxy(timeline: room.timeline(), backgroundTaskService: backgroundTaskService)
-        } catch {
-            MXLog.error("Failed creating timeline with error: \(error)")
-            return nil
-        }
-        
-        Task {
-            await updateMembers()
-        }
-    }
-    
-    func subscribeForUpdates() async {
-        guard !subscribedForUpdates else {
-            MXLog.warning("Room already subscribed for updates")
-            return
-        }
-        
-        subscribedForUpdates = true
-        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
-                                                        RequiredState(key: "m.room.topic", value: ""),
-                                                        RequiredState(key: "m.room.avatar", value: ""),
-                                                        RequiredState(key: "m.room.canonical_alias", value: ""),
-                                                        RequiredState(key: "m.room.join_rules", value: "")],
-                                        timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit))
-        roomListItem.subscribe(settings: settings)
-        
-        await timeline.subscribeForUpdates()
-        
-        subscribeToRoomInfoUpdates()
-        
-        subscribeToTypingNotifications()
-    }
-    
-    func unsubscribeFromUpdates() {
-        roomListItem.unsubscribe()
-    }
-
-    lazy var id: String = room.id()
     
     var name: String? {
         roomListItem.name()
@@ -156,14 +110,79 @@ class RoomProxy: RoomProxyProtocol {
     var activeMembersCount: Int {
         Int(room.activeMembersCount())
     }
-    
-    func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
+
+    init?(roomListItem: RoomListItemProtocol,
+          room: RoomProtocol) async {
+        self.roomListItem = roomListItem
+        self.room = room
+        
+        do {
+            timeline = try await TimelineProxy(timeline: room.timeline(), isLive: true)
+        } catch {
+            MXLog.error("Failed creating timeline with error: \(error)")
+            return nil
         }
         
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        Task {
+            await updateMembers()
+        }
+    }
+    
+    func subscribeForUpdates() async {
+        guard !subscribedForUpdates else {
+            MXLog.warning("Room already subscribed for updates")
+            return
+        }
+        
+        subscribedForUpdates = true
+        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
+                                                        RequiredState(key: "m.room.topic", value: ""),
+                                                        RequiredState(key: "m.room.avatar", value: ""),
+                                                        RequiredState(key: "m.room.canonical_alias", value: ""),
+                                                        RequiredState(key: "m.room.join_rules", value: "")],
+                                        timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit))
+        roomListItem.subscribe(settings: settings)
+        Self.subscriptionCountPerRoom[roomListItem.id()] = (Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0) + 1
+        
+        await timeline.subscribeForUpdates()
+        
+        subscribeToRoomInfoUpdates()
+        
+        subscribeToTypingNotifications()
+    }
+    
+    func unsubscribeFromUpdates() {
+        Self.subscriptionCountPerRoom[roomListItem.id()] = max(0, (Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0) - 1)
+        
+        if Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0 <= 0 {
+            roomListItem.unsubscribe()
+        }
+    }
+    
+    func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
+        do {
+            let timeline = try await room.timelineFocusedOnEvent(eventId: eventID, numContextEvents: numberOfEvents, internalIdPrefix: UUID().uuidString)
+            return .success(TimelineProxy(timeline: timeline, isLive: false))
+        } catch let error as FocusEventError {
+            switch error {
+            case .InvalidEventId(_, let error):
+                MXLog.error("Invalid event \(eventID) Error: \(error)")
+                return .failure(.eventNotFound)
+            case .EventNotFound:
+                MXLog.error("Event \(eventID) not found.")
+                return .failure(.eventNotFound)
+            case .Other(let message):
+                MXLog.error("Failed to create a timeline focussed on event \(eventID) Error: \(message)")
+                return .failure(.sdkError(error))
+            }
+        } catch {
+            MXLog.error("Unexpected error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
                 try self.room.redact(eventId: eventID, reason: nil)
                 return .success(())
@@ -173,14 +192,9 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
-
+    
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
                 try self.room.reportContent(eventId: eventID, score: nil, reason: reason)
                 return .success(())
@@ -219,11 +233,6 @@ class RoomProxy: RoomProxyProtocol {
             return .success(member)
         }
         
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
         do {
             let member = try await room.member(userId: userID)
             return .success(RoomMemberProxy(member: member))
@@ -232,14 +241,9 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
+    
     func leaveRoom() async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
-        return await Task.dispatch(on: .global()) {
+        await Task.dispatch(on: .global()) {
             do {
                 try self.room.leave()
                 return .success(())

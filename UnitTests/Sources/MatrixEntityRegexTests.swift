@@ -32,39 +32,6 @@ class MatrixEntityRegexTests: XCTestCase {
         XCTAssertFalse(MatrixEntityRegex.isMatrixUserIdentifier("username:example.com"))
         XCTAssertFalse(MatrixEntityRegex.isMatrixUserIdentifier("@username.example.com"))
     }
-
-    func testRoomAlias() {
-        XCTAssertTrue(MatrixEntityRegex.isMatrixRoomAlias("#element-ios:matrix.org"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixRoomAlias("element-ios:matrix.org"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixRoomAlias("#element-ios.matrix.org"))
-    }
-
-    func testRoomId() {
-        XCTAssertTrue(MatrixEntityRegex.isMatrixRoomIdentifier("!pMBteVpcoJRdCJxDmn:matrix.org"))
-        XCTAssertTrue(MatrixEntityRegex.isMatrixRoomIdentifier("!pMBte-Vpco-JRdCJxDmn:matrix.org"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixRoomIdentifier("pMBteVpcoJRdCJxDmn:matrix.org"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixRoomIdentifier("!pMBteVpcoJRdCJxDmn.matrix.org"))
-    }
-
-    func testEventId() {
-        // room version 1
-        XCTAssertTrue(MatrixEntityRegex.isMatrixEventIdentifier("$h29iv0s8:example.com"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$h29iv0s8:example."))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$h29iv0s8:"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$h29iv0s8?"))
-
-        // room version 3
-        XCTAssertTrue(MatrixEntityRegex.isMatrixEventIdentifier("$acR1l0raoZnm60CBwAVgqbZqoO/mYU81xysh1u7XcJk"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$acR1l0raoZnm60CBwAVgqbZqoO/mYU81xysh1u7XcJk."))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$acR1l0raoZnm60CBwAVgqbZqoO/mYU81xysh1u7XcJk:"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$acR1l0raoZnm60CBwAVgqbZqoO/mYU81xysh1u7XcJk?"))
-
-        // room version 4
-        XCTAssertTrue(MatrixEntityRegex.isMatrixEventIdentifier("$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg."))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg:"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg?"))
-    }
     
     func testAllUsers() {
         XCTAssertTrue(MatrixEntityRegex.containsMatrixAllUsers("@room"))

@@ -19,10 +19,9 @@ import SwiftUI
 
 struct JoinRoomScreenCoordinatorParameters {
     let roomID: String
-    let roomName: String
-    let avatarURL: URL?
-    let interaction: JoinRoomScreenInteraction
     let clientProxy: ClientProxyProtocol
+    let mediaProvider: MediaProviderProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum JoinRoomScreenCoordinatorAction {
@@ -45,10 +44,9 @@ final class JoinRoomScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = JoinRoomScreenViewModel(roomID: parameters.roomID,
-                                            roomName: parameters.roomName,
-                                            avatarURL: parameters.avatarURL,
-                                            interaction: parameters.interaction,
-                                            clientProxy: parameters.clientProxy)
+                                            clientProxy: parameters.clientProxy,
+                                            mediaProvider: parameters.mediaProvider,
+                                            userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {
@@ -64,6 +62,10 @@ final class JoinRoomScreenCoordinator: CoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
+    }
+    
+    func stop() {
+        viewModel.stop()
     }
         
     func toPresentable() -> AnyView {

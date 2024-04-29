@@ -24,6 +24,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     private let clientProxy: ClientProxyProtocol
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let analytics: AnalyticsService
     
     private var actionsSubject: PassthroughSubject<UserProfileScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<UserProfileScreenViewModelAction, Never> {
@@ -31,23 +32,27 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     }
     
     init(userID: String,
+         isPresentedModally: Bool,
          clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         analytics: AnalyticsService) {
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
         self.userIndicatorController = userIndicatorController
+        self.analytics = analytics
         
         let initialViewState = UserProfileScreenViewState(userID: userID,
                                                           isOwnUser: userID == clientProxy.userID,
+                                                          isPresentedModally: isPresentedModally,
                                                           bindings: .init())
         
         super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
         
-        showMemberLoadingIndicator()
+        showLoadingIndicator(allowsInteraction: true)
         Task {
             defer {
-                hideMemberLoadingIndicator()
+                hideLoadingIndicator()
             }
             
             switch await clientProxy.profile(for: userID) {
@@ -67,37 +72,49 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
         state.bindings.mediaPreviewItem = nil
         
-        hideMemberLoadingIndicator()
+        hideLoadingIndicator()
     }
     
     override func process(viewAction: UserProfileScreenViewAction) {
         switch viewAction {
         case .displayAvatar:
-            displayFullScreenAvatar()
+            Task { await displayFullScreenAvatar() }
         case .openDirectChat:
-            guard let userProfile = state.userProfile else { fatalError() }
-            actionsSubject.send(.openDirectChat(displayName: userProfile.displayName))
+            Task { await openDirectChat() }
+        case .dismiss:
+            actionsSubject.send(.dismiss)
         }
     }
 
     // MARK: - Private
     
-    private func displayFullScreenAvatar() {
+    private func displayFullScreenAvatar() async {
         guard let userProfile = state.userProfile else { fatalError() }
         guard let avatarURL = userProfile.avatarURL else { return }
         
-        let loadingIndicatorIdentifier = "roomMemberAvatarLoadingIndicator"
-        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+        showLoadingIndicator(allowsInteraction: false)
+        defer { hideLoadingIndicator() }
         
-        Task {
-            defer {
-                userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
-            }
+        // We don't actually know the mime type here, assume it's an image.
+        if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: avatarURL, mimeType: "image/jpeg")) {
+            state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: userProfile.displayName)
+        }
+    }
+    
+    private func openDirectChat() async {
+        guard let userProfile = state.userProfile else { fatalError() }
+        
+        showLoadingIndicator(allowsInteraction: false)
+        defer { hideLoadingIndicator() }
             
-            // We don't actually know the mime type here, assume it's an image.
-            if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: avatarURL, mimeType: "image/jpeg")) {
-                state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: userProfile.displayName)
+        switch await clientProxy.createDirectRoomIfNeeded(with: userProfile.userID, expectedRoomName: userProfile.displayName) {
+        case .success((let roomID, let isNewRoom)):
+            if isNewRoom {
+                analytics.trackCreatedRoom(isDM: true)
             }
+            actionsSubject.send(.openDirectChat(roomID: roomID))
+        case .failure:
+            state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)
         }
     }
     
@@ -105,15 +122,15 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     
     private static let loadingIndicatorIdentifier = "\(UserProfileScreenViewModel.self)-Loading"
     
-    private func showMemberLoadingIndicator() {
+    private func showLoadingIndicator(allowsInteraction: Bool) {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: true),
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: allowsInteraction),
                                                               title: L10n.commonLoading,
                                                               persistent: true),
                                                 delay: .milliseconds(100))
     }
     
-    private func hideMemberLoadingIndicator() {
+    private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

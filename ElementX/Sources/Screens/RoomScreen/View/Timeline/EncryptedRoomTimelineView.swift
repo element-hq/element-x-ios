@@ -14,14 +14,29 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct EncryptedRoomTimelineView: View {
     let timelineItem: EncryptedRoomTimelineItem
     
+    var icon: KeyPath<CompoundIcons, Image> {
+        switch timelineItem.encryptionType {
+        case .megolmV1AesSha2(_, let cause):
+            switch cause {
+            case .unknown:
+                return \.time
+            case .membership:
+                return \.block
+            }
+        default:
+            return \.time
+        }
+    }
+    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Label(timelineItem.body, icon: \.time, iconSize: .small, relativeTo: .compound.bodyLG)
+            Label(timelineItem.body, icon: icon, iconSize: .small, relativeTo: .compound.bodyLG)
                 .labelStyle(RoomTimelineViewLabelStyle())
                 .font(.compound.bodyLG)
         }
@@ -68,6 +83,10 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                              timestamp: "Later",
                                                              isOutgoing: true,
                                                              senderId: "Anne"))
+            
+            EncryptedRoomTimelineView(timelineItem: expectedItemWith(timestamp: "Now",
+                                                                     isOutgoing: false,
+                                                                     senderId: "Bob"))
         }
     }
     
@@ -75,6 +94,17 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         EncryptedRoomTimelineItem(id: .random,
                                   body: text,
                                   encryptionType: .unknown,
+                                  timestamp: timestamp,
+                                  isOutgoing: isOutgoing,
+                                  isEditable: false,
+                                  canBeRepliedTo: false,
+                                  sender: .init(id: senderId))
+    }
+    
+    private static func expectedItemWith(timestamp: String, isOutgoing: Bool, senderId: String) -> EncryptedRoomTimelineItem {
+        EncryptedRoomTimelineItem(id: .random,
+                                  body: L10n.commonUnableToDecryptNoAccess,
+                                  encryptionType: .megolmV1AesSha2(sessionID: "foo", cause: .membership),
                                   timestamp: timestamp,
                                   isOutgoing: isOutgoing,
                                   isEditable: false,

@@ -129,7 +129,9 @@ final class AppSettings {
     let encryptionURL: URL = "https://element.io/help#encryption"
     /// A URL where users can go read more about the chat backup.
     let chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
-
+    /// Any domains that Element web may be hosted on - used for handling links.
+    let elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
+    
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
     var appAppearance: AppAppearance
     
@@ -298,8 +300,6 @@ final class AppSettings {
     #endif
     
     // MARK: - Shared
-    
-    let permalinkBaseURL: URL = "https://matrix.to"
         
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
     var logLevel

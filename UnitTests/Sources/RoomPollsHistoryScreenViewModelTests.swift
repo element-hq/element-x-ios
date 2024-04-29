@@ -28,7 +28,6 @@ class RoomPollsHistoryScreenViewModelTests: XCTestCase {
         interactionHandler = PollInteractionHandlerMock()
         timelineController = MockRoomTimelineController()
         let roomProxyMockConfiguration = RoomProxyMockConfiguration(name: "Polls")
-        roomProxyMockConfiguration.timeline.timelineStartReached = false
         viewModel = RoomPollsHistoryScreenViewModel(pollInteractionHandler: interactionHandler,
                                                     roomTimelineController: timelineController,
                                                     userIndicatorController: UserIndicatorControllerMock())

@@ -20,7 +20,6 @@ import MatrixRustSDK
 
 class UserSessionStore: UserSessionStoreProtocol {
     private let keychainController: KeychainControllerProtocol
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let matrixSDKStateKey = "matrix-sdk-state"
     
     /// Whether or not there are sessions in the store.
@@ -33,9 +32,8 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     var clientSessionDelegate: ClientSessionDelegate { keychainController }
     
-    init(keychainController: KeychainControllerProtocol, backgroundTaskService: BackgroundTaskServiceProtocol) {
+    init(keychainController: KeychainControllerProtocol) {
         self.keychainController = keychainController
-        self.backgroundTaskService = backgroundTaskService
         baseDirectory = .sessionsBaseDirectory
         MXLog.info("Setup base directory at: \(baseDirectory)")
     }
@@ -100,11 +98,9 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol) -> UserSessionProtocol {
         let mediaProvider = MediaProvider(mediaLoader: clientProxy,
-                                          imageCache: .onlyInMemory,
-                                          backgroundTaskService: backgroundTaskService)
+                                          imageCache: .onlyInMemory)
         
-        let voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
-                                                                backgroundTaskService: backgroundTaskService)
+        let voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider)
         
         return UserSession(clientProxy: clientProxy,
                            mediaProvider: mediaProvider,
@@ -150,7 +146,6 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     private func setupProxyForClient(_ client: Client) async -> ClientProxyProtocol {
         await ClientProxy(client: client,
-                          backgroundTaskService: backgroundTaskService,
                           appSettings: ServiceLocator.shared.settings,
                           networkMonitor: ServiceLocator.shared.networkMonitor)
     }

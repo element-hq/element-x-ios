@@ -89,7 +89,6 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         ScrollView {
             VStack(spacing: 8) {
                 states
-                    .padding(.horizontal)
             }
         }
         .environmentObject(viewModel.context)
@@ -98,7 +97,6 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         ScrollView {
             VStack(spacing: 0) {
                 states
-                    .padding(.horizontal)
             }
         }
         .environment(\.timelineStyle, .plain)
@@ -136,6 +134,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description"),
                                                      replyDetails: .loaded(sender: .init(id: "Someone"),
+                                                                           eventID: "123",
                                                                            eventContent: .message(.text(.init(body: "The thread content goes 'ere."))))))
     }
 }

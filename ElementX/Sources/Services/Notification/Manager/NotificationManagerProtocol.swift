@@ -40,4 +40,7 @@ protocol NotificationManagerProtocol: AnyObject {
     func setUserSession(_ userSession: UserSessionProtocol?)
     
     func requestAuthorization()
+    
+    func removeDeliveredMessageNotifications(for roomID: String) async
+    func removeDeliveredInviteNotifications() async
 }

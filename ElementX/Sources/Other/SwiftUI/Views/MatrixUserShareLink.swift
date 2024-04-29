@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import MatrixRustSDK
 import SwiftUI
 
 struct MatrixUserShareLink<Label: View>: View {
@@ -22,8 +23,7 @@ struct MatrixUserShareLink<Label: View>: View {
     
     init(userID: String, @ViewBuilder label: () -> Label) {
         self.label = label()
-        permalink = try? PermalinkBuilder.permalinkTo(userIdentifier: userID,
-                                                      baseURL: ServiceLocator.shared.settings.permalinkBaseURL)
+        permalink = try? URL(string: matrixToUserPermalink(userId: userID))
     }
     
     var body: some View {

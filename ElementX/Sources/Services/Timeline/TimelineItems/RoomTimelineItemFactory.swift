@@ -161,17 +161,25 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                             _ encryptedMessage: EncryptedMessage,
                                             _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
         var encryptionType = EncryptedRoomTimelineItem.EncryptionType.unknown
+        var errorLabel = L10n.commonWaitingForDecryptionKey
         switch encryptedMessage {
-        case .megolmV1AesSha2(let sessionId):
-            encryptionType = .megolmV1AesSha2(sessionId: sessionId)
+        case .megolmV1AesSha2(let sessionID, let cause):
+            switch cause {
+            case .unknown:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .unknown)
+                errorLabel = L10n.commonWaitingForDecryptionKey
+            case .membership:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .membership)
+                errorLabel = L10n.commonUnableToDecryptNoAccess
+            }
         case .olmV1Curve25519AesSha2(let senderKey):
             encryptionType = .olmV1Curve25519AesSha2(senderKey: senderKey)
-        default:
+        case .unknown:
             break
         }
         
         return EncryptedRoomTimelineItem(id: eventItemProxy.id,
-                                         body: L10n.commonWaitingForDecryptionKey,
+                                         body: errorLabel,
                                          encryptionType: encryptionType,
                                          timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                          isOutgoing: isOutgoing,
@@ -626,13 +634,15 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case let .ready(timelineItem, senderID, senderProfile):
             let sender: TimelineItemSender
             switch senderProfile {
-            case let .ready(displayName, _, avatarUrl):
+            case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
                 sender = TimelineItemSender(id: senderID,
                                             displayName: displayName,
+                                            isDisplayNameAmbiguous: isDisplayNameAmbiguous,
                                             avatarURL: avatarUrl.flatMap(URL.init(string:)))
             default:
                 sender = TimelineItemSender(id: senderID,
                                             displayName: nil,
+                                            isDisplayNameAmbiguous: false,
                                             avatarURL: nil)
             }
             
@@ -640,7 +650,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             
             switch timelineItem.kind() {
             case .message:
-                return timelineItemReplyDetails(for: timelineItem.asMessage()?.msgtype(), sender: sender)
+                return timelineItemReplyDetails(sender: sender, eventID: details.eventId, messageType: timelineItem.asMessage()?.msgtype())
             case .poll(let question, _, _, _, _, _, _):
                 replyContent = .poll(question: question)
             case .sticker(let body, _, _):
@@ -651,13 +661,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
             }
             
-            return .loaded(sender: sender, eventContent: replyContent)
+            return .loaded(sender: sender, eventID: details.eventId, eventContent: replyContent)
         case let .error(message):
             return .error(eventID: details.eventId, message: message)
         }
     }
     
-    private func timelineItemReplyDetails(for messageType: MessageType?, sender: TimelineItemSender) -> TimelineItemReplyDetails {
+    private func timelineItemReplyDetails(sender: TimelineItemSender, eventID: String, messageType: MessageType?) -> TimelineItemReplyDetails {
         let replyContent: EventBasedMessageTimelineItemContentType
         
         switch messageType {
@@ -685,7 +695,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
         }
         
-        return .loaded(sender: sender, eventContent: .message(replyContent))
+        return .loaded(sender: sender,
+                       eventID: eventID,
+                       eventContent: .message(replyContent))
     }
 }
 

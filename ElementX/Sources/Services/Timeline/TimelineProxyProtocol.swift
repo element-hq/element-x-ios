@@ -41,9 +41,9 @@ enum TimelineProxyAction {
 protocol TimelineProxyProtocol {
     var actions: AnyPublisher<TimelineProxyAction, Never> { get }
     
-    var timelineProvider: RoomTimelineProviderProtocol { get }
+    var isLive: Bool { get }
     
-    var timelineStartReached: Bool { get }
+    var timelineProvider: RoomTimelineProviderProtocol { get }
     
     func subscribeForUpdates() async
     
@@ -64,9 +64,8 @@ protocol TimelineProxyProtocol {
     /// Retries sending a failed message given its transaction ID
     func retrySend(transactionID: String) async
     
-    func paginateBackwards(requestSize: UInt) async -> Result<Void, TimelineProxyError>
-    
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError>
+    func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     
     func sendAudio(url: URL,
                    audioInfo: AudioInfo,

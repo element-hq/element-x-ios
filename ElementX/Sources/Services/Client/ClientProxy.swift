@@ -23,7 +23,6 @@ import MatrixRustSDK
 
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let appSettings: AppSettings
     private let networkMonitor: NetworkMonitorProtocol
     
@@ -122,11 +121,9 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     init(client: ClientProtocol,
-         backgroundTaskService: BackgroundTaskServiceProtocol,
          appSettings: AppSettings,
          networkMonitor: NetworkMonitorProtocol) async {
         self.client = client
-        self.backgroundTaskService = backgroundTaskService
         self.appSettings = appSettings
         self.networkMonitor = networkMonitor
         
@@ -134,8 +131,7 @@ class ClientProxy: ClientProxyProtocol {
         
         mediaLoader = MediaLoader(client: client)
         
-        notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings(),
-                                                         backgroundTaskService: backgroundTaskService)
+        notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
 
@@ -289,6 +285,23 @@ class ClientProxy: ClientProxyProtocol {
         try? client.accountUrl(action: action).flatMap(URL.init(string:))
     }
     
+    func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError> {
+        let currentDirectRoom = await directRoomForUserID(userID)
+        switch currentDirectRoom {
+        case .success(.some(let roomID)):
+            return .success((roomID: roomID, isNewRoom: false))
+        case .success(.none):
+            switch await createDirectRoom(with: userID, expectedRoomName: expectedRoomName) {
+            case .success(let roomID):
+                return .success((roomID: roomID, isNewRoom: true))
+            case .failure(let error):
+                return .failure(.sdkError(error))
+            }
+        case .failure(let error):
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
@@ -408,8 +421,7 @@ class ClientProxy: ClientProxyProtocol {
         
         if let roomListItem, let room {
             return await RoomProxy(roomListItem: roomListItem,
-                                   room: room,
-                                   backgroundTaskService: backgroundTaskService)
+                                   room: room)
         }
         
         // Else wait for the visible rooms list to go into fully loaded
@@ -436,8 +448,17 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         return await RoomProxy(roomListItem: roomListItem,
-                               room: room,
-                               backgroundTaskService: backgroundTaskService)
+                               room: room)
+    }
+    
+    func roomPreviewForIdentifier(_ identifier: String) async -> Result<RoomPreviewDetails, ClientProxyError> {
+        do {
+            let roomPreview = try await client.getRoomPreview(roomIdOrAlias: identifier)
+            return .success(.init(roomPreview))
+        } catch {
+            MXLog.error("Failed retrieving preview for room: \(identifier) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
     }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
@@ -576,6 +597,15 @@ class ClientProxy: ClientProxyProtocol {
         RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch())
     }
     
+    func resolveRoomAlias(_ alias: String) async -> String? {
+        do {
+            return try await client.resolveRoomAlias(roomAlias: alias)
+        } catch {
+            MXLog.error("Failed resolving room alias: \(alias) with error: \(error)")
+            return nil
+        }
+    }
+    
     // MARK: Ignored users
     
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
@@ -681,10 +711,10 @@ class ClientProxy: ClientProxyProtocol {
             let roomListService = syncService.roomListService()
             
             let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
-                                                                                                                               permalinkBaseURL: appSettings.permalinkBaseURL,
                                                                                                                                mentionBuilder: PlainMentionBuilder()))
-            let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
-                                                            messageEventStringBuilder: roomMessageEventStringBuilder)
+            let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID, shouldDisambiguateDisplayNames: false),
+                                                            messageEventStringBuilder: roomMessageEventStringBuilder,
+                                                            shouldDisambiguateDisplayNames: false)
             
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                       eventStringBuilder: eventStringBuilder,
@@ -787,7 +817,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let roomListItem = try roomListService?.room(roomId: identifier)
             if roomListItem?.isTimelineInitialized() == false {
-                try await roomListItem?.initTimeline(eventTypeFilter: eventFilters)
+                try await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
             }
             let fullRoom = try await roomListItem?.fullRoom()
             
@@ -912,5 +942,21 @@ private class IgnoredUsersListenerProxy: IgnoredUsersListener {
     
     func call(ignoredUserIds: [String]) {
         onUpdateClosure(ignoredUserIds)
+    }
+}
+
+private extension RoomPreviewDetails {
+    init(_ roomPreview: RoomPreview) {
+        self = RoomPreviewDetails(roomID: roomPreview.roomId,
+                                  name: roomPreview.name,
+                                  canonicalAlias: roomPreview.canonicalAlias,
+                                  topic: roomPreview.topic,
+                                  avatarURL: roomPreview.avatarUrl.flatMap(URL.init(string:)),
+                                  memberCount: UInt(roomPreview.numJoinedMembers),
+                                  isHistoryWorldReadable: roomPreview.isHistoryWorldReadable,
+                                  isJoined: roomPreview.isJoined,
+                                  isInvited: roomPreview.isInvited,
+                                  isPublic: roomPreview.isPublic,
+                                  canKnock: roomPreview.canKnock)
     }
 }

@@ -22,15 +22,13 @@ import XCTest
 final class MediaProviderTests: XCTestCase {
     private let mediaLoader = MockMediaLoader()
     private var imageCache: MockImageCache!
-    private var backgroundTaskService = MockBackgroundTaskService()
     
     var mediaProvider: MediaProvider!
     
     override func setUp() {
         imageCache = MockImageCache(name: "Test")
         mediaProvider = MediaProvider(mediaLoader: mediaLoader,
-                                      imageCache: imageCache,
-                                      backgroundTaskService: backgroundTaskService)
+                                      imageCache: imageCache)
     }
     
     func test_whenImageFromSourceWithSourceNil_nilReturned() throws {

@@ -121,6 +121,18 @@ struct HomeScreenViewState: BindableState {
     var shouldShowEmptyFilterState: Bool {
         !bindings.isSearchFieldFocused && bindings.filtersState.isFiltering && visibleRooms.isEmpty
     }
+    
+    var shouldShowFilters: Bool {
+        !bindings.isSearchFieldFocused
+    }
+    
+    var shouldShowRecoveryKeyConfirmationBanner: Bool {
+        securityBannerMode == .recoveryKeyConfirmation
+    }
+    
+    var shouldShowInvitesButton: Bool {
+        !ServiceLocator.shared.settings.roomListInvitesEnabled && hasPendingInvitations && !bindings.isSearchFieldFocused
+    }
 }
 
 struct HomeScreenViewStateBindings {

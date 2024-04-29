@@ -28,10 +28,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationSplitCoordinator: NavigationSplitCoordinator
-    private let windowManager: WindowManagerProtocol
     private let bugReportService: BugReportServiceProtocol
+    private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
+    private let notificationManager: NotificationManagerProtocol
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     
@@ -66,10 +67,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     init(userSession: UserSessionProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
-         windowManager: WindowManagerProtocol,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
+         appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
          notificationManager: NotificationManagerProtocol,
@@ -77,11 +78,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationRootCoordinator = navigationRootCoordinator
-        self.windowManager = windowManager
         self.bugReportService = bugReportService
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
+        self.appMediator = appMediator
         self.appSettings = appSettings
         self.analytics = analytics
+        self.notificationManager = notificationManager
         
         navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         
@@ -91,7 +93,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
                 
         settingsFlowCoordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
-                                                                            windowManager: windowManager,
+                                                                            windowManager: appMediator.windowManager,
                                                                             appLockService: appLockService,
                                                                             bugReportService: bugReportService,
                                                                             notificationSettings: userSession.clientProxy.notificationSettings,
@@ -154,8 +156,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 } else {
                     timeToDecryptMs = -1
                 }
-            
-                analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
+                
+                switch info.cause {
+                case .unknown:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
+                case .membership:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .HistoricalMessage, timeToDecryptMillis: timeToDecryptMs)
+                }
             }
             .store(in: &cancellables)
     }
@@ -173,56 +180,70 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - FlowCoordinatorProtocol
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
-        clearPresentedSheets(animated: animated) { [weak self] in
-            guard let self else { return }
-            
-            switch appRoute {
-            case .room(let roomID):
-                Task { await self.handleRoomRoute(roomID: roomID, animated: animated) }
-            case .childRoom(let roomID):
-                if let roomFlowCoordinator {
-                    roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-                } else {
-                    Task { await self.handleRoomRoute(roomID: roomID, animated: animated) }
-                }
-            case .roomDetails(let roomID):
-                if stateMachine.state.selectedRoomID == roomID {
-                    roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-                } else {
-                    stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: true), userInfo: .init(animated: animated))
-                }
-            case .roomList, .roomMemberDetails:
-                self.roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-            case .genericCallLink(let url):
-                self.navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
-            case .oidcCallback:
-                break
-            case .settings, .chatBackupSettings:
-                settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-            }
+        Task {
+            await asyncHandleAppRoute(appRoute, animated: animated)
         }
     }
     
-    private func handleRoomRoute(roomID: String, animated: Bool) async {
-        switch await userSession.clientProxy.roomForIdentifier(roomID)?.membership {
-        case .invited:
-            if UIDevice.current.isPhone {
-                roomFlowCoordinator?.clearRoute(animated: animated)
-            }
-            stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
-        case .joined:
-            stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false), userInfo: .init(animated: animated))
-        case .left, .none:
-            // Do nothing but maybe we should ask design to have some kind of error state
-            break
-        }
-    }
-
     func clearRoute(animated: Bool) {
-        roomFlowCoordinator?.handleAppRoute(.roomList, animated: animated)
+        roomFlowCoordinator?.clearRoute(animated: animated)
     }
 
     // MARK: - Private
+    
+    func asyncHandleAppRoute(_ appRoute: AppRoute, animated: Bool) async {
+        showLoadingIndicator(delay: .seconds(0.25))
+        defer {
+            hideLoadingIndicator()
+        }
+        
+        await clearPresentedSheets(animated: animated)
+        
+        switch appRoute {
+        case .room(let roomID):
+            stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room), userInfo: .init(animated: animated))
+        case .roomAlias(let alias):
+            guard let roomID = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
+            await asyncHandleAppRoute(.room(roomID: roomID), animated: animated)
+        case .childRoom(let roomID):
+            if let roomFlowCoordinator {
+                roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room), userInfo: .init(animated: animated))
+            }
+        case .childRoomAlias(let alias):
+            guard let roomID = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
+            await asyncHandleAppRoute(.childRoom(roomID: roomID), animated: animated)
+        case .roomDetails(let roomID):
+            if stateMachine.state.selectedRoomID == roomID {
+                roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .roomDetails), userInfo: .init(animated: animated))
+            }
+        case .roomList:
+            roomFlowCoordinator?.clearRoute(animated: animated)
+        case .roomMemberDetails:
+            roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+        case .event(let roomID, let eventID):
+            stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .eventID(eventID)), userInfo: .init(animated: animated))
+        case .eventOnRoomAlias(let alias, let eventID):
+            guard let roomID = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
+            await asyncHandleAppRoute(.event(roomID: roomID, eventID: eventID), animated: animated)
+        case .childEvent:
+            roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+        case .childEventOnRoomAlias(let alias, let eventID):
+            guard let roomID = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
+            await asyncHandleAppRoute(.childEvent(roomID: roomID, eventID: eventID), animated: animated)
+        case .userProfile(let userID):
+            stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
+        case .genericCallLink(let url):
+            navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
+        case .oidcCallback:
+            break
+        case .settings, .chatBackupSettings:
+            settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+        }
+    }
     
     func attemptStartingOnboarding() {
         if onboardingFlowCoordinator.shouldStart {
@@ -231,18 +252,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func clearPresentedSheets(animated: Bool, completion: @escaping () -> Void) {
+    private func clearPresentedSheets(animated: Bool) async {
         if navigationSplitCoordinator.sheetCoordinator == nil {
-            completion()
             return
         }
         
         navigationSplitCoordinator.setSheetCoordinator(nil, animated: animated)
         
         // Prevents system crashes when presenting a sheet if another one was already shown
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-            completion()
-        }
+        try? await Task.sleep(for: .seconds(0.25))
     }
     
     private func setupStateMachine() {
@@ -253,16 +271,26 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.initial, .start, .roomList):
                 presentHomeScreen()
                 attemptStartingOnboarding()
-                
-            case(.roomList, .selectRoom(let roomID, let showingRoomDetails), .roomList):
-                Task { await self.presentRoomFlow(roomID: roomID, showingRoomDetails: showingRoomDetails, animated: animated) }
+            case(.roomList(let selectedRoomID), .selectRoom(let roomID, let entryPoint), .roomList):
+                if selectedRoomID == roomID {
+                    if let roomFlowCoordinator {
+                        let route: AppRoute = switch entryPoint {
+                        case .room: .room(roomID: roomID)
+                        case .eventID(let eventID): .event(roomID: roomID, eventID: eventID)
+                        case .roomDetails: .roomDetails(roomID: roomID)
+                        }
+                        roomFlowCoordinator.handleAppRoute(route, animated: animated)
+                    }
+                } else {
+                    Task { await self.startRoomFlow(roomID: roomID, entryPoint: entryPoint, animated: animated) }
+                }
             case(.roomList, .deselectRoom, .roomList):
-                tearDownRoomFlow(animated: animated)
+                dismissRoomFlow(animated: animated)
                 
             case (.invitesScreen, .selectRoom, .invitesScreen):
                 break
             case (.invitesScreen, .deselectRoom, .invitesScreen):
-                tearDownRoomFlow(animated: animated)
+                dismissRoomFlow(animated: animated)
                 
             case (.roomList, .showSettingsScreen, .settingsScreen):
                 break
@@ -300,6 +328,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 presentRoomDirectorySearch()
             case (.roomDirectorySearchScreen, .dismissedRoomDirectorySearchScreen, .roomList):
                 dismissRoomDirectorySearch()
+            
+            case (_, .showUserProfileScreen(let userID), .userProfileScreen):
+                presentUserProfileScreen(userID: userID, animated: animated)
+            case (.userProfileScreen, .dismissedUserProfileScreen, .roomList):
+                break
                 
             default:
                 fatalError("Unknown transition: \(context)")
@@ -326,8 +359,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentHomeScreen() {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
-                                                         attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,
-                                                                                                          mentionBuilder: MentionBuilder()),
+                                                         attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                          bugReportService: bugReportService,
                                                          navigationStackCoordinator: detailNavigationStackCoordinator,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher())
@@ -339,9 +371,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .presentRoom(let roomID):
-                    stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false))
+                    handleAppRoute(.room(roomID: roomID), animated: true)
                 case .presentRoomDetails(let roomID):
-                    stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: true))
+                    handleAppRoute(.roomDetails(roomID: roomID), animated: true)
                 case .roomLeft(let roomID):
                     if case .roomList(selectedRoomID: let selectedRoomID) = stateMachine.state,
                        selectedRoomID == roomID {
@@ -419,22 +451,19 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: Room Flow
     
-    private func presentRoomFlow(roomID: String, showingRoomDetails: Bool, animated: Bool) async {
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            MXLog.error("Invalid room ID: \(roomID)")
-            return
-        }
-        
-        let coordinator = await RoomFlowCoordinator(roomProxy: roomProxy,
+    private func startRoomFlow(roomID: String,
+                               entryPoint: RoomFlowCoordinatorEntryPoint,
+                               animated: Bool) async {
+        let coordinator = await RoomFlowCoordinator(roomID: roomID,
                                                     userSession: userSession,
                                                     isChildFlow: false,
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                     navigationStackCoordinator: detailNavigationStackCoordinator,
                                                     emojiProvider: EmojiProvider(),
+                                                    appMediator: appMediator,
                                                     appSettings: appSettings,
                                                     analytics: analytics,
-                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                    orientationManager: windowManager)
+                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -443,7 +472,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .finished:
                 stateMachine.processEvent(.deselectRoom)
             case .presentRoom(let roomID):
-                stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false))
+                stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
             case .presentCallScreen(let roomProxy):
                 presentCallScreen(roomProxy: roomProxy)
             }
@@ -456,10 +485,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator, animated: animated)
         }
         
-        if showingRoomDetails {
-            coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: animated)
-        } else {
+        switch entryPoint {
+        case .room:
             coordinator.handleAppRoute(.room(roomID: roomID), animated: animated)
+        case .eventID(let eventID):
+            coordinator.handleAppRoute(.event(roomID: roomID, eventID: eventID), animated: animated)
+        case .roomDetails:
+            coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: animated)
         }
         
         let availableInvitesCount = userSession.clientProxy.inviteSummaryProvider?.roomListPublisher.value.count ?? 0
@@ -468,11 +500,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         Task {
-            await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
+            let _ = await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
+            
+            await notificationManager.removeDeliveredMessageNotifications(for: roomID)
         }
     }
     
-    private func tearDownRoomFlow(animated: Bool) {
+    private func dismissRoomFlow(animated: Bool) {
         // THIS MUST BE CALLED *AFTER* THE FLOW HAS TIDIED UP THE STACK OR IT CAN CAUSE A CRASH.
         navigationSplitCoordinator.setDetailCoordinator(nil, animated: animated)
         roomFlowCoordinator = nil
@@ -484,7 +518,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let startChatNavigationStackCoordinator = NavigationStackCoordinator()
 
         let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
-        let parameters = StartChatScreenCoordinatorParameters(orientationManager: windowManager,
+        let parameters = StartChatScreenCoordinatorParameters(orientationManager: appMediator.windowManager,
                                                               userSession: userSession,
                                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                               navigationStackCoordinator: startChatNavigationStackCoordinator,
@@ -498,7 +532,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
             case .openRoom(let roomID):
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
-                self.stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false))
+                self.stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
             }
         }
         .store(in: &cancellables)
@@ -520,13 +554,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 switch action {
                 case .openRoom(let roomID):
-                    self?.stateMachine.processEvent(.selectRoom(roomID: roomID, showingRoomDetails: false))
+                    self?.stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
                 }
             }
             .store(in: &cancellables)
         
         sidebarNavigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedInvitesScreen)
+        }
+        
+        Task {
+            await notificationManager.removeDeliveredInviteNotifications()
         }
     }
     
@@ -609,14 +647,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         let hostingController = UIHostingController(rootView: coordinator.toPresentable())
         hostingController.view.backgroundColor = .clear
-        windowManager.globalSearchWindow.rootViewController = hostingController
+        appMediator.windowManager.globalSearchWindow.rootViewController = hostingController
 
-        windowManager.showGlobalSearch()
+        appMediator.windowManager.showGlobalSearch()
     }
     
     private func dismissGlobalSearch() {
-        windowManager.globalSearchWindow.rootViewController = nil
-        windowManager.hideGlobalSearch()
+        appMediator.windowManager.globalSearchWindow.rootViewController = nil
+        appMediator.windowManager.hideGlobalSearch()
         
         globalSearchScreenCoordinator = nil
     }
@@ -632,7 +670,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .joined(let roomID):
+            case .select(let roomID):
                 stateMachine.processEvent(.dismissedRoomDirectorySearchScreen)
                 handleAppRoute(.room(roomID: roomID), animated: true)
             case .dismiss:
@@ -646,5 +684,53 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func dismissRoomDirectorySearch() {
         navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
+    }
+    
+    // MARK: User Profile
+    
+    private func presentUserProfileScreen(userID: String, animated: Bool) {
+        clearRoute(animated: animated)
+        
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
+                                                                isPresentedModally: true,
+                                                                clientProxy: userSession.clientProxy,
+                                                                mediaProvider: userSession.mediaProvider,
+                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                analytics: analytics)
+        let coordinator = UserProfileScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .openDirectChat(let roomID):
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
+            case .dismiss:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.setRootCoordinator(coordinator, animated: false)
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedUserProfileScreen)
+        }
+    }
+    
+    // MARK: Toasts and loading indicators
+    
+    private static let loadingIndicatorIdentifier = "\(UserSessionFlowCoordinator.self)-Loading"
+    
+    private func showLoadingIndicator(delay: Duration? = nil) {
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                                    type: .modal,
+                                                                                    title: L10n.commonLoading,
+                                                                                    persistent: true),
+                                                                      delay: delay)
+    }
+    
+    private func hideLoadingIndicator() {
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

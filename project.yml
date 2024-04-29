@@ -30,7 +30,7 @@ settings:
   APP_DISPLAY_NAME: Element X
   PRODUCTION_APP_NAME: Element
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
-  MARKETING_VERSION: 1.6.3
+  MARKETING_VERSION: 1.6.4
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
   SUPPORTS_MACCATALYST: NO
@@ -49,15 +49,15 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.1.58
+    exactVersion: 1.1.61
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 43310aaaced1a0861c39894bb1086067375326be
+    revision: 259b94104ce799725b9d140c6508312ee475d0a8
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    minorVersion: 0.14.0
+    minorVersion: 0.20.0
     # path: ../matrix-analytics-events
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings

@@ -40,7 +40,7 @@ class RoomScreenInteractionHandler {
     private let voiceMessageRecorder: VoiceMessageRecorderProtocol
     private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let application: ApplicationProtocol
+    private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let pollInteractionHandler: PollInteractionHandlerProtocol
@@ -50,7 +50,12 @@ class RoomScreenInteractionHandler {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var voiceMessageRecorderObserver: AnyCancellable?
+    private var voiceMessageRecorderObserver: AnyCancellable? {
+        didSet {
+            appMediator.setIdleTimerDisabled(voiceMessageRecorderObserver != nil)
+        }
+    }
+    
     private var canCurrentUserRedactOthers = false
     private var canCurrentUserRedactSelf = false
     private var resumeVoiceMessagePlaybackAfterScrubbing = false
@@ -62,7 +67,7 @@ class RoomScreenInteractionHandler {
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          voiceMessageRecorder: VoiceMessageRecorderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         application: ApplicationProtocol,
+         appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analyticsService: AnalyticsService) {
         self.roomProxy = roomProxy
@@ -72,7 +77,7 @@ class RoomScreenInteractionHandler {
         self.voiceMessageMediaManager = voiceMessageMediaManager
         self.voiceMessageRecorder = voiceMessageRecorder
         self.userIndicatorController = userIndicatorController
-        self.application = application
+        self.appMediator = appMediator
         self.appSettings = appSettings
         self.analyticsService = analyticsService
         pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService, roomProxy: roomProxy)
@@ -125,7 +130,7 @@ class RoomScreenInteractionHandler {
 
         if let encryptedItem = timelineItem as? EncryptedRoomTimelineItem {
             switch encryptedItem.encryptionType {
-            case .megolmV1AesSha2(let sessionID):
+            case .megolmV1AesSha2(let sessionID, _):
                 debugActions.append(.retryDecryption(sessionID: sessionID))
             default:
                 break
@@ -230,8 +235,12 @@ class RoomScreenInteractionHandler {
                 }
             }
         case .reply:
+            guard let eventID = eventTimelineItem.id.eventID else {
+                return
+            }
+            
             let replyInfo = buildReplyInfo(for: eventTimelineItem)
-            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventContent: replyInfo.type)
+            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventID: eventID, eventContent: replyInfo.type)
             
             actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails, isThread: replyInfo.isThread))))
         case .forward(let itemID):
@@ -401,6 +410,7 @@ class RoomScreenInteractionHandler {
     
     func stopRecordingVoiceMessage() async {
         await voiceMessageRecorder.stopRecording()
+        voiceMessageRecorderObserver = nil
     }
     
     func cancelRecordingVoiceMessage() async {
@@ -619,7 +629,7 @@ class RoomScreenInteractionHandler {
     }
     
     private func openSystemSettings() {
-        application.openAppSettings()
+        appMediator.openAppSettings()
     }
     
     private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {

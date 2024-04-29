@@ -319,8 +319,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
-                                          attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
-                                                                                           mentionBuilder: MentionBuilder()))
+                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
     }()
     
     static let dmRoomViewModel = {
@@ -345,8 +344,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
-                                          attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
-                                                                                           mentionBuilder: MentionBuilder()))
+                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
     }()
     
     static let simpleRoomViewModel = {
@@ -370,8 +368,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
-                                          attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .userDirectory,
-                                                                                           mentionBuilder: MentionBuilder()))
+                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
     }()
     
     static var previews: some View {

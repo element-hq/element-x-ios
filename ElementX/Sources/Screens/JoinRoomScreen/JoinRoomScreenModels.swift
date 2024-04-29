@@ -21,34 +21,44 @@ enum JoinRoomScreenViewModelAction {
     case cancelled
 }
 
+enum JoinRoomScreenInteractionMode {
+    case unknown
+    case invited
+    case join
+    case knock
+}
+
 struct JoinRoomScreenViewState: BindableState {
     // Maybe use room summary details or similar here??
     let roomID: String
-    let roomName: String
-    let avatarURL: URL?
     
-    let interaction: JoinRoomScreenInteraction
+    var roomDetails: RoomPreviewDetails?
     
-    var isJoining = false
+    var mode: JoinRoomScreenInteractionMode {
+        guard let roomDetails else {
+            return .unknown
+        }
+        
+        if roomDetails.isInvited {
+            return .invited
+        }
+        
+        if roomDetails.isPublic {
+            return .join
+        }
+        
+        // Knocking is not supported yet, treat it as .unknown
+        // if roomDetails.canKnock {
+        //     return .knock
+        // }
+        
+        return .unknown
+    }
     
     var bindings = JoinRoomScreenViewStateBindings()
     
     var title: String {
-        switch interaction {
-        case .knock:
-            L10n.screenJoinRoomTitleKnock
-        case .join, .invited:
-            L10n.screenJoinRoomTitleNoPreview
-        }
-    }
-    
-    var subtitle: String {
-        switch interaction {
-        case .knock:
-            L10n.screenJoinRoomSubtitleKnock
-        case .join, .invited:
-            L10n.screenJoinRoomSubtitleNoPreview
-        }
+        roomDetails?.name ?? L10n.screenJoinRoomTitleNoPreview
     }
 }
 
@@ -57,13 +67,7 @@ struct JoinRoomScreenViewStateBindings {
 }
 
 enum JoinRoomScreenAlertType {
-    case joinFailed
-}
-
-enum JoinRoomScreenInteraction {
-    case knock
-    case join
-    case invited
+    case declineInvite
 }
 
 enum JoinRoomScreenViewAction {

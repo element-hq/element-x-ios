@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 enum AppRoute: Equatable {
     /// The callback used to complete login with OIDC.
@@ -23,13 +24,26 @@ enum AppRoute: Equatable {
     case roomList
     /// A room, shown as the root of the stack (popping any child rooms).
     case room(roomID: String)
+    /// The same as ``room`` but using a room alias.
+    case roomAlias(String)
     /// A room, pushed as a child of any existing rooms on the stack.
     case childRoom(roomID: String)
+    /// The same as ``childRoom`` but using a room alias.
+    case childRoomAlias(String)
     /// The information about a particular room.
     case roomDetails(roomID: String)
     /// The profile of a member within the current room.
-    /// (This can be specialised into 2 routes when we support user permalinks).
     case roomMemberDetails(userID: String)
+    /// An event within a room, shown as the root of the stack (popping any child rooms).
+    case event(roomID: String, eventID: String)
+    /// The same as ``event`` but using a room alias.
+    case eventOnRoomAlias(alias: String, eventID: String)
+    /// An event within a room, either within the last child on the stack or pushing a new child if needed.
+    case childEvent(roomID: String, eventID: String)
+    /// The same as ``childEvent`` but using a room alias.
+    case childEventOnRoomAlias(alias: String, eventID: String)
+    /// The profile of a matrix user (outside of a room).
+    case userProfile(userID: String)
     /// An Element Call link generated outside of a chat room.
     case genericCallLink(url: URL)
     /// The settings screen.
@@ -43,7 +57,8 @@ struct AppRouteURLParser {
     
     init(appSettings: AppSettings) {
         urlParsers = [
-            MatrixPermalinkParser(appSettings: appSettings),
+            MatrixPermalinkParser(),
+            ElementWebURLParser(domains: appSettings.elementWebHosts),
             OIDCCallbackURLParser(appSettings: appSettings),
             ElementCallURLParser()
         ]
@@ -63,9 +78,6 @@ struct AppRouteURLParser {
 /// Represents a type that can parse a `URL` into an `AppRoute`.
 ///
 /// The following Universal Links are missing parsers.
-/// - app.element.io
-/// - staging.element.io
-/// - develop.element.io
 /// - mobile.element.io
 protocol URLParser {
     func route(from url: URL) -> AppRoute?
@@ -121,16 +133,50 @@ struct ElementCallURLParser: URLParser {
 }
 
 struct MatrixPermalinkParser: URLParser {
-    let appSettings: AppSettings
-    
     func route(from url: URL) -> AppRoute? {
-        switch PermalinkBuilder.detectPermalink(in: url, baseURL: appSettings.permalinkBaseURL) {
-        case .userIdentifier(let userID):
-            return .roomMemberDetails(userID: userID)
-        case .roomIdentifier(let roomID):
-            return .room(roomID: roomID)
+        switch parseMatrixEntityFrom(uri: url.absoluteString)?.id {
+        case .room(let id):
+            return .room(roomID: id)
+        case .roomAlias(let alias):
+            return .roomAlias(alias)
+        case .user(let id):
+            return .userProfile(userID: id)
+        case .eventOnRoomId(let roomID, let eventID):
+            return .event(roomID: roomID, eventID: eventID)
+        case .eventOnRoomAlias(let alias, let eventID):
+            return .eventOnRoomAlias(alias: alias, eventID: eventID)
         default:
             return nil
         }
+    }
+}
+
+struct ElementWebURLParser: URLParser {
+    let domains: [String]
+    let paths = ["room", "user"]
+    
+    private let permalinkParser = MatrixPermalinkParser()
+    
+    func route(from url: URL) -> AppRoute? {
+        guard let matrixToURL = buildMatrixToURL(from: url) else { return nil }
+        return permalinkParser.route(from: matrixToURL)
+    }
+    
+    private func buildMatrixToURL(from url: URL) -> URL? {
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            return url
+        }
+        
+        for domain in domains where domain == url.host {
+            components.host = "matrix.to"
+            for path in paths {
+                components.fragment?.replace("/\(path)", with: "")
+            }
+            
+            guard let matrixToURL = components.url else { continue }
+            return matrixToURL
+        }
+        
+        return url
     }
 }

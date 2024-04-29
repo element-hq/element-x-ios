@@ -20,29 +20,27 @@ import MatrixRustSDK
 
 final class TimelineProxy: TimelineProxyProtocol {
     private let timeline: Timeline
-    private var sendMessageBackgroundTask: BackgroundTaskProtocol?
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
     
-    private let backgroundTaskName = "SendRoomEvent"
     private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.low_priority", qos: .utility)
     private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
     private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
     
-    private var backPaginationStateObservationToken: TaskHandle?
+    private var backPaginationStatusObservationToken: TaskHandle?
     private var roomTimelineObservationToken: TaskHandle?
     
     // periphery:ignore - retaining purpose
     private var timelineListener: RoomTimelineListener?
-   
-    private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
+    
+    private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.idle)
+    private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
-   
-    private(set) var timelineStartReached = false
     
     private let actionsSubject = PassthroughSubject<TimelineProxyAction, Never>()
     var actions: AnyPublisher<TimelineProxyAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+    
+    let isLive: Bool
    
     private var innerTimelineProvider: RoomTimelineProviderProtocol!
     var timelineProvider: RoomTimelineProviderProtocol {
@@ -50,13 +48,13 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     deinit {
-        backPaginationStateObservationToken?.cancel()
+        backPaginationStatusObservationToken?.cancel()
         roomTimelineObservationToken?.cancel()
     }
     
-    init(timeline: Timeline, backgroundTaskService: BackgroundTaskServiceProtocol) {
+    init(timeline: Timeline, isLive: Bool) {
         self.timeline = timeline
-        self.backgroundTaskService = backgroundTaskService
+        self.isLive = isLive
     }
     
     func subscribeForUpdates() async {
@@ -74,21 +72,22 @@ final class TimelineProxy: TimelineProxyProtocol {
         let result = await timeline.addListener(listener: timelineListener)
         roomTimelineObservationToken = result.itemsStream
         
-        subscribeToBackpagination()
+        let paginationStatePublisher = backPaginationStatusSubject
+            .combineLatest(forwardPaginationStatusSubject)
+            .map { PaginationState(backward: $0.0, forward: $0.1) }
+            .eraseToAnyPublisher()
+        
+        subscribeToPagination()
         
         innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
+                                                           isLive: isLive,
                                                            updatePublisher: timelineUpdatesSubject.eraseToAnyPublisher(),
-                                                           backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
+                                                           paginationStatePublisher: paginationStatePublisher)
     }
     
     func cancelSend(transactionID: String) async {
         MXLog.info("Cancelling sending for transaction ID: \(transactionID)")
         
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.timeline.cancelSend(txnId: transactionID)
             MXLog.info("Finished cancelling sending for transaction ID: \(transactionID)")
@@ -101,11 +100,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Editing message with original event ID: \(eventID)")
 
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
         let messageContent = buildMessageContentFor(message,
                                                     html: html,
                                                     intentionalMentions: intentionalMentions.toRustMentions())
@@ -152,36 +146,40 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func paginateBackwards(requestSize: UInt) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Paginating backwards with requestSize: \(requestSize)")
+    func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Paginating backwards")
         
         do {
-            try await Task.dispatch(on: .global()) {
-                try self.timeline.paginateBackwards(opts: .simpleRequest(eventLimit: UInt16(requestSize), waitForToken: true))
-            }
-            
-            MXLog.info("Finished paginating backwards with requestSize: \(requestSize)")
+            _ = try await timeline.paginateBackwards(numEvents: requestSize)
+            MXLog.info("Finished paginating backwards")
             
             return .success(())
         } catch {
-            MXLog.error("Failed paginating backwards with requestSize: \(requestSize) with error: \(error)")
+            MXLog.error("Failed paginating backwards with error: \(error)")
             return .failure(.failedPaginatingBackwards)
         }
     }
     
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Paginating backwards with requestSize: \(requestSize), untilNumberOfItems: \(untilNumberOfItems)")
-        
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+        // This extra check is necessary as forwards pagination status doesn't support subscribing.
+        // We need it to make sure we send a valid status after a failure.
+        guard forwardPaginationStatusSubject.value == .idle else {
+            MXLog.error("Attempting to paginate forwards when already at the end.")
+            return .failure(.failedPaginatingBackwards)
+        }
+
+        MXLog.info("Paginating forwards")
+        forwardPaginationStatusSubject.send(.paginating)
+
         do {
-            try await Task.dispatch(on: .global()) {
-                try self.timeline.paginateBackwards(opts: .untilNumItems(eventLimit: UInt16(requestSize), items: UInt16(untilNumberOfItems), waitForToken: true))
-            }
-            
-            MXLog.info("Finished paginating backwards with requestSize: \(requestSize), untilNumberOfItems: \(untilNumberOfItems)")
-            
+            let timelineEndReached = try await timeline.focusedPaginateForwards(numEvents: 16)
+            MXLog.info("Finished paginating forwards")
+
+            forwardPaginationStatusSubject.send(timelineEndReached ? .timelineEndReached : .idle)
             return .success(())
         } catch {
-            MXLog.error("Finished paginating backwards with requestSize: \(requestSize), untilNumberOfItems: \(untilNumberOfItems) with error: \(error)")
+            MXLog.error("Failed paginating forwards with error: \(error)")
+            forwardPaginationStatusSubject.send(.idle)
             return .failure(.failedPaginatingBackwards)
         }
     }
@@ -198,11 +196,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     func retrySend(transactionID: String) async {
         MXLog.info("Retrying sending for transactionID: \(transactionID)")
         
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.timeline.retrySend(txnId: transactionID)
             MXLog.info("Finished retrying sending for transactionID: \(transactionID)")
@@ -214,11 +207,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending audio")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         let handle = timeline.sendAudio(url: url.path(percentEncoded: false), audioInfo: audioInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
@@ -244,11 +232,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                   progressSubject: CurrentValueSubject<Double, Never>?,
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending file")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         let handle = timeline.sendFile(url: url.path(percentEncoded: false), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
@@ -276,11 +259,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending image")
         
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
         let handle = timeline.sendImage(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), imageInfo: imageInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
@@ -307,11 +285,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                       assetType: AssetType?) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending location")
         
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.timeline.sendLocation(body: body,
                                        geoUri: geoURI.string,
@@ -333,11 +306,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending video")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         let handle = timeline.sendVideo(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), videoInfo: videoInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
@@ -364,11 +332,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                           progressSubject: CurrentValueSubject<Double, Never>?,
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending voice message")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         let handle = timeline.sendVoiceMessage(url: url.path(percentEncoded: false), audioInfo: audioInfo, waveform: waveform, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
@@ -397,11 +360,6 @@ final class TimelineProxy: TimelineProxyProtocol {
             MXLog.info("Sending reply to eventID: \(eventID)")
         } else {
             MXLog.info("Sending message")
-        }
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
         }
         
         let messageContent = buildMessageContentFor(message,
@@ -436,12 +394,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending message content")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
-        
+                
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.timeline.send(msg: messageContent)
             
@@ -455,11 +408,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError> {
         MXLog.verbose("Sending read receipt for eventID: \(eventID)")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         return await Task.dispatch(on: lowPriorityDispatchQueue) {
             do {
@@ -475,11 +423,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Toggling reaction for eventID: \(eventID)")
-        
-        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-        defer {
-            sendMessageBackgroundTask?.stop()
-        }
         
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
@@ -605,18 +548,18 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    private func subscribeToBackpagination() {
-        let listener = RoomBackpaginationStatusListener { [weak self] status in
-            if status == .timelineStartReached {
-                self?.timelineStartReached = true
-            }
-            self?.backPaginationStateSubject.send(status)
+    private func subscribeToPagination() {
+        let backPaginationListener = RoomPaginationStatusListener { [weak self] status in
+            self?.backPaginationStatusSubject.send(status)
         }
         do {
-            backPaginationStateObservationToken = try timeline.subscribeToBackPaginationStatus(listener: listener)
+            backPaginationStatusObservationToken = try timeline.subscribeToBackPaginationStatus(listener: backPaginationListener)
         } catch {
-            MXLog.error("Failed to subscribe to back pagination state with error: \(error)")
+            MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
         }
+        
+        // Forward pagination doesn't support observation, set the initial state ourself.
+        forwardPaginationStatusSubject.send(isLive ? .timelineEndReached : .idle)
     }
 }
 
@@ -632,14 +575,14 @@ private final class RoomTimelineListener: TimelineListener {
     }
 }
 
-private final class RoomBackpaginationStatusListener: BackPaginationStatusListener {
-    private let onUpdateClosure: (BackPaginationStatus) -> Void
+private final class RoomPaginationStatusListener: PaginationStatusListener {
+    private let onUpdateClosure: (PaginationStatus) -> Void
 
-    init(_ onUpdateClosure: @escaping (BackPaginationStatus) -> Void) {
+    init(_ onUpdateClosure: @escaping (PaginationStatus) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
 
-    func onUpdate(status: BackPaginationStatus) {
+    func onUpdate(status: PaginationStatus) {
         onUpdateClosure(status)
     }
 }

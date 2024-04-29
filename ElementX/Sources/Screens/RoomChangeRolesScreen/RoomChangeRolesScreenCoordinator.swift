@@ -22,6 +22,7 @@ import SwiftUI
 struct RoomChangeRolesScreenCoordinatorParameters {
     let mode: RoomMemberDetails.Role
     let roomProxy: RoomProxyProtocol
+    let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
 }
@@ -46,6 +47,7 @@ final class RoomChangeRolesScreenCoordinator: CoordinatorProtocol {
         
         viewModel = RoomChangeRolesScreenViewModel(mode: parameters.mode,
                                                    roomProxy: parameters.roomProxy,
+                                                   mediaProvider: parameters.mediaProvider,
                                                    userIndicatorController: parameters.userIndicatorController,
                                                    analytics: parameters.analytics)
     }

@@ -23,5 +23,7 @@ protocol RoomScreenViewModelProtocol {
     var actions: AnyPublisher<RoomScreenViewModelAction, Never> { get }
     var context: RoomScreenViewModelType.Context { get }
     func process(composerAction: ComposerToolbarViewModelAction)
+    /// Updates the timeline to show and highlight the item with the corresponding event ID.
+    func focusOnEvent(eventID: String) async
     func stop()
 }

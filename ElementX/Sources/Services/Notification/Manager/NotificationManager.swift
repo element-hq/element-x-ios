@@ -33,7 +33,6 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         self.notificationCenter = notificationCenter
         self.appSettings = appSettings
         super.init()
-        addObservers()
     }
 
     // MARK: NotificationManagerProtocol
@@ -100,8 +99,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             guard let self else { return }
             
             if await notificationCenter.authorizationStatus() == .authorized {
-                await MainActor.run {
-                    delegate?.registerForRemoteNotifications()
+                await MainActor.run { [weak self] in
+                    self?.delegate?.registerForRemoteNotifications()
                 }
             }
         }
@@ -126,6 +125,22 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         } catch {
             MXLog.error("[NotificationManager] show local notification failed: \(error)")
         }
+    }
+    
+    func removeDeliveredMessageNotifications(for roomID: String) async {
+        let notificationsIdentifiers = await notificationCenter
+            .deliveredNotifications()
+            .filter { $0.request.content.roomID == roomID }
+            .map(\.request.identifier)
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
+    }
+
+    func removeDeliveredInviteNotifications() async {
+        let notificationsIdentifiers = await notificationCenter
+            .deliveredNotifications()
+            .filter { $0.request.content.categoryIdentifier == NotificationConstants.Category.invite }
+            .map(\.request.identifier)
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
     }
     
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {
@@ -175,47 +190,6 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             requestAuthorization()
         } else {
             delegate?.unregisterForRemoteNotifications()
-        }
-    }
-
-    private func addObservers() {
-        NotificationCenter
-            .default
-            .publisher(for: .roomMarkedAsRead)
-            .sink { [weak self] notification in
-                guard let roomID = notification.object as? String else {
-                    return
-                }
-                self?.removeMessageNotifications(for: roomID)
-            }
-            .store(in: &cancellables)
-
-        NotificationCenter
-            .default
-            .publisher(for: .invitesScreenAppeared)
-            .sink { [weak self] _ in
-                self?.removeInviteNotifications()
-            }
-            .store(in: &cancellables)
-    }
-
-    private func removeMessageNotifications(for roomID: String) {
-        Task {
-            let notificationsIdentifiers = await notificationCenter
-                .deliveredNotifications()
-                .filter { $0.request.content.roomID == roomID }
-                .map(\.request.identifier)
-            notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
-        }
-    }
-
-    private func removeInviteNotifications() {
-        Task {
-            let notificationsIdentifiers = await notificationCenter
-                .deliveredNotifications()
-                .filter { $0.request.content.categoryIdentifier == NotificationConstants.Category.invite }
-                .map(\.request.identifier)
-            notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
         }
     }
 }

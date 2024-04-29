@@ -1093,6 +1093,78 @@ class SDKClientMock: SDKClientProtocol {
             return getRecentlyVisitedRoomsReturnValue
         }
     }
+    //MARK: - getRoomPreview
+
+    public var getRoomPreviewRoomIdOrAliasThrowableError: Error?
+    var getRoomPreviewRoomIdOrAliasUnderlyingCallsCount = 0
+    public var getRoomPreviewRoomIdOrAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getRoomPreviewRoomIdOrAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomPreviewRoomIdOrAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomPreviewRoomIdOrAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomPreviewRoomIdOrAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    public var getRoomPreviewRoomIdOrAliasCalled: Bool {
+        return getRoomPreviewRoomIdOrAliasCallsCount > 0
+    }
+    public var getRoomPreviewRoomIdOrAliasReceivedRoomIdOrAlias: String?
+    public var getRoomPreviewRoomIdOrAliasReceivedInvocations: [String] = []
+
+    var getRoomPreviewRoomIdOrAliasUnderlyingReturnValue: RoomPreview!
+    public var getRoomPreviewRoomIdOrAliasReturnValue: RoomPreview! {
+        get {
+            if Thread.isMainThread {
+                return getRoomPreviewRoomIdOrAliasUnderlyingReturnValue
+            } else {
+                var returnValue: RoomPreview? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomPreviewRoomIdOrAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomPreviewRoomIdOrAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomPreviewRoomIdOrAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    public var getRoomPreviewRoomIdOrAliasClosure: ((String) async throws -> RoomPreview)?
+
+    public func getRoomPreview(roomIdOrAlias: String) async throws -> RoomPreview {
+        if let error = getRoomPreviewRoomIdOrAliasThrowableError {
+            throw error
+        }
+        getRoomPreviewRoomIdOrAliasCallsCount += 1
+        getRoomPreviewRoomIdOrAliasReceivedRoomIdOrAlias = roomIdOrAlias
+        getRoomPreviewRoomIdOrAliasReceivedInvocations.append(roomIdOrAlias)
+        if let getRoomPreviewRoomIdOrAliasClosure = getRoomPreviewRoomIdOrAliasClosure {
+            return try await getRoomPreviewRoomIdOrAliasClosure(roomIdOrAlias)
+        } else {
+            return getRoomPreviewRoomIdOrAliasReturnValue
+        }
+    }
     //MARK: - getSessionVerificationController
 
     public var getSessionVerificationControllerThrowableError: Error?
@@ -1629,6 +1701,78 @@ class SDKClientMock: SDKClientProtocol {
         }
         removeAvatarCallsCount += 1
         try removeAvatarClosure?()
+    }
+    //MARK: - resolveRoomAlias
+
+    public var resolveRoomAliasRoomAliasThrowableError: Error?
+    var resolveRoomAliasRoomAliasUnderlyingCallsCount = 0
+    public var resolveRoomAliasRoomAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resolveRoomAliasRoomAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resolveRoomAliasRoomAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resolveRoomAliasRoomAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resolveRoomAliasRoomAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    public var resolveRoomAliasRoomAliasCalled: Bool {
+        return resolveRoomAliasRoomAliasCallsCount > 0
+    }
+    public var resolveRoomAliasRoomAliasReceivedRoomAlias: String?
+    public var resolveRoomAliasRoomAliasReceivedInvocations: [String] = []
+
+    var resolveRoomAliasRoomAliasUnderlyingReturnValue: String!
+    public var resolveRoomAliasRoomAliasReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return resolveRoomAliasRoomAliasUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resolveRoomAliasRoomAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resolveRoomAliasRoomAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resolveRoomAliasRoomAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    public var resolveRoomAliasRoomAliasClosure: ((String) async throws -> String)?
+
+    public func resolveRoomAlias(roomAlias: String) async throws -> String {
+        if let error = resolveRoomAliasRoomAliasThrowableError {
+            throw error
+        }
+        resolveRoomAliasRoomAliasCallsCount += 1
+        resolveRoomAliasRoomAliasReceivedRoomAlias = roomAlias
+        resolveRoomAliasRoomAliasReceivedInvocations.append(roomAlias)
+        if let resolveRoomAliasRoomAliasClosure = resolveRoomAliasRoomAliasClosure {
+            return try await resolveRoomAliasRoomAliasClosure(roomAlias)
+        } else {
+            return resolveRoomAliasRoomAliasReturnValue
+        }
     }
     //MARK: - restoreSession
 

@@ -67,6 +67,20 @@ enum SessionVerificationState {
     case unverified
 }
 
+struct RoomPreviewDetails {
+    let roomID: String
+    let name: String?
+    let canonicalAlias: String?
+    let topic: String?
+    let avatarURL: URL?
+    let memberCount: UInt
+    let isHistoryWorldReadable: Bool
+    let isJoined: Bool
+    let isInvited: Bool
+    let isPublic: Bool
+    let canKnock: Bool
+}
+
 // sourcery: AutoMockable
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> { get }
@@ -109,6 +123,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func accountURL(action: AccountManagementAction) -> URL?
     
+    func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError>
+    
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
     
     func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError>
@@ -120,6 +136,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError>
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
+    
+    func roomPreviewForIdentifier(_ identifier: String) async -> Result<RoomPreviewDetails, ClientProxyError>
     
     @discardableResult func loadUserDisplayName() async -> Result<Void, ClientProxyError>
     
@@ -142,6 +160,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError>
     
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol
+    
+    func resolveRoomAlias(_ alias: String) async -> String?
 
     // MARK: - Ignored users
     

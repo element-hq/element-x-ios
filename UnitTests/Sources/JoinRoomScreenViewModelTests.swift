@@ -34,13 +34,44 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
+    func testAcceptInviteInteraction() async throws {
+        setupViewModel()
+        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .joined }
+        context.send(viewAction: .acceptInvite)
+        try await deferred.fulfill()
+    }
+    
+    func testDeclineInviteInteraction() async throws {
+        setupViewModel()
+        
+        try await deferFulfillment(viewModel.context.$viewState) { $0.roomDetails != nil }.fulfill()
+        
+        context.send(viewAction: .declineInvite)
+        
+        XCTAssertEqual(viewModel.context.alertInfo?.id, .declineInvite)
+    }
+    
     private func setupViewModel(throwing: Bool = false) {
         let clientProxy = ClientProxyMock(.init())
+        
         clientProxy.joinRoomReturnValue = throwing ? .failure(.sdkError(ClientProxyMockError.generic)) : .success(())
+        
+        clientProxy.roomPreviewForIdentifierReturnValue = .success(.init(roomID: "",
+                                                                         name: nil,
+                                                                         canonicalAlias: nil,
+                                                                         topic: nil,
+                                                                         avatarURL: nil,
+                                                                         memberCount: 0,
+                                                                         isHistoryWorldReadable: false,
+                                                                         isJoined: false,
+                                                                         isInvited: false,
+                                                                         isPublic: false,
+                                                                         canKnock: false))
+        
         viewModel = JoinRoomScreenViewModel(roomID: "1",
-                                            roomName: "Room Name",
-                                            avatarURL: nil,
-                                            interaction: .join,
-                                            clientProxy: clientProxy)
+                                            clientProxy: clientProxy,
+                                            mediaProvider: MockMediaProvider(),
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }
