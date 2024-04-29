@@ -241,6 +241,7 @@
 "error_failed_loading_messages" = "Načítání zpráv se nezdařilo";
 "error_failed_locating_user" = "%1$@ nemá přístup k vaší poloze. Zkuste to prosím později.";
 "error_failed_uploading_voice_message" = "Nepodařilo se nahrát hlasovou zprávu.";
+"error_message_not_found" = "Message not found";
 "error_no_compatible_app_found" = "Nebyla nalezena žádná kompatibilní aplikace, která by tuto akci zpracovala.";
 "error_some_messages_have_not_been_sent" = "Některé zprávy nebyly odeslány";
 "error_unknown" = "Omlouváme se, došlo k chybě";

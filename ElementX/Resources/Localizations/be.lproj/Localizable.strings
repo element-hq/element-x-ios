@@ -241,6 +241,7 @@
 "error_failed_loading_messages" = "Не ўдалося загрузіць паведамленні";
 "error_failed_locating_user" = "%1$@ не магчыма атрымаць доступ да вашага месцазнаходжання. Калі ласка паспрабуйце зноў пазней.";
 "error_failed_uploading_voice_message" = "Не ўдалося загрузіць ваша галасавое паведамленне.";
+"error_message_not_found" = "Паведамленне не знойдзена";
 "error_no_compatible_app_found" = "Не знойдзена сумяшчальная праграма для выканання гэтага дзеяння.";
 "error_some_messages_have_not_been_sent" = "Некаторыя паведамленні не былі адпраўлены";
 "error_unknown" = "На жаль, адбылася памылка";

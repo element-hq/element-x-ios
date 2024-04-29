@@ -241,6 +241,7 @@
 "error_failed_loading_messages" = "Nem sikerült betölteni az üzeneteket";
 "error_failed_locating_user" = "Az %1$@ nem tudta elérni a tartózkodási helyét. Próbálja újra később.";
 "error_failed_uploading_voice_message" = "Nem sikerült feltölteni a hangüzenetét.";
+"error_message_not_found" = "Message not found";
 "error_no_compatible_app_found" = "Nem található kompatibilis alkalmazás a művelet kezeléséhez.";
 "error_some_messages_have_not_been_sent" = "Néhány üzenet nem került elküldésre";
 "error_unknown" = "Elnézést, hiba történt";

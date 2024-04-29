@@ -241,6 +241,7 @@
 "error_failed_loading_messages" = "Fehler beim Laden der Nachrichten";
 "error_failed_locating_user" = "%1$@ konnte nicht auf deinen Standort zugreifen. Bitte versuche es später erneut.";
 "error_failed_uploading_voice_message" = "Fehler beim Hochladen der Sprachnachricht.";
+"error_message_not_found" = "Message not found";
 "error_no_compatible_app_found" = "Für diese Aktion wurde keine kompatible App gefunden.";
 "error_some_messages_have_not_been_sent" = "Einige Nachrichten wurden nicht gesendet";
 "error_unknown" = "Entschuldigung, es ist ein Fehler aufgetreten";

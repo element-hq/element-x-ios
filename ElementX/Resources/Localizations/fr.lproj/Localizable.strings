@@ -151,7 +151,7 @@
 "common_people" = "Personnes";
 "common_permalink" = "Permalien";
 "common_permission" = "Autorisation";
-"common_please_wait" = "Please wait…";
+"common_please_wait" = "Veuillez patienter…";
 "common_poll_total_votes" = "Nombre total de votes : %1$@";
 "common_poll_undisclosed_text" = "Les résultats s’afficheront une fois le sondage terminé";
 "common_privacy_policy" = "Politique de confidentialité";
@@ -207,11 +207,11 @@
 "common_voice_message" = "Message vocal";
 "common_waiting" = "En attente...";
 "common_waiting_for_decryption_key" = "En attente de la clé de déchiffrement";
-"common_no_room_name" = "No room name";
+"common_no_room_name" = "Salon sans nom";
 "common_poll_end_confirmation" = "Êtes-vous sûr de vouloir mettre fin à ce sondage ?";
 "common_poll_summary" = "Sondage : %1$@";
 "common_something_went_wrong" = "Une erreur s'est produite";
-"common_unable_to_decrypt_no_access" = "You don't have access to this message";
+"common_unable_to_decrypt_no_access" = "Vous ne pouvez pas voir ce message";
 "common_verify_device" = "Vérifier la session";
 "confirm_recovery_key_banner_message" = "La sauvegarde des conversations est désynchronisée. Vous devez confirmer la clé de récupération pour accéder à votre historique.";
 "confirm_recovery_key_banner_title" = "Confirmer votre clé de récupération";
@@ -241,6 +241,7 @@
 "error_failed_loading_messages" = "Échec du chargement des messages";
 "error_failed_locating_user" = "%1$@ n’a pas pu accéder à votre position. Veuillez réessayer ultérieurement.";
 "error_failed_uploading_voice_message" = "Échec lors de l’envoi du message vocal.";
+"error_message_not_found" = "Message not found";
 "error_no_compatible_app_found" = "Aucune application compatible n’a été trouvée pour gérer cette action.";
 "error_some_messages_have_not_been_sent" = "Certains messages n’ont pas été envoyés";
 "error_unknown" = "Désolé, une erreur s’est produite";
@@ -423,8 +424,8 @@
 "screen_invites_invited_you" = "%1$@ (%2$@) vous a invité(e)";
 "screen_join_room_join_action" = "Rejoindre";
 "screen_join_room_knock_action" = "Demander à joindre";
-"screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
-"screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
+"screen_join_room_space_not_supported_description" = "Les Spaces ne sont pas encore pris en charge par %1$@ . Vous pouvez voir les Spaces sur le Web.";
+"screen_join_room_space_not_supported_title" = "Les Spaces ne sont pas encore pris en charge";
 "screen_join_room_subtitle_knock" = "Cliquez ci-dessous et un administrateur sera prévenu. Une fois votre demande approuvée, pour pourrez rejoindre la discussion.";
 "screen_join_room_subtitle_no_preview" = "Vous devez être un membre du salon pour pouvoir lire l'historique des messages.";
 "screen_join_room_title_knock" = "Vous souhaitez rejoindre ce salon?";
@@ -526,7 +527,7 @@
 "screen_recovery_key_confirm_key_description" = "Si vous avez une clé de sécurité ou une phrase de sécurité, cela fonctionnera également.";
 "screen_recovery_key_confirm_key_label" = "Clé de récupération";
 "screen_recovery_key_confirm_key_placeholder" = "Saisissez la clé ici…";
-"screen_recovery_key_confirm_lost_recovery_key" = "Lost your recovery key?";
+"screen_recovery_key_confirm_lost_recovery_key" = "Clé de récupération perdue?";
 "screen_recovery_key_confirm_success" = "Clé de récupération confirmée";
 "screen_recovery_key_confirm_title" = "Saisissez votre clé de récupération";
 "screen_recovery_key_copied_to_clipboard" = "Clé de récupération copiée";

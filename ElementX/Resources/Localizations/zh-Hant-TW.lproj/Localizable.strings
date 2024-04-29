@@ -241,6 +241,7 @@
 "error_failed_loading_messages" = "無法載入訊息";
 "error_failed_locating_user" = "%1$@ 無法取得您的位置。請稍後再試。";
 "error_failed_uploading_voice_message" = "無法上傳語音訊息。";
+"error_message_not_found" = "Message not found";
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "有些訊息尚未傳送";
 "error_unknown" = "Sorry, an error occurred";

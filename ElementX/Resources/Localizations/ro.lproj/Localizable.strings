@@ -241,6 +241,7 @@
 "error_failed_loading_messages" = "Încărcarea mesajelor a eșuat";
 "error_failed_locating_user" = "%1$@ nu a putut accesa locația dumneavoastră. Vă rugăm să încercați din nou mai târziu.";
 "error_failed_uploading_voice_message" = "Trimiterea mesajului vocal nu a reușit.";
+"error_message_not_found" = "Message not found";
 "error_no_compatible_app_found" = "Nu a fost găsită nicio aplicație capabilă să gestioneze această acțiune.";
 "error_some_messages_have_not_been_sent" = "Unele mesaje nu au fost trimise";
 "error_unknown" = "Ne pare rău, a apărut o eroare";

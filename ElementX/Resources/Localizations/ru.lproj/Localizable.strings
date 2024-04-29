@@ -241,6 +241,7 @@
 "error_failed_loading_messages" = "Не удалось загрузить сообщения";
 "error_failed_locating_user" = "%1$@ не удалось получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже.";
 "error_failed_uploading_voice_message" = "Не удалось загрузить голосовое сообщение.";
+"error_message_not_found" = "Message not found";
 "error_no_compatible_app_found" = "Не найдено совместимое приложение для обработки этого действия.";
 "error_some_messages_have_not_been_sent" = "Некоторые сообщения не были отправлены";
 "error_unknown" = "Извините, произошла ошибка";
