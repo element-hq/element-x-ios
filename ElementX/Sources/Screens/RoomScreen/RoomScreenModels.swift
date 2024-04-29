@@ -85,6 +85,7 @@ enum RoomScreenViewAction {
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards
     case paginateForwards
+    case scrollToBottom
     
     case timelineItemMenu(itemID: TimelineItemIdentifier)
     case timelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)

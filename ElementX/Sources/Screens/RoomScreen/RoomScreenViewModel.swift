@@ -176,6 +176,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             paginateBackwards()
         case .paginateForwards:
             paginateForwards()
+        case .scrollToBottom:
+            scrollToBottom()
         case .poll(let pollAction):
             processPollAction(pollAction)
         case .audio(let audioAction):
@@ -367,7 +369,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .filter { $0 == .sentMessage }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.state.timelineViewState.scrollToBottomPublisher.send(())
+                self?.scrollToBottom()
             }
             .store(in: &cancellables)
 
@@ -487,6 +489,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             
             paginateForwardsTask = nil
+        }
+    }
+    
+    private func scrollToBottom() {
+        if state.timelineViewState.isLive {
+            state.timelineViewState.scrollToBottomPublisher.send(())
+        } else {
+            focusLive()
         }
     }
     
