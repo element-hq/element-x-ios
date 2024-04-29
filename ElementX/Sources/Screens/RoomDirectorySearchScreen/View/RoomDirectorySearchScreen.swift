@@ -34,13 +34,22 @@ struct RoomDirectorySearchScreen: View {
                         if context.viewState.isLoading {
                             ProgressView()
                                 .frame(maxWidth: .infinity)
+                        } else if context.viewState.rooms.isEmpty {
+                            Text(L10n.commonNoResults)
+                                .font(.compound.bodyLG)
+                                .foregroundColor(.compound.textSecondary)
+                                .frame(maxWidth: .infinity)
+                                .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
+                        } else {
+                            // This needs to be in the else as when you start a search, the results are cleared making the footer visible.
+                            // We only want to trigger the pagination when the state is not loading.
+                            emptyRectangle
+                                .onAppear {
+                                    context.send(viewAction: .reachedBottom)
+                                }
                         }
-                        
-                        emptyRectangle
-                            .onAppear {
-                                context.send(viewAction: .reachedBottom)
-                            }
                     }
+                    .listRowSeparator(.hidden)
                 }
             }
             .listStyle(.plain)
@@ -70,7 +79,7 @@ struct RoomDirectorySearchScreen: View {
 
 // MARK: - Previews
 
-struct RoomDirectorySearchScreenScreen_Previews: PreviewProvider, TestablePreview {
+struct RoomDirectorySearchScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel: RoomDirectorySearchScreenViewModel = {
         let results = [RoomDirectorySearchResult(id: "test_1",
                                                  alias: "#test_1:example.com",

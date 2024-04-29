@@ -93,6 +93,10 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
                                                                       title: L10n.screenRoomDirectorySearchLoadingError,
                                                                       iconName: "xmark"))
             }
+            
+            // Add a small delay to allow the rooms to be published,
+            // otherwise you see the No Results text briefly.
+            try? await Task.sleep(for: .milliseconds(50))
             state.isLoading = false
         }
     }

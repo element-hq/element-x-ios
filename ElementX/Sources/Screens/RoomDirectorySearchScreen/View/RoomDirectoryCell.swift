@@ -37,17 +37,10 @@ struct RoomDirectorySearchCell: View {
     }
 
     var body: some View {
-        if result.canBeJoined {
-            ListRow(label: .avatar(title: result.name ?? result.alias ?? result.id,
-                                   description: description,
-                                   icon: avatar),
-                    details: .label(title: L10n.actionJoin, icon: EmptyView()),
-                    kind: .navigationLink(action: joinAction))
-        } else {
-            ListRow(label: .avatar(title: result.name ?? result.alias ?? result.id,
-                                   description: description,
-                                   icon: avatar), kind: .label)
-        }
+        ListRow(label: .avatar(title: result.name ?? result.alias ?? result.id,
+                               description: description,
+                               icon: avatar),
+                kind: result.canBeJoined ? .navigationLink(action: joinAction) : .label)
     }
     
     private var avatar: some View {
@@ -70,7 +63,7 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   name: "Test title",
                                                   topic: "test description",
                                                   avatarURL: nil,
-                                                  canBeJoined: false),
+                                                  canBeJoined: true),
                                     imageProvider: MockMediaProvider()) { }
             
             RoomDirectorySearchCell(result: .init(id: "!test_id_2:matrix.org",
@@ -78,7 +71,7 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   name: nil,
                                                   topic: "test description",
                                                   avatarURL: nil,
-                                                  canBeJoined: false),
+                                                  canBeJoined: true),
                                     imageProvider: MockMediaProvider()) { }
             
             RoomDirectorySearchCell(result: .init(id: "!test_id_3:example.com",
@@ -86,7 +79,7 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   name: "Test title no topic",
                                                   topic: nil,
                                                   avatarURL: nil,
-                                                  canBeJoined: false),
+                                                  canBeJoined: true),
                                     imageProvider: MockMediaProvider()) { }
             
             RoomDirectorySearchCell(result: .init(id: "!test_id_4:example.com",
@@ -94,7 +87,7 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   name: nil,
                                                   topic: nil,
                                                   avatarURL: nil,
-                                                  canBeJoined: false),
+                                                  canBeJoined: true),
                                     imageProvider: MockMediaProvider()) { }
             
             RoomDirectorySearchCell(result: .init(id: "!test_id_5:example.com",
@@ -129,5 +122,6 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   canBeJoined: false),
                                     imageProvider: MockMediaProvider()) { }
         }
+        .compoundList()
     }
 }
