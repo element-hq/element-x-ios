@@ -112,11 +112,8 @@ enum RoomScreenViewAction {
     case focusOnEventID(String)
     /// Switch back to a live timeline (from a detached one).
     case focusLive
-    /// Remove the highlighted event without switching timeline.
-    ///
-    /// This is useful when returning to the bottom of the live timeline
-    ///  if `focusOnEventID` didn't use a detached timeline.
-    case clearFocussedEvent
+    /// The timeline scrolled to reveal the focussed item.
+    case scrolledToFocussedItem
 }
 
 enum RoomScreenComposerAction {
@@ -229,7 +226,10 @@ struct TimelineViewState {
     var isLive = true
     var paginationState = PaginationState.default
     
-    var focussedEventID: String?
+    /// The ID of the focussed event navigated to via a permalink.
+    var focussedEventID: String? { didSet { focussedEventNeedsDisplay = focussedEventID != nil } }
+    /// Whether the timeline should scroll to `focussedEventID` once its item has been built and added to the timeline.
+    var focussedEventNeedsDisplay: Bool
     
     // These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()

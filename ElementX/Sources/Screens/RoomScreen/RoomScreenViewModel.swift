@@ -88,7 +88,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomAvatarURL: roomProxy.avatarURL,
                                                          timelineStyle: appSettings.timelineStyle,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         timelineViewState: TimelineViewState(focussedEventID: focussedEventID),
+                                                         timelineViewState: TimelineViewState(focussedEventID: focussedEventID,
+                                                                                              focussedEventNeedsDisplay: focussedEventID != nil),
                                                          ownUserID: roomProxy.ownUserID,
                                                          hasOngoingCall: roomProxy.hasOngoingCall,
                                                          bindings: .init(reactionsCollapsed: [:])),
@@ -187,8 +188,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await focusOnEvent(eventID: eventID) }
         case .focusLive:
             focusLive()
-        case .clearFocussedEvent:
-            state.timelineViewState.focussedEventID = nil
+        case .scrolledToFocussedItem:
+            // Use a Task to mutate view state after the current view update.
+            Task { state.timelineViewState.focussedEventNeedsDisplay = false }
         }
     }
 

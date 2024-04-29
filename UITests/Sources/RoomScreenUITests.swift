@@ -118,14 +118,20 @@ class RoomScreenUITests: XCTestCase {
         await client.waitForApp()
         defer { try? client.stop() }
         
-        // Some time for the timeline to settle.
-        try await Task.sleep(for: .seconds(1))
         // When tapping a permalink to an item in the timeline.
         try await performOperation(.focusOnEvent("$5"), using: client)
-        // Some time for the timeline to settle.
-        try await Task.sleep(for: .seconds(1))
         
         // Then the item should become highlighted.
+        try await app.assertScreenshot(.roomLayoutHighlight, step: 0)
+        
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
+        
+        // When scrolling to the bottom and tapping the same permalink again.
+        app.buttons[A11yIdentifiers.roomScreen.scrollToBottom].tap()
+        try await Task.sleep(for: .seconds(1)) // Some time for the timeline to settle
+        try await performOperation(.focusOnEvent("$5"), using: client)
+        
+        // Then the item should also be highlighted and scrolled to in the same state as before.
         try await app.assertScreenshot(.roomLayoutHighlight, step: 0)
     }
 

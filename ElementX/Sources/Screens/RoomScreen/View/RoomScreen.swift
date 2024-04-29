@@ -121,6 +121,7 @@ struct RoomScreen: View {
         .opacity(isAtBottomAndLive ? 0.0 : 1.0)
         .accessibilityHidden(isAtBottomAndLive)
         .animation(.elementDefault, value: isAtBottomAndLive)
+        .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
     }
     
     private var isAtBottomAndLive: Bool {
