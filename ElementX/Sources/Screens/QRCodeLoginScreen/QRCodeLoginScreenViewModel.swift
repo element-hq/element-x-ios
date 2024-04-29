@@ -60,6 +60,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             .map(\.bindings.qrResult)
             .removeDuplicates()
             .compactMap { $0 }
+            // this needs to be received on the main actor or the state change for connecting won't work properly
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] qrData in
                 guard let self, scanTask == nil else {
                     return
@@ -103,9 +105,9 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 
                 switch progress {
                 case .establishingSecureChannel(_, let stringCode):
-                    self.state.state = .displayCode(.deviceCode(stringCode))
+                    state.state = .displayCode(.deviceCode(stringCode))
                 case .waitingForToken(let code):
-                    self.state.state = .displayCode(.verificationCode(code))
+                    state.state = .displayCode(.verificationCode(code))
                 default:
                     break
                 }
