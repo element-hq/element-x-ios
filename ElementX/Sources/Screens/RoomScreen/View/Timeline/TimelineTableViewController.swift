@@ -76,10 +76,10 @@ class TimelineTableViewController: UIViewController {
     }
     
     /// There are pending items in `timelineItemsDictionary` that haven't been applied to the data source.
-    var hasPendingItems = false
+    private var hasPendingItems = false
     
     /// The user is dragging the scroll view (or it is still decelerating after a drag).
-    var isDraggingScrollView = false {
+    private var isDraggingScrollView = false {
         didSet {
             if !isDraggingScrollView, hasPendingItems {
                 hasPendingItems = false
@@ -104,19 +104,17 @@ class TimelineTableViewController: UIViewController {
         }
     }
     
-    /// The ID of the focussed event if opening the room to an event permalink.
-    var focussedEventID: String? {
-        didSet {
-            guard let focussedEventID else { return }
-            
-            focussedEventNeedsDisplay = true
-            scrollToItem(eventID: focussedEventID, animated: false)
-        }
-    }
+    /// The ID of the focussed event if navigating to an event permalink within the room.
+    var focussedEventID: String?
 
     /// Whether the timeline should scroll to `focussedEventID` when that item is added to the data source.
     /// This is necessary as the focussed event can be set before the timeline builder has built its item.
-    var focussedEventNeedsDisplay = false
+    var focussedEventNeedsDisplay = false {
+        didSet {
+            guard focussedEventNeedsDisplay, let focussedEventID else { return }
+            scrollToItem(eventID: focussedEventID, animated: false)
+        }
+    }
     
     /// Used to hold an observable object that the typing indicator can use
     let typingMembers = TypingMembersObservableObject(members: [])
@@ -173,10 +171,7 @@ class TimelineTableViewController: UIViewController {
         
         scrollToBottomPublisher
             .sink { [weak self] _ in
-                guard let self else { return }
-                
-                scrollToNewestItem(animated: true)
-                coordinator.send(viewAction: .clearFocussedEvent)
+                self?.scrollToNewestItem(animated: true)
             }
             .store(in: &cancellables)
         
@@ -343,7 +338,7 @@ class TimelineTableViewController: UIViewController {
         if let kvPair = timelineItemsDictionary.first(where: { $0.value.identifier.eventID == focussedEventID }),
            let indexPath = dataSource?.indexPath(for: kvPair.key) {
             tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
-            focussedEventNeedsDisplay = false
+            coordinator.send(viewAction: .scrolledToFocussedItem)
         }
     }
     

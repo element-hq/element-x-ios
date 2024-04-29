@@ -103,7 +103,7 @@ struct RoomScreen: View {
     }
     
     private var scrollToBottomButton: some View {
-        Button(action: scrollToBottom) {
+        Button { context.send(viewAction: .scrollToBottom) } label: {
             Image(systemName: "chevron.down")
                 .font(.compound.bodyLG)
                 .fontWeight(.semibold)
@@ -121,18 +121,11 @@ struct RoomScreen: View {
         .opacity(isAtBottomAndLive ? 0.0 : 1.0)
         .accessibilityHidden(isAtBottomAndLive)
         .animation(.elementDefault, value: isAtBottomAndLive)
+        .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
     }
     
     private var isAtBottomAndLive: Bool {
         context.isScrolledToBottom && context.viewState.timelineViewState.isLive
-    }
-    
-    private func scrollToBottom() {
-        if context.viewState.timelineViewState.isLive {
-            context.viewState.timelineViewState.scrollToBottomPublisher.send(())
-        } else {
-            context.send(viewAction: .focusLive)
-        }
     }
     
     @ViewBuilder

@@ -65,6 +65,9 @@ struct TimelineView: UIViewControllerRepresentable {
             if tableViewController.focussedEventID != context.viewState.timelineViewState.focussedEventID {
                 tableViewController.focussedEventID = context.viewState.timelineViewState.focussedEventID
             }
+            if tableViewController.focussedEventNeedsDisplay != context.viewState.timelineViewState.focussedEventNeedsDisplay {
+                tableViewController.focussedEventNeedsDisplay = context.viewState.timelineViewState.focussedEventNeedsDisplay
+            }
             
             if tableViewController.typingMembers.members != context.viewState.typingMembers {
                 tableViewController.setTypingMembers(context.viewState.typingMembers)
