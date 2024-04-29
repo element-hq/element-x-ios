@@ -241,6 +241,7 @@
 "error_failed_loading_messages" = "Не вдалося завантажити повідомлення";
 "error_failed_locating_user" = "%1$@ не вдалося отримати доступ до вашого місцезнаходження. Будь ласка, спробуйте ще раз пізніше.";
 "error_failed_uploading_voice_message" = "Не вдалося завантажити голосове повідомлення.";
+"error_message_not_found" = "Message not found";
 "error_no_compatible_app_found" = "Не знайдено сумісного застосунку для виконання цієї дії.";
 "error_some_messages_have_not_been_sent" = "Деякі повідомлення не були надіслані";
 "error_unknown" = "Вибачте, сталася помилка";

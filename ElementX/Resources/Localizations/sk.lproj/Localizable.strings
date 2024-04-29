@@ -207,7 +207,7 @@
 "common_voice_message" = "Hlasová správa";
 "common_waiting" = "Čaká sa…";
 "common_waiting_for_decryption_key" = "Čaká sa na dešifrovací kľúč";
-"common_no_room_name" = "No room name";
+"common_no_room_name" = "Žiadny názov miestnosti";
 "common_poll_end_confirmation" = "Ste si istí, že chcete ukončiť túto anketu?";
 "common_poll_summary" = "Anketa: %1$@";
 "common_something_went_wrong" = "Niečo sa pokazilo";
@@ -241,6 +241,7 @@
 "error_failed_loading_messages" = "Načítanie správ zlyhalo";
 "error_failed_locating_user" = "%1$@ nemohol získať prístup k vašej polohe. Skúste to prosím neskôr.";
 "error_failed_uploading_voice_message" = "Nepodarilo sa nahrať hlasovú správu.";
+"error_message_not_found" = "Správa sa nenašla";
 "error_no_compatible_app_found" = "Nebola nájdená žiadna kompatibilná aplikácia, ktorá by túto akciu dokázala spracovať.";
 "error_some_messages_have_not_been_sent" = "Niektoré správy neboli odoslané";
 "error_unknown" = "Prepáčte, vyskytla sa chyba";
@@ -487,7 +488,7 @@
 "screen_polls_history_filter_ongoing" = "Prebiehajúce";
 "screen_polls_history_filter_past" = "Minulé";
 "screen_polls_history_title" = "Ankety";
-"screen_qr_code_login_connecting_subtitle" = "Nadväzovanie spojenia";
+"screen_qr_code_login_connecting_subtitle" = "Nadväzovanie bezpečného spojenia";
 "screen_qr_code_login_connection_note_secure_state_description" = "K novému zariadeniu sa nepodarilo vytvoriť bezpečné pripojenie. Vaše existujúce zariadenia sú stále v bezpečí a nemusíte sa o ne obávať.";
 "screen_qr_code_login_connection_note_secure_state_list_header" = "Čo teraz?";
 "screen_qr_code_login_connection_note_secure_state_list_item_1" = "Skúste sa znova prihlásiť pomocou QR kódu v prípade, že ide o problém so sieťou";

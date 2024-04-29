@@ -241,6 +241,7 @@
 "error_failed_loading_messages" = "Failed loading messages";
 "error_failed_locating_user" = "%1$@ could not access your location. Please try again later.";
 "error_failed_uploading_voice_message" = "Failed to upload your voice message.";
+"error_message_not_found" = "Message not found";
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
 "error_unknown" = "Sorry, an error occurred";

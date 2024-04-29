@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d digit entered</string>
+			<string>%1$d siffra angiven</string>
 			<key>other</key>
-			<string>%1$d digits entered</string>
+			<string>%1$d siffror angivna</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
