@@ -27,10 +27,16 @@ class MatrixEntityRegexTests: XCTestCase {
         XCTAssertFalse(MatrixEntityRegex.isMatrixHomeserver("matrix?.org"))
     }
 
-    func testUserId() {
+    func testUserID() {
         XCTAssertTrue(MatrixEntityRegex.isMatrixUserIdentifier("@username:example.com"))
         XCTAssertFalse(MatrixEntityRegex.isMatrixUserIdentifier("username:example.com"))
         XCTAssertFalse(MatrixEntityRegex.isMatrixUserIdentifier("@username.example.com"))
+    }
+    
+    func testRoomAlias() {
+        XCTAssertTrue(MatrixEntityRegex.isMatrixRoomAlias("#element-ios:matrix.org"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixRoomAlias("element-ios:matrix.org"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixRoomAlias("#element-ios.matrix.org"))
     }
     
     func testAllUsers() {

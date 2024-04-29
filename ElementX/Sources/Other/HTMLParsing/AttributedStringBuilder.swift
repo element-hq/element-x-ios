@@ -218,6 +218,16 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return TextParsingMatch(type: .userID(identifier: identifier), range: match.range)
         }
         
+        matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string, options: []).compactMap { match in
+            guard let matchRange = Range(match.range, in: string) else {
+                return nil
+            }
+            
+            let alias = String(string[matchRange])
+            
+            return TextParsingMatch(type: .roomAlias(alias: alias), range: match.range)
+        })
+        
         matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string, options: []).compactMap { match in
             guard let matchRange = Range(match.range, in: string) else {
                 return nil
@@ -257,6 +267,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             switch match.type {
             case .atRoom:
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
+            case .roomAlias(let alias):
+                if let url = try? matrixToRoomAliasPermalink(roomAlias: alias) {
+                    attributedString.addAttribute(.link, value: url, range: match.range)
+                }
             case .userID, .link:
                 if let url = match.link {
                     attributedString.addAttribute(.link, value: url, range: match.range)
@@ -363,6 +377,7 @@ protocol MentionBuilderProtocol {
 private struct TextParsingMatch {
     enum MatchType {
         case userID(identifier: String)
+        case roomAlias(alias: String)
         case link(urlString: String)
         case atRoom
     }

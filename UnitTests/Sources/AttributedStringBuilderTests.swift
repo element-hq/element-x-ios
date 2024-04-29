@@ -188,12 +188,23 @@ class AttributedStringBuilderTests: XCTestCase {
         checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: string, expectedRuns: 1)
     }
     
-    func testUserIdLink() {
-        let userId = "@user:matrix.org"
-        let string = "The user is \(userId)."
-        let expectedLink = "https://matrix.to/#/\(userId)"
+    func testUserIDLink() {
+        let userID = "@user:matrix.org"
+        let string = "The user is \(userID)."
+        let expectedLink = "https://matrix.to/#/\(userID)"
         checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink, expectedRuns: 3)
         checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink, expectedRuns: 3)
+    }
+    
+    func testRoomAliasLink() {
+        let roomAlias = "#room:matrix.org"
+        let string = "The room is \(roomAlias)."
+        guard let expectedLink = URL(string: "https://matrix.to/#/\(roomAlias)") else {
+            XCTFail("The expected link should be valid.")
+            return
+        }
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
     }
         
     func testDefaultFont() {
