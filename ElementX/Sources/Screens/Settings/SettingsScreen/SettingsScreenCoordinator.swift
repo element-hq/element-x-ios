@@ -51,9 +51,9 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Setup
     
-    init(parameters: SettingsScreenCoordinatorParameters) {
-        viewModel = SettingsScreenViewModel(userSession: parameters.userSession,
-                                            appSettings: parameters.appSettings)
+    init(parameters: SettingsScreenCoordinatorParameters) async {
+        viewModel = await SettingsScreenViewModel(userSession: parameters.userSession,
+                                                  appSettings: parameters.appSettings)
         
         viewModel.actions
             .sink { [weak self] action in

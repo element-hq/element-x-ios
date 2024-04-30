@@ -26,13 +26,13 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, appSettings: AppSettings) {
-        super.init(initialViewState: .init(deviceID: userSession.deviceID,
-                                           userID: userSession.userID,
-                                           accountProfileURL: userSession.clientProxy.accountURL(action: .profile),
-                                           accountSessionsListURL: userSession.clientProxy.accountURL(action: .sessionsList),
-                                           showDeveloperOptions: appSettings.isDevelopmentBuild),
-                   imageProvider: userSession.mediaProvider)
+    init(userSession: UserSessionProtocol, appSettings: AppSettings) async {
+        await super.init(initialViewState: .init(deviceID: userSession.deviceID,
+                                                 userID: userSession.userID,
+                                                 accountProfileURL: userSession.clientProxy.accountURL(action: .profile),
+                                                 accountSessionsListURL: userSession.clientProxy.accountURL(action: .sessionsList),
+                                                 showDeveloperOptions: appSettings.isDevelopmentBuild),
+                         imageProvider: userSession.mediaProvider)
         
         userSession.clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)

@@ -67,10 +67,14 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         switch appRoute {
         case .settings:
-            presentSettingsScreen(animated: animated)
+            Task {
+                await self.presentSettingsScreen(animated: animated)
+            }
         case .chatBackupSettings:
             if navigationStackCoordinator == nil {
-                presentSettingsScreen(animated: animated)
+                Task {
+                    await self.presentSettingsScreen(animated: animated)
+                }
             }
             
             // The navigation stack doesn't like it if the root and the push happen
@@ -89,11 +93,11 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Private
     
-    private func presentSettingsScreen(animated: Bool) {
+    private func presentSettingsScreen(animated: Bool) async {
         navigationStackCoordinator = NavigationStackCoordinator()
         
-        let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: parameters.userSession,
-                                                                                    appSettings: parameters.appSettings))
+        let settingsScreenCoordinator = await SettingsScreenCoordinator(parameters: .init(userSession: parameters.userSession,
+                                                                                          appSettings: parameters.appSettings))
         
         settingsScreenCoordinator.actions
             .sink { [weak self] action in
@@ -114,7 +118,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .userDetails:
                     presentUserDetailsEditScreen()
                 case .accountProfile:
-                    presentAccountProfileURL()
+                    Task {
+                        await self.presentAccountProfileURL()
+                    }
                 case .analytics:
                     presentAnalyticsScreen()
                 case .appLock:
@@ -131,7 +137,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .blockedUsers:
                     presentBlockedUsersScreen()
                 case .accountSessions:
-                    presentAccountSessionsListURL()
+                    Task {
+                        await self.presentAccountSessionsListURL()
+                    }
                 case .notifications:
                     presentNotificationSettings()
                 case .advancedSettings:
@@ -243,16 +251,16 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
 
     // MARK: OIDC Account Management
     
-    private func presentAccountProfileURL() {
-        guard let url = parameters.userSession.clientProxy.accountURL(action: .profile) else {
+    private func presentAccountProfileURL() async {
+        guard let url = await parameters.userSession.clientProxy.accountURL(action: .profile) else {
             MXLog.error("Account URL is missing.")
             return
         }
         presentAccountManagementURL(url)
     }
     
-    private func presentAccountSessionsListURL() {
-        guard let url = parameters.userSession.clientProxy.accountURL(action: .sessionsList) else {
+    private func presentAccountSessionsListURL() async {
+        guard let url = await parameters.userSession.clientProxy.accountURL(action: .sessionsList) else {
             MXLog.error("Account URL is missing.")
             return
         }
