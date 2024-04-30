@@ -27,13 +27,12 @@ enum SettingsScreenCoordinatorAction {
     case logout
     case secureBackup
     case userDetails
-    case accountProfile(url: URL)
     case analytics
     case appLock
     case bugReport
     case about
     case blockedUsers
-    case accountSessions(url: URL)
+    case manageAccount(url: URL)
     case notifications
     case advancedSettings
     case developerOptions
@@ -64,8 +63,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.dismiss)
                 case .userDetails:
                     actionsSubject.send(.userDetails)
-                case let .accountProfile(url):
-                    actionsSubject.send(.accountProfile(url: url))
+                case let .manageAccount(url):
+                    actionsSubject.send(.manageAccount(url: url))
                 case .analytics:
                     actionsSubject.send(.analytics)
                 case .appLock:
@@ -78,8 +77,6 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.blockedUsers)
                 case .secureBackup:
                     actionsSubject.send(.secureBackup)
-                case let .accountSessionsList(url):
-                    actionsSubject.send(.accountSessions(url: url))
                 case .notifications:
                     actionsSubject.send(.notifications)
                 case .advancedSettings:

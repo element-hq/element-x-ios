@@ -113,7 +113,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentSecureBackupScreen(animated: true)
                 case .userDetails:
                     presentUserDetailsEditScreen()
-                case .accountProfile(let url), .accountSessions(let url):
+                case let .manageAccount(url):
                     presentAccountManagementURL(url)
                 case .analytics:
                     presentAnalyticsScreen()

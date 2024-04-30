@@ -97,7 +97,7 @@ struct SettingsScreen: View {
                 ListRow(label: .default(title: L10n.actionManageAccount,
                                         icon: \.userProfile),
                         kind: .button {
-                            context.send(viewAction: .accountProfile(url: url))
+                            context.send(viewAction: .manageAccount(url: url))
                         })
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.account)
             }
@@ -155,7 +155,7 @@ struct SettingsScreen: View {
                 ListRow(label: .default(title: L10n.actionManageDevices,
                                         icon: \.devices),
                         kind: .button {
-                            context.send(viewAction: .accountSessionsList(url: url))
+                            context.send(viewAction: .manageAccount(url: url))
                         })
             }
         }
@@ -253,6 +253,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         NavigationStack {
             SettingsScreen(context: viewModel.context)
+                .snapshot(delay: 1.0)
         }
     }
 }

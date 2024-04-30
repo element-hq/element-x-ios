@@ -90,8 +90,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.close)
         case .userDetails:
             actionsSubject.send(.userDetails)
-        case let .accountProfile(url):
-            actionsSubject.send(.accountProfile(url: url))
+        case let .manageAccount(url):
+            actionsSubject.send(.manageAccount(url: url))
         case .analytics:
             actionsSubject.send(.analytics)
         case .appLock:
@@ -108,8 +108,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.secureBackup)
         case .notifications:
             actionsSubject.send(.notifications)
-        case let .accountSessionsList(url):
-            actionsSubject.send(.accountSessionsList(url: url))
         case .advancedSettings:
             actionsSubject.send(.advancedSettings)
         case .developerOptions:
