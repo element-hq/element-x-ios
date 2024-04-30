@@ -15,7 +15,6 @@
 //
 
 import AuthenticationServices
-import MatrixRustSDK
 
 /// Presents a web authentication session that will display the user's account settings page.
 ///
@@ -25,29 +24,20 @@ import MatrixRustSDK
 /// isn't sharing the session back to Safari.
 @MainActor
 class OIDCAccountSettingsPresenter: NSObject {
+    private let accountURL: URL
     private let presentationAnchor: UIWindow
     private let oidcRedirectURL: URL
-    private let client: ClientProxyProtocol
-    private let accountAction: AccountManagementAction
     
-    init(presentationAnchor: UIWindow,
-         client: ClientProxyProtocol,
-         accountAction: AccountManagementAction) {
+    init(accountURL: URL, presentationAnchor: UIWindow) {
+        self.accountURL = accountURL
         self.presentationAnchor = presentationAnchor
-        self.client = client
-        self.accountAction = accountAction
         oidcRedirectURL = ServiceLocator.shared.settings.oidcRedirectURL
         super.init()
     }
     
     /// Presents a web authentication session for the supplied data.
-    func start() async {
-        guard let url = await client.accountURL(action: accountAction) else {
-            MXLog.error("Account URL is missing.")
-            return
-        }
-        
-        let session = ASWebAuthenticationSession(url: url, callbackURLScheme: oidcRedirectURL.scheme) { _, _ in }
+    func start() {
+        let session = ASWebAuthenticationSession(url: accountURL, callbackURLScheme: oidcRedirectURL.scheme) { _, _ in }
         session.prefersEphemeralWebBrowserSession = false
         session.presentationContextProvider = self
         session.start()
