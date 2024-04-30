@@ -22,6 +22,7 @@ import Combine
 @MainActor
 class RoomFlowCoordinatorTests: XCTestCase {
     var clientProxy: ClientProxyMock!
+    var timelineControllerFactory: RoomTimelineControllerFactoryMock!
     var roomFlowCoordinator: RoomFlowCoordinator!
     var navigationStackCoordinator: NavigationStackCoordinator!
     var cancellables = Set<AnyCancellable>()
@@ -269,6 +270,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     private func setupRoomFlowCoordinator(asChildFlow: Bool = false, roomType: RoomType? = nil) async {
         cancellables.removeAll()
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+        timelineControllerFactory = RoomTimelineControllerFactoryMock(configuration: .init())
         
         clientProxy.roomPreviewForIdentifierClosure = { [roomType] roomID in
             switch roomType {
@@ -309,7 +311,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         roomFlowCoordinator = await RoomFlowCoordinator(roomID: roomID,
                                                         userSession: userSession,
                                                         isChildFlow: asChildFlow,
-                                                        roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
+                                                        roomTimelineControllerFactory: timelineControllerFactory,
                                                         navigationStackCoordinator: navigationStackCoordinator,
                                                         emojiProvider: EmojiProvider(),
                                                         appMediator: AppMediatorMock.default,

@@ -47,6 +47,11 @@ enum RoomFlowCoordinatorEntryPoint: Hashable {
     case eventID(String)
     /// The flow will start by showing the room's details.
     case roomDetails
+    
+    var isEventID: Bool {
+        guard case .eventID = self else { return false }
+        return true
+    }
 }
 
 // swiftlint:disable:next type_body_length
@@ -498,6 +503,27 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         // through the correct states before presenting the room
         navigationStackCoordinator.setSheetCoordinator(nil)
         
+        // Handle selecting the same room again
+        if !isChildFlow {
+            // First unwind the navigation stack
+            navigationStackCoordinator.popToRoot(animated: animated)
+            
+            // And then decide if the room actually needs to be presented again
+            switch fromState {
+            case .initial, .roomDetails(isRoot: true), .joinRoomScreen:
+                break
+            default:
+                // The room is already on the stack, no need to present it again
+                
+                // Check if we need to focus on an event
+                if let focussedEventID {
+                    roomScreenCoordinator?.focusOnEvent(eventID: focussedEventID)
+                }
+                
+                return
+            }
+        }
+        
         Task {
             // Flag the room as read on entering, the timeline will take care of the read receipts
             await roomProxy.flagAsUnread(false)
@@ -510,6 +536,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
+                                                                                           initialFocussedEventID: focussedEventID,
                                                                                            timelineItemFactory: timelineItemFactory)
         self.timelineController = timelineController
         
@@ -998,6 +1025,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
         let roomTimelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
+                                                                                               initialFocussedEventID: nil,
                                                                                                timelineItemFactory: timelineItemFactory)
         
         let parameters = RoomPollsHistoryScreenCoordinatorParameters(roomProxy: roomProxy,
