@@ -379,9 +379,11 @@ private struct NavigationSplitCoordinatorView: View {
         // through the NavigationSplitCoordinator as well.
         .sheet(item: $navigationSplitCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
+                .id(module.id)
         }
         .fullScreenCover(item: $navigationSplitCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
+                .id(module.id)
         }
         // Handle `horizontalSizeClass` changes breaking the navigation bar
         // https://github.com/element-hq/element-x-ios/issues/617
@@ -408,8 +410,10 @@ private struct NavigationSplitCoordinatorView: View {
     var navigationStack: some View {
         NavigationStack(path: navigationSplitCoordinator.compactLayoutStackModulesBinding) {
             navigationSplitCoordinator.compactLayoutRootModule?.coordinator?.toPresentable()
+                .id(navigationSplitCoordinator.compactLayoutRootModule?.id) // Is a nil ID ok?
                 .navigationDestination(for: NavigationModule.self) { module in
                     module.coordinator?.toPresentable()
+                        .id(module.id)
                 }
         }
     }
@@ -419,19 +423,24 @@ private struct NavigationSplitCoordinatorView: View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             if let sidebarModule = navigationSplitCoordinator.sidebarModule {
                 sidebarModule.coordinator?.toPresentable()
+                    .id(sidebarModule.id)
             } else {
                 navigationSplitCoordinator.placeholderModule.coordinator?.toPresentable()
+                    .id(navigationSplitCoordinator.placeholderModule.id)
             }
         } detail: {
             if let detailModule = navigationSplitCoordinator.detailModule {
                 detailModule.coordinator?.toPresentable()
+                    .id(detailModule.id)
             } else {
                 navigationSplitCoordinator.placeholderModule.coordinator?.toPresentable()
+                    .id(navigationSplitCoordinator.placeholderModule.id)
             }
         }
         .navigationSplitViewStyle(.balanced)
         .navigationDestination(for: NavigationModule.self) { module in
             module.coordinator?.toPresentable()
+                .id(module.id)
         }
         .animation(.elementDefault, value: navigationSplitCoordinator.sidebarModule)
         .animation(.elementDefault, value: navigationSplitCoordinator.detailModule)
@@ -713,15 +722,19 @@ private struct NavigationStackCoordinatorView: View {
     var body: some View {
         NavigationStack(path: $navigationStackCoordinator.stackModules) {
             navigationStackCoordinator.rootModule?.coordinator?.toPresentable()
+                .id(navigationStackCoordinator.rootModule?.id) // Is a nil ID ok?
                 .navigationDestination(for: NavigationModule.self) { module in
                     module.coordinator?.toPresentable()
+                        .id(module.id)
                 }
         }
         .sheet(item: $navigationStackCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
+                .id(module.id)
         }
         .fullScreenCover(item: $navigationStackCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
+                .id(module.id)
         }
         .animation(.elementDefault, value: navigationStackCoordinator.rootModule)
     }

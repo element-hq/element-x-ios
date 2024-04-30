@@ -172,6 +172,7 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(timelineController.focusOnEventCallCount, 0)
         XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
         XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEventID)
+        XCTAssertFalse(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
         
         // When focussing on an item that isn't loaded.
         let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.timelineViewState.isLive }
@@ -182,6 +183,7 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(timelineController.focusOnEventCallCount, 1)
         XCTAssertFalse(viewModel.context.viewState.timelineViewState.isLive)
         XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEventID, "t4")
+        XCTAssertTrue(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
     }
     
     func testFocusLoadedItem() async throws {
@@ -196,6 +198,7 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(timelineController.focusOnEventCallCount, 0)
         XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
         XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEventID)
+        XCTAssertFalse(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
         
         // When focussing on a loaded item.
         let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { !$0.timelineViewState.isLive }
@@ -206,6 +209,7 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(timelineController.focusOnEventCallCount, 0)
         XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
         XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEventID, "t1")
+        XCTAssertTrue(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
     }
     
     func testFocusLive() async throws {
@@ -225,6 +229,7 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(timelineController.focusLiveCallCount, 0)
         XCTAssertFalse(viewModel.context.viewState.timelineViewState.isLive)
         XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEventID, "t4")
+        XCTAssertTrue(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
         
         // When switching back to a live timeline.
         deferred = deferFulfillment(viewModel.context.$viewState) { $0.timelineViewState.isLive }
@@ -235,6 +240,15 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(timelineController.focusLiveCallCount, 1)
         XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
         XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEventID)
+        XCTAssertFalse(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
+    }
+    
+    func testInitialFocusViewState() async throws {
+        let timelineController = MockRoomTimelineController()
+        
+        let viewModel = makeViewModel(focussedEventID: "t10", timelineController: timelineController)
+        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEventID, "t10")
+        XCTAssertTrue(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
     }
     
     // MARK: - Sending
@@ -464,8 +478,11 @@ class RoomScreenViewModelTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeViewModel(roomProxy: RoomProxyProtocol? = nil, timelineController: RoomTimelineControllerProtocol) -> RoomScreenViewModel {
+    private func makeViewModel(roomProxy: RoomProxyProtocol? = nil,
+                               focussedEventID: String? = nil,
+                               timelineController: RoomTimelineControllerProtocol) -> RoomScreenViewModel {
         RoomScreenViewModel(roomProxy: roomProxy ?? RoomProxyMock(with: .init(name: "")),
+                            focussedEventID: focussedEventID,
                             timelineController: timelineController,
                             mediaProvider: MockMediaProvider(),
                             mediaPlayerProvider: MediaPlayerProviderMock(),

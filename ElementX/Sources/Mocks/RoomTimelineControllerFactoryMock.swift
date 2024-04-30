@@ -16,11 +16,18 @@
 
 import Foundation
 
-struct MockRoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
-    func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
-                                     timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol {
-        let timelineController = MockRoomTimelineController()
-        timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
-        return timelineController
+struct RoomTimelineControllerFactoryMockConfiguration {
+    var timelineController: MockRoomTimelineController?
+}
+
+extension RoomTimelineControllerFactoryMock {
+    convenience init(configuration: RoomTimelineControllerFactoryMockConfiguration) {
+        self.init()
+        
+        buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReturnValue = configuration.timelineController ?? {
+            let timelineController = MockRoomTimelineController()
+            timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
+            return timelineController
+        }()
     }
 }
