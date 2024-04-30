@@ -281,8 +281,8 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func accountURL(action: AccountManagementAction) async -> URL? {
-        try? await client.accountUrl(action: action).flatMap(URL.init(string:))
+    func accountURL(action: AccountManagementAction) -> URL? {
+        try? client.accountUrl(action: action).flatMap(URL.init(string:))
     }
     
     func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError> {
@@ -817,10 +817,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let roomListItem = try roomListService?.room(roomId: identifier)
             if roomListItem?.isTimelineInitialized() == false {
-                Task {
-                    @MainActor in
-                    try? await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
-                }
+                try await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
             }
             let fullRoom = try await roomListItem?.fullRoom()
             

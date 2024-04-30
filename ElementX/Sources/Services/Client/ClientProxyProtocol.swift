@@ -121,7 +121,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     func stopSync()
     
-    func accountURL(action: AccountManagementAction) async -> URL?
+    func accountURL(action: AccountManagementAction) -> URL?
     
     func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError>
     
