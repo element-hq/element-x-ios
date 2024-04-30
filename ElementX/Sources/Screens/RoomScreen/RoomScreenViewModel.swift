@@ -88,34 +88,35 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomAvatarURL: roomProxy.avatarURL,
                                                          timelineStyle: appSettings.timelineStyle,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         timelineViewState: TimelineViewState(focussedEventID: focussedEventID),
+                                                         timelineViewState: TimelineViewState(focussedEventID: focussedEventID,
+                                                                                              focussedEventNeedsDisplay: focussedEventID != nil),
                                                          ownUserID: roomProxy.ownUserID,
                                                          hasOngoingCall: roomProxy.hasOngoingCall,
                                                          bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
         
-        // This may change to load the detached timeline directly.
-        if let focussedEventID {
-            Task { await focusOnEvent(eventID: focussedEventID) }
+        if focussedEventID != nil {
+            // The timeline controller will start loading a detached timeline.
+            showFocusLoadingIndicator()
         }
         
         setupSubscriptions()
         setupDirectRoomSubscriptionsIfNeeded()
         
-        state.timelineItemMenuActionProvider = { [weak self] itemId -> TimelineItemMenuActions? in
+        state.timelineItemMenuActionProvider = { [weak self] itemID -> TimelineItemMenuActions? in
             guard let self else {
                 return nil
             }
             
-            return self.roomScreenInteractionHandler.timelineItemMenuActionsForItemId(itemId)
+            return self.roomScreenInteractionHandler.timelineItemMenuActionsForItemId(itemID)
         }
 
-        state.audioPlayerStateProvider = { [weak self] itemId -> AudioPlayerState? in
+        state.audioPlayerStateProvider = { [weak self] itemID -> AudioPlayerState? in
             guard let self else {
                 return nil
             }
             
-            return self.roomScreenInteractionHandler.audioPlayerState(for: itemId)
+            return self.roomScreenInteractionHandler.audioPlayerState(for: itemID)
         }
         
         buildTimelineViews()
@@ -175,6 +176,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             paginateBackwards()
         case .paginateForwards:
             paginateForwards()
+        case .scrollToBottom:
+            scrollToBottom()
         case .poll(let pollAction):
             processPollAction(pollAction)
         case .audio(let audioAction):
@@ -187,8 +190,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await focusOnEvent(eventID: eventID) }
         case .focusLive:
             focusLive()
-        case .clearFocussedEvent:
-            state.timelineViewState.focussedEventID = nil
+        case .scrolledToFocussedItem:
+            Task { // Use a Task to mutate view state after the current view update.
+                state.timelineViewState.focussedEventNeedsDisplay = false
+                hideFocusLoadingIndicator()
+            }
         }
     }
 
@@ -365,7 +371,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .filter { $0 == .sentMessage }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.state.timelineViewState.scrollToBottomPublisher.send(())
+                self?.scrollToBottom()
             }
             .store(in: &cancellables)
 
@@ -485,6 +491,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             
             paginateForwardsTask = nil
+        }
+    }
+    
+    private func scrollToBottom() {
+        if state.timelineViewState.isLive {
+            state.timelineViewState.scrollToBottomPublisher.send(())
+        } else {
+            focusLive()
         }
     }
     

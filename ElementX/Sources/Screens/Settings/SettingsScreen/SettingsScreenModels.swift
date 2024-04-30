@@ -17,17 +17,16 @@
 import Foundation
 import UIKit
 
-enum SettingsScreenViewModelAction {
+enum SettingsScreenViewModelAction: Equatable {
     case close
     case userDetails
-    case accountProfile
+    case manageAccount(url: URL)
     case analytics
     case appLock
     case reportBug
     case about
     case blockedUsers
     case secureBackup
-    case accountSessionsList
     case notifications
     case advancedSettings
     case developerOptions
@@ -57,14 +56,13 @@ struct SettingsScreenViewState: BindableState {
 enum SettingsScreenViewAction {
     case close
     case userDetails
-    case accountProfile
     case analytics
     case appLock
     case reportBug
     case about
     case blockedUsers
     case secureBackup
-    case accountSessionsList
+    case manageAccount(url: URL)
     case notifications
     case developerOptions
     case advancedSettings

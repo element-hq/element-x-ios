@@ -29,9 +29,7 @@ struct SettingsScreen: View {
             
             mainSection
             
-            if context.viewState.accountSessionsListURL != nil {
-                manageSessionsSection
-            }
+            manageSessionsSection
             
             advancedOptionsSection
             
@@ -95,11 +93,11 @@ struct SettingsScreen: View {
     
     private var mainSection: some View {
         Section {
-            if context.viewState.accountProfileURL != nil {
+            if let url = context.viewState.accountProfileURL {
                 ListRow(label: .default(title: L10n.actionManageAccount,
                                         icon: \.userProfile),
                         kind: .button {
-                            context.send(viewAction: .accountProfile)
+                            context.send(viewAction: .manageAccount(url: url))
                         })
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.account)
             }
@@ -150,13 +148,16 @@ struct SettingsScreen: View {
         }
     }
     
+    @ViewBuilder
     private var manageSessionsSection: some View {
-        Section {
-            ListRow(label: .default(title: L10n.actionManageDevices,
-                                    icon: \.devices),
-                    kind: .button {
-                        context.send(viewAction: .accountSessionsList)
-                    })
+        if let url = context.viewState.accountSessionsListURL {
+            Section {
+                ListRow(label: .default(title: L10n.actionManageDevices,
+                                        icon: \.devices),
+                        kind: .button {
+                            context.send(viewAction: .manageAccount(url: url))
+                        })
+            }
         }
     }
     
@@ -252,6 +253,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         NavigationStack {
             SettingsScreen(context: viewModel.context)
+                .snapshot(delay: 1.0)
         }
     }
 }
