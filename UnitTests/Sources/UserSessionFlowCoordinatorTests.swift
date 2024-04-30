@@ -22,6 +22,7 @@ import Combine
 @MainActor
 class UserSessionFlowCoordinatorTests: XCTestCase {
     var clientProxy: ClientProxyMock!
+    var timelineControllerFactory: RoomTimelineControllerFactoryMock!
     var userSessionFlowCoordinator: UserSessionFlowCoordinator!
     var navigationRootCoordinator: NavigationRootCoordinator!
     var notificationManager: NotificationManagerMock!
@@ -35,6 +36,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     override func setUp() async throws {
         cancellables.removeAll()
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+        timelineControllerFactory = RoomTimelineControllerFactoryMock(configuration: .init())
         let mediaProvider = MockMediaProvider()
         let voiceMessageMediaManager = VoiceMessageMediaManagerMock()
         let userSession = MockUserSession(clientProxy: clientProxy,
@@ -49,7 +51,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appLockService: AppLockServiceMock(),
                                                                 bugReportService: BugReportServiceMock(),
-                                                                roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
+                                                                roomTimelineControllerFactory: timelineControllerFactory,
                                                                 appMediator: AppMediatorMock.default,
                                                                 appSettings: ServiceLocator.shared.settings,
                                                                 analytics: ServiceLocator.shared.analytics,
@@ -216,22 +218,40 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     }
     
     func testEventRoutes() async throws {
+        // A regular event route should set its room as the root of the stack and focus on the event.
         try await process(route: .event(roomID: "1", eventID: "1"), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
         XCTAssertNotNil(detailCoordinator)
+        XCTAssertEqual(timelineControllerFactory.buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryCallsCount, 1)
+        XCTAssertEqual(timelineControllerFactory.buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReceivedArguments?.initialFocussedEventID, "1")
         
+        // A child event route should push a new room screen onto the stack and focus on the event.
         userSessionFlowCoordinator.handleAppRoute(.childEvent(roomID: "2", eventID: "2"), animated: true)
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 1)
         XCTAssertTrue(detailNavigationStack?.stackCoordinators.first is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
+        XCTAssertEqual(timelineControllerFactory.buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryCallsCount, 2)
+        XCTAssertEqual(timelineControllerFactory.buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReceivedArguments?.initialFocussedEventID, "2")
         
+        // A subsequent regular event route should clear the stack and set the new room as the root of the stack.
         try await process(route: .event(roomID: "3", eventID: "3"), expectedState: .roomList(selectedRoomID: "3"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
         XCTAssertNotNil(detailCoordinator)
+        XCTAssertEqual(timelineControllerFactory.buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryCallsCount, 3)
+        XCTAssertEqual(timelineControllerFactory.buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReceivedArguments?.initialFocussedEventID, "3")
+        
+        // A regular event route for the same room should set a new instance of the room as the root of the stack.
+        try await process(route: .event(roomID: "3", eventID: "4"), expectedState: .roomList(selectedRoomID: "3"))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
+        XCTAssertNotNil(detailCoordinator)
+        XCTAssertEqual(timelineControllerFactory.buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryCallsCount, 4)
+        XCTAssertEqual(timelineControllerFactory.buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReceivedArguments?.initialFocussedEventID, "4",
+                       "A new timeline should be created for the same room ID, so that the screen isn't stale while loading.")
     }
     
     // MARK: - Private

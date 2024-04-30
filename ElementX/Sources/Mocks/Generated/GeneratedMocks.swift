@@ -9652,6 +9652,77 @@ class RoomSummaryProviderMock: RoomSummaryProviderProtocol {
         setFilterClosure?(filter)
     }
 }
+class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol {
+
+    //MARK: - buildRoomTimelineController
+
+    var buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryUnderlyingCallsCount = 0
+    var buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryCalled: Bool {
+        return buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryCallsCount > 0
+    }
+    var buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReceivedArguments: (roomProxy: RoomProxyProtocol, initialFocussedEventID: String?, timelineItemFactory: RoomTimelineItemFactoryProtocol)?
+    var buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReceivedInvocations: [(roomProxy: RoomProxyProtocol, initialFocussedEventID: String?, timelineItemFactory: RoomTimelineItemFactoryProtocol)] = []
+
+    var buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryUnderlyingReturnValue: RoomTimelineControllerProtocol!
+    var buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReturnValue: RoomTimelineControllerProtocol! {
+        get {
+            if Thread.isMainThread {
+                return buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryUnderlyingReturnValue
+            } else {
+                var returnValue: RoomTimelineControllerProtocol? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryClosure: ((RoomProxyProtocol, String?, RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol)?
+
+    func buildRoomTimelineController(roomProxy: RoomProxyProtocol, initialFocussedEventID: String?, timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol {
+        buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryCallsCount += 1
+        buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReceivedArguments = (roomProxy: roomProxy, initialFocussedEventID: initialFocussedEventID, timelineItemFactory: timelineItemFactory)
+        buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReceivedInvocations.append((roomProxy: roomProxy, initialFocussedEventID: initialFocussedEventID, timelineItemFactory: timelineItemFactory))
+        if let buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryClosure = buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryClosure {
+            return buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryClosure(roomProxy, initialFocussedEventID, timelineItemFactory)
+        } else {
+            return buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReturnValue
+        }
+    }
+}
 class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
     var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
         get { return underlyingUpdatePublisher }

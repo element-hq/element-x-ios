@@ -18,8 +18,10 @@ import Foundation
 
 struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
+                                     initialFocussedEventID: String?,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol {
         RoomTimelineController(roomProxy: roomProxy,
+                               initialFocussedEventID: initialFocussedEventID,
                                timelineItemFactory: timelineItemFactory,
                                appSettings: ServiceLocator.shared.settings)
     }

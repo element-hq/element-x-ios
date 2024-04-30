@@ -44,6 +44,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     init(roomProxy: RoomProxyProtocol,
+         initialFocussedEventID: String?,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          appSettings: AppSettings) {
         self.roomProxy = roomProxy
@@ -54,9 +55,24 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         activeTimeline = roomProxy.timeline
         activeTimelineProvider = liveTimelineProvider
-        configureActiveTimelineProvider()
         
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
+        
+        guard let initialFocussedEventID else {
+            configureActiveTimelineProvider()
+            return
+        }
+        
+        Task {
+            callbacks.send(.paginationState(PaginationState(backward: .paginating, forward: .paginating)))
+            switch await focusOnEvent(initialFocussedEventID, timelineSize: 100) {
+            case .success:
+                break
+            case .failure:
+                // Setup the live timeline as a fallback.
+                configureActiveTimelineProvider()
+            }
+        }
     }
     
     func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
@@ -78,7 +94,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     func focusLive() {
         activeTimeline = roomProxy.timeline
         activeTimelineProvider = liveTimelineProvider
-        callbacks.send(.isLive(true))
     }
     
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {

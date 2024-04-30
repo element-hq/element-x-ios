@@ -272,15 +272,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 presentHomeScreen()
                 attemptStartingOnboarding()
             case(.roomList(let selectedRoomID), .selectRoom(let roomID, let entryPoint), .roomList):
-                if selectedRoomID == roomID {
-                    if let roomFlowCoordinator {
-                        let route: AppRoute = switch entryPoint {
-                        case .room: .room(roomID: roomID)
-                        case .eventID(let eventID): .event(roomID: roomID, eventID: eventID)
-                        case .roomDetails: .roomDetails(roomID: roomID)
-                        }
-                        roomFlowCoordinator.handleAppRoute(route, animated: animated)
+                if selectedRoomID == roomID,
+                   !entryPoint.isEventID, // Don't reuse the existing room so the live timeline is hidden while the detached timeline is loading.
+                   let roomFlowCoordinator {
+                    let route: AppRoute = switch entryPoint {
+                    case .room: .room(roomID: roomID)
+                    case .roomDetails: .roomDetails(roomID: roomID)
+                    case .eventID(let eventID): .event(roomID: roomID, eventID: eventID) // ignored.
                     }
+                    roomFlowCoordinator.handleAppRoute(route, animated: animated)
                 } else {
                     Task { await self.startRoomFlow(roomID: roomID, entryPoint: entryPoint, animated: animated) }
                 }

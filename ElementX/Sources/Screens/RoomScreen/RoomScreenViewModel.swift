@@ -95,28 +95,28 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
         
-        // This may change to load the detached timeline directly.
-        if let focussedEventID {
-            Task { await focusOnEvent(eventID: focussedEventID) }
+        if focussedEventID != nil {
+            // The timeline controller will start loading a detached timeline.
+            showFocusLoadingIndicator()
         }
         
         setupSubscriptions()
         setupDirectRoomSubscriptionsIfNeeded()
         
-        state.timelineItemMenuActionProvider = { [weak self] itemId -> TimelineItemMenuActions? in
+        state.timelineItemMenuActionProvider = { [weak self] itemID -> TimelineItemMenuActions? in
             guard let self else {
                 return nil
             }
             
-            return self.roomScreenInteractionHandler.timelineItemMenuActionsForItemId(itemId)
+            return self.roomScreenInteractionHandler.timelineItemMenuActionsForItemId(itemID)
         }
 
-        state.audioPlayerStateProvider = { [weak self] itemId -> AudioPlayerState? in
+        state.audioPlayerStateProvider = { [weak self] itemID -> AudioPlayerState? in
             guard let self else {
                 return nil
             }
             
-            return self.roomScreenInteractionHandler.audioPlayerState(for: itemId)
+            return self.roomScreenInteractionHandler.audioPlayerState(for: itemID)
         }
         
         buildTimelineViews()
@@ -191,8 +191,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .focusLive:
             focusLive()
         case .scrolledToFocussedItem:
-            // Use a Task to mutate view state after the current view update.
-            Task { state.timelineViewState.focussedEventNeedsDisplay = false }
+            Task { // Use a Task to mutate view state after the current view update.
+                state.timelineViewState.focussedEventNeedsDisplay = false
+                hideFocusLoadingIndicator()
+            }
         }
     }
 
