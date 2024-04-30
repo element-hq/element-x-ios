@@ -817,7 +817,10 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let roomListItem = try roomListService?.room(roomId: identifier)
             if roomListItem?.isTimelineInitialized() == false {
-                try await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
+                Task {
+                    @MainActor in
+                    try? await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
+                }
             }
             let fullRoom = try await roomListItem?.fullRoom()
             
