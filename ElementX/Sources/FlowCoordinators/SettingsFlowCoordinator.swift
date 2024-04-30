@@ -113,10 +113,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentSecureBackupScreen(animated: true)
                 case .userDetails:
                     presentUserDetailsEditScreen()
-                case .accountProfile:
-                    Task {
-                        await self.presentAccountProfileURL()
-                    }
+                case .accountProfile(let url), .accountSessions(let url):
+                    presentAccountManagementURL(url)
                 case .analytics:
                     presentAnalyticsScreen()
                 case .appLock:
@@ -132,10 +130,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentLegalInformationScreen()
                 case .blockedUsers:
                     presentBlockedUsersScreen()
-                case .accountSessions:
-                    Task {
-                        await self.presentAccountSessionsListURL()
-                    }
                 case .notifications:
                     presentNotificationSettings()
                 case .advancedSettings:
@@ -246,23 +240,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
 
     // MARK: OIDC Account Management
-    
-    private func presentAccountProfileURL() async {
-        guard let url = await parameters.userSession.clientProxy.accountURL(action: .profile) else {
-            MXLog.error("Account URL is missing.")
-            return
-        }
-        presentAccountManagementURL(url)
-    }
-    
-    private func presentAccountSessionsListURL() async {
-        guard let url = await parameters.userSession.clientProxy.accountURL(action: .sessionsList) else {
-            MXLog.error("Account URL is missing.")
-            return
-        }
-        presentAccountManagementURL(url)
-    }
-    
+        
     private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
     private func presentAccountManagementURL(_ url: URL) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
