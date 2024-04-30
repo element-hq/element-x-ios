@@ -135,9 +135,9 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var accountUrlActionClosure: ((AccountManagementAction?) throws -> String?)?
+    public var accountUrlActionClosure: ((AccountManagementAction?) async throws -> String?)?
 
-    public func accountUrl(action: AccountManagementAction?) throws -> String? {
+    public func accountUrl(action: AccountManagementAction?) async throws -> String? {
         if let error = accountUrlActionThrowableError {
             throw error
         }
@@ -145,7 +145,7 @@ class SDKClientMock: SDKClientProtocol {
         accountUrlActionReceivedAction = action
         accountUrlActionReceivedInvocations.append(action)
         if let accountUrlActionClosure = accountUrlActionClosure {
-            return try accountUrlActionClosure(action)
+            return try await accountUrlActionClosure(action)
         } else {
             return accountUrlActionReturnValue
         }

@@ -281,8 +281,8 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func accountURL(action: AccountManagementAction) -> URL? {
-        try? client.accountUrl(action: action).flatMap(URL.init(string:))
+    func accountURL(action: AccountManagementAction) async -> URL? {
+        try? await client.accountUrl(action: action).flatMap(URL.init(string:))
     }
     
     func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError> {

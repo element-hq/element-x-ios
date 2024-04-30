@@ -17,6 +17,8 @@
 import Combine
 import SwiftUI
 
+import MatrixRustSDK
+
 enum SettingsFlowCoordinatorAction {
     case presentedSettings
     case dismissedSettings
@@ -244,26 +246,22 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: OIDC Account Management
     
     private func presentAccountProfileURL() {
-        guard let url = parameters.userSession.clientProxy.accountURL(action: .profile) else {
-            MXLog.error("Account URL is missing.")
-            return
-        }
-        presentAccountManagementURL(url)
+        presentAccountManagementURL(action: .profile)
     }
     
     private func presentAccountSessionsListURL() {
-        guard let url = parameters.userSession.clientProxy.accountURL(action: .sessionsList) else {
-            MXLog.error("Account URL is missing.")
-            return
-        }
-        presentAccountManagementURL(url)
+        presentAccountManagementURL(action: .sessionsList)
     }
     
     private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
-    private func presentAccountManagementURL(_ url: URL) {
+    private func presentAccountManagementURL(action: AccountManagementAction) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
-        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url, presentationAnchor: parameters.windowManager.mainWindow)
-        accountSettingsPresenter?.start()
+        accountSettingsPresenter = OIDCAccountSettingsPresenter(presentationAnchor: parameters.windowManager.mainWindow,
+                                                                client: parameters.userSession.clientProxy,
+                                                                accountAction: action)
+        Task {
+            await accountSettingsPresenter?.start()
+        }
     }
 }

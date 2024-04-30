@@ -2104,14 +2104,14 @@ class ClientProxyMock: ClientProxyProtocol {
             }
         }
     }
-    var accountURLActionClosure: ((AccountManagementAction) -> URL?)?
+    var accountURLActionClosure: ((AccountManagementAction) async -> URL?)?
 
-    func accountURL(action: AccountManagementAction) -> URL? {
+    func accountURL(action: AccountManagementAction) async -> URL? {
         accountURLActionCallsCount += 1
         accountURLActionReceivedAction = action
         accountURLActionReceivedInvocations.append(action)
         if let accountURLActionClosure = accountURLActionClosure {
-            return accountURLActionClosure(action)
+            return await accountURLActionClosure(action)
         } else {
             return accountURLActionReturnValue
         }

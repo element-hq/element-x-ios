@@ -29,8 +29,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     init(userSession: UserSessionProtocol, appSettings: AppSettings) {
         super.init(initialViewState: .init(deviceID: userSession.deviceID,
                                            userID: userSession.userID,
-                                           accountProfileURL: userSession.clientProxy.accountURL(action: .profile),
-                                           accountSessionsListURL: userSession.clientProxy.accountURL(action: .sessionsList),
                                            showDeveloperOptions: appSettings.isDevelopmentBuild),
                    imageProvider: userSession.mediaProvider)
         
@@ -81,6 +79,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         Task {
             await userSession.clientProxy.loadUserAvatarURL()
             await userSession.clientProxy.loadUserDisplayName()
+            await state.accountProfileURL = userSession.clientProxy.accountURL(action: .profile)
+            await state.accountSessionsListURL = userSession.clientProxy.accountURL(action: .sessionsList)
         }
     }
     
