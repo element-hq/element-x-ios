@@ -28,6 +28,7 @@ private struct HighlightedTimelineItemModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
+            .padding(.top, isHighlighted ? 1 : 0)
             .background {
                 if isHighlighted {
                     VStack(spacing: 0) {
@@ -47,7 +48,9 @@ private struct HighlightedTimelineItemModifier: ViewModifier {
     }
 }
 
-// swiftlint:disable line_length
+// MARK: - Previews
+
+// swiftlint:disable line_length blanket_disable_command
 struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ScrollView {
@@ -67,6 +70,7 @@ struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePrevie
                     .highlightedTimelineItem(true)
             }
         }
+        .previewDisplayName("Layout")
     }
     
     struct Bubble: View {
@@ -85,4 +89,25 @@ struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePrevie
     }
 }
 
-// swiftlint:enable line_length
+/// A preview that allows quick testing of the highlight appearance across various timeline scenarios.
+struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
+    static let focussedEventID = "RoomTimelineItemFixtures.default.5"
+    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Preview room")),
+                                               focussedEventID: focussedEventID,
+                                               timelineController: MockRoomTimelineController(),
+                                               mediaProvider: MockMediaProvider(),
+                                               mediaPlayerProvider: MediaPlayerProviderMock(),
+                                               voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                               appMediator: AppMediatorMock.default,
+                                               appSettings: ServiceLocator.shared.settings,
+                                               analyticsService: ServiceLocator.shared.analytics,
+                                               notificationCenter: NotificationCenterMock())
+
+    static var previews: some View {
+        NavigationStack {
+            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar.mock())
+        }
+        .previewDisplayName("Timeline")
+    }
+}
