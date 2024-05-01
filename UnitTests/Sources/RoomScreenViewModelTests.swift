@@ -171,8 +171,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let viewModel = makeViewModel(timelineController: timelineController)
         XCTAssertEqual(timelineController.focusOnEventCallCount, 0)
         XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEventID)
-        XCTAssertFalse(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
+        XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEvent)
         
         // When focussing on an item that isn't loaded.
         let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.timelineViewState.isLive }
@@ -182,8 +181,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // Then a new timeline should be loaded and the room focussed on that event.
         XCTAssertEqual(timelineController.focusOnEventCallCount, 1)
         XCTAssertFalse(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEventID, "t4")
-        XCTAssertTrue(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
+        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEvent, .init(eventID: "t4", appearance: .immediate))
     }
     
     func testFocusLoadedItem() async throws {
@@ -197,8 +195,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let viewModel = makeViewModel(timelineController: timelineController)
         XCTAssertEqual(timelineController.focusOnEventCallCount, 0)
         XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEventID)
-        XCTAssertFalse(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
+        XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEvent)
         
         // When focussing on a loaded item.
         let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { !$0.timelineViewState.isLive }
@@ -208,8 +205,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // Then the timeline should remain live and the item should be focussed.
         XCTAssertEqual(timelineController.focusOnEventCallCount, 0)
         XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEventID, "t1")
-        XCTAssertTrue(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
+        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEvent, .init(eventID: "t1", appearance: .animated))
     }
     
     func testFocusLive() async throws {
@@ -228,8 +224,7 @@ class RoomScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(timelineController.focusLiveCallCount, 0)
         XCTAssertFalse(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEventID, "t4")
-        XCTAssertTrue(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
+        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEvent, .init(eventID: "t4", appearance: .immediate))
         
         // When switching back to a live timeline.
         deferred = deferFulfillment(viewModel.context.$viewState) { $0.timelineViewState.isLive }
@@ -239,16 +234,14 @@ class RoomScreenViewModelTests: XCTestCase {
         // Then the timeline should switch back to being live and the event focus should be removed.
         XCTAssertEqual(timelineController.focusLiveCallCount, 1)
         XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEventID)
-        XCTAssertFalse(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
+        XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEvent)
     }
     
     func testInitialFocusViewState() async throws {
         let timelineController = MockRoomTimelineController()
         
         let viewModel = makeViewModel(focussedEventID: "t10", timelineController: timelineController)
-        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEventID, "t10")
-        XCTAssertTrue(viewModel.context.viewState.timelineViewState.focussedEventNeedsDisplay)
+        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEvent, .init(eventID: "t10", appearance: .immediate))
     }
     
     // MARK: - Sending
