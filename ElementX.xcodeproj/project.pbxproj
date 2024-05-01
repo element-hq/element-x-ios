@@ -7420,7 +7420,7 @@
 			repositoryURL = "https://github.com/element-hq/swift-ogg";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.0.2;
+				minimumVersion = 0.0.3;
 			};
 		};
 		E9C4F3A12AA1F65C13A8C8EB /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
