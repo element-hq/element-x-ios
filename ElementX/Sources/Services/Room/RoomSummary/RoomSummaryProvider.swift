@@ -193,7 +193,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return updatedItems
     }
 
-    private func fetchRoomInfo(roomListItem: RoomListItemProtocol) -> RoomInfo? {
+    private func fetchRoomInfo(roomID: String) -> RoomInfo? {
         class FetchResult {
             var roomInfo: RoomInfo?
         }
@@ -203,6 +203,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
 
         Task {
             do {
+                let roomListItem = try await roomListService.room(roomId: roomID)
                 result.roomInfo = try await roomListItem.roomInfo()
             } catch {
                 MXLog.error("Failed fetching room info with error: \(error)")
@@ -214,12 +215,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
 
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
-        guard let roomListItem = try? roomListService.room(roomId: identifier) else {
-            MXLog.error("\(name): Failed finding room with id: \(identifier)")
-            return .empty
-        }
-        
-        guard let roomInfo = fetchRoomInfo(roomListItem: roomListItem) else {
+        guard let roomInfo = fetchRoomInfo(roomID: identifier) else {
             return .empty
         }
         
@@ -242,7 +238,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let details = RoomSummaryDetails(id: roomInfo.id,
                                          isInvite: roomInfo.membership == .invited,
                                          inviter: inviterProxy,
-                                         name: roomInfo.name ?? roomInfo.id,
+                                         name: roomInfo.rawName ?? roomInfo.id,
                                          isDirect: roomInfo.isDirect,
                                          avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                                          lastMessage: attributedLastMessage,

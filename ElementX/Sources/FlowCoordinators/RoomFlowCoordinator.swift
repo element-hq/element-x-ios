@@ -1136,7 +1136,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func forward(eventID: String, toRoomID roomID: String) async {
-        guard let messageEventContent = roomProxy.timeline.messageEventContent(for: eventID) else {
+        guard let messageEventContent = await roomProxy.timeline.messageEventContent(for: eventID) else {
             MXLog.error("Failed retrieving forwarded message event content for eventID: \(eventID)")
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
             return
