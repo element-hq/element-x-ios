@@ -287,14 +287,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.paginationState(.init(backward: .paginating, forward: .paginating)))
         callbacks.send(.isLive(activeTimelineProvider.isLive))
         
-        if clearExistingItems {
-            // Transition through empty to prevent animations.
-            timelineItems.removeAll()
-            callbacks.send(.updatedTimelineItems)
-        }
-        
         serialDispatchQueue.async { [activeTimelineProvider] in
-            self.updateTimelineItems(itemProxies: activeTimelineProvider.itemProxies, paginationState: activeTimelineProvider.paginationState)
+            self.updateTimelineItems(itemProxies: activeTimelineProvider.itemProxies,
+                                     paginationState: activeTimelineProvider.paginationState,
+                                     clearExistingItems: clearExistingItems)
             self.callbacks.send(.paginationState(.init(backward: .idle, forward: .idle)))
         }
     }
@@ -306,7 +302,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    private func updateTimelineItems(itemProxies: [TimelineItemProxy], paginationState: PaginationState) {
+    private func updateTimelineItems(itemProxies: [TimelineItemProxy], paginationState: PaginationState, clearExistingItems: Bool = false) {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         
         let collapsibleChunks = itemProxies.groupBy { isItemCollapsible($0) }
@@ -359,6 +355,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         DispatchQueue.main.sync {
+            if clearExistingItems {
+                // Transition through empty to prevent animations.
+                timelineItems.removeAll()
+                callbacks.send(.updatedTimelineItems)
+            }
+            
             timelineItems = newTimelineItems
         }
         
