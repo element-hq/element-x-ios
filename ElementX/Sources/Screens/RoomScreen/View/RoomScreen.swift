@@ -96,7 +96,7 @@ struct RoomScreen: View {
             .id(context.viewState.roomID)
             .environmentObject(context)
             .environment(\.timelineStyle, context.viewState.timelineStyle)
-            .environment(\.focussedEventID, context.viewState.timelineViewState.focussedEventID)
+            .environment(\.focussedEventID, context.viewState.timelineViewState.focussedEvent?.eventID)
             .overlay(alignment: .bottomTrailing) {
                 scrollToBottomButton
             }

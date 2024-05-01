@@ -88,8 +88,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomAvatarURL: roomProxy.avatarURL,
                                                          timelineStyle: appSettings.timelineStyle,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         timelineViewState: TimelineViewState(focussedEventID: focussedEventID,
-                                                                                              focussedEventNeedsDisplay: focussedEventID != nil),
+                                                         timelineViewState: TimelineViewState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                          ownUserID: roomProxy.ownUserID,
                                                          hasOngoingCall: roomProxy.hasOngoingCall,
                                                          bindings: .init(reactionsCollapsed: [:])),
@@ -192,7 +191,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             focusLive()
         case .scrolledToFocussedItem:
             Task { // Use a Task to mutate view state after the current view update.
-                state.timelineViewState.focussedEventNeedsDisplay = false
+                state.timelineViewState.focussedEvent?.appearance = .hasAppeared
                 hideFocusLoadingIndicator()
             }
         }
@@ -230,7 +229,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     func focusOnEvent(eventID: String) async {
         if state.timelineViewState.hasLoadedItem(with: eventID) {
-            state.timelineViewState.focussedEventID = eventID
+            state.timelineViewState.focussedEvent = .init(eventID: eventID, appearance: .animated)
             return
         }
         
@@ -239,7 +238,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         switch await timelineController.focusOnEvent(eventID, timelineSize: Constants.detachedTimelineSize) {
         case .success:
-            state.timelineViewState.focussedEventID = eventID
+            state.timelineViewState.focussedEvent = .init(eventID: eventID, appearance: .immediate)
         case .failure(let error):
             MXLog.error("Failed to focus on event \(eventID)")
             
@@ -255,7 +254,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func focusLive() {
         timelineController.focusLive()
-        state.timelineViewState.focussedEventID = nil
     }
     
     private func attach(_ attachment: ComposerAttachmentType) {
@@ -347,8 +345,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                         state.timelineViewState.isLive = isLive
                         
                         // Remove the event highlight *only* when transitioning from non-live to live.
-                        if isLive, state.timelineViewState.focussedEventID != nil {
-                            state.timelineViewState.focussedEventID = nil
+                        if isLive, state.timelineViewState.focussedEvent != nil {
+                            state.timelineViewState.focussedEvent = nil
                         }
                     }
                 }

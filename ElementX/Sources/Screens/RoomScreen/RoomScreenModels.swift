@@ -227,10 +227,24 @@ struct TimelineViewState {
     var isLive = true
     var paginationState = PaginationState.default
     
-    /// The ID of the focussed event navigated to via a permalink.
-    var focussedEventID: String? { didSet { focussedEventNeedsDisplay = focussedEventID != nil } }
-    /// Whether the timeline should scroll to `focussedEventID` once its item has been built and added to the timeline.
-    var focussedEventNeedsDisplay: Bool
+    struct FocussedEvent: Equatable {
+        enum Appearance {
+            /// The event should be shown using an animated scroll.
+            case animated
+            /// The event should be shown immediately, without any animation.
+            case immediate
+            /// The event has already been shown.
+            case hasAppeared
+        }
+
+        /// The ID of the event.
+        let eventID: String
+        /// How the event should be shown, or whether it has already appeared.
+        var appearance: Appearance
+    }
+    
+    /// A focussed event that was navigated to via a permalink.
+    var focussedEvent: FocussedEvent?
     
     // These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
