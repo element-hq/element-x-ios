@@ -229,8 +229,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/swift-ogg",
       "state" : {
-        "revision" : "8525ce629cb27170503b177397243d71cecd530e",
-        "version" : "0.0.2"
+        "revision" : "d60d4dd3eaaa3b07eafed76420ea03b79a516a13",
+        "version" : "0.0.3"
       }
     },
     {
