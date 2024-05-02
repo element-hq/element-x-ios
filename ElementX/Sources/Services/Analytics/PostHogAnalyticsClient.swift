@@ -15,12 +15,13 @@
 //
 
 import AnalyticsEvents
+import MatrixRustSDK
 import PostHog
 
 /// An analytics client that reports events to a PostHog server.
 class PostHogAnalyticsClient: AnalyticsClientProtocol {
     /// The PHGPostHog object used to report events.
-    private var postHog: PHGPostHog?
+    private var postHog: PHGPostHogProtocol?
     
     /// Any user properties to be included with the next captured event.
     private(set) var pendingUserProperties: AnalyticsEvent.UserProperties?
@@ -28,20 +29,24 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     /// Super Properties are properties associated with events that are set once and then sent with every capture call, be it a $screen, an autocaptured button click, or anything else.
     /// It is different from user properties that will be attached to the user and not events.
     /// Not persisted for now, should be set on start.
-    private var superProperties: [String: Any] = [:]
+    private var superProperties: AnalyticsEvent.SuperProperties?
     
     var isRunning: Bool { postHog?.enabled ?? false }
     
-    func start(analyticsConfiguration: AnalyticsConfiguration) {
+    func start(analyticsConfiguration: AnalyticsConfiguration, posthogFactory: PostHogFactory?) {
         // Only start if analytics have been configured in BuildSettings
         guard let configuration = PHGPostHogConfiguration.standard(analyticsConfiguration: analyticsConfiguration) else { return }
         
         if postHog == nil {
-            postHog = PHGPostHog(configuration: configuration)
+            if let factory = posthogFactory {
+                postHog = factory.createPostHog(config: configuration)
+            } else {
+                postHog = PHGPostHog(configuration: configuration)
+            }
         }
         // Add super property cryptoSDK to the captured events, to allow easy
         // filtering of events across different client by using same filter.
-        superProperties["cryptoSDK"] = "Rust"
+        superProperties = AnalyticsEvent.SuperProperties(appPlatform: nil, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha())
         postHog?.enable()
     }
     
@@ -80,6 +85,20 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
                                                                    numSpaces: userProperties.numSpaces ?? pendingUserProperties.numSpaces)
     }
     
+    func updateSuperProperties(_ updatedProperties: AnalyticsEvent.SuperProperties) {
+        guard let currentProperties = superProperties else {
+            superProperties = updatedProperties
+            return
+        }
+        
+        superProperties = AnalyticsEvent.SuperProperties(appPlatform: updatedProperties.appPlatform ??
+            currentProperties.appPlatform,
+            cryptoSDK: updatedProperties.cryptoSDK ??
+                currentProperties.cryptoSDK,
+            cryptoSDKVersion: updatedProperties.cryptoSDKVersion ??
+                currentProperties.cryptoSDKVersion)
+    }
+    
     // MARK: - Private
     
     /// Given a dictionary containing properties from an event, this method will return those properties
@@ -100,8 +119,11 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     /// Attach super properties to events.
     /// If the property is already set on the event, the already set value will be kept.
     private func attachSuperProperties(to properties: [String: Any]) -> [String: Any] {
+        guard isRunning, let superProperties = superProperties else { return properties }
+        
         var properties = properties
-        superProperties.forEach { (key: String, value: Any) in
+        
+        superProperties.properties.forEach { (key: String, value: Any) in
             if properties[key] == nil {
                 properties[key] = value
             }

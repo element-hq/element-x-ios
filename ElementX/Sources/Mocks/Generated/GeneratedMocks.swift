@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.2 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.4 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -18,15 +18,15 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
 
     //MARK: - start
 
-    var startAnalyticsConfigurationUnderlyingCallsCount = 0
-    var startAnalyticsConfigurationCallsCount: Int {
+    var startAnalyticsConfigurationPosthogFactoryUnderlyingCallsCount = 0
+    var startAnalyticsConfigurationPosthogFactoryCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return startAnalyticsConfigurationUnderlyingCallsCount
+                return startAnalyticsConfigurationPosthogFactoryUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = startAnalyticsConfigurationUnderlyingCallsCount
+                    returnValue = startAnalyticsConfigurationPosthogFactoryUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -34,26 +34,26 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
         }
         set {
             if Thread.isMainThread {
-                startAnalyticsConfigurationUnderlyingCallsCount = newValue
+                startAnalyticsConfigurationPosthogFactoryUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    startAnalyticsConfigurationUnderlyingCallsCount = newValue
+                    startAnalyticsConfigurationPosthogFactoryUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var startAnalyticsConfigurationCalled: Bool {
-        return startAnalyticsConfigurationCallsCount > 0
+    var startAnalyticsConfigurationPosthogFactoryCalled: Bool {
+        return startAnalyticsConfigurationPosthogFactoryCallsCount > 0
     }
-    var startAnalyticsConfigurationReceivedAnalyticsConfiguration: AnalyticsConfiguration?
-    var startAnalyticsConfigurationReceivedInvocations: [AnalyticsConfiguration] = []
-    var startAnalyticsConfigurationClosure: ((AnalyticsConfiguration) -> Void)?
+    var startAnalyticsConfigurationPosthogFactoryReceivedArguments: (analyticsConfiguration: AnalyticsConfiguration, posthogFactory: PostHogFactory?)?
+    var startAnalyticsConfigurationPosthogFactoryReceivedInvocations: [(analyticsConfiguration: AnalyticsConfiguration, posthogFactory: PostHogFactory?)] = []
+    var startAnalyticsConfigurationPosthogFactoryClosure: ((AnalyticsConfiguration, PostHogFactory?) -> Void)?
 
-    func start(analyticsConfiguration: AnalyticsConfiguration) {
-        startAnalyticsConfigurationCallsCount += 1
-        startAnalyticsConfigurationReceivedAnalyticsConfiguration = analyticsConfiguration
-        startAnalyticsConfigurationReceivedInvocations.append(analyticsConfiguration)
-        startAnalyticsConfigurationClosure?(analyticsConfiguration)
+    func start(analyticsConfiguration: AnalyticsConfiguration, posthogFactory: PostHogFactory?) {
+        startAnalyticsConfigurationPosthogFactoryCallsCount += 1
+        startAnalyticsConfigurationPosthogFactoryReceivedArguments = (analyticsConfiguration: analyticsConfiguration, posthogFactory: posthogFactory)
+        startAnalyticsConfigurationPosthogFactoryReceivedInvocations.append((analyticsConfiguration: analyticsConfiguration, posthogFactory: posthogFactory))
+        startAnalyticsConfigurationPosthogFactoryClosure?(analyticsConfiguration, posthogFactory)
     }
     //MARK: - reset
 
@@ -6583,6 +6583,197 @@ class OrientationManagerMock: OrientationManagerProtocol {
         lockOrientationReceivedOrientation = orientation
         lockOrientationReceivedInvocations.append(orientation)
         lockOrientationClosure?(orientation)
+    }
+}
+class PHGPostHogMock: PHGPostHogProtocol {
+    var enabled: Bool {
+        get { return underlyingEnabled }
+        set(value) { underlyingEnabled = value }
+    }
+    var underlyingEnabled: Bool!
+
+    //MARK: - enable
+
+    var enableUnderlyingCallsCount = 0
+    var enableCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return enableUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = enableUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                enableUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    enableUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var enableCalled: Bool {
+        return enableCallsCount > 0
+    }
+    var enableClosure: (() -> Void)?
+
+    func enable() {
+        enableCallsCount += 1
+        enableClosure?()
+    }
+    //MARK: - disable
+
+    var disableUnderlyingCallsCount = 0
+    var disableCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return disableUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = disableUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                disableUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    disableUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var disableCalled: Bool {
+        return disableCallsCount > 0
+    }
+    var disableClosure: (() -> Void)?
+
+    func disable() {
+        disableCallsCount += 1
+        disableClosure?()
+    }
+    //MARK: - reset
+
+    var resetUnderlyingCallsCount = 0
+    var resetCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() -> Void)?
+
+    func reset() {
+        resetCallsCount += 1
+        resetClosure?()
+    }
+    //MARK: - capture
+
+    var capturePropertiesUnderlyingCallsCount = 0
+    var capturePropertiesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return capturePropertiesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = capturePropertiesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                capturePropertiesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    capturePropertiesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var capturePropertiesCalled: Bool {
+        return capturePropertiesCallsCount > 0
+    }
+    var capturePropertiesReceivedArguments: (event: String, properties: [String: Any]?)?
+    var capturePropertiesReceivedInvocations: [(event: String, properties: [String: Any]?)] = []
+    var capturePropertiesClosure: ((String, [String: Any]?) -> Void)?
+
+    func capture(_ event: String, properties: [String: Any]?) {
+        capturePropertiesCallsCount += 1
+        capturePropertiesReceivedArguments = (event: event, properties: properties)
+        capturePropertiesReceivedInvocations.append((event: event, properties: properties))
+        capturePropertiesClosure?(event, properties)
+    }
+    //MARK: - screen
+
+    var screenPropertiesUnderlyingCallsCount = 0
+    var screenPropertiesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return screenPropertiesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = screenPropertiesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                screenPropertiesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    screenPropertiesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var screenPropertiesCalled: Bool {
+        return screenPropertiesCallsCount > 0
+    }
+    var screenPropertiesReceivedArguments: (screenTitle: String, properties: [String: Any]?)?
+    var screenPropertiesReceivedInvocations: [(screenTitle: String, properties: [String: Any]?)] = []
+    var screenPropertiesClosure: ((String, [String: Any]?) -> Void)?
+
+    func screen(_ screenTitle: String, properties: [String: Any]?) {
+        screenPropertiesCallsCount += 1
+        screenPropertiesReceivedArguments = (screenTitle: screenTitle, properties: properties)
+        screenPropertiesReceivedInvocations.append((screenTitle: screenTitle, properties: properties))
+        screenPropertiesClosure?(screenTitle, properties)
     }
 }
 class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
