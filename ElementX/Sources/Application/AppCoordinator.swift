@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import AnalyticsEvents
 import BackgroundTasks
 import Combine
 import MatrixRustSDK
@@ -313,7 +314,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                           applicationId: appSettings.bugReportApplicationId,
                                                                           sdkGitSHA: sdkGitSha(),
                                                                           maxUploadSize: appSettings.bugReportMaxUploadSize))
-        ServiceLocator.shared.register(analytics: AnalyticsService(client: PostHogAnalyticsClient(),
+        let posthogAnalyticsClient = PostHogAnalyticsClient()
+        posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: nil, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
+        ServiceLocator.shared.register(analytics: AnalyticsService(client: posthogAnalyticsClient,
                                                                    appSettings: appSettings,
                                                                    bugReportService: ServiceLocator.shared.bugReportService))
     }

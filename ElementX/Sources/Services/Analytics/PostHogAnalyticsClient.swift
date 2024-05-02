@@ -15,7 +15,6 @@
 //
 
 import AnalyticsEvents
-import MatrixRustSDK
 import PostHog
 
 /// An analytics client that reports events to a PostHog server.
@@ -50,7 +49,7 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
         }
         // Add super property cryptoSDK to the captured events, to allow easy
         // filtering of events across different client by using same filter.
-        superProperties = AnalyticsEvent.SuperProperties(appPlatform: nil, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha())
+        superProperties = AnalyticsEvent.SuperProperties(appPlatform: nil, cryptoSDK: .Rust, cryptoSDKVersion: nil)
         postHog?.enable()
     }
     
