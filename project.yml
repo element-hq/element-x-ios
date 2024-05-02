@@ -64,7 +64,7 @@ packages:
     minorVersion: 1.0.0
   SwiftOGG:
     url: https://github.com/element-hq/swift-ogg
-    minorVersion: 0.0.2
+    minorVersion: 0.0.3
     # path: ../swift-ogg
   WysiwygComposer:
     url: https://github.com/matrix-org/matrix-rich-text-editor-swift
