@@ -118,7 +118,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return self.roomScreenInteractionHandler.audioPlayerState(for: itemID)
         }
         
-        buildTimelineViews()
+        buildTimelineViews(timelineItems: timelineController.timelineItems)
         
         updateMembers(roomProxy.membersPublisher.value)
 
@@ -194,6 +194,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 state.timelineViewState.focussedEvent?.appearance = .hasAppeared
                 hideFocusLoadingIndicator()
             }
+        case .hasSwitchedTimeline:
+            Task { state.timelineViewState.isSwitchingTimelines = false }
         }
     }
 
@@ -334,8 +336,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 guard let self else { return }
 
                 switch callback {
-                case .updatedTimelineItems:
-                    buildTimelineViews()
+                case .updatedTimelineItems(let updatedItems, let isSwitchingTimelines):
+                    buildTimelineViews(timelineItems: updatedItems, isSwitchingTimelines: isSwitchingTimelines)
                 case .paginationState(let paginationState):
                     if state.timelineViewState.paginationState != paginationState {
                         state.timelineViewState.paginationState = paginationState
@@ -566,10 +568,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Timeline Item Building
     
-    private func buildTimelineViews() {
+    private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
         var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
         
-        timelineController.timelineItems.filter { $0 is RedactedRoomTimelineItem }.forEach { timelineItem in
+        timelineItems.filter { $0 is RedactedRoomTimelineItem }.forEach { timelineItem in
             // Stops the audio player when a voice message is redacted.
             guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(timelineItem.id)) else {
                 return
@@ -581,7 +583,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }
 
-        let itemsGroupedByTimelineDisplayStyle = timelineController.timelineItems.chunked { current, next in
+        let itemsGroupedByTimelineDisplayStyle = timelineItems.chunked { current, next in
             canGroupItem(timelineItem: current, with: next)
         }
         
@@ -610,6 +612,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     }
                 }
             }
+        }
+        
+        if isSwitchingTimelines {
+            state.timelineViewState.isSwitchingTimelines = true
         }
         
         state.timelineViewState.itemsDictionary = timelineItemsDictionary

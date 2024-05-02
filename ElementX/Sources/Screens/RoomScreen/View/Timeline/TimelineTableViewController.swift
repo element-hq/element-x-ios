@@ -66,7 +66,7 @@ class TimelineTableViewController: UIViewController {
             }
             
             applySnapshot()
-
+            
             if timelineItemsDictionary.isEmpty {
                 paginatePublisher.send()
             }
@@ -103,6 +103,9 @@ class TimelineTableViewController: UIViewController {
             paginatePublisher.send(())
         }
     }
+    
+    /// Whether the table view is about to load items from a new timeline or not.
+    var isSwitchingTimelines = false
     
     /// The focussed event if navigating to an event permalink within the room.
     var focussedEvent: TimelineViewState.FocussedEvent? {
@@ -296,7 +299,7 @@ class TimelineTableViewController: UIViewController {
         let newestItemIdentifier = snapshot.mainItemIdentifiers.first
         let currentNewestItemIdentifier = currentSnapshot.mainItemIdentifiers.first
         let newestItemIDChanged = snapshot.numberOfMainItems > 0 && currentSnapshot.numberOfMainItems > 0 && newestItemIdentifier != currentNewestItemIdentifier
-        let animated = isLive && newestItemIDChanged
+        let animated = isLive && !isSwitchingTimelines && newestItemIDChanged
         
         let layout: Layout? = if !isLive, newestItemIDChanged {
             snapshotLayout()
@@ -310,6 +313,12 @@ class TimelineTableViewController: UIViewController {
             scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)
         } else if let layout {
             restoreLayout(layout)
+        } else if isSwitchingTimelines {
+            scrollToNewestItem(animated: false)
+        }
+        
+        if isSwitchingTimelines {
+            coordinator.send(viewAction: .hasSwitchedTimeline)
         }
     }
     

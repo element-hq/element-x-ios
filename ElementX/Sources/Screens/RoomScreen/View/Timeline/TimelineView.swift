@@ -50,6 +50,10 @@ struct TimelineView: UIViewControllerRepresentable {
         
         /// Updates the specified table view's properties from the current view state.
         func update(tableViewController: TimelineTableViewController, timelineStyle: TimelineStyle) {
+            if tableViewController.isSwitchingTimelines != context.viewState.timelineViewState.isSwitchingTimelines {
+                // Must come before timelineItemsDictionary in order to disable animations.
+                tableViewController.isSwitchingTimelines = context.viewState.timelineViewState.isSwitchingTimelines
+            }
             if tableViewController.timelineStyle != timelineStyle {
                 tableViewController.timelineStyle = timelineStyle
             }

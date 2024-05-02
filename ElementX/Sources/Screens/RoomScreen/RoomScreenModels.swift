@@ -115,6 +115,8 @@ enum RoomScreenViewAction {
     case focusLive
     /// The timeline scrolled to reveal the focussed item.
     case scrolledToFocussedItem
+    /// The table view has loaded the first items for a new timeline.
+    case hasSwitchedTimeline
 }
 
 enum RoomScreenComposerAction {
@@ -226,6 +228,9 @@ struct RoomMemberState {
 struct TimelineViewState {
     var isLive = true
     var paginationState = PaginationState.default
+    
+    /// The room is in the process of loading items from a new timeline (switching to/from a detached timeline).
+    var isSwitchingTimelines = false
     
     struct FocussedEvent: Equatable {
         enum Appearance {
