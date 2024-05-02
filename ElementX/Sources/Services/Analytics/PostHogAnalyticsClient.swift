@@ -20,6 +20,14 @@ import PostHog
 
 /// An analytics client that reports events to a PostHog server.
 class PostHogAnalyticsClient: AnalyticsClientProtocol {
+    private var posthogFactory: PostHogFactory = DefaultPostHogFactory()
+    
+    init(posthogFactory: PostHogFactory? = nil) {
+        if let factory = posthogFactory {
+            self.posthogFactory = factory
+        }
+    }
+    
     /// The PHGPostHog object used to report events.
     private var postHog: PHGPostHogProtocol?
     
@@ -33,16 +41,12 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     
     var isRunning: Bool { postHog?.enabled ?? false }
     
-    func start(analyticsConfiguration: AnalyticsConfiguration, posthogFactory: PostHogFactory?) {
+    func start(analyticsConfiguration: AnalyticsConfiguration) {
         // Only start if analytics have been configured in BuildSettings
         guard let configuration = PHGPostHogConfiguration.standard(analyticsConfiguration: analyticsConfiguration) else { return }
         
         if postHog == nil {
-            if let factory = posthogFactory {
-                postHog = factory.createPostHog(config: configuration)
-            } else {
-                postHog = PHGPostHog(configuration: configuration)
-            }
+            postHog = posthogFactory.createPostHog(config: configuration)
         }
         // Add super property cryptoSDK to the captured events, to allow easy
         // filtering of events across different client by using same filter.
@@ -119,7 +123,7 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     /// Attach super properties to events.
     /// If the property is already set on the event, the already set value will be kept.
     private func attachSuperProperties(to properties: [String: Any]) -> [String: Any] {
-        guard isRunning, let superProperties = superProperties else { return properties }
+        guard isRunning, let superProperties else { return properties }
         
         var properties = properties
         

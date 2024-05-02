@@ -36,4 +36,10 @@ protocol PostHogFactory {
     func createPostHog(config: PHGPostHogConfiguration) -> PHGPostHogProtocol
 }
 
+class DefaultPostHogFactory: PostHogFactory {
+    func createPostHog(config: PHGPostHogConfiguration) -> PHGPostHogProtocol {
+        PHGPostHog(configuration: config)
+    }
+}
+
 extension PHGPostHog: PHGPostHogProtocol { }

@@ -18,15 +18,15 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
 
     //MARK: - start
 
-    var startAnalyticsConfigurationPosthogFactoryUnderlyingCallsCount = 0
-    var startAnalyticsConfigurationPosthogFactoryCallsCount: Int {
+    var startAnalyticsConfigurationUnderlyingCallsCount = 0
+    var startAnalyticsConfigurationCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return startAnalyticsConfigurationPosthogFactoryUnderlyingCallsCount
+                return startAnalyticsConfigurationUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = startAnalyticsConfigurationPosthogFactoryUnderlyingCallsCount
+                    returnValue = startAnalyticsConfigurationUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -34,26 +34,26 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
         }
         set {
             if Thread.isMainThread {
-                startAnalyticsConfigurationPosthogFactoryUnderlyingCallsCount = newValue
+                startAnalyticsConfigurationUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    startAnalyticsConfigurationPosthogFactoryUnderlyingCallsCount = newValue
+                    startAnalyticsConfigurationUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var startAnalyticsConfigurationPosthogFactoryCalled: Bool {
-        return startAnalyticsConfigurationPosthogFactoryCallsCount > 0
+    var startAnalyticsConfigurationCalled: Bool {
+        return startAnalyticsConfigurationCallsCount > 0
     }
-    var startAnalyticsConfigurationPosthogFactoryReceivedArguments: (analyticsConfiguration: AnalyticsConfiguration, posthogFactory: PostHogFactory?)?
-    var startAnalyticsConfigurationPosthogFactoryReceivedInvocations: [(analyticsConfiguration: AnalyticsConfiguration, posthogFactory: PostHogFactory?)] = []
-    var startAnalyticsConfigurationPosthogFactoryClosure: ((AnalyticsConfiguration, PostHogFactory?) -> Void)?
+    var startAnalyticsConfigurationReceivedAnalyticsConfiguration: AnalyticsConfiguration?
+    var startAnalyticsConfigurationReceivedInvocations: [AnalyticsConfiguration] = []
+    var startAnalyticsConfigurationClosure: ((AnalyticsConfiguration) -> Void)?
 
-    func start(analyticsConfiguration: AnalyticsConfiguration, posthogFactory: PostHogFactory?) {
-        startAnalyticsConfigurationPosthogFactoryCallsCount += 1
-        startAnalyticsConfigurationPosthogFactoryReceivedArguments = (analyticsConfiguration: analyticsConfiguration, posthogFactory: posthogFactory)
-        startAnalyticsConfigurationPosthogFactoryReceivedInvocations.append((analyticsConfiguration: analyticsConfiguration, posthogFactory: posthogFactory))
-        startAnalyticsConfigurationPosthogFactoryClosure?(analyticsConfiguration, posthogFactory)
+    func start(analyticsConfiguration: AnalyticsConfiguration) {
+        startAnalyticsConfigurationCallsCount += 1
+        startAnalyticsConfigurationReceivedAnalyticsConfiguration = analyticsConfiguration
+        startAnalyticsConfigurationReceivedInvocations.append(analyticsConfiguration)
+        startAnalyticsConfigurationClosure?(analyticsConfiguration)
     }
     //MARK: - reset
 

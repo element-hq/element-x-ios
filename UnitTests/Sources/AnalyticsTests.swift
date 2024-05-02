@@ -82,7 +82,7 @@ class AnalyticsTests: XCTestCase {
         XCTAssertEqual(appSettings.analyticsConsentState, .unknown)
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
         XCTAssertFalse(ServiceLocator.shared.analytics.isRunning)
-        XCTAssertFalse(analyticsClient.startAnalyticsConfigurationPosthogFactoryCalled)
+        XCTAssertFalse(analyticsClient.startAnalyticsConfigurationCalled)
         XCTAssertFalse(bugReportService.startCalled)
     }
     
@@ -109,7 +109,7 @@ class AnalyticsTests: XCTestCase {
         XCTAssertEqual(appSettings.analyticsConsentState, .optedIn)
         XCTAssertTrue(ServiceLocator.shared.analytics.isEnabled)
         // Analytics client and the bug report service should have been started
-        XCTAssertTrue(analyticsClient.startAnalyticsConfigurationPosthogFactoryCalled)
+        XCTAssertTrue(analyticsClient.startAnalyticsConfigurationCalled)
         XCTAssertTrue(bugReportService.startCalled)
     }
     
@@ -119,7 +119,7 @@ class AnalyticsTests: XCTestCase {
         // Analytics should not start
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
         ServiceLocator.shared.analytics.startIfEnabled()
-        XCTAssertFalse(analyticsClient.startAnalyticsConfigurationPosthogFactoryCalled)
+        XCTAssertFalse(analyticsClient.startAnalyticsConfigurationCalled)
         XCTAssertFalse(bugReportService.startCalled)
     }
     
@@ -129,7 +129,7 @@ class AnalyticsTests: XCTestCase {
         // Analytics should start
         XCTAssertTrue(ServiceLocator.shared.analytics.isEnabled)
         ServiceLocator.shared.analytics.startIfEnabled()
-        XCTAssertTrue(analyticsClient.startAnalyticsConfigurationPosthogFactoryCalled)
+        XCTAssertTrue(analyticsClient.startAnalyticsConfigurationCalled)
         XCTAssertTrue(bugReportService.startCalled)
     }
     
@@ -181,7 +181,7 @@ class AnalyticsTests: XCTestCase {
         client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil, ftueUseCaseSelection: .PersonalMessaging,
                                                                   numFavouriteRooms: nil,
                                                                   numSpaces: nil))
-        client.start(analyticsConfiguration: appSettings.analyticsConfiguration, posthogFactory: nil)
+        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
         
         XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
         XCTAssertEqual(client.pendingUserProperties?.ftueUseCaseSelection, .PersonalMessaging, "The use case selection should match.")
@@ -208,8 +208,8 @@ class AnalyticsTests: XCTestCase {
     
     func testSendingAndUpdatingSuperProperties() {
         // Given a client with user properties set
-        let client = PostHogAnalyticsClient()
-        client.start(analyticsConfiguration: appSettings.analyticsConfiguration, posthogFactory: MockPostHogFactory(mock: posthogMock))
+        let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
+        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
         
         client.updateSuperProperties(
             AnalyticsEvent.SuperProperties(appPlatform: "A thing",

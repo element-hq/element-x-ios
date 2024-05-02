@@ -80,7 +80,7 @@ class AnalyticsService {
     func startIfEnabled() {
         guard isEnabled, !isRunning else { return }
         
-        client.start(analyticsConfiguration: appSettings.analyticsConfiguration, posthogFactory: nil)
+        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
         bugReportService.start()
 
         // Sanity check in case something went wrong.
