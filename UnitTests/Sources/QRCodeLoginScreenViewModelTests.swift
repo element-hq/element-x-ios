@@ -83,9 +83,9 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
         var deferred = deferFulfillment(context.$viewState) { state in
             state.state == .scan(.scanning)
         }
-        
         context.send(viewAction: .startScan)
         try await deferred.fulfill()
+        XCTAssertTrue(qrServiceMock.requestAuthorizationIfNeededCalled)
         
         deferred = deferFulfillment(context.$viewState) { state in
             state.state == .scan(.connecting)
