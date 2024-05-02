@@ -363,7 +363,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // When a new message is received and marked as read.
         let newMessage = TextRoomTimelineItem(eventID: "t4")
         timelineController.timelineItems.append(newMessage)
-        timelineController.callbacks.send(.updatedTimelineItems)
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: timelineController.timelineItems, isSwitchingTimelines: false))
         try await Task.sleep(for: .milliseconds(100))
         
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(newMessage.id))
