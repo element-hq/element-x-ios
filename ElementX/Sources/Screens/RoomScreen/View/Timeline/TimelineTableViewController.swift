@@ -66,7 +66,7 @@ class TimelineTableViewController: UIViewController {
             }
             
             applySnapshot()
-
+            
             if timelineItemsDictionary.isEmpty {
                 paginatePublisher.send()
             }
@@ -104,15 +104,14 @@ class TimelineTableViewController: UIViewController {
         }
     }
     
-    /// The ID of the focussed event if navigating to an event permalink within the room.
-    var focussedEventID: String?
-
-    /// Whether the timeline should scroll to `focussedEventID` when that item is added to the data source.
-    /// This is necessary as the focussed event can be set before the timeline builder has built its item.
-    var focussedEventNeedsDisplay = false {
+    /// Whether the table view is about to load items from a new timeline or not.
+    var isSwitchingTimelines = false
+    
+    /// The focussed event if navigating to an event permalink within the room.
+    var focussedEvent: TimelineViewState.FocussedEvent? {
         didSet {
-            guard focussedEventNeedsDisplay, let focussedEventID else { return }
-            scrollToItem(eventID: focussedEventID, animated: false)
+            guard let focussedEvent, focussedEvent.appearance != .hasAppeared else { return }
+            scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)
         }
     }
     
@@ -300,7 +299,7 @@ class TimelineTableViewController: UIViewController {
         let newestItemIdentifier = snapshot.mainItemIdentifiers.first
         let currentNewestItemIdentifier = currentSnapshot.mainItemIdentifiers.first
         let newestItemIDChanged = snapshot.numberOfMainItems > 0 && currentSnapshot.numberOfMainItems > 0 && newestItemIdentifier != currentNewestItemIdentifier
-        let animated = isLive && newestItemIDChanged
+        let animated = isLive && !isSwitchingTimelines && newestItemIDChanged
         
         let layout: Layout? = if !isLive, newestItemIDChanged {
             snapshotLayout()
@@ -310,10 +309,16 @@ class TimelineTableViewController: UIViewController {
         
         dataSource.apply(snapshot, animatingDifferences: animated)
         
-        if let focussedEventID, focussedEventNeedsDisplay {
-            scrollToItem(eventID: focussedEventID, animated: false)
+        if let focussedEvent, focussedEvent.appearance != .hasAppeared {
+            scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)
         } else if let layout {
             restoreLayout(layout)
+        } else if isSwitchingTimelines {
+            scrollToNewestItem(animated: false)
+        }
+        
+        if isSwitchingTimelines {
+            coordinator.send(viewAction: .hasSwitchedTimeline)
         }
     }
     
@@ -335,7 +340,7 @@ class TimelineTableViewController: UIViewController {
     
     /// Scrolls to the item with the corresponding event ID if loaded in the timeline.
     private func scrollToItem(eventID: String, animated: Bool) {
-        if let kvPair = timelineItemsDictionary.first(where: { $0.value.identifier.eventID == focussedEventID }),
+        if let kvPair = timelineItemsDictionary.first(where: { $0.value.identifier.eventID == eventID }),
            let indexPath = dataSource?.indexPath(for: kvPair.key) {
             tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
             coordinator.send(viewAction: .scrolledToFocussedItem)

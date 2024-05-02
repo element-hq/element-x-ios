@@ -33,7 +33,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private var activeTimeline: TimelineProxyProtocol
     private var activeTimelineProvider: RoomTimelineProviderProtocol {
         didSet {
-            configureActiveTimelineProvider(clearExistingItems: true)
+            configureActiveTimelineProvider()
         }
     }
     
@@ -272,31 +272,26 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     /// The cancellable used to update the timeline items.
     private var updateTimelineItemsCancellable: AnyCancellable?
+    /// The controller is switching the `activeTimelineProvider`.
+    private var isSwitchingTimelines = false
     
     /// Configures the controller to listen to `activeTimeline` for events.
     /// - Parameter clearExistingItems: Whether or not to clear any existing items before loading the timeline's contents.
-    private func configureActiveTimelineProvider(clearExistingItems: Bool = false) {
+    private func configureActiveTimelineProvider() {
+        updateTimelineItemsCancellable = nil
+        
+        isSwitchingTimelines = true
+        
+        // Inform the world that the initial items are loading from the store
+        callbacks.send(.paginationState(.init(backward: .paginating, forward: .paginating)))
+        callbacks.send(.isLive(activeTimelineProvider.isLive))
+        
         updateTimelineItemsCancellable = activeTimelineProvider
             .updatePublisher
             .receive(on: serialDispatchQueue)
             .sink { [weak self] items, paginationState in
                 self?.updateTimelineItems(itemProxies: items, paginationState: paginationState)
             }
-        
-        // Inform the world that the initial items are loading from the store
-        callbacks.send(.paginationState(.init(backward: .paginating, forward: .paginating)))
-        callbacks.send(.isLive(activeTimelineProvider.isLive))
-        
-        if clearExistingItems {
-            // Transition through empty to prevent animations.
-            timelineItems.removeAll()
-            callbacks.send(.updatedTimelineItems)
-        }
-        
-        serialDispatchQueue.async { [activeTimelineProvider] in
-            self.updateTimelineItems(itemProxies: activeTimelineProvider.itemProxies, paginationState: activeTimelineProvider.paginationState)
-            self.callbacks.send(.paginationState(.init(backward: .idle, forward: .idle)))
-        }
     }
     
     @objc private func contentSizeCategoryDidChange() {
@@ -308,6 +303,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     private func updateTimelineItems(itemProxies: [TimelineItemProxy], paginationState: PaginationState) {
         var newTimelineItems = [RoomTimelineItemProtocol]()
+        
+        let isNewTimeline = isSwitchingTimelines
+        isSwitchingTimelines = false
         
         let collapsibleChunks = itemProxies.groupBy { isItemCollapsible($0) }
         
@@ -362,7 +360,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             timelineItems = newTimelineItems
         }
         
-        callbacks.send(.updatedTimelineItems)
+        callbacks.send(.updatedTimelineItems(timelineItems: newTimelineItems, isSwitchingTimelines: isNewTimeline))
         callbacks.send(.paginationState(paginationState))
     }
     

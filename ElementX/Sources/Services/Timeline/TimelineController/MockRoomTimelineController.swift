@@ -165,7 +165,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         
         let incomingItem = incomingItems.removeFirst()
         timelineItems.append(incomingItem)
-        callbacks.send(.updatedTimelineItems)
+        callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
         
         try client?.send(.success)
     }
@@ -181,7 +181,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         
         let newItems = backPaginationResponses.removeFirst()
         timelineItems.insert(contentsOf: newItems, at: 0)
-        callbacks.send(.updatedTimelineItems)
+        callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
         
         try client?.send(.success)
     }

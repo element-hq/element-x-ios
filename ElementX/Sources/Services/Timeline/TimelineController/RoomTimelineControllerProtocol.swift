@@ -19,7 +19,7 @@ import Foundation
 import UIKit
 
 enum RoomTimelineControllerCallback {
-    case updatedTimelineItems
+    case updatedTimelineItems(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool)
     case paginationState(PaginationState)
     case isLive(Bool)
 }
