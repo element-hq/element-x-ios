@@ -26,6 +26,8 @@ enum UserIDAttribute: AttributedStringKey {
     static var name = "MXUserIDAttribute"
 }
 
+/// This attribute is used to help the composer convert a mention into to a markdown link before sending
+/// the message. It doesn't interact mention pills, as these fetch display names live from the room.
 enum UserDisplayNameAttribute: AttributedStringKey {
     typealias Value = String
     static var name = "MXUserDisplayNameAttribute"
