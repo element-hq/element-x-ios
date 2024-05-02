@@ -115,4 +115,15 @@ enum QRCodeLoginState: Equatable {
             return false
         }
     }
+    
+    var isError: Bool {
+        switch self {
+        case .error:
+            return true
+        case let .scan(state):
+            return state == .invalid
+        default:
+            return false
+        }
+    }
 }

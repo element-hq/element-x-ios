@@ -75,7 +75,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
 
                 guard let self,
                       // Let's not advance the state if the current state is already invalid
-                      state.state != .scan(.invalid) else {
+                      !state.state.isError else {
                     return
                 }
                 
@@ -120,7 +120,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             case .failure(let error):
                 // TODO: The error are flattened now, but here we should return all the possible errors not only the decode error ones, but also the connection related ones.
                 MXLog.error("Failed to scan the QR code:\(error)")
-                state.state = .scan(.invalid)
+                state.state = .error(.unknown)
             }
         }
     }
