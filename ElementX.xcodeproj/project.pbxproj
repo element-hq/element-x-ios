@@ -2669,6 +2669,7 @@
 		31CE4DA53232AA534057F912 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				226536FD2BE3AC680031D298 /* PHGPostHogMock.swift */,
 				69CB8242D69B7E4D0B32E18D /* AggregatedReactionMock.swift */,
 				3BAC027034248429A438886B /* AppMediatorMock.swift */,
 				E2F96CCBEAAA7F2185BFA354 /* ClientProxyMock.swift */,
@@ -3127,6 +3128,7 @@
 		4BF8D11D9ED15CFC373D0119 /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
+				226536FB2BE3AC510031D298 /* PHGPostHogProtocol.swift */,
 				E3B97591B2D3D4D67553506D /* AnalyticsClientProtocol.swift */,
 				D77B3D4950F1707E66E4A45A /* AnalyticsConfiguration.swift */,
 				57B6B383F1FD04CC0E7B60C6 /* AnalyticsConsentState.swift */,
@@ -5971,6 +5973,7 @@
 				C32765D740C81AD4C42E8F50 /* CreateRoomFlowParameters.swift in Sources */,
 				FB53CD9B74A15B3B94F9F788 /* CreateRoomModels.swift in Sources */,
 				292827744227DF61C930BDDB /* CreateRoomScreen.swift in Sources */,
+				226536FE2BE3AC680031D298 /* PHGPostHogMock.swift in Sources */,
 				0BE4D5CBF86956410F071F91 /* CreateRoomViewModel.swift in Sources */,
 				4799A852132F1744E2825994 /* CreateRoomViewModelProtocol.swift in Sources */,
 				565868808A1DA565707394ED /* CurrentValuePublisher.swift in Sources */,
@@ -6362,6 +6365,7 @@
 				6C34237AFB808E38FC8776B9 /* RoomStateEventStringBuilder.swift in Sources */,
 				A7FD7B992E6EE6E5A8429197 /* RoomSummaryDetails.swift in Sources */,
 				983896D611ABF52A5C37498D /* RoomSummaryProvider.swift in Sources */,
+				226536FC2BE3AC510031D298 /* PHGPostHogProtocol.swift in Sources */,
 				B5899F18AD6C56CE08FE532B /* RoomSummaryProviderMock.swift in Sources */,
 				AA050DF4AEE54A641BA7CA22 /* RoomSummaryProviderProtocol.swift in Sources */,
 				2ABF11717C64054CEF2819A3 /* RoomTimelineController.swift in Sources */,
