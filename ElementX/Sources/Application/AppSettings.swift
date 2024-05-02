@@ -291,7 +291,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .volatile)
     var publicSearchEnabled
     
-    @UserPreference(key: UserDefaultsKeys.qrCodeLoginEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.qrCodeLoginEnabled, defaultValue: true, storageType: .userDefaults(store))
     var qrCodeLoginEnabled
     
     @UserPreference(key: UserDefaultsKeys.roomListInvitesEnabled, defaultValue: false, storageType: .userDefaults(store))
