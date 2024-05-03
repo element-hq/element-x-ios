@@ -315,49 +315,41 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError> {
-        let result: Result<String, ClientProxyError> = await Task.dispatch(on: clientQueue) {
-            do {
-                let parameters = CreateRoomParameters(name: nil,
-                                                      topic: nil,
-                                                      isEncrypted: true,
-                                                      isDirect: true,
-                                                      visibility: .private,
-                                                      preset: .trustedPrivateChat,
-                                                      invite: [userID],
-                                                      avatar: nil,
-                                                      powerLevelContentOverride: Self.roomCreationPowerLevelOverrides)
-                let result = try self.client.createRoom(request: parameters)
-                return .success(result)
-            } catch {
-                MXLog.error("Failed creating direct room for userID: \(userID) with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            let parameters = CreateRoomParameters(name: nil,
+                                                  topic: nil,
+                                                  isEncrypted: true,
+                                                  isDirect: true,
+                                                  visibility: .private,
+                                                  preset: .trustedPrivateChat,
+                                                  invite: [userID],
+                                                  avatar: nil,
+                                                  powerLevelContentOverride: Self.roomCreationPowerLevelOverrides)
+            let result = try await client.createRoom(request: parameters)
+            return await waitForRoomSummary(with: .success(result), name: expectedRoomName)
+        } catch {
+            MXLog.error("Failed creating direct room for userID: \(userID) with error: \(error)")
+            return .failure(.sdkError(error))
         }
-        
-        return await waitForRoomSummary(with: result, name: expectedRoomName)
     }
     
     func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError> {
-        let result: Result<String, ClientProxyError> = await Task.dispatch(on: clientQueue) {
-            do {
-                let parameters = CreateRoomParameters(name: name,
-                                                      topic: topic,
-                                                      isEncrypted: isRoomPrivate,
-                                                      isDirect: false,
-                                                      visibility: isRoomPrivate ? .private : .public,
-                                                      preset: isRoomPrivate ? .privateChat : .publicChat,
-                                                      invite: userIDs,
-                                                      avatar: avatarURL?.absoluteString,
-                                                      powerLevelContentOverride: Self.roomCreationPowerLevelOverrides)
-                let roomID = try self.client.createRoom(request: parameters)
-                return .success(roomID)
-            } catch {
-                MXLog.error("Failed creating room with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            let parameters = CreateRoomParameters(name: name,
+                                                  topic: topic,
+                                                  isEncrypted: isRoomPrivate,
+                                                  isDirect: false,
+                                                  visibility: isRoomPrivate ? .private : .public,
+                                                  preset: isRoomPrivate ? .privateChat : .publicChat,
+                                                  invite: userIDs,
+                                                  avatar: avatarURL?.absoluteString,
+                                                  powerLevelContentOverride: Self.roomCreationPowerLevelOverrides)
+            let roomID = try await client.createRoom(request: parameters)
+            return await waitForRoomSummary(with: .success(roomID), name: name)
+        } catch {
+            MXLog.error("Failed creating room with error: \(error)")
+            return .failure(.sdkError(error))
         }
-        
-        return await waitForRoomSummary(with: result, name: name)
     }
     
     func joinRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
@@ -462,103 +454,89 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
-        await Task.dispatch(on: clientQueue) {
-            do {
-                let displayName = try self.client.displayName()
-                self.userDisplayNameSubject.send(displayName)
-                return .success(())
-            } catch {
-                MXLog.error("Failed loading user display name with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            let displayName = try await client.displayName()
+            userDisplayNameSubject.send(displayName)
+            return .success(())
+        } catch {
+            MXLog.error("Failed loading user display name with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError> {
-        await Task.dispatch(on: clientQueue) {
-            do {
-                try self.client.setDisplayName(name: name)
-                Task {
-                    await self.loadUserDisplayName()
-                }
-                return .success(())
-            } catch {
-                MXLog.error("Failed setting user display name with error: \(error)")
-                return .failure(.sdkError(error))
+        do {
+            try await client.setDisplayName(name: name)
+            Task {
+                await self.loadUserDisplayName()
             }
+            return .success(())
+        } catch {
+            MXLog.error("Failed setting user display name with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
 
     func loadUserAvatarURL() async -> Result<Void, ClientProxyError> {
-        await Task.dispatch(on: clientQueue) {
-            do {
-                let urlString = try self.client.avatarUrl()
-                self.loadCachedAvatarURLTask?.cancel()
-                self.userAvatarURLSubject.send(urlString.flatMap(URL.init))
-                return .success(())
-            } catch {
-                MXLog.error("Failed loading user avatar URL with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            let urlString = try await client.avatarUrl()
+            loadCachedAvatarURLTask?.cancel()
+            userAvatarURLSubject.send(urlString.flatMap(URL.init))
+            return .success(())
+        } catch {
+            MXLog.error("Failed loading user avatar URL with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError> {
-        await Task.dispatch(on: .global()) {
-            guard case let .image(imageURL, _, _) = media, let mimeType = media.mimeType else {
-                MXLog.error("Failed uploading, invalid media: \(media)")
-                return .failure(.invalidMedia)
-            }
+        guard case let .image(imageURL, _, _) = media, let mimeType = media.mimeType else {
+            MXLog.error("Failed uploading, invalid media: \(media)")
+            return .failure(.invalidMedia)
+        }
             
-            do {
-                let data = try Data(contentsOf: imageURL)
-                try self.client.uploadAvatar(mimeType: mimeType, data: data)
-                Task {
-                    await self.loadUserAvatarURL()
-                }
-                return .success(())
-            } catch {
-                MXLog.error("Failed setting user avatar with error: \(error)")
-                return .failure(.sdkError(error))
+        do {
+            let data = try Data(contentsOf: imageURL)
+            try await client.uploadAvatar(mimeType: mimeType, data: data)
+            Task {
+                await self.loadUserAvatarURL()
             }
+            return .success(())
+        } catch {
+            MXLog.error("Failed setting user avatar with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func removeUserAvatar() async -> Result<Void, ClientProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                try self.client.removeAvatar()
-                Task {
-                    await self.loadUserAvatarURL()
-                }
-                return .success(())
-            } catch {
-                MXLog.error("Failed removing user avatar with error: \(error)")
-                return .failure(.sdkError(error))
+        do {
+            try await client.removeAvatar()
+            Task {
+                await self.loadUserAvatarURL()
             }
+            return .success(())
+        } catch {
+            MXLog.error("Failed removing user avatar with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
 
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
-        await Task.dispatch(on: clientQueue) {
-            do {
-                let sessionVerificationController = try self.client.getSessionVerificationController()
-                return .success(SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController))
-            } catch {
-                MXLog.error("Failed retrieving session verification controller proxy with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            let sessionVerificationController = try await client.getSessionVerificationController()
+            return .success(SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController))
+        } catch {
+            MXLog.error("Failed retrieving session verification controller proxy with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
 
     func logout() async -> URL? {
-        await Task.dispatch(on: clientQueue) {
-            do {
-                return try self.client.logout().flatMap(URL.init(string:))
-            } catch {
-                MXLog.error("Failed logging out with error: \(error)")
-                return nil
-            }
+        do {
+            return try await client.logout().flatMap(URL.init(string:))
+        } catch {
+            MXLog.error("Failed logging out with error: \(error)")
+            return nil
         }
     }
     
@@ -572,24 +550,20 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
-        await Task.dispatch(on: clientQueue) {
-            do {
-                return try .success(.init(sdkResults: self.client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
-            } catch {
-                MXLog.error("Failed searching users with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            return try await .success(.init(sdkResults: client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
+        } catch {
+            MXLog.error("Failed searching users with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
-        await Task.dispatch(on: clientQueue) {
-            do {
-                return try .success(.init(sdkUserProfile: self.client.getProfile(userId: userID)))
-            } catch {
-                MXLog.error("Failed retrieving profile for userID: \(userID) with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            return try await .success(.init(sdkUserProfile: client.getProfile(userId: userID)))
+        } catch {
+            MXLog.error("Failed retrieving profile for userID: \(userID) with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
@@ -815,7 +789,7 @@ class ClientProxy: ClientProxyProtocol {
 
     private func roomTupleForIdentifier(_ identifier: String) async -> (RoomListItem?, Room?) {
         do {
-            let roomListItem = try roomListService?.room(roomId: identifier)
+            let roomListItem = try await roomListService?.room(roomId: identifier)
             if roomListItem?.isTimelineInitialized() == false {
                 try await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
             }

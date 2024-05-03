@@ -57,7 +57,7 @@ protocol TimelineProxyProtocol {
     
     func fetchDetails(for eventID: String)
     
-    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation?
+    func messageEventContent(for eventID: String) async -> RoomMessageEventContentWithoutRelation?
     
     func retryDecryption(for sessionID: String) async
     

@@ -10960,14 +10960,14 @@ class TimelineProxyMock: TimelineProxyProtocol {
             }
         }
     }
-    var messageEventContentForClosure: ((String) -> RoomMessageEventContentWithoutRelation?)?
+    var messageEventContentForClosure: ((String) async -> RoomMessageEventContentWithoutRelation?)?
 
-    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
+    func messageEventContent(for eventID: String) async -> RoomMessageEventContentWithoutRelation? {
         messageEventContentForCallsCount += 1
         messageEventContentForReceivedEventID = eventID
         messageEventContentForReceivedInvocations.append(eventID)
         if let messageEventContentForClosure = messageEventContentForClosure {
-            return messageEventContentForClosure(eventID)
+            return await messageEventContentForClosure(eventID)
         } else {
             return messageEventContentForReturnValue
         }

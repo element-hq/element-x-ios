@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.2 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.4 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -63,9 +63,9 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var accountDataEventTypeClosure: ((String) throws -> String?)?
+    public var accountDataEventTypeClosure: ((String) async throws -> String?)?
 
-    public func accountData(eventType: String) throws -> String? {
+    public func accountData(eventType: String) async throws -> String? {
         if let error = accountDataEventTypeThrowableError {
             throw error
         }
@@ -73,7 +73,7 @@ class SDKClientMock: SDKClientProtocol {
         accountDataEventTypeReceivedEventType = eventType
         accountDataEventTypeReceivedInvocations.append(eventType)
         if let accountDataEventTypeClosure = accountDataEventTypeClosure {
-            return try accountDataEventTypeClosure(eventType)
+            return try await accountDataEventTypeClosure(eventType)
         } else {
             return accountDataEventTypeReturnValue
         }
@@ -205,15 +205,15 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var avatarUrlClosure: (() throws -> String?)?
+    public var avatarUrlClosure: (() async throws -> String?)?
 
-    public func avatarUrl() throws -> String? {
+    public func avatarUrl() async throws -> String? {
         if let error = avatarUrlThrowableError {
             throw error
         }
         avatarUrlCallsCount += 1
         if let avatarUrlClosure = avatarUrlClosure {
-            return try avatarUrlClosure()
+            return try await avatarUrlClosure()
         } else {
             return avatarUrlReturnValue
         }
@@ -343,9 +343,9 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var createRoomRequestClosure: ((CreateRoomParameters) throws -> String)?
+    public var createRoomRequestClosure: ((CreateRoomParameters) async throws -> String)?
 
-    public func createRoom(request: CreateRoomParameters) throws -> String {
+    public func createRoom(request: CreateRoomParameters) async throws -> String {
         if let error = createRoomRequestThrowableError {
             throw error
         }
@@ -353,7 +353,7 @@ class SDKClientMock: SDKClientProtocol {
         createRoomRequestReceivedRequest = request
         createRoomRequestReceivedInvocations.append(request)
         if let createRoomRequestClosure = createRoomRequestClosure {
-            return try createRoomRequestClosure(request)
+            return try await createRoomRequestClosure(request)
         } else {
             return createRoomRequestReturnValue
         }
@@ -524,15 +524,15 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var displayNameClosure: (() throws -> String)?
+    public var displayNameClosure: (() async throws -> String)?
 
-    public func displayName() throws -> String {
+    public func displayName() async throws -> String {
         if let error = displayNameThrowableError {
             throw error
         }
         displayNameCallsCount += 1
         if let displayNameClosure = displayNameClosure {
-            return try displayNameClosure()
+            return try await displayNameClosure()
         } else {
             return displayNameReturnValue
         }
@@ -1010,9 +1010,9 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var getProfileUserIdClosure: ((String) throws -> UserProfile)?
+    public var getProfileUserIdClosure: ((String) async throws -> UserProfile)?
 
-    public func getProfile(userId: String) throws -> UserProfile {
+    public func getProfile(userId: String) async throws -> UserProfile {
         if let error = getProfileUserIdThrowableError {
             throw error
         }
@@ -1020,7 +1020,7 @@ class SDKClientMock: SDKClientProtocol {
         getProfileUserIdReceivedUserId = userId
         getProfileUserIdReceivedInvocations.append(userId)
         if let getProfileUserIdClosure = getProfileUserIdClosure {
-            return try getProfileUserIdClosure(userId)
+            return try await getProfileUserIdClosure(userId)
         } else {
             return getProfileUserIdReturnValue
         }
@@ -1220,15 +1220,15 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var getSessionVerificationControllerClosure: (() throws -> SessionVerificationController)?
+    public var getSessionVerificationControllerClosure: (() async throws -> SessionVerificationController)?
 
-    public func getSessionVerificationController() throws -> SessionVerificationController {
+    public func getSessionVerificationController() async throws -> SessionVerificationController {
         if let error = getSessionVerificationControllerThrowableError {
             throw error
         }
         getSessionVerificationControllerCallsCount += 1
         if let getSessionVerificationControllerClosure = getSessionVerificationControllerClosure {
-            return try getSessionVerificationControllerClosure()
+            return try await getSessionVerificationControllerClosure()
         } else {
             return getSessionVerificationControllerReturnValue
         }
@@ -1578,15 +1578,15 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var logoutClosure: (() throws -> String?)?
+    public var logoutClosure: (() async throws -> String?)?
 
-    public func logout() throws -> String? {
+    public func logout() async throws -> String? {
         if let error = logoutThrowableError {
             throw error
         }
         logoutCallsCount += 1
         if let logoutClosure = logoutClosure {
-            return try logoutClosure()
+            return try await logoutClosure()
         } else {
             return logoutReturnValue
         }
@@ -1624,13 +1624,13 @@ class SDKClientMock: SDKClientProtocol {
     public var notificationClientProcessSetupReceivedProcessSetup: NotificationProcessSetup?
     public var notificationClientProcessSetupReceivedInvocations: [NotificationProcessSetup] = []
 
-    var notificationClientProcessSetupUnderlyingReturnValue: NotificationClientBuilder!
-    public var notificationClientProcessSetupReturnValue: NotificationClientBuilder! {
+    var notificationClientProcessSetupUnderlyingReturnValue: NotificationClient!
+    public var notificationClientProcessSetupReturnValue: NotificationClient! {
         get {
             if Thread.isMainThread {
                 return notificationClientProcessSetupUnderlyingReturnValue
             } else {
-                var returnValue: NotificationClientBuilder? = nil
+                var returnValue: NotificationClient? = nil
                 DispatchQueue.main.sync {
                     returnValue = notificationClientProcessSetupUnderlyingReturnValue
                 }
@@ -1648,9 +1648,9 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var notificationClientProcessSetupClosure: ((NotificationProcessSetup) throws -> NotificationClientBuilder)?
+    public var notificationClientProcessSetupClosure: ((NotificationProcessSetup) async throws -> NotificationClient)?
 
-    public func notificationClient(processSetup: NotificationProcessSetup) throws -> NotificationClientBuilder {
+    public func notificationClient(processSetup: NotificationProcessSetup) async throws -> NotificationClient {
         if let error = notificationClientProcessSetupThrowableError {
             throw error
         }
@@ -1658,7 +1658,7 @@ class SDKClientMock: SDKClientProtocol {
         notificationClientProcessSetupReceivedProcessSetup = processSetup
         notificationClientProcessSetupReceivedInvocations.append(processSetup)
         if let notificationClientProcessSetupClosure = notificationClientProcessSetupClosure {
-            return try notificationClientProcessSetupClosure(processSetup)
+            return try await notificationClientProcessSetupClosure(processSetup)
         } else {
             return notificationClientProcessSetupReturnValue
         }
@@ -1693,14 +1693,14 @@ class SDKClientMock: SDKClientProtocol {
     public var removeAvatarCalled: Bool {
         return removeAvatarCallsCount > 0
     }
-    public var removeAvatarClosure: (() throws -> Void)?
+    public var removeAvatarClosure: (() async throws -> Void)?
 
-    public func removeAvatar() throws {
+    public func removeAvatar() async throws {
         if let error = removeAvatarThrowableError {
             throw error
         }
         removeAvatarCallsCount += 1
-        try removeAvatarClosure?()
+        try await removeAvatarClosure?()
     }
     //MARK: - resolveRoomAlias
 
@@ -1806,16 +1806,16 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var restoreSessionSessionReceivedSession: Session?
     public var restoreSessionSessionReceivedInvocations: [Session] = []
-    public var restoreSessionSessionClosure: ((Session) throws -> Void)?
+    public var restoreSessionSessionClosure: ((Session) async throws -> Void)?
 
-    public func restoreSession(session: Session) throws {
+    public func restoreSession(session: Session) async throws {
         if let error = restoreSessionSessionThrowableError {
             throw error
         }
         restoreSessionSessionCallsCount += 1
         restoreSessionSessionReceivedSession = session
         restoreSessionSessionReceivedInvocations.append(session)
-        try restoreSessionSessionClosure?(session)
+        try await restoreSessionSessionClosure?(session)
     }
     //MARK: - roomDirectorySearch
 
@@ -2002,9 +2002,9 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var searchUsersSearchTermLimitClosure: ((String, UInt64) throws -> SearchUsersResults)?
+    public var searchUsersSearchTermLimitClosure: ((String, UInt64) async throws -> SearchUsersResults)?
 
-    public func searchUsers(searchTerm: String, limit: UInt64) throws -> SearchUsersResults {
+    public func searchUsers(searchTerm: String, limit: UInt64) async throws -> SearchUsersResults {
         if let error = searchUsersSearchTermLimitThrowableError {
             throw error
         }
@@ -2012,7 +2012,7 @@ class SDKClientMock: SDKClientProtocol {
         searchUsersSearchTermLimitReceivedArguments = (searchTerm: searchTerm, limit: limit)
         searchUsersSearchTermLimitReceivedInvocations.append((searchTerm: searchTerm, limit: limit))
         if let searchUsersSearchTermLimitClosure = searchUsersSearchTermLimitClosure {
-            return try searchUsersSearchTermLimitClosure(searchTerm, limit)
+            return try await searchUsersSearchTermLimitClosure(searchTerm, limit)
         } else {
             return searchUsersSearchTermLimitReturnValue
         }
@@ -2072,15 +2072,15 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var sessionClosure: (() throws -> Session)?
+    public var sessionClosure: (() async throws -> Session)?
 
-    public func session() throws -> Session {
+    public func session() async throws -> Session {
         if let error = sessionThrowableError {
             throw error
         }
         sessionCallsCount += 1
         if let sessionClosure = sessionClosure {
-            return try sessionClosure()
+            return try await sessionClosure()
         } else {
             return sessionReturnValue
         }
@@ -2117,16 +2117,16 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var setAccountDataEventTypeContentReceivedArguments: (eventType: String, content: String)?
     public var setAccountDataEventTypeContentReceivedInvocations: [(eventType: String, content: String)] = []
-    public var setAccountDataEventTypeContentClosure: ((String, String) throws -> Void)?
+    public var setAccountDataEventTypeContentClosure: ((String, String) async throws -> Void)?
 
-    public func setAccountData(eventType: String, content: String) throws {
+    public func setAccountData(eventType: String, content: String) async throws {
         if let error = setAccountDataEventTypeContentThrowableError {
             throw error
         }
         setAccountDataEventTypeContentCallsCount += 1
         setAccountDataEventTypeContentReceivedArguments = (eventType: eventType, content: content)
         setAccountDataEventTypeContentReceivedInvocations.append((eventType: eventType, content: content))
-        try setAccountDataEventTypeContentClosure?(eventType, content)
+        try await setAccountDataEventTypeContentClosure?(eventType, content)
     }
     //MARK: - setDelegate
 
@@ -2228,16 +2228,16 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var setDisplayNameNameReceivedName: String?
     public var setDisplayNameNameReceivedInvocations: [String] = []
-    public var setDisplayNameNameClosure: ((String) throws -> Void)?
+    public var setDisplayNameNameClosure: ((String) async throws -> Void)?
 
-    public func setDisplayName(name: String) throws {
+    public func setDisplayName(name: String) async throws {
         if let error = setDisplayNameNameThrowableError {
             throw error
         }
         setDisplayNameNameCallsCount += 1
         setDisplayNameNameReceivedName = name
         setDisplayNameNameReceivedInvocations.append(name)
-        try setDisplayNameNameClosure?(name)
+        try await setDisplayNameNameClosure?(name)
     }
     //MARK: - setPusher
 
@@ -2532,16 +2532,16 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var uploadAvatarMimeTypeDataReceivedArguments: (mimeType: String, data: Data)?
     public var uploadAvatarMimeTypeDataReceivedInvocations: [(mimeType: String, data: Data)] = []
-    public var uploadAvatarMimeTypeDataClosure: ((String, Data) throws -> Void)?
+    public var uploadAvatarMimeTypeDataClosure: ((String, Data) async throws -> Void)?
 
-    public func uploadAvatar(mimeType: String, data: Data) throws {
+    public func uploadAvatar(mimeType: String, data: Data) async throws {
         if let error = uploadAvatarMimeTypeDataThrowableError {
             throw error
         }
         uploadAvatarMimeTypeDataCallsCount += 1
         uploadAvatarMimeTypeDataReceivedArguments = (mimeType: mimeType, data: data)
         uploadAvatarMimeTypeDataReceivedInvocations.append((mimeType: mimeType, data: data))
-        try uploadAvatarMimeTypeDataClosure?(mimeType, data)
+        try await uploadAvatarMimeTypeDataClosure?(mimeType, data)
     }
     //MARK: - uploadMedia
 
