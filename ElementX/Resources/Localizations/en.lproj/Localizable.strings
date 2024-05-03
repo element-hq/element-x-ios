@@ -666,6 +666,7 @@
 "screen_room_timeline_reactions_show_less" = "Show less";
 "screen_room_timeline_reactions_show_more" = "Show more";
 "screen_room_timeline_read_marker_title" = "New";
+"screen_room_title" = "Chat";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ and ";
 "screen_room_typing_notification_plural_ios" = " are typing…";
 "screen_room_typing_notification_singular_ios" = " is typing…";
