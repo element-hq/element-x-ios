@@ -16,20 +16,9 @@
 
 import Combine
 
-// sourcery: AutoMockable
-protocol CompletionSuggestionServiceProtocol {
-    var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> { get }
-    
-    func setSuggestionTrigger(_ suggestionTrigger: SuggestionPattern?)
-}
-
-extension CompletionSuggestionServiceMock {
-    struct CompletionSuggestionServiceMockConfiguration {
-        var suggestions: [SuggestionItem] = []
-    }
-    
-    convenience init(configuration: CompletionSuggestionServiceMockConfiguration) {
-        self.init()
-        underlyingSuggestionsPublisher = Just(configuration.suggestions).eraseToAnyPublisher()
-    }
+// periphery: ignore - markdown protocol
+protocol ComposerToolbarViewModelProtocol {
+    var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> { get }
+    var context: ComposerToolbarViewModelType.Context { get }
+    func process(roomAction: RoomScreenComposerAction)
 }

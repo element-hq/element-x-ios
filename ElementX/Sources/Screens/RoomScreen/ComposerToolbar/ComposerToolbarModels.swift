@@ -56,6 +56,8 @@ enum ComposerToolbarViewAction {
     case selectedSuggestion(_ suggestion: SuggestionItem)
     
     case voiceMessage(ComposerToolbarVoiceMessageAction)
+    
+    case plainComposerTextChanged
 }
 
 enum ComposerAttachmentType {
@@ -94,7 +96,7 @@ struct ComposerToolbarViewState: BindableState {
             if ServiceLocator.shared.settings.richTextEditorEnabled {
                 return !composerEmpty
             } else {
-                return !bindings.composerPlainText.isEmpty
+                return !bindings.plainComposerText.string.isEmpty
             }
         }
     }
@@ -107,7 +109,7 @@ struct ComposerToolbarViewState: BindableState {
         if ServiceLocator.shared.settings.richTextEditorEnabled {
             return composerEmpty
         } else {
-            return bindings.composerPlainText.isEmpty
+            return bindings.plainComposerText.string.isEmpty
         }
     }
     
@@ -122,7 +124,7 @@ struct ComposerToolbarViewState: BindableState {
 }
 
 struct ComposerToolbarViewStateBindings {
-    var composerPlainText = ""
+    var plainComposerText: NSAttributedString = .init(string: "")
     var composerFocused = false
     var composerActionsEnabled = false
     var composerExpanded = false

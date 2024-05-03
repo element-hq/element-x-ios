@@ -17,7 +17,7 @@ import SwiftUI
 
 struct MessageComposerTextField: View {
     let placeholder: String
-    @Binding var text: String
+    @Binding var text: NSAttributedString
     @Binding var isMultiline: Bool
 
     let maxHeight: CGFloat
@@ -36,7 +36,7 @@ struct MessageComposerTextField: View {
 
     @ViewBuilder
     private var placeholderView: some View {
-        if text.isEmpty {
+        if text.string.isEmpty {
             Text(placeholder)
                 .foregroundColor(.compound.textPlaceholder)
                 .accessibilityHidden(true)
@@ -45,9 +45,9 @@ struct MessageComposerTextField: View {
 }
 
 private struct UITextViewWrapper: UIViewRepresentable {
-    typealias UIViewType = UITextView
+    @Environment(\.roomContext) private var roomContext
 
-    @Binding var text: String
+    @Binding var text: NSAttributedString
     @Binding var isMultiline: Bool
 
     let maxHeight: CGFloat
@@ -60,6 +60,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
         // Need to use TextKit 1 for mentions
         let textView = ElementTextView(usingTextLayoutManager: false)
+        textView.roomContext = roomContext
+        
         textView.isMultiline = $isMultiline
         textView.delegate = context.coordinator
         textView.elementDelegate = context.coordinator
@@ -75,7 +77,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.keyboardType = .default
 
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-
+        
         return textView
     }
 
@@ -90,10 +92,14 @@ private struct UITextViewWrapper: UIViewRepresentable {
     }
 
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
-        if textView.text != text {
-            textView.text = text
-
-            if text.isEmpty {
+        if textView.attributedText != text {
+            textView.attributedText = text
+            
+            // Prevent the textView from randomly using the tint color
+            textView.typingAttributes = [.font: font,
+                                         .foregroundColor: UIColor(.compound.textPrimary)]
+            
+            if text.string.isEmpty {
                 // text cleared, probably because the written text is sent
                 // reload keyboard type
                 if textView.isFirstResponder {
@@ -114,14 +120,14 @@ private struct UITextViewWrapper: UIViewRepresentable {
     }
 
     final class Coordinator: NSObject, UITextViewDelegate, ElementTextViewDelegate {
-        private var text: Binding<String>
+        private var text: Binding<NSAttributedString>
 
         private let maxHeight: CGFloat
 
         private let enterKeyHandler: EnterKeyHandler
         private let pasteHandler: PasteHandler
 
-        init(text: Binding<String>,
+        init(text: Binding<NSAttributedString>,
              maxHeight: CGFloat,
              enterKeyHandler: @escaping EnterKeyHandler,
              pasteHandler: @escaping PasteHandler) {
@@ -132,7 +138,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
 
         func textViewDidChange(_ textView: UITextView) {
-            text.wrappedValue = textView.text
+            text.wrappedValue = textView.attributedText
         }
 
         func textViewDidReceiveEnterKeyPress(_ textView: UITextView) {
@@ -155,10 +161,13 @@ private protocol ElementTextViewDelegate: AnyObject {
     func textView(_ textView: UITextView, didReceivePasteWith provider: NSItemProvider)
 }
 
-private class ElementTextView: UITextView {
-    weak var elementDelegate: ElementTextViewDelegate?
-
+private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
+    var roomContext: RoomScreenViewModel.Context?
     var isMultiline: Binding<Bool>?
+    
+    weak var elementDelegate: ElementTextViewDelegate?
+    
+    private var pillViews = NSHashTable<UIView>.weakObjects()
 
     override var keyCommands: [UIKeyCommand]? {
         [UIKeyCommand(input: "\r", modifierFlags: .shift, action: #selector(shiftEnterKeyPressed)),
@@ -215,6 +224,31 @@ private class ElementTextView: UITextView {
 
         elementDelegate?.textView(self, didReceivePasteWith: provider)
     }
+    
+    // MARK: PillAttachmentViewProviderDelegate
+    
+    func invalidateTextAttachmentsDisplay() {
+        attributedText.enumerateAttribute(.attachment,
+                                          in: NSRange(location: 0, length: attributedText.length),
+                                          options: []) { value, range, _ in
+            guard value != nil else {
+                return
+            }
+            self.layoutManager.invalidateDisplay(forCharacterRange: range)
+        }
+    }
+    
+    func registerPillView(_ pillView: UIView) {
+        pillViews.add(pillView)
+    }
+
+    func flushPills() {
+        for view in pillViews.allObjects {
+            view.alpha = 0.0
+            view.removeFromSuperview()
+        }
+        pillViews.removeAllObjects()
+    }
 }
 
 struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
@@ -227,11 +261,12 @@ struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
     }
 
     struct PreviewWrapper: View {
-        @State var text: String
+        @State var text: NSAttributedString
         @State var isMultiline: Bool
 
         init(text: String) {
-            _text = .init(initialValue: text)
+            _text = .init(initialValue: .init(string: text, attributes: [.font: UIFont.preferredFont(forTextStyle: .body),
+                                                                         .foregroundColor: UIColor(.compound.textPrimary)]))
             _isMultiline = .init(initialValue: false)
         }
 

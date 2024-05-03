@@ -20,7 +20,7 @@ import Foundation
 struct PlainMentionBuilder: MentionBuilderProtocol {
     func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange) { }
     
-    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String) {
+    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String, userDisplayName: String?) {
         guard !attributedString.attributedSubstring(from: range).string.hasPrefix("@") else {
             return
         }

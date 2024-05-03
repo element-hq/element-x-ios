@@ -285,7 +285,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 if let url = value as? URL, let matrixEntity = parseMatrixEntityFrom(uri: url.absoluteString) {
                     switch matrixEntity.id {
                     case .user(let userID):
-                        mentionBuilder.handleUserMention(for: attributedString, in: range, url: url, userID: userID)
+                        mentionBuilder.handleUserMention(for: attributedString, in: range, url: url, userID: userID, userDisplayName: nil)
                     case .room(let roomID):
                         attributedString.addAttributes([.MatrixRoomID: roomID], range: range)
                     case .roomAlias(let alias):
@@ -362,6 +362,7 @@ extension NSAttributedString.Key {
     static let DTTextBlocks: NSAttributedString.Key = .init(rawValue: DTTextBlocksAttribute)
     static let MatrixBlockquote: NSAttributedString.Key = .init(rawValue: BlockquoteAttribute.name)
     static let MatrixUserID: NSAttributedString.Key = .init(rawValue: UserIDAttribute.name)
+    static let MatrixUserDisplayName: NSAttributedString.Key = .init(rawValue: UserDisplayNameAttribute.name)
     static let MatrixRoomID: NSAttributedString.Key = .init(rawValue: RoomIDAttribute.name)
     static let MatrixRoomAlias: NSAttributedString.Key = .init(rawValue: RoomAliasAttribute.name)
     static let MatrixEventOnRoomID: NSAttributedString.Key = .init(rawValue: EventOnRoomIDAttribute.name)
@@ -370,7 +371,7 @@ extension NSAttributedString.Key {
 }
 
 protocol MentionBuilderProtocol {
-    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String)
+    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String, userDisplayName: String?)
     func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange)
 }
 
