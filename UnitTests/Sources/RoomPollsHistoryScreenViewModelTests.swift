@@ -139,7 +139,7 @@ class RoomPollsHistoryScreenViewModelTests: XCTestCase {
     }
     
     func testSendPollResponse() async throws {
-        let deferred = deferFulfillment(interactionHandler.publisher) { _ in true }
+        let deferred = deferFulfillment(interactionHandler.publisher.delay(for: 0.1, scheduler: DispatchQueue.main)) { _ in true }
             
         interactionHandler.sendPollResponsePollStartIDOptionIDReturnValue = .success(())
         viewModel.context.send(viewAction: .sendPollResponse(pollStartID: "somePollID", optionID: "someOptionID"))
