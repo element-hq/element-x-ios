@@ -95,6 +95,10 @@ private struct UITextViewWrapper: UIViewRepresentable {
         if textView.attributedText != text {
             textView.attributedText = text
             
+            // Re-apply the default font when setting text for e.g. edits.
+            textView.font = font
+            textView.textColor = .compound.textPrimary
+            
             // Prevent the textView from randomly using the tint color
             textView.typingAttributes = [.font: font,
                                          .foregroundColor: UIColor(.compound.textPrimary)]
