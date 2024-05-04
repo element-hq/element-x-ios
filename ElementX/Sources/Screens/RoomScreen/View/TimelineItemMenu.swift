@@ -236,7 +236,6 @@ struct TimelineItemMenu: View {
                 .accessibilityLabel(L10n.actionReact)
             }
             .padding(.horizontal)
-            .fixedSize(horizontal: false, vertical: true)
             .frame(minWidth: reactionsFrame.width, maxWidth: .infinity, alignment: .center)
         }
         .scrollIndicators(.hidden)
