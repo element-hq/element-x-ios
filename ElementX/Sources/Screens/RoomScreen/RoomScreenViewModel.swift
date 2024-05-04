@@ -190,10 +190,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .focusLive:
             focusLive()
         case .scrolledToFocussedItem:
-            Task { // Use a Task to mutate view state after the current view update.
-                state.timelineViewState.focussedEvent?.appearance = .hasAppeared
-                hideFocusLoadingIndicator()
-            }
+            // Use a Task to mutate view state after the current view update.
+            Task { didScrollToFocussedItem() }
         case .hasSwitchedTimeline:
             Task { state.timelineViewState.isSwitchingTimelines = false }
         }
@@ -256,6 +254,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func focusLive() {
         timelineController.focusLive()
+    }
+    
+    private func didScrollToFocussedItem() {
+        if var focussedEvent = state.timelineViewState.focussedEvent {
+            focussedEvent.appearance = .hasAppeared
+            state.timelineViewState.focussedEvent = focussedEvent
+            hideFocusLoadingIndicator()
+        }
     }
     
     private func attach(_ attachment: ComposerAttachmentType) {
