@@ -100,7 +100,6 @@ struct SettingsScreen: View {
         }
     }
     
-    @ViewBuilder
     private var manageAccountSection: some View {
         Section {
             if let url = context.viewState.accountProfileURL {
