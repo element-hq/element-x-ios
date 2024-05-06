@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "För att ta bilder eller videor och skicka dem som ett meddelande behöver Element X åtkomst till kameran.";
+"NSFaceIDUsageDescription" = "Face ID används för att komma åt din app.";
+"NSLocationWhenInUseUsageDescription" = "Ge platsåtkomst så att Element X kan dela din plats.";
+"NSMicrophoneUsageDescription" = "För att spela in och skicka meddelanden med ljud måste Element X komma åt mikrofonen.";
+"NSPhotoLibraryUsageDescription" = "Gör det möjligt att spara foton och videor i ditt bibliotek.";

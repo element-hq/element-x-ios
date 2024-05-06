@@ -1227,12 +1227,8 @@ internal enum L10n {
   }
   /// “Link new device”
   internal static var screenQrCodeLoginInitialStateItem3Action: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_3_action") }
-  /// Select %1$@
-  internal static func screenQrCodeLoginInitialStateItem4(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_4", String(describing: p1))
-  }
-  /// “Show QR code”
-  internal static var screenQrCodeLoginInitialStateItem4Action: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_4_action") }
+  /// Follow the instructions shown
+  internal static var screenQrCodeLoginInitialStateItem4: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_4") }
   /// Open %1$@ on another device to get the QR code
   internal static func screenQrCodeLoginInitialStateTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_qr_code_login_initial_state_title", String(describing: p1))
