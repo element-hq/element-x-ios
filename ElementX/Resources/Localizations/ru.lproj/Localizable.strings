@@ -501,8 +501,7 @@
 "screen_qr_code_login_initial_state_item_2" = "Нажмите на свое изображение";
 "screen_qr_code_login_initial_state_item_3" = "Выбрать %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "\"Привязать новое устройство\"";
-"screen_qr_code_login_initial_state_item_4" = "Выбрать %1$@";
-"screen_qr_code_login_initial_state_item_4_action" = "\"Показать QR-код\"";
+"screen_qr_code_login_initial_state_item_4" = "Follow the instructions shown";
 "screen_qr_code_login_initial_state_title" = "Откройте %1$@ на другом устройстве, чтобы получить QR-код";
 "screen_qr_code_login_invalid_scan_state_description" = "Используйте QR-код, показанный на другом устройстве.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Неверный QR-код";
@@ -666,6 +665,7 @@
 "screen_room_timeline_reactions_show_less" = "Показать меньше";
 "screen_room_timeline_reactions_show_more" = "Показать больше";
 "screen_room_timeline_read_marker_title" = "Новый";
+"screen_room_title" = "Chat";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ и ";
 "screen_room_typing_notification_plural_ios" = " печатают…";
 "screen_room_typing_notification_singular_ios" = " печатает…";
