@@ -38,11 +38,11 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     /// Not persisted for now, should be set on start.
     private var superProperties: AnalyticsEvent.SuperProperties?
     
-    var isRunning: Bool { postHog?.enabled ?? false }
+    var isRunning: Bool { postHog != nil }
     
     func start(analyticsConfiguration: AnalyticsConfiguration) {
         // Only start if analytics have been configured in BuildSettings
-        guard let configuration = PHGPostHogConfiguration.standard(analyticsConfiguration: analyticsConfiguration) else { return }
+        guard let configuration = PostHogConfig.standard(analyticsConfiguration: analyticsConfiguration) else { return }
         
         if postHog == nil {
             postHog = posthogFactory.createPostHog(config: configuration)
@@ -50,7 +50,7 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
         // Add super property cryptoSDK to the captured events, to allow easy
         // filtering of events across different client by using same filter.
         superProperties = AnalyticsEvent.SuperProperties(appPlatform: nil, cryptoSDK: .Rust, cryptoSDKVersion: nil)
-        postHog?.enable()
+        postHog?.optIn()
     }
     
     func reset() {
@@ -59,8 +59,8 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     }
     
     func stop() {
-        postHog?.disable()
-        
+        postHog?.optOut()
+        postHog = nil
         // As of PostHog 1.4.4, setting the client to nil here doesn't release
         // it. Keep it around to avoid having multiple instances if the user re-enables
     }

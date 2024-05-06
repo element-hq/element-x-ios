@@ -265,4 +265,38 @@ class AnalyticsTests: XCTestCase {
         XCTAssertEqual(capturedEvent2?.properties?["appPlatform"] as? String, "A thing")
         XCTAssertEqual(capturedEvent2?.properties?["cryptoSDKVersion"] as? String, "001")
     }
+    
+    func testShouldNotReportIfNotStarted() {
+        // Given a client with user properties set
+        let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
+    
+        // No call to start
+        
+        client.screen(AnalyticsEvent.MobileScreen(durationMs: nil, screenName: .Home))
+        
+        XCTAssertEqual(posthogMock.screenPropertiesCalled, false)
+        
+        // It should be the same for any event
+        let someEvent = AnalyticsEvent.Error(context: nil,
+                                             cryptoModule: .Rust,
+                                             cryptoSDK: .Rust,
+                                             domain: .E2EE,
+                                             eventLocalAgeMillis: nil,
+                                             isFederated: nil,
+                                             isMatrixDotOrg: nil,
+                                             name: .OlmKeysNotSentError,
+                                             timeToDecryptMillis: nil,
+                                             userTrustsOwnIdentity: nil,
+                                             wasVisibleToUser: nil)
+        client.capture(someEvent)
+        
+        XCTAssertEqual(posthogMock.capturePropertiesCalled, false)
+        
+        // start now
+        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
+        XCTAssertEqual(posthogMock.optInCalled, true)
+        
+        client.capture(someEvent)
+        XCTAssertEqual(posthogMock.capturePropertiesCalled, true)
+    }
 }
