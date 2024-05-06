@@ -6625,23 +6625,18 @@ class OrientationManagerMock: OrientationManagerProtocol {
     }
 }
 class PHGPostHogMock: PHGPostHogProtocol {
-    var enabled: Bool {
-        get { return underlyingEnabled }
-        set(value) { underlyingEnabled = value }
-    }
-    var underlyingEnabled: Bool!
 
-    //MARK: - enable
+    //MARK: - optIn
 
-    var enableUnderlyingCallsCount = 0
-    var enableCallsCount: Int {
+    var optInUnderlyingCallsCount = 0
+    var optInCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return enableUnderlyingCallsCount
+                return optInUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = enableUnderlyingCallsCount
+                    returnValue = optInUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -6649,34 +6644,34 @@ class PHGPostHogMock: PHGPostHogProtocol {
         }
         set {
             if Thread.isMainThread {
-                enableUnderlyingCallsCount = newValue
+                optInUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    enableUnderlyingCallsCount = newValue
+                    optInUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var enableCalled: Bool {
-        return enableCallsCount > 0
+    var optInCalled: Bool {
+        return optInCallsCount > 0
     }
-    var enableClosure: (() -> Void)?
+    var optInClosure: (() -> Void)?
 
-    func enable() {
-        enableCallsCount += 1
-        enableClosure?()
+    func optIn() {
+        optInCallsCount += 1
+        optInClosure?()
     }
-    //MARK: - disable
+    //MARK: - optOut
 
-    var disableUnderlyingCallsCount = 0
-    var disableCallsCount: Int {
+    var optOutUnderlyingCallsCount = 0
+    var optOutCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return disableUnderlyingCallsCount
+                return optOutUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = disableUnderlyingCallsCount
+                    returnValue = optOutUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -6684,22 +6679,22 @@ class PHGPostHogMock: PHGPostHogProtocol {
         }
         set {
             if Thread.isMainThread {
-                disableUnderlyingCallsCount = newValue
+                optOutUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    disableUnderlyingCallsCount = newValue
+                    optOutUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var disableCalled: Bool {
-        return disableCallsCount > 0
+    var optOutCalled: Bool {
+        return optOutCallsCount > 0
     }
-    var disableClosure: (() -> Void)?
+    var optOutClosure: (() -> Void)?
 
-    func disable() {
-        disableCallsCount += 1
-        disableClosure?()
+    func optOut() {
+        optOutCallsCount += 1
+        optOutClosure?()
     }
     //MARK: - reset
 

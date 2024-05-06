@@ -19,9 +19,8 @@ import PostHog
 
 extension PHGPostHogMock {
     func configureMockBehavior() {
-        enableClosure = {
-            self.enabled = true
-        }
+        // We don't need custom configuration anymore since update of the posthog SDK
+        // Keeping boilerplate code in case needed later?
     }
 }
 
@@ -32,7 +31,7 @@ class MockPostHogFactory: PostHogFactory {
         self.mock = mock
     }
     
-    func createPostHog(config: PHGPostHogConfiguration) -> ElementX.PHGPostHogProtocol {
+    func createPostHog(config: PostHogConfig) -> ElementX.PHGPostHogProtocol {
         mock
     }
 }
