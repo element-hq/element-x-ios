@@ -88,16 +88,16 @@ private struct UITextViewWrapper: UIViewRepresentable {
     }
 
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
+        // Prevent the textView from inheriting attributes from mention pills
+        textView.typingAttributes = [.font: font,
+                                     .foregroundColor: UIColor(.compound.textPrimary)]
+        
         if textView.attributedText != text {
             textView.attributedText = text
             
             // Re-apply the default font when setting text for e.g. edits.
             textView.font = font
             textView.textColor = .compound.textPrimary
-            
-            // Prevent the textView from randomly using the tint color
-            textView.typingAttributes = [.font: font,
-                                         .foregroundColor: UIColor(.compound.textPrimary)]
             
             if text.string.isEmpty {
                 // text cleared, probably because the written text is sent
