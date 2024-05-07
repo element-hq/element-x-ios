@@ -37,13 +37,31 @@ struct RoomAttachmentPicker: View {
     
     var menuContent: some View {
         VStack(alignment: .leading, spacing: 0.0) {
+            if ServiceLocator.shared.settings.richTextEditorEnabled {
+                Button {
+                    context.send(viewAction: .enableTextFormatting)
+                } label: {
+                    Label(L10n.screenRoomAttachmentTextFormatting, icon: \.textFormatting)
+                        .labelStyle(.menuSheet)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
+            }
+            
             Button {
-                context.send(viewAction: .attach(.photoLibrary))
+                context.send(viewAction: .attach(.poll))
             } label: {
-                Label(L10n.screenRoomAttachmentSourceGallery, icon: \.image)
+                Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
                     .labelStyle(.menuSheet)
             }
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
+            
+            Button {
+                context.send(viewAction: .attach(.location))
+            } label: {
+                Label(L10n.screenRoomAttachmentSourceLocation, icon: \.locationPin)
+                    .labelStyle(.menuSheet)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
             
             Button {
                 context.send(viewAction: .attach(.file))
@@ -54,38 +72,20 @@ struct RoomAttachmentPicker: View {
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
             
             Button {
+                context.send(viewAction: .attach(.photoLibrary))
+            } label: {
+                Label(L10n.screenRoomAttachmentSourceGallery, icon: \.image)
+                    .labelStyle(.menuSheet)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
+            
+            Button {
                 context.send(viewAction: .attach(.camera))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceCamera, icon: \.takePhoto)
                     .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerCamera)
-
-            Button {
-                context.send(viewAction: .attach(.location))
-            } label: {
-                Label(L10n.screenRoomAttachmentSourceLocation, icon: \.locationPin)
-                    .labelStyle(.menuSheet)
-            }
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
-
-            Button {
-                context.send(viewAction: .attach(.poll))
-            } label: {
-                Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
-                    .labelStyle(.menuSheet)
-            }
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
-
-            if ServiceLocator.shared.settings.richTextEditorEnabled {
-                Button {
-                    context.send(viewAction: .enableTextFormatting)
-                } label: {
-                    Label(L10n.screenRoomAttachmentTextFormatting, icon: \.textFormatting)
-                        .labelStyle(.menuSheet)
-                }
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
-            }
         }
     }
 }
