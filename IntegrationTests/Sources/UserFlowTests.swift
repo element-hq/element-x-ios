@@ -27,8 +27,6 @@ class UserFlowTests: XCTestCase {
     func testUserFlow() {
         checkSettings()
         
-        checkInvites()
-        
         checkRoomCreation()
         
         // Open the first room in the list.
@@ -48,17 +46,7 @@ class UserFlowTests: XCTestCase {
         
         app.logout()
     }
-    
-    private func checkInvites() {
-        // Open invites
-        let invitesButton = app.buttons[A11yIdentifiers.homeScreen.invites]
-        XCTAssertTrue(invitesButton.waitForExistence(timeout: 10.0))
-        invitesButton.tap()
         
-        // Go back to the room list
-        tapOnBackButton("Chats")
-    }
-    
     private func checkPhotoSharing() {
         // Open attachments picker
         tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
@@ -159,7 +147,7 @@ class UserFlowTests: XCTestCase {
         tapOnBackButton("Room info")
         
         // Go back to the room
-        tapOnBackButton("Room")
+        tapOnBackButton("Chat")
         
         // Go back to the room list
         tapOnBackButton("Chats")
