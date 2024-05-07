@@ -239,6 +239,7 @@ struct TimelineItemMenu: View {
             .frame(minWidth: reactionsFrame.width, maxWidth: .infinity, alignment: .center)
         }
         .scrollIndicators(.hidden)
+        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
         .readFrame($reactionsFrame)
     }
     
