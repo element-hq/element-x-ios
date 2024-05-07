@@ -68,7 +68,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     func userSession(for client: Client, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError> {
         do {
-            let session = try client.session()
+            let session = try await client.session()
             let userID = try client.userId()
             let clientProxy = await setupProxyForClient(client)
             
@@ -133,9 +133,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         do {
             let client = try await completeBuilder.build()
             
-            try await Task.dispatch(on: .global()) {
-                try client.restoreSession(session: credentials.restorationToken.session)
-            }
+            try await client.restoreSession(session: credentials.restorationToken.session)
             
             return await .success(setupProxyForClient(client))
         } catch {

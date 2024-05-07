@@ -14,9 +14,19 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
-
 import WysiwygComposer
+
+struct SuggestionTrigger: Equatable {
+    enum SuggestionType: Equatable {
+        case user
+    }
+    
+    let type: SuggestionType
+    let text: String
+    let range: NSRange
+}
 
 enum SuggestionItem: Identifiable, Equatable {
     case user(item: MentionSuggestionItem)
@@ -30,26 +40,49 @@ enum SuggestionItem: Identifiable, Equatable {
             return PillConstants.atRoom
         }
     }
+    
+    var range: NSRange {
+        switch self {
+        case .user(let item), .allUsers(let item):
+            return item.range
+        }
+    }
 }
 
 struct MentionSuggestionItem: Identifiable, Equatable {
     let id: String
     let displayName: String?
     let avatarURL: URL?
+    let range: NSRange
+}
+
+// sourcery: AutoMockable
+protocol CompletionSuggestionServiceProtocol {
+    var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> { get }
     
-    static func allUsersMention(roomAvatar: URL?) -> Self {
-        MentionSuggestionItem(id: PillConstants.atRoom, displayName: PillConstants.everyone, avatarURL: roomAvatar)
-    }
+    func processTextMessage(_ textMessage: String?)
+    
+    func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?)
 }
 
 extension WysiwygComposer.SuggestionPattern {
-    var toElementPattern: SuggestionPattern? {
+    var toElementPattern: SuggestionTrigger? {
         switch key {
         case .at:
-            return SuggestionPattern(type: .user, text: text)
-        // Not yet supported
+            return SuggestionTrigger(type: .user, text: text, range: .init(location: Int(start), length: Int(end)))
         default:
             return nil
         }
+    }
+}
+
+extension CompletionSuggestionServiceMock {
+    struct CompletionSuggestionServiceMockConfiguration {
+        var suggestions: [SuggestionItem] = []
+    }
+    
+    convenience init(configuration: CompletionSuggestionServiceMockConfiguration) {
+        self.init()
+        underlyingSuggestionsPublisher = Just(configuration.suggestions).eraseToAnyPublisher()
     }
 }

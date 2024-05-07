@@ -30,7 +30,7 @@ settings:
   APP_DISPLAY_NAME: Element X
   PRODUCTION_APP_NAME: Element
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
-  MARKETING_VERSION: 1.6.4
+  MARKETING_VERSION: 1.6.5
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
   SUPPORTS_MACCATALYST: NO
@@ -49,7 +49,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 0.0.1-qr-login
+    exactVersion: 0.0.2-qr-login
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
@@ -57,7 +57,7 @@ packages:
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    minorVersion: 0.20.0
+    minorVersion: 0.21.0
     # path: ../matrix-analytics-events
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
@@ -107,7 +107,7 @@ packages:
     minorVersion: 5.13.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 2.0.3
+    minorVersion: 3.2.4
   Prefire:
     url: https://github.com/BarredEwe/Prefire
     minorVersion: 2.0.4

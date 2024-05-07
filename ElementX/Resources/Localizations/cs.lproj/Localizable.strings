@@ -241,7 +241,7 @@
 "error_failed_loading_messages" = "Načítání zpráv se nezdařilo";
 "error_failed_locating_user" = "%1$@ nemá přístup k vaší poloze. Zkuste to prosím později.";
 "error_failed_uploading_voice_message" = "Nepodařilo se nahrát hlasovou zprávu.";
-"error_message_not_found" = "Message not found";
+"error_message_not_found" = "Zpráva nebyla nalezena";
 "error_no_compatible_app_found" = "Nebyla nalezena žádná kompatibilní aplikace, která by tuto akci zpracovala.";
 "error_some_messages_have_not_been_sent" = "Některé zprávy nebyly odeslány";
 "error_unknown" = "Omlouváme se, došlo k chybě";
@@ -501,8 +501,7 @@
 "screen_qr_code_login_initial_state_item_2" = "Klikněte na svůj avatar";
 "screen_qr_code_login_initial_state_item_3" = "Vybrat %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "\"Připojit nové zařízení\"";
-"screen_qr_code_login_initial_state_item_4" = "Vybrat %1$@";
-"screen_qr_code_login_initial_state_item_4_action" = "\"Zobrazit QR kód\"";
+"screen_qr_code_login_initial_state_item_4" = "Postupujte podle uvedených pokynů";
 "screen_qr_code_login_initial_state_title" = "Otevřete %1$@ na jiném zařízení pro získání QR kódu";
 "screen_qr_code_login_invalid_scan_state_description" = "Použijte QR kód zobrazený na druhém zařízení.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Špatný QR kód";
@@ -666,6 +665,7 @@
 "screen_room_timeline_reactions_show_less" = "Zobrazit méně";
 "screen_room_timeline_reactions_show_more" = "Zobrazit více";
 "screen_room_timeline_read_marker_title" = "Nové";
+"screen_room_title" = "Chat";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ a ";
 "screen_room_typing_notification_plural_ios" = "píší…";
 "screen_room_typing_notification_singular_ios" = "píše…";

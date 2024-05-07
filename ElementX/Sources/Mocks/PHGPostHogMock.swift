@@ -1,5 +1,5 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2024 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,20 +14,24 @@
 // limitations under the License.
 //
 
-import Combine
+import Foundation
+import PostHog
 
-struct SuggestionPattern: Equatable {
-    enum SuggestionType: Equatable {
-        case user
+extension PHGPostHogMock {
+    func configureMockBehavior() {
+        // We don't need custom configuration anymore since update of the posthog SDK
+        // Keeping boilerplate code in case needed later?
     }
-    
-    let type: SuggestionType
-    let text: String
 }
 
-// periphery: ignore - markdown protocol
-protocol ComposerToolbarViewModelProtocol {
-    var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> { get }
-    var context: ComposerToolbarViewModelType.Context { get }
-    func process(roomAction: RoomScreenComposerAction)
+class MockPostHogFactory: PostHogFactory {
+    var mock: PHGPostHogProtocol!
+    
+    init(mock: PHGPostHogProtocol!) {
+        self.mock = mock
+    }
+    
+    func createPostHog(config: PostHogConfig) -> ElementX.PHGPostHogProtocol {
+        mock
+    }
 }

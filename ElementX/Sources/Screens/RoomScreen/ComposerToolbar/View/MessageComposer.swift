@@ -18,22 +18,21 @@ import Compound
 import SwiftUI
 import WysiwygComposer
 
-typealias EnterKeyHandler = () -> Void
+typealias GenericKeyHandler = (_ key: UIKeyboardHIDUsage) -> Void
 typealias PasteHandler = (NSItemProvider) -> Void
 
 struct MessageComposer: View {
-    @Binding var plainText: String
+    @Binding var plainComposerText: NSAttributedString
     let composerView: WysiwygComposerView
     let mode: RoomScreenComposerMode
     let showResizeGrabber: Bool
     @Binding var isExpanded: Bool
-    let sendAction: EnterKeyHandler
+    let sendAction: () -> Void
+    let editAction: () -> Void
     let pasteAction: PasteHandler
-    let replyCancellationAction: () -> Void
-    let editCancellationAction: () -> Void
+    let cancellationAction: () -> Void
     let onAppearAction: () -> Void
     
-    @State private var isMultiline = false
     @State private var composerTranslation: CGFloat = 0
     private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
     
@@ -85,10 +84,9 @@ struct MessageComposer: View {
                     }
             } else {
                 MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
-                                         text: $plainText,
-                                         isMultiline: $isMultiline,
+                                         text: $plainComposerText,
                                          maxHeight: 300,
-                                         enterKeyHandler: sendAction,
+                                         keyHandler: { handleKeyPress($0) },
                                          pasteHandler: pasteAction)
                     .tint(.compound.iconAccentTertiary)
                     .padding(.vertical, 10)
@@ -105,9 +103,9 @@ struct MessageComposer: View {
     private var header: some View {
         switch mode {
         case .reply(_, let replyDetails, _):
-            MessageComposerReplyHeader(replyDetails: replyDetails, action: replyCancellationAction)
+            MessageComposerReplyHeader(replyDetails: replyDetails, action: cancellationAction)
         case .edit:
-            MessageComposerEditHeader(action: editCancellationAction)
+            MessageComposerEditHeader(action: cancellationAction)
         case .recordVoiceMessage, .previewVoiceMessage, .default:
             EmptyView()
         }
@@ -136,6 +134,19 @@ struct MessageComposer: View {
                     composerTranslation = 0
                 }
             }
+    }
+    
+    private func handleKeyPress(_ key: UIKeyboardHIDUsage) {
+        switch key {
+        case .keyboardReturnOrEnter:
+            sendAction()
+        case .keyboardUpArrow:
+            editAction()
+        case .keyboardEscape:
+            cancellationAction()
+        default:
+            break
+        }
     }
 }
 
@@ -228,11 +239,11 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         .loading(eventID: "")
     ]
     
-    static func messageComposer(_ content: String = "",
+    static func messageComposer(_ content: NSAttributedString = .init(string: ""),
                                 mode: RoomScreenComposerMode = .default) -> MessageComposer {
         let viewModel = WysiwygComposerViewModel(minHeight: 22,
                                                  maxExpandedHeight: 250)
-        viewModel.setMarkdownContent(content)
+        viewModel.setMarkdownContent(content.string)
         
         let composerView = WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
                                                viewModel: viewModel,
@@ -240,15 +251,15 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                                keyCommands: nil,
                                                pasteHandler: nil)
         
-        return MessageComposer(plainText: .constant(content),
+        return MessageComposer(plainComposerText: .constant(content),
                                composerView: composerView,
                                mode: mode,
                                showResizeGrabber: false,
                                isExpanded: .constant(false),
                                sendAction: { },
+                               editAction: { },
                                pasteAction: { _ in },
-                               replyCancellationAction: { },
-                               editCancellationAction: { },
+                               cancellationAction: { },
                                onAppearAction: { viewModel.setup() })
     }
     
@@ -256,7 +267,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 8) {
             messageComposer()
             
-            messageComposer("Some message",
+            messageComposer(.init(string: "Some message"),
                             mode: .edit(originalItemId: .random))
             
             messageComposer(mode: .reply(itemID: .random,

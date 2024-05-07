@@ -15,10 +15,11 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 enum MessageForwardingScreenViewModelAction {
     case dismiss
-    case send(roomID: String)
+    case sent(roomID: String)
 }
 
 struct MessageForwardingScreenViewState: BindableState {
@@ -44,4 +45,22 @@ struct MessageForwardingRoom: Identifiable, Equatable {
     let name: String
     let alias: String?
     let avatarURL: URL?
+}
+
+struct MessageForwardingItem: Hashable {
+    /// The source item's timeline ID. Only necessary for a rough Hashable conformance.
+    let id: TimelineItemIdentifier
+    /// The source item's room ID.
+    let roomID: String
+    /// The item's content to be forwarded.
+    let content: RoomMessageEventContentWithoutRelation
+    
+    static func == (lhs: MessageForwardingItem, rhs: MessageForwardingItem) -> Bool {
+        lhs.id == rhs.id && lhs.roomID == rhs.roomID
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(roomID)
+    }
 }

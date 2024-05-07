@@ -48,30 +48,25 @@ final class NSEUserSession {
         
         baseClient = try await clientBuilder.build()
         delegateHandle = baseClient.setDelegate(delegate: ClientDelegateWrapper())
-        try baseClient.restoreSession(session: credentials.restorationToken.session)
+        try await baseClient.restoreSession(session: credentials.restorationToken.session)
         
-        notificationClient = try baseClient
-            .notificationClient(processSetup: .multipleProcesses)
-            .filterByPushRules()
-            .finish()
+        notificationClient = try await baseClient.notificationClient(processSetup: .multipleProcesses)
     }
     
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
-        await Task.dispatch(on: .global()) {
-            do {
-                let notification = try self.notificationClient.getNotification(roomId: roomID, eventId: eventID)
+        do {
+            let notification = try await notificationClient.getNotification(roomId: roomID, eventId: eventID)
                 
-                guard let notification else {
-                    return nil
-                }
-                return NotificationItemProxy(notificationItem: notification,
-                                             eventID: eventID,
-                                             receiverID: self.userID,
-                                             roomID: roomID)
-            } catch {
-                MXLog.error("NSE: Could not get notification's content creating an empty notification instead, error: \(error)")
-                return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: self.userID)
+            guard let notification else {
+                return nil
             }
+            return NotificationItemProxy(notificationItem: notification,
+                                         eventID: eventID,
+                                         receiverID: userID,
+                                         roomID: roomID)
+        } catch {
+            MXLog.error("NSE: Could not get notification's content creating an empty notification instead, error: \(error)")
+            return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
         }
     }
     

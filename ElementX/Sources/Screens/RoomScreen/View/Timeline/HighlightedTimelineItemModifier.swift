@@ -28,6 +28,7 @@ private struct HighlightedTimelineItemModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
+            .padding(.top, isHighlighted ? 1 : 0)
             .background {
                 if isHighlighted {
                     VStack(spacing: 0) {
@@ -47,7 +48,9 @@ private struct HighlightedTimelineItemModifier: ViewModifier {
     }
 }
 
-// swiftlint:disable line_length
+// MARK: - Previews
+
+// swiftlint:disable line_length blanket_disable_command
 struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ScrollView {
@@ -58,6 +61,7 @@ struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePrevie
                 Bubble(text: "Not highlighted")
                     .highlightedTimelineItem(false)
                 
+                // swiftlint:disable line_length
                 Bubble(text: """
                        Bacon ipsum dolor amet brisket bacon hamburger filet mignon ham hock, capicola meatloaf corned beef tongue. Ribeye filet mignon shoulder drumstick doner shank. Landjaeger shankle chislic brisket short loin pig. Frankfurter sirloin jerky bresaola tri-tip cow buffalo. Beef tongue shankle venison, sirloin boudin biltong ham hock corned beef. Sirloin shankle pork belly, strip steak pancetta brisket flank ribeye cow chislic. Pork ham landjaeger, pastrami beef sausage capicola meatball.
                        
@@ -65,8 +69,10 @@ struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePrevie
                        """,
                        isOutgoing: true)
                     .highlightedTimelineItem(true)
+                // swiftlint:enable line_length
             }
         }
+        .previewDisplayName("Layout")
     }
     
     struct Bubble: View {
@@ -85,4 +91,25 @@ struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePrevie
     }
 }
 
-// swiftlint:enable line_length
+/// A preview that allows quick testing of the highlight appearance across various timeline scenarios.
+struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
+    static let focussedEventID = "RoomTimelineItemFixtures.default.5"
+    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Preview room")),
+                                               focussedEventID: focussedEventID,
+                                               timelineController: MockRoomTimelineController(),
+                                               mediaProvider: MockMediaProvider(),
+                                               mediaPlayerProvider: MediaPlayerProviderMock(),
+                                               voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                               appMediator: AppMediatorMock.default,
+                                               appSettings: ServiceLocator.shared.settings,
+                                               analyticsService: ServiceLocator.shared.analytics,
+                                               notificationCenter: NotificationCenterMock())
+
+    static var previews: some View {
+        NavigationStack {
+            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar.mock())
+        }
+        .previewDisplayName("Timeline")
+    }
+}

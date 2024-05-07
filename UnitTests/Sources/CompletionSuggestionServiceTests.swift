@@ -40,27 +40,27 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         try await deferred.fulfill()
         
         deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
-            suggestions == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL))]
+            suggestions == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL, range: .init()))]
         }
-        service.setSuggestionTrigger(.init(type: .user, text: "ali"))
+        service.setSuggestionTrigger(.init(type: .user, text: "ali", range: .init()))
         try await deferred.fulfill()
         
         deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == []
         }
-        service.setSuggestionTrigger(.init(type: .user, text: "me"))
+        service.setSuggestionTrigger(.init(type: .user, text: "me", range: .init()))
         try await deferred.fulfill()
         
         deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == []
         }
-        service.setSuggestionTrigger(.init(type: .user, text: "room"))
+        service.setSuggestionTrigger(.init(type: .user, text: "room", range: .init()))
         try await deferred.fulfill()
         
         deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == []
         }
-        service.setSuggestionTrigger(.init(type: .user, text: "everyon"))
+        service.setSuggestionTrigger(.init(type: .user, text: "everyon", range: .init()))
         try await deferred.fulfill()
     }
     
@@ -79,13 +79,13 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == [.allUsers(item: .allUsersMention(roomAvatar: nil))]
         }
-        service.setSuggestionTrigger(.init(type: .user, text: "ro"))
+        service.setSuggestionTrigger(.init(type: .user, text: "ro", range: .init()))
         try await deferred.fulfill()
         
         deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == [.allUsers(item: .allUsersMention(roomAvatar: nil))]
         }
-        service.setSuggestionTrigger(.init(type: .user, text: "every"))
+        service.setSuggestionTrigger(.init(type: .user, text: "every", range: .init()))
         try await deferred.fulfill()
     }
     
@@ -104,10 +104,16 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         
         deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == [.allUsers(item: .allUsersMention(roomAvatar: nil)),
-                            .user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL)),
-                            .user(item: .init(id: bob.userID, displayName: bob.displayName, avatarURL: bob.avatarURL))]
+                            .user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL, range: .init())),
+                            .user(item: .init(id: bob.userID, displayName: bob.displayName, avatarURL: bob.avatarURL, range: .init()))]
         }
-        service.setSuggestionTrigger(.init(type: .user, text: ""))
+        service.setSuggestionTrigger(.init(type: .user, text: "", range: .init()))
         try await deferred.fulfill()
+    }
+}
+
+private extension MentionSuggestionItem {
+    static func allUsersMention(roomAvatar: URL?) -> Self {
+        MentionSuggestionItem(id: PillConstants.atRoom, displayName: PillConstants.everyone, avatarURL: roomAvatar, range: .init())
     }
 }

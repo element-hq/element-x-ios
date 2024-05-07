@@ -501,8 +501,7 @@
 "screen_qr_code_login_initial_state_item_2" = "Kliknite na svoj obrázok";
 "screen_qr_code_login_initial_state_item_3" = "Vyberte %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "„Prepojiť nové zariadenie“";
-"screen_qr_code_login_initial_state_item_4" = "Vyberte %1$@";
-"screen_qr_code_login_initial_state_item_4_action" = "„Zobraziť QR kód“";
+"screen_qr_code_login_initial_state_item_4" = "Postupujte podľa zobrazených pokynov";
 "screen_qr_code_login_initial_state_title" = "Ak chcete získať QR kód, otvorte %1$@ na inom zariadení";
 "screen_qr_code_login_invalid_scan_state_description" = "Použite QR kód zobrazený na druhom zariadení.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Nesprávny QR kód";
@@ -666,6 +665,7 @@
 "screen_room_timeline_reactions_show_less" = "Zobraziť menej";
 "screen_room_timeline_reactions_show_more" = "Zobraziť viac";
 "screen_room_timeline_read_marker_title" = "Nové";
+"screen_room_title" = "Konverzácia";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ a ";
 "screen_room_typing_notification_plural_ios" = " píšu…";
 "screen_room_typing_notification_singular_ios" = " píše…";

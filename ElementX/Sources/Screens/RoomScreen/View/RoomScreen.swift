@@ -45,9 +45,9 @@ struct RoomScreen: View {
                     }
                     .padding(.top, 8)
                     .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-                    .environmentObject(context)
+                    .environment(\.roomContext, context)
             }
-            .navigationTitle(L10n.commonRoom) // Hidden but used for back button text.
+            .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(isNavigationBarHidden)
             .toolbar { toolbar }
@@ -96,7 +96,7 @@ struct RoomScreen: View {
             .id(context.viewState.roomID)
             .environmentObject(context)
             .environment(\.timelineStyle, context.viewState.timelineStyle)
-            .environment(\.focussedEventID, context.viewState.timelineViewState.focussedEventID)
+            .environment(\.focussedEventID, context.viewState.timelineViewState.focussedEvent?.eventID)
             .overlay(alignment: .bottomTrailing) {
                 scrollToBottomButton
             }

@@ -88,8 +88,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomAvatarURL: roomProxy.avatarURL,
                                                          timelineStyle: appSettings.timelineStyle,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         timelineViewState: TimelineViewState(focussedEventID: focussedEventID,
-                                                                                              focussedEventNeedsDisplay: focussedEventID != nil),
+                                                         timelineViewState: TimelineViewState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                          ownUserID: roomProxy.ownUserID,
                                                          hasOngoingCall: roomProxy.hasOngoingCall,
                                                          bindings: .init(reactionsCollapsed: [:])),
@@ -119,7 +118,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return self.roomScreenInteractionHandler.audioPlayerState(for: itemID)
         }
         
-        buildTimelineViews()
+        buildTimelineViews(timelineItems: timelineController.timelineItems)
         
         updateMembers(roomProxy.membersPublisher.value)
 
@@ -191,10 +190,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .focusLive:
             focusLive()
         case .scrolledToFocussedItem:
-            Task { // Use a Task to mutate view state after the current view update.
-                state.timelineViewState.focussedEventNeedsDisplay = false
-                hideFocusLoadingIndicator()
-            }
+            // Use a Task to mutate view state after the current view update.
+            Task { didScrollToFocussedItem() }
+        case .hasSwitchedTimeline:
+            Task { state.timelineViewState.isSwitchingTimelines = false }
         }
     }
 
@@ -207,6 +206,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                          mode: mode,
                                          intentionalMentions: intentionalMentions)
             }
+        case .editLastMessage:
+            editLastMessage()
         case .attach(let attachment):
             attach(attachment)
         case .handlePasteOrDrop(let provider):
@@ -230,7 +231,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     func focusOnEvent(eventID: String) async {
         if state.timelineViewState.hasLoadedItem(with: eventID) {
-            state.timelineViewState.focussedEventID = eventID
+            state.timelineViewState.focussedEvent = .init(eventID: eventID, appearance: .animated)
             return
         }
         
@@ -239,7 +240,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         switch await timelineController.focusOnEvent(eventID, timelineSize: Constants.detachedTimelineSize) {
         case .success:
-            state.timelineViewState.focussedEventID = eventID
+            state.timelineViewState.focussedEvent = .init(eventID: eventID, appearance: .immediate)
         case .failure(let error):
             MXLog.error("Failed to focus on event \(eventID)")
             
@@ -255,7 +256,28 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func focusLive() {
         timelineController.focusLive()
-        state.timelineViewState.focussedEventID = nil
+    }
+    
+    private func didScrollToFocussedItem() {
+        if var focussedEvent = state.timelineViewState.focussedEvent {
+            focussedEvent.appearance = .hasAppeared
+            state.timelineViewState.focussedEvent = focussedEvent
+            hideFocusLoadingIndicator()
+        }
+    }
+    
+    private func editLastMessage() {
+        guard let item = timelineController.timelineItems.reversed().first(where: {
+            guard let item = $0 as? EventBasedMessageTimelineItemProtocol else {
+                return false
+            }
+            
+            return item.sender.id == roomProxy.ownUserID && item.isEditable
+        }) else {
+            return
+        }
+        
+        roomScreenInteractionHandler.processTimelineItemMenuAction(.edit, itemID: item.id)
     }
     
     private func attach(_ attachment: ComposerAttachmentType) {
@@ -336,8 +358,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 guard let self else { return }
 
                 switch callback {
-                case .updatedTimelineItems:
-                    buildTimelineViews()
+                case .updatedTimelineItems(let updatedItems, let isSwitchingTimelines):
+                    buildTimelineViews(timelineItems: updatedItems, isSwitchingTimelines: isSwitchingTimelines)
                 case .paginationState(let paginationState):
                     if state.timelineViewState.paginationState != paginationState {
                         state.timelineViewState.paginationState = paginationState
@@ -347,8 +369,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                         state.timelineViewState.isLive = isLive
                         
                         // Remove the event highlight *only* when transitioning from non-live to live.
-                        if isLive, state.timelineViewState.focussedEventID != nil {
-                            state.timelineViewState.focussedEventID = nil
+                        if isLive, state.timelineViewState.focussedEvent != nil {
+                            state.timelineViewState.focussedEvent = nil
                         }
                     }
                 }
@@ -407,7 +429,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 case .displayEmojiPicker(let itemID, let selectedEmojis):
                     actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .displayMessageForwarding(let itemID):
-                    actionsSubject.send(.displayMessageForwarding(itemID: itemID))
+                    Task { await self.forwardMessage(itemID: itemID) }
                 case .displayPollForm(let mode):
                     actionsSubject.send(.displayPollForm(mode: mode))
                 case .displayReportContent(let itemID, let senderID):
@@ -568,10 +590,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Timeline Item Building
     
-    private func buildTimelineViews() {
+    private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
         var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
         
-        timelineController.timelineItems.filter { $0 is RedactedRoomTimelineItem }.forEach { timelineItem in
+        timelineItems.filter { $0 is RedactedRoomTimelineItem }.forEach { timelineItem in
             // Stops the audio player when a voice message is redacted.
             guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(timelineItem.id)) else {
                 return
@@ -583,7 +605,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }
 
-        let itemsGroupedByTimelineDisplayStyle = timelineController.timelineItems.chunked { current, next in
+        let itemsGroupedByTimelineDisplayStyle = timelineItems.chunked { current, next in
             canGroupItem(timelineItem: current, with: next)
         }
         
@@ -612,6 +634,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     }
                 }
             }
+        }
+        
+        if isSwitchingTimelines {
+            state.timelineViewState.isSwitchingTimelines = true
         }
         
         state.timelineViewState.itemsDictionary = timelineItemsDictionary
@@ -712,6 +738,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.bindings.readReceiptsSummaryInfo = .init(orderedReceipts: eventTimelineItem.properties.orderedReadReceipts, id: eventTimelineItem.id)
     }
     
+    // MARK: - Message forwarding
+    
+    private func forwardMessage(itemID: TimelineItemIdentifier) async {
+        guard let content = await timelineController.messageEventContent(for: itemID) else { return }
+        actionsSubject.send(.displayMessageForwarding(forwardingItem: .init(id: itemID, roomID: roomProxy.id, content: content)))
+    }
+    
     // MARK: - User Indicators
     
     private func showFocusLoadingIndicator() {
@@ -777,7 +810,7 @@ extension EnvironmentValues {
         get { self[RoomContextKey.self] }
         set { self[RoomContextKey.self] = newValue }
     }
-    
+
     /// An event ID which will be non-nil when a timeline item should show as focussed.
     var focussedEventID: String? {
         get { self[FocussedEventID.self] }

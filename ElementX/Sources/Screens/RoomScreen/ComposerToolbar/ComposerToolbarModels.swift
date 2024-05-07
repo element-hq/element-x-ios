@@ -32,6 +32,7 @@ enum ComposerToolbarVoiceMessageAction {
 
 enum ComposerToolbarViewModelAction {
     case sendMessage(plain: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions)
+    case editLastMessage
     case attach(ComposerAttachmentType)
 
     case handlePasteOrDrop(provider: NSItemProvider)
@@ -47,6 +48,7 @@ enum ComposerToolbarViewModelAction {
 enum ComposerToolbarViewAction {
     case composerAppeared
     case sendMessage
+    case editLastMessage
     case cancelReply
     case cancelEdit
     case attach(ComposerAttachmentType)
@@ -56,6 +58,8 @@ enum ComposerToolbarViewAction {
     case selectedSuggestion(_ suggestion: SuggestionItem)
     
     case voiceMessage(ComposerToolbarVoiceMessageAction)
+    
+    case plainComposerTextChanged
 }
 
 enum ComposerAttachmentType {
@@ -94,7 +98,7 @@ struct ComposerToolbarViewState: BindableState {
             if ServiceLocator.shared.settings.richTextEditorEnabled {
                 return !composerEmpty
             } else {
-                return !bindings.composerPlainText.isEmpty
+                return !bindings.plainComposerText.string.isEmpty
             }
         }
     }
@@ -107,7 +111,7 @@ struct ComposerToolbarViewState: BindableState {
         if ServiceLocator.shared.settings.richTextEditorEnabled {
             return composerEmpty
         } else {
-            return bindings.composerPlainText.isEmpty
+            return bindings.plainComposerText.string.isEmpty
         }
     }
     
@@ -122,7 +126,7 @@ struct ComposerToolbarViewState: BindableState {
 }
 
 struct ComposerToolbarViewStateBindings {
-    var composerPlainText = ""
+    var plainComposerText: NSAttributedString = .init(string: "")
     var composerFocused = false
     var composerActionsEnabled = false
     var composerExpanded = false

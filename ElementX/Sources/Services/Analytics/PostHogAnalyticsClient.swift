@@ -19,23 +19,42 @@ import PostHog
 
 /// An analytics client that reports events to a PostHog server.
 class PostHogAnalyticsClient: AnalyticsClientProtocol {
+    private var posthogFactory: PostHogFactory = DefaultPostHogFactory()
+    
+    init(posthogFactory: PostHogFactory? = nil) {
+        if let factory = posthogFactory {
+            self.posthogFactory = factory
+        }
+    }
+    
     /// The PHGPostHog object used to report events.
-    private var postHog: PHGPostHog?
+    private var postHog: PHGPostHogProtocol?
     
     /// Any user properties to be included with the next captured event.
     private(set) var pendingUserProperties: AnalyticsEvent.UserProperties?
     
-    var isRunning: Bool { postHog?.enabled ?? false }
+    /// Super Properties are properties associated with events that are set once and then sent with every capture call, be it a $screen, an autocaptured button click, or anything else.
+    /// It is different from user properties that will be attached to the user and not events.
+    /// Not persisted for now, should be set on start.
+    private var superProperties: AnalyticsEvent.SuperProperties?
+    
+    var isRunning: Bool { postHog != nil }
     
     func start(analyticsConfiguration: AnalyticsConfiguration) {
         // Only start if analytics have been configured in BuildSettings
-        guard let configuration = PHGPostHogConfiguration.standard(analyticsConfiguration: analyticsConfiguration) else { return }
+        guard let configuration = PostHogConfig.standard(analyticsConfiguration: analyticsConfiguration) else { return }
         
-        if postHog == nil {
-            postHog = PHGPostHog(configuration: configuration)
+        if postHog != nil {
+            // start has been called twice in a row without calling stop()?
+            // Anyhow it's no-op if it's the case, but log for sanity
+            MXLog.failure("Posthog should always be nil when it's being started")
         }
+        postHog = posthogFactory.createPostHog(config: configuration)
         
-        postHog?.enable()
+        // Add super property cryptoSDK to the captured events, to allow easy
+        // filtering of events across different client by using same filter.
+        superProperties = AnalyticsEvent.SuperProperties(appPlatform: nil, cryptoSDK: .Rust, cryptoSDKVersion: nil)
+        postHog?.optIn()
     }
     
     func reset() {
@@ -44,20 +63,19 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     }
     
     func stop() {
-        postHog?.disable()
-        
-        // As of PostHog 1.4.4, setting the client to nil here doesn't release
-        // it. Keep it around to avoid having multiple instances if the user re-enables
+        postHog?.optOut()
+        postHog = nil
     }
     
     func capture(_ event: AnalyticsEventProtocol) {
         guard isRunning else { return }
-        postHog?.capture(event.eventName, properties: attachUserProperties(to: event.properties))
+        postHog?.capture(event.eventName, properties: attachSuperProperties(to: event.properties), userProperties: pendingUserProperties?.properties.compactMapValues { $0 })
+        pendingUserProperties = nil
     }
     
     func screen(_ event: AnalyticsScreenProtocol) {
         guard isRunning else { return }
-        postHog?.screen(event.screenName.rawValue, properties: attachUserProperties(to: event.properties))
+        postHog?.screen(event.screenName.rawValue, properties: attachSuperProperties(to: event.properties))
     }
     
     func updateUserProperties(_ userProperties: AnalyticsEvent.UserProperties) {
@@ -70,23 +88,39 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
         self.pendingUserProperties = AnalyticsEvent.UserProperties(allChatsActiveFilter: userProperties.allChatsActiveFilter ?? pendingUserProperties.allChatsActiveFilter,
                                                                    ftueUseCaseSelection: userProperties.ftueUseCaseSelection ?? pendingUserProperties.ftueUseCaseSelection,
                                                                    numFavouriteRooms: userProperties.numFavouriteRooms ?? pendingUserProperties.numFavouriteRooms,
-                                                                   numSpaces: userProperties.numSpaces ?? pendingUserProperties.numSpaces)
+                                                                   numSpaces: userProperties.numSpaces ?? pendingUserProperties.numSpaces,
+                                                                   recoveryState: userProperties.recoveryState ?? pendingUserProperties.recoveryState,
+                                                                   verificationState: userProperties.verificationState ?? pendingUserProperties.verificationState)
+    }
+    
+    func updateSuperProperties(_ updatedProperties: AnalyticsEvent.SuperProperties) {
+        guard let currentProperties = superProperties else {
+            superProperties = updatedProperties
+            return
+        }
+        
+        superProperties = AnalyticsEvent.SuperProperties(appPlatform: updatedProperties.appPlatform ??
+            currentProperties.appPlatform,
+            cryptoSDK: updatedProperties.cryptoSDK ??
+                currentProperties.cryptoSDK,
+            cryptoSDKVersion: updatedProperties.cryptoSDKVersion ??
+                currentProperties.cryptoSDKVersion)
     }
     
     // MARK: - Private
     
-    /// Given a dictionary containing properties from an event, this method will return those properties
-    /// with any pending user properties included under the `$set` key.
-    /// - Parameter properties: A dictionary of properties from an event.
-    /// - Returns: The `properties` dictionary with any user properties included.
-    private func attachUserProperties(to properties: [String: Any]) -> [String: Any] {
-        guard isRunning, let userProperties = pendingUserProperties else { return properties }
+    /// Attach super properties to events.
+    /// If the property is already set on the event, the already set value will be kept.
+    private func attachSuperProperties(to properties: [String: Any]) -> [String: Any] {
+        guard isRunning, let superProperties else { return properties }
         
         var properties = properties
         
-        // As user properties overwrite old ones via $set, compactMap the dictionary to avoid resetting any missing properties
-        properties["$set"] = userProperties.properties.compactMapValues { $0 }
-        pendingUserProperties = nil
+        superProperties.properties.forEach { (key: String, value: Any) in
+            if properties[key] == nil {
+                properties[key] = value
+            }
+        }
         return properties
     }
 }

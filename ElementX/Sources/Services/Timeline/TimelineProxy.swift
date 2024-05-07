@@ -21,9 +21,7 @@ import MatrixRustSDK
 final class TimelineProxy: TimelineProxyProtocol {
     private let timeline: Timeline
     
-    private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.low_priority", qos: .utility)
     private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
-    private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
     
     private var backPaginationStatusObservationToken: TaskHandle?
     private var roomTimelineObservationToken: TaskHandle?
@@ -104,40 +102,36 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                     html: html,
                                                     intentionalMentions: intentionalMentions.toRustMentions())
         
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            do {
-                let originalEvent = try self.timeline.getEventTimelineItemByEventId(eventId: eventID)
-                try self.timeline.edit(newContent: messageContent, editItem: originalEvent)
+        do {
+            let originalEvent = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
+            try await timeline.edit(newContent: messageContent, editItem: originalEvent)
                 
-                MXLog.info("Finished editing message with original event ID: \(eventID)")
+            MXLog.info("Finished editing message with original event ID: \(eventID)")
                 
-                return .success(())
-            } catch {
-                MXLog.error("Failed editing message with original event ID: \(eventID) with error: \(error)")
-                return .failure(.failedEditingMessage)
-            }
+            return .success(())
+        } catch {
+            MXLog.error("Failed editing message with original event ID: \(eventID) with error: \(error)")
+            return .failure(.failedEditingMessage)
         }
     }
     
     func fetchDetails(for eventID: String) {
         Task {
-            await Task.dispatch(on: .global()) {
-                do {
-                    MXLog.info("Fetching event details for \(eventID)")
-                    try self.timeline.fetchDetailsForEvent(eventId: eventID)
-                    MXLog.info("Finished fetching event details for eventID: \(eventID)")
-                } catch {
-                    MXLog.error("Failed fetching event details for eventID: \(eventID) with error: \(error)")
-                }
+            do {
+                MXLog.info("Fetching event details for \(eventID)")
+                try await self.timeline.fetchDetailsForEvent(eventId: eventID)
+                MXLog.info("Finished fetching event details for eventID: \(eventID)")
+            } catch {
+                MXLog.error("Failed fetching event details for eventID: \(eventID) with error: \(error)")
             }
         }
     }
     
-    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
+    func messageEventContent(for eventID: String) async -> RoomMessageEventContentWithoutRelation? {
         MXLog.info("Fetching event content for \(eventID)")
         
         do {
-            let result = try timeline.getTimelineEventContentByEventId(eventId: eventID)
+            let result = try await timeline.getTimelineEventContentByEventId(eventId: eventID)
             MXLog.info("Finished fetching event content for eventID: \(eventID)")
             return result
         } catch {
@@ -366,30 +360,28 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                     html: html,
                                                     intentionalMentions: intentionalMentions.toRustMentions())
         
-        return await Task.dispatch(on: messageSendingDispatchQueue) {
-            do {
-                if let eventID {
-                    let replyItem = try self.timeline.getEventTimelineItemByEventId(eventId: eventID)
-                    try self.timeline.sendReply(msg: messageContent, replyItem: replyItem)
-                    MXLog.info("Finished sending reply to eventID: \(eventID)")
-                } else {
-                    self.timeline.send(msg: messageContent)
-                    MXLog.info("Finished sending message")
-                }
-            } catch {
-                if let eventID {
-                    MXLog.error("Failed sending reply to eventID: \(eventID)")
-                } else {
-                    MXLog.error("Failed sending message")
-                }
-                
-                return .failure(.failedSendingMessage)
+        do {
+            if let eventID {
+                let replyItem = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
+                try await timeline.sendReply(msg: messageContent, replyItem: replyItem)
+                MXLog.info("Finished sending reply to eventID: \(eventID)")
+            } else {
+                timeline.send(msg: messageContent)
+                MXLog.info("Finished sending message")
             }
-            
-            self.actionsSubject.send(.sentMessage)
-            
-            return .success(())
+        } catch {
+            if let eventID {
+                MXLog.error("Failed sending reply to eventID: \(eventID)")
+            } else {
+                MXLog.error("Failed sending message")
+            }
+                
+            return .failure(.failedSendingMessage)
         }
+            
+        actionsSubject.send(.sentMessage)
+            
+        return .success(())
     }
     
     func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
@@ -409,30 +401,26 @@ final class TimelineProxy: TimelineProxyProtocol {
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError> {
         MXLog.verbose("Sending read receipt for eventID: \(eventID)")
         
-        return await Task.dispatch(on: lowPriorityDispatchQueue) {
-            do {
-                try self.timeline.sendReadReceipt(receiptType: type, eventId: eventID)
-                MXLog.info("Finished sending read receipt for eventID: \(eventID)")
-                return .success(())
-            } catch {
-                MXLog.error("Failed sending read receipt for eventID: \(eventID) with error: \(error)")
-                return .failure(.failedSendingReadReceipt)
-            }
+        do {
+            try await timeline.sendReadReceipt(receiptType: type, eventId: eventID)
+            MXLog.info("Finished sending read receipt for eventID: \(eventID)")
+            return .success(())
+        } catch {
+            MXLog.error("Failed sending read receipt for eventID: \(eventID) with error: \(error)")
+            return .failure(.failedSendingReadReceipt)
         }
     }
     
     func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Toggling reaction for eventID: \(eventID)")
         
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self.timeline.toggleReaction(eventId: eventID, key: reaction)
-                MXLog.info("Finished toggling reaction for eventID: \(eventID)")
-                return .success(())
-            } catch {
-                MXLog.error("Failed toggling reaction for eventID: \(eventID)")
-                return .failure(.failedSendingReaction)
-            }
+        do {
+            try await timeline.toggleReaction(eventId: eventID, key: reaction)
+            MXLog.info("Finished toggling reaction for eventID: \(eventID)")
+            return .success(())
+        } catch {
+            MXLog.error("Failed toggling reaction for eventID: \(eventID)")
+            return .failure(.failedSendingReaction)
         }
     }
     
@@ -464,9 +452,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Editing poll with eventID: \(eventID)")
         
         do {
-            let originalEvent = try await Task.dispatch(on: .global()) {
-                try self.timeline.getEventTimelineItemByEventId(eventId: eventID)
-            }
+            let originalEvent = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
             
             try await timeline.editPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind), editItem: originalEvent)
             

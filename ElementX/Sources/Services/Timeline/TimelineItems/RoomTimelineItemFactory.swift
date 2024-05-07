@@ -570,12 +570,23 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
 
         var formattedBody: AttributedString?
         if let htmlBody {
-            formattedBody = attributedStringBuilder.fromHTML(L10n.commonEmote(name, htmlBody))
+            formattedBody = buildEmoteFormattedBodyFromHTML(html: htmlBody, name: name)
         } else {
             formattedBody = attributedStringBuilder.fromPlain(L10n.commonEmote(name, messageContent.body))
         }
         
         return .init(body: messageContent.body, formattedBody: formattedBody, formattedBodyHTMLString: htmlBody)
+    }
+    
+    // This fixes the issue of the name not belonging to the first <p> defined paragraph
+    private func buildEmoteFormattedBodyFromHTML(html: String, name: String) -> AttributedString? {
+        let htmlBodyPlaceholder = "{htmlBodyPlaceholder}"
+        var finalString = AttributedString(L10n.commonEmote(name, htmlBodyPlaceholder))
+        guard let htmlBodyString = attributedStringBuilder.fromHTML(html) else {
+            return nil
+        }
+        finalString.replace(htmlBodyPlaceholder, with: htmlBodyString)
+        return finalString
     }
     
     // MARK: - State Events

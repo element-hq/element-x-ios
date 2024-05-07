@@ -27,8 +27,6 @@ class RoomProxy: RoomProxyProtocol {
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
     
-    private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
-    
     // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
     // periphery:ignore - required for instance retention in the rust codebase
@@ -58,7 +56,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     var name: String? {
-        roomListItem.name()
+        roomListItem.displayName()
     }
         
     var topic: String? {
@@ -182,26 +180,22 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self.room.redact(eventId: eventID, reason: nil)
-                return .success(())
-            } catch {
-                MXLog.error("Failed redacting eventID: \(eventID) with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            try await room.redact(eventId: eventID, reason: nil)
+            return .success(())
+        } catch {
+            MXLog.error("Failed redacting eventID: \(eventID) with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self.room.reportContent(eventId: eventID, score: nil, reason: reason)
-                return .success(())
-            } catch {
-                MXLog.error("Failed reporting eventID: \(eventID) with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            try await room.reportContent(eventId: eventID, score: nil, reason: reason)
+            return .success(())
+        } catch {
+            MXLog.error("Failed reporting eventID: \(eventID) with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
@@ -243,99 +237,83 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func leaveRoom() async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                try self.room.leave()
-                return .success(())
-            } catch {
-                MXLog.error("Failed leaving room with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            try await room.leave()
+            return .success(())
+        } catch {
+            MXLog.error("Failed leaving room with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func rejectInvitation() async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                return try .success(self.room.leave())
-            } catch {
-                MXLog.error("Failed rejecting invitiation with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            return try await .success(room.leave())
+        } catch {
+            MXLog.error("Failed rejecting invitiation with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func acceptInvitation() async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                try self.room.join()
-                return .success(())
-            } catch {
-                MXLog.error("Failed accepting invitation with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            try await room.join()
+            return .success(())
+        } catch {
+            MXLog.error("Failed accepting invitation with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func invite(userID: String) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                MXLog.info("Inviting user \(userID)")
-                return try .success(self.room.inviteUserById(userId: userID))
-            } catch {
-                MXLog.error("Failed inviting user \(userID) with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            MXLog.info("Inviting user \(userID)")
+            return try await .success(room.inviteUserById(userId: userID))
+        } catch {
+            MXLog.error("Failed inviting user \(userID) with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func setName(_ name: String) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                return try .success(self.room.setName(name: name))
-            } catch {
-                MXLog.error("Failed setting name with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            return try await .success(room.setName(name: name))
+        } catch {
+            MXLog.error("Failed setting name with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
 
     func setTopic(_ topic: String) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                return try .success(self.room.setTopic(topic: topic))
-            } catch {
-                MXLog.error("Failed setting topic with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            return try await .success(room.setTopic(topic: topic))
+        } catch {
+            MXLog.error("Failed setting topic with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func removeAvatar() async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                return try .success(self.room.removeAvatar())
-            } catch {
-                MXLog.error("Failed removing avatar with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            return try await .success(room.removeAvatar())
+        } catch {
+            MXLog.error("Failed removing avatar with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     
     func uploadAvatar(media: MediaInfo) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            guard case let .image(imageURL, _, _) = media, let mimeType = media.mimeType else {
-                MXLog.error("Failed uploading avatar, invalid media: \(media)")
-                return .failure(.invalidMedia)
-            }
+        guard case let .image(imageURL, _, _) = media, let mimeType = media.mimeType else {
+            MXLog.error("Failed uploading avatar, invalid media: \(media)")
+            return .failure(.invalidMedia)
+        }
 
-            do {
-                let data = try Data(contentsOf: imageURL)
-                return try .success(self.room.uploadAvatar(mimeType: mimeType, data: data, mediaInfo: nil))
-            } catch {
-                MXLog.error("Failed uploading avatar with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            let data = try Data(contentsOf: imageURL)
+            return try await .success(room.uploadAvatar(mimeType: mimeType, data: data, mediaInfo: nil))
+        } catch {
+            MXLog.error("Failed uploading avatar with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
         

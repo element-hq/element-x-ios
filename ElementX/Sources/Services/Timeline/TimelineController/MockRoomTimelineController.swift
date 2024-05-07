@@ -18,6 +18,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 
 class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// An array of timeline item arrays that will be inserted in order for each back pagination request.
@@ -99,6 +100,10 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     func redact(_ itemID: TimelineItemIdentifier) async { }
     
+    func messageEventContent(for itemID: TimelineItemIdentifier) -> RoomMessageEventContentWithoutRelation? {
+        .init(noPointer: .init())
+    }
+    
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo {
         .init(model: "Mock debug description", originalJSON: nil, latestEditJSON: nil)
     }
@@ -165,7 +170,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         
         let incomingItem = incomingItems.removeFirst()
         timelineItems.append(incomingItem)
-        callbacks.send(.updatedTimelineItems)
+        callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
         
         try client?.send(.success)
     }
@@ -181,7 +186,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         
         let newItems = backPaginationResponses.removeFirst()
         timelineItems.insert(contentsOf: newItems, at: 0)
-        callbacks.send(.updatedTimelineItems)
+        callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
         
         try client?.send(.success)
     }

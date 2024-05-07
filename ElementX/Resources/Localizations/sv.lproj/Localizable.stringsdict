@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Read by %1$@ and %2$d other</string>
+			<string>Läst av %1$@ och %2$d annan</string>
 			<key>other</key>
-			<string>Read by %1$@ and %2$d others</string>
+			<string>Läst av %1$@ och %2$d andra</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -237,9 +237,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
+			<string>%1$@, %2$@ och %3$d annan</string>
 			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@, %2$@ och %3$d andra</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members_second_component_ios</key>
@@ -269,9 +269,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
+			<string>%1$@ skriver</string>
 			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ skriver</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>

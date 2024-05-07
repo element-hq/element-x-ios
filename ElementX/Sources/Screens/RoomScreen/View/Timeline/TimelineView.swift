@@ -50,6 +50,10 @@ struct TimelineView: UIViewControllerRepresentable {
         
         /// Updates the specified table view's properties from the current view state.
         func update(tableViewController: TimelineTableViewController, timelineStyle: TimelineStyle) {
+            if tableViewController.isSwitchingTimelines != context.viewState.timelineViewState.isSwitchingTimelines {
+                // Must come before timelineItemsDictionary in order to disable animations.
+                tableViewController.isSwitchingTimelines = context.viewState.timelineViewState.isSwitchingTimelines
+            }
             if tableViewController.timelineStyle != timelineStyle {
                 tableViewController.timelineStyle = timelineStyle
             }
@@ -62,11 +66,8 @@ struct TimelineView: UIViewControllerRepresentable {
             if tableViewController.isLive != context.viewState.timelineViewState.isLive {
                 tableViewController.isLive = context.viewState.timelineViewState.isLive
             }
-            if tableViewController.focussedEventID != context.viewState.timelineViewState.focussedEventID {
-                tableViewController.focussedEventID = context.viewState.timelineViewState.focussedEventID
-            }
-            if tableViewController.focussedEventNeedsDisplay != context.viewState.timelineViewState.focussedEventNeedsDisplay {
-                tableViewController.focussedEventNeedsDisplay = context.viewState.timelineViewState.focussedEventNeedsDisplay
+            if tableViewController.focussedEvent != context.viewState.timelineViewState.focussedEvent {
+                tableViewController.focussedEvent = context.viewState.timelineViewState.focussedEvent
             }
             
             if tableViewController.typingMembers.members != context.viewState.typingMembers {

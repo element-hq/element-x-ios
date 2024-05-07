@@ -110,13 +110,6 @@ struct ComposerToolbar: View {
                     RoomAttachmentPicker(context: context)
                 }
                 messageComposer
-                    .environmentObject(context)
-                    .onTapGesture {
-                        guard !composerFocused else { return }
-                        composerFocused = true
-                    }
-                    .padding(.leading, context.composerActionsEnabled ? 7 : 0)
-                    .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
             }
             .opacity(context.viewState.isVoiceMessageModeActivated ? 0 : 1)
             
@@ -162,22 +155,36 @@ struct ComposerToolbar: View {
     }
     
     private var messageComposer: some View {
-        MessageComposer(plainText: $context.composerPlainText,
+        MessageComposer(plainComposerText: $context.plainComposerText,
                         composerView: composerView,
                         mode: context.viewState.composerMode,
                         showResizeGrabber: context.viewState.bindings.composerActionsEnabled,
                         isExpanded: $context.composerExpanded) {
             context.send(viewAction: .sendMessage)
+        } editAction: {
+            context.send(viewAction: .editLastMessage)
         } pasteAction: { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
-        } replyCancellationAction: {
-            context.send(viewAction: .cancelReply)
-        } editCancellationAction: {
-            context.send(viewAction: .cancelEdit)
+        } cancellationAction: {
+            switch context.viewState.composerMode {
+            case .edit:
+                context.send(viewAction: .cancelEdit)
+            case .reply:
+                context.send(viewAction: .cancelReply)
+            default:
+                break
+            }
         } onAppearAction: {
             context.send(viewAction: .composerAppeared)
         }
+        .environmentObject(context)
         .focused($composerFocused)
+        .padding(.leading, context.composerActionsEnabled ? 7 : 0)
+        .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
+        .onTapGesture {
+            guard !composerFocused else { return }
+            composerFocused = true
+        }
         .onChange(of: context.composerFocused) { newValue in
             guard composerFocused != newValue else { return }
             
@@ -185,6 +192,9 @@ struct ComposerToolbar: View {
         }
         .onChange(of: composerFocused) { newValue in
             context.composerFocused = newValue
+        }
+        .onChange(of: context.plainComposerText) { _ in
+            context.send(viewAction: .plainComposerTextChanged)
         }
         .onAppear {
             composerFocused = context.composerFocused
@@ -279,8 +289,8 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
                                                             mediaProvider: MockMediaProvider(),
                                                             appSettings: ServiceLocator.shared.settings,
                                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
-    static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
-                                                .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
+    static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init())),
+                                                .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory, range: .init()))]
     
     static var previews: some View {
         ComposerToolbar.mock(focused: true)

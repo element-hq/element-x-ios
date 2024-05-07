@@ -21,19 +21,23 @@ import SwiftUI
 struct SettingsScreen: View {
     @ObservedObject var context: SettingsScreenViewModel.Context
     
+    private var shouldHideManageAccountSection: Bool {
+        context.viewState.accountProfileURL == nil &&
+            context.viewState.accountSessionsListURL == nil &&
+            !context.viewState.showBlockedUsers
+    }
+    
     var body: some View {
         Form {
             userSection
             
-            accountSecuritySection
+            manageMyAppSection
             
-            mainSection
+            if !shouldHideManageAccountSection {
+                manageAccountSection
+            }
             
-            manageSessionsSection
-            
-            advancedOptionsSection
-            
-            signOutSection
+            generalSection
         }
         .compoundList()
         .navigationTitle(L10n.commonSettings)
@@ -75,9 +79,22 @@ struct SettingsScreen: View {
         }
     }
     
-    @ViewBuilder
-    private var accountSecuritySection: some View {
+    private var manageMyAppSection: some View {
         Section {
+            ListRow(label: .default(title: L10n.screenNotificationSettingsTitle,
+                                    icon: \.notifications),
+                    kind: .navigationLink {
+                        context.send(viewAction: .notifications)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
+            
+            ListRow(label: .default(title: L10n.commonScreenLock,
+                                    icon: \.lock),
+                    kind: .navigationLink {
+                        context.send(viewAction: .appLock)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.screenLock)
+            
             switch context.viewState.securitySectionMode {
             case .secureBackup:
                 ListRow(label: .default(title: L10n.commonChatBackup,
@@ -91,7 +108,7 @@ struct SettingsScreen: View {
         }
     }
     
-    private var mainSection: some View {
+    private var manageAccountSection: some View {
         Section {
             if let url = context.viewState.accountProfileURL {
                 ListRow(label: .default(title: L10n.actionManageAccount,
@@ -102,40 +119,13 @@ struct SettingsScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.account)
             }
             
-            ListRow(label: .default(title: L10n.screenNotificationSettingsTitle,
-                                    icon: \.notifications),
-                    kind: .navigationLink {
-                        context.send(viewAction: .notifications)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
-            
-            ListRow(label: .default(title: L10n.commonAnalytics,
-                                    icon: \.chart),
-                    kind: .navigationLink {
-                        context.send(viewAction: .analytics)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.analytics)
-            
-            ListRow(label: .default(title: L10n.commonScreenLock,
-                                    icon: \.lock),
-                    kind: .navigationLink {
-                        context.send(viewAction: .appLock)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.screenLock)
-            
-            ListRow(label: .default(title: L10n.commonReportAProblem,
-                                    icon: \.chatProblem),
-                    kind: .navigationLink {
-                        context.send(viewAction: .reportBug)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.reportBug)
-            
-            ListRow(label: .default(title: L10n.commonAbout,
-                                    icon: \.info),
-                    kind: .navigationLink {
-                        context.send(viewAction: .about)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.about)
+            if let url = context.viewState.accountSessionsListURL {
+                ListRow(label: .default(title: L10n.actionManageDevices,
+                                        icon: \.devices),
+                        kind: .button {
+                            context.send(viewAction: .manageAccount(url: url))
+                        })
+            }
             
             if context.viewState.showBlockedUsers {
                 ListRow(label: .default(title: L10n.commonBlockedUsers,
@@ -148,21 +138,29 @@ struct SettingsScreen: View {
         }
     }
     
-    @ViewBuilder
-    private var manageSessionsSection: some View {
-        if let url = context.viewState.accountSessionsListURL {
-            Section {
-                ListRow(label: .default(title: L10n.actionManageDevices,
-                                        icon: \.devices),
-                        kind: .button {
-                            context.send(viewAction: .manageAccount(url: url))
-                        })
-            }
-        }
-    }
-    
-    private var advancedOptionsSection: some View {
+    private var generalSection: some View {
         Section {
+            ListRow(label: .default(title: L10n.commonAbout,
+                                    icon: \.info),
+                    kind: .navigationLink {
+                        context.send(viewAction: .about)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.about)
+            
+            ListRow(label: .default(title: L10n.commonReportAProblem,
+                                    icon: \.chatProblem),
+                    kind: .navigationLink {
+                        context.send(viewAction: .reportBug)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.reportBug)
+            
+            ListRow(label: .default(title: L10n.commonAnalytics,
+                                    icon: \.chart),
+                    kind: .navigationLink {
+                        context.send(viewAction: .analytics)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.analytics)
+            
             ListRow(label: .default(title: L10n.commonAdvancedSettings,
                                     icon: \.settings),
                     kind: .navigationLink {
@@ -178,11 +176,7 @@ struct SettingsScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
             }
-        }
-    }
-    
-    private var signOutSection: some View {
-        Section {
+            
             ListRow(label: .action(title: L10n.screenSignoutPreferenceItem,
                                    icon: \.signOut,
                                    role: .destructive),

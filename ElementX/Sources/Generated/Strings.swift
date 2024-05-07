@@ -1621,6 +1621,8 @@ internal enum L10n {
   internal static func screenRoomTimelineStateChanges(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_timeline_state_changes", p1)
   }
+  /// Chat
+  internal static var screenRoomTitle: String { return L10n.tr("Localizable", "screen_room_title") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomTypingManyMembers(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_typing_many_members", p1)

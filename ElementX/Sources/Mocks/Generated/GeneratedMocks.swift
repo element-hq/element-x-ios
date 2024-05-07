@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.2 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.4 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -202,6 +202,45 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
         screenReceivedEvent = event
         screenReceivedInvocations.append(event)
         screenClosure?(event)
+    }
+    //MARK: - updateUserProperties
+
+    var updateUserPropertiesUnderlyingCallsCount = 0
+    var updateUserPropertiesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateUserPropertiesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateUserPropertiesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateUserPropertiesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateUserPropertiesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var updateUserPropertiesCalled: Bool {
+        return updateUserPropertiesCallsCount > 0
+    }
+    var updateUserPropertiesReceivedEvent: AnalyticsEvent.UserProperties?
+    var updateUserPropertiesReceivedInvocations: [AnalyticsEvent.UserProperties] = []
+    var updateUserPropertiesClosure: ((AnalyticsEvent.UserProperties) -> Void)?
+
+    func updateUserProperties(_ event: AnalyticsEvent.UserProperties) {
+        updateUserPropertiesCallsCount += 1
+        updateUserPropertiesReceivedEvent = event
+        updateUserPropertiesReceivedInvocations.append(event)
+        updateUserPropertiesClosure?(event)
     }
 }
 class AppLockServiceMock: AppLockServiceProtocol {
@@ -3985,6 +4024,45 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
     }
     var underlyingSuggestionsPublisher: AnyPublisher<[SuggestionItem], Never>!
 
+    //MARK: - processTextMessage
+
+    var processTextMessageUnderlyingCallsCount = 0
+    var processTextMessageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return processTextMessageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = processTextMessageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                processTextMessageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    processTextMessageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var processTextMessageCalled: Bool {
+        return processTextMessageCallsCount > 0
+    }
+    var processTextMessageReceivedTextMessage: String?
+    var processTextMessageReceivedInvocations: [String?] = []
+    var processTextMessageClosure: ((String?) -> Void)?
+
+    func processTextMessage(_ textMessage: String?) {
+        processTextMessageCallsCount += 1
+        processTextMessageReceivedTextMessage = textMessage
+        processTextMessageReceivedInvocations.append(textMessage)
+        processTextMessageClosure?(textMessage)
+    }
     //MARK: - setSuggestionTrigger
 
     var setSuggestionTriggerUnderlyingCallsCount = 0
@@ -4014,11 +4092,11 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
     var setSuggestionTriggerCalled: Bool {
         return setSuggestionTriggerCallsCount > 0
     }
-    var setSuggestionTriggerReceivedSuggestionTrigger: SuggestionPattern?
-    var setSuggestionTriggerReceivedInvocations: [SuggestionPattern?] = []
-    var setSuggestionTriggerClosure: ((SuggestionPattern?) -> Void)?
+    var setSuggestionTriggerReceivedSuggestionTrigger: SuggestionTrigger?
+    var setSuggestionTriggerReceivedInvocations: [SuggestionTrigger?] = []
+    var setSuggestionTriggerClosure: ((SuggestionTrigger?) -> Void)?
 
-    func setSuggestionTrigger(_ suggestionTrigger: SuggestionPattern?) {
+    func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {
         setSuggestionTriggerCallsCount += 1
         setSuggestionTriggerReceivedSuggestionTrigger = suggestionTrigger
         setSuggestionTriggerReceivedInvocations.append(suggestionTrigger)
@@ -6583,6 +6661,192 @@ class OrientationManagerMock: OrientationManagerProtocol {
         lockOrientationReceivedOrientation = orientation
         lockOrientationReceivedInvocations.append(orientation)
         lockOrientationClosure?(orientation)
+    }
+}
+class PHGPostHogMock: PHGPostHogProtocol {
+
+    //MARK: - optIn
+
+    var optInUnderlyingCallsCount = 0
+    var optInCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return optInUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = optInUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                optInUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    optInUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var optInCalled: Bool {
+        return optInCallsCount > 0
+    }
+    var optInClosure: (() -> Void)?
+
+    func optIn() {
+        optInCallsCount += 1
+        optInClosure?()
+    }
+    //MARK: - optOut
+
+    var optOutUnderlyingCallsCount = 0
+    var optOutCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return optOutUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = optOutUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                optOutUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    optOutUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var optOutCalled: Bool {
+        return optOutCallsCount > 0
+    }
+    var optOutClosure: (() -> Void)?
+
+    func optOut() {
+        optOutCallsCount += 1
+        optOutClosure?()
+    }
+    //MARK: - reset
+
+    var resetUnderlyingCallsCount = 0
+    var resetCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() -> Void)?
+
+    func reset() {
+        resetCallsCount += 1
+        resetClosure?()
+    }
+    //MARK: - capture
+
+    var capturePropertiesUserPropertiesUnderlyingCallsCount = 0
+    var capturePropertiesUserPropertiesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return capturePropertiesUserPropertiesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = capturePropertiesUserPropertiesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                capturePropertiesUserPropertiesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    capturePropertiesUserPropertiesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var capturePropertiesUserPropertiesCalled: Bool {
+        return capturePropertiesUserPropertiesCallsCount > 0
+    }
+    var capturePropertiesUserPropertiesReceivedArguments: (event: String, properties: [String: Any]?, userProperties: [String: Any]?)?
+    var capturePropertiesUserPropertiesReceivedInvocations: [(event: String, properties: [String: Any]?, userProperties: [String: Any]?)] = []
+    var capturePropertiesUserPropertiesClosure: ((String, [String: Any]?, [String: Any]?) -> Void)?
+
+    func capture(_ event: String, properties: [String: Any]?, userProperties: [String: Any]?) {
+        capturePropertiesUserPropertiesCallsCount += 1
+        capturePropertiesUserPropertiesReceivedArguments = (event: event, properties: properties, userProperties: userProperties)
+        capturePropertiesUserPropertiesReceivedInvocations.append((event: event, properties: properties, userProperties: userProperties))
+        capturePropertiesUserPropertiesClosure?(event, properties, userProperties)
+    }
+    //MARK: - screen
+
+    var screenPropertiesUnderlyingCallsCount = 0
+    var screenPropertiesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return screenPropertiesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = screenPropertiesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                screenPropertiesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    screenPropertiesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var screenPropertiesCalled: Bool {
+        return screenPropertiesCallsCount > 0
+    }
+    var screenPropertiesReceivedArguments: (screenTitle: String, properties: [String: Any]?)?
+    var screenPropertiesReceivedInvocations: [(screenTitle: String, properties: [String: Any]?)] = []
+    var screenPropertiesClosure: ((String, [String: Any]?) -> Void)?
+
+    func screen(_ screenTitle: String, properties: [String: Any]?) {
+        screenPropertiesCallsCount += 1
+        screenPropertiesReceivedArguments = (screenTitle: screenTitle, properties: properties)
+        screenPropertiesReceivedInvocations.append((screenTitle: screenTitle, properties: properties))
+        screenPropertiesClosure?(screenTitle, properties)
     }
 }
 class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
@@ -10803,14 +11067,14 @@ class TimelineProxyMock: TimelineProxyProtocol {
             }
         }
     }
-    var messageEventContentForClosure: ((String) -> RoomMessageEventContentWithoutRelation?)?
+    var messageEventContentForClosure: ((String) async -> RoomMessageEventContentWithoutRelation?)?
 
-    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
+    func messageEventContent(for eventID: String) async -> RoomMessageEventContentWithoutRelation? {
         messageEventContentForCallsCount += 1
         messageEventContentForReceivedEventID = eventID
         messageEventContentForReceivedInvocations.append(eventID)
         if let messageEventContentForClosure = messageEventContentForClosure {
-            return messageEventContentForClosure(eventID)
+            return await messageEventContentForClosure(eventID)
         } else {
             return messageEventContentForReturnValue
         }

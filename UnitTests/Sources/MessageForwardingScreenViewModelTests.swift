@@ -21,20 +21,29 @@ import XCTest
 
 @MainActor
 class MessageForwardingScreenViewModelTests: XCTestCase {
+    let forwardingItem = MessageForwardingItem(id: .init(timelineID: "t1", eventID: "t1"),
+                                               roomID: "1",
+                                               content: .init(noPointer: .init()))
     var viewModel: MessageForwardingScreenViewModelProtocol!
     var context: MessageForwardingScreenViewModelType.Context!
     var cancellables = Set<AnyCancellable>()
     
     override func setUpWithError() throws {
         cancellables.removeAll()
-        viewModel = MessageForwardingScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                                     mediaProvider: MockMediaProvider(),
-                                                     sourceRoomID: "1")
+        
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.roomForIdentifierClosure = { RoomProxyMock(with: .init(id: $0)) }
+        
+        viewModel = MessageForwardingScreenViewModel(forwardingItem: forwardingItem,
+                                                     clientProxy: clientProxy,
+                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                     userIndicatorController: UserIndicatorControllerMock(),
+                                                     mediaProvider: MockMediaProvider())
         context = viewModel.context
     }
     
     func testInitialState() {
-        XCTAssertNil(context.viewState.rooms.first(where: { $0.id == "1" }), "The source room ID shouldn't be shown")
+        XCTAssertNil(context.viewState.rooms.first(where: { $0.id == forwardingItem.roomID }), "The source room ID shouldn't be shown")
     }
     
     func testRoomSelection() {
@@ -61,7 +70,7 @@ class MessageForwardingScreenViewModelTests: XCTestCase {
         viewModel.actions
             .sink { action in
                 switch action {
-                case .send(let roomID):
+                case .sent(let roomID):
                     XCTAssertEqual(roomID, "2")
                     expectation.fulfill()
                 default:
