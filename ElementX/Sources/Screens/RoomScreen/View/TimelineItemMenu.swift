@@ -137,6 +137,8 @@ struct TimelineItemMenu: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.dismiss) private var dismiss
     
+    @State private var reactionsFrame = CGRect.zero
+    
     let item: EventBasedTimelineItemProtocol
     let actions: TimelineItemMenuActions
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
@@ -212,28 +214,33 @@ struct TimelineItemMenu: View {
     }
     
     private var reactionsSection: some View {
-        HStack(alignment: .center, spacing: 8) {
-            reactionButton(for: "👍️")
-            reactionButton(for: "👎️")
-            reactionButton(for: "🔥")
-            reactionButton(for: "❤️")
-            reactionButton(for: "👏")
-            
-            Button {
-                dismiss()
-                // Otherwise we get errors that a sheet is already presented
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    context.send(viewAction: .displayEmojiPicker(itemID: item.id))
+        ScrollView(.horizontal) {
+            HStack(alignment: .center, spacing: 8) {
+                reactionButton(for: "👍️")
+                reactionButton(for: "👎️")
+                reactionButton(for: "🔥")
+                reactionButton(for: "❤️")
+                reactionButton(for: "👏")
+                
+                Button {
+                    dismiss()
+                    // Otherwise we get errors that a sheet is already presented
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        context.send(viewAction: .displayEmojiPicker(itemID: item.id))
+                    }
+                } label: {
+                    CompoundIcon(\.reactionAdd, size: .medium, relativeTo: .compound.headingLG)
+                        .foregroundColor(.compound.iconSecondary)
+                        .padding(10)
                 }
-            } label: {
-                CompoundIcon(\.reactionAdd, size: .medium, relativeTo: .compound.headingLG)
-                    .foregroundColor(.compound.iconSecondary)
-                    .padding(10)
+                .accessibilityLabel(L10n.actionReact)
             }
-            .accessibilityLabel(L10n.actionReact)
+            .padding(.horizontal)
+            .frame(minWidth: reactionsFrame.width, maxWidth: .infinity, alignment: .center)
         }
-        .padding(.horizontal)
-        .frame(maxWidth: .infinity, alignment: .center)
+        .scrollIndicators(.hidden)
+        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
+        .readFrame($reactionsFrame)
     }
     
     private func reactionButton(for emoji: String) -> some View {
@@ -243,11 +250,11 @@ struct TimelineItemMenu: View {
             context.send(viewAction: .toggleReaction(key: emoji, itemID: item.id))
         } label: {
             Text(emoji)
-                .padding(8)
                 .font(.compound.headingLG)
+                .padding(8)
                 .background(Circle()
                     .foregroundColor(reactionBackgroundColor(for: emoji)))
-            Spacer()
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
     
@@ -284,6 +291,15 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
 
     static var previews: some View {
+        testView
+            .previewDisplayName("With button shapes off")
+        testView
+            .environment(\._accessibilityShowButtonShapes, true)
+            .previewDisplayName("With button shapes on")
+    }
+    
+    @ViewBuilder
+    static var testView: some View {
         if let item = RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol,
            let actions = TimelineItemMenuActions(actions: [.copy, .edit, .reply(isThread: false), .redact], debugActions: [.viewSource]) {
             TimelineItemMenu(item: item, actions: actions)
