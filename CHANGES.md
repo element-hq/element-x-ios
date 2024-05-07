@@ -1,3 +1,34 @@
+## Changes in 1.6.4 (2024-05-07)
+
+✨ Features
+
+- Support navigating to permalinks and replies. ([#2748](https://github.com/element-hq/element-x-ios/pull/2748))
+- Impement suggestion and pill support on the plain text composer ([#2751](https://github.com/element-hq/element-x-ios/pull/2751))
+- Add specific UX for Expected UTDs due to membership ([#2740](https://github.com/element-hq/element-x-ios/issues/2740))
+- Use the keyboard up arrow to edit the last message, use escape to cancel editing or replying. ([#2765](https://github.com/element-hq/element-x-ios/issues/2765))
+
+🙌 Improvements
+
+- Prevent the app from locking while recording a voice message ([#2707](https://github.com/element-hq/element-x-ios/issues/2707))
+- Use an animation when scrolling to a nearby timeline item. ([#2757](https://github.com/element-hq/element-x-ios/issues/2757))
+- The settings screen design has slightly changed order and grouping of the options. ([#2789](https://github.com/element-hq/element-x-ios/issues/2789))
+
+🐛 Bugfixes
+
+- If button shapes are enabled, emojis are now displayed properly in the menu. ([#2406](https://github.com/element-hq/element-x-ios/issues/2406))
+- Fixed a bug that added an extra newline between the name and a formatted text in an emote. ([#2503](https://github.com/element-hq/element-x-ios/issues/2503))
+- Fix room list looping and fighting scrolling after filtering ([#2652](https://github.com/element-hq/element-x-ios/issues/2652))
+- Fix deeplinking/navigating into the same room multiple times ([#2653](https://github.com/element-hq/element-x-ios/issues/2653))
+- Fix a bug where avatars were missing from the RoomChangeRolesScreen. ([#2713](https://github.com/element-hq/element-x-ios/issues/2713))
+- Fix a bug where tapping the same permalink a second time didn't do anything. ([#2758](https://github.com/element-hq/element-x-ios/issues/2758))
+- Scrolling to the bottom after sending a message should also go live if necessary. ([#2760](https://github.com/element-hq/element-x-ios/issues/2760))
+- Handle plain room aliases as permalinks. ([#2762](https://github.com/element-hq/element-x-ios/issues/2762))
+- Add missing padding on the permalink highlight. ([#2764](https://github.com/element-hq/element-x-ios/issues/2764))
+
+Others
+
+- Bump posthog sdk version to 3.2.0 ([#2788](https://github.com/element-hq/element-x-ios/issues/2788))
+
 ## Changes in 1.6.3 (2024-04-15)
 
 🙌 Improvements

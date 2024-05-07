@@ -1,1 +1,0 @@
-Use the keyboard up arrow to edit the last message, use escape to cancel editing or replying.

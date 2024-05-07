@@ -1,1 +1,0 @@
-Impement suggestion and pill support on the plain text composer
