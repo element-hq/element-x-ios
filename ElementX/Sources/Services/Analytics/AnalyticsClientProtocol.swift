@@ -38,6 +38,10 @@ protocol AnalyticsClientProtocol {
     /// Capture the supplied analytics screen event.
     /// - Parameter event: The screen event to capture.
     func screen(_ event: AnalyticsScreenProtocol)
+    
+    /// Updates the user properties
+    /// - Parameter userProperties: The properties event to capture.
+    func updateUserProperties(_ event: AnalyticsEvent.UserProperties)
 }
 
 // sourcery: AutoMockable

@@ -88,7 +88,9 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
         self.pendingUserProperties = AnalyticsEvent.UserProperties(allChatsActiveFilter: userProperties.allChatsActiveFilter ?? pendingUserProperties.allChatsActiveFilter,
                                                                    ftueUseCaseSelection: userProperties.ftueUseCaseSelection ?? pendingUserProperties.ftueUseCaseSelection,
                                                                    numFavouriteRooms: userProperties.numFavouriteRooms ?? pendingUserProperties.numFavouriteRooms,
-                                                                   numSpaces: userProperties.numSpaces ?? pendingUserProperties.numSpaces)
+                                                                   numSpaces: userProperties.numSpaces ?? pendingUserProperties.numSpaces,
+                                                                   recoveryState: userProperties.recoveryState ?? pendingUserProperties.recoveryState,
+                                                                   verificationState: userProperties.verificationState ?? pendingUserProperties.verificationState)
     }
     
     func updateSuperProperties(_ updatedProperties: AnalyticsEvent.SuperProperties) {
