@@ -27,7 +27,6 @@ class RoomPollsHistoryScreenViewModelTests: XCTestCase {
     override func setUpWithError() throws {
         interactionHandler = PollInteractionHandlerMock()
         timelineController = MockRoomTimelineController()
-        let roomProxyMockConfiguration = RoomProxyMockConfiguration(name: "Polls")
         viewModel = RoomPollsHistoryScreenViewModel(pollInteractionHandler: interactionHandler,
                                                     roomTimelineController: timelineController,
                                                     userIndicatorController: UserIndicatorControllerMock())
