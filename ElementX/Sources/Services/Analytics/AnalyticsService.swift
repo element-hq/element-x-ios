@@ -225,31 +225,32 @@ extension AnalyticsService {
     }
     
     func trackSessionSecurityState(_ state: SessionSecurityState) {
-        let analyticsVerificationState: AnalyticsEvent.CryptoSessionStateChange.VerificationState? = switch state.verificationState {
+        let analyticsVerificationState: AnalyticsEvent.CryptoSessionStateChange.VerificationState
+        
+        switch state.verificationState {
         case .unknown:
-            nil
+            return
         case .verified:
-            .Verified
+            analyticsVerificationState = .Verified
         case .unverified:
-            .NotVerified
+            analyticsVerificationState = .NotVerified
         }
         
-        let analyticsRecoveryState: AnalyticsEvent.CryptoSessionStateChange.RecoveryState? = switch state.recoveryState {
+        let analyticsRecoveryState: AnalyticsEvent.CryptoSessionStateChange.RecoveryState
+        
+        switch state.recoveryState {
         case .enabled:
-            .Enabled
+            analyticsRecoveryState = .Enabled
         case .disabled:
-            .Disabled
+            analyticsRecoveryState = .Disabled
         case .incomplete:
-            .Incomplete
+            analyticsRecoveryState = .Incomplete
         case .unknown:
-            nil
+            return
         case .settingUp:
-            nil
+            return
         }
-        
-        guard let analyticsVerificationState else { return }
-        guard let analyticsRecoveryState else { return }
-        
+
         let event = AnalyticsEvent.CryptoSessionStateChange(recoveryState: analyticsRecoveryState, verificationState: analyticsVerificationState)
         client.capture(event)
     }
