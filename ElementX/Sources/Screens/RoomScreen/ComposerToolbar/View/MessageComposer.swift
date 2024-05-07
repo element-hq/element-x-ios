@@ -33,7 +33,6 @@ struct MessageComposer: View {
     let editCancellationAction: () -> Void
     let onAppearAction: () -> Void
     
-    @State private var isMultiline = false
     @State private var composerTranslation: CGFloat = 0
     private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
     
@@ -86,7 +85,6 @@ struct MessageComposer: View {
             } else {
                 MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
                                          text: $plainComposerText,
-                                         isMultiline: $isMultiline,
                                          maxHeight: 300,
                                          enterKeyHandler: sendAction,
                                          pasteHandler: pasteAction)
