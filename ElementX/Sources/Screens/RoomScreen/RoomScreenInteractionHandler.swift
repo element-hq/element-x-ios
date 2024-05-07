@@ -257,6 +257,9 @@ class RoomScreenInteractionHandler {
             actionsSubject.send(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
         case .react:
             showEmojiPicker(for: itemID)
+        case .toggleReaction(let key):
+            guard let eventID = itemID.eventID else { return }
+            Task { await roomProxy.timeline.toggleReaction(key, to: eventID) }
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
         }
