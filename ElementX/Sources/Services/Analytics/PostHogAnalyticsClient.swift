@@ -69,12 +69,13 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     
     func capture(_ event: AnalyticsEventProtocol) {
         guard isRunning else { return }
-        postHog?.capture(event.eventName, properties: attachUserProperties(to: attachSuperProperties(to: event.properties)))
+        postHog?.capture(event.eventName, properties: attachSuperProperties(to: event.properties), userProperties: pendingUserProperties?.properties.compactMapValues { $0 })
+        pendingUserProperties = nil
     }
     
     func screen(_ event: AnalyticsScreenProtocol) {
         guard isRunning else { return }
-        postHog?.screen(event.screenName.rawValue, properties: attachUserProperties(to: attachSuperProperties(to: event.properties)))
+        postHog?.screen(event.screenName.rawValue, properties: attachSuperProperties(to: event.properties))
     }
     
     func updateUserProperties(_ userProperties: AnalyticsEvent.UserProperties) {
@@ -105,21 +106,6 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     }
     
     // MARK: - Private
-    
-    /// Given a dictionary containing properties from an event, this method will return those properties
-    /// with any pending user properties included under the `$set` key.
-    /// - Parameter properties: A dictionary of properties from an event.
-    /// - Returns: The `properties` dictionary with any user properties included.
-    private func attachUserProperties(to properties: [String: Any]) -> [String: Any] {
-        guard isRunning, let userProperties = pendingUserProperties else { return properties }
-        
-        var properties = properties
-        
-        // As user properties overwrite old ones via $set, compactMap the dictionary to avoid resetting any missing properties
-        properties["$set"] = userProperties.properties.compactMapValues { $0 }
-        pendingUserProperties = nil
-        return properties
-    }
     
     /// Attach super properties to events.
     /// If the property is already set on the event, the already set value will be kept.

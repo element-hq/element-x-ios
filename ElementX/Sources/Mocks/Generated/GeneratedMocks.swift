@@ -6733,15 +6733,15 @@ class PHGPostHogMock: PHGPostHogProtocol {
     }
     //MARK: - capture
 
-    var capturePropertiesUnderlyingCallsCount = 0
-    var capturePropertiesCallsCount: Int {
+    var capturePropertiesUserPropertiesUnderlyingCallsCount = 0
+    var capturePropertiesUserPropertiesCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return capturePropertiesUnderlyingCallsCount
+                return capturePropertiesUserPropertiesUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = capturePropertiesUnderlyingCallsCount
+                    returnValue = capturePropertiesUserPropertiesUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -6749,26 +6749,26 @@ class PHGPostHogMock: PHGPostHogProtocol {
         }
         set {
             if Thread.isMainThread {
-                capturePropertiesUnderlyingCallsCount = newValue
+                capturePropertiesUserPropertiesUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    capturePropertiesUnderlyingCallsCount = newValue
+                    capturePropertiesUserPropertiesUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var capturePropertiesCalled: Bool {
-        return capturePropertiesCallsCount > 0
+    var capturePropertiesUserPropertiesCalled: Bool {
+        return capturePropertiesUserPropertiesCallsCount > 0
     }
-    var capturePropertiesReceivedArguments: (event: String, properties: [String: Any]?)?
-    var capturePropertiesReceivedInvocations: [(event: String, properties: [String: Any]?)] = []
-    var capturePropertiesClosure: ((String, [String: Any]?) -> Void)?
+    var capturePropertiesUserPropertiesReceivedArguments: (event: String, properties: [String: Any]?, userProperties: [String: Any]?)?
+    var capturePropertiesUserPropertiesReceivedInvocations: [(event: String, properties: [String: Any]?, userProperties: [String: Any]?)] = []
+    var capturePropertiesUserPropertiesClosure: ((String, [String: Any]?, [String: Any]?) -> Void)?
 
-    func capture(_ event: String, properties: [String: Any]?) {
-        capturePropertiesCallsCount += 1
-        capturePropertiesReceivedArguments = (event: event, properties: properties)
-        capturePropertiesReceivedInvocations.append((event: event, properties: properties))
-        capturePropertiesClosure?(event, properties)
+    func capture(_ event: String, properties: [String: Any]?, userProperties: [String: Any]?) {
+        capturePropertiesUserPropertiesCallsCount += 1
+        capturePropertiesUserPropertiesReceivedArguments = (event: event, properties: properties, userProperties: userProperties)
+        capturePropertiesUserPropertiesReceivedInvocations.append((event: event, properties: properties, userProperties: userProperties))
+        capturePropertiesUserPropertiesClosure?(event, properties, userProperties)
     }
     //MARK: - screen
 
