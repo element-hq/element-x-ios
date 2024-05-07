@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import AnalyticsEvents
 import Combine
 import SwiftUI
 
@@ -83,6 +84,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     state.securityBannerMode = .none
                     state.requiresExtraAccountSetup = false
                 }
+            }
+            .store(in: &cancellables)
+        
+        userSession.sessionSecurityStatePublisher
+            .receive(on: DispatchQueue.main)
+            .filter { state in
+                state.verificationState != .unknown
+                    && state.recoveryState != .settingUp
+                    && state.recoveryState != .unknown
+            }
+            .sink { [weak self] state in
+                guard let self else { return }
+                
+                self.analyticsService.updateUserProperties(AnalyticsEvent.newVerificationStateUserProperty(verificationState: state.verificationState, recoveryState: state.recoveryState))
+                self.analyticsService.trackSessionSecurityState(state)
             }
             .store(in: &cancellables)
         

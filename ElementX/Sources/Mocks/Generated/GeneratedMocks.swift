@@ -203,6 +203,45 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
         screenReceivedInvocations.append(event)
         screenClosure?(event)
     }
+    //MARK: - updateUserProperties
+
+    var updateUserPropertiesUnderlyingCallsCount = 0
+    var updateUserPropertiesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateUserPropertiesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateUserPropertiesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateUserPropertiesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateUserPropertiesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var updateUserPropertiesCalled: Bool {
+        return updateUserPropertiesCallsCount > 0
+    }
+    var updateUserPropertiesReceivedEvent: AnalyticsEvent.UserProperties?
+    var updateUserPropertiesReceivedInvocations: [AnalyticsEvent.UserProperties] = []
+    var updateUserPropertiesClosure: ((AnalyticsEvent.UserProperties) -> Void)?
+
+    func updateUserProperties(_ event: AnalyticsEvent.UserProperties) {
+        updateUserPropertiesCallsCount += 1
+        updateUserPropertiesReceivedEvent = event
+        updateUserPropertiesReceivedInvocations.append(event)
+        updateUserPropertiesClosure?(event)
+    }
 }
 class AppLockServiceMock: AppLockServiceProtocol {
     var isMandatory: Bool {

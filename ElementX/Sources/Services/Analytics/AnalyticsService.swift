@@ -223,4 +223,38 @@ extension AnalyticsService {
         let role = role.map(AnalyticsEvent.RoomModeration.Role.init)
         capture(event: AnalyticsEvent.RoomModeration(action: action, role: role))
     }
+    
+    func trackSessionSecurityState(_ state: SessionSecurityState) {
+        let analyticsVerificationState: AnalyticsEvent.CryptoSessionStateChange.VerificationState? = switch state.verificationState {
+        case .unknown:
+            nil
+        case .verified:
+            .Verified
+        case .unverified:
+            .NotVerified
+        }
+        
+        let analyticsRecoveryState: AnalyticsEvent.CryptoSessionStateChange.RecoveryState? = switch state.recoveryState {
+        case .enabled:
+            .Enabled
+        case .disabled:
+            .Disabled
+        case .incomplete:
+            .Incomplete
+        case .unknown:
+            nil
+        case .settingUp:
+            nil
+        }
+        
+        guard let analyticsVerificationState else { return }
+        guard let analyticsRecoveryState else { return }
+        
+        let event = AnalyticsEvent.CryptoSessionStateChange(recoveryState: analyticsRecoveryState, verificationState: analyticsVerificationState)
+        client.capture(event)
+    }
+    
+    func updateUserProperties(_ userProperties: AnalyticsEvent.UserProperties) {
+        client.updateUserProperties(userProperties)
+    }
 }
