@@ -501,8 +501,7 @@
 "screen_qr_code_login_initial_state_item_2" = "Klik pada avatar Anda";
 "screen_qr_code_login_initial_state_item_3" = "Pilih %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Tautkan perangkat baru”";
-"screen_qr_code_login_initial_state_item_4" = "Pilih %1$@";
-"screen_qr_code_login_initial_state_item_4_action" = "“Tampilkan kode QR”";
+"screen_qr_code_login_initial_state_item_4" = "Follow the instructions shown";
 "screen_qr_code_login_initial_state_title" = "Buka %1$@ di perangkat lain untuk mendapatkan kode QR";
 "screen_qr_code_login_invalid_scan_state_description" = "Gunakan kode QR yang ditampilkan di perangkat lain.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Kode QR salah";
@@ -666,6 +665,7 @@
 "screen_room_timeline_reactions_show_less" = "Tampilkan lebih sedikit";
 "screen_room_timeline_reactions_show_more" = "Tampilkan lebih banyak";
 "screen_room_timeline_read_marker_title" = "Baru";
+"screen_room_title" = "Chat";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@, dan ";
 "screen_room_typing_notification_plural_ios" = " sedang mengetik…";
 "screen_room_typing_notification_singular_ios" = " sedang mengetik…";
