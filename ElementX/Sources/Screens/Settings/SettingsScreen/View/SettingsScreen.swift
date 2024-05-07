@@ -21,13 +21,21 @@ import SwiftUI
 struct SettingsScreen: View {
     @ObservedObject var context: SettingsScreenViewModel.Context
     
+    private var shouldHideManageAccountSection: Bool {
+        context.viewState.accountProfileURL == nil &&
+            context.viewState.accountSessionsListURL == nil &&
+            !context.viewState.showBlockedUsers
+    }
+    
     var body: some View {
         Form {
             userSection
             
             manageMyAppSection
             
-            manageAccountSection
+            if !shouldHideManageAccountSection {
+                manageAccountSection
+            }
             
             generalSection
         }
