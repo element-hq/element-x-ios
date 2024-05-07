@@ -16,12 +16,13 @@
 
 import PostHog
 
-extension PHGPostHogConfiguration {
-    static func standard(analyticsConfiguration: AnalyticsConfiguration) -> PHGPostHogConfiguration? {
+extension PostHogConfig {
+    static func standard(analyticsConfiguration: AnalyticsConfiguration) -> PostHogConfig? {
         guard analyticsConfiguration.isEnabled else { return nil }
         
-        let postHogConfiguration = PHGPostHogConfiguration(apiKey: analyticsConfiguration.apiKey, host: analyticsConfiguration.host)
-        postHogConfiguration.shouldSendDeviceID = false
+        let postHogConfiguration = PostHogConfig(apiKey: analyticsConfiguration.apiKey, host: analyticsConfiguration.host)
+        // We capture screens manually
+        postHogConfiguration.captureScreenViews = false
         
         return postHogConfiguration
     }
