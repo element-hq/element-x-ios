@@ -18,7 +18,6 @@ import SwiftUI
 struct MessageComposerTextField: View {
     let placeholder: String
     @Binding var text: NSAttributedString
-    @Binding var isMultiline: Bool
 
     let maxHeight: CGFloat
     let enterKeyHandler: EnterKeyHandler
@@ -26,7 +25,6 @@ struct MessageComposerTextField: View {
 
     var body: some View {
         UITextViewWrapper(text: $text,
-                          isMultiline: $isMultiline,
                           maxHeight: maxHeight,
                           enterKeyHandler: enterKeyHandler,
                           pasteHandler: pasteHandler)
@@ -48,7 +46,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
     @Environment(\.roomContext) private var roomContext
 
     @Binding var text: NSAttributedString
-    @Binding var isMultiline: Bool
 
     let maxHeight: CGFloat
 
@@ -62,7 +59,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
         let textView = ElementTextView(usingTextLayoutManager: false)
         textView.roomContext = roomContext
         
-        textView.isMultiline = $isMultiline
         textView.delegate = context.coordinator
         textView.elementDelegate = context.coordinator
         textView.textColor = .compound.textPrimary
@@ -167,7 +163,6 @@ private protocol ElementTextViewDelegate: AnyObject {
 
 private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     var roomContext: RoomScreenViewModel.Context?
-    var isMultiline: Binding<Bool>?
     
     weak var elementDelegate: ElementTextViewDelegate?
     
@@ -184,23 +179,6 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
 
     @objc func enterKeyPressed(sender: UIKeyCommand) {
         elementDelegate?.textViewDidReceiveEnterKeyPress(self)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        guard let isMultiline, let font else { return }
-
-        let numberOfLines = frame.height / font.lineHeight
-        if numberOfLines > 1.5 {
-            if !isMultiline.wrappedValue {
-                isMultiline.wrappedValue = true
-            }
-        } else {
-            if isMultiline.wrappedValue {
-                isMultiline.wrappedValue = false
-            }
-        }
     }
 
     // Pasting support
@@ -266,18 +244,15 @@ struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
 
     struct PreviewWrapper: View {
         @State var text: NSAttributedString
-        @State var isMultiline: Bool
 
         init(text: String) {
             _text = .init(initialValue: .init(string: text, attributes: [.font: UIFont.preferredFont(forTextStyle: .body),
                                                                          .foregroundColor: UIColor(.compound.textPrimary)]))
-            _isMultiline = .init(initialValue: false)
         }
 
         var body: some View {
             MessageComposerTextField(placeholder: "Placeholder",
                                      text: $text,
-                                     isMultiline: $isMultiline,
                                      maxHeight: 300,
                                      enterKeyHandler: { },
                                      pasteHandler: { _ in })
