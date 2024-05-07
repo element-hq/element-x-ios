@@ -25,7 +25,7 @@ protocol PHGPostHogProtocol {
     
     func reset()
     
-    func capture(_ event: String, properties: [String: Any]?)
+    func capture(_ event: String, properties: [String: Any]?, userProperties: [String: Any]?)
     
     func screen(_ screenTitle: String, properties: [String: Any]?)
 }
