@@ -135,6 +135,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                     sendPlainComposerText()
                 }
             }
+        case .editLastMessage:
+            actionsSubject.send(.editLastMessage)
         case .cancelReply:
             set(mode: .default)
         case .cancelEdit:

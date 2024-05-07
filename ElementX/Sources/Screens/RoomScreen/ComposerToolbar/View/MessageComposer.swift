@@ -18,7 +18,7 @@ import Compound
 import SwiftUI
 import WysiwygComposer
 
-typealias EnterKeyHandler = () -> Void
+typealias GenericKeyHandler = (_ key: UIKeyboardHIDUsage) -> Void
 typealias PasteHandler = (NSItemProvider) -> Void
 
 struct MessageComposer: View {
@@ -27,10 +27,10 @@ struct MessageComposer: View {
     let mode: RoomScreenComposerMode
     let showResizeGrabber: Bool
     @Binding var isExpanded: Bool
-    let sendAction: EnterKeyHandler
+    let sendAction: () -> Void
+    let editAction: () -> Void
     let pasteAction: PasteHandler
-    let replyCancellationAction: () -> Void
-    let editCancellationAction: () -> Void
+    let cancellationAction: () -> Void
     let onAppearAction: () -> Void
     
     @State private var composerTranslation: CGFloat = 0
@@ -86,7 +86,7 @@ struct MessageComposer: View {
                 MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
                                          text: $plainComposerText,
                                          maxHeight: 300,
-                                         enterKeyHandler: sendAction,
+                                         keyHandler: { handleKeyPress($0) },
                                          pasteHandler: pasteAction)
                     .tint(.compound.iconAccentTertiary)
                     .padding(.vertical, 10)
@@ -103,9 +103,9 @@ struct MessageComposer: View {
     private var header: some View {
         switch mode {
         case .reply(_, let replyDetails, _):
-            MessageComposerReplyHeader(replyDetails: replyDetails, action: replyCancellationAction)
+            MessageComposerReplyHeader(replyDetails: replyDetails, action: cancellationAction)
         case .edit:
-            MessageComposerEditHeader(action: editCancellationAction)
+            MessageComposerEditHeader(action: cancellationAction)
         case .recordVoiceMessage, .previewVoiceMessage, .default:
             EmptyView()
         }
@@ -134,6 +134,19 @@ struct MessageComposer: View {
                     composerTranslation = 0
                 }
             }
+    }
+    
+    private func handleKeyPress(_ key: UIKeyboardHIDUsage) {
+        switch key {
+        case .keyboardReturnOrEnter:
+            sendAction()
+        case .keyboardUpArrow:
+            editAction()
+        case .keyboardEscape:
+            cancellationAction()
+        default:
+            break
+        }
     }
 }
 
@@ -244,9 +257,9 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                showResizeGrabber: false,
                                isExpanded: .constant(false),
                                sendAction: { },
+                               editAction: { },
                                pasteAction: { _ in },
-                               replyCancellationAction: { },
-                               editCancellationAction: { },
+                               cancellationAction: { },
                                onAppearAction: { viewModel.setup() })
     }
     

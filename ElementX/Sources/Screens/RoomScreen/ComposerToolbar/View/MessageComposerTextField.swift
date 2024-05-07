@@ -20,13 +20,13 @@ struct MessageComposerTextField: View {
     @Binding var text: NSAttributedString
 
     let maxHeight: CGFloat
-    let enterKeyHandler: EnterKeyHandler
+    let keyHandler: GenericKeyHandler
     let pasteHandler: PasteHandler
 
     var body: some View {
         UITextViewWrapper(text: $text,
                           maxHeight: maxHeight,
-                          enterKeyHandler: enterKeyHandler,
+                          keyHandler: keyHandler,
                           pasteHandler: pasteHandler)
             .accessibilityLabel(placeholder)
             .background(placeholderView, alignment: .topLeading)
@@ -49,7 +49,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
     let maxHeight: CGFloat
 
-    let enterKeyHandler: EnterKeyHandler
+    let keyHandler: GenericKeyHandler
     let pasteHandler: PasteHandler
 
     private let font = UIFont.preferredFont(forTextStyle: .body)
@@ -115,7 +115,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text,
                     maxHeight: maxHeight,
-                    enterKeyHandler: enterKeyHandler,
+                    keyHandler: keyHandler,
                     pasteHandler: pasteHandler)
     }
 
@@ -124,16 +124,16 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
         private let maxHeight: CGFloat
 
-        private let enterKeyHandler: EnterKeyHandler
+        private let keyHandler: GenericKeyHandler
         private let pasteHandler: PasteHandler
 
         init(text: Binding<NSAttributedString>,
              maxHeight: CGFloat,
-             enterKeyHandler: @escaping EnterKeyHandler,
+             keyHandler: @escaping GenericKeyHandler,
              pasteHandler: @escaping PasteHandler) {
             self.text = text
             self.maxHeight = maxHeight
-            self.enterKeyHandler = enterKeyHandler
+            self.keyHandler = keyHandler
             self.pasteHandler = pasteHandler
         }
 
@@ -141,10 +141,10 @@ private struct UITextViewWrapper: UIViewRepresentable {
             text.wrappedValue = textView.attributedText
         }
 
-        func textViewDidReceiveEnterKeyPress(_ textView: UITextView) {
-            enterKeyHandler()
+        func textViewDidReceiveKeyPress(_ textView: UITextView, key: UIKeyboardHIDUsage) {
+            keyHandler(key)
         }
-
+        
         func textViewDidReceiveShiftEnterKeyPress(_ textView: UITextView) {
             textView.insertText("\n")
         }
@@ -157,7 +157,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
 private protocol ElementTextViewDelegate: AnyObject {
     func textViewDidReceiveShiftEnterKeyPress(_ textView: UITextView)
-    func textViewDidReceiveEnterKeyPress(_ textView: UITextView)
+    func textViewDidReceiveKeyPress(_ textView: UITextView, key: UIKeyboardHIDUsage)
     func textView(_ textView: UITextView, didReceivePasteWith provider: NSItemProvider)
 }
 
@@ -176,9 +176,28 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     @objc func shiftEnterKeyPressed(sender: UIKeyCommand) {
         elementDelegate?.textViewDidReceiveShiftEnterKeyPress(self)
     }
-
+    
     @objc func enterKeyPressed(sender: UIKeyCommand) {
-        elementDelegate?.textViewDidReceiveEnterKeyPress(self)
+        elementDelegate?.textViewDidReceiveKeyPress(self, key: .keyboardReturnOrEnter)
+    }
+    
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        guard let key = presses.first?.key else {
+            super.pressesBegan(presses, with: event)
+            return
+        }
+        
+        if key.keyCode == .keyboardUpArrow, selectedRange.location == 0 {
+            elementDelegate?.textViewDidReceiveKeyPress(self, key: key.keyCode)
+            return
+        }
+        
+        if key.keyCode == .keyboardEscape {
+            elementDelegate?.textViewDidReceiveKeyPress(self, key: key.keyCode)
+            return
+        }
+        
+        super.pressesBegan(presses, with: event)
     }
 
     // Pasting support
@@ -254,7 +273,7 @@ struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
             MessageComposerTextField(placeholder: "Placeholder",
                                      text: $text,
                                      maxHeight: 300,
-                                     enterKeyHandler: { },
+                                     keyHandler: { _ in },
                                      pasteHandler: { _ in })
         }
     }

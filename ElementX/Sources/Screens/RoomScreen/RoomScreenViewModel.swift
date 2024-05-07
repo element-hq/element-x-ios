@@ -206,6 +206,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                          mode: mode,
                                          intentionalMentions: intentionalMentions)
             }
+        case .editLastMessage:
+            editLastMessage()
         case .attach(let attachment):
             attach(attachment)
         case .handlePasteOrDrop(let provider):
@@ -262,6 +264,20 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.timelineViewState.focussedEvent = focussedEvent
             hideFocusLoadingIndicator()
         }
+    }
+    
+    private func editLastMessage() {
+        guard let item = timelineController.timelineItems.reversed().first(where: {
+            guard let item = $0 as? EventBasedMessageTimelineItemProtocol else {
+                return false
+            }
+            
+            return item.sender.id == roomProxy.ownUserID && item.isEditable
+        }) else {
+            return
+        }
+        
+        roomScreenInteractionHandler.processTimelineItemMenuAction(.edit, itemID: item.id)
     }
     
     private func attach(_ attachment: ComposerAttachmentType) {
