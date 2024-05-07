@@ -110,13 +110,6 @@ struct ComposerToolbar: View {
                     RoomAttachmentPicker(context: context)
                 }
                 messageComposer
-                    .environmentObject(context)
-                    .onTapGesture {
-                        guard !composerFocused else { return }
-                        composerFocused = true
-                    }
-                    .padding(.leading, context.composerActionsEnabled ? 7 : 0)
-                    .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
             }
             .opacity(context.viewState.isVoiceMessageModeActivated ? 0 : 1)
             
@@ -177,7 +170,14 @@ struct ComposerToolbar: View {
         } onAppearAction: {
             context.send(viewAction: .composerAppeared)
         }
+        .environmentObject(context)
         .focused($composerFocused)
+        .padding(.leading, context.composerActionsEnabled ? 7 : 0)
+        .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
+        .onTapGesture {
+            guard !composerFocused else { return }
+            composerFocused = true
+        }
         .onChange(of: context.composerFocused) { newValue in
             guard composerFocused != newValue else { return }
             

@@ -45,7 +45,7 @@ struct RoomScreen: View {
                     }
                     .padding(.top, 8)
                     .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-                    .environmentObject(context)
+                    .environment(\.roomContext, context)
             }
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)

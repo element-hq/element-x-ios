@@ -787,7 +787,7 @@ extension EnvironmentValues {
         get { self[RoomContextKey.self] }
         set { self[RoomContextKey.self] = newValue }
     }
-    
+
     /// An event ID which will be non-nil when a timeline item should show as focussed.
     var focussedEventID: String? {
         get { self[FocussedEventID.self] }
