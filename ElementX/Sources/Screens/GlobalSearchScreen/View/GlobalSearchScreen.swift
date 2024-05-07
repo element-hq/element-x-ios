@@ -197,7 +197,10 @@ private class GlobalSearchTextField: UITextField {
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        guard let key = presses.first?.key else { return }
+        guard let key = presses.first?.key else {
+            super.pressesBegan(presses, with: event)
+            return
+        }
         
         if keyPressHandler(key.keyCode) {
             return

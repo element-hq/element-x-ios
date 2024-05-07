@@ -161,12 +161,19 @@ struct ComposerToolbar: View {
                         showResizeGrabber: context.viewState.bindings.composerActionsEnabled,
                         isExpanded: $context.composerExpanded) {
             context.send(viewAction: .sendMessage)
+        } editAction: {
+            context.send(viewAction: .editLastMessage)
         } pasteAction: { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
-        } replyCancellationAction: {
-            context.send(viewAction: .cancelReply)
-        } editCancellationAction: {
-            context.send(viewAction: .cancelEdit)
+        } cancellationAction: {
+            switch context.viewState.composerMode {
+            case .edit:
+                context.send(viewAction: .cancelEdit)
+            case .reply:
+                context.send(viewAction: .cancelReply)
+            default:
+                break
+            }
         } onAppearAction: {
             context.send(viewAction: .composerAppeared)
         }

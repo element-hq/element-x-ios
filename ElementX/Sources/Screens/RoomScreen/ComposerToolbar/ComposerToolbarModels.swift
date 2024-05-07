@@ -32,6 +32,7 @@ enum ComposerToolbarVoiceMessageAction {
 
 enum ComposerToolbarViewModelAction {
     case sendMessage(plain: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions)
+    case editLastMessage
     case attach(ComposerAttachmentType)
 
     case handlePasteOrDrop(provider: NSItemProvider)
@@ -47,6 +48,7 @@ enum ComposerToolbarViewModelAction {
 enum ComposerToolbarViewAction {
     case composerAppeared
     case sendMessage
+    case editLastMessage
     case cancelReply
     case cancelEdit
     case attach(ComposerAttachmentType)
