@@ -61,6 +61,7 @@ struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePrevie
                 Bubble(text: "Not highlighted")
                     .highlightedTimelineItem(false)
                 
+                // swiftlint:disable line_length
                 Bubble(text: """
                        Bacon ipsum dolor amet brisket bacon hamburger filet mignon ham hock, capicola meatloaf corned beef tongue. Ribeye filet mignon shoulder drumstick doner shank. Landjaeger shankle chislic brisket short loin pig. Frankfurter sirloin jerky bresaola tri-tip cow buffalo. Beef tongue shankle venison, sirloin boudin biltong ham hock corned beef. Sirloin shankle pork belly, strip steak pancetta brisket flank ribeye cow chislic. Pork ham landjaeger, pastrami beef sausage capicola meatball.
                        
@@ -68,6 +69,7 @@ struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePrevie
                        """,
                        isOutgoing: true)
                     .highlightedTimelineItem(true)
+                // swiftlint:enable line_length
             }
         }
         .previewDisplayName("Layout")
