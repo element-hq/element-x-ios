@@ -177,17 +177,35 @@ class AnalyticsTests: XCTestCase {
     
     func testSendingUserProperties() {
         // Given a client with user properties set
-        let client = PostHogAnalyticsClient()
+        
+        let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
+        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
+        
         client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil, ftueUseCaseSelection: .PersonalMessaging,
                                                                   numFavouriteRooms: nil,
                                                                   numSpaces: nil))
-        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
         
         XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
         XCTAssertEqual(client.pendingUserProperties?.ftueUseCaseSelection, .PersonalMessaging, "The use case selection should match.")
         
         // When sending an event (tests run under Debug configuration so this is sent to the development instance)
-        client.screen(AnalyticsEvent.MobileScreen(durationMs: nil, screenName: .Home))
+        let someEvent = AnalyticsEvent.Error(context: nil,
+                                             cryptoModule: .Rust,
+                                             cryptoSDK: .Rust,
+                                             domain: .E2EE,
+                                             eventLocalAgeMillis: nil,
+                                             isFederated: nil,
+                                             isMatrixDotOrg: nil,
+                                             name: .OlmKeysNotSentError,
+                                             timeToDecryptMillis: nil,
+                                             userTrustsOwnIdentity: nil,
+                                             wasVisibleToUser: nil)
+        client.capture(someEvent)
+        
+        let capturedEvent = posthogMock.capturePropertiesUserPropertiesReceivedArguments
+        
+        // The user properties should have been added
+        XCTAssertEqual(capturedEvent?.userProperties?["ftueUseCaseSelection"] as? String, AnalyticsEvent.UserProperties.FtueUseCaseSelection.PersonalMessaging.rawValue)
         
         // Then the properties should be cleared
         XCTAssertNil(client.pendingUserProperties, "The user properties should be cleared.")
@@ -243,7 +261,7 @@ class AnalyticsTests: XCTestCase {
                                              wasVisibleToUser: nil)
         client.capture(someEvent)
         
-        let capturedEvent = posthogMock.capturePropertiesReceivedArguments
+        let capturedEvent = posthogMock.capturePropertiesUserPropertiesReceivedArguments
         
         // All the super properties should have been added
         XCTAssertEqual(capturedEvent?.properties?["cryptoSDK"] as? String, AnalyticsEvent.SuperProperties.CryptoSDK.Rust.rawValue)
@@ -258,7 +276,7 @@ class AnalyticsTests: XCTestCase {
         )
         
         client.capture(someEvent)
-        let capturedEvent2 = posthogMock.capturePropertiesReceivedArguments
+        let capturedEvent2 = posthogMock.capturePropertiesUserPropertiesReceivedArguments
         
         // All the super properties should have been added, with the one udpated
         XCTAssertEqual(capturedEvent2?.properties?["cryptoSDK"] as? String, AnalyticsEvent.SuperProperties.CryptoSDK.Rust.rawValue)
@@ -290,13 +308,13 @@ class AnalyticsTests: XCTestCase {
                                              wasVisibleToUser: nil)
         client.capture(someEvent)
         
-        XCTAssertEqual(posthogMock.capturePropertiesCalled, false)
+        XCTAssertEqual(posthogMock.capturePropertiesUserPropertiesCalled, false)
         
         // start now
         client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
         XCTAssertEqual(posthogMock.optInCalled, true)
         
         client.capture(someEvent)
-        XCTAssertEqual(posthogMock.capturePropertiesCalled, true)
+        XCTAssertEqual(posthogMock.capturePropertiesUserPropertiesCalled, true)
     }
 }
