@@ -16,7 +16,6 @@
 
 import Combine
 import SwiftUI
-import UIKit
 
 import OrderedCollections
 
@@ -31,7 +30,7 @@ enum RoomScreenViewModelAction {
     case displayPollForm(mode: PollFormMode)
     case displayMediaUploadPreviewScreen(url: URL)
     case displayRoomMemberDetails(userID: String)
-    case displayMessageForwarding(itemID: TimelineItemIdentifier)
+    case displayMessageForwarding(forwardingItem: MessageForwardingItem)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case composer(action: RoomScreenComposerAction)
     case displayCallScreen

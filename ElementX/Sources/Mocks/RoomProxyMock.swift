@@ -40,14 +40,15 @@ struct RoomProxyMockConfiguration {
     var canUserJoinCall = true
     
     func makeTimeline() -> TimelineProxyMock {
-        let mock = TimelineProxyMock()
-        mock.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
+        let timeline = TimelineProxyMock()
+        timeline.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
+        timeline.sendMessageEventContentReturnValue = .success(())
         
         let timelineProvider = RoomTimelineProviderMock()
         timelineProvider.paginationState = .init(backward: timelineStartReached ? .timelineEndReached : .idle, forward: .timelineEndReached)
         timelineProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
-        mock.underlyingTimelineProvider = timelineProvider
-        return mock
+        timeline.underlyingTimelineProvider = timelineProvider
+        return timeline
     }
 }
 

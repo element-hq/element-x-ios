@@ -429,7 +429,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 case .displayEmojiPicker(let itemID, let selectedEmojis):
                     actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .displayMessageForwarding(let itemID):
-                    actionsSubject.send(.displayMessageForwarding(itemID: itemID))
+                    Task { await self.forwardMessage(itemID: itemID) }
                 case .displayPollForm(let mode):
                     actionsSubject.send(.displayPollForm(mode: mode))
                 case .displayReportContent(let itemID, let senderID):
@@ -736,6 +736,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         state.bindings.readReceiptsSummaryInfo = .init(orderedReceipts: eventTimelineItem.properties.orderedReadReceipts, id: eventTimelineItem.id)
+    }
+    
+    // MARK: - Message forwarding
+    
+    private func forwardMessage(itemID: TimelineItemIdentifier) async {
+        guard let content = await timelineController.messageEventContent(for: itemID) else { return }
+        actionsSubject.send(.displayMessageForwarding(forwardingItem: .init(id: itemID, roomID: roomProxy.id, content: content)))
     }
     
     // MARK: - User Indicators

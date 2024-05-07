@@ -15,8 +15,8 @@
 //
 
 import Combine
-import Foundation
-import UIKit
+import MatrixRustSDK
+import SwiftUI
 
 enum RoomTimelineControllerCallback {
     case updatedTimelineItems(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool)
@@ -67,6 +67,8 @@ protocol RoomTimelineControllerProtocol {
     func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async
 
     func redact(_ itemID: TimelineItemIdentifier) async
+    
+    func messageEventContent(for itemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation?
     
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo
     
