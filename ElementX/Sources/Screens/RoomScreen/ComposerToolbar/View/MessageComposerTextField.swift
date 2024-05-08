@@ -36,7 +36,8 @@ struct MessageComposerTextField: View {
     private var placeholderView: some View {
         if text.string.isEmpty {
             Text(placeholder)
-                .foregroundColor(.compound.textPlaceholder)
+                .font(Font(UIFont.preferredFont(forTextStyle: .body)))
+                .foregroundColor(.compound.textSecondary)
                 .accessibilityHidden(true)
         }
     }

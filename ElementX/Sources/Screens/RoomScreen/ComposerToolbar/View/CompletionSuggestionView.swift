@@ -52,6 +52,7 @@ struct CompletionSuggestionView: View {
                     list()
                 }
             }
+            .padding(.bottom, Constants.listItemPadding)
         }
     }
 

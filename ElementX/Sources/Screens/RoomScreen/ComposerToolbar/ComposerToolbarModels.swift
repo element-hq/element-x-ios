@@ -60,6 +60,7 @@ enum ComposerToolbarViewAction {
     case voiceMessage(ComposerToolbarVoiceMessageAction)
     
     case plainComposerTextChanged
+    case didToggleFormattingOptions
 }
 
 enum ComposerAttachmentType {
@@ -95,7 +96,7 @@ struct ComposerToolbarViewState: BindableState {
         case .previewVoiceMessage:
             return true
         default:
-            if ServiceLocator.shared.settings.richTextEditorEnabled {
+            if bindings.composerFormattingEnabled {
                 return !composerEmpty
             } else {
                 return !bindings.plainComposerText.string.isEmpty
@@ -108,7 +109,7 @@ struct ComposerToolbarViewState: BindableState {
             return false
         }
         
-        if ServiceLocator.shared.settings.richTextEditorEnabled {
+        if bindings.composerFormattingEnabled {
             return composerEmpty
         } else {
             return bindings.plainComposerText.string.isEmpty
@@ -128,7 +129,7 @@ struct ComposerToolbarViewState: BindableState {
 struct ComposerToolbarViewStateBindings {
     var plainComposerText: NSAttributedString = .init(string: "")
     var composerFocused = false
-    var composerActionsEnabled = false
+    var composerFormattingEnabled = false
     var composerExpanded = false
     var formatItems: [FormatItem] = .init()
     var alertInfo: AlertInfo<UUID>?

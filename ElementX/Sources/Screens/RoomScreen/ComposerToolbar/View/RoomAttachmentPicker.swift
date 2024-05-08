@@ -37,15 +37,13 @@ struct RoomAttachmentPicker: View {
     
     var menuContent: some View {
         VStack(alignment: .leading, spacing: 0.0) {
-            if ServiceLocator.shared.settings.richTextEditorEnabled {
-                Button {
-                    context.send(viewAction: .enableTextFormatting)
-                } label: {
-                    Label(L10n.screenRoomAttachmentTextFormatting, icon: \.textFormatting)
-                        .labelStyle(.menuSheet)
-                }
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
+            Button {
+                context.send(viewAction: .enableTextFormatting)
+            } label: {
+                Label(L10n.screenRoomAttachmentTextFormatting, icon: \.textFormatting)
+                    .labelStyle(.menuSheet)
             }
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
             
             Button {
                 context.send(viewAction: .attach(.poll))

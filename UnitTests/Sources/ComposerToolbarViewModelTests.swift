@@ -30,7 +30,6 @@ class ComposerToolbarViewModelTests: XCTestCase {
     override func setUp() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
-        appSettings.richTextEditorEnabled = true
         ServiceLocator.shared.register(appSettings: appSettings)
         wysiwygViewModel = WysiwygComposerViewModel()
         completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
@@ -39,6 +38,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              mediaProvider: MockMediaProvider(),
                                              appSettings: appSettings,
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+        
+        viewModel.context.composerFormattingEnabled = true
     }
     
     override func tearDown() {
@@ -94,7 +95,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
         viewModel.state.composerEmpty = false
         viewModel.process(viewAction: .sendMessage)
-        XCTAssertTrue(viewModel.state.bindings.composerActionsEnabled)
+        XCTAssertTrue(viewModel.state.bindings.composerFormattingEnabled)
     }
 
     func testAlertIsShownAfterLinkAction() {

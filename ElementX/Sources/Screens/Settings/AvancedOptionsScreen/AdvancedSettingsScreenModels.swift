@@ -40,7 +40,6 @@ enum AdvancedSettingsScreenViewAction { }
 protocol AdvancedSettingsProtocol: AnyObject {
     var timelineStyle: TimelineStyle { get set }
     var viewSourceEnabled: Bool { get set }
-    var richTextEditorEnabled: Bool { get set }
     var appAppearance: AppAppearance { get set }
     var sharePresence: Bool { get set }
 }
