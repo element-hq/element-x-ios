@@ -117,12 +117,6 @@
 	<string>$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
 	<key>mapLibreAPIKey</key>
 	<string>$(MAPLIBRE_API_KEY)</string>
-	<key>otlpTracingPassword</key>
-	<string>${OTLP_TRACING_PASSWORD}</string>
-	<key>otlpTracingURL</key>
-	<string>${OTLP_TRACING_URL}</string>
-	<key>otlpTracingUsername</key>
-	<string>${OTLP_TRACING_USERNAME}</string>
 	<key>productionAppName</key>
 	<string>$(PRODUCTION_APP_NAME)</string>
 </dict>

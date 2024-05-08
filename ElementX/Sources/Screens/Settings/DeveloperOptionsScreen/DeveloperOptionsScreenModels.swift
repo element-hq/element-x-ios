@@ -45,7 +45,6 @@ enum DeveloperOptionsScreenViewAction {
 
 protocol DeveloperOptionsProtocol: AnyObject {
     var logLevel: TracingConfiguration.LogLevel { get set }
-    var otlpTracingEnabled: Bool { get set }
     var shouldCollapseRoomStateEvents: Bool { get set }
     var hideUnreadMessagesBadge: Bool { get set }
     var elementCallBaseURL: URL { get set }
