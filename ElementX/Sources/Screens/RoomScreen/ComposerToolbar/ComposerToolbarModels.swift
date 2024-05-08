@@ -96,7 +96,7 @@ struct ComposerToolbarViewState: BindableState {
         case .previewVoiceMessage:
             return true
         default:
-            if bindings.composerActionsEnabled {
+            if bindings.composerFormattingEnabled {
                 return !composerEmpty
             } else {
                 return !bindings.plainComposerText.string.isEmpty
@@ -109,7 +109,7 @@ struct ComposerToolbarViewState: BindableState {
             return false
         }
         
-        if bindings.composerActionsEnabled {
+        if bindings.composerFormattingEnabled {
             return composerEmpty
         } else {
             return bindings.plainComposerText.string.isEmpty
@@ -129,7 +129,7 @@ struct ComposerToolbarViewState: BindableState {
 struct ComposerToolbarViewStateBindings {
     var plainComposerText: NSAttributedString = .init(string: "")
     var composerFocused = false
-    var composerActionsEnabled = false
+    var composerFormattingEnabled = false
     var composerExpanded = false
     var formatItems: [FormatItem] = .init()
     var alertInfo: AlertInfo<UUID>?

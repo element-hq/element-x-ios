@@ -125,7 +125,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             case .previewVoiceMessage:
                 actionsSubject.send(.voiceMessage(.send))
             default:
-                if context.composerActionsEnabled {
+                if context.composerFormattingEnabled {
                     actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
                                                      html: wysiwygViewModel.content.html,
                                                      mode: state.composerMode,
@@ -147,7 +147,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .handlePasteOrDrop(let provider):
             actionsSubject.send(.handlePasteOrDrop(provider: provider))
         case .enableTextFormatting:
-            state.bindings.composerActionsEnabled = true
+            state.bindings.composerFormattingEnabled = true
             state.bindings.composerFocused = true
         case .composerAction(let action):
             if action == .link {
@@ -162,15 +162,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .plainComposerTextChanged:
             completionSuggestionService.processTextMessage(state.bindings.plainComposerText.string)
         case .didToggleFormattingOptions:
-            if context.composerActionsEnabled {
+            if context.composerFormattingEnabled {
                 DispatchQueue.main.async {
                     self.wysiwygViewModel.textView.flushPills()
                     self.wysiwygViewModel.setMarkdownContent(self.context.plainComposerText.string)
                 }
             } else {
-                context.plainComposerText = NSAttributedString(string: wysiwygViewModel.attributedContent.text.string,
-                                                               attributes: [.font: UIFont.preferredFont(forTextStyle: .body),
-                                                                            .foregroundColor: UIColor(.compound.textPrimary)])
+                context.plainComposerText = NSAttributedString(string: wysiwygViewModel.attributedContent.text.string)
             }
         }
     }
@@ -254,7 +252,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func processVoiceMessageAction(_ action: ComposerToolbarVoiceMessageAction) {
         switch action {
         case .startRecording:
-            state.bindings.composerActionsEnabled = false
+            state.bindings.composerFormattingEnabled = false
             actionsSubject.send(.voiceMessage(.startRecording))
         case .stopRecording:
             actionsSubject.send(.voiceMessage(.stopRecording))
@@ -307,7 +305,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 return
             }
             
-            if context.composerActionsEnabled {
+            if context.composerFormattingEnabled {
                 wysiwygViewModel.setMention(url: url.absoluteString, name: item.displayName ?? item.id, mentionType: .user)
             } else {
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
@@ -315,7 +313,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 state.bindings.plainComposerText = attributedString
             }
         case .allUsers:
-            if context.composerActionsEnabled {
+            if context.composerFormattingEnabled {
                 wysiwygViewModel.setAtRoomMention()
             } else {
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
@@ -343,7 +341,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(text: String) {
-        if context.composerActionsEnabled {
+        if context.composerFormattingEnabled {
             wysiwygViewModel.textView.flushPills()
             
             wysiwygViewModel.setHtmlContent(text)

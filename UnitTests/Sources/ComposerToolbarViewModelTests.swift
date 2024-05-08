@@ -39,7 +39,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              appSettings: appSettings,
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
         
-        viewModel.context.composerActionsEnabled = true
+        viewModel.context.composerFormattingEnabled = true
     }
     
     override func tearDown() {
@@ -95,7 +95,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
         viewModel.state.composerEmpty = false
         viewModel.process(viewAction: .sendMessage)
-        XCTAssertTrue(viewModel.state.bindings.composerActionsEnabled)
+        XCTAssertTrue(viewModel.state.bindings.composerFormattingEnabled)
     }
 
     func testAlertIsShownAfterLinkAction() {

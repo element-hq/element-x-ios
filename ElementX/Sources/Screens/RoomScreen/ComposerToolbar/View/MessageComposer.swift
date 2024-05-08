@@ -25,7 +25,7 @@ struct MessageComposer: View {
     @Binding var plainComposerText: NSAttributedString
     let composerView: WysiwygComposerView
     let mode: RoomScreenComposerMode
-    let composerActionsEnabled: Bool
+    let composerFormattingEnabled: Bool
     let showResizeGrabber: Bool
     @Binding var isExpanded: Bool
     let sendAction: () -> Void
@@ -69,7 +69,7 @@ struct MessageComposer: View {
         VStack(alignment: .leading, spacing: -6) {
             header
             
-            if composerActionsEnabled {
+            if composerFormattingEnabled {
                 Color.clear
                     .overlay(alignment: .top) {
                         composerView
@@ -255,7 +255,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         return MessageComposer(plainComposerText: .constant(content),
                                composerView: composerView,
                                mode: mode,
-                               composerActionsEnabled: false,
+                               composerFormattingEnabled: false,
                                showResizeGrabber: false,
                                isExpanded: .constant(false),
                                sendAction: { },

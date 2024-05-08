@@ -35,9 +35,9 @@ struct RoomScreen: View {
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composerToolbar
-                    .padding(.bottom, composerToolbarContext.composerActionsEnabled ? 8 : 12)
+                    .padding(.bottom, composerToolbarContext.composerFormattingEnabled ? 8 : 12)
                     .background {
-                        if composerToolbarContext.composerActionsEnabled {
+                        if composerToolbarContext.composerFormattingEnabled {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
                                 .ignoresSafeArea()
@@ -186,7 +186,7 @@ struct RoomScreen: View {
     }
     
     private var isNavigationBarHidden: Bool {
-        composerToolbarContext.composerActionsEnabled && composerToolbarContext.composerExpanded && UIDevice.current.userInterfaceIdiom == .pad
+        composerToolbarContext.composerFormattingEnabled && composerToolbarContext.composerExpanded && UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 

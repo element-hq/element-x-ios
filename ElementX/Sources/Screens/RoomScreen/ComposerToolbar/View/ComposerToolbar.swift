@@ -34,7 +34,7 @@ struct ComposerToolbar: View {
         VStack(spacing: 8) {
             topBar
             
-            if context.composerActionsEnabled {
+            if context.composerFormattingEnabled {
                 if verticalSizeClass != .compact,
                    context.composerExpanded {
                     suggestionView
@@ -68,7 +68,7 @@ struct ComposerToolbar: View {
         topBarLayout {
             mainTopBarContent
             
-            if !context.composerActionsEnabled {
+            if !context.composerFormattingEnabled {
                 if context.viewState.isUploading {
                     ProgressView()
                         .scaledFrame(size: 44, relativeTo: .title)
@@ -106,7 +106,7 @@ struct ComposerToolbar: View {
     private var mainTopBarContent: some View {
         ZStack(alignment: .bottom) {
             topBarLayout {
-                if !context.composerActionsEnabled {
+                if !context.composerFormattingEnabled {
                     RoomAttachmentPicker(context: context)
                 }
                 messageComposer
@@ -122,7 +122,7 @@ struct ComposerToolbar: View {
     
     private var closeRTEButton: some View {
         Button {
-            context.composerActionsEnabled = false
+            context.composerFormattingEnabled = false
             context.composerExpanded = false
         } label: {
             Image(Asset.Images.closeRte.name)
@@ -158,8 +158,8 @@ struct ComposerToolbar: View {
         MessageComposer(plainComposerText: $context.plainComposerText,
                         composerView: composerView,
                         mode: context.viewState.composerMode,
-                        composerActionsEnabled: context.composerActionsEnabled,
-                        showResizeGrabber: context.composerActionsEnabled,
+                        composerFormattingEnabled: context.composerFormattingEnabled,
+                        showResizeGrabber: context.composerFormattingEnabled,
                         isExpanded: $context.composerExpanded) {
             context.send(viewAction: .sendMessage)
         } editAction: {
@@ -180,8 +180,8 @@ struct ComposerToolbar: View {
         }
         .environmentObject(context)
         .focused($composerFocused)
-        .padding(.leading, context.composerActionsEnabled ? 7 : 0)
-        .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
+        .padding(.leading, context.composerFormattingEnabled ? 7 : 0)
+        .padding(.trailing, context.composerFormattingEnabled ? 4 : 0)
         .onTapGesture {
             guard !composerFocused else { return }
             composerFocused = true
@@ -197,7 +197,7 @@ struct ComposerToolbar: View {
         .onChange(of: context.plainComposerText) { _ in
             context.send(viewAction: .plainComposerTextChanged)
         }
-        .onChange(of: context.composerActionsEnabled) { _ in
+        .onChange(of: context.composerFormattingEnabled) { _ in
             context.send(viewAction: .didToggleFormattingOptions)
         }
         .onAppear {
