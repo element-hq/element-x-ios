@@ -25,6 +25,7 @@
 "action_accept" = "Прыняць";
 "action_add_to_timeline" = "Дадаць у хроніку";
 "action_back" = "Назад";
+"action_call" = "Call";
 "action_cancel" = "Скасаваць";
 "action_choose_photo" = "Выбраць фота";
 "action_clear" = "Ачысціць";
@@ -665,7 +666,7 @@
 "screen_room_timeline_reactions_show_less" = "Паказаць менш";
 "screen_room_timeline_reactions_show_more" = "Паказаць больш";
 "screen_room_timeline_read_marker_title" = "Новы";
-"screen_room_title" = "Chat";
+"screen_room_title" = "Чат";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ i ";
 "screen_room_typing_notification_plural_ios" = " пішуць…";
 "screen_room_typing_notification_singular_ios" = " піша…";

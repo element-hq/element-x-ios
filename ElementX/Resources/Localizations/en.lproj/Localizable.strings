@@ -25,6 +25,7 @@
 "action_accept" = "Accept";
 "action_add_to_timeline" = "Add to timeline";
 "action_back" = "Back";
+"action_call" = "Call";
 "action_cancel" = "Cancel";
 "action_choose_photo" = "Choose photo";
 "action_clear" = "Clear";

@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "要拍摄照片或视频并作为信息发送，Element X 需要访问相机。";
+"NSFaceIDUsageDescription" = "面容 ID 用于访问您的应用程序。";
+"NSLocationWhenInUseUsageDescription" = "授予位置访问权限，以便 Element X 可以共享您的位置。";
+"NSMicrophoneUsageDescription" = "要录制和发送音频消息，Element X 需要访问麦克风。";
+"NSPhotoLibraryUsageDescription" = "允许将照片和视频保存到您的图库中。";

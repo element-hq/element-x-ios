@@ -25,6 +25,7 @@
 "action_accept" = "Прийняти";
 "action_add_to_timeline" = "Додати до стрічки";
 "action_back" = "Назад";
+"action_call" = "Call";
 "action_cancel" = "Скасувати";
 "action_choose_photo" = "Вибрати фото";
 "action_clear" = "Очистити";
@@ -345,7 +346,7 @@
 "screen_app_lock_signout_alert_message" = "Щоб продовжити, вам потрібно буде повторно увійти та створити новий PIN-код";
 "screen_app_lock_signout_alert_title" = "Ви виходите з системи";
 "screen_blocked_users_empty" = "У вас немає заблокованих користувачів.";
-"screen_blocked_users_unblocking" = "Заблокування…";
+"screen_blocked_users_unblocking" = "Розблокування…";
 "screen_bug_report_attach_screenshot" = "Прикріпити знімок екрану";
 "screen_bug_report_contact_me" = "Ви можете зв'язатися зі мною, якщо у вас виникнуть додаткові запитання.";
 "screen_bug_report_contact_me_title" = "Звʼязатися зі мною";
@@ -433,9 +434,9 @@
 "screen_key_backup_disable_confirmation_action_turn_off" = "Вимкнути";
 "screen_key_backup_disable_confirmation_description" = "Ви втратите зашифровані повідомлення, якщо вийдете з усіх пристроїв.";
 "screen_key_backup_disable_confirmation_title" = "Ви впевнені, що хочете вимкнути резервне копіювання?";
-"screen_key_backup_disable_description" = "Вимкнення резервного копіювання призведе до видалення поточної резервної копії ключа шифрування та вимкнення інших функцій безпеки. В цьому випадку ви будете:";
-"screen_key_backup_disable_description_point_1" = "Не мати зашифрованої історії повідомлень на нових пристроях";
-"screen_key_backup_disable_description_point_2" = "Втратите доступ до зашифрованих повідомлень, якщо ви вийдете з усіх %1$@ сеансів";
+"screen_key_backup_disable_description" = "Вимкнення резервного копіювання призведе до видалення поточної резервної копії ключа шифрування та вимкнення інших функцій безпеки. В такому разі ви:";
+"screen_key_backup_disable_description_point_1" = "Не матимете історії зашифрованих повідомлень на нових пристроях";
+"screen_key_backup_disable_description_point_2" = "Втратите доступ до зашифрованих повідомлень, якщо вийдете з усіх сеансів %1$@";
 "screen_key_backup_disable_title" = "Ви впевнені, що хочете вимкнути резервне копіювання?";
 "screen_login_error_deactivated_account" = "Цей обліковий запис було деактивовано.";
 "screen_login_error_invalid_credentials" = "Неправильне ім'я користувача та/або пароль";
@@ -559,9 +560,9 @@
 "screen_room_change_permissions_invite_people" = "Запрошувати людей";
 "screen_room_change_permissions_moderators" = "Адміністратори та модератори";
 "screen_room_change_permissions_remove_people" = "Вилучати людей";
-"screen_room_change_permissions_room_avatar" = "Змінити аватар кімнати";
-"screen_room_change_permissions_room_name" = "Змінити назву кімнати";
-"screen_room_change_permissions_room_topic" = "Змінити тему кімнати";
+"screen_room_change_permissions_room_avatar" = "Змінювати аватар кімнати";
+"screen_room_change_permissions_room_name" = "Змінювати назву кімнати";
+"screen_room_change_permissions_room_topic" = "Змінювати тему кімнати";
 "screen_room_change_permissions_send_messages" = "Надсилати повідомлення";
 "screen_room_change_role_administrators_title" = "Керувати адмінами";
 "screen_room_change_role_confirm_add_admin_description" = "Ви не зможете скасувати цю дію. Ви просуваєте користувача, щоб він мав такий же рівень прав, як і ви.";
@@ -622,7 +623,7 @@
 "screen_room_member_list_mode_banned" = "Заблоковані";
 "screen_room_member_list_mode_members" = "Учасники";
 "screen_room_member_list_pending_header_title" = "На розгляді";
-"screen_room_member_list_removing_user" = "Видаляємо %1$@…";
+"screen_room_member_list_removing_user" = "Вилучаємо %1$@…";
 "screen_room_member_list_role_administrator" = "Адміністратор";
 "screen_room_member_list_role_moderator" = "Модератор";
 "screen_room_member_list_room_members_header_title" = "Учасники кімнати";
@@ -837,7 +838,7 @@
 "troubleshoot_notifications_test_detect_push_provider_title" = "Detect push providers";
 "troubleshoot_notifications_test_display_notification_description" = "Check that the application can display notification.";
 "troubleshoot_notifications_test_display_notification_failure" = "The notification has not been clicked.";
-"troubleshoot_notifications_test_display_notification_permission_failure" = "Cannot display the notification.";
+"troubleshoot_notifications_test_display_notification_permission_failure" = "Не вдається відобразити сповіщення.";
 "troubleshoot_notifications_test_display_notification_success" = "The notification has been clicked!";
 "troubleshoot_notifications_test_display_notification_title" = "Display notification";
 "troubleshoot_notifications_test_display_notification_waiting" = "Please click on the notification to continue the test.";

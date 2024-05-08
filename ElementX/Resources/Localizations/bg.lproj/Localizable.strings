@@ -25,6 +25,7 @@
 "action_accept" = "Приемане";
 "action_add_to_timeline" = "Add to timeline";
 "action_back" = "Назад";
+"action_call" = "Call";
 "action_cancel" = "Отказ";
 "action_choose_photo" = "Избор на снимка";
 "action_clear" = "Изчистване";

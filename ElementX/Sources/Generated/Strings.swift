@@ -80,6 +80,8 @@ internal enum L10n {
   internal static var actionAddToTimeline: String { return L10n.tr("Localizable", "action_add_to_timeline") }
   /// Back
   internal static var actionBack: String { return L10n.tr("Localizable", "action_back") }
+  /// Call
+  internal static var actionCall: String { return L10n.tr("Localizable", "action_call") }
   /// Cancel
   internal static var actionCancel: String { return L10n.tr("Localizable", "action_cancel") }
   /// Choose photo
