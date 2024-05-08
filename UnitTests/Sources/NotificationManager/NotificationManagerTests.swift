@@ -163,6 +163,38 @@ final class NotificationManagerTests: XCTestCase {
         await fulfillment(of: [expectation])
         XCTAssertTrue(authorizationStatusWasGranted)
     }
+    
+    func test_whenStartAndAuthorizedAndNotificationDisabled_registerForRemoteNotificationsNotCalled() async throws {
+        appSettings.enableNotifications = false
+        notificationCenter.authorizationStatusReturnValue = .authorized
+        notificationManager.delegate = self
+        
+        notificationManager.setUserSession(MockUserSession(clientProxy: ClientProxyMock(),
+                                                           mediaProvider: MockMediaProvider(),
+                                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock()))
+        try await Task.sleep(for: .seconds(1))
+        
+        XCTAssertFalse(authorizationStatusWasGranted)
+    }
+    
+    func test_whenStartAndAuthorized_registerForRemoteNotificationsCalled() async throws {
+        appSettings.enableNotifications = true
+        notificationCenter.authorizationStatusReturnValue = .authorized
+        notificationManager.delegate = self
+        
+        let expectation: XCTestExpectation = expectation(description: "registerForRemoteNotifications delegate function should be called")
+        expectation.assertForOverFulfill = false
+        registerForRemoteNotificationsDelegateCalled = {
+            expectation.fulfill()
+        }
+        
+        notificationManager.setUserSession(MockUserSession(clientProxy: ClientProxyMock(),
+                                                           mediaProvider: MockMediaProvider(),
+                                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock()))
+        await fulfillment(of: [expectation])
+        
+        XCTAssertTrue(authorizationStatusWasGranted)
+    }
 
     func test_whenWillPresentNotificationsDelegateNotSet_CorrectPresentationOptionsReturned() async throws {
         let archiver = MockCoder(requiringSecureCoding: false)

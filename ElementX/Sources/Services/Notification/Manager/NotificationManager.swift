@@ -98,7 +98,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         Task { [weak self] in
             guard let self else { return }
             
-            if await notificationCenter.authorizationStatus() == .authorized {
+            if await notificationCenter.authorizationStatus() == .authorized, appSettings.enableNotifications {
                 await MainActor.run { [weak self] in
                     self?.delegate?.registerForRemoteNotifications()
                 }
