@@ -25,7 +25,6 @@ struct RoomMemberDetailsScreen: View {
             headerSection
             
             if context.viewState.memberDetails != nil, !context.viewState.isOwnMemberDetails {
-                directChatSection
                 blockUserSection
             }
         }
@@ -40,6 +39,29 @@ struct RoomMemberDetailsScreen: View {
     // MARK: - Private
     
     @ViewBuilder
+    private var otherUserFooter: some View {
+        HStack(spacing: 8) {
+            if context.viewState.memberDetails != nil, !context.viewState.isOwnMemberDetails {
+                Button {
+                    context.send(viewAction: .openDirectChat)
+                } label: {
+                    CompoundIcon(\.chat)
+                }
+                .buttonStyle(FormActionButtonStyle(title: L10n.commonMessage))
+                .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
+            }
+            
+            if let permalink = context.viewState.memberDetails?.permalink {
+                ShareLink(item: permalink) {
+                    CompoundIcon(\.shareIos)
+                }
+                .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
+            }
+        }
+        .padding(.top, 32)
+    }
+    
+    @ViewBuilder
     private var headerSection: some View {
         if let memberDetails = context.viewState.memberDetails {
             AvatarHeaderView(member: memberDetails,
@@ -47,15 +69,7 @@ struct RoomMemberDetailsScreen: View {
                              imageProvider: context.imageProvider) {
                 context.send(viewAction: .displayAvatar)
             } footer: {
-                if let permalink = memberDetails.permalink {
-                    HStack(spacing: 32) {
-                        ShareLink(item: permalink) {
-                            CompoundIcon(\.shareIos)
-                        }
-                        .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
-                    }
-                    .padding(.top, 32)
-                }
+                otherUserFooter
             }
         } else {
             AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
@@ -65,17 +79,6 @@ struct RoomMemberDetailsScreen: View {
         }
     }
     
-    private var directChatSection: some View {
-        Section {
-            ListRow(label: .default(title: L10n.commonDirectChat,
-                                    icon: \.chat),
-                    kind: .button {
-                        context.send(viewAction: .openDirectChat)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
-        }
-    }
-
     @ViewBuilder
     private var blockUserSection: some View {
         if let memberDetails = context.viewState.memberDetails {

@@ -106,6 +106,7 @@ struct AvatarHeaderView<Footer: View>: View {
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets())
     }
 }
 

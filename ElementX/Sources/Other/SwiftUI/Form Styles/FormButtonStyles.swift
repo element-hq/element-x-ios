@@ -22,19 +22,22 @@ struct FormActionButtonStyle: ButtonStyle {
     let title: String
     
     func makeBody(configuration: Configuration) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 4) {
             configuration.label
                 .buttonStyle(.plain)
-                .foregroundColor(.compound.textPrimary)
-                .scaledFrame(size: 54)
-                .background {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(configuration.isPressed ? Color.compound.bgSubtlePrimary : .compound.bgCanvasDefaultLevel1)
-                }
+                .foregroundColor(.compound.iconSecondary)
+                .scaledFrame(size: 24)
             
             Text(title)
-                .foregroundColor(.compound.textSecondary)
-                .font(.compound.bodyMD)
+                .foregroundColor(.compound.textPrimary)
+                .font(.compound.bodyLG)
+        }
+        .padding(.horizontal, 4)
+        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity)
+        .background {
+            RoundedRectangle(cornerRadius: 14)
+                .fill(configuration.isPressed ? Color.compound.bgSubtlePrimary : .compound.bgCanvasDefaultLevel1)
         }
     }
 }
