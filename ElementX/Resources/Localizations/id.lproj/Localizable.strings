@@ -25,6 +25,7 @@
 "action_accept" = "Terima";
 "action_add_to_timeline" = "Tambahkan ke lini masa";
 "action_back" = "Kembali";
+"action_call" = "Call";
 "action_cancel" = "Batal";
 "action_choose_photo" = "Pilih foto";
 "action_clear" = "Hapus";

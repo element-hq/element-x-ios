@@ -25,6 +25,7 @@
 "action_accept" = "Godkänn";
 "action_add_to_timeline" = "Lägg till i tidslinjen";
 "action_back" = "Tillbaka";
+"action_call" = "Call";
 "action_cancel" = "Avbryt";
 "action_choose_photo" = "Välj bild";
 "action_clear" = "Rensa";
@@ -353,7 +354,7 @@
 "screen_bug_report_editor_description" = "Vänligen beskriv problemet. Vad gjorde du? Vad förväntade du dig skulle hända? Vad hände istället? Vänligen gå in i så mycket detaljer som möjligt.";
 "screen_bug_report_editor_placeholder" = "Beskriv problemet …";
 "screen_bug_report_editor_supporting" = "Om möjligt, skriv beskrivningen på engelska.";
-"screen_bug_report_error_description_too_short" = "The description is too short, please provide more details about what happened. Thanks!";
+"screen_bug_report_error_description_too_short" = "Beskrivningen är för kort, vänligen ge mer information om vad som hände. Tack!";
 "screen_bug_report_include_crash_logs" = "Skicka kraschloggar";
 "screen_bug_report_include_logs" = "Tillåt loggar";
 "screen_bug_report_include_screenshot" = "Skicka skärmdump";
@@ -666,9 +667,9 @@
 "screen_room_timeline_reactions_show_more" = "Visa mer";
 "screen_room_timeline_read_marker_title" = "Nytt";
 "screen_room_title" = "Chat";
-"screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ and ";
-"screen_room_typing_notification_plural_ios" = " are typing…";
-"screen_room_typing_notification_singular_ios" = " is typing…";
+"screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ och ";
+"screen_room_typing_notification_plural_ios" = " skriver …";
+"screen_room_typing_notification_singular_ios" = " skriver …";
 "screen_room_typing_two_members" = "%1$@ och %2$@";
 "screen_room_voice_message_tooltip" = "Håll för att spela in";
 "screen_roomlist_a11y_create_message" = "Skapa en ny konversation eller ett nytt rum";

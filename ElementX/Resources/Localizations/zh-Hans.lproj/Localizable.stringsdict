@@ -12,12 +12,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d cifră introdusă</string>
-			<key>few</key>
-			<string>%1$d cifre introduse</string>
 			<key>other</key>
-			<string>%1$d cifre introduse</string>
+			<string>已输入 %1$d 个数字</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -30,12 +26,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Citit de %1$@ și incă %2$d</string>
-			<key>few</key>
-			<string>Citit de %1$@ și incă %2$d</string>
 			<key>other</key>
-			<string>Citit de %1$@ și incă %2$d</string>
+			<string>%1$@ 及其他 %2$d 人已读</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -48,12 +40,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d membru</string>
-			<key>few</key>
-			<string>%1$d membri</string>
 			<key>other</key>
-			<string>%1$d membri</string>
+			<string>%1$d个成员</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -66,12 +54,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d vot</string>
-			<key>few</key>
-			<string>%d voturi</string>
 			<key>other</key>
-			<string>%d voturi</string>
+			<string>%d 票</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -84,10 +68,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@: %2$d mesaj</string>
 			<key>other</key>
-			<string>%1$@: %2$d mesaje</string>
+			<string>%1$@：%2$d 条消息</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -100,10 +82,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d notificare</string>
 			<key>other</key>
-			<string>%d notificări</string>
+			<string>%d 条通知</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -116,10 +96,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d invitație</string>
 			<key>other</key>
-			<string>%d invitații</string>
+			<string>%d 个邀请</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -132,10 +110,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d mesaj nou</string>
 			<key>other</key>
-			<string>%d mesaje noi</string>
+			<string>%d 条新消息</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -148,10 +124,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d mesaj notificat necitit</string>
 			<key>other</key>
-			<string>%d mesaje notificate necitite</string>
+			<string>%d 条未读消息</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -164,10 +138,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d cameră</string>
 			<key>other</key>
-			<string>%d camere</string>
+			<string>%d 个房间</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -180,12 +152,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Aveți %1$d încercare de deblocare</string>
-			<key>few</key>
-			<string>Aveți %1$d încercări de deblocare</string>
 			<key>other</key>
-			<string>Aveți %1$d încercări de deblocare</string>
+			<string>还剩 %1$d 次解锁机会</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -198,12 +166,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>PIN greșit. Mai aveți %1$d sansa</string>
-			<key>few</key>
-			<string>PIN greșit. Mai aveți %1$d sanse</string>
 			<key>other</key>
-			<string>PIN greșit. Mai aveți %1$d sanse</string>
+			<string>PIN 码错误。还剩 %1$d 次机会</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -216,10 +180,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>o persoană</string>
 			<key>other</key>
-			<string>%1$d persoane</string>
+			<string>%1$d 人</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -232,12 +194,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d schimbare a camerii</string>
-			<key>few</key>
-			<string>%1$d schimbări ale camerei</string>
 			<key>other</key>
-			<string>%1$d schimbări ale camerei</string>
+			<string>%1$d 聊天室变更</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
@@ -250,12 +208,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@, %2$@ și încă %3$d</string>
-			<key>few</key>
-			<string>%1$@, %2$@ și încă %3$d</string>
 			<key>other</key>
-			<string>%1$@, %2$@ și încă %3$d</string>
+			<string>%1$@，%2$@ 和其他 %3$d 个人</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members_second_component_ios</key>
@@ -268,12 +222,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d altul</string>
-			<key>few</key>
-			<string>%d alții</string>
 			<key>other</key>
-			<string>%d alții</string>
+			<string>其他 %d 人</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -286,12 +236,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@ tastează</string>
-			<key>few</key>
-			<string></string>
 			<key>other</key>
-			<string>%1$@ tastează</string>
+			<string>%1$@ 正在输入</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
@@ -304,12 +250,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>S-a găsit %1$d furnizor push: %2$@</string>
-			<key>few</key>
-			<string></string>
 			<key>other</key>
-			<string>S-au găsit %1$d furnizori push: %2$@</string>
+			<string>找到了 %1$d 个推送提供者：%2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -322,12 +264,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d distribuitor găsit: %2$@.</string>
-			<key>few</key>
-			<string></string>
 			<key>other</key>
-			<string>%1$d distribuitori găsiți: %2$@.</string>
+			<string>找到 %1$d 个 distributors：%2$@</string>
 		</dict>
 	</dict>
 </dict>

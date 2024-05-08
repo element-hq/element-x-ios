@@ -25,6 +25,7 @@
 "action_accept" = "Akzeptieren";
 "action_add_to_timeline" = "Zum Nachrichtenverlauf hinzufügen";
 "action_back" = "Zurück";
+"action_call" = "Call";
 "action_cancel" = "Abbrechen";
 "action_choose_photo" = "Foto auswählen";
 "action_clear" = "Löschen";

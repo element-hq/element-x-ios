@@ -25,6 +25,7 @@
 "action_accept" = "接受";
 "action_add_to_timeline" = "新增至時間軸";
 "action_back" = "返回";
+"action_call" = "Call";
 "action_cancel" = "取消";
 "action_choose_photo" = "選擇照片";
 "action_clear" = "清除";

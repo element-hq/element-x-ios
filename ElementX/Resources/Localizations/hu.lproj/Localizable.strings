@@ -25,6 +25,7 @@
 "action_accept" = "Elfogadás";
 "action_add_to_timeline" = "Hozzáadás az idővonalhoz";
 "action_back" = "Vissza";
+"action_call" = "Call";
 "action_cancel" = "Mégse";
 "action_choose_photo" = "Fénykép kiválasztása";
 "action_clear" = "Törlés";

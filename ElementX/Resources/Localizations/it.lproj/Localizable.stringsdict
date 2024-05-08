@@ -301,9 +301,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d distributor found: %2$@.</string>
+			<string>%1$d distributore trovato: %2$@.</string>
 			<key>other</key>
-			<string>%1$d distributors found: %2$@.</string>
+			<string>%1$d distributori trovati: %2$@.</string>
 		</dict>
 	</dict>
 </dict>
