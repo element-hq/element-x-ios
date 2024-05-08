@@ -51,6 +51,15 @@ struct RoomMemberDetailsScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
             }
             
+            if context.viewState.hasExistingDM {
+                Button {
+                    context.send(viewAction: .call)
+                } label: {
+                    CompoundIcon(\.videoCall)
+                }
+                .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
+            }
+            
             if let permalink = context.viewState.memberDetails?.permalink {
                 ShareLink(item: permalink) {
                     CompoundIcon(\.shareIos)
@@ -137,9 +146,16 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let roomProxyMock = RoomProxyMock(with: .init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         
+        let clientProxyMock = ClientProxyMock(.init())
+        
+        // to avoid mock the call state for the account owner test case
+        if member.userID != RoomMemberProxyMock.mockMe.userID {
+            clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")
+        }
+        
         return RoomMemberDetailsScreenViewModel(userID: member.userID,
                                                 roomProxy: roomProxyMock,
-                                                clientProxy: ClientProxyMock(.init()),
+                                                clientProxy: clientProxyMock,
                                                 mediaProvider: MockMediaProvider(),
                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                 analytics: ServiceLocator.shared.analytics)

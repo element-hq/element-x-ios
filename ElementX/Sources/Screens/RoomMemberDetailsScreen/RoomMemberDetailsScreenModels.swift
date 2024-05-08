@@ -19,6 +19,7 @@ import Foundation
 enum RoomMemberDetailsScreenViewModelAction {
     case openUserProfile
     case openDirectChat(roomID: String)
+    case startCall(roomID: String)
 }
 
 struct RoomMemberDetailsScreenViewState: BindableState {
@@ -26,6 +27,7 @@ struct RoomMemberDetailsScreenViewState: BindableState {
     var memberDetails: RoomMemberDetails?
     var isOwnMemberDetails = false
     var isProcessingIgnoreRequest = false
+    var hasExistingDM = false
 
     var bindings: RoomMemberDetailsScreenViewStateBindings
 }
@@ -83,6 +85,7 @@ enum RoomMemberDetailsScreenViewAction {
     case unignoreConfirmed
     case displayAvatar
     case openDirectChat
+    case call
 }
 
 enum RoomMemberDetailsScreenError: Hashable {

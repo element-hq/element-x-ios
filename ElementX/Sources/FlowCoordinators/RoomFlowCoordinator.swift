@@ -176,6 +176,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    private func handleCallRoute(roomID: String) async {
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            return
+        }
+        
+        actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+    }
+    
     private func handleRoomRoute(roomID: String, focussedEventID: String? = nil, animated: Bool) async {
         guard roomID == self.roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
         
@@ -1064,6 +1072,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentUserProfile(userID: userID))
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, entryPoint: .room))
+            case .startCall(let roomID):
+                Task { await self.handleCallRoute(roomID: roomID) }
             }
         }
         .store(in: &cancellables)
@@ -1087,6 +1097,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, entryPoint: .room))
+            case .startCall(let roomID):
+                Task { await self.handleCallRoute(roomID: roomID) }
             case .dismiss:
                 break // Not supported when pushed.
             }

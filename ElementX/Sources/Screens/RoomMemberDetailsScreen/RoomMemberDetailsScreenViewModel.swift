@@ -61,6 +61,12 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
                 roomMemberProxy = member
                 state.memberDetails = RoomMemberDetails(withProxy: member)
                 state.isOwnMemberDetails = member.userID == roomProxy.ownUserID
+                switch await clientProxy.directRoomForUserID(member.userID) {
+                case .success(let roomID):
+                    state.hasExistingDM = roomID != nil
+                case .failure:
+                    state.hasExistingDM = false
+                }
             case .failure(let error):
                 MXLog.warning("Failed to find member: \(error)")
                 actionsSubject.send(.openUserProfile)
@@ -90,7 +96,9 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         case .displayAvatar:
             Task { await displayFullScreenAvatar() }
         case .openDirectChat:
-            Task { await openDirectChat() }
+            Task { await openDirectChat(shouldStartCall: false) }
+        case .call:
+            Task { await openDirectChat(shouldStartCall: true) }
         }
     }
 
@@ -163,7 +171,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
     }
     
-    private func openDirectChat() async {
+    private func openDirectChat(shouldStartCall: Bool) async {
         guard let roomMemberProxy else { fatalError() }
         
         let loadingIndicatorIdentifier = "openDirectChatLoadingIndicator"
@@ -178,7 +186,12 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             if isNewRoom {
                 analytics.trackCreatedRoom(isDM: true)
             }
-            actionsSubject.send(.openDirectChat(roomID: roomID))
+            
+            if shouldStartCall {
+                actionsSubject.send(.startCall(roomID: roomID))
+            } else {
+                actionsSubject.send(.openDirectChat(roomID: roomID))
+            }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)
         }

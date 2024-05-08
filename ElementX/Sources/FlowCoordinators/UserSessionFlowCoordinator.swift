@@ -238,10 +238,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .genericCallLink(let url):
             navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
-        case .oidcCallback:
-            break
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+        case .oidcCallback:
+            break
         }
     }
     
@@ -706,6 +706,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .openDirectChat(let roomID):
                 navigationSplitCoordinator.setSheetCoordinator(nil)
                 stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
+            case .startCall(let roomID):
+                Task { await self.presentCall(roomID: roomID) }
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }
@@ -716,6 +718,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedUserProfileScreen)
         }
+    }
+    
+    private func presentCall(roomID: String) async {
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            return
+        }
+        
+        presentCallScreen(roomProxy: roomProxy)
     }
     
     // MARK: Toasts and loading indicators
