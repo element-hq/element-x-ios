@@ -35,7 +35,6 @@ final class AppSettings {
         case enableInAppNotifications
         case pusherProfileTag
         case logLevel
-        case otlpTracingEnabled
         case viewSourceEnabled
         case richTextEditorEnabled
         case appAppearance
@@ -254,15 +253,6 @@ final class AppSettings {
     /// Tag describing which set of device specific rules a pusher executes.
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
-    
-    // MARK: - Logging
-    
-    @UserPreference(key: UserDefaultsKeys.otlpTracingEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var otlpTracingEnabled
-    
-    let otlpTracingURL = InfoPlistReader.main.otlpTracingURL
-    let otlpTracingUsername = InfoPlistReader.main.otlpTracingUsername
-    let otlpTracingPassword = InfoPlistReader.main.otlpTracingPassword
     
     // MARK: - Maps
     

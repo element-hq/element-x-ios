@@ -25,11 +25,6 @@ struct DeveloperOptionsScreen: View {
         Form {
             Section("Logging") {
                 LogLevelConfigurationView(logLevel: $context.logLevel)
-                
-                Toggle(isOn: $context.otlpTracingEnabled) {
-                    Text("OTLP tracing")
-                    Text("Requires app reboot")
-                }
             }
             
             Section("Room List") {

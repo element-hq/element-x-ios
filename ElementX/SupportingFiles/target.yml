@@ -108,9 +108,6 @@ targets:
           LSItemContentTypes: $(PILLS_UT_TYPE_IDENTIFIER)
         LSSupportsOpeningDocumentsInPlace: false
         mapLibreAPIKey: $(MAPLIBRE_API_KEY)
-        otlpTracingURL: ${OTLP_TRACING_URL}
-        otlpTracingUsername: ${OTLP_TRACING_USERNAME}
-        otlpTracingPassword: ${OTLP_TRACING_PASSWORD}
 
 
     settings:

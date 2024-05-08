@@ -70,13 +70,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let appSettings = AppSettings()
         
-        if appSettings.otlpTracingEnabled {
-            MXLog.configure(logLevel: appSettings.logLevel, otlpConfiguration: .init(url: appSettings.otlpTracingURL,
-                                                                                     username: appSettings.otlpTracingUsername,
-                                                                                     password: appSettings.otlpTracingPassword))
-        } else {
-            MXLog.configure(logLevel: appSettings.logLevel)
-        }
+        MXLog.configure(logLevel: appSettings.logLevel)
         
         let appName = InfoPlistReader.main.bundleDisplayName
         let appVersion = InfoPlistReader.main.bundleShortVersionString
