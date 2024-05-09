@@ -149,7 +149,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         // Event identifiers and room aliases and identifiers detected in plain text are techincally incomplete
         // without via parameters and we won't bother detecting them
         
-        var matches: [TextParsingMatch] = MatrixEntityRegex.userIdentifierRegex.matches(in: string, options: []).compactMap { match in
+        var matches: [TextParsingMatch] = MatrixEntityRegex.userIdentifierRegex.matches(in: string).compactMap { match in
             guard let matchRange = Range(match.range, in: string) else {
                 return nil
             }
@@ -159,7 +159,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return TextParsingMatch(type: .userID(identifier: identifier), range: match.range)
         }
         
-        matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string, options: []).compactMap { match in
+        matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string).compactMap { match in
             guard let matchRange = Range(match.range, in: string) else {
                 return nil
             }
@@ -169,7 +169,17 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return TextParsingMatch(type: .roomAlias(alias: alias), range: match.range)
         })
         
-        matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string, options: []).compactMap { match in
+        matches.append(contentsOf: MatrixEntityRegex.uriRegex.matches(in: string).compactMap { match in
+            guard let matchRange = Range(match.range, in: string) else {
+                return nil
+            }
+            
+            let uri = String(string[matchRange])
+            
+            return TextParsingMatch(type: .matrixURI(uri: uri), range: match.range)
+        })
+        
+        matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string).compactMap { match in
             guard let matchRange = Range(match.range, in: string) else {
                 return nil
             }
@@ -183,7 +193,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return TextParsingMatch(type: .link(urlString: link), range: match.range)
         })
         
-        matches.append(contentsOf: MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string, options: []).map { match in
+        matches.append(contentsOf: MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string).map { match in
             TextParsingMatch(type: .atRoom, range: match.range)
         })
         
@@ -215,6 +225,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
             case .roomAlias(let alias):
                 if let url = try? matrixToRoomAliasPermalink(roomAlias: alias) {
+                    attributedString.addAttribute(.link, value: url, range: match.range)
+                }
+            case .matrixURI(let uri):
+                if let url = URL(string: uri) {
                     attributedString.addAttribute(.link, value: url, range: match.range)
                 }
             case .userID, .link:
@@ -357,6 +371,7 @@ private struct TextParsingMatch {
     enum MatchType {
         case userID(identifier: String)
         case roomAlias(alias: String)
+        case matrixURI(uri: String)
         case link(urlString: String)
         case atRoom
     }

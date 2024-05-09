@@ -22,6 +22,7 @@ enum MatrixEntityRegex: String {
     case homeserver
     case userID
     case roomAlias
+    case uri
     case allUsers
     
     var rawValue: String {
@@ -32,6 +33,8 @@ enum MatrixEntityRegex: String {
             return "@[\\x21-\\x39\\x3B-\\x7F]+:" + MatrixEntityRegex.homeserver.rawValue
         case .roomAlias:
             return "#[A-Z0-9._%#@=+-]+:" + MatrixEntityRegex.homeserver.rawValue
+        case .uri:
+            return "matrix:(r|u|roomid)\\/[A-Z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*(?:\\?[A-Z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*)?"
         case .allUsers:
             return PillConstants.atRoom
         }
@@ -41,6 +44,7 @@ enum MatrixEntityRegex: String {
     static var homeserverRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.homeserver.rawValue, options: .caseInsensitive)
     static var userIdentifierRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.userID.rawValue, options: .caseInsensitive)
     static var roomAliasRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.roomAlias.rawValue, options: .caseInsensitive)
+    static var uriRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.uri.rawValue, options: .caseInsensitive)
     static var allUsersRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.allUsers.rawValue)
     static var linkRegex = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
     // swiftlint:enable force_try
@@ -67,6 +71,14 @@ enum MatrixEntityRegex: String {
         }
         
         return match.range.length == alias.count
+    }
+    
+    static func isMatrixURI(_ uri: String) -> Bool {
+        guard let match = uriRegex.firstMatch(in: uri) else {
+            return false
+        }
+        
+        return match.range.length == uri.count
     }
     
     static func containsMatrixAllUsers(_ string: String) -> Bool {

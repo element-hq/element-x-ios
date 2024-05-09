@@ -188,6 +188,12 @@ class AttributedStringBuilderTests: XCTestCase {
         checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: string, expectedRuns: 1)
     }
     
+    func testMatrixURI() {
+        let string = "matrix:roomid/hello:matrix.org/e/world?via=matrix.org"
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: string, expectedRuns: 1)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: string, expectedRuns: 1)
+    }
+    
     func testUserIDLink() {
         let userID = "@user:matrix.org"
         let string = "The user is \(userID)."
