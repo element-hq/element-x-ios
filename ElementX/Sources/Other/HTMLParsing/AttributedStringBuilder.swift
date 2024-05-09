@@ -170,21 +170,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             if let value = value as? UIColor,
                value == temporaryCodeBlockMarkingColor {
                 attributedString.addAttribute(.backgroundColor, value: UIColor(.compound._bgCodeBlock) as Any, range: range)
-                // Codebloks should not have explicit links
-                attributedString.enumerateAttribute(.link, in: range, options: []) { value, range, _ in
-                    if let link = value as? URL {
-                        var text = attributedString.attributedSubstring(from: range).string
-                        if !text.contains("://") {
-                            // we sanitize links by always  them use https://
-                            text.insert(contentsOf: "https://", at: text.startIndex)
-                        }
-                        if text == link.absoluteString {
-                            attributedString.removeAttribute(.link, range: range)
-                        }
-                    }
-                }
-                // Codeblocks should not have all users mentions
-                attributedString.removeAttribute(.MatrixAllUsersMention, range: range)
+                attributedString.removeAttribute(.link, range: range)
             }
         }
     }
@@ -261,6 +247,11 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             }
             
             if hasLink {
+                return
+            }
+            
+            // Don't add any extra attributes within codeblocks
+            if attributedString.attribute(.backgroundColor, at: match.range.location, effectiveRange: nil) as? UIColor == temporaryCodeBlockMarkingColor {
                 return
             }
             
