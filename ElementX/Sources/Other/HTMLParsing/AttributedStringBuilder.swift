@@ -140,51 +140,11 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         return result
     }
     
-    private func replaceMarkedBlockquotes(_ attributedString: NSMutableAttributedString) {
-        // According to blockquotes in the string, DTCoreText can apply 2 policies:
-        //     - define a `DTTextBlocksAttribute` attribute on a <blockquote> block
-        //     - or, just define a `NSBackgroundColorAttributeName` attribute
-        attributedString.enumerateAttribute(.DTTextBlocks, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
-            guard let value = value as? NSArray,
-                  let dtTextBlock = value.firstObject as? DTTextBlock,
-                  dtTextBlock.backgroundColor == temporaryBlockquoteMarkingColor else {
-                return
+    private func removeDefaultForegroundColor(_ attributedString: NSMutableAttributedString) {
+        attributedString.enumerateAttribute(.foregroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            if value as? UIColor == UIColor.black {
+                attributedString.removeAttribute(.foregroundColor, range: range)
             }
-            
-            attributedString.addAttribute(.MatrixBlockquote, value: true, range: range)
-        }
-        
-        attributedString.enumerateAttribute(.backgroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
-            guard let value = value as? UIColor,
-                  value == temporaryBlockquoteMarkingColor else {
-                return
-            }
-            
-            attributedString.removeAttribute(.backgroundColor, range: range)
-            attributedString.addAttribute(.MatrixBlockquote, value: true, range: range)
-        }
-    }
-    
-    private func replaceMarkedCodeBlocks(_ attributedString: NSMutableAttributedString) {
-        attributedString.enumerateAttribute(.backgroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
-            if let value = value as? UIColor,
-               value == temporaryCodeBlockMarkingColor {
-                attributedString.addAttribute(.backgroundColor, value: UIColor(.compound._bgCodeBlock) as Any, range: range)
-                attributedString.removeAttribute(.link, range: range)
-            }
-        }
-    }
-    
-    private func removeDTCoreTextArtifacts(_ attributedString: NSMutableAttributedString) {
-        guard attributedString.length > 0 else {
-            return
-        }
-        
-        // DTCoreText adds a newline at the end of plain text ( https://github.com/Cocoanetics/DTCoreText/issues/779 )
-        // or after a blockquote section.
-        // Trim trailing whitespace and newlines in the string content
-        while (attributedString.string as NSString).hasSuffixCharacter(from: .whitespacesAndNewlines) {
-            attributedString.deleteCharacters(in: .init(location: attributedString.length - 1, length: 1))
         }
     }
     
@@ -270,6 +230,41 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
+    private func replaceMarkedBlockquotes(_ attributedString: NSMutableAttributedString) {
+        // According to blockquotes in the string, DTCoreText can apply 2 policies:
+        //     - define a `DTTextBlocksAttribute` attribute on a <blockquote> block
+        //     - or, just define a `NSBackgroundColorAttributeName` attribute
+        attributedString.enumerateAttribute(.DTTextBlocks, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            guard let value = value as? NSArray,
+                  let dtTextBlock = value.firstObject as? DTTextBlock,
+                  dtTextBlock.backgroundColor == temporaryBlockquoteMarkingColor else {
+                return
+            }
+            
+            attributedString.addAttribute(.MatrixBlockquote, value: true, range: range)
+        }
+        
+        attributedString.enumerateAttribute(.backgroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            guard let value = value as? UIColor,
+                  value == temporaryBlockquoteMarkingColor else {
+                return
+            }
+            
+            attributedString.removeAttribute(.backgroundColor, range: range)
+            attributedString.addAttribute(.MatrixBlockquote, value: true, range: range)
+        }
+    }
+    
+    private func replaceMarkedCodeBlocks(_ attributedString: NSMutableAttributedString) {
+        attributedString.enumerateAttribute(.backgroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            if let value = value as? UIColor,
+               value == temporaryCodeBlockMarkingColor {
+                attributedString.addAttribute(.backgroundColor, value: UIColor(.compound._bgCodeBlock) as Any, range: range)
+                attributedString.removeAttribute(.link, range: range)
+            }
+        }
+    }
+    
     func detectPermalinks(_ attributedString: NSMutableAttributedString) {
         attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if value != nil {
@@ -298,19 +293,24 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
-    private func removeDefaultForegroundColor(_ attributedString: NSMutableAttributedString) {
-        attributedString.enumerateAttribute(.foregroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
-            if value as? UIColor == UIColor.black {
-                attributedString.removeAttribute(.foregroundColor, range: range)
-            }
-        }
-    }
-    
     private func removeLinkColors(_ attributedString: NSMutableAttributedString) {
         attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if value != nil {
                 attributedString.removeAttribute(.foregroundColor, range: range)
             }
+        }
+    }
+    
+    private func removeDTCoreTextArtifacts(_ attributedString: NSMutableAttributedString) {
+        guard attributedString.length > 0 else {
+            return
+        }
+        
+        // DTCoreText adds a newline at the end of plain text ( https://github.com/Cocoanetics/DTCoreText/issues/779 )
+        // or after a blockquote section.
+        // Trim trailing whitespace and newlines in the string content
+        while (attributedString.string as NSString).hasSuffixCharacter(from: .whitespacesAndNewlines) {
+            attributedString.deleteCharacters(in: .init(location: attributedString.length - 1, length: 1))
         }
     }
     
