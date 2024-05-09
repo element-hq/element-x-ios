@@ -30,6 +30,7 @@ struct MessageComposerTextField: View {
                           pasteHandler: pasteHandler)
             .accessibilityLabel(placeholder)
             .background(placeholderView, alignment: .topLeading)
+            .background { keyboardShortcuts }
     }
 
     @ViewBuilder
@@ -39,6 +40,16 @@ struct MessageComposerTextField: View {
                 .font(Font(UIFont.preferredFont(forTextStyle: .body)))
                 .foregroundColor(.compound.textSecondary)
                 .accessibilityHidden(true)
+        }
+    }
+    
+    private var keyboardShortcuts: some View {
+        Group {
+            Button("") {
+                keyHandler(.keyboardEscape)
+            }
+            // Need this to enable escape on the textView and forward the presses
+            .keyboardShortcut(.escape, modifiers: [])
         }
     }
 }

@@ -103,7 +103,7 @@ struct GlobalSearchScreen: View {
             Button("") {
                 context.send(viewAction: .dismiss)
             }
-            // Need this to enable escape on the textfield and forward the presses
+            // Need this to enable escape on the textField and forward the presses
             .keyboardShortcut(.escape, modifiers: [])
         }
     }
