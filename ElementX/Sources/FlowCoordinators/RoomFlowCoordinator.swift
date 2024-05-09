@@ -176,6 +176,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    private func presentCallScreen(roomID: String) async {
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            return
+        }
+        
+        actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+    }
+    
     private func handleRoomRoute(roomID: String, focussedEventID: String? = nil, animated: Bool) async {
         guard roomID == self.roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
         
@@ -1064,6 +1072,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentUserProfile(userID: userID))
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, entryPoint: .room))
+            case .startCall(let roomID):
+                Task { await self.presentCallScreen(roomID: roomID) }
             }
         }
         .store(in: &cancellables)
@@ -1087,6 +1097,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, entryPoint: .room))
+            case .startCall(let roomID):
+                Task { await self.presentCallScreen(roomID: roomID) }
             case .dismiss:
                 break // Not supported when pushed.
             }
@@ -1094,9 +1106,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         // Replace the RoomMemberDetailsScreen without any animation.
-        navigationStackCoordinator.pop(animated: false)
-        navigationStackCoordinator.push(coordinator, animated: false) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissUserProfile)
+        // If this pop and push happens before the previous navigation is completed it might break screen presentation logic
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            self.navigationStackCoordinator.pop(animated: false)
+            self.navigationStackCoordinator.push(coordinator, animated: false) { [weak self] in
+                self?.stateMachine.tryEvent(.dismissUserProfile)
+            }
         }
     }
     

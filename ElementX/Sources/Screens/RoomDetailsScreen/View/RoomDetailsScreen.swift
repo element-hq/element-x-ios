@@ -97,7 +97,7 @@ struct RoomDetailsScreen: View {
     
     @ViewBuilder
     private var headerSectionShortcuts: some View {
-        HStack(spacing: 32) {
+        HStack(spacing: 8) {
             ForEach(context.viewState.shortcuts, id: \.self) { shortcut in
                 switch shortcut {
                 case .mute:

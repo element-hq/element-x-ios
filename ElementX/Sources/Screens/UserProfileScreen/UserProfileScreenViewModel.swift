@@ -59,6 +59,12 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             case .success(let userProfile):
                 state.userProfile = userProfile
                 state.permalink = (try? matrixToUserPermalink(userId: userID)).flatMap(URL.init(string:))
+                switch await clientProxy.directRoomForUserID(userProfile.userID) {
+                case .success(let roomID):
+                    state.dmRoomID = roomID
+                case .failure:
+                    break
+                }
             case .failure(let error):
                 state.bindings.alertInfo = .init(id: .unknown)
                 MXLog.error("Failed to find user profile: \(error)")
@@ -81,6 +87,8 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             Task { await displayFullScreenAvatar() }
         case .openDirectChat:
             Task { await openDirectChat() }
+        case .startCall(let roomID):
+            actionsSubject.send(.startCall(roomID: roomID))
         case .dismiss:
             actionsSubject.send(.dismiss)
         }

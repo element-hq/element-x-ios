@@ -63,6 +63,7 @@
 "action_leave_room" = "Leave room";
 "action_manage_account" = "Manage account";
 "action_manage_devices" = "Manage devices";
+"action_message" = "Message";
 "action_next" = "Next";
 "action_no" = "No";
 "action_not_now" = "Not now";

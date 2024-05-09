@@ -18,6 +18,7 @@ import Foundation
 
 enum UserProfileScreenViewModelAction {
     case openDirectChat(roomID: String)
+    case startCall(roomID: String)
     case dismiss
 }
 
@@ -28,6 +29,7 @@ struct UserProfileScreenViewState: BindableState {
     
     var userProfile: UserProfileProxy?
     var permalink: URL?
+    var dmRoomID: String?
 
     var bindings: UserProfileScreenViewStateBindings
 }
@@ -42,6 +44,7 @@ struct UserProfileScreenViewStateBindings {
 enum UserProfileScreenViewAction {
     case displayAvatar
     case openDirectChat
+    case startCall(roomID: String)
     case dismiss
 }
 

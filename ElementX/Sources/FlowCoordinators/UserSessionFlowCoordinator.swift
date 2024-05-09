@@ -238,10 +238,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .genericCallLink(let url):
             navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
-        case .oidcCallback:
-            break
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+        case .oidcCallback:
+            break
         }
     }
     
@@ -595,6 +595,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(callScreenCoordinator, animated: true)
     }
     
+    private func presentCallScreen(roomID: String) async {
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            return
+        }
+        
+        presentCallScreen(roomProxy: roomProxy)
+    }
+    
     // MARK: Secure backup confirmation
     
     private func presentSecureBackupLogoutConfirmationScreen() {
@@ -706,6 +714,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .openDirectChat(let roomID):
                 navigationSplitCoordinator.setSheetCoordinator(nil)
                 stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
+            case .startCall(let roomID):
+                Task { await self.presentCallScreen(roomID: roomID) }
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }

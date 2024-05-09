@@ -23,10 +23,6 @@ struct UserProfileScreen: View {
     var body: some View {
         Form {
             headerSection
-            
-            if context.viewState.userProfile != nil, !context.viewState.isOwnUser {
-                directChatSection
-            }
         }
         .compoundList()
         .navigationTitle(L10n.screenRoomMemberDetailsTitle)
@@ -40,6 +36,38 @@ struct UserProfileScreen: View {
     // MARK: - Private
     
     @ViewBuilder
+    private var otherUserFooter: some View {
+        HStack(spacing: 8) {
+            if context.viewState.userProfile != nil, !context.viewState.isOwnUser {
+                Button {
+                    context.send(viewAction: .openDirectChat)
+                } label: {
+                    CompoundIcon(\.chat)
+                }
+                .buttonStyle(FormActionButtonStyle(title: L10n.commonMessage))
+                .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
+            }
+            
+            if let roomID = context.viewState.dmRoomID {
+                Button {
+                    context.send(viewAction: .startCall(roomID: roomID))
+                } label: {
+                    CompoundIcon(\.videoCall)
+                }
+                .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
+            }
+            
+            if let permalink = context.viewState.permalink {
+                ShareLink(item: permalink) {
+                    CompoundIcon(\.shareIos)
+                }
+                .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
+            }
+        }
+        .padding(.top, 32)
+    }
+    
+    @ViewBuilder
     private var headerSection: some View {
         if let userProfile = context.viewState.userProfile {
             AvatarHeaderView(user: userProfile,
@@ -47,32 +75,13 @@ struct UserProfileScreen: View {
                              imageProvider: context.imageProvider) {
                 context.send(viewAction: .displayAvatar)
             } footer: {
-                if let permalink = context.viewState.permalink {
-                    HStack(spacing: 32) {
-                        ShareLink(item: permalink) {
-                            CompoundIcon(\.shareIos)
-                        }
-                        .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
-                    }
-                    .padding(.top, 32)
-                }
+                otherUserFooter
             }
         } else {
             AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
                              avatarSize: .user(on: .memberDetails),
                              imageProvider: context.imageProvider,
                              footer: { })
-        }
-    }
-    
-    private var directChatSection: some View {
-        Section {
-            ListRow(label: .default(title: L10n.commonDirectChat,
-                                    icon: \.chat),
-                    kind: .button {
-                        context.send(viewAction: .openDirectChat)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
         }
     }
     
@@ -104,11 +113,15 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(userID: String) -> UserProfileScreenViewModel {
-        UserProfileScreenViewModel(userID: userID,
-                                   isPresentedModally: false,
-                                   clientProxy: ClientProxyMock(.init()),
-                                   mediaProvider: MockMediaProvider(),
-                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                   analytics: ServiceLocator.shared.analytics)
+        let clientProxyMock = ClientProxyMock(.init())
+        if userID != RoomMemberProxyMock.mockMe.userID {
+            clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")
+        }
+        return UserProfileScreenViewModel(userID: userID,
+                                          isPresentedModally: false,
+                                          clientProxy: clientProxyMock,
+                                          mediaProvider: MockMediaProvider(),
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                          analytics: ServiceLocator.shared.analytics)
     }
 }
