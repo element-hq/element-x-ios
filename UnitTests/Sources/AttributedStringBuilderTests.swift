@@ -491,14 +491,21 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertNil(attributedStringFromHTML?.link)
     }
     
-    func testHyperlinksAreNotIgnoredInCode() {
+    func testHyperlinksAreIgnoredInCode() {
         let htmlString = "<pre><code>test <a href=\"https://matrix.org\">matrix</a> test</code></pre>"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
-        checkLinkIn(attributedString: attributedStringFromHTML, expectedLink: "https://matrix.org", expectedRuns: 3)
+        XCTAssertNil(attributedStringFromHTML?.link)
     }
     
     func testUserMentionIsIgnoredInCode() {
         let htmlString = "<pre><code>test https://matrix.org/#/@test:matrix.org test</code></pre>"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
+        XCTAssert(attributedStringFromHTML?.runs.count == 1)
+        XCTAssertNil(attributedStringFromHTML?.attachment)
+    }
+    
+    func testPlainTextUserMentionIsIgnoredInCode() {
+        let htmlString = "<pre><code>Hey @some.user.ceriu:matrix.org</code></pre>"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
         XCTAssert(attributedStringFromHTML?.runs.count == 1)
         XCTAssertNil(attributedStringFromHTML?.attachment)
