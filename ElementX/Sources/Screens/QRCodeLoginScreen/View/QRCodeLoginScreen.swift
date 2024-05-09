@@ -62,7 +62,7 @@ struct QRCodeLoginScreen: View {
                 SFNumberedListView(items: context.viewState.initialStateListItems)
             }
         } bottomContent: {
-            Button(L10n.actionContinue) {
+            Button(L10n.screenQrCodeLoginInitialStateButtonTitle) {
                 context.send(viewAction: .startScan)
             }
             .buttonStyle(.compound(.primary))

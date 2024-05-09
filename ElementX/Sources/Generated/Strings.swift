@@ -80,6 +80,8 @@ internal enum L10n {
   internal static var actionAddToTimeline: String { return L10n.tr("Localizable", "action_add_to_timeline") }
   /// Back
   internal static var actionBack: String { return L10n.tr("Localizable", "action_back") }
+  /// Call
+  internal static var actionCall: String { return L10n.tr("Localizable", "action_call") }
   /// Cancel
   internal static var actionCancel: String { return L10n.tr("Localizable", "action_cancel") }
   /// Choose photo
@@ -158,6 +160,8 @@ internal enum L10n {
   internal static var actionManageAccount: String { return L10n.tr("Localizable", "action_manage_account") }
   /// Manage devices
   internal static var actionManageDevices: String { return L10n.tr("Localizable", "action_manage_devices") }
+  /// Message
+  internal static var actionMessage: String { return L10n.tr("Localizable", "action_message") }
   /// Next
   internal static var actionNext: String { return L10n.tr("Localizable", "action_next") }
   /// No
@@ -1215,6 +1219,8 @@ internal enum L10n {
   internal static var screenQrCodeLoginDeviceCodeSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_subtitle") }
   /// Enter the number below on your other device
   internal static var screenQrCodeLoginDeviceCodeTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_title") }
+  /// Ready to scan
+  internal static var screenQrCodeLoginInitialStateButtonTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_button_title") }
   /// Open %1$@ on a desktop device
   internal static func screenQrCodeLoginInitialStateItem1(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_1", String(describing: p1))
@@ -1227,7 +1233,7 @@ internal enum L10n {
   }
   /// “Link new device”
   internal static var screenQrCodeLoginInitialStateItem3Action: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_3_action") }
-  /// Follow the instructions shown
+  /// Scan the QR code with this device
   internal static var screenQrCodeLoginInitialStateItem4: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_4") }
   /// Open %1$@ on another device to get the QR code
   internal static func screenQrCodeLoginInitialStateTitle(_ p1: Any) -> String {
@@ -1405,6 +1411,12 @@ internal enum L10n {
   internal static var screenRoomDetailsAlreadyAMember: String { return L10n.tr("Localizable", "screen_room_details_already_a_member") }
   /// Already invited
   internal static var screenRoomDetailsAlreadyInvited: String { return L10n.tr("Localizable", "screen_room_details_already_invited") }
+  /// Encrypted
+  internal static var screenRoomDetailsBadgeEncrypted: String { return L10n.tr("Localizable", "screen_room_details_badge_encrypted") }
+  /// Not encrypted
+  internal static var screenRoomDetailsBadgeNotEncrypted: String { return L10n.tr("Localizable", "screen_room_details_badge_not_encrypted") }
+  /// Public room
+  internal static var screenRoomDetailsBadgePublic: String { return L10n.tr("Localizable", "screen_room_details_badge_public") }
   /// Edit Room
   internal static var screenRoomDetailsEditRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_edit_room_title") }
   /// There was an unknown error and the information couldn't be changed.
