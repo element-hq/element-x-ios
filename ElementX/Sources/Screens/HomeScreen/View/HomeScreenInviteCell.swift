@@ -112,13 +112,11 @@ struct HomeScreenInviteCell: View {
                 context.send(viewAction: .declineInvite(roomIdentifier: room.id))
             }
             .buttonStyle(.compound(.secondary, size: .medium))
-            .accessibilityIdentifier(A11yIdentifiers.invitesScreen.decline)
             
             Button(L10n.actionAccept) {
                 context.send(viewAction: .acceptInvite(roomIdentifier: room.id))
             }
             .buttonStyle(.compound(.primary, size: .medium))
-            .accessibilityIdentifier(A11yIdentifiers.invitesScreen.accept)
         }
     }
     

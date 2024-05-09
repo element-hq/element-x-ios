@@ -286,12 +286,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
-                
-            case (.invitesScreen, .selectRoom, .invitesScreen):
-                break
-            case (.invitesScreen, .deselectRoom, .invitesScreen):
-                dismissRoomFlow(animated: animated)
-                
+                                
             case (.roomList, .showSettingsScreen, .settingsScreen):
                 break
             case (.settingsScreen, .dismissedSettingsScreen, .roomList):
@@ -310,13 +305,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomList, .showStartChatScreen, .startChatScreen):
                 presentStartChat(animated: animated)
             case (.startChatScreen, .dismissedStartChatScreen, .roomList):
-                break
-                
-            case (.roomList, .showInvitesScreen, .invitesScreen):
-                presentInvitesList(animated: animated)
-            case (.invitesScreen, .showInvitesScreen, .invitesScreen):
-                break
-            case (.invitesScreen, .dismissedInvitesScreen, .roomList):
                 break
                 
             case (.roomList, .showLogoutConfirmationScreen, .logoutConfirmationScreen):
@@ -389,8 +377,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.showStartChatScreen)
                 case .logout:
                     Task { await self.runLogoutFlow() }
-                case .presentInvitesScreen:
-                    stateMachine.processEvent(.showInvitesScreen)
                 case .presentGlobalSearch:
                     presentGlobalSearch()
                 case .presentRoomDirectorySearch:
@@ -493,12 +479,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .roomDetails:
             coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: animated)
         }
-        
-        let availableInvitesCount = userSession.clientProxy.inviteSummaryProvider?.roomListPublisher.value.count ?? 0
-        if case .invitesScreen = stateMachine.state, availableInvitesCount == 1 {
-            dismissInvitesList(animated: true)
-        }
-        
+                
         Task {
             let _ = await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
             
@@ -544,38 +525,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
         
-    // MARK: Invites list
-    
-    private func presentInvitesList(animated: Bool) {
-        let parameters = InvitesScreenCoordinatorParameters(userSession: userSession)
-        let coordinator = InvitesScreenCoordinator(parameters: parameters)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                switch action {
-                case .openRoom(let roomID):
-                    self?.stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
-                }
-            }
-            .store(in: &cancellables)
-        
-        sidebarNavigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedInvitesScreen)
-        }
-        
-        Task {
-            await notificationManager.removeDeliveredInviteNotifications()
-        }
-    }
-    
-    private func dismissInvitesList(animated: Bool) {
-        guard case .invitesScreen = stateMachine.state else {
-            fatalError()
-        }
-        
-        sidebarNavigationStackCoordinator.pop(animated: animated)
-    }
-    
     // MARK: Calls
     
     private func presentCallScreen(roomProxy: RoomProxyProtocol) {

@@ -36,9 +36,6 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Showing the start chat screen
         case startChatScreen(selectedRoomID: String?)
         
-        /// Showing invites list screen
-        case invitesScreen(selectedRoomID: String?)
-        
         /// Showing the logout flows
         case logoutConfirmationScreen(selectedRoomID: String?)
         
@@ -57,7 +54,6 @@ class UserSessionFlowCoordinatorStateMachine {
                  .feedbackScreen(let selectedRoomID),
                  .settingsScreen(let selectedRoomID),
                  .startChatScreen(let selectedRoomID),
-                 .invitesScreen(let selectedRoomID),
                  .logoutConfirmationScreen(let selectedRoomID),
                  .roomDirectorySearchScreen(let selectedRoomID):
                 selectedRoomID
@@ -95,12 +91,7 @@ class UserSessionFlowCoordinatorStateMachine {
         case showStartChatScreen
         /// Start chat has been dismissed
         case dismissedStartChatScreen
-        
-        /// Request presentation of the invites screen
-        case showInvitesScreen
-        /// The invites screen has been dismissed
-        case dismissedInvitesScreen
-        
+                
         /// Logout has been requested and this is the last sesion
         case showLogoutConfirmationScreen
         /// Logout has been cancelled
@@ -140,12 +131,8 @@ class UserSessionFlowCoordinatorStateMachine {
             switch (fromState, event) {
             case (.roomList, .selectRoom(let roomID, _)):
                 return .roomList(selectedRoomID: roomID)
-            case (.invitesScreen, .selectRoom(let roomID, _)):
-                return .invitesScreen(selectedRoomID: roomID)
             case (.roomList, .deselectRoom):
                 return .roomList(selectedRoomID: nil)
-            case (.invitesScreen, .deselectRoom):
-                return .invitesScreen(selectedRoomID: nil)
 
             case (.roomList(let selectedRoomID), .showSettingsScreen):
                 return .settingsScreen(selectedRoomID: selectedRoomID)
@@ -161,15 +148,7 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .startChatScreen(selectedRoomID: selectedRoomID)
             case (.startChatScreen(let selectedRoomID), .dismissedStartChatScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
-            
-            case (.roomList(let selectedRoomID), .showInvitesScreen):
-                return .invitesScreen(selectedRoomID: selectedRoomID)
-            case (.invitesScreen(let selectedRoomID), .showInvitesScreen):
-                return .invitesScreen(selectedRoomID: selectedRoomID)
-
-            case (.invitesScreen(let selectedRoomID), .dismissedInvitesScreen):
-                return .roomList(selectedRoomID: selectedRoomID)
-                
+                            
             case (.roomList(let selectedRoomID), .showLogoutConfirmationScreen):
                 return .logoutConfirmationScreen(selectedRoomID: selectedRoomID)
             case (.logoutConfirmationScreen(let selectedRoomID), .dismissedLogoutConfirmationScreen):
@@ -223,8 +202,6 @@ class UserSessionFlowCoordinatorStateMachine {
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
         switch stateMachine.state {
         case .roomList(let selectedRoomID):
-            return roomID == selectedRoomID
-        case .invitesScreen(let selectedRoomID):
             return roomID == selectedRoomID
         default:
             return false
