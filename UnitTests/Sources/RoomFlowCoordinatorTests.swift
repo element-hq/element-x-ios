@@ -30,7 +30,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     func testRoomPresentation() async throws {
         await setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1"))
+        try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
         try await clearRoute(expectedActions: [.finished])
@@ -64,7 +64,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     func testPushDetails() async throws {
         await setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1"))
+        try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
@@ -77,15 +77,15 @@ class RoomFlowCoordinatorTests: XCTestCase {
     func testChildRoomFlow() async throws {
         await setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1"))
+        try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
-        try await process(route: .childRoom(roomID: "2"))
+        try await process(route: .childRoom(roomID: "2", via: []))
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         
-        try await process(route: .childRoom(roomID: "3"))
+        try await process(route: .childRoom(roomID: "3", via: []))
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2)
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         XCTAssert(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
@@ -100,7 +100,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         await setupRoomFlowCoordinator(asChildFlow: true)
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
-        try await process(route: .room(roomID: "1"))
+        try await process(route: .room(roomID: "1", via: []))
         try await process(route: .roomDetails(roomID: "1"))
         XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2)
@@ -117,11 +117,11 @@ class RoomFlowCoordinatorTests: XCTestCase {
     func testChildRoomMemberDetails() async throws {
         await setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1"))
+        try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
-        try await process(route: .childRoom(roomID: "2"))
+        try await process(route: .childRoom(roomID: "2", via: []))
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         
@@ -134,19 +134,19 @@ class RoomFlowCoordinatorTests: XCTestCase {
     func testChildRoomIgnoresDirectDuplicate() async throws {
         await setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1"))
+        try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
-        try await process(route: .childRoom(roomID: "1"))
+        try await process(route: .childRoom(roomID: "1", via: []))
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0,
                        "A room flow shouldn't present a direct child for the same room.")
         
-        try await process(route: .childRoom(roomID: "2"))
+        try await process(route: .childRoom(roomID: "2", via: []))
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         
-        try await process(route: .childRoom(roomID: "1"))
+        try await process(route: .childRoom(roomID: "1", via: []))
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2,
                        "Presenting the same room multiple times should be allowed when it's not a direct child of itself.")
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
@@ -156,7 +156,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     func testRoomMembershipInvite() async throws {
         await setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
         
-        try await process(route: .room(roomID: "InvitedRoomID"))
+        try await process(route: .room(roomID: "InvitedRoomID", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
@@ -165,7 +165,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         
         await setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
         
-        try await process(route: .room(roomID: "InvitedRoomID"))
+        try await process(route: .room(roomID: "InvitedRoomID", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
@@ -174,7 +174,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
             RoomProxyMock(with: .init())
         }
         
-        try await process(route: .room(roomID: "InvitedRoomID"))
+        try await process(route: .room(roomID: "InvitedRoomID", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
     }
@@ -183,7 +183,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         await setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
-        try await process(route: .room(roomID: "InvitedRoomID"))
+        try await process(route: .room(roomID: "InvitedRoomID", via: []))
         XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is JoinRoomScreenCoordinator)
@@ -194,7 +194,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         await setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
-        try await process(route: .room(roomID: "InvitedRoomID"))
+        try await process(route: .room(roomID: "InvitedRoomID", via: []))
         XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is JoinRoomScreenCoordinator)
@@ -204,7 +204,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
             RoomProxyMock(with: .init())
         }
         
-        try await process(route: .room(roomID: "InvitedRoomID"))
+        try await process(route: .room(roomID: "InvitedRoomID", via: []))
         XCTAssertTrue(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
@@ -213,15 +213,15 @@ class RoomFlowCoordinatorTests: XCTestCase {
     func testEventRoute() async throws {
         await setupRoomFlowCoordinator()
         
-        try await process(route: .event(roomID: "1", eventID: "1"))
+        try await process(route: .event(eventID: "1", roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
-        try await process(route: .childEvent(roomID: "1", eventID: "2"))
+        try await process(route: .childEvent(eventID: "2", roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
-        try await process(route: .childEvent(roomID: "2", eventID: "3"))
+        try await process(route: .childEvent(eventID: "3", roomID: "2", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)

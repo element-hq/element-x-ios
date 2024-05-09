@@ -17,7 +17,8 @@
 import Foundation
 
 enum RoomDirectorySearchScreenViewModelAction {
-    case select(roomID: String)
+    case selectAlias(String)
+    case selectRoomID(String)
     case dismiss
 }
 
@@ -35,6 +36,6 @@ struct RoomDirectorySearchScreenViewStateBindings {
 
 enum RoomDirectorySearchScreenViewAction {
     case dismiss
-    case select(roomID: String)
+    case select(room: RoomDirectorySearchResult)
     case reachedBottom
 }

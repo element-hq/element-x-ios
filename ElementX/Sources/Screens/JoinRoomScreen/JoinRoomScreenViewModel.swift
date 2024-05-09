@@ -21,6 +21,7 @@ typealias JoinRoomScreenViewModelType = StateStoreViewModel<JoinRoomScreenViewSt
 
 class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewModelProtocol {
     private let roomID: String
+    private let via: [String]
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -30,10 +31,12 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
 
     init(roomID: String,
+         via: [String],
          clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomID = roomID
+        self.via = via
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
@@ -74,6 +77,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             hideLoadingIndicator()
         }
         
+        // We need an SDK update to pass the via into this preview.
         switch await clientProxy.roomPreviewForIdentifier(roomID) {
         case .success(let roomDetails):
             state.roomDetails = roomDetails
@@ -89,7 +93,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             hideLoadingIndicator()
         }
         
-        switch await clientProxy.joinRoom(roomID) {
+        switch await clientProxy.joinRoom(roomID, via: via) {
         case .success:
             actionsSubject.send(.joined)
         case .failure(let error):

@@ -23,11 +23,11 @@ enum AppRoute: Equatable {
     /// The app's home screen.
     case roomList
     /// A room, shown as the root of the stack (popping any child rooms).
-    case room(roomID: String)
+    case room(roomID: String, via: [String])
     /// The same as ``room`` but using a room alias.
     case roomAlias(String)
     /// A room, pushed as a child of any existing rooms on the stack.
-    case childRoom(roomID: String)
+    case childRoom(roomID: String, via: [String])
     /// The same as ``childRoom`` but using a room alias.
     case childRoomAlias(String)
     /// The information about a particular room.
@@ -35,13 +35,13 @@ enum AppRoute: Equatable {
     /// The profile of a member within the current room.
     case roomMemberDetails(userID: String)
     /// An event within a room, shown as the root of the stack (popping any child rooms).
-    case event(roomID: String, eventID: String)
+    case event(eventID: String, roomID: String, via: [String])
     /// The same as ``event`` but using a room alias.
-    case eventOnRoomAlias(alias: String, eventID: String)
+    case eventOnRoomAlias(eventID: String, alias: String)
     /// An event within a room, either within the last child on the stack or pushing a new child if needed.
-    case childEvent(roomID: String, eventID: String)
+    case childEvent(eventID: String, roomID: String, via: [String])
     /// The same as ``childEvent`` but using a room alias.
-    case childEventOnRoomAlias(alias: String, eventID: String)
+    case childEventOnRoomAlias(eventID: String, alias: String)
     /// The profile of a matrix user (outside of a room).
     case userProfile(userID: String)
     /// An Element Call link generated outside of a chat room.
@@ -134,19 +134,19 @@ struct ElementCallURLParser: URLParser {
 
 struct MatrixPermalinkParser: URLParser {
     func route(from url: URL) -> AppRoute? {
-        switch parseMatrixEntityFrom(uri: url.absoluteString)?.id {
+        guard let entity = parseMatrixEntityFrom(uri: url.absoluteString) else { return nil }
+        
+        switch entity.id {
         case .room(let id):
-            return .room(roomID: id)
+            return .room(roomID: id, via: entity.via)
         case .roomAlias(let alias):
             return .roomAlias(alias)
         case .user(let id):
             return .userProfile(userID: id)
         case .eventOnRoomId(let roomID, let eventID):
-            return .event(roomID: roomID, eventID: eventID)
+            return .event(eventID: eventID, roomID: roomID, via: entity.via)
         case .eventOnRoomAlias(let alias, let eventID):
-            return .eventOnRoomAlias(alias: alias, eventID: eventID)
-        default:
-            return nil
+            return .eventOnRoomAlias(eventID: eventID, alias: alias)
         }
     }
 }

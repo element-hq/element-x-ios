@@ -189,11 +189,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 } else {
                     handleAppRoute(.roomMemberDetails(userID: userID))
                 }
-            case .room(let roomID):
+            case .room(let roomID, let via):
                 if isExternalURL {
                     handleAppRoute(route)
                 } else {
-                    handleAppRoute(.childRoom(roomID: roomID))
+                    handleAppRoute(.childRoom(roomID: roomID, via: via))
                 }
             case .roomAlias(let alias):
                 if isExternalURL {
@@ -201,17 +201,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 } else {
                     handleAppRoute(.childRoomAlias(alias))
                 }
-            case .event(let roomID, let eventID):
+            case .event(let eventID, let roomID, let via):
                 if isExternalURL {
                     handleAppRoute(route)
                 } else {
-                    handleAppRoute(.childEvent(roomID: roomID, eventID: eventID))
+                    handleAppRoute(.childEvent(eventID: eventID, roomID: roomID, via: via))
                 }
-            case .eventOnRoomAlias(let alias, let eventID):
+            case .eventOnRoomAlias(let eventID, let alias):
                 if isExternalURL {
                     handleAppRoute(route)
                 } else {
-                    handleAppRoute(.childEventOnRoomAlias(alias: alias, eventID: eventID))
+                    handleAppRoute(.childEventOnRoomAlias(eventID: eventID, alias: alias))
                 }
             default:
                 break
@@ -267,7 +267,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        handleAppRoute(.room(roomID: roomID))
+        handleAppRoute(.room(roomID: roomID, via: []))
     }
     
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {

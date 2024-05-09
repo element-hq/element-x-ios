@@ -350,9 +350,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func joinRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
+    func joinRoom(_ roomID: String, via: [String]) async -> Result<Void, ClientProxyError> {
         do {
-            let _ = try await client.joinRoomById(roomId: roomID)
+            let _ = try await client.joinRoomByIdOrAlias(roomIdOrAlias: roomID, serverNames: via)
             
             // Wait for the room to appear in the room lists to avoid issues downstream
             let _ = await waitForRoomSummary(with: .success(roomID), name: nil, timeout: 30)
@@ -569,7 +569,7 @@ class ClientProxy: ClientProxyProtocol {
         RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch())
     }
     
-    func resolveRoomAlias(_ alias: String) async -> String? {
+    func resolveRoomAlias(_ alias: String) async -> ResolvedRoomAlias? {
         do {
             return try await client.resolveRoomAlias(roomAlias: alias)
         } catch {
@@ -678,7 +678,6 @@ class ClientProxy: ClientProxyProtocol {
                 .syncService()
                 .withCrossProcessLock(appIdentifier: "MainApp")
                 .withUtdHook(delegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
-                .withUnifiedInvitesInRoomList(withUnifiedInvites: true)
                 .finish()
             let roomListService = syncService.roomListService()
             
