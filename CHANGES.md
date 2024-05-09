@@ -1,3 +1,14 @@
+## Changes in 1.6.5 (2024-05-09)
+
+🙌 Improvements
+
+- Reorder available composer menu actions ([#2790](https://github.com/element-hq/element-x-ios/issues/2790))
+
+🐛 Bugfixes
+
+- Only register for notifications when the setting is enabled. ([#2721](https://github.com/element-hq/element-x-ios/issues/2721))
+- Prevent the message sending failure options from showing up as a popup on the room list on iPads ([#2808](https://github.com/element-hq/element-x-ios/issues/2808))
+
 ## Changes in 1.6.4 (2024-05-07)
 
 ✨ Features
