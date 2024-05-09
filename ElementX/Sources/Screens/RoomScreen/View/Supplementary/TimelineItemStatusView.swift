@@ -56,7 +56,7 @@ struct TimelineItemStatusView: View {
                 CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyMD)
                     .foregroundColor(.compound.iconCriticalPrimary)
                     .onTapGesture {
-                        context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
+                        context.send(viewAction: .showSendingFailureAlert(itemID: timelineItem.id))
                     }
                     .accessibilityLabel(L10n.commonSendingFailed)
                     .accessibilityHint(L10n.actionTapForOptions)

@@ -56,6 +56,7 @@ struct RoomScreen: View {
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo)
             .alert(item: $context.confirmationAlertInfo)
+            .alert(item: $context.messageSendingFailureAlertInfo)
             .sheet(item: $context.debugInfo) { TimelineItemDebugView(info: $0) }
             .sheet(item: $context.actionMenuInfo) { info in
                 context.viewState.timelineItemMenuActionProvider?(info.item.id).map { actions in
@@ -81,14 +82,6 @@ struct RoomScreen: View {
                 
                 context.send(viewAction: .handlePasteOrDrop(provider: provider))
                 return true
-            }
-            .confirmationDialog(item: $context.sendFailedConfirmationDialogInfo, titleVisibility: .visible) { info in
-                Button(L10n.screenRoomRetrySendMenuSendAgainAction) {
-                    context.send(viewAction: .retrySend(itemID: info.itemID))
-                }
-                Button(L10n.actionRemove, role: .destructive) {
-                    context.send(viewAction: .cancelSend(itemID: info.itemID))
-                }
             }
     }
 

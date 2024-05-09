@@ -97,14 +97,13 @@ enum RoomScreenViewAction {
     
     case reactionSummary(itemID: TimelineItemIdentifier, key: String)
     
-    case retrySend(itemID: TimelineItemIdentifier)
-    case cancelSend(itemID: TimelineItemIdentifier)
     
     case showReadReceipts(itemID: TimelineItemIdentifier)
     
     case poll(RoomScreenViewPollAction)
     
     case audio(RoomScreenViewAudioAction)
+    case displaySendingFailureAlert(itemID: TimelineItemIdentifier)
     
     case presentCall
     
@@ -171,7 +170,7 @@ struct RoomScreenViewStateBindings {
     
     var actionMenuInfo: TimelineItemActionMenuInfo?
     
-    var sendFailedConfirmationDialogInfo: SendFailedConfirmationDialogInfo?
+    var messageSendingFailureAlertInfo: AlertInfo<MessageSendingFailureInfo>?
     
     var reactionSummaryInfo: ReactionSummaryInfo?
     
@@ -190,9 +189,7 @@ struct TimelineItemActionMenuInfo: Equatable, Identifiable {
     }
 }
 
-struct SendFailedConfirmationDialogInfo: ConfirmationDialogProtocol {
-    let title = L10n.screenRoomRetrySendMenuTitle
-    
+struct MessageSendingFailureInfo: Hashable {
     let itemID: TimelineItemIdentifier
 }
 

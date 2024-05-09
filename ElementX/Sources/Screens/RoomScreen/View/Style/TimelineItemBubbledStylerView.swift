@@ -110,8 +110,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         VStack(alignment: alignment, spacing: -3) {
             messageBubble
                 .timelineItemAccessibility(timelineItem) {
-                    if adjustedDeliveryStatus == .sendingFailed {
-                        context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
+                    if adjustedDeliveryStatus != .sendingFailed {
+                        context.send(viewAction: .showSendingFailureAlert(itemID: timelineItem.id))
                     } else {
                         context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
                     }
@@ -180,7 +180,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         if adjustedDeliveryStatus == .sendingFailed {
             layoutedLocalizedSendInfo
                 .onTapGesture {
-                    context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
+                    context.send(viewAction: .showSendingFailureAlert(itemID: timelineItem.id))
                 }
         } else {
             layoutedLocalizedSendInfo

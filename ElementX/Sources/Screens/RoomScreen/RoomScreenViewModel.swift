@@ -171,6 +171,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await timelineController.retrySending(itemID: itemID) }
         case .cancelSend(let itemID):
             Task { await timelineController.cancelSending(itemID: itemID) }
+        case .displaySendingFailureAlert(let itemID):
+            showSendingFailureAlert(for: itemID)
         case .paginateBackwards:
             paginateBackwards()
         case .paginateForwards:
@@ -736,6 +738,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         state.bindings.readReceiptsSummaryInfo = .init(orderedReceipts: eventTimelineItem.properties.orderedReadReceipts, id: eventTimelineItem.id)
+    }
+    
+    // MARK: - Sending failure retrying
+    
+    private func showSendingFailureAlert(for itemID: TimelineItemIdentifier) {
+        context.messageSendingFailureAlertInfo = .init(id: .init(itemID: itemID),
+                                                       title: L10n.screenRoomRetrySendMenuTitle,
+                                                       primaryButton: .init(title: L10n.screenRoomRetrySendMenuSendAgainAction) {
+                                                           Task { await self.timelineController.retrySending(itemID: itemID) }
+                                                       },
+                                                       secondaryButton: .init(title: L10n.actionRemove, role: .destructive) {
+                                                           Task { await self.timelineController.cancelSending(itemID: itemID) }
+                                                       })
     }
     
     // MARK: - Message forwarding
