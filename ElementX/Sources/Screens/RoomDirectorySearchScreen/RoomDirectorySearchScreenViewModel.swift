@@ -65,8 +65,12 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
         switch viewAction {
         case .dismiss:
             actionsSubject.send(.dismiss)
-        case .select(roomID: let roomID):
-            actionsSubject.send(.select(roomID: roomID))
+        case .select(let room):
+            if let alias = room.alias {
+                actionsSubject.send(.selectAlias(alias))
+            } else {
+                actionsSubject.send(.selectRoomID(room.id))
+            }
         case .reachedBottom:
             loadNextPage()
         }

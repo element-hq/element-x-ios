@@ -19,6 +19,7 @@ import SwiftUI
 
 struct JoinRoomScreenCoordinatorParameters {
     let roomID: String
+    let via: [String]
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -44,6 +45,7 @@ final class JoinRoomScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = JoinRoomScreenViewModel(roomID: parameters.roomID,
+                                            via: parameters.via,
                                             clientProxy: parameters.clientProxy,
                                             mediaProvider: parameters.mediaProvider,
                                             userIndicatorController: parameters.userIndicatorController)

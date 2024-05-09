@@ -129,7 +129,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError>
     
-    func joinRoom(_ roomID: String) async -> Result<Void, ClientProxyError>
+    func joinRoom(_ roomID: String, via: [String]) async -> Result<Void, ClientProxyError>
     
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError>
     
@@ -159,7 +159,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol
     
-    func resolveRoomAlias(_ alias: String) async -> String?
+    func resolveRoomAlias(_ alias: String) async -> ResolvedRoomAlias?
 
     // MARK: - Ignored users
     

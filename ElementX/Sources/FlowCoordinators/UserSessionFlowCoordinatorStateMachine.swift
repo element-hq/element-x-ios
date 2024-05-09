@@ -70,10 +70,11 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Start the user session flows.
         case start
         
-        /// Request presentation for a particular room
-        /// - Parameter roomID: The room identifier
+        /// Request presentation for a particular room.
+        /// - Parameter roomID: The room identifier.
+        /// - Parameter via: Any servers necessary to discover the room.
         /// - Parameter entryPoint: The starting point for the presented room.
-        case selectRoom(roomID: String, entryPoint: RoomFlowCoordinatorEntryPoint)
+        case selectRoom(roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint)
         /// The room screen has been dismissed
         case deselectRoom
         
@@ -129,7 +130,7 @@ class UserSessionFlowCoordinatorStateMachine {
 
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (fromState, event) {
-            case (.roomList, .selectRoom(let roomID, _)):
+            case (.roomList, .selectRoom(let roomID, _, _)):
                 return .roomList(selectedRoomID: roomID)
             case (.roomList, .deselectRoom):
                 return .roomList(selectedRoomID: nil)
