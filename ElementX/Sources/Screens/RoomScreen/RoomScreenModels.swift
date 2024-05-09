@@ -68,14 +68,12 @@ enum RoomScreenViewPollAction {
     case edit(pollStartID: String, poll: Poll)
 }
 
-enum RoomScreenViewAudioAction {
+enum RoomScreenAudioPlayerAction {
     case playPause(itemID: TimelineItemIdentifier)
     case seek(itemID: TimelineItemIdentifier, progress: Double)
 }
 
 enum RoomScreenViewAction {
-    case displayRoomDetails
-    
     case itemAppeared(itemID: TimelineItemIdentifier)
     case itemDisappeared(itemID: TimelineItemIdentifier)
     
@@ -86,27 +84,20 @@ enum RoomScreenViewAction {
     case paginateForwards
     case scrollToBottom
     
-    case timelineItemMenu(itemID: TimelineItemIdentifier)
-    case timelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
+    case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
+    case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
     
+    case displayRoomDetails
+    case displayRoomMemberDetails(userID: String)
+    case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
     case displayEmojiPicker(itemID: TimelineItemIdentifier)
+    case displayMessageSendingFailureAlert(itemID: TimelineItemIdentifier)
+    case displayReadReceipts(itemID: TimelineItemIdentifier)
+    case displayCall
     
     case handlePasteOrDrop(provider: NSItemProvider)
-    
-    case tappedOnUser(userID: String)
-    
-    case reactionSummary(itemID: TimelineItemIdentifier, key: String)
-    
-    case retrySend(itemID: TimelineItemIdentifier)
-    case cancelSend(itemID: TimelineItemIdentifier)
-    
-    case showReadReceipts(itemID: TimelineItemIdentifier)
-    
-    case poll(RoomScreenViewPollAction)
-    
-    case audio(RoomScreenViewAudioAction)
-    
-    case presentCall
+    case handlePollAction(RoomScreenViewPollAction)
+    case handleAudioPlayerAction(RoomScreenAudioPlayerAction)
     
     /// Focus the timeline onto the specified event ID (switching to a detached timeline if needed).
     case focusOnEventID(String)
@@ -161,17 +152,11 @@ struct RoomScreenViewStateBindings {
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
     
-    /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<RoomScreenErrorType>?
-    
-    /// An alert info for confirmation actions (e.g. ending a poll)
-    var confirmationAlertInfo: AlertInfo<UUID>?
+    var alertInfo: AlertInfo<RoomScreenAlertInfoType>?
     
     var debugInfo: TimelineItemDebugInfo?
     
     var actionMenuInfo: TimelineItemActionMenuInfo?
-    
-    var sendFailedConfirmationDialogInfo: SendFailedConfirmationDialogInfo?
     
     var reactionSummaryInfo: ReactionSummaryInfo?
     
@@ -190,9 +175,7 @@ struct TimelineItemActionMenuInfo: Equatable, Identifiable {
     }
 }
 
-struct SendFailedConfirmationDialogInfo: ConfirmationDialogProtocol {
-    let title = L10n.screenRoomRetrySendMenuTitle
-    
+struct MessageSendingFailureInfo: Hashable {
     let itemID: TimelineItemIdentifier
 }
 
@@ -210,11 +193,10 @@ struct ReadReceiptSummaryInfo: Identifiable {
     let id: TimelineItemIdentifier
 }
 
-enum RoomScreenErrorType: Hashable {
-    /// A specific error message shown in an alert.
-    case alert(String)
-    /// A specific error message shown in a toast.
-    case toast(String)
+enum RoomScreenAlertInfoType: Hashable {
+    case audioRecodingPermissionError
+    case pollEndConfirmation(String)
+    case messageSendingFailure(TimelineItemIdentifier)
 }
 
 struct RoomMemberState {

@@ -69,7 +69,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             content()
                 .layoutPriority(1)
                 .timelineItemAccessibility(timelineItem) {
-                    context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
+                    context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
                 }
         }
         .onTapGesture(count: 2) {
@@ -81,7 +81,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
         // We need a tap gesture before this long one so that it doesn't
         // steal away the gestures from the scroll view
         .longPressWithFeedback {
-            context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
+            context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
         }
         .swipeRightAction {
             SwipeToReplyView(timelineItem: timelineItem)
@@ -89,12 +89,12 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             context.viewState.timelineItemMenuActionProvider?(timelineItem.id)?.canReply ?? false
         } action: {
             let isThread = (timelineItem as? EventBasedMessageTimelineItemProtocol)?.isThreaded ?? false
-            context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply(isThread: isThread)))
+            context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: .reply(isThread: isThread)))
         }
         .contextMenu {
             TimelineItemMacContextMenu(item: timelineItem,
                                        actionProvider: context.viewState.timelineItemMenuActionProvider) { action in
-                context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: action))
+                context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: action))
             }
         }
     }
@@ -111,7 +111,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                         .lineLimit(1)
                 }
                 .onTapGesture {
-                    context.send(viewAction: .tappedOnUser(userID: timelineItem.sender.id))
+                    context.send(viewAction: .displayRoomMemberDetails(userID: timelineItem.sender.id))
                 }
                 Spacer()
                 Text(timelineItem.timestamp)

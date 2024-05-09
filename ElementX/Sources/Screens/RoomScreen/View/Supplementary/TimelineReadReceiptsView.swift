@@ -46,7 +46,7 @@ struct TimelineReadReceiptsView: View {
             }
         }
         .onTapGesture {
-            context.send(viewAction: .showReadReceipts(itemID: timelineItem.id))
+            context.send(viewAction: .displayReadReceipts(itemID: timelineItem.id))
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityLabel)

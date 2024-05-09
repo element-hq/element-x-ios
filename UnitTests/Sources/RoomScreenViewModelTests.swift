@@ -244,84 +244,6 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEvent, .init(eventID: "t10", appearance: .immediate))
     }
     
-    // MARK: - Sending
-
-    func testRetrySend() async throws {
-        let timelineController = MockRoomTimelineController()
-        let roomProxy = RoomProxyMock(with: .init(name: ""))
-        
-        let timelineProxy = TimelineProxyMock()
-        timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
-        
-        roomProxy.underlyingTimeline = timelineProxy
-        timelineController.roomProxy = roomProxy
-
-        let viewModel = makeViewModel(roomProxy: roomProxy, timelineController: timelineController)
-
-        viewModel.context.send(viewAction: .retrySend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test retry send id")))
-        
-        try? await Task.sleep(for: .milliseconds(100))
-        
-        XCTAssert(timelineProxy.retrySendTransactionIDCallsCount == 1)
-        XCTAssert(timelineProxy.retrySendTransactionIDReceivedInvocations == ["test retry send id"])
-    }
-
-    func testRetrySendNoTransactionID() async {
-        let timelineController = MockRoomTimelineController()
-        let roomProxy = RoomProxyMock(with: .init(name: ""))
-        
-        let timelineProxy = TimelineProxyMock()
-        timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
-        
-        roomProxy.underlyingTimeline = timelineProxy
-
-        let viewModel = makeViewModel(roomProxy: roomProxy, timelineController: timelineController)
-
-        viewModel.context.send(viewAction: .retrySend(itemID: .random))
-        
-        try? await Task.sleep(for: .milliseconds(100))
-        
-        XCTAssert(timelineProxy.retrySendTransactionIDCallsCount == 0)
-    }
-
-    func testCancelSend() async {
-        let timelineController = MockRoomTimelineController()
-        let roomProxy = RoomProxyMock(with: .init(name: ""))
-        
-        let timelineProxy = TimelineProxyMock()
-        timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
-        
-        roomProxy.underlyingTimeline = timelineProxy
-        timelineController.roomProxy = roomProxy
-
-        let viewModel = makeViewModel(roomProxy: roomProxy, timelineController: timelineController)
-
-        viewModel.context.send(viewAction: .cancelSend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test cancel send id")))
-        
-        try? await Task.sleep(for: .milliseconds(100))
-        
-        XCTAssert(timelineProxy.cancelSendTransactionIDCallsCount == 1)
-        XCTAssert(timelineProxy.cancelSendTransactionIDReceivedInvocations == ["test cancel send id"])
-    }
-
-    func testCancelSendNoTransactionID() async {
-        let timelineController = MockRoomTimelineController()
-        let roomProxy = RoomProxyMock(with: .init(name: ""))
-        
-        let timelineProxy = TimelineProxyMock()
-        timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
-        
-        roomProxy.underlyingTimeline = timelineProxy
-
-        let viewModel = makeViewModel(roomProxy: roomProxy, timelineController: timelineController)
-
-        viewModel.context.send(viewAction: .cancelSend(itemID: .random))
-
-        try? await Task.sleep(for: .milliseconds(100))
-        
-        XCTAssert(timelineProxy.cancelSendTransactionIDCallsCount == 0)
-    }
-    
     // MARK: - Read Receipts
     
     // swiftlint:disable force_unwrapping
@@ -465,7 +387,7 @@ class RoomScreenViewModelTests: XCTestCase {
             value.bindings.readReceiptsSummaryInfo?.orderedReceipts == receipts
         }
         
-        viewModel.context.send(viewAction: .showReadReceipts(itemID: id))
+        viewModel.context.send(viewAction: .displayReadReceipts(itemID: id))
         try await deferred.fulfill()
     }
     
