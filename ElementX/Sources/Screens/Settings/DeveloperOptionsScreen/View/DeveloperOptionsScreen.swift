@@ -31,11 +31,6 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
                     Text("Hide grey dots")
                 }
-                
-                Toggle(isOn: $context.roomListInvitesEnabled) {
-                    Text("Room list invites")
-                    Text("Requires app reboot and, after disabling the feature, a cache clear.")
-                }
             }
             
             Section("Room Directory Search") {

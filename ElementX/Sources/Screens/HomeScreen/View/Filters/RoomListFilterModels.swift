@@ -32,11 +32,7 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     case invites
     
     static var availableFilters: [RoomListFilter] {
-        if ServiceLocator.shared.settings.roomListInvitesEnabled {
-            return RoomListFilter.allCases
-        } else {
-            return RoomListFilter.allCases.filter { !($0 == .invites) }
-        }
+        RoomListFilter.allCases
     }
     
     var localizedName: String {

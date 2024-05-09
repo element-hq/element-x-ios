@@ -109,8 +109,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     /// Used for listing rooms that shouldn't be affected by the main `roomSummaryProvider` filtering
     var alternateRoomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
-    var inviteSummaryProvider: RoomSummaryProviderProtocol? { get }
-    
     var notificationSettings: NotificationSettingsProxyProtocol { get }
     
     var secureBackupController: SecureBackupControllerProtocol { get }

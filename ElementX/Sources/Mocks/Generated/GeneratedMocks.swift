@@ -1941,7 +1941,6 @@ class ClientProxyMock: ClientProxyProtocol {
     var pusherNotificationClientIdentifier: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
-    var inviteSummaryProvider: RoomSummaryProviderProtocol?
     var notificationSettings: NotificationSettingsProxyProtocol {
         get { return underlyingNotificationSettings }
         set(value) { underlyingNotificationSettings = value }

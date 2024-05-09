@@ -27,7 +27,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
-    private let inviteSummaryProvider: RoomSummaryProviderProtocol?
     
     private var migrationCancellable: AnyCancellable?
     
@@ -50,7 +49,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.userIndicatorController = userIndicatorController
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
-        inviteSummaryProvider = userSession.clientProxy.inviteSummaryProvider
         
         super.init(initialViewState: .init(userID: userSession.userID),
                    imageProvider: userSession.mediaProvider)
@@ -157,8 +155,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             visibleItemRangePublisher.send((range, isScrolling))
         case .startChat:
             actionsSubject.send(.presentStartChatScreen)
-        case .selectInvites:
-            actionsSubject.send(.presentInvitesScreen)
         case .globalSearch:
             actionsSubject.send(.presentGlobalSearch)
         case .markRoomAsUnread(let roomIdentifier):
@@ -233,7 +229,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func setupRoomListSubscriptions() {
-        guard let roomSummaryProvider, let inviteSummaryProvider else {
+        guard let roomSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
         }
@@ -278,28 +274,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 // Wait for the all rooms view to receive its first update before installing
                 // dynamic timeline modifiers
                 self?.installListRangeModifiers()
-            }
-            .store(in: &cancellables)
-        
-        inviteSummaryProvider.roomListPublisher
-            .combineLatest(appSettings.$seenInvites)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] summaries, seenInvites in
-                self?.state.hasPendingInvitations = !summaries.isEmpty
-                
-                let invites = summaries.compactMap(\.id)
-                
-                let unreadInvites = summaries.filter { summary in
-                    guard let roomID = summary.id else {
-                        return false
-                    }
-                    
-                    return !seenInvites.contains(roomID)
-                }
-                
-                MXLog.info("Received invite list update - invites: \(invites), seenInvites: \(seenInvites), unreadInvites: \(unreadInvites)")
-                
-                self?.state.hasUnreadPendingInvitations = !unreadInvites.isEmpty
             }
             .store(in: &cancellables)
     }

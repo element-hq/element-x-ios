@@ -111,8 +111,7 @@ struct HomeScreenContent: View {
     private var topSection: some View {
         // An empty VStack causes glitches within the room list
         if context.viewState.shouldShowFilters ||
-            context.viewState.shouldShowRecoveryKeyConfirmationBanner ||
-            context.viewState.shouldShowInvitesButton {
+            context.viewState.shouldShowRecoveryKeyConfirmationBanner {
             VStack(spacing: 0) {
                 if context.viewState.shouldShowFilters {
                     RoomListFiltersView(state: $context.filtersState)
@@ -120,14 +119,6 @@ struct HomeScreenContent: View {
                 
                 if context.viewState.shouldShowRecoveryKeyConfirmationBanner {
                     HomeScreenRecoveryKeyConfirmationBanner(context: context)
-                }
-                
-                if context.viewState.shouldShowInvitesButton {
-                    HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
-                        context.send(viewAction: .selectInvites)
-                    }
-                    .accessibilityIdentifier(A11yIdentifiers.homeScreen.invites)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
             .background(Color.compound.bgCanvasDefault)

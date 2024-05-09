@@ -52,8 +52,6 @@ class ClientProxy: ClientProxyProtocol {
     private(set) var roomSummaryProvider: RoomSummaryProviderProtocol?
     private(set) var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
     
-    private(set) var inviteSummaryProvider: RoomSummaryProviderProtocol?
-    
     let notificationSettings: NotificationSettingsProxyProtocol
 
     let secureBackupController: SecureBackupControllerProtocol
@@ -680,7 +678,7 @@ class ClientProxy: ClientProxyProtocol {
                 .syncService()
                 .withCrossProcessLock(appIdentifier: "MainApp")
                 .withUtdHook(delegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
-                .withUnifiedInvitesInRoomList(withUnifiedInvites: appSettings.roomListInvitesEnabled)
+                .withUnifiedInvitesInRoomList(withUnifiedInvites: true)
                 .finish()
             let roomListService = syncService.roomListService()
             
@@ -702,13 +700,7 @@ class ClientProxy: ClientProxyProtocol {
                                                                name: "MessageForwarding",
                                                                notificationSettings: notificationSettings)
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
-            
-            inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                        eventStringBuilder: eventStringBuilder,
-                                                        name: "Invites",
-                                                        notificationSettings: notificationSettings)
-            try await inviteSummaryProvider?.setRoomList(roomListService.invites())
-            
+                        
             self.syncService = syncService
             self.roomListService = roomListService
 
