@@ -16,8 +16,6 @@
 
 import SwiftUI
 
-import Compound
-
 struct AvatarHeaderView<Footer: View>: View {
     let id: String
     let name: String?
@@ -108,7 +106,7 @@ struct AvatarHeaderView<Footer: View>: View {
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
-        .listRowInsets(EdgeInsets(top: ListRowPadding.vertical, leading: 0, bottom: ListRowPadding.vertical, trailing: 0))
+        .listRowInsets(EdgeInsets())
     }
 }
 
