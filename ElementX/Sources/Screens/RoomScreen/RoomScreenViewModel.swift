@@ -143,50 +143,51 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
-        case .displayRoomDetails:
-            actionsSubject.send(.displayRoomDetails)
         case .itemAppeared(let id):
             Task { await timelineController.processItemAppearance(id) }
         case .itemDisappeared(let id):
             Task { await timelineController.processItemDisappearance(id) }
+            
         case .itemTapped(let id):
             Task { await handleItemTapped(with: id) }
         case .toggleReaction(let emoji, let itemId):
             Task { await timelineController.toggleReaction(emoji, to: itemId) }
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
-        case .timelineItemMenu(let itemID):
-            roomScreenInteractionHandler.showTimelineItemActionMenu(for: itemID)
-        case .timelineItemMenuAction(let itemID, let action):
-            roomScreenInteractionHandler.processTimelineItemMenuAction(action, itemID: itemID)
-        case .handlePasteOrDrop(let provider):
-            roomScreenInteractionHandler.handlePasteOrDrop(provider)
-        case .tappedOnUser(userID: let userID):
-            Task { await roomScreenInteractionHandler.handleTappedUser(userID: userID) }
-        case .displayEmojiPicker(let itemID):
-            roomScreenInteractionHandler.showEmojiPicker(for: itemID)
-        case .reactionSummary(let itemID, let key):
-            showReactionSummary(for: itemID, selectedKey: key)
-        case .retrySend(let itemID):
-            Task { await timelineController.retrySending(itemID: itemID) }
-        case .cancelSend(let itemID):
-            Task { await timelineController.cancelSending(itemID: itemID) }
-        case .displaySendingFailureAlert(let itemID):
-            showSendingFailureAlert(for: itemID)
         case .paginateBackwards:
             paginateBackwards()
         case .paginateForwards:
             paginateForwards()
         case .scrollToBottom:
             scrollToBottom()
-        case .poll(let pollAction):
-            processPollAction(pollAction)
-        case .audio(let audioAction):
-            processAudioAction(audioAction)
-        case .presentCall:
+            
+        case .displayTimelineItemMenu(let itemID):
+            roomScreenInteractionHandler.displayTimelineItemActionMenu(for: itemID)
+        case .handleTimelineItemMenuAction(let itemID, let action):
+            roomScreenInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
+            
+        case .displayRoomDetails:
+            actionsSubject.send(.displayRoomDetails)
+        case .displayRoomMemberDetails(userID: let userID):
+            Task { await roomScreenInteractionHandler.displayRoomMemberDetails(userID: userID) }
+        case .displayEmojiPicker(let itemID):
+            roomScreenInteractionHandler.displayEmojiPicker(for: itemID)
+        case .displayReactionSummary(let itemID, let key):
+            displayReactionSummary(for: itemID, selectedKey: key)
+        case .displayMessageSendingFailureAlert(let itemID):
+            displaySendingFailureAlert(for: itemID)
+        case .displayReadReceipts(itemID: let itemID):
+            displayReadReceipts(for: itemID)
+        case .displayCall:
             actionsSubject.send(.displayCallScreen)
-        case .showReadReceipts(itemID: let itemID):
-            showReadReceipts(for: itemID)
+            
+        case .handlePasteOrDrop(let provider):
+            roomScreenInteractionHandler.handlePasteOrDrop(provider)
+        case .handlePollAction(let pollAction):
+            handlePollAction(pollAction)
+        case .handleAudioPlayerAction(let audioPlayerAction):
+            handleAudioPlayerAction(audioPlayerAction)
+            
         case .focusOnEventID(let eventID):
             Task { await focusOnEvent(eventID: eventID) }
         case .focusLive:
@@ -279,7 +280,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return
         }
         
-        roomScreenInteractionHandler.processTimelineItemMenuAction(.edit, itemID: item.id)
+        roomScreenInteractionHandler.handleTimelineItemMenuAction(.edit, itemID: item.id)
     }
     
     private func attach(_ attachment: ComposerAttachmentType) {
@@ -297,7 +298,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func processPollAction(_ action: RoomScreenViewPollAction) {
+    private func handlePollAction(_ action: RoomScreenViewPollAction) {
         switch action {
         case let .selectOption(pollStartID, optionID):
             roomScreenInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
@@ -312,7 +313,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func processAudioAction(_ action: RoomScreenViewAudioAction) {
+    private func handleAudioPlayerAction(_ action: RoomScreenViewAudioPlayerAction) {
         switch action {
         case .playPause(let itemID):
             Task { await roomScreenInteractionHandler.playPauseAudio(for: itemID) }
@@ -720,7 +721,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Reactions
         
-    private func showReactionSummary(for itemID: TimelineItemIdentifier, selectedKey: String) {
+    private func displayReactionSummary(for itemID: TimelineItemIdentifier, selectedKey: String) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
@@ -731,7 +732,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Read Receipts
 
-    private func showReadReceipts(for itemID: TimelineItemIdentifier) {
+    private func displayReadReceipts(for itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
@@ -742,7 +743,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Sending failure retrying
     
-    private func showSendingFailureAlert(for itemID: TimelineItemIdentifier) {
+    private func displaySendingFailureAlert(for itemID: TimelineItemIdentifier) {
         context.messageSendingFailureAlertInfo = .init(id: .init(itemID: itemID),
                                                        title: L10n.screenRoomRetrySendMenuTitle,
                                                        primaryButton: .init(title: L10n.screenRoomRetrySendMenuSendAgainAction) {

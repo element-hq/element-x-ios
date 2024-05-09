@@ -57,7 +57,7 @@ struct TimelineReactionsView: View {
                     feedbackGenerator.impactOccurred()
                     context.send(viewAction: .toggleReaction(key: key, itemID: itemID))
                 } showReactionSummary: { key in
-                    context.send(viewAction: .reactionSummary(itemID: itemID, key: key))
+                    context.send(viewAction: .displayReactionSummary(itemID: itemID, key: key))
                 }
                 .reactionLayoutItem(.reaction)
                 .environment(\.layoutDirection, layoutDirection)

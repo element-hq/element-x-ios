@@ -68,14 +68,12 @@ enum RoomScreenViewPollAction {
     case edit(pollStartID: String, poll: Poll)
 }
 
-enum RoomScreenViewAudioAction {
+enum RoomScreenViewAudioPlayerAction {
     case playPause(itemID: TimelineItemIdentifier)
     case seek(itemID: TimelineItemIdentifier, progress: Double)
 }
 
 enum RoomScreenViewAction {
-    case displayRoomDetails
-    
     case itemAppeared(itemID: TimelineItemIdentifier)
     case itemDisappeared(itemID: TimelineItemIdentifier)
     
@@ -86,26 +84,20 @@ enum RoomScreenViewAction {
     case paginateForwards
     case scrollToBottom
     
-    case timelineItemMenu(itemID: TimelineItemIdentifier)
-    case timelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
+    case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
+    case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
     
+    case displayRoomDetails
+    case displayRoomMemberDetails(userID: String)
+    case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
     case displayEmojiPicker(itemID: TimelineItemIdentifier)
+    case displayMessageSendingFailureAlert(itemID: TimelineItemIdentifier)
+    case displayReadReceipts(itemID: TimelineItemIdentifier)
+    case displayCall
     
     case handlePasteOrDrop(provider: NSItemProvider)
-    
-    case tappedOnUser(userID: String)
-    
-    case reactionSummary(itemID: TimelineItemIdentifier, key: String)
-    
-    
-    case showReadReceipts(itemID: TimelineItemIdentifier)
-    
-    case poll(RoomScreenViewPollAction)
-    
-    case audio(RoomScreenViewAudioAction)
-    case displaySendingFailureAlert(itemID: TimelineItemIdentifier)
-    
-    case presentCall
+    case handlePollAction(RoomScreenViewPollAction)
+    case handleAudioPlayerAction(RoomScreenViewAudioPlayerAction)
     
     /// Focus the timeline onto the specified event ID (switching to a detached timeline if needed).
     case focusOnEventID(String)

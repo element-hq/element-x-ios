@@ -161,7 +161,7 @@ struct RoomScreen: View {
     private var callButton: some View {
         if context.viewState.hasOngoingCall {
             Button {
-                context.send(viewAction: .presentCall)
+                context.send(viewAction: .displayCall)
             } label: {
                 Label(L10n.actionJoin, icon: \.videoCallSolid)
                     .labelStyle(.titleAndIcon)
@@ -170,7 +170,7 @@ struct RoomScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         } else {
             Button {
-                context.send(viewAction: .presentCall)
+                context.send(viewAction: .displayCall)
             } label: {
                 CompoundIcon(\.videoCallSolid)
             }

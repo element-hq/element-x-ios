@@ -99,7 +99,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             // sender info are read inside the `TimelineAccessibilityModifier`
             .accessibilityHidden(true)
             .onTapGesture {
-                context.send(viewAction: .tappedOnUser(userID: timelineItem.sender.id))
+                context.send(viewAction: .displayRoomMemberDetails(userID: timelineItem.sender.id))
             }
             .padding(.top, 8)
         }
@@ -111,9 +111,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             messageBubble
                 .timelineItemAccessibility(timelineItem) {
                     if adjustedDeliveryStatus != .sendingFailed {
-                        context.send(viewAction: .showSendingFailureAlert(itemID: timelineItem.id))
+                        context.send(viewAction: .displayMessageSendingFailureAlert(itemID: timelineItem.id))
                     } else {
-                        context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
+                        context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
                     }
                 }
             
@@ -139,7 +139,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             // We need a tap gesture before this long one so that it doesn't
             // steal away the gestures from the scroll view
             .longPressWithFeedback {
-                context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
+                context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
             }
             .swipeRightAction {
                 SwipeToReplyView(timelineItem: timelineItem)
@@ -147,12 +147,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 context.viewState.timelineItemMenuActionProvider?(timelineItem.id)?.canReply ?? false
             } action: {
                 let isThread = (timelineItem as? EventBasedMessageTimelineItemProtocol)?.isThreaded ?? false
-                context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply(isThread: isThread)))
+                context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: .reply(isThread: isThread)))
             }
             .contextMenu {
                 TimelineItemMacContextMenu(item: timelineItem,
                                            actionProvider: context.viewState.timelineItemMenuActionProvider) { action in
-                    context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: action))
+                    context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: action))
                 }
             }
             .padding(.top, messageBubbleTopPadding)
@@ -180,7 +180,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         if adjustedDeliveryStatus == .sendingFailed {
             layoutedLocalizedSendInfo
                 .onTapGesture {
-                    context.send(viewAction: .showSendingFailureAlert(itemID: timelineItem.id))
+                    context.send(viewAction: .displayMessageSendingFailureAlert(itemID: timelineItem.id))
                 }
         } else {
             layoutedLocalizedSendInfo

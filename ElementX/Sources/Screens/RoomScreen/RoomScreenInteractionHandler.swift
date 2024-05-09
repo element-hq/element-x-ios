@@ -85,7 +85,7 @@ class RoomScreenInteractionHandler {
     
     // MARK: Timeline Item Action Menu
     
-    func showTimelineItemActionMenu(for itemID: TimelineItemIdentifier) {
+    func displayTimelineItemActionMenu(for itemID: TimelineItemIdentifier) {
         Task {
             if case let .success(value) = await roomProxy.canUserRedactOther(userID: roomProxy.ownUserID) {
                 canCurrentUserRedactOthers = value
@@ -186,7 +186,7 @@ class RoomScreenInteractionHandler {
         return .init(actions: actions, debugActions: debugActions)
     }
 
-    func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
+    func handleTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
@@ -256,7 +256,7 @@ class RoomScreenInteractionHandler {
         case .report:
             actionsSubject.send(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
         case .react:
-            showEmojiPicker(for: itemID)
+            displayEmojiPicker(for: itemID)
         case .toggleReaction(let key):
             guard let eventID = itemID.eventID else { return }
             Task { await roomProxy.timeline.toggleReaction(key, to: eventID) }
@@ -586,7 +586,7 @@ class RoomScreenInteractionHandler {
     
     // MARK: Other
     
-    func showEmojiPicker(for itemID: TimelineItemIdentifier) {
+    func displayEmojiPicker(for itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               timelineItem.isReactable,
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
@@ -596,7 +596,7 @@ class RoomScreenInteractionHandler {
         actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
     }
     
-    func handleTappedUser(userID: String) async {
+    func displayRoomMemberDetails(userID: String) async {
         actionsSubject.send(.displayRoomMemberDetails(userID: userID))
     }
     
