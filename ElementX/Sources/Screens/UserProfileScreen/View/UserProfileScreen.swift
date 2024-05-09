@@ -113,11 +113,15 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(userID: String) -> UserProfileScreenViewModel {
-        UserProfileScreenViewModel(userID: userID,
-                                   isPresentedModally: false,
-                                   clientProxy: ClientProxyMock(.init()),
-                                   mediaProvider: MockMediaProvider(),
-                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                   analytics: ServiceLocator.shared.analytics)
+        let clientProxyMock = ClientProxyMock(.init())
+        if userID != RoomMemberProxyMock.mockMe.userID {
+            clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")
+        }
+        return UserProfileScreenViewModel(userID: userID,
+                                          isPresentedModally: false,
+                                          clientProxy: clientProxyMock,
+                                          mediaProvider: MockMediaProvider(),
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                          analytics: ServiceLocator.shared.analytics)
     }
 }

@@ -1106,9 +1106,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         // Replace the RoomMemberDetailsScreen without any animation.
-        navigationStackCoordinator.pop(animated: false)
-        navigationStackCoordinator.push(coordinator, animated: false) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissUserProfile)
+        // If this pop and push happens before the previous navigation is completed it might break screen presentation logic
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            self.navigationStackCoordinator.pop(animated: false)
+            self.navigationStackCoordinator.push(coordinator, animated: false) { [weak self] in
+                self?.stateMachine.tryEvent(.dismissUserProfile)
+            }
         }
     }
     
