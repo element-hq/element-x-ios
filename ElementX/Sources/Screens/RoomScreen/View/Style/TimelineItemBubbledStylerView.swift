@@ -110,7 +110,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         VStack(alignment: alignment, spacing: -3) {
             messageBubble
                 .timelineItemAccessibility(timelineItem) {
-                    if adjustedDeliveryStatus != .sendingFailed {
+                    if adjustedDeliveryStatus == .sendingFailed {
                         context.send(viewAction: .displayMessageSendingFailureAlert(itemID: timelineItem.id))
                     } else {
                         context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))

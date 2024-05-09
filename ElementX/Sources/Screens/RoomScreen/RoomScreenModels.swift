@@ -68,7 +68,7 @@ enum RoomScreenViewPollAction {
     case edit(pollStartID: String, poll: Poll)
 }
 
-enum RoomScreenViewAudioPlayerAction {
+enum RoomScreenAudioPlayerAction {
     case playPause(itemID: TimelineItemIdentifier)
     case seek(itemID: TimelineItemIdentifier, progress: Double)
 }
@@ -97,7 +97,7 @@ enum RoomScreenViewAction {
     
     case handlePasteOrDrop(provider: NSItemProvider)
     case handlePollAction(RoomScreenViewPollAction)
-    case handleAudioPlayerAction(RoomScreenViewAudioPlayerAction)
+    case handleAudioPlayerAction(RoomScreenAudioPlayerAction)
     
     /// Focus the timeline onto the specified event ID (switching to a detached timeline if needed).
     case focusOnEventID(String)
@@ -152,17 +152,11 @@ struct RoomScreenViewStateBindings {
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
     
-    /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<RoomScreenErrorType>?
-    
-    /// An alert info for confirmation actions (e.g. ending a poll)
-    var confirmationAlertInfo: AlertInfo<UUID>?
+    var alertInfo: AlertInfo<RoomScreenAlertInfoType>?
     
     var debugInfo: TimelineItemDebugInfo?
     
     var actionMenuInfo: TimelineItemActionMenuInfo?
-    
-    var messageSendingFailureAlertInfo: AlertInfo<MessageSendingFailureInfo>?
     
     var reactionSummaryInfo: ReactionSummaryInfo?
     
@@ -199,11 +193,10 @@ struct ReadReceiptSummaryInfo: Identifiable {
     let id: TimelineItemIdentifier
 }
 
-enum RoomScreenErrorType: Hashable {
-    /// A specific error message shown in an alert.
-    case alert(String)
-    /// A specific error message shown in a toast.
-    case toast(String)
+enum RoomScreenAlertInfoType: Hashable {
+    case audioRecodingPermissionError
+    case pollEndConfirmation(String)
+    case messageSendingFailure(TimelineItemIdentifier)
 }
 
 struct RoomMemberState {

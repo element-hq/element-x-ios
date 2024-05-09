@@ -175,7 +175,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .displayReactionSummary(let itemID, let key):
             displayReactionSummary(for: itemID, selectedKey: key)
         case .displayMessageSendingFailureAlert(let itemID):
-            displaySendingFailureAlert(for: itemID)
+            displayAlert(.messageSendingFailure(itemID))
         case .displayReadReceipts(itemID: let itemID):
             displayReadReceipts(for: itemID)
         case .displayCall:
@@ -248,9 +248,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             MXLog.error("Failed to focus on event \(eventID)")
             
             if case .eventNotFound = error {
-                displayError(.toast(L10n.errorMessageNotFound))
+                displayErrorToast(L10n.errorMessageNotFound)
             } else {
-                displayError(.toast(L10n.commonFailed))
+                displayErrorToast(L10n.commonFailed)
             }
         }
     }
@@ -303,17 +303,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case let .selectOption(pollStartID, optionID):
             roomScreenInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
         case let .end(pollStartID):
-            state.bindings.confirmationAlertInfo = .init(id: .init(),
-                                                         title: L10n.actionEndPoll,
-                                                         message: L10n.commonPollEndConfirmation,
-                                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                                         secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
+            displayAlert(.pollEndConfirmation(pollStartID))
         case .edit(let pollStartID, let poll):
             actionsSubject.send(.displayPollForm(mode: .edit(eventID: pollStartID, poll: poll)))
         }
     }
     
-    private func handleAudioPlayerAction(_ action: RoomScreenViewAudioPlayerAction) {
+    private func handleAudioPlayerAction(_ action: RoomScreenAudioPlayerAction) {
         switch action {
         case .playPause(let itemID):
             Task { await roomScreenInteractionHandler.playPauseAudio(for: itemID) }
@@ -427,8 +423,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 switch action {
                 case .composer(let action):
                     actionsSubject.send(.composer(action: action))
-                case .displayError(let type):
-                    displayError(type)
+                case .displayAudioRecorderPermissionError:
+                    displayAlert(.audioRecodingPermissionError)
+                case .displayErrorToast(let title):
+                    displayErrorToast(title)
                 case .displayEmojiPicker(let itemID, let selectedEmojis):
                     actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .displayMessageForwarding(let itemID):
@@ -445,8 +443,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     state.bindings.actionMenuInfo = actionMenuInfo
                 case .showDebugInfo(let debugInfo):
                     state.bindings.debugInfo = debugInfo
-                case .showConfirmationAlert(let alertInfo):
-                    state.bindings.confirmationAlertInfo = alertInfo
                 }
             }
             .store(in: &cancellables)
@@ -486,7 +482,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
             switch await timelineController.paginateBackwards(requestSize: Constants.paginationEventLimit) {
             case .failure:
-                displayError(.toast(L10n.errorFailedLoadingMessages))
+                displayErrorToast(L10n.errorFailedLoadingMessages)
             default:
                 break
             }
@@ -506,7 +502,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
             switch await timelineController.paginateForwards(requestSize: Constants.paginationEventLimit) {
             case .failure:
-                displayError(.toast(L10n.errorFailedLoadingMessages))
+                displayErrorToast(L10n.errorFailedLoadingMessages)
             default:
                 break
             }
@@ -740,20 +736,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         state.bindings.readReceiptsSummaryInfo = .init(orderedReceipts: eventTimelineItem.properties.orderedReadReceipts, id: eventTimelineItem.id)
     }
-    
-    // MARK: - Sending failure retrying
-    
-    private func displaySendingFailureAlert(for itemID: TimelineItemIdentifier) {
-        context.messageSendingFailureAlertInfo = .init(id: .init(itemID: itemID),
-                                                       title: L10n.screenRoomRetrySendMenuTitle,
-                                                       primaryButton: .init(title: L10n.screenRoomRetrySendMenuSendAgainAction) {
-                                                           Task { await self.timelineController.retrySending(itemID: itemID) }
-                                                       },
-                                                       secondaryButton: .init(title: L10n.actionRemove, role: .destructive) {
-                                                           Task { await self.timelineController.cancelSending(itemID: itemID) }
-                                                       })
-    }
-    
+        
     // MARK: - Message forwarding
     
     private func forwardMessage(itemID: TimelineItemIdentifier) async {
@@ -774,18 +757,37 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         userIndicatorController.retractIndicatorWithId(Constants.focusTimelineToastIndicatorID)
     }
     
-    private func displayError(_ type: RoomScreenErrorType) {
+    private func displayAlert(_ type: RoomScreenAlertInfoType) {
         switch type {
-        case .alert(let message):
-            state.bindings.alertInfo = AlertInfo(id: type,
-                                                 title: L10n.commonError,
-                                                 message: message)
-        case .toast(let message):
-            userIndicatorController.submitIndicator(UserIndicator(id: Constants.toastErrorID,
-                                                                  type: .toast,
-                                                                  title: message,
-                                                                  iconName: "xmark"))
+        case .audioRecodingPermissionError:
+            state.bindings.alertInfo = .init(id: type,
+                                             title: L10n.dialogPermissionMicrophoneTitleIos(InfoPlistReader.main.bundleDisplayName),
+                                             message: L10n.dialogPermissionMicrophoneDescriptionIos,
+                                             primaryButton: .init(title: L10n.commonSettings, action: { [weak self] in self?.appMediator.openAppSettings() }),
+                                             secondaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil))
+        case .pollEndConfirmation(let pollStartID):
+            state.bindings.alertInfo = .init(id: type,
+                                             title: L10n.actionEndPoll,
+                                             message: L10n.commonPollEndConfirmation,
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                             secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
+        case .messageSendingFailure(let itemID):
+            state.bindings.alertInfo = .init(id: type,
+                                             title: L10n.screenRoomRetrySendMenuTitle,
+                                             primaryButton: .init(title: L10n.screenRoomRetrySendMenuSendAgainAction) {
+                                                 Task { await self.timelineController.retrySending(itemID: itemID) }
+                                             },
+                                             secondaryButton: .init(title: L10n.actionRemove, role: .destructive) {
+                                                 Task { await self.timelineController.cancelSending(itemID: itemID) }
+                                             })
         }
+    }
+    
+    private func displayErrorToast(_ title: String) {
+        userIndicatorController.submitIndicator(UserIndicator(id: Constants.toastErrorID,
+                                                              type: .toast,
+                                                              title: title,
+                                                              iconName: "xmark"))
     }
 }
 
