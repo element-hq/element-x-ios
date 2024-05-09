@@ -61,9 +61,9 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
                 state.permalink = (try? matrixToUserPermalink(userId: userID)).flatMap(URL.init(string:))
                 switch await clientProxy.directRoomForUserID(userProfile.userID) {
                 case .success(let roomID):
-                    state.hasExistingDM = roomID != nil
+                    state.dmRoomID = roomID
                 case .failure:
-                    state.hasExistingDM = false
+                    break
                 }
             case .failure(let error):
                 state.bindings.alertInfo = .init(id: .unknown)
@@ -86,9 +86,9 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         case .displayAvatar:
             Task { await displayFullScreenAvatar() }
         case .openDirectChat:
-            Task { await openDirectChat(shouldStartCall: false) }
-        case .call:
-            Task { await openDirectChat(shouldStartCall: true) }
+            Task { await openDirectChat() }
+        case .startCall(let roomID):
+            actionsSubject.send(.startCall(roomID: roomID))
         case .dismiss:
             actionsSubject.send(.dismiss)
         }
@@ -109,7 +109,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         }
     }
     
-    private func openDirectChat(shouldStartCall: Bool) async {
+    private func openDirectChat() async {
         guard let userProfile = state.userProfile else { fatalError() }
         
         showLoadingIndicator(allowsInteraction: false)
@@ -120,11 +120,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             if isNewRoom {
                 analytics.trackCreatedRoom(isDM: true)
             }
-            if shouldStartCall {
-                actionsSubject.send(.startCall(roomID: roomID))
-            } else {
-                actionsSubject.send(.openDirectChat(roomID: roomID))
-            }
+            actionsSubject.send(.openDirectChat(roomID: roomID))
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)
         }

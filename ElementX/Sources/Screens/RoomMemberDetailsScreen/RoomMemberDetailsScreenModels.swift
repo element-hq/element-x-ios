@@ -27,7 +27,7 @@ struct RoomMemberDetailsScreenViewState: BindableState {
     var memberDetails: RoomMemberDetails?
     var isOwnMemberDetails = false
     var isProcessingIgnoreRequest = false
-    var hasExistingDM = false
+    var dmRoomID: String?
 
     var bindings: RoomMemberDetailsScreenViewStateBindings
 }
@@ -85,7 +85,7 @@ enum RoomMemberDetailsScreenViewAction {
     case unignoreConfirmed
     case displayAvatar
     case openDirectChat
-    case call
+    case startCall(roomID: String)
 }
 
 enum RoomMemberDetailsScreenError: Hashable {

@@ -595,6 +595,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(callScreenCoordinator, animated: true)
     }
     
+    private func presentCallScreen(roomID: String) async {
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            return
+        }
+        
+        presentCallScreen(roomProxy: roomProxy)
+    }
+    
     // MARK: Secure backup confirmation
     
     private func presentSecureBackupLogoutConfirmationScreen() {
@@ -707,7 +715,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 navigationSplitCoordinator.setSheetCoordinator(nil)
                 stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
             case .startCall(let roomID):
-                Task { await self.presentCall(roomID: roomID) }
+                Task { await self.presentCallScreen(roomID: roomID) }
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }
@@ -718,14 +726,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedUserProfileScreen)
         }
-    }
-    
-    private func presentCall(roomID: String) async {
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            return
-        }
-        
-        presentCallScreen(roomProxy: roomProxy)
     }
     
     // MARK: Toasts and loading indicators

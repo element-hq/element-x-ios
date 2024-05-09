@@ -29,7 +29,7 @@ struct UserProfileScreenViewState: BindableState {
     
     var userProfile: UserProfileProxy?
     var permalink: URL?
-    var hasExistingDM = false
+    var dmRoomID: String?
 
     var bindings: UserProfileScreenViewStateBindings
 }
@@ -44,7 +44,7 @@ struct UserProfileScreenViewStateBindings {
 enum UserProfileScreenViewAction {
     case displayAvatar
     case openDirectChat
-    case call
+    case startCall(roomID: String)
     case dismiss
 }
 

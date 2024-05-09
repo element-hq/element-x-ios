@@ -48,9 +48,9 @@ struct UserProfileScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
             }
             
-            if context.viewState.hasExistingDM {
+            if let roomID = context.viewState.dmRoomID {
                 Button {
-                    context.send(viewAction: .call)
+                    context.send(viewAction: .startCall(roomID: roomID))
                 } label: {
                     CompoundIcon(\.videoCall)
                 }

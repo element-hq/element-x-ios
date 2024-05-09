@@ -176,7 +176,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func handleCallRoute(roomID: String) async {
+    private func presentCallScreen(roomID: String) async {
         guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
             return
         }
@@ -1073,7 +1073,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, entryPoint: .room))
             case .startCall(let roomID):
-                Task { await self.handleCallRoute(roomID: roomID) }
+                Task { await self.presentCallScreen(roomID: roomID) }
             }
         }
         .store(in: &cancellables)
@@ -1098,7 +1098,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, entryPoint: .room))
             case .startCall(let roomID):
-                Task { await self.handleCallRoute(roomID: roomID) }
+                Task { await self.presentCallScreen(roomID: roomID) }
             case .dismiss:
                 break // Not supported when pushed.
             }
