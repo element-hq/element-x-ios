@@ -84,23 +84,16 @@ class RoomScreenInteractionHandler {
         self.appSettings = appSettings
         self.analyticsService = analyticsService
         pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService, roomProxy: roomProxy)
+        
+        // Set initial values for redacting from the macOS context menu.
+        Task { await updatePermissions() }
     }
     
     // MARK: Timeline Item Action Menu
     
     func displayTimelineItemActionMenu(for itemID: TimelineItemIdentifier) {
         Task {
-            if case let .success(value) = await roomProxy.canUserRedactOther(userID: roomProxy.ownUserID) {
-                canCurrentUserRedactOthers = value
-            } else {
-                canCurrentUserRedactOthers = false
-            }
-            
-            if case let .success(value) = await roomProxy.canUserRedactOwn(userID: roomProxy.ownUserID) {
-                canCurrentUserRedactSelf = value
-            } else {
-                canCurrentUserRedactSelf = false
-            }
+            await updatePermissions()
          
             guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
                   let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
@@ -606,6 +599,20 @@ class RoomScreenInteractionHandler {
     }
     
     // MARK: - Private
+    
+    private func updatePermissions() async {
+        if case let .success(value) = await roomProxy.canUserRedactOther(userID: roomProxy.ownUserID) {
+            canCurrentUserRedactOthers = value
+        } else {
+            canCurrentUserRedactOthers = false
+        }
+        
+        if case let .success(value) = await roomProxy.canUserRedactOwn(userID: roomProxy.ownUserID) {
+            canCurrentUserRedactSelf = value
+        } else {
+            canCurrentUserRedactSelf = false
+        }
+    }
     
     private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {
         item.isOutgoing ? canCurrentUserRedactSelf : canCurrentUserRedactOthers && !roomProxy.isDirect

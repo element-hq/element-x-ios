@@ -814,7 +814,7 @@ extension RoomScreenViewModel {
 }
 
 private struct RoomContextKey: EnvironmentKey {
-    @MainActor static let defaultValue = RoomScreenViewModel.mock.context
+    @MainActor static let defaultValue: RoomScreenViewModel.Context? = nil
 }
 
 private struct FocussedEventID: EnvironmentKey {
@@ -823,7 +823,7 @@ private struct FocussedEventID: EnvironmentKey {
 
 extension EnvironmentValues {
     /// Used to access and inject the room context without observing it
-    var roomContext: RoomScreenViewModel.Context {
+    var roomContext: RoomScreenViewModel.Context? {
         get { self[RoomContextKey.self] }
         set { self[RoomContextKey.self] = newValue }
     }
