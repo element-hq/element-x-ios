@@ -203,8 +203,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .room(let roomID, let via):
             stateMachine.processEvent(.selectRoom(roomID: roomID, via: via, entryPoint: .room), userInfo: .init(animated: animated))
         case .roomAlias(let alias):
-            guard let resolved = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
-            await asyncHandleAppRoute(.room(roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            switch await userSession.clientProxy.resolveRoomAlias(alias) {
+            case .success(let resolved): await asyncHandleAppRoute(.room(roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            case .failure: showFailureIndicator()
+            }
         case .childRoom(let roomID, let via):
             if let roomFlowCoordinator {
                 roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
@@ -212,8 +214,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: via, entryPoint: .room), userInfo: .init(animated: animated))
             }
         case .childRoomAlias(let alias):
-            guard let resolved = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
-            await asyncHandleAppRoute(.childRoom(roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            switch await userSession.clientProxy.resolveRoomAlias(alias) {
+            case .success(let resolved): await asyncHandleAppRoute(.childRoom(roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            case .failure: showFailureIndicator()
+            }
+            
         case .roomDetails(let roomID):
             if stateMachine.state.selectedRoomID == roomID {
                 roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
@@ -227,13 +232,19 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .event(let eventID, let roomID, let via):
             stateMachine.processEvent(.selectRoom(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: .init(animated: animated))
         case .eventOnRoomAlias(let eventID, let alias):
-            guard let resolved = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
-            await asyncHandleAppRoute(.event(eventID: eventID, roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            switch await userSession.clientProxy.resolveRoomAlias(alias) {
+            case .success(let resolved): await asyncHandleAppRoute(.event(eventID: eventID, roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            case .failure: showFailureIndicator()
+            }
+            
         case .childEvent:
             roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
         case .childEventOnRoomAlias(let eventID, let alias):
-            guard let resolved = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
-            await asyncHandleAppRoute(.childEvent(eventID: eventID, roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            switch await userSession.clientProxy.resolveRoomAlias(alias) {
+            case .success(let resolved): await asyncHandleAppRoute(.childEvent(eventID: eventID, roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            case .failure: showFailureIndicator()
+            }
+            
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .genericCallLink(let url):
@@ -682,6 +693,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Toasts and loading indicators
     
     private static let loadingIndicatorIdentifier = "\(UserSessionFlowCoordinator.self)-Loading"
+    private static let failureIndicatorIdentifier = "\(UserSessionFlowCoordinator.self)-Failure"
     
     private func showLoadingIndicator(delay: Duration? = nil) {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
@@ -693,5 +705,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func hideLoadingIndicator() {
         ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+    
+    private func showFailureIndicator() {
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorIdentifier,
+                                                                                    type: .toast,
+                                                                                    title: L10n.errorUnknown,
+                                                                                    iconName: "xmark"))
     }
 }
