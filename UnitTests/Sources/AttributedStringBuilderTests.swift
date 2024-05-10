@@ -206,16 +206,18 @@ class AttributedStringBuilderTests: XCTestCase {
         checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
         checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
     }
+    
+    // `Plain link in codeblock: https://www.matrix.org`, Link tag in codeblock: <a href=\"https://www.matrix.org/\">link</a>, plain link: https://www.matrix.org, link tag: <a href=\"https://www.matrix.org/\">link</a>
         
     func testDefaultFont() {
-        let htmlString = "<b>Test</b> <i>string</i>."
+        let htmlString = "<b>Test</b> <i>string</i> "
         
         guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
         
-        XCTAssertEqual(attributedString.runs.count, 4)
+        XCTAssertEqual(attributedString.runs.count, 3)
         
         for run in attributedString.runs {
             XCTAssertEqual(run.uiKit.font?.familyName, UIFont.preferredFont(forTextStyle: .body).familyName)
@@ -223,14 +225,14 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     func testDefaultForegroundColor() {
-        let htmlString = "<b>Test</b> <i>string</i>."
+        let htmlString = "<b>Test</b> <i>string</i> <a href=\"https://www.matrix.org/\">link</a> <code><a href=\"https://www.matrix.org/\">link</a></code>"
         
         guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
         
-        XCTAssertEqual(attributedString.runs.count, 4)
+        XCTAssertEqual(attributedString.runs.count, 7)
         
         for run in attributedString.runs {
             XCTAssertNil(run.uiKit.foregroundColor)
@@ -246,16 +248,18 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(attributedString.runs.count, 8)
+        XCTAssertEqual(attributedString.runs.count, 3)
         
         var foundLink = false
+        // Foreground colors should be completely stripped from the attributed string
+        // letting UI components chose the defaults (e.g. tintColor)
         for run in attributedString.runs {
             if run.link != nil {
                 XCTAssertEqual(run.link?.host, "www.matrix.org")
                 XCTAssertNil(run.uiKit.foregroundColor)
                 foundLink = true
             } else {
-                XCTAssertNotNil(run.uiKit.foregroundColor)
+                XCTAssertNil(run.uiKit.foregroundColor)
             }
         }
         
