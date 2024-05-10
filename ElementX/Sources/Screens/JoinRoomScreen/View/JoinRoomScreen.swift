@@ -56,12 +56,7 @@ struct JoinRoomScreen: View {
                 }
                 
                 if let memberCount = context.viewState.roomDetails?.memberCount {
-                    Label("\(memberCount)", icon: \.userProfile, iconSize: .small, relativeTo: .compound.bodySMSemibold)
-                        .font(.compound.bodySMSemibold)
-                        .foregroundStyle(.compound.textSecondary)
-                        .padding(4)
-                        .background(Capsule().fill(.compound.bgSubtleSecondary))
-                        .labelStyle(.custom(spacing: 4))
+                    BadgeLabel(title: "\(memberCount)", icon: \.userProfile, isHighlighted: false)
                 }
                 
                 if let topic = context.viewState.roomDetails?.topic {

@@ -710,6 +710,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentPollsHistory)
             case .presentRolesAndPermissionsScreen:
                 stateMachine.tryEvent(.presentRolesAndPermissionsScreen)
+            case .presentCall:
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             }
         }
         .store(in: &cancellables)

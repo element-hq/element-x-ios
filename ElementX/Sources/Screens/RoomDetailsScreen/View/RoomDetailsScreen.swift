@@ -107,6 +107,20 @@ struct RoomDetailsScreen: View {
                         CompoundIcon(\.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
+                case .call:
+                    Button {
+                        context.send(viewAction: .processTapCall)
+                    } label: {
+                        CompoundIcon(\.videoCall)
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
+                case .invite:
+                    Button {
+                        context.send(viewAction: .processTapInvite)
+                    } label: {
+                        CompoundIcon(\.userAdd)
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionInvite))
                 }
             }
         }
@@ -152,15 +166,6 @@ struct RoomDetailsScreen: View {
                             context.send(viewAction: .processTapPeople)
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-                
-                if context.viewState.canInviteUsers {
-                    ListRow(label: .default(title: L10n.screenRoomDetailsInvitePeopleTitle,
-                                            icon: \.userAdd),
-                            kind: .navigationLink {
-                                context.send(viewAction: .processTapInvite)
-                            })
-                            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
-                }
             }
             ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
                                     icon: \.polls),

@@ -64,6 +64,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                    imageProvider: mediaProvider)
         
         Task {
+            let userID = roomProxy.ownUserID
+            if case let .success(permission) = await roomProxy.canUserJoinCall(userID: userID) {
+                state.canJoinCall = permission
+            }
+        }
+        
+        Task {
             if case let .success(permalinkURL) = await roomProxy.matrixToPermalink() {
                 state.permalink = permalinkURL
             }
@@ -126,6 +133,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             Task { await toggleFavourite(isFavourite) }
         case .processTapRolesAndPermissions:
             actionsSubject.send(.requestRolesAndPermissionsPresentation)
+        case .processTapCall:
+            actionsSubject.send(.startCall)
         }
     }
     

@@ -21,4 +21,6 @@ struct RoomDetails {
     let name: String?
     let avatarURL: URL?
     let canonicalAlias: String?
+    let isEncrypted: Bool
+    let isPublic: Bool
 }

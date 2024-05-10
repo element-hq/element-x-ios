@@ -17,10 +17,16 @@
 import SwiftUI
 
 struct AvatarHeaderView<Footer: View>: View {
+    private enum Badge: Hashable {
+        case encrypted(Bool)
+        case `public`
+    }
+    
     let id: String
     let name: String?
     let subtitle: String?
     let avatarURL: URL?
+    private let badges: [Badge]
     
     let avatarSize: AvatarSize
     let imageProvider: ImageProviderProtocol?
@@ -41,6 +47,13 @@ struct AvatarHeaderView<Footer: View>: View {
         self.imageProvider = imageProvider
         self.onAvatarTap = onAvatarTap
         self.footer = footer
+        
+        var badges = [Badge]()
+        badges.append(.encrypted(room.isEncrypted))
+        if room.isPublic {
+            badges.append(.public)
+        }
+        self.badges = badges
     }
     
     init(member: RoomMemberDetails,
@@ -57,6 +70,7 @@ struct AvatarHeaderView<Footer: View>: View {
         self.imageProvider = imageProvider
         self.onAvatarTap = onAvatarTap
         self.footer = footer
+        badges = []
     }
     
     init(user: UserProfileProxy,
@@ -73,6 +87,30 @@ struct AvatarHeaderView<Footer: View>: View {
         self.imageProvider = imageProvider
         self.onAvatarTap = onAvatarTap
         self.footer = footer
+        badges = []
+    }
+    
+    private var badgesStack: some View {
+        HStack(spacing: 8) {
+            ForEach(badges, id: \.self) { badge in
+                switch badge {
+                case .encrypted(let isEncrypted):
+                    if isEncrypted {
+                        BadgeLabel(title: L10n.screenRoomDetailsBadgeEncrypted,
+                                   icon: \.lockSolid,
+                                   isHighlighted: true)
+                    } else {
+                        BadgeLabel(title: L10n.screenRoomDetailsBadgeNotEncrypted,
+                                   icon: \.lockOff,
+                                   isHighlighted: false)
+                    }
+                case .public:
+                    BadgeLabel(title: L10n.screenRoomDetailsBadgePublic,
+                               icon: \.public,
+                               isHighlighted: false)
+                }
+            }
+        }
     }
 
     var body: some View {
@@ -102,6 +140,10 @@ struct AvatarHeaderView<Footer: View>: View {
                     .textSelection(.enabled)
             }
             
+            if !badges.isEmpty {
+                badgesStack
+            }
+            
             footer()
         }
         .frame(maxWidth: .infinity, alignment: .center)
@@ -119,7 +161,9 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
             AvatarHeaderView(room: .init(id: "@test:matrix.org",
                                          name: "Test Room",
                                          avatarURL: URL.picturesDirectory,
-                                         canonicalAlias: "#test:matrix.org"),
+                                         canonicalAlias: "#test:matrix.org",
+                                         isEncrypted: true,
+                                         isPublic: true),
                              avatarSize: .room(on: .details),
                              imageProvider: MockMediaProvider()) {
                 HStack(spacing: 32) {
