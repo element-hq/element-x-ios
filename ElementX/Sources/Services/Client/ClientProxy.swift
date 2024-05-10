@@ -569,12 +569,12 @@ class ClientProxy: ClientProxyProtocol {
         RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch())
     }
     
-    func resolveRoomAlias(_ alias: String) async -> ResolvedRoomAlias? {
+    func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError> {
         do {
-            return try await client.resolveRoomAlias(roomAlias: alias)
+            return try await .success(client.resolveRoomAlias(roomAlias: alias))
         } catch {
             MXLog.error("Failed resolving room alias: \(alias) with error: \(error)")
-            return nil
+            return .failure(.sdkError(error))
         }
     }
     

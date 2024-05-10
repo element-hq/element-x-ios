@@ -3431,13 +3431,13 @@ class ClientProxyMock: ClientProxyProtocol {
     var resolveRoomAliasReceivedAlias: String?
     var resolveRoomAliasReceivedInvocations: [String] = []
 
-    var resolveRoomAliasUnderlyingReturnValue: ResolvedRoomAlias?
-    var resolveRoomAliasReturnValue: ResolvedRoomAlias? {
+    var resolveRoomAliasUnderlyingReturnValue: Result<ResolvedRoomAlias, ClientProxyError>!
+    var resolveRoomAliasReturnValue: Result<ResolvedRoomAlias, ClientProxyError>! {
         get {
             if Thread.isMainThread {
                 return resolveRoomAliasUnderlyingReturnValue
             } else {
-                var returnValue: ResolvedRoomAlias?? = nil
+                var returnValue: Result<ResolvedRoomAlias, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = resolveRoomAliasUnderlyingReturnValue
                 }
@@ -3455,9 +3455,9 @@ class ClientProxyMock: ClientProxyProtocol {
             }
         }
     }
-    var resolveRoomAliasClosure: ((String) async -> ResolvedRoomAlias?)?
+    var resolveRoomAliasClosure: ((String) async -> Result<ResolvedRoomAlias, ClientProxyError>)?
 
-    func resolveRoomAlias(_ alias: String) async -> ResolvedRoomAlias? {
+    func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError> {
         resolveRoomAliasCallsCount += 1
         resolveRoomAliasReceivedAlias = alias
         resolveRoomAliasReceivedInvocations.append(alias)
