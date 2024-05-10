@@ -193,8 +193,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .focusLive:
             focusLive()
         case .scrolledToFocussedItem:
-            // Use a Task to mutate view state after the current view update.
-            Task { didScrollToFocussedItem() }
+            didScrollToFocussedItem()
         case .hasSwitchedTimeline:
             Task { state.timelineViewState.isSwitchingTimelines = false }
         }
