@@ -34,12 +34,12 @@ struct RoomMessageEventStringBuilder {
         case .audio(content: let content):
             let isVoiceMessage = content.voice != nil
             message = isVoiceMessage ? L10n.commonVoiceMessage : L10n.commonAudio
-        case .image:
-            message = L10n.commonImage
-        case .video:
-            message = L10n.commonVideo
-        case .file:
-            message = L10n.commonFile
+        case .image(let content):
+            message = "\(L10n.commonImage) - \(content.body)"
+        case .video(let content):
+            message = "\(L10n.commonVideo) - \(content.body)"
+        case .file(let content):
+            message = "\(L10n.commonFile) - \(content.body)"
         case .location:
             message = L10n.commonSharedLocation
         case .notice(content: let content):
