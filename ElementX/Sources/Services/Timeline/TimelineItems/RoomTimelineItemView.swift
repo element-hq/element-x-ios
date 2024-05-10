@@ -16,7 +16,7 @@
 import SwiftUI
 
 struct RoomTimelineItemView: View {
-    @Environment(\.roomContext) var context: RoomScreenViewModel.Context
+    @Environment(\.roomContext) var context
     @ObservedObject var viewState: RoomTimelineItemViewState
     
     var body: some View {
@@ -25,10 +25,10 @@ struct RoomTimelineItemView: View {
             .animation(.elementDefault, value: viewState.type)
             .environment(\.timelineGroupStyle, viewState.groupStyle)
             .onAppear {
-                context.send(viewAction: .itemAppeared(itemID: viewState.identifier))
+                context?.send(viewAction: .itemAppeared(itemID: viewState.identifier))
             }
             .onDisappear {
-                context.send(viewAction: .itemDisappeared(itemID: viewState.identifier))
+                context?.send(viewAction: .itemDisappeared(itemID: viewState.identifier))
             }
     }
 
@@ -73,7 +73,7 @@ struct RoomTimelineItemView: View {
         case .poll(let item):
             PollRoomTimelineView(timelineItem: item)
         case .voice(let item):
-            VoiceMessageRoomTimelineView(timelineItem: item, playerState: context.viewState.audioPlayerStateProvider?(item.id) ?? AudioPlayerState(id: .timelineItemIdentifier(item.id), duration: 0))
+            VoiceMessageRoomTimelineView(timelineItem: item, playerState: context?.viewState.audioPlayerStateProvider?(item.id) ?? AudioPlayerState(id: .timelineItemIdentifier(item.id), duration: 0))
         case .callInvite(let item):
             CallInviteRoomTimelineView(timelineItem: item)
         }
