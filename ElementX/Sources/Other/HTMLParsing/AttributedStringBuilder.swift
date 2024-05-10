@@ -49,9 +49,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
 
         let mutableAttributedString = NSMutableAttributedString(string: string)
+        removeDefaultForegroundColors(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
-        removeLinkColors(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
         Self.cacheValue(result, forKey: string, cacheKey: cacheKey)
@@ -105,12 +105,11 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
         
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
-        removeDefaultForegroundColor(mutableAttributedString)
+        removeDefaultForegroundColors(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
-        removeLinkColors(mutableAttributedString)
         removeDTCoreTextArtifacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
@@ -140,12 +139,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         return result
     }
     
-    private func removeDefaultForegroundColor(_ attributedString: NSMutableAttributedString) {
-        attributedString.enumerateAttribute(.foregroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
-            if value as? UIColor == UIColor.black {
-                attributedString.removeAttribute(.foregroundColor, range: range)
-            }
-        }
+    private func removeDefaultForegroundColors(_ attributedString: NSMutableAttributedString) {
+        attributedString.removeAttribute(.foregroundColor, range: .init(location: 0, length: attributedString.length))
     }
     
     private func addLinksAndMentions(_ attributedString: NSMutableAttributedString) {
@@ -289,14 +284,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             if let value = value as? Bool,
                value {
                 mentionBuilder.handleAllUsersMention(for: attributedString, in: range)
-            }
-        }
-    }
-    
-    private func removeLinkColors(_ attributedString: NSMutableAttributedString) {
-        attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
-            if value != nil {
-                attributedString.removeAttribute(.foregroundColor, range: range)
             }
         }
     }
