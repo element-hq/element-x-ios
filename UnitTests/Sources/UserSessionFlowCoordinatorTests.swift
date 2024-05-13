@@ -88,7 +88,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     }
     
     func testRoomAliasPresentation() async throws {
-        clientProxy.resolveRoomAliasReturnValue = .init(roomId: "1", servers: [])
+        clientProxy.resolveRoomAliasReturnValue = .success(.init(roomId: "1", servers: []))
         
         try await process(route: .roomAlias("#alias:matrix.org"), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
@@ -102,7 +102,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
-        clientProxy.resolveRoomAliasReturnValue = .init(roomId: "2", servers: [])
+        clientProxy.resolveRoomAliasReturnValue = .success(.init(roomId: "2", servers: []))
         
         try await process(route: .room(roomID: "2", via: []), expectedState: .roomList(selectedRoomID: "2"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
