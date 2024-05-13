@@ -25,7 +25,7 @@
 "action_accept" = "Prijať";
 "action_add_to_timeline" = "Pridať na časovú os";
 "action_back" = "Späť";
-"action_call" = "Call";
+"action_call" = "Zavolať";
 "action_cancel" = "Zrušiť";
 "action_choose_photo" = "Vybrať fotku";
 "action_clear" = "Vyčistiť";
@@ -63,6 +63,7 @@
 "action_leave_room" = "Opustiť miestnosť";
 "action_manage_account" = "Spravovať účet";
 "action_manage_devices" = "Spravovať zariadenia";
+"action_message" = "Poslať správu";
 "action_next" = "Ďalej";
 "action_no" = "Nie";
 "action_not_now" = "Teraz nie";
@@ -498,11 +499,12 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "Pripojenie nie je bezpečené";
 "screen_qr_code_login_device_code_subtitle" = "Budete požiadaní o zadanie dvoch číslic zobrazených na tomto zariadení.";
 "screen_qr_code_login_device_code_title" = "Zadajte nižšie uvedené číslo na vašom druhom zariadení";
+"screen_qr_code_login_initial_state_button_title" = "Pripravené na skenovanie";
 "screen_qr_code_login_initial_state_item_1" = "Otvorte %1$@ na stolnom zariadení";
 "screen_qr_code_login_initial_state_item_2" = "Kliknite na svoj obrázok";
 "screen_qr_code_login_initial_state_item_3" = "Vyberte %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "„Prepojiť nové zariadenie“";
-"screen_qr_code_login_initial_state_item_4" = "Postupujte podľa zobrazených pokynov";
+"screen_qr_code_login_initial_state_item_4" = "Naskenujte QR kód pomocou tohto zariadenia";
 "screen_qr_code_login_initial_state_title" = "Ak chcete získať QR kód, otvorte %1$@ na inom zariadení";
 "screen_qr_code_login_invalid_scan_state_description" = "Použite QR kód zobrazený na druhom zariadení.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Nesprávny QR kód";
@@ -578,6 +580,9 @@
 "screen_room_details_add_topic_title" = "Pridať tému";
 "screen_room_details_already_a_member" = "Už ste členom";
 "screen_room_details_already_invited" = "Už ste pozvaní";
+"screen_room_details_badge_encrypted" = "Zašifrované";
+"screen_room_details_badge_not_encrypted" = "Nešifrované";
+"screen_room_details_badge_public" = "Verejná miestnosť";
 "screen_room_details_edit_room_title" = "Upraviť miestnosť";
 "screen_room_details_edition_error" = "Vyskytla sa neznáma chyba a informácie nebolo možné zmeniť.";
 "screen_room_details_edition_error_title" = "Nepodarilo sa aktualizovať miestnosť";
