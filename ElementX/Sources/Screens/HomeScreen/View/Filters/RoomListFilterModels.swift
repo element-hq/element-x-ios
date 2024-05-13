@@ -69,13 +69,13 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     var rustFilter: RoomListEntriesDynamicFilterKind {
         switch self {
         case .people:
-            return .category(expect: .people)
+            return .all(filters: [.category(expect: .people), .joined])
         case .rooms:
-            return .category(expect: .group)
+            return .all(filters: [.category(expect: .group), .joined])
         case .unreads:
-            return .unread
+            return .all(filters: [.unread, .joined])
         case .favourites:
-            return .favourite
+            return .all(filters: [.favourite, .joined])
         case .invites:
             return .invite
         }
