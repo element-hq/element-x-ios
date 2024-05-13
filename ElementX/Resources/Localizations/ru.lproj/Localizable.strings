@@ -25,7 +25,7 @@
 "action_accept" = "Разрешить";
 "action_add_to_timeline" = "Добавить в хронологию";
 "action_back" = "Назад";
-"action_call" = "Call";
+"action_call" = "Позвонить";
 "action_cancel" = "Отмена";
 "action_choose_photo" = "Выбрать фото";
 "action_clear" = "Очистить";
@@ -63,6 +63,7 @@
 "action_leave_room" = "Покинуть комнату";
 "action_manage_account" = "Настройки аккаунта";
 "action_manage_devices" = "Управление устройствами";
+"action_message" = "Message";
 "action_next" = "Далее";
 "action_no" = "Нет";
 "action_not_now" = "Не сейчас";
@@ -498,6 +499,7 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "Соединение не защищено";
 "screen_qr_code_login_device_code_subtitle" = "Вам нужно будет ввести две цифры, показанные на этом устройстве.";
 "screen_qr_code_login_device_code_title" = "Введите показанный номер на своем другом устройстве";
+"screen_qr_code_login_initial_state_button_title" = "Ready to scan";
 "screen_qr_code_login_initial_state_item_1" = "Откройте %1$@ на настольном устройстве";
 "screen_qr_code_login_initial_state_item_2" = "Нажмите на свое изображение";
 "screen_qr_code_login_initial_state_item_3" = "Выбрать %1$@";
@@ -578,6 +580,9 @@
 "screen_room_details_add_topic_title" = "Добавить тему";
 "screen_room_details_already_a_member" = "Уже зарегистрирован";
 "screen_room_details_already_invited" = "Уже приглашены";
+"screen_room_details_badge_encrypted" = "Encrypted";
+"screen_room_details_badge_not_encrypted" = "Not encrypted";
+"screen_room_details_badge_public" = "Public room";
 "screen_room_details_edit_room_title" = "Редактировать комнату";
 "screen_room_details_edition_error" = "Произошла неизвестная ошибка и информацию не удалось изменить.";
 "screen_room_details_edition_error_title" = "Не удалось обновить комнату";

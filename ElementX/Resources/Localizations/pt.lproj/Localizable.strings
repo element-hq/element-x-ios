@@ -25,7 +25,7 @@
 "action_accept" = "Aceitar";
 "action_add_to_timeline" = "Adicionar à cronologia";
 "action_back" = "Voltar";
-"action_call" = "Call";
+"action_call" = "Chamar";
 "action_cancel" = "Cancelar";
 "action_choose_photo" = "Escolher foto";
 "action_clear" = "Limpar";
@@ -63,6 +63,7 @@
 "action_leave_room" = "Sair da sala";
 "action_manage_account" = "Gerir conta";
 "action_manage_devices" = "Gerir dispositivos";
+"action_message" = "Enviar mensagem";
 "action_next" = "Próximo";
 "action_no" = "Não";
 "action_not_now" = "Agora não";
@@ -498,11 +499,12 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "Ligação insegura";
 "screen_qr_code_login_device_code_subtitle" = "Ser-te-á pedido que insiras os dois dígitos indicados neste dispositivo.";
 "screen_qr_code_login_device_code_title" = "Insere o número abaixo no teu dispositivo";
+"screen_qr_code_login_initial_state_button_title" = "Pronto para ler";
 "screen_qr_code_login_initial_state_item_1" = "Abre a %1$@ num computador";
 "screen_qr_code_login_initial_state_item_2" = "Carrega no teu avatar";
 "screen_qr_code_login_initial_state_item_3" = "Seleciona %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Ligar novo dispositivo”";
-"screen_qr_code_login_initial_state_item_4" = "Segue as instruções apresentadas";
+"screen_qr_code_login_initial_state_item_4" = "Lê o código QR com este dispositivo";
 "screen_qr_code_login_initial_state_title" = "Abre a %1$@ noutro dispositivo para obteres o código QR";
 "screen_qr_code_login_invalid_scan_state_description" = "Lê o código QR apresentado no outro dispositivo.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Código QR inválido";
@@ -578,6 +580,9 @@
 "screen_room_details_add_topic_title" = "Adicionar descrição";
 "screen_room_details_already_a_member" = "Já é participante";
 "screen_room_details_already_invited" = "Já foi convidado";
+"screen_room_details_badge_encrypted" = "Cifrada";
+"screen_room_details_badge_not_encrypted" = "Não cifrada";
+"screen_room_details_badge_public" = "Sala pública";
 "screen_room_details_edit_room_title" = "Editar sala";
 "screen_room_details_edition_error" = "Ocorreu um erro desconhecido e não foi possível alterar a informação.";
 "screen_room_details_edition_error_title" = "Não foi possível atualizar a sala";
@@ -666,7 +671,7 @@
 "screen_room_timeline_reactions_show_less" = "Mostrar menos";
 "screen_room_timeline_reactions_show_more" = "Mostrar mais";
 "screen_room_timeline_read_marker_title" = "Novas";
-"screen_room_title" = "Chat";
+"screen_room_title" = "Conversa";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ e ";
 "screen_room_typing_notification_plural_ios" = " estão a escrever…";
 "screen_room_typing_notification_singular_ios" = " está a escrever…";

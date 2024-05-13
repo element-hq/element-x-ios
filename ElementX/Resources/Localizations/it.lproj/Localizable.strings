@@ -63,6 +63,7 @@
 "action_leave_room" = "Esci dalla stanza";
 "action_manage_account" = "Gestisci account";
 "action_manage_devices" = "Gestisci dispositivi";
+"action_message" = "Message";
 "action_next" = "Avanti";
 "action_no" = "No";
 "action_not_now" = "Non ora";
@@ -498,6 +499,7 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "La connessione non è sicura";
 "screen_qr_code_login_device_code_subtitle" = "Ti verrà chiesto di inserire le due cifre mostrate su questo dispositivo.";
 "screen_qr_code_login_device_code_title" = "Inserisci il numero qui sotto sull'altro dispositivo";
+"screen_qr_code_login_initial_state_button_title" = "Ready to scan";
 "screen_qr_code_login_initial_state_item_1" = "Apri %1$@ su un dispositivo desktop";
 "screen_qr_code_login_initial_state_item_2" = "Clicca sul tuo avatar";
 "screen_qr_code_login_initial_state_item_3" = "Seleziona %1$@";
@@ -578,6 +580,9 @@
 "screen_room_details_add_topic_title" = "Aggiungi argomento";
 "screen_room_details_already_a_member" = "Già membro";
 "screen_room_details_already_invited" = "Già invitato";
+"screen_room_details_badge_encrypted" = "Encrypted";
+"screen_room_details_badge_not_encrypted" = "Not encrypted";
+"screen_room_details_badge_public" = "Public room";
 "screen_room_details_edit_room_title" = "Modifica stanza";
 "screen_room_details_edition_error" = "Si è verificato un errore sconosciuto e non è stato possibile modificare le informazioni.";
 "screen_room_details_edition_error_title" = "Impossibile aggiornare la stanza";

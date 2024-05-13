@@ -63,6 +63,7 @@
 "action_leave_room" = "离开房间";
 "action_manage_account" = "管理账户";
 "action_manage_devices" = "管理设备";
+"action_message" = "Message";
 "action_next" = "下一步";
 "action_no" = "否";
 "action_not_now" = "以后再说";
@@ -498,6 +499,7 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "连接不安全";
 "screen_qr_code_login_device_code_subtitle" = "您会被要求输入此设备上显示的两位数。";
 "screen_qr_code_login_device_code_title" = "在您的其他设备上输入下面的数字";
+"screen_qr_code_login_initial_state_button_title" = "Ready to scan";
 "screen_qr_code_login_initial_state_item_1" = "在桌面设备上打开 %1$@";
 "screen_qr_code_login_initial_state_item_2" = "点击你的头像";
 "screen_qr_code_login_initial_state_item_3" = "选择 %1$@";
@@ -578,6 +580,9 @@
 "screen_room_details_add_topic_title" = "添加主题";
 "screen_room_details_already_a_member" = "已经是成员";
 "screen_room_details_already_invited" = "已邀请";
+"screen_room_details_badge_encrypted" = "Encrypted";
+"screen_room_details_badge_not_encrypted" = "Not encrypted";
+"screen_room_details_badge_public" = "Public room";
 "screen_room_details_edit_room_title" = "编辑聊天室";
 "screen_room_details_edition_error" = "出现未知错误，无法更改信息。";
 "screen_room_details_edition_error_title" = "无法更新聊天室";
