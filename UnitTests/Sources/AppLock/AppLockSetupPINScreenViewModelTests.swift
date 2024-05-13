@@ -128,6 +128,28 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
+    func testForgotPIN() async throws {
+        // Given the screen in unlock mode.
+        viewModel = AppLockSetupPINScreenViewModel(initialMode: .unlock, isMandatory: false, appLockService: appLockService)
+        XCTAssertNil(context.alertInfo, "There shouldn't be an alert to begin with.")
+        XCTAssertFalse(context.viewState.isLoggingOut, "The view should not start disabled.")
+        
+        // When the user has forgotten their PIN.
+        context.send(viewAction: .forgotPIN)
+        
+        // Then an alert should be shown before logging out.
+        XCTAssertEqual(context.alertInfo?.id, .confirmResetPIN, "The weak PIN should be rejected.")
+        XCTAssertFalse(context.viewState.isLoggingOut, "The view should not be disabled until the user confirms.")
+        
+        // When confirming the logout.
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .forceLogout }
+        context.alertInfo?.primaryButton.action?()
+        
+        // Then a force logout should be initiated.
+        try await deferred.fulfill()
+        XCTAssertTrue(context.viewState.isLoggingOut, "The view should become disabled.")
+    }
+    
     func testUnlockFailed() async throws {
         // Given the screen in unlock mode.
         viewModel = AppLockSetupPINScreenViewModel(initialMode: .unlock, isMandatory: false, appLockService: appLockService)

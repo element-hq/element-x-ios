@@ -83,6 +83,8 @@ enum AppLockSetupPINScreenAlertType {
     case pinMismatch
     /// An error occurred setting the PIN code in the App Lock service.
     case failedToSetPIN
+    /// The user has forgotten their PIN, confirm they're happy to sign out.
+    case confirmResetPIN
     /// The user failed to unlock the app (or forgot their PIN).
     case forceLogout
 }
@@ -90,4 +92,6 @@ enum AppLockSetupPINScreenAlertType {
 enum AppLockSetupPINScreenViewAction {
     /// Stop entering a PIN.
     case cancel
+    /// The user didn't heed the warnings and can't remember their PIN.
+    case forgotPIN
 }
