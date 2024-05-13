@@ -58,6 +58,8 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
         switch viewAction {
         case .cancel:
             actionsSubject.send(.cancel)
+        case .forgotPIN:
+            displayAlert(.confirmResetPIN)
         }
     }
     
@@ -80,7 +82,7 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
         let pinCode = state.bindings.pinCode
         if case let .failure(error) = appLockService.validate(pinCode) {
             MXLog.warning("PIN rejected: \(error)")
-            handleError(.weakPIN)
+            displayAlert(.weakPIN)
             return
         }
         
@@ -95,17 +97,17 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
         let pinCode = state.bindings.pinCode
         guard pinCode == newPIN else {
             MXLog.warning("PIN mismatch.")
-            handleError(.pinMismatch)
+            displayAlert(.pinMismatch)
             return
         }
         
         if case let .failure(error) = appLockService.setupPINCode(pinCode) {
             MXLog.warning("Failed to set PIN: \(error)")
             if case .keychainError = error {
-                handleError(.failedToSetPIN)
+                displayAlert(.failedToSetPIN)
                 return
             } else {
-                handleError(.weakPIN) // Shouldn't really happen but just in case.
+                displayAlert(.weakPIN) // Shouldn't really happen but just in case.
                 return
             }
         }
@@ -118,7 +120,7 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
         guard appLockService.unlock(with: state.bindings.pinCode) else {
             state.bindings.pinCode = ""
             if state.numberOfUnlockAttempts >= state.maximumAttempts {
-                handleError(.forceLogout)
+                displayAlert(.forceLogout)
             }
             return
         }
@@ -126,27 +128,33 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
         actionsSubject.send(.complete)
     }
     
-    private func handleError(_ error: AppLockSetupPINScreenAlertType) {
-        switch error {
+    private func displayAlert(_ alertType: AppLockSetupPINScreenAlertType) {
+        switch alertType {
         case .weakPIN:
-            state.bindings.alertInfo = .init(id: error,
+            state.bindings.alertInfo = .init(id: alertType,
                                              title: L10n.screenAppLockSetupPinBlacklistedDialogTitle,
                                              message: L10n.screenAppLockSetupPinBlacklistedDialogContent,
                                              primaryButton: .init(title: L10n.actionOk) { self.state.bindings.pinCode = "" })
         case .pinMismatch:
             state.numberOfConfirmAttempts += 1
-            state.bindings.alertInfo = .init(id: error,
+            state.bindings.alertInfo = .init(id: alertType,
                                              title: L10n.screenAppLockSetupPinMismatchDialogTitle,
                                              message: L10n.screenAppLockSetupPinMismatchDialogContent,
                                              primaryButton: .init(title: L10n.actionTryAgain) { self.restartCreateIfNeeded() })
         case .failedToSetPIN:
-            state.bindings.alertInfo = .init(id: error)
-        case .forceLogout:
-            state.isLoggingOut = true // Disable the screen before showing the alert.
-            state.bindings.alertInfo = .init(id: error,
+            state.bindings.alertInfo = .init(id: alertType)
+        case .confirmResetPIN:
+            state.bindings.alertInfo = .init(id: alertType,
                                              title: L10n.screenAppLockSignoutAlertTitle,
                                              message: L10n.screenAppLockSignoutAlertMessage,
-                                             primaryButton: .init(title: L10n.actionOk) { self.actionsSubject.send(.forceLogout) })
+                                             primaryButton: .init(title: L10n.actionOk) { self.forceLogout() },
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+        case .forceLogout:
+            state.isLoggingOut = true // Disable the screen before showing the alert.
+            state.bindings.alertInfo = .init(id: alertType,
+                                             title: L10n.screenAppLockSignoutAlertTitle,
+                                             message: L10n.screenAppLockSignoutAlertMessage,
+                                             primaryButton: .init(title: L10n.actionOk) { self.forceLogout() })
         }
     }
     
@@ -158,5 +166,10 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
             state.mode = .create
             state.numberOfConfirmAttempts = 0
         }
+    }
+    
+    private func forceLogout() {
+        state.isLoggingOut = true // Double call on failed to unlock, but not for forgot PIN.
+        actionsSubject.send(.forceLogout)
     }
 }

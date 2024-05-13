@@ -43,6 +43,13 @@ struct AppLockSetupPINScreen: View {
                 PINTextField(pinCode: $context.pinCode,
                              isSecure: true)
                     .focused($textFieldFocus)
+                
+                if context.viewState.mode == .unlock {
+                    Button(L10n.screenAppLockForgotPin) {
+                        context.send(viewAction: .forgotPIN)
+                    }
+                    .buttonStyle(.compound(.plain))
+                }
             }
             .padding(.horizontal, 16)
             .padding(.top, UIConstants.iconTopPaddingToNavigationBar)
