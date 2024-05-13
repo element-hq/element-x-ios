@@ -1,3 +1,16 @@
+## Changes in 1.6.7 (2024-05-13)
+
+🙌 Improvements
+
+- Display message bodies (file names) next to attachment previews ([#2800](https://github.com/element-hq/element-x-ios/issues/2800))
+- Room details have been updated. ([#2812](https://github.com/element-hq/element-x-ios/issues/2812))
+- The UX of the profile of other users has been updated. ([#2816](https://github.com/element-hq/element-x-ios/issues/2816))
+
+🐛 Bugfixes
+
+- Render matrix URIs as links so they can be tapped. ([#2802](https://github.com/element-hq/element-x-ios/issues/2802))
+- Show a failure toast when alias look-up fails. ([#2825](https://github.com/element-hq/element-x-ios/issues/2825))
+
 ## Changes in 1.6.5 (2024-05-09)
 
 🙌 Improvements
