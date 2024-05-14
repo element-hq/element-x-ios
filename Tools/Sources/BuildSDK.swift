@@ -28,7 +28,7 @@ struct BuildSDK: ParsableCommand {
     var simulator
     
     @Option(help: "The target to build for such as aarch64-apple-ios. Omit this option to build for all targets.")
-    var target: [Target]
+    var target: [Target] = []
     
     @Option(help: "The profile to use when building the SDK. Omit this option to build in debug mode.")
     var profile: Profile = .reldbg
