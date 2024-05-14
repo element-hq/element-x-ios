@@ -46,6 +46,7 @@ enum UserAvatarSizeOnScreen {
     case home
     case settings
     case roomDetails
+    case dmDetails
     case startChat
     case memberDetails
     case inviteUsers
@@ -76,11 +77,13 @@ enum UserAvatarSizeOnScreen {
         case .startChat:
             return 36
         case .memberDetails:
-            return 70
+            return 96
         case .inviteUsers:
             return 56
         case .editUserDetails:
             return 96
+        case .dmDetails:
+            return 75
         }
     }
 }
@@ -110,7 +113,7 @@ enum RoomAvatarSizeOnScreen {
         case .home:
             return 52
         case .details:
-            return 70
+            return 96
         case .joinRoom:
             return 96
         }
