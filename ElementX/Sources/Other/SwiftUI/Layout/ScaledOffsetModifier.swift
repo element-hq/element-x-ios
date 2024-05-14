@@ -26,9 +26,9 @@ private struct ScaledOffsetModifier: ViewModifier {
     @ScaledMetric var x: CGFloat
     @ScaledMetric var y: CGFloat
     
-    init(x: CGFloat, y: CGFloat, relativeTo: Font.TextStyle) {
-        _x = ScaledMetric(wrappedValue: x, relativeTo: relativeTo)
-        _y = ScaledMetric(wrappedValue: y, relativeTo: relativeTo)
+    init(x: CGFloat, y: CGFloat, relativeTo textStyle: Font.TextStyle) {
+        _x = ScaledMetric(wrappedValue: x, relativeTo: textStyle)
+        _y = ScaledMetric(wrappedValue: y, relativeTo: textStyle)
     }
     
     func body(content: Content) -> some View {
