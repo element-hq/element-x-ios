@@ -17,31 +17,53 @@
 import SwiftUI
 
 struct AvatarHeaderView<Footer: View>: View {
+    private struct AvatarInfo {
+        let id: String
+        let name: String?
+        let avatarURL: URL?
+        
+        init(from room: RoomDetails) {
+            id = room.id
+            name = room.name
+            avatarURL = room.avatarURL
+        }
+        
+        init(from member: RoomMemberDetails) {
+            id = member.id
+            name = member.isBanned ? nil : member.name
+            avatarURL = member.isBanned ? nil : member.avatarURL
+        }
+        
+        init(from user: UserProfileProxy) {
+            id = user.userID
+            name = user.displayName
+            avatarURL = user.avatarURL
+        }
+    }
+    
     private enum Badge: Hashable {
         case encrypted(Bool)
         case `public`
     }
     
-    let id: String
-    let name: String?
-    let subtitle: String?
-    let avatarURL: URL?
+    private let mainAvatarInfo: AvatarInfo
+    private let secondaryAvatarInfo: AvatarInfo?
+    private let subtitle: String?
     private let badges: [Badge]
     
-    let avatarSize: AvatarSize
-    let imageProvider: ImageProviderProtocol?
-    var onAvatarTap: (() -> Void)?
-    @ViewBuilder var footer: () -> Footer
+    private let avatarSize: AvatarSize
+    private let imageProvider: ImageProviderProtocol?
+    private var onAvatarTap: (() -> Void)?
+    @ViewBuilder private var footer: () -> Footer
     
     init(room: RoomDetails,
          avatarSize: AvatarSize,
          imageProvider: ImageProviderProtocol? = nil,
          onAvatarTap: (() -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
-        id = room.id
-        name = room.name
+        mainAvatarInfo = .init(from: room)
+        secondaryAvatarInfo = nil
         subtitle = room.canonicalAlias
-        avatarURL = room.avatarURL
         
         self.avatarSize = avatarSize
         self.imageProvider = imageProvider
@@ -56,15 +78,31 @@ struct AvatarHeaderView<Footer: View>: View {
         self.badges = badges
     }
     
+    init(accountOwner: RoomMemberDetails,
+         dmRecipient: RoomMemberDetails,
+         imageProvider: ImageProviderProtocol? = nil,
+         onAvatarTap: (() -> Void)? = nil,
+         @ViewBuilder footer: @escaping () -> Footer) {
+        mainAvatarInfo = .init(from: dmRecipient)
+        secondaryAvatarInfo = .init(from: accountOwner)
+        subtitle = dmRecipient.isBanned ? nil : dmRecipient.name == nil ? nil : dmRecipient.id
+        
+        avatarSize = .user(on: .dmDetails)
+        self.imageProvider = imageProvider
+        self.onAvatarTap = onAvatarTap
+        self.footer = footer
+        // In EL-X a DM is by definition always encrypted
+        badges = [.encrypted(true)]
+    }
+    
     init(member: RoomMemberDetails,
          avatarSize: AvatarSize,
          imageProvider: ImageProviderProtocol? = nil,
          onAvatarTap: (() -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
-        id = member.id
-        name = member.isBanned ? nil : member.name
+        mainAvatarInfo = .init(from: member)
+        secondaryAvatarInfo = nil
         subtitle = member.isBanned ? nil : member.name == nil ? nil : member.id
-        avatarURL = member.isBanned ? nil : member.avatarURL
         
         self.avatarSize = avatarSize
         self.imageProvider = imageProvider
@@ -78,10 +116,9 @@ struct AvatarHeaderView<Footer: View>: View {
          imageProvider: ImageProviderProtocol? = nil,
          onAvatarTap: (() -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
-        id = user.userID
-        name = user.displayName
+        mainAvatarInfo = .init(from: user)
+        secondaryAvatarInfo = nil
         subtitle = user.displayName == nil ? nil : user.userID
-        avatarURL = user.avatarURL
         
         self.avatarSize = avatarSize
         self.imageProvider = imageProvider
@@ -112,26 +149,66 @@ struct AvatarHeaderView<Footer: View>: View {
             }
         }
     }
-
+    
+    @ViewBuilder
+    private var avatar: some View {
+        if let secondaryAvatarInfo {
+            ZStack {
+                LoadableAvatarImage(url: mainAvatarInfo.avatarURL,
+                                    name: mainAvatarInfo.name,
+                                    contentID: mainAvatarInfo.id,
+                                    avatarSize: avatarSize,
+                                    imageProvider: imageProvider)
+                    .scaledFrame(size: 120, alignment: .topTrailing)
+                LoadableAvatarImage(url: secondaryAvatarInfo.avatarURL,
+                                    name: secondaryAvatarInfo.name,
+                                    contentID: secondaryAvatarInfo.id,
+                                    avatarSize: avatarSize,
+                                    imageProvider: imageProvider)
+                    .mask {
+                        Rectangle()
+                            .fill(Color.white)
+                            .overlay {
+                                Circle()
+                                    .inset(by: -4)
+                                    .fill(Color.black)
+                                    .scaledOffset(x: 120 - avatarSize.value,
+                                                  y: -120 + avatarSize.value)
+                            }
+                            .compositingGroup()
+                            .luminanceToAlpha()
+                    }
+                    .scaledFrame(size: 120, alignment: .bottomLeading)
+            }
+            .scaledFrame(size: 120)
+            
+        } else {
+            LoadableAvatarImage(url: mainAvatarInfo.avatarURL,
+                                name: mainAvatarInfo.name,
+                                contentID: mainAvatarInfo.id,
+                                avatarSize: avatarSize,
+                                imageProvider: imageProvider)
+        }
+    }
+    
     var body: some View {
         VStack(spacing: 8.0) {
             Button {
                 onAvatarTap?()
             } label: {
-                LoadableAvatarImage(url: avatarURL,
-                                    name: name,
-                                    contentID: id,
-                                    avatarSize: avatarSize,
-                                    imageProvider: imageProvider)
+                avatar
             }
             .buttonStyle(.borderless) // Add a button style to stop the whole row being tappable.
-
-            Text(name ?? id)
+            
+            Spacer()
+                .frame(height: 9)
+            
+            Text(mainAvatarInfo.name ?? mainAvatarInfo.id)
                 .foregroundColor(.compound.textPrimary)
-                .font(.compound.headingLGBold)
+                .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .textSelection(.enabled)
-
+            
             if let subtitle {
                 Text(subtitle)
                     .foregroundColor(.compound.textSecondary)
@@ -176,6 +253,20 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
             }
         }
         .previewDisplayName("Room")
+        
+        Form {
+            AvatarHeaderView(accountOwner: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockMe), dmRecipient: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
+                             imageProvider: MockMediaProvider()) {
+                HStack(spacing: 32) {
+                    ShareLink(item: "test") {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: "Test"))
+                }
+                .padding(.top, 32)
+            }
+        }
+        .previewDisplayName("DM")
         
         VStack(spacing: 16) {
             AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),

@@ -24,8 +24,10 @@ struct RoomDetailsScreen: View {
     
     var body: some View {
         Form {
-            if let recipient = context.viewState.dmRecipient {
-                dmHeaderSection(recipient: recipient)
+            if let recipient = context.viewState.dmRecipient,
+               let accountOwner = context.viewState.accountOwner {
+                dmHeaderSection(accountOwner: accountOwner,
+                                recipient: recipient)
             } else {
                 normalRoomHeaderSection
             }
@@ -82,9 +84,9 @@ struct RoomDetailsScreen: View {
         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
     }
     
-    private func dmHeaderSection(recipient: RoomMemberDetails) -> some View {
-        AvatarHeaderView(member: recipient,
-                         avatarSize: .user(on: .memberDetails),
+    private func dmHeaderSection(accountOwner: RoomMemberDetails, recipient: RoomMemberDetails) -> some View {
+        AvatarHeaderView(accountOwner: accountOwner,
+                         dmRecipient: recipient,
                          imageProvider: context.imageProvider) {
             context.send(viewAction: .displayAvatar)
         } footer: {
