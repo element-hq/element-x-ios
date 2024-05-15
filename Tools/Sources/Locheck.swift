@@ -1,4 +1,5 @@
 import ArgumentParser
+import CommandLineTools
 import Foundation
 
 struct Locheck: ParsableCommand {
@@ -19,7 +20,7 @@ struct Locheck: ParsableCommand {
     static var configuration = CommandConfiguration(abstract: "A tool that verifies bad strings contained in localization files")
 
     private var stringsDirectoryURL: URL {
-        Utilities.projectDirectoryURL.appendingPathComponent("ElementX/Resources/Localizations")
+        .projectDirectory.appendingPathComponent("ElementX/Resources/Localizations")
     }
 
     func run() throws {
@@ -28,14 +29,14 @@ struct Locheck: ParsableCommand {
     }
 
     func checkStrings() throws {
-        guard let output = try Utilities.zsh("mint run locheck discoverlproj --ignore-missing --ignore lproj_file_missing_from_translation --treat-warnings-as-errors \(stringsDirectoryURL.path)") else {
+        guard let output = try Zsh.run(command: "mint run locheck discoverlproj --ignore-missing --ignore lproj_file_missing_from_translation --treat-warnings-as-errors \(stringsDirectoryURL.path)") else {
             throw LocheckError.missingMint
         }
         print(output)
     }
 
     private func checkMint() throws {
-        let result = try Utilities.zsh("which mint")
+        let result = try Zsh.run(command: "which mint")
 
         if result?.contains("not found") == true {
             throw LocheckError.missingMint

@@ -1,4 +1,5 @@
 import ArgumentParser
+import CommandLineTools
 import Foundation
 
 struct DownloadStrings: ParsableCommand {
@@ -14,10 +15,10 @@ struct DownloadStrings: ParsableCommand {
 
     private func localazyDownload() throws {
         let arguments = allLanguages ? " all" : ""
-        try Utilities.zsh("localazy download\(arguments)")
+        try Zsh.run(command: "localazy download\(arguments)")
     }
 
     private func swiftgen() throws {
-        try Utilities.zsh("swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml")
+        try Zsh.run(command: "swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml")
     }
 }

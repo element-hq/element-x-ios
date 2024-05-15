@@ -1,4 +1,5 @@
 import ArgumentParser
+import CommandLineTools
 import Foundation
 
 struct GenerateSDKMocks: ParsableCommand {
@@ -15,7 +16,7 @@ struct GenerateSDKMocks: ParsableCommand {
 
     func run() throws {
         if version == "local" {
-            try generateSDKMocks(ffiPath: "\(Utilities.sdkDirectoryURL.path)/bindings/apple/generated/swift")
+            try generateSDKMocks(ffiPath: "\(URL.sdkDirectory.path)/bindings/apple/generated/swift")
         } else {
             try downloadSDK(version: version) { path in
                 try generateSDKMocks(ffiPath: path)
@@ -26,7 +27,7 @@ struct GenerateSDKMocks: ParsableCommand {
 
     /// Generates the SDK mocks using Sourcery.
     func generateSDKMocks(ffiPath: String) throws {
-        try Utilities.zsh("sourcery --sources \(ffiPath) --sources ElementX/Sources/Mocks/SDK --templates Tools/Sourcery --output ElementX/Sources/Mocks/Generated/SDKGeneratedMocks.swift --args autoMockableImports=\"Foundation\",autoMockableImports=\"MatrixRustSDK\"")
+        try Zsh.run(command: "sourcery --sources \(ffiPath) --sources ElementX/Sources/Mocks/SDK --templates Tools/Sourcery --output ElementX/Sources/Mocks/Generated/SDKGeneratedMocks.swift --args autoMockableImports=\"Foundation\",autoMockableImports=\"MatrixRustSDK\"")
     }
 
     /// Downloads the specified version of the `matrix_sdk_ffi.swift` file and returns the path to the downloaded file.
