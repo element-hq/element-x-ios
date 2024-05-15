@@ -65,8 +65,7 @@ struct GenerateSAS: ParsableCommand {
     }
     
     private func writeToFile(file: String, dict: [String: String], subdirectory: String) {
-        let projectDirectory = Utilities.projectDirectoryURL
-        let fileDirectory = projectDirectory.appendingPathComponent("ElementX/Resources/Localizations").appendingPathComponent(subdirectory)
+        let fileDirectory = URL.projectDirectory.appendingPathComponent("ElementX/Resources/Localizations").appendingPathComponent(subdirectory)
         
         let filePath = fileDirectory.appendingPathComponent(file)
         

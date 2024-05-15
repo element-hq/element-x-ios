@@ -10,6 +10,14 @@
       }
     },
     {
+      "identity" : "swift-command-line-tools",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/element-hq/swift-command-line-tools.git",
+      "state" : {
+        "revision" : "a6ad90808f4f6cac615ab8496c6ff1bc5f9fa192"
+      }
+    },
+    {
       "identity" : "yams",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jpsim/Yams",
