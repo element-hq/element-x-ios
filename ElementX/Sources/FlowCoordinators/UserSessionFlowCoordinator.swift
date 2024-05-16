@@ -307,8 +307,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(sidebarNavigationStackCoordinator),
                                                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                                       bugReportService: bugReportService,
-                                                                                      userID: userSession.userID,
-                                                                                      deviceID: userSession.deviceID))
+                                                                                      userSession: userSession))
                 bugReportFlowCoordinator?.start()
             case (.feedbackScreen, .dismissedFeedbackScreen, .roomList):
                 break

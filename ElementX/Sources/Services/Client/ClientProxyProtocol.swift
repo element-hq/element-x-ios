@@ -174,4 +174,9 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func recentlyVisitedRooms() async -> Result<[String], ClientProxyError>
     
     func recentConversationCounterparts() async -> [UserProfileProxy]
+    
+    // MARK: - Encryption Info
+    
+    func ed25519Base64() async -> String?
+    func curve25519Base64() async -> String?
 }

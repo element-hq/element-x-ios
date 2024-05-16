@@ -149,18 +149,24 @@ struct BugReportScreen: View {
 struct BugReport_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         NavigationStack {
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            let userSession = MockUserSession(clientProxy: clientProxy,
+                                              mediaProvider: MockMediaProvider(),
+                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
-                                                              userID: "@mock.client.com",
-                                                              deviceID: nil,
+                                                              userSession: userSession,
                                                               screenshot: nil,
                                                               isModallyPresented: false).context)
                 .previewDisplayName("Without Screenshot")
         }
         
         NavigationStack {
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            let userSession = MockUserSession(clientProxy: clientProxy,
+                                              mediaProvider: MockMediaProvider(),
+                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
-                                                              userID: "@mock.client.com",
-                                                              deviceID: nil,
+                                                              userSession: userSession,
                                                               screenshot: Asset.Images.appLogo.image,
                                                               isModallyPresented: false).context)
                 .previewDisplayName("With Screenshot")

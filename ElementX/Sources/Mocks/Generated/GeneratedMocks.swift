@@ -3799,6 +3799,134 @@ class ClientProxyMock: ClientProxyProtocol {
             return recentConversationCounterpartsReturnValue
         }
     }
+    //MARK: - ed25519Base64
+
+    var ed25519Base64UnderlyingCallsCount = 0
+    var ed25519Base64CallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return ed25519Base64UnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = ed25519Base64UnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                ed25519Base64UnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    ed25519Base64UnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var ed25519Base64Called: Bool {
+        return ed25519Base64CallsCount > 0
+    }
+
+    var ed25519Base64UnderlyingReturnValue: String?
+    var ed25519Base64ReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return ed25519Base64UnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = ed25519Base64UnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                ed25519Base64UnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    ed25519Base64UnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var ed25519Base64Closure: (() async -> String?)?
+
+    func ed25519Base64() async -> String? {
+        ed25519Base64CallsCount += 1
+        if let ed25519Base64Closure = ed25519Base64Closure {
+            return await ed25519Base64Closure()
+        } else {
+            return ed25519Base64ReturnValue
+        }
+    }
+    //MARK: - curve25519Base64
+
+    var curve25519Base64UnderlyingCallsCount = 0
+    var curve25519Base64CallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return curve25519Base64UnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = curve25519Base64UnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                curve25519Base64UnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    curve25519Base64UnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var curve25519Base64Called: Bool {
+        return curve25519Base64CallsCount > 0
+    }
+
+    var curve25519Base64UnderlyingReturnValue: String?
+    var curve25519Base64ReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return curve25519Base64UnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = curve25519Base64UnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                curve25519Base64UnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    curve25519Base64UnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var curve25519Base64Closure: (() async -> String?)?
+
+    func curve25519Base64() async -> String? {
+        curve25519Base64CallsCount += 1
+        if let curve25519Base64Closure = curve25519Base64Closure {
+            return await curve25519Base64Closure()
+        } else {
+            return curve25519Base64ReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

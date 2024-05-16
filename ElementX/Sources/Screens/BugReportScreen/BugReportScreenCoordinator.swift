@@ -25,8 +25,7 @@ enum BugReportScreenCoordinatorAction {
 
 struct BugReportScreenCoordinatorParameters {
     let bugReportService: BugReportServiceProtocol
-    let userID: String?
-    let deviceID: String?
+    let userSession: UserSessionProtocol?
     
     let userIndicatorController: UserIndicatorControllerProtocol?
     let screenshot: UIImage?
@@ -47,8 +46,7 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = BugReportScreenViewModel(bugReportService: parameters.bugReportService,
-                                             userID: parameters.userID,
-                                             deviceID: parameters.deviceID,
+                                             userSession: parameters.userSession,
                                              screenshot: parameters.screenshot,
                                              isModallyPresented: parameters.isModallyPresented)
     }
