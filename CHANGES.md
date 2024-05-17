@@ -1,3 +1,14 @@
+## Changes in 1.6.8 (2024-05-17)
+
+🙌 Improvements
+
+- DM Details UI has been updated. ([#2813](https://github.com/element-hq/element-x-ios/issues/2813))
+
+🐛 Bugfixes
+
+- Add missing Forgot PIN option when asked to unlock the Screen Lock settings. ([#2688](https://github.com/element-hq/element-x-ios/issues/2688))
+- Fix voice message recoder not showing send message button ([#2845](https://github.com/element-hq/element-x-ios/issues/2845))
+
 ## Changes in 1.6.7 (2024-05-13)
 
 🙌 Improvements
