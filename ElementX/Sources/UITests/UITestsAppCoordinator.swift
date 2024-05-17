@@ -505,6 +505,7 @@ class MockScreen: Identifiable {
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                             appSettings: ServiceLocator.shared.settings),
                                                              bugReportService: BugReportServiceMock(),
+                                                             elementCallService: ElementCallServiceMock(),
                                                              roomTimelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: appSettings,

@@ -167,7 +167,8 @@ struct CallScreen_Previews: PreviewProvider {
         
         roomProxy.elementCallWidgetDriverReturnValue = widgetDriver
         
-        return CallScreenViewModel(roomProxy: roomProxy,
+        return CallScreenViewModel(elementCallService: ElementCallServiceMock(),
+                                   roomProxy: roomProxy,
                                    callBaseURL: "https://call.element.io",
                                    clientID: "io.element.elementx")
     }()

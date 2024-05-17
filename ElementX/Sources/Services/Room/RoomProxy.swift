@@ -521,6 +521,16 @@ class RoomProxy: RoomProxyProtocol {
         ElementCallWidgetDriver(room: room)
     }
     
+    func sendCallNotificationIfNeeeded() async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.sendCallNotificationIfNeeded()
+            return .success(())
+        } catch {
+            MXLog.error("Failed room call notification with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Permalinks
     
     func matrixToPermalink() async -> Result<URL, RoomProxyError> {

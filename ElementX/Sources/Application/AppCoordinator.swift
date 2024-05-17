@@ -28,6 +28,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appMediator: AppMediator
     private let appSettings: AppSettings
     private let appDelegate: AppDelegate
+    private let elementCallService: ElementCallServiceProtocol
 
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: UIBackgroundTaskIdentifier?
@@ -85,6 +86,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         self.appSettings = appSettings
         appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
         
+        elementCallService = ElementCallService()
+        
         navigationRootCoordinator = NavigationRootCoordinator()
         
         Self.setupServiceLocator(appSettings: appSettings)
@@ -131,6 +134,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         observeAppLockChanges()
         
         registerBackgroundAppRefresh()
+        
+        elementCallService.actions.sink { [weak self] action in
+            switch action {
+            case .answerCall(let roomID):
+                self?.handleAppRoute(.call(roomID: roomID))
+            case .declineCall:
+                break
+            }
+        }
+        .store(in: &cancellables)
     }
     
     func start() {
@@ -482,6 +495,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                     navigationRootCoordinator: navigationRootCoordinator,
                                                                     appLockService: appLockFlowCoordinator.appLockService,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
+                                                                    elementCallService: elementCallService,
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory(),
                                                                     appMediator: appMediator,
                                                                     appSettings: appSettings,

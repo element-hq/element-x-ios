@@ -18,10 +18,9 @@ import Combine
 import SwiftUI
 
 struct CallScreenCoordinatorParameters {
+    let elementCallService: ElementCallServiceProtocol
     let roomProxy: RoomProxyProtocol
-    /// Which Element Call instance should be used
     let callBaseURL: URL
-    /// A way to identify the current client against Element Call
     let clientID: String
 }
 
@@ -39,7 +38,8 @@ final class CallScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: CallScreenCoordinatorParameters) {
-        viewModel = CallScreenViewModel(roomProxy: parameters.roomProxy,
+        viewModel = CallScreenViewModel(elementCallService: parameters.elementCallService,
+                                        roomProxy: parameters.roomProxy,
                                         callBaseURL: parameters.callBaseURL,
                                         clientID: parameters.clientID)
     }

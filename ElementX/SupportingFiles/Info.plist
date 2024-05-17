@@ -80,8 +80,9 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
 		<string>audio</string>
+		<string>fetch</string>
+		<string>processing</string>
 		<string>voip</string>
 	</array>
 	<key>UILaunchScreen</key>
