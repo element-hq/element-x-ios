@@ -373,6 +373,7 @@ class RoomScreenInteractionHandler {
             actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
         case .didStopRecording(let previewAudioPlayerState, let url):
             actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: previewAudioPlayerState, waveform: .url(url), isUploading: false))))
+            voiceMessageRecorderObserver = nil
         case .didFailWithError(let error):
             switch error {
             case .audioRecorderError(.recordPermissionNotGranted):
@@ -397,7 +398,6 @@ class RoomScreenInteractionHandler {
     
     func stopRecordingVoiceMessage() async {
         await voiceMessageRecorder.stopRecording()
-        voiceMessageRecorderObserver = nil
     }
     
     func cancelRecordingVoiceMessage() async {
