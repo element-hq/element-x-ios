@@ -26,13 +26,13 @@ struct PollRoomTimelineView: View {
                 switch action {
                 case .selectOption(let optionID):
                     guard let eventID, let option = poll.options.first(where: { $0.id == optionID }), !option.isSelected else { return }
-                    context.send(viewAction: .poll(.selectOption(pollStartID: eventID, optionID: option.id)))
+                    context.send(viewAction: .handlePollAction(.selectOption(pollStartID: eventID, optionID: option.id)))
                 case .edit:
                     guard let eventID else { return }
-                    context.send(viewAction: .poll(.edit(pollStartID: eventID, poll: poll)))
+                    context.send(viewAction: .handlePollAction(.edit(pollStartID: eventID, poll: poll)))
                 case .end:
                     guard let eventID else { return }
-                    context.send(viewAction: .poll(.end(pollStartID: eventID)))
+                    context.send(viewAction: .handlePollAction(.end(pollStartID: eventID)))
                 }
             }
         }

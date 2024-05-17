@@ -130,7 +130,7 @@ class AppRouteURLParserTests: XCTestCase {
         
         let route = appRouteURLParser.route(from: url)
         
-        XCTAssertEqual(route, .room(roomID: id))
+        XCTAssertEqual(route, .room(roomID: id, via: []))
     }
     
     func testWebRoomIDURL() {
@@ -142,7 +142,7 @@ class AppRouteURLParserTests: XCTestCase {
         
         let route = appRouteURLParser.route(from: url)
         
-        XCTAssertEqual(route, .room(roomID: id))
+        XCTAssertEqual(route, .room(roomID: id, via: []))
     }
     
     func testWebUserIDURL() {

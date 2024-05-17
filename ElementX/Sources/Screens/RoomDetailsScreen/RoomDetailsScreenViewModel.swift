@@ -64,6 +64,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                    imageProvider: mediaProvider)
         
         Task {
+            let userID = roomProxy.ownUserID
+            if case let .success(permission) = await roomProxy.canUserJoinCall(userID: userID) {
+                state.canJoinCall = permission
+            }
+        }
+        
+        Task {
             if case let .success(permalinkURL) = await roomProxy.matrixToPermalink() {
                 state.permalink = permalinkURL
             }
@@ -126,6 +133,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             Task { await toggleFavourite(isFavourite) }
         case .processTapRolesAndPermissions:
             actionsSubject.send(.requestRolesAndPermissionsPresentation)
+        case .processTapCall:
+            actionsSubject.send(.startCall)
         }
     }
     
@@ -165,9 +174,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .receive(on: DispatchQueue.main)
             .sink { [weak self, ownUserID = roomProxy.ownUserID] members in
                 guard let self else { return }
+                let accountOwner = members.first(where: { $0.userID == ownUserID })
                 let dmRecipient = members.first(where: { $0.userID != ownUserID })
                 self.dmRecipient = dmRecipient
                 self.state.dmRecipient = dmRecipient.map(RoomMemberDetails.init(withProxy:))
+                self.state.accountOwner = accountOwner.map(RoomMemberDetails.init(withProxy:))
             }
             .store(in: &cancellables)
         

@@ -31,9 +31,6 @@ struct AdvancedSettingsScreen: View {
                         kind: .picker(selection: $context.timelineStyle,
                                       items: TimelineStyle.allCases.map { (title: $0.name, tag: $0) }))
                 
-                ListRow(label: .plain(title: L10n.commonRichTextEditor),
-                        kind: .toggle($context.richTextEditorEnabled))
-                
                 ListRow(label: .plain(title: L10n.actionViewSource),
                         kind: .toggle($context.viewSourceEnabled))
                 

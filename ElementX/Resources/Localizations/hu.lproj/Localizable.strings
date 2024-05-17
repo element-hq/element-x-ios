@@ -25,6 +25,7 @@
 "action_accept" = "Elfogadás";
 "action_add_to_timeline" = "Hozzáadás az idővonalhoz";
 "action_back" = "Vissza";
+"action_call" = "Hívás";
 "action_cancel" = "Mégse";
 "action_choose_photo" = "Fénykép kiválasztása";
 "action_clear" = "Törlés";
@@ -62,6 +63,7 @@
 "action_leave_room" = "Szoba elhagyása";
 "action_manage_account" = "Fiók kezelése";
 "action_manage_devices" = "Eszközök kezelése";
+"action_message" = "Üzenet";
 "action_next" = "Következő";
 "action_no" = "Nem";
 "action_not_now" = "Most nem";
@@ -497,11 +499,12 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "A kapcsolat nem biztonságos";
 "screen_qr_code_login_device_code_subtitle" = "A rendszer kérni fogja, hogy adja meg az alábbi két számjegyet az eszközén.";
 "screen_qr_code_login_device_code_title" = "Adja meg az alábbi számot a másik eszközén";
+"screen_qr_code_login_initial_state_button_title" = "Készen áll a beolvasásra";
 "screen_qr_code_login_initial_state_item_1" = "Nyissa meg az %1$@et egy asztali eszközön";
 "screen_qr_code_login_initial_state_item_2" = "Kattintson a profilképére";
 "screen_qr_code_login_initial_state_item_3" = "Válassza ezt: %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "„Új eszköz összekapcsolása”";
-"screen_qr_code_login_initial_state_item_4" = "Kövesse a látható utasításokat";
+"screen_qr_code_login_initial_state_item_4" = "Olvassa be a QR-kódot ezzel az eszközzel";
 "screen_qr_code_login_initial_state_title" = "Nyissa meg az %1$@et egy másik eszközön a QR-kód lekéréséhez.";
 "screen_qr_code_login_invalid_scan_state_description" = "Használja a másik eszközön látható QR-kódot.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Hibás QR-kód";
@@ -577,6 +580,9 @@
 "screen_room_details_add_topic_title" = "Téma hozzáadása";
 "screen_room_details_already_a_member" = "Már tag";
 "screen_room_details_already_invited" = "Már meghívták";
+"screen_room_details_badge_encrypted" = "Titkosítva";
+"screen_room_details_badge_not_encrypted" = "Nincs titkosítva";
+"screen_room_details_badge_public" = "Nyilvános szoba";
 "screen_room_details_edit_room_title" = "Szoba szerkesztése";
 "screen_room_details_edition_error" = "Ismeretlen hiba történt, és az információkat nem lehetett megváltoztatni.";
 "screen_room_details_edition_error_title" = "Nem sikerült frissíteni a szobát";
@@ -665,7 +671,7 @@
 "screen_room_timeline_reactions_show_less" = "Kevesebb megjelenítése";
 "screen_room_timeline_reactions_show_more" = "Több megjelenítése";
 "screen_room_timeline_read_marker_title" = "Új";
-"screen_room_title" = "Chat";
+"screen_room_title" = "Csevegés";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ és ";
 "screen_room_typing_notification_plural_ios" = " éppen ír…";
 "screen_room_typing_notification_singular_ios" = " éppen ír…";

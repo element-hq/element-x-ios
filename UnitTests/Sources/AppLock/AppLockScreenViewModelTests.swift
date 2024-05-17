@@ -54,7 +54,7 @@ class AppLockScreenViewModelTests: XCTestCase {
         XCTAssertEqual(result, .appUnlocked)
     }
     
-    func testForgotPIN() {
+    func testForgotPIN() async throws {
         // Given a fresh launch of the app.
         XCTAssertNil(context.alertInfo, "No alert should be shown initially.")
         
@@ -63,6 +63,13 @@ class AppLockScreenViewModelTests: XCTestCase {
         
         // Then an alert should be shown before logging out.
         XCTAssertEqual(context.alertInfo?.id, .confirmResetPIN, "An alert should be shown before logging out.")
+        
+        // When confirming the logout.
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .forceLogout }
+        context.alertInfo?.primaryButton.action?()
+        
+        // Then a force logout should be initiated.
+        try await deferred.fulfill()
     }
     
     func testUnlockFailure() async throws {

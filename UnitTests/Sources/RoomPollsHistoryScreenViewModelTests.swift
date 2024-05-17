@@ -112,7 +112,7 @@ class RoomPollsHistoryScreenViewModelTests: XCTestCase {
     }
     
     func testEndPoll() async throws {
-        let deferred = deferFulfillment(interactionHandler.publisher) { _ in true }
+        let deferred = deferFulfillment(interactionHandler.publisher.delay(for: 0.1, scheduler: DispatchQueue.main)) { _ in true }
             
         interactionHandler.endPollPollStartIDReturnValue = .success(())
         viewModel.context.send(viewAction: .end(pollStartID: "somePollID"))

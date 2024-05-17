@@ -143,55 +143,57 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
-        case .displayRoomDetails:
-            actionsSubject.send(.displayRoomDetails)
         case .itemAppeared(let id):
             Task { await timelineController.processItemAppearance(id) }
         case .itemDisappeared(let id):
             Task { await timelineController.processItemDisappearance(id) }
+            
         case .itemTapped(let id):
             Task { await handleItemTapped(with: id) }
         case .toggleReaction(let emoji, let itemId):
             Task { await timelineController.toggleReaction(emoji, to: itemId) }
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
-        case .timelineItemMenu(let itemID):
-            roomScreenInteractionHandler.showTimelineItemActionMenu(for: itemID)
-        case .timelineItemMenuAction(let itemID, let action):
-            roomScreenInteractionHandler.processTimelineItemMenuAction(action, itemID: itemID)
-        case .handlePasteOrDrop(let provider):
-            roomScreenInteractionHandler.handlePasteOrDrop(provider)
-        case .tappedOnUser(userID: let userID):
-            Task { await roomScreenInteractionHandler.handleTappedUser(userID: userID) }
-        case .displayEmojiPicker(let itemID):
-            roomScreenInteractionHandler.showEmojiPicker(for: itemID)
-        case .reactionSummary(let itemID, let key):
-            showReactionSummary(for: itemID, selectedKey: key)
-        case .retrySend(let itemID):
-            Task { await timelineController.retrySending(itemID: itemID) }
-        case .cancelSend(let itemID):
-            Task { await timelineController.cancelSending(itemID: itemID) }
         case .paginateBackwards:
             paginateBackwards()
         case .paginateForwards:
             paginateForwards()
         case .scrollToBottom:
             scrollToBottom()
-        case .poll(let pollAction):
-            processPollAction(pollAction)
-        case .audio(let audioAction):
-            processAudioAction(audioAction)
-        case .presentCall:
+            
+        case .displayTimelineItemMenu(let itemID):
+            roomScreenInteractionHandler.displayTimelineItemActionMenu(for: itemID)
+        case .handleTimelineItemMenuAction(let itemID, let action):
+            roomScreenInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
+            
+        case .displayRoomDetails:
+            actionsSubject.send(.displayRoomDetails)
+        case .displayRoomMemberDetails(userID: let userID):
+            Task { await roomScreenInteractionHandler.displayRoomMemberDetails(userID: userID) }
+        case .displayEmojiPicker(let itemID):
+            roomScreenInteractionHandler.displayEmojiPicker(for: itemID)
+        case .displayReactionSummary(let itemID, let key):
+            displayReactionSummary(for: itemID, selectedKey: key)
+        case .displayMessageSendingFailureAlert(let itemID):
+            displayAlert(.messageSendingFailure(itemID))
+        case .displayReadReceipts(itemID: let itemID):
+            displayReadReceipts(for: itemID)
+        case .displayCall:
             actionsSubject.send(.displayCallScreen)
-        case .showReadReceipts(itemID: let itemID):
-            showReadReceipts(for: itemID)
+            
+        case .handlePasteOrDrop(let provider):
+            roomScreenInteractionHandler.handlePasteOrDrop(provider)
+        case .handlePollAction(let pollAction):
+            handlePollAction(pollAction)
+        case .handleAudioPlayerAction(let audioPlayerAction):
+            handleAudioPlayerAction(audioPlayerAction)
+            
         case .focusOnEventID(let eventID):
             Task { await focusOnEvent(eventID: eventID) }
         case .focusLive:
             focusLive()
         case .scrolledToFocussedItem:
-            // Use a Task to mutate view state after the current view update.
-            Task { didScrollToFocussedItem() }
+            didScrollToFocussedItem()
         case .hasSwitchedTimeline:
             Task { state.timelineViewState.isSwitchingTimelines = false }
         }
@@ -245,9 +247,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             MXLog.error("Failed to focus on event \(eventID)")
             
             if case .eventNotFound = error {
-                displayError(.toast(L10n.errorMessageNotFound))
+                displayErrorToast(L10n.errorMessageNotFound)
             } else {
-                displayError(.toast(L10n.commonFailed))
+                displayErrorToast(L10n.commonFailed)
             }
         }
     }
@@ -277,7 +279,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return
         }
         
-        roomScreenInteractionHandler.processTimelineItemMenuAction(.edit, itemID: item.id)
+        roomScreenInteractionHandler.handleTimelineItemMenuAction(.edit, itemID: item.id)
     }
     
     private func attach(_ attachment: ComposerAttachmentType) {
@@ -295,22 +297,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func processPollAction(_ action: RoomScreenViewPollAction) {
+    private func handlePollAction(_ action: RoomScreenViewPollAction) {
         switch action {
         case let .selectOption(pollStartID, optionID):
             roomScreenInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
         case let .end(pollStartID):
-            state.bindings.confirmationAlertInfo = .init(id: .init(),
-                                                         title: L10n.actionEndPoll,
-                                                         message: L10n.commonPollEndConfirmation,
-                                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                                         secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
+            displayAlert(.pollEndConfirmation(pollStartID))
         case .edit(let pollStartID, let poll):
             actionsSubject.send(.displayPollForm(mode: .edit(eventID: pollStartID, poll: poll)))
         }
     }
     
-    private func processAudioAction(_ action: RoomScreenViewAudioAction) {
+    private func handleAudioPlayerAction(_ action: RoomScreenAudioPlayerAction) {
         switch action {
         case .playPause(let itemID):
             Task { await roomScreenInteractionHandler.playPauseAudio(for: itemID) }
@@ -424,8 +422,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 switch action {
                 case .composer(let action):
                     actionsSubject.send(.composer(action: action))
-                case .displayError(let type):
-                    displayError(type)
+                case .displayAudioRecorderPermissionError:
+                    displayAlert(.audioRecodingPermissionError)
+                case .displayErrorToast(let title):
+                    displayErrorToast(title)
                 case .displayEmojiPicker(let itemID, let selectedEmojis):
                     actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .displayMessageForwarding(let itemID):
@@ -442,8 +442,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     state.bindings.actionMenuInfo = actionMenuInfo
                 case .showDebugInfo(let debugInfo):
                     state.bindings.debugInfo = debugInfo
-                case .showConfirmationAlert(let alertInfo):
-                    state.bindings.confirmationAlertInfo = alertInfo
                 }
             }
             .store(in: &cancellables)
@@ -483,7 +481,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
             switch await timelineController.paginateBackwards(requestSize: Constants.paginationEventLimit) {
             case .failure:
-                displayError(.toast(L10n.errorFailedLoadingMessages))
+                displayErrorToast(L10n.errorFailedLoadingMessages)
             default:
                 break
             }
@@ -503,7 +501,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
             switch await timelineController.paginateForwards(requestSize: Constants.paginationEventLimit) {
             case .failure:
-                displayError(.toast(L10n.errorFailedLoadingMessages))
+                displayErrorToast(L10n.errorFailedLoadingMessages)
             default:
                 break
             }
@@ -718,7 +716,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Reactions
         
-    private func showReactionSummary(for itemID: TimelineItemIdentifier, selectedKey: String) {
+    private func displayReactionSummary(for itemID: TimelineItemIdentifier, selectedKey: String) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
@@ -729,7 +727,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Read Receipts
 
-    private func showReadReceipts(for itemID: TimelineItemIdentifier) {
+    private func displayReadReceipts(for itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
@@ -737,7 +735,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         state.bindings.readReceiptsSummaryInfo = .init(orderedReceipts: eventTimelineItem.properties.orderedReadReceipts, id: eventTimelineItem.id)
     }
-    
+        
     // MARK: - Message forwarding
     
     private func forwardMessage(itemID: TimelineItemIdentifier) async {
@@ -758,18 +756,37 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         userIndicatorController.retractIndicatorWithId(Constants.focusTimelineToastIndicatorID)
     }
     
-    private func displayError(_ type: RoomScreenErrorType) {
+    private func displayAlert(_ type: RoomScreenAlertInfoType) {
         switch type {
-        case .alert(let message):
-            state.bindings.alertInfo = AlertInfo(id: type,
-                                                 title: L10n.commonError,
-                                                 message: message)
-        case .toast(let message):
-            userIndicatorController.submitIndicator(UserIndicator(id: Constants.toastErrorID,
-                                                                  type: .toast,
-                                                                  title: message,
-                                                                  iconName: "xmark"))
+        case .audioRecodingPermissionError:
+            state.bindings.alertInfo = .init(id: type,
+                                             title: L10n.dialogPermissionMicrophoneTitleIos(InfoPlistReader.main.bundleDisplayName),
+                                             message: L10n.dialogPermissionMicrophoneDescriptionIos,
+                                             primaryButton: .init(title: L10n.commonSettings, action: { [weak self] in self?.appMediator.openAppSettings() }),
+                                             secondaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil))
+        case .pollEndConfirmation(let pollStartID):
+            state.bindings.alertInfo = .init(id: type,
+                                             title: L10n.actionEndPoll,
+                                             message: L10n.commonPollEndConfirmation,
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                             secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
+        case .messageSendingFailure(let itemID):
+            state.bindings.alertInfo = .init(id: type,
+                                             title: L10n.screenRoomRetrySendMenuTitle,
+                                             primaryButton: .init(title: L10n.screenRoomRetrySendMenuSendAgainAction) {
+                                                 Task { await self.timelineController.retrySending(itemID: itemID) }
+                                             },
+                                             secondaryButton: .init(title: L10n.actionRemove, role: .destructive) {
+                                                 Task { await self.timelineController.cancelSending(itemID: itemID) }
+                                             })
         }
+    }
+    
+    private func displayErrorToast(_ title: String) {
+        userIndicatorController.submitIndicator(UserIndicator(id: Constants.toastErrorID,
+                                                              type: .toast,
+                                                              title: title,
+                                                              iconName: "xmark"))
     }
 }
 
@@ -797,7 +814,7 @@ extension RoomScreenViewModel {
 }
 
 private struct RoomContextKey: EnvironmentKey {
-    @MainActor static let defaultValue = RoomScreenViewModel.mock.context
+    @MainActor static let defaultValue: RoomScreenViewModel.Context? = nil
 }
 
 private struct FocussedEventID: EnvironmentKey {
@@ -806,7 +823,7 @@ private struct FocussedEventID: EnvironmentKey {
 
 extension EnvironmentValues {
     /// Used to access and inject the room context without observing it
-    var roomContext: RoomScreenViewModel.Context {
+    var roomContext: RoomScreenViewModel.Context? {
         get { self[RoomContextKey.self] }
         set { self[RoomContextKey.self] = newValue }
     }

@@ -64,7 +64,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     }
     
     func testRoomPresentation() async throws {
-        try await process(route: .room(roomID: "1"), expectedState: .roomList(selectedRoomID: "1"))
+        try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
@@ -72,11 +72,11 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         XCTAssertNil(detailNavigationStack?.rootCoordinator)
         XCTAssertNil(detailCoordinator)
         
-        try await process(route: .room(roomID: "1"), expectedState: .roomList(selectedRoomID: "1"))
+        try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
-        try await process(route: .room(roomID: "2"), expectedState: .roomList(selectedRoomID: "2"))
+        try await process(route: .room(roomID: "2", via: []), expectedState: .roomList(selectedRoomID: "2"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
@@ -88,7 +88,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     }
     
     func testRoomAliasPresentation() async throws {
-        clientProxy.resolveRoomAliasReturnValue = "1"
+        clientProxy.resolveRoomAliasReturnValue = .success(.init(roomId: "1", servers: []))
         
         try await process(route: .roomAlias("#alias:matrix.org"), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
@@ -98,13 +98,13 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         XCTAssertNil(detailNavigationStack?.rootCoordinator)
         XCTAssertNil(detailCoordinator)
         
-        try await process(route: .room(roomID: "1"), expectedState: .roomList(selectedRoomID: "1"))
+        try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
-        clientProxy.resolveRoomAliasReturnValue = "2"
+        clientProxy.resolveRoomAliasReturnValue = .success(.init(roomId: "2", servers: []))
         
-        try await process(route: .room(roomID: "2"), expectedState: .roomList(selectedRoomID: "2"))
+        try await process(route: .room(roomID: "2", via: []), expectedState: .roomList(selectedRoomID: "2"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
@@ -130,7 +130,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
-        try await process(route: .room(roomID: "2"), expectedState: .roomList(selectedRoomID: "2"))
+        try await process(route: .room(roomID: "2", via: []), expectedState: .roomList(selectedRoomID: "2"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
     }
@@ -159,7 +159,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     }
     
     func testPushDetails() async throws {
-        try await process(route: .room(roomID: "1"), expectedState: .roomList(selectedRoomID: "1"))
+        try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
@@ -178,7 +178,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
-        try await process(route: .room(roomID: "1"), expectedState: .roomList(selectedRoomID: "1"))
+        try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
     }
@@ -199,19 +199,19 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     }
     
     func testRoomClearsStack() async throws {
-        try await process(route: .room(roomID: "1"), expectedState: .roomList(selectedRoomID: "1"))
+        try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
         XCTAssertNotNil(detailCoordinator)
         
-        userSessionFlowCoordinator.handleAppRoute(.childRoom(roomID: "2"), animated: true)
+        userSessionFlowCoordinator.handleAppRoute(.childRoom(roomID: "2", via: []), animated: true)
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 1)
         XCTAssertTrue(detailNavigationStack?.stackCoordinators.first is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
         
-        try await process(route: .room(roomID: "3"), expectedState: .roomList(selectedRoomID: "3"))
+        try await process(route: .room(roomID: "3", via: []), expectedState: .roomList(selectedRoomID: "3"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
         XCTAssertNotNil(detailCoordinator)
@@ -219,7 +219,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     
     func testEventRoutes() async throws {
         // A regular event route should set its room as the root of the stack and focus on the event.
-        try await process(route: .event(roomID: "1", eventID: "1"), expectedState: .roomList(selectedRoomID: "1"))
+        try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
         XCTAssertNotNil(detailCoordinator)
@@ -227,7 +227,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         XCTAssertEqual(timelineControllerFactory.buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReceivedArguments?.initialFocussedEventID, "1")
         
         // A child event route should push a new room screen onto the stack and focus on the event.
-        userSessionFlowCoordinator.handleAppRoute(.childEvent(roomID: "2", eventID: "2"), animated: true)
+        userSessionFlowCoordinator.handleAppRoute(.childEvent(eventID: "2", roomID: "2", via: []), animated: true)
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 1)
@@ -237,7 +237,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         XCTAssertEqual(timelineControllerFactory.buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReceivedArguments?.initialFocussedEventID, "2")
         
         // A subsequent regular event route should clear the stack and set the new room as the root of the stack.
-        try await process(route: .event(roomID: "3", eventID: "3"), expectedState: .roomList(selectedRoomID: "3"))
+        try await process(route: .event(eventID: "3", roomID: "3", via: []), expectedState: .roomList(selectedRoomID: "3"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
         XCTAssertNotNil(detailCoordinator)
@@ -245,7 +245,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         XCTAssertEqual(timelineControllerFactory.buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReceivedArguments?.initialFocussedEventID, "3")
         
         // A regular event route for the same room should set a new instance of the room as the root of the stack.
-        try await process(route: .event(roomID: "3", eventID: "4"), expectedState: .roomList(selectedRoomID: "3"))
+        try await process(route: .event(eventID: "4", roomID: "3", via: []), expectedState: .roomList(selectedRoomID: "3"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(detailNavigationStack?.stackCoordinators.count, 0)
         XCTAssertNotNil(detailCoordinator)

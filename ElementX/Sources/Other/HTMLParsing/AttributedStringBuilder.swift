@@ -49,9 +49,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
 
         let mutableAttributedString = NSMutableAttributedString(string: string)
+        removeDefaultForegroundColors(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
-        removeLinkColors(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
         Self.cacheValue(result, forKey: string, cacheKey: cacheKey)
@@ -105,12 +105,11 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
         
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
-        removeDefaultForegroundColor(mutableAttributedString)
+        removeDefaultForegroundColors(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
-        removeLinkColors(mutableAttributedString)
         removeDTCoreTextArtifacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
@@ -138,6 +137,106 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
         
         return result
+    }
+    
+    private func removeDefaultForegroundColors(_ attributedString: NSMutableAttributedString) {
+        attributedString.removeAttribute(.foregroundColor, range: .init(location: 0, length: attributedString.length))
+    }
+    
+    private func addLinksAndMentions(_ attributedString: NSMutableAttributedString) {
+        let string = attributedString.string
+        
+        // Event identifiers and room aliases and identifiers detected in plain text are techincally incomplete
+        // without via parameters and we won't bother detecting them
+        
+        var matches: [TextParsingMatch] = MatrixEntityRegex.userIdentifierRegex.matches(in: string).compactMap { match in
+            guard let matchRange = Range(match.range, in: string) else {
+                return nil
+            }
+            
+            let identifier = String(string[matchRange])
+
+            return TextParsingMatch(type: .userID(identifier: identifier), range: match.range)
+        }
+        
+        matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string).compactMap { match in
+            guard let matchRange = Range(match.range, in: string) else {
+                return nil
+            }
+            
+            let alias = String(string[matchRange])
+            
+            return TextParsingMatch(type: .roomAlias(alias: alias), range: match.range)
+        })
+        
+        matches.append(contentsOf: MatrixEntityRegex.uriRegex.matches(in: string).compactMap { match in
+            guard let matchRange = Range(match.range, in: string) else {
+                return nil
+            }
+            
+            let uri = String(string[matchRange])
+            
+            return TextParsingMatch(type: .matrixURI(uri: uri), range: match.range)
+        })
+        
+        matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string).compactMap { match in
+            guard let matchRange = Range(match.range, in: string) else {
+                return nil
+            }
+            
+            var link = String(string[matchRange])
+            
+            if !link.contains("://") {
+                link.insert(contentsOf: "https://", at: link.startIndex)
+            }
+            
+            return TextParsingMatch(type: .link(urlString: link), range: match.range)
+        })
+        
+        matches.append(contentsOf: MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string).map { match in
+            TextParsingMatch(type: .atRoom, range: match.range)
+        })
+        
+        guard matches.count > 0 else {
+            return
+        }
+        
+        // Sort the links by length so the longest one always takes priority
+        matches.sorted { $0.range.length > $1.range.length }.forEach { [attributedString] match in
+            var hasLink = false
+            attributedString.enumerateAttribute(.link, in: match.range, options: []) { value, _, stop in
+                if value != nil {
+                    hasLink = true
+                    stop.pointee = true
+                }
+            }
+            
+            if hasLink {
+                return
+            }
+            
+            // Don't add any extra attributes within codeblocks
+            if attributedString.attribute(.backgroundColor, at: match.range.location, effectiveRange: nil) as? UIColor == temporaryCodeBlockMarkingColor {
+                return
+            }
+            
+            switch match.type {
+            case .atRoom:
+                attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
+            case .roomAlias(let alias):
+                if let url = try? matrixToRoomAliasPermalink(roomAlias: alias) {
+                    attributedString.addAttribute(.link, value: url, range: match.range)
+                }
+            case .matrixURI(let uri):
+                if let url = URL(string: uri) {
+                    attributedString.addAttribute(.link, value: url, range: match.range)
+                }
+            case .userID, .link:
+                if let url = match.link {
+                    attributedString.addAttribute(.link, value: url, range: match.range)
+                }
+            }
+        }
     }
     
     private func replaceMarkedBlockquotes(_ attributedString: NSMutableAttributedString) {
@@ -170,111 +269,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             if let value = value as? UIColor,
                value == temporaryCodeBlockMarkingColor {
                 attributedString.addAttribute(.backgroundColor, value: UIColor(.compound._bgCodeBlock) as Any, range: range)
-                // Codebloks should not have explicit links
-                attributedString.enumerateAttribute(.link, in: range, options: []) { value, range, _ in
-                    if let link = value as? URL {
-                        var text = attributedString.attributedSubstring(from: range).string
-                        if !text.contains("://") {
-                            // we sanitize links by always  them use https://
-                            text.insert(contentsOf: "https://", at: text.startIndex)
-                        }
-                        if text == link.absoluteString {
-                            attributedString.removeAttribute(.link, range: range)
-                        }
-                    }
-                }
-                // Codeblocks should not have all users mentions
-                attributedString.removeAttribute(.MatrixAllUsersMention, range: range)
-            }
-        }
-    }
-    
-    private func removeDTCoreTextArtifacts(_ attributedString: NSMutableAttributedString) {
-        guard attributedString.length > 0 else {
-            return
-        }
-        
-        // DTCoreText adds a newline at the end of plain text ( https://github.com/Cocoanetics/DTCoreText/issues/779 )
-        // or after a blockquote section.
-        // Trim trailing whitespace and newlines in the string content
-        while (attributedString.string as NSString).hasSuffixCharacter(from: .whitespacesAndNewlines) {
-            attributedString.deleteCharacters(in: .init(location: attributedString.length - 1, length: 1))
-        }
-    }
-    
-    private func addLinksAndMentions(_ attributedString: NSMutableAttributedString) {
-        let string = attributedString.string
-        
-        // Event identifiers and room aliases and identifiers detected in plain text are techincally incomplete
-        // without via parameters and we won't bother detecting them
-        
-        var matches: [TextParsingMatch] = MatrixEntityRegex.userIdentifierRegex.matches(in: string, options: []).compactMap { match in
-            guard let matchRange = Range(match.range, in: string) else {
-                return nil
-            }
-            
-            let identifier = String(string[matchRange])
-
-            return TextParsingMatch(type: .userID(identifier: identifier), range: match.range)
-        }
-        
-        matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string, options: []).compactMap { match in
-            guard let matchRange = Range(match.range, in: string) else {
-                return nil
-            }
-            
-            let alias = String(string[matchRange])
-            
-            return TextParsingMatch(type: .roomAlias(alias: alias), range: match.range)
-        })
-        
-        matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string, options: []).compactMap { match in
-            guard let matchRange = Range(match.range, in: string) else {
-                return nil
-            }
-            
-            var link = String(string[matchRange])
-            
-            if !link.contains("://") {
-                link.insert(contentsOf: "https://", at: link.startIndex)
-            }
-            
-            return TextParsingMatch(type: .link(urlString: link), range: match.range)
-        })
-        
-        matches.append(contentsOf: MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string, options: []).map { match in
-            TextParsingMatch(type: .atRoom, range: match.range)
-        })
-        
-        guard matches.count > 0 else {
-            return
-        }
-        
-        // Sort the links by length so the longest one always takes priority
-        matches.sorted { $0.range.length > $1.range.length }.forEach { [attributedString] match in
-            var hasLink = false
-            attributedString.enumerateAttribute(.link, in: match.range, options: []) { value, _, stop in
-                if value != nil {
-                    hasLink = true
-                    stop.pointee = true
-                }
-            }
-            
-            if hasLink {
-                return
-            }
-            
-            switch match.type {
-            case .atRoom:
-                attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
-            case .roomAlias(let alias):
-                if let url = try? matrixToRoomAliasPermalink(roomAlias: alias) {
-                    attributedString.addAttribute(.link, value: url, range: match.range)
-                }
-            case .userID, .link:
-                if let url = match.link {
-                    attributedString.addAttribute(.link, value: url, range: match.range)
-                }
+                attributedString.removeAttribute(.link, range: range)
             }
         }
     }
@@ -307,19 +302,16 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
-    private func removeDefaultForegroundColor(_ attributedString: NSMutableAttributedString) {
-        attributedString.enumerateAttribute(.foregroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
-            if value as? UIColor == UIColor.black {
-                attributedString.removeAttribute(.foregroundColor, range: range)
-            }
+    private func removeDTCoreTextArtifacts(_ attributedString: NSMutableAttributedString) {
+        guard attributedString.length > 0 else {
+            return
         }
-    }
-    
-    private func removeLinkColors(_ attributedString: NSMutableAttributedString) {
-        attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
-            if value != nil {
-                attributedString.removeAttribute(.foregroundColor, range: range)
-            }
+        
+        // DTCoreText adds a newline at the end of plain text ( https://github.com/Cocoanetics/DTCoreText/issues/779 )
+        // or after a blockquote section.
+        // Trim trailing whitespace and newlines in the string content
+        while (attributedString.string as NSString).hasSuffixCharacter(from: .whitespacesAndNewlines) {
+            attributedString.deleteCharacters(in: .init(location: attributedString.length - 1, length: 1))
         }
     }
     
@@ -379,6 +371,7 @@ private struct TextParsingMatch {
     enum MatchType {
         case userID(identifier: String)
         case roomAlias(alias: String)
+        case matrixURI(uri: String)
         case link(urlString: String)
         case atRoom
     }

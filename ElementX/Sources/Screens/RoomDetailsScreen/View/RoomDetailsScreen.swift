@@ -24,8 +24,10 @@ struct RoomDetailsScreen: View {
     
     var body: some View {
         Form {
-            if let recipient = context.viewState.dmRecipient {
-                dmHeaderSection(recipient: recipient)
+            if let recipient = context.viewState.dmRecipient,
+               let accountOwner = context.viewState.accountOwner {
+                dmHeaderSection(accountOwner: accountOwner,
+                                recipient: recipient)
             } else {
                 normalRoomHeaderSection
             }
@@ -82,9 +84,9 @@ struct RoomDetailsScreen: View {
         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
     }
     
-    private func dmHeaderSection(recipient: RoomMemberDetails) -> some View {
-        AvatarHeaderView(member: recipient,
-                         avatarSize: .user(on: .memberDetails),
+    private func dmHeaderSection(accountOwner: RoomMemberDetails, recipient: RoomMemberDetails) -> some View {
+        AvatarHeaderView(accountOwner: accountOwner,
+                         dmRecipient: recipient,
                          imageProvider: context.imageProvider) {
             context.send(viewAction: .displayAvatar)
         } footer: {
@@ -97,7 +99,7 @@ struct RoomDetailsScreen: View {
     
     @ViewBuilder
     private var headerSectionShortcuts: some View {
-        HStack(spacing: 32) {
+        HStack(spacing: 8) {
             ForEach(context.viewState.shortcuts, id: \.self) { shortcut in
                 switch shortcut {
                 case .mute:
@@ -107,6 +109,20 @@ struct RoomDetailsScreen: View {
                         CompoundIcon(\.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
+                case .call:
+                    Button {
+                        context.send(viewAction: .processTapCall)
+                    } label: {
+                        CompoundIcon(\.videoCall)
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
+                case .invite:
+                    Button {
+                        context.send(viewAction: .processTapInvite)
+                    } label: {
+                        CompoundIcon(\.userAdd)
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionInvite))
                 }
             }
         }
@@ -152,15 +168,6 @@ struct RoomDetailsScreen: View {
                             context.send(viewAction: .processTapPeople)
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-                
-                if context.viewState.canInviteUsers {
-                    ListRow(label: .default(title: L10n.screenRoomDetailsInvitePeopleTitle,
-                                            icon: \.userAdd),
-                            kind: .navigationLink {
-                                context.send(viewAction: .processTapInvite)
-                            })
-                            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
-                }
             }
             ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
                                     icon: \.polls),

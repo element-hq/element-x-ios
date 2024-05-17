@@ -29,6 +29,7 @@ enum RoomDetailsScreenViewModelAction {
     case requestEditDetailsPresentation
     case requestPollsHistoryPresentation
     case requestRolesAndPermissionsPresentation
+    case startCall
 }
 
 // MARK: View
@@ -50,6 +51,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRoomAvatar = false
     var canEditRolesOrPermissions = false
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
+    var canJoinCall = false
     
     var canEdit: Bool {
         !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
@@ -62,9 +64,16 @@ struct RoomDetailsScreenViewState: BindableState {
     var bindings: RoomDetailsScreenViewStateBindings
 
     var dmRecipient: RoomMemberDetails?
+    var accountOwner: RoomMemberDetails?
     
     var shortcuts: [RoomDetailsScreenViewShortcut] {
         var shortcuts: [RoomDetailsScreenViewShortcut] = [.mute]
+        if !ProcessInfo.processInfo.isiOSAppOnMac, canJoinCall {
+            shortcuts.append(.call)
+        }
+        if dmRecipient == nil, canInviteUsers {
+            shortcuts.append(.invite)
+        }
         if let permalink = dmRecipient?.permalink {
             shortcuts.append(.share(link: permalink))
         } else if let permalink {
@@ -184,11 +193,14 @@ enum RoomDetailsScreenViewAction {
     case processTapPolls
     case toggleFavourite(isFavourite: Bool)
     case processTapRolesAndPermissions
+    case processTapCall
 }
 
 enum RoomDetailsScreenViewShortcut {
     case share(link: URL)
     case mute
+    case call
+    case invite
 }
 
 extension RoomDetailsScreenViewShortcut: Hashable { }

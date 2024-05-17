@@ -25,6 +25,7 @@
 "action_accept" = "Прыняць";
 "action_add_to_timeline" = "Дадаць у хроніку";
 "action_back" = "Назад";
+"action_call" = "Выклік";
 "action_cancel" = "Скасаваць";
 "action_choose_photo" = "Выбраць фота";
 "action_clear" = "Ачысціць";
@@ -62,6 +63,7 @@
 "action_leave_room" = "Пакінуць пакой";
 "action_manage_account" = "Кіраванне ўліковым запісам";
 "action_manage_devices" = "Кіраванне прыладамі";
+"action_message" = "Паведамленне";
 "action_next" = "Далей";
 "action_no" = "Не";
 "action_not_now" = "Не зараз";
@@ -497,11 +499,12 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "Злучэнне небяспечнае";
 "screen_qr_code_login_device_code_subtitle" = "Вам будзе прапанавана ўвесці дзве лічбы, паказаныя на гэтай прыладзе.";
 "screen_qr_code_login_device_code_title" = "Увядзіце наступны нумар на іншай прыладзе.";
+"screen_qr_code_login_initial_state_button_title" = "Гатовы да сканавання";
 "screen_qr_code_login_initial_state_item_1" = "Адкрыйце %1$@ на настольнай прыладзе";
 "screen_qr_code_login_initial_state_item_2" = "Націсніце на свой аватар";
 "screen_qr_code_login_initial_state_item_3" = "Выберыце %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Звязаць новую прыладу”";
-"screen_qr_code_login_initial_state_item_4" = "Выконвайце паказаныя інструкцыі";
+"screen_qr_code_login_initial_state_item_4" = "Адсканіруйце QR-код з дапамогай гэтай прылады";
 "screen_qr_code_login_initial_state_title" = "Адкрыйце %1$@ на іншай прыладзе, каб атрымаць QR-код";
 "screen_qr_code_login_invalid_scan_state_description" = "Выкарыстоўвайце QR-код, паказаны на іншай прыладзе.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Няправільны QR-код";
@@ -577,6 +580,9 @@
 "screen_room_details_add_topic_title" = "Дадаць тэму";
 "screen_room_details_already_a_member" = "Ужо ўдзельнік";
 "screen_room_details_already_invited" = "Ужо запрасілі";
+"screen_room_details_badge_encrypted" = "Зашыфравана";
+"screen_room_details_badge_not_encrypted" = "Не зашыфравана";
+"screen_room_details_badge_public" = "Публічны пакой";
 "screen_room_details_edit_room_title" = "Рэдагаваць пакой";
 "screen_room_details_edition_error" = "Адбылася невядомая памылка, і інфармацыю нельга было змяніць.";
 "screen_room_details_edition_error_title" = "Немагчыма абнавіць пакой";
@@ -665,7 +671,7 @@
 "screen_room_timeline_reactions_show_less" = "Паказаць менш";
 "screen_room_timeline_reactions_show_more" = "Паказаць больш";
 "screen_room_timeline_read_marker_title" = "Новы";
-"screen_room_title" = "Chat";
+"screen_room_title" = "Чат";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ i ";
 "screen_room_typing_notification_plural_ios" = " пішуць…";
 "screen_room_typing_notification_singular_ios" = " піша…";

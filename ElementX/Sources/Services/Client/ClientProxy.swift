@@ -52,8 +52,6 @@ class ClientProxy: ClientProxyProtocol {
     private(set) var roomSummaryProvider: RoomSummaryProviderProtocol?
     private(set) var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
     
-    private(set) var inviteSummaryProvider: RoomSummaryProviderProtocol?
-    
     let notificationSettings: NotificationSettingsProxyProtocol
 
     let secureBackupController: SecureBackupControllerProtocol
@@ -352,9 +350,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func joinRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
+    func joinRoom(_ roomID: String, via: [String]) async -> Result<Void, ClientProxyError> {
         do {
-            let _ = try await client.joinRoomById(roomId: roomID)
+            let _ = try await client.joinRoomByIdOrAlias(roomIdOrAlias: roomID, serverNames: via)
             
             // Wait for the room to appear in the room lists to avoid issues downstream
             let _ = await waitForRoomSummary(with: .success(roomID), name: nil, timeout: 30)
@@ -571,12 +569,12 @@ class ClientProxy: ClientProxyProtocol {
         RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch())
     }
     
-    func resolveRoomAlias(_ alias: String) async -> String? {
+    func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError> {
         do {
-            return try await client.resolveRoomAlias(roomAlias: alias)
+            return try await .success(client.resolveRoomAlias(roomAlias: alias))
         } catch {
             MXLog.error("Failed resolving room alias: \(alias) with error: \(error)")
-            return nil
+            return .failure(.sdkError(error))
         }
     }
     
@@ -680,7 +678,6 @@ class ClientProxy: ClientProxyProtocol {
                 .syncService()
                 .withCrossProcessLock(appIdentifier: "MainApp")
                 .withUtdHook(delegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
-                .withUnifiedInvitesInRoomList(withUnifiedInvites: appSettings.roomListInvitesEnabled)
                 .finish()
             let roomListService = syncService.roomListService()
             
@@ -702,13 +699,7 @@ class ClientProxy: ClientProxyProtocol {
                                                                name: "MessageForwarding",
                                                                notificationSettings: notificationSettings)
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
-            
-            inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                        eventStringBuilder: eventStringBuilder,
-                                                        name: "Invites",
-                                                        notificationSettings: notificationSettings)
-            try await inviteSummaryProvider?.setRoomList(roomListService.invites())
-            
+                        
             self.syncService = syncService
             self.roomListService = roomListService
 

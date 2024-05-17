@@ -39,6 +39,38 @@ class MatrixEntityRegexTests: XCTestCase {
         XCTAssertFalse(MatrixEntityRegex.isMatrixRoomAlias("#element-ios.matrix.org"))
     }
     
+    func testMatrixURI() {
+        // Users
+        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:u/alice:example.org"))
+        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:u/alice:example.org?action=chat"))
+        
+        // Room ID
+        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/somewhere:example.org"))
+        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/my-room:example.com?via=elsewhere.ca"))
+        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/123_room:chat.myserver.net?via=elsewhere.ca&via=other.org"))
+        
+        // Room Alias
+        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:r/general:matrix.org"))
+        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:r/123_room:chat.myserver.net"))
+        
+        // Event
+        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/somewhere:example.org/e/event"))
+        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/my-room:example.com/e/message?via=elsewhere.ca"))
+        XCTAssertTrue(MatrixEntityRegex.isMatrixURI("matrix:roomid/123_room:chat.myserver.net/e/1234?via=elsewhere.ca&via=other.org"))
+        
+        // Inline
+        let string = "Hello matrix:u/alice:example.org how are you?"
+        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("Hello matrix:u/alice:example.org how are you?"))
+        XCTAssertEqual(MatrixEntityRegex.uriRegex.matches(in: string).count, 1)
+        
+        // Invalid
+        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("matrix://@alice:example.org"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("matrix://!somewhere:example.org"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("matrix://#general:matrix.org"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("matrix:event/somewhere:example.org/e/event"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixURI("matrix:e/somewhere:example.org/e/event"))
+    }
+    
     func testAllUsers() {
         XCTAssertTrue(MatrixEntityRegex.containsMatrixAllUsers("@room"))
         XCTAssertTrue(MatrixEntityRegex.containsMatrixAllUsers("a@rooma"))

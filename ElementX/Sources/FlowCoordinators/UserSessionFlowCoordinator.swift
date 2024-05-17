@@ -200,48 +200,59 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         await clearPresentedSheets(animated: animated)
         
         switch appRoute {
-        case .room(let roomID):
-            stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room), userInfo: .init(animated: animated))
+        case .room(let roomID, let via):
+            stateMachine.processEvent(.selectRoom(roomID: roomID, via: via, entryPoint: .room), userInfo: .init(animated: animated))
         case .roomAlias(let alias):
-            guard let roomID = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
-            await asyncHandleAppRoute(.room(roomID: roomID), animated: animated)
-        case .childRoom(let roomID):
+            switch await userSession.clientProxy.resolveRoomAlias(alias) {
+            case .success(let resolved): await asyncHandleAppRoute(.room(roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            case .failure: showFailureIndicator()
+            }
+        case .childRoom(let roomID, let via):
             if let roomFlowCoordinator {
                 roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             } else {
-                stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room), userInfo: .init(animated: animated))
+                stateMachine.processEvent(.selectRoom(roomID: roomID, via: via, entryPoint: .room), userInfo: .init(animated: animated))
             }
         case .childRoomAlias(let alias):
-            guard let roomID = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
-            await asyncHandleAppRoute(.childRoom(roomID: roomID), animated: animated)
+            switch await userSession.clientProxy.resolveRoomAlias(alias) {
+            case .success(let resolved): await asyncHandleAppRoute(.childRoom(roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            case .failure: showFailureIndicator()
+            }
+            
         case .roomDetails(let roomID):
             if stateMachine.state.selectedRoomID == roomID {
                 roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             } else {
-                stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .roomDetails), userInfo: .init(animated: animated))
+                stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .roomDetails), userInfo: .init(animated: animated))
             }
         case .roomList:
             roomFlowCoordinator?.clearRoute(animated: animated)
         case .roomMemberDetails:
             roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-        case .event(let roomID, let eventID):
-            stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .eventID(eventID)), userInfo: .init(animated: animated))
-        case .eventOnRoomAlias(let alias, let eventID):
-            guard let roomID = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
-            await asyncHandleAppRoute(.event(roomID: roomID, eventID: eventID), animated: animated)
+        case .event(let eventID, let roomID, let via):
+            stateMachine.processEvent(.selectRoom(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: .init(animated: animated))
+        case .eventOnRoomAlias(let eventID, let alias):
+            switch await userSession.clientProxy.resolveRoomAlias(alias) {
+            case .success(let resolved): await asyncHandleAppRoute(.event(eventID: eventID, roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            case .failure: showFailureIndicator()
+            }
+            
         case .childEvent:
             roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-        case .childEventOnRoomAlias(let alias, let eventID):
-            guard let roomID = await userSession.clientProxy.resolveRoomAlias(alias) else { return }
-            await asyncHandleAppRoute(.childEvent(roomID: roomID, eventID: eventID), animated: animated)
+        case .childEventOnRoomAlias(let eventID, let alias):
+            switch await userSession.clientProxy.resolveRoomAlias(alias) {
+            case .success(let resolved): await asyncHandleAppRoute(.childEvent(eventID: eventID, roomID: resolved.roomId, via: resolved.servers), animated: animated)
+            case .failure: showFailureIndicator()
+            }
+            
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .genericCallLink(let url):
             navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
-        case .oidcCallback:
-            break
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+        case .oidcCallback:
+            break
         }
     }
     
@@ -271,27 +282,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.initial, .start, .roomList):
                 presentHomeScreen()
                 attemptStartingOnboarding()
-            case(.roomList(let selectedRoomID), .selectRoom(let roomID, let entryPoint), .roomList):
+            case(.roomList(let selectedRoomID), .selectRoom(let roomID, let via, let entryPoint), .roomList):
                 if selectedRoomID == roomID,
                    !entryPoint.isEventID, // Don't reuse the existing room so the live timeline is hidden while the detached timeline is loading.
                    let roomFlowCoordinator {
                     let route: AppRoute = switch entryPoint {
-                    case .room: .room(roomID: roomID)
+                    case .room: .room(roomID: roomID, via: via)
                     case .roomDetails: .roomDetails(roomID: roomID)
-                    case .eventID(let eventID): .event(roomID: roomID, eventID: eventID) // ignored.
+                    case .eventID(let eventID): .event(eventID: eventID, roomID: roomID, via: via) // ignored.
                     }
                     roomFlowCoordinator.handleAppRoute(route, animated: animated)
                 } else {
-                    Task { await self.startRoomFlow(roomID: roomID, entryPoint: entryPoint, animated: animated) }
+                    Task { await self.startRoomFlow(roomID: roomID, via: via, entryPoint: entryPoint, animated: animated) }
                 }
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
-                
-            case (.invitesScreen, .selectRoom, .invitesScreen):
-                break
-            case (.invitesScreen, .deselectRoom, .invitesScreen):
-                dismissRoomFlow(animated: animated)
-                
+                                
             case (.roomList, .showSettingsScreen, .settingsScreen):
                 break
             case (.settingsScreen, .dismissedSettingsScreen, .roomList):
@@ -310,13 +316,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomList, .showStartChatScreen, .startChatScreen):
                 presentStartChat(animated: animated)
             case (.startChatScreen, .dismissedStartChatScreen, .roomList):
-                break
-                
-            case (.roomList, .showInvitesScreen, .invitesScreen):
-                presentInvitesList(animated: animated)
-            case (.invitesScreen, .showInvitesScreen, .invitesScreen):
-                break
-            case (.invitesScreen, .dismissedInvitesScreen, .roomList):
                 break
                 
             case (.roomList, .showLogoutConfirmationScreen, .logoutConfirmationScreen):
@@ -371,7 +370,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .presentRoom(let roomID):
-                    handleAppRoute(.room(roomID: roomID), animated: true)
+                    handleAppRoute(.room(roomID: roomID, via: []), animated: true)
                 case .presentRoomDetails(let roomID):
                     handleAppRoute(.roomDetails(roomID: roomID), animated: true)
                 case .roomLeft(let roomID):
@@ -389,8 +388,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.showStartChatScreen)
                 case .logout:
                     Task { await self.runLogoutFlow() }
-                case .presentInvitesScreen:
-                    stateMachine.processEvent(.showInvitesScreen)
                 case .presentGlobalSearch:
                     presentGlobalSearch()
                 case .presentRoomDirectorySearch:
@@ -452,6 +449,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Room Flow
     
     private func startRoomFlow(roomID: String,
+                               via: [String],
                                entryPoint: RoomFlowCoordinatorEntryPoint,
                                animated: Bool) async {
         let coordinator = await RoomFlowCoordinator(roomID: roomID,
@@ -469,12 +467,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .finished:
-                stateMachine.processEvent(.deselectRoom)
-            case .presentRoom(let roomID):
-                stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
             case .presentCallScreen(let roomProxy):
                 presentCallScreen(roomProxy: roomProxy)
+            case .finished:
+                stateMachine.processEvent(.deselectRoom)
             }
         }
         .store(in: &cancellables)
@@ -487,18 +483,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         switch entryPoint {
         case .room:
-            coordinator.handleAppRoute(.room(roomID: roomID), animated: animated)
+            coordinator.handleAppRoute(.room(roomID: roomID, via: via), animated: animated)
         case .eventID(let eventID):
-            coordinator.handleAppRoute(.event(roomID: roomID, eventID: eventID), animated: animated)
+            coordinator.handleAppRoute(.event(eventID: eventID, roomID: roomID, via: via), animated: animated)
         case .roomDetails:
             coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: animated)
         }
-        
-        let availableInvitesCount = userSession.clientProxy.inviteSummaryProvider?.roomListPublisher.value.count ?? 0
-        if case .invitesScreen = stateMachine.state, availableInvitesCount == 1 {
-            dismissInvitesList(animated: true)
-        }
-        
+                
         Task {
             let _ = await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
             
@@ -532,7 +523,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
             case .openRoom(let roomID):
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
-                self.stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
+                self.stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
             }
         }
         .store(in: &cancellables)
@@ -544,38 +535,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
         
-    // MARK: Invites list
-    
-    private func presentInvitesList(animated: Bool) {
-        let parameters = InvitesScreenCoordinatorParameters(userSession: userSession)
-        let coordinator = InvitesScreenCoordinator(parameters: parameters)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                switch action {
-                case .openRoom(let roomID):
-                    self?.stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
-                }
-            }
-            .store(in: &cancellables)
-        
-        sidebarNavigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedInvitesScreen)
-        }
-        
-        Task {
-            await notificationManager.removeDeliveredInviteNotifications()
-        }
-    }
-    
-    private func dismissInvitesList(animated: Bool) {
-        guard case .invitesScreen = stateMachine.state else {
-            fatalError()
-        }
-        
-        sidebarNavigationStackCoordinator.pop(animated: animated)
-    }
-    
     // MARK: Calls
     
     private func presentCallScreen(roomProxy: RoomProxyProtocol) {
@@ -593,6 +552,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationSplitCoordinator.setSheetCoordinator(callScreenCoordinator, animated: true)
+    }
+    
+    private func presentCallScreen(roomID: String) async {
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            return
+        }
+        
+        presentCallScreen(roomProxy: roomProxy)
     }
     
     // MARK: Secure backup confirmation
@@ -640,7 +607,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     dismissGlobalSearch()
                 case .select(let roomID):
                     dismissGlobalSearch()
-                    handleAppRoute(.room(roomID: roomID), animated: true)
+                    handleAppRoute(.room(roomID: roomID, via: []), animated: true)
                 }
             }
             .store(in: &cancellables)
@@ -670,9 +637,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .select(let roomID):
+            case .selectAlias(let alias):
                 stateMachine.processEvent(.dismissedRoomDirectorySearchScreen)
-                handleAppRoute(.room(roomID: roomID), animated: true)
+                handleAppRoute(.roomAlias(alias), animated: true)
+            case .selectRoomID(let roomID):
+                stateMachine.processEvent(.dismissedRoomDirectorySearchScreen)
+                handleAppRoute(.room(roomID: roomID, via: []), animated: true)
             case .dismiss:
                 stateMachine.processEvent(.dismissedRoomDirectorySearchScreen)
             }
@@ -705,7 +675,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .openDirectChat(let roomID):
                 navigationSplitCoordinator.setSheetCoordinator(nil)
-                stateMachine.processEvent(.selectRoom(roomID: roomID, entryPoint: .room))
+                stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
+            case .startCall(let roomID):
+                Task { await self.presentCallScreen(roomID: roomID) }
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }
@@ -721,6 +693,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Toasts and loading indicators
     
     private static let loadingIndicatorIdentifier = "\(UserSessionFlowCoordinator.self)-Loading"
+    private static let failureIndicatorIdentifier = "\(UserSessionFlowCoordinator.self)-Failure"
     
     private func showLoadingIndicator(delay: Duration? = nil) {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
@@ -732,5 +705,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func hideLoadingIndicator() {
         ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+    
+    private func showFailureIndicator() {
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorIdentifier,
+                                                                                    type: .toast,
+                                                                                    title: L10n.errorUnknown,
+                                                                                    iconName: "xmark"))
     }
 }

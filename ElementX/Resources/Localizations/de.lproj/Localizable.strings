@@ -25,6 +25,7 @@
 "action_accept" = "Akzeptieren";
 "action_add_to_timeline" = "Zum Nachrichtenverlauf hinzufügen";
 "action_back" = "Zurück";
+"action_call" = "Anruf";
 "action_cancel" = "Abbrechen";
 "action_choose_photo" = "Foto auswählen";
 "action_clear" = "Löschen";
@@ -62,6 +63,7 @@
 "action_leave_room" = "Verlassen";
 "action_manage_account" = "Konto verwalten";
 "action_manage_devices" = "Geräte verwalten";
+"action_message" = "Nachricht";
 "action_next" = "Weiter";
 "action_no" = "Nein";
 "action_not_now" = "Später";
@@ -497,11 +499,12 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "Die Verbindung ist nicht sicher";
 "screen_qr_code_login_device_code_subtitle" = "Du wirst aufgefordert, die beiden unten abgebildeten Ziffern einzugeben.";
 "screen_qr_code_login_device_code_title" = "Trage die unten angezeigte Zahl auf einem anderen Device ein";
+"screen_qr_code_login_initial_state_button_title" = "Bereit zum Scannen";
 "screen_qr_code_login_initial_state_item_1" = "%1$@ auf einem Desktop-Gerät öffnen";
 "screen_qr_code_login_initial_state_item_2" = "Klick auf deinen Avatar";
 "screen_qr_code_login_initial_state_item_3" = "Wähle %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "\"Neues Gerät verknüpfen\"";
-"screen_qr_code_login_initial_state_item_4" = "Befolge die angezeigten Anweisungen";
+"screen_qr_code_login_initial_state_item_4" = "Scanne den QR-Code mit diesem Gerät";
 "screen_qr_code_login_initial_state_title" = "Öffne %1$@ auf einem anderen Gerät, um den QR-Code zu erhalten";
 "screen_qr_code_login_invalid_scan_state_description" = "Verwende den QR-Code, der auf dem anderen Gerät angezeigt wird.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Falscher QR-Code";
@@ -577,6 +580,9 @@
 "screen_room_details_add_topic_title" = "Thema hinzufügen";
 "screen_room_details_already_a_member" = "Bereits Mitglied";
 "screen_room_details_already_invited" = "Bereits eingeladen";
+"screen_room_details_badge_encrypted" = "Verschlüsselt";
+"screen_room_details_badge_not_encrypted" = "Nicht verschlüsselt";
+"screen_room_details_badge_public" = "Öffentlicher Raum";
 "screen_room_details_edit_room_title" = "Raum bearbeiten";
 "screen_room_details_edition_error" = "Es ist ein unbekannter Fehler aufgetreten und die Informationen konnten nicht geändert werden.";
 "screen_room_details_edition_error_title" = "Raum kann nicht aktualisiert werden";

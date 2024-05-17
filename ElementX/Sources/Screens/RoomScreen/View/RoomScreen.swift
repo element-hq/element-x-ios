@@ -35,9 +35,9 @@ struct RoomScreen: View {
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composerToolbar
-                    .padding(.bottom, composerToolbarContext.composerActionsEnabled ? 8 : 12)
+                    .padding(.bottom, composerToolbarContext.composerFormattingEnabled ? 8 : 12)
                     .background {
-                        if composerToolbarContext.composerActionsEnabled {
+                        if composerToolbarContext.composerFormattingEnabled {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
                                 .ignoresSafeArea()
@@ -55,7 +55,6 @@ struct RoomScreen: View {
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo)
-            .alert(item: $context.confirmationAlertInfo)
             .sheet(item: $context.debugInfo) { TimelineItemDebugView(info: $0) }
             .sheet(item: $context.actionMenuInfo) { info in
                 context.viewState.timelineItemMenuActionProvider?(info.item.id).map { actions in
@@ -81,14 +80,6 @@ struct RoomScreen: View {
                 
                 context.send(viewAction: .handlePasteOrDrop(provider: provider))
                 return true
-            }
-            .confirmationDialog(item: $context.sendFailedConfirmationDialogInfo, titleVisibility: .visible) { info in
-                Button(L10n.screenRoomRetrySendMenuSendAgainAction) {
-                    context.send(viewAction: .retrySend(itemID: info.itemID))
-                }
-                Button(L10n.actionRemove, role: .destructive) {
-                    context.send(viewAction: .cancelSend(itemID: info.itemID))
-                }
             }
     }
 
@@ -168,7 +159,7 @@ struct RoomScreen: View {
     private var callButton: some View {
         if context.viewState.hasOngoingCall {
             Button {
-                context.send(viewAction: .presentCall)
+                context.send(viewAction: .displayCall)
             } label: {
                 Label(L10n.actionJoin, icon: \.videoCallSolid)
                     .labelStyle(.titleAndIcon)
@@ -177,7 +168,7 @@ struct RoomScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         } else {
             Button {
-                context.send(viewAction: .presentCall)
+                context.send(viewAction: .displayCall)
             } label: {
                 CompoundIcon(\.videoCallSolid)
             }
@@ -186,7 +177,7 @@ struct RoomScreen: View {
     }
     
     private var isNavigationBarHidden: Bool {
-        composerToolbarContext.composerActionsEnabled && composerToolbarContext.composerExpanded && UIDevice.current.userInterfaceIdiom == .pad
+        composerToolbarContext.composerFormattingEnabled && composerToolbarContext.composerExpanded && UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 

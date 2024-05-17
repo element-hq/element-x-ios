@@ -25,21 +25,11 @@ struct DeveloperOptionsScreen: View {
         Form {
             Section("Logging") {
                 LogLevelConfigurationView(logLevel: $context.logLevel)
-                
-                Toggle(isOn: $context.otlpTracingEnabled) {
-                    Text("OTLP tracing")
-                    Text("Requires app reboot")
-                }
             }
             
             Section("Room List") {
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
                     Text("Hide grey dots")
-                }
-                
-                Toggle(isOn: $context.roomListInvitesEnabled) {
-                    Text("Room list invites")
-                    Text("Requires app reboot and, after disabling the feature, a cache clear.")
                 }
             }
             

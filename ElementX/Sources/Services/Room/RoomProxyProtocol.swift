@@ -141,7 +141,9 @@ extension RoomProxyProtocol {
         RoomDetails(id: id,
                     name: name,
                     avatarURL: avatarURL,
-                    canonicalAlias: canonicalAlias)
+                    canonicalAlias: canonicalAlias,
+                    isEncrypted: isEncrypted,
+                    isPublic: isPublic)
     }
         
     // Avoids to duplicate the same logic around in the app

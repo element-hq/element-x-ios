@@ -115,6 +115,7 @@ extension RoomProxyMock {
         }
         canUserInviteUserIDReturnValue = .success(configuration.canUserInvite)
         canUserRedactOtherUserIDReturnValue = .success(false)
+        canUserRedactOwnUserIDReturnValue = .success(false)
         canUserKickUserIDClosure = { [weak self] userID in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }

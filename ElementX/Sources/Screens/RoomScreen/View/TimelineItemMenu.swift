@@ -298,7 +298,7 @@ struct TimelineItemMenu: View {
         dismiss()
         // Otherwise we might get errors that a sheet is already presented
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            context.send(viewAction: .timelineItemMenuAction(itemID: item.id, action: action))
+            context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: action))
         }
     }
 }

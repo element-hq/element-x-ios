@@ -19,16 +19,19 @@ import UIKit
 
 enum RoomScreenInteractionHandlerAction {
     case composer(action: RoomScreenComposerAction)
-    case displayError(RoomScreenErrorType)
+    
     case displayEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayMediaUploadPreviewScreen(url: URL)
     case displayPollForm(mode: PollFormMode)
     case displayRoomMemberDetails(userID: String)
+    
     case showActionMenu(TimelineItemActionMenuInfo)
     case showDebugInfo(TimelineItemDebugInfo)
-    case showConfirmationAlert(AlertInfo<UUID>)
+    
+    case displayAudioRecorderPermissionError
+    case displayErrorToast(String)
 }
 
 @MainActor
@@ -81,23 +84,16 @@ class RoomScreenInteractionHandler {
         self.appSettings = appSettings
         self.analyticsService = analyticsService
         pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService, roomProxy: roomProxy)
+        
+        // Set initial values for redacting from the macOS context menu.
+        Task { await updatePermissions() }
     }
     
     // MARK: Timeline Item Action Menu
     
-    func showTimelineItemActionMenu(for itemID: TimelineItemIdentifier) {
+    func displayTimelineItemActionMenu(for itemID: TimelineItemIdentifier) {
         Task {
-            if case let .success(value) = await roomProxy.canUserRedactOther(userID: roomProxy.ownUserID) {
-                canCurrentUserRedactOthers = value
-            } else {
-                canCurrentUserRedactOthers = false
-            }
-            
-            if case let .success(value) = await roomProxy.canUserRedactOwn(userID: roomProxy.ownUserID) {
-                canCurrentUserRedactSelf = value
-            } else {
-                canCurrentUserRedactSelf = false
-            }
+            await updatePermissions()
          
             guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
                   let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
@@ -186,7 +182,7 @@ class RoomScreenInteractionHandler {
         return .init(actions: actions, debugActions: debugActions)
     }
 
-    func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
+    func handleTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
@@ -214,13 +210,13 @@ class RoomScreenInteractionHandler {
             }
         case .copyPermalink:
             guard let eventID = eventTimelineItem.id.eventID else {
-                actionsSubject.send(.displayError(.alert(L10n.errorFailedCreatingThePermalink)))
+                actionsSubject.send(.displayErrorToast(L10n.errorFailedCreatingThePermalink))
                 return
             }
             
             Task {
                 guard case let .success(permalinkURL) = await roomProxy.matrixToEventPermalink(eventID) else {
-                    actionsSubject.send(.displayError(.alert(L10n.errorFailedCreatingThePermalink)))
+                    actionsSubject.send(.displayErrorToast(L10n.errorFailedCreatingThePermalink))
                     return
                 }
                 
@@ -256,7 +252,7 @@ class RoomScreenInteractionHandler {
         case .report:
             actionsSubject.send(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
         case .react:
-            showEmojiPicker(for: itemID)
+            displayEmojiPicker(for: itemID)
         case .toggleReaction(let key):
             guard let eventID = itemID.eventID else { return }
             Task { await roomProxy.timeline.toggleReaction(key, to: eventID) }
@@ -272,18 +268,10 @@ class RoomScreenInteractionHandler {
     private func processEditMessageEvent(_ messageTimelineItem: EventBasedMessageTimelineItemProtocol) {
         let text: String
         switch messageTimelineItem.contentType {
-        case .text(let textItem):
-            if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = textItem.formattedBodyHTMLString {
-                text = formattedBodyHTMLString
-            } else {
-                text = messageTimelineItem.body
-            }
-        case .emote(let emoteItem):
-            if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = emoteItem.formattedBodyHTMLString {
-                text = "/me " + formattedBodyHTMLString
-            } else {
-                text = "/me " + messageTimelineItem.body
-            }
+        case .text:
+            text = messageTimelineItem.body
+        case .emote:
+            text = "/me " + messageTimelineItem.body
         default:
             text = messageTimelineItem.body
         }
@@ -302,7 +290,7 @@ class RoomScreenInteractionHandler {
             case .success:
                 break
             case .failure:
-                actionsSubject.send(.displayError(.toast(L10n.errorUnknown)))
+                actionsSubject.send(.displayErrorToast(L10n.errorUnknown))
             }
         }
     }
@@ -315,7 +303,7 @@ class RoomScreenInteractionHandler {
             case .success:
                 break
             case .failure:
-                actionsSubject.send(.displayError(.toast(L10n.errorUnknown)))
+                actionsSubject.send(.displayErrorToast(L10n.errorUnknown))
             }
         }
     }
@@ -326,7 +314,7 @@ class RoomScreenInteractionHandler {
         guard let contentType = provider.preferredContentType,
               let preferredExtension = contentType.preferredFilenameExtension else {
             MXLog.error("Invalid NSItemProvider: \(provider)")
-            actionsSubject.send(.displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia)))
+            actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
             return
         }
         
@@ -342,13 +330,13 @@ class RoomScreenInteractionHandler {
                 }
 
                 if let error {
-                    self.actionsSubject.send(.displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia)))
+                    self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
                     MXLog.error("Failed processing NSItemProvider: \(providerDescription) with error: \(error)")
                     return
                 }
 
                 guard let data else {
-                    self.actionsSubject.send(.displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia)))
+                    self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
                     MXLog.error("Invalid NSItemProvider data: \(providerDescription)")
                     return
                 }
@@ -367,7 +355,7 @@ class RoomScreenInteractionHandler {
 
                     self.actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
                 } catch {
-                    self.actionsSubject.send(.displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia)))
+                    self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
                     MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
                 }
             }
@@ -385,15 +373,12 @@ class RoomScreenInteractionHandler {
             actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
         case .didStopRecording(let previewAudioPlayerState, let url):
             actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: previewAudioPlayerState, waveform: .url(url), isUploading: false))))
+            voiceMessageRecorderObserver = nil
         case .didFailWithError(let error):
             switch error {
             case .audioRecorderError(.recordPermissionNotGranted):
                 MXLog.info("permission to record audio has not been granted.")
-                actionsSubject.send(.showConfirmationAlert(.init(id: .init(),
-                                                                 title: L10n.dialogPermissionMicrophoneTitleIos(InfoPlistReader.main.bundleDisplayName),
-                                                                 message: L10n.dialogPermissionMicrophoneDescriptionIos,
-                                                                 primaryButton: .init(title: L10n.commonSettings, action: { [weak self] in self?.openSystemSettings() }),
-                                                                 secondaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil))))
+                actionsSubject.send(.displayAudioRecorderPermissionError)
             default:
                 MXLog.error("failed to start voice message recording. \(error)")
                 actionsSubject.send(.composer(action: .setMode(mode: .default)))
@@ -413,7 +398,6 @@ class RoomScreenInteractionHandler {
     
     func stopRecordingVoiceMessage() async {
         await voiceMessageRecorder.stopRecording()
-        voiceMessageRecorderObserver = nil
     }
     
     func cancelRecordingVoiceMessage() async {
@@ -435,7 +419,7 @@ class RoomScreenInteractionHandler {
     
     func sendCurrentVoiceMessage() async {
         guard let audioPlayerState = voiceMessageRecorder.previewAudioPlayerState, let recordingURL = voiceMessageRecorder.recordingURL else {
-            actionsSubject.send(.displayError(.alert(L10n.errorFailedUploadingVoiceMessage)))
+            actionsSubject.send(.displayErrorToast(L10n.errorFailedUploadingVoiceMessage))
             return
         }
         
@@ -453,7 +437,7 @@ class RoomScreenInteractionHandler {
         case .failure(let error):
             MXLog.error("failed to send the voice message. \(error)")
             actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: false))))
-            actionsSubject.send(.displayError(.alert(L10n.errorFailedUploadingVoiceMessage)))
+            actionsSubject.send(.displayErrorToast(L10n.errorFailedUploadingVoiceMessage))
         }
     }
     
@@ -586,7 +570,7 @@ class RoomScreenInteractionHandler {
     
     // MARK: Other
     
-    func showEmojiPicker(for itemID: TimelineItemIdentifier) {
+    func displayEmojiPicker(for itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               timelineItem.isReactable,
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
@@ -596,7 +580,7 @@ class RoomScreenInteractionHandler {
         actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
     }
     
-    func handleTappedUser(userID: String) async {
+    func displayRoomMemberDetails(userID: String) async {
         actionsSubject.send(.displayRoomMemberDetails(userID: userID))
     }
     
@@ -616,6 +600,20 @@ class RoomScreenInteractionHandler {
     
     // MARK: - Private
     
+    private func updatePermissions() async {
+        if case let .success(value) = await roomProxy.canUserRedactOther(userID: roomProxy.ownUserID) {
+            canCurrentUserRedactOthers = value
+        } else {
+            canCurrentUserRedactOthers = false
+        }
+        
+        if case let .success(value) = await roomProxy.canUserRedactOwn(userID: roomProxy.ownUserID) {
+            canCurrentUserRedactSelf = value
+        } else {
+            canCurrentUserRedactSelf = false
+        }
+    }
+    
     private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {
         item.isOutgoing ? canCurrentUserRedactSelf : canCurrentUserRedactOthers && !roomProxy.isDirect
     }
@@ -629,10 +627,6 @@ class RoomScreenInteractionHandler {
         default:
             return .init(type: .message(.text(.init(body: item.body))), isThread: false)
         }
-    }
-    
-    private func openSystemSettings() {
-        appMediator.openAppSettings()
     }
     
     private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {

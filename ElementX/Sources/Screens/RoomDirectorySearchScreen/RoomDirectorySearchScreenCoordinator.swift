@@ -24,7 +24,8 @@ struct RoomDirectorySearchScreenCoordinatorParameters {
 }
 
 enum RoomDirectorySearchScreenCoordinatorAction {
-    case select(roomID: String)
+    case selectAlias(String)
+    case selectRoomID(String)
     case dismiss
 }
 
@@ -48,8 +49,10 @@ final class RoomDirectorySearchScreenCoordinator: CoordinatorProtocol {
         viewModel.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .select(let roomID):
-                actionsSubject.send(.select(roomID: roomID))
+            case .selectAlias(let alias):
+                actionsSubject.send(.selectAlias(alias))
+            case .selectRoomID(let roomID):
+                actionsSubject.send(.selectRoomID(roomID))
             case .dismiss:
                 actionsSubject.send(.dismiss)
             }

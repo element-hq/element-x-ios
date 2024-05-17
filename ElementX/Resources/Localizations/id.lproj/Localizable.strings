@@ -25,6 +25,7 @@
 "action_accept" = "Terima";
 "action_add_to_timeline" = "Tambahkan ke lini masa";
 "action_back" = "Kembali";
+"action_call" = "Call";
 "action_cancel" = "Batal";
 "action_choose_photo" = "Pilih foto";
 "action_clear" = "Hapus";
@@ -62,6 +63,7 @@
 "action_leave_room" = "Tinggalkan ruangan";
 "action_manage_account" = "Kelola akun";
 "action_manage_devices" = "Kelola perangkat";
+"action_message" = "Message";
 "action_next" = "Berikutnya";
 "action_no" = "Tidak";
 "action_not_now" = "Jangan sekarang";
@@ -497,11 +499,12 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "Koneksi tidak aman";
 "screen_qr_code_login_device_code_subtitle" = "Anda akan diminta untuk memasukkan dua digit yang ditunjukkan di bawah ini.";
 "screen_qr_code_login_device_code_title" = "Masukkan nomor di perangkat Anda";
+"screen_qr_code_login_initial_state_button_title" = "Ready to scan";
 "screen_qr_code_login_initial_state_item_1" = "Buka %1$@ di perangkat desktop";
 "screen_qr_code_login_initial_state_item_2" = "Klik pada avatar Anda";
 "screen_qr_code_login_initial_state_item_3" = "Pilih %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Tautkan perangkat baru”";
-"screen_qr_code_login_initial_state_item_4" = "Follow the instructions shown";
+"screen_qr_code_login_initial_state_item_4" = "Scan the QR code with this device";
 "screen_qr_code_login_initial_state_title" = "Buka %1$@ di perangkat lain untuk mendapatkan kode QR";
 "screen_qr_code_login_invalid_scan_state_description" = "Gunakan kode QR yang ditampilkan di perangkat lain.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Kode QR salah";
@@ -577,6 +580,9 @@
 "screen_room_details_add_topic_title" = "Tambahkan topik";
 "screen_room_details_already_a_member" = "Sudah menjadi anggota";
 "screen_room_details_already_invited" = "Sudah diundang";
+"screen_room_details_badge_encrypted" = "Encrypted";
+"screen_room_details_badge_not_encrypted" = "Not encrypted";
+"screen_room_details_badge_public" = "Public room";
 "screen_room_details_edit_room_title" = "Sunting Ruangan";
 "screen_room_details_edition_error" = "Terjadi kesalahan yang tidak diketahui dan informasinya tidak dapat diubah.";
 "screen_room_details_edition_error_title" = "Tidak dapat memperbarui ruangan";

@@ -25,6 +25,7 @@
 "action_accept" = "Accepter";
 "action_add_to_timeline" = "Ajouter à la discussion";
 "action_back" = "Retour";
+"action_call" = "Call";
 "action_cancel" = "Annuler";
 "action_choose_photo" = "Choisissez une photo";
 "action_clear" = "Effacer";
@@ -62,6 +63,7 @@
 "action_leave_room" = "Quitter le salon";
 "action_manage_account" = "Gérer le compte";
 "action_manage_devices" = "Gérez les sessions";
+"action_message" = "Message";
 "action_next" = "Suivant";
 "action_no" = "Non";
 "action_not_now" = "Pas maintenant";
@@ -320,7 +322,7 @@
 "screen_analytics_prompt_third_party_sharing" = "Nous ne partagerons pas vos données avec des tiers";
 "screen_analytics_prompt_title" = "Aidez à améliorer %1$@";
 "screen_analytics_settings_share_data" = "Partagez des données de statistiques d’utilisation";
-"screen_app_lock_biometric_authentication" = "authentification biométrique";
+"screen_app_lock_biometric_authentication" = "l'authentification biométrique";
 "screen_app_lock_biometric_unlock" = "déverrouillage biométrique";
 "screen_app_lock_biometric_unlock_reason_ios" = "Veuillez vous authentification pour accéder à l’application";
 "screen_app_lock_forgot_pin" = "Code PIN oublié?";
@@ -497,6 +499,7 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "La connexion n’est pas sécurisée";
 "screen_qr_code_login_device_code_subtitle" = "Il vous sera demandé de saisir les deux chiffres affichés sur cet appareil.";
 "screen_qr_code_login_device_code_title" = "Saisissez le nombre ci-dessous sur votre autre appareil";
+"screen_qr_code_login_initial_state_button_title" = "Ready to scan";
 "screen_qr_code_login_initial_state_item_1" = "Ouvrez %1$@ sur un ordinateur";
 "screen_qr_code_login_initial_state_item_2" = "Cliquez sur votre image de profil";
 "screen_qr_code_login_initial_state_item_3" = "Choisissez %1$@";
@@ -539,7 +542,7 @@
 "screen_recovery_key_setup_confirmation_title" = "Avez-vous sauvegardé votre clé de récupération?";
 "screen_recovery_key_setup_description" = "Votre sauvegarde est protégée par votre clé de récupération. Si vous avez besoin d’une nouvelle clé après la configuration, vous pourrez en créer une nouvelle en cliquant sur \"Changer la clé de récupération\".";
 "screen_recovery_key_setup_generate_key" = "Générer la clé de récupération";
-"screen_recovery_key_setup_generate_key_description" = "Assurez-vous de pouvoir enregistrer votre clé dans un endroit sécurisé";
+"screen_recovery_key_setup_generate_key_description" = "Assurez-vous de conserver la clé dans un endroit sûr";
 "screen_recovery_key_setup_success" = "Sauvegarde mise en place avec succès";
 "screen_recovery_key_setup_title" = "Configurer la sauvegarde";
 "screen_report_content_block_user_hint" = "Cochez si vous souhaitez masquer tous les messages actuels et futurs de cet utilisateur.";
@@ -577,6 +580,9 @@
 "screen_room_details_add_topic_title" = "Ajouter un sujet";
 "screen_room_details_already_a_member" = "Déjà membre";
 "screen_room_details_already_invited" = "Déjà invité(e)";
+"screen_room_details_badge_encrypted" = "Encrypted";
+"screen_room_details_badge_not_encrypted" = "Not encrypted";
+"screen_room_details_badge_public" = "Public room";
 "screen_room_details_edit_room_title" = "Modifier le salon";
 "screen_room_details_edition_error" = "Une erreur inconnue s’est produite et les informations n’ont pas pu être modifiées.";
 "screen_room_details_edition_error_title" = "Impossible de mettre à jour le salon";
@@ -630,7 +636,7 @@
 "screen_room_notification_settings_allow_custom" = "Autoriser les paramètres personnalisés";
 "screen_room_notification_settings_allow_custom_footnote" = "L’activation de cette option annulera votre paramètre par défaut";
 "screen_room_notification_settings_custom_settings_title" = "Prévenez-moi dans ce salon pour";
-"screen_room_notification_settings_default_setting_footnote" = "Vous pouvez le modifier dans votre %1$@.";
+"screen_room_notification_settings_default_setting_footnote" = "Vous pouvez le modifier dans vos %1$@.";
 "screen_room_notification_settings_default_setting_footnote_content_link" = "paramètres globaux";
 "screen_room_notification_settings_default_setting_title" = "Paramètre par défaut";
 "screen_room_notification_settings_edit_remove_setting" = "Supprimer le paramètre personnalisé";

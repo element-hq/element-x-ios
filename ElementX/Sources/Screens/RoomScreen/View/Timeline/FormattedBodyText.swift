@@ -181,6 +181,15 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
     static var body: some View {
         let htmlStrings = [
             """
+            Plain text\n
+            @bob:matrix.org\n
+            #room:matrix.org\n
+            !room:matrix.org\n
+            https://www.matrix.org\n
+            www.matrix.org\n
+            matrix.org
+            """,
+            """
             Text before blockquote
             <blockquote>
             <b>bold</b> <i>italic</i>
@@ -203,6 +212,8 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             <code><b>Hello</b> <i>world</i></code>
             <p>Text</p>
             <code>Hello world</code>
+            <p>Text</p>
+            <code><a href="https://www.matrix.org">matrix.org</a> https://www.matrix.org</code>
             """,
             "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n",
             "<ul><li>First item</li><li>Second item</li><li>Third item</li></ul>",
@@ -231,6 +242,8 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             }
             .padding()
         }
+        .previewLayout(.sizeThatFits)
+        .snapshot(delay: 0.25)
     }
 }
 

@@ -1480,6 +1480,78 @@ class SDKClientMock: SDKClientProtocol {
             return joinRoomByIdRoomIdReturnValue
         }
     }
+    //MARK: - joinRoomByIdOrAlias
+
+    public var joinRoomByIdOrAliasRoomIdOrAliasServerNamesThrowableError: Error?
+    var joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingCallsCount = 0
+    public var joinRoomByIdOrAliasRoomIdOrAliasServerNamesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    public var joinRoomByIdOrAliasRoomIdOrAliasServerNamesCalled: Bool {
+        return joinRoomByIdOrAliasRoomIdOrAliasServerNamesCallsCount > 0
+    }
+    public var joinRoomByIdOrAliasRoomIdOrAliasServerNamesReceivedArguments: (roomIdOrAlias: String, serverNames: [String])?
+    public var joinRoomByIdOrAliasRoomIdOrAliasServerNamesReceivedInvocations: [(roomIdOrAlias: String, serverNames: [String])] = []
+
+    var joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingReturnValue: Room!
+    public var joinRoomByIdOrAliasRoomIdOrAliasServerNamesReturnValue: Room! {
+        get {
+            if Thread.isMainThread {
+                return joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingReturnValue
+            } else {
+                var returnValue: Room? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinRoomByIdOrAliasRoomIdOrAliasServerNamesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    public var joinRoomByIdOrAliasRoomIdOrAliasServerNamesClosure: ((String, [String]) async throws -> Room)?
+
+    public func joinRoomByIdOrAlias(roomIdOrAlias: String, serverNames: [String]) async throws -> Room {
+        if let error = joinRoomByIdOrAliasRoomIdOrAliasServerNamesThrowableError {
+            throw error
+        }
+        joinRoomByIdOrAliasRoomIdOrAliasServerNamesCallsCount += 1
+        joinRoomByIdOrAliasRoomIdOrAliasServerNamesReceivedArguments = (roomIdOrAlias: roomIdOrAlias, serverNames: serverNames)
+        joinRoomByIdOrAliasRoomIdOrAliasServerNamesReceivedInvocations.append((roomIdOrAlias: roomIdOrAlias, serverNames: serverNames))
+        if let joinRoomByIdOrAliasRoomIdOrAliasServerNamesClosure = joinRoomByIdOrAliasRoomIdOrAliasServerNamesClosure {
+            return try await joinRoomByIdOrAliasRoomIdOrAliasServerNamesClosure(roomIdOrAlias, serverNames)
+        } else {
+            return joinRoomByIdOrAliasRoomIdOrAliasServerNamesReturnValue
+        }
+    }
     //MARK: - login
 
     public var loginUsernamePasswordInitialDeviceNameDeviceIdThrowableError: Error?
@@ -1735,13 +1807,13 @@ class SDKClientMock: SDKClientProtocol {
     public var resolveRoomAliasRoomAliasReceivedRoomAlias: String?
     public var resolveRoomAliasRoomAliasReceivedInvocations: [String] = []
 
-    var resolveRoomAliasRoomAliasUnderlyingReturnValue: String!
-    public var resolveRoomAliasRoomAliasReturnValue: String! {
+    var resolveRoomAliasRoomAliasUnderlyingReturnValue: ResolvedRoomAlias!
+    public var resolveRoomAliasRoomAliasReturnValue: ResolvedRoomAlias! {
         get {
             if Thread.isMainThread {
                 return resolveRoomAliasRoomAliasUnderlyingReturnValue
             } else {
-                var returnValue: String? = nil
+                var returnValue: ResolvedRoomAlias? = nil
                 DispatchQueue.main.sync {
                     returnValue = resolveRoomAliasRoomAliasUnderlyingReturnValue
                 }
@@ -1759,9 +1831,9 @@ class SDKClientMock: SDKClientProtocol {
             }
         }
     }
-    public var resolveRoomAliasRoomAliasClosure: ((String) async throws -> String)?
+    public var resolveRoomAliasRoomAliasClosure: ((String) async throws -> ResolvedRoomAlias)?
 
-    public func resolveRoomAlias(roomAlias: String) async throws -> String {
+    public func resolveRoomAlias(roomAlias: String) async throws -> ResolvedRoomAlias {
         if let error = resolveRoomAliasRoomAliasThrowableError {
             throw error
         }

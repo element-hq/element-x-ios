@@ -1,4 +1,5 @@
 import ArgumentParser
+import CommandLineTools
 import Foundation
 import Yams
 
@@ -21,8 +22,14 @@ struct BuildSDK: ParsableCommand {
     @Argument(help: "An optional argument to specify a branch of the SDK.")
     var branch: String?
     
+    @Flag(help: "Build the SDK to run on an iPhone or iPad. This flag takes precedence over --simulator and --target.")
+    var device
+    
+    @Flag(help: "Build the SDK to run on the simulator. This flag takes precedence over --target.")
+    var simulator
+    
     @Option(help: "The target to build for such as aarch64-apple-ios. Omit this option to build for all targets.")
-    var target: Target?
+    var target: [Target] = []
     
     @Option(help: "The profile to use when building the SDK. Omit this option to build in debug mode.")
     var profile: Profile = .reldbg
@@ -60,8 +67,8 @@ struct BuildSDK: ParsableCommand {
     /// Checks that all of the required targets have been added through rustup
     /// but only when the ``target`` option hasn't been supplied.
     func checkRustupTargets() throws {
-        guard target == nil else { return }
-        guard let output = try Utilities.zsh("rustup show") else { throw Error.rustupOutputFailure }
+        guard target.isEmpty, device == 0, simulator == 0 else { return }
+        guard let output = try Zsh.run(command: "rustup show") else { throw Error.rustupOutputFailure }
         
         var requiredTargets = Target.allCases.reduce(into: [String: Bool]()) { partialResult, target in
             partialResult[target.rawValue] = false
@@ -79,14 +86,14 @@ struct BuildSDK: ParsableCommand {
     
     /// Clones the Rust SDK if a copy isn't found in the parent directory.
     func cloneSDKIfNeeded() throws {
-        guard !FileManager.default.fileExists(atPath: Utilities.sdkDirectoryURL.path) else { return }
-        try Utilities.zsh("git clone https://github.com/matrix-org/matrix-rust-sdk", workingDirectoryURL: Utilities.parentDirectoryURL)
+        guard !FileManager.default.fileExists(atPath: URL.sdkDirectory.path) else { return }
+        try Zsh.run(command: "git clone https://github.com/matrix-org/matrix-rust-sdk", directory: .parentDirectory)
     }
     
     /// Checkout the specified branch of the SDK if supplied.
     func checkoutBranchIfSupplied() throws {
         guard let branch else { return }
-        try Utilities.zsh("git checkout \(branch)", workingDirectoryURL: Utilities.sdkDirectoryURL)
+        try Zsh.run(command: "git checkout \(branch)", directory: .sdkDirectory)
     }
     
     /// Build the Rust SDK as an XCFramework with the debug profile.
@@ -94,21 +101,30 @@ struct BuildSDK: ParsableCommand {
         // unset fixes an issue where swift compilation prevents building for targets other than macOS X
         var buildCommand = "unset SDKROOT && cargo xtask swift build-framework"
         buildCommand.append(" --profile \(profile.rawValue)")
-        if let target {
-            buildCommand.append(" --only-target \(target.rawValue)")
+        if device > 0 {
+            buildCommand.append(" --target \(Target.iOS.rawValue)")
+        } else if simulator > 0 {
+            let hostArchitecture = try Zsh.run(command: "arch")
+            if hostArchitecture?.trimmingCharacters(in: .whitespacesAndNewlines) == "arm64" {
+                buildCommand.append(" --target \(Target.simulatorARM64.rawValue)")
+            } else {
+                buildCommand.append(" --target \(Target.simulatorIntel.rawValue)")
+            }
+        } else if !target.isEmpty {
+            target.forEach { buildCommand.append(" --target \($0.rawValue)") }
         }
-        try Utilities.zsh(buildCommand, workingDirectoryURL: Utilities.sdkDirectoryURL)
+        try Zsh.run(command: buildCommand, directory: .sdkDirectory)
     }
     
     /// Update the Xcode project to use the build of the SDK.
     func updateXcodeProject() throws {
         try updateProjectYAML()
-        try Utilities.zsh("xcodegen")
+        try Zsh.run(command: "xcodegen")
     }
     
     /// Update project.yml with the local path of the SDK.
     func updateProjectYAML() throws {
-        let yamlURL = Utilities.projectDirectoryURL.appendingPathComponent("project.yml")
+        let yamlURL = URL.projectDirectory.appendingPathComponent("project.yml")
         let yamlString = try String(contentsOf: yamlURL)
         guard var projectConfig = try Yams.compose(yaml: yamlString) else { throw Error.failureParsingProjectYAML }
         

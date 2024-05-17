@@ -40,7 +40,6 @@ enum A11yIdentifiers {
     static let startChatScreen = StartChatScreen()
     static let roomMemberDetailsScreen = RoomMemberDetailsScreen()
     static let createRoomScreen = CreateRoomScreen()
-    static let invitesScreen = InvitesScreen()
     static let inviteUsersScreen = InviteUsersScreen()
     static let migrationScreen = MigrationScreen()
     static let notificationSettingsScreen = NotificationSettingsScreen()
@@ -105,12 +104,6 @@ enum A11yIdentifiers {
         }
     }
     
-    struct InvitesScreen {
-        let noInvites = "invites-no_invites"
-        let accept = "invites-accept"
-        let decline = "invites-decline"
-    }
-
     struct InviteUsersScreen {
         let proceed = "invite_users-proceed"
         let userProfile = "invite_users-user_profile"

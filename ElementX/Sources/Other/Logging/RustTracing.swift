@@ -17,12 +17,6 @@
 import Foundation
 import MatrixRustSDK
 
-struct OTLPConfiguration {
-    let url: String
-    let username: String
-    let password: String
-}
-
 enum RustTracing {
     /// The base filename used for log files. This may be suffixed by the target
     /// name and other log management metadata during rotation.
@@ -31,32 +25,19 @@ enum RustTracing {
     static var logsDirectory: URL { .appGroupContainerDirectory }
     
     private(set) static var currentTracingConfiguration: TracingConfiguration?
-    static func setup(configuration: TracingConfiguration, otlpConfiguration: OTLPConfiguration?) {
+    static func setup(configuration: TracingConfiguration) {
         currentTracingConfiguration = configuration
         
         // Keep a minimum of 1 week of log files. In reality it will be longer
         // as the app is unlikely to be running continuously.
         let maxFiles: UInt64 = 24 * 7
         
-        if let otlpConfiguration {
-            setupOtlpTracing(config: .init(clientName: "ElementX-iOS",
-                                           user: otlpConfiguration.username,
-                                           password: otlpConfiguration.password,
-                                           otlpEndpoint: otlpConfiguration.url,
-                                           filter: configuration.filter,
-                                           writeToStdoutOrSystem: true,
-                                           writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
-                                                               filePrefix: configuration.fileName,
-                                                               fileSuffix: configuration.fileExtension,
-                                                               maxFiles: maxFiles)))
-        } else {
-            setupTracing(config: .init(filter: configuration.filter,
-                                       writeToStdoutOrSystem: true,
-                                       writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
-                                                           filePrefix: configuration.fileName,
-                                                           fileSuffix: configuration.fileExtension,
-                                                           maxFiles: maxFiles)))
-        }
+        setupTracing(config: .init(filter: configuration.filter,
+                                   writeToStdoutOrSystem: true,
+                                   writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
+                                                       filePrefix: configuration.fileName,
+                                                       fileSuffix: configuration.fileExtension,
+                                                       maxFiles: maxFiles)))
     }
     
     /// A list of all log file URLs, sorted chronologically. This is only public for testing purposes, within

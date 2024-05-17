@@ -61,6 +61,12 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
                 roomMemberProxy = member
                 state.memberDetails = RoomMemberDetails(withProxy: member)
                 state.isOwnMemberDetails = member.userID == roomProxy.ownUserID
+                switch await clientProxy.directRoomForUserID(member.userID) {
+                case .success(let roomID):
+                    state.dmRoomID = roomID
+                case .failure:
+                    break
+                }
             case .failure(let error):
                 MXLog.warning("Failed to find member: \(error)")
                 actionsSubject.send(.openUserProfile)
@@ -91,6 +97,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             Task { await displayFullScreenAvatar() }
         case .openDirectChat:
             Task { await openDirectChat() }
+        case .startCall(let roomID):
+            actionsSubject.send(.startCall(roomID: roomID))
         }
     }
 

@@ -26,7 +26,6 @@ enum HomeScreenViewModelAction {
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentStartChatScreen
-    case presentInvitesScreen
     case presentGlobalSearch
     case presentRoomDirectorySearch
     case logout
@@ -42,7 +41,6 @@ enum HomeScreenViewAction {
     case confirmRecoveryKey
     case skipRecoveryKeyConfirmation
     case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
-    case selectInvites
     case globalSearch
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
@@ -91,7 +89,6 @@ struct HomeScreenViewState: BindableState {
     var roomListMode: HomeScreenRoomListMode = .skeletons
     
     var hasPendingInvitations = false
-    var hasUnreadPendingInvitations = false
     
     var isRoomDirectorySearchEnabled = false
     
@@ -128,10 +125,6 @@ struct HomeScreenViewState: BindableState {
     
     var shouldShowRecoveryKeyConfirmationBanner: Bool {
         securityBannerMode == .recoveryKeyConfirmation
-    }
-    
-    var shouldShowInvitesButton: Bool {
-        !ServiceLocator.shared.settings.roomListInvitesEnabled && hasPendingInvitations && !bindings.isSearchFieldFocused
     }
 }
 

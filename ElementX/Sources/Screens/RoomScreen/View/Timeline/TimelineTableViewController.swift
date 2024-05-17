@@ -340,10 +340,13 @@ class TimelineTableViewController: UIViewController {
     
     /// Scrolls to the item with the corresponding event ID if loaded in the timeline.
     private func scrollToItem(eventID: String, animated: Bool) {
-        if let kvPair = timelineItemsDictionary.first(where: { $0.value.identifier.eventID == eventID }),
-           let indexPath = dataSource?.indexPath(for: kvPair.key) {
-            tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
-            coordinator.send(viewAction: .scrolledToFocussedItem)
+        DispatchQueue.main.async { [weak self] in // Fixes #2805
+            guard let self else { return }
+            if let kvPair = timelineItemsDictionary.first(where: { $0.value.identifier.eventID == eventID }),
+               let indexPath = dataSource?.indexPath(for: kvPair.key) {
+                tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
+                coordinator.send(viewAction: .scrolledToFocussedItem)
+            }
         }
     }
     

@@ -30,7 +30,7 @@ settings:
   APP_DISPLAY_NAME: Element X
   PRODUCTION_APP_NAME: Element
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
-  MARKETING_VERSION: 1.6.5
+  MARKETING_VERSION: 1.6.9
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
   SUPPORTS_MACCATALYST: NO
@@ -48,12 +48,12 @@ include:
 packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
-    url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 0.0.2-qr-login
+    url: https://github.com/element-hq/matrix-rust-components-swift
+    exactVersion: 1.0.0
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 259b94104ce799725b9d140c6508312ee475d0a8
+    revision: c1b9c32fef5f98f90bd1856cce327770297226b1
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events

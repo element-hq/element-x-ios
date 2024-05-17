@@ -1,3 +1,38 @@
+## Changes in 1.6.8 (2024-05-17)
+
+🙌 Improvements
+
+- DM Details UI has been updated. ([#2813](https://github.com/element-hq/element-x-ios/issues/2813))
+
+🐛 Bugfixes
+
+- Add missing Forgot PIN option when asked to unlock the Screen Lock settings. ([#2688](https://github.com/element-hq/element-x-ios/issues/2688))
+- Fix voice message recoder not showing send message button ([#2845](https://github.com/element-hq/element-x-ios/issues/2845))
+
+## Changes in 1.6.7 (2024-05-13)
+
+🙌 Improvements
+
+- Display message bodies (file names) next to attachment previews ([#2800](https://github.com/element-hq/element-x-ios/issues/2800))
+- Room details have been updated. ([#2812](https://github.com/element-hq/element-x-ios/issues/2812))
+- The UX of the profile of other users has been updated. ([#2816](https://github.com/element-hq/element-x-ios/issues/2816))
+
+🐛 Bugfixes
+
+- Render matrix URIs as links so they can be tapped. ([#2802](https://github.com/element-hq/element-x-ios/issues/2802))
+- Show a failure toast when alias look-up fails. ([#2825](https://github.com/element-hq/element-x-ios/issues/2825))
+
+## Changes in 1.6.5 (2024-05-09)
+
+🙌 Improvements
+
+- Reorder available composer menu actions ([#2790](https://github.com/element-hq/element-x-ios/issues/2790))
+
+🐛 Bugfixes
+
+- Only register for notifications when the setting is enabled. ([#2721](https://github.com/element-hq/element-x-ios/issues/2721))
+- Prevent the message sending failure options from showing up as a popup on the room list on iPads ([#2808](https://github.com/element-hq/element-x-ios/issues/2808))
+
 ## Changes in 1.6.4 (2024-05-07)
 
 ✨ Features

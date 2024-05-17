@@ -1941,7 +1941,6 @@ class ClientProxyMock: ClientProxyProtocol {
     var pusherNotificationClientIdentifier: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
-    var inviteSummaryProvider: RoomSummaryProviderProtocol?
     var notificationSettings: NotificationSettingsProxyProtocol {
         get { return underlyingNotificationSettings }
         set(value) { underlyingNotificationSettings = value }
@@ -2429,15 +2428,15 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     //MARK: - joinRoom
 
-    var joinRoomUnderlyingCallsCount = 0
-    var joinRoomCallsCount: Int {
+    var joinRoomViaUnderlyingCallsCount = 0
+    var joinRoomViaCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return joinRoomUnderlyingCallsCount
+                return joinRoomViaUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = joinRoomUnderlyingCallsCount
+                    returnValue = joinRoomViaUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -2445,29 +2444,29 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                joinRoomUnderlyingCallsCount = newValue
+                joinRoomViaUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    joinRoomUnderlyingCallsCount = newValue
+                    joinRoomViaUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var joinRoomCalled: Bool {
-        return joinRoomCallsCount > 0
+    var joinRoomViaCalled: Bool {
+        return joinRoomViaCallsCount > 0
     }
-    var joinRoomReceivedRoomID: String?
-    var joinRoomReceivedInvocations: [String] = []
+    var joinRoomViaReceivedArguments: (roomID: String, via: [String])?
+    var joinRoomViaReceivedInvocations: [(roomID: String, via: [String])] = []
 
-    var joinRoomUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var joinRoomReturnValue: Result<Void, ClientProxyError>! {
+    var joinRoomViaUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var joinRoomViaReturnValue: Result<Void, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return joinRoomUnderlyingReturnValue
+                return joinRoomViaUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = joinRoomUnderlyingReturnValue
+                    returnValue = joinRoomViaUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -2475,24 +2474,24 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                joinRoomUnderlyingReturnValue = newValue
+                joinRoomViaUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    joinRoomUnderlyingReturnValue = newValue
+                    joinRoomViaUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var joinRoomClosure: ((String) async -> Result<Void, ClientProxyError>)?
+    var joinRoomViaClosure: ((String, [String]) async -> Result<Void, ClientProxyError>)?
 
-    func joinRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
-        joinRoomCallsCount += 1
-        joinRoomReceivedRoomID = roomID
-        joinRoomReceivedInvocations.append(roomID)
-        if let joinRoomClosure = joinRoomClosure {
-            return await joinRoomClosure(roomID)
+    func joinRoom(_ roomID: String, via: [String]) async -> Result<Void, ClientProxyError> {
+        joinRoomViaCallsCount += 1
+        joinRoomViaReceivedArguments = (roomID: roomID, via: via)
+        joinRoomViaReceivedInvocations.append((roomID: roomID, via: via))
+        if let joinRoomViaClosure = joinRoomViaClosure {
+            return await joinRoomViaClosure(roomID, via)
         } else {
-            return joinRoomReturnValue
+            return joinRoomViaReturnValue
         }
     }
     //MARK: - uploadMedia
@@ -3432,13 +3431,13 @@ class ClientProxyMock: ClientProxyProtocol {
     var resolveRoomAliasReceivedAlias: String?
     var resolveRoomAliasReceivedInvocations: [String] = []
 
-    var resolveRoomAliasUnderlyingReturnValue: String?
-    var resolveRoomAliasReturnValue: String? {
+    var resolveRoomAliasUnderlyingReturnValue: Result<ResolvedRoomAlias, ClientProxyError>!
+    var resolveRoomAliasReturnValue: Result<ResolvedRoomAlias, ClientProxyError>! {
         get {
             if Thread.isMainThread {
                 return resolveRoomAliasUnderlyingReturnValue
             } else {
-                var returnValue: String?? = nil
+                var returnValue: Result<ResolvedRoomAlias, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = resolveRoomAliasUnderlyingReturnValue
                 }
@@ -3456,9 +3455,9 @@ class ClientProxyMock: ClientProxyProtocol {
             }
         }
     }
-    var resolveRoomAliasClosure: ((String) async -> String?)?
+    var resolveRoomAliasClosure: ((String) async -> Result<ResolvedRoomAlias, ClientProxyError>)?
 
-    func resolveRoomAlias(_ alias: String) async -> String? {
+    func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError> {
         resolveRoomAliasCallsCount += 1
         resolveRoomAliasReceivedAlias = alias
         resolveRoomAliasReceivedInvocations.append(alias)

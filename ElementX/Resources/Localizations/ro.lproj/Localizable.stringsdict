@@ -287,11 +287,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ scrie</string>
+			<string>%1$@ tastează</string>
 			<key>few</key>
-			<string>%1$@ scriu</string>
+			<string></string>
 			<key>other</key>
-			<string>%1$@ scriu</string>
+			<string>%1$@ tastează</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
@@ -305,9 +305,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Found %1$d push provider: %2$@</string>
+			<string>S-a găsit %1$d furnizor push: %2$@</string>
+			<key>few</key>
+			<string></string>
 			<key>other</key>
-			<string>Found %1$d push providers: %2$@</string>
+			<string>S-au găsit %1$d furnizori push: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -321,9 +323,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d distributor found: %2$@.</string>
+			<string>%1$d distribuitor găsit: %2$@.</string>
+			<key>few</key>
+			<string></string>
 			<key>other</key>
-			<string>%1$d distributors found: %2$@.</string>
+			<string>%1$d distribuitori găsiți: %2$@.</string>
 		</dict>
 	</dict>
 </dict>

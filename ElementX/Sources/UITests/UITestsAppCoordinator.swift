@@ -488,9 +488,8 @@ class MockScreen: Identifiable {
             var sessionVerificationControllerProxy = SessionVerificationControllerProxyMock.configureMock(requestDelay: .seconds(5))
             let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy)
             return SessionVerificationScreenCoordinator(parameters: parameters)
-        case .userSessionScreen, .userSessionScreenReply, .userSessionScreenRTE:
+        case .userSessionScreen, .userSessionScreenReply:
             let appSettings: AppSettings = ServiceLocator.shared.settings
-            appSettings.richTextEditorEnabled = id == .userSessionScreenRTE
             appSettings.hasRunIdentityConfirmationOnboarding = true
             appSettings.hasRunNotificationPermissionsOnboarding = true
             appSettings.analyticsConsentState = .optedOut
@@ -562,28 +561,6 @@ class MockScreen: Identifiable {
                                                                            userIndicatorController: UserIndicatorControllerMock(),
                                                                            navigationStackCoordinator: navigationStackCoordinator,
                                                                            userDiscoveryService: userDiscoveryMock))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .invites:
-            ServiceLocator.shared.settings.seenInvites = Set([RoomSummary].mockInvites.compactMap(\.id))
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
-
-            clientProxy.roomForIdentifierClosure = { identifier in
-                switch identifier {
-                case "someAwesomeRoomId1":
-                    return RoomProxyMock(with: .init(name: "First room"))
-                case "someAwesomeRoomId2":
-                    return RoomProxyMock(with: .init(name: "Second room"))
-                default:
-                    return nil
-                }
-            }
-            
-            let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockInvites)))
-            clientProxy.inviteSummaryProvider = summaryProvider
-            
-            let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .createRoom:

@@ -29,10 +29,6 @@ struct InfoPlistReader {
         static let utTypeIdentifierKey = "UTTypeIdentifier"
         static let utDescriptionKey = "UTTypeDescription"
         
-        static let otlpTracingURL = "otlpTracingURL"
-        static let otlpTracingUsername = "otlpTracingUsername"
-        static let otlpTracingPassword = "otlpTracingPassword"
-        
         static let bundleURLTypes = "CFBundleURLTypes"
         static let bundleURLName = "CFBundleURLName"
         static let bundleURLSchemes = "CFBundleURLSchemes"
@@ -105,20 +101,6 @@ struct InfoPlistReader {
     
     var mapLibreAPIKey: String {
         infoPlistValue(forKey: Keys.mapLibreAPIKey)
-    }
-    
-    // MARK: - OTLP Tracing
-    
-    var otlpTracingURL: String {
-        infoPlistValue(forKey: Keys.otlpTracingURL)
-    }
-    
-    var otlpTracingUsername: String {
-        infoPlistValue(forKey: Keys.otlpTracingUsername)
-    }
-    
-    var otlpTracingPassword: String {
-        infoPlistValue(forKey: Keys.otlpTracingPassword)
     }
     
     // MARK: - Custom App Scheme

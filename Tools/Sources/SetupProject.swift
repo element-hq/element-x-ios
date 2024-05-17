@@ -1,4 +1,5 @@
 import ArgumentParser
+import CommandLineTools
 import Foundation
 
 struct SetupProject: ParsableCommand {
@@ -12,18 +13,18 @@ struct SetupProject: ParsableCommand {
     }
 
     func setupGitHooks() throws {
-        try Utilities.zsh("git config core.hooksPath .githooks")
+        try Zsh.run(command: "git config core.hooksPath .githooks")
     }
 
     func brewBundleInstall() throws {
-        try Utilities.zsh("brew install xcodegen swiftgen swiftformat git-lfs sourcery mint kiliankoe/formulae/swift-outdated localazy/tools/localazy peripheryapp/periphery/periphery")
+        try Zsh.run(command: "brew install xcodegen swiftgen swiftformat git-lfs sourcery mint kiliankoe/formulae/swift-outdated localazy/tools/localazy peripheryapp/periphery/periphery")
     }
 
     func mintPackagesInstall() throws {
-        try Utilities.zsh("mint install Asana/locheck")
+        try Zsh.run(command: "mint install Asana/locheck")
     }
 
     func xcodegen() throws {
-        try Utilities.zsh("xcodegen")
+        try Zsh.run(command: "xcodegen")
     }
 }

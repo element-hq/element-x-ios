@@ -21,7 +21,6 @@ import SwiftUI
 final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
-        case seenInvites
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
         case migratedAccounts
@@ -35,9 +34,7 @@ final class AppSettings {
         case enableInAppNotifications
         case pusherProfileTag
         case logLevel
-        case otlpTracingEnabled
         case viewSourceEnabled
-        case richTextEditorEnabled
         case appAppearance
         case sharePresence
         case hideUnreadMessagesBadge
@@ -49,7 +46,6 @@ final class AppSettings {
         case shouldCollapseRoomStateEvents
         case publicSearchEnabled
         case qrCodeLoginEnabled
-        case roomListInvitesEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -96,12 +92,7 @@ final class AppSettings {
     /// deleted between runs so should clear data in the shared container and keychain.
     @UserPreference(key: UserDefaultsKeys.lastVersionLaunched, storageType: .userDefaults(store))
     var lastVersionLaunched: String?
-    
-    /// The Set of room identifiers of invites that the user already saw in the invites list.
-    /// This Set is being used to implement badges for unread invites.
-    @UserPreference(key: UserDefaultsKeys.seenInvites, defaultValue: [], storageType: .userDefaults(store))
-    var seenInvites: Set<String>
-    
+        
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
     let defaultHomeserverAddress = "matrix.org"
@@ -244,9 +235,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: false, storageType: .userDefaults(store))
     var viewSourceEnabled
 
-    @UserPreference(key: UserDefaultsKeys.richTextEditorEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var richTextEditorEnabled
-    
     // MARK: - Element Call
     
     @UserPreference(key: UserDefaultsKeys.elementCallBaseURL, defaultValue: "https://call.element.io", storageType: .userDefaults(store))
@@ -263,15 +251,6 @@ final class AppSettings {
     /// Tag describing which set of device specific rules a pusher executes.
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
-    
-    // MARK: - Logging
-    
-    @UserPreference(key: UserDefaultsKeys.otlpTracingEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var otlpTracingEnabled
-    
-    let otlpTracingURL = InfoPlistReader.main.otlpTracingURL
-    let otlpTracingUsername = InfoPlistReader.main.otlpTracingUsername
-    let otlpTracingPassword = InfoPlistReader.main.otlpTracingPassword
     
     // MARK: - Maps
     
@@ -293,9 +272,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.qrCodeLoginEnabled, defaultValue: true, storageType: .userDefaults(store))
     var qrCodeLoginEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.roomListInvitesEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var roomListInvitesEnabled
     
     #endif
     

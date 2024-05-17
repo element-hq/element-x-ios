@@ -33,11 +33,10 @@ enum MXLog {
     private static var target: String!
     
     static func configure(target: String? = nil,
-                          logLevel: TracingConfiguration.LogLevel,
-                          otlpConfiguration: OTLPConfiguration? = nil) {
+                          logLevel: TracingConfiguration.LogLevel) {
         guard !didConfigureOnce else { return }
         
-        RustTracing.setup(configuration: .init(logLevel: logLevel, target: target), otlpConfiguration: otlpConfiguration)
+        RustTracing.setup(configuration: .init(logLevel: logLevel, target: target))
         
         if let target {
             self.target = target

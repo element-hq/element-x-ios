@@ -32,11 +32,7 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     case invites
     
     static var availableFilters: [RoomListFilter] {
-        if ServiceLocator.shared.settings.roomListInvitesEnabled {
-            return RoomListFilter.allCases
-        } else {
-            return RoomListFilter.allCases.filter { !($0 == .invites) }
-        }
+        RoomListFilter.allCases
     }
     
     var localizedName: String {
@@ -73,13 +69,13 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     var rustFilter: RoomListEntriesDynamicFilterKind {
         switch self {
         case .people:
-            return .category(expect: .people)
+            return .all(filters: [.category(expect: .people), .joined])
         case .rooms:
-            return .category(expect: .group)
+            return .all(filters: [.category(expect: .group), .joined])
         case .unreads:
-            return .unread
+            return .all(filters: [.unread, .joined])
         case .favourites:
-            return .favourite
+            return .all(filters: [.favourite, .joined])
         case .invites:
             return .invite
         }
