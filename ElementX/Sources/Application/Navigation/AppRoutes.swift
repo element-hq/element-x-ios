@@ -44,6 +44,8 @@ enum AppRoute: Equatable {
     case childEventOnRoomAlias(eventID: String, alias: String)
     /// The profile of a matrix user (outside of a room).
     case userProfile(userID: String)
+    /// An Element Call running in a particular room
+    case call(roomID: String)
     /// An Element Call link generated outside of a chat room.
     case genericCallLink(url: URL)
     /// The settings screen.

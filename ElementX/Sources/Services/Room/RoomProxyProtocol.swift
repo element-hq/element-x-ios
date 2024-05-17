@@ -129,6 +129,8 @@ protocol RoomProxyProtocol {
     
     func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol
     
+    func sendCallNotificationIfNeeeded() async -> Result<Void, RoomProxyError>
+    
     // MARK: - Permalinks
     
     func matrixToPermalink() async -> Result<URL, RoomProxyError>

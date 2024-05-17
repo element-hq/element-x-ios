@@ -104,4 +104,5 @@ targets:
     - path: ../../ElementX/Sources/Services/Notification/Proxy
     - path: ../../ElementX/Sources/Services/Room/RoomSummary/RoomMessageEventStringBuilder.swift
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
+    - path: ../../ElementX/Sources/Services/ElementCall/ElementCallServiceProtocol.swift
     - path: ../../ElementX/Sources/Application/AppSettings.swift
