@@ -51,7 +51,7 @@ struct RoomEventStringBuilder {
             return stateEventStringBuilder
                 .buildString(for: state, sender: sender, isOutgoing: isOutgoing)
                 .map(AttributedString.init)
-        case .roomMembership(let userID, let change):
+        case .roomMembership(let userID, _, let change):
             return stateEventStringBuilder
                 .buildString(for: change, member: userID, sender: sender, isOutgoing: isOutgoing)
                 .map(AttributedString.init)

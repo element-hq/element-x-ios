@@ -536,7 +536,19 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private func subscribeToPagination() {
         let backPaginationListener = RoomPaginationStatusListener { [weak self] status in
-            self?.backPaginationStatusSubject.send(status)
+            guard let self else {
+                return
+            }
+            
+            switch status {
+            case .idle:
+                backPaginationStatusSubject.send(.idle)
+            case .paginating:
+                backPaginationStatusSubject.send(.paginating)
+            case .fetchingTargetEvent, .initial:
+                // TODO: NO IDEA
+                break
+            }
         }
         do {
             backPaginationStatusObservationToken = try timeline.subscribeToBackPaginationStatus(listener: backPaginationListener)
@@ -562,13 +574,13 @@ private final class RoomTimelineListener: TimelineListener {
 }
 
 private final class RoomPaginationStatusListener: PaginationStatusListener {
-    private let onUpdateClosure: (PaginationStatus) -> Void
+    private let onUpdateClosure: (PaginatorState) -> Void
 
-    init(_ onUpdateClosure: @escaping (PaginationStatus) -> Void) {
+    init(_ onUpdateClosure: @escaping (PaginatorState) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
 
-    func onUpdate(status: PaginationStatus) {
+    func onUpdate(status: PaginatorState) {
         onUpdateClosure(status)
     }
 }

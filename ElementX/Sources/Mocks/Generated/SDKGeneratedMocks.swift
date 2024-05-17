@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.4 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.2 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -1093,18 +1093,18 @@ class SDKClientMock: SDKClientProtocol {
             return getRecentlyVisitedRoomsReturnValue
         }
     }
-    //MARK: - getRoomPreview
+    //MARK: - getRoomPreviewFromRoomAlias
 
-    public var getRoomPreviewRoomIdOrAliasThrowableError: Error?
-    var getRoomPreviewRoomIdOrAliasUnderlyingCallsCount = 0
-    public var getRoomPreviewRoomIdOrAliasCallsCount: Int {
+    public var getRoomPreviewFromRoomAliasRoomAliasThrowableError: Error?
+    var getRoomPreviewFromRoomAliasRoomAliasUnderlyingCallsCount = 0
+    public var getRoomPreviewFromRoomAliasRoomAliasCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getRoomPreviewRoomIdOrAliasUnderlyingCallsCount
+                return getRoomPreviewFromRoomAliasRoomAliasUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getRoomPreviewRoomIdOrAliasUnderlyingCallsCount
+                    returnValue = getRoomPreviewFromRoomAliasRoomAliasUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -1112,29 +1112,29 @@ class SDKClientMock: SDKClientProtocol {
         }
         set {
             if Thread.isMainThread {
-                getRoomPreviewRoomIdOrAliasUnderlyingCallsCount = newValue
+                getRoomPreviewFromRoomAliasRoomAliasUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getRoomPreviewRoomIdOrAliasUnderlyingCallsCount = newValue
+                    getRoomPreviewFromRoomAliasRoomAliasUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    public var getRoomPreviewRoomIdOrAliasCalled: Bool {
-        return getRoomPreviewRoomIdOrAliasCallsCount > 0
+    public var getRoomPreviewFromRoomAliasRoomAliasCalled: Bool {
+        return getRoomPreviewFromRoomAliasRoomAliasCallsCount > 0
     }
-    public var getRoomPreviewRoomIdOrAliasReceivedRoomIdOrAlias: String?
-    public var getRoomPreviewRoomIdOrAliasReceivedInvocations: [String] = []
+    public var getRoomPreviewFromRoomAliasRoomAliasReceivedRoomAlias: String?
+    public var getRoomPreviewFromRoomAliasRoomAliasReceivedInvocations: [String] = []
 
-    var getRoomPreviewRoomIdOrAliasUnderlyingReturnValue: RoomPreview!
-    public var getRoomPreviewRoomIdOrAliasReturnValue: RoomPreview! {
+    var getRoomPreviewFromRoomAliasRoomAliasUnderlyingReturnValue: RoomPreview!
+    public var getRoomPreviewFromRoomAliasRoomAliasReturnValue: RoomPreview! {
         get {
             if Thread.isMainThread {
-                return getRoomPreviewRoomIdOrAliasUnderlyingReturnValue
+                return getRoomPreviewFromRoomAliasRoomAliasUnderlyingReturnValue
             } else {
                 var returnValue: RoomPreview? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getRoomPreviewRoomIdOrAliasUnderlyingReturnValue
+                    returnValue = getRoomPreviewFromRoomAliasRoomAliasUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -1142,27 +1142,99 @@ class SDKClientMock: SDKClientProtocol {
         }
         set {
             if Thread.isMainThread {
-                getRoomPreviewRoomIdOrAliasUnderlyingReturnValue = newValue
+                getRoomPreviewFromRoomAliasRoomAliasUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getRoomPreviewRoomIdOrAliasUnderlyingReturnValue = newValue
+                    getRoomPreviewFromRoomAliasRoomAliasUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    public var getRoomPreviewRoomIdOrAliasClosure: ((String) async throws -> RoomPreview)?
+    public var getRoomPreviewFromRoomAliasRoomAliasClosure: ((String) async throws -> RoomPreview)?
 
-    public func getRoomPreview(roomIdOrAlias: String) async throws -> RoomPreview {
-        if let error = getRoomPreviewRoomIdOrAliasThrowableError {
+    public func getRoomPreviewFromRoomAlias(roomAlias: String) async throws -> RoomPreview {
+        if let error = getRoomPreviewFromRoomAliasRoomAliasThrowableError {
             throw error
         }
-        getRoomPreviewRoomIdOrAliasCallsCount += 1
-        getRoomPreviewRoomIdOrAliasReceivedRoomIdOrAlias = roomIdOrAlias
-        getRoomPreviewRoomIdOrAliasReceivedInvocations.append(roomIdOrAlias)
-        if let getRoomPreviewRoomIdOrAliasClosure = getRoomPreviewRoomIdOrAliasClosure {
-            return try await getRoomPreviewRoomIdOrAliasClosure(roomIdOrAlias)
+        getRoomPreviewFromRoomAliasRoomAliasCallsCount += 1
+        getRoomPreviewFromRoomAliasRoomAliasReceivedRoomAlias = roomAlias
+        getRoomPreviewFromRoomAliasRoomAliasReceivedInvocations.append(roomAlias)
+        if let getRoomPreviewFromRoomAliasRoomAliasClosure = getRoomPreviewFromRoomAliasRoomAliasClosure {
+            return try await getRoomPreviewFromRoomAliasRoomAliasClosure(roomAlias)
         } else {
-            return getRoomPreviewRoomIdOrAliasReturnValue
+            return getRoomPreviewFromRoomAliasRoomAliasReturnValue
+        }
+    }
+    //MARK: - getRoomPreviewFromRoomId
+
+    public var getRoomPreviewFromRoomIdRoomIdViaServersThrowableError: Error?
+    var getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingCallsCount = 0
+    public var getRoomPreviewFromRoomIdRoomIdViaServersCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    public var getRoomPreviewFromRoomIdRoomIdViaServersCalled: Bool {
+        return getRoomPreviewFromRoomIdRoomIdViaServersCallsCount > 0
+    }
+    public var getRoomPreviewFromRoomIdRoomIdViaServersReceivedArguments: (roomId: String, viaServers: [String])?
+    public var getRoomPreviewFromRoomIdRoomIdViaServersReceivedInvocations: [(roomId: String, viaServers: [String])] = []
+
+    var getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingReturnValue: RoomPreview!
+    public var getRoomPreviewFromRoomIdRoomIdViaServersReturnValue: RoomPreview! {
+        get {
+            if Thread.isMainThread {
+                return getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingReturnValue
+            } else {
+                var returnValue: RoomPreview? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomPreviewFromRoomIdRoomIdViaServersUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    public var getRoomPreviewFromRoomIdRoomIdViaServersClosure: ((String, [String]) async throws -> RoomPreview)?
+
+    public func getRoomPreviewFromRoomId(roomId: String, viaServers: [String]) async throws -> RoomPreview {
+        if let error = getRoomPreviewFromRoomIdRoomIdViaServersThrowableError {
+            throw error
+        }
+        getRoomPreviewFromRoomIdRoomIdViaServersCallsCount += 1
+        getRoomPreviewFromRoomIdRoomIdViaServersReceivedArguments = (roomId: roomId, viaServers: viaServers)
+        getRoomPreviewFromRoomIdRoomIdViaServersReceivedInvocations.append((roomId: roomId, viaServers: viaServers))
+        if let getRoomPreviewFromRoomIdRoomIdViaServersClosure = getRoomPreviewFromRoomIdRoomIdViaServersClosure {
+            return try await getRoomPreviewFromRoomIdRoomIdViaServersClosure(roomId, viaServers)
+        } else {
+            return getRoomPreviewFromRoomIdRoomIdViaServersReturnValue
         }
     }
     //MARK: - getSessionVerificationController
