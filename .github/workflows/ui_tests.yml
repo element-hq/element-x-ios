@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: nschloe/action-cached-lfs-checkout@v1
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
