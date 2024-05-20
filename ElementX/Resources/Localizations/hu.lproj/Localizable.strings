@@ -110,6 +110,7 @@
 "common_blocked_users" = "Letiltott felhasználók";
 "common_bubbles" = "Buborékok";
 "common_call_invite" = "Folyamatban lévő hívás (nem támogatott)";
+"common_call_started" = "Call started";
 "common_chat_backup" = "Csevegés biztonsági mentése";
 "common_copyright" = "Szerzői jogok";
 "common_creating_room" = "Szoba létrehozása…";

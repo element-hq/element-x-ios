@@ -110,6 +110,7 @@
 "common_blocked_users" = "Заблакіраваныя карыстальнікі";
 "common_bubbles" = "Бурбалкі";
 "common_call_invite" = "Ідзе выклік (не падтрымліваецца)";
+"common_call_started" = "Выклік пачаўся";
 "common_chat_backup" = "Рэзервовае капіраванне чатаў";
 "common_copyright" = "Аўтарскае права";
 "common_creating_room" = "Стварэнне пакоя…";

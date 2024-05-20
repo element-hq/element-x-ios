@@ -110,6 +110,7 @@
 "common_blocked_users" = "Blokovaní uživatelé";
 "common_bubbles" = "Bubliny";
 "common_call_invite" = "Probíhá hovor (nepodporováno)";
+"common_call_started" = "Call started";
 "common_chat_backup" = "Záloha chatu";
 "common_copyright" = "Autorská práva";
 "common_creating_room" = "Vytváření místnosti…";

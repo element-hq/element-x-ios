@@ -110,6 +110,7 @@
 "common_blocked_users" = "Blokovaní používatelia";
 "common_bubbles" = "Bubliny";
 "common_call_invite" = "Prebieha hovor (nepodporované)";
+"common_call_started" = "Hovor sa začal";
 "common_chat_backup" = "Záloha konverzácie";
 "common_copyright" = "Autorské práva";
 "common_creating_room" = "Vytváranie miestnosti...";
@@ -128,7 +129,7 @@
 "common_face_id_ios" = "Face ID";
 "common_failed" = "Zlyhalo";
 "common_favourite" = "Obľúbené";
-"common_favourited" = "";
+"common_favourited" = "Obľúbené";
 "common_file" = "Súbor";
 "common_forward_message" = "Preposlať správu";
 "common_gif" = "GIF";

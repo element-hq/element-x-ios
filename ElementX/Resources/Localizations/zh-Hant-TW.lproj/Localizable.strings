@@ -110,6 +110,7 @@
 "common_blocked_users" = "封鎖的使用者";
 "common_bubbles" = "泡泡";
 "common_call_invite" = "Call in progress (unsupported)";
+"common_call_started" = "Call started";
 "common_chat_backup" = "聊天室備份";
 "common_copyright" = "著作權";
 "common_creating_room" = "正在建立聊天室...";
