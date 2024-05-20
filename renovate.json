@@ -2,5 +2,19 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules" : [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName" : "GitHub Actions"
+    },
+    {
+      "matchManagers": ["swift", "cocoapods"],
+      "groupName" : "Swift"
+    },
+    {
+      "matchManagers": ["bundler"],
+      "groupName" : "Ruby"
+    }
   ]
 }
