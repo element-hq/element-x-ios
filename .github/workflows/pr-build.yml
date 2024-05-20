@@ -52,7 +52,7 @@ jobs:
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
 
       - name: Add release notes and Diawi info
-        uses: NejcZdovc/comment-pr@v1
+        uses: NejcZdovc/comment-pr@v2
         with:
           message: |
             :iphone: Scan the QR code below to install the build for this PR. 
