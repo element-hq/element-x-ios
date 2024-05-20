@@ -109,7 +109,7 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
             switch action {
             case .done:
                 return true
-            case .cancel:
+            default:
                 return false
             }
         }
