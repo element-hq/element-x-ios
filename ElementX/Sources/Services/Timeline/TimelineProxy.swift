@@ -29,7 +29,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     // periphery:ignore - retaining purpose
     private var timelineListener: RoomTimelineListener?
     
-    private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.idle)
+    private let backPaginationSubscriptionSubject = CurrentValueSubject<PaginationStatus, Never>(.idle)
+    private let backPaginationTimelineEndSubject = CurrentValueSubject<Bool, Never>(false)
     private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
     
@@ -70,7 +71,15 @@ final class TimelineProxy: TimelineProxyProtocol {
         let result = await timeline.addListener(listener: timelineListener)
         roomTimelineObservationToken = result.itemsStream
         
-        let paginationStatePublisher = backPaginationStatusSubject
+        // Merge the subscription with the paginate method's return value.
+        let backPaginationPublisher = backPaginationSubscriptionSubject
+            .combineLatest(backPaginationTimelineEndSubject)
+            .map { status, timelineEnd in
+                timelineEnd ? .timelineEndReached : status
+            }
+            .eraseToAnyPublisher()
+        
+        let paginationStatePublisher = backPaginationPublisher
             .combineLatest(forwardPaginationStatusSubject)
             .map { PaginationState(backward: $0.0, forward: $0.1) }
             .eraseToAnyPublisher()
@@ -144,8 +153,10 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Paginating backwards")
         
         do {
-            _ = try await timeline.paginateBackwards(numEvents: requestSize)
+            let timelineEndReached = try await timeline.paginateBackwards(numEvents: requestSize)
             MXLog.info("Finished paginating backwards")
+            
+            backPaginationTimelineEndSubject.send(timelineEndReached)
             
             return .success(())
         } catch {
@@ -166,7 +177,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         forwardPaginationStatusSubject.send(.paginating)
 
         do {
-            let timelineEndReached = try await timeline.focusedPaginateForwards(numEvents: 16)
+            let timelineEndReached = try await timeline.focusedPaginateForwards(numEvents: requestSize)
             MXLog.info("Finished paginating forwards")
 
             forwardPaginationStatusSubject.send(timelineEndReached ? .timelineEndReached : .idle)
@@ -541,13 +552,10 @@ final class TimelineProxy: TimelineProxyProtocol {
             }
             
             switch status {
-            case .idle:
-                backPaginationStatusSubject.send(.idle)
-            case .paginating:
-                backPaginationStatusSubject.send(.paginating)
-            case .fetchingTargetEvent, .initial:
-                // TODO: NO IDEA
-                break
+            case .initial, .idle:
+                backPaginationSubscriptionSubject.send(.idle)
+            case .fetchingTargetEvent, .paginating:
+                backPaginationSubscriptionSubject.send(.paginating)
             }
         }
         do {
