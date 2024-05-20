@@ -23,7 +23,6 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     private let oidcConfiguration: OidcConfiguration
     private let passphrase: String
     private let userSessionStore: UserSessionStoreProtocol
-    private var client: Client?
     private var listener: QrLoginProgressListenerProxy?
     
     private let qrLoginProgressSubject = PassthroughSubject<QrLoginProgress, Never>()
@@ -56,8 +55,16 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
                 .serverVersions(versions: ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"]) // FIXME: Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
                 .buildWithQrCode(qrCodeData: qrData, oidcConfiguration: oidcConfiguration, progressListener: listener)
             return await login(client: client)
+        } catch let error as QrCodeDecodeError {
+            MXLog.error("QRCode decode error: \(error)")
+            return .failure(.invalidQRCode)
+        } catch let error as QrLoginError {
+            let humanError = qrLoginErrorToHumanError(error: error)
+            MXLog.error("QRCode login error\ninternal error: \(error)\nhuman error: \(humanError)")
+            return .failure(humanError.serviceError)
         } catch {
-            return .failure(.qrDecodeError)
+            MXLog.error("QRCode login unknown error: \(error)")
+            return .failure(.unknown)
         }
     }
     
@@ -83,7 +90,8 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         switch await userSessionStore.userSession(for: client, passphrase: passphrase) {
         case .success(let session):
             return .success(session)
-        case .failure:
+        case .failure(let error):
+            MXLog.error("QRCode login failed error: \(error)")
             return .failure(.failedLoggingIn)
         }
     }
@@ -98,5 +106,26 @@ final class QrLoginProgressListenerProxy: QrLoginProgressListener {
     
     func onUpdate(state: QrLoginProgress) {
         onUpdateClosure(state)
+    }
+}
+
+private extension HumanQrLoginError {
+    var serviceError: QRCodeLoginServiceError {
+        switch self {
+        case .cancelled:
+            return .cancelled
+        case .connectionInsecure:
+            return .connectionInsecure
+        case .declined:
+            return .declined
+        case .linkingNotSupported:
+            return .linkingNotSupported
+        case .expired:
+            return .expired
+        case .invalidQrCode:
+            return .invalidQRCode
+        case .unknown:
+            return .unknown
+        }
     }
 }

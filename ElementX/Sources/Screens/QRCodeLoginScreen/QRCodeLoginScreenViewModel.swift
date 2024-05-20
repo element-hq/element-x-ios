@@ -14,9 +14,8 @@
 // limitations under the License.
 //
 
-import AVFoundation
 import Combine
-import SwiftUI
+import Foundation
 
 typealias QRCodeLoginScreenViewModelType = StateStoreViewModel<QRCodeLoginScreenViewState, QRCodeLoginScreenViewAction>
 
@@ -49,6 +48,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             Task { await startScanIfPossible() }
         case .openSettings:
             appMediator.openAppSettings()
+        case .signInManually:
+            actionsSubject.send(.signInManually)
         }
     }
     
@@ -118,10 +119,28 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 MXLog.info("QR Login completed")
                 actionsSubject.send(.done(userSession: session))
             case .failure(let error):
-                // TODO: The error are flattened now, but here we should return all the possible errors not only the decode error ones, but also the connection related ones.
-                MXLog.error("Failed to scan the QR code:\(error)")
-                state.state = .error(.unknown)
+                handleError(error: error)
             }
+        }
+    }
+    
+    private func handleError(error: QRCodeLoginServiceError) {
+        MXLog.error("Failed to scan the QR code: \(error)")
+        switch error {
+        case .invalidQRCode:
+            state.state = .scan(.invalid)
+        case .cancelled:
+            state.state = .error(.cancelled)
+        case .connectionInsecure:
+            state.state = .error(.connectionNotSecure)
+        case .declined:
+            state.state = .error(.declined)
+        case .linkingNotSupported:
+            state.state = .error(.linkingNotSupported)
+        case .expired:
+            state.state = .error(.expired)
+        case .failedLoggingIn, .unknown:
+            state.state = .error(.unknown)
         }
     }
         

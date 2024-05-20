@@ -252,6 +252,8 @@ internal enum L10n {
   internal static var commonBubbles: String { return L10n.tr("Localizable", "common_bubbles") }
   /// Call in progress (unsupported)
   internal static var commonCallInvite: String { return L10n.tr("Localizable", "common_call_invite") }
+  /// Call started
+  internal static var commonCallStarted: String { return L10n.tr("Localizable", "common_call_started") }
   /// Chat backup
   internal static var commonChatBackup: String { return L10n.tr("Localizable", "common_chat_backup") }
   /// Copyright
@@ -1219,6 +1221,24 @@ internal enum L10n {
   internal static var screenQrCodeLoginDeviceCodeSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_subtitle") }
   /// Enter the number below on your other device
   internal static var screenQrCodeLoginDeviceCodeTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_title") }
+  /// The sign in was cancelled on the other device.
+  internal static var screenQrCodeLoginErrorCancelledSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_cancelled_subtitle") }
+  /// Sign in request cancelled
+  internal static var screenQrCodeLoginErrorCancelledTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_cancelled_title") }
+  /// The request on your other device was not accepted.
+  internal static var screenQrCodeLoginErrorDeclinedSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_declined_subtitle") }
+  /// Sign in declined
+  internal static var screenQrCodeLoginErrorDeclinedTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_declined_title") }
+  /// Sign in expired. Please try again.
+  internal static var screenQrCodeLoginErrorExpiredSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_expired_subtitle") }
+  /// The sign in was not completed in time
+  internal static var screenQrCodeLoginErrorExpiredTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_expired_title") }
+  /// Your other device does not support signing in to Element with a QR code.
+  /// 
+  /// Try signing in manually, or scan the QR code with another device.
+  internal static var screenQrCodeLoginErrorLinkingNotSuportedSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_linking_not_suported_subtitle") }
+  /// QR code not supported
+  internal static var screenQrCodeLoginErrorLinkingNotSuportedTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_linking_not_suported_title") }
   /// Ready to scan
   internal static var screenQrCodeLoginInitialStateButtonTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_button_title") }
   /// Open %1$@ on a desktop device

@@ -20,9 +20,14 @@ import Foundation
 import MatrixRustSDK
 
 enum QRCodeLoginServiceError: Error {
-    case clientNotInitialised
     case failedLoggingIn
-    case qrDecodeError
+    case invalidQRCode
+    case cancelled
+    case connectionInsecure
+    case declined
+    case linkingNotSupported
+    case expired
+    case unknown
 }
 
 // sourcery: AutoMockable

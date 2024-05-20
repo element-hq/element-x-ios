@@ -18,6 +18,7 @@ import Foundation
 
 enum QRCodeLoginScreenViewModelAction {
     case cancel
+    case signInManually
     case done(userSession: UserSessionProtocol)
 }
 
@@ -56,6 +57,7 @@ struct QRCodeLoginScreenViewStateBindings {
 enum QRCodeLoginScreenViewAction {
     case cancel
     case startScan
+    case signInManually
     case openSettings
 }
 
@@ -72,6 +74,10 @@ enum QRCodeLoginState: Equatable {
     enum QRCodeLoginErrorState: Equatable {
         case noCameraPermission
         case connectionNotSecure
+        case cancelled
+        case declined
+        case expired
+        case linkingNotSupported
         case unknown
     }
     
@@ -122,6 +128,19 @@ enum QRCodeLoginState: Equatable {
             return true
         case let .scan(state):
             return state == .invalid
+        default:
+            return false
+        }
+    }
+    
+    var shouldDisplayCancelButton: Bool {
+        switch self {
+        case .initial:
+            return true
+        case .scan:
+            return true
+        case .error(let error):
+            return error == .noCameraPermission
         default:
             return false
         }

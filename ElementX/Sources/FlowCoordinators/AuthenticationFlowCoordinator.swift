@@ -117,6 +117,9 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 return
             }
             switch action {
+            case .signInManually:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                Task { await self.startAuthentication() }
             case .cancel:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .done(let userSession):
