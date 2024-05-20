@@ -35,7 +35,7 @@ jobs:
           source ci_scripts/ci_common.sh && setup_github_actions_environment
 
       - name: Import signing certificate
-        uses: apple-actions/import-codesign-certs@v1
+        uses: apple-actions/import-codesign-certs@v3
         with:
           p12-file-base64: ${{ secrets.ALPHA_CERTIFICATES_P12 }}
           p12-password: ${{ secrets.ALPHA_CERTIFICATES_P12_PASSWORD }}
