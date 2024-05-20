@@ -47,7 +47,7 @@ jobs:
         run: zip -r UITests.xcresult.zip UITests.xcresult
 
       - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: Results
