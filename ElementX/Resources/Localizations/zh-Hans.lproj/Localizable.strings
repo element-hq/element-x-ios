@@ -95,7 +95,7 @@
 "action_start_chat" = "开始聊天";
 "action_start_verification" = "开始验证";
 "action_static_map_load" = "点击以加载地图";
-"action_take_photo" = "\t拍摄照片";
+"action_take_photo" = "拍摄照片";
 "action_tap_for_options" = "点按查看选项";
 "action_try_again" = "再试一次";
 "action_view_source" = "查看来源";
@@ -110,6 +110,7 @@
 "common_blocked_users" = "已屏蔽用户";
 "common_bubbles" = "气泡";
 "common_call_invite" = "通话进行中（不支持）";
+"common_call_started" = "Call started";
 "common_chat_backup" = "聊天记录备份";
 "common_copyright" = "版权";
 "common_creating_room" = "正在创建房间...";
@@ -895,7 +896,7 @@
 "screen_login_subtitle" = "Matrix 是一个用于安全、去中心化通信的开放网络。";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "再试一次";
 "screen_report_content_block_user" = "封禁用户";
-"screen_room_attachment_source_camera_photo" = "\t拍摄照片";
+"screen_room_attachment_source_camera_photo" = "拍摄照片";
 "screen_room_change_permissions_everyone" = "所有人";
 "screen_room_change_permissions_member_moderation" = "成员权限";
 "screen_room_change_permissions_messages_and_content" = "消息和内容";

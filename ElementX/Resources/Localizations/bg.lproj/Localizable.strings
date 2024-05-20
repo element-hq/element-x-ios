@@ -110,6 +110,7 @@
 "common_blocked_users" = "Блокирани потребители";
 "common_bubbles" = "Bubbles";
 "common_call_invite" = "Call in progress (unsupported)";
+"common_call_started" = "Call started";
 "common_chat_backup" = "Резервно копие на чатовете";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Създаване на стая…";

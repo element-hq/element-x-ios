@@ -110,6 +110,7 @@
 "common_blocked_users" = "Utilisateurs bloqués";
 "common_bubbles" = "Bulles";
 "common_call_invite" = "Appel en cours (non supporté)";
+"common_call_started" = "Call started";
 "common_chat_backup" = "Sauvegarde des discussions";
 "common_copyright" = "Droits d’auteur";
 "common_creating_room" = "Création du salon…";

@@ -110,6 +110,7 @@
 "common_blocked_users" = "Заблоковані користувачі";
 "common_bubbles" = "Бульбашки";
 "common_call_invite" = "Триває виклик (не підтримується)";
+"common_call_started" = "Call started";
 "common_chat_backup" = "Резервне копіювання чату";
 "common_copyright" = "Авторське право";
 "common_creating_room" = "Створення кімнати...";

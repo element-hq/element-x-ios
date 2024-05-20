@@ -252,6 +252,8 @@ internal enum L10n {
   internal static var commonBubbles: String { return L10n.tr("Localizable", "common_bubbles") }
   /// Call in progress (unsupported)
   internal static var commonCallInvite: String { return L10n.tr("Localizable", "common_call_invite") }
+  /// Call started
+  internal static var commonCallStarted: String { return L10n.tr("Localizable", "common_call_started") }
   /// Chat backup
   internal static var commonChatBackup: String { return L10n.tr("Localizable", "common_chat_backup") }
   /// Copyright

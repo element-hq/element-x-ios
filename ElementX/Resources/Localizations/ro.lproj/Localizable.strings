@@ -63,7 +63,7 @@
 "action_leave_room" = "Părăsiți camera";
 "action_manage_account" = "Administrare cont";
 "action_manage_devices" = "Gestionare dispozitive";
-"action_message" = "Message";
+"action_message" = "Mesaj";
 "action_next" = "Următorul";
 "action_no" = "Nu";
 "action_not_now" = "Nu acum";
@@ -110,6 +110,7 @@
 "common_blocked_users" = "Utilizatori blocați";
 "common_bubbles" = "Baloane";
 "common_call_invite" = "Apel în curs (nesuportat)";
+"common_call_started" = "Call started";
 "common_chat_backup" = "Backup conversații";
 "common_copyright" = "Drepturi de autor";
 "common_creating_room" = "Se creează camera…";
@@ -499,12 +500,12 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "Conexiunea nu este sigură";
 "screen_qr_code_login_device_code_subtitle" = "Vi se va cere să introduceți cele două cifre afișate pe acest dispozitiv.";
 "screen_qr_code_login_device_code_title" = "Introduceți numărul de mai jos pe celălalt dispozitiv";
-"screen_qr_code_login_initial_state_button_title" = "Ready to scan";
+"screen_qr_code_login_initial_state_button_title" = "Gata de scanare";
 "screen_qr_code_login_initial_state_item_1" = "Deschideți %1$@ pe un dispozitiv desktop";
 "screen_qr_code_login_initial_state_item_2" = "Faceți clic pe avatarul dumneavoastră";
 "screen_qr_code_login_initial_state_item_3" = "Selectați %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "„Conectați un dispozitiv nou”";
-"screen_qr_code_login_initial_state_item_4" = "Urmați instrucțiunile afișate";
+"screen_qr_code_login_initial_state_item_4" = "Scanați codul QR cu acest dispozitiv";
 "screen_qr_code_login_initial_state_title" = "Deschideți %1$@ pe un alt dispozitiv pentru a obține codul QR";
 "screen_qr_code_login_invalid_scan_state_description" = "Utilizați codul QR afișat pe celălalt dispozitiv.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Cod QR greșit";
@@ -580,9 +581,9 @@
 "screen_room_details_add_topic_title" = "Adăugare subiect";
 "screen_room_details_already_a_member" = "Deja membru";
 "screen_room_details_already_invited" = "Deja invitat";
-"screen_room_details_badge_encrypted" = "Encrypted";
-"screen_room_details_badge_not_encrypted" = "Not encrypted";
-"screen_room_details_badge_public" = "Public room";
+"screen_room_details_badge_encrypted" = "Criptat";
+"screen_room_details_badge_not_encrypted" = "Necriptat";
+"screen_room_details_badge_public" = "Cameră publică";
 "screen_room_details_edit_room_title" = "Editați camera";
 "screen_room_details_edition_error" = "A apărut o eroare la actualizarea detaliilor camerei";
 "screen_room_details_edition_error_title" = "Nu s-a putut actualiza camera";
