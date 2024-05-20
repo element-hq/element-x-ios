@@ -46,7 +46,7 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = BugReportScreenViewModel(bugReportService: parameters.bugReportService,
-                                             userSession: parameters.userSession,
+                                             clientProxy: parameters.userSession?.clientProxy,
                                              screenshot: parameters.screenshot,
                                              isModallyPresented: parameters.isModallyPresented)
     }

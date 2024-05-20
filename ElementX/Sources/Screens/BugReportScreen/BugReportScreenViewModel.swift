@@ -21,7 +21,7 @@ typealias BugReportScreenViewModelType = StateStoreViewModel<BugReportScreenView
 
 class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenViewModelProtocol {
     private let bugReportService: BugReportServiceProtocol
-    private let userSession: UserSessionProtocol?
+    private let clientProxy: ClientProxyProtocol?
     
     private let actionsSubject: PassthroughSubject<BugReportScreenViewModelAction, Never> = .init()
     // periphery:ignore - when set to nil this is automatically cancelled
@@ -32,11 +32,11 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     }
     
     init(bugReportService: BugReportServiceProtocol,
-         userSession: UserSessionProtocol?,
+         clientProxy: ClientProxyProtocol?,
          screenshot: UIImage?,
          isModallyPresented: Bool) {
         self.bugReportService = bugReportService
-        self.userSession = userSession
+        self.clientProxy = clientProxy
         
         let bindings = BugReportScreenViewStateBindings(reportText: "", sendingLogsEnabled: true, canContact: false)
         super.init(initialViewState: BugReportScreenViewState(screenshot: screenshot,
@@ -83,10 +83,10 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
                 // Continue anyway without the screenshot.
             }
         }
-        let ed25519 = await userSession?.clientProxy.ed25519Base64()
-        let curve25519 = await userSession?.clientProxy.curve25519Base64()
-        let bugReport = BugReport(userID: userSession?.userID,
-                                  deviceID: userSession?.deviceID,
+        let ed25519 = await clientProxy?.ed25519Base64()
+        let curve25519 = await clientProxy?.curve25519Base64()
+        let bugReport = BugReport(userID: clientProxy?.userID,
+                                  deviceID: clientProxy?.deviceID,
                                   ed25519: ed25519,
                                   curve25519: curve25519,
                                   text: context.reportText,
