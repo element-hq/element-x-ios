@@ -272,7 +272,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = RoomTimelineControllerFactoryMock(configuration: .init())
         
-        clientProxy.roomPreviewForIdentifierClosure = { [roomType] roomID in
+        clientProxy.roomPreviewForIdentifierViaClosure = { [roomType] roomID, _ in
             switch roomType {
             case .invited:
                 return .success(.init(roomID: roomID,

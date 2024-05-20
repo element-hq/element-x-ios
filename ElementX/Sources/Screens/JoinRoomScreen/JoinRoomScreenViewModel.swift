@@ -77,8 +77,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             hideLoadingIndicator()
         }
         
-        // We need an SDK update to pass the via into this preview.
-        switch await clientProxy.roomPreviewForIdentifier(roomID) {
+        switch await clientProxy.roomPreviewForIdentifier(roomID, via: via) {
         case .success(let roomDetails):
             state.roomDetails = roomDetails
         case .failure:
