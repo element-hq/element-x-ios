@@ -12,7 +12,7 @@ jobs:
     if: github.repository == 'element-hq/element-x-ios'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup environment
         run: 
@@ -28,7 +28,7 @@ jobs:
         run: swift run tools generate-sas
 
       - name: Create PR for Translations
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.ELEMENT_BOT_TOKEN }}
           commit-message: Translations update

@@ -148,20 +148,20 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         }
         
         if mode == .unknown {
-            clientProxy.roomPreviewForIdentifierReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+            clientProxy.roomPreviewForIdentifierViaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         } else {
-            clientProxy.roomPreviewForIdentifierReturnValue = .success(.init(roomID: "1",
-                                                                             name: "The Three-Body Problem - 三体",
-                                                                             canonicalAlias: "#3🌞problem:matrix.org",
-                                                                             // swiftlint:disable:next line_length
-                                                                             topic: "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”",
-                                                                             avatarURL: URL.homeDirectory,
-                                                                             memberCount: UInt(100),
-                                                                             isHistoryWorldReadable: false,
-                                                                             isJoined: membership.isJoined,
-                                                                             isInvited: membership.isInvited,
-                                                                             isPublic: membership.isPublic,
-                                                                             canKnock: membership.canKnock))
+            clientProxy.roomPreviewForIdentifierViaReturnValue = .success(.init(roomID: "1",
+                                                                                name: "The Three-Body Problem - 三体",
+                                                                                canonicalAlias: "#3🌞problem:matrix.org",
+                                                                                // swiftlint:disable:next line_length
+                                                                                topic: "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”",
+                                                                                avatarURL: URL.homeDirectory,
+                                                                                memberCount: UInt(100),
+                                                                                isHistoryWorldReadable: false,
+                                                                                isJoined: membership.isJoined,
+                                                                                isInvited: membership.isInvited,
+                                                                                isPublic: membership.isPublic,
+                                                                                canKnock: membership.canKnock))
         }
         
         return JoinRoomScreenViewModel(roomID: "1",

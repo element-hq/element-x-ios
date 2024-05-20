@@ -17,9 +17,9 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
@@ -43,7 +43,7 @@ jobs:
         run: zip -r IntegrationTests.xcresult.zip IntegrationTests.xcresult
       
       - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: Results
@@ -52,7 +52,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Archive raw log file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: raw.log
@@ -62,7 +62,7 @@ jobs:
      
       - name: Checkout gh-pages branch (for perf stats)
         if: always()
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: gh-pages
           path: gh-pages

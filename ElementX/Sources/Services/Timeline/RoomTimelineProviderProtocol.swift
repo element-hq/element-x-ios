@@ -18,6 +18,12 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
+enum PaginationStatus {
+    case idle
+    case timelineEndReached
+    case paginating
+}
+
 struct PaginationState: Equatable {
     static var `default` = PaginationState(backward: .idle, forward: .timelineEndReached)
     let backward: PaginationStatus

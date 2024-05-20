@@ -59,7 +59,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return nil
             }
             return buildStateTimelineItem(for: eventItemProxy, state: content, isOutgoing: isOutgoing)
-        case .roomMembership(userId: let userID, change: let change):
+        case .roomMembership(userId: let userID, _, change: let change):
             if isDM, change == .joined, userID == self.userID {
                 return nil
             }

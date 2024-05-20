@@ -441,9 +441,9 @@ class ClientProxy: ClientProxyProtocol {
                                room: room)
     }
     
-    func roomPreviewForIdentifier(_ identifier: String) async -> Result<RoomPreviewDetails, ClientProxyError> {
+    func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError> {
         do {
-            let roomPreview = try await client.getRoomPreview(roomIdOrAlias: identifier)
+            let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
             return .success(.init(roomPreview))
         } catch {
             MXLog.error("Failed retrieving preview for room: \(identifier) with error: \(error)")

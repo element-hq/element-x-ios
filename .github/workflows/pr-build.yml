@@ -11,7 +11,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'Trigger-PR-Build')
 
     name: Release
-    runs-on: macos-13
+    runs-on: macos-14
     
     concurrency:
       # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
@@ -19,9 +19,9 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
@@ -52,7 +52,7 @@ jobs:
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
 
       - name: Add release notes and Diawi info
-        uses: NejcZdovc/comment-pr@v1
+        uses: NejcZdovc/comment-pr@v2
         with:
           message: |
             :iphone: Scan the QR code below to install the build for this PR. 
