@@ -2632,15 +2632,15 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     //MARK: - roomPreviewForIdentifier
 
-    var roomPreviewForIdentifierUnderlyingCallsCount = 0
-    var roomPreviewForIdentifierCallsCount: Int {
+    var roomPreviewForIdentifierViaUnderlyingCallsCount = 0
+    var roomPreviewForIdentifierViaCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return roomPreviewForIdentifierUnderlyingCallsCount
+                return roomPreviewForIdentifierViaUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = roomPreviewForIdentifierUnderlyingCallsCount
+                    returnValue = roomPreviewForIdentifierViaUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -2648,29 +2648,29 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                roomPreviewForIdentifierUnderlyingCallsCount = newValue
+                roomPreviewForIdentifierViaUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    roomPreviewForIdentifierUnderlyingCallsCount = newValue
+                    roomPreviewForIdentifierViaUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var roomPreviewForIdentifierCalled: Bool {
-        return roomPreviewForIdentifierCallsCount > 0
+    var roomPreviewForIdentifierViaCalled: Bool {
+        return roomPreviewForIdentifierViaCallsCount > 0
     }
-    var roomPreviewForIdentifierReceivedIdentifier: String?
-    var roomPreviewForIdentifierReceivedInvocations: [String] = []
+    var roomPreviewForIdentifierViaReceivedArguments: (identifier: String, via: [String])?
+    var roomPreviewForIdentifierViaReceivedInvocations: [(identifier: String, via: [String])] = []
 
-    var roomPreviewForIdentifierUnderlyingReturnValue: Result<RoomPreviewDetails, ClientProxyError>!
-    var roomPreviewForIdentifierReturnValue: Result<RoomPreviewDetails, ClientProxyError>! {
+    var roomPreviewForIdentifierViaUnderlyingReturnValue: Result<RoomPreviewDetails, ClientProxyError>!
+    var roomPreviewForIdentifierViaReturnValue: Result<RoomPreviewDetails, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return roomPreviewForIdentifierUnderlyingReturnValue
+                return roomPreviewForIdentifierViaUnderlyingReturnValue
             } else {
                 var returnValue: Result<RoomPreviewDetails, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = roomPreviewForIdentifierUnderlyingReturnValue
+                    returnValue = roomPreviewForIdentifierViaUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -2678,24 +2678,24 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                roomPreviewForIdentifierUnderlyingReturnValue = newValue
+                roomPreviewForIdentifierViaUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    roomPreviewForIdentifierUnderlyingReturnValue = newValue
+                    roomPreviewForIdentifierViaUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var roomPreviewForIdentifierClosure: ((String) async -> Result<RoomPreviewDetails, ClientProxyError>)?
+    var roomPreviewForIdentifierViaClosure: ((String, [String]) async -> Result<RoomPreviewDetails, ClientProxyError>)?
 
-    func roomPreviewForIdentifier(_ identifier: String) async -> Result<RoomPreviewDetails, ClientProxyError> {
-        roomPreviewForIdentifierCallsCount += 1
-        roomPreviewForIdentifierReceivedIdentifier = identifier
-        roomPreviewForIdentifierReceivedInvocations.append(identifier)
-        if let roomPreviewForIdentifierClosure = roomPreviewForIdentifierClosure {
-            return await roomPreviewForIdentifierClosure(identifier)
+    func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError> {
+        roomPreviewForIdentifierViaCallsCount += 1
+        roomPreviewForIdentifierViaReceivedArguments = (identifier: identifier, via: via)
+        roomPreviewForIdentifierViaReceivedInvocations.append((identifier: identifier, via: via))
+        if let roomPreviewForIdentifierViaClosure = roomPreviewForIdentifierViaClosure {
+            return await roomPreviewForIdentifierViaClosure(identifier, via)
         } else {
-            return roomPreviewForIdentifierReturnValue
+            return roomPreviewForIdentifierViaReturnValue
         }
     }
     //MARK: - loadUserDisplayName

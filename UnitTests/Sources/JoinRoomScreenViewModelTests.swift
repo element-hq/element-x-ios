@@ -57,17 +57,17 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         
         clientProxy.joinRoomViaReturnValue = throwing ? .failure(.sdkError(ClientProxyMockError.generic)) : .success(())
         
-        clientProxy.roomPreviewForIdentifierReturnValue = .success(.init(roomID: "",
-                                                                         name: nil,
-                                                                         canonicalAlias: nil,
-                                                                         topic: nil,
-                                                                         avatarURL: nil,
-                                                                         memberCount: 0,
-                                                                         isHistoryWorldReadable: false,
-                                                                         isJoined: false,
-                                                                         isInvited: false,
-                                                                         isPublic: false,
-                                                                         canKnock: false))
+        clientProxy.roomPreviewForIdentifierViaReturnValue = .success(.init(roomID: "",
+                                                                            name: nil,
+                                                                            canonicalAlias: nil,
+                                                                            topic: nil,
+                                                                            avatarURL: nil,
+                                                                            memberCount: 0,
+                                                                            isHistoryWorldReadable: false,
+                                                                            isJoined: false,
+                                                                            isInvited: false,
+                                                                            isPublic: false,
+                                                                            canKnock: false))
         
         viewModel = JoinRoomScreenViewModel(roomID: "1",
                                             via: [],
