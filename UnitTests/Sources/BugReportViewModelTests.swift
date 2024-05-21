@@ -25,9 +25,9 @@ class BugReportViewModelTests: XCTestCase {
     }
     
     func testInitialState() {
+        let clientProxy = ClientProxyMock(.init(userID: "@mock.client.com"))
         let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
-                                                 userID: "@mock.client.com",
-                                                 deviceID: nil,
+                                                 clientProxy: clientProxy,
                                                  screenshot: nil,
                                                  isModallyPresented: false)
         let context = viewModel.context
@@ -38,9 +38,9 @@ class BugReportViewModelTests: XCTestCase {
     }
     
     func testClearScreenshot() async throws {
+        let clientProxy = ClientProxyMock(.init(userID: "@mock.client.com"))
         let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
-                                                 userID: "@mock.client.com",
-                                                 deviceID: nil,
+                                                 clientProxy: clientProxy,
                                                  screenshot: UIImage.actions,
                                                  isModallyPresented: false)
         let context = viewModel.context
@@ -50,9 +50,9 @@ class BugReportViewModelTests: XCTestCase {
     }
     
     func testAttachScreenshot() async throws {
+        let clientProxy = ClientProxyMock(.init(userID: "@mock.client.com"))
         let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
-                                                 userID: "@mock.client.com",
-                                                 deviceID: nil,
+                                                 clientProxy: clientProxy,
                                                  screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
         XCTAssertNil(context.viewState.screenshot)
@@ -66,9 +66,13 @@ class BugReportViewModelTests: XCTestCase {
             await Task.yield()
             return .success(SubmitBugReportResponse(reportUrl: "https://test.test"))
         }
+        
+        let clientProxy = ClientProxyMock(.init(userID: "@mock.client.com", deviceID: "ABCDEFGH"))
+        clientProxy.ed25519Base64ReturnValue = "THEEDKEYKEY"
+        clientProxy.curve25519Base64ReturnValue = "THECURVEKEYKEY"
+        
         let viewModel = BugReportScreenViewModel(bugReportService: mockService,
-                                                 userID: "@mock.client.com",
-                                                 deviceID: nil,
+                                                 clientProxy: clientProxy,
                                                  screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
         
@@ -86,7 +90,9 @@ class BugReportViewModelTests: XCTestCase {
                 
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.userID, "@mock.client.com")
-        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.deviceID, nil)
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.deviceID, "ABCDEFGH")
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.curve25519, "THECURVEKEYKEY")
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.ed25519, "THEEDKEYKEY")
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.text, "")
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.includeLogs, true)
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.canContact, false)
@@ -99,9 +105,10 @@ class BugReportViewModelTests: XCTestCase {
         mockService.submitBugReportProgressListenerClosure = { _, _ in
             .failure(.uploadFailure(TestError.testError))
         }
+        
+        let clientProxy = ClientProxyMock(.init(userID: "@mock.client.com"))
         let viewModel = BugReportScreenViewModel(bugReportService: mockService,
-                                                 userID: "@mock.client.com",
-                                                 deviceID: nil,
+                                                 clientProxy: clientProxy,
                                                  screenshot: nil, isModallyPresented: false)
         
         let deferred = deferFulfillment(viewModel.actions) { action in

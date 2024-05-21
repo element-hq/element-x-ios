@@ -803,6 +803,16 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
+    
+    // MARK: - Encryption
+    
+    func ed25519Base64() async -> String? {
+        await client.encryption().ed25519Key()
+    }
+    
+    func curve25519Base64() async -> String? {
+        await client.encryption().curve25519Key()
+    }
 }
 
 extension ClientProxy: MediaLoaderProtocol {

@@ -25,8 +25,7 @@ struct BugReportFlowCoordinatorParameters {
     let presentationMode: PresentationMode
     let userIndicatorController: UserIndicatorControllerProtocol
     let bugReportService: BugReportServiceProtocol
-    let userID: String?
-    let deviceID: String?
+    let userSession: UserSessionProtocol?
 }
 
 class BugReportFlowCoordinator: FlowCoordinatorProtocol {
@@ -64,8 +63,7 @@ class BugReportFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentBugReportScreen() {
         let params = BugReportScreenCoordinatorParameters(bugReportService: parameters.bugReportService,
-                                                          userID: parameters.userID,
-                                                          deviceID: parameters.deviceID,
+                                                          userSession: parameters.userSession,
                                                           userIndicatorController: parameters.userIndicatorController,
                                                           screenshot: nil,
                                                           isModallyPresented: isModallyPresented)

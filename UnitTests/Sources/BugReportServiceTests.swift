@@ -37,6 +37,8 @@ class BugReportServiceTests: XCTestCase {
     func testSubmitBugReportWithMockService() async throws {
         let bugReport = BugReport(userID: "@mock:client.com",
                                   deviceID: nil,
+                                  ed25519: nil,
+                                  curve25519: nil,
                                   text: "i cannot send message",
                                   includeLogs: true,
                                   canContact: false,
@@ -67,6 +69,8 @@ class BugReportServiceTests: XCTestCase {
 
         let bugReport = BugReport(userID: "@mock:client.com",
                                   deviceID: nil,
+                                  ed25519: nil,
+                                  curve25519: nil,
                                   text: "i cannot send message",
                                   includeLogs: true,
                                   canContact: false,

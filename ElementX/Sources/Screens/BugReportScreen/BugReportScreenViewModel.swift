@@ -21,8 +21,7 @@ typealias BugReportScreenViewModelType = StateStoreViewModel<BugReportScreenView
 
 class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenViewModelProtocol {
     private let bugReportService: BugReportServiceProtocol
-    private let userID: String?
-    private let deviceID: String?
+    private let clientProxy: ClientProxyProtocol?
     
     private let actionsSubject: PassthroughSubject<BugReportScreenViewModelAction, Never> = .init()
     // periphery:ignore - when set to nil this is automatically cancelled
@@ -33,13 +32,11 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     }
     
     init(bugReportService: BugReportServiceProtocol,
-         userID: String?,
-         deviceID: String?,
+         clientProxy: ClientProxyProtocol?,
          screenshot: UIImage?,
          isModallyPresented: Bool) {
         self.bugReportService = bugReportService
-        self.userID = userID
-        self.deviceID = deviceID
+        self.clientProxy = clientProxy
         
         let bindings = BugReportScreenViewStateBindings(reportText: "", sendingLogsEnabled: true, canContact: false)
         super.init(initialViewState: BugReportScreenViewState(screenshot: screenshot,
@@ -86,8 +83,12 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
                 // Continue anyway without the screenshot.
             }
         }
-        let bugReport = BugReport(userID: userID,
-                                  deviceID: deviceID,
+        let ed25519 = await clientProxy?.ed25519Base64()
+        let curve25519 = await clientProxy?.curve25519Base64()
+        let bugReport = BugReport(userID: clientProxy?.userID,
+                                  deviceID: clientProxy?.deviceID,
+                                  ed25519: ed25519,
+                                  curve25519: curve25519,
                                   text: context.reportText,
                                   includeLogs: context.sendingLogsEnabled,
                                   canContact: context.canContact,

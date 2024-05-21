@@ -21,6 +21,8 @@ import UIKit
 struct BugReport: Equatable {
     let userID: String?
     let deviceID: String?
+    let ed25519: String?
+    let curve25519: String?
     let text: String
     let includeLogs: Bool
     let canContact: Bool
