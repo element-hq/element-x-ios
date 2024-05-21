@@ -45,6 +45,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### config_production
+
+```sh
+[bundle exec] fastlane config_production
+```
+
+
+
 ### config_nightly
 
 ```sh
@@ -53,10 +61,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### config_production
+### config_enterprise
 
 ```sh
-[bundle exec] fastlane config_production
+[bundle exec] fastlane config_enterprise
 ```
 
 
