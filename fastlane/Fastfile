@@ -180,7 +180,9 @@ lane :config_enterprise do
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
   data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.enterprise"
-  data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.enterprise"
+  data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.enterprise"
+  data["settings"]["APP_NAME"] = "Element"
+  data["settings"]["APP_DISPLAY_NAME"] = "Element"
   
   config_secrets()
   

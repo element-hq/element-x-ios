@@ -31,7 +31,7 @@ class MockPostHogFactory: PostHogFactory {
         self.mock = mock
     }
     
-    func createPostHog(config: PostHogConfig) -> ElementX.PHGPostHogProtocol {
+    func createPostHog(config: PostHogConfig) -> PHGPostHogProtocol {
         mock
     }
 }
