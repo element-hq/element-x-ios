@@ -39,13 +39,20 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     }
     
     func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
+        let qrData: QrCodeData
         do {
-            let qrData = try QrCodeData.fromBytes(bytes: data)
-            let listener = QrLoginProgressListenerProxy { [weak self] progress in
-                self?.qrLoginProgressSubject.send(progress)
-            }
-            self.listener = listener
-            
+            qrData = try QrCodeData.fromBytes(bytes: data)
+        } catch {
+            MXLog.error("QRCode decode error: \(error)")
+            return .failure(.invalidQRCode)
+        }
+        
+        let listener = QrLoginProgressListenerProxy { [weak self] progress in
+            self?.qrLoginProgressSubject.send(progress)
+        }
+        self.listener = listener
+        
+        do {
             let client = try await ClientBuilder()
                 .basePath(path: userSessionStore.baseDirectory.path(percentEncoded: false))
                 .passphrase(passphrase: passphrase)
@@ -55,13 +62,9 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
                 .serverVersions(versions: ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"]) // FIXME: Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
                 .buildWithQrCode(qrCodeData: qrData, oidcConfiguration: oidcConfiguration, progressListener: listener)
             return await login(client: client)
-        } catch let error as QrCodeDecodeError {
-            MXLog.error("QRCode decode error: \(error)")
-            return .failure(.invalidQRCode)
-        } catch let error as QrLoginError {
-            let humanError = qrLoginErrorToHumanError(error: error)
-            MXLog.error("QRCode login error\ninternal error: \(error)\nhuman error: \(humanError)")
-            return .failure(humanError.serviceError)
+        } catch let error as HumanQrLoginError {
+            MXLog.error("QRCode login error: \(error)")
+            return .failure(error.serviceError)
         } catch {
             MXLog.error("QRCode login unknown error: \(error)")
             return .failure(.unknown)
@@ -112,19 +115,19 @@ final class QrLoginProgressListenerProxy: QrLoginProgressListener {
 private extension HumanQrLoginError {
     var serviceError: QRCodeLoginServiceError {
         switch self {
-        case .cancelled:
+        case .Cancelled:
             return .cancelled
-        case .connectionInsecure:
+        case .ConnectionInsecure:
             return .connectionInsecure
-        case .declined:
+        case .Declined:
             return .declined
-        case .linkingNotSupported:
+        case .LinkingNotSupported, .SlidingSyncNotAvailable:
             return .linkingNotSupported
-        case .expired:
+        case .Expired:
             return .expired
-        case .invalidQrCode:
+        case .InvalidQrCode:
             return .invalidQRCode
-        case .unknown:
+        case .Unknown, .OidcMetadataInvalid:
             return .unknown
         }
     }
