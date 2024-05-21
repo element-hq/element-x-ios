@@ -1406,6 +1406,7 @@
 		45571C2EBD98ED7E0CEA7AF7 /* RoomRolesAndPermissionsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomRolesAndPermissionsUITests.swift; sourceTree = "<group>"; };
 		45CDF9A107BFE6C79B58D6B5 /* RoomMembersListScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersListScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		45D8149FDDA0315CDC553B4B /* UserNotificationCenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCenterProtocol.swift; sourceTree = "<group>"; };
+		4629710C0337ADD9C8909542 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/Localizable.strings; sourceTree = "<group>"; };
 		466C71A0FED9BFF287613C82 /* RoomDetailsScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsScreenModels.swift; sourceTree = "<group>"; };
 		46A2AD86F7E618F468F6FAF5 /* VoiceMessageRecordingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMessageRecordingButton.swift; sourceTree = "<group>"; };
 		46C208DA43CE25D13E670F40 /* UITestsAppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestsAppCoordinator.swift; sourceTree = "<group>"; };
@@ -1950,6 +1951,7 @@
 		D0A45283CF1DB96E583BECA6 /* ImageRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRoomTimelineView.swift; sourceTree = "<group>"; };
 		D0C2D52E36AD614B3C003EF6 /* RoomTimelineItemViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemViewState.swift; sourceTree = "<group>"; };
 		D162B2280A15ACAF35360554 /* HighlightedTimelineItemModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightedTimelineItemModifier.swift; sourceTree = "<group>"; };
+		D1896F6288D80E1F3EFB3DF8 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ka; path = ka.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D196116D2DD3F2757D45FCB7 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/SAS.strings; sourceTree = "<group>"; };
 		D1BC84BA0AF11C2128D58ABD /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		D1D8479BB704B7EF696F8ABE /* RoomPollsHistoryScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPollsHistoryScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -5386,6 +5388,7 @@
 				hu,
 				id,
 				it,
+				ka,
 				pt,
 				ro,
 				ru,
@@ -6678,6 +6681,7 @@
 				C95ADE8D9527523572532219 /* hu */,
 				475D47D0BFE961B02BAC5D49 /* id */,
 				6FC5015B9634698BDB8701AF /* it */,
+				D1896F6288D80E1F3EFB3DF8 /* ka */,
 				8166F121C79C7B62BF01D508 /* pt */,
 				E9D059BFE329BE09B6D96A9F /* ro */,
 				E5F2B6443D1ED8602F328539 /* ru */,
@@ -6703,6 +6707,7 @@
 				624244C398804ADC885239AA /* hu */,
 				EF98A02DED04075F7CF0C721 /* id */,
 				7B04BD3874D736127A8156B8 /* it */,
+				4629710C0337ADD9C8909542 /* ka */,
 				0CB569EAA5017B5B23970655 /* pt */,
 				33E49C5C6F802B4D94CA78D1 /* ro */,
 				E8294DB9E95C0C0630418466 /* ru */,
@@ -7332,7 +7337,7 @@
 			repositoryURL = "https://github.com/PostHog/posthog-ios";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 3.2.4;
+				minimumVersion = 3.2.5;
 			};
 		};
 		9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
