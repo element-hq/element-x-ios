@@ -123,8 +123,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .push(navigationStackCoordinator),
                                                                                           userIndicatorController: parameters.userIndicatorController,
                                                                                           bugReportService: parameters.bugReportService,
-                                                                                          userID: parameters.userSession.userID,
-                                                                                          deviceID: parameters.userSession.deviceID))
+                                                                                          userSession: parameters.userSession))
                     bugReportFlowCoordinator?.start()
                 case .about:
                     presentLegalInformationScreen()

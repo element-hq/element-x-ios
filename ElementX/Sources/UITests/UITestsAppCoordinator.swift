@@ -229,9 +229,12 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .bugReport:
             let navigationStackCoordinator = NavigationStackCoordinator()
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            let userSession = MockUserSession(clientProxy: clientProxy,
+                                              mediaProvider: MockMediaProvider(),
+                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             let coordinator = BugReportScreenCoordinator(parameters: .init(bugReportService: BugReportServiceMock(),
-                                                                           userID: "@mock:client.com",
-                                                                           deviceID: nil,
+                                                                           userSession: userSession,
                                                                            userIndicatorController: nil,
                                                                            screenshot: nil,
                                                                            isModallyPresented: true))

@@ -238,7 +238,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let details = RoomSummaryDetails(id: roomInfo.id,
                                          isInvite: roomInfo.membership == .invited,
                                          inviter: inviterProxy,
-                                         name: roomInfo.rawName ?? roomInfo.id,
+                                         name: roomInfo.displayName ?? roomInfo.id,
                                          isDirect: roomInfo.isDirect,
                                          avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                                          lastMessage: attributedLastMessage,

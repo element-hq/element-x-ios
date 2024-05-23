@@ -139,8 +139,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(navigationStackCoordinator),
                                                                               userIndicatorController: userIndicatorController,
                                                                               bugReportService: bugReportService,
-                                                                              userID: nil,
-                                                                              deviceID: nil))
+                                                                              userSession: nil))
         bugReportFlowCoordinator?.start()
     }
     

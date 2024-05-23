@@ -107,7 +107,7 @@ packages:
     minorVersion: 5.13.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.2.4
+    minorVersion: 3.2.5
   Prefire:
     url: https://github.com/BarredEwe/Prefire
     minorVersion: 2.0.4

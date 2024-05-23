@@ -127,6 +127,11 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             params.append(.init(key: "device_id", type: .text(value: deviceID)))
         }
         
+        if let ed25519 = bugReport.ed25519, let curve25519 = bugReport.curve25519 {
+            let compactKeys = "curve25519:\(curve25519), ed25519:\(ed25519)"
+            params.append(.init(key: "device_keys", type: .text(value: compactKeys)))
+        }
+        
         params.append(contentsOf: defaultParams)
         
         for label in bugReport.githubLabels {

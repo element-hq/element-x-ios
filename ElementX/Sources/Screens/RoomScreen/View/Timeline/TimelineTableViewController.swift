@@ -59,8 +59,7 @@ class TimelineTableViewController: UIViewController {
     var timelineStyle: TimelineStyle
     var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>() {
         didSet {
-            if !isLive, isDraggingScrollView {
-                // Forward pagination doesn't play well with the user scrolling, so we wait for it to stop.
+            guard canApplySnapshot else {
                 hasPendingItems = true
                 return
             }
@@ -75,13 +74,34 @@ class TimelineTableViewController: UIViewController {
         }
     }
     
+    /// Whether or not it is safe to update the data source with the latest items.
+    private var canApplySnapshot: Bool {
+        if isLive {
+            // Backward pagination jumps if items are inserted whilst actively dragging.
+            !isDraggingScrollView
+        } else {
+            // Forward pagination breaks inertial scrolling when fixing the offset.
+            !scrollViewIsScrolling
+        }
+    }
+    
     /// There are pending items in `timelineItemsDictionary` that haven't been applied to the data source.
     private var hasPendingItems = false
     
-    /// The user is dragging the scroll view (or it is still decelerating after a drag).
+    /// The scroll view is scrolling either directly with a drag or indirectly with inertia.
+    private var scrollViewIsScrolling = false {
+        didSet {
+            if !scrollViewIsScrolling, hasPendingItems, !isLive {
+                hasPendingItems = false
+                applySnapshot()
+            }
+        }
+    }
+    
+    /// The scroll view is being dragged by the user (doesn't include scrolling with inertia)
     private var isDraggingScrollView = false {
         didSet {
-            if !isDraggingScrollView, hasPendingItems {
+            if !isDraggingScrollView, hasPendingItems, isLive {
                 hasPendingItems = false
                 applySnapshot()
             }
@@ -415,18 +435,21 @@ extension TimelineTableViewController: UITableViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isDraggingScrollView = true
+        scrollViewIsScrolling = true
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         sendLastVisibleItemReadReceipt()
+        
+        isDraggingScrollView = false
         if !decelerate {
-            isDraggingScrollView = false
+            scrollViewIsScrolling = false
         }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         sendLastVisibleItemReadReceipt()
-        isDraggingScrollView = false
+        scrollViewIsScrolling = false
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
