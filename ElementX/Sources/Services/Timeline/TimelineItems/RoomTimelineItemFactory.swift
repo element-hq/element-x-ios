@@ -214,7 +214,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              isThreaded: isThreaded,
                              sender: eventItemProxy.sender,
                              content: buildTextTimelineItemContent(messageContent),
-                             replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                             replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageTimelineItem.inReplyTo()),
                              properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
@@ -234,7 +234,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildImageTimelineItemContent(messageContent),
-                              replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                              replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageTimelineItem.inReplyTo()),
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
@@ -254,7 +254,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildVideoTimelineItemContent(messageContent),
-                              replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                              replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageTimelineItem.inReplyTo()),
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
@@ -274,7 +274,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildAudioTimelineItemContent(messageContent),
-                              replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                              replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageTimelineItem.inReplyTo()),
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
@@ -294,7 +294,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      isThreaded: isThreaded,
                                      sender: eventItemProxy.sender,
                                      content: buildAudioTimelineItemContent(messageContent),
-                                     replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                                     replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageTimelineItem.inReplyTo()),
                                      properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                             reactions: aggregateReactions(eventItemProxy.reactions),
                                                                             deliveryStatus: eventItemProxy.deliveryStatus,
@@ -314,7 +314,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              isThreaded: isThreaded,
                              sender: eventItemProxy.sender,
                              content: buildFileTimelineItemContent(messageContent),
-                             replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                             replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageTimelineItem.inReplyTo()),
                              properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
@@ -334,7 +334,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                isThreaded: isThreaded,
                                sender: eventItemProxy.sender,
                                content: buildNoticeTimelineItemContent(messageContent),
-                               replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                               replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageTimelineItem.inReplyTo()),
                                properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                       reactions: aggregateReactions(eventItemProxy.reactions),
                                                                       deliveryStatus: eventItemProxy.deliveryStatus,
@@ -354,7 +354,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildEmoteTimelineItemContent(senderDisplayName: eventItemProxy.sender.displayName, senderID: eventItemProxy.sender.id, messageContent: messageContent),
-                              replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                              replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageTimelineItem.inReplyTo()),
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
@@ -374,7 +374,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                  isThreaded: isThreaded,
                                  sender: eventItemProxy.sender,
                                  content: buildLocationTimelineItemContent(messageContent),
-                                 replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                                 replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageTimelineItem.inReplyTo()),
                                  properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                         reactions: aggregateReactions(eventItemProxy.reactions),
                                                                         deliveryStatus: eventItemProxy.deliveryStatus,
@@ -634,9 +634,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     // MARK: - Reply details
     
-    private func buildReplyToDetailsFrom(details: InReplyToDetails?) -> TimelineItemReplyDetails? {
-        guard let details else { return nil }
-        
+    func buildReplyToDetails(details: InReplyToDetails) -> TimelineItemReplyDetails {
         switch details.event {
         case .unavailable:
             return .notLoaded(eventID: details.eventId)
@@ -676,6 +674,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case let .error(message):
             return .error(eventID: details.eventId, message: message)
         }
+    }
+    
+    private func buildReplyToDetailsFromDetailsIfAvailable(details: InReplyToDetails?) -> TimelineItemReplyDetails? {
+        guard let details else {
+            return nil
+        }
+        
+        return buildReplyToDetails(details: details)
     }
     
     private func timelineItemReplyDetails(sender: TimelineItemSender, eventID: String, messageType: MessageType?) -> TimelineItemReplyDetails {

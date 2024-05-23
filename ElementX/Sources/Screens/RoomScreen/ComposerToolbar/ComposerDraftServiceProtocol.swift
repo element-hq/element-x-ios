@@ -15,3 +15,17 @@
 //
 
 import Foundation
+
+import MatrixRustSDK
+
+enum ComposerDraftServiceError: Error {
+    case generic
+}
+
+// sourcery: AutoMockable
+protocol ComposerDraftServiceProtocol {
+    func saveDraft(_ draft: ComposerDraft) async
+    func restoreDraft() async -> Result<ComposerDraft?, ComposerDraftServiceError>
+    func clearDraft() async
+    func getReplyDetails(eventID: String) async -> TimelineItemReplyDetails
+}

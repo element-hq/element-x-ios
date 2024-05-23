@@ -15,3 +15,51 @@
 //
 
 import Foundation
+
+import MatrixRustSDK
+
+final class ComposerDraftService: ComposerDraftServiceProtocol {
+    private let roomProxy: RoomProxyProtocol
+    private let timelineItemfactory: RoomTimelineItemFactoryProtocol
+    
+    init(roomProxy: RoomProxyProtocol, timelineItemfactory: RoomTimelineItemFactoryProtocol) {
+        self.roomProxy = roomProxy
+        self.timelineItemfactory = timelineItemfactory
+    }
+    
+    func saveDraft(_ draft: ComposerDraft) async {
+        switch await roomProxy.saveDraft(draft) {
+        case .success:
+            MXLog.info("Successfully saved draft")
+        case .failure(let error):
+            MXLog.info("Failed to save draft: \(error)")
+        }
+    }
+    
+    func restoreDraft() async -> Result<ComposerDraft?, ComposerDraftServiceError> {
+        switch await roomProxy.restoreDraft() {
+        case .success(let draft):
+            return .success(draft)
+        case .failure(let error):
+            MXLog.info("Failed to restore draft: \(error)")
+            return .failure(.generic)
+        }
+    }
+    
+    func getReplyDetails(eventID: String) async -> TimelineItemReplyDetails {
+        guard case let .success(replyDetails) = await roomProxy.getLoadedReplyDetails(eventID: eventID) else {
+            return .error(eventID: eventID, message: "Could not load details")
+        }
+        
+        return await timelineItemfactory.buildReplyToDetails(details: replyDetails)
+    }
+    
+    func clearDraft() async {
+        switch await roomProxy.clearDraft() {
+        case .success:
+            MXLog.info("Successfully cleared draft")
+        case .failure(let error):
+            MXLog.info("Failed to clear draft: \(error)")
+        }
+    }
+}

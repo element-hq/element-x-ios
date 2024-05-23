@@ -60,6 +60,29 @@ enum RoomScreenComposerMode: Equatable {
             return false
         }
     }
+    
+    var isLoadingReply: Bool {
+        switch self {
+        case .reply(_, let replyDetails, _):
+            switch replyDetails {
+            case .loading:
+                return true
+            default:
+                return false
+            }
+        default:
+            return false
+        }
+    }
+    
+    var replyEventID: String? {
+        switch self {
+        case .reply(let itemID, _, _):
+            return itemID.eventID
+        default:
+            return nil
+        }
+    }
 }
 
 enum RoomScreenViewPollAction {
@@ -114,6 +137,8 @@ enum RoomScreenComposerAction {
     case setText(text: String)
     case removeFocus
     case clear
+    case saveDraft
+    case restoreDraft
 }
 
 struct RoomScreenViewState: BindableState {

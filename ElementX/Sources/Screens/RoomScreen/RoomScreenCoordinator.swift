@@ -30,6 +30,7 @@ struct RoomScreenCoordinatorParameters {
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
+    let draftService: ComposerDraftServiceProtocol
 }
 
 enum RoomScreenCoordinatorAction {
@@ -79,7 +80,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                      completionSuggestionService: parameters.completionSuggestionService,
                                                      mediaProvider: parameters.mediaProvider,
                                                      appSettings: parameters.appSettings,
-                                                     mentionDisplayHelper: ComposerMentionDisplayHelper(roomContext: viewModel.context))
+                                                     mentionDisplayHelper: ComposerMentionDisplayHelper(roomContext: viewModel.context),
+                                                     draftService: parameters.draftService)
     }
     
     // MARK: - Public
@@ -129,6 +131,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 viewModel.process(composerAction: action)
             }
             .store(in: &cancellables)
+        
+        viewModel.start()
     }
     
     func focusOnEvent(eventID: String) {

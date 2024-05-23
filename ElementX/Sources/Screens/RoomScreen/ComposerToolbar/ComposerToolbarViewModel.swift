@@ -27,6 +27,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let appSettings: AppSettings
+    private let draftService: ComposerDraftServiceProtocol
     
     private let mentionBuilder: MentionBuilderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
@@ -46,11 +47,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private var currentLinkData: WysiwygLinkData?
+    
+    private var replyLoadingTask: Task<Void, Never>?
 
-    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol, appSettings: AppSettings, mentionDisplayHelper: MentionDisplayHelper) {
+    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol, appSettings: AppSettings, mentionDisplayHelper: MentionDisplayHelper, draftService: ComposerDraftServiceProtocol) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.appSettings = appSettings
+        self.draftService = draftService
         
         mentionBuilder = MentionBuilder()
         attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: mentionBuilder)
@@ -184,6 +188,97 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .clear:
             set(mode: .default)
             set(text: "")
+        case .saveDraft:
+            handleSaveDraft()
+        case .restoreDraft:
+            Task {
+                await handleRestoreDraft()
+            }
+        }
+    }
+    
+    private func handleRestoreDraft() async {
+        guard case let .success(draft) = await draftService.restoreDraft(),
+              let draft else {
+            return
+        }
+        
+        if let html = draft.htmlText {
+            context.composerFormattingEnabled = true
+            await MainActor.run {
+                set(text: html)
+            }
+        } else {
+            context.composerFormattingEnabled = false
+            set(text: draft.plainText)
+        }
+        
+        switch draft.draftType {
+        case .newMessage:
+            set(mode: .default)
+        case .edit(let eventID):
+            set(mode: .edit(originalItemId: .init(timelineID: "", eventID: eventID)))
+        case .reply(let eventID):
+            set(mode: .reply(itemID: .init(timelineID: "", eventID: eventID), replyDetails: .loading(eventID: eventID), isThread: false))
+            replyLoadingTask = Task {
+                let replyDetails = await draftService.getReplyDetails(eventID: eventID)
+                guard !Task.isCancelled else {
+                    return
+                }
+                set(mode: .reply(itemID: .init(timelineID: "", eventID: eventID), replyDetails: replyDetails, isThread: false))
+            }
+        }
+    }
+    
+    private func handleSaveDraft() {
+        let plainText: String
+        let htmlText: String?
+        let type: DraftType
+        
+        if context.composerFormattingEnabled {
+            guard !wysiwygViewModel.content.html.isEmpty else {
+                Task {
+                    await draftService.clearDraft()
+                }
+                return
+            }
+            plainText = wysiwygViewModel.content.markdown
+            htmlText = wysiwygViewModel.content.html
+        } else if !context.plainComposerText.string.isEmpty {
+            plainText = context.plainComposerText.string
+            htmlText = nil
+        } else {
+            Task {
+                await draftService.clearDraft()
+            }
+            return
+        }
+        
+        switch state.composerMode {
+        case .default:
+            type = .newMessage
+        case .edit(let itemID):
+            guard let eventID = itemID.eventID else {
+                MXLog.error("The event id for this message is missing")
+                return
+            }
+            type = .edit(eventId: eventID)
+        case .reply(let itemID, _, _):
+            guard let eventID = itemID.eventID else {
+                MXLog.error("The event id for this message is missing")
+                return
+            }
+            type = .reply(eventId: eventID)
+        default:
+            // Do not save a draft for the other cases
+            Task {
+                await draftService.clearDraft()
+            }
+            return
+        }
+        
+        Task {
+            await draftService.saveDraft(.init(plainText: plainText, htmlText: htmlText, draftType: type))
         }
     }
     
@@ -324,6 +419,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(mode: RoomScreenComposerMode) {
+        if state.composerMode.isLoadingReply, state.composerMode.replyEventID != mode.replyEventID {
+            replyLoadingTask?.cancel()
+        }
+        
         guard mode != state.composerMode else { return }
 
         state.composerMode = mode
