@@ -121,12 +121,14 @@ private extension HumanQrLoginError {
             return .connectionInsecure
         case .Declined:
             return .declined
-        case .LinkingNotSupported, .SlidingSyncNotAvailable:
+        case .LinkingNotSupported:
             return .linkingNotSupported
         case .Expired:
             return .expired
         case .InvalidQrCode:
             return .invalidQRCode
+        case .SlidingSyncNotAvailable:
+            return .deviceNotSupported
         case .Unknown, .OidcMetadataInvalid:
             return .unknown
         }

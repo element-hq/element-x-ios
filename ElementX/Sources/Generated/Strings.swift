@@ -1233,12 +1233,22 @@ internal enum L10n {
   internal static var screenQrCodeLoginErrorExpiredSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_expired_subtitle") }
   /// The sign in was not completed in time
   internal static var screenQrCodeLoginErrorExpiredTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_expired_title") }
-  /// Your other device does not support signing in to Element with a QR code.
+  /// Your other device does not support signing in to %@ with a QR code.
   /// 
   /// Try signing in manually, or scan the QR code with another device.
-  internal static var screenQrCodeLoginErrorLinkingNotSuportedSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_linking_not_suported_subtitle") }
+  internal static func screenQrCodeLoginErrorLinkingNotSuportedSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_qr_code_login_error_linking_not_suported_subtitle", String(describing: p1))
+  }
   /// QR code not supported
   internal static var screenQrCodeLoginErrorLinkingNotSuportedTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_linking_not_suported_title") }
+  /// Your account provider does not support %1$@.
+  internal static func screenQrCodeLoginErrorSlidingSyncNotSupportedSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_qr_code_login_error_sliding_sync_not_supported_subtitle", String(describing: p1))
+  }
+  /// %1$@ not supported
+  internal static func screenQrCodeLoginErrorSlidingSyncNotSupportedTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_qr_code_login_error_sliding_sync_not_supported_title", String(describing: p1))
+  }
   /// Ready to scan
   internal static var screenQrCodeLoginInitialStateButtonTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_button_title") }
   /// Open %1$@ on a desktop device

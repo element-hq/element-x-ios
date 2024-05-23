@@ -78,6 +78,7 @@ enum QRCodeLoginState: Equatable {
         case declined
         case expired
         case linkingNotSupported
+        case deviceNotSupported
         case unknown
     }
     

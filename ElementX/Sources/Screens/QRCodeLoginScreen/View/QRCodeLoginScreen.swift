@@ -289,6 +289,8 @@ struct QRCodeLoginScreen: View {
             L10n.screenQrCodeLoginErrorExpiredTitle
         case .linkingNotSupported:
             L10n.screenQrCodeLoginErrorLinkingNotSuportedTitle
+        case .deviceNotSupported:
+            L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedTitle(InfoPlistReader.main.bundleDisplayName)
         case .unknown:
             L10n.commonSomethingWentWrong
         default:
@@ -296,7 +298,7 @@ struct QRCodeLoginScreen: View {
             ""
         }
         
-        let subtitle = switch errorState {
+        let subtitle: String = switch errorState {
         case .cancelled:
             L10n.screenQrCodeLoginErrorCancelledSubtitle
         case .declined:
@@ -304,7 +306,9 @@ struct QRCodeLoginScreen: View {
         case .expired:
             L10n.screenQrCodeLoginErrorExpiredSubtitle
         case .linkingNotSupported:
-            L10n.screenQrCodeLoginErrorLinkingNotSuportedSubtitle
+            L10n.screenQrCodeLoginErrorLinkingNotSuportedSubtitle(InfoPlistReader.main.bundleDisplayName)
+        case .deviceNotSupported:
+            L10n.screenQrCodeLoginErrorSlidingSyncNotSupportedSubtitle(InfoPlistReader.main.bundleDisplayName)
         case .unknown:
             L10n.screenQrCodeLoginUnknownErrorDescription
         default:
@@ -337,7 +341,7 @@ struct QRCodeLoginScreen: View {
                 context.send(viewAction: .openSettings)
             }
             .buttonStyle(.compound(.primary))
-        case .connectionNotSecure, .unknown, .expired, .declined:
+        case .connectionNotSecure, .unknown, .expired, .declined, .deviceNotSupported:
             Button(L10n.screenQrCodeLoginStartOverButton) {
                 context.send(viewAction: .startScan)
             }
@@ -421,6 +425,8 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     
     static let expiredStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.expired))
     
+    static let deviceNoSupportedViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.deviceNotSupported))
+    
     static let unknownErrorStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.unknown))
     
     static var previews: some View {
@@ -459,6 +465,9 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
         
         QRCodeLoginScreen(context: expiredStateViewModel.context)
             .previewDisplayName("Expired")
+        
+        QRCodeLoginScreen(context: deviceNoSupportedViewModel.context)
+            .previewDisplayName("Device not supported")
         
         QRCodeLoginScreen(context: unknownErrorStateViewModel.context)
             .previewDisplayName("Unknown error")
