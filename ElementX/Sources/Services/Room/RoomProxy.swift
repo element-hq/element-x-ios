@@ -554,6 +554,27 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    // MARK: - Drafts
+    
+    func saveDraft(_ draft: ComposerDraft) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.saveComposerDraft(draft: draft)
+            return .success(())
+        } catch {
+            MXLog.error("Failed saving draft with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func restoreDraft() async -> Result<ComposerDraft?, RoomProxyError> {
+        do {
+            return try await .success(room.restoreComposerDraft())
+        } catch {
+            MXLog.error("Failed restoring draft with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
 
     // MARK: - Private
     
