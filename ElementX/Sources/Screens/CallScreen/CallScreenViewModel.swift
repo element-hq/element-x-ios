@@ -31,10 +31,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
-    deinit {
-        elementCallService.tearDownCallSession()
-    }
-    
     /// Designated initialiser
     /// - Parameters:
     ///   - elementCallService: service responsible for setting up CallKit
@@ -120,7 +116,28 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
     }
     
+    func stop() {
+        Task {
+            await hangUp()
+        }
+        
+        elementCallService.tearDownCallSession()
+    }
+    
     // MARK: - Private
+    
+    private func hangUp() async {
+        let hangUpMessage = """
+        "api":"toWidget",
+        "widgetId":"\(widgetDriver.widgetID)",
+        "requestId":"widgetapi-\(UUID())",
+        "action":"im.vector.hangup",
+        "data":{}
+        """
+        
+        let result = await widgetDriver.sendMessage(hangUpMessage)
+        MXLog.error("Result yo: \(result)")
+    }
 
     private static let eventHandlerName = "elementx"
     

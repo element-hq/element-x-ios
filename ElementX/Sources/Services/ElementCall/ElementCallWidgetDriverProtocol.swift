@@ -32,6 +32,8 @@ enum ElementCallWidgetDriverAction {
 
 // sourcery: AutoMockable
 protocol ElementCallWidgetDriverProtocol {
+    var widgetID: String { get }
+    
     var messagePublisher: PassthroughSubject<String, Never> { get }
     var actions: AnyPublisher<ElementCallWidgetDriverAction, Never> { get }
     

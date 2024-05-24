@@ -55,6 +55,10 @@ final class CallScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
+    
+    func stop() {
+        viewModel.stop()
+    }
         
     func toPresentable() -> AnyView {
         AnyView(CallScreen(context: viewModel.context))
