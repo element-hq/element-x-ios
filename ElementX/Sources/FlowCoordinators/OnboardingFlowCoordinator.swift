@@ -212,6 +212,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             case .skip:
                 appSettings.hasRunIdentityConfirmationOnboarding = true
                 stateMachine.tryEvent(.next)
+            case .reset:
+                presentResetRecoveryKeyScreen()
             }
         }
         .store(in: &cancellables)
