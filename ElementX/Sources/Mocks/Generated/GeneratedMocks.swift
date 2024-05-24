@@ -4313,6 +4313,11 @@ class ElementCallServiceMock: ElementCallServiceProtocol {
     }
 }
 class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
+    var widgetID: String {
+        get { return underlyingWidgetID }
+        set(value) { underlyingWidgetID = value }
+    }
+    var underlyingWidgetID: String!
     var messagePublisher: PassthroughSubject<String, Never> {
         get { return underlyingMessagePublisher }
         set(value) { underlyingMessagePublisher = value }
