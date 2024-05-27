@@ -141,7 +141,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
         if let incomingCallRoomID {
-            actionsSubject.send(.answerCall(roomID: incomingCallRoomID))
+            Task {
+                // Dispatch to next run loop so it doesn't conflict with `setupCallSession`
+                actionsSubject.send(.answerCall(roomID: incomingCallRoomID))
+            }
             self.incomingCallRoomID = nil
         } else {
             MXLog.error("Failed answering incoming call, missing room ID")
