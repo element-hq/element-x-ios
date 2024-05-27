@@ -124,6 +124,13 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             
             completion()
         }
+        
+        Task { [weak self, callProvider, callID] in
+            try? await Task.sleep(for: .seconds(15))
+            if let ongoingCallID = self?.ongoingCallID, ongoingCallID == callID {
+                callProvider.reportCall(with: callID, endedAt: .now, reason: .unanswered)
+            }
+        }
     }
     
     // MARK: - CXProviderDelegate
