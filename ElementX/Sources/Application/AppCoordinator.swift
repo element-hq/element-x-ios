@@ -17,6 +17,7 @@
 import AnalyticsEvents
 import BackgroundTasks
 import Combine
+import Intents
 import MatrixRustSDK
 import SwiftUI
 import Version
@@ -234,6 +235,20 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         return false
+    }
+    
+    func handleUserActivity(_ userActivity: NSUserActivity) {
+        // `INStartVideoCallIntent` is to be replaced with `INStartCallIntent`
+        // but calls from Recents still send it ¯\_(ツ)_/¯
+        guard let intent = userActivity.interaction?.intent as? INStartVideoCallIntent,
+              let contact = intent.contacts?.first,
+              let roomIdentifier = contact.personHandle?.value else {
+            MXLog.error("Failed retrieving information from userActivity: \(userActivity)")
+            return
+        }
+        
+        MXLog.info("Starting call in room: \(roomIdentifier)")
+        handleAppRoute(AppRoute.call(roomID: roomIdentifier))
     }
     
     // MARK: - AuthenticationFlowCoordinatorDelegate

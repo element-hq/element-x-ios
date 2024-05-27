@@ -41,4 +41,8 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
     func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool {
         fatalError("Not implemented.")
     }
+    
+    func handleUserActivity(_ activity: NSUserActivity) {
+        fatalError("Not implemented.")
+    }
 }

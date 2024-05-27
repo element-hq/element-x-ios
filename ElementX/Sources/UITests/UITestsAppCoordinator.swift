@@ -70,6 +70,10 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         fatalError("Not implemented.")
     }
     
+    func handleUserActivity(_ activity: NSUserActivity) {
+        fatalError("Not implemented.")
+    }
+    
     func windowManagerDidConfigureWindows(_ windowManager: SecureWindowManagerProtocol) {
         ServiceLocator.shared.userIndicatorController.window = windowManager.overlayWindow
         

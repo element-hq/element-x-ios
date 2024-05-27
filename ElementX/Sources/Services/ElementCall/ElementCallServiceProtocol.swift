@@ -24,8 +24,6 @@ enum ElementCallServiceAction {
 enum ElementCallServiceNotificationKey: String {
     case roomID
     case roomDisplayName
-    case senderID
-    case senderDisplayName
 }
 
 let ElementCallServiceNotificationDiscardDelta = 10.0
