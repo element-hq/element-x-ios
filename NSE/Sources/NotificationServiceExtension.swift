@@ -206,12 +206,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             return true
         }
         
-        var payload = [ElementCallServiceNotificationKey.roomID.rawValue: itemProxy.roomID,
-                       ElementCallServiceNotificationKey.roomDisplayName.rawValue: itemProxy.roomDisplayName,
-                       ElementCallServiceNotificationKey.senderID.rawValue: itemProxy.senderID]
-        if let senderDisplayName = itemProxy.senderDisplayName {
-            payload[ElementCallServiceNotificationKey.senderDisplayName.rawValue] = senderDisplayName
-        }
+        let payload = [ElementCallServiceNotificationKey.roomID.rawValue: itemProxy.roomID,
+                       ElementCallServiceNotificationKey.roomDisplayName.rawValue: itemProxy.roomDisplayName]
         
         do {
             try await CXProvider.reportNewIncomingVoIPPushPayload(payload)

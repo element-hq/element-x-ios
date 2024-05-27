@@ -91,7 +91,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
         guard let roomID = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomID.rawValue] as? String else {
-            MXLog.error("Somethnig went wrong, missing room identifier for incoming voip call: \(payload)")
+            MXLog.error("Something went wrong, missing room identifier for incoming voip call: \(payload)")
             return
         }
         
@@ -102,20 +102,18 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         let configuration = CXProviderConfiguration()
         configuration.supportsVideo = true
-        configuration.includesCallsInRecents = false
+        configuration.includesCallsInRecents = true
+        
+        // https://stackoverflow.com/a/46077628/730924
+        configuration.supportedHandleTypes = [.generic]
         
         let update = CXCallUpdate()
         update.hasVideo = true
         
         update.localizedCallerName = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomDisplayName.rawValue] as? String
         
-        if let senderDisplayName = payload.dictionaryPayload[ElementCallServiceNotificationKey.senderDisplayName.rawValue] as? String {
-            update.remoteHandle = .init(type: .generic, value: senderDisplayName)
-        } else if let senderID = payload.dictionaryPayload[ElementCallServiceNotificationKey.senderID.rawValue] as? String {
-            update.remoteHandle = .init(type: .generic, value: senderID)
-        } else {
-            MXLog.error("Something went wrong, both the user display name and ID are nil")
-        }
+        // https://stackoverflow.com/a/41230020/730924
+        update.remoteHandle = .init(type: .generic, value: roomID)
         
         let callProvider = CXProvider(configuration: configuration)
         callProvider.setDelegate(self, queue: nil)
