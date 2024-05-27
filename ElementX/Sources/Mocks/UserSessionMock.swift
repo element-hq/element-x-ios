@@ -27,10 +27,6 @@ extension UserSessionMock {
         self.init()
         
         clientProxy = configuration.clientProxy
-        userID = clientProxy.userID
-        deviceID = clientProxy.deviceID
-        homeserver = clientProxy.homeserver
-        
         mediaProvider = MockMediaProvider()
         voiceMessageMediaManager = VoiceMessageMediaManagerMock()
         

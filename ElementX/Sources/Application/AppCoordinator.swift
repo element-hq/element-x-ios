@@ -450,15 +450,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         Task {
-            let credentials = SoftLogoutScreenCredentials(userID: userSession.userID,
-                                                          homeserverName: userSession.homeserver,
+            let credentials = SoftLogoutScreenCredentials(userID: userSession.clientProxy.userID,
+                                                          homeserverName: userSession.clientProxy.homeserver,
                                                           userDisplayName: userSession.clientProxy.userDisplayNamePublisher.value ?? "",
-                                                          deviceID: userSession.deviceID)
+                                                          deviceID: userSession.clientProxy.deviceID)
             
             let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
                                                                    encryptionKeyProvider: EncryptionKeyProvider(),
                                                                    appSettings: appSettings)
-            _ = await authenticationService.configure(for: userSession.homeserver)
+            _ = await authenticationService.configure(for: userSession.clientProxy.homeserver)
             
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                    credentials: credentials,
@@ -690,7 +690,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         stopSync()
         userSessionFlowCoordinator?.stop()
         
-        let userID = userSession.userID
+        let userID = userSession.clientProxy.userID
         tearDownUserSession()
     
         // Allow for everything to deallocate properly

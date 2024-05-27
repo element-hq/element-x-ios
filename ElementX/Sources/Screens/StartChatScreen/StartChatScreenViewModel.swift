@@ -41,7 +41,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         self.userIndicatorController = userIndicatorController
         self.userDiscoveryService = userDiscoveryService
         
-        super.init(initialViewState: StartChatScreenViewState(userID: userSession.userID), imageProvider: userSession.mediaProvider)
+        super.init(initialViewState: StartChatScreenViewState(userID: userSession.clientProxy.userID), imageProvider: userSession.mediaProvider)
         
         setupBindings()
         
