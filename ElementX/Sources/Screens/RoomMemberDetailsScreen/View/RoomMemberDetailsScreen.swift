@@ -143,7 +143,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(member: RoomMemberProxyMock) -> RoomMemberDetailsScreenViewModel {
-        let roomProxyMock = RoomProxyMock(with: .init(name: ""))
+        let roomProxyMock = RoomProxyMock(.init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         
         let clientProxyMock = ClientProxyMock(.init())

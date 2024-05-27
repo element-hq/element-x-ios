@@ -127,7 +127,7 @@ struct RoomRolesAndPermissionsScreen: View {
 
 struct RoomRolesAndPermissionsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomRolesAndPermissionsScreenViewModel(initialPermissions: RoomPermissions(powerLevels: .mock),
-                                                                  roomProxy: RoomProxyMock(with: .init(members: .allMembersAsAdmin)),
+                                                                  roomProxy: RoomProxyMock(.init(members: .allMembersAsAdmin)),
                                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                                   analytics: ServiceLocator.shared.analytics)
     static var previews: some View {

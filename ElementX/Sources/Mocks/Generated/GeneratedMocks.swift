@@ -13079,6 +13079,34 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol {
         }
     }
 }
+class UserSessionMock: UserSessionProtocol {
+    var clientProxy: ClientProxyProtocol {
+        get { return underlyingClientProxy }
+        set(value) { underlyingClientProxy = value }
+    }
+    var underlyingClientProxy: ClientProxyProtocol!
+    var mediaProvider: MediaProviderProtocol {
+        get { return underlyingMediaProvider }
+        set(value) { underlyingMediaProvider = value }
+    }
+    var underlyingMediaProvider: MediaProviderProtocol!
+    var voiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
+        get { return underlyingVoiceMessageMediaManager }
+        set(value) { underlyingVoiceMessageMediaManager = value }
+    }
+    var underlyingVoiceMessageMediaManager: VoiceMessageMediaManagerProtocol!
+    var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> {
+        get { return underlyingSessionSecurityStatePublisher }
+        set(value) { underlyingSessionSecurityStatePublisher = value }
+    }
+    var underlyingSessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>!
+    var callbacks: PassthroughSubject<UserSessionCallback, Never> {
+        get { return underlyingCallbacks }
+        set(value) { underlyingCallbacks = value }
+    }
+    var underlyingCallbacks: PassthroughSubject<UserSessionCallback, Never>!
+
+}
 class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
     var urlForRecording: URL {
         get { return underlyingUrlForRecording }

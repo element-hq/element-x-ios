@@ -25,7 +25,7 @@ class ReportContentScreenViewModelTests: XCTestCase {
     
     func testReportContent() async throws {
         // Given the report content view for some content.
-        let roomProxy = RoomProxyMock(with: .init(name: "test"))
+        let roomProxy = RoomProxyMock(.init(name: "test"))
         roomProxy.reportContentReasonReturnValue = .success(())
         let clientProxy = ClientProxyMock(.init())
         let viewModel = ReportContentScreenViewModel(eventID: eventID,
@@ -54,7 +54,7 @@ class ReportContentScreenViewModelTests: XCTestCase {
     
     func testReportIgnoringSender() async throws {
         // Given the report content view for some content.
-        let roomProxy = RoomProxyMock(with: .init(name: "test"))
+        let roomProxy = RoomProxyMock(.init(name: "test"))
         roomProxy.reportContentReasonReturnValue = .success(())
         let clientProxy = ClientProxyMock(.init())
         let viewModel = ReportContentScreenViewModel(eventID: eventID,

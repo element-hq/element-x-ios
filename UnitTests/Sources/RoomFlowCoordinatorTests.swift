@@ -171,7 +171,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         
         // "Join" the room
         clientProxy.roomForIdentifierClosure = { _ in
-            RoomProxyMock(with: .init())
+            RoomProxyMock(.init())
         }
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
@@ -201,7 +201,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         
         // "Join" the room
         clientProxy.roomForIdentifierClosure = { _ in
-            RoomProxyMock(with: .init())
+            RoomProxyMock(.init())
         }
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
@@ -291,12 +291,6 @@ class RoomFlowCoordinatorTests: XCTestCase {
             }
         }
         
-        let mediaProvider = MockMediaProvider()
-        let voiceMessageMediaManager = VoiceMessageMediaManagerMock()
-        let userSession = MockUserSession(clientProxy: clientProxy,
-                                          mediaProvider: mediaProvider,
-                                          voiceMessageMediaManager: voiceMessageMediaManager)
-        
         let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         navigationStackCoordinator = NavigationStackCoordinator()
         navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator)
@@ -309,7 +303,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         }
         
         roomFlowCoordinator = await RoomFlowCoordinator(roomID: roomID,
-                                                        userSession: userSession,
+                                                        userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                         isChildFlow: asChildFlow,
                                                         roomTimelineControllerFactory: timelineControllerFactory,
                                                         navigationStackCoordinator: navigationStackCoordinator,
