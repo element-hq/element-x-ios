@@ -140,6 +140,7 @@ extension RoomProxyMock {
         widgetDriver.startBaseURLClientIDReturnValue = .success(url)
         
         elementCallWidgetDriverReturnValue = widgetDriver
+        sendCallNotificationIfNeeededReturnValue = .success(())
         
         matrixToPermalinkReturnValue = .success(.homeDirectory)
         matrixToEventPermalinkReturnValue = .success(.homeDirectory)
