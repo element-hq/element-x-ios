@@ -28,10 +28,6 @@ struct SessionSecurityState: Equatable {
 
 // sourcery: AutoMockable
 protocol UserSessionProtocol {
-    var homeserver: String { get }
-    var userID: String { get }
-    var deviceID: String? { get }
-    
     var clientProxy: ClientProxyProtocol { get }
     var mediaProvider: MediaProviderProtocol { get }
     var voiceMessageMediaManager: VoiceMessageMediaManagerProtocol { get }
