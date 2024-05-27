@@ -107,7 +107,7 @@ struct MessageForwardingScreen_Previews: PreviewProvider, TestablePreview {
         let viewModel = MessageForwardingScreenViewModel(forwardingItem: .init(id: .init(timelineID: ""),
                                                                                roomID: "",
                                                                                content: .init(noPointer: .init())),
-                                                         clientProxy: ClientProxyMock(),
+                                                         clientProxy: ClientProxyMock(.init()),
                                                          roomSummaryProvider: summaryProvider,
                                                          userIndicatorController: UserIndicatorControllerMock(),
                                                          mediaProvider: MockMediaProvider())

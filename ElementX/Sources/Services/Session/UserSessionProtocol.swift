@@ -26,6 +26,7 @@ struct SessionSecurityState: Equatable {
     let recoveryState: SecureBackupRecoveryState
 }
 
+// sourcery: AutoMockable
 protocol UserSessionProtocol {
     var homeserver: String { get }
     var userID: String { get }

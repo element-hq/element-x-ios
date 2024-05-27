@@ -115,10 +115,8 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     private static var viewModel: IdentityConfirmationScreenViewModel {
-        let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "@user:example.com",
-                                                                             roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))))),
-                                          mediaProvider: MockMediaProvider(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@user:example.com",
+                                                                                   roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([])))))))
         
         return IdentityConfirmationScreenViewModel(userSession: userSession,
                                                    appSettings: ServiceLocator.shared.settings,

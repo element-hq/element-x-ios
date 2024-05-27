@@ -86,7 +86,7 @@ struct RoomChangePermissionsScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(group: RoomRolesAndPermissionsScreenPermissionsGroup) -> RoomChangePermissionsScreenViewModel {
         RoomChangePermissionsScreenViewModel(currentPermissions: .init(powerLevels: .mock),
                                              group: group,
-                                             roomProxy: RoomProxyMock(with: .init()),
+                                             roomProxy: RoomProxyMock(.init()),
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              analytics: ServiceLocator.shared.analytics)
     }

@@ -31,9 +31,7 @@ class HomeScreenViewModelTests: XCTestCase {
         cancellables.removeAll()
         roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
         clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: roomSummaryProvider))
-        viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: clientProxy,
-                                                                     mediaProvider: MockMediaProvider(),
-                                                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
+        viewModel = HomeScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                         analyticsService: ServiceLocator.shared.analytics,
                                         appSettings: ServiceLocator.shared.settings,
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
@@ -89,7 +87,7 @@ class HomeScreenViewModelTests: XCTestCase {
     func testLeaveRoomAlert() async throws {
         let mockRoomId = "1"
         
-        clientProxy.roomForIdentifierClosure = { _ in RoomProxyMock(with: .init(id: mockRoomId, name: "Some room")) }
+        clientProxy.roomForIdentifierClosure = { _ in RoomProxyMock(.init(id: mockRoomId, name: "Some room")) }
         
         let deferred = deferFulfillment(context.$viewState) { value in
             value.bindings.leaveRoomAlertItem != nil
@@ -104,7 +102,7 @@ class HomeScreenViewModelTests: XCTestCase {
     
     func testLeaveRoomError() async throws {
         let mockRoomId = "1"
-        let room: RoomProxyMock = .init(with: .init(id: mockRoomId, name: "Some room"))
+        let room = RoomProxyMock(.init(id: mockRoomId, name: "Some room"))
         room.leaveRoomClosure = { .failure(.sdkError(ClientProxyMockError.generic)) }
         
         clientProxy.roomForIdentifierClosure = { _ in room }
@@ -135,7 +133,7 @@ class HomeScreenViewModelTests: XCTestCase {
                 expectation.fulfill()
             }
             .store(in: &cancellables)
-        let room: RoomProxyMock = .init(with: .init(id: mockRoomId, name: "Some room"))
+        let room = RoomProxyMock(.init(id: mockRoomId, name: "Some room"))
         room.leaveRoomClosure = { .success(()) }
         
         clientProxy.roomForIdentifierClosure = { _ in room }

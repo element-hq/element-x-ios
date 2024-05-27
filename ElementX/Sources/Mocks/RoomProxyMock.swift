@@ -58,7 +58,7 @@ enum RoomProxyMockError: Error {
 
 extension RoomProxyMock {
     @MainActor
-    convenience init(with configuration: RoomProxyMockConfiguration) {
+    convenience init(_ configuration: RoomProxyMockConfiguration) {
         self.init()
 
         id = configuration.id
