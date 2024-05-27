@@ -82,6 +82,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 self?.actionsSubject.send(.contentChanged(isEmpty: isEmpty))
             }
             .store(in: &cancellables)
+        
+        context.$viewState
+            .map(\.bindings.plainComposerText)
+            .removeDuplicates()
+            .sink { [weak self] plainComposerText in
+                self?.actionsSubject.send(.contentChanged(isEmpty: plainComposerText.string.isEmpty))
+            }
+            .store(in: &cancellables)
 
         wysiwygViewModel.$actionStates
             .map { actions in
