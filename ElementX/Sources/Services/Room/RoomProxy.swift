@@ -138,7 +138,8 @@ class RoomProxy: RoomProxyProtocol {
                                                         RequiredState(key: "m.room.avatar", value: ""),
                                                         RequiredState(key: "m.room.canonical_alias", value: ""),
                                                         RequiredState(key: "m.room.join_rules", value: "")],
-                                        timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit))
+                                        timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit),
+                                        includeHeroes: false) // We don't need heroes here as they're already included in the `all_rooms` list
         roomListItem.subscribe(settings: settings)
         Self.subscriptionCountPerRoom[roomListItem.id()] = (Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0) + 1
         
