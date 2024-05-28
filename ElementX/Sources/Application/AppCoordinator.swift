@@ -666,10 +666,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         ServiceLocator.shared.networkMonitor
             .reachabilityPublisher
             .removeDuplicates()
-            .sink { reachability in
+            .sink { [weak self] reachability in
                 MXLog.info("Reachability changed to \(reachability)")
                 
                 if reachability == .reachable {
+                    self?.userSession?.clientProxy.setSendingQueueEnabled(true)
+                    
                     ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(reachabilityNotificationIdentifier)
                 } else {
                     ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationIdentifier,

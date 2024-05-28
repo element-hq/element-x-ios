@@ -55,9 +55,6 @@ struct TimelineItemStatusView: View {
             if style == .plain {
                 CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyMD)
                     .foregroundColor(.compound.iconCriticalPrimary)
-                    .onTapGesture {
-                        context.send(viewAction: .displayMessageSendingFailureAlert(itemID: timelineItem.id))
-                    }
                     .accessibilityLabel(L10n.commonSendingFailed)
                     .accessibilityHint(L10n.actionTapForOptions)
             }

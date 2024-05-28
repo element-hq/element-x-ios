@@ -1,0 +1,1 @@
+Adopt new automatically retrying message sending queue

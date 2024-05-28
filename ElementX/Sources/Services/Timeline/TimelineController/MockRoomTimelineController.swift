@@ -92,11 +92,11 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                      intentionalMentions: IntentionalMentions) async { }
         
     func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async { }
-
-    func editMessage(_ newMessage: String,
-                     html: String?,
-                     original itemID: TimelineItemIdentifier,
-                     intentionalMentions: IntentionalMentions) async { }
+    
+    func edit(_ timelineItemID: TimelineItemIdentifier,
+              message: String,
+              html: String?,
+              intentionalMentions: IntentionalMentions) async { }
     
     func redact(_ itemID: TimelineItemIdentifier) async { }
     
@@ -109,23 +109,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     }
         
     func retryDecryption(for sessionID: String) async { }
-    
-    func retrySending(itemID: TimelineItemIdentifier) async {
-        guard let transactionID = itemID.transactionID else {
-            return
-        }
         
-        await roomProxy?.timeline.retrySend(transactionID: transactionID)
-    }
-    
-    func cancelSending(itemID: TimelineItemIdentifier) async {
-        guard let transactionID = itemID.transactionID else {
-            return
-        }
-        
-        await roomProxy?.timeline.cancelSend(transactionID: transactionID)
-    }
-    
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
         timelineItemsTimestamp[itemID] ?? .now
     }

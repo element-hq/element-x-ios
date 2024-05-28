@@ -41,7 +41,6 @@ struct RoomProxyMockConfiguration {
     
     func makeTimeline() -> TimelineProxyMock {
         let timeline = TimelineProxyMock()
-        timeline.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
         timeline.sendMessageEventContentReturnValue = .success(())
         
         let timelineProvider = RoomTimelineProviderMock()

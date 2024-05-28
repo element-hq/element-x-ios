@@ -336,7 +336,6 @@ class RoomScreenViewModelTests: XCTestCase {
         let roomProxy = RoomProxyMock(.init(name: ""))
         
         let timelineProxy = TimelineProxyMock()
-        timelineProxy.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
         
         roomProxy.timeline = timelineProxy
         let timelineController = MockRoomTimelineController()

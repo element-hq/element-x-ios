@@ -3496,6 +3496,45 @@ class ClientProxyMock: ClientProxyProtocol {
             return resolveRoomAliasReturnValue
         }
     }
+    //MARK: - setSendingQueueEnabled
+
+    var setSendingQueueEnabledUnderlyingCallsCount = 0
+    var setSendingQueueEnabledCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setSendingQueueEnabledUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setSendingQueueEnabledUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setSendingQueueEnabledUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setSendingQueueEnabledUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setSendingQueueEnabledCalled: Bool {
+        return setSendingQueueEnabledCallsCount > 0
+    }
+    var setSendingQueueEnabledReceivedEnabled: Bool?
+    var setSendingQueueEnabledReceivedInvocations: [Bool] = []
+    var setSendingQueueEnabledClosure: ((Bool) -> Void)?
+
+    func setSendingQueueEnabled(_ enabled: Bool) {
+        setSendingQueueEnabledCallsCount += 1
+        setSendingQueueEnabledReceivedEnabled = enabled
+        setSendingQueueEnabledReceivedInvocations.append(enabled)
+        setSendingQueueEnabledClosure?(enabled)
+    }
     //MARK: - ignoreUser
 
     var ignoreUserUnderlyingCallsCount = 0
@@ -11057,11 +11096,6 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
 }
 class TimelineProxyMock: TimelineProxyProtocol {
-    var actions: AnyPublisher<TimelineProxyAction, Never> {
-        get { return underlyingActions }
-        set(value) { underlyingActions = value }
-    }
-    var underlyingActions: AnyPublisher<TimelineProxyAction, Never>!
     var isLive: Bool {
         get { return underlyingIsLive }
         set(value) { underlyingIsLive = value }
@@ -11107,113 +11141,6 @@ class TimelineProxyMock: TimelineProxyProtocol {
     func subscribeForUpdates() async {
         subscribeForUpdatesCallsCount += 1
         await subscribeForUpdatesClosure?()
-    }
-    //MARK: - cancelSend
-
-    var cancelSendTransactionIDUnderlyingCallsCount = 0
-    var cancelSendTransactionIDCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return cancelSendTransactionIDUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = cancelSendTransactionIDUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                cancelSendTransactionIDUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    cancelSendTransactionIDUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var cancelSendTransactionIDCalled: Bool {
-        return cancelSendTransactionIDCallsCount > 0
-    }
-    var cancelSendTransactionIDReceivedTransactionID: String?
-    var cancelSendTransactionIDReceivedInvocations: [String] = []
-    var cancelSendTransactionIDClosure: ((String) async -> Void)?
-
-    func cancelSend(transactionID: String) async {
-        cancelSendTransactionIDCallsCount += 1
-        cancelSendTransactionIDReceivedTransactionID = transactionID
-        cancelSendTransactionIDReceivedInvocations.append(transactionID)
-        await cancelSendTransactionIDClosure?(transactionID)
-    }
-    //MARK: - editMessage
-
-    var editMessageHtmlOriginalIntentionalMentionsUnderlyingCallsCount = 0
-    var editMessageHtmlOriginalIntentionalMentionsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return editMessageHtmlOriginalIntentionalMentionsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = editMessageHtmlOriginalIntentionalMentionsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                editMessageHtmlOriginalIntentionalMentionsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    editMessageHtmlOriginalIntentionalMentionsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var editMessageHtmlOriginalIntentionalMentionsCalled: Bool {
-        return editMessageHtmlOriginalIntentionalMentionsCallsCount > 0
-    }
-    var editMessageHtmlOriginalIntentionalMentionsReceivedArguments: (message: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)?
-    var editMessageHtmlOriginalIntentionalMentionsReceivedInvocations: [(message: String, html: String?, eventID: String, intentionalMentions: IntentionalMentions)] = []
-
-    var editMessageHtmlOriginalIntentionalMentionsUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var editMessageHtmlOriginalIntentionalMentionsReturnValue: Result<Void, TimelineProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return editMessageHtmlOriginalIntentionalMentionsUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, TimelineProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = editMessageHtmlOriginalIntentionalMentionsUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                editMessageHtmlOriginalIntentionalMentionsUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    editMessageHtmlOriginalIntentionalMentionsUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var editMessageHtmlOriginalIntentionalMentionsClosure: ((String, String?, String, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
-
-    func editMessage(_ message: String, html: String?, original eventID: String, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
-        editMessageHtmlOriginalIntentionalMentionsCallsCount += 1
-        editMessageHtmlOriginalIntentionalMentionsReceivedArguments = (message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
-        editMessageHtmlOriginalIntentionalMentionsReceivedInvocations.append((message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
-        if let editMessageHtmlOriginalIntentionalMentionsClosure = editMessageHtmlOriginalIntentionalMentionsClosure {
-            return await editMessageHtmlOriginalIntentionalMentionsClosure(message, html, eventID, intentionalMentions)
-        } else {
-            return editMessageHtmlOriginalIntentionalMentionsReturnValue
-        }
     }
     //MARK: - fetchDetails
 
@@ -11283,8 +11210,8 @@ class TimelineProxyMock: TimelineProxyProtocol {
     var messageEventContentForCalled: Bool {
         return messageEventContentForCallsCount > 0
     }
-    var messageEventContentForReceivedEventID: String?
-    var messageEventContentForReceivedInvocations: [String] = []
+    var messageEventContentForReceivedTimelineItemID: TimelineItemIdentifier?
+    var messageEventContentForReceivedInvocations: [TimelineItemIdentifier] = []
 
     var messageEventContentForUnderlyingReturnValue: RoomMessageEventContentWithoutRelation?
     var messageEventContentForReturnValue: RoomMessageEventContentWithoutRelation? {
@@ -11310,14 +11237,14 @@ class TimelineProxyMock: TimelineProxyProtocol {
             }
         }
     }
-    var messageEventContentForClosure: ((String) async -> RoomMessageEventContentWithoutRelation?)?
+    var messageEventContentForClosure: ((TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation?)?
 
-    func messageEventContent(for eventID: String) async -> RoomMessageEventContentWithoutRelation? {
+    func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
         messageEventContentForCallsCount += 1
-        messageEventContentForReceivedEventID = eventID
-        messageEventContentForReceivedInvocations.append(eventID)
+        messageEventContentForReceivedTimelineItemID = timelineItemID
+        messageEventContentForReceivedInvocations.append(timelineItemID)
         if let messageEventContentForClosure = messageEventContentForClosure {
-            return await messageEventContentForClosure(eventID)
+            return await messageEventContentForClosure(timelineItemID)
         } else {
             return messageEventContentForReturnValue
         }
@@ -11360,45 +11287,6 @@ class TimelineProxyMock: TimelineProxyProtocol {
         retryDecryptionForReceivedSessionID = sessionID
         retryDecryptionForReceivedInvocations.append(sessionID)
         await retryDecryptionForClosure?(sessionID)
-    }
-    //MARK: - retrySend
-
-    var retrySendTransactionIDUnderlyingCallsCount = 0
-    var retrySendTransactionIDCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return retrySendTransactionIDUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = retrySendTransactionIDUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                retrySendTransactionIDUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    retrySendTransactionIDUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var retrySendTransactionIDCalled: Bool {
-        return retrySendTransactionIDCallsCount > 0
-    }
-    var retrySendTransactionIDReceivedTransactionID: String?
-    var retrySendTransactionIDReceivedInvocations: [String] = []
-    var retrySendTransactionIDClosure: ((String) async -> Void)?
-
-    func retrySend(transactionID: String) async {
-        retrySendTransactionIDCallsCount += 1
-        retrySendTransactionIDReceivedTransactionID = transactionID
-        retrySendTransactionIDReceivedInvocations.append(transactionID)
-        await retrySendTransactionIDClosure?(transactionID)
     }
     //MARK: - paginateBackwards
 
@@ -11534,6 +11422,142 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return await paginateForwardsRequestSizeClosure(requestSize)
         } else {
             return paginateForwardsRequestSizeReturnValue
+        }
+    }
+    //MARK: - edit
+
+    var editMessageHtmlIntentionalMentionsUnderlyingCallsCount = 0
+    var editMessageHtmlIntentionalMentionsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return editMessageHtmlIntentionalMentionsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editMessageHtmlIntentionalMentionsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editMessageHtmlIntentionalMentionsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editMessageHtmlIntentionalMentionsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var editMessageHtmlIntentionalMentionsCalled: Bool {
+        return editMessageHtmlIntentionalMentionsCallsCount > 0
+    }
+    var editMessageHtmlIntentionalMentionsReceivedArguments: (timelineItemID: TimelineItemIdentifier, message: String, html: String?, intentionalMentions: IntentionalMentions)?
+    var editMessageHtmlIntentionalMentionsReceivedInvocations: [(timelineItemID: TimelineItemIdentifier, message: String, html: String?, intentionalMentions: IntentionalMentions)] = []
+
+    var editMessageHtmlIntentionalMentionsUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var editMessageHtmlIntentionalMentionsReturnValue: Result<Void, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return editMessageHtmlIntentionalMentionsUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editMessageHtmlIntentionalMentionsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editMessageHtmlIntentionalMentionsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editMessageHtmlIntentionalMentionsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var editMessageHtmlIntentionalMentionsClosure: ((TimelineItemIdentifier, String, String?, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
+
+    func edit(_ timelineItemID: TimelineItemIdentifier, message: String, html: String?, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        editMessageHtmlIntentionalMentionsCallsCount += 1
+        editMessageHtmlIntentionalMentionsReceivedArguments = (timelineItemID: timelineItemID, message: message, html: html, intentionalMentions: intentionalMentions)
+        editMessageHtmlIntentionalMentionsReceivedInvocations.append((timelineItemID: timelineItemID, message: message, html: html, intentionalMentions: intentionalMentions))
+        if let editMessageHtmlIntentionalMentionsClosure = editMessageHtmlIntentionalMentionsClosure {
+            return await editMessageHtmlIntentionalMentionsClosure(timelineItemID, message, html, intentionalMentions)
+        } else {
+            return editMessageHtmlIntentionalMentionsReturnValue
+        }
+    }
+    //MARK: - redact
+
+    var redactReasonUnderlyingCallsCount = 0
+    var redactReasonCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return redactReasonUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = redactReasonUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                redactReasonUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    redactReasonUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var redactReasonCalled: Bool {
+        return redactReasonCallsCount > 0
+    }
+    var redactReasonReceivedArguments: (timelineItemID: TimelineItemIdentifier, reason: String?)?
+    var redactReasonReceivedInvocations: [(timelineItemID: TimelineItemIdentifier, reason: String?)] = []
+
+    var redactReasonUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var redactReasonReturnValue: Result<Void, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return redactReasonUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = redactReasonUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                redactReasonUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    redactReasonUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var redactReasonClosure: ((TimelineItemIdentifier, String?) async -> Result<Void, TimelineProxyError>)?
+
+    func redact(_ timelineItemID: TimelineItemIdentifier, reason: String?) async -> Result<Void, TimelineProxyError> {
+        redactReasonCallsCount += 1
+        redactReasonReceivedArguments = (timelineItemID: timelineItemID, reason: reason)
+        redactReasonReceivedInvocations.append((timelineItemID: timelineItemID, reason: reason))
+        if let redactReasonClosure = redactReasonClosure {
+            return await redactReasonClosure(timelineItemID, reason)
+        } else {
+            return redactReasonReturnValue
         }
     }
     //MARK: - sendAudio

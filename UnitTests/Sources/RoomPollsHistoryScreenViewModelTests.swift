@@ -128,7 +128,7 @@ class RoomPollsHistoryScreenViewModelTests: XCTestCase {
             value.bindings.alertInfo != nil
         }
             
-        interactionHandler.endPollPollStartIDReturnValue = .failure(TimelineProxyError.failedEndingPoll)
+        interactionHandler.endPollPollStartIDReturnValue = .failure(SDKError.generic)
         viewModel.context.send(viewAction: .end(pollStartID: "somePollID"))
 
         try await deferred.fulfill()
@@ -155,7 +155,7 @@ class RoomPollsHistoryScreenViewModelTests: XCTestCase {
             value.bindings.alertInfo != nil
         }
             
-        interactionHandler.sendPollResponsePollStartIDOptionIDReturnValue = .failure(TimelineProxyError.failedSendingPollResponse)
+        interactionHandler.sendPollResponsePollStartIDOptionIDReturnValue = .failure(SDKError.generic)
         viewModel.context.send(viewAction: .sendPollResponse(pollStartID: "somePollID", optionID: "someOptionID"))
 
         try await deferred.fulfill()
@@ -179,4 +179,8 @@ class RoomPollsHistoryScreenViewModelTests: XCTestCase {
         viewModel.context.send(viewAction: .edit(pollStartID: expectedPollStartID, poll: expectedPoll))
         try await deferred.fulfill()
     }
+}
+
+private enum SDKError: Error {
+    case generic
 }
