@@ -157,7 +157,9 @@ class RoomScreenInteractionHandler {
             actions.append(.copy)
         }
         
-        actions.append(.copyPermalink)
+        if item.isRemoteMessage {
+            actions.append(.copyPermalink)
+        }
 
         if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = itemID.eventID {
             actions.append(.endPoll(pollStartID: eventID))
@@ -224,11 +226,7 @@ class RoomScreenInteractionHandler {
             }
         case .redact:
             Task {
-                if eventTimelineItem.hasFailedToSend {
-                    await timelineController.cancelSending(itemID: itemID)
-                } else {
-                    await timelineController.redact(itemID)
-                }
+                await timelineController.redact(itemID)
             }
         case .reply:
             guard let eventID = eventTimelineItem.id.eventID else {

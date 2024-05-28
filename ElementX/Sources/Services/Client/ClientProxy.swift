@@ -45,6 +45,9 @@ class ClientProxy: ClientProxyProtocol {
     // periphery:ignore - required for instance retention in the rust codebase
     private var verificationStateListenerTaskHandle: TaskHandle?
     
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var sendingQueueListenerTaskHandle: TaskHandle?
+    
     private var delegateHandle: TaskHandle?
     
     // These following summary providers both operate on the same allRooms() list but
@@ -160,6 +163,17 @@ class ClientProxy: ClientProxyProtocol {
         
         verificationStateListenerTaskHandle = client.encryption().verificationStateListener(listener: VerificationStateListenerProxy { [weak self] verificationState in
             self?.updateVerificationState(verificationState)
+        })
+        
+        sendingQueueListenerTaskHandle = client.subscribeToSendingQueueStatus(listener: SendingQueueStatusListenerProxy { [weak self] enabled in
+            guard let self else { return }
+            
+            MXLog.error("Sending queue status changed to enabled: \(enabled)")
+            
+            if enabled == false,
+               networkMonitor.reachabilityPublisher.value == .reachable {
+                setSendingQueueEnabled(true)
+            }
         })
     }
     
@@ -578,6 +592,11 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func setSendingQueueEnabled(_ enabled: Bool) {
+        MXLog.info("Setting sending queue to enabled: \(enabled)")
+        client.enableSendingQueue(enable: enabled)
+    }
+    
     // MARK: Ignored users
     
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
@@ -784,7 +803,7 @@ class ClientProxy: ClientProxyProtocol {
             if roomListItem?.isTimelineInitialized() == false {
                 try await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
             }
-            let fullRoom = try await roomListItem?.fullRoom()
+            let fullRoom = try roomListItem?.fullRoom()
             
             return (roomListItem, fullRoom)
         } catch {
@@ -917,6 +936,18 @@ private class IgnoredUsersListenerProxy: IgnoredUsersListener {
     
     func call(ignoredUserIds: [String]) {
         onUpdateClosure(ignoredUserIds)
+    }
+}
+
+private class SendingQueueStatusListenerProxy: SendingQueueStatusListener {
+    private let onUpdateClosure: (Bool) -> Void
+    
+    init(onUpdateClosure: @escaping (Bool) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(newValue: Bool) {
+        onUpdateClosure(newValue)
     }
 }
 

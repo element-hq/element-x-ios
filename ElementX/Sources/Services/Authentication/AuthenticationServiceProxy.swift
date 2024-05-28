@@ -105,7 +105,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
                                                                initialDeviceName: initialDeviceName,
                                                                deviceId: deviceID)
             
-            let refreshToken = try? await client.session().refreshToken
+            let refreshToken = try? client.session().refreshToken
             
             if refreshToken != nil {
                 MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")

@@ -18,54 +18,40 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-enum TimelineProxyError: Error, Equatable {
-    case failedEditingMessage
-    case failedPaginatingBackwards
-    case failedSendingMessage
-    case failedSendingReaction
-    case failedSendingReadReceipt
-    case failedSendingMedia
+enum TimelineProxyError: Error {
+    case sdkError(Error)
     
-    // Polls
-    case failedCreatingPoll
-    case failedEditingPoll
-    case failedEndingPoll
-    case failedSendingPollResponse
-}
-
-enum TimelineProxyAction {
-    case sentMessage
+    case failedEditing
+    case failedRedacting
+    case failedPaginatingEndReached
 }
 
 // sourcery: AutoMockable
 protocol TimelineProxyProtocol {
-    var actions: AnyPublisher<TimelineProxyAction, Never> { get }
-    
     var isLive: Bool { get }
     
     var timelineProvider: RoomTimelineProviderProtocol { get }
     
     func subscribeForUpdates() async
     
-    /// Cancels a failed message given its transaction ID from the timeline
-    func cancelSend(transactionID: String) async
-    
-    func editMessage(_ message: String,
-                     html: String?,
-                     original eventID: String,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
-    
     func fetchDetails(for eventID: String)
     
-    func messageEventContent(for eventID: String) async -> RoomMessageEventContentWithoutRelation?
+    func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation?
     
     func retryDecryption(for sessionID: String) async
     
-    /// Retries sending a failed message given its transaction ID
-    func retrySend(transactionID: String) async
-    
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
+    
+    func edit(_ timelineItemID: TimelineItemIdentifier,
+              message: String,
+              html: String?,
+              intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
+    
+    func redact(_ timelineItemID: TimelineItemIdentifier,
+                reason: String?) async -> Result<Void, TimelineProxyError>
+    
+    // MARK: - Sending
     
     func sendAudio(url: URL,
                    audioInfo: AudioInfo,

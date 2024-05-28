@@ -174,8 +174,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             roomScreenInteractionHandler.displayEmojiPicker(for: itemID)
         case .displayReactionSummary(let itemID, let key):
             displayReactionSummary(for: itemID, selectedKey: key)
-        case .displayMessageSendingFailureAlert(let itemID):
-            displayAlert(.messageSendingFailure(itemID))
         case .displayReadReceipts(itemID: let itemID):
             displayReadReceipts(for: itemID)
         case .displayCall:
@@ -387,14 +385,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        roomProxy.timeline.actions
-            .filter { $0 == .sentMessage }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.scrollToBottom()
-            }
-            .store(in: &cancellables)
-
         appSettings.$timelineStyle
             .weakAssign(to: \.state.timelineStyle, on: self)
             .store(in: &cancellables)
@@ -558,10 +548,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                  inReplyTo: itemId,
                                                  intentionalMentions: intentionalMentions)
         case .edit(let originalItemId):
-            await timelineController.editMessage(message,
-                                                 html: html,
-                                                 original: originalItemId,
-                                                 intentionalMentions: intentionalMentions)
+            await timelineController.edit(originalItemId,
+                                          message: message,
+                                          html: html,
+                                          intentionalMentions: intentionalMentions)
         case .default:
             await timelineController.sendMessage(message,
                                                  html: html,
@@ -569,6 +559,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .recordVoiceMessage, .previewVoiceMessage:
             fatalError("invalid composer mode.")
         }
+        
+        scrollToBottom()
     }
         
     private func trackComposerMode(_ mode: RoomScreenComposerMode) {
@@ -770,15 +762,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                              message: L10n.commonPollEndConfirmation,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
                                              secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
-        case .messageSendingFailure(let itemID):
-            state.bindings.alertInfo = .init(id: type,
-                                             title: L10n.screenRoomRetrySendMenuTitle,
-                                             primaryButton: .init(title: L10n.screenRoomRetrySendMenuSendAgainAction) {
-                                                 Task { await self.timelineController.retrySending(itemID: itemID) }
-                                             },
-                                             secondaryButton: .init(title: L10n.actionRemove, role: .destructive) {
-                                                 Task { await self.timelineController.cancelSending(itemID: itemID) }
-                                             })
         }
     }
     
