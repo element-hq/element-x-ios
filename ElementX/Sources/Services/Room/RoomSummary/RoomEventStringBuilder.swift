@@ -68,6 +68,8 @@ struct RoomEventStringBuilder {
             return prefix(L10n.commonPollSummary(question), with: displayName)
         case .callInvite:
             return prefix(L10n.commonCallInvite, with: displayName)
+        case .callNotify:
+            return prefix(L10n.commonCallStarted, with: displayName)
         }
     }
     
