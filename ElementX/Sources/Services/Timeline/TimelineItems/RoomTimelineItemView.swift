@@ -76,6 +76,8 @@ struct RoomTimelineItemView: View {
             VoiceMessageRoomTimelineView(timelineItem: item, playerState: context?.viewState.audioPlayerStateProvider?(item.id) ?? AudioPlayerState(id: .timelineItemIdentifier(item.id), duration: 0))
         case .callInvite(let item):
             CallInviteRoomTimelineView(timelineItem: item)
+        case .callNotification(let item):
+            CallNotificationRoomTimelineView(timelineItem: item)
         }
     }
 }
