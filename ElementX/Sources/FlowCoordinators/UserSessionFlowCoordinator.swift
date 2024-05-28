@@ -29,6 +29,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let bugReportService: BugReportServiceProtocol
+    private let elementCallService: ElementCallServiceProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
@@ -69,6 +70,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          navigationRootCoordinator: NavigationRootCoordinator,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
+         elementCallService: ElementCallServiceProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
@@ -79,6 +81,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         self.userSession = userSession
         self.navigationRootCoordinator = navigationRootCoordinator
         self.bugReportService = bugReportService
+        self.elementCallService = elementCallService
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.appMediator = appMediator
         self.appSettings = appSettings
@@ -247,6 +250,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
+        case .call(let roomID):
+            Task {
+                await presentCallScreen(roomID: roomID)
+            }
         case .genericCallLink(let url):
             navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
         case .settings, .chatBackupSettings:
@@ -537,7 +544,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Calls
     
     private func presentCallScreen(roomProxy: RoomProxyProtocol) {
-        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
+                                                                            roomProxy: roomProxy,
                                                                             callBaseURL: appSettings.elementCallBaseURL,
                                                                             clientID: InfoPlistReader.main.bundleIdentifier))
         

@@ -96,9 +96,9 @@ extension ClientProxyMock {
         
             switch room {
             case .empty:
-                return await RoomProxyMock(with: .init(name: "Empty room"))
+                return await RoomProxyMock(.init(name: "Empty room"))
             case .filled(let details), .invalidated(let details):
-                return await RoomProxyMock(with: .init(id: roomID, name: details.name))
+                return await RoomProxyMock(.init(id: roomID, name: details.name))
             }
         }
     }

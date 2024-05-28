@@ -128,6 +128,8 @@ protocol RoomProxyProtocol {
     func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError>
     func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol
     
+    func sendCallNotificationIfNeeeded() async -> Result<Void, RoomProxyError>
+    
     // MARK: - Permalinks
     
     func matrixToPermalink() async -> Result<URL, RoomProxyError>

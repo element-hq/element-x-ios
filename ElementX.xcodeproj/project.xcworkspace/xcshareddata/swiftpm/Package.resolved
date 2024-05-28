@@ -3,7 +3,7 @@
     {
       "identity" : "compound-design-tokens",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/element-hq/compound-design-tokens",
+      "location" : "https://github.com/element-hq/compound-design-tokens.git",
       "state" : {
         "revision" : "c3fff1f2b042295cd5f4bcf8d4fe68ec47ca4061",
         "version" : "1.2.0"
@@ -139,8 +139,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "e87ffe044e74a74930386c2185f5fbcfce3c7877",
-        "version" : "1.0.2"
+        "revision" : "100598671d3e6186f77e2f48630e9cbcb63fd86b",
+        "version" : "1.0.4"
       }
     },
     {
@@ -191,7 +191,7 @@
     {
       "identity" : "sfsafesymbols",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols",
+      "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols.git",
       "state" : {
         "revision" : "7cca2d60925876b5953a2cf7341cd80fbeac983c",
         "version" : "4.1.1"

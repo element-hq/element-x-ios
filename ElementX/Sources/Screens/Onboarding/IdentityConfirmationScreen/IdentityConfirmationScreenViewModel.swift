@@ -59,6 +59,8 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
             actionsSubject.send(.recoveryKey)
         case .skip:
             actionsSubject.send(.skip)
+        case .reset:
+            actionsSubject.send(.reset)
         }
     }
     
@@ -75,11 +77,18 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
             return
         }
         
-        guard case let .success(isOnlyDeviceLeft) = await userSession.clientProxy.isOnlyDeviceLeft() else {
-            return
+        var availableActions: [IdentityConfirmationScreenViewState.AvailableActions] = []
+        
+        if case let .success(isOnlyDeviceLeft) = await userSession.clientProxy.isOnlyDeviceLeft(),
+           !isOnlyDeviceLeft {
+            availableActions.append(.interactiveVerification)
         }
         
-        state.mode = isOnlyDeviceLeft ? .recoveryOnly : .recoveryAndVerification
+        if sessionSecurityState.recoveryState == .enabled || sessionSecurityState.recoveryState == .incomplete {
+            availableActions.append(.recovery)
+        }
+        
+        state.availableActions = availableActions
     }
     
     private static let loadingIndicatorIdentifier = "\(IdentityConfirmationScreenViewModel.self)-Loading"

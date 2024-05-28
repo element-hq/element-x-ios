@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2024 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,12 +14,25 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
-protocol AppCoordinatorProtocol: CoordinatorProtocol {
-    var windowManager: SecureWindowManagerProtocol { get }
+enum ElementCallServiceAction {
+    case answerCall(roomID: String)
+    case declineCall(roomID: String)
+}
+
+enum ElementCallServiceNotificationKey: String {
+    case roomID
+    case roomDisplayName
+}
+
+let ElementCallServiceNotificationDiscardDelta = 10.0
+
+// sourcery: AutoMockable
+protocol ElementCallServiceProtocol {
+    var actions: AnyPublisher<ElementCallServiceAction, Never> { get }
     
-    @discardableResult func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool
+    func setupCallSession(title: String) async
     
-    func handleUserActivity(_ userActivity: NSUserActivity)
+    func tearDownCallSession()
 }

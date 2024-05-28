@@ -83,7 +83,7 @@ class RoomRolesAndPermissionsScreenViewModelTests: XCTestCase {
     }
     
     private func setupViewModel(members: [RoomMemberProxyMock]) {
-        roomProxy = RoomProxyMock(with: .init(members: members))
+        roomProxy = RoomProxyMock(.init(members: members))
         viewModel = RoomRolesAndPermissionsScreenViewModel(roomProxy: roomProxy,
                                                            userIndicatorController: UserIndicatorControllerMock(),
                                                            analytics: ServiceLocator.shared.analytics)

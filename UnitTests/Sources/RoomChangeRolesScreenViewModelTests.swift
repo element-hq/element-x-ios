@@ -202,7 +202,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
     }
     
     private func setupViewModel(mode: RoomMemberDetails.Role) {
-        roomProxy = RoomProxyMock(with: .init(members: .allMembersAsAdmin))
+        roomProxy = RoomProxyMock(.init(members: .allMembersAsAdmin))
         viewModel = RoomChangeRolesScreenViewModel(mode: mode,
                                                    roomProxy: roomProxy,
                                                    mediaProvider: MockMediaProvider(),

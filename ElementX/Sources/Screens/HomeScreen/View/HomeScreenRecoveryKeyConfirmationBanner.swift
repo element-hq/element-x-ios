@@ -68,9 +68,7 @@ struct HomeScreenRecoveryKeyConfirmationBanner_Previews: PreviewProvider, Testab
         let clientProxy = ClientProxyMock(.init(userID: "@alice:example.com",
                                                 roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loading))))
         
-        let userSession = MockUserSession(clientProxy: clientProxy,
-                                          mediaProvider: MockMediaProvider(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
         return HomeScreenViewModel(userSession: userSession,
                                    analyticsService: ServiceLocator.shared.analytics,

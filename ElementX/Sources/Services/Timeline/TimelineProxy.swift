@@ -30,7 +30,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     private var timelineListener: RoomTimelineListener?
     
     private let backPaginationSubscriptionSubject = CurrentValueSubject<PaginationStatus, Never>(.idle)
-    private let backPaginationTimelineEndSubject = CurrentValueSubject<Bool, Never>(false)
     private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
     
@@ -71,20 +70,12 @@ final class TimelineProxy: TimelineProxyProtocol {
         let result = await timeline.addListener(listener: timelineListener)
         roomTimelineObservationToken = result.itemsStream
         
-        // Merge the subscription with the paginate method's return value.
-        let backPaginationPublisher = backPaginationSubscriptionSubject
-            .combineLatest(backPaginationTimelineEndSubject)
-            .map { status, timelineEnd in
-                timelineEnd ? .timelineEndReached : status
-            }
-            .eraseToAnyPublisher()
-        
-        let paginationStatePublisher = backPaginationPublisher
+        let paginationStatePublisher = backPaginationSubscriptionSubject
             .combineLatest(forwardPaginationStatusSubject)
             .map { PaginationState(backward: $0.0, forward: $0.1) }
             .eraseToAnyPublisher()
         
-        subscribeToPagination()
+        await subscribeToPagination()
         
         innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
                                                            isLive: isLive,
@@ -152,10 +143,8 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Paginating backwards")
         
         do {
-            let timelineEndReached = try await timeline.paginateBackwards(numEvents: requestSize)
+            let _ = try await timeline.paginateBackwards(numEvents: requestSize)
             MXLog.info("Finished paginating backwards")
-            
-            backPaginationTimelineEndSubject.send(timelineEndReached)
             
             return .success(())
         } catch {
@@ -543,21 +532,22 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    private func subscribeToPagination() {
+    private func subscribeToPagination() async {
         let backPaginationListener = RoomPaginationStatusListener { [weak self] status in
             guard let self else {
                 return
             }
             
             switch status {
-            case .initial, .idle:
-                backPaginationSubscriptionSubject.send(.idle)
-            case .fetchingTargetEvent, .paginating:
+            case .idle(let hitStartOfTimeline):
+                backPaginationSubscriptionSubject.send(hitStartOfTimeline ? .timelineEndReached : .idle)
+            case .paginating:
                 backPaginationSubscriptionSubject.send(.paginating)
             }
         }
+        
         do {
-            backPaginationStatusObservationToken = try timeline.subscribeToBackPaginationStatus(listener: backPaginationListener)
+            backPaginationStatusObservationToken = try await timeline.subscribeToBackPaginationStatus(listener: backPaginationListener)
         } catch {
             MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
         }
@@ -580,13 +570,13 @@ private final class RoomTimelineListener: TimelineListener {
 }
 
 private final class RoomPaginationStatusListener: PaginationStatusListener {
-    private let onUpdateClosure: (PaginatorState) -> Void
+    private let onUpdateClosure: (LiveBackPaginationStatus) -> Void
 
-    init(_ onUpdateClosure: @escaping (PaginatorState) -> Void) {
+    init(_ onUpdateClosure: @escaping (LiveBackPaginationStatus) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
 
-    func onUpdate(status: PaginatorState) {
+    func onUpdate(status: LiveBackPaginationStatus) {
         onUpdateClosure(status)
     }
 }

@@ -191,9 +191,7 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
     static func viewModel() -> HomeScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         
-        let userSession = MockUserSession(clientProxy: clientProxy,
-                                          mediaProvider: MockMediaProvider(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
         return HomeScreenViewModel(userSession: userSession,
                                    analyticsService: ServiceLocator.shared.analytics,

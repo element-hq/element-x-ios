@@ -27,9 +27,7 @@ class SettingsScreenViewModelTests: XCTestCase {
     
     @MainActor override func setUpWithError() throws {
         cancellables.removeAll()
-        let userSession = MockUserSession(clientProxy: ClientProxyMock(.init(userID: "")),
-                                          mediaProvider: MockMediaProvider(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: ""))))
         viewModel = SettingsScreenViewModel(userSession: userSession, appSettings: ServiceLocator.shared.settings)
         context = viewModel.context
     }

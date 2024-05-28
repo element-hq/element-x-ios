@@ -77,11 +77,13 @@
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>INSendMessageIntent</string>
+		<string>INStartCallIntent</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
 		<string>audio</string>
+		<string>fetch</string>
+		<string>processing</string>
 		<string>voip</string>
 	</array>
 	<key>UILaunchScreen</key>

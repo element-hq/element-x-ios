@@ -32,9 +32,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         clientProxy = .init(.init(userID: ""))
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
-        let userSession = MockUserSession(clientProxy: clientProxy,
-                                          mediaProvider: MockMediaProvider(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         viewModel = StartChatScreenViewModel(userSession: userSession,
                                              analytics: ServiceLocator.shared.analytics,
                                              userIndicatorController: UserIndicatorControllerMock(),

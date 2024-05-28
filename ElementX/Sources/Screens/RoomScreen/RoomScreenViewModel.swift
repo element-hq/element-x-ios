@@ -805,7 +805,7 @@ private extension RoomProxyProtocol {
 // MARK: - Mocks
 
 extension RoomScreenViewModel {
-    static let mock = RoomScreenViewModel(roomProxy: RoomProxyMock(with: .init(name: "Preview room")),
+    static let mock = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room")),
                                           focussedEventID: nil,
                                           timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),

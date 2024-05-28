@@ -245,9 +245,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         let clientProxy = ClientProxyMock(.init(userID: userID,
                                                 roomSummaryProvider: RoomSummaryProviderMock(.init(state: roomSummaryProviderState))))
         
-        let userSession = MockUserSession(clientProxy: clientProxy,
-                                          mediaProvider: MockMediaProvider(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
         return HomeScreenViewModel(userSession: userSession,
                                    analyticsService: ServiceLocator.shared.analytics,

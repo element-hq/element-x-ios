@@ -132,7 +132,7 @@ struct RoomChangeRolesScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(mode: RoomMemberDetails.Role) -> RoomChangeRolesScreenViewModel {
         RoomChangeRolesScreenViewModel(mode: mode,
-                                       roomProxy: RoomProxyMock(with: .init(members: .allMembersAsAdmin)),
+                                       roomProxy: RoomProxyMock(.init(members: .allMembersAsAdmin)),
                                        mediaProvider: MockMediaProvider(),
                                        userIndicatorController: UserIndicatorControllerMock(),
                                        analytics: ServiceLocator.shared.analytics)

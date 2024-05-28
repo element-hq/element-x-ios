@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import AVFoundation
 import CallKit
 import Combine
 import SwiftUI
@@ -22,33 +21,27 @@ import SwiftUI
 typealias CallScreenViewModelType = StateStoreViewModel<CallScreenViewState, CallScreenViewAction>
 
 class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol {
+    private let elementCallService: ElementCallServiceProtocol
     private let roomProxy: RoomProxyProtocol
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
-    
-    private let callController = CXCallController()
-    // periphery: ignore - call kit magic do not remove
-    private let callProvider = CXProvider(configuration: .init())
-    
-    private let callID = UUID()
     
     private let actionsSubject: PassthroughSubject<CallScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<CallScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    deinit {
-        tearDownVoIPSession(callID: callID)
-    }
-    
     /// Designated initialiser
     /// - Parameters:
+    ///   - elementCallService: service responsible for setting up CallKit
     ///   - roomProxy: The room in which the call should be created
     ///   - callBaseURL: Which Element Call instance should be used
     ///   - clientID: Something to identify the current client on the Element Call side
-    init(roomProxy: RoomProxyProtocol,
+    init(elementCallService: ElementCallServiceProtocol,
+         roomProxy: RoomProxyProtocol,
          callBaseURL: URL,
          clientID: String) {
+        self.elementCallService = elementCallService
         self.roomProxy = roomProxy
         
         widgetDriver = roomProxy.elementCallWidgetDriver()
@@ -109,11 +102,9 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 return
             }
             
-            do {
-                try await setupVoIPSession(callID: callID)
-            } catch {
-                MXLog.error("Failed setting up VoIP session with error: \(error)")
-            }
+            await elementCallService.setupCallSession(title: roomProxy.roomTitle)
+            
+            let _ = await roomProxy.sendCallNotificationIfNeeeded()
         }
     }
     
@@ -125,21 +116,28 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
     }
     
-    // MARK: - CXCallObserverDelegate
-    
-    // periphery: ignore - call kit magic do not remove
-    func callObserver(_ callObserver: CXCallObserver, callChanged call: CXCall) {
-        MXLog.info("Call changed: \(call)")
-    }
-    
-    // MARK: - CXProviderDelegate
-    
-    // periphery: ignore - call kit magic do not remove
-    func providerDidReset(_ provider: CXProvider) {
-        MXLog.info("Call provider did reset: \(provider)")
+    func stop() {
+        Task {
+            await hangUp()
+        }
+        
+        elementCallService.tearDownCallSession()
     }
     
     // MARK: - Private
+    
+    private func hangUp() async {
+        let hangUpMessage = """
+        "api":"toWidget",
+        "widgetId":"\(widgetDriver.widgetID)",
+        "requestId":"widgetapi-\(UUID())",
+        "action":"im.vector.hangup",
+        "data":{}
+        """
+        
+        let result = await widgetDriver.sendMessage(hangUpMessage)
+        MXLog.error("Result yo: \(result)")
+    }
 
     private static let eventHandlerName = "elementx"
     
@@ -159,35 +157,5 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             false,
           );
         """
-    }
-    
-    private func setupVoIPSession(callID: UUID) async throws {
-        try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [])
-        try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
-        
-        let handle = CXHandle(type: .generic, value: roomProxy.roomTitle)
-        let startCallAction = CXStartCallAction(call: callID, handle: handle)
-        startCallAction.isVideo = true
-        
-        let transaction = CXTransaction(action: startCallAction)
-        
-        try await callController.request(transaction)
-    }
-    
-    private nonisolated func tearDownVoIPSession(callID: UUID?) {
-        guard let callID else {
-            return
-        }
-        
-        try? AVAudioSession.sharedInstance().setActive(false)
-            
-        let endCallAction = CXEndCallAction(call: callID)
-        let transaction = CXTransaction(action: endCallAction)
-        
-        callController.request(transaction) { error in
-            if let error {
-                MXLog.error("Failed transaction with error: \(error)")
-            }
-        }
     }
 }
