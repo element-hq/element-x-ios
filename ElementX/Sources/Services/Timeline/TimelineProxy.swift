@@ -112,8 +112,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                     intentionalMentions: intentionalMentions.toRustMentions())
         
         do {
-            let originalEvent = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
-            try await timeline.edit(newContent: messageContent, editItem: originalEvent)
+            try await timeline.editByEventId(newContent: messageContent, eventId: eventID)
                 
             MXLog.info("Finished editing message with original event ID: \(eventID)")
                 
@@ -373,8 +372,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         do {
             if let eventID {
-                let replyItem = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
-                try await timeline.sendReply(msg: messageContent, replyItem: replyItem)
+                try await timeline.sendReplyByEventId(msg: messageContent, replyEventId: eventID)
                 MXLog.info("Finished sending reply to eventID: \(eventID)")
             } else {
                 timeline.send(msg: messageContent)
