@@ -42,7 +42,7 @@ enum AuthenticationServiceError: Error {
 protocol AuthenticationServiceProxyProtocol {
     /// The currently configured homeserver.
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { get }
-    
+        
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError>
     /// Performs login using OIDC for the current homeserver.

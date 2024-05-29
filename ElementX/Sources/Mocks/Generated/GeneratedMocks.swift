@@ -1014,6 +1014,70 @@ class AppMediatorMock: AppMediatorProtocol {
         setIdleTimerDisabledReceivedInvocations.append(disabled)
         setIdleTimerDisabledClosure?(disabled)
     }
+    //MARK: - requestAuthorizationIfNeeded
+
+    var requestAuthorizationIfNeededUnderlyingCallsCount = 0
+    var requestAuthorizationIfNeededCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return requestAuthorizationIfNeededUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestAuthorizationIfNeededUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestAuthorizationIfNeededUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestAuthorizationIfNeededUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var requestAuthorizationIfNeededCalled: Bool {
+        return requestAuthorizationIfNeededCallsCount > 0
+    }
+
+    var requestAuthorizationIfNeededUnderlyingReturnValue: Bool!
+    var requestAuthorizationIfNeededReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return requestAuthorizationIfNeededUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestAuthorizationIfNeededUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestAuthorizationIfNeededUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestAuthorizationIfNeededUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var requestAuthorizationIfNeededClosure: (() async -> Bool)?
+
+    func requestAuthorizationIfNeeded() async -> Bool {
+        requestAuthorizationIfNeededCallsCount += 1
+        if let requestAuthorizationIfNeededClosure = requestAuthorizationIfNeededClosure {
+            return await requestAuthorizationIfNeededClosure()
+        } else {
+            return requestAuthorizationIfNeededReturnValue
+        }
+    }
 }
 class AudioConverterMock: AudioConverterProtocol {
 
@@ -7203,18 +7267,23 @@ class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
     }
 }
 class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
+    var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
+        get { return underlyingQrLoginProgressPublisher }
+        set(value) { underlyingQrLoginProgressPublisher = value }
+    }
+    var underlyingQrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never>!
 
-    //MARK: - requestAuthorizationIfNeeded
+    //MARK: - loginWithQRCode
 
-    var requestAuthorizationIfNeededUnderlyingCallsCount = 0
-    var requestAuthorizationIfNeededCallsCount: Int {
+    var loginWithQRCodeDataUnderlyingCallsCount = 0
+    var loginWithQRCodeDataCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return requestAuthorizationIfNeededUnderlyingCallsCount
+                return loginWithQRCodeDataUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = requestAuthorizationIfNeededUnderlyingCallsCount
+                    returnValue = loginWithQRCodeDataUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7222,27 +7291,29 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
         }
         set {
             if Thread.isMainThread {
-                requestAuthorizationIfNeededUnderlyingCallsCount = newValue
+                loginWithQRCodeDataUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    requestAuthorizationIfNeededUnderlyingCallsCount = newValue
+                    loginWithQRCodeDataUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var requestAuthorizationIfNeededCalled: Bool {
-        return requestAuthorizationIfNeededCallsCount > 0
+    var loginWithQRCodeDataCalled: Bool {
+        return loginWithQRCodeDataCallsCount > 0
     }
+    var loginWithQRCodeDataReceivedData: Data?
+    var loginWithQRCodeDataReceivedInvocations: [Data] = []
 
-    var requestAuthorizationIfNeededUnderlyingReturnValue: Bool!
-    var requestAuthorizationIfNeededReturnValue: Bool! {
+    var loginWithQRCodeDataUnderlyingReturnValue: Result<UserSessionProtocol, QRCodeLoginServiceError>!
+    var loginWithQRCodeDataReturnValue: Result<UserSessionProtocol, QRCodeLoginServiceError>! {
         get {
             if Thread.isMainThread {
-                return requestAuthorizationIfNeededUnderlyingReturnValue
+                return loginWithQRCodeDataUnderlyingReturnValue
             } else {
-                var returnValue: Bool? = nil
+                var returnValue: Result<UserSessionProtocol, QRCodeLoginServiceError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = requestAuthorizationIfNeededUnderlyingReturnValue
+                    returnValue = loginWithQRCodeDataUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7250,22 +7321,24 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
         }
         set {
             if Thread.isMainThread {
-                requestAuthorizationIfNeededUnderlyingReturnValue = newValue
+                loginWithQRCodeDataUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    requestAuthorizationIfNeededUnderlyingReturnValue = newValue
+                    loginWithQRCodeDataUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var requestAuthorizationIfNeededClosure: (() async -> Bool)?
+    var loginWithQRCodeDataClosure: ((Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError>)?
 
-    func requestAuthorizationIfNeeded() async -> Bool {
-        requestAuthorizationIfNeededCallsCount += 1
-        if let requestAuthorizationIfNeededClosure = requestAuthorizationIfNeededClosure {
-            return await requestAuthorizationIfNeededClosure()
+    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
+        loginWithQRCodeDataCallsCount += 1
+        loginWithQRCodeDataReceivedData = data
+        loginWithQRCodeDataReceivedInvocations.append(data)
+        if let loginWithQRCodeDataClosure = loginWithQRCodeDataClosure {
+            return await loginWithQRCodeDataClosure(data)
         } else {
-            return requestAuthorizationIfNeededReturnValue
+            return loginWithQRCodeDataReturnValue
         }
     }
 }

@@ -444,10 +444,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private func startAuthentication() {
+        let encryptionKeyProvider = EncryptionKeyProvider()
         let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
-                                                               encryptionKeyProvider: EncryptionKeyProvider(),
+                                                               encryptionKeyProvider: encryptionKeyProvider,
                                                                appSettings: appSettings)
+        let qrCodeLoginService = QRCodeLoginService(oidcConfiguration: appSettings.oidcConfiguration.rustValue,
+                                                    encryptionKeyProvider: encryptionKeyProvider,
+                                                    userSessionStore: userSessionStore)
+        
         authenticationFlowCoordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
+                                                                      qrCodeLoginService: qrCodeLoginService,
                                                                       bugReportService: ServiceLocator.shared.bugReportService,
                                                                       navigationRootCoordinator: navigationRootCoordinator,
                                                                       appMediator: appMediator,

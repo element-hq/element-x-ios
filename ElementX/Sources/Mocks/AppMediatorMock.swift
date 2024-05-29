@@ -17,10 +17,11 @@
 import UIKit
 
 extension AppMediatorMock {
-    static var `default`: AppMediatorProtocol {
+    static var `default`: AppMediatorMock {
         let mock = AppMediatorMock()
         
         mock.underlyingAppState = .active
+        mock.requestAuthorizationIfNeededUnderlyingReturnValue = true
         mock.underlyingWindowManager = WindowManagerMock()
         
         return mock

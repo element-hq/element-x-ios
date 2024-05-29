@@ -154,6 +154,15 @@ final class AppSettings {
         return url
     }()
     
+    private(set) lazy var oidcConfiguration = OIDCConfigurationProxy(clientName: InfoPlistReader.main.bundleDisplayName,
+                                                                     redirectURI: oidcRedirectURL,
+                                                                     clientURI: websiteURL,
+                                                                     logoURI: logoURL,
+                                                                     tosURI: acceptableUseURL,
+                                                                     policyURI: privacyURL,
+                                                                     contacts: [supportEmailAddress],
+                                                                     staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
+
     /// A dictionary of accounts that have performed an initial sync through their proxy.
     ///
     /// This is a temporary workaround. In the future we should be able to receive a signal from the

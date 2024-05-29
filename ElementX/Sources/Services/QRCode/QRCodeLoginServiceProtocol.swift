@@ -14,7 +14,27 @@
 // limitations under the License.
 //
 
+import Combine
+import Foundation
+
+import MatrixRustSDK
+
+enum QRCodeLoginServiceError: Error {
+    case failedLoggingIn
+    case invalidQRCode
+    case cancelled
+    case connectionInsecure
+    case declined
+    case linkingNotSupported
+    case expired
+    case deviceNotSupported
+    case deviceNotSignedIn
+    case unknown
+}
+
 // sourcery: AutoMockable
 protocol QRCodeLoginServiceProtocol {
-    func requestAuthorizationIfNeeded() async -> Bool
+    var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> { get }
+    
+    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError>
 }
