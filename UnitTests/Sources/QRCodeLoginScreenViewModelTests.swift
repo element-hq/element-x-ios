@@ -72,10 +72,7 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
             while !isCompleted {
                 await Task.yield()
             }
-            
-            return .success(MockUserSession(clientProxy: ClientProxyMock(),
-                                            mediaProvider: MockMediaProvider(),
-                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock()))
+            return .success(UserSessionMock(.init(clientProxy: ClientProxyMock())))
         }
         
         XCTAssert(context.viewState.state == .initial)
