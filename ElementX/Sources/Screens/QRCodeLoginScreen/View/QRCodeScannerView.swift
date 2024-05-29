@@ -119,7 +119,7 @@ final class QRScannerController: UIViewController {
         // Start video capture.
         DispatchQueue.global(qos: .userInitiated).async {
             self.captureSession.startRunning()
-            MXLog.info("QRCodeScannerView: catpure session started")
+            MXLog.info("QRCodeScannerView: capture session started")
         }
     }
     
@@ -127,7 +127,7 @@ final class QRScannerController: UIViewController {
         // Stop video capture.
         DispatchQueue.global(qos: .userInitiated).async {
             self.captureSession.stopRunning()
-            MXLog.info("QRCodeScannerView: catpure session stopped")
+            MXLog.info("QRCodeScannerView: capture session stopped")
         }
     }
 }
