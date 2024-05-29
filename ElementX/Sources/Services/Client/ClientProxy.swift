@@ -807,15 +807,11 @@ class ClientProxy: ClientProxyProtocol {
     // MARK: - Encryption
     
     func ed25519Base64() async -> String? {
-        // TODO: Restore this when the PR is updated
-//        await client.encryption().ed25519Key()
-        nil
+        await client.encryption().ed25519Key()
     }
     
     func curve25519Base64() async -> String? {
-        // TODO: Restore this when the PR is updated
-//        await client.encryption().curve25519Key()
-        nil
+        await client.encryption().curve25519Key()
     }
 }
 

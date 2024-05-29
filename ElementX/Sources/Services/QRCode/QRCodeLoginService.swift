@@ -23,7 +23,6 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     private let oidcConfiguration: OidcConfiguration
     private let passphrase: String
     private let userSessionStore: UserSessionStoreProtocol
-    private var listener: QrLoginProgressListenerProxy?
     
     private let qrLoginProgressSubject = PassthroughSubject<QrLoginProgress, Never>()
     var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
@@ -50,7 +49,6 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         let listener = QrLoginProgressListenerProxy { [weak self] progress in
             self?.qrLoginProgressSubject.send(progress)
         }
-        self.listener = listener
         
         do {
             let client = try await ClientBuilder()

@@ -58,7 +58,7 @@ struct QRCodeScannerView: UIViewControllerRepresentable {
             }
             
             scanResult = data
-            MXLog.info("QRCodeScannerView: scanned \(data)")
+            MXLog.info("QRCodeScannerView: scanned data")
         }
     }
 }
