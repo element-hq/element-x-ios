@@ -105,8 +105,6 @@ private extension HumanQrLoginError {
             return .linkingNotSupported
         case .Expired:
             return .expired
-        case .InvalidQrCode:
-            return .invalidQRCode
         case .SlidingSyncNotAvailable:
             return .deviceNotSupported
         case .OtherDeviceNotSignedIn:
