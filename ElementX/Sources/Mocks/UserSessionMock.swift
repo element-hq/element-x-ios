@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2024 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,15 +15,21 @@
 //
 
 import Combine
+import Foundation
 
-struct MockUserSession: UserSessionProtocol {
-    let callbacks = PassthroughSubject<UserSessionCallback, Never>()
+struct UserSessionMockConfiguration {
     var sessionVerificationController: SessionVerificationControllerProxyProtocol?
-    var userID: String { clientProxy.userID }
-    var deviceID: String? { clientProxy.deviceID }
-    var homeserver: String { clientProxy.homeserver }
     let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
-    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
-    var sessionSecurityStatePublisher = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .enabled)).asCurrentValuePublisher()
+}
+
+extension UserSessionMock {
+    convenience init(_ configuration: UserSessionMockConfiguration) {
+        self.init()
+        
+        clientProxy = configuration.clientProxy
+        mediaProvider = MockMediaProvider()
+        voiceMessageMediaManager = VoiceMessageMediaManagerMock()
+        
+        sessionSecurityStatePublisher = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .enabled)).asCurrentValuePublisher()
+    }
 }

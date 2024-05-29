@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import CallKit
 import Intents
 import MatrixRustSDK
 import UserNotifications
@@ -104,6 +105,10 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 return discard(unreadCount: unreadCount)
             }
             
+            guard await shouldHandleCallNotification(itemProxy) else {
+                return discard(unreadCount: unreadCount)
+            }
+            
             // After the first processing, update the modified content
             modifiedContent = try await notificationContentBuilder.content(for: itemProxy, mediaProvider: nil)
             
@@ -172,5 +177,45 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         cleanUp()
         NSELogger.logMemory(with: tag)
         MXLog.info("\(tag) deinit")
+    }
+    
+    private func shouldHandleCallNotification(_ itemProxy: NotificationItemProxyProtocol) async -> Bool {
+        // Handle incoming VoIP calls, show the native OS call screen
+        // https://developer.apple.com/documentation/callkit/sending-end-to-end-encrypted-voip-calls
+        //
+        // The way this works is the following:
+        // - the NSE receives the notification and decrypts it
+        // - checks if it's still time relevant (max 10 seconds old) and whether it should ring
+        // - otherwise it goes on to show it as a normal notification
+        // - if it should ring then it discards the notification but invokes `reportNewIncomingVoIPPushPayload`
+        // so that the main app can handle it
+        // - the main app picks this up in `PKPushRegistry.didReceiveIncomingPushWith` and
+        // `CXProvider.reportNewIncomingCall` to show the system UI and handle actions on it.
+        // N.B. this flow works properly only when background processing capabilities are enabled
+        
+        guard case let .timeline(event) = itemProxy.event,
+              case let .messageLike(content) = try? event.eventType(),
+              case let .callNotify(notificationType) = content,
+              notificationType == .ring else {
+            return true
+        }
+        
+        let timestamp = Date(timeIntervalSince1970: TimeInterval(event.timestamp() / 1000))
+        guard abs(timestamp.timeIntervalSinceNow) < ElementCallServiceNotificationDiscardDelta else {
+            MXLog.info("Call notification is too old, handling as push notification")
+            return true
+        }
+        
+        let payload = [ElementCallServiceNotificationKey.roomID.rawValue: itemProxy.roomID,
+                       ElementCallServiceNotificationKey.roomDisplayName.rawValue: itemProxy.roomDisplayName]
+        
+        do {
+            try await CXProvider.reportNewIncomingVoIPPushPayload(payload)
+        } catch {
+            MXLog.error("Failed reporting voip call with error: \(error). Handling as push notification")
+            return true
+        }
+        
+        return false
     }
 }

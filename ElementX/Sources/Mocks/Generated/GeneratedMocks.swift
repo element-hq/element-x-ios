@@ -4230,7 +4230,94 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
         setSuggestionTriggerClosure?(suggestionTrigger)
     }
 }
+class ElementCallServiceMock: ElementCallServiceProtocol {
+    var actions: AnyPublisher<ElementCallServiceAction, Never> {
+        get { return underlyingActions }
+        set(value) { underlyingActions = value }
+    }
+    var underlyingActions: AnyPublisher<ElementCallServiceAction, Never>!
+
+    //MARK: - setupCallSession
+
+    var setupCallSessionTitleUnderlyingCallsCount = 0
+    var setupCallSessionTitleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setupCallSessionTitleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setupCallSessionTitleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setupCallSessionTitleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setupCallSessionTitleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setupCallSessionTitleCalled: Bool {
+        return setupCallSessionTitleCallsCount > 0
+    }
+    var setupCallSessionTitleReceivedTitle: String?
+    var setupCallSessionTitleReceivedInvocations: [String] = []
+    var setupCallSessionTitleClosure: ((String) async -> Void)?
+
+    func setupCallSession(title: String) async {
+        setupCallSessionTitleCallsCount += 1
+        setupCallSessionTitleReceivedTitle = title
+        setupCallSessionTitleReceivedInvocations.append(title)
+        await setupCallSessionTitleClosure?(title)
+    }
+    //MARK: - tearDownCallSession
+
+    var tearDownCallSessionUnderlyingCallsCount = 0
+    var tearDownCallSessionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return tearDownCallSessionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = tearDownCallSessionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                tearDownCallSessionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    tearDownCallSessionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var tearDownCallSessionCalled: Bool {
+        return tearDownCallSessionCallsCount > 0
+    }
+    var tearDownCallSessionClosure: (() -> Void)?
+
+    func tearDownCallSession() {
+        tearDownCallSessionCallsCount += 1
+        tearDownCallSessionClosure?()
+    }
+}
 class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
+    var widgetID: String {
+        get { return underlyingWidgetID }
+        set(value) { underlyingWidgetID = value }
+    }
+    var underlyingWidgetID: String!
     var messagePublisher: PassthroughSubject<String, Never> {
         get { return underlyingMessagePublisher }
         set(value) { underlyingMessagePublisher = value }
@@ -9853,6 +9940,70 @@ class RoomProxyMock: RoomProxyProtocol {
             return elementCallWidgetDriverReturnValue
         }
     }
+    //MARK: - sendCallNotificationIfNeeeded
+
+    var sendCallNotificationIfNeeededUnderlyingCallsCount = 0
+    var sendCallNotificationIfNeeededCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendCallNotificationIfNeeededUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendCallNotificationIfNeeededUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendCallNotificationIfNeeededUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendCallNotificationIfNeeededUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendCallNotificationIfNeeededCalled: Bool {
+        return sendCallNotificationIfNeeededCallsCount > 0
+    }
+
+    var sendCallNotificationIfNeeededUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var sendCallNotificationIfNeeededReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return sendCallNotificationIfNeeededUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendCallNotificationIfNeeededUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendCallNotificationIfNeeededUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendCallNotificationIfNeeededUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendCallNotificationIfNeeededClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func sendCallNotificationIfNeeeded() async -> Result<Void, RoomProxyError> {
+        sendCallNotificationIfNeeededCallsCount += 1
+        if let sendCallNotificationIfNeeededClosure = sendCallNotificationIfNeeededClosure {
+            return await sendCallNotificationIfNeeededClosure()
+        } else {
+            return sendCallNotificationIfNeeededReturnValue
+        }
+    }
     //MARK: - matrixToPermalink
 
     var matrixToPermalinkUnderlyingCallsCount = 0
@@ -13000,6 +13151,34 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol {
             return authorizationStatusReturnValue
         }
     }
+}
+class UserSessionMock: UserSessionProtocol {
+    var clientProxy: ClientProxyProtocol {
+        get { return underlyingClientProxy }
+        set(value) { underlyingClientProxy = value }
+    }
+    var underlyingClientProxy: ClientProxyProtocol!
+    var mediaProvider: MediaProviderProtocol {
+        get { return underlyingMediaProvider }
+        set(value) { underlyingMediaProvider = value }
+    }
+    var underlyingMediaProvider: MediaProviderProtocol!
+    var voiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
+        get { return underlyingVoiceMessageMediaManager }
+        set(value) { underlyingVoiceMessageMediaManager = value }
+    }
+    var underlyingVoiceMessageMediaManager: VoiceMessageMediaManagerProtocol!
+    var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> {
+        get { return underlyingSessionSecurityStatePublisher }
+        set(value) { underlyingSessionSecurityStatePublisher = value }
+    }
+    var underlyingSessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>!
+    var callbacks: PassthroughSubject<UserSessionCallback, Never> {
+        get { return underlyingCallbacks }
+        set(value) { underlyingCallbacks = value }
+    }
+    var underlyingCallbacks: PassthroughSubject<UserSessionCallback, Never>!
+
 }
 class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
     var urlForRecording: URL {

@@ -24,9 +24,7 @@ import XCTest
 final class NotificationManagerTests: XCTestCase {
     var notificationManager: NotificationManager!
     private let clientProxy = ClientProxyMock(.init(userID: "@test:user.net"))
-    private lazy var mockUserSession = MockUserSession(clientProxy: clientProxy,
-                                                       mediaProvider: MockMediaProvider(),
-                                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock())
+    private lazy var mockUserSession = UserSessionMock(.init(clientProxy: clientProxy))
     private var notificationCenter: UserNotificationCenterMock!
     private var authorizationStatusWasGranted = false
     private var shouldDisplayInAppNotificationReturnValue = false
@@ -169,9 +167,7 @@ final class NotificationManagerTests: XCTestCase {
         notificationCenter.authorizationStatusReturnValue = .authorized
         notificationManager.delegate = self
         
-        notificationManager.setUserSession(MockUserSession(clientProxy: ClientProxyMock(),
-                                                           mediaProvider: MockMediaProvider(),
-                                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock()))
+        notificationManager.setUserSession(UserSessionMock(.init(clientProxy: ClientProxyMock(.init()))))
         try await Task.sleep(for: .seconds(1))
         
         XCTAssertFalse(authorizationStatusWasGranted)
@@ -188,9 +184,7 @@ final class NotificationManagerTests: XCTestCase {
             expectation.fulfill()
         }
         
-        notificationManager.setUserSession(MockUserSession(clientProxy: ClientProxyMock(),
-                                                           mediaProvider: MockMediaProvider(),
-                                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock()))
+        notificationManager.setUserSession(UserSessionMock(.init(clientProxy: ClientProxyMock(.init()))))
         await fulfillment(of: [expectation])
         
         XCTAssertTrue(authorizationStatusWasGranted)

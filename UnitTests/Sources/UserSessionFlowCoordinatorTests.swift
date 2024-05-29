@@ -37,20 +37,16 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         cancellables.removeAll()
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = RoomTimelineControllerFactoryMock(configuration: .init())
-        let mediaProvider = MockMediaProvider()
-        let voiceMessageMediaManager = VoiceMessageMediaManagerMock()
-        let userSession = MockUserSession(clientProxy: clientProxy,
-                                          mediaProvider: mediaProvider,
-                                          voiceMessageMediaManager: voiceMessageMediaManager)
         
         navigationRootCoordinator = NavigationRootCoordinator()
         
         notificationManager = NotificationManagerMock()
         
-        userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
+        userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appLockService: AppLockServiceMock(),
                                                                 bugReportService: BugReportServiceMock(),
+                                                                elementCallService: ElementCallServiceMock(),
                                                                 roomTimelineControllerFactory: timelineControllerFactory,
                                                                 appMediator: AppMediatorMock.default,
                                                                 appSettings: ServiceLocator.shared.settings,

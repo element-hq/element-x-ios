@@ -17,6 +17,7 @@
 import AnalyticsEvents
 import BackgroundTasks
 import Combine
+import Intents
 import MatrixRustSDK
 import SwiftUI
 import Version
@@ -28,6 +29,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appMediator: AppMediator
     private let appSettings: AppSettings
     private let appDelegate: AppDelegate
+    private let elementCallService: ElementCallServiceProtocol
 
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: UIBackgroundTaskIdentifier?
@@ -85,6 +87,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         self.appSettings = appSettings
         appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
         
+        elementCallService = ElementCallService()
+        
         navigationRootCoordinator = NavigationRootCoordinator()
         
         Self.setupServiceLocator(appSettings: appSettings)
@@ -131,6 +135,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         observeAppLockChanges()
         
         registerBackgroundAppRefresh()
+        
+        elementCallService.actions.sink { [weak self] action in
+            switch action {
+            case .answerCall(let roomID):
+                self?.handleAppRoute(.call(roomID: roomID))
+            case .declineCall:
+                break
+            }
+        }
+        .store(in: &cancellables)
     }
     
     func start() {
@@ -221,6 +235,20 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         return false
+    }
+    
+    func handleUserActivity(_ userActivity: NSUserActivity) {
+        // `INStartVideoCallIntent` is to be replaced with `INStartCallIntent`
+        // but calls from Recents still send it ¯\_(ツ)_/¯
+        guard let intent = userActivity.interaction?.intent as? INStartVideoCallIntent,
+              let contact = intent.contacts?.first,
+              let roomIdentifier = contact.personHandle?.value else {
+            MXLog.error("Failed retrieving information from userActivity: \(userActivity)")
+            return
+        }
+        
+        MXLog.info("Starting call in room: \(roomIdentifier)")
+        handleAppRoute(AppRoute.call(roomID: roomIdentifier))
     }
     
     // MARK: - AuthenticationFlowCoordinatorDelegate
@@ -443,15 +471,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         Task {
-            let credentials = SoftLogoutScreenCredentials(userID: userSession.userID,
-                                                          homeserverName: userSession.homeserver,
+            let credentials = SoftLogoutScreenCredentials(userID: userSession.clientProxy.userID,
+                                                          homeserverName: userSession.clientProxy.homeserver,
                                                           userDisplayName: userSession.clientProxy.userDisplayNamePublisher.value ?? "",
-                                                          deviceID: userSession.deviceID)
+                                                          deviceID: userSession.clientProxy.deviceID)
             
             let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
                                                                    encryptionKeyProvider: EncryptionKeyProvider(),
                                                                    appSettings: appSettings)
-            _ = await authenticationService.configure(for: userSession.homeserver)
+            _ = await authenticationService.configure(for: userSession.clientProxy.homeserver)
             
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                    credentials: credentials,
@@ -488,6 +516,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                     navigationRootCoordinator: navigationRootCoordinator,
                                                                     appLockService: appLockFlowCoordinator.appLockService,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
+                                                                    elementCallService: elementCallService,
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory(),
                                                                     appMediator: appMediator,
                                                                     appSettings: appSettings,
@@ -682,7 +711,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         stopSync()
         userSessionFlowCoordinator?.stop()
         
-        let userID = userSession.userID
+        let userID = userSession.clientProxy.userID
         tearDownUserSession()
     
         // Allow for everything to deallocate properly

@@ -143,6 +143,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         attributedString.removeAttribute(.foregroundColor, range: .init(location: 0, length: attributedString.length))
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func addLinksAndMentions(_ attributedString: NSMutableAttributedString) {
         let string = attributedString.string
         

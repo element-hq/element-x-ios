@@ -50,7 +50,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
-        super.init(initialViewState: .init(userID: userSession.userID),
+        super.init(initialViewState: .init(userID: userSession.clientProxy.userID),
                    imageProvider: userSession.mediaProvider)
         
         userSession.clientProxy.userAvatarURLPublisher
@@ -236,7 +236,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         analyticsService.signpost.beginFirstRooms()
         
-        let hasUserBeenMigrated = appSettings.migratedAccounts[userSession.userID] == true
+        let hasUserBeenMigrated = appSettings.migratedAccounts[userSession.clientProxy.userID] == true
 
         if !hasUserBeenMigrated {
             state.roomListMode = .migration
@@ -248,7 +248,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 .sink { [weak self] callback in
                     guard let self, case .receivedSyncUpdate = callback else { return }
                     migrationCancellable = nil
-                    appSettings.migratedAccounts[userSession.userID] = true
+                    appSettings.migratedAccounts[userSession.clientProxy.userID] = true
                     
                     MXLog.info("Received first sync response, updating room list mode")
                     
@@ -279,7 +279,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState) {
-        guard appSettings.migratedAccounts[userSession.userID] == true else {
+        guard appSettings.migratedAccounts[userSession.clientProxy.userID] == true else {
             // Ignore room summary provider updates while "migrating"
             return
         }

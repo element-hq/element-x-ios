@@ -53,8 +53,8 @@ private struct WebView: UIViewRepresentable {
     }
     
     @MainActor
-    class Coordinator: NSObject, WKScriptMessageHandler, WKUIDelegate, WKNavigationDelegate {
-        private let viewModelContext: CallScreenViewModel.Context
+    class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate {
+        private weak var viewModelContext: CallScreenViewModel.Context?
         
         private(set) var webView: WKWebView!
         
@@ -73,7 +73,7 @@ private struct WebView: UIViewRepresentable {
             let configuration = WKWebViewConfiguration()
             
             let userContentController = WKUserContentController()
-            userContentController.add(self, name: viewModelContext.viewState.messageHandler)
+            userContentController.add(WKScriptMessageHandlerWrapper(self), name: viewModelContext.viewState.messageHandler)
             
             configuration.userContentController = userContentController
             configuration.allowsInlineMediaPlayback = true
@@ -98,8 +98,8 @@ private struct WebView: UIViewRepresentable {
             // After testing different scenarios it seems that when using async/await version of these
             // methods wkwebView expects JavaScript to return with a value (something other than Void),
             // if there is no value returning from the JavaScript that you evaluate you will have a crash.
-            try await withCheckedThrowingContinuation { continuaton in
-                webView.evaluateJavaScript(script) { result, error in
+            try await withCheckedThrowingContinuation { [weak self] continuaton in
+                self?.webView.evaluateJavaScript(script) { result, error in
                     if let error {
                         continuaton.resume(throwing: error)
                     } else {
@@ -109,12 +109,10 @@ private struct WebView: UIViewRepresentable {
             }
         }
         
-        // MARK: - WKScriptMessageHandler
-        
         nonisolated func userContentController(_ userContentController: WKUserContentController,
                                                didReceive message: WKScriptMessage) {
-            Task { @MainActor in
-                viewModelContext.javaScriptMessageHandler?(message.body)
+            Task { @MainActor [weak self] in
+                self?.viewModelContext?.javaScriptMessageHandler?(message.body)
             }
         }
         
@@ -148,8 +146,24 @@ private struct WebView: UIViewRepresentable {
         
         nonisolated func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             Task { @MainActor in
-                viewModelContext.send(viewAction: .urlChanged(webView.url))
+                viewModelContext?.send(viewAction: .urlChanged(webView.url))
             }
+        }
+    }
+    
+    /// Avoids retain loops between the configuration and webView coordinator
+    private class WKScriptMessageHandlerWrapper: NSObject, WKScriptMessageHandler {
+        private weak var coordinator: Coordinator?
+        
+        init(_ coordinator: Coordinator) {
+            self.coordinator = coordinator
+        }
+        
+        // MARK: - WKScriptMessageHandler
+        
+        nonisolated func userContentController(_ userContentController: WKUserContentController,
+                                               didReceive message: WKScriptMessage) {
+            coordinator?.userContentController(userContentController, didReceive: message)
         }
     }
 }
@@ -167,7 +181,8 @@ struct CallScreen_Previews: PreviewProvider {
         
         roomProxy.elementCallWidgetDriverReturnValue = widgetDriver
         
-        return CallScreenViewModel(roomProxy: roomProxy,
+        return CallScreenViewModel(elementCallService: ElementCallServiceMock(),
+                                   roomProxy: roomProxy,
                                    callBaseURL: "https://call.element.io",
                                    clientID: "io.element.elementx")
     }()

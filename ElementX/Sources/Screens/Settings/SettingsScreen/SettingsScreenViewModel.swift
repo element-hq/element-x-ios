@@ -27,8 +27,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     }
     
     init(userSession: UserSessionProtocol, appSettings: AppSettings) {
-        super.init(initialViewState: .init(deviceID: userSession.deviceID,
-                                           userID: userSession.userID,
+        super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
+                                           userID: userSession.clientProxy.userID,
                                            showDeveloperOptions: appSettings.isDevelopmentBuild),
                    imageProvider: userSession.mediaProvider)
         

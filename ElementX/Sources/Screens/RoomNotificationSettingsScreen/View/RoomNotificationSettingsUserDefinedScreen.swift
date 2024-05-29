@@ -52,7 +52,7 @@ struct RoomNotificationSettingsUserDefinedScreen_Previews: PreviewProvider, Test
     static let viewModel = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(defaultRoomMode: .mentionsAndKeywordsOnly, roomMode: .mentionsAndKeywordsOnly))
 
-        let roomProxy = RoomProxyMock(with: .init(name: "Room", isEncrypted: true))
+        let roomProxy = RoomProxyMock(.init(name: "Room", isEncrypted: true))
         
         return RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
                                                        roomProxy: roomProxy,
@@ -62,7 +62,7 @@ struct RoomNotificationSettingsUserDefinedScreen_Previews: PreviewProvider, Test
     static let viewModelUnencrypted = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(defaultRoomMode: .mentionsAndKeywordsOnly, roomMode: .mentionsAndKeywordsOnly))
 
-        let roomProxy = RoomProxyMock(with: .init(name: "Room", isEncrypted: false))
+        let roomProxy = RoomProxyMock(.init(name: "Room", isEncrypted: false))
         
         return RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
                                                        roomProxy: roomProxy,
