@@ -140,7 +140,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
     // MARK: - WidgetCapabilitiesProvider
     
     func acquireCapabilities(capabilities: WidgetCapabilities) -> WidgetCapabilities {
-        capabilities
+        getElementCallRequiredPermissions(ownUserId: room.ownUserId())
     }
     
     // MARK: - Private
