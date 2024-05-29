@@ -129,6 +129,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         switch error {
         case .invalidQRCode:
             state.state = .scan(.invalid)
+        case .deviceNotSignedIn:
+            state.state = .scan(.deviceNotSignedIn)
         case .cancelled:
             state.state = .error(.cancelled)
         case .connectionInsecure:

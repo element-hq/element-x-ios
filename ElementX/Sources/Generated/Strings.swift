@@ -1221,6 +1221,10 @@ internal enum L10n {
   internal static var screenQrCodeLoginDeviceCodeSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_subtitle") }
   /// Enter the number below on your other device
   internal static var screenQrCodeLoginDeviceCodeTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_title") }
+  /// Sign in to your other device and then try again, or use another device that’s already signed in.
+  internal static var screenQrCodeLoginDeviceNotSignedInScanStateDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_device_not_signed_in_scan_state_description") }
+  /// Other device not signed in
+  internal static var screenQrCodeLoginDeviceNotSignedInScanStateSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_not_signed_in_scan_state_subtitle") }
   /// The sign in was cancelled on the other device.
   internal static var screenQrCodeLoginErrorCancelledSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_cancelled_subtitle") }
   /// Sign in request cancelled

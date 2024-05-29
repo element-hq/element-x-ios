@@ -89,6 +89,8 @@ enum QRCodeLoginState: Equatable {
         case connecting
         /// the qr code has been processed and is invalid
         case invalid
+        /// the qr code has been processed but it belongs to a device not signed in,
+        case deviceNotSignedIn
     }
     
     enum QRCodeLoginDisplayCodeState: Equatable {
@@ -128,7 +130,12 @@ enum QRCodeLoginState: Equatable {
         case .error:
             return true
         case let .scan(state):
-            return state == .invalid
+            switch state {
+            case .invalid, .deviceNotSignedIn:
+                return true
+            default:
+                return false
+            }
         default:
             return false
         }

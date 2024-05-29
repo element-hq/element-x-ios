@@ -129,6 +129,8 @@ private extension HumanQrLoginError {
             return .invalidQRCode
         case .SlidingSyncNotAvailable:
             return .deviceNotSupported
+        case .OtherDeviceNotSignedIn:
+            return .deviceNotSignedIn
         case .Unknown, .OidcMetadataInvalid:
             return .unknown
         }

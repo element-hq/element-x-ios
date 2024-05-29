@@ -28,6 +28,7 @@ enum QRCodeLoginServiceError: Error {
     case linkingNotSupported
     case expired
     case deviceNotSupported
+    case deviceNotSignedIn
     case unknown
 }
 
