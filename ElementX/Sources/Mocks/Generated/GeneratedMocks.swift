@@ -1014,6 +1014,70 @@ class AppMediatorMock: AppMediatorProtocol {
         setIdleTimerDisabledReceivedInvocations.append(disabled)
         setIdleTimerDisabledClosure?(disabled)
     }
+    //MARK: - requestAuthorizationIfNeeded
+
+    var requestAuthorizationIfNeededUnderlyingCallsCount = 0
+    var requestAuthorizationIfNeededCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return requestAuthorizationIfNeededUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestAuthorizationIfNeededUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestAuthorizationIfNeededUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestAuthorizationIfNeededUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var requestAuthorizationIfNeededCalled: Bool {
+        return requestAuthorizationIfNeededCallsCount > 0
+    }
+
+    var requestAuthorizationIfNeededUnderlyingReturnValue: Bool!
+    var requestAuthorizationIfNeededReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return requestAuthorizationIfNeededUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestAuthorizationIfNeededUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestAuthorizationIfNeededUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestAuthorizationIfNeededUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var requestAuthorizationIfNeededClosure: (() async -> Bool)?
+
+    func requestAuthorizationIfNeeded() async -> Bool {
+        requestAuthorizationIfNeededCallsCount += 1
+        if let requestAuthorizationIfNeededClosure = requestAuthorizationIfNeededClosure {
+            return await requestAuthorizationIfNeededClosure()
+        } else {
+            return requestAuthorizationIfNeededReturnValue
+        }
+    }
 }
 class AudioConverterMock: AudioConverterProtocol {
 
@@ -7209,70 +7273,6 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
     }
     var underlyingQrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never>!
 
-    //MARK: - requestAuthorizationIfNeeded
-
-    var requestAuthorizationIfNeededUnderlyingCallsCount = 0
-    var requestAuthorizationIfNeededCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return requestAuthorizationIfNeededUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = requestAuthorizationIfNeededUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                requestAuthorizationIfNeededUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    requestAuthorizationIfNeededUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var requestAuthorizationIfNeededCalled: Bool {
-        return requestAuthorizationIfNeededCallsCount > 0
-    }
-
-    var requestAuthorizationIfNeededUnderlyingReturnValue: Bool!
-    var requestAuthorizationIfNeededReturnValue: Bool! {
-        get {
-            if Thread.isMainThread {
-                return requestAuthorizationIfNeededUnderlyingReturnValue
-            } else {
-                var returnValue: Bool? = nil
-                DispatchQueue.main.sync {
-                    returnValue = requestAuthorizationIfNeededUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                requestAuthorizationIfNeededUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    requestAuthorizationIfNeededUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var requestAuthorizationIfNeededClosure: (() async -> Bool)?
-
-    func requestAuthorizationIfNeeded() async -> Bool {
-        requestAuthorizationIfNeededCallsCount += 1
-        if let requestAuthorizationIfNeededClosure = requestAuthorizationIfNeededClosure {
-            return await requestAuthorizationIfNeededClosure()
-        } else {
-            return requestAuthorizationIfNeededReturnValue
-        }
-    }
     //MARK: - loginWithQRCode
 
     var loginWithQRCodeDataUnderlyingCallsCount = 0

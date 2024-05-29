@@ -130,7 +130,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .authenticationFlow:
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: MockAuthenticationServiceProxy(),
-                                                                qrCodeLoginService: QRCodeLoginServiceMock(configuration: .init()),
+                                                                qrCodeLoginService: QRCodeLoginServiceMock(),
                                                                 bugReportService: BugReportServiceMock(),
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appMediator: AppMediatorMock.default,

@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import AVFoundation
 import Combine
+import Foundation
 
 import MatrixRustSDK
 
@@ -67,24 +67,6 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
             MXLog.error("QRCode login unknown error: \(error)")
             return .failure(.unknown)
         }
-    }
-    
-    func requestAuthorizationIfNeeded() async -> Bool {
-        let status = AVCaptureDevice.authorizationStatus(for: .video)
-        
-        // Determine if the user previously authorized camera access.
-        if status == .authorized {
-            return true
-        }
-        
-        var isAuthorized = false
-        // If the system hasn't determined the user's authorization status,
-        // explicitly prompt them for approval.
-        if status == .notDetermined {
-            isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
-        }
-        
-        return isAuthorized
     }
     
     private func login(client: Client) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {

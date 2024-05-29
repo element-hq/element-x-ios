@@ -36,6 +36,5 @@ enum QRCodeLoginServiceError: Error {
 protocol QRCodeLoginServiceProtocol {
     var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> { get }
     
-    func requestAuthorizationIfNeeded() async -> Bool
     func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError>
 }

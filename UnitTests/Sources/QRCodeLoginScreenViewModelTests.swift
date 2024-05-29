@@ -34,7 +34,7 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
     
     override func setUp() {
         qrProgressSubject = PassthroughSubject<QrLoginProgress, Never>()
-        qrServiceMock = QRCodeLoginServiceMock(configuration: .init())
+        qrServiceMock = QRCodeLoginServiceMock()
         qrServiceMock.underlyingQrLoginProgressPublisher = qrProgressSubject.eraseToAnyPublisher()
         appMediatorMock = AppMediatorMock.default
         viewModel = QRCodeLoginScreenViewModel(qrCodeLoginService: qrServiceMock,
@@ -45,12 +45,12 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.state, .initial)
         XCTAssertNil(context.qrResult)
         XCTAssertFalse(qrServiceMock.loginWithQRCodeDataCalled)
-        XCTAssertFalse(qrServiceMock.requestAuthorizationIfNeededCalled)
+        XCTAssertFalse(appMediatorMock.requestAuthorizationIfNeededCalled)
         XCTAssertFalse(appMediatorMock.openAppSettingsCalled)
     }
     
     func testRequestCameraPermission() async throws {
-        qrServiceMock.requestAuthorizationIfNeededReturnValue = false
+        appMediatorMock.requestAuthorizationIfNeededReturnValue = false
         XCTAssert(context.viewState.state == .initial)
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { state in
@@ -58,7 +58,7 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
         }
         context.send(viewAction: .startScan)
         try await deferred.fulfill()
-        XCTAssertTrue(qrServiceMock.requestAuthorizationIfNeededCalled)
+        XCTAssertTrue(appMediatorMock.requestAuthorizationIfNeededCalled)
         
         context.send(viewAction: .openSettings)
         await Task.yield()
@@ -82,7 +82,7 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
         }
         context.send(viewAction: .startScan)
         try await deferred.fulfill()
-        XCTAssertTrue(qrServiceMock.requestAuthorizationIfNeededCalled)
+        XCTAssertTrue(appMediatorMock.requestAuthorizationIfNeededCalled)
         
         deferred = deferFulfillment(context.$viewState) { state in
             state.state == .scan(.connecting)

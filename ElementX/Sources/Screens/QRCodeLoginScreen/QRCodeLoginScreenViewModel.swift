@@ -94,7 +94,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     
     private func startScanIfPossible() async {
         state.bindings.qrResult = nil
-        state.state = await qrCodeLoginService.requestAuthorizationIfNeeded() ? .scan(.scanning) : .error(.noCameraPermission)
+        state.state = await appMediator.requestAuthorizationIfNeeded() ? .scan(.scanning) : .error(.noCameraPermission)
     }
     
     private func handleScan(qrData: Data) {
@@ -150,7 +150,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         
     /// Only for mocking initial states
     fileprivate init(state: QRCodeLoginState) {
-        qrCodeLoginService = QRCodeLoginServiceMock(configuration: .init())
+        qrCodeLoginService = QRCodeLoginServiceMock()
         appMediator = AppMediatorMock.default
         super.init(initialViewState: .init(state: state))
     }
