@@ -23,10 +23,13 @@ extension AVMetadataMachineReadableCodeObject {
     var binaryValue: Data? {
         switch type {
         case .qr:
-            guard let binaryValueWithProtocol else {
+            guard let binaryValueWithProtocol,
+                  let symbolVersion = (descriptor as? CIQRCodeDescriptor)?.symbolVersion else {
                 return nil
             }
-            return removeQrProtocolData(binaryValueWithProtocol)
+            MXLog.info("QR code raw data: \(binaryValueWithProtocol.map { String(format: "%02x", $0) }.joined())")
+            MXLog.info("QR code symbol version: \(symbolVersion)")
+            return Self.removeQrProtocolData(binaryValueWithProtocol, symbolVersion: symbolVersion)
         case .aztec:
             guard let string = stringValue
             else { return nil }
@@ -54,21 +57,20 @@ extension AVMetadataMachineReadableCodeObject {
         }
     }
 
-    private func removeQrProtocolData(_ input: Data) -> Data? {
+    static func removeQrProtocolData(_ input: Data, symbolVersion: Int) -> Data? {
         var halves = input.halfBytes()
-        var batch = takeBatch(&halves)
+        var batch = takeBatch(&halves, version: symbolVersion)
         var output = batch
         while !batch.isEmpty {
-            batch = takeBatch(&halves)
+            batch = takeBatch(&halves, version: symbolVersion)
             output.append(contentsOf: batch)
         }
-        return Data(output)
+        let data = Data(output)
+        MXLog.info("QR code decoded binary data: \(data.map { String(format: "%02x", $0) }.joined())")
+        return data
     }
 
-    private func takeBatch(_ input: inout [HalfByte]) -> [UInt8] {
-        guard let version = (descriptor as? CIQRCodeDescriptor)?.symbolVersion else {
-            return []
-        }
+    private static func takeBatch(_ input: inout [HalfByte], version: Int) -> [UInt8] {
         let characterCountLength = version > 9 ? 16 : 8
         let mode = input.remove(at: 0)
         var output = [UInt8]()
