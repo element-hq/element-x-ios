@@ -27,8 +27,6 @@ extension AVMetadataMachineReadableCodeObject {
                   let symbolVersion = (descriptor as? CIQRCodeDescriptor)?.symbolVersion else {
                 return nil
             }
-            MXLog.info("QR code raw data: \(binaryValueWithProtocol.map { String(format: "%02x", $0) }.joined())")
-            MXLog.info("QR code symbol version: \(symbolVersion)")
             return Self.removeQrProtocolData(binaryValueWithProtocol, symbolVersion: symbolVersion)
         case .aztec:
             guard let string = stringValue
@@ -66,7 +64,6 @@ extension AVMetadataMachineReadableCodeObject {
             output.append(contentsOf: batch)
         }
         let data = Data(output)
-        MXLog.info("QR code decoded binary data: \(data.map { String(format: "%02x", $0) }.joined())")
         return data
     }
 

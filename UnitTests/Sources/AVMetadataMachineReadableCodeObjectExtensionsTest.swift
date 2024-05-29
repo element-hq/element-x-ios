@@ -20,7 +20,7 @@ import XCTest
 @testable import ElementX
 
 final class AVMetadataMachineReadableCodeObjectExtensionsTest: XCTestCase {
-    func testDecoQRCodeVersion8() {
+    func testDecodeQRCodeVersion8() {
         // swiftlint:disable:next line_length
         let rawDataHexString = "4a34d415452495802048bf94b094096e57d3ea43545604cf59b1704879d295cf7fdd99c62df7866da36005668747470733a2f2f73796e617073652d6f6964632e656c656d656e742e6465762f5f73796e617073652f636c69656e742f72656e64657a766f75732f3031485a32394d345936374a4e315658505759464e355a363638002168747470733a2f2f73796e617073652d6f6964632e656c656d656e742e6465762f0ec11ec11ec11ec11ec11ec11ec11ec11ec11ec11ec11ec11ec11ec11ec"
         // swiftlint:disable:next line_length
