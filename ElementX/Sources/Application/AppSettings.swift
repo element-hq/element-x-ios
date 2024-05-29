@@ -270,7 +270,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .volatile)
     var publicSearchEnabled
     
-    @UserPreference(key: UserDefaultsKeys.qrCodeLoginEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.qrCodeLoginEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var qrCodeLoginEnabled
     
     #endif
