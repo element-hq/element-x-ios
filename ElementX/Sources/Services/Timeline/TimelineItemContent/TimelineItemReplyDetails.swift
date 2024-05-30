@@ -16,6 +16,11 @@
 
 import Foundation
 
+struct TimelineItemReply {
+    let details: TimelineItemReplyDetails
+    let isThreaded: Bool
+}
+
 enum TimelineItemReplyDetails: Hashable {
     case notLoaded(eventID: String)
     case loading(eventID: String)

@@ -21,5 +21,5 @@ import MatrixRustSDK
 @MainActor
 protocol RoomTimelineItemFactoryProtocol {
     func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy, isDM: Bool) -> RoomTimelineItemProtocol?
-    func buildReplyToDetails(details: InReplyToDetails) -> TimelineItemReplyDetails
+    func buildReply(details: InReplyToDetails) -> TimelineItemReply
 }

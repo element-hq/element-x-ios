@@ -27,5 +27,5 @@ protocol ComposerDraftServiceProtocol {
     func saveDraft(_ draft: ComposerDraft) async
     func restoreDraft() async -> Result<ComposerDraft?, ComposerDraftServiceError>
     func clearDraft() async
-    func getReplyDetails(eventID: String) async -> TimelineItemReplyDetails
+    func getReply(eventID: String) async -> TimelineItemReply
 }

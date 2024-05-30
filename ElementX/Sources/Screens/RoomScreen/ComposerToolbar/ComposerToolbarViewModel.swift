@@ -229,11 +229,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .reply(let eventID):
             set(mode: .reply(itemID: .init(timelineID: "", eventID: eventID), replyDetails: .loading(eventID: eventID), isThread: false))
             replyLoadingTask = Task {
-                let replyDetails = await draftService.getReplyDetails(eventID: eventID)
+                let reply = await draftService.getReply(eventID: eventID)
                 guard !Task.isCancelled else {
                     return
                 }
-                set(mode: .reply(itemID: .init(timelineID: "", eventID: eventID), replyDetails: replyDetails, isThread: false))
+                set(mode: .reply(itemID: .init(timelineID: "", eventID: eventID), replyDetails: reply.details, isThread: reply.isThreaded))
             }
         }
     }

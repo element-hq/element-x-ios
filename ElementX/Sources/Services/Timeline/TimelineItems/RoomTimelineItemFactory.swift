@@ -634,12 +634,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     // MARK: - Reply details
     
-    func buildReplyToDetails(details: InReplyToDetails) -> TimelineItemReplyDetails {
+    func buildReply(details: InReplyToDetails) -> TimelineItemReply {
+        let isThreaded = details.event.isThreaded
         switch details.event {
         case .unavailable:
-            return .notLoaded(eventID: details.eventId)
+            return .init(details: .notLoaded(eventID: details.eventId), isThreaded: isThreaded)
         case .pending:
-            return .loading(eventID: details.eventId)
+            return .init(details: .loading(eventID: details.eventId), isThreaded: isThreaded)
         case let .ready(timelineItem, senderID, senderProfile):
             let sender: TimelineItemSender
             switch senderProfile {
@@ -659,7 +660,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             
             switch timelineItem.kind() {
             case .message:
-                return timelineItemReplyDetails(sender: sender, eventID: details.eventId, messageType: timelineItem.asMessage()?.msgtype())
+                return .init(details: timelineItemReplyDetails(sender: sender, eventID: details.eventId, messageType: timelineItem.asMessage()?.msgtype()), isThreaded: isThreaded)
             case .poll(let question, _, _, _, _, _, _):
                 replyContent = .poll(question: question)
             case .sticker(let body, _, _):
@@ -670,9 +671,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
             }
             
-            return .loaded(sender: sender, eventID: details.eventId, eventContent: replyContent)
+            return .init(details: .loaded(sender: sender, eventID: details.eventId, eventContent: replyContent), isThreaded: isThreaded)
         case let .error(message):
-            return .error(eventID: details.eventId, message: message)
+            return .init(details: .error(eventID: details.eventId, message: message), isThreaded: isThreaded)
         }
     }
     
@@ -681,7 +682,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return nil
         }
         
-        return buildReplyToDetails(details: details)
+        return buildReply(details: details).details
     }
     
     private func timelineItemReplyDetails(sender: TimelineItemSender, eventID: String, messageType: MessageType?) -> TimelineItemReplyDetails {
@@ -725,6 +726,17 @@ extension Poll.Kind {
             self = .disclosed
         case .undisclosed:
             self = .undisclosed
+        }
+    }
+}
+
+private extension RepliedToEventDetails {
+    var isThreaded: Bool {
+        switch self {
+        case .ready(let content, _, _):
+            return content.asMessage()?.isThreaded() ?? false
+        default:
+            return false
         }
     }
 }
