@@ -1856,41 +1856,6 @@ class BugReportServiceMock: BugReportServiceProtocol {
         stopCallsCount += 1
         stopClosure?()
     }
-    //MARK: - reset
-
-    var resetUnderlyingCallsCount = 0
-    var resetCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return resetUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = resetUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                resetUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    resetUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var resetCalled: Bool {
-        return resetCallsCount > 0
-    }
-    var resetClosure: (() -> Void)?
-
-    func reset() {
-        resetCallsCount += 1
-        resetClosure?()
-    }
     //MARK: - submitBugReport
 
     var submitBugReportProgressListenerUnderlyingCallsCount = 0
