@@ -100,7 +100,8 @@ struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
                                                     completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                     mediaProvider: MockMediaProvider(),
                                                     appSettings: ServiceLocator.shared.settings,
-                                                    mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+                                                    mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                    analyticsService: ServiceLocator.shared.analytics)
 
     static var previews: some View {
         RoomAttachmentPicker(context: viewModel.context)
