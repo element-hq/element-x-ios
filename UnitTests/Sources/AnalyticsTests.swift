@@ -22,21 +22,16 @@ import XCTest
 class AnalyticsTests: XCTestCase {
     private var appSettings: AppSettings!
     private var analyticsClient: AnalyticsClientMock!
-    private var bugReportService: BugReportServiceMock!
     private var posthogMock: PHGPostHogMock!
     
     override func setUp() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         
-        bugReportService = BugReportServiceMock()
-        bugReportService.isRunning = false
-        ServiceLocator.shared.register(bugReportService: bugReportService)
         analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
         ServiceLocator.shared.register(analytics: AnalyticsService(client: analyticsClient,
-                                                                   appSettings: appSettings,
-                                                                   bugReportService: ServiceLocator.shared.bugReportService))
+                                                                   appSettings: appSettings))
         
         posthogMock = PHGPostHogMock()
         posthogMock.configureMockBehavior()
@@ -78,12 +73,11 @@ class AnalyticsTests: XCTestCase {
     }
     
     func testAnalyticsPromptNotDisplayed() {
-        // Given a fresh install of the app both Analytics and BugReportService should be disabled
+        // Given a fresh install of the app Analytics should be disabled
         XCTAssertEqual(appSettings.analyticsConsentState, .unknown)
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
-        XCTAssertFalse(ServiceLocator.shared.analytics.isRunning)
+        XCTAssertFalse(ServiceLocator.shared.analytics.isRunningPublisher.value)
         XCTAssertFalse(analyticsClient.startAnalyticsConfigurationCalled)
-        XCTAssertFalse(bugReportService.startCalled)
     }
     
     func testAnalyticsOptOut() {
@@ -93,12 +87,10 @@ class AnalyticsTests: XCTestCase {
         // Then analytics should be disabled
         XCTAssertEqual(appSettings.analyticsConsentState, .optedOut)
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
-        XCTAssertFalse(ServiceLocator.shared.analytics.isRunning)
+        XCTAssertFalse(ServiceLocator.shared.analytics.isRunningPublisher.value)
         XCTAssertFalse(analyticsClient.isRunning)
-        XCTAssertFalse(bugReportService.isRunning)
-        // Analytics client and the bug report service should have been stopped
+        // Analytics client should have been stopped
         XCTAssertTrue(analyticsClient.stopCalled)
-        XCTAssertTrue(bugReportService.stopCalled)
     }
     
     func testAnalyticsOptIn() {
@@ -108,9 +100,8 @@ class AnalyticsTests: XCTestCase {
         // The analytics should be enabled
         XCTAssertEqual(appSettings.analyticsConsentState, .optedIn)
         XCTAssertTrue(ServiceLocator.shared.analytics.isEnabled)
-        // Analytics client and the bug report service should have been started
+        // Analytics client should have been started
         XCTAssertTrue(analyticsClient.startAnalyticsConfigurationCalled)
-        XCTAssertTrue(bugReportService.startCalled)
     }
     
     func testAnalyticsStartIfNotEnabled() {
@@ -120,17 +111,15 @@ class AnalyticsTests: XCTestCase {
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
         ServiceLocator.shared.analytics.startIfEnabled()
         XCTAssertFalse(analyticsClient.startAnalyticsConfigurationCalled)
-        XCTAssertFalse(bugReportService.startCalled)
     }
     
     func testAnalyticsStartIfEnabled() {
-        // Given an existing install of the app where the user previously accpeted the tracking
+        // Given an existing install of the app where the user previously accepted the tracking
         appSettings.analyticsConsentState = .optedIn
         // Analytics should start
         XCTAssertTrue(ServiceLocator.shared.analytics.isEnabled)
         ServiceLocator.shared.analytics.startIfEnabled()
         XCTAssertTrue(analyticsClient.startAnalyticsConfigurationCalled)
-        XCTAssertTrue(bugReportService.startCalled)
     }
     
     func testAddingUserProperties() {
@@ -232,7 +221,7 @@ class AnalyticsTests: XCTestCase {
         client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
         
         client.updateSuperProperties(
-            AnalyticsEvent.SuperProperties(appPlatform: "A thing",
+            AnalyticsEvent.SuperProperties(appPlatform: .EXI,
                                            cryptoSDK: .Rust,
                                            cryptoSDKVersion: "000")
         )
@@ -246,7 +235,7 @@ class AnalyticsTests: XCTestCase {
         
         // All the super properties should have been added
         XCTAssertEqual(screenEvent?.properties?["cryptoSDK"] as? String, AnalyticsEvent.SuperProperties.CryptoSDK.Rust.rawValue)
-        XCTAssertEqual(screenEvent?.properties?["appPlatform"] as? String, "A thing")
+        XCTAssertEqual(screenEvent?.properties?["appPlatform"] as? String, "EXI")
         XCTAssertEqual(screenEvent?.properties?["cryptoSDKVersion"] as? String, "000")
         
         // It should be the same for any event
@@ -267,13 +256,13 @@ class AnalyticsTests: XCTestCase {
         
         // All the super properties should have been added
         XCTAssertEqual(capturedEvent?.properties?["cryptoSDK"] as? String, AnalyticsEvent.SuperProperties.CryptoSDK.Rust.rawValue)
-        XCTAssertEqual(capturedEvent?.properties?["appPlatform"] as? String, "A thing")
+        XCTAssertEqual(capturedEvent?.properties?["appPlatform"] as? String, "EXI")
         XCTAssertEqual(capturedEvent?.properties?["cryptoSDKVersion"] as? String, "000")
         
         // Updating should keep the previously set properties
         client.updateSuperProperties(
-            AnalyticsEvent.SuperProperties(appPlatform: nil,
-                                           cryptoSDK: nil,
+            AnalyticsEvent.SuperProperties(appPlatform: .EXI,
+                                           cryptoSDK: .Rust,
                                            cryptoSDKVersion: "001")
         )
         
@@ -282,7 +271,7 @@ class AnalyticsTests: XCTestCase {
         
         // All the super properties should have been added, with the one udpated
         XCTAssertEqual(capturedEvent2?.properties?["cryptoSDK"] as? String, AnalyticsEvent.SuperProperties.CryptoSDK.Rust.rawValue)
-        XCTAssertEqual(capturedEvent2?.properties?["appPlatform"] as? String, "A thing")
+        XCTAssertEqual(capturedEvent2?.properties?["appPlatform"] as? String, "EXI")
         XCTAssertEqual(capturedEvent2?.properties?["cryptoSDKVersion"] as? String, "001")
     }
     

@@ -93,6 +93,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         Self.setupServiceLocator(appSettings: appSettings)
         
+        ServiceLocator.shared.analytics.isRunningPublisher
+            .removeDuplicates()
+            .sink { isRunning in
+                if isRunning {
+                    ServiceLocator.shared.bugReportService.start()
+                } else {
+                    ServiceLocator.shared.bugReportService.stop()
+                }
+            }
+            .store(in: &cancellables)
+        
         ServiceLocator.shared.analytics.startIfEnabled()
 
         stateMachine = AppCoordinatorStateMachine()
@@ -337,10 +348,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                           sdkGitSHA: sdkGitSha(),
                                                                           maxUploadSize: appSettings.bugReportMaxUploadSize))
         let posthogAnalyticsClient = PostHogAnalyticsClient()
-        posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: nil, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
+        posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
         ServiceLocator.shared.register(analytics: AnalyticsService(client: posthogAnalyticsClient,
-                                                                   appSettings: appSettings,
-                                                                   bugReportService: ServiceLocator.shared.bugReportService))
+                                                                   appSettings: appSettings))
     }
     
     /// Perform any required migrations for the app to function correctly.

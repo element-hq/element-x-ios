@@ -53,7 +53,7 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
         
         // Add super property cryptoSDK to the captured events, to allow easy
         // filtering of events across different client by using same filter.
-        superProperties = AnalyticsEvent.SuperProperties(appPlatform: nil, cryptoSDK: .Rust, cryptoSDKVersion: nil)
+        superProperties = AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: nil)
         postHog?.optIn()
     }
     
