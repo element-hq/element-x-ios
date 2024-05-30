@@ -292,7 +292,8 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
                                                             mediaProvider: MockMediaProvider(),
                                                             appSettings: ServiceLocator.shared.settings,
-                                                            mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+                                                            mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                            analyticsService: ServiceLocator.shared.analytics)
     static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init())),
                                                 .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory, range: .init()))]
     
@@ -328,7 +329,8 @@ extension ComposerToolbar {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MockMediaProvider(),
                                                  appSettings: ServiceLocator.shared.settings,
-                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                 analyticsService: ServiceLocator.shared.analytics)
             model.state.composerEmpty = focused
             return model
         }
@@ -344,7 +346,8 @@ extension ComposerToolbar {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MockMediaProvider(),
                                                  appSettings: ServiceLocator.shared.settings,
-                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                 analyticsService: ServiceLocator.shared.analytics)
             model.state.composerEmpty = focused
             return model
         }
@@ -360,7 +363,8 @@ extension ComposerToolbar {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MockMediaProvider(),
                                                  appSettings: ServiceLocator.shared.settings,
-                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                 analyticsService: ServiceLocator.shared.analytics)
             model.state.composerMode = .recordVoiceMessage(state: AudioRecorderState())
             return model
         }
@@ -377,7 +381,8 @@ extension ComposerToolbar {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MockMediaProvider(),
                                                  appSettings: ServiceLocator.shared.settings,
-                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                 analyticsService: ServiceLocator.shared.analytics)
             model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData), isUploading: uploading)
             return model
         }
