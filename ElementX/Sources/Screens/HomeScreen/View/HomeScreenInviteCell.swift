@@ -15,6 +15,7 @@
 //
 
 import Combine
+import Compound
 import SwiftUI
 
 @MainActor
@@ -27,11 +28,9 @@ struct HomeScreenInviteCell: View {
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
             if dynamicTypeSize < .accessibility3 {
-                LoadableAvatarImage(url: room.avatarURL,
-                                    name: title,
-                                    contentID: room.id,
-                                    avatarSize: .custom(52),
-                                    imageProvider: context.imageProvider)
+                RoomAvatarImage(avatar: room.avatar,
+                                avatarSize: .custom(52),
+                                imageProvider: context.imageProvider)
                     .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                     .accessibilityHidden(true)
             }
@@ -48,8 +47,8 @@ struct HomeScreenInviteCell: View {
         .padding(.top, 12)
         .padding(.leading, 16)
         .onTapGesture {
-            if let roomId = room.roomId {
-                context.send(viewAction: .selectRoom(roomIdentifier: roomId))
+            if let roomID = room.roomID {
+                context.send(viewAction: .selectRoom(roomIdentifier: roomID))
             }
         }
     }

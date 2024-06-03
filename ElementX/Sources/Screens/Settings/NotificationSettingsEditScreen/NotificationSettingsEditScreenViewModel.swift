@@ -168,7 +168,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         return NotificationSettingsEditScreenRoom(id: details.id,
                                                   roomId: details.id,
                                                   name: details.name,
-                                                  avatarURL: details.avatarURL,
+                                                  avatar: details.avatar,
                                                   notificationMode: notificationMode)
     }
     

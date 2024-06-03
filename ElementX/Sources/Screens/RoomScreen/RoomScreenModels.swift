@@ -144,7 +144,7 @@ enum RoomScreenComposerAction {
 struct RoomScreenViewState: BindableState {
     var roomID: String
     var roomTitle = ""
-    var roomAvatarURL: URL?
+    var roomAvatar: RoomAvatar
     var members: [String: RoomMemberState] = [:]
     var typingMembers: [String] = []
     var showLoading = false

@@ -8057,6 +8057,23 @@ class RoomProxyMock: RoomProxyProtocol {
     var name: String?
     var topic: String?
     var avatarURL: URL?
+    var avatarCallsCount = 0
+    var avatarCalled: Bool {
+        return avatarCallsCount > 0
+    }
+
+    var avatar: RoomAvatar {
+        get async {
+            avatarCallsCount += 1
+            if let avatarClosure = avatarClosure {
+                return await avatarClosure()
+            } else {
+                return underlyingAvatar
+            }
+        }
+    }
+    var underlyingAvatar: RoomAvatar!
+    var avatarClosure: (() async -> RoomAvatar)?
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
         get { return underlyingMembersPublisher }
         set(value) { underlyingMembersPublisher = value }

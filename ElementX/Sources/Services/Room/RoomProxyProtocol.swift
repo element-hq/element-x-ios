@@ -48,11 +48,12 @@ protocol RoomProxyProtocol {
     var topic: String? { get }
     
     var avatarURL: URL? { get }
+    var avatar: RoomAvatar { get async }
 
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> { get }
-        
+    
     var joinedMembersCount: Int { get }
     
     var activeMembersCount: Int { get }

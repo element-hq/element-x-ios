@@ -40,17 +40,13 @@ struct JoinRoomScreen: View {
     
     var mainContent: some View {
         VStack(spacing: 16) {
-            let title = context.viewState.roomDetails?.name ?? L10n.screenJoinRoomTitleNoPreview
-            
-            LoadableAvatarImage(url: context.viewState.roomDetails?.avatarURL,
-                                name: title,
-                                contentID: context.viewState.roomID,
-                                avatarSize: .room(on: .joinRoom),
-                                imageProvider: context.imageProvider)
+            RoomAvatarImage(avatar: context.viewState.avatar,
+                            avatarSize: .room(on: .joinRoom),
+                            imageProvider: context.imageProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
             
             VStack(spacing: 8) {
-                Text(title)
+                Text(context.viewState.title)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)

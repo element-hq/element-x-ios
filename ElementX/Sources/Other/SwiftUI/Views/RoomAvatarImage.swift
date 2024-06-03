@@ -1,0 +1,82 @@
+//
+// Copyright 2024 New Vector Ltd
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+import SwiftUI
+
+/// Information about a room avatar such as it's URL or the heroes to use as a fallback.
+enum RoomAvatar: Equatable {
+    case room(id: String, name: String?, avatarURL: URL?)
+    case users([UserProfileProxy])
+}
+
+/// A view that shows the avatar for a room, or a cluster of heroes if provided.
+///
+/// This should be preferred over `LoadableAvatarImage` when displaying a
+/// room avatar so that DMs have a consistent appearance throughout the app.
+struct RoomAvatarImage: View {
+    let avatar: RoomAvatar
+    
+    let avatarSize: AvatarSize
+    let imageProvider: ImageProviderProtocol?
+    
+    var body: some View {
+        switch avatar {
+        case .room(let id, let name, let avatarURL):
+            LoadableAvatarImage(url: avatarURL,
+                                name: name,
+                                contentID: id,
+                                avatarSize: avatarSize,
+                                imageProvider: imageProvider)
+        case .users(let users):
+            // TODO: Stack in here
+            LoadableAvatarImage(url: users[0].avatarURL,
+                                name: users[0].displayName,
+                                contentID: users[0].userID,
+                                avatarSize: avatarSize,
+                                imageProvider: imageProvider)
+        }
+    }
+}
+
+struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
+    static var previews: some View {
+        HStack {
+            RoomAvatarImage(avatar: .room(id: "!1:server.com",
+                                          name: "Room",
+                                          avatarURL: nil),
+                            avatarSize: .room(on: .home),
+                            imageProvider: MockMediaProvider())
+            
+            RoomAvatarImage(avatar: .room(id: "!2:server.com",
+                                          name: "Room",
+                                          avatarURL: .picturesDirectory),
+                            avatarSize: .room(on: .home),
+                            imageProvider: MockMediaProvider())
+            
+            RoomAvatarImage(avatar: .users([.init(userID: "@user:server.com",
+                                                  displayName: "User",
+                                                  avatarURL: nil)]),
+            avatarSize: .room(on: .home),
+            imageProvider: MockMediaProvider())
+            
+            RoomAvatarImage(avatar: .users([.init(userID: "@user:server.com",
+                                                  displayName: "User",
+                                                  avatarURL: .picturesDirectory)]),
+            avatarSize: .room(on: .home),
+            imageProvider: MockMediaProvider())
+        }
+    }
+}

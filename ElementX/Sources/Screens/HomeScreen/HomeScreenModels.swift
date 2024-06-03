@@ -157,7 +157,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     let id: String
     
     /// The real room identifier this item points to
-    let roomId: String?
+    let roomID: String?
     
     let type: RoomType
     
@@ -181,7 +181,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let lastMessage: AttributedString?
     
-    let avatarURL: URL?
+    let avatar: RoomAvatar
     
     let inviter: InviterDetails?
     
@@ -189,7 +189,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     static func placeholder() -> HomeScreenRoom {
         HomeScreenRoom(id: UUID().uuidString,
-                       roomId: nil,
+                       roomID: nil,
                        type: .placeholder,
                        badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, isCallShown: false),
                        name: "Placeholder room name",
@@ -198,7 +198,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        isFavourite: false,
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
-                       avatarURL: nil,
+                       avatar: .room(id: "", name: "", avatarURL: nil),
                        inviter: nil,
                        canonicalAlias: nil)
     }
@@ -224,7 +224,7 @@ extension HomeScreenRoom {
         }
         
         self.init(id: identifier,
-                  roomId: details.id,
+                  roomID: details.id,
                   type: details.isInvite ? .invite : .room,
                   badges: .init(isDotShown: isDotShown,
                                 isMentionShown: isMentionShown,
@@ -236,7 +236,7 @@ extension HomeScreenRoom {
                   isFavourite: details.isFavourite,
                   timestamp: details.lastMessageFormattedTimestamp,
                   lastMessage: details.lastMessage,
-                  avatarURL: details.avatarURL,
+                  avatar: details.avatar,
                   inviter: inviter,
                   canonicalAlias: details.canonicalAlias)
     }

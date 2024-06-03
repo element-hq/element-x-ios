@@ -83,13 +83,17 @@ struct RoomDirectorySearchScreen_Previews: PreviewProvider, TestablePreview {
                                                  alias: "#test_1:example.com",
                                                  name: "Test 1",
                                                  topic: "Test description 1",
-                                                 avatarURL: nil,
+                                                 avatar: .room(id: "test_1",
+                                                               name: "Test 1",
+                                                               avatarURL: nil),
                                                  canBeJoined: true),
                        RoomDirectorySearchResult(id: "test_2",
                                                  alias: "#test_2:example.com",
                                                  name: "Test 2",
                                                  topic: nil,
-                                                 avatarURL: URL.documentsDirectory,
+                                                 avatar: .room(id: "test_2",
+                                                               name: "Test 2",
+                                                               avatarURL: .picturesDirectory),
                                                  canBeJoined: false)]
         
         let roomDirectorySearchProxy = RoomDirectorySearchProxyMock(configuration: .init(results: results))

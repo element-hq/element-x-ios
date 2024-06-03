@@ -26,6 +26,7 @@ struct RoomSummaryDetails {
     let name: String
     let isDirect: Bool
     let avatarURL: URL?
+    let heroes: [String]
     let lastMessage: AttributedString?
     let lastMessageFormattedTimestamp: String?
     let unreadMessagesCount: UInt
@@ -64,6 +65,7 @@ extension RoomSummaryDetails {
         name = string
         isDirect = true
         avatarURL = nil
+        heroes = []
         lastMessage = AttributedString(string)
         lastMessageFormattedTimestamp = "Now"
         unreadMessagesCount = hasUnreadMessages ? 1 : 0
@@ -77,5 +79,13 @@ extension RoomSummaryDetails {
         isInvite = false
         isMarkedUnread = false
         isFavourite = false
+    }
+    
+    var avatar: RoomAvatar {
+        if isDirect, avatarURL == nil, heroes.count == 1 {
+            .users(heroes.map { UserProfileProxy(userID: $0) })
+        } else {
+            .room(id: id, name: name, avatarURL: avatarURL)
+        }
     }
 }
