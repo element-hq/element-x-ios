@@ -51,7 +51,7 @@
 			<key>one</key>
 			<string>%1$d удзельнік</string>
 			<key>few</key>
-			<string>%1$d удзельніка</string>
+			<string>%1$d удзельнікі</string>
 			<key>many</key>
 			<string>%1$d удзельнікаў</string>
 		</dict>
@@ -87,7 +87,7 @@
 			<key>one</key>
 			<string>%1$@: %2$d паведамленне</string>
 			<key>few</key>
-			<string>%1$@: %2$d паведамлення</string>
+			<string>%1$@: %2$d паведамленні</string>
 			<key>many</key>
 			<string>%1$@: %2$d паведамленняў</string>
 		</dict>
@@ -105,7 +105,7 @@
 			<key>one</key>
 			<string>%d апавяшчэнне</string>
 			<key>few</key>
-			<string>%d апавяшчэння</string>
+			<string>%d апавяшчэнні</string>
 			<key>many</key>
 			<string>%d апавяшчэнняў</string>
 		</dict>
@@ -123,7 +123,7 @@
 			<key>one</key>
 			<string>%d запрашэнне</string>
 			<key>few</key>
-			<string>%d запрашэння</string>
+			<string>%d запрашэнні</string>
 			<key>many</key>
 			<string>%d запрашэнняў</string>
 		</dict>
@@ -141,7 +141,7 @@
 			<key>one</key>
 			<string>%d новае паведамленне</string>
 			<key>few</key>
-			<string>%d новых паведамлення</string>
+			<string>%d новыя паведамленні</string>
 			<key>many</key>
 			<string>%d новых паведамленняў</string>
 		</dict>
@@ -159,7 +159,7 @@
 			<key>one</key>
 			<string>%d непрачытанае апавяшчэнне</string>
 			<key>few</key>
-			<string>%d непрачытаных апавяшчэння</string>
+			<string>%d непрачытаныя апавяшчэнні</string>
 			<key>many</key>
 			<string>%d непрачытаных апавяшчэнняў</string>
 		</dict>
@@ -177,7 +177,7 @@
 			<key>one</key>
 			<string>%d пакой</string>
 			<key>few</key>
-			<string>%d пакоя</string>
+			<string>%d пакоі</string>
 			<key>many</key>
 			<string>%d пакояў</string>
 		</dict>
@@ -213,9 +213,9 @@
 			<key>one</key>
 			<string>Няправільны PIN-код. У вас застаўся %1$d шанец</string>
 			<key>few</key>
-			<string>Няправільны PIN-код. У вас застаўася %1$d шанца</string>
+			<string>Няправільны PIN-код. У вас засталася %1$d шанцы</string>
 			<key>many</key>
-			<string>Няправільны PIN-код. У вас застаўася %1$d шанцаў</string>
+			<string>Няправільны PIN-код. У вас засталася %1$d шанцаў</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -231,7 +231,7 @@
 			<key>one</key>
 			<string>%1$d удзельнік</string>
 			<key>few</key>
-			<string>%1$d удзельніка</string>
+			<string>%1$d удзельнікі</string>
 			<key>many</key>
 			<string>%1$d удзельнікаў</string>
 		</dict>
@@ -339,7 +339,7 @@
 			<key>one</key>
 			<string>%1$d знойдзены размеркавальнік: %2$@.</string>
 			<key>few</key>
-			<string>%1$d знойдзена размеркавальніка: %2$@.</string>
+			<string>%1$d знойдзены размеркавальнікі: %2$@.</string>
 			<key>many</key>
 			<string>%1$d знойдзена размеркавальнікаў: %2$@.</string>
 		</dict>
