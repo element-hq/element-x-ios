@@ -504,7 +504,7 @@
 "screen_qr_code_login_device_not_signed_in_scan_state_subtitle" = "Other device not signed in";
 "screen_qr_code_login_error_cancelled_subtitle" = "The sign in was cancelled on the other device.";
 "screen_qr_code_login_error_cancelled_title" = "Sign in request cancelled";
-"screen_qr_code_login_error_declined_subtitle" = "The request on your other device was not accepted.";
+"screen_qr_code_login_error_declined_subtitle" = "The sign in was declined on the other device.";
 "screen_qr_code_login_error_declined_title" = "Sign in declined";
 "screen_qr_code_login_error_expired_subtitle" = "Sign in expired. Please try again.";
 "screen_qr_code_login_error_expired_title" = "The sign in was not completed in time";
