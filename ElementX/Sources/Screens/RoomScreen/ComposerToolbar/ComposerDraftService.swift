@@ -46,12 +46,12 @@ final class ComposerDraftService: ComposerDraftServiceProtocol {
         }
     }
     
-    func getReply(eventID: String) async -> TimelineItemReplyDetails {
+    func getReply(eventID: String) async -> TimelineItemReply {
         guard case let .success(replyDetails) = await roomProxy.getLoadedReplyDetails(eventID: eventID) else {
-            return .error(eventID: eventID, message: "Could not load details")
+            return .init(details: .error(eventID: eventID, message: "Could not load details"), isThreaded: false)
         }
         
-        return await timelineItemfactory.buildReplyToDetails(details: replyDetails)
+        return await timelineItemfactory.buildReply(details: replyDetails)
     }
     
     func clearDraft() async {

@@ -60,17 +60,18 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomScreenCoordinatorParameters) {
-        viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
-                                        focussedEventID: parameters.focussedEventID,
-                                        timelineController: parameters.timelineController,
-                                        mediaProvider: parameters.mediaProvider,
-                                        mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                        voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                        appMediator: parameters.appMediator,
-                                        appSettings: parameters.appSettings,
-                                        analyticsService: ServiceLocator.shared.analytics,
-                                        notificationCenter: NotificationCenter.default)
+        let viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
+                                            focussedEventID: parameters.focussedEventID,
+                                            timelineController: parameters.timelineController,
+                                            mediaProvider: parameters.mediaProvider,
+                                            mediaPlayerProvider: parameters.mediaPlayerProvider,
+                                            voiceMessageMediaManager: parameters.voiceMessageMediaManager,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                            appMediator: parameters.appMediator,
+                                            appSettings: parameters.appSettings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            notificationCenter: NotificationCenter.default)
+        self.viewModel = viewModel
 
         wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
@@ -82,6 +83,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                      appSettings: parameters.appSettings,
                                                      mentionDisplayHelper: ComposerMentionDisplayHelper(roomContext: viewModel.context),
                                                      draftService: parameters.draftService)
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification).sink { _ in
+            viewModel.saveDraft()
+        }
+        .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -140,6 +145,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func stop() {
+        viewModel.saveDraft()
         viewModel.stop()
     }
     
@@ -148,7 +154,11 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                               wysiwygViewModel: wysiwygViewModel,
                                               keyCommands: composerViewModel.keyCommands)
 
-        return AnyView(RoomScreen(context: viewModel.context, composerToolbar: composerToolbar))
+        return AnyView(RoomScreen(context: viewModel.context, composerToolbar: composerToolbar)
+            // We need to capture the viewModel strongly to extend its lifetime to serve the onDisappear event
+            .onDisappear { [weak self] in
+                self?.viewModel.saveDraft()
+            })
     }
 }
 

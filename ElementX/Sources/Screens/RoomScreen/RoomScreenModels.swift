@@ -134,7 +134,7 @@ enum RoomScreenViewAction {
 
 enum RoomScreenComposerAction {
     case setMode(mode: RoomScreenComposerMode)
-    case setText(text: String)
+    case setText(plainText: String, htmlText: String?)
     case removeFocus
     case clear
     case saveDraft

@@ -599,7 +599,7 @@ class RoomProxy: RoomProxyProtocol {
     
     func getLoadedReplyDetails(eventID: String) async -> Result<InReplyToDetails, RoomProxyError> {
         do {
-            return try await .success(room.getLoadedReplyDetails(eventId: eventID))
+            return try await .success(room.loadReplyDetails(eventId: eventID))
         } catch {
             MXLog.error("Failed getting reply details for event \(eventID) with error: \(error)")
             return .failure(.sdkError(error))

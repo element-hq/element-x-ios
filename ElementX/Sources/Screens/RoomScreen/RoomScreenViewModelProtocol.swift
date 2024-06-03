@@ -27,4 +27,5 @@ protocol RoomScreenViewModelProtocol {
     func focusOnEvent(eventID: String) async
     func stop()
     func start()
+    func saveDraft()
 }

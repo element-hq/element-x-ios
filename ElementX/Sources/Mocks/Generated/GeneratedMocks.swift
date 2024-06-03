@@ -4370,17 +4370,17 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
         clearDraftCallsCount += 1
         await clearDraftClosure?()
     }
-    //MARK: - getReplyDetails
+    //MARK: - getReply
 
-    var getReplyDetailsEventIDUnderlyingCallsCount = 0
-    var getReplyDetailsEventIDCallsCount: Int {
+    var getReplyEventIDUnderlyingCallsCount = 0
+    var getReplyEventIDCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getReplyDetailsEventIDUnderlyingCallsCount
+                return getReplyEventIDUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getReplyDetailsEventIDUnderlyingCallsCount
+                    returnValue = getReplyEventIDUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4388,29 +4388,29 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
         }
         set {
             if Thread.isMainThread {
-                getReplyDetailsEventIDUnderlyingCallsCount = newValue
+                getReplyEventIDUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getReplyDetailsEventIDUnderlyingCallsCount = newValue
+                    getReplyEventIDUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var getReplyDetailsEventIDCalled: Bool {
-        return getReplyDetailsEventIDCallsCount > 0
+    var getReplyEventIDCalled: Bool {
+        return getReplyEventIDCallsCount > 0
     }
-    var getReplyDetailsEventIDReceivedEventID: String?
-    var getReplyDetailsEventIDReceivedInvocations: [String] = []
+    var getReplyEventIDReceivedEventID: String?
+    var getReplyEventIDReceivedInvocations: [String] = []
 
-    var getReplyDetailsEventIDUnderlyingReturnValue: TimelineItemReplyDetails!
-    var getReplyDetailsEventIDReturnValue: TimelineItemReplyDetails! {
+    var getReplyEventIDUnderlyingReturnValue: TimelineItemReply!
+    var getReplyEventIDReturnValue: TimelineItemReply! {
         get {
             if Thread.isMainThread {
-                return getReplyDetailsEventIDUnderlyingReturnValue
+                return getReplyEventIDUnderlyingReturnValue
             } else {
-                var returnValue: TimelineItemReplyDetails? = nil
+                var returnValue: TimelineItemReply? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getReplyDetailsEventIDUnderlyingReturnValue
+                    returnValue = getReplyEventIDUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4418,24 +4418,24 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
         }
         set {
             if Thread.isMainThread {
-                getReplyDetailsEventIDUnderlyingReturnValue = newValue
+                getReplyEventIDUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getReplyDetailsEventIDUnderlyingReturnValue = newValue
+                    getReplyEventIDUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var getReplyDetailsEventIDClosure: ((String) async -> TimelineItemReplyDetails)?
+    var getReplyEventIDClosure: ((String) async -> TimelineItemReply)?
 
-    func getReplyDetails(eventID: String) async -> TimelineItemReplyDetails {
-        getReplyDetailsEventIDCallsCount += 1
-        getReplyDetailsEventIDReceivedEventID = eventID
-        getReplyDetailsEventIDReceivedInvocations.append(eventID)
-        if let getReplyDetailsEventIDClosure = getReplyDetailsEventIDClosure {
-            return await getReplyDetailsEventIDClosure(eventID)
+    func getReply(eventID: String) async -> TimelineItemReply {
+        getReplyEventIDCallsCount += 1
+        getReplyEventIDReceivedEventID = eventID
+        getReplyEventIDReceivedInvocations.append(eventID)
+        if let getReplyEventIDClosure = getReplyEventIDClosure {
+            return await getReplyEventIDClosure(eventID)
         } else {
-            return getReplyDetailsEventIDReturnValue
+            return getReplyEventIDReturnValue
         }
     }
 }

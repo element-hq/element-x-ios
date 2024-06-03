@@ -175,6 +175,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             completionSuggestionService.processTextMessage(state.bindings.plainComposerText.string)
         case .didToggleFormattingOptions:
             if context.composerFormattingEnabled {
+                guard !context.plainComposerText.string.isEmpty else {
+                    return
+                }
                 DispatchQueue.main.async {
                     self.wysiwygViewModel.textView.flushPills()
                     self.wysiwygViewModel.setMarkdownContent(self.context.plainComposerText.string)
@@ -189,8 +192,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         switch roomAction {
         case .setMode(mode: let mode):
             set(mode: mode)
-        case .setText(text: let text):
-            set(text: text)
+        case .setText(let plainText, let htmlText):
+            if let htmlText, context.composerFormattingEnabled {
+                set(text: htmlText)
+            } else {
+                set(text: plainText)
+            }
         case .removeFocus:
             state.bindings.composerFocused = false
         case .clear:
@@ -213,8 +220,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         if let html = draft.htmlText {
             context.composerFormattingEnabled = true
-            await MainActor.run {
-                set(text: html)
+            DispatchQueue.main.async {
+                self.set(text: html)
             }
         } else {
             context.composerFormattingEnabled = false
@@ -244,7 +251,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         let type: DraftType
         
         if context.composerFormattingEnabled {
-            guard !wysiwygViewModel.content.html.isEmpty else {
+            if wysiwygViewModel.content.html.isEmpty, state.composerMode == .default {
                 Task {
                     await draftService.clearDraft()
                 }
@@ -252,14 +259,15 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
             plainText = wysiwygViewModel.content.markdown
             htmlText = wysiwygViewModel.content.html
-        } else if !context.plainComposerText.string.isEmpty {
+        } else {
+            if context.plainComposerText.string.isEmpty, state.composerMode == .default {
+                Task {
+                    await draftService.clearDraft()
+                }
+                return
+            }
             plainText = context.plainComposerText.string
             htmlText = nil
-        } else {
-            Task {
-                await draftService.clearDraft()
-            }
-            return
         }
         
         switch state.composerMode {
@@ -450,7 +458,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func set(text: String) {
         if context.composerFormattingEnabled {
             wysiwygViewModel.textView.flushPills()
-            
             wysiwygViewModel.setHtmlContent(text)
         } else {
             state.bindings.plainComposerText = .init(string: text)

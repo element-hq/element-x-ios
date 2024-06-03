@@ -143,6 +143,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     func stop() {
         // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
         state.bindings.mediaPreviewItem = nil
+    }
+    
+    func saveDraft() {
         actionsSubject.send(.composer(action: .saveDraft))
     }
     
