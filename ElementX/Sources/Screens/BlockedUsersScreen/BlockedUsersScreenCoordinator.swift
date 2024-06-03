@@ -18,7 +18,9 @@ import Combine
 import SwiftUI
 
 struct BlockedUsersScreenCoordinatorParameters {
+    let hideProfiles: Bool
     let clientProxy: ClientProxyProtocol
+    let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -26,7 +28,9 @@ final class BlockedUsersScreenCoordinator: CoordinatorProtocol {
     private let viewModel: BlockedUsersScreenViewModelProtocol
     
     init(parameters: BlockedUsersScreenCoordinatorParameters) {
-        viewModel = BlockedUsersScreenViewModel(clientProxy: parameters.clientProxy,
+        viewModel = BlockedUsersScreenViewModel(hideProfiles: parameters.hideProfiles,
+                                                clientProxy: parameters.clientProxy,
+                                                mediaProvider: parameters.mediaProvider,
                                                 userIndicatorController: parameters.userIndicatorController)
     }
     

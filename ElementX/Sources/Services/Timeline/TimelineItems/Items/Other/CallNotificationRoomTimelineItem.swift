@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2024 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,22 +16,13 @@
 
 import Foundation
 
-struct BlockedUsersScreenViewState: BindableState {
-    var blockedUsers: [UserProfileProxy]
-    var processingUserID: String?
+struct CallNotificationRoomTimelineItem: RoomTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
+    let timestamp: String
+    let isEditable: Bool
+    let canBeRepliedTo: Bool
     
-    var bindings = BlockedUsersScreenViewStateBindings()
-}
-
-struct BlockedUsersScreenViewStateBindings {
-    var alertInfo: AlertInfo<BlockedUsersScreenViewStateAlertType>?
-}
-
-enum BlockedUsersScreenViewAction {
-    case unblockUser(UserProfileProxy)
-}
-
-enum BlockedUsersScreenViewStateAlertType: Hashable {
-    case unblock
-    case error
+    let sender: TimelineItemSender
+    
+    var properties = RoomTimelineItemProperties()
 }

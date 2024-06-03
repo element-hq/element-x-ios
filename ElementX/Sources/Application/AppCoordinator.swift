@@ -68,8 +68,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         windowManager = WindowManager(appDelegate: appDelegate)
         appMediator = AppMediator(windowManager: windowManager)
         
-        Self.setupEnvironmentVariables()
-        
         let appSettings = AppSettings()
         
         MXLog.configure(logLevel: appSettings.logLevel)
@@ -333,10 +331,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     // MARK: - Private
-    
-    private static func setupEnvironmentVariables() {
-        setenv("RUST_BACKTRACE", "1", 1)
-    }
     
     private static func setupServiceLocator(appSettings: AppSettings) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
