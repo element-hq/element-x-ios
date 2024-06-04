@@ -175,14 +175,14 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             let (data, response) = try await session.dataWithRetry(for: request, delegate: self)
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                let errorDescription = String(decoding: data, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
+                let errorDescription = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"
                 MXLog.error("Failed to submit bug report: \(errorDescription)")
                 MXLog.error("Response: \(response)")
                 return .failure(.serverError(response, errorDescription))
             }
             
             guard httpResponse.statusCode == 200 else {
-                let errorDescription = String(decoding: data, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
+                let errorDescription = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"
                 MXLog.error("Failed to submit bug report: \(errorDescription) (\(httpResponse.statusCode))")
                 MXLog.error("Response: \(httpResponse)")
                 return .failure(.httpError(httpResponse, errorDescription))
