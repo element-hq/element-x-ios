@@ -559,6 +559,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationSplitCoordinator.setSheetCoordinator(callScreenCoordinator, animated: true)
+        
+        analytics.track(screen: .RoomCall)
     }
     
     private func presentCallScreen(roomID: String) async {

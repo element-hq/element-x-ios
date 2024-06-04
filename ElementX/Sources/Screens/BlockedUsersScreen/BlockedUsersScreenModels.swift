@@ -17,7 +17,7 @@
 import Foundation
 
 struct BlockedUsersScreenViewState: BindableState {
-    var blockedUsers: [String]
+    var blockedUsers: [UserProfileProxy]
     var processingUserID: String?
     
     var bindings = BlockedUsersScreenViewStateBindings()
@@ -28,7 +28,7 @@ struct BlockedUsersScreenViewStateBindings {
 }
 
 enum BlockedUsersScreenViewAction {
-    case unblockUser(userID: String)
+    case unblockUser(UserProfileProxy)
 }
 
 enum BlockedUsersScreenViewStateAlertType: Hashable {

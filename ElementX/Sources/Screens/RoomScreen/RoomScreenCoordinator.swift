@@ -82,6 +82,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                      mediaProvider: parameters.mediaProvider,
                                                      appSettings: parameters.appSettings,
                                                      mentionDisplayHelper: ComposerMentionDisplayHelper(roomContext: viewModel.context),
+                                                     analyticsService: ServiceLocator.shared.analytics,
                                                      draftService: parameters.draftService)
         NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification).sink { _ in
             viewModel.saveDraft()

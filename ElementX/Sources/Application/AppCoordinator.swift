@@ -68,8 +68,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         windowManager = WindowManager(appDelegate: appDelegate)
         appMediator = AppMediator(windowManager: windowManager)
         
-        Self.setupEnvironmentVariables()
-        
         let appSettings = AppSettings()
         
         MXLog.configure(logLevel: appSettings.logLevel)
@@ -92,6 +90,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         navigationRootCoordinator = NavigationRootCoordinator()
         
         Self.setupServiceLocator(appSettings: appSettings)
+        
+        ServiceLocator.shared.analytics.isRunningPublisher
+            .removeDuplicates()
+            .sink { isRunning in
+                if isRunning {
+                    ServiceLocator.shared.bugReportService.start()
+                } else {
+                    ServiceLocator.shared.bugReportService.stop()
+                }
+            }
+            .store(in: &cancellables)
         
         ServiceLocator.shared.analytics.startIfEnabled()
 
@@ -323,10 +332,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     // MARK: - Private
     
-    private static func setupEnvironmentVariables() {
-        setenv("RUST_BACKTRACE", "1", 1)
-    }
-    
     private static func setupServiceLocator(appSettings: AppSettings) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         ServiceLocator.shared.register(appSettings: appSettings)
@@ -337,10 +342,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                           sdkGitSHA: sdkGitSha(),
                                                                           maxUploadSize: appSettings.bugReportMaxUploadSize))
         let posthogAnalyticsClient = PostHogAnalyticsClient()
-        posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: nil, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
+        posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
         ServiceLocator.shared.register(analytics: AnalyticsService(client: posthogAnalyticsClient,
-                                                                   appSettings: appSettings,
-                                                                   bugReportService: ServiceLocator.shared.bugReportService))
+                                                                   appSettings: appSettings))
     }
     
     /// Perform any required migrations for the app to function correctly.
@@ -444,10 +448,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private func startAuthentication() {
+        let encryptionKeyProvider = EncryptionKeyProvider()
         let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
-                                                               encryptionKeyProvider: EncryptionKeyProvider(),
+                                                               encryptionKeyProvider: encryptionKeyProvider,
                                                                appSettings: appSettings)
+        let qrCodeLoginService = QRCodeLoginService(oidcConfiguration: appSettings.oidcConfiguration.rustValue,
+                                                    encryptionKeyProvider: encryptionKeyProvider,
+                                                    userSessionStore: userSessionStore)
+        
         authenticationFlowCoordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
+                                                                      qrCodeLoginService: qrCodeLoginService,
                                                                       bugReportService: ServiceLocator.shared.bugReportService,
                                                                       navigationRootCoordinator: navigationRootCoordinator,
                                                                       appMediator: appMediator,

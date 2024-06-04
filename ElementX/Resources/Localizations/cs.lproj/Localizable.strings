@@ -110,7 +110,7 @@
 "common_blocked_users" = "Blokovaní uživatelé";
 "common_bubbles" = "Bubliny";
 "common_call_invite" = "Probíhá hovor (nepodporováno)";
-"common_call_started" = "Call started";
+"common_call_started" = "Hovor zahájen";
 "common_chat_backup" = "Záloha chatu";
 "common_copyright" = "Autorská práva";
 "common_creating_room" = "Vytváření místnosti…";
@@ -500,6 +500,18 @@
 "screen_qr_code_login_connection_note_secure_state_title" = "Připojení není zabezpečené";
 "screen_qr_code_login_device_code_subtitle" = "Budete požádáni o zadání dvou níže uvedených číslic.";
 "screen_qr_code_login_device_code_title" = "Zadejte níže uvedené číslo na svém dalším zařízení";
+"screen_qr_code_login_device_not_signed_in_scan_state_description" = "Přihlaste se k druhému zařízení a zkuste to znovu, nebo použijte jiné zařízení, které už je přihlášené.";
+"screen_qr_code_login_device_not_signed_in_scan_state_subtitle" = "Druhé zařízení není přihlášeno";
+"screen_qr_code_login_error_cancelled_subtitle" = "Přihlášení bylo na druhém zařízení zrušeno.";
+"screen_qr_code_login_error_cancelled_title" = "Žádost o přihlášení zrušena";
+"screen_qr_code_login_error_declined_subtitle" = "Požadavek na vašem druhém zařízení nebyl přijat.";
+"screen_qr_code_login_error_declined_title" = "Přihlášení odmítnuto";
+"screen_qr_code_login_error_expired_subtitle" = "Platnost přihlášení vypršela. Zkuste to prosím znovu.";
+"screen_qr_code_login_error_expired_title" = "Přihlášení nebylo dokončeno včas";
+"screen_qr_code_login_error_linking_not_suported_subtitle" = "Vaše druhé zařízení nepodporuje přihlášení k %@u pomocí QR kódu.\n\nZkuste se přihlásit ručně nebo naskenujte QR kód pomocí jiného zařízení.";
+"screen_qr_code_login_error_linking_not_suported_title" = "QR kód není podporován";
+"screen_qr_code_login_error_sliding_sync_not_supported_subtitle" = "Váš poskytovatel účtu nepodporuje %1$@.";
+"screen_qr_code_login_error_sliding_sync_not_supported_title" = "%1$@ není podporováno";
 "screen_qr_code_login_initial_state_button_title" = "Připraveno ke skenování";
 "screen_qr_code_login_initial_state_item_1" = "Otevřete %1$@ na stolním počítači";
 "screen_qr_code_login_initial_state_item_2" = "Klikněte na svůj avatar";

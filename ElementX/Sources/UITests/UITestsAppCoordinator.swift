@@ -45,9 +45,11 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         AppSettings.resetAllSettings()
         ServiceLocator.shared.register(appSettings: AppSettings())
         ServiceLocator.shared.register(bugReportService: BugReportServiceMock())
-        ServiceLocator.shared.register(analytics: AnalyticsService(client: AnalyticsClientMock(),
-                                                                   appSettings: ServiceLocator.shared.settings,
-                                                                   bugReportService: ServiceLocator.shared.bugReportService))
+        
+        let analyticsClient = AnalyticsClientMock()
+        analyticsClient.isRunning = false
+        ServiceLocator.shared.register(analytics: AnalyticsService(client: analyticsClient,
+                                                                   appSettings: ServiceLocator.shared.settings))
     }
     
     func start() {
@@ -130,6 +132,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .authenticationFlow:
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: MockAuthenticationServiceProxy(),
+                                                                qrCodeLoginService: QRCodeLoginServiceMock(),
                                                                 bugReportService: BugReportServiceMock(),
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appMediator: AppMediatorMock.default,

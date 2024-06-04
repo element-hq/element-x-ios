@@ -16,13 +16,13 @@
 
 import Foundation
 
-struct QRCodeLoginServiceMockConfiguration {
-    var isAuthorized = true
-}
-
-extension QRCodeLoginServiceMock {
-    convenience init(configuration: QRCodeLoginServiceMockConfiguration) {
-        self.init()
-        requestAuthorizationIfNeededReturnValue = configuration.isAuthorized
-    }
+struct CallNotificationRoomTimelineItem: RoomTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
+    let timestamp: String
+    let isEditable: Bool
+    let canBeRepliedTo: Bool
+    
+    let sender: TimelineItemSender
+    
+    var properties = RoomTimelineItemProperties()
 }

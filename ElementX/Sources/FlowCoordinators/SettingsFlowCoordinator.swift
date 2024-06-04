@@ -201,7 +201,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentBlockedUsersScreen() {
-        let coordinator = BlockedUsersScreenCoordinator(parameters: .init(clientProxy: parameters.userSession.clientProxy,
+        let coordinator = BlockedUsersScreenCoordinator(parameters: .init(hideProfiles: parameters.appSettings.hideIgnoredUserProfiles,
+                                                                          clientProxy: parameters.userSession.clientProxy,
+                                                                          mediaProvider: parameters.userSession.mediaProvider,
                                                                           userIndicatorController: parameters.userIndicatorController))
         navigationStackCoordinator.push(coordinator)
     }

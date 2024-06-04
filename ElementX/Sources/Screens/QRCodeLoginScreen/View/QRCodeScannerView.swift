@@ -19,13 +19,48 @@ import SwiftUI
 import UIKit
 
 struct QRCodeScannerView: UIViewControllerRepresentable {
+    @Binding var result: Data?
+    var isScanning: Bool
+    
     func makeUIViewController(context: Context) -> QRScannerController {
         let controller = QRScannerController()
- 
+        controller.delegate = context.coordinator
         return controller
     }
  
-    func updateUIViewController(_ uiViewController: QRScannerController, context: Context) { }
+    func updateUIViewController(_ uiViewController: QRScannerController, context: Context) {
+        if isScanning {
+            uiViewController.startScan()
+        } else {
+            uiViewController.stopScan()
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator($result)
+    }
+    
+    final class Coordinator: NSObject, AVCaptureMetadataOutputObjectsDelegate {
+        @Binding var scanResult: Data?
+     
+        init(_ scanResult: Binding<Data?>) {
+            _scanResult = scanResult
+        }
+     
+        func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+            // Check if the metadataObjects array is not nil and it contains at least one object.
+            guard metadataObjects.count > 0,
+                  let metadataObj = metadataObjects[0] as? AVMetadataMachineReadableCodeObject,
+                  metadataObj.type == AVMetadataObject.ObjectType.qr,
+                  let data = metadataObj.binaryValue else {
+                MXLog.info("QRCodeScannerView: invalid qr scan")
+                return
+            }
+            
+            scanResult = data
+            MXLog.info("QRCodeScannerView: scanned data")
+        }
+    }
 }
 
 final class QRScannerController: UIViewController {
@@ -33,8 +68,8 @@ final class QRScannerController: UIViewController {
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     private var qrCodeFrameView: UIView?
  
-    var delegate: AVCaptureMetadataOutputObjectsDelegate?
- 
+    weak var delegate: AVCaptureMetadataOutputObjectsDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
  
@@ -73,15 +108,26 @@ final class QRScannerController: UIViewController {
         videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
         videoPreviewLayer?.frame = view.layer.bounds
         view.layer.addSublayer(previewLayer)
- 
-        // Start video capture.
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.captureSession.startRunning()
-        }
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         videoPreviewLayer?.frame = view.layer.bounds
+    }
+    
+    func startScan() {
+        // Start video capture.
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.captureSession.startRunning()
+            MXLog.info("QRCodeScannerView: capture session started")
+        }
+    }
+    
+    func stopScan() {
+        // Stop video capture.
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.captureSession.stopRunning()
+            MXLog.info("QRCodeScannerView: capture session stopped")
+        }
     }
 }

@@ -1221,6 +1221,38 @@ internal enum L10n {
   internal static var screenQrCodeLoginDeviceCodeSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_subtitle") }
   /// Enter the number below on your other device
   internal static var screenQrCodeLoginDeviceCodeTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_title") }
+  /// Sign in to your other device and then try again, or use another device that’s already signed in.
+  internal static var screenQrCodeLoginDeviceNotSignedInScanStateDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_device_not_signed_in_scan_state_description") }
+  /// Other device not signed in
+  internal static var screenQrCodeLoginDeviceNotSignedInScanStateSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_not_signed_in_scan_state_subtitle") }
+  /// The sign in was cancelled on the other device.
+  internal static var screenQrCodeLoginErrorCancelledSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_cancelled_subtitle") }
+  /// Sign in request cancelled
+  internal static var screenQrCodeLoginErrorCancelledTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_cancelled_title") }
+  /// The sign in was declined on the other device.
+  internal static var screenQrCodeLoginErrorDeclinedSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_declined_subtitle") }
+  /// Sign in declined
+  internal static var screenQrCodeLoginErrorDeclinedTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_declined_title") }
+  /// Sign in expired. Please try again.
+  internal static var screenQrCodeLoginErrorExpiredSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_expired_subtitle") }
+  /// The sign in was not completed in time
+  internal static var screenQrCodeLoginErrorExpiredTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_expired_title") }
+  /// Your other device does not support signing in to %@ with a QR code.
+  /// 
+  /// Try signing in manually, or scan the QR code with another device.
+  internal static func screenQrCodeLoginErrorLinkingNotSuportedSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_qr_code_login_error_linking_not_suported_subtitle", String(describing: p1))
+  }
+  /// QR code not supported
+  internal static var screenQrCodeLoginErrorLinkingNotSuportedTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_linking_not_suported_title") }
+  /// Your account provider does not support %1$@.
+  internal static func screenQrCodeLoginErrorSlidingSyncNotSupportedSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_qr_code_login_error_sliding_sync_not_supported_subtitle", String(describing: p1))
+  }
+  /// %1$@ not supported
+  internal static func screenQrCodeLoginErrorSlidingSyncNotSupportedTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_qr_code_login_error_sliding_sync_not_supported_title", String(describing: p1))
+  }
   /// Ready to scan
   internal static var screenQrCodeLoginInitialStateButtonTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_button_title") }
   /// Open %1$@ on a desktop device

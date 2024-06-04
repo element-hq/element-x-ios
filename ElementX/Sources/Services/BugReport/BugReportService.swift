@@ -105,12 +105,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         SentrySDK.close()
         MXLog.info("Stopped.")
     }
-    
-    func reset() {
-        lastCrashEventId = nil
-        MXLog.info("Reset.")
-    }
-    
+        
     // swiftlint:disable:next cyclomatic_complexity
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {

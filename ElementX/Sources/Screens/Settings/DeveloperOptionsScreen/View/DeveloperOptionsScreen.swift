@@ -39,12 +39,6 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("QR Code") {
-                Toggle(isOn: $context.qrCodeLoginEnabled) {
-                    Text("QR code login")
-                }
-            }
-            
             Section("Room") {
                 Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
                     Text("Collapse room state events")

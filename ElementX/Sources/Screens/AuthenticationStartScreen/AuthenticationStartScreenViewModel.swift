@@ -31,9 +31,13 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         self.appSettings = appSettings
         super.init(initialViewState: AuthenticationStartScreenViewState())
         if !ProcessInfo.processInfo.isiOSAppOnMac {
-            appSettings.$qrCodeLoginEnabled
-                .weakAssign(to: \.state.isQRCodeLoginEnabled, on: self)
-                .store(in: &cancellables)
+            if appSettings.isDevelopmentBuild {
+                state.isQRCodeLoginEnabled = true
+            } else {
+                appSettings.$qrCodeLoginEnabled
+                    .weakAssign(to: \.state.isQRCodeLoginEnabled, on: self)
+                    .store(in: &cancellables)
+            }
         }
     }
 

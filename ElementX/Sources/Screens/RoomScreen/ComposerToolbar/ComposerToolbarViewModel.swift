@@ -27,6 +27,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let appSettings: AppSettings
+    private let analyticsService: AnalyticsService
     private let draftService: ComposerDraftServiceProtocol
     
     private let mentionBuilder: MentionBuilderProtocol
@@ -55,10 +56,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
          mediaProvider: MediaProviderProtocol,
          appSettings: AppSettings,
          mentionDisplayHelper: MentionDisplayHelper,
+         analyticsService: AnalyticsService,
          draftService: ComposerDraftServiceProtocol) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.appSettings = appSettings
+        self.analyticsService = analyticsService
         self.draftService = draftService
         
         mentionBuilder = MentionBuilder()
@@ -166,6 +169,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .enableTextFormatting:
             state.bindings.composerFormattingEnabled = true
             state.bindings.composerFocused = true
+            
+            analyticsService.trackInteraction(name: .MobileRoomComposerFormattingEnabled)
         case .composerAction(let action):
             if action == .link {
                 createLinkAlert()

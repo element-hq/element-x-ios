@@ -154,6 +154,15 @@ final class AppSettings {
         return url
     }()
     
+    private(set) lazy var oidcConfiguration = OIDCConfigurationProxy(clientName: InfoPlistReader.main.bundleDisplayName,
+                                                                     redirectURI: oidcRedirectURL,
+                                                                     clientURI: websiteURL,
+                                                                     logoURI: logoURL,
+                                                                     tosURI: acceptableUseURL,
+                                                                     policyURI: privacyURL,
+                                                                     contacts: [supportEmailAddress],
+                                                                     staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
+
     /// A dictionary of accounts that have performed an initial sync through their proxy.
     ///
     /// This is a temporary workaround. In the future we should be able to receive a signal from the
@@ -172,6 +181,16 @@ final class AppSettings {
     }
     
     let pushGatewayBaseURL: URL = "https://matrix.org/_matrix/push/v1/notify"
+    
+    @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
+    var enableNotifications
+
+    @UserPreference(key: UserDefaultsKeys.enableInAppNotifications, defaultValue: true, storageType: .userDefaults(store))
+    var enableInAppNotifications
+
+    /// Tag describing which set of device specific rules a pusher executes.
+    @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
+    var pusherProfileTag: String?
         
     // MARK: - Bug report
 
@@ -231,17 +250,10 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.elementCallBaseURL, defaultValue: "https://call.element.io", storageType: .userDefaults(store))
     var elementCallBaseURL: URL
     
-    // MARK: - Notifications
-
-    @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
-    var enableNotifications
-
-    @UserPreference(key: UserDefaultsKeys.enableInAppNotifications, defaultValue: true, storageType: .userDefaults(store))
-    var enableInAppNotifications
-
-    /// Tag describing which set of device specific rules a pusher executes.
-    @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
-    var pusherProfileTag: String?
+    // MARK: - Users
+    
+    /// Whether to hide the display name and avatar of ignored users as these may contain objectionable content.
+    let hideIgnoredUserProfiles = true
     
     // MARK: - Maps
     
