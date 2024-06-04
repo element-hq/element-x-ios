@@ -41,19 +41,58 @@ struct RoomAvatarImage: View {
                                 avatarSize: avatarSize,
                                 imageProvider: imageProvider)
         case .users(let users):
-            // TODO: Stack in here
-            LoadableAvatarImage(url: users[0].avatarURL,
-                                name: users[0].displayName,
-                                contentID: users[0].userID,
-                                avatarSize: avatarSize,
-                                imageProvider: imageProvider)
+            if users.count == 1 {
+                LoadableAvatarImage(url: users[0].avatarURL,
+                                    name: users[0].displayName,
+                                    contentID: users[0].userID,
+                                    avatarSize: avatarSize,
+                                    imageProvider: imageProvider)
+            } else if users.count == 2 {
+                let clusterSize = avatarSize.value * 1.6
+                ZStack {
+                    LoadableAvatarImage(url: users[0].avatarURL,
+                                        name: users[0].displayName,
+                                        contentID: users[0].userID,
+                                        avatarSize: avatarSize,
+                                        imageProvider: imageProvider)
+                        .scaledFrame(size: clusterSize, alignment: .topTrailing)
+                    
+                    LoadableAvatarImage(url: users[1].avatarURL,
+                                        name: users[1].displayName,
+                                        contentID: users[1].userID,
+                                        avatarSize: avatarSize,
+                                        imageProvider: imageProvider)
+                        .mask {
+                            Rectangle()
+                                .fill(Color.white)
+                                .overlay {
+                                    Circle()
+                                        .inset(by: -4)
+                                        .fill(Color.black)
+                                        .scaledOffset(x: clusterSize - avatarSize.value,
+                                                      y: -clusterSize + avatarSize.value)
+                                }
+                                .compositingGroup()
+                                .luminanceToAlpha()
+                        }
+                        .scaledFrame(size: clusterSize, alignment: .bottomLeading)
+                }
+                .scaledFrame(size: clusterSize)
+            } else {
+                // TODO: More stack sizes in here.
+                LoadableAvatarImage(url: users[0].avatarURL,
+                                    name: users[0].displayName,
+                                    contentID: users[0].userID,
+                                    avatarSize: avatarSize,
+                                    imageProvider: imageProvider)
+            }
         }
     }
 }
 
 struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        HStack {
+        HStack(spacing: 8) {
             RoomAvatarImage(avatar: .room(id: "!1:server.com",
                                           name: "Room",
                                           avatarURL: nil),
@@ -77,6 +116,11 @@ struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
                                                   avatarURL: .picturesDirectory)]),
             avatarSize: .room(on: .home),
             imageProvider: MockMediaProvider())
+            
+            RoomAvatarImage(avatar: .users([.init(userID: "@alice:server.com", displayName: "Alice", avatarURL: nil),
+                                            .init(userID: "@bob:server.net", displayName: "Bob", avatarURL: nil)]),
+                            avatarSize: .room(on: .home),
+                            imageProvider: MockMediaProvider())
         }
     }
 }

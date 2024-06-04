@@ -80,9 +80,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                                     appSettings: appSettings,
                                                                     analyticsService: analyticsService)
         
-        super.init(initialViewState: RoomScreenViewState(roomID: timelineController.roomID,
+        super.init(initialViewState: RoomScreenViewState(roomID: roomProxy.id,
                                                          roomTitle: roomProxy.roomTitle,
-                                                         roomAvatarURL: roomProxy.avatarURL,
+                                                         roomAvatar: roomProxy.avatar,
                                                          timelineStyle: appSettings.timelineStyle,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                          timelineViewState: TimelineViewState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
@@ -389,9 +389,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
                 guard let self else { return }
-                self.state.roomTitle = roomProxy.roomTitle
-                self.state.roomAvatarURL = roomProxy.avatarURL
-                self.state.hasOngoingCall = roomProxy.hasOngoingCall
+                state.roomTitle = roomProxy.roomTitle
+                state.roomAvatar = roomProxy.avatar
+                state.hasOngoingCall = roomProxy.hasOngoingCall
             }
             .store(in: &cancellables)
         

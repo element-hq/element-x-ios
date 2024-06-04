@@ -26,7 +26,7 @@ struct RoomSummaryDetails {
     let name: String
     let isDirect: Bool
     let avatarURL: URL?
-    let heroes: [String]
+    let heroes: [UserProfileProxy]
     let lastMessage: AttributedString?
     let lastMessageFormattedTimestamp: String?
     let unreadMessagesCount: UInt
@@ -83,7 +83,7 @@ extension RoomSummaryDetails {
     
     var avatar: RoomAvatar {
         if isDirect, avatarURL == nil, heroes.count == 1 {
-            .users(heroes.map { UserProfileProxy(userID: $0) })
+            .users(heroes)
         } else {
             .room(id: id, name: name, avatarURL: avatarURL)
         }
