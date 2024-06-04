@@ -106,7 +106,7 @@ class RoomProxy: RoomProxyProtocol {
             let heroes = room.heroes()
             
             if heroes.count == 1 {
-                return .users(heroes.map(UserProfileProxy.init))
+                return .heroes(heroes.map(UserProfileProxy.init))
             }
         }
         

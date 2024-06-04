@@ -18,8 +18,10 @@ import SwiftUI
 
 /// Information about a room avatar such as it's URL or the heroes to use as a fallback.
 enum RoomAvatar: Equatable {
+    /// An avatar generated from the room's details.
     case room(id: String, name: String?, avatarURL: URL?)
-    case users([UserProfileProxy])
+    /// An avatar generated from the room's heroes.
+    case heroes([UserProfileProxy])
 }
 
 /// A view that shows the avatar for a room, or a cluster of heroes if provided.
@@ -40,7 +42,7 @@ struct RoomAvatarImage: View {
                                 contentID: id,
                                 avatarSize: avatarSize,
                                 imageProvider: imageProvider)
-        case .users(let users):
+        case .heroes(let users):
             if users.count == 1 {
                 LoadableAvatarImage(url: users[0].avatarURL,
                                     name: users[0].displayName,
@@ -105,20 +107,20 @@ struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
                             avatarSize: .room(on: .home),
                             imageProvider: MockMediaProvider())
             
-            RoomAvatarImage(avatar: .users([.init(userID: "@user:server.com",
-                                                  displayName: "User",
-                                                  avatarURL: nil)]),
+            RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com",
+                                                   displayName: "User",
+                                                   avatarURL: nil)]),
             avatarSize: .room(on: .home),
             imageProvider: MockMediaProvider())
             
-            RoomAvatarImage(avatar: .users([.init(userID: "@user:server.com",
-                                                  displayName: "User",
-                                                  avatarURL: .picturesDirectory)]),
+            RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com",
+                                                   displayName: "User",
+                                                   avatarURL: .picturesDirectory)]),
             avatarSize: .room(on: .home),
             imageProvider: MockMediaProvider())
             
-            RoomAvatarImage(avatar: .users([.init(userID: "@alice:server.com", displayName: "Alice", avatarURL: nil),
-                                            .init(userID: "@bob:server.net", displayName: "Bob", avatarURL: nil)]),
+            RoomAvatarImage(avatar: .heroes([.init(userID: "@alice:server.com", displayName: "Alice", avatarURL: nil),
+                                             .init(userID: "@bob:server.net", displayName: "Bob", avatarURL: nil)]),
                             avatarSize: .room(on: .home),
                             imageProvider: MockMediaProvider())
         }

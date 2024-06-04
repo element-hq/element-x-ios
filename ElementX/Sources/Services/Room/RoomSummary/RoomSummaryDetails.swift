@@ -83,7 +83,7 @@ extension RoomSummaryDetails {
     
     var avatar: RoomAvatar {
         if isDirect, avatarURL == nil, heroes.count == 1 {
-            .users(heroes)
+            .heroes(heroes)
         } else {
             .room(id: id, name: name, avatarURL: avatarURL)
         }

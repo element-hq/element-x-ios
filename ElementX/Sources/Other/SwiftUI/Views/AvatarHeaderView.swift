@@ -65,7 +65,7 @@ struct AvatarHeaderView<Footer: View>: View {
          onAvatarTap: (() -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         let dmRecipientProfile = UserProfileProxy(member: dmRecipient)
-        avatarInfo = .room(.users([dmRecipientProfile, UserProfileProxy(member: accountOwner)]))
+        avatarInfo = .room(.heroes([dmRecipientProfile, UserProfileProxy(member: accountOwner)]))
         title = dmRecipientProfile.displayName ?? dmRecipientProfile.userID
         subtitle = dmRecipientProfile.displayName == nil ? nil : dmRecipientProfile.userID
         
