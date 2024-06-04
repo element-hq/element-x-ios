@@ -26,6 +26,6 @@ protocol RoomScreenViewModelProtocol {
     /// Updates the timeline to show and highlight the item with the corresponding event ID.
     func focusOnEvent(eventID: String) async
     func stop()
-    func start()
+    func restoreDraft()
     func saveDraft()
 }

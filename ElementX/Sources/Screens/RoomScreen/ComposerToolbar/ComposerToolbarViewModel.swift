@@ -50,7 +50,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     
     private var replyLoadingTask: Task<Void, Never>?
 
-    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol, appSettings: AppSettings, mentionDisplayHelper: MentionDisplayHelper, draftService: ComposerDraftServiceProtocol) {
+    init(wysiwygViewModel: WysiwygComposerViewModel,
+         completionSuggestionService: CompletionSuggestionServiceProtocol,
+         mediaProvider: MediaProviderProtocol,
+         appSettings: AppSettings,
+         mentionDisplayHelper: MentionDisplayHelper,
+         draftService: ComposerDraftServiceProtocol) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.appSettings = appSettings
@@ -251,7 +256,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         let type: DraftType
         
         if context.composerFormattingEnabled {
-            if wysiwygViewModel.content.html.isEmpty, state.composerMode == .default {
+            if wysiwygViewModel.isContentEmpty, state.composerMode == .default {
                 Task {
                     await draftService.clearDraft()
                 }

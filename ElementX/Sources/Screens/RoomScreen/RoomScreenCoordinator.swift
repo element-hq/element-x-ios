@@ -137,7 +137,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        viewModel.start()
+        viewModel.restoreDraft()
     }
     
     func focusOnEvent(eventID: String) {
@@ -155,7 +155,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                               keyCommands: composerViewModel.keyCommands)
 
         return AnyView(RoomScreen(context: viewModel.context, composerToolbar: composerToolbar)
-            // We need to capture the viewModel strongly to extend its lifetime to serve the onDisappear event
             .onDisappear { [weak self] in
                 self?.viewModel.saveDraft()
             })

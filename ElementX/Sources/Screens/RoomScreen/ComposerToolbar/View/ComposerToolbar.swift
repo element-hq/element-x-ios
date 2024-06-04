@@ -315,6 +315,12 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
             ComposerToolbar.voiceMessagePreviewMock(uploading: false)
         }
         .previewDisplayName("Voice Message")
+        
+        VStack(spacing: 8) {
+            ComposerToolbar.replyLoadingPreviewMock(isLoading: true)
+            ComposerToolbar.replyLoadingPreviewMock(isLoading: false)
+        }
+        .previewDisplayName("Reply")
     }
 }
 
@@ -379,6 +385,28 @@ extension ComposerToolbar {
                                                  appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock, draftService: ComposerDraftServiceMock())
             model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData), isUploading: uploading)
+            return model
+        }
+        return ComposerToolbar(context: composerViewModel.context,
+                               wysiwygViewModel: wysiwygViewModel,
+                               keyCommands: [])
+    }
+    
+    static func replyLoadingPreviewMock(isLoading: Bool) -> ComposerToolbar {
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        var composerViewModel: ComposerToolbarViewModel {
+            let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                 completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                 mediaProvider: MockMediaProvider(),
+                                                 appSettings: ServiceLocator.shared.settings,
+                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock, draftService: ComposerDraftServiceMock())
+            model.state.composerMode = isLoading ? .reply(itemID: .init(timelineID: ""),
+                                                          replyDetails: .loading(eventID: ""),
+                                                          isThread: false) :
+                .reply(itemID: .init(timelineID: ""),
+                       replyDetails: .loaded(sender: .init(id: "",
+                                                           displayName: "Test"),
+                                             eventID: "", eventContent: .message(.text(.init(body: "Hello World!")))), isThread: false)
             return model
         }
         return ComposerToolbar(context: composerViewModel.context,

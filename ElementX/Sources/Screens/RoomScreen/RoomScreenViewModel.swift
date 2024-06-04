@@ -136,7 +136,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Public
     
-    func start() {
+    func restoreDraft() {
         actionsSubject.send(.composer(action: .restoreDraft))
     }
     
