@@ -21,12 +21,12 @@ import UIKit
 import DeviceKit
 #endif
 
-final class UserAgentBuilder {
-    class func makeASCIIUserAgent() -> String {
+enum UserAgentBuilder {
+    static func makeASCIIUserAgent() -> String {
         makeUserAgent()?.asciified() ?? "unknown"
     }
     
-    private class func makeUserAgent() -> String? {
+    static func makeUserAgent() -> String? {
         let clientName = InfoPlistReader.app.bundleDisplayName
         let clientVersion = InfoPlistReader.app.bundleShortVersionString
 

@@ -294,7 +294,7 @@ class LoggingTests: XCTestCase {
         let currentLogFile = logsFileDirectory.appending(path: "console.1.log")
         let fileHandle = try FileHandle(forWritingTo: currentLogFile)
         try fileHandle.seekToEnd()
-        guard let newLineData = "newline".data(using: .utf8) else {
+        guard let newLineData = Data("newline".utf8) else {
             XCTFail("Couldn't create data to write to disk.")
             return
         }

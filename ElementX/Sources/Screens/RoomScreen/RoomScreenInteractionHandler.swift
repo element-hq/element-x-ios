@@ -502,7 +502,7 @@ class RoomScreenInteractionHandler {
         }
 
         guard let audioPlayerState = audioPlayerState(for: itemID) else {
-            fatalError("Audio player not found for \(itemID)")
+            fatalError("Audio player state not found for \(itemID)")
         }
         
         // Ensure this one is attached
