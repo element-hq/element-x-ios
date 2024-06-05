@@ -294,12 +294,7 @@ class LoggingTests: XCTestCase {
         let currentLogFile = logsFileDirectory.appending(path: "console.1.log")
         let fileHandle = try FileHandle(forWritingTo: currentLogFile)
         try fileHandle.seekToEnd()
-        guard let newLineData = "newline".data(using: .utf8) else {
-            XCTFail("Couldn't create data to write to disk.")
-            return
-        }
-        
-        try fileHandle.write(contentsOf: newLineData)
+        try fileHandle.write(contentsOf: Data("newline".utf8))
         try fileHandle.close()
         
         // Then that file should now be the first log file.
