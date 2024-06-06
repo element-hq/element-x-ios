@@ -55,7 +55,6 @@ Git LFS is used to store UI test snapshots. `swift run tools setup-project` will
 
 ```
 git lfs install
-ln -s "$(which git-lfs)" "$(git --exec-path)/git-lfs"
 ```
 
 ### Snapshot Tests
