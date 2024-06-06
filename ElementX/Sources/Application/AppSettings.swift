@@ -161,7 +161,8 @@ final class AppSettings {
                                                                      tosURI: acceptableUseURL,
                                                                      policyURI: privacyURL,
                                                                      contacts: [supportEmailAddress],
-                                                                     staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
+                                                                     staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString },
+                                                                     dynamicRegistrationsFile: .sessionsBaseDirectory.appending(path: "oidc/registrations.json"))
 
     /// A dictionary of accounts that have performed an initial sync through their proxy.
     ///
