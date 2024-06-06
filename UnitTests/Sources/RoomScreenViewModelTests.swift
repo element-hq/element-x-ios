@@ -353,8 +353,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock,
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            notificationCenter: notificationCenter)
+                                            analyticsService: ServiceLocator.shared.analytics)
         return (viewModel, roomProxy, timelineProxy, timelineController, notificationCenter)
     }
     
@@ -378,8 +377,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock,
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            notificationCenter: NotificationCenterMock())
+                                            analyticsService: ServiceLocator.shared.analytics)
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.bindings.readReceiptsSummaryInfo?.orderedReceipts == receipts
@@ -403,8 +401,7 @@ class RoomScreenViewModelTests: XCTestCase {
                             userIndicatorController: userIndicatorControllerMock,
                             appMediator: AppMediatorMock.default,
                             appSettings: ServiceLocator.shared.settings,
-                            analyticsService: ServiceLocator.shared.analytics,
-                            notificationCenter: NotificationCenterMock())
+                            analyticsService: ServiceLocator.shared.analytics)
     }
 }
 

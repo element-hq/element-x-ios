@@ -66,7 +66,6 @@ struct QRCodeScannerView: UIViewControllerRepresentable {
 final class QRScannerController: UIViewController {
     private var captureSession = AVCaptureSession()
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
-    private var qrCodeFrameView: UIView?
  
     weak var delegate: AVCaptureMetadataOutputObjectsDelegate?
     

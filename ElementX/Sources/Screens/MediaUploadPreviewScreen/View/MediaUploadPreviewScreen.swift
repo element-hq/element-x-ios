@@ -42,8 +42,7 @@ struct MediaUploadPreviewScreen: View {
                 .font(.compound.headingMD)
                 .foregroundColor(.compound.textSecondary)
         } else {
-            PreviewView(context: context,
-                        fileURL: context.viewState.url,
+            PreviewView(fileURL: context.viewState.url,
                         title: context.viewState.title)
         }
     }
@@ -65,7 +64,6 @@ struct MediaUploadPreviewScreen: View {
 }
 
 private struct PreviewView: UIViewControllerRepresentable {
-    let context: MediaUploadPreviewScreenViewModel.Context
     let fileURL: URL
     let title: String?
 

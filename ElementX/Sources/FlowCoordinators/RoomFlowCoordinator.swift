@@ -1036,8 +1036,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                                initialFocussedEventID: nil,
                                                                                                timelineItemFactory: timelineItemFactory)
         
-        let parameters = RoomPollsHistoryScreenCoordinatorParameters(roomProxy: roomProxy,
-                                                                     pollInteractionHandler: PollInteractionHandler(analyticsService: analytics, roomProxy: roomProxy),
+        let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: PollInteractionHandler(analyticsService: analytics, roomProxy: roomProxy),
                                                                      roomTimelineController: roomTimelineController)
         let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
         coordinator.actions

@@ -10710,70 +10710,6 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
     var underlyingCallbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>!
 
-    //MARK: - isVerified
-
-    var isVerifiedUnderlyingCallsCount = 0
-    var isVerifiedCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return isVerifiedUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = isVerifiedUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                isVerifiedUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    isVerifiedUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var isVerifiedCalled: Bool {
-        return isVerifiedCallsCount > 0
-    }
-
-    var isVerifiedUnderlyingReturnValue: Result<Bool, SessionVerificationControllerProxyError>!
-    var isVerifiedReturnValue: Result<Bool, SessionVerificationControllerProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return isVerifiedUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Bool, SessionVerificationControllerProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = isVerifiedUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                isVerifiedUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    isVerifiedUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var isVerifiedClosure: (() async -> Result<Bool, SessionVerificationControllerProxyError>)?
-
-    func isVerified() async -> Result<Bool, SessionVerificationControllerProxyError> {
-        isVerifiedCallsCount += 1
-        if let isVerifiedClosure = isVerifiedClosure {
-            return await isVerifiedClosure()
-        } else {
-            return isVerifiedReturnValue
-        }
-    }
     //MARK: - requestVerification
 
     var requestVerificationUnderlyingCallsCount = 0
@@ -11096,11 +11032,6 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
 }
 class TimelineProxyMock: TimelineProxyProtocol {
-    var isLive: Bool {
-        get { return underlyingIsLive }
-        set(value) { underlyingIsLive = value }
-    }
-    var underlyingIsLive: Bool!
     var timelineProvider: RoomTimelineProviderProtocol {
         get { return underlyingTimelineProvider }
         set(value) { underlyingTimelineProvider = value }

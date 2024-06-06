@@ -68,8 +68,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                         appMediator: parameters.appMediator,
                                         appSettings: parameters.appSettings,
-                                        analyticsService: ServiceLocator.shared.analytics,
-                                        notificationCenter: NotificationCenter.default)
+                                        analyticsService: ServiceLocator.shared.analytics)
 
         wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
@@ -78,7 +77,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                      completionSuggestionService: parameters.completionSuggestionService,
                                                      mediaProvider: parameters.mediaProvider,
-                                                     appSettings: parameters.appSettings,
                                                      mentionDisplayHelper: ComposerMentionDisplayHelper(roomContext: viewModel.context),
                                                      analyticsService: ServiceLocator.shared.analytics)
     }

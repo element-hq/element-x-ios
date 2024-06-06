@@ -26,8 +26,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let appSettings: AppSettings
     private let serialDispatchQueue: DispatchQueue
     
-    private var cancellables = Set<AnyCancellable>()
-    
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     private var activeTimeline: TimelineProxyProtocol

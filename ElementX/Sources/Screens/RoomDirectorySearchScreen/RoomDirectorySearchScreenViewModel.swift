@@ -20,7 +20,6 @@ import SwiftUI
 typealias RoomDirectorySearchScreenViewModelType = StateStoreViewModel<RoomDirectorySearchScreenViewState, RoomDirectorySearchScreenViewAction>
 
 class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType, RoomDirectorySearchScreenViewModelProtocol {
-    private let clientProxy: ClientProxyProtocol
     private let roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -32,7 +31,6 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
     init(clientProxy: ClientProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          imageProvider: ImageProviderProtocol) {
-        self.clientProxy = clientProxy
         roomDirectorySearchProxy = clientProxy.roomDirectorySearchProxy()
         self.userIndicatorController = userIndicatorController
         

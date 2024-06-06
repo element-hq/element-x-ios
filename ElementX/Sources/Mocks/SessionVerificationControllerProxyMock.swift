@@ -30,7 +30,6 @@ extension SessionVerificationControllerProxyMock {
                               requestDelay: Duration = .seconds(1)) -> SessionVerificationControllerProxyMock {
         let mock = SessionVerificationControllerProxyMock()
         mock.underlyingCallbacks = callbacks
-        mock.isVerifiedReturnValue = .success(isVerified)
 
         mock.requestVerificationClosure = { [unowned mock] in
             Task.detached {

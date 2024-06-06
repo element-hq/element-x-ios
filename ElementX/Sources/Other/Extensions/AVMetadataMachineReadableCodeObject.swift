@@ -120,15 +120,6 @@ private extension Data {
         }
         return result
     }
-
-    init(_ halves: [HalfByte]) {
-        var halves = halves
-        var result = [UInt8]()
-        while halves.count > 1 {
-            result.append(halves.takeUInt8())
-        }
-        self.init(result)
-    }
 }
 
 private extension UInt8 {

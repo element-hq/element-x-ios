@@ -20,7 +20,6 @@ import SwiftUI
 typealias AuthenticationStartScreenViewModelType = StateStoreViewModel<AuthenticationStartScreenViewState, AuthenticationStartScreenViewAction>
 
 class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType, AuthenticationStartScreenViewModelProtocol {
-    private let appSettings: AppSettings
     private var actionsSubject: PassthroughSubject<AuthenticationStartScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<AuthenticationStartScreenViewModelAction, Never> {
@@ -28,7 +27,6 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     }
 
     init(appSettings: AppSettings) {
-        self.appSettings = appSettings
         super.init(initialViewState: AuthenticationStartScreenViewState())
         if !ProcessInfo.processInfo.isiOSAppOnMac {
             if appSettings.isDevelopmentBuild {

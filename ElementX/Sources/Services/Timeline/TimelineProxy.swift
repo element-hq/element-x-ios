@@ -21,8 +21,6 @@ import MatrixRustSDK
 final class TimelineProxy: TimelineProxyProtocol {
     private let timeline: Timeline
     
-    private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
-    
     private var backPaginationStatusObservationToken: TaskHandle?
     private var roomTimelineObservationToken: TaskHandle?
     
