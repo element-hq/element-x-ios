@@ -121,6 +121,8 @@ class ClientProxy: ClientProxyProtocol {
         verificationStateSubject.asCurrentValuePublisher()
     }
     
+    private let sendingQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
+    
     init(client: ClientProtocol,
          appSettings: AppSettings,
          networkMonitor: NetworkMonitorProtocol) async {
@@ -166,15 +168,23 @@ class ClientProxy: ClientProxyProtocol {
         })
         
         sendingQueueListenerTaskHandle = client.subscribeToSendingQueueStatus(listener: SendingQueueStatusListenerProxy { [weak self] enabled in
-            guard let self else { return }
-            
-            MXLog.error("Sending queue status changed to enabled: \(enabled)")
-            
-            if enabled == false,
-               networkMonitor.reachabilityPublisher.value == .reachable {
-                setSendingQueueEnabled(true)
-            }
+            self?.sendingQueueStatusSubject.send(enabled)
         })
+        
+        sendingQueueStatusSubject
+            .removeDuplicates()
+            .debounce(for: 0.25, scheduler: DispatchQueue.main)
+            .sink { [weak self] enabled in
+                guard let self else { return }
+                
+                MXLog.info("Sending queue status changed to enabled: \(enabled)")
+                
+                if enabled == false,
+                   networkMonitor.reachabilityPublisher.value == .reachable {
+                    setSendingQueueEnabled(true)
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func updateVerificationState(_ verificationState: VerificationState) {
