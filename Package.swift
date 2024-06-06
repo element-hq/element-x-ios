@@ -13,7 +13,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "1.4.0")),
-        .package(url: "https://github.com/element-hq/swift-command-line-tools.git", revision: "a6ad90808f4f6cac615ab8496c6ff1bc5f9fa192"),
+        .package(url: "https://github.com/element-hq/swift-command-line-tools.git", revision: "e5eaab1558ef664e6cd80493f64259381670fb3a"),
         // .package(path: "../../../swift-command-line-tools"),
         .package(url: "https://github.com/jpsim/Yams", .upToNextMinor(from: "5.1.2"))
     ],

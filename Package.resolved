@@ -14,7 +14,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/swift-command-line-tools.git",
       "state" : {
-        "revision" : "a6ad90808f4f6cac615ab8496c6ff1bc5f9fa192"
+        "revision" : "e5eaab1558ef664e6cd80493f64259381670fb3a"
       }
     },
     {

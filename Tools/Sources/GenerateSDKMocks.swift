@@ -12,7 +12,7 @@ struct GenerateSDKMocks: ParsableCommand {
     @Argument(help: "The argument to specify a branch of the SDK. Use `local` to use your local version")
     var version: String
 
-    private var fileURLFormat = "https://raw.githubusercontent.com/matrix-org/matrix-rust-components-swift/%@/Sources/MatrixRustSDK/matrix_sdk_ffi.swift"
+    private var fileURLFormat = "https://raw.githubusercontent.com/element-hq/matrix-rust-components-swift/%@/Sources/MatrixRustSDK/matrix_sdk_ffi.swift"
 
     func run() throws {
         if version == "local" {

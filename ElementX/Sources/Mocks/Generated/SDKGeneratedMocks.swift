@@ -3688,75 +3688,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
     }
 
-    //MARK: - basePath
-
-    var basePathPathUnderlyingCallsCount = 0
-    open var basePathPathCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return basePathPathUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = basePathPathUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                basePathPathUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    basePathPathUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var basePathPathCalled: Bool {
-        return basePathPathCallsCount > 0
-    }
-    open var basePathPathReceivedPath: String?
-    open var basePathPathReceivedInvocations: [String] = []
-
-    var basePathPathUnderlyingReturnValue: ClientBuilder!
-    open var basePathPathReturnValue: ClientBuilder! {
-        get {
-            if Thread.isMainThread {
-                return basePathPathUnderlyingReturnValue
-            } else {
-                var returnValue: ClientBuilder? = nil
-                DispatchQueue.main.sync {
-                    returnValue = basePathPathUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                basePathPathUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    basePathPathUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var basePathPathClosure: ((String) -> ClientBuilder)?
-
-    open override func basePath(path: String) -> ClientBuilder {
-        basePathPathCallsCount += 1
-        basePathPathReceivedPath = path
-        basePathPathReceivedInvocations.append(path)
-        if let basePathPathClosure = basePathPathClosure {
-            return basePathPathClosure(path)
-        } else {
-            return basePathPathReturnValue
-        }
-    }
-
     //MARK: - build
 
     open var buildThrowableError: Error?
@@ -4509,6 +4440,75 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
             return serverVersionsVersionsClosure(versions)
         } else {
             return serverVersionsVersionsReturnValue
+        }
+    }
+
+    //MARK: - sessionPath
+
+    var sessionPathPathUnderlyingCallsCount = 0
+    open var sessionPathPathCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sessionPathPathUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionPathPathUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionPathPathUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionPathPathUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var sessionPathPathCalled: Bool {
+        return sessionPathPathCallsCount > 0
+    }
+    open var sessionPathPathReceivedPath: String?
+    open var sessionPathPathReceivedInvocations: [String] = []
+
+    var sessionPathPathUnderlyingReturnValue: ClientBuilder!
+    open var sessionPathPathReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return sessionPathPathUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionPathPathUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionPathPathUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionPathPathUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var sessionPathPathClosure: ((String) -> ClientBuilder)?
+
+    open override func sessionPath(path: String) -> ClientBuilder {
+        sessionPathPathCallsCount += 1
+        sessionPathPathReceivedPath = path
+        sessionPathPathReceivedInvocations.append(path)
+        if let sessionPathPathClosure = sessionPathPathClosure {
+            return sessionPathPathClosure(path)
+        } else {
+            return sessionPathPathReturnValue
         }
     }
 
