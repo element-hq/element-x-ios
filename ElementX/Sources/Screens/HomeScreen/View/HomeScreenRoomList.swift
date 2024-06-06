@@ -50,13 +50,13 @@ struct HomeScreenRoomList: View {
                             Button {
                                 context.send(viewAction: .markRoomAsRead(roomIdentifier: room.id))
                             } label: {
-                                Text(L10n.screenRoomlistMarkAsRead)
+                                Label(L10n.screenRoomlistMarkAsRead, icon: \.markAsRead)
                             }
                         } else {
                             Button {
                                 context.send(viewAction: .markRoomAsUnread(roomIdentifier: room.id))
                             } label: {
-                                Text(L10n.screenRoomlistMarkAsUnread)
+                                Label(L10n.screenRoomlistMarkAsUnread, icon: \.markAsUnread)
                             }
                         }
                         
