@@ -25,6 +25,7 @@ struct OIDCConfigurationProxy {
     let policyURI: URL
     let contacts: [String]
     let staticRegistrations: [String: String]
+    let dynamicRegistrationsFile: URL
 }
 
 #if canImport(MatrixRustSDK)
@@ -39,7 +40,8 @@ extension OIDCConfigurationProxy {
                           tosUri: tosURI.absoluteString,
                           policyUri: policyURI.absoluteString,
                           contacts: contacts,
-                          staticRegistrations: staticRegistrations)
+                          staticRegistrations: staticRegistrations,
+                          dynamicRegistrationsFile: dynamicRegistrationsFile.path(percentEncoded: false))
     }
 }
 #endif

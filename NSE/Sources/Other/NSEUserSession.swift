@@ -33,7 +33,7 @@ final class NSEUserSession {
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
         var clientBuilder = ClientBuilder()
-            .basePath(path: URL.sessionsBaseDirectory.path)
+            .sessionPath(path: credentials.restorationToken.sessionDirectory.path(percentEncoded: false))
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
             .passphrase(passphrase: credentials.restorationToken.passphrase)

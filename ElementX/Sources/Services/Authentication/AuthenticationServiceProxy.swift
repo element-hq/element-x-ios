@@ -21,19 +21,21 @@ import MatrixRustSDK
 class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     private let authenticationService: AuthenticationService
     private let userSessionStore: UserSessionStoreProtocol
-    private let passphrase: String?
+    private let sessionDirectory: URL
+    private let passphrase: String
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
     
     init(userSessionStore: UserSessionStoreProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, appSettings: AppSettings) {
+        sessionDirectory = .sessionsBaseDirectory.appending(component: UUID().uuidString)
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
         self.userSessionStore = userSessionStore
         
         homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress,
                                                   loginMode: .unknown))
                
-        authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
+        authenticationService = AuthenticationService(sessionPath: sessionDirectory.path(percentEncoded: false),
                                                       passphrase: passphrase,
                                                       userAgent: UserAgentBuilder.makeASCIIUserAgent(),
                                                       additionalRootCertificates: [],
@@ -136,7 +138,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     // MARK: - Private
     
     private func userSession(for client: Client) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        switch await userSessionStore.userSession(for: client, passphrase: passphrase) {
+        switch await userSessionStore.userSession(for: client, sessionDirectory: sessionDirectory, passphrase: passphrase) {
         case .success(let clientProxy):
             return .success(clientProxy)
         case .failure:
