@@ -218,25 +218,11 @@ struct SettingsScreen: View {
     }
 }
 
-private extension TimelineStyle {
-    var name: String {
-        switch self {
-        case .plain:
-            return L10n.commonModern
-        case .bubbles:
-            return L10n.commonBubbles
-        }
-    }
-}
-
 // MARK: - Previews
 
 struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
-        let verificationController = SessionVerificationControllerProxyMock()
-        verificationController.isVerifiedReturnValue = .success(false)
-        let userSession = UserSessionMock(.init(sessionVerificationController: verificationController,
-                                                clientProxy: ClientProxyMock(.init(userID: "@userid:example.com",
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com",
                                                                                    deviceID: "AAAAAAAAAAA"))))
         return SettingsScreenViewModel(userSession: userSession,
                                        appSettings: ServiceLocator.shared.settings)

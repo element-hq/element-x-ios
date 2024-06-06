@@ -23,7 +23,6 @@ import MatrixRustSDK
 
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
-    private let appSettings: AppSettings
     private let networkMonitor: NetworkMonitorProtocol
     
     private let mediaLoader: MediaLoaderProtocol
@@ -122,10 +121,8 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     init(client: ClientProtocol,
-         appSettings: AppSettings,
          networkMonitor: NetworkMonitorProtocol) async {
         self.client = client
-        self.appSettings = appSettings
         self.networkMonitor = networkMonitor
         
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)

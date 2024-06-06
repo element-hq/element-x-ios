@@ -18,7 +18,6 @@ import Combine
 import Foundation
 
 enum SessionVerificationControllerProxyError: Error {
-    case failedCheckingVerificationState
     case failedRequestingVerification
     case failedStartingSasVerification
     case failedApprovingVerification
@@ -47,8 +46,6 @@ struct SessionVerificationEmoji: Hashable {
 // sourcery: AutoMockable
 protocol SessionVerificationControllerProxyProtocol {
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> { get }
-    
-    func isVerified() async -> Result<Bool, SessionVerificationControllerProxyError>
         
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError>
     

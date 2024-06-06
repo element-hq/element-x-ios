@@ -21,7 +21,6 @@ import SwiftUI
 typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreenViewState, InviteUsersScreenViewAction>
 
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
-    private let clientProxy: ClientProxyProtocol
     private let roomType: InviteUsersScreenRoomType
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -39,7 +38,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
          mediaProvider: MediaProviderProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
-        self.clientProxy = clientProxy
         self.roomType = roomType
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController

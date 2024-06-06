@@ -99,7 +99,6 @@ struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
     static let viewModel = ComposerToolbarViewModel(wysiwygViewModel: WysiwygComposerViewModel(),
                                                     completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                     mediaProvider: MockMediaProvider(),
-                                                    appSettings: ServiceLocator.shared.settings,
                                                     mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                     analyticsService: ServiceLocator.shared.analytics)
 

@@ -291,7 +291,6 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
                                                             mediaProvider: MockMediaProvider(),
-                                                            appSettings: ServiceLocator.shared.settings,
                                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                             analyticsService: ServiceLocator.shared.analytics)
     static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init())),
@@ -328,7 +327,6 @@ extension ComposerToolbar {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MockMediaProvider(),
-                                                 appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  analyticsService: ServiceLocator.shared.analytics)
             model.state.composerEmpty = focused
@@ -345,7 +343,6 @@ extension ComposerToolbar {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MockMediaProvider(),
-                                                 appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  analyticsService: ServiceLocator.shared.analytics)
             model.state.composerEmpty = focused
@@ -362,7 +359,6 @@ extension ComposerToolbar {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MockMediaProvider(),
-                                                 appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  analyticsService: ServiceLocator.shared.analytics)
             model.state.composerMode = .recordVoiceMessage(state: AudioRecorderState())
@@ -380,7 +376,6 @@ extension ComposerToolbar {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MockMediaProvider(),
-                                                 appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  analyticsService: ServiceLocator.shared.analytics)
             model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData), isUploading: uploading)

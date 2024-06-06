@@ -36,7 +36,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
-    private let notificationCenter: NotificationCenterProtocol
     
     private let roomScreenInteractionHandler: RoomScreenInteractionHandler
     
@@ -59,8 +58,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService,
-         notificationCenter: NotificationCenterProtocol) {
+         analyticsService: AnalyticsService) {
         self.timelineController = timelineController
         self.mediaPlayerProvider = mediaPlayerProvider
         self.roomProxy = roomProxy
@@ -68,7 +66,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
-        self.notificationCenter = notificationCenter
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
@@ -792,8 +789,7 @@ extension RoomScreenViewModel {
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics,
-                                          notificationCenter: NotificationCenterMock())
+                                          analyticsService: ServiceLocator.shared.analytics)
 }
 
 private struct RoomContextKey: EnvironmentKey {

@@ -18,7 +18,6 @@ import Combine
 import SwiftUI
 
 struct RoomPollsHistoryScreenCoordinatorParameters {
-    let roomProxy: RoomProxyProtocol
     let pollInteractionHandler: PollInteractionHandlerProtocol
     let roomTimelineController: RoomTimelineControllerProtocol
 }

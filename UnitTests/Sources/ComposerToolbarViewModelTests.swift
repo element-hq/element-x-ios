@@ -36,7 +36,6 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: completionSuggestionServiceMock,
                                              mediaProvider: MockMediaProvider(),
-                                             appSettings: appSettings,
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              analyticsService: ServiceLocator.shared.analytics)
         
@@ -113,7 +112,6 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MockMediaProvider(),
-                                             appSettings: ServiceLocator.shared.settings,
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              analyticsService: ServiceLocator.shared.analytics)
         

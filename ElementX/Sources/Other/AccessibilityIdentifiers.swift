@@ -93,9 +93,7 @@ enum A11yIdentifiers {
     
     struct HomeScreen {
         let userAvatar = "home_screen-user_avatar"
-        let verificationBannerContinue = "home_screen-verification_continue"
         let recoveryKeyConfirmationBannerContinue = "home_screen-recovery_key_confirmation_continue"
-        let invites = "home_screen-invites"
         let startChat = "home_screen-start_chat"
         
         let roomNamePrefix = "home_screen-room_name"
@@ -164,7 +162,6 @@ enum A11yIdentifiers {
         let avatar = "room_details-avatar"
         let dmAvatar = "room_details-dm_avatar"
         let people = "room_details-people"
-        let invite = "room_details-invite"
         let notifications = "room_details-notifications"
         let pollsHistory = "room_details-polls_history"
         let favourite = "room_details-favourite"
@@ -200,8 +197,6 @@ enum A11yIdentifiers {
         let declineChallenge = "session_verification-decline_challenge"
         let emojiWrapper = "session_verification-emojis"
         let verificationComplete = "session_verification-verification_complete"
-        let close = "session_verification-close"
-        let enterRecoveryKey = "session_verification-enter_recovery_key"
     }
     
     struct SettingsScreen {

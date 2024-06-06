@@ -26,7 +26,6 @@ typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarView
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
-    private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     
     private let mentionBuilder: MentionBuilderProtocol
@@ -51,12 +50,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     init(wysiwygViewModel: WysiwygComposerViewModel,
          completionSuggestionService: CompletionSuggestionServiceProtocol,
          mediaProvider: MediaProviderProtocol,
-         appSettings: AppSettings,
          mentionDisplayHelper: MentionDisplayHelper,
          analyticsService: AnalyticsService) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
-        self.appSettings = appSettings
         self.analyticsService = analyticsService
         
         mentionBuilder = MentionBuilder()

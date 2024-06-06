@@ -144,7 +144,6 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     private func setupProxyForClient(_ client: Client) async -> ClientProxyProtocol {
         await ClientProxy(client: client,
-                          appSettings: ServiceLocator.shared.settings,
                           networkMonitor: ServiceLocator.shared.networkMonitor)
     }
     
