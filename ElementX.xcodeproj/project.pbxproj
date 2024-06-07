@@ -7287,7 +7287,7 @@
 			repositoryURL = "https://github.com/BarredEwe/Prefire";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 2.0.4;
+				minimumVersion = 2.7.0;
 			};
 		};
 		395DE6AE429B7ACC7C7FE31D /* XCRemoteSwiftPackageReference "KZFileWatchers" */ = {
@@ -7367,7 +7367,7 @@
 			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.9.0;
+				minimumVersion = 1.1.4;
 			};
 		};
 		A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
@@ -7455,7 +7455,7 @@
 			repositoryURL = "https://github.com/element-hq/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = c1b9c32fef5f98f90bd1856cce327770297226b1;
+				revision = 3cafe19060a31cb68aa4f530d2a37b3e5beac554;
 			};
 		};
 		F76A08D0EA29A07A54F4EB4D /* XCRemoteSwiftPackageReference "swift-collections" */ = {
