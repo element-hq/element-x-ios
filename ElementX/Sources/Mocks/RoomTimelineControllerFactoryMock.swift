@@ -17,7 +17,7 @@
 import Foundation
 
 struct RoomTimelineControllerFactoryMockConfiguration {
-    var timelineController: MockRoomTimelineController?
+    var timelineController: RoomTimelineControllerProtocol?
 }
 
 extension RoomTimelineControllerFactoryMock {
