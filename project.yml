@@ -99,6 +99,9 @@ packages:
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     branch: master
+  LoremSwiftum:
+    url: https://github.com/lukaskubanek/LoremSwiftum
+    minorVersion: 2.2.1
   LRUCache:
     url: https://github.com/nicklockwood/LRUCache
     minorVersion: 1.0.4

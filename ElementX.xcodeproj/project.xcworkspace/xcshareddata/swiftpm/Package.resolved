@@ -99,6 +99,15 @@
       }
     },
     {
+      "identity" : "loremswiftum",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lukaskubanek/LoremSwiftum",
+      "state" : {
+        "revision" : "8942e732e50458cde5dccf9996afa16f29372853",
+        "version" : "2.2.2"
+      }
+    },
+    {
       "identity" : "lrucache",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nicklockwood/LRUCache",

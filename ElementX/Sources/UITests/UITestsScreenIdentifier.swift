@@ -52,6 +52,7 @@ enum UITestsScreenIdentifier: String {
     case templateScreen
     case userSessionScreen
     case userSessionScreenReply
+    case autoUpdatingTimeline
 }
 
 extension UITestsScreenIdentifier: CustomStringConvertible {
