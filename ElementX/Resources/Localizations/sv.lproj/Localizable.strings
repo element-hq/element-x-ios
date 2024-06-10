@@ -73,6 +73,7 @@
 "action_quick_reply" = "Snabbsvar";
 "action_quote" = "Citera";
 "action_react" = "Reagera";
+"action_reject" = "Reject";
 "action_remove" = "Ta bort";
 "action_reply" = "Svara";
 "action_reply_in_thread" = "Svara i tråd";
@@ -210,6 +211,7 @@
 "common_voice_message" = "Röstmeddelande";
 "common_waiting" = "Väntar …";
 "common_waiting_for_decryption_key" = "Väntar på detta meddelande";
+"common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "Är du säker på att du vill avsluta den här omröstningen?";
 "common_poll_summary" = "Omröstning: %1$@";
@@ -258,7 +260,9 @@
 "notification_channel_call" = "Samtal";
 "notification_channel_listening_for_events" = "Lyssnar efter händelser";
 "notification_channel_noisy" = "Högljudda aviseringar";
+"notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Tysta aviseringar";
+"notification_incoming_call" = "Incoming call";
 "notification_inline_reply_failed" = "** Misslyckades att skicka - vänligen öppna rummet";
 "notification_invitation_action_reject" = "Avvisa";
 "notification_invite_body" = "Bjöd in dig att chatta";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Din hemserver stöder inte det här alternativet i krypterade rum, du blir inte aviserad i det här rummet.";
 "screen_room_notification_settings_mode_all_messages" = "Alla meddelanden";
 "screen_room_notification_settings_room_custom_settings_title" = "I det här rummet, meddela mig för";
-"screen_room_retry_send_menu_send_again_action" = "Skicka igen";
 "screen_room_retry_send_menu_title" = "Ditt meddelande kunde inte skickas";
 "screen_room_roles_and_permissions_admins" = "Administratörer";
 "screen_room_roles_and_permissions_change_my_role" = "Change my role";

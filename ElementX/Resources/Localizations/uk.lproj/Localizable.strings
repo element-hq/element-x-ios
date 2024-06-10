@@ -73,6 +73,7 @@
 "action_quick_reply" = "Швидка відповідь";
 "action_quote" = "Цитувати";
 "action_react" = "Реакція";
+"action_reject" = "Reject";
 "action_remove" = "Вилучити";
 "action_reply" = "Відповісти";
 "action_reply_in_thread" = "Відповісти в гілці";
@@ -210,6 +211,7 @@
 "common_voice_message" = "Голосове повідомлення";
 "common_waiting" = "Очікування...";
 "common_waiting_for_decryption_key" = "Чекаємо на це повідомлення";
+"common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "Ви впевнені, що хочете закінчити це опитування?";
 "common_poll_summary" = "Опитування: %1$@";
@@ -258,7 +260,9 @@
 "notification_channel_call" = "Виклик";
 "notification_channel_listening_for_events" = "Прослуховування подій";
 "notification_channel_noisy" = "Гучні сповіщення";
+"notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Тихі сповіщення";
+"notification_incoming_call" = "Incoming call";
 "notification_inline_reply_failed" = "** Не вдалося надіслати - будь ласка, відкрийте кімнату";
 "notification_invitation_action_reject" = "Відхилити";
 "notification_invite_body" = "Запросив (-ла) Вас до чату";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви не отримаєте сповіщення в цій кімнаті.";
 "screen_room_notification_settings_mode_all_messages" = "Всі повідомлення";
 "screen_room_notification_settings_room_custom_settings_title" = "У цій кімнаті повідомляти мене про";
-"screen_room_retry_send_menu_send_again_action" = "Надіслати знову";
 "screen_room_retry_send_menu_title" = "Ваше повідомлення не вдалося надіслати";
 "screen_room_roles_and_permissions_admins" = "Адміністратори";
 "screen_room_roles_and_permissions_change_my_role" = "Змінити мою роль";

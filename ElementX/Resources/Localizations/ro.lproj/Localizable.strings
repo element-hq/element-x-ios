@@ -73,6 +73,7 @@
 "action_quick_reply" = "Raspuns rapid";
 "action_quote" = "Citat";
 "action_react" = "Reacționați";
+"action_reject" = "Reject";
 "action_remove" = "Ștergeți";
 "action_reply" = "Răspundeți";
 "action_reply_in_thread" = "Răspundeți în fir";
@@ -210,6 +211,7 @@
 "common_voice_message" = "Mesaj vocal";
 "common_waiting" = "Se aşteaptă…";
 "common_waiting_for_decryption_key" = "Mesaj în așteptare";
+"common.send_to" = "Send to";
 "common_no_room_name" = "Fără nume de cameră";
 "common_poll_end_confirmation" = "Sunteți sigur că doriți să încheiați acest sondaj?";
 "common_poll_summary" = "Sondajul %1$@";
@@ -258,7 +260,9 @@
 "notification_channel_call" = "Apel";
 "notification_channel_listening_for_events" = "Ascultare evenimente";
 "notification_channel_noisy" = "Notificări zgomotoase";
+"notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Notificări silențioase";
+"notification_incoming_call" = "Incoming call";
 "notification_inline_reply_failed" = "** Trimiterea eșuată - vă rugăm să deschideți camera";
 "notification_invitation_action_reject" = "Respingeți";
 "notification_invite_body" = "V-a invitat la o discuție";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, nu veți primi notificări în această cameră.";
 "screen_room_notification_settings_mode_all_messages" = "Toate mesajele";
 "screen_room_notification_settings_room_custom_settings_title" = "În această cameră, anunțați-mă pentru";
-"screen_room_retry_send_menu_send_again_action" = "Trimiteți din nou";
 "screen_room_retry_send_menu_title" = "Mesajul dvs. nu a putut fi trimis";
 "screen_room_roles_and_permissions_admins" = "Administratori";
 "screen_room_roles_and_permissions_change_my_role" = "Schimbare rol";

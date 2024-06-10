@@ -73,6 +73,7 @@
 "action_quick_reply" = "Respuesta rápida";
 "action_quote" = "Citar";
 "action_react" = "Reaccionar";
+"action_reject" = "Reject";
 "action_remove" = "Eliminar";
 "action_reply" = "Responder";
 "action_reply_in_thread" = "Responder en el hilo";
@@ -210,6 +211,7 @@
 "common_voice_message" = "Mensaje de voz";
 "common_waiting" = "Esperando…";
 "common_waiting_for_decryption_key" = "Esperando este mensaje";
+"common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "¿Estás seguro de que quieres finalizar esta encuesta?";
 "common_poll_summary" = "Encuesta: %1$@";
@@ -258,7 +260,9 @@
 "notification_channel_call" = "Llamada";
 "notification_channel_listening_for_events" = "Esperando eventos";
 "notification_channel_noisy" = "Notificaciones ruidosas";
+"notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Notificaciones silenciosas";
+"notification_incoming_call" = "Incoming call";
 "notification_inline_reply_failed" = "** No se ha podido enviar - por favor, abre la sala";
 "notification_invitation_action_reject" = "Rechazar";
 "notification_invite_body" = "Te invitó a chatear";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Tu servidor principal no admite esta opción en salas cifradas, no recibirás notificaciones en esta sala.";
 "screen_room_notification_settings_mode_all_messages" = "Todos los mensajes";
 "screen_room_notification_settings_room_custom_settings_title" = "En esta sala, notificarme por";
-"screen_room_retry_send_menu_send_again_action" = "Enviar de nuevo";
 "screen_room_retry_send_menu_title" = "No se pudo enviar tu mensaje";
 "screen_room_roles_and_permissions_admins" = "Administradores";
 "screen_room_roles_and_permissions_change_my_role" = "Cambiar mi rol";

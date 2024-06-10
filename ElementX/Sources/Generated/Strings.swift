@@ -180,6 +180,8 @@ internal enum L10n {
   internal static var actionQuote: String { return L10n.tr("Localizable", "action_quote") }
   /// React
   internal static var actionReact: String { return L10n.tr("Localizable", "action_react") }
+  /// Reject
+  internal static var actionReject: String { return L10n.tr("Localizable", "action_reject") }
   /// Remove
   internal static var actionRemove: String { return L10n.tr("Localizable", "action_remove") }
   /// Reply
@@ -588,6 +590,8 @@ internal enum L10n {
   internal static var notificationChannelListeningForEvents: String { return L10n.tr("Localizable", "notification_channel_listening_for_events") }
   /// Noisy notifications
   internal static var notificationChannelNoisy: String { return L10n.tr("Localizable", "notification_channel_noisy") }
+  /// Ringing calls
+  internal static var notificationChannelRingingCalls: String { return L10n.tr("Localizable", "notification_channel_ringing_calls") }
   /// Silent notifications
   internal static var notificationChannelSilent: String { return L10n.tr("Localizable", "notification_channel_silent") }
   /// Plural format key: "%#@COUNT@"
@@ -600,6 +604,8 @@ internal enum L10n {
   }
   /// Notification
   internal static var notificationFallbackContent: String { return L10n.tr("Localizable", "notification_fallback_content") }
+  /// Incoming call
+  internal static var notificationIncomingCall: String { return L10n.tr("Localizable", "notification_incoming_call") }
   /// ** Failed to send - please open room
   internal static var notificationInlineReplyFailed: String { return L10n.tr("Localizable", "notification_inline_reply_failed") }
   /// Join
@@ -1611,8 +1617,6 @@ internal enum L10n {
   internal static var screenRoomNotificationSettingsModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_mentions_and_keywords") }
   /// In this room, notify me for
   internal static var screenRoomNotificationSettingsRoomCustomSettingsTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_room_custom_settings_title") }
-  /// Send again
-  internal static var screenRoomRetrySendMenuSendAgainAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_send_again_action") }
   /// Your message failed to send
   internal static var screenRoomRetrySendMenuTitle: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_title") }
   /// Admins
@@ -2211,6 +2215,11 @@ internal enum L10n {
   internal enum Action {
     /// Load more
     internal static var loadMore: String { return L10n.tr("Localizable", "action.load_more") }
+  }
+
+  internal enum Common {
+    /// Send to
+    internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

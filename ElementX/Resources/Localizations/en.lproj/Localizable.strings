@@ -73,6 +73,7 @@
 "action_quick_reply" = "Quick reply";
 "action_quote" = "Quote";
 "action_react" = "React";
+"action_reject" = "Reject";
 "action_remove" = "Remove";
 "action_reply" = "Reply";
 "action_reply_in_thread" = "Reply in thread";
@@ -210,6 +211,7 @@
 "common_voice_message" = "Voice message";
 "common_waiting" = "Waiting…";
 "common_waiting_for_decryption_key" = "Waiting for this message";
+"common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";
@@ -258,7 +260,9 @@
 "notification_channel_call" = "Call";
 "notification_channel_listening_for_events" = "Listening for events";
 "notification_channel_noisy" = "Noisy notifications";
+"notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Silent notifications";
+"notification_incoming_call" = "Incoming call";
 "notification_inline_reply_failed" = "** Failed to send - please open room";
 "notification_invitation_action_reject" = "Reject";
 "notification_invite_body" = "Invited you to chat";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.";
 "screen_room_notification_settings_mode_all_messages" = "All messages";
 "screen_room_notification_settings_room_custom_settings_title" = "In this room, notify me for";
-"screen_room_retry_send_menu_send_again_action" = "Send again";
 "screen_room_retry_send_menu_title" = "Your message failed to send";
 "screen_room_roles_and_permissions_admins" = "Admins";
 "screen_room_roles_and_permissions_change_my_role" = "Change my role";
