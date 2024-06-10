@@ -73,6 +73,7 @@
 "action_quick_reply" = "Gyors válasz";
 "action_quote" = "Idézet";
 "action_react" = "Reakció";
+"action_reject" = "Reject";
 "action_remove" = "Eltávolítás";
 "action_reply" = "Válasz";
 "action_reply_in_thread" = "Válasz az üzenetszálban";
@@ -210,6 +211,7 @@
 "common_voice_message" = "Hangüzenet";
 "common_waiting" = "Várakozás…";
 "common_waiting_for_decryption_key" = "Várakozás a visszafejtési kulcsra";
+"common.send_to" = "Send to";
 "common_no_room_name" = "Nincs szobanév";
 "common_poll_end_confirmation" = "Biztos, hogy befejezi ezt a szavazást?";
 "common_poll_summary" = "Szavazás: %1$@";
@@ -258,7 +260,9 @@
 "notification_channel_call" = "Hívás";
 "notification_channel_listening_for_events" = "Események figyelése";
 "notification_channel_noisy" = "Zajos értesítések";
+"notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Csendes értesítések";
+"notification_incoming_call" = "Incoming call";
 "notification_inline_reply_failed" = "** Nem sikerült elküldeni – nyissa meg a szobát";
 "notification_invitation_action_reject" = "Elutasítás";
 "notification_invite_body" = "Meghívta, hogy csevegjen";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, egyes szobákban nem fog értesítéseket kapni.";
 "screen_room_notification_settings_mode_all_messages" = "Összes üzenet";
 "screen_room_notification_settings_room_custom_settings_title" = "Ebben a szobában, értesítés ezekről:";
-"screen_room_retry_send_menu_send_again_action" = "Újraküldés";
 "screen_room_retry_send_menu_title" = "Az üzenet elküldése sikertelen";
 "screen_room_roles_and_permissions_admins" = "Adminisztrátorok";
 "screen_room_roles_and_permissions_change_my_role" = "Saját szerepkör módosítása";

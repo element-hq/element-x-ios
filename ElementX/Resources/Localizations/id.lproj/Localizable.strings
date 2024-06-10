@@ -73,6 +73,7 @@
 "action_quick_reply" = "Balas cepat";
 "action_quote" = "Kutip";
 "action_react" = "Bereaksi";
+"action_reject" = "Reject";
 "action_remove" = "Hapus";
 "action_reply" = "Balas";
 "action_reply_in_thread" = "Balas dalam utas";
@@ -210,6 +211,7 @@
 "common_voice_message" = "Pesan suara";
 "common_waiting" = "Menunggu…";
 "common_waiting_for_decryption_key" = "Menunggu pesan ini";
+"common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "Apakah Anda yakin ingin mengakhiri pemungutan suara ini?";
 "common_poll_summary" = "Pemungutan suara: %1$@";
@@ -258,7 +260,9 @@
 "notification_channel_call" = "Panggil";
 "notification_channel_listening_for_events" = "Mendengarkan peristiwa";
 "notification_channel_noisy" = "Pemberitahuan berisik";
+"notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Pemberitahuan diam";
+"notification_incoming_call" = "Incoming call";
 "notification_inline_reply_failed" = "** Gagal mengirim — silakan buka ruangan";
 "notification_invitation_action_reject" = "Tolak";
 "notification_invite_body" = "Mengundang Anda untuk mengobrol";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Homeserver Anda tidak mendukung opsi ini dalam ruangan terenkripsi, Anda tidak akan diberi tahu dalam ruangan ini.";
 "screen_room_notification_settings_mode_all_messages" = "Semua pesan";
 "screen_room_notification_settings_room_custom_settings_title" = "Di ruangan ini, beri tahu saya tentang";
-"screen_room_retry_send_menu_send_again_action" = "Kirim ulang";
 "screen_room_retry_send_menu_title" = "Pesan Anda gagal dikirim";
 "screen_room_roles_and_permissions_admins" = "Admin";
 "screen_room_roles_and_permissions_change_my_role" = "Ubah peran saya";

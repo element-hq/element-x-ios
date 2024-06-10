@@ -73,6 +73,7 @@
 "action_quick_reply" = "Rychlá odpověď";
 "action_quote" = "Citovat";
 "action_react" = "Reagovat";
+"action_reject" = "Reject";
 "action_remove" = "Odstranit";
 "action_reply" = "Odpovědět";
 "action_reply_in_thread" = "Odpovědět ve vlákně";
@@ -210,6 +211,7 @@
 "common_voice_message" = "Hlasová zpráva";
 "common_waiting" = "Čekání...";
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
+"common.send_to" = "Send to";
 "common_no_room_name" = "Žádný název místnosti";
 "common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
 "common_poll_summary" = "Hlasování: %1$@";
@@ -258,7 +260,9 @@
 "notification_channel_call" = "Hovor";
 "notification_channel_listening_for_events" = "Naslouchání událostem";
 "notification_channel_noisy" = "Hlasitá oznámení";
+"notification_channel_ringing_calls" = "Vyzvánění hovorů";
 "notification_channel_silent" = "Tichá oznámení";
+"notification_incoming_call" = "Incoming call";
 "notification_inline_reply_failed" = "** Nepodařilo se odeslat - otevřete prosím místnost";
 "notification_invitation_action_reject" = "Odmítnout";
 "notification_invite_body" = "Vás pozval(a) do chatu";
@@ -504,7 +508,7 @@
 "screen_qr_code_login_device_not_signed_in_scan_state_subtitle" = "Druhé zařízení není přihlášeno";
 "screen_qr_code_login_error_cancelled_subtitle" = "Přihlášení bylo na druhém zařízení zrušeno.";
 "screen_qr_code_login_error_cancelled_title" = "Žádost o přihlášení zrušena";
-"screen_qr_code_login_error_declined_subtitle" = "Požadavek na vašem druhém zařízení nebyl přijat.";
+"screen_qr_code_login_error_declined_subtitle" = "Přihlášení bylo na druhém zařízení odmítnuto.";
 "screen_qr_code_login_error_declined_title" = "Přihlášení odmítnuto";
 "screen_qr_code_login_error_expired_subtitle" = "Platnost přihlášení vypršela. Zkuste to prosím znovu.";
 "screen_qr_code_login_error_expired_title" = "Přihlášení nebylo dokončeno včas";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Váš domovský server tuto možnost nepodporuje v šifrovaných místnostech, v této místnosti nebudete dostávat upozornění.";
 "screen_room_notification_settings_mode_all_messages" = "Všechny zprávy";
 "screen_room_notification_settings_room_custom_settings_title" = "V této místnosti mě upozornit na";
-"screen_room_retry_send_menu_send_again_action" = "Odeslat znovu";
 "screen_room_retry_send_menu_title" = "Vaši zprávu se nepodařilo odeslat";
 "screen_room_roles_and_permissions_admins" = "Správci";
 "screen_room_roles_and_permissions_change_my_role" = "Změnit moji roli";

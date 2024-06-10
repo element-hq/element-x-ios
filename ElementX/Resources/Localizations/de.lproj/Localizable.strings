@@ -73,6 +73,7 @@
 "action_quick_reply" = "Schnelle Antwort";
 "action_quote" = "Zitat";
 "action_react" = "Reagieren";
+"action_reject" = "Reject";
 "action_remove" = "Entfernen";
 "action_reply" = "Antworten";
 "action_reply_in_thread" = "Im Thread antworten";
@@ -210,6 +211,7 @@
 "common_voice_message" = "Sprachnachricht";
 "common_waiting" = "Warten…";
 "common_waiting_for_decryption_key" = "Warte auf diese Nachricht";
+"common.send_to" = "Send to";
 "common_no_room_name" = "Kein Raumname";
 "common_poll_end_confirmation" = "Bist du sicher, dass du diese Umfrage beenden möchtest?";
 "common_poll_summary" = "Umfrage: %1$@";
@@ -258,7 +260,9 @@
 "notification_channel_call" = "Anruf";
 "notification_channel_listening_for_events" = "Auf Ereignisse achten";
 "notification_channel_noisy" = "Laute Benachrichtigungen";
+"notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Stumme Benachrichtigungen";
+"notification_incoming_call" = "Incoming call";
 "notification_inline_reply_failed" = "** Fehler beim Senden - bitte Raum öffnen";
 "notification_invitation_action_reject" = "Ablehnen";
 "notification_invite_body" = "Du wurdest zu einem Chat eingeladen";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Dein Homeserver unterstützt diese Option in verschlüsselten Chats nicht. Du wirst in diesem Chat nicht benachrichtigt.";
 "screen_room_notification_settings_mode_all_messages" = "Alle Nachrichten";
 "screen_room_notification_settings_room_custom_settings_title" = "Benachrichtige mich bei";
-"screen_room_retry_send_menu_send_again_action" = "Erneut senden";
 "screen_room_retry_send_menu_title" = "Deine Nachricht konnte nicht gesendet werden";
 "screen_room_roles_and_permissions_admins" = "Administratoren";
 "screen_room_roles_and_permissions_change_my_role" = "Ändere meine Rolle";
