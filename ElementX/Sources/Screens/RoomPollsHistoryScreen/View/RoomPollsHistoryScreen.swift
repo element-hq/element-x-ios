@@ -165,6 +165,6 @@ struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
             RoomPollsHistoryScreen(context: viewModel.context)
         }
         .previewDisplayName("polls")
-        .snapshot(delay: 1.0)
+        .snapshot(delay: 1.0, perceptualPrecision: 0.7) // Date formatting breaks the snaphots on CI
     }
 }

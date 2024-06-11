@@ -149,5 +149,6 @@ struct ReactionsSummaryView_Previews: PreviewProvider, TestablePreview {
                              members: [:],
                              imageProvider: MockMediaProvider(),
                              selectedReactionKey: AggregatedReaction.mockReactions[0].key)
+            .snapshot(perceptualPrecision: 0.7) // Date formatting breaks the snaphots on CI
     }
 }
