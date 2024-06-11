@@ -3496,45 +3496,6 @@ class ClientProxyMock: ClientProxyProtocol {
             return resolveRoomAliasReturnValue
         }
     }
-    //MARK: - setSendingQueueEnabled
-
-    var setSendingQueueEnabledUnderlyingCallsCount = 0
-    var setSendingQueueEnabledCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return setSendingQueueEnabledUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = setSendingQueueEnabledUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                setSendingQueueEnabledUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    setSendingQueueEnabledUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var setSendingQueueEnabledCalled: Bool {
-        return setSendingQueueEnabledCallsCount > 0
-    }
-    var setSendingQueueEnabledReceivedEnabled: Bool?
-    var setSendingQueueEnabledReceivedInvocations: [Bool] = []
-    var setSendingQueueEnabledClosure: ((Bool) -> Void)?
-
-    func setSendingQueueEnabled(_ enabled: Bool) {
-        setSendingQueueEnabledCallsCount += 1
-        setSendingQueueEnabledReceivedEnabled = enabled
-        setSendingQueueEnabledReceivedInvocations.append(enabled)
-        setSendingQueueEnabledClosure?(enabled)
-    }
     //MARK: - ignoreUser
 
     var ignoreUserUnderlyingCallsCount = 0

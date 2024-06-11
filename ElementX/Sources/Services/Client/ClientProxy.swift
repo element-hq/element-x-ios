@@ -45,7 +45,7 @@ class ClientProxy: ClientProxyProtocol {
     private var verificationStateListenerTaskHandle: TaskHandle?
     
     // periphery:ignore - required for instance retention in the rust codebase
-    private var sendingQueueListenerTaskHandle: TaskHandle?
+    private var sendQueueListenerTaskHandle: TaskHandle?
     
     private var delegateHandle: TaskHandle?
     
@@ -120,7 +120,7 @@ class ClientProxy: ClientProxyProtocol {
         verificationStateSubject.asCurrentValuePublisher()
     }
     
-    private let sendingQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
+    private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
     init(client: ClientProtocol,
          networkMonitor: NetworkMonitorProtocol) async {
@@ -164,21 +164,21 @@ class ClientProxy: ClientProxyProtocol {
             self?.updateVerificationState(verificationState)
         })
         
-        sendingQueueListenerTaskHandle = client.subscribeToSendingQueueStatus(listener: SendingQueueStatusListenerProxy { [weak self] enabled in
-            self?.sendingQueueStatusSubject.send(enabled)
+        sendQueueListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SendQueueRoomErrorListenerProxy { [weak self] roomID, error in
+            MXLog.error("Send queue failed in room: \(roomID) with error: \(error)")
+            self?.sendQueueStatusSubject.send(false)
         })
         
-        sendingQueueStatusSubject
+        sendQueueStatusSubject
             .removeDuplicates()
-            .debounce(for: 0.25, scheduler: DispatchQueue.main)
-            .sink { [weak self] enabled in
-                guard let self else { return }
+            .combineLatest(networkMonitor.reachabilityPublisher)
+            .debounce(for: 1.0, scheduler: DispatchQueue.main)
+            .sink { enabled, reachability in
+                MXLog.info("Send queue status changed to enabled: \(enabled)")
                 
-                MXLog.info("Sending queue status changed to enabled: \(enabled)")
-                
-                if enabled == false,
-                   networkMonitor.reachabilityPublisher.value == .reachable {
-                    setSendingQueueEnabled(true)
+                if enabled == false, reachability == .reachable {
+                    MXLog.info("Enabling all send queues")
+                    client.enableAllSendQueues(enable: true)
                 }
             }
             .store(in: &cancellables)
@@ -598,12 +598,7 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-    
-    func setSendingQueueEnabled(_ enabled: Bool) {
-        MXLog.info("Setting sending queue to enabled: \(enabled)")
-        client.enableSendingQueue(enable: enabled)
-    }
-    
+        
     // MARK: Ignored users
     
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
@@ -946,15 +941,15 @@ private class IgnoredUsersListenerProxy: IgnoredUsersListener {
     }
 }
 
-private class SendingQueueStatusListenerProxy: SendingQueueStatusListener {
-    private let onUpdateClosure: (Bool) -> Void
+private class SendQueueRoomErrorListenerProxy: SendQueueRoomErrorListener {
+    private let onErrorClosure: (String, ClientError) -> Void
     
-    init(onUpdateClosure: @escaping (Bool) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
+    init(onErrorClosure: @escaping (String, ClientError) -> Void) {
+        self.onErrorClosure = onErrorClosure
     }
     
-    func onUpdate(newValue: Bool) {
-        onUpdateClosure(newValue)
+    func onError(roomId: String, error: ClientError) {
+        onErrorClosure(roomId, error)
     }
 }
 
