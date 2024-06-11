@@ -86,7 +86,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func showStartScreen() {
-        let coordinator = AuthenticationStartScreenCoordinator(parameters: .init(appSettings: appSettings))
+        let coordinator = AuthenticationStartScreenCoordinator()
         
         coordinator.actions
             .sink { [weak self] action in

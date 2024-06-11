@@ -17,10 +17,6 @@
 import Combine
 import SwiftUI
 
-struct AuthenticationStartScreenCoordinatorParameters {
-    let appSettings: AppSettings
-}
-
 final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
     private var viewModel: AuthenticationStartScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<AuthenticationStartScreenCoordinatorAction, Never> = .init()
@@ -30,8 +26,8 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: AuthenticationStartScreenCoordinatorParameters) {
-        viewModel = AuthenticationStartScreenViewModel(appSettings: parameters.appSettings)
+    init() {
+        viewModel = AuthenticationStartScreenViewModel()
     }
     
     // MARK: - Public

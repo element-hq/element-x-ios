@@ -26,17 +26,9 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(appSettings: AppSettings) {
+    init() {
         super.init(initialViewState: AuthenticationStartScreenViewState())
-        if !ProcessInfo.processInfo.isiOSAppOnMac {
-            if appSettings.isDevelopmentBuild {
-                state.isQRCodeLoginEnabled = true
-            } else {
-                appSettings.$qrCodeLoginEnabled
-                    .weakAssign(to: \.state.isQRCodeLoginEnabled, on: self)
-                    .store(in: &cancellables)
-            }
-        }
+        state.isQRCodeLoginEnabled = !ProcessInfo.processInfo.isiOSAppOnMac && AppSettings.isDevelopmentBuild
     }
 
     override func process(viewAction: AuthenticationStartScreenViewAction) {

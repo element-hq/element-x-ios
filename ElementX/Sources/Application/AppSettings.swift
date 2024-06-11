@@ -43,9 +43,7 @@ final class AppSettings {
         case elementCallEncryptionEnabled
         
         // Feature flags
-        case shouldCollapseRoomStateEvents
         case publicSearchEnabled
-        case qrCodeLoginEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -78,7 +76,7 @@ final class AppSettings {
     // MARK: - Application
     
     /// Whether or not the app is a development build that isn't in production.
-    lazy var isDevelopmentBuild: Bool = {
+    static var isDevelopmentBuild: Bool = {
         #if DEBUG
         true
         #else
@@ -240,10 +238,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.timelineStyle, defaultValue: TimelineStyle.bubbles, storageType: .userDefaults(store))
     var timelineStyle
     
-    @UserPreference(key: UserDefaultsKeys.shouldCollapseRoomStateEvents, defaultValue: true, storageType: .volatile)
-    var shouldCollapseRoomStateEvents
-    
-    @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var viewSourceEnabled
 
     // MARK: - Element Call
@@ -271,12 +266,9 @@ final class AppSettings {
     
     // MARK: - Feature Flags
     
-    @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: false, storageType: .volatile)
+    @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: isDevelopmentBuild, storageType: .volatile)
     var publicSearchEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.qrCodeLoginEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var qrCodeLoginEnabled
-    
+        
     #endif
     
     // MARK: - Shared
