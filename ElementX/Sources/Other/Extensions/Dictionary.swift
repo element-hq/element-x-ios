@@ -22,7 +22,7 @@ extension Dictionary {
                                                      options: [.fragmentsAllowed, .sortedKeys]) else {
             return nil
         }
-        return String(data: data, encoding: .utf8)
+        return String(decoding: data, as: UTF8.self)
     }
     
     /// Returns a dictionary containing the original values keyed by the results of mapping the given closure over its keys.
