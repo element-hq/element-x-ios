@@ -670,8 +670,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 MXLog.info("Reachability changed to \(reachability)")
                 
                 if reachability == .reachable {
-                    self?.userSession?.clientProxy.setSendingQueueEnabled(true)
-                    
                     ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(reachabilityNotificationIdentifier)
                 } else {
                     ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationIdentifier,

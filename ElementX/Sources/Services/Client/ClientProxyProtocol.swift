@@ -160,8 +160,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol
     
     func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError>
-    
-    func setSendingQueueEnabled(_ enabled: Bool)
 
     // MARK: - Ignored users
     

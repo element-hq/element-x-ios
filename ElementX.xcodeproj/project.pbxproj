@@ -1320,6 +1320,7 @@
 		2BDB3E65A79779EDA5D33D8A /* AudioPlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerState.swift; sourceTree = "<group>"; };
 		2BFDCA5A09EE70BC17F2EFA7 /* URLComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponents.swift; sourceTree = "<group>"; };
 		2C0197EAE9D45A662B8847B6 /* RoomTimelineControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineControllerProtocol.swift; sourceTree = "<group>"; };
+		2C39D91A31409775B0F4268F /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2CEBCB9676FCD1D0F13188DD /* StringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringTests.swift; sourceTree = "<group>"; };
 		2CF9FE7E0CF9F40D1509E63A /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = bg; path = bg.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		2D0946F77B696176E062D037 /* RoomMembersListScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersListScreenModels.swift; sourceTree = "<group>"; };
@@ -1456,6 +1457,7 @@
 		4E47F18A9A077E351CEA10D4 /* TextBasedRoomTimelineViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBasedRoomTimelineViewProtocol.swift; sourceTree = "<group>"; };
 		4E625B0EB2F86B37C14EF7E6 /* SettingsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenViewModel.swift; sourceTree = "<group>"; };
 		4F0CB536D1C3CC15AA740CC6 /* AuthenticationServiceProxyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServiceProxyProtocol.swift; sourceTree = "<group>"; };
+		4F5F0662483ED69791D63B16 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = et; path = et.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		4FA29BAE9B0F2D90E57B261C /* UserSessionFlowCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSessionFlowCoordinatorTests.swift; sourceTree = "<group>"; };
 		4FCB2126C091EEF2454B4D56 /* RoomFlowCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFlowCoordinatorTests.swift; sourceTree = "<group>"; };
 		4FD6E621CC5E6D4830D96D2D /* MockMediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMediaProvider.swift; sourceTree = "<group>"; };
@@ -1775,6 +1777,7 @@
 		A40F1985065500F0E7F61A27 /* PollFormScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollFormScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		A433BE28B40D418237BE37B5 /* ReportContentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportContentScreen.swift; sourceTree = "<group>"; };
 		A436057DBEA1A23CA8CB1FD7 /* UIFont+AttributedStringBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+AttributedStringBuilder.h"; sourceTree = "<group>"; };
+		A443FAE2EE820A5790C35C8D /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A4A1003A0F7A1DFB47F4E2D0 /* TimelineItemMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemMock.swift; sourceTree = "<group>"; };
 		A58E93D91DE3288010390DEE /* EmojiDetectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiDetectionTests.swift; sourceTree = "<group>"; };
 		A65F140F9FE5E8D4DAEFF354 /* RoomProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomProxy.swift; sourceTree = "<group>"; };
@@ -2113,6 +2116,7 @@
 		F348B5F2C12F9D4F4B4D3884 /* VideoRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRoomTimelineItem.swift; sourceTree = "<group>"; };
 		F36C0A6D59717193F49EA986 /* UserSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSessionTests.swift; sourceTree = "<group>"; };
 		F37FA1A5D55633E1942B153B /* CallScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallScreenCoordinator.swift; sourceTree = "<group>"; };
+		F3C7252B3461D06175D975A4 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/SAS.strings; sourceTree = "<group>"; };
 		F3EAE3E9D5EF4A6D5D9C6CFD /* EmojiPickerScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerScreenViewModel.swift; sourceTree = "<group>"; };
 		F4469F6AE311BDC439B3A5EC /* UserSessionMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSessionMock.swift; sourceTree = "<group>"; };
 		F4548A9BDE5CB3AB864BCA9F /* EffectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsView.swift; sourceTree = "<group>"; };
@@ -5407,6 +5411,7 @@
 				de,
 				en,
 				es,
+				et,
 				fr,
 				hu,
 				id,
@@ -6688,6 +6693,7 @@
 				DA3D82522494E78746B2214E /* de */,
 				7447C0AD7EF302CD027D6230 /* en */,
 				6722709BD6178E10B70C9641 /* es */,
+				F3C7252B3461D06175D975A4 /* et */,
 				CEE20623EB4A9B88FB29F2BA /* fr */,
 				D196116D2DD3F2757D45FCB7 /* hu */,
 				330AF4D121C3396F7A14B21D /* id */,
@@ -6711,6 +6717,7 @@
 				AE5DDBEBBA17973ED4638823 /* de */,
 				13802897C7AFA360EA74C0B0 /* en */,
 				AACE9B8E1A4AE79A7E2914F6 /* es */,
+				4F5F0662483ED69791D63B16 /* et */,
 				653610CB5F9776EAAAB98155 /* fr */,
 				C95ADE8D9527523572532219 /* hu */,
 				475D47D0BFE961B02BAC5D49 /* id */,
@@ -6737,6 +6744,7 @@
 				35AFCF4C05DEED04E3DB1A16 /* de */,
 				CACA846B3E3E9A521D98B178 /* en */,
 				CBBCC6E74774E79B599625D0 /* es */,
+				A443FAE2EE820A5790C35C8D /* et */,
 				CC680E0E79D818706CB28CF8 /* fr */,
 				624244C398804ADC885239AA /* hu */,
 				EF98A02DED04075F7CF0C721 /* id */,
@@ -6763,6 +6771,7 @@
 				84311D707B09854D67F78BBF /* de */,
 				1215A4FC53D2319E81AE8970 /* en */,
 				2525D78FEA7E7B132ED85C58 /* es */,
+				2C39D91A31409775B0F4268F /* et */,
 				ACD7BD6BEE21264F6677904A /* fr */,
 				1D652E78832289CD9EB64488 /* hu */,
 				7199693797B66245EF97BCF5 /* id */,
@@ -7355,7 +7364,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 1.0.10;
+				version = 1.0.11;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {

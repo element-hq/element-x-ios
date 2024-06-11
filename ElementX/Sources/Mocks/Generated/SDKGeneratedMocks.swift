@@ -965,17 +965,17 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
-    //MARK: - enableSendingQueue
+    //MARK: - enableAllSendQueues
 
-    var enableSendingQueueEnableUnderlyingCallsCount = 0
-    open var enableSendingQueueEnableCallsCount: Int {
+    var enableAllSendQueuesEnableUnderlyingCallsCount = 0
+    open var enableAllSendQueuesEnableCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return enableSendingQueueEnableUnderlyingCallsCount
+                return enableAllSendQueuesEnableUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = enableSendingQueueEnableUnderlyingCallsCount
+                    returnValue = enableAllSendQueuesEnableUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -983,26 +983,26 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         set {
             if Thread.isMainThread {
-                enableSendingQueueEnableUnderlyingCallsCount = newValue
+                enableAllSendQueuesEnableUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    enableSendingQueueEnableUnderlyingCallsCount = newValue
+                    enableAllSendQueuesEnableUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var enableSendingQueueEnableCalled: Bool {
-        return enableSendingQueueEnableCallsCount > 0
+    open var enableAllSendQueuesEnableCalled: Bool {
+        return enableAllSendQueuesEnableCallsCount > 0
     }
-    open var enableSendingQueueEnableReceivedEnable: Bool?
-    open var enableSendingQueueEnableReceivedInvocations: [Bool] = []
-    open var enableSendingQueueEnableClosure: ((Bool) -> Void)?
+    open var enableAllSendQueuesEnableReceivedEnable: Bool?
+    open var enableAllSendQueuesEnableReceivedInvocations: [Bool] = []
+    open var enableAllSendQueuesEnableClosure: ((Bool) -> Void)?
 
-    open override func enableSendingQueue(enable: Bool) {
-        enableSendingQueueEnableCallsCount += 1
-        enableSendingQueueEnableReceivedEnable = enable
-        enableSendingQueueEnableReceivedInvocations.append(enable)
-        enableSendingQueueEnableClosure?(enable)
+    open override func enableAllSendQueues(enable: Bool) {
+        enableAllSendQueuesEnableCallsCount += 1
+        enableAllSendQueuesEnableReceivedEnable = enable
+        enableAllSendQueuesEnableReceivedInvocations.append(enable)
+        enableAllSendQueuesEnableClosure?(enable)
     }
 
     //MARK: - encryption
@@ -2993,17 +2993,17 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
-    //MARK: - subscribeToSendingQueueStatus
+    //MARK: - subscribeToSendQueueStatus
 
-    var subscribeToSendingQueueStatusListenerUnderlyingCallsCount = 0
-    open var subscribeToSendingQueueStatusListenerCallsCount: Int {
+    var subscribeToSendQueueStatusListenerUnderlyingCallsCount = 0
+    open var subscribeToSendQueueStatusListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return subscribeToSendingQueueStatusListenerUnderlyingCallsCount
+                return subscribeToSendQueueStatusListenerUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = subscribeToSendingQueueStatusListenerUnderlyingCallsCount
+                    returnValue = subscribeToSendQueueStatusListenerUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -3011,29 +3011,29 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         set {
             if Thread.isMainThread {
-                subscribeToSendingQueueStatusListenerUnderlyingCallsCount = newValue
+                subscribeToSendQueueStatusListenerUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    subscribeToSendingQueueStatusListenerUnderlyingCallsCount = newValue
+                    subscribeToSendQueueStatusListenerUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var subscribeToSendingQueueStatusListenerCalled: Bool {
-        return subscribeToSendingQueueStatusListenerCallsCount > 0
+    open var subscribeToSendQueueStatusListenerCalled: Bool {
+        return subscribeToSendQueueStatusListenerCallsCount > 0
     }
-    open var subscribeToSendingQueueStatusListenerReceivedListener: SendingQueueStatusListener?
-    open var subscribeToSendingQueueStatusListenerReceivedInvocations: [SendingQueueStatusListener] = []
+    open var subscribeToSendQueueStatusListenerReceivedListener: SendQueueRoomErrorListener?
+    open var subscribeToSendQueueStatusListenerReceivedInvocations: [SendQueueRoomErrorListener] = []
 
-    var subscribeToSendingQueueStatusListenerUnderlyingReturnValue: TaskHandle!
-    open var subscribeToSendingQueueStatusListenerReturnValue: TaskHandle! {
+    var subscribeToSendQueueStatusListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToSendQueueStatusListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
-                return subscribeToSendingQueueStatusListenerUnderlyingReturnValue
+                return subscribeToSendQueueStatusListenerUnderlyingReturnValue
             } else {
                 var returnValue: TaskHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = subscribeToSendingQueueStatusListenerUnderlyingReturnValue
+                    returnValue = subscribeToSendQueueStatusListenerUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -3041,24 +3041,24 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         set {
             if Thread.isMainThread {
-                subscribeToSendingQueueStatusListenerUnderlyingReturnValue = newValue
+                subscribeToSendQueueStatusListenerUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    subscribeToSendingQueueStatusListenerUnderlyingReturnValue = newValue
+                    subscribeToSendQueueStatusListenerUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var subscribeToSendingQueueStatusListenerClosure: ((SendingQueueStatusListener) -> TaskHandle)?
+    open var subscribeToSendQueueStatusListenerClosure: ((SendQueueRoomErrorListener) -> TaskHandle)?
 
-    open override func subscribeToSendingQueueStatus(listener: SendingQueueStatusListener) -> TaskHandle {
-        subscribeToSendingQueueStatusListenerCallsCount += 1
-        subscribeToSendingQueueStatusListenerReceivedListener = listener
-        subscribeToSendingQueueStatusListenerReceivedInvocations.append(listener)
-        if let subscribeToSendingQueueStatusListenerClosure = subscribeToSendingQueueStatusListenerClosure {
-            return subscribeToSendingQueueStatusListenerClosure(listener)
+    open override func subscribeToSendQueueStatus(listener: SendQueueRoomErrorListener) -> TaskHandle {
+        subscribeToSendQueueStatusListenerCallsCount += 1
+        subscribeToSendQueueStatusListenerReceivedListener = listener
+        subscribeToSendQueueStatusListenerReceivedInvocations.append(listener)
+        if let subscribeToSendQueueStatusListenerClosure = subscribeToSendQueueStatusListenerClosure {
+            return subscribeToSendQueueStatusListenerClosure(listener)
         } else {
-            return subscribeToSendingQueueStatusListenerReturnValue
+            return subscribeToSendQueueStatusListenerReturnValue
         }
     }
 
@@ -10290,7 +10290,6 @@ open class RoomSDKMock: MatrixRustSDK.Room {
 
     //MARK: - displayName
 
-    open var displayNameThrowableError: Error?
     var displayNameUnderlyingCallsCount = 0
     open var displayNameCallsCount: Int {
         get {
@@ -10319,13 +10318,13 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         return displayNameCallsCount > 0
     }
 
-    var displayNameUnderlyingReturnValue: String!
-    open var displayNameReturnValue: String! {
+    var displayNameUnderlyingReturnValue: String?
+    open var displayNameReturnValue: String? {
         get {
             if Thread.isMainThread {
                 return displayNameUnderlyingReturnValue
             } else {
-                var returnValue: String? = nil
+                var returnValue: String?? = nil
                 DispatchQueue.main.sync {
                     returnValue = displayNameUnderlyingReturnValue
                 }
@@ -10343,18 +10342,55 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             }
         }
     }
-    open var displayNameClosure: (() throws -> String)?
+    open var displayNameClosure: (() -> String?)?
 
-    open override func displayName() throws -> String {
-        if let error = displayNameThrowableError {
-            throw error
-        }
+    open override func displayName() -> String? {
         displayNameCallsCount += 1
         if let displayNameClosure = displayNameClosure {
-            return try displayNameClosure()
+            return displayNameClosure()
         } else {
             return displayNameReturnValue
         }
+    }
+
+    //MARK: - enableSendQueue
+
+    var enableSendQueueEnableUnderlyingCallsCount = 0
+    open var enableSendQueueEnableCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return enableSendQueueEnableUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = enableSendQueueEnableUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                enableSendQueueEnableUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    enableSendQueueEnableUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var enableSendQueueEnableCalled: Bool {
+        return enableSendQueueEnableCallsCount > 0
+    }
+    open var enableSendQueueEnableReceivedEnable: Bool?
+    open var enableSendQueueEnableReceivedInvocations: [Bool] = []
+    open var enableSendQueueEnableClosure: ((Bool) -> Void)?
+
+    open override func enableSendQueue(enable: Bool) {
+        enableSendQueueEnableCallsCount += 1
+        enableSendQueueEnableReceivedEnable = enable
+        enableSendQueueEnableReceivedInvocations.append(enable)
+        enableSendQueueEnableClosure?(enable)
     }
 
     //MARK: - getPowerLevels
@@ -10970,6 +11006,71 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             return isPublicClosure()
         } else {
             return isPublicReturnValue
+        }
+    }
+
+    //MARK: - isSendQueueEnabled
+
+    var isSendQueueEnabledUnderlyingCallsCount = 0
+    open var isSendQueueEnabledCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isSendQueueEnabledUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isSendQueueEnabledUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isSendQueueEnabledUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isSendQueueEnabledUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var isSendQueueEnabledCalled: Bool {
+        return isSendQueueEnabledCallsCount > 0
+    }
+
+    var isSendQueueEnabledUnderlyingReturnValue: Bool!
+    open var isSendQueueEnabledReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return isSendQueueEnabledUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isSendQueueEnabledUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isSendQueueEnabledUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isSendQueueEnabledUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var isSendQueueEnabledClosure: (() -> Bool)?
+
+    open override func isSendQueueEnabled() -> Bool {
+        isSendQueueEnabledCallsCount += 1
+        if let isSendQueueEnabledClosure = isSendQueueEnabledClosure {
+            return isSendQueueEnabledClosure()
+        } else {
+            return isSendQueueEnabledReturnValue
         }
     }
 
@@ -16352,14 +16453,14 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder {
             }
         }
     }
-    open var withUtdHookDelegateClosure: ((UnableToDecryptDelegate) -> SyncServiceBuilder)?
+    open var withUtdHookDelegateClosure: ((UnableToDecryptDelegate) async -> SyncServiceBuilder)?
 
-    open override func withUtdHook(delegate: UnableToDecryptDelegate) -> SyncServiceBuilder {
+    open override func withUtdHook(delegate: UnableToDecryptDelegate) async -> SyncServiceBuilder {
         withUtdHookDelegateCallsCount += 1
         withUtdHookDelegateReceivedDelegate = delegate
         withUtdHookDelegateReceivedInvocations.append(delegate)
         if let withUtdHookDelegateClosure = withUtdHookDelegateClosure {
-            return withUtdHookDelegateClosure(delegate)
+            return await withUtdHookDelegateClosure(delegate)
         } else {
             return withUtdHookDelegateReturnValue
         }
