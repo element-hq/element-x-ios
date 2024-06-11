@@ -1,6 +1,6 @@
 test_configuration:
   - template_file_path: PreviewTests.stencil
-  - simulator_device: "iPhone15"
+  - simulator_device: "iPhone15,2"
   - required_os: 17
   - snapshot_devices:
       - iPhone 15
