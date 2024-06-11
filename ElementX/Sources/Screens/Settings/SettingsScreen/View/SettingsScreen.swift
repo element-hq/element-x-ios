@@ -188,6 +188,9 @@ struct SettingsScreen: View {
             VStack(spacing: 0) {
                 versionText
                     .frame(maxWidth: .infinity)
+                    .onTapGesture(count: 7) {
+                        context.send(viewAction: .enableDeveloperOptions)
+                    }
                 
                 if let deviceID = context.viewState.deviceID {
                     Text(deviceID)

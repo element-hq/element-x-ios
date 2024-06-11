@@ -110,6 +110,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.notifications)
         case .advancedSettings:
             actionsSubject.send(.advancedSettings)
+        case .enableDeveloperOptions:
+            state.showDeveloperOptions = true
         case .developerOptions:
             actionsSubject.send(.developerOptions)
         }
