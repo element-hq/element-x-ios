@@ -64,6 +64,7 @@ enum SettingsScreenViewAction {
     case secureBackup
     case manageAccount(url: URL)
     case notifications
+    case enableDeveloperOptions
     case developerOptions
     case advancedSettings
     case logout

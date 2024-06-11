@@ -32,19 +32,7 @@ struct DeveloperOptionsScreen: View {
                     Text("Hide grey dots")
                 }
             }
-            
-            Section("Room Directory Search") {
-                Toggle(isOn: $context.publicSearchEnabled) {
-                    Text("Public rooms search")
-                }
-            }
-            
-            Section("Room") {
-                Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
-                    Text("Collapse room state events")
-                }
-            }
-            
+                                    
             Section("Element Call") {
                 TextField(context.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
                     .submitLabel(.done)

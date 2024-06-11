@@ -666,7 +666,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         ServiceLocator.shared.networkMonitor
             .reachabilityPublisher
             .removeDuplicates()
-            .sink { [weak self] reachability in
+            .sink { reachability in
                 MXLog.info("Reachability changed to \(reachability)")
                 
                 if reachability == .reachable {

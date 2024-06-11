@@ -363,10 +363,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
         
     private func isItemCollapsible(_ item: TimelineItemProxy) -> Bool {
-        if !appSettings.shouldCollapseRoomStateEvents {
-            return false
-        }
-        
         if case let .event(eventItem) = item {
             switch eventItem.content.kind() {
             case .profileChange, .roomMembership, .state:

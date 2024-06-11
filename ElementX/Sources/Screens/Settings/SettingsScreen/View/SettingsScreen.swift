@@ -196,6 +196,9 @@ struct SettingsScreen: View {
             .compoundListSectionFooter()
             .textSelection(.enabled)
             .padding(.top, 24)
+            .onTapGesture(count: 7) {
+                context.send(viewAction: .enableDeveloperOptions)
+            }
         }
     }
     

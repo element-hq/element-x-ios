@@ -29,7 +29,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     init(userSession: UserSessionProtocol, appSettings: AppSettings) {
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userID: userSession.clientProxy.userID,
-                                           showDeveloperOptions: appSettings.isDevelopmentBuild),
+                                           showDeveloperOptions: AppSettings.isDevelopmentBuild),
                    imageProvider: userSession.mediaProvider)
         
         userSession.clientProxy.userAvatarURLPublisher
@@ -110,6 +110,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.notifications)
         case .advancedSettings:
             actionsSubject.send(.advancedSettings)
+        case .enableDeveloperOptions:
+            state.showDeveloperOptions = true
         case .developerOptions:
             actionsSubject.send(.developerOptions)
         }
