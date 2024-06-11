@@ -1,3 +1,18 @@
+## Changes in 1.6.9 (2024-06-11)
+
+✨ Features
+
+- Adopt new automatically retrying message sending queue ([#2842](https://github.com/element-hq/element-x-ios/issues/2842))
+
+🐛 Bugfixes
+
+- Room membership state changes will use the display name whenever possible. ([#2846](https://github.com/element-hq/element-x-ios/issues/2846))
+
+Others
+
+- Add a flag for Forks to disable hidden profiles for ignored users ([#2892](https://github.com/element-hq/element-x-ios/pull/2892))
+- Rageshake | Add device public curve25519 and ed25519 keys info to rageshake. ([#2550](https://github.com/element-hq/element-x-ios/issues/2550))
+
 ## Changes in 1.6.8 (2024-05-17)
 
 🙌 Improvements
