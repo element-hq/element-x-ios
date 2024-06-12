@@ -44,6 +44,7 @@ final class AppSettings {
         
         // Feature flags
         case publicSearchEnabled
+        case draftRestoringEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -268,6 +269,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: isDevelopmentBuild, storageType: .volatile)
     var publicSearchEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.draftRestoringEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var draftRestoringEnabled
         
     #endif
     

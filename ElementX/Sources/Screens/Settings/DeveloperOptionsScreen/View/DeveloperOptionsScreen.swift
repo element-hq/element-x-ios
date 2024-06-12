@@ -32,6 +32,12 @@ struct DeveloperOptionsScreen: View {
                     Text("Hide grey dots")
                 }
             }
+            
+            Section("Drafts") {
+                Toggle(isOn: $context.draftRestoringEnabled) {
+                    Text("Allow drafts to be restored")
+                }
+            }
                                     
             Section("Element Call") {
                 TextField(context.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
