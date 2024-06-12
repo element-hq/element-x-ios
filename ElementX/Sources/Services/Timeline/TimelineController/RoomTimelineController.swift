@@ -26,8 +26,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let appSettings: AppSettings
     private let serialDispatchQueue: DispatchQueue
     
-    private var cancellables = Set<AnyCancellable>()
-    
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     private var activeTimeline: TimelineProxyProtocol
@@ -131,7 +129,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return
             }
             
-            _ = await roomProxy.timeline.sendReadReceipt(for: eventID, type: receiptType)
+            _ = await activeTimeline.sendReadReceipt(for: eventID, type: receiptType)
         }
     }
     
@@ -162,10 +160,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        switch await roomProxy.timeline.sendMessage(message,
-                                                    html: html,
-                                                    inReplyTo: inReplyTo,
-                                                    intentionalMentions: intentionalMentions) {
+        switch await activeTimeline.sendMessage(message,
+                                                html: html,
+                                                inReplyTo: inReplyTo,
+                                                intentionalMentions: intentionalMentions) {
         case .success:
             MXLog.info("Finished sending message")
         case .failure(let error):
@@ -188,38 +186,27 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func editMessage(_ newMessage: String,
-                     html: String?,
-                     original itemID: TimelineItemIdentifier,
-                     intentionalMentions: IntentionalMentions) async {
+    func edit(_ timelineItemID: TimelineItemIdentifier,
+              message: String,
+              html: String?,
+              intentionalMentions: IntentionalMentions) async {
         MXLog.info("Edit message in \(roomID)")
-        if let timelineItem = timelineItems.firstUsingStableID(itemID),
-           let item = timelineItem as? EventBasedTimelineItemProtocol,
-           item.hasFailedToSend {
-            MXLog.info("Editing a failed echo, will cancel and resend it as a new message")
-            await cancelSending(itemID: itemID)
-            await sendMessage(newMessage, html: html, intentionalMentions: intentionalMentions)
-        } else if let eventID = itemID.eventID {
-            switch await activeTimeline.editMessage(newMessage,
-                                                    html: html,
-                                                    original: eventID,
-                                                    intentionalMentions: intentionalMentions) {
-            case .success:
-                MXLog.info("Finished editing message")
-            case .failure(let error):
-                MXLog.error("Failed editing message with error: \(error)")
-            }
-        } else {
-            MXLog.error("Editing failed: missing identifiers")
+        
+        switch await activeTimeline.edit(timelineItemID,
+                                         message: message,
+                                         html: html,
+                                         intentionalMentions: intentionalMentions) {
+        case .success:
+            MXLog.info("Finished editing message")
+        case .failure(let error):
+            MXLog.error("Failed editing message with error: \(error)")
         }
     }
     
-    func redact(_ itemID: TimelineItemIdentifier) async {
+    func redact(_ timelineItemID: TimelineItemIdentifier) async {
         MXLog.info("Send redaction in \(roomID)")
-        guard let eventID = itemID.eventID else {
-            return
-        }
-        switch await roomProxy.redact(eventID) {
+        
+        switch await activeTimeline.redact(timelineItemID, reason: nil) {
         case .success:
             MXLog.info("Finished redacting message")
         case .failure(let error):
@@ -227,12 +214,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func messageEventContent(for itemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
-        guard let eventID = itemID.eventID else {
-            MXLog.warning("The item doesn't have an event ID.")
-            return nil
-        }
-        return await activeTimeline.messageEventContent(for: eventID)
+    func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
+        await activeTimeline.messageEventContent(for: timelineItemID)
     }
     
     // Handle this parallel to the timeline items so we're not forced
@@ -254,26 +237,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func retryDecryption(for sessionID: String) async {
         await activeTimeline.retryDecryption(for: sessionID)
-    }
-    
-    func retrySending(itemID: TimelineItemIdentifier) async {
-        guard let transactionID = itemID.transactionID else {
-            MXLog.error("Failed Retry Send: missing transaction ID")
-            return
-        }
-        
-        MXLog.info("Retry sending in \(roomID)")
-        await roomProxy.timeline.retrySend(transactionID: transactionID)
-    }
-    
-    func cancelSending(itemID: TimelineItemIdentifier) async {
-        guard let transactionID = itemID.transactionID else {
-            MXLog.error("Failed Cancel Send: missing transaction ID")
-            return
-        }
-        
-        MXLog.info("Cancelling send in \(roomID)")
-        await roomProxy.timeline.cancelSend(transactionID: transactionID)
     }
     
     // MARK: - Private
@@ -400,10 +363,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
         
     private func isItemCollapsible(_ item: TimelineItemProxy) -> Bool {
-        if !appSettings.shouldCollapseRoomStateEvents {
-            return false
-        }
-        
         if case let .event(eventItem) = item {
             switch eventItem.content.kind() {
             case .profileChange, .roomMembership, .state:

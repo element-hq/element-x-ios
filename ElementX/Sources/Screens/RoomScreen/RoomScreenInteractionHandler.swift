@@ -120,7 +120,7 @@ class RoomScreenInteractionHandler {
         }
 
         var debugActions: [TimelineItemMenuAction] = []
-        if appSettings.isDevelopmentBuild || appSettings.viewSourceEnabled {
+        if appSettings.viewSourceEnabled {
             debugActions.append(.viewSource)
         }
 
@@ -157,7 +157,9 @@ class RoomScreenInteractionHandler {
             actions.append(.copy)
         }
         
-        actions.append(.copyPermalink)
+        if item.isRemoteMessage {
+            actions.append(.copyPermalink)
+        }
 
         if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = itemID.eventID {
             actions.append(.endPoll(pollStartID: eventID))
@@ -224,11 +226,7 @@ class RoomScreenInteractionHandler {
             }
         case .redact:
             Task {
-                if eventTimelineItem.hasFailedToSend {
-                    await timelineController.cancelSending(itemID: itemID)
-                } else {
-                    await timelineController.redact(itemID)
-                }
+                await timelineController.redact(itemID)
             }
         case .reply:
             guard let eventID = eventTimelineItem.id.eventID else {
@@ -478,6 +476,7 @@ class RoomScreenInteractionHandler {
     
     // MARK: Audio Playback
     
+    // swiftlint:disable:next cyclomatic_complexity
     func playPauseAudio(for itemID: TimelineItemIdentifier) async {
         MXLog.info("Toggle play/pause audio for itemID \(itemID)")
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
@@ -504,7 +503,7 @@ class RoomScreenInteractionHandler {
         }
 
         guard let audioPlayerState = audioPlayerState(for: itemID) else {
-            fatalError("Audio player not found for \(itemID)")
+            fatalError("Audio player state not found for \(itemID)")
         }
         
         // Ensure this one is attached

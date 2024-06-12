@@ -27,21 +27,16 @@ class UserSessionStore: UserSessionStoreProtocol {
     /// All the user IDs managed by the store.
     var userIDs: [String] { keychainController.restorationTokens().map(\.userID) }
     
-    /// The base directory where all session data is stored.
-    let baseDirectory: URL
-    
     var clientSessionDelegate: ClientSessionDelegate { keychainController }
     
     init(keychainController: KeychainControllerProtocol) {
         self.keychainController = keychainController
-        baseDirectory = .sessionsBaseDirectory
-        MXLog.info("Setup base directory at: \(baseDirectory)")
     }
     
     /// Deletes all data stored in the shared container and keychain
     func reset() {
         MXLog.warning("Resetting the UserSessionStore. All accounts will be affected.")
-        try? FileManager.default.removeItem(at: baseDirectory)
+        try? FileManager.default.removeItem(at: .sessionsBaseDirectory)
         keychainController.removeAllRestorationTokens()
     }
     
@@ -59,20 +54,21 @@ class UserSessionStore: UserSessionStoreProtocol {
             MXLog.error("Failed restoring login with error: \(error)")
             
             // On any restoration failure reset the token and restart
-            keychainController.removeAllRestorationTokens()
-            deleteSessionDirectory(for: credentials.userID)
+            keychainController.removeRestorationTokenForUsername(credentials.userID)
+            deleteSessionDirectory(for: credentials)
             
             return .failure(error)
         }
     }
     
-    func userSession(for client: Client, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError> {
+    func userSession(for client: Client, sessionDirectory: URL, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError> {
         do {
-            let session = try await client.session()
+            let session = try client.session()
             let userID = try client.userId()
             let clientProxy = await setupProxyForClient(client)
             
             keychainController.setRestorationToken(RestorationToken(session: session,
+                                                                    sessionDirectory: sessionDirectory,
                                                                     passphrase: passphrase,
                                                                     pusherNotificationClientIdentifier: clientProxy.pusherNotificationClientIdentifier),
                                                    forUsername: userID)
@@ -86,12 +82,20 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     func logout(userSession: UserSessionProtocol) {
         let userID = userSession.clientProxy.userID
+        let credentials = keychainController.restorationTokens().first { $0.userID == userID }
         keychainController.removeRestorationTokenForUsername(userID)
-        deleteSessionDirectory(for: userID)
+        
+        if let credentials {
+            deleteSessionDirectory(for: credentials)
+        }
     }
     
     func clearCache(for userID: String) {
-        deleteCaches(for: userID)
+        guard let credentials = keychainController.restorationTokens().first(where: { $0.userID == userID }) else {
+            MXLog.error("Failed to clearing caches: Credentials missing")
+            return
+        }
+        deleteCaches(for: credentials)
     }
     
     // MARK: - Private
@@ -115,7 +119,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
         
         var builder = ClientBuilder()
-            .basePath(path: baseDirectory.path)
+            .sessionPath(path: credentials.restorationToken.sessionDirectory.path(percentEncoded: false))
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
             .passphrase(passphrase: credentials.restorationToken.passphrase)
@@ -144,32 +148,25 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     private func setupProxyForClient(_ client: Client) async -> ClientProxyProtocol {
         await ClientProxy(client: client,
-                          appSettings: ServiceLocator.shared.settings,
                           networkMonitor: ServiceLocator.shared.networkMonitor)
     }
     
-    private func deleteSessionDirectory(for userID: String) {
+    private func deleteSessionDirectory(for credentials: KeychainCredentials) {
         do {
-            try FileManager.default.removeItem(at: basePath(for: userID))
+            try FileManager.default.removeItem(at: credentials.restorationToken.sessionDirectory)
         } catch {
             MXLog.failure("Failed deleting the session data: \(error)")
         }
     }
     
-    private func deleteCaches(for userID: String) {
+    private func deleteCaches(for credentials: KeychainCredentials) {
         do {
-            for url in try FileManager.default.contentsOfDirectory(at: basePath(for: userID), includingPropertiesForKeys: nil) where url.path.contains(matrixSDKStateKey) {
+            let sessionDirectoryContents = try FileManager.default.contentsOfDirectory(at: credentials.restorationToken.sessionDirectory, includingPropertiesForKeys: nil)
+            for url in sessionDirectoryContents where url.path.contains(matrixSDKStateKey) {
                 try FileManager.default.removeItem(at: url)
             }
         } catch {
-            MXLog.failure("Failed deleting the session data: \(error)")
+            MXLog.failure("Failed clearing caches: \(error)")
         }
-    }
-    
-    #warning("We should move this and the caches cleanup to the rust side")
-    private func basePath(for userID: String) -> URL {
-        // Rust sanitises the user ID replacing invalid characters with an _
-        let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")
-        return baseDirectory.appendingPathComponent(sanitisedUserID)
     }
 }

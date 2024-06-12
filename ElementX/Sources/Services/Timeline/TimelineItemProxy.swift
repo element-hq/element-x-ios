@@ -78,11 +78,8 @@ class EventTimelineItemProxy {
         }
         
         switch localSendState {
-        case .notSentYet:
+        case .notSentYet, .sendingFailed:
             return .sending
-        // cancelled is exactly like sendingFailed but does not contain an error
-        case .sendingFailed, .cancelled:
-            return .sendingFailed
         case .sent:
             return .sent
         }
@@ -162,7 +159,7 @@ struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {
             return nil
         }
         
-        return String(data: jsonData, encoding: .utf8)
+        return String(decoding: jsonData, as: UTF8.self)
     }
 }
 

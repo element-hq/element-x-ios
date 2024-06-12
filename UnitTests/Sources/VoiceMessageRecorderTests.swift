@@ -239,7 +239,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         let timelineProxy = TimelineProxyMock()
         let roomProxy = RoomProxyMock()
         roomProxy.timeline = timelineProxy
-        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
+        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
             XCTFail("An error is expected")
             return
@@ -260,7 +260,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         let timelineProxy = TimelineProxyMock()
         let roomProxy = RoomProxyMock()
         roomProxy.timeline = timelineProxy
-        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
+        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
             XCTFail("An error is expected")
             return
@@ -283,7 +283,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         let timelineProxy = TimelineProxyMock()
         let roomProxy = RoomProxyMock()
         roomProxy.timeline = timelineProxy
-        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.failedSendingMedia)
+        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
             XCTFail("An error is expected")
             return
@@ -388,4 +388,8 @@ class VoiceMessageRecorderTests: XCTestCase {
         audioRecorderActionsSubject.send(.didFailWithError(error: .audioEngineFailure))
         try await deferred.fulfill()
     }
+}
+
+private enum SDKError: Error {
+    case generic
 }

@@ -21,6 +21,7 @@ import MatrixRustSDK
 
 final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     private let oidcConfiguration: OidcConfiguration
+    private let sessionDirectory: URL
     private let passphrase: String
     private let userSessionStore: UserSessionStoreProtocol
     
@@ -34,6 +35,7 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
          userSessionStore: UserSessionStoreProtocol) {
         self.oidcConfiguration = oidcConfiguration
         self.userSessionStore = userSessionStore
+        sessionDirectory = .sessionsBaseDirectory.appending(component: UUID().uuidString)
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
     }
     
@@ -52,7 +54,7 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         
         do {
             let client = try await ClientBuilder()
-                .basePath(path: userSessionStore.baseDirectory.path(percentEncoded: false))
+                .sessionPath(path: sessionDirectory.path(percentEncoded: false))
                 .passphrase(passphrase: passphrase)
                 .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
                 .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
@@ -70,7 +72,7 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     }
     
     private func login(client: Client) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
-        switch await userSessionStore.userSession(for: client, passphrase: passphrase) {
+        switch await userSessionStore.userSession(for: client, sessionDirectory: sessionDirectory, passphrase: passphrase) {
         case .success(let session):
             return .success(session)
         case .failure(let error):

@@ -580,7 +580,7 @@ class RoomProxy: RoomProxyProtocol {
     
     func restoreDraft() async -> Result<ComposerDraft?, RoomProxyError> {
         do {
-            return try await .success(room.restoreComposerDraft())
+            return try await .success(room.loadComposerDraft())
         } catch {
             MXLog.error("Failed restoring draft with error: \(error)")
             return .failure(.sdkError(error))
@@ -593,15 +593,6 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed clearing draft with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func getLoadedReplyDetails(eventID: String) async -> Result<InReplyToDetails, RoomProxyError> {
-        do {
-            return try await .success(room.loadReplyDetails(eventId: eventID))
-        } catch {
-            MXLog.error("Failed getting reply details for event \(eventID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

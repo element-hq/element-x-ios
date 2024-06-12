@@ -73,6 +73,7 @@
 "action_quick_reply" = "Rýchla odpoveď";
 "action_quote" = "Citovať";
 "action_react" = "Reagovať";
+"action_reject" = "Odmietnuť";
 "action_remove" = "Odstrániť";
 "action_reply" = "Odpovedať";
 "action_reply_in_thread" = "Odpovedať vo vlákne";
@@ -210,6 +211,7 @@
 "common_voice_message" = "Hlasová správa";
 "common_waiting" = "Čaká sa…";
 "common_waiting_for_decryption_key" = "Čaká sa na dešifrovací kľúč";
+"common.send_to" = "Odoslať";
 "common_no_room_name" = "Žiadny názov miestnosti";
 "common_poll_end_confirmation" = "Ste si istí, že chcete ukončiť túto anketu?";
 "common_poll_summary" = "Anketa: %1$@";
@@ -258,7 +260,9 @@
 "notification_channel_call" = "Zavolať";
 "notification_channel_listening_for_events" = "Počúvanie udalostí";
 "notification_channel_noisy" = "Hlasité oznámenia";
+"notification_channel_ringing_calls" = "Vyzváňanie hovorov";
 "notification_channel_silent" = "Tiché oznámenia";
+"notification_incoming_call" = "Prichádzajúci hovor";
 "notification_inline_reply_failed" = "** Nepodarilo sa odoslať - prosím otvorte miestnosť";
 "notification_invitation_action_reject" = "Zamietnuť";
 "notification_invite_body" = "Vás pozval/a na konverzáciu";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v tejto miestnosti nedostanete upozornenie.";
 "screen_room_notification_settings_mode_all_messages" = "Všetky správy";
 "screen_room_notification_settings_room_custom_settings_title" = "V tejto miestnosti ma upozorniť na";
-"screen_room_retry_send_menu_send_again_action" = "Odoslať znova";
 "screen_room_retry_send_menu_title" = "Vašu správu sa nepodarilo odoslať";
 "screen_room_roles_and_permissions_admins" = "Správcovia";
 "screen_room_roles_and_permissions_change_my_role" = "Zmeniť moje oprávnenia";

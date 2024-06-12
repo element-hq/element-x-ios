@@ -12,7 +12,7 @@ struct GenerateSDKMocks: ParsableCommand {
     @Argument(help: "The argument to specify a branch of the SDK. Use `local` to use your local version")
     var version: String
 
-    private var fileURLFormat = "https://raw.githubusercontent.com/matrix-org/matrix-rust-components-swift/%@/Sources/MatrixRustSDK/matrix_sdk_ffi.swift"
+    private var fileURLFormat = "https://raw.githubusercontent.com/element-hq/matrix-rust-components-swift/%@/Sources/MatrixRustSDK/matrix_sdk_ffi.swift"
 
     func run() throws {
         if version == "local" {
@@ -27,7 +27,7 @@ struct GenerateSDKMocks: ParsableCommand {
 
     /// Generates the SDK mocks using Sourcery.
     func generateSDKMocks(ffiPath: String) throws {
-        try Zsh.run(command: "sourcery --sources \(ffiPath) --sources ElementX/Sources/Mocks/SDK --templates Tools/Sourcery --output ElementX/Sources/Mocks/Generated/SDKGeneratedMocks.swift --args autoMockableImports=\"Foundation\",autoMockableImports=\"MatrixRustSDK\"")
+        try Zsh.run(command: "sourcery --sources \(ffiPath) --templates Tools/Sourcery/SDKAutoMockable.stencil --output ElementX/Sources/Mocks/Generated/SDKGeneratedMocks.swift --args autoMockableImports=\"Foundation\",autoMockableImports=\"MatrixRustSDK\"")
     }
 
     /// Downloads the specified version of the `matrix_sdk_ffi.swift` file and returns the path to the downloaded file.

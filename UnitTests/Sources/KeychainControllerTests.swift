@@ -40,6 +40,7 @@ class KeychainControllerTests: XCTestCase {
                                                                homeserverUrl: "homeserverUrl",
                                                                oidcData: "oidcData",
                                                                slidingSyncProxy: "https://my.sync.proxy"),
+                                                sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
                                                 passphrase: "passphrase",
                                                 pusherNotificationClientIdentifier: "pusherClientID")
         keychain.setRestorationToken(restorationToken, forUsername: username)
@@ -58,6 +59,7 @@ class KeychainControllerTests: XCTestCase {
                                                                homeserverUrl: "homeserverUrl",
                                                                oidcData: "oidcData",
                                                                slidingSyncProxy: "https://my.sync.proxy"),
+                                                sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
                                                 passphrase: "passphrase",
                                                 pusherNotificationClientIdentifier: "pusherClientID")
         keychain.setRestorationToken(restorationToken, forUsername: username)
@@ -82,6 +84,7 @@ class KeychainControllerTests: XCTestCase {
                                                                    homeserverUrl: "homeserverUrl",
                                                                    oidcData: "oidcData",
                                                                    slidingSyncProxy: "https://my.sync.proxy"),
+                                                    sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
                                                     passphrase: "passphrase",
                                                     pusherNotificationClientIdentifier: "pusherClientID")
             keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
@@ -105,6 +108,7 @@ class KeychainControllerTests: XCTestCase {
                                                                    homeserverUrl: "homeserverUrl",
                                                                    oidcData: "oidcData",
                                                                    slidingSyncProxy: "https://my.sync.proxy"),
+                                                    sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
                                                     passphrase: "passphrase",
                                                     pusherNotificationClientIdentifier: "pusherClientID")
             keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
@@ -170,7 +174,7 @@ class KeychainControllerTests: XCTestCase {
         XCTAssertNil(keychain.pinCodeBiometricState(), "A new keychain shouldn't return biometric state.")
         
         // When setting the state.
-        let data: Data! = "Face ID".data(using: .utf8)
+        let data = Data("Face ID".utf8)
         try keychain.setPINCodeBiometricState(data)
         
         // Then the state should be stored.
@@ -180,13 +184,13 @@ class KeychainControllerTests: XCTestCase {
     
     func testUpdatePINCodeBiometricState() throws {
         // Given a keychain that contains PIN code biometric state.
-        let data: Data! = "😃".data(using: .utf8)
+        let data = Data("😃".utf8)
         try keychain.setPINCodeBiometricState(data)
         XCTAssertTrue(keychain.containsPINCodeBiometricState(), "The keychain should contain the biometric state.")
         XCTAssertEqual(keychain.pinCodeBiometricState(), data, "The stored biometric state should match what was set.")
         
         // When setting different state.
-        let newData: Data! = "😎".data(using: .utf8)
+        let newData = Data("😎".utf8)
         try keychain.setPINCodeBiometricState(newData)
         
         // Then the state should be updated.
@@ -197,7 +201,7 @@ class KeychainControllerTests: XCTestCase {
     
     func testRemovePINCodeBiometricState() throws {
         // Given a keychain that contains PIN code biometric state.
-        let data: Data! = "Face ID".data(using: .utf8)
+        let data = Data("Face ID".utf8)
         try keychain.setPINCodeBiometricState(data)
         XCTAssertTrue(keychain.containsPINCodeBiometricState(), "The keychain should contain the biometric state.")
         XCTAssertEqual(keychain.pinCodeBiometricState(), data, "The stored biometric state should match what was set.")

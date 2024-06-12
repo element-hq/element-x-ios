@@ -43,8 +43,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
         super.init(initialViewState: NotificationSettingsEditScreenViewState(bindings: bindings,
-                                                                             strings: NotificationSettingsEditScreenStrings(chatType: chatType),
-                                                                             chatType: chatType),
+                                                                             strings: NotificationSettingsEditScreenStrings(chatType: chatType)),
                    imageProvider: userSession.mediaProvider)
         
         setupNotificationSettingsSubscription()

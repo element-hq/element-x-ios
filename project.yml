@@ -30,7 +30,7 @@ settings:
   APP_DISPLAY_NAME: Element X
   PRODUCTION_APP_NAME: Element
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
-  MARKETING_VERSION: 1.6.9
+  MARKETING_VERSION: 1.6.10
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
   SUPPORTS_MACCATALYST: NO
@@ -53,7 +53,7 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: c1b9c32fef5f98f90bd1856cce327770297226b1
+    revision: e44f649c9f0c9c562fed3f311aca10c144059725
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
@@ -99,6 +99,9 @@ packages:
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     branch: master
+  LoremSwiftum:
+    url: https://github.com/lukaskubanek/LoremSwiftum
+    minorVersion: 2.2.1
   LRUCache:
     url: https://github.com/nicklockwood/LRUCache
     minorVersion: 1.0.4
@@ -116,13 +119,13 @@ packages:
     minorVersion: 8.13.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    minorVersion: 1.13.0
+    minorVersion: 1.16.0
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     minorVersion: 6.0.0
   SwiftUIIntrospect:
     url: https://github.com/siteline/SwiftUI-Introspect
-    minorVersion: 0.9.0
+    minorVersion: 1.1.4
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.0.0

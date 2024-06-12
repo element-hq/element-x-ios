@@ -19,9 +19,7 @@ import SwiftUI
 
 struct HomeScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let attributedStringBuilder: AttributedStringBuilderProtocol
     let bugReportService: BugReportServiceProtocol
-    let navigationStackCoordinator: NavigationStackCoordinator
     let selectedRoomPublisher: CurrentValuePublisher<String?, Never>
 }
 

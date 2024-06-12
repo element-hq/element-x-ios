@@ -31,7 +31,6 @@ enum JoinRoomScreenCoordinatorAction {
 }
 
 final class JoinRoomScreenCoordinator: CoordinatorProtocol {
-    private let parameters: JoinRoomScreenCoordinatorParameters
     private let viewModel: JoinRoomScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -42,8 +41,6 @@ final class JoinRoomScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: JoinRoomScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = JoinRoomScreenViewModel(roomID: parameters.roomID,
                                             via: parameters.via,
                                             clientProxy: parameters.clientProxy,

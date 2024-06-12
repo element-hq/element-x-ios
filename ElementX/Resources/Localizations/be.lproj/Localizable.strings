@@ -73,6 +73,7 @@
 "action_quick_reply" = "Хуткі адказ";
 "action_quote" = "Цытата";
 "action_react" = "Рэакцыя";
+"action_reject" = "Адхіліць";
 "action_remove" = "Выдаліць";
 "action_reply" = "Адказаць";
 "action_reply_in_thread" = "Адказаць у гутаркі";
@@ -145,7 +146,7 @@
 "common_message_layout" = "Выгляд паведамлення";
 "common_message_removed" = "Паведамленне выдалена";
 "common_modern" = "Сучасны";
-"common_mute" = "Адключыць гук";
+"common_mute" = "Адкл. гук";
 "common_no_results" = "Вынікаў няма";
 "common_offline" = "Па-за сеткай";
 "common_optic_id_ios" = "Optic ID";
@@ -201,7 +202,7 @@
 "common_unable_to_invite_message" = "Не ўдалося адправіць запрашэнні аднаму або некалькім карыстальнікам.";
 "common_unable_to_invite_title" = "Немагчыма адправіць запрашэнне(я)";
 "common_unlock" = "Разблакіраваць";
-"common_unmute" = "Уключыць гук";
+"common_unmute" = "Укл. гук";
 "common_unsupported_event" = "Падзея не падтрымліваецца";
 "common_username" = "Імя карыстальніка";
 "common_verification_cancelled" = "Праверка адменена";
@@ -209,7 +210,8 @@
 "common_video" = "Відэа";
 "common_voice_message" = "Галасавое паведамленне";
 "common_waiting" = "Чакаем…";
-"common_waiting_for_decryption_key" = "Чакаю гэтага паведамлення";
+"common_waiting_for_decryption_key" = "Чакаю гэта паведамленне";
+"common.send_to" = "Адправіць";
 "common_no_room_name" = "Няма назвы пакоя";
 "common_poll_end_confirmation" = "Вы ўпэўнены, што хочаце скончыць гэтае апытанне?";
 "common_poll_summary" = "Апытанне: %1$@";
@@ -252,13 +254,15 @@
 "invite_friends_text" = "Гэй, пагавары са мной у %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "Вы ўпэўнены, што хочаце пакінуць гэту размову? Гэта размова не з'яўляецца публічнай, і вы не зможаце далучыцца зноў без запрашэння.";
 "leave_room_alert_empty_subtitle" = "Вы ўпэўнены, што хочаце пакінуць гэты пакой? Вы тут адзіны карыстальнік. Калі вы выйдзеце, ніхто не зможа далучыцца ў будучыні, у тым ліку і вы.";
-"leave_room_alert_private_subtitle" = "Вы ўпэўнены, што жхочаце пакінуць гэты пакой? Гэты пакой не агульнадаступны, і вы не зможаце далучыцца да яго зноў без запрашэння.";
+"leave_room_alert_private_subtitle" = "Вы ўпэўнены, што хочаце пакінуць гэты пакой? Гэты пакой не агульнадаступны, і вы не зможаце далучыцца да яго зноў без запрашэння.";
 "leave_room_alert_subtitle" = "Вы ўпэўнены, што хочаце пакінуць пакой?";
 "login_initial_device_name_ios" = "%1$@ iOS";
 "notification_channel_call" = "Пазваніць";
 "notification_channel_listening_for_events" = "Праслухоўванне падзей";
 "notification_channel_noisy" = "Шумныя апавяшчэнні";
+"notification_channel_ringing_calls" = "Званкі";
 "notification_channel_silent" = "Ціхія апавяшчэнні";
+"notification_incoming_call" = "Уваходны званок";
 "notification_inline_reply_failed" = "** Не атрымалася даслаць - калі ласка, адкрыйце пакой";
 "notification_invitation_action_reject" = "Адхіліць";
 "notification_invite_body" = "Запрасіў(-ла) вас у чат";
@@ -638,7 +642,7 @@
 "screen_room_member_list_manage_member_unban_message" = "Яны змогуць зноў далучыцца да гэтага пакоя, калі іх запросяць.";
 "screen_room_member_list_manage_member_unban_title" = "Разблакіраваць удзельніка";
 "screen_room_member_list_manage_member_user_info" = "Прагляд профілю";
-"screen_room_member_list_mode_banned" = "Заблакіраваны";
+"screen_room_member_list_mode_banned" = "Заблакіраваныя";
 "screen_room_member_list_mode_members" = "Удзельнікі";
 "screen_room_member_list_pending_header_title" = "У чаканні";
 "screen_room_member_list_removing_user" = "Выдаленне %1$@ ...";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ваш хатні сервер не падтрымлівае гэту опцыю ў зашыфраваных пакоях, вы не атрымаеце апавяшчэнне ў гэтым пакоі.";
 "screen_room_notification_settings_mode_all_messages" = "Усе паведамленні";
 "screen_room_notification_settings_room_custom_settings_title" = "У гэтым пакоі паведаміце мяне пра";
-"screen_room_retry_send_menu_send_again_action" = "Адправіць зноў";
 "screen_room_retry_send_menu_title" = "Не ўдалося адправіць ваша паведамленне";
 "screen_room_roles_and_permissions_admins" = "Адміністратары";
 "screen_room_roles_and_permissions_change_my_role" = "Змяніць маю роль";
@@ -683,7 +686,7 @@
 "screen_room_timeline_no_permission_to_post" = "У Вас няма дазволу на публікацыю ў гэтым пакоі";
 "screen_room_timeline_reactions_show_less" = "Паказаць менш";
 "screen_room_timeline_reactions_show_more" = "Паказаць больш";
-"screen_room_timeline_read_marker_title" = "Новы";
+"screen_room_timeline_read_marker_title" = "Новае";
 "screen_room_title" = "Чат";
 "screen_room_typing_many_members_first_component_ios" = "%1$@, %2$@ i ";
 "screen_room_typing_notification_plural_ios" = " пішуць…";

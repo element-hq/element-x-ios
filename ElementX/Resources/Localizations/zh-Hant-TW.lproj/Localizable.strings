@@ -73,6 +73,7 @@
 "action_quick_reply" = "快速回覆";
 "action_quote" = "引用";
 "action_react" = "回應";
+"action_reject" = "Reject";
 "action_remove" = "移除";
 "action_reply" = "回覆";
 "action_reply_in_thread" = "在討論串中回覆";
@@ -210,6 +211,7 @@
 "common_voice_message" = "語音訊息";
 "common_waiting" = "等待中...";
 "common_waiting_for_decryption_key" = "等待此則訊息";
+"common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "您確定要結束這項投票嗎？";
 "common_poll_summary" = "投票：%1$@";
@@ -258,7 +260,9 @@
 "notification_channel_call" = "通話";
 "notification_channel_listening_for_events" = "Listening for events";
 "notification_channel_noisy" = "Noisy notifications";
+"notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "無聲通知";
+"notification_incoming_call" = "Incoming call";
 "notification_inline_reply_failed" = "** 無法傳送，請開啟聊天室";
 "notification_invitation_action_reject" = "拒絕";
 "notification_invite_body" = "邀請您聊天";
@@ -659,7 +663,6 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.";
 "screen_room_notification_settings_mode_all_messages" = "所有訊息";
 "screen_room_notification_settings_room_custom_settings_title" = "In this room, notify me for";
-"screen_room_retry_send_menu_send_again_action" = "重傳";
 "screen_room_retry_send_menu_title" = "無法傳送您的訊息";
 "screen_room_roles_and_permissions_admins" = "管理員";
 "screen_room_roles_and_permissions_change_my_role" = "變更我的身份";

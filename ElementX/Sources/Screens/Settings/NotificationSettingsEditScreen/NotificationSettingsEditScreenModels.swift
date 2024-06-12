@@ -28,7 +28,6 @@ enum NotificationSettingsEditScreenDefaultMode {
 struct NotificationSettingsEditScreenViewState: BindableState {
     var bindings: NotificationSettingsEditScreenViewStateBindings
     var strings: NotificationSettingsEditScreenStrings
-    var chatType: NotificationSettingsChatType
     var availableDefaultModes: [NotificationSettingsEditScreenDefaultMode] = [.allMessages, .mentionsAndKeywordsOnly]
     var defaultMode: NotificationSettingsEditScreenDefaultMode?
     var pendingMode: NotificationSettingsEditScreenDefaultMode?

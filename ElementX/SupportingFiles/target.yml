@@ -188,6 +188,7 @@ targets:
     - package: KeychainAccess
     - package: Kingfisher
     - package: KZFileWatchers
+    - package: LoremSwiftum
     - package: LRUCache
     - package: Mapbox
     - package: PostHog

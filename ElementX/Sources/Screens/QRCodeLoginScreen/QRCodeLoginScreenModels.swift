@@ -107,15 +107,6 @@ enum QRCodeLoginState: Equatable {
         }
     }
     
-    var isDisplayingCode: Bool {
-        switch self {
-        case .displayCode:
-            return true
-        default:
-            return false
-        }
-    }
-    
     var isScanning: Bool {
         switch self {
         case .scan(let state):

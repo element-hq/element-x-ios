@@ -23,7 +23,6 @@ import MatrixRustSDK
 
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
-    private let appSettings: AppSettings
     private let networkMonitor: NetworkMonitorProtocol
     
     private let mediaLoader: MediaLoaderProtocol
@@ -44,6 +43,9 @@ class ClientProxy: ClientProxyProtocol {
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var verificationStateListenerTaskHandle: TaskHandle?
+    
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var sendQueueListenerTaskHandle: TaskHandle?
     
     private var delegateHandle: TaskHandle?
     
@@ -118,11 +120,11 @@ class ClientProxy: ClientProxyProtocol {
         verificationStateSubject.asCurrentValuePublisher()
     }
     
+    private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
+    
     init(client: ClientProtocol,
-         appSettings: AppSettings,
          networkMonitor: NetworkMonitorProtocol) async {
         self.client = client
-        self.appSettings = appSettings
         self.networkMonitor = networkMonitor
         
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
@@ -161,6 +163,25 @@ class ClientProxy: ClientProxyProtocol {
         verificationStateListenerTaskHandle = client.encryption().verificationStateListener(listener: VerificationStateListenerProxy { [weak self] verificationState in
             self?.updateVerificationState(verificationState)
         })
+        
+        sendQueueListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SendQueueRoomErrorListenerProxy { [weak self] roomID, error in
+            MXLog.error("Send queue failed in room: \(roomID) with error: \(error)")
+            self?.sendQueueStatusSubject.send(false)
+        })
+        
+        sendQueueStatusSubject
+            .removeDuplicates()
+            .combineLatest(networkMonitor.reachabilityPublisher)
+            .debounce(for: 1.0, scheduler: DispatchQueue.main)
+            .sink { enabled, reachability in
+                MXLog.info("Send queue status changed to enabled: \(enabled)")
+                
+                if enabled == false, reachability == .reachable {
+                    MXLog.info("Enabling all send queues")
+                    client.enableAllSendQueues(enable: true)
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func updateVerificationState(_ verificationState: VerificationState) {
@@ -577,7 +598,7 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-    
+        
     // MARK: Ignored users
     
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
@@ -784,7 +805,7 @@ class ClientProxy: ClientProxyProtocol {
             if roomListItem?.isTimelineInitialized() == false {
                 try await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
             }
-            let fullRoom = try await roomListItem?.fullRoom()
+            let fullRoom = try roomListItem?.fullRoom()
             
             return (roomListItem, fullRoom)
         } catch {
@@ -917,6 +938,18 @@ private class IgnoredUsersListenerProxy: IgnoredUsersListener {
     
     func call(ignoredUserIds: [String]) {
         onUpdateClosure(ignoredUserIds)
+    }
+}
+
+private class SendQueueRoomErrorListenerProxy: SendQueueRoomErrorListener {
+    private let onErrorClosure: (String, ClientError) -> Void
+    
+    init(onErrorClosure: @escaping (String, ClientError) -> Void) {
+        self.onErrorClosure = onErrorClosure
+    }
+    
+    func onError(roomId: String, error: ClientError) {
+        onErrorClosure(roomId, error)
     }
 }
 

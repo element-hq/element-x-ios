@@ -20,25 +20,15 @@ import SwiftUI
 typealias AuthenticationStartScreenViewModelType = StateStoreViewModel<AuthenticationStartScreenViewState, AuthenticationStartScreenViewAction>
 
 class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType, AuthenticationStartScreenViewModelProtocol {
-    private let appSettings: AppSettings
     private var actionsSubject: PassthroughSubject<AuthenticationStartScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<AuthenticationStartScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(appSettings: AppSettings) {
-        self.appSettings = appSettings
+    init() {
         super.init(initialViewState: AuthenticationStartScreenViewState())
-        if !ProcessInfo.processInfo.isiOSAppOnMac {
-            if appSettings.isDevelopmentBuild {
-                state.isQRCodeLoginEnabled = true
-            } else {
-                appSettings.$qrCodeLoginEnabled
-                    .weakAssign(to: \.state.isQRCodeLoginEnabled, on: self)
-                    .store(in: &cancellables)
-            }
-        }
+        state.isQRCodeLoginEnabled = !ProcessInfo.processInfo.isiOSAppOnMac && AppSettings.isDevelopmentBuild
     }
 
     override func process(viewAction: AuthenticationStartScreenViewAction) {

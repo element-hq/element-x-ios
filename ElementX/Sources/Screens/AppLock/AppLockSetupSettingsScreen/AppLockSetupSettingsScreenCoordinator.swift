@@ -18,8 +18,6 @@ import Combine
 import SwiftUI
 
 struct AppLockSetupSettingsScreenCoordinatorParameters {
-    /// Whether App Lock is mandatory and can be disabled by the user.
-    let isMandatory: Bool
     let appLockService: AppLockServiceProtocol
 }
 

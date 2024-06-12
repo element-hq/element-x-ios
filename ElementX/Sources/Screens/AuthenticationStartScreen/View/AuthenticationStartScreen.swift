@@ -117,10 +117,7 @@ struct AuthenticationStartScreen: View {
 // MARK: - Previews
 
 struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = {
-        ServiceLocator.shared.settings.qrCodeLoginEnabled = true
-        return AuthenticationStartScreenViewModel(appSettings: ServiceLocator.shared.settings)
-    }()
+    static let viewModel = AuthenticationStartScreenViewModel()
     
     static var previews: some View {
         AuthenticationStartScreen(context: viewModel.context)

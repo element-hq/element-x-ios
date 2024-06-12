@@ -26,7 +26,6 @@ typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarView
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
-    private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let draftService: ComposerDraftServiceProtocol
     
@@ -54,13 +53,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     init(wysiwygViewModel: WysiwygComposerViewModel,
          completionSuggestionService: CompletionSuggestionServiceProtocol,
          mediaProvider: MediaProviderProtocol,
-         appSettings: AppSettings,
          mentionDisplayHelper: MentionDisplayHelper,
          analyticsService: AnalyticsService,
          draftService: ComposerDraftServiceProtocol) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
-        self.appSettings = appSettings
         self.analyticsService = analyticsService
         self.draftService = draftService
         
@@ -258,7 +255,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func handleSaveDraft() {
         let plainText: String
         let htmlText: String?
-        let type: DraftType
+        let type: ComposerDraftType
         
         if context.composerFormattingEnabled {
             if wysiwygViewModel.isContentEmpty, state.composerMode == .default {

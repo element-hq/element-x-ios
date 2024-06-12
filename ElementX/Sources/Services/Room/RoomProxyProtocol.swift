@@ -140,7 +140,6 @@ protocol RoomProxyProtocol {
     func saveDraft(_ draft: ComposerDraft) async -> Result<Void, RoomProxyError>
     func restoreDraft() async -> Result<ComposerDraft?, RoomProxyError>
     func clearDraft() async -> Result<Void, RoomProxyError>
-    func getLoadedReplyDetails(eventID: String) async -> Result<InReplyToDetails, RoomProxyError>
 }
 
 extension RoomProxyProtocol {

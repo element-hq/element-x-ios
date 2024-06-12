@@ -39,6 +39,8 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         
         windowManager.delegate = self
         
+        MXLog.configure(logLevel: .debug)
+        
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         
         AppSettings.configureWithSuiteName("io.element.elementx.uitests")
@@ -160,7 +162,7 @@ class MockScreen: Identifiable {
             let context = LAContextMock()
             context.biometryTypeValue = UIDevice.current.isPhone ? .faceID : .touchID // (iPhone 14 & iPad 9th gen)
             context.evaluatePolicyReturnValue = true
-            context.evaluatedPolicyDomainStateValue = "😎".data(using: .utf8)
+            context.evaluatedPolicyDomainStateValue = Data("😎".utf8)
             
             let appLockService = AppLockService(keychainController: keychainController,
                                                 appSettings: ServiceLocator.shared.settings,
@@ -215,7 +217,7 @@ class MockScreen: Identifiable {
             let context = LAContextMock()
             context.biometryTypeValue = UIDevice.current.isPhone ? .faceID : .touchID // (iPhone 14 & iPad 9th gen)
             context.evaluatePolicyReturnValue = true
-            context.evaluatedPolicyDomainStateValue = "😎".data(using: .utf8)
+            context.evaluatedPolicyDomainStateValue = Data("😎".utf8)
             
             let appLockService = AppLockService(keychainController: keychainController,
                                                 appSettings: ServiceLocator.shared.settings,
@@ -612,6 +614,46 @@ class MockScreen: Identifiable {
             let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .autoUpdatingTimeline:
+            let appSettings: AppSettings = ServiceLocator.shared.settings
+            appSettings.hasRunIdentityConfirmationOnboarding = true
+            appSettings.hasRunNotificationPermissionsOnboarding = true
+            appSettings.analyticsConsentState = .optedOut
+            let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
+            
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            
+            let roomProxy = RoomProxyMock(.init(id: "whatever", name: "okay", shouldUseAutoUpdatingTimeline: true))
+            
+            clientProxy.roomForIdentifierReturnValue = roomProxy
+            
+            ServiceLocator.shared.settings.migratedAccounts[clientProxy.userID] = true
+            
+            let timelineController = RoomTimelineController(roomProxy: roomProxy,
+                                                            initialFocussedEventID: nil,
+                                                            timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
+                                                                                                         attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                                                                         stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
+                                                            appSettings: ServiceLocator.shared.settings)
+            
+            let flowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                             navigationRootCoordinator: navigationRootCoordinator,
+                                                             appLockService: AppLockService(keychainController: KeychainControllerMock(),
+                                                                                            appSettings: ServiceLocator.shared.settings),
+                                                             bugReportService: BugReportServiceMock(),
+                                                             elementCallService: ElementCallServiceMock(),
+                                                             roomTimelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init(timelineController: timelineController)),
+                                                             appMediator: AppMediatorMock.default,
+                                                             appSettings: appSettings,
+                                                             analytics: ServiceLocator.shared.analytics,
+                                                             notificationManager: NotificationManagerMock(),
+                                                             isNewLogin: false)
+            
+            flowCoordinator.start()
+            
+            retainedState.append(flowCoordinator)
+            
+            return nil
         }
     }()
 }

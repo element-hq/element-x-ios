@@ -20,7 +20,7 @@ import XCTest
 
 final class MediaLoaderTests: XCTestCase {
     func testMediaRequestCoalescing() async {
-        let mediaLoadingClient = SDKClientMock()
+        let mediaLoadingClient = ClientSDKMock()
         mediaLoadingClient.getMediaContentMediaSourceReturnValue = Data()
         let mediaLoader = MediaLoader(client: mediaLoadingClient)
         
@@ -38,7 +38,7 @@ final class MediaLoaderTests: XCTestCase {
     }
     
     func testMediaThumbnailRequestCoalescing() async {
-        let mediaLoadingClient = SDKClientMock()
+        let mediaLoadingClient = ClientSDKMock()
         mediaLoadingClient.getMediaThumbnailMediaSourceWidthHeightReturnValue = Data()
         let mediaLoader = MediaLoader(client: mediaLoadingClient)
         

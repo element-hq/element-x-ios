@@ -251,8 +251,7 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func showSettings() {
-        let coordinator = AppLockSetupSettingsScreenCoordinator(parameters: .init(isMandatory: appLockService.isMandatory,
-                                                                                  appLockService: appLockService))
+        let coordinator = AppLockSetupSettingsScreenCoordinator(parameters: .init(appLockService: appLockService))
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {

@@ -18,7 +18,6 @@ import Combine
 import Foundation
 
 struct UserSessionMockConfiguration {
-    var sessionVerificationController: SessionVerificationControllerProxyProtocol?
     let clientProxy: ClientProxyProtocol
 }
 

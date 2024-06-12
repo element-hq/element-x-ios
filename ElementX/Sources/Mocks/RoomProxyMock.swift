@@ -39,17 +39,7 @@ struct RoomProxyMockConfiguration {
     var canUserTriggerRoomNotification = false
     var canUserJoinCall = true
     
-    func makeTimeline() -> TimelineProxyMock {
-        let timeline = TimelineProxyMock()
-        timeline.underlyingActions = Empty(completeImmediately: false).eraseToAnyPublisher()
-        timeline.sendMessageEventContentReturnValue = .success(())
-        
-        let timelineProvider = RoomTimelineProviderMock()
-        timelineProvider.paginationState = .init(backward: timelineStartReached ? .timelineEndReached : .idle, forward: .timelineEndReached)
-        timelineProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
-        timeline.underlyingTimelineProvider = timelineProvider
-        return timeline
-    }
+    var shouldUseAutoUpdatingTimeline = false
 }
 
 enum RoomProxyMockError: Error {
@@ -72,8 +62,23 @@ extension RoomProxyMock {
         hasOngoingCall = configuration.hasOngoingCall
         canonicalAlias = configuration.canonicalAlias
         
-        timeline = configuration.makeTimeline()
+        let timeline = TimelineProxyMock()
+        timeline.sendMessageEventContentReturnValue = .success(())
+        timeline.paginateBackwardsRequestSizeReturnValue = .success(())
+        timeline.paginateForwardsRequestSizeReturnValue = .success(())
+        timeline.sendReadReceiptForTypeReturnValue = .success(())
         
+        if configuration.shouldUseAutoUpdatingTimeline {
+            timeline.underlyingTimelineProvider = AutoUpdatingRoomTimelineProviderMock()
+        } else {
+            let timelineProvider = RoomTimelineProviderMock()
+            timelineProvider.paginationState = .init(backward: configuration.timelineStartReached ? .timelineEndReached : .idle, forward: .timelineEndReached)
+            timelineProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
+            timeline.underlyingTimelineProvider = timelineProvider
+        }
+        
+        self.timeline = timeline
+
         ownUserID = configuration.ownUserID
         membership = .joined
         

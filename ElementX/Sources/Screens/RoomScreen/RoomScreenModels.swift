@@ -114,7 +114,6 @@ enum RoomScreenViewAction {
     case displayRoomMemberDetails(userID: String)
     case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
     case displayEmojiPicker(itemID: TimelineItemIdentifier)
-    case displayMessageSendingFailureAlert(itemID: TimelineItemIdentifier)
     case displayReadReceipts(itemID: TimelineItemIdentifier)
     case displayCall
     
@@ -200,10 +199,6 @@ struct TimelineItemActionMenuInfo: Equatable, Identifiable {
     }
 }
 
-struct MessageSendingFailureInfo: Hashable {
-    let itemID: TimelineItemIdentifier
-}
-
 struct ReactionSummaryInfo: Identifiable {
     let reactions: [AggregatedReaction]
     let selectedKey: String
@@ -221,7 +216,6 @@ struct ReadReceiptSummaryInfo: Identifiable {
 enum RoomScreenAlertInfoType: Hashable {
     case audioRecodingPermissionError
     case pollEndConfirmation(String)
-    case messageSendingFailure(TimelineItemIdentifier)
 }
 
 struct RoomMemberState {

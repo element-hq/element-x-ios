@@ -18,8 +18,6 @@ import Combine
 import Foundation
 
 class UserSession: UserSessionProtocol {
-    private let sessionVerificationStateSubject: CurrentValueSubject<SessionVerificationState, Never> = .init(.unknown)
-    
     private var cancellables = Set<AnyCancellable>()
     
     private var authErrorCancellable: AnyCancellable?

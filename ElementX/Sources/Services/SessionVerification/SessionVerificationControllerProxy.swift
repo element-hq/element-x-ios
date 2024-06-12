@@ -70,16 +70,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     }
     
     let callbacks = PassthroughSubject<SessionVerificationControllerProxyCallback, Never>()
-    
-    func isVerified() async -> Result<Bool, SessionVerificationControllerProxyError> {
-        do {
-            let result = try await sessionVerificationController.isVerified()
-            return .success(result)
-        } catch {
-            return .failure(.failedCheckingVerificationState)
-        }
-    }
-    
+        
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         sessionVerificationController.setDelegate(delegate: WeakSessionVerificationControllerProxy(proxy: self))
         
