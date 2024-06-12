@@ -14,7 +14,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "3cafe19060a31cb68aa4f530d2a37b3e5beac554"
+        "revision" : "c81a76f2b1e38719892bc6d86c33f221c9b7af0e"
       }
     },
     {
@@ -184,8 +184,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/BarredEwe/Prefire",
       "state" : {
-        "revision" : "1ea1d76bb3c115a630c5d5d5f5d1c330f2f49982",
-        "version" : "2.7.0"
+        "revision" : "608e7992dedc5ee409e59b3580010371ff0cef57",
+        "version" : "2.0.4"
       }
     },
     {
@@ -274,8 +274,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/SwiftUI-Introspect",
       "state" : {
-        "revision" : "7dc5b287f8040e4ad5038739850b758e78f77808",
-        "version" : "1.1.4"
+        "revision" : "b94da693e57eaf79d16464b8b7c90d09cba4e290",
+        "version" : "0.9.2"
       }
     },
     {

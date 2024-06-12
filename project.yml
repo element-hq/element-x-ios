@@ -53,7 +53,7 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 3cafe19060a31cb68aa4f530d2a37b3e5beac554
+    revision: c81a76f2b1e38719892bc6d86c33f221c9b7af0e
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
@@ -113,7 +113,7 @@ packages:
     minorVersion: 3.2.5
   Prefire:
     url: https://github.com/BarredEwe/Prefire
-    minorVersion: 2.7.0
+    minorVersion: 2.0.4
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
     minorVersion: 8.13.0
@@ -125,7 +125,7 @@ packages:
     minorVersion: 6.0.0
   SwiftUIIntrospect:
     url: https://github.com/siteline/SwiftUI-Introspect
-    minorVersion: 1.1.4
+    minorVersion: 0.9.0
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.0.0
