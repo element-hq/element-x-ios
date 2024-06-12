@@ -121,6 +121,7 @@
 		1B2DADC008EE211AF1DA5292 /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ED584467DB380E3CEFB1DB /* NotificationManagerTests.swift */; };
 		1B67DE519285647C98812723 /* ScaledOffsetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5D7DA665E1F5F509C994C7 /* ScaledOffsetModifier.swift */; };
 		1B88BB631F7FC45A213BB554 /* TimelineItemSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AEEF8142DF1B59DB40FB93 /* TimelineItemSender.swift */; };
+		1B8BC65C42DF9F9EBA5CB60F /* ComposerDraftServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57690D3B4E567A82F7A8F7E /* ComposerDraftServiceProtocol.swift */; };
 		1B8E30B35BF8F541C1318F19 /* SecureBackupScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40316EFFEAC7B206EE9A55AE /* SecureBackupScreenViewModelTests.swift */; };
 		1BA04D05EBC6646958B1BE60 /* PlaceholderScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF34A2FD6797535C95AC918D /* PlaceholderScreenCoordinator.swift */; };
 		1C409A26A99F0371C47AFA51 /* UserDiscoveryServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F615A00DB223FF3280204D2 /* UserDiscoveryServiceProtocol.swift */; };
@@ -298,6 +299,7 @@
 		4807E8F51DB54F56B25E1C7E /* AppLockSetupSettingsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8C38663020DF2EB2D13F5E /* AppLockSetupSettingsScreenViewModel.swift */; };
 		48416BBEB8DDF3E4DED0EDB6 /* ElementCallServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC8B21E86B137BE4E91F82A /* ElementCallServiceProtocol.swift */; };
 		484202C5D50983442D24D061 /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BD6ED18E2EB61E28C340AD /* AttributedString.swift */; };
+		4887457921376E7306F83096 /* ComposerDraftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284D517A93EEC1758D3E471D /* ComposerDraftService.swift */; };
 		489BB6A733D3DA0FE7062650 /* IdentityConfirmationScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C71B9802433F1B4252291BB /* IdentityConfirmationScreenViewModelProtocol.swift */; };
 		491D62ACD19E6F134B1766AF /* RoomNotificationSettingsUserDefinedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3203C6566DC17B7AECC1B7FD /* RoomNotificationSettingsUserDefinedScreen.swift */; };
 		492274DA6691EE985C2FCCAA /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 67E7A6F388D3BF85767609D9 /* Sentry */; };
@@ -1305,6 +1307,7 @@
 		27D0EA07BD545CC9F234DB8D /* UserDetailsEditScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsEditScreenModels.swift; sourceTree = "<group>"; };
 		28146817C61423CACCF942F5 /* CallScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallScreenModels.swift; sourceTree = "<group>"; };
 		283974987DA7EC61D2AB57D9 /* VoiceMessageCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMessageCacheTests.swift; sourceTree = "<group>"; };
+		284D517A93EEC1758D3E471D /* ComposerDraftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerDraftService.swift; sourceTree = "<group>"; };
 		284FEEB0789B8894E52A7F34 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		287FC98AF2664EAD79C0D902 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		28C19F54A0C4FC9AB7ABD583 /* TextRoomTimelineItemContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRoomTimelineItemContent.swift; sourceTree = "<group>"; };
@@ -1842,6 +1845,7 @@
 		B4CFE236419E830E8946639C /* Analytics+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Analytics+SwiftUI.swift"; sourceTree = "<group>"; };
 		B50F03079F6B5EF9CA005F14 /* TimelineProxyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineProxyProtocol.swift; sourceTree = "<group>"; };
 		B53AC78E49A297AC1D72A7CF /* AppMediator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMediator.swift; sourceTree = "<group>"; };
+		B57690D3B4E567A82F7A8F7E /* ComposerDraftServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerDraftServiceProtocol.swift; sourceTree = "<group>"; };
 		B590BD4507D4F0A377FDE01A /* LoadableAvatarImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadableAvatarImage.swift; sourceTree = "<group>"; };
 		B5B243E7818E5E9F6A4EDC7A /* NoticeRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeRoomTimelineView.swift; sourceTree = "<group>"; };
 		B61C339A2FDDBD067FF6635C /* ConfettiScene.scn */ = {isa = PBXFileReference; path = ConfettiScene.scn; sourceTree = "<group>"; };
@@ -2971,6 +2975,8 @@
 			children = (
 				3A12D3D8138F1B71AFA7C858 /* CompletionSuggestionService.swift */,
 				9ECF11669EF253E98AA2977A /* CompletionSuggestionServiceProtocol.swift */,
+				284D517A93EEC1758D3E471D /* ComposerDraftService.swift */,
+				B57690D3B4E567A82F7A8F7E /* ComposerDraftServiceProtocol.swift */,
 				4D3A7375AB22721C436EB056 /* ComposerToolbarModels.swift */,
 				C90514BE9B8ACCBCF0AD2489 /* ComposerToolbarViewModel.swift */,
 				B0618820D26F9871A4BBB40E /* ComposerToolbarViewModelProtocol.swift */,
@@ -5968,6 +5974,8 @@
 				19DF5600A7F547B22DD7872A /* CompletionSuggestionService.swift in Sources */,
 				EAB3C1F0BC7F671ED8BDF82D /* CompletionSuggestionServiceProtocol.swift in Sources */,
 				16E4F1B8B9BFE1367F96DDA7 /* CompletionSuggestionView.swift in Sources */,
+				4887457921376E7306F83096 /* ComposerDraftService.swift in Sources */,
+				1B8BC65C42DF9F9EBA5CB60F /* ComposerDraftServiceProtocol.swift in Sources */,
 				937985546F708339711ECDFC /* ComposerToolbar.swift in Sources */,
 				94E15D018D70563FA4AB4E5A /* ComposerToolbarModels.swift in Sources */,
 				71AC1CAAC23403FFE847F2C9 /* ComposerToolbarViewModel.swift in Sources */,
@@ -7343,7 +7351,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 1.0.8;
+				version = 1.0.12;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
