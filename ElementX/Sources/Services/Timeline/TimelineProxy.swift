@@ -76,29 +76,6 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                            paginationStatePublisher: paginationStatePublisher)
     }
     
-    func editMessage(_ message: String,
-                     html: String?,
-                     original eventID: String,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Editing message with original event ID: \(eventID)")
-
-        let messageContent = buildMessageContentFor(message,
-                                                    html: html,
-                                                    intentionalMentions: intentionalMentions.toRustMentions())
-        
-        do {
-            let originalEvent = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
-            try await timeline.edit(newContent: messageContent, editItem: originalEvent)
-                
-            MXLog.info("Finished editing message with original event ID: \(eventID)")
-                
-            return .success(())
-        } catch {
-            MXLog.error("Failed editing message with original event ID: \(eventID) with error: \(error)")
-            return .failure(.failedEditing)
-        }
-    }
-    
     func fetchDetails(for eventID: String) {
         Task {
             do {
