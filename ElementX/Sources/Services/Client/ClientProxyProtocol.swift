@@ -131,6 +131,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func joinRoom(_ roomID: String, via: [String]) async -> Result<Void, ClientProxyError>
     
+    func joinRoomAlias(_ roomAlias: String) async -> Result<Void, ClientProxyError>
+    
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError>
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?

@@ -2523,6 +2523,74 @@ class ClientProxyMock: ClientProxyProtocol {
             return joinRoomViaReturnValue
         }
     }
+    //MARK: - joinRoomAlias
+
+    var joinRoomAliasUnderlyingCallsCount = 0
+    var joinRoomAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return joinRoomAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinRoomAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinRoomAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinRoomAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var joinRoomAliasCalled: Bool {
+        return joinRoomAliasCallsCount > 0
+    }
+    var joinRoomAliasReceivedRoomAlias: String?
+    var joinRoomAliasReceivedInvocations: [String] = []
+
+    var joinRoomAliasUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var joinRoomAliasReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return joinRoomAliasUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinRoomAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinRoomAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinRoomAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var joinRoomAliasClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func joinRoomAlias(_ roomAlias: String) async -> Result<Void, ClientProxyError> {
+        joinRoomAliasCallsCount += 1
+        joinRoomAliasReceivedRoomAlias = roomAlias
+        joinRoomAliasReceivedInvocations.append(roomAlias)
+        if let joinRoomAliasClosure = joinRoomAliasClosure {
+            return await joinRoomAliasClosure(roomAlias)
+        } else {
+            return joinRoomAliasReturnValue
+        }
+    }
     //MARK: - uploadMedia
 
     var uploadMediaUnderlyingCallsCount = 0
