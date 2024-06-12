@@ -385,6 +385,20 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func joinRoomAlias(_ roomAlias: String) async -> Result<Void, ClientProxyError> {
+        do {
+            let room = try await client.joinRoomByIdOrAlias(roomIdOrAlias: roomAlias, serverNames: [])
+            
+            // Wait for the room to appear in the room lists to avoid issues downstream
+            let _ = await waitForRoomSummary(with: .success(room.id()), name: nil, timeout: 30)
+            
+            return .success(())
+        } catch {
+            MXLog.error("Failed joining roomAlias: \(roomAlias) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError> {
         guard let mimeType = media.mimeType else {
             MXLog.error("Failed uploading media, invalid mime type: \(media)")

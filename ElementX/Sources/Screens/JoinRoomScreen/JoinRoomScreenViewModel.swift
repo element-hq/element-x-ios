@@ -92,12 +92,23 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             hideLoadingIndicator()
         }
         
-        switch await clientProxy.joinRoom(roomID, via: via) {
-        case .success:
-            actionsSubject.send(.joined)
-        case .failure(let error):
-            MXLog.error("Failed joining room with error: \(error)")
-            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+        // Prioritise joining by the alias and letting the homeserver do the right thing
+        if let alias = state.roomDetails?.canonicalAlias {
+            switch await clientProxy.joinRoomAlias(alias) {
+            case .success:
+                actionsSubject.send(.joined)
+            case .failure(let error):
+                MXLog.error("Failed joining room alias: \(alias) with error: \(error)")
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
+        } else {
+            switch await clientProxy.joinRoom(roomID, via: via) {
+            case .success:
+                actionsSubject.send(.joined)
+            case .failure(let error):
+                MXLog.error("Failed joining room id: \(roomID) with error: \(error)")
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
         }
     }
     
