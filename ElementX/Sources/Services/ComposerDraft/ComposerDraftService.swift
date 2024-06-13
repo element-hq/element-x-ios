@@ -27,8 +27,8 @@ final class ComposerDraftService: ComposerDraftServiceProtocol {
         self.timelineItemfactory = timelineItemfactory
     }
     
-    func saveDraft(_ draft: ComposerDraft) async {
-        switch await roomProxy.saveDraft(draft) {
+    func saveDraft(_ draft: ComposerDraftProxy) async {
+        switch await roomProxy.saveDraft(draft.toRust) {
         case .success:
             MXLog.info("Successfully saved draft")
         case .failure(let error):
@@ -36,22 +36,27 @@ final class ComposerDraftService: ComposerDraftServiceProtocol {
         }
     }
     
-    func restoreDraft() async -> Result<ComposerDraft?, ComposerDraftServiceError> {
-        switch await roomProxy.restoreDraft() {
+    func loadDraft() async -> Result<ComposerDraftProxy?, ComposerDraftServiceError> {
+        switch await roomProxy.loadDraft() {
         case .success(let draft):
-            return .success(draft)
+            guard let draft else {
+                return .success(nil)
+            }
+            return .success(ComposerDraftProxy(from: draft))
         case .failure(let error):
-            MXLog.info("Failed to restore draft: \(error)")
-            return .failure(.generic)
+            MXLog.info("Failed to load draft: \(error)")
+            return .failure(.failedToLoadDraft)
         }
     }
     
-    func getReply(eventID: String) async -> TimelineItemReply {
-        guard case let .success(replyDetails) = await roomProxy.timeline.getLoadedReplyDetails(eventID: eventID) else {
-            return .init(details: .error(eventID: eventID, message: "Could not load details"), isThreaded: false)
+    func getReply(eventID: String) async -> Result<TimelineItemReply, ComposerDraftServiceError> {
+        switch await roomProxy.timeline.getLoadedReplyDetails(eventID: eventID) {
+        case .success(let replyDetails):
+            return await .success(timelineItemfactory.buildReply(details: replyDetails))
+        case .failure(let error):
+            MXLog.error("Could not load reply: \(error)")
+            return .failure(.failedToLoadReply)
         }
-        
-        return await timelineItemfactory.buildReply(details: replyDetails)
     }
     
     func clearDraft() async {

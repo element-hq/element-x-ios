@@ -33,7 +33,7 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Drafts") {
+            Section("Room") {
                 Toggle(isOn: $context.draftRestoringEnabled) {
                     Text("Allow drafts to be restored")
                 }

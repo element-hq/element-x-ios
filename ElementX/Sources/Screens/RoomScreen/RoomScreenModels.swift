@@ -137,7 +137,7 @@ enum RoomScreenComposerAction {
     case removeFocus
     case clear
     case saveDraft
-    case restoreDraft
+    case loadDraft
 }
 
 struct RoomScreenViewState: BindableState {

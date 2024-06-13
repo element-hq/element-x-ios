@@ -149,7 +149,7 @@ extension RoomProxyMock {
         
         matrixToPermalinkReturnValue = .success(.homeDirectory)
         matrixToEventPermalinkReturnValue = .success(.homeDirectory)
-        restoreDraftReturnValue = .success(nil)
+        loadDraftReturnValue = .success(nil)
         clearDraftReturnValue = .success(())
     }
 }

@@ -578,7 +578,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func restoreDraft() async -> Result<ComposerDraft?, RoomProxyError> {
+    func loadDraft() async -> Result<ComposerDraft?, RoomProxyError> {
         do {
             return try await .success(room.loadComposerDraft())
         } catch {

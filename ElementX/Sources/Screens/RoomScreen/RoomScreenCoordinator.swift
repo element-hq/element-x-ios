@@ -30,7 +30,7 @@ struct RoomScreenCoordinatorParameters {
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
-    let draftService: ComposerDraftServiceProtocol
+    let composerDraftService: ComposerDraftServiceProtocol
 }
 
 enum RoomScreenCoordinatorAction {
@@ -81,7 +81,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                      mediaProvider: parameters.mediaProvider,
                                                      mentionDisplayHelper: ComposerMentionDisplayHelper(roomContext: viewModel.context),
                                                      analyticsService: ServiceLocator.shared.analytics,
-                                                     draftService: parameters.draftService)
+                                                     composerDraftService: parameters.composerDraftService)
+        
         NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification).sink { _ in
             viewModel.saveDraft()
         }
@@ -136,7 +137,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        viewModel.restoreDraft()
+        viewModel.loadDraft()
     }
     
     func focusOnEvent(eventID: String) {

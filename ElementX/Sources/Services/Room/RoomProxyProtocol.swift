@@ -138,7 +138,7 @@ protocol RoomProxyProtocol {
     // MARK: - Drafts
     
     func saveDraft(_ draft: ComposerDraft) async -> Result<Void, RoomProxyError>
-    func restoreDraft() async -> Result<ComposerDraft?, RoomProxyError>
+    func loadDraft() async -> Result<ComposerDraft?, RoomProxyError>
     func clearDraft() async -> Result<Void, RoomProxyError>
 }
 

@@ -55,11 +55,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
          mediaProvider: MediaProviderProtocol,
          mentionDisplayHelper: MentionDisplayHelper,
          analyticsService: AnalyticsService,
-         draftService: ComposerDraftServiceProtocol) {
+         composerDraftService: ComposerDraftServiceProtocol) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.analyticsService = analyticsService
-        self.draftService = draftService
+        draftService = composerDraftService
         
         mentionBuilder = MentionBuilder()
         attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: mentionBuilder)
@@ -212,15 +212,25 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             set(text: "")
         case .saveDraft:
             handleSaveDraft()
-        case .restoreDraft:
+        case .loadDraft:
             Task {
-                await handleRestoreDraft()
+                await handleLoadDraft()
             }
         }
     }
     
-    private func handleRestoreDraft() async {
-        guard case let .success(draft) = await draftService.restoreDraft(),
+    var keyCommands: [WysiwygKeyCommand] {
+        [
+            .enter { [weak self] in
+                self?.process(viewAction: .sendMessage)
+            }
+        ]
+    }
+
+    // MARK: - Private
+    
+    private func handleLoadDraft() async {
+        guard case let .success(draft) = await draftService.loadDraft(),
               let draft else {
             return
         }
@@ -243,10 +253,17 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .reply(let eventID):
             set(mode: .reply(itemID: .init(timelineID: "", eventID: eventID), replyDetails: .loading(eventID: eventID), isThread: false))
             replyLoadingTask = Task {
-                let reply = await draftService.getReply(eventID: eventID)
+                let reply = switch await draftService.getReply(eventID: eventID) {
+                case .success(let reply):
+                    reply
+                case .failure:
+                    TimelineItemReply(details: .error(eventID: eventID, message: L10n.commonSomethingWentWrong), isThreaded: false)
+                }
+                
                 guard !Task.isCancelled else {
                     return
                 }
+                
                 set(mode: .reply(itemID: .init(timelineID: "", eventID: eventID), replyDetails: reply.details, isThread: reply.isThreaded))
             }
         }
@@ -255,7 +272,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func handleSaveDraft() {
         let plainText: String
         let htmlText: String?
-        let type: ComposerDraftType
+        let type: ComposerDraftProxy.ComposerDraftType
         
         if context.composerFormattingEnabled {
             if wysiwygViewModel.isContentEmpty, state.composerMode == .default {
@@ -285,13 +302,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 MXLog.error("The event id for this message is missing")
                 return
             }
-            type = .edit(eventId: eventID)
+            type = .edit(eventID: eventID)
         case .reply(let itemID, _, _):
             guard let eventID = itemID.eventID else {
                 MXLog.error("The event id for this message is missing")
                 return
             }
-            type = .reply(eventId: eventID)
+            type = .reply(eventID: eventID)
         default:
             // Do not save a draft for the other cases
             Task {
@@ -304,16 +321,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             await draftService.saveDraft(.init(plainText: plainText, htmlText: htmlText, draftType: type))
         }
     }
-    
-    var keyCommands: [WysiwygKeyCommand] {
-        [
-            .enter { [weak self] in
-                self?.process(viewAction: .sendMessage)
-            }
-        ]
-    }
-
-    // MARK: - Private
     
     private func sendPlainComposerText() {
         let attributedString = NSMutableAttributedString(attributedString: context.plainComposerText)

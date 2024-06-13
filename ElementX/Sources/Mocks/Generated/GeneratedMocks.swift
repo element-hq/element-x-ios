@@ -4290,27 +4290,27 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
     var saveDraftCalled: Bool {
         return saveDraftCallsCount > 0
     }
-    var saveDraftReceivedDraft: ComposerDraft?
-    var saveDraftReceivedInvocations: [ComposerDraft] = []
-    var saveDraftClosure: ((ComposerDraft) async -> Void)?
+    var saveDraftReceivedDraft: ComposerDraftProxy?
+    var saveDraftReceivedInvocations: [ComposerDraftProxy] = []
+    var saveDraftClosure: ((ComposerDraftProxy) async -> Void)?
 
-    func saveDraft(_ draft: ComposerDraft) async {
+    func saveDraft(_ draft: ComposerDraftProxy) async {
         saveDraftCallsCount += 1
         saveDraftReceivedDraft = draft
         saveDraftReceivedInvocations.append(draft)
         await saveDraftClosure?(draft)
     }
-    //MARK: - restoreDraft
+    //MARK: - loadDraft
 
-    var restoreDraftUnderlyingCallsCount = 0
-    var restoreDraftCallsCount: Int {
+    var loadDraftUnderlyingCallsCount = 0
+    var loadDraftCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return restoreDraftUnderlyingCallsCount
+                return loadDraftUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = restoreDraftUnderlyingCallsCount
+                    returnValue = loadDraftUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4318,27 +4318,27 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
         }
         set {
             if Thread.isMainThread {
-                restoreDraftUnderlyingCallsCount = newValue
+                loadDraftUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    restoreDraftUnderlyingCallsCount = newValue
+                    loadDraftUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var restoreDraftCalled: Bool {
-        return restoreDraftCallsCount > 0
+    var loadDraftCalled: Bool {
+        return loadDraftCallsCount > 0
     }
 
-    var restoreDraftUnderlyingReturnValue: Result<ComposerDraft?, ComposerDraftServiceError>!
-    var restoreDraftReturnValue: Result<ComposerDraft?, ComposerDraftServiceError>! {
+    var loadDraftUnderlyingReturnValue: Result<ComposerDraftProxy?, ComposerDraftServiceError>!
+    var loadDraftReturnValue: Result<ComposerDraftProxy?, ComposerDraftServiceError>! {
         get {
             if Thread.isMainThread {
-                return restoreDraftUnderlyingReturnValue
+                return loadDraftUnderlyingReturnValue
             } else {
-                var returnValue: Result<ComposerDraft?, ComposerDraftServiceError>? = nil
+                var returnValue: Result<ComposerDraftProxy?, ComposerDraftServiceError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = restoreDraftUnderlyingReturnValue
+                    returnValue = loadDraftUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4346,22 +4346,22 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
         }
         set {
             if Thread.isMainThread {
-                restoreDraftUnderlyingReturnValue = newValue
+                loadDraftUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    restoreDraftUnderlyingReturnValue = newValue
+                    loadDraftUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var restoreDraftClosure: (() async -> Result<ComposerDraft?, ComposerDraftServiceError>)?
+    var loadDraftClosure: (() async -> Result<ComposerDraftProxy?, ComposerDraftServiceError>)?
 
-    func restoreDraft() async -> Result<ComposerDraft?, ComposerDraftServiceError> {
-        restoreDraftCallsCount += 1
-        if let restoreDraftClosure = restoreDraftClosure {
-            return await restoreDraftClosure()
+    func loadDraft() async -> Result<ComposerDraftProxy?, ComposerDraftServiceError> {
+        loadDraftCallsCount += 1
+        if let loadDraftClosure = loadDraftClosure {
+            return await loadDraftClosure()
         } else {
-            return restoreDraftReturnValue
+            return loadDraftReturnValue
         }
     }
     //MARK: - clearDraft
@@ -4431,13 +4431,13 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
     var getReplyEventIDReceivedEventID: String?
     var getReplyEventIDReceivedInvocations: [String] = []
 
-    var getReplyEventIDUnderlyingReturnValue: TimelineItemReply!
-    var getReplyEventIDReturnValue: TimelineItemReply! {
+    var getReplyEventIDUnderlyingReturnValue: Result<TimelineItemReply, ComposerDraftServiceError>!
+    var getReplyEventIDReturnValue: Result<TimelineItemReply, ComposerDraftServiceError>! {
         get {
             if Thread.isMainThread {
                 return getReplyEventIDUnderlyingReturnValue
             } else {
-                var returnValue: TimelineItemReply? = nil
+                var returnValue: Result<TimelineItemReply, ComposerDraftServiceError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = getReplyEventIDUnderlyingReturnValue
                 }
@@ -4455,9 +4455,9 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
             }
         }
     }
-    var getReplyEventIDClosure: ((String) async -> TimelineItemReply)?
+    var getReplyEventIDClosure: ((String) async -> Result<TimelineItemReply, ComposerDraftServiceError>)?
 
-    func getReply(eventID: String) async -> TimelineItemReply {
+    func getReply(eventID: String) async -> Result<TimelineItemReply, ComposerDraftServiceError> {
         getReplyEventIDCallsCount += 1
         getReplyEventIDReceivedEventID = eventID
         getReplyEventIDReceivedInvocations.append(eventID)
@@ -10378,17 +10378,17 @@ class RoomProxyMock: RoomProxyProtocol {
             return saveDraftReturnValue
         }
     }
-    //MARK: - restoreDraft
+    //MARK: - loadDraft
 
-    var restoreDraftUnderlyingCallsCount = 0
-    var restoreDraftCallsCount: Int {
+    var loadDraftUnderlyingCallsCount = 0
+    var loadDraftCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return restoreDraftUnderlyingCallsCount
+                return loadDraftUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = restoreDraftUnderlyingCallsCount
+                    returnValue = loadDraftUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -10396,27 +10396,27 @@ class RoomProxyMock: RoomProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                restoreDraftUnderlyingCallsCount = newValue
+                loadDraftUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    restoreDraftUnderlyingCallsCount = newValue
+                    loadDraftUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var restoreDraftCalled: Bool {
-        return restoreDraftCallsCount > 0
+    var loadDraftCalled: Bool {
+        return loadDraftCallsCount > 0
     }
 
-    var restoreDraftUnderlyingReturnValue: Result<ComposerDraft?, RoomProxyError>!
-    var restoreDraftReturnValue: Result<ComposerDraft?, RoomProxyError>! {
+    var loadDraftUnderlyingReturnValue: Result<ComposerDraft?, RoomProxyError>!
+    var loadDraftReturnValue: Result<ComposerDraft?, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return restoreDraftUnderlyingReturnValue
+                return loadDraftUnderlyingReturnValue
             } else {
                 var returnValue: Result<ComposerDraft?, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = restoreDraftUnderlyingReturnValue
+                    returnValue = loadDraftUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -10424,22 +10424,22 @@ class RoomProxyMock: RoomProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                restoreDraftUnderlyingReturnValue = newValue
+                loadDraftUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    restoreDraftUnderlyingReturnValue = newValue
+                    loadDraftUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var restoreDraftClosure: (() async -> Result<ComposerDraft?, RoomProxyError>)?
+    var loadDraftClosure: (() async -> Result<ComposerDraft?, RoomProxyError>)?
 
-    func restoreDraft() async -> Result<ComposerDraft?, RoomProxyError> {
-        restoreDraftCallsCount += 1
-        if let restoreDraftClosure = restoreDraftClosure {
-            return await restoreDraftClosure()
+    func loadDraft() async -> Result<ComposerDraft?, RoomProxyError> {
+        loadDraftCallsCount += 1
+        if let loadDraftClosure = loadDraftClosure {
+            return await loadDraftClosure()
         } else {
-            return restoreDraftReturnValue
+            return loadDraftReturnValue
         }
     }
     //MARK: - clearDraft

@@ -133,11 +133,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Public
     
-    func restoreDraft() {
+    func loadDraft() {
         guard appSettings.draftRestoringEnabled else {
             return
         }
-        actionsSubject.send(.composer(action: .restoreDraft))
+        actionsSubject.send(.composer(action: .loadDraft))
     }
     
     func stop() {
