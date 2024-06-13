@@ -118,9 +118,11 @@ class ComposerToolbarViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.suggestions, suggestions)
     }
     
-    func testSuggestionTrigger() {
+    func testSuggestionTrigger() async {
         wysiwygViewModel.setMarkdownContent("@test")
         wysiwygViewModel.setMarkdownContent("#not_implemented_yay")
+        
+        await Task.yield()
         
         // The first one is nil because when initialised the view model is empty
         XCTAssertEqual(completionSuggestionServiceMock.setSuggestionTriggerReceivedInvocations, [nil, .init(type: .user, text: "test", range: .init(location: 0, length: 5)), nil])
