@@ -22,14 +22,9 @@ final class TimelineProxy: TimelineProxyProtocol {
     private let timeline: Timeline
     
     private var backPaginationStatusObservationToken: TaskHandle?
-    private var roomTimelineObservationToken: TaskHandle?
-    
-    // periphery:ignore - retaining purpose
-    private var timelineListener: RoomTimelineListener?
     
     private let backPaginationSubscriptionSubject = CurrentValueSubject<PaginationStatus, Never>(.idle)
     private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
-    private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
     
     let isLive: Bool
    
@@ -40,7 +35,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     deinit {
         backPaginationStatusObservationToken?.cancel()
-        roomTimelineObservationToken?.cancel()
     }
     
     init(timeline: Timeline, isLive: Bool) {
@@ -54,15 +48,6 @@ final class TimelineProxy: TimelineProxyProtocol {
             return
         }
         
-        let timelineListener = RoomTimelineListener { [weak self] timelineDiffs in
-            self?.timelineUpdatesSubject.send(timelineDiffs)
-        }
-        
-        self.timelineListener = timelineListener
-        
-        let result = await timeline.addListener(listener: timelineListener)
-        roomTimelineObservationToken = result.itemsStream
-        
         let paginationStatePublisher = backPaginationSubscriptionSubject
             .combineLatest(forwardPaginationStatusSubject)
             .map { PaginationState(backward: $0.0, forward: $0.1) }
@@ -70,10 +55,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         await subscribeToPagination()
         
-        innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
-                                                           isLive: isLive,
-                                                           updatePublisher: timelineUpdatesSubject.eraseToAnyPublisher(),
-                                                           paginationStatePublisher: paginationStatePublisher)
+        innerTimelineProvider = await RoomTimelineProvider(timeline: timeline, isLive: isLive, paginationStatePublisher: paginationStatePublisher)
     }
     
     func fetchDetails(for eventID: String) {
@@ -539,18 +521,6 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         // Forward pagination doesn't support observation, set the initial state ourself.
         forwardPaginationStatusSubject.send(isLive ? .timelineEndReached : .idle)
-    }
-}
-
-private final class RoomTimelineListener: TimelineListener {
-    private let onUpdateClosure: ([TimelineDiff]) -> Void
-   
-    init(_ onUpdateClosure: @escaping ([TimelineDiff]) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(diff: [TimelineDiff]) {
-        onUpdateClosure(diff)
     }
 }
 

@@ -20,20 +20,25 @@ import MatrixRustSDK
 
 @MainActor
 class AutoUpdatingRoomTimelineProviderMock: RoomTimelineProvider {
-    private let innerUpdatePublisher: PassthroughSubject<[TimelineDiff], Never>
+    static var timelineListener: TimelineListener?
+    
     private let innerPaginationStatePublisher: PassthroughSubject<PaginationState, Never>
-    private let innerItems: [TimelineItemProxy] = []
     
     init() {
-        innerUpdatePublisher = .init()
         innerPaginationStatePublisher = .init()
         
-        super.init(currentItems: [],
+        let timelineMock = TimelineSDKMock()
+        
+        timelineMock.addListenerListenerClosure = { listener in
+            Self.timelineListener = listener
+            return TaskHandleSDKMock()
+        }
+        
+        super.init(timeline: timelineMock,
                    isLive: true,
-                   updatePublisher: innerUpdatePublisher.eraseToAnyPublisher(),
                    paginationStatePublisher: innerPaginationStatePublisher.eraseToAnyPublisher())
         
-        Task.detached { [weak self] in
+        Task.detached {
             for _ in 0...100 {
                 try? await Task.sleep(for: .seconds(1))
                 
@@ -41,7 +46,7 @@ class AutoUpdatingRoomTimelineProviderMock: RoomTimelineProvider {
                 diff.changeReturnValue = .append
                 diff.appendReturnValue = [TimelineItemFixtures.messageTimelineItem]
                 
-                self?.innerUpdatePublisher.send([diff])
+                await Self.timelineListener?.onUpdate(diff: [diff])
             }
         }
     }

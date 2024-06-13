@@ -131,7 +131,9 @@ open class AuthenticationServiceSDKMock: MatrixRustSDK.AuthenticationService {
         }
         configureHomeserverServerNameOrHomeserverUrlCallsCount += 1
         configureHomeserverServerNameOrHomeserverUrlReceivedServerNameOrHomeserverUrl = serverNameOrHomeserverUrl
-        configureHomeserverServerNameOrHomeserverUrlReceivedInvocations.append(serverNameOrHomeserverUrl)
+        DispatchQueue.main.async {
+            self.configureHomeserverServerNameOrHomeserverUrlReceivedInvocations.append(serverNameOrHomeserverUrl)
+        }
         try await configureHomeserverServerNameOrHomeserverUrlClosure?(serverNameOrHomeserverUrl)
     }
 
@@ -265,7 +267,9 @@ open class AuthenticationServiceSDKMock: MatrixRustSDK.AuthenticationService {
         }
         loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount += 1
         loginUsernamePasswordInitialDeviceNameDeviceIdReceivedArguments = (username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId)
-        loginUsernamePasswordInitialDeviceNameDeviceIdReceivedInvocations.append((username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId))
+        DispatchQueue.main.async {
+            self.loginUsernamePasswordInitialDeviceNameDeviceIdReceivedInvocations.append((username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId))
+        }
         if let loginUsernamePasswordInitialDeviceNameDeviceIdClosure = loginUsernamePasswordInitialDeviceNameDeviceIdClosure {
             return try await loginUsernamePasswordInitialDeviceNameDeviceIdClosure(username, password, initialDeviceName, deviceId)
         } else {
@@ -338,7 +342,9 @@ open class AuthenticationServiceSDKMock: MatrixRustSDK.AuthenticationService {
         }
         loginWithOidcCallbackAuthenticationDataCallbackUrlCallsCount += 1
         loginWithOidcCallbackAuthenticationDataCallbackUrlReceivedArguments = (authenticationData: authenticationData, callbackUrl: callbackUrl)
-        loginWithOidcCallbackAuthenticationDataCallbackUrlReceivedInvocations.append((authenticationData: authenticationData, callbackUrl: callbackUrl))
+        DispatchQueue.main.async {
+            self.loginWithOidcCallbackAuthenticationDataCallbackUrlReceivedInvocations.append((authenticationData: authenticationData, callbackUrl: callbackUrl))
+        }
         if let loginWithOidcCallbackAuthenticationDataCallbackUrlClosure = loginWithOidcCallbackAuthenticationDataCallbackUrlClosure {
             return try await loginWithOidcCallbackAuthenticationDataCallbackUrlClosure(authenticationData, callbackUrl)
         } else {
@@ -491,7 +497,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         accountDataEventTypeCallsCount += 1
         accountDataEventTypeReceivedEventType = eventType
-        accountDataEventTypeReceivedInvocations.append(eventType)
+        DispatchQueue.main.async {
+            self.accountDataEventTypeReceivedInvocations.append(eventType)
+        }
         if let accountDataEventTypeClosure = accountDataEventTypeClosure {
             return try await accountDataEventTypeClosure(eventType)
         } else {
@@ -564,7 +572,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         accountUrlActionCallsCount += 1
         accountUrlActionReceivedAction = action
-        accountUrlActionReceivedInvocations.append(action)
+        DispatchQueue.main.async {
+            self.accountUrlActionReceivedInvocations.append(action)
+        }
         if let accountUrlActionClosure = accountUrlActionClosure {
             return try await accountUrlActionClosure(action)
         } else {
@@ -775,7 +785,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         createRoomRequestCallsCount += 1
         createRoomRequestReceivedRequest = request
-        createRoomRequestReceivedInvocations.append(request)
+        DispatchQueue.main.async {
+            self.createRoomRequestReceivedInvocations.append(request)
+        }
         if let createRoomRequestClosure = createRoomRequestClosure {
             return try await createRoomRequestClosure(request)
         } else {
@@ -823,7 +835,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         deletePusherIdentifiersCallsCount += 1
         deletePusherIdentifiersReceivedIdentifiers = identifiers
-        deletePusherIdentifiersReceivedInvocations.append(identifiers)
+        DispatchQueue.main.async {
+            self.deletePusherIdentifiersReceivedInvocations.append(identifiers)
+        }
         try await deletePusherIdentifiersClosure?(identifiers)
     }
 
@@ -1001,7 +1015,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
     open override func enableAllSendQueues(enable: Bool) {
         enableAllSendQueuesEnableCallsCount += 1
         enableAllSendQueuesEnableReceivedEnable = enable
-        enableAllSendQueuesEnableReceivedInvocations.append(enable)
+        DispatchQueue.main.async {
+            self.enableAllSendQueuesEnableReceivedInvocations.append(enable)
+        }
         enableAllSendQueuesEnableClosure?(enable)
     }
 
@@ -1135,7 +1151,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         getDmRoomUserIdCallsCount += 1
         getDmRoomUserIdReceivedUserId = userId
-        getDmRoomUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.getDmRoomUserIdReceivedInvocations.append(userId)
+        }
         if let getDmRoomUserIdClosure = getDmRoomUserIdClosure {
             return try getDmRoomUserIdClosure(userId)
         } else {
@@ -1208,7 +1226,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         getMediaContentMediaSourceCallsCount += 1
         getMediaContentMediaSourceReceivedMediaSource = mediaSource
-        getMediaContentMediaSourceReceivedInvocations.append(mediaSource)
+        DispatchQueue.main.async {
+            self.getMediaContentMediaSourceReceivedInvocations.append(mediaSource)
+        }
         if let getMediaContentMediaSourceClosure = getMediaContentMediaSourceClosure {
             return try await getMediaContentMediaSourceClosure(mediaSource)
         } else {
@@ -1281,7 +1301,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCallsCount += 1
         getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedArguments = (mediaSource: mediaSource, body: body, mimeType: mimeType, useCache: useCache, tempDir: tempDir)
-        getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedInvocations.append((mediaSource: mediaSource, body: body, mimeType: mimeType, useCache: useCache, tempDir: tempDir))
+        DispatchQueue.main.async {
+            self.getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedInvocations.append((mediaSource: mediaSource, body: body, mimeType: mimeType, useCache: useCache, tempDir: tempDir))
+        }
         if let getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure = getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure {
             return try await getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure(mediaSource, body, mimeType, useCache, tempDir)
         } else {
@@ -1354,7 +1376,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         getMediaThumbnailMediaSourceWidthHeightCallsCount += 1
         getMediaThumbnailMediaSourceWidthHeightReceivedArguments = (mediaSource: mediaSource, width: width, height: height)
-        getMediaThumbnailMediaSourceWidthHeightReceivedInvocations.append((mediaSource: mediaSource, width: width, height: height))
+        DispatchQueue.main.async {
+            self.getMediaThumbnailMediaSourceWidthHeightReceivedInvocations.append((mediaSource: mediaSource, width: width, height: height))
+        }
         if let getMediaThumbnailMediaSourceWidthHeightClosure = getMediaThumbnailMediaSourceWidthHeightClosure {
             return try await getMediaThumbnailMediaSourceWidthHeightClosure(mediaSource, width, height)
         } else {
@@ -1492,7 +1516,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         getProfileUserIdCallsCount += 1
         getProfileUserIdReceivedUserId = userId
-        getProfileUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.getProfileUserIdReceivedInvocations.append(userId)
+        }
         if let getProfileUserIdClosure = getProfileUserIdClosure {
             return try await getProfileUserIdClosure(userId)
         } else {
@@ -1634,7 +1660,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         getRoomPreviewFromRoomAliasRoomAliasCallsCount += 1
         getRoomPreviewFromRoomAliasRoomAliasReceivedRoomAlias = roomAlias
-        getRoomPreviewFromRoomAliasRoomAliasReceivedInvocations.append(roomAlias)
+        DispatchQueue.main.async {
+            self.getRoomPreviewFromRoomAliasRoomAliasReceivedInvocations.append(roomAlias)
+        }
         if let getRoomPreviewFromRoomAliasRoomAliasClosure = getRoomPreviewFromRoomAliasRoomAliasClosure {
             return try await getRoomPreviewFromRoomAliasRoomAliasClosure(roomAlias)
         } else {
@@ -1707,7 +1735,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         getRoomPreviewFromRoomIdRoomIdViaServersCallsCount += 1
         getRoomPreviewFromRoomIdRoomIdViaServersReceivedArguments = (roomId: roomId, viaServers: viaServers)
-        getRoomPreviewFromRoomIdRoomIdViaServersReceivedInvocations.append((roomId: roomId, viaServers: viaServers))
+        DispatchQueue.main.async {
+            self.getRoomPreviewFromRoomIdRoomIdViaServersReceivedInvocations.append((roomId: roomId, viaServers: viaServers))
+        }
         if let getRoomPreviewFromRoomIdRoomIdViaServersClosure = getRoomPreviewFromRoomIdRoomIdViaServersClosure {
             return try await getRoomPreviewFromRoomIdRoomIdViaServersClosure(roomId, viaServers)
         } else {
@@ -1889,7 +1919,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         ignoreUserUserIdCallsCount += 1
         ignoreUserUserIdReceivedUserId = userId
-        ignoreUserUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.ignoreUserUserIdReceivedInvocations.append(userId)
+        }
         try await ignoreUserUserIdClosure?(userId)
     }
 
@@ -2027,7 +2059,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         joinRoomByIdRoomIdCallsCount += 1
         joinRoomByIdRoomIdReceivedRoomId = roomId
-        joinRoomByIdRoomIdReceivedInvocations.append(roomId)
+        DispatchQueue.main.async {
+            self.joinRoomByIdRoomIdReceivedInvocations.append(roomId)
+        }
         if let joinRoomByIdRoomIdClosure = joinRoomByIdRoomIdClosure {
             return try await joinRoomByIdRoomIdClosure(roomId)
         } else {
@@ -2100,7 +2134,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         joinRoomByIdOrAliasRoomIdOrAliasServerNamesCallsCount += 1
         joinRoomByIdOrAliasRoomIdOrAliasServerNamesReceivedArguments = (roomIdOrAlias: roomIdOrAlias, serverNames: serverNames)
-        joinRoomByIdOrAliasRoomIdOrAliasServerNamesReceivedInvocations.append((roomIdOrAlias: roomIdOrAlias, serverNames: serverNames))
+        DispatchQueue.main.async {
+            self.joinRoomByIdOrAliasRoomIdOrAliasServerNamesReceivedInvocations.append((roomIdOrAlias: roomIdOrAlias, serverNames: serverNames))
+        }
         if let joinRoomByIdOrAliasRoomIdOrAliasServerNamesClosure = joinRoomByIdOrAliasRoomIdOrAliasServerNamesClosure {
             return try await joinRoomByIdOrAliasRoomIdOrAliasServerNamesClosure(roomIdOrAlias, serverNames)
         } else {
@@ -2148,7 +2184,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount += 1
         loginUsernamePasswordInitialDeviceNameDeviceIdReceivedArguments = (username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId)
-        loginUsernamePasswordInitialDeviceNameDeviceIdReceivedInvocations.append((username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId))
+        DispatchQueue.main.async {
+            self.loginUsernamePasswordInitialDeviceNameDeviceIdReceivedInvocations.append((username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId))
+        }
         try await loginUsernamePasswordInitialDeviceNameDeviceIdClosure?(username, password, initialDeviceName, deviceId)
     }
 
@@ -2286,7 +2324,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         notificationClientProcessSetupCallsCount += 1
         notificationClientProcessSetupReceivedProcessSetup = processSetup
-        notificationClientProcessSetupReceivedInvocations.append(processSetup)
+        DispatchQueue.main.async {
+            self.notificationClientProcessSetupReceivedInvocations.append(processSetup)
+        }
         if let notificationClientProcessSetupClosure = notificationClientProcessSetupClosure {
             return try await notificationClientProcessSetupClosure(processSetup)
         } else {
@@ -2399,7 +2439,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         resolveRoomAliasRoomAliasCallsCount += 1
         resolveRoomAliasRoomAliasReceivedRoomAlias = roomAlias
-        resolveRoomAliasRoomAliasReceivedInvocations.append(roomAlias)
+        DispatchQueue.main.async {
+            self.resolveRoomAliasRoomAliasReceivedInvocations.append(roomAlias)
+        }
         if let resolveRoomAliasRoomAliasClosure = resolveRoomAliasRoomAliasClosure {
             return try await resolveRoomAliasRoomAliasClosure(roomAlias)
         } else {
@@ -2447,7 +2489,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         restoreSessionSessionCallsCount += 1
         restoreSessionSessionReceivedSession = session
-        restoreSessionSessionReceivedInvocations.append(session)
+        DispatchQueue.main.async {
+            self.restoreSessionSessionReceivedInvocations.append(session)
+        }
         try await restoreSessionSessionClosure?(session)
     }
 
@@ -2646,7 +2690,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         searchUsersSearchTermLimitCallsCount += 1
         searchUsersSearchTermLimitReceivedArguments = (searchTerm: searchTerm, limit: limit)
-        searchUsersSearchTermLimitReceivedInvocations.append((searchTerm: searchTerm, limit: limit))
+        DispatchQueue.main.async {
+            self.searchUsersSearchTermLimitReceivedInvocations.append((searchTerm: searchTerm, limit: limit))
+        }
         if let searchUsersSearchTermLimitClosure = searchUsersSearchTermLimitClosure {
             return try await searchUsersSearchTermLimitClosure(searchTerm, limit)
         } else {
@@ -2763,7 +2809,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         setAccountDataEventTypeContentCallsCount += 1
         setAccountDataEventTypeContentReceivedArguments = (eventType: eventType, content: content)
-        setAccountDataEventTypeContentReceivedInvocations.append((eventType: eventType, content: content))
+        DispatchQueue.main.async {
+            self.setAccountDataEventTypeContentReceivedInvocations.append((eventType: eventType, content: content))
+        }
         try await setAccountDataEventTypeContentClosure?(eventType, content)
     }
 
@@ -2828,7 +2876,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
     open override func setDelegate(delegate: ClientDelegate?) -> TaskHandle? {
         setDelegateDelegateCallsCount += 1
         setDelegateDelegateReceivedDelegate = delegate
-        setDelegateDelegateReceivedInvocations.append(delegate)
+        DispatchQueue.main.async {
+            self.setDelegateDelegateReceivedInvocations.append(delegate)
+        }
         if let setDelegateDelegateClosure = setDelegateDelegateClosure {
             return setDelegateDelegateClosure(delegate)
         } else {
@@ -2876,7 +2926,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         setDisplayNameNameCallsCount += 1
         setDisplayNameNameReceivedName = name
-        setDisplayNameNameReceivedInvocations.append(name)
+        DispatchQueue.main.async {
+            self.setDisplayNameNameReceivedInvocations.append(name)
+        }
         try await setDisplayNameNameClosure?(name)
     }
 
@@ -2920,7 +2972,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCallsCount += 1
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedArguments = (identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang)
-        setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang))
+        DispatchQueue.main.async {
+            self.setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang))
+        }
         try await setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure?(identifiers, kind, appDisplayName, deviceDisplayName, profileTag, lang)
     }
 
@@ -2985,7 +3039,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
     open override func subscribeToIgnoredUsers(listener: IgnoredUsersListener) -> TaskHandle {
         subscribeToIgnoredUsersListenerCallsCount += 1
         subscribeToIgnoredUsersListenerReceivedListener = listener
-        subscribeToIgnoredUsersListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.subscribeToIgnoredUsersListenerReceivedInvocations.append(listener)
+        }
         if let subscribeToIgnoredUsersListenerClosure = subscribeToIgnoredUsersListenerClosure {
             return subscribeToIgnoredUsersListenerClosure(listener)
         } else {
@@ -3054,7 +3110,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
     open override func subscribeToSendQueueStatus(listener: SendQueueRoomErrorListener) -> TaskHandle {
         subscribeToSendQueueStatusListenerCallsCount += 1
         subscribeToSendQueueStatusListenerReceivedListener = listener
-        subscribeToSendQueueStatusListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.subscribeToSendQueueStatusListenerReceivedInvocations.append(listener)
+        }
         if let subscribeToSendQueueStatusListenerClosure = subscribeToSendQueueStatusListenerClosure {
             return subscribeToSendQueueStatusListenerClosure(listener)
         } else {
@@ -3167,7 +3225,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         trackRecentlyVisitedRoomRoomCallsCount += 1
         trackRecentlyVisitedRoomRoomReceivedRoom = room
-        trackRecentlyVisitedRoomRoomReceivedInvocations.append(room)
+        DispatchQueue.main.async {
+            self.trackRecentlyVisitedRoomRoomReceivedInvocations.append(room)
+        }
         try await trackRecentlyVisitedRoomRoomClosure?(room)
     }
 
@@ -3211,7 +3271,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         unignoreUserUserIdCallsCount += 1
         unignoreUserUserIdReceivedUserId = userId
-        unignoreUserUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.unignoreUserUserIdReceivedInvocations.append(userId)
+        }
         try await unignoreUserUserIdClosure?(userId)
     }
 
@@ -3255,7 +3317,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         uploadAvatarMimeTypeDataCallsCount += 1
         uploadAvatarMimeTypeDataReceivedArguments = (mimeType: mimeType, data: data)
-        uploadAvatarMimeTypeDataReceivedInvocations.append((mimeType: mimeType, data: data))
+        DispatchQueue.main.async {
+            self.uploadAvatarMimeTypeDataReceivedInvocations.append((mimeType: mimeType, data: data))
+        }
         try await uploadAvatarMimeTypeDataClosure?(mimeType, data)
     }
 
@@ -3324,7 +3388,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         uploadMediaMimeTypeDataProgressWatcherCallsCount += 1
         uploadMediaMimeTypeDataProgressWatcherReceivedArguments = (mimeType: mimeType, data: data, progressWatcher: progressWatcher)
-        uploadMediaMimeTypeDataProgressWatcherReceivedInvocations.append((mimeType: mimeType, data: data, progressWatcher: progressWatcher))
+        DispatchQueue.main.async {
+            self.uploadMediaMimeTypeDataProgressWatcherReceivedInvocations.append((mimeType: mimeType, data: data, progressWatcher: progressWatcher))
+        }
         if let uploadMediaMimeTypeDataProgressWatcherClosure = uploadMediaMimeTypeDataProgressWatcherClosure {
             return try await uploadMediaMimeTypeDataProgressWatcherClosure(mimeType, data, progressWatcher)
         } else {
@@ -3473,7 +3539,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func addRootCertificates(certificates: [Data]) -> ClientBuilder {
         addRootCertificatesCertificatesCallsCount += 1
         addRootCertificatesCertificatesReceivedCertificates = certificates
-        addRootCertificatesCertificatesReceivedInvocations.append(certificates)
+        DispatchQueue.main.async {
+            self.addRootCertificatesCertificatesReceivedInvocations.append(certificates)
+        }
         if let addRootCertificatesCertificatesClosure = addRootCertificatesCertificatesClosure {
             return addRootCertificatesCertificatesClosure(certificates)
         } else {
@@ -3542,7 +3610,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func autoEnableBackups(autoEnableBackups: Bool) -> ClientBuilder {
         autoEnableBackupsAutoEnableBackupsCallsCount += 1
         autoEnableBackupsAutoEnableBackupsReceivedAutoEnableBackups = autoEnableBackups
-        autoEnableBackupsAutoEnableBackupsReceivedInvocations.append(autoEnableBackups)
+        DispatchQueue.main.async {
+            self.autoEnableBackupsAutoEnableBackupsReceivedInvocations.append(autoEnableBackups)
+        }
         if let autoEnableBackupsAutoEnableBackupsClosure = autoEnableBackupsAutoEnableBackupsClosure {
             return autoEnableBackupsAutoEnableBackupsClosure(autoEnableBackups)
         } else {
@@ -3611,7 +3681,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func autoEnableCrossSigning(autoEnableCrossSigning: Bool) -> ClientBuilder {
         autoEnableCrossSigningAutoEnableCrossSigningCallsCount += 1
         autoEnableCrossSigningAutoEnableCrossSigningReceivedAutoEnableCrossSigning = autoEnableCrossSigning
-        autoEnableCrossSigningAutoEnableCrossSigningReceivedInvocations.append(autoEnableCrossSigning)
+        DispatchQueue.main.async {
+            self.autoEnableCrossSigningAutoEnableCrossSigningReceivedInvocations.append(autoEnableCrossSigning)
+        }
         if let autoEnableCrossSigningAutoEnableCrossSigningClosure = autoEnableCrossSigningAutoEnableCrossSigningClosure {
             return autoEnableCrossSigningAutoEnableCrossSigningClosure(autoEnableCrossSigning)
         } else {
@@ -3680,7 +3752,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func backupDownloadStrategy(backupDownloadStrategy: BackupDownloadStrategy) -> ClientBuilder {
         backupDownloadStrategyBackupDownloadStrategyCallsCount += 1
         backupDownloadStrategyBackupDownloadStrategyReceivedBackupDownloadStrategy = backupDownloadStrategy
-        backupDownloadStrategyBackupDownloadStrategyReceivedInvocations.append(backupDownloadStrategy)
+        DispatchQueue.main.async {
+            self.backupDownloadStrategyBackupDownloadStrategyReceivedInvocations.append(backupDownloadStrategy)
+        }
         if let backupDownloadStrategyBackupDownloadStrategyClosure = backupDownloadStrategyBackupDownloadStrategyClosure {
             return backupDownloadStrategyBackupDownloadStrategyClosure(backupDownloadStrategy)
         } else {
@@ -3822,7 +3896,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
         buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerCallsCount += 1
         buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments = (qrCodeData: qrCodeData, oidcConfiguration: oidcConfiguration, progressListener: progressListener)
-        buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations.append((qrCodeData: qrCodeData, oidcConfiguration: oidcConfiguration, progressListener: progressListener))
+        DispatchQueue.main.async {
+            self.buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations.append((qrCodeData: qrCodeData, oidcConfiguration: oidcConfiguration, progressListener: progressListener))
+        }
         if let buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerClosure = buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerClosure {
             return try await buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerClosure(qrCodeData, oidcConfiguration, progressListener)
         } else {
@@ -4021,7 +4097,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func enableCrossProcessRefreshLock(processId: String, sessionDelegate: ClientSessionDelegate) -> ClientBuilder {
         enableCrossProcessRefreshLockProcessIdSessionDelegateCallsCount += 1
         enableCrossProcessRefreshLockProcessIdSessionDelegateReceivedArguments = (processId: processId, sessionDelegate: sessionDelegate)
-        enableCrossProcessRefreshLockProcessIdSessionDelegateReceivedInvocations.append((processId: processId, sessionDelegate: sessionDelegate))
+        DispatchQueue.main.async {
+            self.enableCrossProcessRefreshLockProcessIdSessionDelegateReceivedInvocations.append((processId: processId, sessionDelegate: sessionDelegate))
+        }
         if let enableCrossProcessRefreshLockProcessIdSessionDelegateClosure = enableCrossProcessRefreshLockProcessIdSessionDelegateClosure {
             return enableCrossProcessRefreshLockProcessIdSessionDelegateClosure(processId, sessionDelegate)
         } else {
@@ -4090,7 +4168,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func homeserverUrl(url: String) -> ClientBuilder {
         homeserverUrlUrlCallsCount += 1
         homeserverUrlUrlReceivedUrl = url
-        homeserverUrlUrlReceivedInvocations.append(url)
+        DispatchQueue.main.async {
+            self.homeserverUrlUrlReceivedInvocations.append(url)
+        }
         if let homeserverUrlUrlClosure = homeserverUrlUrlClosure {
             return homeserverUrlUrlClosure(url)
         } else {
@@ -4159,7 +4239,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func passphrase(passphrase: String?) -> ClientBuilder {
         passphrasePassphraseCallsCount += 1
         passphrasePassphraseReceivedPassphrase = passphrase
-        passphrasePassphraseReceivedInvocations.append(passphrase)
+        DispatchQueue.main.async {
+            self.passphrasePassphraseReceivedInvocations.append(passphrase)
+        }
         if let passphrasePassphraseClosure = passphrasePassphraseClosure {
             return passphrasePassphraseClosure(passphrase)
         } else {
@@ -4228,7 +4310,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func proxy(url: String) -> ClientBuilder {
         proxyUrlCallsCount += 1
         proxyUrlReceivedUrl = url
-        proxyUrlReceivedInvocations.append(url)
+        DispatchQueue.main.async {
+            self.proxyUrlReceivedInvocations.append(url)
+        }
         if let proxyUrlClosure = proxyUrlClosure {
             return proxyUrlClosure(url)
         } else {
@@ -4297,7 +4381,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func serverName(serverName: String) -> ClientBuilder {
         serverNameServerNameCallsCount += 1
         serverNameServerNameReceivedServerName = serverName
-        serverNameServerNameReceivedInvocations.append(serverName)
+        DispatchQueue.main.async {
+            self.serverNameServerNameReceivedInvocations.append(serverName)
+        }
         if let serverNameServerNameClosure = serverNameServerNameClosure {
             return serverNameServerNameClosure(serverName)
         } else {
@@ -4366,7 +4452,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func serverNameOrHomeserverUrl(serverNameOrUrl: String) -> ClientBuilder {
         serverNameOrHomeserverUrlServerNameOrUrlCallsCount += 1
         serverNameOrHomeserverUrlServerNameOrUrlReceivedServerNameOrUrl = serverNameOrUrl
-        serverNameOrHomeserverUrlServerNameOrUrlReceivedInvocations.append(serverNameOrUrl)
+        DispatchQueue.main.async {
+            self.serverNameOrHomeserverUrlServerNameOrUrlReceivedInvocations.append(serverNameOrUrl)
+        }
         if let serverNameOrHomeserverUrlServerNameOrUrlClosure = serverNameOrHomeserverUrlServerNameOrUrlClosure {
             return serverNameOrHomeserverUrlServerNameOrUrlClosure(serverNameOrUrl)
         } else {
@@ -4435,7 +4523,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func serverVersions(versions: [String]) -> ClientBuilder {
         serverVersionsVersionsCallsCount += 1
         serverVersionsVersionsReceivedVersions = versions
-        serverVersionsVersionsReceivedInvocations.append(versions)
+        DispatchQueue.main.async {
+            self.serverVersionsVersionsReceivedInvocations.append(versions)
+        }
         if let serverVersionsVersionsClosure = serverVersionsVersionsClosure {
             return serverVersionsVersionsClosure(versions)
         } else {
@@ -4504,7 +4594,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func sessionPath(path: String) -> ClientBuilder {
         sessionPathPathCallsCount += 1
         sessionPathPathReceivedPath = path
-        sessionPathPathReceivedInvocations.append(path)
+        DispatchQueue.main.async {
+            self.sessionPathPathReceivedInvocations.append(path)
+        }
         if let sessionPathPathClosure = sessionPathPathClosure {
             return sessionPathPathClosure(path)
         } else {
@@ -4573,7 +4665,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func setSessionDelegate(sessionDelegate: ClientSessionDelegate) -> ClientBuilder {
         setSessionDelegateSessionDelegateCallsCount += 1
         setSessionDelegateSessionDelegateReceivedSessionDelegate = sessionDelegate
-        setSessionDelegateSessionDelegateReceivedInvocations.append(sessionDelegate)
+        DispatchQueue.main.async {
+            self.setSessionDelegateSessionDelegateReceivedInvocations.append(sessionDelegate)
+        }
         if let setSessionDelegateSessionDelegateClosure = setSessionDelegateSessionDelegateClosure {
             return setSessionDelegateSessionDelegateClosure(sessionDelegate)
         } else {
@@ -4642,7 +4736,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func slidingSyncProxy(slidingSyncProxy: String?) -> ClientBuilder {
         slidingSyncProxySlidingSyncProxyCallsCount += 1
         slidingSyncProxySlidingSyncProxyReceivedSlidingSyncProxy = slidingSyncProxy
-        slidingSyncProxySlidingSyncProxyReceivedInvocations.append(slidingSyncProxy)
+        DispatchQueue.main.async {
+            self.slidingSyncProxySlidingSyncProxyReceivedInvocations.append(slidingSyncProxy)
+        }
         if let slidingSyncProxySlidingSyncProxyClosure = slidingSyncProxySlidingSyncProxyClosure {
             return slidingSyncProxySlidingSyncProxyClosure(slidingSyncProxy)
         } else {
@@ -4711,7 +4807,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func userAgent(userAgent: String) -> ClientBuilder {
         userAgentUserAgentCallsCount += 1
         userAgentUserAgentReceivedUserAgent = userAgent
-        userAgentUserAgentReceivedInvocations.append(userAgent)
+        DispatchQueue.main.async {
+            self.userAgentUserAgentReceivedInvocations.append(userAgent)
+        }
         if let userAgentUserAgentClosure = userAgentUserAgentClosure {
             return userAgentUserAgentClosure(userAgent)
         } else {
@@ -4780,7 +4878,9 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
     open override func username(username: String) -> ClientBuilder {
         usernameUsernameCallsCount += 1
         usernameUsernameReceivedUsername = username
-        usernameUsernameReceivedInvocations.append(username)
+        DispatchQueue.main.async {
+            self.usernameUsernameReceivedInvocations.append(username)
+        }
         if let usernameUsernameClosure = usernameUsernameClosure {
             return usernameUsernameClosure(username)
         } else {
@@ -4994,7 +5094,9 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
     open override func backupStateListener(listener: BackupStateListener) -> TaskHandle {
         backupStateListenerListenerCallsCount += 1
         backupStateListenerListenerReceivedListener = listener
-        backupStateListenerListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.backupStateListenerListenerReceivedInvocations.append(listener)
+        }
         if let backupStateListenerListenerClosure = backupStateListenerListenerClosure {
             return backupStateListenerListenerClosure(listener)
         } else {
@@ -5277,7 +5379,9 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         }
         enableRecoveryWaitForBackupsToUploadProgressListenerCallsCount += 1
         enableRecoveryWaitForBackupsToUploadProgressListenerReceivedArguments = (waitForBackupsToUpload: waitForBackupsToUpload, progressListener: progressListener)
-        enableRecoveryWaitForBackupsToUploadProgressListenerReceivedInvocations.append((waitForBackupsToUpload: waitForBackupsToUpload, progressListener: progressListener))
+        DispatchQueue.main.async {
+            self.enableRecoveryWaitForBackupsToUploadProgressListenerReceivedInvocations.append((waitForBackupsToUpload: waitForBackupsToUpload, progressListener: progressListener))
+        }
         if let enableRecoveryWaitForBackupsToUploadProgressListenerClosure = enableRecoveryWaitForBackupsToUploadProgressListenerClosure {
             return try await enableRecoveryWaitForBackupsToUploadProgressListenerClosure(waitForBackupsToUpload, progressListener)
         } else {
@@ -5394,7 +5498,9 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         }
         recoverRecoveryKeyCallsCount += 1
         recoverRecoveryKeyReceivedRecoveryKey = recoveryKey
-        recoverRecoveryKeyReceivedInvocations.append(recoveryKey)
+        DispatchQueue.main.async {
+            self.recoverRecoveryKeyReceivedInvocations.append(recoveryKey)
+        }
         try await recoverRecoveryKeyClosure?(recoveryKey)
     }
 
@@ -5463,7 +5569,9 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         }
         recoverAndResetOldRecoveryKeyCallsCount += 1
         recoverAndResetOldRecoveryKeyReceivedOldRecoveryKey = oldRecoveryKey
-        recoverAndResetOldRecoveryKeyReceivedInvocations.append(oldRecoveryKey)
+        DispatchQueue.main.async {
+            self.recoverAndResetOldRecoveryKeyReceivedInvocations.append(oldRecoveryKey)
+        }
         if let recoverAndResetOldRecoveryKeyClosure = recoverAndResetOldRecoveryKeyClosure {
             return try await recoverAndResetOldRecoveryKeyClosure(oldRecoveryKey)
         } else {
@@ -5597,7 +5705,9 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
     open override func recoveryStateListener(listener: RecoveryStateListener) -> TaskHandle {
         recoveryStateListenerListenerCallsCount += 1
         recoveryStateListenerListenerReceivedListener = listener
-        recoveryStateListenerListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.recoveryStateListenerListenerReceivedInvocations.append(listener)
+        }
         if let recoveryStateListenerListenerClosure = recoveryStateListenerListenerClosure {
             return recoveryStateListenerListenerClosure(listener)
         } else {
@@ -5800,7 +5910,9 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
     open override func verificationStateListener(listener: VerificationStateListener) -> TaskHandle {
         verificationStateListenerListenerCallsCount += 1
         verificationStateListenerListenerReceivedListener = listener
-        verificationStateListenerListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.verificationStateListenerListenerReceivedInvocations.append(listener)
+        }
         if let verificationStateListenerListenerClosure = verificationStateListenerListenerClosure {
             return verificationStateListenerListenerClosure(listener)
         } else {
@@ -5848,7 +5960,9 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         }
         waitForBackupUploadSteadyStateProgressListenerCallsCount += 1
         waitForBackupUploadSteadyStateProgressListenerReceivedProgressListener = progressListener
-        waitForBackupUploadSteadyStateProgressListenerReceivedInvocations.append(progressListener)
+        DispatchQueue.main.async {
+            self.waitForBackupUploadSteadyStateProgressListenerReceivedInvocations.append(progressListener)
+        }
         try await waitForBackupUploadSteadyStateProgressListenerClosure?(progressListener)
     }
 
@@ -7355,7 +7469,9 @@ open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle {
         }
         persistPathCallsCount += 1
         persistPathReceivedPath = path
-        persistPathReceivedInvocations.append(path)
+        DispatchQueue.main.async {
+            self.persistPathReceivedInvocations.append(path)
+        }
         if let persistPathClosure = persistPathClosure {
             return try persistPathClosure(path)
         } else {
@@ -7984,7 +8100,9 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient {
         }
         getNotificationRoomIdEventIdCallsCount += 1
         getNotificationRoomIdEventIdReceivedArguments = (roomId: roomId, eventId: eventId)
-        getNotificationRoomIdEventIdReceivedInvocations.append((roomId: roomId, eventId: eventId))
+        DispatchQueue.main.async {
+            self.getNotificationRoomIdEventIdReceivedInvocations.append((roomId: roomId, eventId: eventId))
+        }
         if let getNotificationRoomIdEventIdClosure = getNotificationRoomIdEventIdClosure {
             return try await getNotificationRoomIdEventIdClosure(roomId, eventId)
         } else {
@@ -8259,7 +8377,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
     open override func getDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool) async -> RoomNotificationMode {
         getDefaultRoomNotificationModeIsEncryptedIsOneToOneCallsCount += 1
         getDefaultRoomNotificationModeIsEncryptedIsOneToOneReceivedArguments = (isEncrypted: isEncrypted, isOneToOne: isOneToOne)
-        getDefaultRoomNotificationModeIsEncryptedIsOneToOneReceivedInvocations.append((isEncrypted: isEncrypted, isOneToOne: isOneToOne))
+        DispatchQueue.main.async {
+            self.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReceivedInvocations.append((isEncrypted: isEncrypted, isOneToOne: isOneToOne))
+        }
         if let getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure {
             return await getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure(isEncrypted, isOneToOne)
         } else {
@@ -8332,7 +8452,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         }
         getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneCallsCount += 1
         getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneReceivedArguments = (roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne)
-        getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneReceivedInvocations.append((roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne))
+        DispatchQueue.main.async {
+            self.getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneReceivedInvocations.append((roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne))
+        }
         if let getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneClosure = getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneClosure {
             return try await getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneClosure(roomId, isEncrypted, isOneToOne)
         } else {
@@ -8401,7 +8523,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
     open override func getRoomsWithUserDefinedRules(enabled: Bool?) async -> [String] {
         getRoomsWithUserDefinedRulesEnabledCallsCount += 1
         getRoomsWithUserDefinedRulesEnabledReceivedEnabled = enabled
-        getRoomsWithUserDefinedRulesEnabledReceivedInvocations.append(enabled)
+        DispatchQueue.main.async {
+            self.getRoomsWithUserDefinedRulesEnabledReceivedInvocations.append(enabled)
+        }
         if let getRoomsWithUserDefinedRulesEnabledClosure = getRoomsWithUserDefinedRulesEnabledClosure {
             return await getRoomsWithUserDefinedRulesEnabledClosure(enabled)
         } else {
@@ -8474,7 +8598,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         }
         getUserDefinedRoomNotificationModeRoomIdCallsCount += 1
         getUserDefinedRoomNotificationModeRoomIdReceivedRoomId = roomId
-        getUserDefinedRoomNotificationModeRoomIdReceivedInvocations.append(roomId)
+        DispatchQueue.main.async {
+            self.getUserDefinedRoomNotificationModeRoomIdReceivedInvocations.append(roomId)
+        }
         if let getUserDefinedRoomNotificationModeRoomIdClosure = getUserDefinedRoomNotificationModeRoomIdClosure {
             return try await getUserDefinedRoomNotificationModeRoomIdClosure(roomId)
         } else {
@@ -8798,7 +8924,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         }
         restoreDefaultRoomNotificationModeRoomIdCallsCount += 1
         restoreDefaultRoomNotificationModeRoomIdReceivedRoomId = roomId
-        restoreDefaultRoomNotificationModeRoomIdReceivedInvocations.append(roomId)
+        DispatchQueue.main.async {
+            self.restoreDefaultRoomNotificationModeRoomIdReceivedInvocations.append(roomId)
+        }
         try await restoreDefaultRoomNotificationModeRoomIdClosure?(roomId)
     }
 
@@ -8842,7 +8970,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         }
         setCallEnabledEnabledCallsCount += 1
         setCallEnabledEnabledReceivedEnabled = enabled
-        setCallEnabledEnabledReceivedInvocations.append(enabled)
+        DispatchQueue.main.async {
+            self.setCallEnabledEnabledReceivedInvocations.append(enabled)
+        }
         try await setCallEnabledEnabledClosure?(enabled)
     }
 
@@ -8886,7 +9016,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         }
         setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount += 1
         setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedArguments = (isEncrypted: isEncrypted, isOneToOne: isOneToOne, mode: mode)
-        setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations.append((isEncrypted: isEncrypted, isOneToOne: isOneToOne, mode: mode))
+        DispatchQueue.main.async {
+            self.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations.append((isEncrypted: isEncrypted, isOneToOne: isOneToOne, mode: mode))
+        }
         try await setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeClosure?(isEncrypted, isOneToOne, mode)
     }
 
@@ -8926,7 +9058,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
     open override func setDelegate(delegate: NotificationSettingsDelegate?) {
         setDelegateDelegateCallsCount += 1
         setDelegateDelegateReceivedDelegate = delegate
-        setDelegateDelegateReceivedInvocations.append(delegate)
+        DispatchQueue.main.async {
+            self.setDelegateDelegateReceivedInvocations.append(delegate)
+        }
         setDelegateDelegateClosure?(delegate)
     }
 
@@ -8970,7 +9104,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         }
         setInviteForMeEnabledEnabledCallsCount += 1
         setInviteForMeEnabledEnabledReceivedEnabled = enabled
-        setInviteForMeEnabledEnabledReceivedInvocations.append(enabled)
+        DispatchQueue.main.async {
+            self.setInviteForMeEnabledEnabledReceivedInvocations.append(enabled)
+        }
         try await setInviteForMeEnabledEnabledClosure?(enabled)
     }
 
@@ -9014,7 +9150,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         }
         setRoomMentionEnabledEnabledCallsCount += 1
         setRoomMentionEnabledEnabledReceivedEnabled = enabled
-        setRoomMentionEnabledEnabledReceivedInvocations.append(enabled)
+        DispatchQueue.main.async {
+            self.setRoomMentionEnabledEnabledReceivedInvocations.append(enabled)
+        }
         try await setRoomMentionEnabledEnabledClosure?(enabled)
     }
 
@@ -9058,7 +9196,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         }
         setRoomNotificationModeRoomIdModeCallsCount += 1
         setRoomNotificationModeRoomIdModeReceivedArguments = (roomId: roomId, mode: mode)
-        setRoomNotificationModeRoomIdModeReceivedInvocations.append((roomId: roomId, mode: mode))
+        DispatchQueue.main.async {
+            self.setRoomNotificationModeRoomIdModeReceivedInvocations.append((roomId: roomId, mode: mode))
+        }
         try await setRoomNotificationModeRoomIdModeClosure?(roomId, mode)
     }
 
@@ -9102,7 +9242,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         }
         setUserMentionEnabledEnabledCallsCount += 1
         setUserMentionEnabledEnabledReceivedEnabled = enabled
-        setUserMentionEnabledEnabledReceivedInvocations.append(enabled)
+        DispatchQueue.main.async {
+            self.setUserMentionEnabledEnabledReceivedInvocations.append(enabled)
+        }
         try await setUserMentionEnabledEnabledClosure?(enabled)
     }
 
@@ -9146,7 +9288,9 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         }
         unmuteRoomRoomIdIsEncryptedIsOneToOneCallsCount += 1
         unmuteRoomRoomIdIsEncryptedIsOneToOneReceivedArguments = (roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne)
-        unmuteRoomRoomIdIsEncryptedIsOneToOneReceivedInvocations.append((roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne))
+        DispatchQueue.main.async {
+            self.unmuteRoomRoomIdIsEncryptedIsOneToOneReceivedInvocations.append((roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne))
+        }
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
     }
 }
@@ -9486,7 +9630,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         applyPowerLevelChangesChangesCallsCount += 1
         applyPowerLevelChangesChangesReceivedChanges = changes
-        applyPowerLevelChangesChangesReceivedInvocations.append(changes)
+        DispatchQueue.main.async {
+            self.applyPowerLevelChangesChangesReceivedInvocations.append(changes)
+        }
         try await applyPowerLevelChangesChangesClosure?(changes)
     }
 
@@ -9595,7 +9741,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         banUserUserIdReasonCallsCount += 1
         banUserUserIdReasonReceivedArguments = (userId: userId, reason: reason)
-        banUserUserIdReasonReceivedInvocations.append((userId: userId, reason: reason))
+        DispatchQueue.main.async {
+            self.banUserUserIdReasonReceivedInvocations.append((userId: userId, reason: reason))
+        }
         try await banUserUserIdReasonClosure?(userId, reason)
     }
 
@@ -9664,7 +9812,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         canUserBanUserIdCallsCount += 1
         canUserBanUserIdReceivedUserId = userId
-        canUserBanUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.canUserBanUserIdReceivedInvocations.append(userId)
+        }
         if let canUserBanUserIdClosure = canUserBanUserIdClosure {
             return try await canUserBanUserIdClosure(userId)
         } else {
@@ -9737,7 +9887,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         canUserInviteUserIdCallsCount += 1
         canUserInviteUserIdReceivedUserId = userId
-        canUserInviteUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.canUserInviteUserIdReceivedInvocations.append(userId)
+        }
         if let canUserInviteUserIdClosure = canUserInviteUserIdClosure {
             return try await canUserInviteUserIdClosure(userId)
         } else {
@@ -9810,7 +9962,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         canUserKickUserIdCallsCount += 1
         canUserKickUserIdReceivedUserId = userId
-        canUserKickUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.canUserKickUserIdReceivedInvocations.append(userId)
+        }
         if let canUserKickUserIdClosure = canUserKickUserIdClosure {
             return try await canUserKickUserIdClosure(userId)
         } else {
@@ -9883,7 +10037,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         canUserRedactOtherUserIdCallsCount += 1
         canUserRedactOtherUserIdReceivedUserId = userId
-        canUserRedactOtherUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.canUserRedactOtherUserIdReceivedInvocations.append(userId)
+        }
         if let canUserRedactOtherUserIdClosure = canUserRedactOtherUserIdClosure {
             return try await canUserRedactOtherUserIdClosure(userId)
         } else {
@@ -9956,7 +10112,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         canUserRedactOwnUserIdCallsCount += 1
         canUserRedactOwnUserIdReceivedUserId = userId
-        canUserRedactOwnUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.canUserRedactOwnUserIdReceivedInvocations.append(userId)
+        }
         if let canUserRedactOwnUserIdClosure = canUserRedactOwnUserIdClosure {
             return try await canUserRedactOwnUserIdClosure(userId)
         } else {
@@ -10029,7 +10187,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         canUserSendMessageUserIdMessageCallsCount += 1
         canUserSendMessageUserIdMessageReceivedArguments = (userId: userId, message: message)
-        canUserSendMessageUserIdMessageReceivedInvocations.append((userId: userId, message: message))
+        DispatchQueue.main.async {
+            self.canUserSendMessageUserIdMessageReceivedInvocations.append((userId: userId, message: message))
+        }
         if let canUserSendMessageUserIdMessageClosure = canUserSendMessageUserIdMessageClosure {
             return try await canUserSendMessageUserIdMessageClosure(userId, message)
         } else {
@@ -10102,7 +10262,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         canUserSendStateUserIdStateEventCallsCount += 1
         canUserSendStateUserIdStateEventReceivedArguments = (userId: userId, stateEvent: stateEvent)
-        canUserSendStateUserIdStateEventReceivedInvocations.append((userId: userId, stateEvent: stateEvent))
+        DispatchQueue.main.async {
+            self.canUserSendStateUserIdStateEventReceivedInvocations.append((userId: userId, stateEvent: stateEvent))
+        }
         if let canUserSendStateUserIdStateEventClosure = canUserSendStateUserIdStateEventClosure {
             return try await canUserSendStateUserIdStateEventClosure(userId, stateEvent)
         } else {
@@ -10175,7 +10337,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         canUserTriggerRoomNotificationUserIdCallsCount += 1
         canUserTriggerRoomNotificationUserIdReceivedUserId = userId
-        canUserTriggerRoomNotificationUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.canUserTriggerRoomNotificationUserIdReceivedInvocations.append(userId)
+        }
         if let canUserTriggerRoomNotificationUserIdClosure = canUserTriggerRoomNotificationUserIdClosure {
             return try await canUserTriggerRoomNotificationUserIdClosure(userId)
         } else {
@@ -10246,6 +10410,46 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         } else {
             return canonicalAliasReturnValue
         }
+    }
+
+    //MARK: - clearComposerDraft
+
+    open var clearComposerDraftThrowableError: Error?
+    var clearComposerDraftUnderlyingCallsCount = 0
+    open var clearComposerDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return clearComposerDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearComposerDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearComposerDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearComposerDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var clearComposerDraftCalled: Bool {
+        return clearComposerDraftCallsCount > 0
+    }
+    open var clearComposerDraftClosure: (() async throws -> Void)?
+
+    open override func clearComposerDraft() async throws {
+        if let error = clearComposerDraftThrowableError {
+            throw error
+        }
+        clearComposerDraftCallsCount += 1
+        try await clearComposerDraftClosure?()
     }
 
     //MARK: - discardRoomKey
@@ -10389,7 +10593,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
     open override func enableSendQueue(enable: Bool) {
         enableSendQueueEnableCallsCount += 1
         enableSendQueueEnableReceivedEnable = enable
-        enableSendQueueEnableReceivedInvocations.append(enable)
+        DispatchQueue.main.async {
+            self.enableSendQueueEnableReceivedInvocations.append(enable)
+        }
         enableSendQueueEnableClosure?(enable)
     }
 
@@ -10632,7 +10838,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         ignoreUserUserIdCallsCount += 1
         ignoreUserUserIdReceivedUserId = userId
-        ignoreUserUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.ignoreUserUserIdReceivedInvocations.append(userId)
+        }
         try await ignoreUserUserIdClosure?(userId)
     }
 
@@ -10676,7 +10884,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         inviteUserByIdUserIdCallsCount += 1
         inviteUserByIdUserIdReceivedUserId = userId
-        inviteUserByIdUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.inviteUserByIdUserIdReceivedInvocations.append(userId)
+        }
         try await inviteUserByIdUserIdClosure?(userId)
     }
 
@@ -11349,7 +11559,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         kickUserUserIdReasonCallsCount += 1
         kickUserUserIdReasonReceivedArguments = (userId: userId, reason: reason)
-        kickUserUserIdReasonReceivedInvocations.append((userId: userId, reason: reason))
+        DispatchQueue.main.async {
+            self.kickUserUserIdReasonReceivedInvocations.append((userId: userId, reason: reason))
+        }
         try await kickUserUserIdReasonClosure?(userId, reason)
     }
 
@@ -11393,6 +11605,75 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         try await leaveClosure?()
     }
 
+    //MARK: - loadComposerDraft
+
+    open var loadComposerDraftThrowableError: Error?
+    var loadComposerDraftUnderlyingCallsCount = 0
+    open var loadComposerDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadComposerDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadComposerDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadComposerDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadComposerDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loadComposerDraftCalled: Bool {
+        return loadComposerDraftCallsCount > 0
+    }
+
+    var loadComposerDraftUnderlyingReturnValue: ComposerDraft?
+    open var loadComposerDraftReturnValue: ComposerDraft? {
+        get {
+            if Thread.isMainThread {
+                return loadComposerDraftUnderlyingReturnValue
+            } else {
+                var returnValue: ComposerDraft?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadComposerDraftUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadComposerDraftUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadComposerDraftUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var loadComposerDraftClosure: (() async throws -> ComposerDraft?)?
+
+    open override func loadComposerDraft() async throws -> ComposerDraft? {
+        if let error = loadComposerDraftThrowableError {
+            throw error
+        }
+        loadComposerDraftCallsCount += 1
+        if let loadComposerDraftClosure = loadComposerDraftClosure {
+            return try await loadComposerDraftClosure()
+        } else {
+            return loadComposerDraftReturnValue
+        }
+    }
+
     //MARK: - markAsRead
 
     open var markAsReadReceiptTypeThrowableError: Error?
@@ -11433,7 +11714,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         markAsReadReceiptTypeCallsCount += 1
         markAsReadReceiptTypeReceivedReceiptType = receiptType
-        markAsReadReceiptTypeReceivedInvocations.append(receiptType)
+        DispatchQueue.main.async {
+            self.markAsReadReceiptTypeReceivedInvocations.append(receiptType)
+        }
         try await markAsReadReceiptTypeClosure?(receiptType)
     }
 
@@ -11502,7 +11785,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         matrixToEventPermalinkEventIdCallsCount += 1
         matrixToEventPermalinkEventIdReceivedEventId = eventId
-        matrixToEventPermalinkEventIdReceivedInvocations.append(eventId)
+        DispatchQueue.main.async {
+            self.matrixToEventPermalinkEventIdReceivedInvocations.append(eventId)
+        }
         if let matrixToEventPermalinkEventIdClosure = matrixToEventPermalinkEventIdClosure {
             return try await matrixToEventPermalinkEventIdClosure(eventId)
         } else {
@@ -11644,7 +11929,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         memberUserIdCallsCount += 1
         memberUserIdReceivedUserId = userId
-        memberUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.memberUserIdReceivedInvocations.append(userId)
+        }
         if let memberUserIdClosure = memberUserIdClosure {
             return try await memberUserIdClosure(userId)
         } else {
@@ -11717,7 +12004,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         memberAvatarUrlUserIdCallsCount += 1
         memberAvatarUrlUserIdReceivedUserId = userId
-        memberAvatarUrlUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.memberAvatarUrlUserIdReceivedInvocations.append(userId)
+        }
         if let memberAvatarUrlUserIdClosure = memberAvatarUrlUserIdClosure {
             return try await memberAvatarUrlUserIdClosure(userId)
         } else {
@@ -11790,7 +12079,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         memberDisplayNameUserIdCallsCount += 1
         memberDisplayNameUserIdReceivedUserId = userId
-        memberDisplayNameUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.memberDisplayNameUserIdReceivedInvocations.append(userId)
+        }
         if let memberDisplayNameUserIdClosure = memberDisplayNameUserIdClosure {
             return try await memberDisplayNameUserIdClosure(userId)
         } else {
@@ -12171,7 +12462,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         redactEventIdReasonCallsCount += 1
         redactEventIdReasonReceivedArguments = (eventId: eventId, reason: reason)
-        redactEventIdReasonReceivedInvocations.append((eventId: eventId, reason: reason))
+        DispatchQueue.main.async {
+            self.redactEventIdReasonReceivedInvocations.append((eventId: eventId, reason: reason))
+        }
         try await redactEventIdReasonClosure?(eventId, reason)
     }
 
@@ -12255,7 +12548,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         reportContentEventIdScoreReasonCallsCount += 1
         reportContentEventIdScoreReasonReceivedArguments = (eventId: eventId, score: score, reason: reason)
-        reportContentEventIdScoreReasonReceivedInvocations.append((eventId: eventId, score: score, reason: reason))
+        DispatchQueue.main.async {
+            self.reportContentEventIdScoreReasonReceivedInvocations.append((eventId: eventId, score: score, reason: reason))
+        }
         try await reportContentEventIdScoreReasonClosure?(eventId, score, reason)
     }
 
@@ -12397,6 +12692,52 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
     }
 
+    //MARK: - saveComposerDraft
+
+    open var saveComposerDraftDraftThrowableError: Error?
+    var saveComposerDraftDraftUnderlyingCallsCount = 0
+    open var saveComposerDraftDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return saveComposerDraftDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = saveComposerDraftDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                saveComposerDraftDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    saveComposerDraftDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var saveComposerDraftDraftCalled: Bool {
+        return saveComposerDraftDraftCallsCount > 0
+    }
+    open var saveComposerDraftDraftReceivedDraft: ComposerDraft?
+    open var saveComposerDraftDraftReceivedInvocations: [ComposerDraft] = []
+    open var saveComposerDraftDraftClosure: ((ComposerDraft) async throws -> Void)?
+
+    open override func saveComposerDraft(draft: ComposerDraft) async throws {
+        if let error = saveComposerDraftDraftThrowableError {
+            throw error
+        }
+        saveComposerDraftDraftCallsCount += 1
+        saveComposerDraftDraftReceivedDraft = draft
+        DispatchQueue.main.async {
+            self.saveComposerDraftDraftReceivedInvocations.append(draft)
+        }
+        try await saveComposerDraftDraftClosure?(draft)
+    }
+
     //MARK: - sendCallNotification
 
     open var sendCallNotificationCallIdApplicationNotifyTypeMentionsThrowableError: Error?
@@ -12437,7 +12778,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         sendCallNotificationCallIdApplicationNotifyTypeMentionsCallsCount += 1
         sendCallNotificationCallIdApplicationNotifyTypeMentionsReceivedArguments = (callId: callId, application: application, notifyType: notifyType, mentions: mentions)
-        sendCallNotificationCallIdApplicationNotifyTypeMentionsReceivedInvocations.append((callId: callId, application: application, notifyType: notifyType, mentions: mentions))
+        DispatchQueue.main.async {
+            self.sendCallNotificationCallIdApplicationNotifyTypeMentionsReceivedInvocations.append((callId: callId, application: application, notifyType: notifyType, mentions: mentions))
+        }
         try await sendCallNotificationCallIdApplicationNotifyTypeMentionsClosure?(callId, application, notifyType, mentions)
     }
 
@@ -12521,7 +12864,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         setIsFavouriteIsFavouriteTagOrderCallsCount += 1
         setIsFavouriteIsFavouriteTagOrderReceivedArguments = (isFavourite: isFavourite, tagOrder: tagOrder)
-        setIsFavouriteIsFavouriteTagOrderReceivedInvocations.append((isFavourite: isFavourite, tagOrder: tagOrder))
+        DispatchQueue.main.async {
+            self.setIsFavouriteIsFavouriteTagOrderReceivedInvocations.append((isFavourite: isFavourite, tagOrder: tagOrder))
+        }
         try await setIsFavouriteIsFavouriteTagOrderClosure?(isFavourite, tagOrder)
     }
 
@@ -12565,7 +12910,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         setIsLowPriorityIsLowPriorityTagOrderCallsCount += 1
         setIsLowPriorityIsLowPriorityTagOrderReceivedArguments = (isLowPriority: isLowPriority, tagOrder: tagOrder)
-        setIsLowPriorityIsLowPriorityTagOrderReceivedInvocations.append((isLowPriority: isLowPriority, tagOrder: tagOrder))
+        DispatchQueue.main.async {
+            self.setIsLowPriorityIsLowPriorityTagOrderReceivedInvocations.append((isLowPriority: isLowPriority, tagOrder: tagOrder))
+        }
         try await setIsLowPriorityIsLowPriorityTagOrderClosure?(isLowPriority, tagOrder)
     }
 
@@ -12609,7 +12956,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         setNameNameCallsCount += 1
         setNameNameReceivedName = name
-        setNameNameReceivedInvocations.append(name)
+        DispatchQueue.main.async {
+            self.setNameNameReceivedInvocations.append(name)
+        }
         try await setNameNameClosure?(name)
     }
 
@@ -12653,7 +13002,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         setTopicTopicCallsCount += 1
         setTopicTopicReceivedTopic = topic
-        setTopicTopicReceivedInvocations.append(topic)
+        DispatchQueue.main.async {
+            self.setTopicTopicReceivedInvocations.append(topic)
+        }
         try await setTopicTopicClosure?(topic)
     }
 
@@ -12697,7 +13048,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         setUnreadFlagNewValueCallsCount += 1
         setUnreadFlagNewValueReceivedNewValue = newValue
-        setUnreadFlagNewValueReceivedInvocations.append(newValue)
+        DispatchQueue.main.async {
+            self.setUnreadFlagNewValueReceivedInvocations.append(newValue)
+        }
         try await setUnreadFlagNewValueClosure?(newValue)
     }
 
@@ -12762,7 +13115,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
     open override func subscribeToRoomInfoUpdates(listener: RoomInfoListener) -> TaskHandle {
         subscribeToRoomInfoUpdatesListenerCallsCount += 1
         subscribeToRoomInfoUpdatesListenerReceivedListener = listener
-        subscribeToRoomInfoUpdatesListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.subscribeToRoomInfoUpdatesListenerReceivedInvocations.append(listener)
+        }
         if let subscribeToRoomInfoUpdatesListenerClosure = subscribeToRoomInfoUpdatesListenerClosure {
             return subscribeToRoomInfoUpdatesListenerClosure(listener)
         } else {
@@ -12831,7 +13186,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
     open override func subscribeToTypingNotifications(listener: TypingNotificationsListener) -> TaskHandle {
         subscribeToTypingNotificationsListenerCallsCount += 1
         subscribeToTypingNotificationsListenerReceivedListener = listener
-        subscribeToTypingNotificationsListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.subscribeToTypingNotificationsListenerReceivedInvocations.append(listener)
+        }
         if let subscribeToTypingNotificationsListenerClosure = subscribeToTypingNotificationsListenerClosure {
             return subscribeToTypingNotificationsListenerClosure(listener)
         } else {
@@ -12904,7 +13261,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         suggestedRoleForUserUserIdCallsCount += 1
         suggestedRoleForUserUserIdReceivedUserId = userId
-        suggestedRoleForUserUserIdReceivedInvocations.append(userId)
+        DispatchQueue.main.async {
+            self.suggestedRoleForUserUserIdReceivedInvocations.append(userId)
+        }
         if let suggestedRoleForUserUserIdClosure = suggestedRoleForUserUserIdClosure {
             return try await suggestedRoleForUserUserIdClosure(userId)
         } else {
@@ -13046,7 +13405,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixCallsCount += 1
         timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixReceivedArguments = (eventId: eventId, numContextEvents: numContextEvents, internalIdPrefix: internalIdPrefix)
-        timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixReceivedInvocations.append((eventId: eventId, numContextEvents: numContextEvents, internalIdPrefix: internalIdPrefix))
+        DispatchQueue.main.async {
+            self.timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixReceivedInvocations.append((eventId: eventId, numContextEvents: numContextEvents, internalIdPrefix: internalIdPrefix))
+        }
         if let timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixClosure = timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixClosure {
             return try await timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixClosure(eventId, numContextEvents, internalIdPrefix)
         } else {
@@ -13159,7 +13520,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         typingNoticeIsTypingCallsCount += 1
         typingNoticeIsTypingReceivedIsTyping = isTyping
-        typingNoticeIsTypingReceivedInvocations.append(isTyping)
+        DispatchQueue.main.async {
+            self.typingNoticeIsTypingReceivedInvocations.append(isTyping)
+        }
         try await typingNoticeIsTypingClosure?(isTyping)
     }
 
@@ -13203,7 +13566,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         unbanUserUserIdReasonCallsCount += 1
         unbanUserUserIdReasonReceivedArguments = (userId: userId, reason: reason)
-        unbanUserUserIdReasonReceivedInvocations.append((userId: userId, reason: reason))
+        DispatchQueue.main.async {
+            self.unbanUserUserIdReasonReceivedInvocations.append((userId: userId, reason: reason))
+        }
         try await unbanUserUserIdReasonClosure?(userId, reason)
     }
 
@@ -13247,7 +13612,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         updatePowerLevelsForUsersUpdatesCallsCount += 1
         updatePowerLevelsForUsersUpdatesReceivedUpdates = updates
-        updatePowerLevelsForUsersUpdatesReceivedInvocations.append(updates)
+        DispatchQueue.main.async {
+            self.updatePowerLevelsForUsersUpdatesReceivedInvocations.append(updates)
+        }
         try await updatePowerLevelsForUsersUpdatesClosure?(updates)
     }
 
@@ -13291,7 +13658,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         uploadAvatarMimeTypeDataMediaInfoCallsCount += 1
         uploadAvatarMimeTypeDataMediaInfoReceivedArguments = (mimeType: mimeType, data: data, mediaInfo: mediaInfo)
-        uploadAvatarMimeTypeDataMediaInfoReceivedInvocations.append((mimeType: mimeType, data: data, mediaInfo: mediaInfo))
+        DispatchQueue.main.async {
+            self.uploadAvatarMimeTypeDataMediaInfoReceivedInvocations.append((mimeType: mimeType, data: data, mediaInfo: mediaInfo))
+        }
         try await uploadAvatarMimeTypeDataMediaInfoClosure?(mimeType, data, mediaInfo)
     }
 }
@@ -13545,7 +13914,9 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch {
     open override func results(listener: RoomDirectorySearchEntriesListener) async -> TaskHandle {
         resultsListenerCallsCount += 1
         resultsListenerReceivedListener = listener
-        resultsListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.resultsListenerReceivedInvocations.append(listener)
+        }
         if let resultsListenerClosure = resultsListenerClosure {
             return await resultsListenerClosure(listener)
         } else {
@@ -13593,7 +13964,9 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch {
         }
         searchFilterBatchSizeCallsCount += 1
         searchFilterBatchSizeReceivedArguments = (filter: filter, batchSize: batchSize)
-        searchFilterBatchSizeReceivedInvocations.append((filter: filter, batchSize: batchSize))
+        DispatchQueue.main.async {
+            self.searchFilterBatchSizeReceivedInvocations.append((filter: filter, batchSize: batchSize))
+        }
         try await searchFilterBatchSizeClosure?(filter, batchSize)
     }
 }
@@ -13669,7 +14042,9 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList {
     open override func entries(listener: RoomListEntriesListener) -> RoomListEntriesResult {
         entriesListenerCallsCount += 1
         entriesListenerReceivedListener = listener
-        entriesListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.entriesListenerReceivedInvocations.append(listener)
+        }
         if let entriesListenerClosure = entriesListenerClosure {
             return entriesListenerClosure(listener)
         } else {
@@ -13738,7 +14113,9 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList {
     open override func entriesWithDynamicAdapters(pageSize: UInt32, listener: RoomListEntriesListener) -> RoomListEntriesWithDynamicAdaptersResult {
         entriesWithDynamicAdaptersPageSizeListenerCallsCount += 1
         entriesWithDynamicAdaptersPageSizeListenerReceivedArguments = (pageSize: pageSize, listener: listener)
-        entriesWithDynamicAdaptersPageSizeListenerReceivedInvocations.append((pageSize: pageSize, listener: listener))
+        DispatchQueue.main.async {
+            self.entriesWithDynamicAdaptersPageSizeListenerReceivedInvocations.append((pageSize: pageSize, listener: listener))
+        }
         if let entriesWithDynamicAdaptersPageSizeListenerClosure = entriesWithDynamicAdaptersPageSizeListenerClosure {
             return entriesWithDynamicAdaptersPageSizeListenerClosure(pageSize, listener)
         } else {
@@ -13811,7 +14188,9 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList {
         }
         loadingStateListenerCallsCount += 1
         loadingStateListenerReceivedListener = listener
-        loadingStateListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.loadingStateListenerReceivedInvocations.append(listener)
+        }
         if let loadingStateListenerClosure = loadingStateListenerClosure {
             return try loadingStateListenerClosure(listener)
         } else {
@@ -13884,7 +14263,9 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList {
         }
         roomRoomIdCallsCount += 1
         roomRoomIdReceivedRoomId = roomId
-        roomRoomIdReceivedInvocations.append(roomId)
+        DispatchQueue.main.async {
+            self.roomRoomIdReceivedInvocations.append(roomId)
+        }
         if let roomRoomIdClosure = roomRoomIdClosure {
             return try await roomRoomIdClosure(roomId)
         } else {
@@ -14036,7 +14417,9 @@ open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynami
     open override func setFilter(kind: RoomListEntriesDynamicFilterKind) -> Bool {
         setFilterKindCallsCount += 1
         setFilterKindReceivedKind = kind
-        setFilterKindReceivedInvocations.append(kind)
+        DispatchQueue.main.async {
+            self.setFilterKindReceivedInvocations.append(kind)
+        }
         if let setFilterKindClosure = setFilterKindClosure {
             return setFilterKindClosure(kind)
         } else {
@@ -14424,7 +14807,9 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
         }
         initTimelineEventTypeFilterInternalIdPrefixCallsCount += 1
         initTimelineEventTypeFilterInternalIdPrefixReceivedArguments = (eventTypeFilter: eventTypeFilter, internalIdPrefix: internalIdPrefix)
-        initTimelineEventTypeFilterInternalIdPrefixReceivedInvocations.append((eventTypeFilter: eventTypeFilter, internalIdPrefix: internalIdPrefix))
+        DispatchQueue.main.async {
+            self.initTimelineEventTypeFilterInternalIdPrefixReceivedInvocations.append((eventTypeFilter: eventTypeFilter, internalIdPrefix: internalIdPrefix))
+        }
         try await initTimelineEventTypeFilterInternalIdPrefixClosure?(eventTypeFilter, internalIdPrefix)
     }
 
@@ -14728,7 +15113,9 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
     open override func subscribe(settings: RoomSubscription?) {
         subscribeSettingsCallsCount += 1
         subscribeSettingsReceivedSettings = settings
-        subscribeSettingsReceivedInvocations.append(settings)
+        DispatchQueue.main.async {
+            self.subscribeSettingsReceivedInvocations.append(settings)
+        }
         subscribeSettingsClosure?(settings)
     }
 
@@ -14888,7 +15275,9 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
         }
         applyInputInputCallsCount += 1
         applyInputInputReceivedInput = input
-        applyInputInputReceivedInvocations.append(input)
+        DispatchQueue.main.async {
+            self.applyInputInputReceivedInvocations.append(input)
+        }
         try await applyInputInputClosure?(input)
     }
 
@@ -14957,7 +15346,9 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
         }
         roomRoomIdCallsCount += 1
         roomRoomIdReceivedRoomId = roomId
-        roomRoomIdReceivedInvocations.append(roomId)
+        DispatchQueue.main.async {
+            self.roomRoomIdReceivedInvocations.append(roomId)
+        }
         if let roomRoomIdClosure = roomRoomIdClosure {
             return try await roomRoomIdClosure(roomId)
         } else {
@@ -15026,7 +15417,9 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
     open override func state(listener: RoomListServiceStateListener) -> TaskHandle {
         stateListenerCallsCount += 1
         stateListenerReceivedListener = listener
-        stateListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.stateListenerReceivedInvocations.append(listener)
+        }
         if let stateListenerClosure = stateListenerClosure {
             return stateListenerClosure(listener)
         } else {
@@ -15095,7 +15488,9 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
     open override func syncIndicator(delayBeforeShowingInMs: UInt32, delayBeforeHidingInMs: UInt32, listener: RoomListServiceSyncIndicatorListener) -> TaskHandle {
         syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerCallsCount += 1
         syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerReceivedArguments = (delayBeforeShowingInMs: delayBeforeShowingInMs, delayBeforeHidingInMs: delayBeforeHidingInMs, listener: listener)
-        syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerReceivedInvocations.append((delayBeforeShowingInMs: delayBeforeShowingInMs, delayBeforeHidingInMs: delayBeforeHidingInMs, listener: listener))
+        DispatchQueue.main.async {
+            self.syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerReceivedInvocations.append((delayBeforeShowingInMs: delayBeforeShowingInMs, delayBeforeHidingInMs: delayBeforeHidingInMs, listener: listener))
+        }
         if let syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerClosure = syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerClosure {
             return syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerClosure(delayBeforeShowingInMs, delayBeforeHidingInMs, listener)
         } else {
@@ -15240,7 +15635,9 @@ open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator {
     open override func nextChunk(chunkSize: UInt32) -> [RoomMember]? {
         nextChunkChunkSizeCallsCount += 1
         nextChunkChunkSizeReceivedChunkSize = chunkSize
-        nextChunkChunkSizeReceivedInvocations.append(chunkSize)
+        DispatchQueue.main.async {
+            self.nextChunkChunkSizeReceivedInvocations.append(chunkSize)
+        }
         if let nextChunkChunkSizeClosure = nextChunkChunkSizeClosure {
             return nextChunkChunkSizeClosure(chunkSize)
         } else {
@@ -15320,7 +15717,9 @@ open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMess
     open override func withMentions(mentions: Mentions) -> RoomMessageEventContentWithoutRelation {
         withMentionsMentionsCallsCount += 1
         withMentionsMentionsReceivedMentions = mentions
-        withMentionsMentionsReceivedInvocations.append(mentions)
+        DispatchQueue.main.async {
+            self.withMentionsMentionsReceivedInvocations.append(mentions)
+        }
         if let withMentionsMentionsClosure = withMentionsMentionsClosure {
             return withMentionsMentionsClosure(mentions)
         } else {
@@ -15691,7 +16090,9 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
     open override func setDelegate(delegate: SessionVerificationControllerDelegate?) {
         setDelegateDelegateCallsCount += 1
         setDelegateDelegateReceivedDelegate = delegate
-        setDelegateDelegateReceivedInvocations.append(delegate)
+        DispatchQueue.main.async {
+            self.setDelegateDelegateReceivedInvocations.append(delegate)
+        }
         setDelegateDelegateClosure?(delegate)
     }
 
@@ -16200,7 +16601,9 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService {
     open override func state(listener: SyncServiceStateObserver) -> TaskHandle {
         stateListenerCallsCount += 1
         stateListenerReceivedListener = listener
-        stateListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.stateListenerReceivedInvocations.append(listener)
+        }
         if let stateListenerClosure = stateListenerClosure {
             return stateListenerClosure(listener)
         } else {
@@ -16389,7 +16792,9 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder {
     open override func withCrossProcessLock(appIdentifier: String?) -> SyncServiceBuilder {
         withCrossProcessLockAppIdentifierCallsCount += 1
         withCrossProcessLockAppIdentifierReceivedAppIdentifier = appIdentifier
-        withCrossProcessLockAppIdentifierReceivedInvocations.append(appIdentifier)
+        DispatchQueue.main.async {
+            self.withCrossProcessLockAppIdentifierReceivedInvocations.append(appIdentifier)
+        }
         if let withCrossProcessLockAppIdentifierClosure = withCrossProcessLockAppIdentifierClosure {
             return withCrossProcessLockAppIdentifierClosure(appIdentifier)
         } else {
@@ -16458,7 +16863,9 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder {
     open override func withUtdHook(delegate: UnableToDecryptDelegate) async -> SyncServiceBuilder {
         withUtdHookDelegateCallsCount += 1
         withUtdHookDelegateReceivedDelegate = delegate
-        withUtdHookDelegateReceivedInvocations.append(delegate)
+        DispatchQueue.main.async {
+            self.withUtdHookDelegateReceivedInvocations.append(delegate)
+        }
         if let withUtdHookDelegateClosure = withUtdHookDelegateClosure {
             return await withUtdHookDelegateClosure(delegate)
         } else {
@@ -16621,13 +17028,13 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open var addListenerListenerReceivedListener: TimelineListener?
     open var addListenerListenerReceivedInvocations: [TimelineListener] = []
 
-    var addListenerListenerUnderlyingReturnValue: RoomTimelineListenerResult!
-    open var addListenerListenerReturnValue: RoomTimelineListenerResult! {
+    var addListenerListenerUnderlyingReturnValue: TaskHandle!
+    open var addListenerListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
                 return addListenerListenerUnderlyingReturnValue
             } else {
-                var returnValue: RoomTimelineListenerResult? = nil
+                var returnValue: TaskHandle? = nil
                 DispatchQueue.main.sync {
                     returnValue = addListenerListenerUnderlyingReturnValue
                 }
@@ -16645,12 +17052,14 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
             }
         }
     }
-    open var addListenerListenerClosure: ((TimelineListener) async -> RoomTimelineListenerResult)?
+    open var addListenerListenerClosure: ((TimelineListener) async -> TaskHandle)?
 
-    open override func addListener(listener: TimelineListener) async -> RoomTimelineListenerResult {
+    open override func addListener(listener: TimelineListener) async -> TaskHandle {
         addListenerListenerCallsCount += 1
         addListenerListenerReceivedListener = listener
-        addListenerListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.addListenerListenerReceivedInvocations.append(listener)
+        }
         if let addListenerListenerClosure = addListenerListenerClosure {
             return await addListenerListenerClosure(listener)
         } else {
@@ -16698,7 +17107,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         createPollQuestionAnswersMaxSelectionsPollKindCallsCount += 1
         createPollQuestionAnswersMaxSelectionsPollKindReceivedArguments = (question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)
-        createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocations.append((question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind))
+        DispatchQueue.main.async {
+            self.createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocations.append((question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind))
+        }
         try await createPollQuestionAnswersMaxSelectionsPollKindClosure?(question, answers, maxSelections, pollKind)
     }
 
@@ -16742,7 +17153,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         editNewContentEditItemCallsCount += 1
         editNewContentEditItemReceivedArguments = (newContent: newContent, editItem: editItem)
-        editNewContentEditItemReceivedInvocations.append((newContent: newContent, editItem: editItem))
+        DispatchQueue.main.async {
+            self.editNewContentEditItemReceivedInvocations.append((newContent: newContent, editItem: editItem))
+        }
         try await editNewContentEditItemClosure?(newContent, editItem)
     }
 
@@ -16786,7 +17199,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         editPollQuestionAnswersMaxSelectionsPollKindEditItemCallsCount += 1
         editPollQuestionAnswersMaxSelectionsPollKindEditItemReceivedArguments = (question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind, editItem: editItem)
-        editPollQuestionAnswersMaxSelectionsPollKindEditItemReceivedInvocations.append((question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind, editItem: editItem))
+        DispatchQueue.main.async {
+            self.editPollQuestionAnswersMaxSelectionsPollKindEditItemReceivedInvocations.append((question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind, editItem: editItem))
+        }
         try await editPollQuestionAnswersMaxSelectionsPollKindEditItemClosure?(question, answers, maxSelections, pollKind, editItem)
     }
 
@@ -16830,7 +17245,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         endPollPollStartIdTextCallsCount += 1
         endPollPollStartIdTextReceivedArguments = (pollStartId: pollStartId, text: text)
-        endPollPollStartIdTextReceivedInvocations.append((pollStartId: pollStartId, text: text))
+        DispatchQueue.main.async {
+            self.endPollPollStartIdTextReceivedInvocations.append((pollStartId: pollStartId, text: text))
+        }
         try endPollPollStartIdTextClosure?(pollStartId, text)
     }
 
@@ -16874,7 +17291,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         fetchDetailsForEventEventIdCallsCount += 1
         fetchDetailsForEventEventIdReceivedEventId = eventId
-        fetchDetailsForEventEventIdReceivedInvocations.append(eventId)
+        DispatchQueue.main.async {
+            self.fetchDetailsForEventEventIdReceivedInvocations.append(eventId)
+        }
         try await fetchDetailsForEventEventIdClosure?(eventId)
     }
 
@@ -16979,7 +17398,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         focusedPaginateForwardsNumEventsCallsCount += 1
         focusedPaginateForwardsNumEventsReceivedNumEvents = numEvents
-        focusedPaginateForwardsNumEventsReceivedInvocations.append(numEvents)
+        DispatchQueue.main.async {
+            self.focusedPaginateForwardsNumEventsReceivedInvocations.append(numEvents)
+        }
         if let focusedPaginateForwardsNumEventsClosure = focusedPaginateForwardsNumEventsClosure {
             return try await focusedPaginateForwardsNumEventsClosure(numEvents)
         } else {
@@ -17052,7 +17473,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         getEventTimelineItemByEventIdEventIdCallsCount += 1
         getEventTimelineItemByEventIdEventIdReceivedEventId = eventId
-        getEventTimelineItemByEventIdEventIdReceivedInvocations.append(eventId)
+        DispatchQueue.main.async {
+            self.getEventTimelineItemByEventIdEventIdReceivedInvocations.append(eventId)
+        }
         if let getEventTimelineItemByEventIdEventIdClosure = getEventTimelineItemByEventIdEventIdClosure {
             return try await getEventTimelineItemByEventIdEventIdClosure(eventId)
         } else {
@@ -17125,7 +17548,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         getEventTimelineItemByTransactionIdTransactionIdCallsCount += 1
         getEventTimelineItemByTransactionIdTransactionIdReceivedTransactionId = transactionId
-        getEventTimelineItemByTransactionIdTransactionIdReceivedInvocations.append(transactionId)
+        DispatchQueue.main.async {
+            self.getEventTimelineItemByTransactionIdTransactionIdReceivedInvocations.append(transactionId)
+        }
         if let getEventTimelineItemByTransactionIdTransactionIdClosure = getEventTimelineItemByTransactionIdTransactionIdClosure {
             return try await getEventTimelineItemByTransactionIdTransactionIdClosure(transactionId)
         } else {
@@ -17198,6 +17623,81 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
     }
 
+    //MARK: - loadReplyDetails
+
+    open var loadReplyDetailsEventIdStrThrowableError: Error?
+    var loadReplyDetailsEventIdStrUnderlyingCallsCount = 0
+    open var loadReplyDetailsEventIdStrCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadReplyDetailsEventIdStrUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadReplyDetailsEventIdStrUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadReplyDetailsEventIdStrUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadReplyDetailsEventIdStrUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loadReplyDetailsEventIdStrCalled: Bool {
+        return loadReplyDetailsEventIdStrCallsCount > 0
+    }
+    open var loadReplyDetailsEventIdStrReceivedEventIdStr: String?
+    open var loadReplyDetailsEventIdStrReceivedInvocations: [String] = []
+
+    var loadReplyDetailsEventIdStrUnderlyingReturnValue: InReplyToDetails!
+    open var loadReplyDetailsEventIdStrReturnValue: InReplyToDetails! {
+        get {
+            if Thread.isMainThread {
+                return loadReplyDetailsEventIdStrUnderlyingReturnValue
+            } else {
+                var returnValue: InReplyToDetails? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadReplyDetailsEventIdStrUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadReplyDetailsEventIdStrUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadReplyDetailsEventIdStrUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var loadReplyDetailsEventIdStrClosure: ((String) async throws -> InReplyToDetails)?
+
+    open override func loadReplyDetails(eventIdStr: String) async throws -> InReplyToDetails {
+        if let error = loadReplyDetailsEventIdStrThrowableError {
+            throw error
+        }
+        loadReplyDetailsEventIdStrCallsCount += 1
+        loadReplyDetailsEventIdStrReceivedEventIdStr = eventIdStr
+        DispatchQueue.main.async {
+            self.loadReplyDetailsEventIdStrReceivedInvocations.append(eventIdStr)
+        }
+        if let loadReplyDetailsEventIdStrClosure = loadReplyDetailsEventIdStrClosure {
+            return try await loadReplyDetailsEventIdStrClosure(eventIdStr)
+        } else {
+            return loadReplyDetailsEventIdStrReturnValue
+        }
+    }
+
     //MARK: - markAsRead
 
     open var markAsReadReceiptTypeThrowableError: Error?
@@ -17238,7 +17738,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         markAsReadReceiptTypeCallsCount += 1
         markAsReadReceiptTypeReceivedReceiptType = receiptType
-        markAsReadReceiptTypeReceivedInvocations.append(receiptType)
+        DispatchQueue.main.async {
+            self.markAsReadReceiptTypeReceivedInvocations.append(receiptType)
+        }
         try await markAsReadReceiptTypeClosure?(receiptType)
     }
 
@@ -17307,7 +17809,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         paginateBackwardsNumEventsCallsCount += 1
         paginateBackwardsNumEventsReceivedNumEvents = numEvents
-        paginateBackwardsNumEventsReceivedInvocations.append(numEvents)
+        DispatchQueue.main.async {
+            self.paginateBackwardsNumEventsReceivedInvocations.append(numEvents)
+        }
         if let paginateBackwardsNumEventsClosure = paginateBackwardsNumEventsClosure {
             return try await paginateBackwardsNumEventsClosure(numEvents)
         } else {
@@ -17380,7 +17884,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         redactEventItemReasonCallsCount += 1
         redactEventItemReasonReceivedArguments = (item: item, reason: reason)
-        redactEventItemReasonReceivedInvocations.append((item: item, reason: reason))
+        DispatchQueue.main.async {
+            self.redactEventItemReasonReceivedInvocations.append((item: item, reason: reason))
+        }
         if let redactEventItemReasonClosure = redactEventItemReasonClosure {
             return try await redactEventItemReasonClosure(item, reason)
         } else {
@@ -17424,7 +17930,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open override func retryDecryption(sessionIds: [String]) {
         retryDecryptionSessionIdsCallsCount += 1
         retryDecryptionSessionIdsReceivedSessionIds = sessionIds
-        retryDecryptionSessionIdsReceivedInvocations.append(sessionIds)
+        DispatchQueue.main.async {
+            self.retryDecryptionSessionIdsReceivedInvocations.append(sessionIds)
+        }
         retryDecryptionSessionIdsClosure?(sessionIds)
     }
 
@@ -17493,7 +18001,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         sendMsgCallsCount += 1
         sendMsgReceivedMsg = msg
-        sendMsgReceivedInvocations.append(msg)
+        DispatchQueue.main.async {
+            self.sendMsgReceivedInvocations.append(msg)
+        }
         if let sendMsgClosure = sendMsgClosure {
             return try await sendMsgClosure(msg)
         } else {
@@ -17562,7 +18072,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open override func sendAudio(url: String, audioInfo: AudioInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?) -> SendAttachmentJoinHandle {
         sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherCallsCount += 1
         sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherReceivedArguments = (url: url, audioInfo: audioInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher)
-        sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherReceivedInvocations.append((url: url, audioInfo: audioInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher))
+        DispatchQueue.main.async {
+            self.sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherReceivedInvocations.append((url: url, audioInfo: audioInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher))
+        }
         if let sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherClosure = sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherClosure {
             return sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherClosure(url, audioInfo, caption, formattedCaption, progressWatcher)
         } else {
@@ -17631,7 +18143,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open override func sendFile(url: String, fileInfo: FileInfo, progressWatcher: ProgressWatcher?) -> SendAttachmentJoinHandle {
         sendFileUrlFileInfoProgressWatcherCallsCount += 1
         sendFileUrlFileInfoProgressWatcherReceivedArguments = (url: url, fileInfo: fileInfo, progressWatcher: progressWatcher)
-        sendFileUrlFileInfoProgressWatcherReceivedInvocations.append((url: url, fileInfo: fileInfo, progressWatcher: progressWatcher))
+        DispatchQueue.main.async {
+            self.sendFileUrlFileInfoProgressWatcherReceivedInvocations.append((url: url, fileInfo: fileInfo, progressWatcher: progressWatcher))
+        }
         if let sendFileUrlFileInfoProgressWatcherClosure = sendFileUrlFileInfoProgressWatcherClosure {
             return sendFileUrlFileInfoProgressWatcherClosure(url, fileInfo, progressWatcher)
         } else {
@@ -17700,7 +18214,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open override func sendImage(url: String, thumbnailUrl: String?, imageInfo: ImageInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?) -> SendAttachmentJoinHandle {
         sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherCallsCount += 1
         sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherReceivedArguments = (url: url, thumbnailUrl: thumbnailUrl, imageInfo: imageInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher)
-        sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherReceivedInvocations.append((url: url, thumbnailUrl: thumbnailUrl, imageInfo: imageInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher))
+        DispatchQueue.main.async {
+            self.sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherReceivedInvocations.append((url: url, thumbnailUrl: thumbnailUrl, imageInfo: imageInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher))
+        }
         if let sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherClosure = sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherClosure {
             return sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherClosure(url, thumbnailUrl, imageInfo, caption, formattedCaption, progressWatcher)
         } else {
@@ -17744,7 +18260,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open override func sendLocation(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?) async {
         sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeCallsCount += 1
         sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReceivedArguments = (body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType)
-        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReceivedInvocations.append((body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType))
+        DispatchQueue.main.async {
+            self.sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReceivedInvocations.append((body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType))
+        }
         await sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeClosure?(body, geoUri, description, zoomLevel, assetType)
     }
 
@@ -17788,7 +18306,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         sendPollResponsePollStartIdAnswersCallsCount += 1
         sendPollResponsePollStartIdAnswersReceivedArguments = (pollStartId: pollStartId, answers: answers)
-        sendPollResponsePollStartIdAnswersReceivedInvocations.append((pollStartId: pollStartId, answers: answers))
+        DispatchQueue.main.async {
+            self.sendPollResponsePollStartIdAnswersReceivedInvocations.append((pollStartId: pollStartId, answers: answers))
+        }
         try await sendPollResponsePollStartIdAnswersClosure?(pollStartId, answers)
     }
 
@@ -17832,7 +18352,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         sendReadReceiptReceiptTypeEventIdCallsCount += 1
         sendReadReceiptReceiptTypeEventIdReceivedArguments = (receiptType: receiptType, eventId: eventId)
-        sendReadReceiptReceiptTypeEventIdReceivedInvocations.append((receiptType: receiptType, eventId: eventId))
+        DispatchQueue.main.async {
+            self.sendReadReceiptReceiptTypeEventIdReceivedInvocations.append((receiptType: receiptType, eventId: eventId))
+        }
         try await sendReadReceiptReceiptTypeEventIdClosure?(receiptType, eventId)
     }
 
@@ -17876,7 +18398,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         sendReplyMsgReplyItemCallsCount += 1
         sendReplyMsgReplyItemReceivedArguments = (msg: msg, replyItem: replyItem)
-        sendReplyMsgReplyItemReceivedInvocations.append((msg: msg, replyItem: replyItem))
+        DispatchQueue.main.async {
+            self.sendReplyMsgReplyItemReceivedInvocations.append((msg: msg, replyItem: replyItem))
+        }
         try await sendReplyMsgReplyItemClosure?(msg, replyItem)
     }
 
@@ -17941,7 +18465,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open override func sendVideo(url: String, thumbnailUrl: String?, videoInfo: VideoInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?) -> SendAttachmentJoinHandle {
         sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherCallsCount += 1
         sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherReceivedArguments = (url: url, thumbnailUrl: thumbnailUrl, videoInfo: videoInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher)
-        sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherReceivedInvocations.append((url: url, thumbnailUrl: thumbnailUrl, videoInfo: videoInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher))
+        DispatchQueue.main.async {
+            self.sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherReceivedInvocations.append((url: url, thumbnailUrl: thumbnailUrl, videoInfo: videoInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher))
+        }
         if let sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherClosure = sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherClosure {
             return sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherClosure(url, thumbnailUrl, videoInfo, caption, formattedCaption, progressWatcher)
         } else {
@@ -18010,7 +18536,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open override func sendVoiceMessage(url: String, audioInfo: AudioInfo, waveform: [UInt16], caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?) -> SendAttachmentJoinHandle {
         sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherCallsCount += 1
         sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherReceivedArguments = (url: url, audioInfo: audioInfo, waveform: waveform, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher)
-        sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherReceivedInvocations.append((url: url, audioInfo: audioInfo, waveform: waveform, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher))
+        DispatchQueue.main.async {
+            self.sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherReceivedInvocations.append((url: url, audioInfo: audioInfo, waveform: waveform, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher))
+        }
         if let sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherClosure = sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherClosure {
             return sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherClosure(url, audioInfo, waveform, caption, formattedCaption, progressWatcher)
         } else {
@@ -18083,7 +18611,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         subscribeToBackPaginationStatusListenerCallsCount += 1
         subscribeToBackPaginationStatusListenerReceivedListener = listener
-        subscribeToBackPaginationStatusListenerReceivedInvocations.append(listener)
+        DispatchQueue.main.async {
+            self.subscribeToBackPaginationStatusListenerReceivedInvocations.append(listener)
+        }
         if let subscribeToBackPaginationStatusListenerClosure = subscribeToBackPaginationStatusListenerClosure {
             return try await subscribeToBackPaginationStatusListenerClosure(listener)
         } else {
@@ -18131,7 +18661,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         toggleReactionEventIdKeyCallsCount += 1
         toggleReactionEventIdKeyReceivedArguments = (eventId: eventId, key: key)
-        toggleReactionEventIdKeyReceivedInvocations.append((eventId: eventId, key: key))
+        DispatchQueue.main.async {
+            self.toggleReactionEventIdKeyReceivedInvocations.append((eventId: eventId, key: key))
+        }
         try await toggleReactionEventIdKeyClosure?(eventId, key)
     }
 }
@@ -19620,7 +20152,9 @@ open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver {
     open override func run(room: Room, capabilitiesProvider: WidgetCapabilitiesProvider) async {
         runRoomCapabilitiesProviderCallsCount += 1
         runRoomCapabilitiesProviderReceivedArguments = (room: room, capabilitiesProvider: capabilitiesProvider)
-        runRoomCapabilitiesProviderReceivedInvocations.append((room: room, capabilitiesProvider: capabilitiesProvider))
+        DispatchQueue.main.async {
+            self.runRoomCapabilitiesProviderReceivedInvocations.append((room: room, capabilitiesProvider: capabilitiesProvider))
+        }
         await runRoomCapabilitiesProviderClosure?(room, capabilitiesProvider)
     }
 }
@@ -19761,7 +20295,9 @@ open class WidgetDriverHandleSDKMock: MatrixRustSDK.WidgetDriverHandle {
     open override func send(msg: String) async -> Bool {
         sendMsgCallsCount += 1
         sendMsgReceivedMsg = msg
-        sendMsgReceivedInvocations.append(msg)
+        DispatchQueue.main.async {
+            self.sendMsgReceivedInvocations.append(msg)
+        }
         if let sendMsgClosure = sendMsgClosure {
             return await sendMsgClosure(msg)
         } else {
