@@ -137,6 +137,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
         
+        // Loading the draft requires the subscriptions to be set up first otherwise the room won't be be able to propagate the information to the composer.
         viewModel.loadDraft()
     }
     
