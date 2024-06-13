@@ -197,7 +197,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
             XCTAssertEqual(draft.plainText, "Hello world!")
             XCTAssertNil(draft.htmlText)
             XCTAssertEqual(draft.draftType, .newMessage)
-            expectation.fulfill()
+            defer { expectation.fulfill() }
+            return .success(())
         }
         
         viewModel.context.composerFormattingEnabled = false
@@ -216,7 +217,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
             XCTAssertEqual(draft.plainText, "__Hello__ world!")
             XCTAssertEqual(draft.htmlText, "<strong>Hello</strong> world!")
             XCTAssertEqual(draft.draftType, .newMessage)
-            expectation.fulfill()
+            defer { expectation.fulfill() }
+            return .success(())
         }
         
         viewModel.context.composerFormattingEnabled = true
@@ -235,7 +237,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
             XCTAssertEqual(draft.plainText, "Hello world!")
             XCTAssertNil(draft.htmlText)
             XCTAssertEqual(draft.draftType, .edit(eventID: "testID"))
-            expectation.fulfill()
+            defer { expectation.fulfill() }
+            return .success(())
         }
         
         viewModel.context.composerFormattingEnabled = false
@@ -255,7 +258,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
             XCTAssertEqual(draft.plainText, "Hello world!")
             XCTAssertNil(draft.htmlText)
             XCTAssertEqual(draft.draftType, .reply(eventID: "testID"))
-            expectation.fulfill()
+            defer { expectation.fulfill() }
+            return .success(())
         }
         
         viewModel.context.composerFormattingEnabled = false
@@ -280,7 +284,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
             XCTAssertEqual(draft.plainText, "")
             XCTAssertNil(draft.htmlText)
             XCTAssertEqual(draft.draftType, .reply(eventID: "testID"))
-            expectation.fulfill()
+            defer { expectation.fulfill() }
+            return .success(())
         }
         
         viewModel.context.composerFormattingEnabled = false
@@ -301,7 +306,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
     func testClearDraftWhenEmptyNormalMessage() async {
         let expectation = expectation(description: "Wait for draft to be cleared")
         draftServiceMock.clearDraftClosure = {
-            expectation.fulfill()
+            defer { expectation.fulfill() }
+            return .success(())
         }
         
         viewModel.context.composerFormattingEnabled = false
@@ -316,7 +322,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
     func testClearDraftForNonTextMode() async {
         let expectation = expectation(description: "Wait for draft to be cleared")
         draftServiceMock.clearDraftClosure = {
-            expectation.fulfill()
+            defer { expectation.fulfill() }
+            return .success(())
         }
         
         viewModel.context.composerFormattingEnabled = false

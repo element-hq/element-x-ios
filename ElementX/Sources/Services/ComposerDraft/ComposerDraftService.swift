@@ -27,12 +27,14 @@ final class ComposerDraftService: ComposerDraftServiceProtocol {
         self.timelineItemfactory = timelineItemfactory
     }
     
-    func saveDraft(_ draft: ComposerDraftProxy) async {
+    func saveDraft(_ draft: ComposerDraftProxy) async -> Result<Void, ComposerDraftServiceError> {
         switch await roomProxy.saveDraft(draft.toRust) {
         case .success:
             MXLog.info("Successfully saved draft")
+            return .success(())
         case .failure(let error):
             MXLog.info("Failed to save draft: \(error)")
+            return .failure(.failedToSaveDraft)
         }
     }
     
@@ -59,12 +61,14 @@ final class ComposerDraftService: ComposerDraftServiceProtocol {
         }
     }
     
-    func clearDraft() async {
+    func clearDraft() async -> Result<Void, ComposerDraftServiceError> {
         switch await roomProxy.clearDraft() {
         case .success:
             MXLog.info("Successfully cleared draft")
+            return .success(())
         case .failure(let error):
             MXLog.info("Failed to clear draft: \(error)")
+            return .failure(.failedToClearDraft)
         }
     }
 }

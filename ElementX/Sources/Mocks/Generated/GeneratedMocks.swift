@@ -4292,13 +4292,42 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
     }
     var saveDraftReceivedDraft: ComposerDraftProxy?
     var saveDraftReceivedInvocations: [ComposerDraftProxy] = []
-    var saveDraftClosure: ((ComposerDraftProxy) async -> Void)?
 
-    func saveDraft(_ draft: ComposerDraftProxy) async {
+    var saveDraftUnderlyingReturnValue: Result<Void, ComposerDraftServiceError>!
+    var saveDraftReturnValue: Result<Void, ComposerDraftServiceError>! {
+        get {
+            if Thread.isMainThread {
+                return saveDraftUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ComposerDraftServiceError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = saveDraftUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                saveDraftUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    saveDraftUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var saveDraftClosure: ((ComposerDraftProxy) async -> Result<Void, ComposerDraftServiceError>)?
+
+    func saveDraft(_ draft: ComposerDraftProxy) async -> Result<Void, ComposerDraftServiceError> {
         saveDraftCallsCount += 1
         saveDraftReceivedDraft = draft
         saveDraftReceivedInvocations.append(draft)
-        await saveDraftClosure?(draft)
+        if let saveDraftClosure = saveDraftClosure {
+            return await saveDraftClosure(draft)
+        } else {
+            return saveDraftReturnValue
+        }
     }
     //MARK: - loadDraft
 
@@ -4393,11 +4422,40 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
     var clearDraftCalled: Bool {
         return clearDraftCallsCount > 0
     }
-    var clearDraftClosure: (() async -> Void)?
 
-    func clearDraft() async {
+    var clearDraftUnderlyingReturnValue: Result<Void, ComposerDraftServiceError>!
+    var clearDraftReturnValue: Result<Void, ComposerDraftServiceError>! {
+        get {
+            if Thread.isMainThread {
+                return clearDraftUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ComposerDraftServiceError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearDraftUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearDraftUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearDraftUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var clearDraftClosure: (() async -> Result<Void, ComposerDraftServiceError>)?
+
+    func clearDraft() async -> Result<Void, ComposerDraftServiceError> {
         clearDraftCallsCount += 1
-        await clearDraftClosure?()
+        if let clearDraftClosure = clearDraftClosure {
+            return await clearDraftClosure()
+        } else {
+            return clearDraftReturnValue
+        }
     }
     //MARK: - getReply
 

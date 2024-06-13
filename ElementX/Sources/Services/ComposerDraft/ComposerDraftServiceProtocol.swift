@@ -67,12 +67,14 @@ extension ComposerDraftProxy {
 enum ComposerDraftServiceError: Error {
     case failedToLoadDraft
     case failedToLoadReply
+    case failedToSaveDraft
+    case failedToClearDraft
 }
 
 // sourcery: AutoMockable
 protocol ComposerDraftServiceProtocol {
-    func saveDraft(_ draft: ComposerDraftProxy) async
+    func saveDraft(_ draft: ComposerDraftProxy) async -> Result<Void, ComposerDraftServiceError>
     func loadDraft() async -> Result<ComposerDraftProxy?, ComposerDraftServiceError>
-    func clearDraft() async
+    func clearDraft() async -> Result<Void, ComposerDraftServiceError>
     func getReply(eventID: String) async -> Result<TimelineItemReply, ComposerDraftServiceError>
 }
