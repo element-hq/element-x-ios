@@ -10248,6 +10248,46 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
     }
 
+    //MARK: - clearComposerDraft
+
+    open var clearComposerDraftThrowableError: Error?
+    var clearComposerDraftUnderlyingCallsCount = 0
+    open var clearComposerDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return clearComposerDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearComposerDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearComposerDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearComposerDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var clearComposerDraftCalled: Bool {
+        return clearComposerDraftCallsCount > 0
+    }
+    open var clearComposerDraftClosure: (() async throws -> Void)?
+
+    open override func clearComposerDraft() async throws {
+        if let error = clearComposerDraftThrowableError {
+            throw error
+        }
+        clearComposerDraftCallsCount += 1
+        try await clearComposerDraftClosure?()
+    }
+
     //MARK: - discardRoomKey
 
     open var discardRoomKeyThrowableError: Error?
@@ -11393,6 +11433,75 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         try await leaveClosure?()
     }
 
+    //MARK: - loadComposerDraft
+
+    open var loadComposerDraftThrowableError: Error?
+    var loadComposerDraftUnderlyingCallsCount = 0
+    open var loadComposerDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadComposerDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadComposerDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadComposerDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadComposerDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loadComposerDraftCalled: Bool {
+        return loadComposerDraftCallsCount > 0
+    }
+
+    var loadComposerDraftUnderlyingReturnValue: ComposerDraft?
+    open var loadComposerDraftReturnValue: ComposerDraft? {
+        get {
+            if Thread.isMainThread {
+                return loadComposerDraftUnderlyingReturnValue
+            } else {
+                var returnValue: ComposerDraft?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadComposerDraftUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadComposerDraftUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadComposerDraftUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var loadComposerDraftClosure: (() async throws -> ComposerDraft?)?
+
+    open override func loadComposerDraft() async throws -> ComposerDraft? {
+        if let error = loadComposerDraftThrowableError {
+            throw error
+        }
+        loadComposerDraftCallsCount += 1
+        if let loadComposerDraftClosure = loadComposerDraftClosure {
+            return try await loadComposerDraftClosure()
+        } else {
+            return loadComposerDraftReturnValue
+        }
+    }
+
     //MARK: - markAsRead
 
     open var markAsReadReceiptTypeThrowableError: Error?
@@ -12395,6 +12504,50 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         } else {
             return roomInfoReturnValue
         }
+    }
+
+    //MARK: - saveComposerDraft
+
+    open var saveComposerDraftDraftThrowableError: Error?
+    var saveComposerDraftDraftUnderlyingCallsCount = 0
+    open var saveComposerDraftDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return saveComposerDraftDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = saveComposerDraftDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                saveComposerDraftDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    saveComposerDraftDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var saveComposerDraftDraftCalled: Bool {
+        return saveComposerDraftDraftCallsCount > 0
+    }
+    open var saveComposerDraftDraftReceivedDraft: ComposerDraft?
+    open var saveComposerDraftDraftReceivedInvocations: [ComposerDraft] = []
+    open var saveComposerDraftDraftClosure: ((ComposerDraft) async throws -> Void)?
+
+    open override func saveComposerDraft(draft: ComposerDraft) async throws {
+        if let error = saveComposerDraftDraftThrowableError {
+            throw error
+        }
+        saveComposerDraftDraftCallsCount += 1
+        saveComposerDraftDraftReceivedDraft = draft
+        saveComposerDraftDraftReceivedInvocations.append(draft)
+        try await saveComposerDraftDraftClosure?(draft)
     }
 
     //MARK: - sendCallNotification
@@ -16621,13 +16774,13 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open var addListenerListenerReceivedListener: TimelineListener?
     open var addListenerListenerReceivedInvocations: [TimelineListener] = []
 
-    var addListenerListenerUnderlyingReturnValue: RoomTimelineListenerResult!
-    open var addListenerListenerReturnValue: RoomTimelineListenerResult! {
+    var addListenerListenerUnderlyingReturnValue: TaskHandle!
+    open var addListenerListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
                 return addListenerListenerUnderlyingReturnValue
             } else {
-                var returnValue: RoomTimelineListenerResult? = nil
+                var returnValue: TaskHandle? = nil
                 DispatchQueue.main.sync {
                     returnValue = addListenerListenerUnderlyingReturnValue
                 }
@@ -16645,9 +16798,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
             }
         }
     }
-    open var addListenerListenerClosure: ((TimelineListener) async -> RoomTimelineListenerResult)?
+    open var addListenerListenerClosure: ((TimelineListener) async -> TaskHandle)?
 
-    open override func addListener(listener: TimelineListener) async -> RoomTimelineListenerResult {
+    open override func addListener(listener: TimelineListener) async -> TaskHandle {
         addListenerListenerCallsCount += 1
         addListenerListenerReceivedListener = listener
         addListenerListenerReceivedInvocations.append(listener)
@@ -17195,6 +17348,79 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
             return await latestEventClosure()
         } else {
             return latestEventReturnValue
+        }
+    }
+
+    //MARK: - loadReplyDetails
+
+    open var loadReplyDetailsEventIdStrThrowableError: Error?
+    var loadReplyDetailsEventIdStrUnderlyingCallsCount = 0
+    open var loadReplyDetailsEventIdStrCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadReplyDetailsEventIdStrUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadReplyDetailsEventIdStrUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadReplyDetailsEventIdStrUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadReplyDetailsEventIdStrUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loadReplyDetailsEventIdStrCalled: Bool {
+        return loadReplyDetailsEventIdStrCallsCount > 0
+    }
+    open var loadReplyDetailsEventIdStrReceivedEventIdStr: String?
+    open var loadReplyDetailsEventIdStrReceivedInvocations: [String] = []
+
+    var loadReplyDetailsEventIdStrUnderlyingReturnValue: InReplyToDetails!
+    open var loadReplyDetailsEventIdStrReturnValue: InReplyToDetails! {
+        get {
+            if Thread.isMainThread {
+                return loadReplyDetailsEventIdStrUnderlyingReturnValue
+            } else {
+                var returnValue: InReplyToDetails? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadReplyDetailsEventIdStrUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadReplyDetailsEventIdStrUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadReplyDetailsEventIdStrUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var loadReplyDetailsEventIdStrClosure: ((String) async throws -> InReplyToDetails)?
+
+    open override func loadReplyDetails(eventIdStr: String) async throws -> InReplyToDetails {
+        if let error = loadReplyDetailsEventIdStrThrowableError {
+            throw error
+        }
+        loadReplyDetailsEventIdStrCallsCount += 1
+        loadReplyDetailsEventIdStrReceivedEventIdStr = eventIdStr
+        loadReplyDetailsEventIdStrReceivedInvocations.append(eventIdStr)
+        if let loadReplyDetailsEventIdStrClosure = loadReplyDetailsEventIdStrClosure {
+            return try await loadReplyDetailsEventIdStrClosure(eventIdStr)
+        } else {
+            return loadReplyDetailsEventIdStrReturnValue
         }
     }
 
