@@ -549,6 +549,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy)
         
+        let composerDraftService = ComposerDraftService(roomProxy: roomProxy, timelineItemfactory: timelineItemFactory)
+        
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          focussedEventID: focussedEventID,
                                                          timelineController: timelineController,
@@ -558,7 +560,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          emojiProvider: emojiProvider,
                                                          completionSuggestionService: completionSuggestionService,
                                                          appMediator: appMediator,
-                                                         appSettings: appSettings)
+                                                         appSettings: appSettings,
+                                                         composerDraftService: composerDraftService)
         
         let coordinator = RoomScreenCoordinator(parameters: parameters)
         coordinator.actions

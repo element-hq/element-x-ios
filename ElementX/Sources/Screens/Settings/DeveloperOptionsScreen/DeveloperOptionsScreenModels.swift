@@ -46,6 +46,7 @@ enum DeveloperOptionsScreenViewAction {
 protocol DeveloperOptionsProtocol: AnyObject {
     var logLevel: TracingConfiguration.LogLevel { get set }
     var hideUnreadMessagesBadge: Bool { get set }
+    var draftRestoringEnabled: Bool { get set }
     var elementCallBaseURL: URL { get set }
 }
 

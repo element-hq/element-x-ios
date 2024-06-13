@@ -26,6 +26,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     private var wysiwygViewModel: WysiwygComposerViewModel!
     private var viewModel: ComposerToolbarViewModel!
     private var completionSuggestionServiceMock: CompletionSuggestionServiceMock!
+    private var draftServiceMock: ComposerDraftServiceMock!
 
     override func setUp() {
         AppSettings.resetAllSettings()
@@ -33,11 +34,13 @@ class ComposerToolbarViewModelTests: XCTestCase {
         ServiceLocator.shared.register(appSettings: appSettings)
         wysiwygViewModel = WysiwygComposerViewModel()
         completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
+        draftServiceMock = ComposerDraftServiceMock()
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: completionSuggestionServiceMock,
                                              mediaProvider: MockMediaProvider(),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                             analyticsService: ServiceLocator.shared.analytics)
+                                             analyticsService: ServiceLocator.shared.analytics,
+                                             composerDraftService: draftServiceMock)
         
         viewModel.context.composerFormattingEnabled = true
     }
@@ -113,7 +116,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MockMediaProvider(),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                             analyticsService: ServiceLocator.shared.analytics)
+                                             analyticsService: ServiceLocator.shared.analytics,
+                                             composerDraftService: draftServiceMock)
         
         XCTAssertEqual(viewModel.state.suggestions, suggestions)
     }
@@ -185,6 +189,304 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.send(viewAction: .sendMessage)
         
         try await deferred.fulfill()
+    }
+    
+    // MARK: - Draft
+    
+    func testSaveDraftPlainText() async {
+        let expectation = expectation(description: "Wait for draft to be saved")
+        draftServiceMock.saveDraftClosure = { draft in
+            XCTAssertEqual(draft.plainText, "Hello world!")
+            XCTAssertNil(draft.htmlText)
+            XCTAssertEqual(draft.draftType, .newMessage)
+            defer { expectation.fulfill() }
+            return .success(())
+        }
+        
+        viewModel.context.composerFormattingEnabled = false
+        viewModel.context.plainComposerText = .init(string: "Hello world!")
+        viewModel.process(roomAction: .saveDraft)
+        
+        await fulfillment(of: [expectation], timeout: 10)
+        XCTAssertEqual(draftServiceMock.saveDraftCallsCount, 1)
+        XCTAssertFalse(draftServiceMock.clearDraftCalled)
+        XCTAssertFalse(draftServiceMock.loadDraftCalled)
+    }
+    
+    func testSaveDraftFormattedText() async {
+        let expectation = expectation(description: "Wait for draft to be saved")
+        draftServiceMock.saveDraftClosure = { draft in
+            XCTAssertEqual(draft.plainText, "__Hello__ world!")
+            XCTAssertEqual(draft.htmlText, "<strong>Hello</strong> world!")
+            XCTAssertEqual(draft.draftType, .newMessage)
+            defer { expectation.fulfill() }
+            return .success(())
+        }
+        
+        viewModel.context.composerFormattingEnabled = true
+        wysiwygViewModel.setHtmlContent("<strong>Hello</strong> world!")
+        viewModel.process(roomAction: .saveDraft)
+        
+        await fulfillment(of: [expectation], timeout: 10)
+        XCTAssertEqual(draftServiceMock.saveDraftCallsCount, 1)
+        XCTAssertFalse(draftServiceMock.clearDraftCalled)
+        XCTAssertFalse(draftServiceMock.loadDraftCalled)
+    }
+    
+    func testSaveDraftEdit() async {
+        let expectation = expectation(description: "Wait for draft to be saved")
+        draftServiceMock.saveDraftClosure = { draft in
+            XCTAssertEqual(draft.plainText, "Hello world!")
+            XCTAssertNil(draft.htmlText)
+            XCTAssertEqual(draft.draftType, .edit(eventID: "testID"))
+            defer { expectation.fulfill() }
+            return .success(())
+        }
+        
+        viewModel.context.composerFormattingEnabled = false
+        viewModel.process(roomAction: .setMode(mode: .edit(originalItemId: .init(timelineID: "", eventID: "testID"))))
+        viewModel.context.plainComposerText = .init(string: "Hello world!")
+        viewModel.process(roomAction: .saveDraft)
+        
+        await fulfillment(of: [expectation], timeout: 10)
+        XCTAssertEqual(draftServiceMock.saveDraftCallsCount, 1)
+        XCTAssertFalse(draftServiceMock.clearDraftCalled)
+        XCTAssertFalse(draftServiceMock.loadDraftCalled)
+    }
+    
+    func testSaveDraftReply() async {
+        let expectation = expectation(description: "Wait for draft to be saved")
+        draftServiceMock.saveDraftClosure = { draft in
+            XCTAssertEqual(draft.plainText, "Hello world!")
+            XCTAssertNil(draft.htmlText)
+            XCTAssertEqual(draft.draftType, .reply(eventID: "testID"))
+            defer { expectation.fulfill() }
+            return .success(())
+        }
+        
+        viewModel.context.composerFormattingEnabled = false
+        viewModel.process(roomAction: .setMode(mode: .reply(itemID: .init(timelineID: "",
+                                                                          eventID: "testID"),
+            replyDetails: .loaded(sender: .init(id: ""),
+                                  eventID: "testID",
+                                  eventContent: .message(.text(.init(body: "reply text")))),
+            isThread: false)))
+        viewModel.context.plainComposerText = .init(string: "Hello world!")
+        viewModel.process(roomAction: .saveDraft)
+        
+        await fulfillment(of: [expectation], timeout: 10)
+        XCTAssertEqual(draftServiceMock.saveDraftCallsCount, 1)
+        XCTAssertFalse(draftServiceMock.clearDraftCalled)
+        XCTAssertFalse(draftServiceMock.loadDraftCalled)
+    }
+    
+    func testSaveDraftWhenEmptyReply() async {
+        let expectation = expectation(description: "Wait for draft to be saved")
+        draftServiceMock.saveDraftClosure = { draft in
+            XCTAssertEqual(draft.plainText, "")
+            XCTAssertNil(draft.htmlText)
+            XCTAssertEqual(draft.draftType, .reply(eventID: "testID"))
+            defer { expectation.fulfill() }
+            return .success(())
+        }
+        
+        viewModel.context.composerFormattingEnabled = false
+        viewModel.process(roomAction: .setMode(mode: .reply(itemID: .init(timelineID: "",
+                                                                          eventID: "testID"),
+            replyDetails: .loaded(sender: .init(id: ""),
+                                  eventID: "testID",
+                                  eventContent: .message(.text(.init(body: "reply text")))),
+            isThread: false)))
+        viewModel.process(roomAction: .saveDraft)
+        
+        await fulfillment(of: [expectation], timeout: 10)
+        XCTAssertEqual(draftServiceMock.saveDraftCallsCount, 1)
+        XCTAssertFalse(draftServiceMock.clearDraftCalled)
+        XCTAssertFalse(draftServiceMock.loadDraftCalled)
+    }
+    
+    func testClearDraftWhenEmptyNormalMessage() async {
+        let expectation = expectation(description: "Wait for draft to be cleared")
+        draftServiceMock.clearDraftClosure = {
+            defer { expectation.fulfill() }
+            return .success(())
+        }
+        
+        viewModel.context.composerFormattingEnabled = false
+        viewModel.process(roomAction: .saveDraft)
+        
+        await fulfillment(of: [expectation], timeout: 10)
+        XCTAssertFalse(draftServiceMock.saveDraftCalled)
+        XCTAssertEqual(draftServiceMock.clearDraftCallsCount, 1)
+        XCTAssertFalse(draftServiceMock.loadDraftCalled)
+    }
+    
+    func testClearDraftForNonTextMode() async {
+        let expectation = expectation(description: "Wait for draft to be cleared")
+        draftServiceMock.clearDraftClosure = {
+            defer { expectation.fulfill() }
+            return .success(())
+        }
+        
+        viewModel.context.composerFormattingEnabled = false
+        let waveformData: [Float] = Array(repeating: 1.0, count: 1000)
+        viewModel.context.plainComposerText = .init(string: "Hello world!")
+        viewModel.process(roomAction: .setMode(mode: .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData), isUploading: false)))
+        viewModel.process(roomAction: .saveDraft)
+
+        await fulfillment(of: [expectation], timeout: 10)
+        XCTAssertFalse(draftServiceMock.saveDraftCalled)
+        XCTAssertEqual(draftServiceMock.clearDraftCallsCount, 1)
+        XCTAssertFalse(draftServiceMock.loadDraftCalled)
+    }
+    
+    func testNothingToRestore() async {
+        viewModel.context.composerFormattingEnabled = false
+        let expectation = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadDraftClosure = {
+            defer { expectation.fulfill() }
+            return .success(nil)
+        }
+        
+        viewModel.process(roomAction: .loadDraft)
+        await fulfillment(of: [expectation], timeout: 10)
+        XCTAssertFalse(viewModel.context.composerFormattingEnabled)
+        XCTAssertTrue(viewModel.state.composerEmpty)
+        XCTAssertEqual(viewModel.state.composerMode, .default)
+    }
+    
+    func testRestoreNormalPlainTextMessage() async {
+        viewModel.context.composerFormattingEnabled = false
+        let expectation = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadDraftClosure = {
+            defer { expectation.fulfill() }
+            return .success(.init(plainText: "Hello world!",
+                                  htmlText: nil,
+                                  draftType: .newMessage))
+        }
+        viewModel.process(roomAction: .loadDraft)
+        
+        await fulfillment(of: [expectation], timeout: 10)
+        XCTAssertFalse(viewModel.context.composerFormattingEnabled)
+        XCTAssertEqual(viewModel.state.composerMode, .default)
+        XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world!"))
+    }
+    
+    func testRestoreNormalFormattedTextMessage() async {
+        viewModel.context.composerFormattingEnabled = false
+        let expectation = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadDraftClosure = {
+            defer { expectation.fulfill() }
+            return .success(.init(plainText: "__Hello__ world!",
+                                  htmlText: "<strong>Hello</strong> world!",
+                                  draftType: .newMessage))
+        }
+        viewModel.process(roomAction: .loadDraft)
+        
+        await fulfillment(of: [expectation], timeout: 10)
+        XCTAssertTrue(viewModel.context.composerFormattingEnabled)
+        XCTAssertEqual(viewModel.state.composerMode, .default)
+        XCTAssertEqual(wysiwygViewModel.content.html, "<strong>Hello</strong> world!")
+        XCTAssertEqual(wysiwygViewModel.content.markdown, "__Hello__ world!")
+    }
+    
+    func testRestoreEdit() async {
+        viewModel.context.composerFormattingEnabled = false
+        let expectation = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadDraftClosure = {
+            defer { expectation.fulfill() }
+            return .success(.init(plainText: "Hello world!",
+                                  htmlText: nil,
+                                  draftType: .edit(eventID: "testID")))
+        }
+        viewModel.process(roomAction: .loadDraft)
+        
+        await fulfillment(of: [expectation], timeout: 10)
+        XCTAssertFalse(viewModel.context.composerFormattingEnabled)
+        XCTAssertEqual(viewModel.state.composerMode, .edit(originalItemId: .init(timelineID: "", eventID: "testID")))
+        XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world!"))
+    }
+    
+    func testRestoreReply() async {
+        let testEventID = "testID"
+        let text = "Hello world!"
+        let loadedReply = TimelineItemReplyDetails.loaded(sender: .init(id: "userID",
+                                                                        displayName: "Username"),
+                                                          eventID: testEventID,
+                                                          eventContent: .message(.text(.init(body: "Reply text"))))
+        
+        viewModel.context.composerFormattingEnabled = false
+        let draftExpectation = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadDraftClosure = {
+            defer { draftExpectation.fulfill() }
+            return .success(.init(plainText: text,
+                                  htmlText: nil,
+                                  draftType: .reply(eventID: testEventID)))
+        }
+        
+        let loadReplyExpectation = expectation(description: "Wait for reply to be loaded")
+        draftServiceMock.getReplyEventIDClosure = { eventID in
+            defer { loadReplyExpectation.fulfill() }
+            XCTAssertEqual(eventID, testEventID)
+            try? await Task.sleep(for: .seconds(1))
+            return .success(.init(details: loadedReply,
+                                  isThreaded: true))
+        }
+        viewModel.process(roomAction: .loadDraft)
+        
+        await fulfillment(of: [draftExpectation], timeout: 10)
+        XCTAssertFalse(viewModel.context.composerFormattingEnabled)
+        // Testing the loading state first
+        XCTAssertEqual(viewModel.state.composerMode, .reply(itemID: .init(timelineID: "", eventID: testEventID),
+                                                            replyDetails: .loading(eventID: testEventID),
+                                                            isThread: false))
+        XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: text))
+        
+        await fulfillment(of: [loadReplyExpectation], timeout: 10)
+        XCTAssertEqual(viewModel.state.composerMode, .reply(itemID: .init(timelineID: "", eventID: testEventID),
+                                                            replyDetails: loadedReply,
+                                                            isThread: true))
+    }
+    
+    func testRestoreReplyAndCancelReplyMode() async {
+        let testEventID = "testID"
+        let text = "Hello world!"
+        let loadedReply = TimelineItemReplyDetails.loaded(sender: .init(id: "userID",
+                                                                        displayName: "Username"),
+                                                          eventID: testEventID,
+                                                          eventContent: .message(.text(.init(body: "Reply text"))))
+        
+        viewModel.context.composerFormattingEnabled = false
+        let draftExpectation = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadDraftClosure = {
+            defer { draftExpectation.fulfill() }
+            return .success(.init(plainText: text,
+                                  htmlText: nil,
+                                  draftType: .reply(eventID: testEventID)))
+        }
+        
+        let loadReplyExpectation = expectation(description: "Wait for reply to be loaded")
+        draftServiceMock.getReplyEventIDClosure = { eventID in
+            defer { loadReplyExpectation.fulfill() }
+            XCTAssertEqual(eventID, testEventID)
+            try? await Task.sleep(for: .seconds(1))
+            return .success(.init(details: loadedReply,
+                                  isThreaded: true))
+        }
+        viewModel.process(roomAction: .loadDraft)
+        
+        await fulfillment(of: [draftExpectation], timeout: 10)
+        XCTAssertFalse(viewModel.context.composerFormattingEnabled)
+        // Testing the loading state first
+        XCTAssertEqual(viewModel.state.composerMode, .reply(itemID: .init(timelineID: "", eventID: testEventID),
+                                                            replyDetails: .loading(eventID: testEventID),
+                                                            isThread: false))
+        XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: text))
+        
+        // Now we change the state to cancel the reply mode update
+        viewModel.process(viewAction: .cancelReply)
+        await fulfillment(of: [loadReplyExpectation], timeout: 10)
+        XCTAssertEqual(viewModel.state.composerMode, .default)
     }
 }
 

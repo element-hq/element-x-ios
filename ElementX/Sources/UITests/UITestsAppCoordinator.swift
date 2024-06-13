@@ -256,7 +256,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -272,7 +273,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -288,7 +290,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -304,7 +307,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -323,7 +327,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -342,7 +347,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -361,7 +367,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -381,7 +388,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -400,7 +408,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -418,7 +427,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             
@@ -450,7 +460,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -469,7 +480,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -488,7 +500,8 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             composerDraftService: ComposerDraftServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)

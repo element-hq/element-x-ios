@@ -172,6 +172,15 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
+    func getLoadedReplyDetails(eventID: String) async -> Result<InReplyToDetails, TimelineProxyError> {
+        do {
+            return try await .success(timeline.loadReplyDetails(eventIdStr: eventID))
+        } catch {
+            MXLog.error("Failed getting reply details for event \(eventID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Sending
     
     func sendAudio(url: URL,

@@ -265,16 +265,18 @@ class RoomScreenInteractionHandler {
     
     private func processEditMessageEvent(_ messageTimelineItem: EventBasedMessageTimelineItemProtocol) {
         let text: String
+        var htmlText: String?
         switch messageTimelineItem.contentType {
-        case .text:
-            text = messageTimelineItem.body
-        case .emote:
-            text = "/me " + messageTimelineItem.body
+        case .text(let content):
+            text = content.body
+            htmlText = content.formattedBodyHTMLString
+        case .emote(let content):
+            text = "/me " + content.body
         default:
             text = messageTimelineItem.body
         }
         
-        actionsSubject.send(.composer(action: .setText(text: text)))
+        actionsSubject.send(.composer(action: .setText(plainText: text, htmlText: htmlText)))
         actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
     }
     

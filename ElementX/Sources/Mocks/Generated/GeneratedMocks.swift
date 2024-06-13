@@ -4415,6 +4415,273 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
         setSuggestionTriggerClosure?(suggestionTrigger)
     }
 }
+class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
+
+    //MARK: - saveDraft
+
+    var saveDraftUnderlyingCallsCount = 0
+    var saveDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return saveDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = saveDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                saveDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    saveDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var saveDraftCalled: Bool {
+        return saveDraftCallsCount > 0
+    }
+    var saveDraftReceivedDraft: ComposerDraftProxy?
+    var saveDraftReceivedInvocations: [ComposerDraftProxy] = []
+
+    var saveDraftUnderlyingReturnValue: Result<Void, ComposerDraftServiceError>!
+    var saveDraftReturnValue: Result<Void, ComposerDraftServiceError>! {
+        get {
+            if Thread.isMainThread {
+                return saveDraftUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ComposerDraftServiceError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = saveDraftUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                saveDraftUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    saveDraftUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var saveDraftClosure: ((ComposerDraftProxy) async -> Result<Void, ComposerDraftServiceError>)?
+
+    func saveDraft(_ draft: ComposerDraftProxy) async -> Result<Void, ComposerDraftServiceError> {
+        saveDraftCallsCount += 1
+        saveDraftReceivedDraft = draft
+        saveDraftReceivedInvocations.append(draft)
+        if let saveDraftClosure = saveDraftClosure {
+            return await saveDraftClosure(draft)
+        } else {
+            return saveDraftReturnValue
+        }
+    }
+    //MARK: - loadDraft
+
+    var loadDraftUnderlyingCallsCount = 0
+    var loadDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadDraftCalled: Bool {
+        return loadDraftCallsCount > 0
+    }
+
+    var loadDraftUnderlyingReturnValue: Result<ComposerDraftProxy?, ComposerDraftServiceError>!
+    var loadDraftReturnValue: Result<ComposerDraftProxy?, ComposerDraftServiceError>! {
+        get {
+            if Thread.isMainThread {
+                return loadDraftUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ComposerDraftProxy?, ComposerDraftServiceError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadDraftUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadDraftUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadDraftUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadDraftClosure: (() async -> Result<ComposerDraftProxy?, ComposerDraftServiceError>)?
+
+    func loadDraft() async -> Result<ComposerDraftProxy?, ComposerDraftServiceError> {
+        loadDraftCallsCount += 1
+        if let loadDraftClosure = loadDraftClosure {
+            return await loadDraftClosure()
+        } else {
+            return loadDraftReturnValue
+        }
+    }
+    //MARK: - clearDraft
+
+    var clearDraftUnderlyingCallsCount = 0
+    var clearDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return clearDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var clearDraftCalled: Bool {
+        return clearDraftCallsCount > 0
+    }
+
+    var clearDraftUnderlyingReturnValue: Result<Void, ComposerDraftServiceError>!
+    var clearDraftReturnValue: Result<Void, ComposerDraftServiceError>! {
+        get {
+            if Thread.isMainThread {
+                return clearDraftUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ComposerDraftServiceError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearDraftUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearDraftUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearDraftUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var clearDraftClosure: (() async -> Result<Void, ComposerDraftServiceError>)?
+
+    func clearDraft() async -> Result<Void, ComposerDraftServiceError> {
+        clearDraftCallsCount += 1
+        if let clearDraftClosure = clearDraftClosure {
+            return await clearDraftClosure()
+        } else {
+            return clearDraftReturnValue
+        }
+    }
+    //MARK: - getReply
+
+    var getReplyEventIDUnderlyingCallsCount = 0
+    var getReplyEventIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getReplyEventIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getReplyEventIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getReplyEventIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getReplyEventIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getReplyEventIDCalled: Bool {
+        return getReplyEventIDCallsCount > 0
+    }
+    var getReplyEventIDReceivedEventID: String?
+    var getReplyEventIDReceivedInvocations: [String] = []
+
+    var getReplyEventIDUnderlyingReturnValue: Result<TimelineItemReply, ComposerDraftServiceError>!
+    var getReplyEventIDReturnValue: Result<TimelineItemReply, ComposerDraftServiceError>! {
+        get {
+            if Thread.isMainThread {
+                return getReplyEventIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<TimelineItemReply, ComposerDraftServiceError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getReplyEventIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getReplyEventIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getReplyEventIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getReplyEventIDClosure: ((String) async -> Result<TimelineItemReply, ComposerDraftServiceError>)?
+
+    func getReply(eventID: String) async -> Result<TimelineItemReply, ComposerDraftServiceError> {
+        getReplyEventIDCallsCount += 1
+        getReplyEventIDReceivedEventID = eventID
+        getReplyEventIDReceivedInvocations.append(eventID)
+        if let getReplyEventIDClosure = getReplyEventIDClosure {
+            return await getReplyEventIDClosure(eventID)
+        } else {
+            return getReplyEventIDReturnValue
+        }
+    }
+}
 class ElementCallServiceMock: ElementCallServiceProtocol {
     var actions: AnyPublisher<ElementCallServiceAction, Never> {
         get { return underlyingActions }
@@ -10387,6 +10654,202 @@ class RoomProxyMock: RoomProxyProtocol {
             return matrixToEventPermalinkReturnValue
         }
     }
+    //MARK: - saveDraft
+
+    var saveDraftUnderlyingCallsCount = 0
+    var saveDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return saveDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = saveDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                saveDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    saveDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var saveDraftCalled: Bool {
+        return saveDraftCallsCount > 0
+    }
+    var saveDraftReceivedDraft: ComposerDraft?
+    var saveDraftReceivedInvocations: [ComposerDraft] = []
+
+    var saveDraftUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var saveDraftReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return saveDraftUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = saveDraftUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                saveDraftUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    saveDraftUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var saveDraftClosure: ((ComposerDraft) async -> Result<Void, RoomProxyError>)?
+
+    func saveDraft(_ draft: ComposerDraft) async -> Result<Void, RoomProxyError> {
+        saveDraftCallsCount += 1
+        saveDraftReceivedDraft = draft
+        saveDraftReceivedInvocations.append(draft)
+        if let saveDraftClosure = saveDraftClosure {
+            return await saveDraftClosure(draft)
+        } else {
+            return saveDraftReturnValue
+        }
+    }
+    //MARK: - loadDraft
+
+    var loadDraftUnderlyingCallsCount = 0
+    var loadDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadDraftCalled: Bool {
+        return loadDraftCallsCount > 0
+    }
+
+    var loadDraftUnderlyingReturnValue: Result<ComposerDraft?, RoomProxyError>!
+    var loadDraftReturnValue: Result<ComposerDraft?, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return loadDraftUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ComposerDraft?, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadDraftUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadDraftUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadDraftUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadDraftClosure: (() async -> Result<ComposerDraft?, RoomProxyError>)?
+
+    func loadDraft() async -> Result<ComposerDraft?, RoomProxyError> {
+        loadDraftCallsCount += 1
+        if let loadDraftClosure = loadDraftClosure {
+            return await loadDraftClosure()
+        } else {
+            return loadDraftReturnValue
+        }
+    }
+    //MARK: - clearDraft
+
+    var clearDraftUnderlyingCallsCount = 0
+    var clearDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return clearDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var clearDraftCalled: Bool {
+        return clearDraftCallsCount > 0
+    }
+
+    var clearDraftUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var clearDraftReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return clearDraftUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearDraftUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearDraftUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearDraftUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var clearDraftClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func clearDraft() async -> Result<Void, RoomProxyError> {
+        clearDraftCallsCount += 1
+        if let clearDraftClosure = clearDraftClosure {
+            return await clearDraftClosure()
+        } else {
+            return clearDraftReturnValue
+        }
+    }
 }
 class RoomSummaryProviderMock: RoomSummaryProviderProtocol {
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
@@ -12710,6 +13173,74 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return await sendPollResponsePollStartIDAnswersClosure(pollStartID, answers)
         } else {
             return sendPollResponsePollStartIDAnswersReturnValue
+        }
+    }
+    //MARK: - getLoadedReplyDetails
+
+    var getLoadedReplyDetailsEventIDUnderlyingCallsCount = 0
+    var getLoadedReplyDetailsEventIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getLoadedReplyDetailsEventIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getLoadedReplyDetailsEventIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getLoadedReplyDetailsEventIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getLoadedReplyDetailsEventIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getLoadedReplyDetailsEventIDCalled: Bool {
+        return getLoadedReplyDetailsEventIDCallsCount > 0
+    }
+    var getLoadedReplyDetailsEventIDReceivedEventID: String?
+    var getLoadedReplyDetailsEventIDReceivedInvocations: [String] = []
+
+    var getLoadedReplyDetailsEventIDUnderlyingReturnValue: Result<InReplyToDetails, TimelineProxyError>!
+    var getLoadedReplyDetailsEventIDReturnValue: Result<InReplyToDetails, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getLoadedReplyDetailsEventIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<InReplyToDetails, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getLoadedReplyDetailsEventIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getLoadedReplyDetailsEventIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getLoadedReplyDetailsEventIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getLoadedReplyDetailsEventIDClosure: ((String) async -> Result<InReplyToDetails, TimelineProxyError>)?
+
+    func getLoadedReplyDetails(eventID: String) async -> Result<InReplyToDetails, TimelineProxyError> {
+        getLoadedReplyDetailsEventIDCallsCount += 1
+        getLoadedReplyDetailsEventIDReceivedEventID = eventID
+        getLoadedReplyDetailsEventIDReceivedInvocations.append(eventID)
+        if let getLoadedReplyDetailsEventIDClosure = getLoadedReplyDetailsEventIDClosure {
+            return await getLoadedReplyDetailsEventIDClosure(eventID)
+        } else {
+            return getLoadedReplyDetailsEventIDReturnValue
         }
     }
 }
