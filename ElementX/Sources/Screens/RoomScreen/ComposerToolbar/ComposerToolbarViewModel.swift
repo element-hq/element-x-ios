@@ -431,7 +431,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
             
             if context.composerFormattingEnabled {
-                wysiwygViewModel.setMention(url: url.absoluteString, name: item.displayName ?? item.id, mentionType: .user)
+                wysiwygViewModel.setMention(url: url.absoluteString, name: item.id, mentionType: .user)
             } else {
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
                 mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: item.id, userDisplayName: item.displayName)
