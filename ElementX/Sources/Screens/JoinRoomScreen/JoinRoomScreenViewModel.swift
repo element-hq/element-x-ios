@@ -74,6 +74,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         showLoadingIndicator()
         
         defer {
+            updateMode()
             hideLoadingIndicator()
         }
         
@@ -82,6 +83,23 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             state.roomDetails = roomDetails
         case .failure:
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+        }
+    }
+    
+    private func updateMode() {
+        guard let roomDetails = state.roomDetails else {
+            state.mode = .unknown
+            return
+        }
+        
+        if roomDetails.isPublic {
+            state.mode = .join
+        } else if roomDetails.isInvited {
+            state.mode = .invited
+        } else if roomDetails.canKnock { // Knocking is not supported yet, treat it as .unknown
+            state.mode = .unknown
+        } else {
+            state.mode = .unknown
         }
     }
     

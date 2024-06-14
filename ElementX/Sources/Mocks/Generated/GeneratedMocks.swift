@@ -2638,7 +2638,9 @@ class ClientProxyMock: ClientProxyProtocol {
     func joinRoomAlias(_ roomAlias: String) async -> Result<Void, ClientProxyError> {
         joinRoomAliasCallsCount += 1
         joinRoomAliasReceivedRoomAlias = roomAlias
-        joinRoomAliasReceivedInvocations.append(roomAlias)
+        DispatchQueue.main.async {
+            self.joinRoomAliasReceivedInvocations.append(roomAlias)
+        }
         if let joinRoomAliasClosure = joinRoomAliasClosure {
             return await joinRoomAliasClosure(roomAlias)
         } else {
@@ -4478,7 +4480,9 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
     func saveDraft(_ draft: ComposerDraftProxy) async -> Result<Void, ComposerDraftServiceError> {
         saveDraftCallsCount += 1
         saveDraftReceivedDraft = draft
-        saveDraftReceivedInvocations.append(draft)
+        DispatchQueue.main.async {
+            self.saveDraftReceivedInvocations.append(draft)
+        }
         if let saveDraftClosure = saveDraftClosure {
             return await saveDraftClosure(draft)
         } else {
@@ -4674,7 +4678,9 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
     func getReply(eventID: String) async -> Result<TimelineItemReply, ComposerDraftServiceError> {
         getReplyEventIDCallsCount += 1
         getReplyEventIDReceivedEventID = eventID
-        getReplyEventIDReceivedInvocations.append(eventID)
+        DispatchQueue.main.async {
+            self.getReplyEventIDReceivedInvocations.append(eventID)
+        }
         if let getReplyEventIDClosure = getReplyEventIDClosure {
             return await getReplyEventIDClosure(eventID)
         } else {
@@ -10715,7 +10721,9 @@ class RoomProxyMock: RoomProxyProtocol {
     func saveDraft(_ draft: ComposerDraft) async -> Result<Void, RoomProxyError> {
         saveDraftCallsCount += 1
         saveDraftReceivedDraft = draft
-        saveDraftReceivedInvocations.append(draft)
+        DispatchQueue.main.async {
+            self.saveDraftReceivedInvocations.append(draft)
+        }
         if let saveDraftClosure = saveDraftClosure {
             return await saveDraftClosure(draft)
         } else {
@@ -13236,7 +13244,9 @@ class TimelineProxyMock: TimelineProxyProtocol {
     func getLoadedReplyDetails(eventID: String) async -> Result<InReplyToDetails, TimelineProxyError> {
         getLoadedReplyDetailsEventIDCallsCount += 1
         getLoadedReplyDetailsEventIDReceivedEventID = eventID
-        getLoadedReplyDetailsEventIDReceivedInvocations.append(eventID)
+        DispatchQueue.main.async {
+            self.getLoadedReplyDetailsEventIDReceivedInvocations.append(eventID)
+        }
         if let getLoadedReplyDetailsEventIDClosure = getLoadedReplyDetailsEventIDClosure {
             return await getLoadedReplyDetailsEventIDClosure(eventID)
         } else {
