@@ -128,9 +128,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubble: some View {
         styledContent
-            .onTapGesture(count: 2) {
-                context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
-            }
             .onTapGesture {
                 context.send(viewAction: .itemTapped(itemID: timelineItem.id))
             }
