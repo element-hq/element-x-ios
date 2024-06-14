@@ -24,7 +24,11 @@ struct JoinRoomScreen: View {
     
     var body: some View {
         FullscreenDialog(topPadding: 80, background: .bloom) {
-            mainContent
+            if context.viewState.mode == .loading {
+                EmptyView()
+            } else {
+                mainContent
+            }
         } bottomContent: {
             buttons
         }
@@ -36,15 +40,17 @@ struct JoinRoomScreen: View {
     
     var mainContent: some View {
         VStack(spacing: 16) {
+            let title = context.viewState.roomDetails?.name ?? L10n.screenJoinRoomTitleNoPreview
+            
             LoadableAvatarImage(url: context.viewState.roomDetails?.avatarURL,
-                                name: context.viewState.title,
+                                name: title,
                                 contentID: context.viewState.roomID,
                                 avatarSize: .room(on: .joinRoom),
                                 imageProvider: context.imageProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
             
             VStack(spacing: 8) {
-                Text(context.viewState.title)
+                Text(title)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
@@ -73,7 +79,7 @@ struct JoinRoomScreen: View {
     @ViewBuilder
     var buttons: some View {
         switch context.viewState.mode {
-        case .unknown:
+        case .loading, .unknown:
             EmptyView()
         case .knock:
             Button(L10n.screenJoinRoomKnockAction) { context.send(viewAction: .knock) }
@@ -113,11 +119,11 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Unknown")
         .snapshot(delay: 0.25)
         
-//        NavigationStack {
-//            JoinRoomScreen(context: knockViewModel.context)
-//        }
-//        .previewDisplayName("Knock")
-//        .snapshot(delay: 0.25)
+        NavigationStack {
+            JoinRoomScreen(context: knockViewModel.context)
+        }
+        .previewDisplayName("Knock")
+        .snapshot(delay: 0.25)
         
         NavigationStack {
             JoinRoomScreen(context: joinViewModel.context)
@@ -137,7 +143,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         
         // swiftlint:disable:next large_tuple
         let membership: (isJoined: Bool, isInvited: Bool, isPublic: Bool, canKnock: Bool) = switch mode {
-        case .unknown:
+        case .loading, .unknown:
             (false, false, false, false)
         case .invited:
             (false, true, false, false)
