@@ -136,7 +136,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
         let suggestion = SuggestionItem.user(item: .init(id: "@test:matrix.org", displayName: "Test", avatarURL: nil, range: .init()))
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
-        XCTAssertEqual(wysiwygViewModel.content.html, "<a href=\"https://matrix.to/#/@test:matrix.org\">Test</a> ")
+        // The display name can be used for HTML injection in the rich text editor and it's useless anyway as the clients don't use it when resolving display names
+        XCTAssertEqual(wysiwygViewModel.content.html, "<a href=\"https://matrix.to/#/@test:matrix.org\">@test:matrix.org</a> ")
     }
     
     func testAllUsersSuggestion() {
