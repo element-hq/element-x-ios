@@ -73,7 +73,7 @@
 "action_quick_reply" = "Réponse rapide";
 "action_quote" = "Citer";
 "action_react" = "Réagissez";
-"action_reject" = "Reject";
+"action_reject" = "Rejeter";
 "action_remove" = "Supprimer";
 "action_reply" = "Répondre";
 "action_reply_in_thread" = "Répondre dans le fil de discussion";
@@ -250,6 +250,8 @@
 "error_no_compatible_app_found" = "Aucune application compatible n’a été trouvée pour gérer cette action.";
 "error_some_messages_have_not_been_sent" = "Certains messages n’ont pas été envoyés";
 "error_unknown" = "Désolé, une erreur s’est produite";
+"full_screen_intent_banner_message" = "Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé.";
+"full_screen_intent_banner_title" = "Améliorez votre expérience d'appel";
 "invite_friends_rich_title" = "🔐️ Rejoignez-moi sur %1$@";
 "invite_friends_text" = "Salut, parle-moi sur %1$@ : %2$@";
 "leave_conversation_alert_subtitle" = "Êtes-vous sûr de vouloir quitter cette discussion? Vous ne pourrez pas la rejoindre à nouveau sans y être invité.";
@@ -260,9 +262,9 @@
 "notification_channel_call" = "Appel";
 "notification_channel_listening_for_events" = "À l’écoute des événements";
 "notification_channel_noisy" = "Notifications bruyantes";
-"notification_channel_ringing_calls" = "Ringing calls";
+"notification_channel_ringing_calls" = "Appels entrants";
 "notification_channel_silent" = "Notifications silencieuses";
-"notification_incoming_call" = "Incoming call";
+"notification_incoming_call" = "Appel entrant";
 "notification_inline_reply_failed" = "** Échec de l’envoi - veuillez ouvrir le salon";
 "notification_invitation_action_reject" = "Rejeter";
 "notification_invite_body" = "Vous a invité(e) à discuter";
@@ -663,6 +665,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous ne serez pas notifié(e) dans ce salon.";
 "screen_room_notification_settings_mode_all_messages" = "Tous les messages";
 "screen_room_notification_settings_room_custom_settings_title" = "Dans ce salon, prévenez-moi pour";
+"screen_room_retry_send_menu_send_again_action" = "Envoyer à nouveau";
 "screen_room_retry_send_menu_title" = "Votre message n’a pas pu être envoyé";
 "screen_room_roles_and_permissions_admins" = "Administrateurs";
 "screen_room_roles_and_permissions_change_my_role" = "Changer mon rôle";

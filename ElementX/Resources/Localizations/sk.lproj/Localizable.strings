@@ -250,6 +250,8 @@
 "error_no_compatible_app_found" = "Nebola nájdená žiadna kompatibilná aplikácia, ktorá by túto akciu dokázala spracovať.";
 "error_some_messages_have_not_been_sent" = "Niektoré správy neboli odoslané";
 "error_unknown" = "Prepáčte, vyskytla sa chyba";
+"full_screen_intent_banner_message" = "Aby ste už nikdy nezmeškali dôležitý hovor, zmeňte svoje nastavenia a povoľte upozornenia na celú obrazovku, keď je váš telefón uzamknutý.";
+"full_screen_intent_banner_title" = "Vylepšite svoj zážitok z hovoru";
 "invite_friends_rich_title" = "🔐️ Pripojte sa ku mne na %1$@";
 "invite_friends_text" = "Ahoj, porozprávajte sa so mnou na %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "Ste si istí, že chcete opustiť konverzáciu?";
@@ -663,6 +665,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v tejto miestnosti nedostanete upozornenie.";
 "screen_room_notification_settings_mode_all_messages" = "Všetky správy";
 "screen_room_notification_settings_room_custom_settings_title" = "V tejto miestnosti ma upozorniť na";
+"screen_room_retry_send_menu_send_again_action" = "Odoslať znova";
 "screen_room_retry_send_menu_title" = "Vašu správu sa nepodarilo odoslať";
 "screen_room_roles_and_permissions_admins" = "Správcovia";
 "screen_room_roles_and_permissions_change_my_role" = "Zmeniť moje oprávnenia";

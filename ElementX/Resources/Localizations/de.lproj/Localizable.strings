@@ -250,6 +250,8 @@
 "error_no_compatible_app_found" = "Für diese Aktion wurde keine kompatible App gefunden.";
 "error_some_messages_have_not_been_sent" = "Einige Nachrichten wurden nicht gesendet";
 "error_unknown" = "Entschuldigung, es ist ein Fehler aufgetreten";
+"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
+"full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ Begleite mich auf %1$@";
 "invite_friends_text" = "Hey, sprich mit mir auf %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "Bist du sicher, dass du diese Unterhaltung verlassen willst? Diese Unterhaltung ist nicht öffentlich und du kannst ihr ohne Einladung nicht wieder beitreten.";
@@ -663,6 +665,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Dein Homeserver unterstützt diese Option in verschlüsselten Chats nicht. Du wirst in diesem Chat nicht benachrichtigt.";
 "screen_room_notification_settings_mode_all_messages" = "Alle Nachrichten";
 "screen_room_notification_settings_room_custom_settings_title" = "Benachrichtige mich bei";
+"screen_room_retry_send_menu_send_again_action" = "Erneut senden";
 "screen_room_retry_send_menu_title" = "Deine Nachricht konnte nicht gesendet werden";
 "screen_room_roles_and_permissions_admins" = "Administratoren";
 "screen_room_roles_and_permissions_change_my_role" = "Ändere meine Rolle";

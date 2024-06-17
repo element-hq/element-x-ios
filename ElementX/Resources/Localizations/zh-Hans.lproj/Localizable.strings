@@ -250,6 +250,8 @@
 "error_no_compatible_app_found" = "找不到完成此项操作的合适应用。";
 "error_some_messages_have_not_been_sent" = "某些信息尚未发送";
 "error_unknown" = "抱歉，发生了错误";
+"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
+"full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ 加入我 %1$@";
 "invite_friends_text" = "嗨！请通过 %1$@ 与我联系：%2$@";
 "leave_conversation_alert_subtitle" = "您确定要离开此对话吗？此对话不公开，未经邀请您将无法重新加入。";
@@ -663,6 +665,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "您的服务器在加密房间中不支持此选项，您无法在此房间收到通知。";
 "screen_room_notification_settings_mode_all_messages" = "所有消息";
 "screen_room_notification_settings_room_custom_settings_title" = "在这个聊天室，通知我：";
+"screen_room_retry_send_menu_send_again_action" = "重新发送";
 "screen_room_retry_send_menu_title" = "消息发送失败";
 "screen_room_roles_and_permissions_admins" = "管理员";
 "screen_room_roles_and_permissions_change_my_role" = "更改我的角色";
