@@ -113,13 +113,13 @@ packages:
     minorVersion: 3.2.5
   Prefire:
     url: https://github.com/BarredEwe/Prefire
-    minorVersion: 2.0.4
+    minorVersion: 2.8.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
     minorVersion: 8.13.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    minorVersion: 1.16.0
+    minorVersion: 1.16.1
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     minorVersion: 6.0.0
