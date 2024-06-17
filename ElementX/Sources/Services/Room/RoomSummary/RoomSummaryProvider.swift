@@ -24,6 +24,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let name: String
     private let shouldUpdateVisibleRange: Bool
     private let notificationSettings: NotificationSettingsProxyProtocol
+    private let appSettings: AppSettings
 
     private let roomListPageSize = 200
     
@@ -65,13 +66,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
          shouldUpdateVisibleRange: Bool = false,
-         notificationSettings: NotificationSettingsProxyProtocol) {
+         notificationSettings: NotificationSettingsProxyProtocol,
+         appSettings: AppSettings) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
         self.name = name
         self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
         self.notificationSettings = notificationSettings
+        self.appSettings = appSettings
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -148,7 +151,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         case .excludeAll:
             _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .none)
         case let .search(query):
-            let filters: [RoomListEntriesDynamicFilterKind] = [.normalizedMatchRoomName(pattern: query), .nonLeft]
+            let filters: [RoomListEntriesDynamicFilterKind] = if appSettings.fuzzyRoomListSearchEnabled {
+                [.fuzzyMatchRoomName(pattern: query), .nonLeft]
+            } else {
+                [.normalizedMatchRoomName(pattern: query), .nonLeft]
+            }
             _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .all(filters: filters))
         case let .all(filters):
             var filters = filters.map(\.rustFilter)

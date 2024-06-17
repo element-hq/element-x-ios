@@ -24,6 +24,7 @@ import MatrixRustSDK
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let networkMonitor: NetworkMonitorProtocol
+    private let appSettings: AppSettings
     
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
@@ -123,9 +124,11 @@ class ClientProxy: ClientProxyProtocol {
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
     init(client: ClientProtocol,
-         networkMonitor: NetworkMonitorProtocol) async {
+         networkMonitor: NetworkMonitorProtocol,
+         appSettings: AppSettings) async {
         self.client = client
         self.networkMonitor = networkMonitor
+        self.appSettings = appSettings
         
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
@@ -726,13 +729,15 @@ class ClientProxy: ClientProxyProtocol {
                                                       eventStringBuilder: eventStringBuilder,
                                                       name: "AllRooms",
                                                       shouldUpdateVisibleRange: true,
-                                                      notificationSettings: notificationSettings)
+                                                      notificationSettings: notificationSettings,
+                                                      appSettings: appSettings)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                                eventStringBuilder: eventStringBuilder,
                                                                name: "MessageForwarding",
-                                                               notificationSettings: notificationSettings)
+                                                               notificationSettings: notificationSettings,
+                                                               appSettings: appSettings)
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
                         
             self.syncService = syncService

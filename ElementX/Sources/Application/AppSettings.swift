@@ -45,6 +45,7 @@ final class AppSettings {
         // Feature flags
         case publicSearchEnabled
         case draftRestoringEnabled
+        case fuzzyRoomListSearchEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -272,6 +273,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.draftRestoringEnabled, defaultValue: false, storageType: .userDefaults(store))
     var draftRestoringEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var fuzzyRoomListSearchEnabled
         
     #endif
     
