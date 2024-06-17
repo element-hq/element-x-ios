@@ -14255,9 +14255,9 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList {
             }
         }
     }
-    open var roomRoomIdClosure: ((String) async throws -> RoomListItem)?
+    open var roomRoomIdClosure: ((String) throws -> RoomListItem)?
 
-    open override func room(roomId: String) async throws -> RoomListItem {
+    open override func room(roomId: String) throws -> RoomListItem {
         if let error = roomRoomIdThrowableError {
             throw error
         }
@@ -14267,7 +14267,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList {
             self.roomRoomIdReceivedInvocations.append(roomId)
         }
         if let roomRoomIdClosure = roomRoomIdClosure {
-            return try await roomRoomIdClosure(roomId)
+            return try roomRoomIdClosure(roomId)
         } else {
             return roomRoomIdReturnValue
         }
@@ -15338,9 +15338,9 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
             }
         }
     }
-    open var roomRoomIdClosure: ((String) async throws -> RoomListItem)?
+    open var roomRoomIdClosure: ((String) throws -> RoomListItem)?
 
-    open override func room(roomId: String) async throws -> RoomListItem {
+    open override func room(roomId: String) throws -> RoomListItem {
         if let error = roomRoomIdThrowableError {
             throw error
         }
@@ -15350,7 +15350,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
             self.roomRoomIdReceivedInvocations.append(roomId)
         }
         if let roomRoomIdClosure = roomRoomIdClosure {
-            return try await roomRoomIdClosure(roomId)
+            return try roomRoomIdClosure(roomId)
         } else {
             return roomRoomIdReturnValue
         }
@@ -17555,71 +17555,6 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
             return try await getEventTimelineItemByTransactionIdTransactionIdClosure(transactionId)
         } else {
             return getEventTimelineItemByTransactionIdTransactionIdReturnValue
-        }
-    }
-
-    //MARK: - latestEvent
-
-    var latestEventUnderlyingCallsCount = 0
-    open var latestEventCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return latestEventUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = latestEventUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                latestEventUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    latestEventUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var latestEventCalled: Bool {
-        return latestEventCallsCount > 0
-    }
-
-    var latestEventUnderlyingReturnValue: EventTimelineItem?
-    open var latestEventReturnValue: EventTimelineItem? {
-        get {
-            if Thread.isMainThread {
-                return latestEventUnderlyingReturnValue
-            } else {
-                var returnValue: EventTimelineItem?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = latestEventUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                latestEventUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    latestEventUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var latestEventClosure: (() async -> EventTimelineItem?)?
-
-    open override func latestEvent() async -> EventTimelineItem? {
-        latestEventCallsCount += 1
-        if let latestEventClosure = latestEventClosure {
-            return await latestEventClosure()
-        } else {
-            return latestEventReturnValue
         }
     }
 
