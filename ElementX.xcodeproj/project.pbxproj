@@ -7324,7 +7324,7 @@
 			repositoryURL = "https://github.com/BarredEwe/Prefire";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 2.0.4;
+				minimumVersion = 2.8.0;
 			};
 		};
 		395DE6AE429B7ACC7C7FE31D /* XCRemoteSwiftPackageReference "KZFileWatchers" */ = {
@@ -7484,7 +7484,7 @@
 			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 1.16.0;
+				minimumVersion = 1.16.1;
 			};
 		};
 		EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */ = {
