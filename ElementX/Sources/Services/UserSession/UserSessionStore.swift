@@ -148,7 +148,8 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     private func setupProxyForClient(_ client: Client) async -> ClientProxyProtocol {
         await ClientProxy(client: client,
-                          networkMonitor: ServiceLocator.shared.networkMonitor)
+                          networkMonitor: ServiceLocator.shared.networkMonitor,
+                          appSettings: ServiceLocator.shared.settings)
     }
     
     private func deleteSessionDirectory(for credentials: KeychainCredentials) {
