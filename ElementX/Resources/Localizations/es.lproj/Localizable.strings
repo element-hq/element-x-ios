@@ -250,6 +250,8 @@
 "error_no_compatible_app_found" = "No se encontró ninguna aplicación compatible con esta acción.";
 "error_some_messages_have_not_been_sent" = "Algunos mensajes no se han enviado";
 "error_unknown" = "Lo siento, se ha producido un error";
+"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
+"full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ Únete a mí en %1$@";
 "invite_friends_text" = "Hola, puedes hablar conmigo en %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "¿Estás seguro de que quieres salir de esta conversación? Esta conversación no es pública y no podrás volver a unirte sin una invitación.";
@@ -663,6 +665,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Tu servidor principal no admite esta opción en salas cifradas, no recibirás notificaciones en esta sala.";
 "screen_room_notification_settings_mode_all_messages" = "Todos los mensajes";
 "screen_room_notification_settings_room_custom_settings_title" = "En esta sala, notificarme por";
+"screen_room_retry_send_menu_send_again_action" = "Enviar de nuevo";
 "screen_room_retry_send_menu_title" = "No se pudo enviar tu mensaje";
 "screen_room_roles_and_permissions_admins" = "Administradores";
 "screen_room_roles_and_permissions_change_my_role" = "Cambiar mi rol";

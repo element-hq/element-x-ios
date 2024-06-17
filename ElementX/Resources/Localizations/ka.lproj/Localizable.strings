@@ -250,6 +250,8 @@
 "error_no_compatible_app_found" = "თავსებადი აპლიკაცია ვერ მოიძებნა ამ მოქმედების შესასრულებლად.";
 "error_some_messages_have_not_been_sent" = "ზოგიერთი შეტყობინება არ გაიგზავნა";
 "error_unknown" = "ბოდიშით, შეცდომა მოხდა";
+"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
+"full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ შემომიერთდით %1$@";
 "invite_friends_text" = "გაგიმარჯოს! მესაუბრე %1$@-ზე: %2$@";
 "leave_conversation_alert_subtitle" = "Are you sure that you want to leave this conversation? This conversation is not public and you won't be able to rejoin without an invite.";
@@ -663,6 +665,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.";
 "screen_room_notification_settings_mode_all_messages" = "ყველა შეტყობინება";
 "screen_room_notification_settings_room_custom_settings_title" = "ამ ოთახში, შემატყობინეთ:";
+"screen_room_retry_send_menu_send_again_action" = "Ხელახლა გაგზავნა";
 "screen_room_retry_send_menu_title" = "თქვენი შეტყობინების გაგზავნა ვერ მოხერხდა";
 "screen_room_roles_and_permissions_admins" = "Admins";
 "screen_room_roles_and_permissions_change_my_role" = "Change my role";

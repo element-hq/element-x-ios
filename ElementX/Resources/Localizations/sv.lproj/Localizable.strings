@@ -250,6 +250,8 @@
 "error_no_compatible_app_found" = "Ingen kompatibel app hittades för att hantera den här åtgärden.";
 "error_some_messages_have_not_been_sent" = "Vissa meddelanden har inte skickats";
 "error_unknown" = "Tyvärr, ett fel uppstod";
+"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
+"full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ Häng med mig på %1$@";
 "invite_friends_text" = "Hallå, prata med mig på %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "Är du säker på att du vill lämna den här konversationen? Den här konversationen är inte offentlig och du kommer inte att kunna gå med igen utan en inbjudan.";
@@ -663,6 +665,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Din hemserver stöder inte det här alternativet i krypterade rum, du blir inte aviserad i det här rummet.";
 "screen_room_notification_settings_mode_all_messages" = "Alla meddelanden";
 "screen_room_notification_settings_room_custom_settings_title" = "I det här rummet, meddela mig för";
+"screen_room_retry_send_menu_send_again_action" = "Skicka igen";
 "screen_room_retry_send_menu_title" = "Ditt meddelande kunde inte skickas";
 "screen_room_roles_and_permissions_admins" = "Administratörer";
 "screen_room_roles_and_permissions_change_my_role" = "Change my role";

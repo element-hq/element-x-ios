@@ -250,6 +250,8 @@
 "error_no_compatible_app_found" = "Не знайдено сумісного застосунку для виконання цієї дії.";
 "error_some_messages_have_not_been_sent" = "Деякі повідомлення не були надіслані";
 "error_unknown" = "Вибачте, сталася помилка";
+"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
+"full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ Приєднуйтеся до мене в %1$@";
 "invite_friends_text" = "Привіт, пишіть мені за адресою %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "Ви впевнені, що хочете залишити цю розмову? Ця розмова не є загальнодоступною, і ви не зможете знову приєднатися без запрошення.";
@@ -663,6 +665,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви не отримаєте сповіщення в цій кімнаті.";
 "screen_room_notification_settings_mode_all_messages" = "Всі повідомлення";
 "screen_room_notification_settings_room_custom_settings_title" = "У цій кімнаті повідомляти мене про";
+"screen_room_retry_send_menu_send_again_action" = "Надіслати знову";
 "screen_room_retry_send_menu_title" = "Ваше повідомлення не вдалося надіслати";
 "screen_room_roles_and_permissions_admins" = "Адміністратори";
 "screen_room_roles_and_permissions_change_my_role" = "Змінити мою роль";
