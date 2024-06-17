@@ -200,9 +200,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return updatedItems
     }
 
-    private func fetchRoomInfo(roomID: String) -> RoomInfo? {
+    private func fetchRoomDetails(roomID: String) -> (roomInfo: RoomInfo?, latestEvent: EventTimelineItem?) {
         class FetchResult {
             var roomInfo: RoomInfo?
+            var latestEvent: EventTimelineItem?
         }
 
         let semaphore = DispatchSemaphore(value: 0)
@@ -210,7 +211,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
 
         Task {
             do {
-                let roomListItem = try await roomListService.room(roomId: roomID)
+                let roomListItem = try roomListService.room(roomId: roomID)
+                result.latestEvent = await roomListItem.latestEvent()
                 result.roomInfo = try await roomListItem.roomInfo()
             } catch {
                 MXLog.error("Failed fetching room info with error: \(error)")
@@ -218,18 +220,20 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             semaphore.signal()
         }
         semaphore.wait()
-        return result.roomInfo
+        return (result.roomInfo, result.latestEvent)
     }
 
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
-        guard let roomInfo = fetchRoomInfo(roomID: identifier) else {
+        let roomDetails = fetchRoomDetails(roomID: identifier)
+        
+        guard let roomInfo = roomDetails.roomInfo else {
             return .empty
         }
         
         var attributedLastMessage: AttributedString?
         var lastMessageFormattedTimestamp: String?
         
-        if let latestRoomMessage = roomInfo.latestEvent {
+        if let latestRoomMessage = roomDetails.latestEvent {
             let lastMessage = EventTimelineItemProxy(item: latestRoomMessage, id: "0")
             lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
             attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)

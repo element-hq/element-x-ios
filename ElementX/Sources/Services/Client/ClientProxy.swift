@@ -820,7 +820,7 @@ class ClientProxy: ClientProxyProtocol {
 
     private func roomTupleForIdentifier(_ identifier: String) async -> (RoomListItem?, Room?) {
         do {
-            let roomListItem = try await roomListService?.room(roomId: identifier)
+            let roomListItem = try roomListService?.room(roomId: identifier)
             if roomListItem?.isTimelineInitialized() == false {
                 try await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
             }
