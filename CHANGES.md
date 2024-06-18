@@ -1,3 +1,8 @@
+## Changes in 1.6.11 (2024-06-18)
+
+No significant changes.
+
+
 ## Changes in 1.6.10 (2024-06-18)
 
 ✨ Features
