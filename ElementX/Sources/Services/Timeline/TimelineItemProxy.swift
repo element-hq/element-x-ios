@@ -78,7 +78,9 @@ class EventTimelineItemProxy {
         }
         
         switch localSendState {
-        case .notSentYet, .sendingFailed:
+        case .sendingFailed:
+            return .sendingFailed
+        case .notSentYet:
             return .sending
         case .sent:
             return .sent

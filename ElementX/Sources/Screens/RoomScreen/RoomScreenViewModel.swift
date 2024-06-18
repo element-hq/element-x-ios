@@ -182,6 +182,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             roomScreenInteractionHandler.displayEmojiPicker(for: itemID)
         case .displayReactionSummary(let itemID, let key):
             displayReactionSummary(for: itemID, selectedKey: key)
+        case .displayMessageSendingFailureAlert(let itemID):
+            displayAlert(.messageSendingFailure(itemID))
         case .displayReadReceipts(itemID: let itemID):
             displayReadReceipts(for: itemID)
         case .displayCall:
@@ -770,6 +772,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                              message: L10n.commonPollEndConfirmation,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
                                              secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
+        case .messageSendingFailure(let itemID):
+            state.bindings.alertInfo = .init(id: type, title: L10n.screenRoomRetrySendMenuTitle, primaryButton: .init(title: L10n.actionRemove, role: .destructive) {
+                Task {
+                    await self.timelineController.redact(itemID)
+                }
+            })
         }
     }
     
