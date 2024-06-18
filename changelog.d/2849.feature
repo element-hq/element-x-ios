@@ -1,1 +1,0 @@
-Composer drafts will now be saved upon leaving the screen, and get restored later when displayed again.

@@ -1,3 +1,13 @@
+## Changes in 1.6.10 (2024-06-18)
+
+✨ Features
+
+- Composer drafts will now be saved upon leaving the screen, and get restored later when displayed again. ([#2849](https://github.com/element-hq/element-x-ios/issues/2849))
+
+🙌 Improvements
+
+- Allow timeline messages text selection on both the Mac and on iOS (not on long press but a double tap) ([#2924](https://github.com/element-hq/element-x-ios/issues/2924))
+
 ## Changes in 1.6.9 (2024-06-11)
 
 ✨ Features
