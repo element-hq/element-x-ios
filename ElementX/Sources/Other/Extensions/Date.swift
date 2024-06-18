@@ -26,7 +26,8 @@ extension Date {
             return formatted(date: .omitted, time: .shortened)
         } else if calendar.isDateInYesterday(self) {
             // Simply "Yesterday" if it was yesterday.
-            return formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence))
+            guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) else { fatalError() }
+            return yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence))
         } else if let sixDaysAgo = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: .now)),
                   sixDaysAgo <= self {
             // The named day if it was in the last 6 days.

@@ -484,7 +484,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return firstTimestamp > secondTimestamp
             }
             .map { key, receipt in
-                ReadReceipt(userID: key, formattedTimestamp: receipt.dateTimestamp?.formatted(date: .omitted, time: .shortened))
+                ReadReceipt(userID: key, formattedTimestamp: receipt.dateTimestamp?.formattedMinimal())
             }
     }
     
