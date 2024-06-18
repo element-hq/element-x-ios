@@ -10733,6 +10733,71 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
     }
 
+    //MARK: - heroes
+
+    var heroesUnderlyingCallsCount = 0
+    open var heroesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return heroesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = heroesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                heroesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    heroesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var heroesCalled: Bool {
+        return heroesCallsCount > 0
+    }
+
+    var heroesUnderlyingReturnValue: [RoomHero]!
+    open var heroesReturnValue: [RoomHero]! {
+        get {
+            if Thread.isMainThread {
+                return heroesUnderlyingReturnValue
+            } else {
+                var returnValue: [RoomHero]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = heroesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                heroesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    heroesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var heroesClosure: (() -> [RoomHero])?
+
+    open override func heroes() -> [RoomHero] {
+        heroesCallsCount += 1
+        if let heroesClosure = heroesClosure {
+            return heroesClosure()
+        } else {
+            return heroesReturnValue
+        }
+    }
+
     //MARK: - id
 
     var idUnderlyingCallsCount = 0
