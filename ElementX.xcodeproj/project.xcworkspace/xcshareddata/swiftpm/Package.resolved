@@ -148,8 +148,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "76ccbfd106eb4d967c79eccaf339ddfc45e6f7fb",
-        "version" : "1.0.14"
+        "revision" : "279994ebdb1aef807946b79306bbdd892cecd873",
+        "version" : "1.0.15"
       }
     },
     {
@@ -184,8 +184,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/BarredEwe/Prefire",
       "state" : {
-        "revision" : "608e7992dedc5ee409e59b3580010371ff0cef57",
-        "version" : "2.0.4"
+        "revision" : "237f4005c81f74d5359eddb534d2d10925ef2787",
+        "version" : "2.8.0"
       }
     },
     {
@@ -247,8 +247,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
-        "revision" : "625ccca8570773dd84a34ee51a81aa2bc5a4f97a",
-        "version" : "1.16.0"
+        "revision" : "8ddd519780452729c6634ad6bd0d2595938e9ea3",
+        "version" : "1.16.1"
       }
     },
     {
