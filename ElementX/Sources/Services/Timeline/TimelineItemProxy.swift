@@ -78,8 +78,8 @@ class EventTimelineItemProxy {
         }
         
         switch localSendState {
-        case .sendingFailed:
-            return .sendingFailed
+        case .sendingFailed(_, let isRecoverable):
+            return isRecoverable ? .sending : .sendingFailed
         case .notSentYet:
             return .sending
         case .sent:
