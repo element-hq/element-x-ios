@@ -252,6 +252,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          name: roomInfo.displayName ?? roomInfo.id,
                                          isDirect: roomInfo.isDirect,
                                          avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
+                                         heroes: roomInfo.heroes.map(UserProfileProxy.init),
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
                                          unreadMessagesCount: UInt(roomInfo.numUnreadMessages),

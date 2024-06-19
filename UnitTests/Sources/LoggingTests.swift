@@ -86,12 +86,14 @@ class LoggingTests: XCTestCase {
         // Given a room summary that contains sensitive information
         let roomName = "Private Conversation"
         let lastMessage = "Secret information"
+        let heroName = "Pseudonym"
         let roomSummary = RoomSummaryDetails(id: "myroomid",
                                              isInvite: false,
                                              inviter: nil,
                                              name: roomName,
                                              isDirect: true,
                                              avatarURL: nil,
+                                             heroes: [.init(userID: "", displayName: heroName)],
                                              lastMessage: AttributedString(lastMessage),
                                              lastMessageFormattedTimestamp: "Now",
                                              unreadMessagesCount: 0,
@@ -116,6 +118,7 @@ class LoggingTests: XCTestCase {
         XCTAssertTrue(content.contains(roomSummary.id))
         XCTAssertFalse(content.contains(roomName))
         XCTAssertFalse(content.contains(lastMessage))
+        XCTAssertFalse(content.contains(heroName))
     }
         
     func validateTimelineContentIsRedacted() throws {

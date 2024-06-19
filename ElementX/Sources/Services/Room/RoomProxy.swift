@@ -100,6 +100,18 @@ class RoomProxy: RoomProxyProtocol {
     var avatarURL: URL? {
         roomListItem.avatarUrl().flatMap(URL.init(string:))
     }
+    
+    var avatar: RoomAvatar {
+        if isDirect, avatarURL == nil {
+            let heroes = room.heroes()
+            
+            if heroes.count == 1 {
+                return .heroes(heroes.map(UserProfileProxy.init))
+            }
+        }
+        
+        return .room(id: id, name: name, avatarURL: avatarURL)
+    }
 
     var joinedMembersCount: Int {
         Int(room.joinedMembersCount())

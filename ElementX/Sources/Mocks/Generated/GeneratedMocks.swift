@@ -8056,6 +8056,11 @@ class RoomProxyMock: RoomProxyProtocol {
     var underlyingOwnUserID: String!
     var name: String?
     var topic: String?
+    var avatar: RoomAvatar {
+        get { return underlyingAvatar }
+        set(value) { underlyingAvatar = value }
+    }
+    var underlyingAvatar: RoomAvatar!
     var avatarURL: URL?
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
         get { return underlyingMembersPublisher }

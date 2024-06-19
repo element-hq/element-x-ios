@@ -15,19 +15,18 @@
 //
 
 import Combine
-import Foundation
+import Compound
 import SwiftUI
 
 struct RoomHeaderView: View {
-    let roomID: String
     let roomName: String
-    let avatarURL: URL?
+    let roomAvatar: RoomAvatar
     
     let imageProvider: ImageProviderProtocol?
     
     var body: some View {
         HStack(spacing: 12) {
-            roomAvatar
+            avatarImage
                 .accessibilityHidden(true)
             Text(roomName)
                 .font(.compound.bodyLGSemibold)
@@ -37,28 +36,28 @@ struct RoomHeaderView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     
-    private var roomAvatar: some View {
-        LoadableAvatarImage(url: avatarURL,
-                            name: roomName,
-                            contentID: roomID,
-                            avatarSize: .room(on: .timeline),
-                            imageProvider: imageProvider)
+    private var avatarImage: some View {
+        RoomAvatarImage(avatar: roomAvatar,
+                        avatarSize: .room(on: .timeline),
+                        imageProvider: imageProvider)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)
     }
 }
 
 struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomHeaderView(roomID: "1",
-                       roomName: "Some Room name",
-                       avatarURL: URL.picturesDirectory,
+        RoomHeaderView(roomName: "Some Room name",
+                       roomAvatar: .room(id: "1",
+                                         name: "Some Room Name",
+                                         avatarURL: URL.picturesDirectory),
                        imageProvider: MockMediaProvider())
             .previewLayout(.sizeThatFits)
             .padding()
         
-        RoomHeaderView(roomID: "1",
-                       roomName: "Some Room name",
-                       avatarURL: nil,
+        RoomHeaderView(roomName: "Some Room name",
+                       roomAvatar: .room(id: "1",
+                                         name: "Some Room Name",
+                                         avatarURL: nil),
                        imageProvider: MockMediaProvider())
             .previewLayout(.sizeThatFits)
             .padding()

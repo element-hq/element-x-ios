@@ -36,6 +36,7 @@ class HomeScreenRoomTests: XCTestCase {
                                                 name: "Test room",
                                                 isDirect: false,
                                                 avatarURL: nil,
+                                                heroes: [],
                                                 lastMessage: nil,
                                                 lastMessageFormattedTimestamp: nil,
                                                 unreadMessagesCount: unreadMessagesCount,

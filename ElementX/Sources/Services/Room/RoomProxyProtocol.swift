@@ -47,12 +47,15 @@ protocol RoomProxyProtocol {
     
     var topic: String? { get }
     
+    /// The room's avatar info for use in a ``RoomAvatarImage``.
+    var avatar: RoomAvatar { get }
+    /// The room's avatar URL. Use this for editing and favour ``avatar`` for display.
     var avatarURL: URL? { get }
 
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> { get }
-        
+    
     var joinedMembersCount: Int { get }
     
     var activeMembersCount: Int { get }
@@ -146,7 +149,7 @@ extension RoomProxyProtocol {
     var details: RoomDetails {
         RoomDetails(id: id,
                     name: name,
-                    avatarURL: avatarURL,
+                    avatar: avatar,
                     canonicalAlias: canonicalAlias,
                     isEncrypted: isEncrypted,
                     isPublic: isPublic)

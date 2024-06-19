@@ -94,7 +94,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
                     continue
                 }
                 
-                let room = MessageForwardingRoom(id: details.id, name: details.name, alias: details.canonicalAlias, avatarURL: details.avatarURL)
+                let room = MessageForwardingRoom(id: details.id, name: details.name, alias: details.canonicalAlias, avatar: details.avatar)
                 rooms.append(room)
             }
         }

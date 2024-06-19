@@ -38,6 +38,14 @@ struct JoinRoomScreenViewState: BindableState {
     var mode: JoinRoomScreenInteractionMode = .loading
     
     var bindings = JoinRoomScreenViewStateBindings()
+    
+    var title: String {
+        roomDetails?.name ?? L10n.screenJoinRoomTitleNoPreview
+    }
+    
+    var avatar: RoomAvatar {
+        .room(id: roomID, name: title, avatarURL: roomDetails?.avatarURL)
+    }
 }
 
 struct JoinRoomScreenViewStateBindings {

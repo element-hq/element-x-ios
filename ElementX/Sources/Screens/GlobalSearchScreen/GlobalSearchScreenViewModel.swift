@@ -81,7 +81,7 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
                 return GlobalSearchRoom(id: details.id,
                                         name: details.name,
                                         alias: details.canonicalAlias,
-                                        avatarURL: details.avatarURL)
+                                        avatar: details.avatar)
             }
         }
     }

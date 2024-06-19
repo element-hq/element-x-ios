@@ -34,6 +34,6 @@ struct RoomDirectorySearchResult: Identifiable {
     let alias: String?
     let name: String?
     let topic: String?
-    let avatarURL: URL?
+    let avatar: RoomAvatar
     let canBeJoined: Bool
 }
