@@ -60,7 +60,7 @@ struct RoomStateEventStringBuilder {
                 return L10n.stateEventRoomInvite(senderDisplayName, member)
             }
         case .invitationAccepted:
-            return memberIsYou ? L10n.stateEventRoomInviteAcceptedByYou : L10n.stateEventRoomInviteAccepted(senderDisplayName)
+            return memberIsYou ? L10n.stateEventRoomInviteAcceptedByYou : L10n.stateEventRoomInviteAccepted(member)
         case .invitationRejected:
             return memberIsYou ? L10n.stateEventRoomRejectByYou : L10n.stateEventRoomReject(senderDisplayName)
         case .invitationRevoked:
