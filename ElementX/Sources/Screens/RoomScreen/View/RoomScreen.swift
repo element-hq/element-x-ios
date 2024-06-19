@@ -183,7 +183,9 @@ struct RoomScreen: View {
 // MARK: - Previews
 
 struct RoomScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room", hasOngoingCall: true)),
+    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(id: "stable_id",
+                                                                              name: "Preview room",
+                                                                              hasOngoingCall: true)),
                                                timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
                                                mediaPlayerProvider: MediaPlayerProviderMock(),
