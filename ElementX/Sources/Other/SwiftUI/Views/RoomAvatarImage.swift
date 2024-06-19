@@ -43,13 +43,8 @@ struct RoomAvatarImage: View {
                                 avatarSize: avatarSize,
                                 imageProvider: imageProvider)
         case .heroes(let users):
-            if users.count == 1 {
-                LoadableAvatarImage(url: users[0].avatarURL,
-                                    name: users[0].displayName,
-                                    contentID: users[0].userID,
-                                    avatarSize: avatarSize,
-                                    imageProvider: imageProvider)
-            } else if users.count == 2 {
+            // We will expand upon this with more stack sizes in the future.
+            if users.count == 2 {
                 let clusterSize = avatarSize.value * 1.6
                 ZStack {
                     LoadableAvatarImage(url: users[0].avatarURL,
@@ -81,7 +76,6 @@ struct RoomAvatarImage: View {
                 }
                 .scaledFrame(size: clusterSize)
             } else {
-                // TODO: More stack sizes in here.
                 LoadableAvatarImage(url: users[0].avatarURL,
                                     name: users[0].displayName,
                                     contentID: users[0].userID,

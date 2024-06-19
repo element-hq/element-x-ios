@@ -54,7 +54,7 @@ extension RoomProxyMock {
         id = configuration.id
         name = configuration.name
         topic = configuration.topic
-        avatar = .room(id: configuration.id, name: configuration.name, avatarURL: configuration.avatarURL) // TODO: What happens for the logic in here?
+        avatar = .room(id: configuration.id, name: configuration.name, avatarURL: configuration.avatarURL) // Note: This doesn't replicate the real proxy logic.
         avatarURL = configuration.avatarURL
         isDirect = configuration.isDirect
         isSpace = configuration.isSpace
