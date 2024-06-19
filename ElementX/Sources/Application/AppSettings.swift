@@ -44,7 +44,6 @@ final class AppSettings {
         
         // Feature flags
         case publicSearchEnabled
-        case draftRestoringEnabled
         case fuzzyRoomListSearchEnabled
     }
     
@@ -270,9 +269,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: isDevelopmentBuild, storageType: .volatile)
     var publicSearchEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.draftRestoringEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var draftRestoringEnabled
     
     @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var fuzzyRoomListSearchEnabled

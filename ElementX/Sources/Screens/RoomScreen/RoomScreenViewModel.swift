@@ -134,9 +134,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Public
     
     func loadDraft() {
-        guard appSettings.draftRestoringEnabled else {
-            return
-        }
         actionsSubject.send(.composer(action: .loadDraft))
     }
     
