@@ -191,6 +191,13 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 link.insert(contentsOf: "https://", at: link.startIndex)
             }
             
+            // Don't include punctuation characters at the end of links
+            // e.g `https://element.io/blog:` <- which is a valid link but the wrong place
+            while !link.isEmpty,
+                  link.rangeOfCharacter(from: .punctuationCharacters, options: .backwards)?.upperBound == link.endIndex {
+                link = String(link.dropLast())
+            }
+            
             return TextParsingMatch(type: .link(urlString: link), range: match.range)
         })
         
