@@ -126,8 +126,8 @@ final class TimelineProxy: TimelineProxyProtocol {
               intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Editing timeline item: \(timelineItemID)")
         
-        guard let eventTimelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID) else {
-            MXLog.error("Unknown timeline item: \(timelineItemID)")
+        guard let eventID = timelineItemID.eventID else {
+            MXLog.error("Missing event ID")
             return .failure(.failedEditing)
         }
         
@@ -136,7 +136,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                     intentionalMentions: intentionalMentions.toRustMentions())
         
         do {
-            try await timeline.edit(newContent: messageContent, editItem: eventTimelineItem)
+            try await timeline.edit(newContent: messageContent, eventId: eventID)
             
             MXLog.info("Finished editing timeline item: \(timelineItemID)")
             
@@ -335,8 +335,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         do {
             if let eventID {
-                let replyItem = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
-                try await timeline.sendReply(msg: messageContent, replyItem: replyItem)
+                try await timeline.sendReply(msg: messageContent, eventId: eventID)
                 MXLog.info("Finished sending reply to eventID: \(eventID)")
             } else {
                 _ = try await timeline.send(msg: messageContent)

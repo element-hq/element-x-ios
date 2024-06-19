@@ -17180,16 +17180,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
 
     //MARK: - edit
 
-    open var editNewContentEditItemThrowableError: Error?
-    var editNewContentEditItemUnderlyingCallsCount = 0
-    open var editNewContentEditItemCallsCount: Int {
+    open var editNewContentEventIdThrowableError: Error?
+    var editNewContentEventIdUnderlyingCallsCount = 0
+    open var editNewContentEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return editNewContentEditItemUnderlyingCallsCount
+                return editNewContentEventIdUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = editNewContentEditItemUnderlyingCallsCount
+                    returnValue = editNewContentEventIdUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -17197,31 +17197,31 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                editNewContentEditItemUnderlyingCallsCount = newValue
+                editNewContentEventIdUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    editNewContentEditItemUnderlyingCallsCount = newValue
+                    editNewContentEventIdUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var editNewContentEditItemCalled: Bool {
-        return editNewContentEditItemCallsCount > 0
+    open var editNewContentEventIdCalled: Bool {
+        return editNewContentEventIdCallsCount > 0
     }
-    open var editNewContentEditItemReceivedArguments: (newContent: RoomMessageEventContentWithoutRelation, editItem: EventTimelineItem)?
-    open var editNewContentEditItemReceivedInvocations: [(newContent: RoomMessageEventContentWithoutRelation, editItem: EventTimelineItem)] = []
-    open var editNewContentEditItemClosure: ((RoomMessageEventContentWithoutRelation, EventTimelineItem) async throws -> Void)?
+    open var editNewContentEventIdReceivedArguments: (newContent: RoomMessageEventContentWithoutRelation, eventId: String)?
+    open var editNewContentEventIdReceivedInvocations: [(newContent: RoomMessageEventContentWithoutRelation, eventId: String)] = []
+    open var editNewContentEventIdClosure: ((RoomMessageEventContentWithoutRelation, String) async throws -> Void)?
 
-    open override func edit(newContent: RoomMessageEventContentWithoutRelation, editItem: EventTimelineItem) async throws {
-        if let error = editNewContentEditItemThrowableError {
+    open override func edit(newContent: RoomMessageEventContentWithoutRelation, eventId: String) async throws {
+        if let error = editNewContentEventIdThrowableError {
             throw error
         }
-        editNewContentEditItemCallsCount += 1
-        editNewContentEditItemReceivedArguments = (newContent: newContent, editItem: editItem)
+        editNewContentEventIdCallsCount += 1
+        editNewContentEventIdReceivedArguments = (newContent: newContent, eventId: eventId)
         DispatchQueue.main.async {
-            self.editNewContentEditItemReceivedInvocations.append((newContent: newContent, editItem: editItem))
+            self.editNewContentEventIdReceivedInvocations.append((newContent: newContent, eventId: eventId))
         }
-        try await editNewContentEditItemClosure?(newContent, editItem)
+        try await editNewContentEventIdClosure?(newContent, eventId)
     }
 
     //MARK: - editPoll
@@ -18360,16 +18360,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
 
     //MARK: - sendReply
 
-    open var sendReplyMsgReplyItemThrowableError: Error?
-    var sendReplyMsgReplyItemUnderlyingCallsCount = 0
-    open var sendReplyMsgReplyItemCallsCount: Int {
+    open var sendReplyMsgEventIdThrowableError: Error?
+    var sendReplyMsgEventIdUnderlyingCallsCount = 0
+    open var sendReplyMsgEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendReplyMsgReplyItemUnderlyingCallsCount
+                return sendReplyMsgEventIdUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendReplyMsgReplyItemUnderlyingCallsCount
+                    returnValue = sendReplyMsgEventIdUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -18377,31 +18377,31 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                sendReplyMsgReplyItemUnderlyingCallsCount = newValue
+                sendReplyMsgEventIdUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendReplyMsgReplyItemUnderlyingCallsCount = newValue
+                    sendReplyMsgEventIdUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendReplyMsgReplyItemCalled: Bool {
-        return sendReplyMsgReplyItemCallsCount > 0
+    open var sendReplyMsgEventIdCalled: Bool {
+        return sendReplyMsgEventIdCallsCount > 0
     }
-    open var sendReplyMsgReplyItemReceivedArguments: (msg: RoomMessageEventContentWithoutRelation, replyItem: EventTimelineItem)?
-    open var sendReplyMsgReplyItemReceivedInvocations: [(msg: RoomMessageEventContentWithoutRelation, replyItem: EventTimelineItem)] = []
-    open var sendReplyMsgReplyItemClosure: ((RoomMessageEventContentWithoutRelation, EventTimelineItem) async throws -> Void)?
+    open var sendReplyMsgEventIdReceivedArguments: (msg: RoomMessageEventContentWithoutRelation, eventId: String)?
+    open var sendReplyMsgEventIdReceivedInvocations: [(msg: RoomMessageEventContentWithoutRelation, eventId: String)] = []
+    open var sendReplyMsgEventIdClosure: ((RoomMessageEventContentWithoutRelation, String) async throws -> Void)?
 
-    open override func sendReply(msg: RoomMessageEventContentWithoutRelation, replyItem: EventTimelineItem) async throws {
-        if let error = sendReplyMsgReplyItemThrowableError {
+    open override func sendReply(msg: RoomMessageEventContentWithoutRelation, eventId: String) async throws {
+        if let error = sendReplyMsgEventIdThrowableError {
             throw error
         }
-        sendReplyMsgReplyItemCallsCount += 1
-        sendReplyMsgReplyItemReceivedArguments = (msg: msg, replyItem: replyItem)
+        sendReplyMsgEventIdCallsCount += 1
+        sendReplyMsgEventIdReceivedArguments = (msg: msg, eventId: eventId)
         DispatchQueue.main.async {
-            self.sendReplyMsgReplyItemReceivedInvocations.append((msg: msg, replyItem: replyItem))
+            self.sendReplyMsgEventIdReceivedInvocations.append((msg: msg, eventId: eventId))
         }
-        try await sendReplyMsgReplyItemClosure?(msg, replyItem)
+        try await sendReplyMsgEventIdClosure?(msg, eventId)
     }
 
     //MARK: - sendVideo
