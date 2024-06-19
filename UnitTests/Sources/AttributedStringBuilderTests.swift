@@ -110,6 +110,23 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(link?.host, "www.matrix.org")
     }
     
+    func testPunctuationAtTheEndOfPlainStringLinks() {
+        let plainString = "This text contains a https://www.matrix.org:;., link."
+        
+        guard let attributedString = attributedStringBuilder.fromPlain(plainString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), plainString)
+        
+        XCTAssertEqual(attributedString.runs.count, 3)
+        
+        let link = attributedString.runs.first(where: { $0.link != nil })?.link
+        
+        XCTAssertEqual(link?.host, "www.matrix.org")
+    }
+    
     func testLinkDefaultScheme() {
         let plainString = "This text contains a matrix.org link."
         
@@ -177,9 +194,13 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     func testLinkWithFragment() {
-        let string = "https://example.com/#/"
-        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: string, expectedRuns: 1)
-        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: string, expectedRuns: 1)
+        var string = "https://example.com/#/"
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: "https://example.com", expectedRuns: 1)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: "https://example.com", expectedRuns: 1)
+        
+        string = "https://example.com/#/some_fragment/"
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: "https://example.com/#/some_fragment", expectedRuns: 1)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: "https://example.com/#/some_fragment", expectedRuns: 1)
     }
     
     func testPermalink() {
