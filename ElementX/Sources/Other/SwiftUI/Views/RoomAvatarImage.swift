@@ -44,7 +44,10 @@ struct RoomAvatarImage: View {
                                 imageProvider: imageProvider)
         case .heroes(let users):
             // We will expand upon this with more stack sizes in the future.
-            if users.count == 2 {
+            if users.count == 0 {
+                let _ = assertionFailure("We should never pass empty heroes here.")
+                PlaceholderAvatarImage(name: nil, contentID: nil)
+            } else if users.count == 2 {
                 let clusterSize = avatarSize.value * 1.6
                 ZStack {
                     LoadableAvatarImage(url: users[0].avatarURL,
