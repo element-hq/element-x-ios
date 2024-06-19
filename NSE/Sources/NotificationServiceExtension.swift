@@ -51,8 +51,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     private var modifiedContent: UNMutableNotificationContent?
     
     // Used to create one single UserSession across process/instances/runs
+    private static let serialQueue = DispatchQueue(label: "io.element.elementx.nse")
     private static var userSession: NSEUserSession?
-
+    
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
@@ -76,19 +77,26 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) #########################################")
         NSELogger.logMemory(with: tag)
         MXLog.info("\(tag) Payload came: \(request.content.userInfo)")
-
-        Task {
+        
+        Self.serialQueue.sync {
             if Self.userSession == nil {
                 // This function might be run concurrently and from different processes
                 // It's imperative that we create **at most** one UserSession/Client per process
-                do {
-                    Self.userSession = try await NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController)
-                } catch {
-                    MXLog.error("NSE run error: \(error)")
-                    return discard(unreadCount: request.unreadCount)
+                Task.synchronous {
+                    do {
+                        Self.userSession = try await NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController)
+                    } catch {
+                        MXLog.error("Failed creating user session with error: \(error)")
+                    }
                 }
             }
             
+            if Self.userSession == nil {
+                return discard(unreadCount: request.unreadCount)
+            }
+        }
+
+        Task {
             await run(with: credentials,
                       roomId: roomId,
                       eventId: eventId,
@@ -232,5 +240,22 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
         
         return false
+    }
+}
+
+// https://stackoverflow.com/a/77300959/730924
+private extension Task where Failure == Error {
+    /// Performs an async task in a sync context.
+    ///
+    /// - Note: This function blocks the thread until the given operation is finished. The caller is responsible for managing multithreading.
+    static func synchronous(priority: TaskPriority? = nil, operation: @escaping @Sendable () async throws -> Success) {
+        let semaphore = DispatchSemaphore(value: 0)
+
+        Task(priority: priority) {
+            defer { semaphore.signal() }
+            return try await operation()
+        }
+
+        semaphore.wait()
     }
 }
