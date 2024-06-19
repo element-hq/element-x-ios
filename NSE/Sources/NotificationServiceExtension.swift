@@ -49,6 +49,9 @@ private let keychainController = KeychainController(service: .sessions,
 class NotificationServiceExtension: UNNotificationServiceExtension {
     private var handler: ((UNNotificationContent) -> Void)?
     private var modifiedContent: UNMutableNotificationContent?
+    
+    // Used to create one single UserSession across process/instances/runs
+    private static var userSession: NSEUserSession?
 
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
@@ -75,6 +78,17 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) Payload came: \(request.content.userInfo)")
 
         Task {
+            if Self.userSession == nil {
+                // This function might be run concurrently and from different processes
+                // It's imperative that we create **at most** one UserSession/Client per process
+                do {
+                    Self.userSession = try await NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController)
+                } catch {
+                    MXLog.error("NSE run error: \(error)")
+                    return discard(unreadCount: request.unreadCount)
+                }
+            }
+            
             await run(with: credentials,
                       roomId: roomId,
                       eventId: eventId,
@@ -94,12 +108,13 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                      eventId: String,
                      unreadCount: Int?) async {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
+        
+        guard let userSession = Self.userSession else {
+            MXLog.error("Invalid NSE User Session, discarding.")
+            return discard(unreadCount: unreadCount)
+        }
 
         do {
-            // This function might be run concurrently and from different processes, let the SDK handle race conditions
-            // on fetching user sessions
-            let userSession = try await NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController)
-            
             guard let itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId) else {
                 MXLog.info("\(tag) no notification for the event, discard")
                 return discard(unreadCount: unreadCount)
