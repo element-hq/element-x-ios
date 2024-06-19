@@ -36,12 +36,6 @@ struct DeveloperOptionsScreen: View {
                     Text("Fuzzy searching")
                 }
             }
-            
-            Section("Room") {
-                Toggle(isOn: $context.draftRestoringEnabled) {
-                    Text("Allow drafts to be restored")
-                }
-            }
                                     
             Section("Element Call") {
                 TextField(context.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)

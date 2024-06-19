@@ -1,0 +1,1 @@
+Draft restoring is enabled by default.
