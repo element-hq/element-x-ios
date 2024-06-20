@@ -665,7 +665,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
         ServiceLocator.shared.networkMonitor
             .reachabilityPublisher
-            .removeDuplicates()
             .sink { reachability in
                 MXLog.info("Reachability changed to \(reachability)")
                 
