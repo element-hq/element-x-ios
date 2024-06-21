@@ -137,22 +137,13 @@ class AuthenticationService: AuthenticationServiceProtocol {
     // MARK: - Private
     
     private func makeClientBuilder() -> ClientBuilder {
-        var builder = ClientBuilder()
+        ClientBuilder
+            .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
+                         slidingSyncProxy: appSettings.slidingSyncProxyURL,
+                         sessionDelegate: userSessionStore.clientSessionDelegate)
             .sessionPath(path: sessionDirectory.path(percentEncoded: false))
             .passphrase(passphrase: passphrase)
             .requiresSlidingSync()
-            .slidingSyncProxy(slidingSyncProxy: appSettings.slidingSyncProxyURL?.absoluteString)
-            .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier, sessionDelegate: userSessionStore.clientSessionDelegate)
-            .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
-            .autoEnableCrossSigning(autoEnableCrossSigning: true) // TODO: Maybe we should remove these or change the defaults?
-            .backupDownloadStrategy(backupDownloadStrategy: .afterDecryptionFailure)
-            .autoEnableBackups(autoEnableBackups: true)
-
-        if let httpProxy = appSettings.websiteURL.globalProxy {
-            builder = builder.proxy(url: httpProxy)
-        }
-        
-        return builder
     }
     
     private func userSession(for client: Client) async -> Result<UserSessionProtocol, AuthenticationServiceError> {

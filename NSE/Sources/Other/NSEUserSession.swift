@@ -32,19 +32,14 @@ final class NSEUserSession {
         }
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
-        var clientBuilder = ClientBuilder()
+        let clientBuilder = ClientBuilder
+            .baseBuilder(setupEncryption: false,
+                         httpProxy: URL(string: homeserverURL)?.globalProxy,
+                         sessionDelegate: clientSessionDelegate)
             .sessionPath(path: credentials.restorationToken.sessionDirectory.path(percentEncoded: false))
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
             .passphrase(passphrase: credentials.restorationToken.passphrase)
-            .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
-            .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
-                                           sessionDelegate: clientSessionDelegate)
-        
-        if let homeserverURL = URL(string: homeserverURL),
-           let proxy = homeserverURL.globalProxy {
-            clientBuilder = clientBuilder.proxy(url: proxy)
-        }
         
         baseClient = try await clientBuilder.build()
         delegateHandle = baseClient.setDelegate(delegate: ClientDelegateWrapper())

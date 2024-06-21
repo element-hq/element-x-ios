@@ -452,9 +452,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
                                                           encryptionKeyProvider: encryptionKeyProvider,
                                                           appSettings: appSettings)
-        let qrCodeLoginService = QRCodeLoginService(oidcConfiguration: appSettings.oidcConfiguration.rustValue,
-                                                    encryptionKeyProvider: encryptionKeyProvider,
-                                                    userSessionStore: userSessionStore)
+        let qrCodeLoginService = QRCodeLoginService(encryptionKeyProvider: encryptionKeyProvider,
+                                                    userSessionStore: userSessionStore,
+                                                    appSettings: appSettings)
         
         authenticationFlowCoordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
                                                                       qrCodeLoginService: qrCodeLoginService,
