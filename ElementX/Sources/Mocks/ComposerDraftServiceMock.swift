@@ -21,7 +21,7 @@ struct ComposerDraftServiceMockConfiguration {
 }
 
 extension ComposerDraftServiceMock {
-    convenience init(config: ComposerDraftServiceMockConfiguration) {
+    convenience init(_ config: ComposerDraftServiceMockConfiguration) {
         self.init()
         loadDraftReturnValue = .success(config.draft)
         saveDraftReturnValue = .success(())
