@@ -257,7 +257,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -274,7 +274,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -291,7 +291,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -308,7 +308,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -328,7 +328,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -348,7 +348,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -368,7 +368,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -389,7 +389,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -409,7 +409,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -428,7 +428,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             
@@ -461,7 +461,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -481,7 +481,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -501,7 +501,7 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
-                                                             composerDraftService: ComposerDraftServiceMock())
+                                                             composerDraftService: ComposerDraftServiceMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
