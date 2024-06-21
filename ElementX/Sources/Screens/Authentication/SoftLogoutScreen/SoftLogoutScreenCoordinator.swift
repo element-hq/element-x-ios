@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 struct SoftLogoutScreenCoordinatorParameters {
-    let authenticationService: AuthenticationServiceProxyProtocol
+    let authenticationService: AuthenticationServiceProtocol
     let credentials: SoftLogoutScreenCredentials
     let keyBackupNeeded: Bool
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -47,7 +47,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     private let actionsSubject: PassthroughSubject<SoftLogoutScreenCoordinatorResult, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
-    private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
+    private var authenticationService: AuthenticationServiceProtocol { parameters.authenticationService }
     private var oidcPresenter: OIDCAuthenticationPresenter?
     
     var actions: AnyPublisher<SoftLogoutScreenCoordinatorResult, Never> {

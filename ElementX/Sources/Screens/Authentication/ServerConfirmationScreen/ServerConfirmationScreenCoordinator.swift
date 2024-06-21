@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 struct ServerConfirmationScreenCoordinatorParameters {
-    let authenticationService: AuthenticationServiceProxyProtocol
+    let authenticationService: AuthenticationServiceProtocol
     let authenticationFlow: AuthenticationFlow
 }
 

@@ -18,7 +18,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
+class MockAuthenticationServiceProxy: AuthenticationServiceProtocol {
     let validCredentials = (username: "alice", password: "12345678")
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>

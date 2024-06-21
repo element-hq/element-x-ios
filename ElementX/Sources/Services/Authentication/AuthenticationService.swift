@@ -18,8 +18,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-// FIXME: This (and the protocol) is no longer a Proxy.
-class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
+class AuthenticationService: AuthenticationServiceProtocol {
     private var client: Client?
     private let sessionDirectory: URL
     private let passphrase: String

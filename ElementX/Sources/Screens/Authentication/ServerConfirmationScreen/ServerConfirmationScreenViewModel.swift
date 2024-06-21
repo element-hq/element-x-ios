@@ -26,7 +26,7 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(authenticationService: AuthenticationServiceProxyProtocol, authenticationFlow: AuthenticationFlow) {
+    init(authenticationService: AuthenticationServiceProtocol, authenticationFlow: AuthenticationFlow) {
         super.init(initialViewState: ServerConfirmationScreenViewState(homeserverAddress: authenticationService.homeserver.value.address,
                                                                        authenticationFlow: authenticationFlow))
         

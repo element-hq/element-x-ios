@@ -19,7 +19,7 @@ import AuthenticationServices
 /// Presents a web authentication session for an OIDC request.
 @MainActor
 class OIDCAuthenticationPresenter: NSObject {
-    private let authenticationService: AuthenticationServiceProxyProtocol
+    private let authenticationService: AuthenticationServiceProtocol
     private let oidcRedirectURL: URL
     private let presentationAnchor: UIWindow
     
@@ -33,7 +33,7 @@ class OIDCAuthenticationPresenter: NSObject {
     /// The current request in progress. This is a single use value and will be moved on access.
     @Consumable private var request: Request?
     
-    init(authenticationService: AuthenticationServiceProxyProtocol, oidcRedirectURL: URL, presentationAnchor: UIWindow) {
+    init(authenticationService: AuthenticationServiceProtocol, oidcRedirectURL: URL, presentationAnchor: UIWindow) {
         self.authenticationService = authenticationService
         self.oidcRedirectURL = oidcRedirectURL
         self.presentationAnchor = presentationAnchor

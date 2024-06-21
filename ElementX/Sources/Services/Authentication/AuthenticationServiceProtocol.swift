@@ -39,7 +39,7 @@ enum AuthenticationServiceError: Error {
     case sessionTokenRefreshNotSupported
 }
 
-protocol AuthenticationServiceProxyProtocol {
+protocol AuthenticationServiceProtocol {
     /// The currently configured homeserver.
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { get }
         
