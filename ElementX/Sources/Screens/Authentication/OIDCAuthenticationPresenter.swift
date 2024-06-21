@@ -26,7 +26,7 @@ class OIDCAuthenticationPresenter: NSObject {
     /// The data required to complete a request.
     struct Request {
         let session: ASWebAuthenticationSession
-        let oidcData: OIDCAuthenticationDataProxy
+        let oidcData: OIDCAuthorizationDataProxy
         let continuation: CheckedContinuation<Result<UserSessionProtocol, AuthenticationServiceError>, Never>
     }
     
@@ -41,7 +41,7 @@ class OIDCAuthenticationPresenter: NSObject {
     }
     
     /// Presents a web authentication session for the supplied data.
-    func authenticate(using oidcData: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func authenticate(using oidcData: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         await withCheckedContinuation { continuation in
             let session = ASWebAuthenticationSession(url: oidcData.url,
                                                      callbackURLScheme: oidcRedirectURL.scheme) { [weak self] url, error in
