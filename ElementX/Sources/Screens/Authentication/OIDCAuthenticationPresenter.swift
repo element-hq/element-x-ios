@@ -107,7 +107,10 @@ class OIDCAuthenticationPresenter: NSObject {
             return
         }
         
-        request.continuation.resume(returning: .failure(error))
+        Task {
+            await authenticationService.abortOIDCLogin(data: request.oidcData)
+            request.continuation.resume(returning: .failure(error))
+        }
     }
 }
 

@@ -52,6 +52,8 @@ class MockAuthenticationServiceProxy: AuthenticationServiceProtocol {
         .failure(.oidcError(.notSupported))
     }
     
+    func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async { }
+    
     func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         .failure(.oidcError(.notSupported))
     }

@@ -82,9 +82,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
-    // TODO: Call me 🤙
     func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async {
         guard let client else { return }
+        MXLog.info("Aborting OIDC login.")
         await client.abortOidcLogin(authorizationData: data.underlyingData)
     }
     
