@@ -19,7 +19,7 @@ import SwiftUI
 
 struct ServerSelectionScreenCoordinatorParameters {
     /// The service used to authenticate the user.
-    let authenticationService: AuthenticationServiceProxyProtocol
+    let authenticationService: AuthenticationServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     /// Whether the screen is presented modally or within a navigation stack.
     let isModallyPresented: Bool
@@ -34,7 +34,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
     private let parameters: ServerSelectionScreenCoordinatorParameters
     private let userIndicatorController: UserIndicatorControllerProtocol
     private var viewModel: ServerSelectionScreenViewModelProtocol
-    private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
+    private var authenticationService: AuthenticationServiceProtocol { parameters.authenticationService }
 
     private let actionsSubject: PassthroughSubject<ServerSelectionScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()

@@ -20,21 +20,21 @@ import Foundation
 import MatrixRustSDK
 
 final class QRCodeLoginService: QRCodeLoginServiceProtocol {
-    private let oidcConfiguration: OidcConfiguration
     private let sessionDirectory: URL
     private let passphrase: String
     private let userSessionStore: UserSessionStoreProtocol
+    private let appSettings: AppSettings
     
     private let qrLoginProgressSubject = PassthroughSubject<QrLoginProgress, Never>()
     var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
         qrLoginProgressSubject.eraseToAnyPublisher()
     }
     
-    init(oidcConfiguration: OidcConfiguration,
-         encryptionKeyProvider: EncryptionKeyProviderProtocol,
-         userSessionStore: UserSessionStoreProtocol) {
-        self.oidcConfiguration = oidcConfiguration
+    init(encryptionKeyProvider: EncryptionKeyProviderProtocol,
+         userSessionStore: UserSessionStoreProtocol,
+         appSettings: AppSettings) {
         self.userSessionStore = userSessionStore
+        self.appSettings = appSettings
         sessionDirectory = .sessionsBaseDirectory.appending(component: UUID().uuidString)
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
     }
@@ -53,14 +53,14 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         }
         
         do {
-            let client = try await ClientBuilder()
+            let client = try await ClientBuilder
+                .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
+                             slidingSyncProxy: appSettings.slidingSyncProxyURL,
+                             sessionDelegate: userSessionStore.clientSessionDelegate)
                 .sessionPath(path: sessionDirectory.path(percentEncoded: false))
                 .passphrase(passphrase: passphrase)
-                .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
-                .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
-                                               sessionDelegate: userSessionStore.clientSessionDelegate)
-                .serverVersions(versions: ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"]) // FIXME: Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
-                .buildWithQrCode(qrCodeData: qrData, oidcConfiguration: oidcConfiguration, progressListener: listener)
+                .requiresSlidingSync()
+                .buildWithQrCode(qrCodeData: qrData, oidcConfiguration: appSettings.oidcConfiguration.rustValue, progressListener: listener)
             return await login(client: client)
         } catch let error as HumanQrLoginError {
             MXLog.error("QRCode login error: \(error)")

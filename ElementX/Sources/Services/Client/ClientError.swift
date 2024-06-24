@@ -34,18 +34,6 @@ extension ClientError {
 
         return first
     }
-}
-
-extension AuthenticationError {
-    var code: MatrixErrorCode {
-        guard case let .Generic(message) = self else { return .unknown }
-        
-        guard let first = MatrixErrorCode.allCases.first(where: { message.contains($0.rawValue) }) else {
-            return .unknown
-        }
-
-        return first
-    }
     
     /// Whether or not the error is related to the sliding sync proxy being full.
     ///

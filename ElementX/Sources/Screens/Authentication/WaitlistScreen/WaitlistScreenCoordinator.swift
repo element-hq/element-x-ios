@@ -21,7 +21,7 @@ struct WaitlistScreenCoordinatorParameters {
     /// The credentials for the login.
     let credentials: WaitlistScreenCredentials
     /// The service used to authenticate the user.
-    let authenticationService: AuthenticationServiceProxyProtocol
+    let authenticationService: AuthenticationServiceProtocol
     /// The service locator for the screen.
     var userIndicatorController: UserIndicatorControllerProtocol = ServiceLocator.shared.userIndicatorController
 }

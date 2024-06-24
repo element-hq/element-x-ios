@@ -39,16 +39,18 @@ enum AuthenticationServiceError: Error {
     case sessionTokenRefreshNotSupported
 }
 
-protocol AuthenticationServiceProxyProtocol {
+protocol AuthenticationServiceProtocol {
     /// The currently configured homeserver.
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { get }
         
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError>
     /// Performs login using OIDC for the current homeserver.
-    func urlForOIDCLogin() async -> Result<OIDCAuthenticationDataProxy, AuthenticationServiceError>
-    /// Add docs.
-    func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError>
+    func urlForOIDCLogin() async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError>
+    /// Asks the SDK to abort an ongoing OIDC login if we didn't get a callback to complete the request with.
+    func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async
+    /// Completes an OIDC login that was started using ``urlForOIDCLogin``.
+    func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     /// Performs a password login using the current homeserver.
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
 }
@@ -66,8 +68,8 @@ enum OIDCError: Error {
     case unknown
 }
 
-struct OIDCAuthenticationDataProxy: Equatable {
-    let underlyingData: OidcAuthenticationData
+struct OIDCAuthorizationDataProxy: Equatable {
+    let underlyingData: OidcAuthorizationData
     
     var url: URL {
         guard let url = URL(string: underlyingData.loginUrl()) else {
@@ -77,8 +79,8 @@ struct OIDCAuthenticationDataProxy: Equatable {
     }
 }
 
-extension OidcAuthenticationData: Equatable {
-    public static func == (lhs: MatrixRustSDK.OidcAuthenticationData, rhs: MatrixRustSDK.OidcAuthenticationData) -> Bool {
+extension OidcAuthorizationData: Equatable {
+    public static func == (lhs: MatrixRustSDK.OidcAuthorizationData, rhs: MatrixRustSDK.OidcAuthorizationData) -> Bool {
         lhs.loginUrl() == rhs.loginUrl()
     }
 }

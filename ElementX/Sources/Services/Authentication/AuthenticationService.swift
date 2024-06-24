@@ -18,11 +18,13 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
-    private let authenticationService: AuthenticationService
-    private let userSessionStore: UserSessionStoreProtocol
+class AuthenticationService: AuthenticationServiceProtocol {
+    private var client: Client?
     private let sessionDirectory: URL
     private let passphrase: String
+    
+    private let userSessionStore: UserSessionStoreProtocol
+    private let appSettings: AppSettings
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
@@ -31,19 +33,10 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         sessionDirectory = .sessionsBaseDirectory.appending(component: UUID().uuidString)
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
         self.userSessionStore = userSessionStore
+        self.appSettings = appSettings
         
         homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress,
                                                   loginMode: .unknown))
-               
-        authenticationService = AuthenticationService(sessionPath: sessionDirectory.path(percentEncoded: false),
-                                                      passphrase: passphrase,
-                                                      userAgent: UserAgentBuilder.makeASCIIUserAgent(),
-                                                      additionalRootCertificates: [],
-                                                      proxy: appSettings.websiteURL.globalProxy,
-                                                      oidcConfiguration: appSettings.oidcConfiguration.rustValue,
-                                                      customSlidingSyncProxy: appSettings.slidingSyncProxyURL?.absoluteString,
-                                                      sessionDelegate: userSessionStore.clientSessionDelegate,
-                                                      crossProcessRefreshLockId: InfoPlistReader.main.bundleIdentifier)
     }
     
     // MARK: - Public
@@ -52,24 +45,24 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         do {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
-            try await authenticationService.configureHomeserver(serverNameOrHomeserverUrl: homeserverAddress)
+            let client = try await makeClientBuilder().serverNameOrHomeserverUrl(serverNameOrUrl: homeserverAddress).build()
+            let loginDetails = await client.homeserverLoginDetails()
             
-            if let details = authenticationService.homeserverDetails() {
-                if details.supportsOidcLogin() {
-                    homeserver.loginMode = .oidc
-                } else if details.supportsPasswordLogin() {
-                    homeserver.loginMode = .password
-                } else {
-                    homeserver.loginMode = .unsupported
-                }
+            if loginDetails.supportsOidcLogin() {
+                homeserver.loginMode = .oidc
+            } else if loginDetails.supportsPasswordLogin() {
+                homeserver.loginMode = .password
+            } else {
+                homeserver.loginMode = .unsupported
             }
             
+            self.client = client
             homeserverSubject.send(homeserver)
             return .success(())
-        } catch AuthenticationError.WellKnownDeserializationError(let error) {
+        } catch ClientBuildError.WellKnownDeserializationError(let error) {
             MXLog.error("The user entered a server with an invalid well-known file: \(error)")
             return .failure(.invalidWellKnown(error))
-        } catch AuthenticationError.SlidingSyncNotAvailable {
+        } catch ClientBuildError.SlidingSyncNotAvailable {
             MXLog.info("User entered a homeserver that isn't configured for sliding sync.")
             return .failure(.slidingSyncNotAvailable)
         } catch {
@@ -78,21 +71,29 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         }
     }
     
-    func urlForOIDCLogin() async -> Result<OIDCAuthenticationDataProxy, AuthenticationServiceError> {
+    func urlForOIDCLogin() async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError> {
+        guard let client else { return .failure(.oidcError(.urlFailure)) }
         do {
-            let oidcData = try await authenticationService.urlForOidcLogin()
-            return .success(OIDCAuthenticationDataProxy(underlyingData: oidcData))
+            let oidcData = try await client.urlForOidcLogin(oidcConfiguration: appSettings.oidcConfiguration.rustValue)
+            return .success(OIDCAuthorizationDataProxy(underlyingData: oidcData))
         } catch {
             MXLog.error("Failed to get URL for OIDC login: \(error)")
             return .failure(.oidcError(.urlFailure))
         }
     }
     
-    func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async {
+        guard let client else { return }
+        MXLog.info("Aborting OIDC login.")
+        await client.abortOidcLogin(authorizationData: data.underlyingData)
+    }
+    
+    func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        guard let client else { return .failure(.failedLoggingIn) }
         do {
-            let client = try await authenticationService.loginWithOidcCallback(authenticationData: data.underlyingData, callbackUrl: callbackURL.absoluteString)
+            try await client.loginWithOidcCallback(authorizationData: data.underlyingData, callbackUrl: callbackURL.absoluteString)
             return await userSession(for: client)
-        } catch AuthenticationError.OidcCancelled {
+        } catch OidcError.Cancelled {
             return .failure(.oidcError(.userCancellation))
         } catch {
             MXLog.error("Login with OIDC failed: \(error)")
@@ -101,14 +102,11 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     }
     
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        guard let client else { return .failure(.failedLoggingIn) }
         do {
-            let client = try await authenticationService.login(username: username,
-                                                               password: password,
-                                                               initialDeviceName: initialDeviceName,
-                                                               deviceId: deviceID)
+            try await client.login(username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceID)
             
             let refreshToken = try? client.session().refreshToken
-            
             if refreshToken != nil {
                 MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
                 _ = try? await client.logout()
@@ -118,7 +116,8 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             return await userSession(for: client)
         } catch {
             MXLog.error("Failed logging in with error: \(error)")
-            guard let error = error as? AuthenticationError else { return .failure(.failedLoggingIn) }
+            // FIXME: How about we make a proper type in the FFI? 😅
+            guard let error = error as? ClientError else { return .failure(.failedLoggingIn) }
             
             if error.isElementWaitlist {
                 return .failure(.isOnWaitlist)
@@ -136,6 +135,16 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     }
     
     // MARK: - Private
+    
+    private func makeClientBuilder() -> ClientBuilder {
+        ClientBuilder
+            .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
+                         slidingSyncProxy: appSettings.slidingSyncProxyURL,
+                         sessionDelegate: userSessionStore.clientSessionDelegate)
+            .sessionPath(path: sessionDirectory.path(percentEncoded: false))
+            .passphrase(passphrase: passphrase)
+            .requiresSlidingSync()
+    }
     
     private func userSession(for client: Client) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         switch await userSessionStore.userSession(for: client, sessionDirectory: sessionDirectory, passphrase: passphrase) {

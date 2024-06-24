@@ -449,12 +449,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private func startAuthentication() {
         let encryptionKeyProvider = EncryptionKeyProvider()
-        let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
-                                                               encryptionKeyProvider: encryptionKeyProvider,
-                                                               appSettings: appSettings)
-        let qrCodeLoginService = QRCodeLoginService(oidcConfiguration: appSettings.oidcConfiguration.rustValue,
-                                                    encryptionKeyProvider: encryptionKeyProvider,
-                                                    userSessionStore: userSessionStore)
+        let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
+                                                          encryptionKeyProvider: encryptionKeyProvider,
+                                                          appSettings: appSettings)
+        let qrCodeLoginService = QRCodeLoginService(encryptionKeyProvider: encryptionKeyProvider,
+                                                    userSessionStore: userSessionStore,
+                                                    appSettings: appSettings)
         
         authenticationFlowCoordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
                                                                       qrCodeLoginService: qrCodeLoginService,
@@ -480,9 +480,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                           userDisplayName: userSession.clientProxy.userDisplayNamePublisher.value ?? "",
                                                           deviceID: userSession.clientProxy.deviceID)
             
-            let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
-                                                                   encryptionKeyProvider: EncryptionKeyProvider(),
-                                                                   appSettings: appSettings)
+            let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
+                                                              encryptionKeyProvider: EncryptionKeyProvider(),
+                                                              appSettings: appSettings)
             _ = await authenticationService.configure(for: userSession.clientProxy.homeserver)
             
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,

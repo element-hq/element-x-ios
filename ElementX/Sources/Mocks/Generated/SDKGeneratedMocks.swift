@@ -80,347 +80,6 @@ open class AbortSendHandleSDKMock: MatrixRustSDK.AbortSendHandle {
         }
     }
 }
-open class AuthenticationServiceSDKMock: MatrixRustSDK.AuthenticationService {
-    init() {
-        super.init(noPointer: .init())
-    }
-
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
-    }
-
-    fileprivate var pointer: UnsafeMutableRawPointer!
-
-    //MARK: - configureHomeserver
-
-    open var configureHomeserverServerNameOrHomeserverUrlThrowableError: Error?
-    var configureHomeserverServerNameOrHomeserverUrlUnderlyingCallsCount = 0
-    open var configureHomeserverServerNameOrHomeserverUrlCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return configureHomeserverServerNameOrHomeserverUrlUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = configureHomeserverServerNameOrHomeserverUrlUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                configureHomeserverServerNameOrHomeserverUrlUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    configureHomeserverServerNameOrHomeserverUrlUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var configureHomeserverServerNameOrHomeserverUrlCalled: Bool {
-        return configureHomeserverServerNameOrHomeserverUrlCallsCount > 0
-    }
-    open var configureHomeserverServerNameOrHomeserverUrlReceivedServerNameOrHomeserverUrl: String?
-    open var configureHomeserverServerNameOrHomeserverUrlReceivedInvocations: [String] = []
-    open var configureHomeserverServerNameOrHomeserverUrlClosure: ((String) async throws -> Void)?
-
-    open override func configureHomeserver(serverNameOrHomeserverUrl: String) async throws {
-        if let error = configureHomeserverServerNameOrHomeserverUrlThrowableError {
-            throw error
-        }
-        configureHomeserverServerNameOrHomeserverUrlCallsCount += 1
-        configureHomeserverServerNameOrHomeserverUrlReceivedServerNameOrHomeserverUrl = serverNameOrHomeserverUrl
-        DispatchQueue.main.async {
-            self.configureHomeserverServerNameOrHomeserverUrlReceivedInvocations.append(serverNameOrHomeserverUrl)
-        }
-        try await configureHomeserverServerNameOrHomeserverUrlClosure?(serverNameOrHomeserverUrl)
-    }
-
-    //MARK: - homeserverDetails
-
-    var homeserverDetailsUnderlyingCallsCount = 0
-    open var homeserverDetailsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return homeserverDetailsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = homeserverDetailsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                homeserverDetailsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    homeserverDetailsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var homeserverDetailsCalled: Bool {
-        return homeserverDetailsCallsCount > 0
-    }
-
-    var homeserverDetailsUnderlyingReturnValue: HomeserverLoginDetails?
-    open var homeserverDetailsReturnValue: HomeserverLoginDetails? {
-        get {
-            if Thread.isMainThread {
-                return homeserverDetailsUnderlyingReturnValue
-            } else {
-                var returnValue: HomeserverLoginDetails?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = homeserverDetailsUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                homeserverDetailsUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    homeserverDetailsUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var homeserverDetailsClosure: (() -> HomeserverLoginDetails?)?
-
-    open override func homeserverDetails() -> HomeserverLoginDetails? {
-        homeserverDetailsCallsCount += 1
-        if let homeserverDetailsClosure = homeserverDetailsClosure {
-            return homeserverDetailsClosure()
-        } else {
-            return homeserverDetailsReturnValue
-        }
-    }
-
-    //MARK: - login
-
-    open var loginUsernamePasswordInitialDeviceNameDeviceIdThrowableError: Error?
-    var loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = 0
-    open var loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var loginUsernamePasswordInitialDeviceNameDeviceIdCalled: Bool {
-        return loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount > 0
-    }
-    open var loginUsernamePasswordInitialDeviceNameDeviceIdReceivedArguments: (username: String, password: String, initialDeviceName: String?, deviceId: String?)?
-    open var loginUsernamePasswordInitialDeviceNameDeviceIdReceivedInvocations: [(username: String, password: String, initialDeviceName: String?, deviceId: String?)] = []
-
-    var loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingReturnValue: Client!
-    open var loginUsernamePasswordInitialDeviceNameDeviceIdReturnValue: Client! {
-        get {
-            if Thread.isMainThread {
-                return loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingReturnValue
-            } else {
-                var returnValue: Client? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginUsernamePasswordInitialDeviceNameDeviceIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var loginUsernamePasswordInitialDeviceNameDeviceIdClosure: ((String, String, String?, String?) async throws -> Client)?
-
-    open override func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async throws -> Client {
-        if let error = loginUsernamePasswordInitialDeviceNameDeviceIdThrowableError {
-            throw error
-        }
-        loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount += 1
-        loginUsernamePasswordInitialDeviceNameDeviceIdReceivedArguments = (username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId)
-        DispatchQueue.main.async {
-            self.loginUsernamePasswordInitialDeviceNameDeviceIdReceivedInvocations.append((username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId))
-        }
-        if let loginUsernamePasswordInitialDeviceNameDeviceIdClosure = loginUsernamePasswordInitialDeviceNameDeviceIdClosure {
-            return try await loginUsernamePasswordInitialDeviceNameDeviceIdClosure(username, password, initialDeviceName, deviceId)
-        } else {
-            return loginUsernamePasswordInitialDeviceNameDeviceIdReturnValue
-        }
-    }
-
-    //MARK: - loginWithOidcCallback
-
-    open var loginWithOidcCallbackAuthenticationDataCallbackUrlThrowableError: Error?
-    var loginWithOidcCallbackAuthenticationDataCallbackUrlUnderlyingCallsCount = 0
-    open var loginWithOidcCallbackAuthenticationDataCallbackUrlCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loginWithOidcCallbackAuthenticationDataCallbackUrlUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginWithOidcCallbackAuthenticationDataCallbackUrlUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginWithOidcCallbackAuthenticationDataCallbackUrlUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginWithOidcCallbackAuthenticationDataCallbackUrlUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var loginWithOidcCallbackAuthenticationDataCallbackUrlCalled: Bool {
-        return loginWithOidcCallbackAuthenticationDataCallbackUrlCallsCount > 0
-    }
-    open var loginWithOidcCallbackAuthenticationDataCallbackUrlReceivedArguments: (authenticationData: OidcAuthenticationData, callbackUrl: String)?
-    open var loginWithOidcCallbackAuthenticationDataCallbackUrlReceivedInvocations: [(authenticationData: OidcAuthenticationData, callbackUrl: String)] = []
-
-    var loginWithOidcCallbackAuthenticationDataCallbackUrlUnderlyingReturnValue: Client!
-    open var loginWithOidcCallbackAuthenticationDataCallbackUrlReturnValue: Client! {
-        get {
-            if Thread.isMainThread {
-                return loginWithOidcCallbackAuthenticationDataCallbackUrlUnderlyingReturnValue
-            } else {
-                var returnValue: Client? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginWithOidcCallbackAuthenticationDataCallbackUrlUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginWithOidcCallbackAuthenticationDataCallbackUrlUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginWithOidcCallbackAuthenticationDataCallbackUrlUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var loginWithOidcCallbackAuthenticationDataCallbackUrlClosure: ((OidcAuthenticationData, String) async throws -> Client)?
-
-    open override func loginWithOidcCallback(authenticationData: OidcAuthenticationData, callbackUrl: String) async throws -> Client {
-        if let error = loginWithOidcCallbackAuthenticationDataCallbackUrlThrowableError {
-            throw error
-        }
-        loginWithOidcCallbackAuthenticationDataCallbackUrlCallsCount += 1
-        loginWithOidcCallbackAuthenticationDataCallbackUrlReceivedArguments = (authenticationData: authenticationData, callbackUrl: callbackUrl)
-        DispatchQueue.main.async {
-            self.loginWithOidcCallbackAuthenticationDataCallbackUrlReceivedInvocations.append((authenticationData: authenticationData, callbackUrl: callbackUrl))
-        }
-        if let loginWithOidcCallbackAuthenticationDataCallbackUrlClosure = loginWithOidcCallbackAuthenticationDataCallbackUrlClosure {
-            return try await loginWithOidcCallbackAuthenticationDataCallbackUrlClosure(authenticationData, callbackUrl)
-        } else {
-            return loginWithOidcCallbackAuthenticationDataCallbackUrlReturnValue
-        }
-    }
-
-    //MARK: - urlForOidcLogin
-
-    open var urlForOidcLoginThrowableError: Error?
-    var urlForOidcLoginUnderlyingCallsCount = 0
-    open var urlForOidcLoginCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return urlForOidcLoginUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = urlForOidcLoginUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                urlForOidcLoginUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    urlForOidcLoginUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var urlForOidcLoginCalled: Bool {
-        return urlForOidcLoginCallsCount > 0
-    }
-
-    var urlForOidcLoginUnderlyingReturnValue: OidcAuthenticationData!
-    open var urlForOidcLoginReturnValue: OidcAuthenticationData! {
-        get {
-            if Thread.isMainThread {
-                return urlForOidcLoginUnderlyingReturnValue
-            } else {
-                var returnValue: OidcAuthenticationData? = nil
-                DispatchQueue.main.sync {
-                    returnValue = urlForOidcLoginUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                urlForOidcLoginUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    urlForOidcLoginUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var urlForOidcLoginClosure: (() async throws -> OidcAuthenticationData)?
-
-    open override func urlForOidcLogin() async throws -> OidcAuthenticationData {
-        if let error = urlForOidcLoginThrowableError {
-            throw error
-        }
-        urlForOidcLoginCallsCount += 1
-        if let urlForOidcLoginClosure = urlForOidcLoginClosure {
-            return try await urlForOidcLoginClosure()
-        } else {
-            return urlForOidcLoginReturnValue
-        }
-    }
-}
 open class ClientSDKMock: MatrixRustSDK.Client {
     init() {
         super.init(noPointer: .init())
@@ -431,6 +90,48 @@ open class ClientSDKMock: MatrixRustSDK.Client {
     }
 
     fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - abortOidcLogin
+
+    var abortOidcLoginAuthorizationDataUnderlyingCallsCount = 0
+    open var abortOidcLoginAuthorizationDataCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return abortOidcLoginAuthorizationDataUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = abortOidcLoginAuthorizationDataUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                abortOidcLoginAuthorizationDataUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    abortOidcLoginAuthorizationDataUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var abortOidcLoginAuthorizationDataCalled: Bool {
+        return abortOidcLoginAuthorizationDataCallsCount > 0
+    }
+    open var abortOidcLoginAuthorizationDataReceivedAuthorizationData: OidcAuthorizationData?
+    open var abortOidcLoginAuthorizationDataReceivedInvocations: [OidcAuthorizationData] = []
+    open var abortOidcLoginAuthorizationDataClosure: ((OidcAuthorizationData) async -> Void)?
+
+    open override func abortOidcLogin(authorizationData: OidcAuthorizationData) async {
+        abortOidcLoginAuthorizationDataCallsCount += 1
+        abortOidcLoginAuthorizationDataReceivedAuthorizationData = authorizationData
+        DispatchQueue.main.async {
+            self.abortOidcLoginAuthorizationDataReceivedInvocations.append(authorizationData)
+        }
+        await abortOidcLoginAuthorizationDataClosure?(authorizationData)
+    }
 
     //MARK: - accountData
 
@@ -1879,6 +1580,71 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
+    //MARK: - homeserverLoginDetails
+
+    var homeserverLoginDetailsUnderlyingCallsCount = 0
+    open var homeserverLoginDetailsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return homeserverLoginDetailsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = homeserverLoginDetailsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                homeserverLoginDetailsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    homeserverLoginDetailsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var homeserverLoginDetailsCalled: Bool {
+        return homeserverLoginDetailsCallsCount > 0
+    }
+
+    var homeserverLoginDetailsUnderlyingReturnValue: HomeserverLoginDetails!
+    open var homeserverLoginDetailsReturnValue: HomeserverLoginDetails! {
+        get {
+            if Thread.isMainThread {
+                return homeserverLoginDetailsUnderlyingReturnValue
+            } else {
+                var returnValue: HomeserverLoginDetails? = nil
+                DispatchQueue.main.sync {
+                    returnValue = homeserverLoginDetailsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                homeserverLoginDetailsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    homeserverLoginDetailsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var homeserverLoginDetailsClosure: (() async -> HomeserverLoginDetails)?
+
+    open override func homeserverLoginDetails() async -> HomeserverLoginDetails {
+        homeserverLoginDetailsCallsCount += 1
+        if let homeserverLoginDetailsClosure = homeserverLoginDetailsClosure {
+            return await homeserverLoginDetailsClosure()
+        } else {
+            return homeserverLoginDetailsReturnValue
+        }
+    }
+
     //MARK: - ignoreUser
 
     open var ignoreUserUserIdThrowableError: Error?
@@ -2188,6 +1954,52 @@ open class ClientSDKMock: MatrixRustSDK.Client {
             self.loginUsernamePasswordInitialDeviceNameDeviceIdReceivedInvocations.append((username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId))
         }
         try await loginUsernamePasswordInitialDeviceNameDeviceIdClosure?(username, password, initialDeviceName, deviceId)
+    }
+
+    //MARK: - loginWithOidcCallback
+
+    open var loginWithOidcCallbackAuthorizationDataCallbackUrlThrowableError: Error?
+    var loginWithOidcCallbackAuthorizationDataCallbackUrlUnderlyingCallsCount = 0
+    open var loginWithOidcCallbackAuthorizationDataCallbackUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loginWithOidcCallbackAuthorizationDataCallbackUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginWithOidcCallbackAuthorizationDataCallbackUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginWithOidcCallbackAuthorizationDataCallbackUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginWithOidcCallbackAuthorizationDataCallbackUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loginWithOidcCallbackAuthorizationDataCallbackUrlCalled: Bool {
+        return loginWithOidcCallbackAuthorizationDataCallbackUrlCallsCount > 0
+    }
+    open var loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedArguments: (authorizationData: OidcAuthorizationData, callbackUrl: String)?
+    open var loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedInvocations: [(authorizationData: OidcAuthorizationData, callbackUrl: String)] = []
+    open var loginWithOidcCallbackAuthorizationDataCallbackUrlClosure: ((OidcAuthorizationData, String) async throws -> Void)?
+
+    open override func loginWithOidcCallback(authorizationData: OidcAuthorizationData, callbackUrl: String) async throws {
+        if let error = loginWithOidcCallbackAuthorizationDataCallbackUrlThrowableError {
+            throw error
+        }
+        loginWithOidcCallbackAuthorizationDataCallbackUrlCallsCount += 1
+        loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedArguments = (authorizationData: authorizationData, callbackUrl: callbackUrl)
+        DispatchQueue.main.async {
+            self.loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedInvocations.append((authorizationData: authorizationData, callbackUrl: callbackUrl))
+        }
+        try await loginWithOidcCallbackAuthorizationDataCallbackUrlClosure?(authorizationData, callbackUrl)
     }
 
     //MARK: - logout
@@ -3398,6 +3210,81 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
+    //MARK: - urlForOidcLogin
+
+    open var urlForOidcLoginOidcConfigurationThrowableError: Error?
+    var urlForOidcLoginOidcConfigurationUnderlyingCallsCount = 0
+    open var urlForOidcLoginOidcConfigurationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return urlForOidcLoginOidcConfigurationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = urlForOidcLoginOidcConfigurationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                urlForOidcLoginOidcConfigurationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    urlForOidcLoginOidcConfigurationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var urlForOidcLoginOidcConfigurationCalled: Bool {
+        return urlForOidcLoginOidcConfigurationCallsCount > 0
+    }
+    open var urlForOidcLoginOidcConfigurationReceivedOidcConfiguration: OidcConfiguration?
+    open var urlForOidcLoginOidcConfigurationReceivedInvocations: [OidcConfiguration] = []
+
+    var urlForOidcLoginOidcConfigurationUnderlyingReturnValue: OidcAuthorizationData!
+    open var urlForOidcLoginOidcConfigurationReturnValue: OidcAuthorizationData! {
+        get {
+            if Thread.isMainThread {
+                return urlForOidcLoginOidcConfigurationUnderlyingReturnValue
+            } else {
+                var returnValue: OidcAuthorizationData? = nil
+                DispatchQueue.main.sync {
+                    returnValue = urlForOidcLoginOidcConfigurationUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                urlForOidcLoginOidcConfigurationUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    urlForOidcLoginOidcConfigurationUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var urlForOidcLoginOidcConfigurationClosure: ((OidcConfiguration) async throws -> OidcAuthorizationData)?
+
+    open override func urlForOidcLogin(oidcConfiguration: OidcConfiguration) async throws -> OidcAuthorizationData {
+        if let error = urlForOidcLoginOidcConfigurationThrowableError {
+            throw error
+        }
+        urlForOidcLoginOidcConfigurationCallsCount += 1
+        urlForOidcLoginOidcConfigurationReceivedOidcConfiguration = oidcConfiguration
+        DispatchQueue.main.async {
+            self.urlForOidcLoginOidcConfigurationReceivedInvocations.append(oidcConfiguration)
+        }
+        if let urlForOidcLoginOidcConfigurationClosure = urlForOidcLoginOidcConfigurationClosure {
+            return try await urlForOidcLoginOidcConfigurationClosure(oidcConfiguration)
+        } else {
+            return urlForOidcLoginOidcConfigurationReturnValue
+        }
+    }
+
     //MARK: - userId
 
     open var userIdThrowableError: Error?
@@ -4317,6 +4204,71 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
             return proxyUrlClosure(url)
         } else {
             return proxyUrlReturnValue
+        }
+    }
+
+    //MARK: - requiresSlidingSync
+
+    var requiresSlidingSyncUnderlyingCallsCount = 0
+    open var requiresSlidingSyncCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return requiresSlidingSyncUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requiresSlidingSyncUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requiresSlidingSyncUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requiresSlidingSyncUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var requiresSlidingSyncCalled: Bool {
+        return requiresSlidingSyncCallsCount > 0
+    }
+
+    var requiresSlidingSyncUnderlyingReturnValue: ClientBuilder!
+    open var requiresSlidingSyncReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return requiresSlidingSyncUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requiresSlidingSyncUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requiresSlidingSyncUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requiresSlidingSyncUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var requiresSlidingSyncClosure: (() -> ClientBuilder)?
+
+    open override func requiresSlidingSync() -> ClientBuilder {
+        requiresSlidingSyncCallsCount += 1
+        if let requiresSlidingSyncClosure = requiresSlidingSyncClosure {
+            return requiresSlidingSyncClosure()
+        } else {
+            return requiresSlidingSyncReturnValue
         }
     }
 
@@ -9292,82 +9244,6 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
             self.unmuteRoomRoomIdIsEncryptedIsOneToOneReceivedInvocations.append((roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne))
         }
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
-    }
-}
-open class OidcAuthenticationDataSDKMock: MatrixRustSDK.OidcAuthenticationData {
-    init() {
-        super.init(noPointer: .init())
-    }
-
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
-    }
-
-    fileprivate var pointer: UnsafeMutableRawPointer!
-
-    //MARK: - loginUrl
-
-    var loginUrlUnderlyingCallsCount = 0
-    open var loginUrlCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loginUrlUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginUrlUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginUrlUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginUrlUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var loginUrlCalled: Bool {
-        return loginUrlCallsCount > 0
-    }
-
-    var loginUrlUnderlyingReturnValue: String!
-    open var loginUrlReturnValue: String! {
-        get {
-            if Thread.isMainThread {
-                return loginUrlUnderlyingReturnValue
-            } else {
-                var returnValue: String? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginUrlUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginUrlUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginUrlUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var loginUrlClosure: (() -> String)?
-
-    open override func loginUrl() -> String {
-        loginUrlCallsCount += 1
-        if let loginUrlClosure = loginUrlClosure {
-            return loginUrlClosure()
-        } else {
-            return loginUrlReturnValue
-        }
     }
 }
 open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {

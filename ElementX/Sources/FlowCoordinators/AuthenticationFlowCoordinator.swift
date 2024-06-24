@@ -23,7 +23,7 @@ protocol AuthenticationFlowCoordinatorDelegate: AnyObject {
 }
 
 class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
-    private let authenticationService: AuthenticationServiceProxyProtocol
+    private let authenticationService: AuthenticationServiceProtocol
     private let bugReportService: BugReportServiceProtocol
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationStackCoordinator: NavigationStackCoordinator
@@ -42,7 +42,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     weak var delegate: AuthenticationFlowCoordinatorDelegate?
     
-    init(authenticationService: AuthenticationServiceProxyProtocol,
+    init(authenticationService: AuthenticationServiceProtocol,
          qrCodeLoginService: QRCodeLoginServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
