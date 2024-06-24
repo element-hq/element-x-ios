@@ -211,6 +211,7 @@
 "common_voice_message" = "語音訊息";
 "common_waiting" = "等待中...";
 "common_waiting_for_decryption_key" = "等待此則訊息";
+"common.do_not_show_this_again" = "Do not show this again";
 "common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "您確定要結束這項投票嗎？";

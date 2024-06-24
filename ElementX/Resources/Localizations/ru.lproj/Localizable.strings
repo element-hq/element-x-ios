@@ -211,6 +211,7 @@
 "common_voice_message" = "Голосовое сообщение";
 "common_waiting" = "Ожидание…";
 "common_waiting_for_decryption_key" = "Ожидание ключа расшифровки";
+"common.do_not_show_this_again" = "Не показывать больше";
 "common.send_to" = "Отправить";
 "common_no_room_name" = "Нету названия комнаты";
 "common_poll_end_confirmation" = "Вы действительно хотите завершить данный опрос?";

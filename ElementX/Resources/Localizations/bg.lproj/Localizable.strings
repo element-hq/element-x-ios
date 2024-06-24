@@ -211,6 +211,7 @@
 "common_voice_message" = "Гласово съобщение";
 "common_waiting" = "Waiting…";
 "common_waiting_for_decryption_key" = "В очакване на това съобщение";
+"common.do_not_show_this_again" = "Do not show this again";
 "common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "Сигурни ли сте, че искате да приключите тази анкета?";

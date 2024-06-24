@@ -211,6 +211,7 @@
 "common_voice_message" = "Message vocal";
 "common_waiting" = "En attente...";
 "common_waiting_for_decryption_key" = "En attente de la clé de déchiffrement";
+"common.do_not_show_this_again" = "Ne plus afficher";
 "common.send_to" = "Envoyer vers";
 "common_no_room_name" = "Salon sans nom";
 "common_poll_end_confirmation" = "Êtes-vous sûr de vouloir mettre fin à ce sondage ?";

@@ -211,6 +211,7 @@
 "common_voice_message" = "Häälsõnum";
 "common_waiting" = "Ootame…";
 "common_waiting_for_decryption_key" = "Ootame selle sõnumi dekrüptimisvõtit";
+"common.do_not_show_this_again" = "Do not show this again";
 "common.send_to" = "Send to";
 "common_no_room_name" = "Jututoal puudub nimi";
 "common_poll_end_confirmation" = "Kas oled kindel, et soovid selle küsitluse lõpetada?";

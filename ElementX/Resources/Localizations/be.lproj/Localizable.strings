@@ -211,6 +211,7 @@
 "common_voice_message" = "Галасавое паведамленне";
 "common_waiting" = "Чакаем…";
 "common_waiting_for_decryption_key" = "Чакаю гэта паведамленне";
+"common.do_not_show_this_again" = "Не паказваць гэта зноў";
 "common.send_to" = "Адправіць";
 "common_no_room_name" = "Няма назвы пакоя";
 "common_poll_end_confirmation" = "Вы ўпэўнены, што хочаце скончыць гэтае апытанне?";

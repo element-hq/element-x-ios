@@ -211,6 +211,7 @@
 "common_voice_message" = "Pesan suara";
 "common_waiting" = "Menunggu…";
 "common_waiting_for_decryption_key" = "Menunggu pesan ini";
+"common.do_not_show_this_again" = "Do not show this again";
 "common.send_to" = "Kirim ke";
 "common_no_room_name" = "Tidak ada nama ruangan";
 "common_poll_end_confirmation" = "Apakah Anda yakin ingin mengakhiri pemungutan suara ini?";

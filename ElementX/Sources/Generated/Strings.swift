@@ -2224,6 +2224,8 @@ internal enum L10n {
   }
 
   internal enum Common {
+    /// Do not show this again
+    internal static var doNotShowThisAgain: String { return L10n.tr("Localizable", "common.do_not_show_this_again") }
     /// Send to
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
   }
