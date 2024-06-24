@@ -59,7 +59,7 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
                              sessionDelegate: userSessionStore.clientSessionDelegate)
                 .sessionPath(path: sessionDirectory.path(percentEncoded: false))
                 .passphrase(passphrase: passphrase)
-                .requiresSlidingSync() // TODO: Check me?
+                .requiresSlidingSync()
                 .buildWithQrCode(qrCodeData: qrData, oidcConfiguration: appSettings.oidcConfiguration.rustValue, progressListener: listener)
             return await login(client: client)
         } catch let error as HumanQrLoginError {
