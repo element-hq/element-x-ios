@@ -30,6 +30,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private var incomingCallRoomID: String?
     
+    private var endUnansweredCallTask: Task<Void, Never>?
+    
     private let actionsSubject: PassthroughSubject<ElementCallServiceAction, Never> = .init()
     var actions: AnyPublisher<ElementCallServiceAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -48,7 +50,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         guard ongoingCallID == nil else {
             return
         }
-        
+                
         let callID = UUID()
         ongoingCallID = callID
         
@@ -103,6 +105,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let configuration = CXProviderConfiguration()
         configuration.supportsVideo = true
         configuration.includesCallsInRecents = true
+        // Provide image icon if available
+        configuration.iconTemplateImageData = nil
         
         // https://stackoverflow.com/a/46077628/730924
         configuration.supportedHandleTypes = [.generic]
@@ -125,8 +129,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             completion()
         }
         
-        Task { [weak self, callProvider, callID] in
+        endUnansweredCallTask = Task { [weak self, callProvider, callID] in
             try? await Task.sleep(for: .seconds(15))
+            guard !Task.isCancelled else {
+                return
+            }
+            
             if let ongoingCallID = self?.ongoingCallID, ongoingCallID == callID {
                 callProvider.reportCall(with: callID, endedAt: .now, reason: .unanswered)
             }
@@ -146,6 +154,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
                 actionsSubject.send(.answerCall(roomID: incomingCallRoomID))
             }
             self.incomingCallRoomID = nil
+            endUnansweredCallTask?.cancel()
         } else {
             MXLog.error("Failed answering incoming call, missing room ID")
         }
