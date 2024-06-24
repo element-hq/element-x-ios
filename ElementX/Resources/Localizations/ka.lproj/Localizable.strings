@@ -211,6 +211,7 @@
 "common_voice_message" = "ხმოვანი შეტყობინება";
 "common_waiting" = "მოცდა...";
 "common_waiting_for_decryption_key" = "Waiting for this message";
+"common.do_not_show_this_again" = "Do not show this again";
 "common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "დარწმუნებული ხართ, რომ გსურთ ამ გამოკითხვის დასრულება?";

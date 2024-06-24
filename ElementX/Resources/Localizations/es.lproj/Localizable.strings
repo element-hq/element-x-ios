@@ -211,6 +211,7 @@
 "common_voice_message" = "Mensaje de voz";
 "common_waiting" = "Esperando…";
 "common_waiting_for_decryption_key" = "Esperando este mensaje";
+"common.do_not_show_this_again" = "Do not show this again";
 "common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "¿Estás seguro de que quieres finalizar esta encuesta?";

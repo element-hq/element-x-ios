@@ -211,6 +211,7 @@
 "common_voice_message" = "语音留言";
 "common_waiting" = "等待...";
 "common_waiting_for_decryption_key" = "正在等待解密密钥";
+"common.do_not_show_this_again" = "Do not show this again";
 "common.send_to" = "Send to";
 "common_no_room_name" = "无房间名";
 "common_poll_end_confirmation" = "你确定要结束这个投票吗？";

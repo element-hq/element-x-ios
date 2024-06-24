@@ -211,6 +211,7 @@
 "common_voice_message" = "Hangüzenet";
 "common_waiting" = "Várakozás…";
 "common_waiting_for_decryption_key" = "Várakozás a visszafejtési kulcsra";
+"common.do_not_show_this_again" = "Do not show this again";
 "common.send_to" = "Címzett";
 "common_no_room_name" = "Nincs szobanév";
 "common_poll_end_confirmation" = "Biztos, hogy befejezi ezt a szavazást?";
