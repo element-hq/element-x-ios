@@ -145,15 +145,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         registerBackgroundAppRefresh()
         
-        elementCallService.actions.sink { [weak self] action in
-            switch action {
-            case .answerCall(let roomID):
-                self?.handleAppRoute(.call(roomID: roomID))
-            case .declineCall:
-                break
+        elementCallService.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                switch action {
+                case .answerCall(let roomID):
+                    self?.handleAppRoute(.call(roomID: roomID))
+                case .declineCall:
+                    break
+                }
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
     }
     
     func start() {
