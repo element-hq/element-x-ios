@@ -1,6 +1,5 @@
 require 'yaml'
 require 'semantic'
-require_relative 'changelog'
 
 before_all do
   xcversion(version: "15.2")
@@ -208,35 +207,30 @@ lane :release_to_github do
   api_token = ENV["GITHUB_TOKEN"]
   UI.user_error!("Invalid GitHub API token.") unless !api_token.to_s.empty?
 
-  # Get the Diawi link from Diawi action shared value
-  diawi_link = lane_context[SharedValues::UPLOADED_FILE_LINK_TO_DIAWI]
-
   release_version = get_version_number(target: "ElementX")
-
-  changes = export_version_changes(version: release_version)
-
-  description = ""
-  if diawi_link.nil?
-    description = "#{changes}"
-  else
-    # Generate the Diawi QR code file link
-    diawi_app_id = URI(diawi_link).path.split('/').last
-    diawi_qr_code_link = "https://www.diawi.com/qrcode/link/#{diawi_app_id}"
-
-    "[iOS AdHoc Release - Diawi Link](#{diawi_link})
-    ![QR code](#{diawi_qr_code_link})
-    #{changes}"
-  end
 
   github_release = set_github_release(
     repository_name: "element-hq/element-x-ios",
     api_token: api_token,
     name: release_version,
     tag_name: release_version,
-    is_generate_release_notes: false,
-    description: description
+    is_generate_release_notes: true,
   )
-
+  
+  release_date = Date.today.strftime("%Y-%m-%d")
+  generated_notes = github_release["body"].gsub(/<!-- .*? -->/, '').gsub("### ", "\n").gsub("## ", "### ")
+  UI.user_error!("The generated release notes are missing!") unless !generated_notes.to_s.empty?
+  
+  # Prepend the new release notes to the CHANGES.md file
+  changes_file = "../CHANGES.md"
+  File.open(changes_file, "r+") do |file|
+    content = file.read
+    file.rewind
+    file.write("## Changes in #{release_version} (#{release_date})#{generated_notes}\n\n#{content}")
+  end
+  
+  # The changelog will be committed when prepare_next_release is called.
+  sh("git add #{changes_file}")
 end
 
 lane :prepare_next_release do
@@ -364,13 +358,6 @@ private_lane :bump_build_number do
   # Increment build number to current date
   build_number = Time.now.strftime("%Y%m%d%H%M")
   increment_build_number(build_number: build_number)
-end
-
-private_lane :export_version_changes do |options|
-  Dir.chdir("..") do
-    Changelog.update_topmost_section(version: options[:version], additional_entries: {})
-    Changelog.extract_first_section
-  end
 end
 
 private_lane :update_app_icon do |options|
