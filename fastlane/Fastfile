@@ -230,6 +230,7 @@ lane :release_to_github do
   end
   
   # The changelog will be committed when prepare_next_release is called.
+  sh("git add #{changes_file}")
 end
 
 lane :prepare_next_release do
