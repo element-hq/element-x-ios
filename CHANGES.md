@@ -1,3 +1,17 @@
+## Changes in 1.6.12 (2024-06-25)
+
+✨ Features
+
+- Draft restoring is enabled by default. ([#2943](https://github.com/element-hq/element-x-ios/pull/2943))
+
+🙌 Improvements
+
+- Adopt the new authentication methods exposed on Rust's Client. ([#2954](https://github.com/element-hq/element-x-ios/pull/2954))
+
+🐛 Bugfixes
+
+- Timestamps in room list inconsistently use absolute and relative formatting ([#2679](https://github.com/element-hq/element-x-ios/issues/2679))
+
 ## Changes in 1.6.11 (2024-06-18)
 
 No significant changes.
