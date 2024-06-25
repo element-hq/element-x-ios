@@ -149,10 +149,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 switch action {
-                case .answerCall(let roomID):
+                case .startCall(let roomID):
                     self?.handleAppRoute(.call(roomID: roomID))
-                case .declineCall:
-                    break
+                case .endCall:
+                    self?.handleAppRoute(.call(roomID: nil))
                 }
             }
             .store(in: &cancellables)

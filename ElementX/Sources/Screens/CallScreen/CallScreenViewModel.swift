@@ -102,7 +102,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 return
             }
             
-            await elementCallService.setupCallSession(title: roomProxy.roomTitle)
+            await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
             
             let _ = await roomProxy.sendCallNotificationIfNeeeded()
         }
@@ -136,7 +136,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         """
         
         let result = await widgetDriver.sendMessage(hangUpMessage)
-        MXLog.error("Result yo: \(result)")
+        MXLog.info("Sent hangUp message with result: \(result)")
     }
 
     private static let eventHandlerName = "elementx"

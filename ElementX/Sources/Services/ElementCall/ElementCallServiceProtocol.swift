@@ -17,8 +17,8 @@
 import Combine
 
 enum ElementCallServiceAction {
-    case answerCall(roomID: String)
-    case declineCall(roomID: String)
+    case startCall(roomID: String)
+    case endCall(roomID: String)
 }
 
 enum ElementCallServiceNotificationKey: String {
@@ -32,7 +32,7 @@ let ElementCallServiceNotificationDiscardDelta = 10.0
 protocol ElementCallServiceProtocol {
     var actions: AnyPublisher<ElementCallServiceAction, Never> { get }
     
-    func setupCallSession(title: String) async
+    func setupCallSession(roomID: String, roomDisplayName: String) async
     
     func tearDownCallSession()
 }

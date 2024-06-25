@@ -251,8 +251,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .call(let roomID):
-            Task {
-                await presentCallScreen(roomID: roomID)
+            if let roomID {
+                Task {
+                    await presentCallScreen(roomID: roomID)
+                }
+            } else {
+                dismissCallScreen()
             }
         case .genericCallLink(let url):
             navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
@@ -567,6 +571,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         presentCallScreen(roomProxy: roomProxy)
+    }
+    
+    private func dismissCallScreen() {
+        guard navigationSplitCoordinator.sheetCoordinator is CallScreenCoordinator else {
+            return
+        }
+        
+        navigationSplitCoordinator.setSheetCoordinator(nil)
     }
     
     // MARK: Secure backup confirmation
