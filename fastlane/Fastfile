@@ -1,6 +1,11 @@
 require 'yaml'
 require 'semantic'
 
+enterprise = '../Enterprise/fastlane/Fastfile'
+if File.exist?(enterprise)
+  import enterprise
+end
+
 before_all do
   xcversion(version: "15.2")
 
@@ -173,23 +178,6 @@ lane :config_nightly do |options|
   release_version = get_version_number(target: "ElementX")
 
   update_app_icon(caption_text: "#{release_version}(#{build_number})", modulate: "100,20,100")
-end
-
-lane :config_enterprise do
-  target_file_path = "../project.yml"
-  data = YAML.load_file target_file_path
-  data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.enterprise"
-  data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.enterprise"
-  data["settings"]["APP_NAME"] = "Element"
-  data["settings"]["APP_DISPLAY_NAME"] = "Element"
-  
-  config_secrets()
-  
-  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
-  
-  xcodegen(spec: "project.yml")
-  
-  update_app_icon(caption_text: "Enterprise", modulate: "100,100,120")
 end
 
 $sentry_retry=0
