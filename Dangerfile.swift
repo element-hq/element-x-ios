@@ -5,6 +5,9 @@ SwiftLint.lint(inline: true)
 
 let danger = Danger()
 
+// All of the new and modified files together.
+let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
+
 // Warn when there is a big PR
 if (danger.github.pullRequest.additions ?? 0) > 1000 {
     warn("This pull request seems relatively large. Please consider splitting it into multiple smaller ones.")
@@ -13,14 +16,6 @@ if (danger.github.pullRequest.additions ?? 0) > 1000 {
 // Check that the PR has a description
 if danger.github.pullRequest.body?.isEmpty ?? true {
     warn("Please provide a description for this PR.")
-}
-
-// Request a changelog for each app change
-let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
-let changelogFiles = editedFiles.filter { $0.hasPrefix("changelog.d/") }
-
-if editedFiles.count > 0, changelogFiles.isEmpty {
-    warn("Please add a changelog.")
 }
 
 // Check for a ticket number
@@ -83,4 +78,12 @@ if hasChangedViews {
 let hasPngs = !editedFiles.filter { $0.lowercased().contains(".xcassets") && $0.lowercased().hasSuffix(".png") }.isEmpty
 if hasPngs {
     warn("You seem to have made changes to some resource images. Please consider using an SVG or PDF.")
+}
+
+if danger.github.pullRequest.title.hasSuffix("…") {
+    fail("Please provide a complete title that can be used as a changelog entry.")
+}
+
+if danger.github.issue.labels.filter({ $0.name.hasPrefix("pr-") }).count != 1 {
+    fail("Please add a `pr-` label to categorise the changelog entry.")
 }
