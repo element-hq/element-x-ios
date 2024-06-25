@@ -38,10 +38,6 @@ install_xcode_cloud_brew_dependencies () {
     fi
 }
 
-install_xcode_cloud_python_dependencies () {
-    pip3 install towncrier # Install towncrier for generating changelogs
-}
-
 setup_github_actions_environment() {
     unset HOMEBREW_NO_INSTALL_FROM_API
     export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1

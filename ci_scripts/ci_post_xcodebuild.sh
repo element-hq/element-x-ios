@@ -11,8 +11,6 @@ bundle exec fastlane upload_dsyms_to_sentry dsym_path:"$CI_ARCHIVE_PATH/dSYMs"
 generate_what_to_test_notes
 
 if [ "$CI_WORKFLOW" = "Release" ]; then
-    install_xcode_cloud_python_dependencies
-
     bundle exec fastlane release_to_github
     bundle exec fastlane prepare_next_release
 elif [ "$CI_WORKFLOW" = "Nightly" ]; then
