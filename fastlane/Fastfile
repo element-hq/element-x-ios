@@ -233,10 +233,22 @@ lane :release_to_github do
     api_token: api_token,
     name: release_version,
     tag_name: release_version,
-    is_generate_release_notes: false,
-    description: description
+    is_generate_release_notes: true,
   )
-
+  
+  release_date = Date.today.strftime("%Y-%m-%d")
+  generated_notes = github_release["body"].gsub(/<!-- .*? -->/, '').gsub("### ", "\n").gsub("## ", "### ")
+  UI.user_error!("The generated release notes are missing!") unless !generated_notes.to_s.empty?
+  
+  # Prepend the new release notes to the CHANGES.md file
+  changes_file = "../CHANGES.md"
+  File.open(changes_file, "r+") do |file|
+    content = file.read
+    file.rewind
+    file.write("## Changes in #{release_version} (#{release_date})#{generated_notes}\n\n#{content}")
+  end
+  
+  # The changelog will be committed when prepare_next_release is called.
 end
 
 lane :prepare_next_release do
