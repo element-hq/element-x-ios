@@ -65,10 +65,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     @Consumable private var storedAppRoute: AppRoute?
 
     init(appDelegate: AppDelegate) {
+        AppHooks.shared.registerHooks()
+        
         windowManager = WindowManager(appDelegate: appDelegate)
         appMediator = AppMediator(windowManager: windowManager)
         
-        let appSettings = AppSettings()
+        let appSettings = AppHooks.shared.runAppSettingsHook(AppSettings())
         
         MXLog.configure(logLevel: appSettings.logLevel)
         

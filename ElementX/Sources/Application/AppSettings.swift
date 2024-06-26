@@ -74,6 +74,14 @@ final class AppSettings {
         store = userDefaults
     }
     
+    // MARK: - Hooks
+    
+    func override(defaultHomeserverAddress: String? = nil) {
+        if let defaultHomeserverAddress {
+            self.defaultHomeserverAddress = defaultHomeserverAddress
+        }
+    }
+    
     // MARK: - Application
     
     /// Whether or not the app is a development build that isn't in production.
@@ -94,7 +102,7 @@ final class AppSettings {
         
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
-    let defaultHomeserverAddress = "matrix.org"
+    private(set) var defaultHomeserverAddress = "matrix.org"
     
     /// An override of the homeserver's Sliding Sync proxy URL. This allows development against servers
     /// that don't yet have an officially trusted proxy configured in their well-known.
