@@ -55,7 +55,12 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         await subscribeToPagination()
         
-        innerTimelineProvider = await RoomTimelineProvider(timeline: timeline, isLive: isLive, paginationStatePublisher: paginationStatePublisher)
+        let provider = await RoomTimelineProvider(timeline: timeline, isLive: isLive, paginationStatePublisher: paginationStatePublisher)
+        // Make sure the existing items are built so that we have content in the timeline before
+        // determining whether or not the timeline should paginate to load more items.
+        await provider.waitForInitialItems()
+        
+        innerTimelineProvider = provider
     }
     
     func fetchDetails(for eventID: String) {
