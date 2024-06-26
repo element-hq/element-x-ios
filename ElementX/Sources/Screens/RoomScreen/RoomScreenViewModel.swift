@@ -83,7 +83,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         super.init(initialViewState: RoomScreenViewState(roomID: roomProxy.id,
                                                          roomTitle: roomProxy.roomTitle,
                                                          roomAvatar: roomProxy.avatar,
-                                                         timelineStyle: .bubbles,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                          timelineViewState: TimelineViewState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                          ownUserID: roomProxy.ownUserID,
