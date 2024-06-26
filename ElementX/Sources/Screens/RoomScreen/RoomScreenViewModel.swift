@@ -83,7 +83,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         super.init(initialViewState: RoomScreenViewState(roomID: roomProxy.id,
                                                          roomTitle: roomProxy.roomTitle,
                                                          roomAvatar: roomProxy.avatar,
-                                                         timelineStyle: appSettings.timelineStyle,
+                                                         timelineStyle: .bubbles,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                          timelineViewState: TimelineViewState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                          ownUserID: roomProxy.ownUserID,
@@ -390,10 +390,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 state.roomAvatar = roomProxy.avatar
                 state.hasOngoingCall = roomProxy.hasOngoingCall
             }
-            .store(in: &cancellables)
-        
-        appSettings.$timelineStyle
-            .weakAssign(to: \.state.timelineStyle, on: self)
             .store(in: &cancellables)
         
         appSettings.$sharePresence
