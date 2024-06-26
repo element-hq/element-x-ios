@@ -29,7 +29,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private let pushRegistry: PKPushRegistry
     private let callController = CXCallController()
-    private lazy var callProvider: CXProvider = {
+    private let callProvider: CXProvider = {
         let configuration = CXProviderConfiguration()
         configuration.supportsVideo = true
         configuration.includesCallsInRecents = true
@@ -92,8 +92,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             MXLog.error("Failed requesting start call action with error: \(error)")
         }
         
-        try? AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [])
-        try? AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+        do { // Setup the audio session even if setting up CallKit failed, ElementCall **is** running at this point
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [])
+            try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            MXLog.error("Failed setting up audio session with error: \(error)")
+        }
     }
     
     func tearDownCallSession() {
@@ -171,6 +175,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     func provider(_ provider: CXProvider, perform action: CXSetMutedCallAction) {
         // Forward this to the widget somehow
+        // webView.evaluateJavaScript("groupCall.setLocalVideoMuted(!groupCall.isLocalVideoMuted())")
+        // webView.evaluateJavaScript("groupCall.setMicrophoneMuted(!groupCall.isMicrophoneMuted())"
     }
     
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {

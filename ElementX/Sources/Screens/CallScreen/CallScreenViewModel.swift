@@ -128,11 +128,11 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     private func hangUp() async {
         let hangUpMessage = """
-        "api":"toWidget",
+        {"api":"fromWidget",
         "widgetId":"\(widgetDriver.widgetID)",
         "requestId":"widgetapi-\(UUID())",
         "action":"im.vector.hangup",
-        "data":{}
+        "data":{}}
         """
         
         let result = await widgetDriver.sendMessage(hangUpMessage)
