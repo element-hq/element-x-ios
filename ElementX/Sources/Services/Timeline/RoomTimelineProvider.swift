@@ -24,7 +24,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     
     private var roomTimelineObservationToken: TaskHandle?
 
-    private let paginationStateSubject = CurrentValueSubject<PaginationState, Never>(.default)
+    private let paginationStateSubject = CurrentValueSubject<PaginationState, Never>(.initial)
     var paginationState: PaginationState {
         paginationStateSubject.value
     }

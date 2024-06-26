@@ -117,7 +117,7 @@ class TimelineTableViewController: UIViewController {
     }
     
     /// The state of pagination (in both directions) of the current timeline.
-    var paginationState: PaginationState = .default {
+    var paginationState: PaginationState = .initial {
         didSet {
             // Paginate again if the threshold hasn't been satisfied.
             paginatePublisher.send(())

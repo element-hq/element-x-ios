@@ -23,7 +23,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private var backPaginationStatusObservationToken: TaskHandle?
     
-    private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.idle)
+    // The default values don't matter here, they will be updated when calling subscribeToPagination.
+    private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     
     let isLive: Bool
