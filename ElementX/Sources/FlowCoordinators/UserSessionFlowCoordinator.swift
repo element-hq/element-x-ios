@@ -168,6 +168,18 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
+        
+        elementCallService.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                switch action {
+                case .startCall:
+                    break
+                case .endCall:
+                    self?.dismissCallScreenIfNeeded()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func start() {
@@ -251,12 +263,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .call(let roomID):
-            if let roomID {
-                Task {
-                    await presentCallScreen(roomID: roomID)
-                }
-            } else {
-                dismissCallScreen()
+            Task {
+                await presentCallScreen(roomID: roomID)
             }
         case .genericCallLink(let url):
             navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
@@ -573,7 +581,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         presentCallScreen(roomProxy: roomProxy)
     }
     
-    private func dismissCallScreen() {
+    private func dismissCallScreenIfNeeded() {
         guard navigationSplitCoordinator.sheetCoordinator is CallScreenCoordinator else {
             return
         }

@@ -19,6 +19,7 @@ import CallKit
 import Combine
 import Foundation
 import PushKit
+import UIKit
 
 class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDelegate, CXProviderDelegate {
     private struct CallID: Equatable {
@@ -32,8 +33,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let configuration = CXProviderConfiguration()
         configuration.supportsVideo = true
         configuration.includesCallsInRecents = true
-        // Provide image icon if available
-        configuration.iconTemplateImageData = nil
+        
+        if let callKitIcon = UIImage(named: "images/app-logo") {
+            configuration.iconTemplateImageData = callKitIcon.pngData()
+        }
         
         // https://stackoverflow.com/a/46077628/730924
         configuration.supportedHandleTypes = [.generic]
@@ -41,8 +44,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         return CXProvider(configuration: configuration)
     }()
     
-    private var ongoingCallID: CallID?
+    private var incomingCallID: CallID?
     private var endUnansweredCallTask: Task<Void, Never>?
+    
+    private var ongoingCallID: CallID?
     
     private let actionsSubject: PassthroughSubject<ElementCallServiceAction, Never> = .init()
     var actions: AnyPublisher<ElementCallServiceAction, Never> {
@@ -57,23 +62,36 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         pushRegistry.delegate = self
         pushRegistry.desiredPushTypes = [.voIP]
         
-        callProvider.setDelegate(self, queue: DispatchQueue.main)
+        callProvider.setDelegate(self, queue: nil)
     }
     
     func setupCallSession(roomID: String, roomDisplayName: String) async {
-        let callID = if let ongoingCallID {
-            ongoingCallID
+        // Drop any ongoing calls when starting a new one
+        if ongoingCallID != nil {
+            tearDownCallSession()
+        }
+        
+        // If this starting from a ring reuse those identifiers
+        // Make sure the roomID matches
+        let callID = if let incomingCallID, incomingCallID.roomID == roomID {
+            incomingCallID
         } else {
             CallID(callKitID: UUID(), roomID: roomID)
         }
         
+        incomingCallID = nil
         ongoingCallID = callID
         
         let handle = CXHandle(type: .generic, value: roomDisplayName)
         let startCallAction = CXStartCallAction(call: callID.callKitID, handle: handle)
         startCallAction.isVideo = true
         
-        try? await callController.request(CXTransaction(action: startCallAction))
+        do {
+            try await callController.request(CXTransaction(action: startCallAction))
+        } catch {
+            MXLog.error("Failed requesting start call action with error: \(error)")
+        }
+        
         try? AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [])
         try? AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
     }
@@ -93,7 +111,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
         
         let callID = CallID(callKitID: UUID(), roomID: roomID)
-        ongoingCallID = callID
+        incomingCallID = callID
         
         let roomDisplayName = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomDisplayName.rawValue] as? String
         
@@ -118,8 +136,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
                 return
             }
             
-            if let ongoingCallID, ongoingCallID.callKitID == callID.callKitID {
-                callProvider.reportCall(with: ongoingCallID.callKitID, endedAt: .now, reason: .unanswered)
+            if let incomingCallID, incomingCallID.callKitID == callID.callKitID {
+                callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .unanswered)
             }
         }
     }
@@ -131,28 +149,22 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
-        guard let ongoingCallID else {
+        if let ongoingCallID {
+            provider.reportOutgoingCall(with: ongoingCallID.callKitID, connectedAt: nil)
+        } else {
             MXLog.error("Failed starting call, missing ongoingCallID")
-            tearDownCallSession()
-            return
         }
-        
-        provider.reportOutgoingCall(with: ongoingCallID.callKitID, connectedAt: .now)
-        
+
         action.fulfill()
     }
     
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
-        guard let ongoingCallID else {
-            MXLog.error("Failed answering incoming call, missing ongoingCallID")
-            tearDownCallSession()
-            return
+        if let incomingCallID {
+            actionsSubject.send(.startCall(roomID: incomingCallID.roomID))
+            endUnansweredCallTask?.cancel()
+        } else {
+            MXLog.error("Failed answering incoming call, missing incomingCallID")
         }
-            
-        // Dispatch to next run loop so it doesn't conflict with `setupCallSession`
-        actionsSubject.send(.startCall(roomID: ongoingCallID.roomID))
-        
-        endUnansweredCallTask?.cancel()
         
         action.fulfill()
     }
@@ -162,16 +174,11 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
-        defer {
-            tearDownCallSession(sendEndCallAction: false)
+        if let ongoingCallID {
+            actionsSubject.send(.endCall(roomID: ongoingCallID.roomID))
         }
         
-        guard let ongoingCallID else {
-            MXLog.error("Failed declining incoming call, missing ongoingCallID")
-            return
-        }
-        
-        actionsSubject.send(.endCall(roomID: ongoingCallID.roomID))
+        tearDownCallSession(sendEndCallAction: false)
         
         action.fulfill()
     }
@@ -179,13 +186,9 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     // MARK: - Private
     
     func tearDownCallSession(sendEndCallAction: Bool = true) {
-        guard let ongoingCallID else {
-            return
-        }
-        
         try? AVAudioSession.sharedInstance().setActive(false)
         
-        if sendEndCallAction {
+        if sendEndCallAction, let ongoingCallID {
             let transaction = CXTransaction(action: CXEndCallAction(call: ongoingCallID.callKitID))
             callController.request(transaction) { error in
                 if let error {
@@ -194,6 +197,6 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             }
         }
         
-        self.ongoingCallID = nil
+        ongoingCallID = nil
     }
 }

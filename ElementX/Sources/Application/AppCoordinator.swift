@@ -152,7 +152,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 case .startCall(let roomID):
                     self?.handleAppRoute(.call(roomID: roomID))
                 case .endCall:
-                    self?.handleAppRoute(.call(roomID: nil))
+                    break // Handled internally in the UserSessionFlowCoordinator
                 }
             }
             .store(in: &cancellables)
