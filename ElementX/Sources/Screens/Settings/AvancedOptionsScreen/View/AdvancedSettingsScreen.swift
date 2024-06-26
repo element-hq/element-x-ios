@@ -27,10 +27,6 @@ struct AdvancedSettingsScreen: View {
                         kind: .picker(selection: $context.appAppearance,
                                       items: AppAppearance.allCases.map { (title: $0.name, tag: $0) }))
                 
-                ListRow(label: .plain(title: L10n.commonMessageLayout),
-                        kind: .picker(selection: $context.timelineStyle,
-                                      items: TimelineStyle.allCases.map { (title: $0.name, tag: $0) }))
-                
                 ListRow(label: .plain(title: L10n.actionViewSource),
                         kind: .toggle($context.viewSourceEnabled))
                 
