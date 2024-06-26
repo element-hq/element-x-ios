@@ -18,6 +18,10 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
+enum PaginationDirection: String {
+    case backwards, forwards
+}
+
 enum PaginationStatus {
     case idle
     case timelineEndReached
