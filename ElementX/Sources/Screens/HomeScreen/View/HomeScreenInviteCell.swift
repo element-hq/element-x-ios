@@ -207,7 +207,8 @@ private extension HomeScreenRoom {
         inviter.displayName = "Jack"
         inviter.userID = "@jack:somewhere.com"
         
-        let details = RoomSummaryDetails(id: "@someone:somewhere.com",
+        let details = RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+                                         id: "@someone:somewhere.com",
                                          isInvite: false,
                                          inviter: inviter,
                                          name: "Some Guy",
@@ -234,7 +235,8 @@ private extension HomeScreenRoom {
         inviter.userID = "@jack:somewhi.nl"
         inviter.avatarURL = avatarURL
         
-        let details = RoomSummaryDetails(id: "@someone:somewhere.com",
+        let details = RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+                                         id: "@someone:somewhere.com",
                                          isInvite: false,
                                          inviter: inviter,
                                          name: "Awesome Room",

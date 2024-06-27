@@ -180,7 +180,9 @@ class ClientProxy: ClientProxyProtocol {
                 
                 if enabled == false, reachability == .reachable {
                     MXLog.info("Enabling all send queues")
-                    client.enableAllSendQueues(enable: true)
+                    Task {
+                        await client.enableAllSendQueues(enable: true)
+                    }
                 }
             }
             .store(in: &cancellables)

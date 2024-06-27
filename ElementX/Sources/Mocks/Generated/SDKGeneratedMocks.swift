@@ -17,6 +17,7 @@ open class AbortSendHandleSDKMock: MatrixRustSDK.AbortSendHandle {
 
     //MARK: - abort
 
+    open var abortThrowableError: Error?
     var abortUnderlyingCallsCount = 0
     open var abortCallsCount: Int {
         get {
@@ -69,12 +70,15 @@ open class AbortSendHandleSDKMock: MatrixRustSDK.AbortSendHandle {
             }
         }
     }
-    open var abortClosure: (() async -> Bool)?
+    open var abortClosure: (() async throws -> Bool)?
 
-    open override func abort() async -> Bool {
+    open override func abort() async throws -> Bool {
+        if let error = abortThrowableError {
+            throw error
+        }
         abortCallsCount += 1
         if let abortClosure = abortClosure {
-            return await abortClosure()
+            return try await abortClosure()
         } else {
             return abortReturnValue
         }
@@ -711,15 +715,15 @@ open class ClientSDKMock: MatrixRustSDK.Client {
     }
     open var enableAllSendQueuesEnableReceivedEnable: Bool?
     open var enableAllSendQueuesEnableReceivedInvocations: [Bool] = []
-    open var enableAllSendQueuesEnableClosure: ((Bool) -> Void)?
+    open var enableAllSendQueuesEnableClosure: ((Bool) async -> Void)?
 
-    open override func enableAllSendQueues(enable: Bool) {
+    open override func enableAllSendQueues(enable: Bool) async {
         enableAllSendQueuesEnableCallsCount += 1
         enableAllSendQueuesEnableReceivedEnable = enable
         DispatchQueue.main.async {
             self.enableAllSendQueuesEnableReceivedInvocations.append(enable)
         }
-        enableAllSendQueuesEnableClosure?(enable)
+        await enableAllSendQueuesEnableClosure?(enable)
     }
 
     //MARK: - encryption
@@ -9246,6 +9250,82 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
     }
 }
+open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - loginUrl
+
+    var loginUrlUnderlyingCallsCount = 0
+    open var loginUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loginUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loginUrlCalled: Bool {
+        return loginUrlCallsCount > 0
+    }
+
+    var loginUrlUnderlyingReturnValue: String!
+    open var loginUrlReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return loginUrlUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginUrlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginUrlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginUrlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var loginUrlClosure: (() -> String)?
+
+    open override func loginUrl() -> String {
+        loginUrlCallsCount += 1
+        if let loginUrlClosure = loginUrlClosure {
+            return loginUrlClosure()
+        } else {
+            return loginUrlReturnValue
+        }
+    }
+}
 open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {
     init() {
         super.init(noPointer: .init())
@@ -13954,13 +14034,13 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList {
     open var entriesListenerReceivedListener: RoomListEntriesListener?
     open var entriesListenerReceivedInvocations: [RoomListEntriesListener] = []
 
-    var entriesListenerUnderlyingReturnValue: RoomListEntriesResult!
-    open var entriesListenerReturnValue: RoomListEntriesResult! {
+    var entriesListenerUnderlyingReturnValue: TaskHandle!
+    open var entriesListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
                 return entriesListenerUnderlyingReturnValue
             } else {
-                var returnValue: RoomListEntriesResult? = nil
+                var returnValue: TaskHandle? = nil
                 DispatchQueue.main.sync {
                     returnValue = entriesListenerUnderlyingReturnValue
                 }
@@ -13978,9 +14058,9 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList {
             }
         }
     }
-    open var entriesListenerClosure: ((RoomListEntriesListener) -> RoomListEntriesResult)?
+    open var entriesListenerClosure: ((RoomListEntriesListener) -> TaskHandle)?
 
-    open override func entries(listener: RoomListEntriesListener) -> RoomListEntriesResult {
+    open override func entries(listener: RoomListEntriesListener) -> TaskHandle {
         entriesListenerCallsCount += 1
         entriesListenerReceivedListener = listener
         DispatchQueue.main.async {
@@ -14365,6 +14445,147 @@ open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynami
             return setFilterKindClosure(kind)
         } else {
             return setFilterKindReturnValue
+        }
+    }
+}
+open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomListEntriesWithDynamicAdaptersResult {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - controller
+
+    var controllerUnderlyingCallsCount = 0
+    open var controllerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return controllerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = controllerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                controllerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    controllerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var controllerCalled: Bool {
+        return controllerCallsCount > 0
+    }
+
+    var controllerUnderlyingReturnValue: RoomListDynamicEntriesController!
+    open var controllerReturnValue: RoomListDynamicEntriesController! {
+        get {
+            if Thread.isMainThread {
+                return controllerUnderlyingReturnValue
+            } else {
+                var returnValue: RoomListDynamicEntriesController? = nil
+                DispatchQueue.main.sync {
+                    returnValue = controllerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                controllerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    controllerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var controllerClosure: (() -> RoomListDynamicEntriesController)?
+
+    open override func controller() -> RoomListDynamicEntriesController {
+        controllerCallsCount += 1
+        if let controllerClosure = controllerClosure {
+            return controllerClosure()
+        } else {
+            return controllerReturnValue
+        }
+    }
+
+    //MARK: - entriesStream
+
+    var entriesStreamUnderlyingCallsCount = 0
+    open var entriesStreamCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return entriesStreamUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = entriesStreamUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                entriesStreamUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    entriesStreamUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var entriesStreamCalled: Bool {
+        return entriesStreamCallsCount > 0
+    }
+
+    var entriesStreamUnderlyingReturnValue: TaskHandle!
+    open var entriesStreamReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return entriesStreamUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = entriesStreamUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                entriesStreamUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    entriesStreamUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var entriesStreamClosure: (() -> TaskHandle)?
+
+    open override func entriesStream() -> TaskHandle {
+        entriesStreamCallsCount += 1
+        if let entriesStreamClosure = entriesStreamClosure {
+            return entriesStreamClosure()
+        } else {
+            return entriesStreamReturnValue
         }
     }
 }
@@ -14819,6 +15040,71 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
         }
     }
 
+    //MARK: - isEncrypted
+
+    var isEncryptedUnderlyingCallsCount = 0
+    open var isEncryptedCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isEncryptedUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isEncryptedUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isEncryptedUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isEncryptedUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var isEncryptedCalled: Bool {
+        return isEncryptedCallsCount > 0
+    }
+
+    var isEncryptedUnderlyingReturnValue: Bool!
+    open var isEncryptedReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return isEncryptedUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isEncryptedUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isEncryptedUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isEncryptedUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var isEncryptedClosure: (() async -> Bool)?
+
+    open override func isEncrypted() async -> Bool {
+        isEncryptedCallsCount += 1
+        if let isEncryptedClosure = isEncryptedClosure {
+            return await isEncryptedClosure()
+        } else {
+            return isEncryptedReturnValue
+        }
+    }
+
     //MARK: - isTimelineInitialized
 
     var isTimelineInitializedUnderlyingCallsCount = 0
@@ -15174,52 +15460,6 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
         } else {
             return allRoomsReturnValue
         }
-    }
-
-    //MARK: - applyInput
-
-    open var applyInputInputThrowableError: Error?
-    var applyInputInputUnderlyingCallsCount = 0
-    open var applyInputInputCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return applyInputInputUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = applyInputInputUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                applyInputInputUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    applyInputInputUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var applyInputInputCalled: Bool {
-        return applyInputInputCallsCount > 0
-    }
-    open var applyInputInputReceivedInput: RoomListInput?
-    open var applyInputInputReceivedInvocations: [RoomListInput] = []
-    open var applyInputInputClosure: ((RoomListInput) async throws -> Void)?
-
-    open override func applyInput(input: RoomListInput) async throws {
-        if let error = applyInputInputThrowableError {
-            throw error
-        }
-        applyInputInputCallsCount += 1
-        applyInputInputReceivedInput = input
-        DispatchQueue.main.async {
-            self.applyInputInputReceivedInvocations.append(input)
-        }
-        try await applyInputInputClosure?(input)
     }
 
     //MARK: - room

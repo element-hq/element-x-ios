@@ -18,6 +18,8 @@ import Foundation
 import MatrixRustSDK
 
 struct RoomSummaryDetails {
+    let roomListItem: RoomListItem
+    
     let id: String
     
     let isInvite: Bool
@@ -59,7 +61,8 @@ extension RoomSummaryDetails: CustomStringConvertible {
 }
 
 extension RoomSummaryDetails {
-    init(id: String, settingsMode: RoomNotificationModeProxy, hasUnreadMessages: Bool, hasUnreadMentions: Bool, hasUnreadNotifications: Bool) {
+    init(roomListItem: RoomListItem, id: String, settingsMode: RoomNotificationModeProxy, hasUnreadMessages: Bool, hasUnreadMentions: Bool, hasUnreadNotifications: Bool) {
+        self.roomListItem = roomListItem
         self.id = id
         let string = "\(settingsMode) - messages: \(hasUnreadMessages) - mentions: \(hasUnreadMentions) - notifications: \(hasUnreadNotifications)"
         name = string
