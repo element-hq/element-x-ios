@@ -43,18 +43,9 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         body.environmentObject(viewModel.context)
             .previewDisplayName("Bubble")
         body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
-            .previewDisplayName("Plain")
-        body
             .environmentObject(viewModel.context)
             .environment(\.layoutDirection, .rightToLeft)
             .previewDisplayName("Bubble RTL")
-        body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
-            .environment(\.layoutDirection, .rightToLeft)
-            .previewDisplayName("Plain RTL")
     }
     
     static var body: some View {

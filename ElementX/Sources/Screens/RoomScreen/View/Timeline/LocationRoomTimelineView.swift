@@ -93,15 +93,6 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         }
         .environmentObject(viewModel.context)
         .previewDisplayName("Bubbles")
-        
-        ScrollView {
-            VStack(spacing: 0) {
-                states
-            }
-        }
-        .environment(\.timelineStyle, .plain)
-        .environmentObject(viewModel.context)
-        .previewDisplayName("Plain")
     }
 
     @ViewBuilder

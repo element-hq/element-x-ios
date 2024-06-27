@@ -51,13 +51,7 @@ struct TimelineItemStatusView: View {
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
             }
         case .sendingFailed:
-            // Bubbles handle the failure internally, but plain items don't.
-            if style == .plain {
-                CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyMD)
-                    .foregroundColor(.compound.iconCriticalPrimary)
-                    .accessibilityLabel(L10n.commonSendingFailed)
-                    .accessibilityHint(L10n.actionTapForOptions)
-            }
+            EmptyView()
         }
     }
 

@@ -18,14 +18,11 @@ import Foundation
 import SwiftUI
 
 enum TimelineStyle: String, CaseIterable, Codable {
-    case plain
     case bubbles
 
     /// List row insets for a timeline
     var rowInsets: EdgeInsets {
         switch self {
-        case .plain:
-            return EdgeInsets(top: 4, leading: 20, bottom: 4, trailing: 20)
         case .bubbles:
             return EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8)
         }
@@ -34,8 +31,6 @@ enum TimelineStyle: String, CaseIterable, Codable {
     /// Short hand for `self == .bubbles`
     var isBubbles: Bool {
         switch self {
-        case .plain:
-            return false
         case .bubbles:
             return true
         }
