@@ -138,21 +138,16 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
             var roomsWithUserDefinedMode: [NotificationSettingsEditScreenRoom] = []
             
             for roomSummary in filteredRoomsSummary {
-                switch roomSummary {
-                case .empty, .invalidated:
+                guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomSummary.id) else { continue }
+                // `isOneToOneRoom` here is not the same as `isDirect` on the room. From the point of view of the push rule, a one-to-one room is a room with exactly two active members.
+                let isOneToOneRoom = roomProxy.activeMembersCount == 2
+                // display only the rooms we're interested in
+                switch chatType {
+                case .oneToOneChat where isOneToOneRoom,
+                        .groupChat where !isOneToOneRoom:
+                    await roomsWithUserDefinedMode.append(buildRoom(with: roomSummary))
+                default:
                     break
-                case .filled(let details):
-                    guard let roomProxy = await userSession.clientProxy.roomForIdentifier(details.id) else { continue }
-                    // `isOneToOneRoom` here is not the same as `isDirect` on the room. From the point of view of the push rule, a one-to-one room is a room with exactly two active members.
-                    let isOneToOneRoom = roomProxy.activeMembersCount == 2
-                    // display only the rooms we're interested in
-                    switch chatType {
-                    case .oneToOneChat where isOneToOneRoom,
-                         .groupChat where !isOneToOneRoom:
-                        await roomsWithUserDefinedMode.append(buildRoom(with: details))
-                    default:
-                        break
-                    }
                 }
             }
             

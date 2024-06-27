@@ -41,60 +41,60 @@ enum RoomSummaryProviderState {
     }
 }
 
-enum RoomSummary: CustomStringConvertible, Equatable {
-    case empty
-    case filled(details: RoomSummaryDetails)
-    case invalidated(details: RoomSummaryDetails)
-    
-    var id: String? {
-        switch self {
-        case .empty:
-            return nil
-        case .invalidated(let details), .filled(let details):
-            return details.id
-        }
-    }
-    
-    var name: String? {
-        switch self {
-        case .empty:
-            return nil
-        case .invalidated(let details), .filled(let details):
-            return details.name
-        }
-    }
-    
-    var isDirect: Bool {
-        switch self {
-        case .empty:
-            return false
-        case .invalidated(let details), .filled(let details):
-            return details.isDirect
-        }
-    }
-    
-    var description: String {
-        switch self {
-        case .empty:
-            return "\(String(describing: Self.self)): Empty"
-        case .invalidated(let details):
-            return "\(String(describing: Self.self)): Invalidated(\(details.id))"
-        case .filled(let details):
-            return "\(String(describing: Self.self)): Filled(\(details.id))"
-        }
-    }
-
-    static func == (lhs: RoomSummary, rhs: RoomSummary) -> Bool {
-        switch (lhs, rhs) {
-        case (.empty, .empty):
-            return true
-        case (.filled(let lhsDetails), .filled(let rhsDetails)), (.invalidated(let lhsDetails), .invalidated(let rhsDetails)):
-            return lhsDetails.id == rhsDetails.id
-        default:
-            return false
-        }
-    }
-}
+//enum RoomSummary: CustomStringConvertible, Equatable {
+//    case empty
+//    case filled(details: RoomSummaryDetails)
+//    case invalidated(details: RoomSummaryDetails)
+//    
+//    var id: String? {
+//        switch self {
+//        case .empty:
+//            return nil
+//        case .invalidated(let details), .filled(let details):
+//            return details.id
+//        }
+//    }
+//    
+//    var name: String? {
+//        switch self {
+//        case .empty:
+//            return nil
+//        case .invalidated(let details), .filled(let details):
+//            return details.name
+//        }
+//    }
+//    
+//    var isDirect: Bool {
+//        switch self {
+//        case .empty:
+//            return false
+//        case .invalidated(let details), .filled(let details):
+//            return details.isDirect
+//        }
+//    }
+//    
+//    var description: String {
+//        switch self {
+//        case .empty:
+//            return "\(String(describing: Self.self)): Empty"
+//        case .invalidated(let details):
+//            return "\(String(describing: Self.self)): Invalidated(\(details.id))"
+//        case .filled(let details):
+//            return "\(String(describing: Self.self)): Filled(\(details.id))"
+//        }
+//    }
+//
+//    static func == (lhs: RoomSummary, rhs: RoomSummary) -> Bool {
+//        switch (lhs, rhs) {
+//        case (.empty, .empty):
+//            return true
+//        case (.filled(let lhsDetails), .filled(let rhsDetails)), (.invalidated(let lhsDetails), .invalidated(let rhsDetails)):
+//            return lhsDetails.id == rhsDetails.id
+//        default:
+//            return false
+//        }
+//    }
+//}
 
 enum RoomSummaryProviderFilter: Equatable {
     /// Filters out everything
@@ -108,7 +108,7 @@ enum RoomSummaryProviderFilter: Equatable {
 // sourcery: AutoMockable
 protocol RoomSummaryProviderProtocol {
     /// Publishes the currently available room summaries
-    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> { get }
+    var roomListPublisher: CurrentValuePublisher<[RoomSummaryDetails], Never> { get }
     
     /// Publishes the current state the summary provider is finding itself in
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> { get }
