@@ -18,6 +18,10 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
+enum PaginationDirection: String {
+    case backwards, forwards
+}
+
 enum PaginationStatus {
     case idle
     case timelineEndReached
@@ -25,7 +29,9 @@ enum PaginationStatus {
 }
 
 struct PaginationState: Equatable {
-    static var `default` = PaginationState(backward: .idle, forward: .timelineEndReached)
+    /// An initial state that is used to prevent pagination whilst loading the timeline.
+    /// Once the initial items are loaded the TimelineProxy will publish the correct value.
+    static var initial = PaginationState(backward: .timelineEndReached, forward: .timelineEndReached)
     let backward: PaginationStatus
     let forward: PaginationStatus
 }

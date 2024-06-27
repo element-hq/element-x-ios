@@ -24,7 +24,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     
     private var roomTimelineObservationToken: TaskHandle?
 
-    private let paginationStateSubject = CurrentValueSubject<PaginationState, Never>(.default)
+    private let paginationStateSubject = CurrentValueSubject<PaginationState, Never>(.initial)
     var paginationState: PaginationState {
         paginationStateSubject.value
     }
@@ -74,6 +74,17 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         }
     }
     
+    /// A continuation to signal whether the initial timeline items have been loaded and processed.
+    private var hasLoadedInitialItemsContinuation: CheckedContinuation<Void, Never>?
+    /// A method that allows `await`ing the first update of timeline items from the listener, as the items
+    /// aren't added directly to the provider upon initialisation and may take some time to come in.
+    func waitForInitialItems() async {
+        guard itemProxies.isEmpty else { return }
+        return await withCheckedContinuation { continuation in
+            hasLoadedInitialItemsContinuation = continuation
+        }
+    }
+    
     // MARK: - Private
     
     private func updateItemsWithDiffs(_ diffs: [TimelineDiff]) {
@@ -100,6 +111,11 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         }
         
         MXLog.verbose("Finished applying diffs, current items (\(itemProxies.count)) : \(itemProxies.map(\.debugIdentifier))")
+        
+        if let hasLoadedInitialItemsContinuation {
+            hasLoadedInitialItemsContinuation.resume()
+            self.hasLoadedInitialItemsContinuation = nil
+        }
     }
     
     // swiftlint:disable:next cyclomatic_complexity

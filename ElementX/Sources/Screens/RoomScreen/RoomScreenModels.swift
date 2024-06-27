@@ -229,7 +229,7 @@ struct RoomMemberState {
 /// Is also nice to have this as a wrapper for any state that is directly connected to the timeline.
 struct TimelineViewState {
     var isLive = true
-    var paginationState = PaginationState.default
+    var paginationState = PaginationState.initial
     
     /// The room is in the process of loading items from a new timeline (switching to/from a detached timeline).
     var isSwitchingTimelines = false
