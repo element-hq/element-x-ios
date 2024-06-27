@@ -1,5 +1,4 @@
 settings:
-  APP_NAME: ElementX
   APP_DISPLAY_NAME: Element X
   PRODUCTION_APP_NAME: Element
   BASE_APP_GROUP_IDENTIFIER: io.element
