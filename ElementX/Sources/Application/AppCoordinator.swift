@@ -151,8 +151,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 switch action {
                 case .startCall(let roomID):
                     self?.handleAppRoute(.call(roomID: roomID))
-                case .endCall:
-                    break // Handled internally in the UserSessionFlowCoordinator
+                default:
+                    break
                 }
             }
             .store(in: &cancellables)
