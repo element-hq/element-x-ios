@@ -155,13 +155,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         MXLog.info("Started processing room list diffs")
         
-        MXLog.verbose("\(name): Received \(diffs.count) diffs, current room list \(rooms.compactMap { $0.id ?? "Empty" })")
+        MXLog.verbose("\(name): Received \(diffs.count) diffs, current room list \(rooms.map(\.id))")
         
         rooms = diffs.reduce(rooms) { currentItems, diff in
             processDiff(diff, on: currentItems)
         }
         
-        MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
+        MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.map(\.id))")
         
         MXLog.info("Finished processing room list diffs")
     }
@@ -226,23 +226,23 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let notificationMode = roomInfo.userDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
         return RoomSummary(roomListItem: roomListItem,
-                                  id: roomInfo.id,
-                                  isInvite: roomInfo.membership == .invited,
-                                  inviter: inviterProxy,
-                                  name: roomInfo.displayName ?? roomInfo.id,
-                                  isDirect: roomInfo.isDirect,
-                                  avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
-                                  heroes: roomInfo.heroes.map(UserProfileProxy.init),
-                                  lastMessage: attributedLastMessage,
-                                  lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
-                                  unreadMessagesCount: UInt(roomInfo.numUnreadMessages),
-                                  unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
-                                  unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),
-                                  notificationMode: notificationMode,
-                                  canonicalAlias: roomInfo.canonicalAlias,
-                                  hasOngoingCall: roomInfo.hasRoomCall,
-                                  isMarkedUnread: roomInfo.isMarkedUnread,
-                                  isFavourite: roomInfo.isFavourite)
+                           id: roomInfo.id,
+                           isInvite: roomInfo.membership == .invited,
+                           inviter: inviterProxy,
+                           name: roomInfo.displayName ?? roomInfo.id,
+                           isDirect: roomInfo.isDirect,
+                           avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
+                           heroes: roomInfo.heroes.map(UserProfileProxy.init),
+                           lastMessage: attributedLastMessage,
+                           lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
+                           unreadMessagesCount: UInt(roomInfo.numUnreadMessages),
+                           unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
+                           unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),
+                           notificationMode: notificationMode,
+                           canonicalAlias: roomInfo.canonicalAlias,
+                           hasOngoingCall: roomInfo.hasRoomCall,
+                           isMarkedUnread: roomInfo.isMarkedUnread,
+                           isFavourite: roomInfo.isFavourite)
     }
     
     private func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
@@ -286,7 +286,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
         case .remove(let index):
             let summary = rooms[Int(index)]
-            MXLog.verbose("\(name): Remove \(summary.id ?? "") from \(index)")
+            MXLog.verbose("\(name): Remove \(summary.id) from \(index)")
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
         case .reset(let values):
             let debugIdentifiers = values.map { $0.id() }
@@ -340,7 +340,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
         
         rooms = rooms.map {
-            return self.buildRoomSummaryForRoomListItem($0.roomListItem)
+            self.buildRoomSummaryForRoomListItem($0.roomListItem)
         }
         
         MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")

@@ -143,8 +143,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
                 let isOneToOneRoom = roomProxy.activeMembersCount == 2
                 // display only the rooms we're interested in
                 switch chatType {
-                case .oneToOneChat where isOneToOneRoom,
-                        .groupChat where !isOneToOneRoom:
+                case .oneToOneChat where isOneToOneRoom, .groupChat where !isOneToOneRoom:
                     await roomsWithUserDefinedMode.append(buildRoom(with: roomSummary))
                 default:
                     break

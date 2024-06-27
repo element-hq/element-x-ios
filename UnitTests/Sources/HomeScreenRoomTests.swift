@@ -31,22 +31,22 @@ class HomeScreenRoomTests: XCTestCase {
                           notificationMode: RoomNotificationModeProxy,
                           hasOngoingCall: Bool) {
         roomSummaryDetails = RoomSummary(id: "Test room",
-                                                isInvite: false,
-                                                inviter: nil,
-                                                name: "Test room",
-                                                isDirect: false,
-                                                avatarURL: nil,
-                                                heroes: [],
-                                                lastMessage: nil,
-                                                lastMessageFormattedTimestamp: nil,
-                                                unreadMessagesCount: unreadMessagesCount,
-                                                unreadMentionsCount: unreadMentionsCount,
-                                                unreadNotificationsCount: unreadNotificationsCount,
-                                                notificationMode: notificationMode,
-                                                canonicalAlias: nil,
-                                                hasOngoingCall: hasOngoingCall,
-                                                isMarkedUnread: isMarkedUnread,
-                                                isFavourite: false)
+                                         isInvite: false,
+                                         inviter: nil,
+                                         name: "Test room",
+                                         isDirect: false,
+                                         avatarURL: nil,
+                                         heroes: [],
+                                         lastMessage: nil,
+                                         lastMessageFormattedTimestamp: nil,
+                                         unreadMessagesCount: unreadMessagesCount,
+                                         unreadMentionsCount: unreadMentionsCount,
+                                         unreadNotificationsCount: unreadNotificationsCount,
+                                         notificationMode: notificationMode,
+                                         canonicalAlias: nil,
+                                         hasOngoingCall: hasOngoingCall,
+                                         isMarkedUnread: isMarkedUnread,
+                                         isFavourite: false)
     }
     
     func testNoBadge() {
