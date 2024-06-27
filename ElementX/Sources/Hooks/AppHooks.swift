@@ -19,8 +19,6 @@ import Foundation
 // MARK: Registration
 
 class AppHooks: AppHooksProtocol {
-    static let shared = AppHooks()
-    
     private(set) var appSettingsHook: AppSettingsHookProtocol?
     func registerAppSettingsHook(_ hook: AppSettingsHookProtocol) {
         appSettingsHook = hook
@@ -33,11 +31,11 @@ class AppHooks: AppHooksProtocol {
 }
 
 protocol AppHooksProtocol {
-    func registerHooks()
+    func configure()
 }
 
 extension AppHooksProtocol {
-    func registerHooks() { }
+    func configure() { }
 }
 
 // MARK: Protocols
