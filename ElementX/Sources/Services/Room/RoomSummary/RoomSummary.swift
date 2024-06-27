@@ -17,7 +17,9 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomSummaryDetails {
+struct RoomSummary {
+    let roomListItem: RoomListItem
+    
     let id: String
     
     let isInvite: Bool
@@ -46,9 +48,9 @@ struct RoomSummaryDetails {
     var isMuted: Bool { notificationMode == .mute }
 }
 
-extension RoomSummaryDetails: CustomStringConvertible {
+extension RoomSummary: CustomStringConvertible {
     var description: String { """
-    RoomSummaryDetails: - id: \(id) \
+    RoomSummary: - id: \(id) \
     - isDirect: \(isDirect) \
     - unreadMessagesCount: \(unreadMessagesCount) \
     - unreadMentionsCount: \(unreadMentionsCount) \
@@ -58,8 +60,9 @@ extension RoomSummaryDetails: CustomStringConvertible {
     }
 }
 
-extension RoomSummaryDetails {
-    init(id: String, settingsMode: RoomNotificationModeProxy, hasUnreadMessages: Bool, hasUnreadMentions: Bool, hasUnreadNotifications: Bool) {
+extension RoomSummary {
+    init(roomListItem: RoomListItem, id: String, settingsMode: RoomNotificationModeProxy, hasUnreadMessages: Bool, hasUnreadMentions: Bool, hasUnreadNotifications: Bool) {
+        self.roomListItem = roomListItem
         self.id = id
         let string = "\(settingsMode) - messages: \(hasUnreadMessages) - mentions: \(hasUnreadMentions) - notifications: \(hasUnreadNotifications)"
         name = string

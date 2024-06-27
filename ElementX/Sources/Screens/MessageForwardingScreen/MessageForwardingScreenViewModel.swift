@@ -84,19 +84,14 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         MXLog.verbose("Updating rooms")
         
         var rooms = [MessageForwardingRoom]()
-                
+        
         for summary in roomSummaryProvider.roomListPublisher.value {
-            switch summary {
-            case .empty, .invalidated:
+            if summary.id == forwardingItem.roomID {
                 continue
-            case .filled(let details):
-                if details.id == forwardingItem.roomID {
-                    continue
-                }
-                
-                let room = MessageForwardingRoom(id: details.id, name: details.name, alias: details.canonicalAlias, avatar: details.avatar)
-                rooms.append(room)
             }
+            
+            let room = MessageForwardingRoom(id: summary.id, name: summary.name, alias: summary.canonicalAlias, avatar: summary.avatar)
+            rooms.append(room)
         }
         
         state.rooms = rooms
