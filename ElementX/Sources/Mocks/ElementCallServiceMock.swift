@@ -15,24 +15,14 @@
 //
 
 import Combine
+import Foundation
 
-enum ElementCallServiceAction {
-    case startCall(roomID: String)
-    case endCall(roomID: String)
-}
+struct ElementCallServiceMockConfiguration { }
 
-enum ElementCallServiceNotificationKey: String {
-    case roomID
-    case roomDisplayName
-}
-
-let ElementCallServiceNotificationDiscardDelta = 10.0
-
-// sourcery: AutoMockable
-protocol ElementCallServiceProtocol {
-    var actions: AnyPublisher<ElementCallServiceAction, Never> { get }
-    
-    func setupCallSession(roomID: String, roomDisplayName: String) async
-    
-    func tearDownCallSession()
+extension ElementCallServiceMock {
+    convenience init(_ configuration: ElementCallServiceMockConfiguration) {
+        self.init()
+        
+        underlyingActions = PassthroughSubject().eraseToAnyPublisher()
+    }
 }

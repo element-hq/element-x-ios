@@ -168,6 +168,18 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
+        
+        elementCallService.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                switch action {
+                case .startCall:
+                    break
+                case .endCall:
+                    self?.dismissCallScreenIfNeeded()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func start() {
@@ -567,6 +579,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         presentCallScreen(roomProxy: roomProxy)
+    }
+    
+    private func dismissCallScreenIfNeeded() {
+        guard navigationSplitCoordinator.sheetCoordinator is CallScreenCoordinator else {
+            return
+        }
+        
+        navigationSplitCoordinator.setSheetCoordinator(nil)
     }
     
     // MARK: Secure backup confirmation

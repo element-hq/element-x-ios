@@ -4697,15 +4697,15 @@ class ElementCallServiceMock: ElementCallServiceProtocol {
 
     //MARK: - setupCallSession
 
-    var setupCallSessionTitleUnderlyingCallsCount = 0
-    var setupCallSessionTitleCallsCount: Int {
+    var setupCallSessionRoomIDRoomDisplayNameUnderlyingCallsCount = 0
+    var setupCallSessionRoomIDRoomDisplayNameCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return setupCallSessionTitleUnderlyingCallsCount
+                return setupCallSessionRoomIDRoomDisplayNameUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = setupCallSessionTitleUnderlyingCallsCount
+                    returnValue = setupCallSessionRoomIDRoomDisplayNameUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4713,28 +4713,28 @@ class ElementCallServiceMock: ElementCallServiceProtocol {
         }
         set {
             if Thread.isMainThread {
-                setupCallSessionTitleUnderlyingCallsCount = newValue
+                setupCallSessionRoomIDRoomDisplayNameUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    setupCallSessionTitleUnderlyingCallsCount = newValue
+                    setupCallSessionRoomIDRoomDisplayNameUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var setupCallSessionTitleCalled: Bool {
-        return setupCallSessionTitleCallsCount > 0
+    var setupCallSessionRoomIDRoomDisplayNameCalled: Bool {
+        return setupCallSessionRoomIDRoomDisplayNameCallsCount > 0
     }
-    var setupCallSessionTitleReceivedTitle: String?
-    var setupCallSessionTitleReceivedInvocations: [String] = []
-    var setupCallSessionTitleClosure: ((String) async -> Void)?
+    var setupCallSessionRoomIDRoomDisplayNameReceivedArguments: (roomID: String, roomDisplayName: String)?
+    var setupCallSessionRoomIDRoomDisplayNameReceivedInvocations: [(roomID: String, roomDisplayName: String)] = []
+    var setupCallSessionRoomIDRoomDisplayNameClosure: ((String, String) async -> Void)?
 
-    func setupCallSession(title: String) async {
-        setupCallSessionTitleCallsCount += 1
-        setupCallSessionTitleReceivedTitle = title
+    func setupCallSession(roomID: String, roomDisplayName: String) async {
+        setupCallSessionRoomIDRoomDisplayNameCallsCount += 1
+        setupCallSessionRoomIDRoomDisplayNameReceivedArguments = (roomID: roomID, roomDisplayName: roomDisplayName)
         DispatchQueue.main.async {
-            self.setupCallSessionTitleReceivedInvocations.append(title)
+            self.setupCallSessionRoomIDRoomDisplayNameReceivedInvocations.append((roomID: roomID, roomDisplayName: roomDisplayName))
         }
-        await setupCallSessionTitleClosure?(title)
+        await setupCallSessionRoomIDRoomDisplayNameClosure?(roomID, roomDisplayName)
     }
     //MARK: - tearDownCallSession
 
