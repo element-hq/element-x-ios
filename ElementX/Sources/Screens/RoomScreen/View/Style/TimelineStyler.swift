@@ -20,8 +20,6 @@ import SwiftUI
 // MARK: - TimelineStyler
 
 struct TimelineStyler<Content: View>: View {
-    @Environment(\.timelineStyle) private var style
-
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
     
@@ -59,10 +57,7 @@ struct TimelineStyler<Content: View>: View {
     
     @ViewBuilder
     var mainContent: some View {
-        switch style {
-        case .bubbles:
-            TimelineItemBubbledStylerView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, content: content)
-        }
+        TimelineItemBubbledStylerView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, content: content)
     }
 }
 
@@ -200,17 +195,14 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         testView
             .environmentObject(viewModel.context)
-            .environment(\.timelineStyle, .bubbles)
             .previewDisplayName("Bubbles")
         
         languagesTestView
             .environmentObject(viewModel.context)
-            .environment(\.timelineStyle, .bubbles)
             .previewDisplayName("Bubbles LTR with different layout languages")
 
         languagesTestView
             .environmentObject(viewModel.context)
-            .environment(\.timelineStyle, .bubbles)
             .environment(\.layoutDirection, .rightToLeft)
             .previewDisplayName("Bubbles RTL with different layout languages")
     }

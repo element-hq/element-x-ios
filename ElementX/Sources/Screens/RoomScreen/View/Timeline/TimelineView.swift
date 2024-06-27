@@ -20,18 +20,16 @@ import WysiwygComposer
 /// A table view wrapper that displays the timeline of a room.
 struct TimelineView: UIViewControllerRepresentable {
     @EnvironmentObject private var viewModelContext: RoomScreenViewModel.Context
-    @Environment(\.timelineStyle) private var timelineStyle
     
     func makeUIViewController(context: Context) -> TimelineTableViewController {
         let tableViewController = TimelineTableViewController(coordinator: context.coordinator,
-                                                              timelineStyle: timelineStyle,
                                                               isScrolledToBottom: $viewModelContext.isScrolledToBottom,
                                                               scrollToBottomPublisher: viewModelContext.viewState.timelineViewState.scrollToBottomPublisher)
         return tableViewController
     }
     
     func updateUIViewController(_ uiViewController: TimelineTableViewController, context: Context) {
-        context.coordinator.update(tableViewController: uiViewController, timelineStyle: timelineStyle)
+        context.coordinator.update(tableViewController: uiViewController)
     }
     
     func makeCoordinator() -> Coordinator {
@@ -49,13 +47,10 @@ struct TimelineView: UIViewControllerRepresentable {
         }
         
         /// Updates the specified table view's properties from the current view state.
-        func update(tableViewController: TimelineTableViewController, timelineStyle: TimelineStyle) {
+        func update(tableViewController: TimelineTableViewController) {
             if tableViewController.isSwitchingTimelines != context.viewState.timelineViewState.isSwitchingTimelines {
                 // Must come before timelineItemsDictionary in order to disable animations.
                 tableViewController.isSwitchingTimelines = context.viewState.timelineViewState.isSwitchingTimelines
-            }
-            if tableViewController.timelineStyle != timelineStyle {
-                tableViewController.timelineStyle = timelineStyle
             }
             if tableViewController.timelineItemsDictionary != context.viewState.timelineViewState.itemsDictionary {
                 tableViewController.timelineItemsDictionary = context.viewState.timelineViewState.itemsDictionary

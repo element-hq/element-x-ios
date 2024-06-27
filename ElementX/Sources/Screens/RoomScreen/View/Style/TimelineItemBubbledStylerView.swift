@@ -73,7 +73,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .padding(.leading, bubbleAvatarPadding)
             }
         }
-        .padding(TimelineStyle.bubbles.rowInsets)
+        .padding(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
         .highlightedTimelineItem(isFocussed)
     }
     
@@ -532,7 +532,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                 }
             }
         }
-        .environment(\.timelineStyle, .bubbles)
         .environmentObject(viewModel.context)
     }
 

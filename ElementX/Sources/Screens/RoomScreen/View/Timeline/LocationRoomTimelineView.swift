@@ -18,7 +18,6 @@ import SwiftUI
 
 struct LocationRoomTimelineView: View {
     let timelineItem: LocationRoomTimelineItem
-    @Environment(\.timelineStyle) var timelineStyle
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
@@ -43,7 +42,7 @@ struct LocationRoomTimelineView: View {
                 .clipped()
             }
         } else {
-            FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
+            FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
         }
     }
 
@@ -61,8 +60,7 @@ struct LocationRoomTimelineView: View {
     private var descriptionView: some View {
         if let description = timelineItem.content.description, !description.isEmpty {
             FormattedBodyText(text: description)
-                .padding(.vertical, 8)
-                .padding(.horizontal, timelineStyle.isBubbles ? 8 : 0)
+                .padding(8)
         }
     }
 
