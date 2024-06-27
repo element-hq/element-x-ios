@@ -51,8 +51,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     // MARK: - Setup
     
     init(parameters: SettingsScreenCoordinatorParameters) {
-        viewModel = SettingsScreenViewModel(userSession: parameters.userSession,
-                                            appSettings: parameters.appSettings)
+        viewModel = SettingsScreenViewModel(userSession: parameters.userSession)
         
         viewModel.actions
             .sink { [weak self] action in

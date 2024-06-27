@@ -19,5 +19,4 @@ protocol TextBasedRoomTimelineViewProtocol {
     associatedtype TimelineItemType: TextBasedRoomTimelineItem
 
     var timelineItem: TimelineItemType { get }
-    var timelineStyle: TimelineStyle { get }
 }

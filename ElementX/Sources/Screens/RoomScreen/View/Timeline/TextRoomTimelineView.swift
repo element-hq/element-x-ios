@@ -19,17 +19,16 @@ import SwiftUI
 
 struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     let timelineItem: TextRoomTimelineItem
-    @Environment(\.timelineStyle) var timelineStyle
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             if let attributedString = timelineItem.content.formattedBody {
                 FormattedBodyText(attributedString: attributedString,
-                                  additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle),
+                                  additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
                                   boostEmojiSize: true)
             } else {
                 FormattedBodyText(text: timelineItem.body,
-                                  additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle),
+                                  additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
                                   boostEmojiSize: true)
             }
         }

@@ -28,7 +28,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
                                                 isThreaded: false,
                                                 sender: .init(id: UUID().uuidString),
                                                 content: .init(body: "Test"))
-        XCTAssertEqual(timelineItem.additionalWhitespaces(timelineStyle: .bubbles), timestamp.count + 1)
+        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.count + 1)
     }
 
     func testTextRoomTimelineItemWhitespaceEndLonger() {
@@ -41,7 +41,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
                                                 isThreaded: false,
                                                 sender: .init(id: UUID().uuidString),
                                                 content: .init(body: "Test"))
-        XCTAssertEqual(timelineItem.additionalWhitespaces(timelineStyle: .bubbles), timestamp.count + 1)
+        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.count + 1)
     }
 
     func testTextRoomTimelineItemWhitespaceEndWithEdit() {
@@ -56,7 +56,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
                                                 content: .init(body: "Test"))
         timelineItem.properties.isEdited = true
         let editedCount = L10n.commonEditedSuffix.count
-        XCTAssertEqual(timelineItem.additionalWhitespaces(timelineStyle: .bubbles), timestamp.count + editedCount + 2)
+        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.count + editedCount + 2)
     }
 
     func testTextRoomTimelineItemWhitespaceEndWithEditAndAlert() {
@@ -72,6 +72,6 @@ final class TextBasedRoomTimelineTests: XCTestCase {
         timelineItem.properties.isEdited = true
         timelineItem.properties.deliveryStatus = .sendingFailed
         let editedCount = L10n.commonEditedSuffix.count
-        XCTAssertEqual(timelineItem.additionalWhitespaces(timelineStyle: .bubbles), timestamp.count + editedCount + 5)
+        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.count + editedCount + 5)
     }
 }

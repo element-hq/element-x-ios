@@ -56,7 +56,6 @@ class TimelineTableViewController: UIViewController {
     private let coordinator: TimelineView.Coordinator
     private let tableView = UITableView(frame: .zero, style: .plain)
     
-    var timelineStyle: TimelineStyle
     var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>() {
         didSet {
             guard canApplySnapshot else {
@@ -166,11 +165,9 @@ class TimelineTableViewController: UIViewController {
     private var hasAppearedOnce = false
     
     init(coordinator: TimelineView.Coordinator,
-         timelineStyle: TimelineStyle,
          isScrolledToBottom: Binding<Bool>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>) {
         self.coordinator = coordinator
-        self.timelineStyle = timelineStyle
         _isScrolledToBottom = isScrolledToBottom
         
         super.init(nibName: nil, bundle: nil)
