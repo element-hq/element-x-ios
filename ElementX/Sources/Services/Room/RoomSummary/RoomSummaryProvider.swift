@@ -37,12 +37,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicAdaptersResult?
     private var stateUpdatesTaskHandle: TaskHandle?
     
-    private let roomListSubject = CurrentValueSubject<[RoomSummaryDetails], Never>([])
+    private let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
     private let stateSubject = CurrentValueSubject<RoomSummaryProviderState, Never>(.notLoaded)
     
     private let diffsPublisher = PassthroughSubject<[RoomListEntriesUpdate], Never>()
     
-    var roomListPublisher: CurrentValuePublisher<[RoomSummaryDetails], Never> {
+    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
         roomListSubject.asCurrentValuePublisher()
     }
 
@@ -50,7 +50,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         stateSubject.asCurrentValuePublisher()
     }
     
-    private var rooms: [RoomSummaryDetails] = [] {
+    private var rooms: [RoomSummary] = [] {
         didSet {
             roomListSubject.send(rooms)
         }
@@ -166,7 +166,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.info("Finished processing room list diffs")
     }
     
-    private func processDiff(_ diff: RoomListEntriesUpdate, on currentItems: [RoomSummaryDetails]) -> [RoomSummaryDetails] {
+    private func processDiff(_ diff: RoomListEntriesUpdate, on currentItems: [RoomSummary]) -> [RoomSummary] {
         guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
             MXLog.error("\(name): Failed building CollectionDifference from \(diff)")
             return currentItems
@@ -202,7 +202,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return (result.roomInfo, result.latestEvent)
     }
     
-    private func buildRoomSummaryForRoomListItem(_ roomListItem: RoomListItem) -> RoomSummaryDetails {
+    private func buildRoomSummaryForRoomListItem(_ roomListItem: RoomListItem) -> RoomSummary {
         let roomDetails = fetchRoomDetailsFromRoomListItem(roomListItem)
         
         guard let roomInfo = roomDetails.roomInfo else {
@@ -225,7 +225,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         let notificationMode = roomInfo.userDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
-        return RoomSummaryDetails(roomListItem: roomListItem,
+        return RoomSummary(roomListItem: roomListItem,
                                   id: roomInfo.id,
                                   isInvite: roomInfo.membership == .invited,
                                   inviter: inviterProxy,
@@ -245,8 +245,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                   isFavourite: roomInfo.isFavourite)
     }
     
-    private func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummaryDetails]) -> CollectionDifference<RoomSummaryDetails>? {
-        var changes = [CollectionDifference<RoomSummaryDetails>.Change]()
+    private func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
+        var changes = [CollectionDifference<RoomSummary>.Change]()
         
         switch diff {
         case .append(let values):

@@ -194,7 +194,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
     
-    static func mockRoom(summary: RoomSummaryDetails) -> HomeScreenRoom? {
+    static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
         HomeScreenRoom(details: summary, invalidated: false, hideUnreadMessagesBadge: false)
     }
     

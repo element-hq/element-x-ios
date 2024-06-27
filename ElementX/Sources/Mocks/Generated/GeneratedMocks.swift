@@ -10996,11 +10996,11 @@ class RoomProxyMock: RoomProxyProtocol {
     }
 }
 class RoomSummaryProviderMock: RoomSummaryProviderProtocol {
-    var roomListPublisher: CurrentValuePublisher<[RoomSummaryDetails], Never> {
+    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
         get { return underlyingRoomListPublisher }
         set(value) { underlyingRoomListPublisher = value }
     }
-    var underlyingRoomListPublisher: CurrentValuePublisher<[RoomSummaryDetails], Never>!
+    var underlyingRoomListPublisher: CurrentValuePublisher<[RoomSummary], Never>!
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {
         get { return underlyingStatePublisher }
         set(value) { underlyingStatePublisher = value }

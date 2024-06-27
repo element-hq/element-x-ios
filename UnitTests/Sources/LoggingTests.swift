@@ -87,7 +87,7 @@ class LoggingTests: XCTestCase {
         let roomName = "Private Conversation"
         let lastMessage = "Secret information"
         let heroName = "Pseudonym"
-        let roomSummary = RoomSummaryDetails(id: "myroomid",
+        let roomSummary = RoomSummary(id: "myroomid",
                                              isInvite: false,
                                              inviter: nil,
                                              name: roomName,

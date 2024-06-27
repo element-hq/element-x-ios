@@ -205,7 +205,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
 }
 
 extension HomeScreenRoom {
-    init(details: RoomSummaryDetails, invalidated: Bool, hideUnreadMessagesBadge: Bool) {
+    init(details: RoomSummary, invalidated: Bool, hideUnreadMessagesBadge: Bool) {
         let identifier = invalidated ? "invalidated-" + details.id : details.id
         
         let hasUnreadMessages = hideUnreadMessagesBadge ? false : details.hasUnreadMessages

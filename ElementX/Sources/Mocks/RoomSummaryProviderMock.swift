@@ -19,7 +19,7 @@ import Foundation
 
 enum RoomSummaryProviderMockConfigurationState {
     case loading
-    case loaded([RoomSummaryDetails])
+    case loaded([RoomSummary])
 }
 
 struct RoomSummaryProviderMockConfiguration {
@@ -30,8 +30,8 @@ extension RoomSummaryProviderMock {
     convenience init(_ configuration: RoomSummaryProviderMockConfiguration) {
         self.init()
         
-        let initialRooms: [RoomSummaryDetails]
-        let roomListSubject: CurrentValueSubject<[RoomSummaryDetails], Never>
+        let initialRooms: [RoomSummary]
+        let roomListSubject: CurrentValueSubject<[RoomSummary], Never>
         let stateSubject: CurrentValueSubject<RoomSummaryProviderState, Never>
         
         switch configuration.state {
@@ -76,9 +76,9 @@ extension RoomSummaryProviderMock {
     }
 }
 
-extension Array where Element == RoomSummaryDetails {
+extension Array where Element == RoomSummary {
     static let mockRooms: [Element] = [
-        RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(roomListItem: RoomListItemSDKMock(),
                            id: "1",
                            isInvite: false,
                            inviter: nil,
@@ -96,7 +96,7 @@ extension Array where Element == RoomSummaryDetails {
                            hasOngoingCall: false,
                            isMarkedUnread: false,
                            isFavourite: false),
-        RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(roomListItem: RoomListItemSDKMock(),
                            id: "2",
                            isInvite: false,
                            inviter: nil,
@@ -114,7 +114,7 @@ extension Array where Element == RoomSummaryDetails {
                            hasOngoingCall: false,
                            isMarkedUnread: false,
                            isFavourite: false),
-        RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(roomListItem: RoomListItemSDKMock(),
                            id: "3",
                            isInvite: false,
                            inviter: nil,
@@ -132,7 +132,7 @@ extension Array where Element == RoomSummaryDetails {
                            hasOngoingCall: false,
                            isMarkedUnread: false,
                            isFavourite: false),
-        RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(roomListItem: RoomListItemSDKMock(),
                            id: "4",
                            isInvite: false,
                            inviter: nil,
@@ -150,7 +150,7 @@ extension Array where Element == RoomSummaryDetails {
                            hasOngoingCall: false,
                            isMarkedUnread: false,
                            isFavourite: false),
-        RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(roomListItem: RoomListItemSDKMock(),
                            id: "5",
                            isInvite: false,
                            inviter: nil,
@@ -168,7 +168,7 @@ extension Array where Element == RoomSummaryDetails {
                            hasOngoingCall: true,
                            isMarkedUnread: false,
                            isFavourite: false),
-        RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(roomListItem: RoomListItemSDKMock(),
                            id: "6",
                            isInvite: false,
                            inviter: nil,
@@ -186,7 +186,7 @@ extension Array where Element == RoomSummaryDetails {
                            hasOngoingCall: true,
                            isMarkedUnread: false,
                            isFavourite: false),
-        RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(roomListItem: RoomListItemSDKMock(),
                            id: "0",
                            isInvite: false,
                            inviter: nil,
@@ -220,7 +220,7 @@ extension Array where Element == RoomSummaryDetails {
                         // Incrementing id value for each combination
                         let id = result.count + 1
                         
-                        let room = RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+                        let room = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                                       id: "\(id)",
                                                       settingsMode: mode,
                                                       hasUnreadMessages: hasUnreadMessages,
@@ -237,7 +237,7 @@ extension Array where Element == RoomSummaryDetails {
     }()
     
     static let mockInvites: [Element] = [
-        RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(roomListItem: RoomListItemSDKMock(),
                            id: "someAwesomeRoomId1",
                            isInvite: false,
                            inviter: RoomMemberProxyMock.mockCharlie,
@@ -255,7 +255,7 @@ extension Array where Element == RoomSummaryDetails {
                            hasOngoingCall: false,
                            isMarkedUnread: false,
                            isFavourite: false),
-        RoomSummaryDetails(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(roomListItem: RoomListItemSDKMock(),
                            id: "someAwesomeRoomId2",
                            isInvite: false,
                            inviter: RoomMemberProxyMock.mockCharlie,
