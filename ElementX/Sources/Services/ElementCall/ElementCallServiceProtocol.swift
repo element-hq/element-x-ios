@@ -19,6 +19,7 @@ import Combine
 enum ElementCallServiceAction {
     case startCall(roomID: String)
     case endCall(roomID: String)
+    case setCallMuted(_ muted: Bool, roomID: String)
 }
 
 enum ElementCallServiceNotificationKey: String {
@@ -35,4 +36,6 @@ protocol ElementCallServiceProtocol {
     func setupCallSession(roomID: String, roomDisplayName: String) async
     
     func tearDownCallSession()
+    
+    func setCallMuted(_ muted: Bool, roomID: String)
 }

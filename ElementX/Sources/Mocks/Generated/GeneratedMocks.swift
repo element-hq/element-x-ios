@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.4 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.5 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -4901,6 +4901,47 @@ class ElementCallServiceMock: ElementCallServiceProtocol {
     func tearDownCallSession() {
         tearDownCallSessionCallsCount += 1
         tearDownCallSessionClosure?()
+    }
+    //MARK: - setCallMuted
+
+    var setCallMutedRoomIDUnderlyingCallsCount = 0
+    var setCallMutedRoomIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setCallMutedRoomIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setCallMutedRoomIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setCallMutedRoomIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setCallMutedRoomIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setCallMutedRoomIDCalled: Bool {
+        return setCallMutedRoomIDCallsCount > 0
+    }
+    var setCallMutedRoomIDReceivedArguments: (muted: Bool, roomID: String)?
+    var setCallMutedRoomIDReceivedInvocations: [(muted: Bool, roomID: String)] = []
+    var setCallMutedRoomIDClosure: ((Bool, String) -> Void)?
+
+    func setCallMuted(_ muted: Bool, roomID: String) {
+        setCallMutedRoomIDCallsCount += 1
+        setCallMutedRoomIDReceivedArguments = (muted: muted, roomID: roomID)
+        DispatchQueue.main.async {
+            self.setCallMutedRoomIDReceivedInvocations.append((muted: muted, roomID: roomID))
+        }
+        setCallMutedRoomIDClosure?(muted, roomID)
     }
 }
 class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
