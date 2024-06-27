@@ -1,6 +1,11 @@
 require 'yaml'
 require 'semantic'
 
+enterprise = '../Enterprise/fastlane/Fastfile'
+if File.exist?(enterprise)
+  import enterprise
+end
+
 before_all do
   xcversion(version: "15.2")
 
@@ -146,14 +151,18 @@ lane :integration_tests do
   )
 end
 
+lane :config_production do
+  config_secrets()
+  xcodegen(spec: "project.yml")
+end
+
 lane :config_nightly do |options|
   build_number = options[:build_number]
   UI.user_error!("Invalid build number.") unless !build_number.to_s.empty?
 
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
-  data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.nightly"
-  data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.nightly"
+  data["include"].append({ "path" => "fastlane/nightly.yml" })
 
   config_secrets()
   
@@ -168,11 +177,6 @@ lane :config_nightly do |options|
   release_version = get_version_number(target: "ElementX")
 
   update_app_icon(caption_text: "#{release_version}(#{build_number})", modulate: "100,20,100")
-end
-
-lane :config_production do
-  config_secrets()
-  xcodegen(spec: "project.yml")
 end
 
 $sentry_retry=0
@@ -302,8 +306,7 @@ end
 private_lane :config_xcodegen_alpha do
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
-  data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.pr"
-  data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.pr"
+  data["include"].append({ "path" => "fastlane/alpha.yml" })
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
   xcodegen(spec: "project.yml")

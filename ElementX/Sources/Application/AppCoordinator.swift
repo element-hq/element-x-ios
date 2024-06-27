@@ -29,6 +29,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appMediator: AppMediator
     private let appSettings: AppSettings
     private let appDelegate: AppDelegate
+    private let appHooks: AppHooks
     private let elementCallService: ElementCallServiceProtocol
 
     /// Common background task to continue long-running tasks in the background.
@@ -65,10 +66,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     @Consumable private var storedAppRoute: AppRoute?
 
     init(appDelegate: AppDelegate) {
+        let appHooks = AppHooks()
+        appHooks.configure()
+        
         windowManager = WindowManager(appDelegate: appDelegate)
         appMediator = AppMediator(windowManager: windowManager)
         
-        let appSettings = AppSettings()
+        let appSettings = appHooks.runAppSettingsHook(AppSettings())
         
         MXLog.configure(logLevel: appSettings.logLevel)
         
@@ -83,6 +87,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         self.appDelegate = appDelegate
         self.appSettings = appSettings
+        self.appHooks = appHooks
         appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
         
         elementCallService = ElementCallService()

@@ -21,21 +21,16 @@ options:
 
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
-  ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "colors/accent-color"
   ENABLE_BITCODE: NO
-  BASE_APP_GROUP_IDENTIFIER: io.element
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
-  BASE_BUNDLE_IDENTIFIER: io.element.elementx
   APP_NAME: ElementX
-  APP_DISPLAY_NAME: Element X
-  PRODUCTION_APP_NAME: Element
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
   MARKETING_VERSION: 1.6.13
   CURRENT_PROJECT_VERSION: 1
-  DEVELOPMENT_TEAM: 7J4U792NQT
   SUPPORTS_MACCATALYST: NO
 
 include:
+  - path: app.yml
   - path: ElementX/SupportingFiles/target.yml
   - path: UnitTests/SupportingFiles/target.yml
   - path: PreviewTests/SupportingFiles/target.yml
