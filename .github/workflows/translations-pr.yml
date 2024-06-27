@@ -35,6 +35,7 @@ jobs:
           title: Translations update
           body: |
             - Translations update
+          labels: pr-i18n
           branch: translations/update
           base: develop
           add-paths: |

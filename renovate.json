@@ -3,6 +3,9 @@
   "extends": [
     "config:recommended"
   ],
+  "labels" : [
+    "pr-misc"
+  ],
   "packageRules" : [
     {
       "matchManagers": ["github-actions"],
