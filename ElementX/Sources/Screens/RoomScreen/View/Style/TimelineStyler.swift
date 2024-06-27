@@ -60,8 +60,6 @@ struct TimelineStyler<Content: View>: View {
     @ViewBuilder
     var mainContent: some View {
         switch style {
-        case .plain:
-            TimelineItemPlainStylerView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, content: content)
         case .bubbles:
             TimelineItemBubbledStylerView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, content: content)
         }
@@ -204,11 +202,6 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
             .environmentObject(viewModel.context)
             .environment(\.timelineStyle, .bubbles)
             .previewDisplayName("Bubbles")
-
-        testView
-            .environmentObject(viewModel.context)
-            .environment(\.timelineStyle, .plain)
-            .previewDisplayName("Plain")
         
         languagesTestView
             .environmentObject(viewModel.context)

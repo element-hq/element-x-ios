@@ -41,17 +41,6 @@ struct AdvancedSettingsScreen: View {
     }
 }
 
-private extension TimelineStyle {
-    var name: String {
-        switch self {
-        case .plain:
-            return L10n.commonModern
-        case .bubbles:
-            return L10n.commonBubbles
-        }
-    }
-}
-
 private extension AppAppearance {
     var name: String {
         switch self {

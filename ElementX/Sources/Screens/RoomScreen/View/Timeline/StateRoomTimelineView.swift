@@ -33,8 +33,6 @@ struct StateRoomTimelineView: View {
 struct StateRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         body
-        body
-            .environment(\.timelineStyle, .plain)
     }
     
     static var body: some View {

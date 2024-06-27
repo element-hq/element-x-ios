@@ -173,8 +173,6 @@ struct FormattedBodyText: View {
 struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         body
-        body
-            .environment(\.timelineStyle, .plain)
     }
     
     @ViewBuilder

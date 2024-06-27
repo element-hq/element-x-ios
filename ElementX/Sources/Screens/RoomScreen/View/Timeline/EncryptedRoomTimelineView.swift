@@ -62,9 +62,6 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         body.environmentObject(viewModel.context)
-        body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
     }
     
     static var body: some View {

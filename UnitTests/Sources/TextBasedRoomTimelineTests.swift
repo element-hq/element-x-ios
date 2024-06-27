@@ -44,18 +44,6 @@ final class TextBasedRoomTimelineTests: XCTestCase {
         XCTAssertEqual(timelineItem.additionalWhitespaces(timelineStyle: .bubbles), timestamp.count + 1)
     }
 
-    func testTextRoomTimelineItemWhitespaceEndPlain() {
-        let timelineItem = TextRoomTimelineItem(id: .random,
-                                                timestamp: "Now",
-                                                isOutgoing: true,
-                                                isEditable: true,
-                                                canBeRepliedTo: true,
-                                                isThreaded: false,
-                                                sender: .init(id: UUID().uuidString),
-                                                content: .init(body: "Test"))
-        XCTAssertEqual(timelineItem.additionalWhitespaces(timelineStyle: .plain), 0)
-    }
-
     func testTextRoomTimelineItemWhitespaceEndWithEdit() {
         let timestamp = "Now"
         var timelineItem = TextRoomTimelineItem(id: .random,
