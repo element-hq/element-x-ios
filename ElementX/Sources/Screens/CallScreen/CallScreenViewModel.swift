@@ -58,10 +58,34 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 return
             }
             
+            // TODO: intercept EC mute state changes and pass them over to CallKit
+            // elementCallService.setCallMuted(roomID: roomProxy.id, muted: muted)
+            
             Task {
                 await self.widgetDriver.sendMessage(message)
             }
         }
+        
+        elementCallService.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case let .setCallMuted(muted, roomID):
+                    guard roomID == roomProxy.id else {
+                        MXLog.error("Received mute request for a different room: \(roomID) != \(roomProxy.id)")
+                        return
+                    }
+                    
+                    Task {
+                        await self.setMuted(muted)
+                    }
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
         
         widgetDriver.messagePublisher
             .receive(on: DispatchQueue.main)
@@ -115,6 +139,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             
             await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
             
+            // TODO: Pass over the current EC mute status to CallKit
+            
             let _ = await roomProxy.sendCallNotificationIfNeeeded()
         }
     }
@@ -136,6 +162,10 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    private func setMuted(_ muted: Bool) async {
+        // Not supported on EC yet
+    }
     
     private func hangUp() async {
         let hangUpMessage = """

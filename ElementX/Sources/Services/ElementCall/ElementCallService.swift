@@ -103,6 +103,25 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     func tearDownCallSession() {
         tearDownCallSession(sendEndCallAction: true)
     }
+    
+    func setCallMuted(_ muted: Bool, roomID: String) {
+        guard let ongoingCallID else {
+            MXLog.error("Failed toggling call microphone, no calls running")
+            return
+        }
+        
+        guard ongoingCallID.roomID == roomID else {
+            MXLog.error("Failed toggling call microphone, rooms don't match: \(ongoingCallID.roomID) != \(roomID)")
+            return
+        }
+        
+        let transaction = CXTransaction(action: CXSetMutedCallAction(call: ongoingCallID.callKitID, muted: muted))
+        callController.request(transaction) { error in
+            if let error {
+                MXLog.error("Failed toggling call microphone with error: \(error)")
+            }
+        }
+    }
 
     // MARK: - PKPushRegistryDelegate
     
@@ -164,9 +183,16 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     func provider(_ provider: CXProvider, perform action: CXSetMutedCallAction) {
-        // Forward this to the widget somehow
-        // webView.evaluateJavaScript("groupCall.setLocalVideoMuted(!groupCall.isLocalVideoMuted())")
-        // webView.evaluateJavaScript("groupCall.setMicrophoneMuted(!groupCall.isMicrophoneMuted())"
+        // if let ongoingCallID {
+        //    actionsSubject.send(.setCallMuted(action.isMuted, roomID: ongoingCallID.roomID))
+        // } else {
+        //     MXLog.error("Failed muting/unmuting call, missing ongoingCallID")
+        // }
+        //
+        // action.fulfill()
+        
+        // TODO: EC doesn't expose controls for this yet. Fail the action for now.
+        action.fail()
     }
     
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {

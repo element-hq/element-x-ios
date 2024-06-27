@@ -173,10 +173,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 switch action {
-                case .startCall:
-                    break
                 case .endCall:
                     self?.dismissCallScreenIfNeeded()
+                default:
+                    break
                 }
             }
             .store(in: &cancellables)
