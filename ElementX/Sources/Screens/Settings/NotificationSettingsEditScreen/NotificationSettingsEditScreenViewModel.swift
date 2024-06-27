@@ -158,7 +158,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         }
     }
     
-    private func buildRoom(with details: RoomSummaryDetails) async -> NotificationSettingsEditScreenRoom {
+    private func buildRoom(with details: RoomSummary) async -> NotificationSettingsEditScreenRoom {
         let notificationMode = try? await notificationSettingsProxy.getUserDefinedRoomNotificationMode(roomId: details.id)
         return NotificationSettingsEditScreenRoom(id: details.id,
                                                   roomId: details.id,

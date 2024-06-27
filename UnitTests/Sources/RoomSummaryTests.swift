@@ -18,7 +18,7 @@ import XCTest
 
 @testable import ElementX
 
-class RoomSummaryDetailsTests: XCTestCase {
+class RoomSummaryTests: XCTestCase {
     // swiftlint:disable:next large_tuple
     let roomDetails: (id: String, name: String, avatarURL: URL) = ("room_id", "Room Name", "mxc://hs.tld/room/avatar")
     let heroes = [UserProfileProxy(userID: "hero_1", displayName: "Hero 1", avatarURL: "mxc://hs.tld/user/avatar")]
@@ -62,8 +62,8 @@ class RoomSummaryDetailsTests: XCTestCase {
     
     // MARK: - Helpers
     
-    func makeDetails(isDirect: Bool, hasRoomAvatar: Bool) -> RoomSummaryDetails {
-        RoomSummaryDetails(id: roomDetails.id,
+    func makeDetails(isDirect: Bool, hasRoomAvatar: Bool) -> RoomSummary {
+        RoomSummary(id: roomDetails.id,
                            isInvite: false,
                            inviter: nil,
                            name: roomDetails.name,

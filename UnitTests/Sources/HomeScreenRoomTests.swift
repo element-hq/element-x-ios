@@ -21,7 +21,7 @@ import XCTest
 
 @MainActor
 class HomeScreenRoomTests: XCTestCase {
-    var roomSummaryDetails: RoomSummaryDetails!
+    var roomSummaryDetails: RoomSummary!
     
     // swiftlint:disable:next function_parameter_count
     func setupRoomSummary(isMarkedUnread: Bool,
@@ -30,7 +30,7 @@ class HomeScreenRoomTests: XCTestCase {
                           unreadNotificationsCount: UInt,
                           notificationMode: RoomNotificationModeProxy,
                           hasOngoingCall: Bool) {
-        roomSummaryDetails = RoomSummaryDetails(id: "Test room",
+        roomSummaryDetails = RoomSummary(id: "Test room",
                                                 isInvite: false,
                                                 inviter: nil,
                                                 name: "Test room",
