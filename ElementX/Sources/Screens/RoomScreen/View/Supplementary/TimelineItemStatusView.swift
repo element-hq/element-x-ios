@@ -51,6 +51,7 @@ struct TimelineItemStatusView: View {
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
             }
         case .sendingFailed:
+            // Bubbles handle the case internally
             EmptyView()
         }
     }
