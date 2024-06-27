@@ -1,0 +1,3 @@
+settings:
+  BASE_APP_GROUP_IDENTIFIER: io.element.nightly
+  BASE_BUNDLE_IDENTIFIER: io.element.elementx.nightly

@@ -162,8 +162,7 @@ lane :config_nightly do |options|
 
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
-  data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.nightly"
-  data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.nightly"
+  data["include"].append("fastlane/nightly.yml")
 
   config_secrets()
   
@@ -307,8 +306,7 @@ end
 private_lane :config_xcodegen_alpha do
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
-  data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.pr"
-  data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.pr"
+  data["include"].append("fastlane/alpha.yml")
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
   xcodegen(spec: "project.yml")
