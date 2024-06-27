@@ -37,12 +37,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicAdaptersResult?
     private var stateUpdatesTaskHandle: TaskHandle?
     
-    private let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
+    private let roomListSubject = CurrentValueSubject<[RoomSummaryDetails], Never>([])
     private let stateSubject = CurrentValueSubject<RoomSummaryProviderState, Never>(.notLoaded)
     
     private let diffsPublisher = PassthroughSubject<[RoomListEntriesUpdate], Never>()
     
-    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
+    var roomListPublisher: CurrentValuePublisher<[RoomSummaryDetails], Never> {
         roomListSubject.asCurrentValuePublisher()
     }
 
@@ -50,7 +50,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         stateSubject.asCurrentValuePublisher()
     }
     
-    private var rooms: [RoomSummary] = [] {
+    private var rooms: [RoomSummaryDetails] = [] {
         didSet {
             roomListSubject.send(rooms)
         }
@@ -166,7 +166,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.info("Finished processing room list diffs")
     }
     
-    private func processDiff(_ diff: RoomListEntriesUpdate, on currentItems: [RoomSummary]) -> [RoomSummary] {
+    private func processDiff(_ diff: RoomListEntriesUpdate, on currentItems: [RoomSummaryDetails]) -> [RoomSummaryDetails] {
         guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
             MXLog.error("\(name): Failed building CollectionDifference from \(diff)")
             return currentItems
@@ -202,11 +202,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return (result.roomInfo, result.latestEvent)
     }
     
-    private func buildRoomSummaryForRoomListItem(_ roomListItem: RoomListItem) -> RoomSummary {
+    private func buildRoomSummaryForRoomListItem(_ roomListItem: RoomListItem) -> RoomSummaryDetails {
         let roomDetails = fetchRoomDetailsFromRoomListItem(roomListItem)
         
         guard let roomInfo = roomDetails.roomInfo else {
-            return .empty
+            fatalError("")
         }
         
         var attributedLastMessage: AttributedString?
@@ -225,30 +225,28 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         let notificationMode = roomInfo.userDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
-        let details = RoomSummaryDetails(roomListItem: roomListItem,
-                                         id: roomInfo.id,
-                                         isInvite: roomInfo.membership == .invited,
-                                         inviter: inviterProxy,
-                                         name: roomInfo.displayName ?? roomInfo.id,
-                                         isDirect: roomInfo.isDirect,
-                                         avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
-                                         heroes: roomInfo.heroes.map(UserProfileProxy.init),
-                                         lastMessage: attributedLastMessage,
-                                         lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
-                                         unreadMessagesCount: UInt(roomInfo.numUnreadMessages),
-                                         unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
-                                         unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),
-                                         notificationMode: notificationMode,
-                                         canonicalAlias: roomInfo.canonicalAlias,
-                                         hasOngoingCall: roomInfo.hasRoomCall,
-                                         isMarkedUnread: roomInfo.isMarkedUnread,
-                                         isFavourite: roomInfo.isFavourite)
-        
-        return .filled(details: details)
+        return RoomSummaryDetails(roomListItem: roomListItem,
+                                  id: roomInfo.id,
+                                  isInvite: roomInfo.membership == .invited,
+                                  inviter: inviterProxy,
+                                  name: roomInfo.displayName ?? roomInfo.id,
+                                  isDirect: roomInfo.isDirect,
+                                  avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
+                                  heroes: roomInfo.heroes.map(UserProfileProxy.init),
+                                  lastMessage: attributedLastMessage,
+                                  lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
+                                  unreadMessagesCount: UInt(roomInfo.numUnreadMessages),
+                                  unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
+                                  unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),
+                                  notificationMode: notificationMode,
+                                  canonicalAlias: roomInfo.canonicalAlias,
+                                  hasOngoingCall: roomInfo.hasRoomCall,
+                                  isMarkedUnread: roomInfo.isMarkedUnread,
+                                  isFavourite: roomInfo.isFavourite)
     }
     
-    private func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
-        var changes = [CollectionDifference<RoomSummary>.Change]()
+    private func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummaryDetails]) -> CollectionDifference<RoomSummaryDetails>? {
+        var changes = [CollectionDifference<RoomSummaryDetails>.Change]()
         
         switch diff {
         case .append(let values):
@@ -342,14 +340,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
         
         rooms = rooms.map {
-            switch $0 {
-            case .empty:
-                return $0
-            case .filled(let details):
-                return self.buildRoomSummaryForRoomListItem(details.roomListItem)
-            case .invalidated(let details):
-                return self.buildRoomSummaryForRoomListItem(details.roomListItem)
-            }
+            return self.buildRoomSummaryForRoomListItem($0.roomListItem)
         }
         
         MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")

@@ -72,17 +72,12 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
     
     // MARK: - Private
     
-    private func updateRooms(with summaries: [RoomSummary]) {
+    private func updateRooms(with summaries: [RoomSummaryDetails]) {
         state.rooms = summaries.compactMap { summary in
-            switch summary {
-            case .empty:
-                return nil
-            case .invalidated(let details), .filled(let details):
-                return GlobalSearchRoom(id: details.id,
-                                        name: details.name,
-                                        alias: details.canonicalAlias,
-                                        avatar: details.avatar)
-            }
+            return GlobalSearchRoom(id: summary.id,
+                                    name: summary.name,
+                                    alias: summary.canonicalAlias,
+                                    avatar: summary.avatar)
         }
     }
     

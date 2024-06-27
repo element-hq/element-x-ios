@@ -72,7 +72,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         
-        notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = [RoomSummary].mockRooms.compactMap(\.id)
+        notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = [RoomSummaryDetails].mockRooms.map(\.id)
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@alice:example.com",
                                                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))))
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
@@ -113,7 +113,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(canPushEncryptedEvents: true))
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         
-        notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = [RoomSummary].mockRooms.compactMap(\.id)
+        notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = [RoomSummaryDetails].mockRooms.map(\.id)
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@alice:example.com",
                                                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))))
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
