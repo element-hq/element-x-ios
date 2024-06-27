@@ -21,6 +21,7 @@ import OrderedCollections
 
 import MatrixRustSDK
 
+// swiftlint:disable file_length
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let networkMonitor: NetworkMonitorProtocol
@@ -188,19 +189,6 @@ class ClientProxy: ClientProxyProtocol {
             .store(in: &cancellables)
     }
     
-    private func updateVerificationState(_ verificationState: VerificationState) {
-        let verificationState: SessionVerificationState = switch verificationState {
-        case .unknown:
-            .unknown
-        case .unverified:
-            .unverified
-        case .verified:
-            .verified
-        }
-        
-        verificationStateSubject.send(verificationState)
-    }
-    
     var userID: String {
         do {
             return try client.userId()
@@ -214,13 +202,22 @@ class ClientProxy: ClientProxyProtocol {
         do {
             return try client.deviceId()
         } catch {
-            MXLog.error("Failed retrieving device id with error: \(error)")
+            MXLog.error("Failed retrieving deviceID with error: \(error)")
             return nil
         }
     }
 
     var homeserver: String {
         client.homeserver()
+    }
+    
+    var userIDServerName: String? {
+        do {
+            return try client.userIdServerName()
+        } catch {
+            MXLog.error("Failed retrieving userID server name with error: \(error)")
+            return nil
+        }
     }
 
     private(set) lazy var pusherNotificationClientIdentifier: String? = {
@@ -616,6 +613,23 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError> {
+        guard let userIDServerName,
+              var url = URL(string: userIDServerName) else {
+            return .failure(.invalidUserIDServerName)
+        }
+        
+        url.append(path: "/.well-known/element/element.json")
+        
+        do {
+            let response = try await client.getUrl(url: url.absoluteString)
+            let sdkWellKnown = try makeElementWellKnown(string: response)
+            return .success(ElementWellKnown(sdkWellKnown))
+        } catch {
+            return .failure(.sdkError(error))
+        }
+    }
         
     // MARK: Ignored users
     
@@ -691,6 +705,19 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: - Private
+    
+    private func updateVerificationState(_ verificationState: VerificationState) {
+        let verificationState: SessionVerificationState = switch verificationState {
+        case .unknown:
+            .unknown
+        case .unverified:
+            .unverified
+        case .verified:
+            .verified
+        }
+        
+        verificationStateSubject.send(verificationState)
+    }
 
     private func loadUserAvatarURLFromCache() {
         loadCachedAvatarURLTask = Task {

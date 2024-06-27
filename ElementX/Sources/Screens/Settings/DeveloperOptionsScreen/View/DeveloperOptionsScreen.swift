@@ -38,14 +38,15 @@ struct DeveloperOptionsScreen: View {
             }
                                     
             Section("Element Call") {
-                TextField(context.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
+                TextField(context.elementCallBaseURL?.absoluteString ?? elementCallBaseURLOverride?.absoluteString,
+                          text: $elementCallBaseURLString)
                     .submitLabel(.done)
                     .onSubmit {
                         guard let url = URL(string: elementCallBaseURLString) else {
                             return
                         }
                         
-                        context.elementCallBaseURL = url
+                        context.elementCallBaseURLOverride = url
                     }
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)

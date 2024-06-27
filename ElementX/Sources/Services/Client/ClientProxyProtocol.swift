@@ -41,6 +41,7 @@ enum ClientProxyError: Error {
     case sdkError(Error)
     
     case invalidMedia
+    case invalidUserIDServerName
     case failedUploadingMedia(Error, MatrixErrorCode)
 }
 
@@ -94,6 +95,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var deviceID: String? { get }
 
     var homeserver: String { get }
+    
+    var userIDServerName: String? { get }
         
     var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> { get }
 
@@ -162,6 +165,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol
     
     func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError>
+    
+    func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError>
 
     // MARK: - Ignored users
     

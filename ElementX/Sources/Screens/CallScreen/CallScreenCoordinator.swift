@@ -19,9 +19,11 @@ import SwiftUI
 
 struct CallScreenCoordinatorParameters {
     let elementCallService: ElementCallServiceProtocol
+    let clientProxy: ClientProxyProtocol
     let roomProxy: RoomProxyProtocol
-    let callBaseURL: URL
     let clientID: String
+    let elementCallBaseURL: URL
+    let elementCallBaseURLOverride: URL?
 }
 
 enum CallScreenCoordinatorAction {
@@ -39,9 +41,11 @@ final class CallScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: CallScreenCoordinatorParameters) {
         viewModel = CallScreenViewModel(elementCallService: parameters.elementCallService,
+                                        clientProxy: parameters.clientProxy,
                                         roomProxy: parameters.roomProxy,
-                                        callBaseURL: parameters.callBaseURL,
-                                        clientID: parameters.clientID)
+                                        clientID: parameters.clientID,
+                                        elementCallBaseURL: parameters.elementCallBaseURL,
+                                        elementCallBaseURLOverride: parameters.elementCallBaseURLOverride)
     }
     
     func start() {

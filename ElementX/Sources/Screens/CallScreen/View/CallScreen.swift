@@ -172,7 +172,11 @@ private struct WebView: UIViewRepresentable {
 
 struct CallScreen_Previews: PreviewProvider {
     static let viewModel = {
+        let clientProxy = ClientProxyMock()
+        clientProxy.getElementWellKnownReturnValue = .success(nil)
+        
         let roomProxy = RoomProxyMock()
+        roomProxy.sendCallNotificationIfNeeededReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
@@ -182,9 +186,11 @@ struct CallScreen_Previews: PreviewProvider {
         roomProxy.elementCallWidgetDriverReturnValue = widgetDriver
         
         return CallScreenViewModel(elementCallService: ElementCallServiceMock(.init()),
+                                   clientProxy: clientProxy,
                                    roomProxy: roomProxy,
-                                   callBaseURL: "https://call.element.io",
-                                   clientID: "io.element.elementx")
+                                   clientID: "io.element.elementx",
+                                   elementCallBaseURL: "https://call.element.io",
+                                   elementCallBaseURLOverride: nil)
     }()
     
     static var previews: some View {

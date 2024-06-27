@@ -39,7 +39,7 @@ final class AppSettings {
         case sharePresence
         case hideUnreadMessagesBadge
         
-        case elementCallBaseURL
+        case elementCallBaseURLOverride
         case elementCallEncryptionEnabled
         
         // Feature flags
@@ -249,8 +249,10 @@ final class AppSettings {
 
     // MARK: - Element Call
     
-    @UserPreference(key: UserDefaultsKeys.elementCallBaseURL, defaultValue: "https://call.element.io", storageType: .userDefaults(store))
-    var elementCallBaseURL: URL
+    let elementCallBaseURL: URL = "https://call.element.io"
+    
+    @UserPreference(key: UserDefaultsKeys.elementCallBaseURLOverride, defaultValue: nil, storageType: .userDefaults(store))
+    var elementCallBaseURLOverride: URL?
     
     // MARK: - Users
     

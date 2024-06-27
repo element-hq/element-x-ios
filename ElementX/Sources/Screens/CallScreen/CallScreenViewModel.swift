@@ -38,9 +38,11 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     ///   - callBaseURL: Which Element Call instance should be used
     ///   - clientID: Something to identify the current client on the Element Call side
     init(elementCallService: ElementCallServiceProtocol,
+         clientProxy: ClientProxyProtocol,
          roomProxy: RoomProxyProtocol,
-         callBaseURL: URL,
-         clientID: String) {
+         clientID: String,
+         elementCallBaseURL: URL,
+         elementCallBaseURLOverride: URL?) {
         self.elementCallService = elementCallService
         self.roomProxy = roomProxy
         
@@ -90,7 +92,15 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             .store(in: &cancellables)
         
         Task {
-            switch await widgetDriver.start(baseURL: callBaseURL, clientID: clientID) {
+            let baseURL = if let elementCallBaseURLOverride {
+                elementCallBaseURLOverride
+            } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCallWidgetURL = wellKnown?.call?.widgetURL {
+                wellKnownCallWidgetURL
+            } else {
+                elementCallBaseURL
+            }
+            
+            switch await widgetDriver.start(baseURL: baseURL, clientID: clientID) {
             case .success(let url):
                 state.url = url
             case .failure(let error):
