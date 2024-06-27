@@ -64,21 +64,21 @@ class RoomSummaryTests: XCTestCase {
     
     func makeDetails(isDirect: Bool, hasRoomAvatar: Bool) -> RoomSummary {
         RoomSummary(id: roomDetails.id,
-                           isInvite: false,
-                           inviter: nil,
-                           name: roomDetails.name,
-                           isDirect: isDirect,
-                           avatarURL: hasRoomAvatar ? roomDetails.avatarURL : nil,
-                           heroes: heroes,
-                           lastMessage: nil,
-                           lastMessageFormattedTimestamp: nil,
-                           unreadMessagesCount: 0,
-                           unreadMentionsCount: 0,
-                           unreadNotificationsCount: 0,
-                           notificationMode: nil,
-                           canonicalAlias: nil,
-                           hasOngoingCall: false,
-                           isMarkedUnread: false,
-                           isFavourite: false)
+                    isInvite: false,
+                    inviter: nil,
+                    name: roomDetails.name,
+                    isDirect: isDirect,
+                    avatarURL: hasRoomAvatar ? roomDetails.avatarURL : nil,
+                    heroes: heroes,
+                    lastMessage: nil,
+                    lastMessageFormattedTimestamp: nil,
+                    unreadMessagesCount: 0,
+                    unreadMentionsCount: 0,
+                    unreadNotificationsCount: 0,
+                    notificationMode: nil,
+                    canonicalAlias: nil,
+                    hasOngoingCall: false,
+                    isMarkedUnread: false,
+                    isFavourite: false)
     }
 }
