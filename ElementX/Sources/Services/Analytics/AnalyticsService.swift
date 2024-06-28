@@ -38,7 +38,7 @@ class AnalyticsService {
     
     /// A signpost client for performance testing the app. This client doesn't respect the
     /// `isRunning` state or behave any differently when `start`/`reset` are called.
-    let signpost = Signposter()
+    let signpost: Signposter
     
     /// Whether or not the object is enabled and sending events to the server.
     private let isRunningSubject: CurrentValueSubject<Bool, Never> = .init(false)
@@ -49,6 +49,7 @@ class AnalyticsService {
     init(client: AnalyticsClientProtocol, appSettings: AppSettings) {
         self.client = client
         self.appSettings = appSettings
+        signpost = Signposter(isDevelopmentBuild: AppSettings.isDevelopmentBuild)
         
         isRunningSubject.send(client.isRunning)
     }

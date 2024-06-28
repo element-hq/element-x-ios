@@ -15,6 +15,7 @@
 //
 
 import OSLog
+import Sentry
 
 /// A simple wrapper around OSSignposter for easy performance testing.
 class Signposter {
@@ -24,22 +25,37 @@ class Signposter {
     private let logger = Logger(subsystem: subsystem, category: category)
     
     /// Signpost name constants.
-    enum Name {
+    private enum Name {
         static let login: StaticString = "Login"
         static let firstSync: StaticString = "FirstSync"
         static let firstRooms: StaticString = "FirstRooms"
         static let roomFlow: StaticString = "RoomFlow"
+        
+        static let appStartup = "AppStartup"
+        static let appStarted = "AppStarted"
+        
+        static let homeserver = "homeserver"
+        static let isDevelopmentBuild = "isDevelopmentBuild"
     }
     
     static let subsystem = "ElementX"
     static let category = "PerformanceTests"
     
+    private var appStartupSpan: Span
+    
+    init(isDevelopmentBuild: Bool) {
+        appStartupSpan = SentrySDK.startTransaction(name: Name.appStartup, operation: Name.appStarted)
+        appStartupSpan.setData(value: isDevelopmentBuild, key: Name.isDevelopmentBuild)
+    }
+    
     // MARK: - Login
     
     private var loginState: OSSignpostIntervalState?
+    private var loginSpan: Span?
     
     func beginLogin() {
         loginState = signposter.beginInterval(Name.login)
+        loginSpan = appStartupSpan.startChild(operation: "\(Name.login)")
     }
     
     func endLogin() {
@@ -49,37 +65,56 @@ class Signposter {
         }
         
         signposter.endInterval(Name.login, loginState)
+        loginSpan?.finish()
+        
         self.loginState = nil
+        loginSpan = nil
     }
     
     // MARK: - FirstSync
     
     private var firstSyncState: OSSignpostIntervalState?
+    private var firstSyncSpan: Span?
     
-    func beginFirstSync() {
+    func beginFirstSync(serverName: String) {
+        appStartupSpan.setTag(value: serverName, key: Name.homeserver)
+        
         firstSyncState = signposter.beginInterval(Name.firstSync)
+        firstSyncSpan = appStartupSpan.startChild(operation: "\(Name.firstSync)")
     }
     
     func endFirstSync() {
         guard let firstSyncState else { return }
         
         signposter.endInterval(Name.firstSync, firstSyncState)
+        firstSyncSpan?.finish()
+        
         self.firstSyncState = nil
+        firstSyncSpan = nil
     }
     
     // MARK: - FirstRooms
     
     private var firstRoomsState: OSSignpostIntervalState?
+    private var firstRoomsSpan: Span?
     
     func beginFirstRooms() {
         firstRoomsState = signposter.beginInterval(Name.firstRooms)
+        firstRoomsSpan = appStartupSpan.startChild(operation: "\(Name.firstRooms)")
     }
     
     func endFirstRooms() {
+        defer {
+            appStartupSpan.finish()
+        }
+        
         guard let firstRoomsState else { return }
         
         signposter.endInterval(Name.firstRooms, firstRoomsState)
+        firstRoomsSpan?.finish()
+        
         self.firstRoomsState = nil
+        firstRoomsSpan = nil
     }
     
     // MARK: - Room Flow

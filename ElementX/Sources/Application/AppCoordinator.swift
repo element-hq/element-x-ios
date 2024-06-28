@@ -807,7 +807,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func startSync() {
         guard let userSession else { return }
         
-        ServiceLocator.shared.analytics.signpost.beginFirstSync()
+        // FIXME: replace this with `user_id_server_name` from https://github.com/matrix-org/matrix-rust-sdk/pull/3617
+        let serverName = String(userSession.clientProxy.userID.split(separator: ":").last ?? "Unknown")
+        
+        ServiceLocator.shared.analytics.signpost.beginFirstSync(serverName: serverName)
         userSession.clientProxy.startSync()
         
         guard clientProxyObserver == nil else {
