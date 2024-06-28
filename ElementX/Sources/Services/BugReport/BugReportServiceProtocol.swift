@@ -55,7 +55,7 @@ enum BugReportServiceError: LocalizedError {
 protocol BugReportServiceProtocol: AnyObject {
     var crashedLastRun: Bool { get }
     
-    var lastCrashEventId: String? { get set }
+    var lastCrashEventID: String? { get set }
     
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>

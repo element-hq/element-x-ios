@@ -29,7 +29,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     private let progressSubject = PassthroughSubject<Double, Never>()
     private var cancellables = Set<AnyCancellable>()
     
-    var lastCrashEventId: String?
+    var lastCrashEventID: String?
     
     init(withBaseURL baseURL: URL,
          applicationId: String,
@@ -84,8 +84,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             }
         }
         
-        if let crashEventId = lastCrashEventId {
-            params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventId)>")))
+        if let crashEventID = lastCrashEventID {
+            params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventID)>")))
         }
         
         for url in bugReport.files {
@@ -138,7 +138,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             let uploadResponse = try decoder.decode(SubmitBugReportResponse.self, from: data)
             
             if !uploadResponse.reportUrl.isEmpty {
-                lastCrashEventId = nil
+                lastCrashEventID = nil
             }
             
             MXLog.info("Feedback submitted.")

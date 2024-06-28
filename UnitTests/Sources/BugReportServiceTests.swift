@@ -51,7 +51,6 @@ class BugReportServiceTests: XCTestCase {
     
     func testInitialStateWithRealService() throws {
         let service = BugReportService(withBaseURL: "https://www.example.com",
-                                       sentryURL: "https://1234@sentry.com/1234",
                                        applicationId: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
@@ -61,7 +60,6 @@ class BugReportServiceTests: XCTestCase {
     
     @MainActor func testSubmitBugReportWithRealService() async throws {
         let service = BugReportService(withBaseURL: "https://www.example.com",
-                                       sentryURL: "https://1234@sentry.com/1234",
                                        applicationId: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,

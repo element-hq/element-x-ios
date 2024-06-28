@@ -1820,7 +1820,7 @@ class BugReportServiceMock: BugReportServiceProtocol {
         set(value) { underlyingCrashedLastRun = value }
     }
     var underlyingCrashedLastRun: Bool!
-    var lastCrashEventId: String?
+    var lastCrashEventID: String?
 
     //MARK: - submitBugReport
 

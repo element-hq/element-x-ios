@@ -30,7 +30,7 @@ struct HomeScreenContent: View {
             migrationView
         default:
             roomList
-                .sentryTrace("HomeScreenRoomList")
+                .sentryTrace("\(Self.self)")
         }
     }
     

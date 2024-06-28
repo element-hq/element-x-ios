@@ -146,7 +146,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 if isRunning {
                     self?.setupSentry()
                 } else {
-                    SentrySDK.close()
+                    self?.teardownSentry()
                 }
             }
             .store(in: &cancellables)
@@ -734,12 +734,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private func setupSentry() {
-        SentrySDK.start { options in
+        SentrySDK.start { [weak self] options in
             #if DEBUG
             options.enabled = false
             #endif
             
-            options.dsn = ServiceLocator.shared.settings.bugReportSentryURL.absoluteString
+            options.dsn = self?.appSettings.bugReportSentryURL.absoluteString
             
             // Sentry swizzling shows up quite often as the heaviest stack trace when profiling
             // We don't need any of the features it powers (see docs)
@@ -760,22 +760,33 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             
             // Experimental. Stitches stack traces of asynchronous code together
             options.swiftAsyncStacktraces = true
-
+            
             // Uniform sample rate: 1.0 captures 100% of transactions
             // In Production you will probably want a smaller number such as 0.5 for 50%
             if AppSettings.isDevelopmentBuild {
+                options.sampleRate = 1.0
                 options.tracesSampleRate = 1.0
+                options.profilesSampleRate = 1.0
             } else {
+                options.sampleRate = 0.5
                 options.tracesSampleRate = 0.5
+                options.profilesSampleRate = 0.5
             }
             
             // This callback is only executed once during the entire run of the program to avoid
             // multiple callbacks if there are multiple crash events to send (see method documentation)
             options.onCrashedLastRun = { event in
                 MXLog.error("Sentry detected a crash in the previous run: \(event.eventId.sentryIdString)")
-                ServiceLocator.shared.bugReportService.lastCrashEventId = event.eventId.sentryIdString
+                ServiceLocator.shared.bugReportService.lastCrashEventID = event.eventId.sentryIdString
             }
+            
+            MXLog.info("SentrySDK started")
         }
+    }
+    
+    private func teardownSentry() {
+        SentrySDK.close()
+        MXLog.info("SentrySDK stopped")
     }
            
     // MARK: Toasts and loading indicators
