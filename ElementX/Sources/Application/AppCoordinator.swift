@@ -19,6 +19,7 @@ import BackgroundTasks
 import Combine
 import Intents
 import MatrixRustSDK
+import Sentry
 import SwiftUI
 import Version
 
@@ -96,17 +97,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         Self.setupServiceLocator(appSettings: appSettings)
         
-        ServiceLocator.shared.analytics.isRunningPublisher
-            .removeDuplicates()
-            .sink { isRunning in
-                if isRunning {
-                    ServiceLocator.shared.bugReportService.start()
-                } else {
-                    ServiceLocator.shared.bugReportService.stop()
-                }
-            }
-            .store(in: &cancellables)
-        
         ServiceLocator.shared.analytics.startIfEnabled()
 
         stateMachine = AppCoordinatorStateMachine()
@@ -149,6 +139,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         observeAppLockChanges()
         
         registerBackgroundAppRefresh()
+        
+        ServiceLocator.shared.analytics.isRunningPublisher
+            .removeDuplicates()
+            .sink { [weak self] isRunning in
+                if isRunning {
+                    self?.setupSentry()
+                } else {
+                    SentrySDK.close()
+                }
+            }
+            .store(in: &cancellables)
         
         elementCallService.actions
             .receive(on: DispatchQueue.main)
@@ -344,7 +345,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         ServiceLocator.shared.register(appSettings: appSettings)
         ServiceLocator.shared.register(networkMonitor: NetworkMonitor())
         ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: appSettings.bugReportServiceBaseURL,
-                                                                          sentryURL: appSettings.bugReportSentryURL,
                                                                           applicationId: appSettings.bugReportApplicationId,
                                                                           sdkGitSHA: sdkGitSha(),
                                                                           maxUploadSize: appSettings.bugReportMaxUploadSize))
@@ -733,6 +733,51 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
+    private func setupSentry() {
+        SentrySDK.start { options in
+            #if DEBUG
+            options.enabled = false
+            #endif
+            
+            options.dsn = ServiceLocator.shared.settings.bugReportSentryURL.absoluteString
+            
+            // Sentry swizzling shows up quite often as the heaviest stack trace when profiling
+            // We don't need any of the features it powers (see docs)
+            options.enableSwizzling = false
+            
+            // WatchdogTermination is currently the top issue but we've had zero complaints
+            // so it might very well just all be false positives
+            options.enableWatchdogTerminationTracking = false
+            
+            // Disabled as it seems to report a lot of false positives
+            options.enableAppHangTracking = false
+            
+            // Most of the network requests are made Rust side, this is useless
+            options.enableNetworkBreadcrumbs = false
+            
+            // Doesn't seem to work at all well with SwiftUI
+            options.enableAutoBreadcrumbTracking = false
+            
+            // Experimental. Stitches stack traces of asynchronous code together
+            options.swiftAsyncStacktraces = true
+
+            // Uniform sample rate: 1.0 captures 100% of transactions
+            // In Production you will probably want a smaller number such as 0.5 for 50%
+            if AppSettings.isDevelopmentBuild {
+                options.tracesSampleRate = 1.0
+            } else {
+                options.tracesSampleRate = 0.5
+            }
+            
+            // This callback is only executed once during the entire run of the program to avoid
+            // multiple callbacks if there are multiple crash events to send (see method documentation)
+            options.onCrashedLastRun = { event in
+                MXLog.error("Sentry detected a crash in the previous run: \(event.eventId.sentryIdString)")
+                ServiceLocator.shared.bugReportService.lastCrashEventId = event.eventId.sentryIdString
+            }
+        }
+    }
+           
     // MARK: Toasts and loading indicators
     
     private static let loadingIndicatorIdentifier = "\(AppCoordinator.self)-Loading"
