@@ -4,82 +4,6 @@
 // swiftlint:disable all
 import Foundation
 import MatrixRustSDK
-open class AbortSendHandleSDKMock: MatrixRustSDK.AbortSendHandle {
-    init() {
-        super.init(noPointer: .init())
-    }
-
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
-    }
-
-    fileprivate var pointer: UnsafeMutableRawPointer!
-
-    //MARK: - abort
-
-    var abortUnderlyingCallsCount = 0
-    open var abortCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return abortUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = abortUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                abortUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    abortUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var abortCalled: Bool {
-        return abortCallsCount > 0
-    }
-
-    var abortUnderlyingReturnValue: Bool!
-    open var abortReturnValue: Bool! {
-        get {
-            if Thread.isMainThread {
-                return abortUnderlyingReturnValue
-            } else {
-                var returnValue: Bool? = nil
-                DispatchQueue.main.sync {
-                    returnValue = abortUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                abortUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    abortUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var abortClosure: (() async -> Bool)?
-
-    open override func abort() async -> Bool {
-        abortCallsCount += 1
-        if let abortClosure = abortClosure {
-            return await abortClosure()
-        } else {
-            return abortReturnValue
-        }
-    }
-}
 open class ClientSDKMock: MatrixRustSDK.Client {
     init() {
         super.init(noPointer: .init())
@@ -711,15 +635,15 @@ open class ClientSDKMock: MatrixRustSDK.Client {
     }
     open var enableAllSendQueuesEnableReceivedEnable: Bool?
     open var enableAllSendQueuesEnableReceivedInvocations: [Bool] = []
-    open var enableAllSendQueuesEnableClosure: ((Bool) -> Void)?
+    open var enableAllSendQueuesEnableClosure: ((Bool) async -> Void)?
 
-    open override func enableAllSendQueues(enable: Bool) {
+    open override func enableAllSendQueues(enable: Bool) async {
         enableAllSendQueuesEnableCallsCount += 1
         enableAllSendQueuesEnableReceivedEnable = enable
         DispatchQueue.main.async {
             self.enableAllSendQueuesEnableReceivedInvocations.append(enable)
         }
-        enableAllSendQueuesEnableClosure?(enable)
+        await enableAllSendQueuesEnableClosure?(enable)
     }
 
     //MARK: - encryption
@@ -9246,6 +9170,82 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
     }
 }
+open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - loginUrl
+
+    var loginUrlUnderlyingCallsCount = 0
+    open var loginUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loginUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loginUrlCalled: Bool {
+        return loginUrlCallsCount > 0
+    }
+
+    var loginUrlUnderlyingReturnValue: String!
+    open var loginUrlReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return loginUrlUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginUrlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginUrlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginUrlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var loginUrlClosure: (() -> String)?
+
+    open override func loginUrl() -> String {
+        loginUrlCallsCount += 1
+        if let loginUrlClosure = loginUrlClosure {
+            return loginUrlClosure()
+        } else {
+            return loginUrlReturnValue
+        }
+    }
+}
 open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {
     init() {
         super.init(noPointer: .init())
@@ -14819,6 +14819,71 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
         }
     }
 
+    //MARK: - isEncrypted
+
+    var isEncryptedUnderlyingCallsCount = 0
+    open var isEncryptedCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isEncryptedUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isEncryptedUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isEncryptedUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isEncryptedUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var isEncryptedCalled: Bool {
+        return isEncryptedCallsCount > 0
+    }
+
+    var isEncryptedUnderlyingReturnValue: Bool!
+    open var isEncryptedReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return isEncryptedUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isEncryptedUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isEncryptedUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isEncryptedUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var isEncryptedClosure: (() async -> Bool)?
+
+    open override func isEncrypted() async -> Bool {
+        isEncryptedCallsCount += 1
+        if let isEncryptedClosure = isEncryptedClosure {
+            return await isEncryptedClosure()
+        } else {
+            return isEncryptedReturnValue
+        }
+    }
+
     //MARK: - isTimelineInitialized
 
     var isTimelineInitializedUnderlyingCallsCount = 0
@@ -15753,6 +15818,86 @@ open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHand
         }
         joinCallsCount += 1
         try await joinClosure?()
+    }
+}
+open class SendHandleSDKMock: MatrixRustSDK.SendHandle {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - abort
+
+    open var abortThrowableError: Error?
+    var abortUnderlyingCallsCount = 0
+    open var abortCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return abortUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = abortUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                abortUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    abortUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var abortCalled: Bool {
+        return abortCallsCount > 0
+    }
+
+    var abortUnderlyingReturnValue: Bool!
+    open var abortReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return abortUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = abortUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                abortUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    abortUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var abortClosure: (() async throws -> Bool)?
+
+    open override func abort() async throws -> Bool {
+        if let error = abortThrowableError {
+            throw error
+        }
+        abortCallsCount += 1
+        if let abortClosure = abortClosure {
+            return try await abortClosure()
+        } else {
+            return abortReturnValue
+        }
     }
 }
 open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificationController {
@@ -17056,16 +17201,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
 
     //MARK: - edit
 
-    open var editNewContentEventIdThrowableError: Error?
-    var editNewContentEventIdUnderlyingCallsCount = 0
-    open var editNewContentEventIdCallsCount: Int {
+    open var editItemNewContentThrowableError: Error?
+    var editItemNewContentUnderlyingCallsCount = 0
+    open var editItemNewContentCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return editNewContentEventIdUnderlyingCallsCount
+                return editItemNewContentUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = editNewContentEventIdUnderlyingCallsCount
+                    returnValue = editItemNewContentUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -17073,31 +17218,106 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                editNewContentEventIdUnderlyingCallsCount = newValue
+                editItemNewContentUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    editNewContentEventIdUnderlyingCallsCount = newValue
+                    editItemNewContentUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var editNewContentEventIdCalled: Bool {
-        return editNewContentEventIdCallsCount > 0
+    open var editItemNewContentCalled: Bool {
+        return editItemNewContentCallsCount > 0
     }
-    open var editNewContentEventIdReceivedArguments: (newContent: RoomMessageEventContentWithoutRelation, eventId: String)?
-    open var editNewContentEventIdReceivedInvocations: [(newContent: RoomMessageEventContentWithoutRelation, eventId: String)] = []
-    open var editNewContentEventIdClosure: ((RoomMessageEventContentWithoutRelation, String) async throws -> Void)?
+    open var editItemNewContentReceivedArguments: (item: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation)?
+    open var editItemNewContentReceivedInvocations: [(item: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation)] = []
 
-    open override func edit(newContent: RoomMessageEventContentWithoutRelation, eventId: String) async throws {
-        if let error = editNewContentEventIdThrowableError {
+    var editItemNewContentUnderlyingReturnValue: Bool!
+    open var editItemNewContentReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return editItemNewContentUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editItemNewContentUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editItemNewContentUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editItemNewContentUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var editItemNewContentClosure: ((EventTimelineItem, RoomMessageEventContentWithoutRelation) async throws -> Bool)?
+
+    open override func edit(item: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async throws -> Bool {
+        if let error = editItemNewContentThrowableError {
             throw error
         }
-        editNewContentEventIdCallsCount += 1
-        editNewContentEventIdReceivedArguments = (newContent: newContent, eventId: eventId)
+        editItemNewContentCallsCount += 1
+        editItemNewContentReceivedArguments = (item: item, newContent: newContent)
         DispatchQueue.main.async {
-            self.editNewContentEventIdReceivedInvocations.append((newContent: newContent, eventId: eventId))
+            self.editItemNewContentReceivedInvocations.append((item: item, newContent: newContent))
         }
-        try await editNewContentEventIdClosure?(newContent, eventId)
+        if let editItemNewContentClosure = editItemNewContentClosure {
+            return try await editItemNewContentClosure(item, newContent)
+        } else {
+            return editItemNewContentReturnValue
+        }
+    }
+
+    //MARK: - editByEventId
+
+    open var editByEventIdEventIdNewContentThrowableError: Error?
+    var editByEventIdEventIdNewContentUnderlyingCallsCount = 0
+    open var editByEventIdEventIdNewContentCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return editByEventIdEventIdNewContentUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editByEventIdEventIdNewContentUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editByEventIdEventIdNewContentUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editByEventIdEventIdNewContentUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var editByEventIdEventIdNewContentCalled: Bool {
+        return editByEventIdEventIdNewContentCallsCount > 0
+    }
+    open var editByEventIdEventIdNewContentReceivedArguments: (eventId: String, newContent: RoomMessageEventContentWithoutRelation)?
+    open var editByEventIdEventIdNewContentReceivedInvocations: [(eventId: String, newContent: RoomMessageEventContentWithoutRelation)] = []
+    open var editByEventIdEventIdNewContentClosure: ((String, RoomMessageEventContentWithoutRelation) async throws -> Void)?
+
+    open override func editByEventId(eventId: String, newContent: RoomMessageEventContentWithoutRelation) async throws {
+        if let error = editByEventIdEventIdNewContentThrowableError {
+            throw error
+        }
+        editByEventIdEventIdNewContentCallsCount += 1
+        editByEventIdEventIdNewContentReceivedArguments = (eventId: eventId, newContent: newContent)
+        DispatchQueue.main.async {
+            self.editByEventIdEventIdNewContentReceivedInvocations.append((eventId: eventId, newContent: newContent))
+        }
+        try await editByEventIdEventIdNewContentClosure?(eventId, newContent)
     }
 
     //MARK: - editPoll
@@ -17845,13 +18065,13 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open var sendMsgReceivedMsg: RoomMessageEventContentWithoutRelation?
     open var sendMsgReceivedInvocations: [RoomMessageEventContentWithoutRelation] = []
 
-    var sendMsgUnderlyingReturnValue: AbortSendHandle!
-    open var sendMsgReturnValue: AbortSendHandle! {
+    var sendMsgUnderlyingReturnValue: SendHandle!
+    open var sendMsgReturnValue: SendHandle! {
         get {
             if Thread.isMainThread {
                 return sendMsgUnderlyingReturnValue
             } else {
-                var returnValue: AbortSendHandle? = nil
+                var returnValue: SendHandle? = nil
                 DispatchQueue.main.sync {
                     returnValue = sendMsgUnderlyingReturnValue
                 }
@@ -17869,9 +18089,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
             }
         }
     }
-    open var sendMsgClosure: ((RoomMessageEventContentWithoutRelation) async throws -> AbortSendHandle)?
+    open var sendMsgClosure: ((RoomMessageEventContentWithoutRelation) async throws -> SendHandle)?
 
-    open override func send(msg: RoomMessageEventContentWithoutRelation) async throws -> AbortSendHandle {
+    open override func send(msg: RoomMessageEventContentWithoutRelation) async throws -> SendHandle {
         if let error = sendMsgThrowableError {
             throw error
         }
