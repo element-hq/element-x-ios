@@ -81,6 +81,7 @@ struct RoomScreen: View {
                 context.send(viewAction: .handlePasteOrDrop(provider: provider))
                 return true
             }
+            .sentryTrace("RoomScreen")
     }
 
     private var timeline: some View {

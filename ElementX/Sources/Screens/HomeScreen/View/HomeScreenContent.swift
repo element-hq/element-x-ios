@@ -15,6 +15,7 @@
 //
 
 import Compound
+import SentrySwiftUI
 import SwiftUI
 
 struct HomeScreenContent: View {
@@ -29,6 +30,7 @@ struct HomeScreenContent: View {
             migrationView
         default:
             roomList
+                .sentryTrace("HomeScreenRoomList")
         }
     }
     
