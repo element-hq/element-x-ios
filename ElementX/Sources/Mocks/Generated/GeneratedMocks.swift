@@ -1815,87 +1815,13 @@ class AudioSessionMock: AudioSessionProtocol {
     }
 }
 class BugReportServiceMock: BugReportServiceProtocol {
-    var isRunning: Bool {
-        get { return underlyingIsRunning }
-        set(value) { underlyingIsRunning = value }
-    }
-    var underlyingIsRunning: Bool!
     var crashedLastRun: Bool {
         get { return underlyingCrashedLastRun }
         set(value) { underlyingCrashedLastRun = value }
     }
     var underlyingCrashedLastRun: Bool!
+    var lastCrashEventID: String?
 
-    //MARK: - start
-
-    var startUnderlyingCallsCount = 0
-    var startCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return startUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = startUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                startUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    startUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var startCalled: Bool {
-        return startCallsCount > 0
-    }
-    var startClosure: (() -> Void)?
-
-    func start() {
-        startCallsCount += 1
-        startClosure?()
-    }
-    //MARK: - stop
-
-    var stopUnderlyingCallsCount = 0
-    var stopCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return stopUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = stopUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                stopUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    stopUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var stopCalled: Bool {
-        return stopCallsCount > 0
-    }
-    var stopClosure: (() -> Void)?
-
-    func stop() {
-        stopCallsCount += 1
-        stopClosure?()
-    }
     //MARK: - submitBugReport
 
     var submitBugReportProgressListenerUnderlyingCallsCount = 0

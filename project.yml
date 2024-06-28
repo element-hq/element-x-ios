@@ -111,7 +111,7 @@ packages:
     minorVersion: 2.8.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 8.13.0
+    minorVersion: 8.30.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     minorVersion: 1.16.1

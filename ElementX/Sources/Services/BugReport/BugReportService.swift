@@ -22,23 +22,21 @@ import UIKit
 
 class BugReportService: NSObject, BugReportServiceProtocol {
     private let baseURL: URL
-    private let sentryURL: URL
     private let applicationId: String
     private let sdkGitSHA: String
     private let maxUploadSize: Int
     private let session: URLSession
-    private var lastCrashEventId: String?
     private let progressSubject = PassthroughSubject<Double, Never>()
     private var cancellables = Set<AnyCancellable>()
     
+    var lastCrashEventID: String?
+    
     init(withBaseURL baseURL: URL,
-         sentryURL: URL,
          applicationId: String,
          sdkGitSHA: String,
          maxUploadSize: Int,
          session: URLSession = .shared) {
         self.baseURL = baseURL
-        self.sentryURL = sentryURL
         self.applicationId = applicationId
         self.sdkGitSHA = sdkGitSHA
         self.maxUploadSize = maxUploadSize
@@ -47,63 +45,9 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     }
 
     // MARK: - BugReportServiceProtocol
-
-    var isRunning: Bool {
-        SentrySDK.isEnabled
-    }
     
     var crashedLastRun: Bool {
         SentrySDK.crashedLastRun
-    }
-    
-    func start() {
-        guard !isRunning else { return }
-        
-        SentrySDK.start { options in
-            #if DEBUG
-            options.enabled = false
-            #endif
-            
-            options.dsn = self.sentryURL.absoluteString
-            
-            // Sentry swizzling shows up quite often as the heaviest stack trace when profiling
-            // We don't need any of the features it powers (see docs)
-            options.enableSwizzling = false
-            
-            // WatchdogTermination is currently the top issue but we've had zero complaints
-            // so it might very well just all be false positives
-            options.enableWatchdogTerminationTracking = false
-            
-            // Disabled as it seems to report a lot of false positives
-            options.enableAppHangTracking = false
-            
-            // Most of the network requests are made Rust side, this is useless
-            options.enableNetworkBreadcrumbs = false
-            
-            // Doesn't seem to work at all well with SwiftUI
-            options.enableAutoBreadcrumbTracking = false
-            
-            // Experimental. Stitches stack traces of asynchronous code together
-            options.swiftAsyncStacktraces = true
-
-            // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-            // We recommend adjusting this value in production.
-            options.tracesSampleRate = 1.0
-            
-            // This callback is only executed once during the entire run of the program to avoid
-            // multiple callbacks if there are multiple crash events to send (see method documentation)
-            options.onCrashedLastRun = { [weak self] event in
-                MXLog.error("Sentry detected a crash in the previous run: \(event.eventId.sentryIdString)")
-                self?.lastCrashEventId = event.eventId.sentryIdString
-            }
-        }
-        MXLog.info("Started.")
-    }
-           
-    func stop() {
-        guard isRunning else { return }
-        SentrySDK.close()
-        MXLog.info("Stopped.")
     }
         
     // swiftlint:disable:next cyclomatic_complexity
@@ -140,8 +84,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             }
         }
         
-        if let crashEventId = lastCrashEventId {
-            params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventId)>")))
+        if let crashEventID = lastCrashEventID {
+            params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventID)>")))
         }
         
         for url in bugReport.files {
@@ -194,7 +138,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             let uploadResponse = try decoder.decode(SubmitBugReportResponse.self, from: data)
             
             if !uploadResponse.reportUrl.isEmpty {
-                lastCrashEventId = nil
+                lastCrashEventID = nil
             }
             
             MXLog.info("Feedback submitted.")
