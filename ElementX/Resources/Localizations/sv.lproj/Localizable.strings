@@ -419,7 +419,7 @@
 "screen_edit_profile_error_title" = "Kunde inte uppdatera profilen";
 "screen_edit_profile_title" = "Redigera profil";
 "screen_edit_profile_updating_details" = "Uppdaterar profil …";
-"screen_identity_confirmation_create_new_recovery_key" = "Create a new recovery key";
+"screen_identity_confirmation_create_new_recovery_key" = "Skapa en ny återställningsnyckel";
 "screen_identity_confirmation_subtitle" = "Verifiera den här enheten för att konfigurera säkra meddelanden.";
 "screen_identity_confirmation_title" = "Bekräfta att det är du";
 "screen_identity_confirmed_subtitle" = "Nu kan du läsa eller skicka meddelanden säkert, och alla du chattar med kan också lita på den här enheten.";
@@ -615,7 +615,7 @@
 "screen_room_details_notification_mode_default" = "Förval";
 "screen_room_details_notification_title" = "Aviseringar";
 "screen_room_details_share_room_title" = "Dela rum";
-"screen_room_details_title" = "Room info";
+"screen_room_details_title" = "Rumsinfo";
 "screen_room_details_updating_room" = "Uppdaterar rummet …";
 "screen_room_directory_search_loading_error" = "Misslyckades att ladda";
 "screen_room_directory_search_title" = "Rumskatalog";
@@ -627,7 +627,7 @@
 "screen_room_member_details_block_alert_action" = "Blockera";
 "screen_room_member_details_block_alert_description" = "Blockerade användare kommer inte att kunna skicka meddelanden till dig och alla deras meddelanden kommer att döljas. Du kan avblockera dem när som helst.";
 "screen_room_member_details_block_user" = "Blockera användare";
-"screen_room_member_details_title" = "Profile";
+"screen_room_member_details_title" = "Profil";
 "screen_room_member_details_unblock_alert_action" = "Avblockera";
 "screen_room_member_details_unblock_alert_description" = "Du kommer att kunna se alla meddelanden från dem igen.";
 "screen_room_member_details_unblock_user" = "Avblockera användare";
@@ -846,12 +846,12 @@
 "troubleshoot_notifications_entry_point_title" = "Felsök aviseringar";
 "troubleshoot_notifications_screen_action" = "Kör tester";
 "troubleshoot_notifications_screen_action_again" = "Kör tester igen";
-"troubleshoot_notifications_screen_failure" = "Some tests failed. Please check the details.";
+"troubleshoot_notifications_screen_failure" = "Vissa tester misslyckades. Kontrollera detaljerna.";
 "troubleshoot_notifications_screen_notice" = "Kör testerna för att upptäcka eventuella problem i din konfiguration som kan göra att aviseringar inte fungerar som förväntat.";
 "troubleshoot_notifications_screen_quick_fix_action" = "Försök att fixa";
-"troubleshoot_notifications_screen_success" = "All tests passed successfully.";
+"troubleshoot_notifications_screen_success" = "Alla tester godkändes.";
 "troubleshoot_notifications_screen_title" = "Felsök aviseringar";
-"troubleshoot_notifications_screen_waiting" = "Some tests require your attention. Please check the details.";
+"troubleshoot_notifications_screen_waiting" = "Vissa tester kräver din uppmärksamhet. Kontrollera detaljerna.";
 "troubleshoot_notifications_test_check_permission_description" = "Kontrollera att applikationen kan visa aviseringar.";
 "troubleshoot_notifications_test_check_permission_title" = "Kontrollera behörigheter";
 "troubleshoot_notifications_test_current_push_provider_description" = "Hämta namnet på den nuvarande leverantören.";

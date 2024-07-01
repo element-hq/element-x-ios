@@ -211,7 +211,7 @@
 "common_voice_message" = "Hangüzenet";
 "common_waiting" = "Várakozás…";
 "common_waiting_for_decryption_key" = "Várakozás a visszafejtési kulcsra";
-"common.do_not_show_this_again" = "Do not show this again";
+"common.do_not_show_this_again" = "Ne jelenjen meg többé";
 "common.send_to" = "Címzett";
 "common_no_room_name" = "Nincs szobanév";
 "common_poll_end_confirmation" = "Biztos, hogy befejezi ezt a szavazást?";
@@ -251,8 +251,8 @@
 "error_no_compatible_app_found" = "Nem található kompatibilis alkalmazás a művelet kezeléséhez.";
 "error_some_messages_have_not_been_sent" = "Néhány üzenet nem került elküldésre";
 "error_unknown" = "Elnézést, hiba történt";
-"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
-"full_screen_intent_banner_title" = "Enhance your call experience";
+"full_screen_intent_banner_message" = "Annak érdekében, hogy soha ne maradjon le egyetlen fontos hívásról sem, módosítsa a beállításokat, hogy engedélyezze a teljes képernyős értesítéseket, amikor a telefon zárolva van.";
+"full_screen_intent_banner_title" = "Növelje a hívásélményét";
 "invite_friends_rich_title" = "🔐️ Csatlakozz hozzám itt: %1$@";
 "invite_friends_text" = "Beszélgessünk itt: %1$@, %2$@";
 "leave_conversation_alert_subtitle" = "Biztos, hogy elhagyja ezt a beszélgetést? Ez a beszélgetés nem nyilvános, és meghívás nélkül nem fog tudni visszacsatlakozni.";

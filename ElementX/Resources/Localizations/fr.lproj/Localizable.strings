@@ -202,7 +202,7 @@
 "common_unable_to_invite_message" = "Les invitations n’ont pas pu être envoyées à un ou plusieurs utilisateurs.";
 "common_unable_to_invite_title" = "Impossible d’envoyer une ou plusieurs invitations";
 "common_unlock" = "Déverrouillage";
-"common_unmute" = "Annuler la sourdine";
+"common_unmute" = "Retirer la sourdine";
 "common_unsupported_event" = "Événement non pris en charge";
 "common_username" = "Nom d’utilisateur";
 "common_verification_cancelled" = "Vérification annulée";
@@ -543,8 +543,8 @@
 "screen_recovery_key_change_success" = "Clé de récupération modifée";
 "screen_recovery_key_change_title" = "Changer la clé de récupération?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Créer une nouvelle clé de récupération";
-"screen_recovery_key_confirm_description" = "Assurez vous que personne d'autre ne regarde l'écran!";
-"screen_recovery_key_confirm_error_content" = "Veuillez réessayer pour accéder à votre historique chiffré.";
+"screen_recovery_key_confirm_description" = "Assurez vous que personne d'autre ne regarde votre écran!";
+"screen_recovery_key_confirm_error_content" = "Veuillez réessayer afin de pouvoir accéder à vos anciens messages.";
 "screen_recovery_key_confirm_error_title" = "Clé de récupération incorrecte";
 "screen_recovery_key_confirm_key_description" = "Si vous avez une clé de sécurité ou une phrase de sécurité, cela fonctionnera également.";
 "screen_recovery_key_confirm_key_label" = "Clé de récupération";
@@ -623,7 +623,7 @@
 "screen_room_encrypted_history_banner_unverified" = "L’historique de la discussion n’est pas disponible. Vérifiez cette session pour accéder à l’historique.";
 "screen_room_error_failed_retrieving_user_details" = "Impossible de récupérer les détails de l’utilisateur";
 "screen_room_invite_again_alert_message" = "Souhaitez-vous inviter l’ancien membre à revenir ?";
-"screen_room_invite_again_alert_title" = "Vous êtes seul dans ce salon";
+"screen_room_invite_again_alert_title" = "Vous êtes seul dans cette discussion";
 "screen_room_member_details_block_alert_action" = "Bloquer";
 "screen_room_member_details_block_alert_description" = "Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment.";
 "screen_room_member_details_block_user" = "Bloquer l’utilisateur";
