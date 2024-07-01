@@ -79,7 +79,7 @@ lane :alpha do
   upload_to_browserstack()
 end
 
-lane :unit_tests do
+lane :unit_tests do |options|
   run_tests(
     scheme: "UnitTests",
     device: 'iPhone 15',
@@ -88,13 +88,15 @@ lane :unit_tests do
     number_of_retries: 3,
   )
   
-  run_tests(
-    scheme: "PreviewTests",
-    device: 'iPhone 15',
-    result_bundle: true,
-    number_of_retries: 3,
-    xcargs: '-skipPackagePluginValidation',
-  )
+  if !options[:skip_previews]
+    run_tests(
+      scheme: "PreviewTests",
+      device: 'iPhone 15',
+      result_bundle: true,
+      number_of_retries: 3,
+      xcargs: '-skipPackagePluginValidation',
+    )
+  end
   
   # We use xcresultparser in the workflow to collect coverage from both result bundles.
 end
