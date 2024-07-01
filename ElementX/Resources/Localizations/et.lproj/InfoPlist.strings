@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "To take pictures or videos and send them as a message Element X needs access to the camera.";
-"NSFaceIDUsageDescription" = "Face ID is used to access your app.";
+"NSCameraUsageDescription" = "Pildistamiseks ja videote salvestamiseks sõnumite saatmise kontekstis vajab Element X ligipääsu kaamerale.";
+"NSFaceIDUsageDescription" = "Ligipääsuks sinu rakendusele on kasutusel Face ID";
 "NSLocationWhenInUseUsageDescription" = "Oma asukoha jagamisel luba rakendusel Element X tuvastada sinu asukohta.";
-"NSMicrophoneUsageDescription" = "To record and send messages with audio, Element X needs to access the microphone.";
-"NSPhotoLibraryUsageDescription" = "Allows saving photos and videos to your library.";
+"NSMicrophoneUsageDescription" = "Heli salvestamiseks sõnumite saatmise kontekstis vajab Element X ligipääsu mikrofonile.";
+"NSPhotoLibraryUsageDescription" = "Võimaldab salvestada fotosid ja pilte nutiseadme meediapanka.";
