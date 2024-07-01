@@ -26,7 +26,7 @@ struct BugReport: Equatable {
     let text: String
     let includeLogs: Bool
     let canContact: Bool
-    let githubLabels: [String]
+    var githubLabels: [String]
     let files: [URL]
 }
 
