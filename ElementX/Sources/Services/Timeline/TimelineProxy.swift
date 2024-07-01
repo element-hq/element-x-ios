@@ -159,10 +159,10 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Editing timeline item: \(timelineItemID)")
         
         let editMode: EditMode
-        if let eventTimelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID) {
-            editMode = .local(item: eventTimelineItem)
-        } else if let eventID = timelineItemID.eventID {
+        if let eventID = timelineItemID.eventID {
             editMode = .remote(eventID: eventID)
+        } else if let eventTimelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID) {
+            editMode = .local(item: eventTimelineItem)
         } else {
             MXLog.error("Unknown timeline item: \(timelineItemID)")
             return .failure(.failedEditing)
