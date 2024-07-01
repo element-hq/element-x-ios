@@ -95,7 +95,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         navigationRootCoordinator = NavigationRootCoordinator()
         
-        Self.setupServiceLocator(appSettings: appSettings)
+        Self.setupServiceLocator(appSettings: appSettings, appHooks: appHooks)
         
         ServiceLocator.shared.analytics.startIfEnabled()
 
@@ -340,14 +340,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     // MARK: - Private
     
-    private static func setupServiceLocator(appSettings: AppSettings) {
+    private static func setupServiceLocator(appSettings: AppSettings, appHooks: AppHooks) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         ServiceLocator.shared.register(appSettings: appSettings)
         ServiceLocator.shared.register(networkMonitor: NetworkMonitor())
         ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: appSettings.bugReportServiceBaseURL,
                                                                           applicationId: appSettings.bugReportApplicationId,
                                                                           sdkGitSHA: sdkGitSha(),
-                                                                          maxUploadSize: appSettings.bugReportMaxUploadSize))
+                                                                          maxUploadSize: appSettings.bugReportMaxUploadSize,
+                                                                          appHooks: appHooks))
         let posthogAnalyticsClient = PostHogAnalyticsClient()
         posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
         ServiceLocator.shared.register(analytics: AnalyticsService(client: posthogAnalyticsClient,

@@ -19,7 +19,7 @@ import Foundation
 // MARK: Registration
 
 class AppHooks: AppHooksProtocol {
-    private(set) var appSettingsHook: AppSettingsHookProtocol?
+    private var appSettingsHook: AppSettingsHookProtocol?
     func registerAppSettingsHook(_ hook: AppSettingsHookProtocol) {
         appSettingsHook = hook
     }
@@ -27,6 +27,16 @@ class AppHooks: AppHooksProtocol {
     func runAppSettingsHook(_ appSettings: AppSettings) -> AppSettings {
         guard let appSettingsHook else { return appSettings }
         return appSettingsHook.run(appSettings: appSettings)
+    }
+    
+    private var bugReportHook: BugReportHookProtocol?
+    func registerBugReportHook(_ hook: BugReportHookProtocol) {
+        bugReportHook = hook
+    }
+    
+    func runBugReportHook(_ bugReport: BugReport) -> BugReport {
+        guard let bugReportHook else { return bugReport }
+        return bugReportHook.run(bugReport: bugReport)
     }
 }
 
@@ -42,4 +52,8 @@ extension AppHooksProtocol {
 
 protocol AppSettingsHookProtocol {
     func run(appSettings: AppSettings) -> AppSettings
+}
+
+protocol BugReportHookProtocol {
+    func run(bugReport: BugReport) -> BugReport
 }

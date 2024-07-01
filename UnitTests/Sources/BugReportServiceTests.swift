@@ -54,7 +54,8 @@ class BugReportServiceTests: XCTestCase {
                                        applicationId: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
-                                       session: .mock)
+                                       session: .mock,
+                                       appHooks: AppHooks())
         XCTAssertFalse(service.crashedLastRun)
     }
     
@@ -63,7 +64,8 @@ class BugReportServiceTests: XCTestCase {
                                        applicationId: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
-                                       session: .mock)
+                                       session: .mock,
+                                       appHooks: AppHooks())
 
         let bugReport = BugReport(userID: "@mock:client.com",
                                   deviceID: nil,

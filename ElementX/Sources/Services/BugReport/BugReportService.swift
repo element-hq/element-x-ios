@@ -26,6 +26,9 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     private let sdkGitSHA: String
     private let maxUploadSize: Int
     private let session: URLSession
+    
+    private let appHooks: AppHooks
+    
     private let progressSubject = PassthroughSubject<Double, Never>()
     private var cancellables = Set<AnyCancellable>()
     
@@ -35,12 +38,14 @@ class BugReportService: NSObject, BugReportServiceProtocol {
          applicationId: String,
          sdkGitSHA: String,
          maxUploadSize: Int,
-         session: URLSession = .shared) {
+         session: URLSession = .shared,
+         appHooks: AppHooks) {
         self.baseURL = baseURL
         self.applicationId = applicationId
         self.sdkGitSHA = sdkGitSHA
         self.maxUploadSize = maxUploadSize
         self.session = session
+        self.appHooks = appHooks
         super.init()
     }
 
@@ -53,6 +58,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     // swiftlint:disable:next cyclomatic_complexity
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
+        let bugReport = appHooks.runBugReportHook(bugReport)
+        
         var params = [
             MultipartFormData(key: "text", type: .text(value: bugReport.text)),
             MultipartFormData(key: "can_contact", type: .text(value: "\(bugReport.canContact)"))
