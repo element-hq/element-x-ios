@@ -158,7 +158,12 @@ final class TimelineProxy: TimelineProxyProtocol {
               intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Editing timeline item: \(timelineItemID)")
         
-        guard let eventTimelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID) else {
+        let editMode: EditMode
+        if let eventID = timelineItemID.eventID {
+            editMode = .remote(eventID: eventID)
+        } else if let eventTimelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID) {
+            editMode = .local(item: eventTimelineItem)
+        } else {
             MXLog.error("Unknown timeline item: \(timelineItemID)")
             return .failure(.failedEditing)
         }
@@ -168,8 +173,13 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                     intentionalMentions: intentionalMentions.toRustMentions())
         
         do {
-            guard try await timeline.edit(item: eventTimelineItem, newContent: messageContent) == true else {
-                return .failure(.failedEditing)
+            switch editMode {
+            case let .local(item):
+                guard try await timeline.edit(item: item, newContent: messageContent) == true else {
+                    return .failure(.failedEditing)
+                }
+            case let .remote(eventID):
+                try await timeline.editByEventId(eventId: eventID, newContent: messageContent)
             }
             
             MXLog.info("Finished editing timeline item: \(timelineItemID)")
@@ -614,4 +624,12 @@ extension Array where Element == TimelineItemProxy {
         
         return eventTimelineItemProxy?.item
     }
+}
+
+private enum EditMode {
+    /// edit for a message that is also found locally as a timeline item
+    case local(item: EventTimelineItem)
+    
+    /// edit for a message that was not found locally
+    case remote(eventID: String)
 }
