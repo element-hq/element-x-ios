@@ -616,7 +616,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError> {
         guard let userIDServerName,
-              var url = URL(string: userIDServerName) else {
+              var url = URL(string: "https://\(userIDServerName)") else {
             return .failure(.invalidUserIDServerName)
         }
         
