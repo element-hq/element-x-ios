@@ -489,6 +489,70 @@ class ComposerToolbarViewModelTests: XCTestCase {
         await fulfillment(of: [loadReplyExpectation], timeout: 10)
         XCTAssertEqual(viewModel.state.composerMode, .default)
     }
+    
+    func testSaveVolatileDraftWhenEditing() {
+        viewModel.context.composerFormattingEnabled = false
+        viewModel.context.plainComposerText = .init(string: "Hello world!")
+        viewModel.process(roomAction: .setMode(mode: .edit(originalItemId: .random)))
+        
+        let draft = draftServiceMock.saveVolatileDraftReceivedDraft
+        XCTAssertNotNil(draft)
+        XCTAssertEqual(draft?.plainText, "Hello world!")
+        XCTAssertNil(draft?.htmlText)
+        XCTAssertEqual(draft?.draftType, .newMessage)
+    }
+    
+    func testRestoreVolatileDraftWhenCancellingEdit() async {
+        let expectation = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadVolatileDraftClosure = {
+            defer { expectation.fulfill() }
+            return .init(plainText: "Hello world",
+                         htmlText: nil,
+                         draftType: .newMessage)
+        }
+        
+        viewModel.process(viewAction: .cancelEdit)
+        await fulfillment(of: [expectation])
+        XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world"))
+    }
+    
+    func testRestoreVolatileDraftWhenClearing() async {
+        let expectation1 = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadVolatileDraftClosure = {
+            defer { expectation1.fulfill() }
+            return .init(plainText: "Hello world",
+                         htmlText: nil,
+                         draftType: .newMessage)
+        }
+        
+        let expectation2 = expectation(description: "The draft should also be cleared after being loaded")
+        draftServiceMock.clearVolatileDraftClosure = {
+            expectation2.fulfill()
+        }
+        
+        viewModel.process(roomAction: .clear)
+        await fulfillment(of: [expectation1, expectation2])
+        XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world"))
+    }
+    
+    func testRestoreVolatileDraftDoubleClear() async {
+        let expectation1 = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadVolatileDraftClosure = {
+            defer { expectation1.fulfill() }
+            return .init(plainText: "Hello world",
+                         htmlText: nil,
+                         draftType: .newMessage)
+        }
+        
+        let expectation2 = expectation(description: "The draft should also be cleared after being loaded")
+        draftServiceMock.clearVolatileDraftClosure = {
+            expectation2.fulfill()
+        }
+        
+        viewModel.process(roomAction: .clear)
+        await fulfillment(of: [expectation1, expectation2])
+        XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world"))
+    }
 }
 
 private extension MentionSuggestionItem {

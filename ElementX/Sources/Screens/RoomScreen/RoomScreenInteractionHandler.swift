@@ -276,8 +276,9 @@ class RoomScreenInteractionHandler {
             text = messageTimelineItem.body
         }
         
-        actionsSubject.send(.composer(action: .setText(plainText: text, htmlText: htmlText)))
+        // Always update the mode first and then the text so that the composer has time to save the text draft
         actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
+        actionsSubject.send(.composer(action: .setText(plainText: text, htmlText: htmlText)))
     }
     
     // MARK: Polls

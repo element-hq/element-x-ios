@@ -83,6 +83,15 @@ enum RoomScreenComposerMode: Equatable {
             return nil
         }
     }
+    
+    var isComposingNewMessage: Bool {
+        switch self {
+        case .default, .reply:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 enum RoomScreenViewPollAction {

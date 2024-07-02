@@ -156,8 +156,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .cancelReply:
             set(mode: .default)
         case .cancelEdit:
-            set(mode: .default)
-            set(text: "")
+            if let draft = draftService.loadVolatileDraft() {
+                handleLoadDraft(draft)
+                draftService.clearVolatileDraft()
+            } else {
+                set(text: "")
+                set(mode: .default)
+            }
         case .attach(let attachment):
             state.bindings.composerFocused = false
             actionsSubject.send(.attach(attachment))
@@ -198,6 +203,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     func process(roomAction: RoomScreenComposerAction) {
         switch roomAction {
         case .setMode(mode: let mode):
+            if state.composerMode.isComposingNewMessage, mode.isEdit {
+                handleSaveDraft(isVolatile: true)
+            }
             set(mode: mode)
         case .setText(let plainText, let htmlText):
             if let htmlText, context.composerFormattingEnabled {
@@ -208,13 +216,22 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .removeFocus:
             state.bindings.composerFocused = false
         case .clear:
-            set(mode: .default)
-            set(text: "")
+            if let draft = draftService.loadVolatileDraft() {
+                handleLoadDraft(draft)
+                draftService.clearVolatileDraft()
+            } else {
+                set(mode: .default)
+                set(text: "")
+            }
         case .saveDraft:
-            handleSaveDraft()
+            handleSaveDraft(isVolatile: false)
         case .loadDraft:
             Task {
-                await handleLoadDraft()
+                guard case let .success(draft) = await draftService.loadDraft(),
+                      let draft else {
+                    return
+                }
+                handleLoadDraft(draft)
             }
         }
     }
@@ -229,12 +246,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     // MARK: - Private
     
-    private func handleLoadDraft() async {
-        guard case let .success(draft) = await draftService.loadDraft(),
-              let draft else {
-            return
-        }
-        
+    private func handleLoadDraft(_ draft: ComposerDraftProxy) {
         if let html = draft.htmlText {
             context.composerFormattingEnabled = true
             DispatchQueue.main.async {
@@ -269,15 +281,19 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
     
-    private func handleSaveDraft() {
+    private func handleSaveDraft(isVolatile: Bool) {
         let plainText: String
         let htmlText: String?
         let type: ComposerDraftProxy.ComposerDraftType
         
         if context.composerFormattingEnabled {
             if wysiwygViewModel.isContentEmpty, state.composerMode == .default {
-                Task {
-                    await draftService.clearDraft()
+                if isVolatile {
+                    draftService.clearVolatileDraft()
+                } else {
+                    Task {
+                        await draftService.clearDraft()
+                    }
                 }
                 return
             }
@@ -285,8 +301,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             htmlText = wysiwygViewModel.content.html
         } else {
             if context.plainComposerText.string.isEmpty, state.composerMode == .default {
-                Task {
-                    await draftService.clearDraft()
+                if isVolatile {
+                    draftService.clearVolatileDraft()
+                } else {
+                    Task {
+                        await draftService.clearDraft()
+                    }
                 }
                 return
             }
@@ -310,15 +330,22 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
             type = .reply(eventID: eventID)
         default:
-            // Do not save a draft for the other cases
-            Task {
-                await draftService.clearDraft()
+            if isVolatile {
+                draftService.clearVolatileDraft()
+            } else {
+                Task {
+                    await draftService.clearDraft()
+                }
             }
             return
         }
         
-        Task {
-            await draftService.saveDraft(.init(plainText: plainText, htmlText: htmlText, draftType: type))
+        if isVolatile {
+            draftService.saveVolatileDraft(.init(plainText: plainText, htmlText: htmlText, draftType: type))
+        } else {
+            Task {
+                await draftService.saveDraft(.init(plainText: plainText, htmlText: htmlText, draftType: type))
+            }
         }
     }
     

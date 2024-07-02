@@ -21,6 +21,7 @@ import MatrixRustSDK
 final class ComposerDraftService: ComposerDraftServiceProtocol {
     private let roomProxy: RoomProxyProtocol
     private let timelineItemfactory: RoomTimelineItemFactoryProtocol
+    private var volatileDraft: ComposerDraftProxy?
     
     init(roomProxy: RoomProxyProtocol, timelineItemfactory: RoomTimelineItemFactoryProtocol) {
         self.roomProxy = roomProxy
@@ -70,5 +71,17 @@ final class ComposerDraftService: ComposerDraftServiceProtocol {
             MXLog.info("Failed to clear draft: \(error)")
             return .failure(.failedToClearDraft)
         }
+    }
+    
+    func saveVolatileDraft(_ draft: ComposerDraftProxy) {
+        volatileDraft = draft
+    }
+    
+    func loadVolatileDraft() -> ComposerDraftProxy? {
+        volatileDraft
+    }
+    
+    func clearVolatileDraft() {
+        volatileDraft = nil
     }
 }
