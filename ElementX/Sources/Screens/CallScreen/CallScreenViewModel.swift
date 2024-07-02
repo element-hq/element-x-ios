@@ -62,6 +62,27 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             }
         }
         
+        elementCallService.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case let .setCallMuted(muted, roomID):
+                    guard roomID == roomProxy.id else {
+                        MXLog.error("Received mute request for a different room: \(roomID) != \(roomProxy.id)")
+                        return
+                    }
+                    
+                    Task {
+                        await self.setMuted(muted)
+                    }
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        
         widgetDriver.messagePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] receivedMessage in
@@ -135,6 +156,16 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    private func setMuted(_ muted: Bool) async {
+        do {
+            let message = "groupCall.setMicrophoneMuted(\(muted))"
+            let result = try await state.bindings.javaScriptEvaluator?(message)
+            MXLog.debug("Evaluated javascript: \(message) with result: \(String(describing: result))")
+        } catch {
+            MXLog.error("Received javascript evaluation error: \(error)")
+        }
+    }
     
     private func hangUp() async {
         let hangUpMessage = """

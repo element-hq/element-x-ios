@@ -174,9 +174,13 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     func provider(_ provider: CXProvider, perform action: CXSetMutedCallAction) {
-        // Forward this to the widget somehow
-        // webView.evaluateJavaScript("groupCall.setLocalVideoMuted(!groupCall.isLocalVideoMuted())")
-        // webView.evaluateJavaScript("groupCall.setMicrophoneMuted(!groupCall.isMicrophoneMuted())"
+        if let ongoingCallID {
+            actionsSubject.send(.setCallMuted(action.isMuted, roomID: ongoingCallID.roomID))
+        } else {
+            MXLog.error("Failed muting/unmuting call, missing ongoingCallID")
+        }
+        
+        action.fulfill()
     }
     
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
