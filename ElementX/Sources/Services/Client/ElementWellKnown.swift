@@ -19,24 +19,17 @@ import MatrixRustSDK
 
 struct ElementWellKnown {
     struct Call {
-        let widgetURL: URL?
+        let widgetURL: URL
         
-        init?(_ wellKnown: MatrixRustSDK.ElementCallWellKnown?) {
-            guard let wellKnown else {
-                return nil
-            }
-            
-            widgetURL = URL(string: wellKnown.widgetUrl)
+        init?(_ wellKnown: MatrixRustSDK.ElementCallWellKnown) {
+            guard let widgetURL = URL(string: wellKnown.widgetUrl) else { return nil }
+            self.widgetURL = widgetURL
         }
     }
     
     let call: Call?
     
-    init?(_ wellKnown: MatrixRustSDK.ElementWellKnown?) {
-        guard let wellKnown else {
-            return nil
-        }
-        
+    init?(_ wellKnown: MatrixRustSDK.ElementWellKnown) {
         call = Call(wellKnown.call)
     }
 }

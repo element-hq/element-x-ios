@@ -94,8 +94,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         Task {
             let baseURL = if let elementCallBaseURLOverride {
                 elementCallBaseURLOverride
-            } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCallWidgetURL = wellKnown?.call?.widgetURL {
-                wellKnownCallWidgetURL
+            } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCall = wellKnown?.call {
+                wellKnownCall.widgetURL
             } else {
                 elementCallBaseURL
             }

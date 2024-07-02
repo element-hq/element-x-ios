@@ -32,7 +32,8 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
     }
     
     init() {
-        viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings)
+        viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings,
+                                                    elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL)
         
         viewModel.actions
             .sink { [weak self] action in
