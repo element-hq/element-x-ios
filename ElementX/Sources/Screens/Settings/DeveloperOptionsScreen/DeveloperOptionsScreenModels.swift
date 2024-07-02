@@ -21,6 +21,7 @@ enum DeveloperOptionsScreenViewModelAction {
 }
 
 struct DeveloperOptionsScreenViewState: BindableState {
+    let elementCallBaseURL: URL
     var bindings: DeveloperOptionsScreenViewStateBindings
 }
 
@@ -46,7 +47,7 @@ enum DeveloperOptionsScreenViewAction {
 protocol DeveloperOptionsProtocol: AnyObject {
     var logLevel: TracingConfiguration.LogLevel { get set }
     var hideUnreadMessagesBadge: Bool { get set }
-    var elementCallBaseURL: URL { get set }
+    var elementCallBaseURLOverride: URL? { get set }
     var fuzzyRoomListSearchEnabled: Bool { get set }
 }
 

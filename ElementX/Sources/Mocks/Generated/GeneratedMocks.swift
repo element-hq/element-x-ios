@@ -1920,6 +1920,7 @@ class ClientProxyMock: ClientProxyProtocol {
         set(value) { underlyingHomeserver = value }
     }
     var underlyingHomeserver: String!
+    var userIDServerName: String?
     var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> {
         get { return underlyingUserDisplayNamePublisher }
         set(value) { underlyingUserDisplayNamePublisher = value }
@@ -3562,6 +3563,70 @@ class ClientProxyMock: ClientProxyProtocol {
             return await resolveRoomAliasClosure(alias)
         } else {
             return resolveRoomAliasReturnValue
+        }
+    }
+    //MARK: - getElementWellKnown
+
+    var getElementWellKnownUnderlyingCallsCount = 0
+    var getElementWellKnownCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getElementWellKnownUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getElementWellKnownUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getElementWellKnownUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getElementWellKnownUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getElementWellKnownCalled: Bool {
+        return getElementWellKnownCallsCount > 0
+    }
+
+    var getElementWellKnownUnderlyingReturnValue: Result<ElementWellKnown?, ClientProxyError>!
+    var getElementWellKnownReturnValue: Result<ElementWellKnown?, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getElementWellKnownUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ElementWellKnown?, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getElementWellKnownUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getElementWellKnownUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getElementWellKnownUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getElementWellKnownClosure: (() async -> Result<ElementWellKnown?, ClientProxyError>)?
+
+    func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError> {
+        getElementWellKnownCallsCount += 1
+        if let getElementWellKnownClosure = getElementWellKnownClosure {
+            return await getElementWellKnownClosure()
+        } else {
+            return getElementWellKnownReturnValue
         }
     }
     //MARK: - ignoreUser
