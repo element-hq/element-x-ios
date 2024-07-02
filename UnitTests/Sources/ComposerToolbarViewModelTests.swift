@@ -513,19 +513,45 @@ class ComposerToolbarViewModelTests: XCTestCase {
         
         viewModel.process(viewAction: .cancelEdit)
         await fulfillment(of: [expectation])
+        XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world"))
     }
     
     func testRestoreVolatileDraftWhenClearing() async {
-        let expectation = expectation(description: "Wait for draft to be restored")
+        let expectation1 = expectation(description: "Wait for draft to be restored")
         draftServiceMock.loadVolatileDraftClosure = {
-            defer { expectation.fulfill() }
+            defer { expectation1.fulfill() }
             return .init(plainText: "Hello world",
                          htmlText: nil,
                          draftType: .newMessage)
         }
         
+        let expectation2 = expectation(description: "The draft should also be cleared after being loaded")
+        draftServiceMock.clearVolatileDraftClosure = {
+            expectation2.fulfill()
+        }
+        
         viewModel.process(roomAction: .clear)
-        await fulfillment(of: [expectation])
+        await fulfillment(of: [expectation1, expectation2])
+        XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world"))
+    }
+    
+    func testRestoreVolatileDraftDoubleClear() async {
+        let expectation1 = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadVolatileDraftClosure = {
+            defer { expectation1.fulfill() }
+            return .init(plainText: "Hello world",
+                         htmlText: nil,
+                         draftType: .newMessage)
+        }
+        
+        let expectation2 = expectation(description: "The draft should also be cleared after being loaded")
+        draftServiceMock.clearVolatileDraftClosure = {
+            expectation2.fulfill()
+        }
+        
+        viewModel.process(roomAction: .clear)
+        await fulfillment(of: [expectation1, expectation2])
+        XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world"))
     }
 }
 

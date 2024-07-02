@@ -158,6 +158,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .cancelEdit:
             if let draft = draftService.loadVolatileDraft() {
                 handleLoadDraft(draft)
+                draftService.clearVolatileDraft()
             } else {
                 set(text: "")
                 set(mode: .default)
@@ -217,6 +218,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .clear:
             if let draft = draftService.loadVolatileDraft() {
                 handleLoadDraft(draft)
+                draftService.clearVolatileDraft()
             } else {
                 set(mode: .default)
                 set(text: "")
