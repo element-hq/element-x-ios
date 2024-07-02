@@ -276,8 +276,8 @@ class RoomScreenInteractionHandler {
             text = messageTimelineItem.body
         }
         
-        actionsSubject.send(.composer(action: .setText(plainText: text, htmlText: htmlText)))
         actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
+        actionsSubject.send(.composer(action: .setText(plainText: text, htmlText: htmlText)))
     }
     
     // MARK: Polls

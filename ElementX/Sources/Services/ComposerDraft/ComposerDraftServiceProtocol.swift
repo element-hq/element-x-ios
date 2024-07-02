@@ -74,7 +74,10 @@ enum ComposerDraftServiceError: Error {
 // sourcery: AutoMockable
 protocol ComposerDraftServiceProtocol {
     func saveDraft(_ draft: ComposerDraftProxy) async -> Result<Void, ComposerDraftServiceError>
+    func saveVolatileDraft(_ draft: ComposerDraftProxy)
     func loadDraft() async -> Result<ComposerDraftProxy?, ComposerDraftServiceError>
+    func loadVolatileDraft() -> ComposerDraftProxy?
     func clearDraft() async -> Result<Void, ComposerDraftServiceError>
+    func clearVolatileDraft()
     func getReply(eventID: String) async -> Result<TimelineItemReply, ComposerDraftServiceError>
 }

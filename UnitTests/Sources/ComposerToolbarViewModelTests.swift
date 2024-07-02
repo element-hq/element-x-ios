@@ -489,6 +489,44 @@ class ComposerToolbarViewModelTests: XCTestCase {
         await fulfillment(of: [loadReplyExpectation], timeout: 10)
         XCTAssertEqual(viewModel.state.composerMode, .default)
     }
+    
+    func testSaveVolatileDraftWhenEditing() {
+        viewModel.context.composerFormattingEnabled = false
+        viewModel.context.plainComposerText = .init(string: "Hello world!")
+        viewModel.process(roomAction: .setMode(mode: .edit(originalItemId: .random)))
+        
+        let draft = draftServiceMock.saveVolatileDraftReceivedDraft
+        XCTAssertNotNil(draft)
+        XCTAssertEqual(draft?.plainText, "Hello world!")
+        XCTAssertNil(draft?.htmlText)
+        XCTAssertEqual(draft?.draftType, .newMessage)
+    }
+    
+    func testRestoreVolatileDraftWhenCancellingEdit() async {
+        let expectation = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadVolatileDraftClosure = {
+            defer { expectation.fulfill() }
+            return .init(plainText: "Hello world",
+                         htmlText: nil,
+                         draftType: .newMessage)
+        }
+        
+        viewModel.process(viewAction: .cancelEdit)
+        await fulfillment(of: [expectation])
+    }
+    
+    func testRestoreVolatileDraftWhenClearing() async {
+        let expectation = expectation(description: "Wait for draft to be restored")
+        draftServiceMock.loadVolatileDraftClosure = {
+            defer { expectation.fulfill() }
+            return .init(plainText: "Hello world",
+                         htmlText: nil,
+                         draftType: .newMessage)
+        }
+        
+        viewModel.process(roomAction: .clear)
+        await fulfillment(of: [expectation])
+    }
 }
 
 private extension MentionSuggestionItem {

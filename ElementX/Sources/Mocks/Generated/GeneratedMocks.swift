@@ -4480,6 +4480,47 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
             return saveDraftReturnValue
         }
     }
+    //MARK: - saveVolatileDraft
+
+    var saveVolatileDraftUnderlyingCallsCount = 0
+    var saveVolatileDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return saveVolatileDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = saveVolatileDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                saveVolatileDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    saveVolatileDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var saveVolatileDraftCalled: Bool {
+        return saveVolatileDraftCallsCount > 0
+    }
+    var saveVolatileDraftReceivedDraft: ComposerDraftProxy?
+    var saveVolatileDraftReceivedInvocations: [ComposerDraftProxy] = []
+    var saveVolatileDraftClosure: ((ComposerDraftProxy) -> Void)?
+
+    func saveVolatileDraft(_ draft: ComposerDraftProxy) {
+        saveVolatileDraftCallsCount += 1
+        saveVolatileDraftReceivedDraft = draft
+        DispatchQueue.main.async {
+            self.saveVolatileDraftReceivedInvocations.append(draft)
+        }
+        saveVolatileDraftClosure?(draft)
+    }
     //MARK: - loadDraft
 
     var loadDraftUnderlyingCallsCount = 0
@@ -4542,6 +4583,70 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
             return await loadDraftClosure()
         } else {
             return loadDraftReturnValue
+        }
+    }
+    //MARK: - loadVolatileDraft
+
+    var loadVolatileDraftUnderlyingCallsCount = 0
+    var loadVolatileDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadVolatileDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadVolatileDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadVolatileDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadVolatileDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadVolatileDraftCalled: Bool {
+        return loadVolatileDraftCallsCount > 0
+    }
+
+    var loadVolatileDraftUnderlyingReturnValue: ComposerDraftProxy?
+    var loadVolatileDraftReturnValue: ComposerDraftProxy? {
+        get {
+            if Thread.isMainThread {
+                return loadVolatileDraftUnderlyingReturnValue
+            } else {
+                var returnValue: ComposerDraftProxy?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadVolatileDraftUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadVolatileDraftUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadVolatileDraftUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadVolatileDraftClosure: (() -> ComposerDraftProxy?)?
+
+    func loadVolatileDraft() -> ComposerDraftProxy? {
+        loadVolatileDraftCallsCount += 1
+        if let loadVolatileDraftClosure = loadVolatileDraftClosure {
+            return loadVolatileDraftClosure()
+        } else {
+            return loadVolatileDraftReturnValue
         }
     }
     //MARK: - clearDraft
@@ -4607,6 +4712,41 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
         } else {
             return clearDraftReturnValue
         }
+    }
+    //MARK: - clearVolatileDraft
+
+    var clearVolatileDraftUnderlyingCallsCount = 0
+    var clearVolatileDraftCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return clearVolatileDraftUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearVolatileDraftUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearVolatileDraftUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearVolatileDraftUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var clearVolatileDraftCalled: Bool {
+        return clearVolatileDraftCallsCount > 0
+    }
+    var clearVolatileDraftClosure: (() -> Void)?
+
+    func clearVolatileDraft() {
+        clearVolatileDraftCallsCount += 1
+        clearVolatileDraftClosure?()
     }
     //MARK: - getReply
 
