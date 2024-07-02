@@ -1,44 +1,60 @@
+---
 name: ElementX
 attributes:
   ORGANIZATIONNAME: Element
 
 fileGroups:
-    - project.yml
+- project.yml
 
 options:
   groupSortPosition: bottom
   createIntermediateGroups: true
   deploymentTarget:
-    iOS: "16.4"
-    macOS: "13.3"
+    iOS: '16.4'
+    macOS: '13.3'
   groupOrdering:
-    - order: [ElementX, UnitTests, UITests, IntegrationTests, Tools]
-    - pattern: ElementX
-      order: [Sources, Resources, SupportingFiles]
-    - pattern: Sources
-      order: [Application, UserSession, Services, FlowCoordinators, Screens, Other, UITests]
+  - order:
+    - ElementX
+    - UnitTests
+    - UITests
+    - IntegrationTests
+    - Tools
+  - pattern: ElementX
+    order:
+    - Sources
+    - Resources
+    - SupportingFiles
+  - pattern: Sources
+    order:
+    - Application
+    - UserSession
+    - Services
+    - FlowCoordinators
+    - Screens
+    - Other
+    - UITests
   postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
 
 settings:
-  CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
-  ENABLE_BITCODE: NO
+  CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: true
+  ENABLE_BITCODE: false
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
   APP_NAME: ElementX
-  KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
+  KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)"
   MARKETING_VERSION: 1.6.13
   CURRENT_PROJECT_VERSION: 1
-  SUPPORTS_MACCATALYST: NO
+  SUPPORTS_MACCATALYST: false
 
 include:
-  - path: app.yml
-  - path: ElementX/SupportingFiles/target.yml
-  - path: UnitTests/SupportingFiles/target.yml
-  - path: PreviewTests/SupportingFiles/target.yml
-  - path: UITests/SupportingFiles/target.yml
-  - path: IntegrationTests/SupportingFiles/target.yml
-  - path: NSE/SupportingFiles/target.yml
-  # not used yet
-  # - path: NCE/SupportingFiles/target.yml
+- path: app.yml
+- path: ElementX/SupportingFiles/target.yml
+- path: UnitTests/SupportingFiles/target.yml
+- path: PreviewTests/SupportingFiles/target.yml
+- path: UITests/SupportingFiles/target.yml
+- path: IntegrationTests/SupportingFiles/target.yml
+- path: NSE/SupportingFiles/target.yml
+# - path: NCE/SupportingFiles/target.yml (not used yet)
+# - path: MyAppVariant/override.yml
 
 packages:
   # Element/Matrix dependencies
@@ -128,8 +144,8 @@ packages:
 aggregateTargets:
   Periphery:
     buildScripts:
-      - name: "Scan"
-        script: |
-          export PATH="$PATH:/opt/homebrew/bin"
-          periphery scan --format xcode
-        basedOnDependencyAnalysis: false
+    - name: Scan
+      script: |
+        export PATH="$PATH:/opt/homebrew/bin"
+        periphery scan --format xcode
+      basedOnDependencyAnalysis: false
