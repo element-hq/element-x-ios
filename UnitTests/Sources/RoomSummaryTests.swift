@@ -24,7 +24,7 @@ class RoomSummaryTests: XCTestCase {
     let heroes = [UserProfileProxy(userID: "hero_1", displayName: "Hero 1", avatarURL: "mxc://hs.tld/user/avatar")]
     
     func testRoomAvatar() {
-        let details = makeDetails(isDirect: false, hasRoomAvatar: true)
+        let details = makeSummary(isDirect: false, hasRoomAvatar: true)
         
         switch details.avatar {
         case .room(let id, let name, let avatarURL):
@@ -37,7 +37,7 @@ class RoomSummaryTests: XCTestCase {
     }
     
     func testDMAvatarSet() {
-        let details = makeDetails(isDirect: true, hasRoomAvatar: true)
+        let details = makeSummary(isDirect: true, hasRoomAvatar: true)
         
         switch details.avatar {
         case .room(let id, let name, let avatarURL):
@@ -50,7 +50,7 @@ class RoomSummaryTests: XCTestCase {
     }
     
     func testDMAvatarNotSet() {
-        let details = makeDetails(isDirect: true, hasRoomAvatar: false)
+        let details = makeSummary(isDirect: true, hasRoomAvatar: false)
         
         switch details.avatar {
         case .room:
@@ -62,8 +62,9 @@ class RoomSummaryTests: XCTestCase {
     
     // MARK: - Helpers
     
-    func makeDetails(isDirect: Bool, hasRoomAvatar: Bool) -> RoomSummary {
-        RoomSummary(id: roomDetails.id,
+    func makeSummary(isDirect: Bool, hasRoomAvatar: Bool) -> RoomSummary {
+        RoomSummary(roomListItem: .init(noPointer: .init()),
+                    id: roomDetails.id,
                     isInvite: false,
                     inviter: nil,
                     name: roomDetails.name,

@@ -348,7 +348,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         var rooms = [HomeScreenRoom]()
         
         for summary in roomSummaryProvider.roomListPublisher.value {
-            let room = HomeScreenRoom(details: summary, invalidated: false, hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge)
+            let room = HomeScreenRoom(summary: summary, hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge)
             rooms.append(room)
         }
         

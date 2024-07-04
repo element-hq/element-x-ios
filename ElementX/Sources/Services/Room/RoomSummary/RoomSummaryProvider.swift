@@ -180,7 +180,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return updatedItems
     }
 
-    private func fetchRoomDetailsFromRoomListItem(_ roomListItem: RoomListItem) -> (roomInfo: RoomInfo?, latestEvent: EventTimelineItem?) {
+    private func fetchRoomDetails(from roomListItem: RoomListItem) -> (roomInfo: RoomInfo?, latestEvent: EventTimelineItem?) {
         class FetchResult {
             var roomInfo: RoomInfo?
             var latestEvent: EventTimelineItem?
@@ -202,11 +202,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return (result.roomInfo, result.latestEvent)
     }
     
-    private func buildRoomSummaryForRoomListItem(_ roomListItem: RoomListItem) -> RoomSummary {
-        let roomDetails = fetchRoomDetailsFromRoomListItem(roomListItem)
+    private func buildRoomSummary(from roomListItem: RoomListItem) -> RoomSummary {
+        let roomDetails = fetchRoomDetails(from: roomListItem)
         
         guard let roomInfo = roomDetails.roomInfo else {
-            fatalError("")
+            fatalError("Missing room info for \(roomListItem.id())")
         }
         
         var attributedLastMessage: AttributedString?
@@ -253,7 +253,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             let debugIdentifiers = values.map { $0.id() }
             MXLog.verbose("\(name): Append \(debugIdentifiers)")
             for (index, value) in values.enumerated() {
-                let summary = buildRoomSummaryForRoomListItem(value)
+                let summary = buildRoomSummary(from: value)
                 changes.append(.insert(offset: rooms.count + index, element: summary, associatedWith: nil))
             }
         case .clear:
@@ -263,7 +263,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             }
         case .insert(let index, let value):
             MXLog.verbose("\(name): Insert at \(value.id()) at \(index)")
-            let summary = buildRoomSummaryForRoomListItem(value)
+            let summary = buildRoomSummary(from: value)
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .popBack:
             MXLog.verbose("\(name): Pop Back")
@@ -278,11 +278,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             changes.append(.remove(offset: 0, element: summary, associatedWith: nil))
         case .pushBack(let value):
             MXLog.verbose("\(name): Push Back \(value.id())")
-            let summary = buildRoomSummaryForRoomListItem(value)
+            let summary = buildRoomSummary(from: value)
             changes.append(.insert(offset: rooms.count, element: summary, associatedWith: nil))
         case .pushFront(let value):
             MXLog.verbose("\(name): Push Front \(value.id())")
-            let summary = buildRoomSummaryForRoomListItem(value)
+            let summary = buildRoomSummary(from: value)
             changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
         case .remove(let index):
             let summary = rooms[Int(index)]
@@ -296,11 +296,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             }
             
             for (index, value) in values.enumerated() {
-                changes.append(.insert(offset: index, element: buildRoomSummaryForRoomListItem(value), associatedWith: nil))
+                changes.append(.insert(offset: index, element: buildRoomSummary(from: value), associatedWith: nil))
             }
         case .set(let index, let value):
             MXLog.verbose("\(name): Update \(value.id()) at \(index)")
-            let summary = buildRoomSummaryForRoomListItem(value)
+            let summary = buildRoomSummary(from: value)
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .truncate(let length):
@@ -340,7 +340,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
         
         rooms = rooms.map {
-            self.buildRoomSummaryForRoomListItem($0.roomListItem)
+            self.buildRoomSummary(from: $0.roomListItem)
         }
         
         MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")

@@ -207,7 +207,7 @@ private extension HomeScreenRoom {
         inviter.displayName = "Jack"
         inviter.userID = "@jack:somewhere.com"
         
-        let details = RoomSummary(roomListItem: RoomListItemSDKMock(),
+        let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                   id: "@someone:somewhere.com",
                                   isInvite: false,
                                   inviter: inviter,
@@ -226,7 +226,7 @@ private extension HomeScreenRoom {
                                   isMarkedUnread: false,
                                   isFavourite: false)
         
-        return .init(details: details, invalidated: false, hideUnreadMessagesBadge: false)
+        return .init(summary: summary, hideUnreadMessagesBadge: false)
     }
     
     static func roomInvite(alias: String? = nil, avatarURL: URL? = nil) -> HomeScreenRoom {
@@ -235,7 +235,7 @@ private extension HomeScreenRoom {
         inviter.userID = "@jack:somewhi.nl"
         inviter.avatarURL = avatarURL
         
-        let details = RoomSummary(roomListItem: RoomListItemSDKMock(),
+        let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                   id: "@someone:somewhere.com",
                                   isInvite: false,
                                   inviter: inviter,
@@ -254,6 +254,6 @@ private extension HomeScreenRoom {
                                   isMarkedUnread: false,
                                   isFavourite: false)
         
-        return .init(details: details, invalidated: false, hideUnreadMessagesBadge: false)
+        return .init(summary: summary, hideUnreadMessagesBadge: false)
     }
 }

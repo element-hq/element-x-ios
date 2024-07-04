@@ -195,7 +195,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     }()
     
     static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
-        HomeScreenRoom(details: summary, invalidated: false, hideUnreadMessagesBadge: false)
+        HomeScreenRoom(summary: summary, hideUnreadMessagesBadge: false)
     }
     
     static var previews: some View {

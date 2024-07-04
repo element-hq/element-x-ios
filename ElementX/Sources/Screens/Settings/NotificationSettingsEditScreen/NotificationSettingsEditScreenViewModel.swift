@@ -157,12 +157,12 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         }
     }
     
-    private func buildRoom(with details: RoomSummary) async -> NotificationSettingsEditScreenRoom {
-        let notificationMode = try? await notificationSettingsProxy.getUserDefinedRoomNotificationMode(roomId: details.id)
-        return NotificationSettingsEditScreenRoom(id: details.id,
-                                                  roomId: details.id,
-                                                  name: details.name,
-                                                  avatar: details.avatar,
+    private func buildRoom(with summary: RoomSummary) async -> NotificationSettingsEditScreenRoom {
+        let notificationMode = try? await notificationSettingsProxy.getUserDefinedRoomNotificationMode(roomId: summary.id)
+        return NotificationSettingsEditScreenRoom(id: summary.id,
+                                                  roomId: summary.id,
+                                                  name: summary.name,
+                                                  avatar: summary.avatar,
                                                   notificationMode: notificationMode)
     }
     
