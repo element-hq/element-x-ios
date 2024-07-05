@@ -21,7 +21,7 @@ import XCTest
 
 @MainActor
 class HomeScreenRoomTests: XCTestCase {
-    var roomSummaryDetails: RoomSummaryDetails!
+    var roomSummary: RoomSummary!
     
     // swiftlint:disable:next function_parameter_count
     func setupRoomSummary(isMarkedUnread: Bool,
@@ -30,23 +30,24 @@ class HomeScreenRoomTests: XCTestCase {
                           unreadNotificationsCount: UInt,
                           notificationMode: RoomNotificationModeProxy,
                           hasOngoingCall: Bool) {
-        roomSummaryDetails = RoomSummaryDetails(id: "Test room",
-                                                isInvite: false,
-                                                inviter: nil,
-                                                name: "Test room",
-                                                isDirect: false,
-                                                avatarURL: nil,
-                                                heroes: [],
-                                                lastMessage: nil,
-                                                lastMessageFormattedTimestamp: nil,
-                                                unreadMessagesCount: unreadMessagesCount,
-                                                unreadMentionsCount: unreadMentionsCount,
-                                                unreadNotificationsCount: unreadNotificationsCount,
-                                                notificationMode: notificationMode,
-                                                canonicalAlias: nil,
-                                                hasOngoingCall: hasOngoingCall,
-                                                isMarkedUnread: isMarkedUnread,
-                                                isFavourite: false)
+        roomSummary = RoomSummary(roomListItem: .init(noPointer: .init()),
+                                  id: "Test room",
+                                  isInvite: false,
+                                  inviter: nil,
+                                  name: "Test room",
+                                  isDirect: false,
+                                  avatarURL: nil,
+                                  heroes: [],
+                                  lastMessage: nil,
+                                  lastMessageFormattedTimestamp: nil,
+                                  unreadMessagesCount: unreadMessagesCount,
+                                  unreadMentionsCount: unreadMentionsCount,
+                                  unreadNotificationsCount: unreadNotificationsCount,
+                                  notificationMode: notificationMode,
+                                  canonicalAlias: nil,
+                                  hasOngoingCall: hasOngoingCall,
+                                  isMarkedUnread: isMarkedUnread,
+                                  isFavourite: false)
     }
     
     func testNoBadge() {
@@ -57,7 +58,7 @@ class HomeScreenRoomTests: XCTestCase {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(details: roomSummaryDetails, invalidated: false, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
         
         XCTAssertFalse(room.isHighlighted)
         XCTAssertFalse(room.badges.isDotShown)
@@ -74,7 +75,7 @@ class HomeScreenRoomTests: XCTestCase {
                          notificationMode: .allMessages,
                          hasOngoingCall: true)
         
-        let room = HomeScreenRoom(details: roomSummaryDetails, invalidated: false, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
         
         XCTAssertTrue(room.isHighlighted)
         XCTAssertTrue(room.badges.isDotShown)
@@ -91,7 +92,7 @@ class HomeScreenRoomTests: XCTestCase {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(details: roomSummaryDetails, invalidated: false, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
         
         XCTAssertFalse(room.isHighlighted)
         XCTAssertTrue(room.badges.isDotShown)
@@ -108,7 +109,7 @@ class HomeScreenRoomTests: XCTestCase {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(details: roomSummaryDetails, invalidated: false, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
         
         XCTAssertTrue(room.isHighlighted)
         XCTAssertTrue(room.badges.isDotShown)
@@ -125,7 +126,7 @@ class HomeScreenRoomTests: XCTestCase {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(details: roomSummaryDetails, invalidated: false, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
         
         XCTAssertTrue(room.isHighlighted)
         XCTAssertTrue(room.badges.isDotShown)
@@ -142,7 +143,7 @@ class HomeScreenRoomTests: XCTestCase {
                          notificationMode: .allMessages,
                          hasOngoingCall: true)
         
-        let room = HomeScreenRoom(details: roomSummaryDetails, invalidated: false, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
         
         XCTAssertFalse(room.isHighlighted)
         XCTAssertFalse(room.badges.isDotShown)
@@ -159,7 +160,7 @@ class HomeScreenRoomTests: XCTestCase {
                          notificationMode: .mentionsAndKeywordsOnly,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(details: roomSummaryDetails, invalidated: false, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
         
         XCTAssertFalse(room.isHighlighted)
         XCTAssertTrue(room.badges.isDotShown)
@@ -176,7 +177,7 @@ class HomeScreenRoomTests: XCTestCase {
                          notificationMode: .mentionsAndKeywordsOnly,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(details: roomSummaryDetails, invalidated: false, hideUnreadMessagesBadge: true)
+        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: true)
         
         XCTAssertFalse(room.isHighlighted)
         XCTAssertFalse(room.badges.isDotShown)
@@ -195,7 +196,7 @@ class HomeScreenRoomTests: XCTestCase {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(details: roomSummaryDetails, invalidated: false, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
         
         XCTAssertTrue(room.isHighlighted)
         XCTAssertTrue(room.badges.isDotShown)
@@ -212,7 +213,7 @@ class HomeScreenRoomTests: XCTestCase {
                          notificationMode: .allMessages,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(details: roomSummaryDetails, invalidated: false, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
         
         XCTAssertTrue(room.isHighlighted)
         XCTAssertTrue(room.badges.isDotShown)
@@ -229,7 +230,7 @@ class HomeScreenRoomTests: XCTestCase {
                          notificationMode: .mute,
                          hasOngoingCall: true)
         
-        let room = HomeScreenRoom(details: roomSummaryDetails, invalidated: false, hideUnreadMessagesBadge: false)
+        let room = HomeScreenRoom(summary: roomSummary, hideUnreadMessagesBadge: false)
         
         XCTAssertTrue(room.isHighlighted)
         XCTAssertTrue(room.badges.isDotShown)

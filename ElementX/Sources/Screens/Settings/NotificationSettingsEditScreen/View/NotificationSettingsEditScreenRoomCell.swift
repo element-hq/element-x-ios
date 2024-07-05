@@ -68,17 +68,12 @@ struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider, Testabl
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         
         let rooms: [NotificationSettingsEditScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary -> NotificationSettingsEditScreenRoom? in
-            switch summary {
-            case .empty, .invalidated:
-                return nil
-            case .filled(let details):
-                return NotificationSettingsEditScreenRoom(id: UUID().uuidString,
-                                                          roomId: details.id,
-                                                          name: details.name,
-                                                          avatar: details.avatar)
-            }
+            NotificationSettingsEditScreenRoom(id: UUID().uuidString,
+                                               roomId: summary.id,
+                                               name: summary.name,
+                                               avatar: summary.avatar)
         }
-
+        
         return VStack(spacing: 0) {
             ForEach(rooms) { room in
                 NotificationSettingsEditScreenRoomCell(room: room, context: viewModel.context)

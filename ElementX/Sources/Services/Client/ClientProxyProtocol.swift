@@ -47,7 +47,6 @@ enum ClientProxyError: Error {
 
 enum SlidingSyncConstants {
     static let defaultTimelineLimit: UInt = 20
-    static let maximumVisibleRangeSize = 30
 }
 
 /// This struct represents the configuration that we are using to register the application through Pusher to Sygnal

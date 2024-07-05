@@ -207,25 +207,26 @@ private extension HomeScreenRoom {
         inviter.displayName = "Jack"
         inviter.userID = "@jack:somewhere.com"
         
-        let details = RoomSummaryDetails(id: "@someone:somewhere.com",
-                                         isInvite: false,
-                                         inviter: inviter,
-                                         name: "Some Guy",
-                                         isDirect: true,
-                                         avatarURL: nil,
-                                         heroes: [.init(userID: "@someone:somewhere.com")],
-                                         lastMessage: nil,
-                                         lastMessageFormattedTimestamp: nil,
-                                         unreadMessagesCount: 0,
-                                         unreadMentionsCount: 0,
-                                         unreadNotificationsCount: 0,
-                                         notificationMode: nil,
-                                         canonicalAlias: "#footest:somewhere.org",
-                                         hasOngoingCall: false,
-                                         isMarkedUnread: false,
-                                         isFavourite: false)
+        let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
+                                  id: "@someone:somewhere.com",
+                                  isInvite: false,
+                                  inviter: inviter,
+                                  name: "Some Guy",
+                                  isDirect: true,
+                                  avatarURL: nil,
+                                  heroes: [.init(userID: "@someone:somewhere.com")],
+                                  lastMessage: nil,
+                                  lastMessageFormattedTimestamp: nil,
+                                  unreadMessagesCount: 0,
+                                  unreadMentionsCount: 0,
+                                  unreadNotificationsCount: 0,
+                                  notificationMode: nil,
+                                  canonicalAlias: "#footest:somewhere.org",
+                                  hasOngoingCall: false,
+                                  isMarkedUnread: false,
+                                  isFavourite: false)
         
-        return .init(details: details, invalidated: false, hideUnreadMessagesBadge: false)
+        return .init(summary: summary, hideUnreadMessagesBadge: false)
     }
     
     static func roomInvite(alias: String? = nil, avatarURL: URL? = nil) -> HomeScreenRoom {
@@ -234,24 +235,25 @@ private extension HomeScreenRoom {
         inviter.userID = "@jack:somewhi.nl"
         inviter.avatarURL = avatarURL
         
-        let details = RoomSummaryDetails(id: "@someone:somewhere.com",
-                                         isInvite: false,
-                                         inviter: inviter,
-                                         name: "Awesome Room",
-                                         isDirect: false,
-                                         avatarURL: avatarURL,
-                                         heroes: [.init(userID: "@someone:somewhere.com")],
-                                         lastMessage: nil,
-                                         lastMessageFormattedTimestamp: nil,
-                                         unreadMessagesCount: 0,
-                                         unreadMentionsCount: 0,
-                                         unreadNotificationsCount: 0,
-                                         notificationMode: nil,
-                                         canonicalAlias: alias,
-                                         hasOngoingCall: false,
-                                         isMarkedUnread: false,
-                                         isFavourite: false)
+        let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
+                                  id: "@someone:somewhere.com",
+                                  isInvite: false,
+                                  inviter: inviter,
+                                  name: "Awesome Room",
+                                  isDirect: false,
+                                  avatarURL: avatarURL,
+                                  heroes: [.init(userID: "@someone:somewhere.com")],
+                                  lastMessage: nil,
+                                  lastMessageFormattedTimestamp: nil,
+                                  unreadMessagesCount: 0,
+                                  unreadMentionsCount: 0,
+                                  unreadNotificationsCount: 0,
+                                  notificationMode: nil,
+                                  canonicalAlias: alias,
+                                  hasOngoingCall: false,
+                                  isMarkedUnread: false,
+                                  isFavourite: false)
         
-        return .init(details: details, invalidated: false, hideUnreadMessagesBadge: false)
+        return .init(summary: summary, hideUnreadMessagesBadge: false)
     }
 }

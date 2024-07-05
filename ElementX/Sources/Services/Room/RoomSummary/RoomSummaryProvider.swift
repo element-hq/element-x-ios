@@ -35,7 +35,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicAdaptersResult?
-    private var listUpdatesTaskHandle: TaskHandle?
     private var stateUpdatesTaskHandle: TaskHandle?
     
     private let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
@@ -85,7 +84,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func setRoomList(_ roomList: RoomList) {
-        guard listUpdatesTaskHandle == nil, stateUpdatesTaskHandle == nil else {
+        guard stateUpdatesTaskHandle == nil else {
             return
         }
         
@@ -100,8 +99,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             
             // Forces the listener above to be called with the current state
             setFilter(.all(filters: []))
-            
-            listUpdatesTaskHandle = listUpdatesSubscriptionResult?.entriesStream
             
             let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: RoomListStateObserver { [weak self] state in
                 guard let self else { return }
@@ -119,48 +116,31 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     func updateVisibleRange(_ range: Range<Int>) {
         if range.upperBound >= rooms.count {
-            listUpdatesSubscriptionResult?.controller.addOnePage()
+            listUpdatesSubscriptionResult?.controller().addOnePage()
         } else if range.lowerBound == 0 {
-            listUpdatesSubscriptionResult?.controller.resetToOnePage()
+            listUpdatesSubscriptionResult?.controller().resetToOnePage()
         }
         
         guard shouldUpdateVisibleRange else {
             return
-        }
-        
-        Task {
-            do {
-                // The scroll view content size based visible range calculations might create large ranges
-                // This is just a safety check to not overload the backend
-                var upperBound = range.upperBound
-                if range.upperBound - range.lowerBound > SlidingSyncConstants.maximumVisibleRangeSize {
-                    upperBound = range.lowerBound + SlidingSyncConstants.maximumVisibleRangeSize
-                }
-                
-                MXLog.info("\(name): Setting visible range to \(range.lowerBound)...\(upperBound)")
-                
-                try await roomListService.applyInput(input: .viewport(ranges: [.init(start: UInt32(range.lowerBound), endInclusive: UInt32(upperBound))]))
-            } catch {
-                MXLog.error("Failed updating visible range with error: \(error)")
-            }
         }
     }
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
         switch filter {
         case .excludeAll:
-            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .none)
+            _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .none)
         case let .search(query):
             let filters: [RoomListEntriesDynamicFilterKind] = if appSettings.fuzzyRoomListSearchEnabled {
                 [.fuzzyMatchRoomName(pattern: query), .nonLeft]
             } else {
                 [.normalizedMatchRoomName(pattern: query), .nonLeft]
             }
-            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .all(filters: filters))
+            _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: filters))
         case let .all(filters):
             var filters = filters.map(\.rustFilter)
             filters.append(.nonLeft)
-            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .all(filters: filters))
+            _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: filters))
         }
     }
     
@@ -175,13 +155,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         MXLog.info("Started processing room list diffs")
         
-        MXLog.verbose("\(name): Received \(diffs.count) diffs, current room list \(rooms.compactMap { $0.id ?? "Empty" })")
+        MXLog.verbose("\(name): Received \(diffs.count) diffs, current room list \(rooms.map(\.id))")
         
         rooms = diffs.reduce(rooms) { currentItems, diff in
             processDiff(diff, on: currentItems)
         }
         
-        MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
+        MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.map(\.id))")
         
         MXLog.info("Finished processing room list diffs")
     }
@@ -200,18 +180,17 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return updatedItems
     }
 
-    private func fetchRoomDetails(roomID: String) -> (roomInfo: RoomInfo?, latestEvent: EventTimelineItem?) {
+    private func fetchRoomDetails(from roomListItem: RoomListItem) -> (roomInfo: RoomInfo?, latestEvent: EventTimelineItem?) {
         class FetchResult {
             var roomInfo: RoomInfo?
             var latestEvent: EventTimelineItem?
         }
-
+        
         let semaphore = DispatchSemaphore(value: 0)
         let result = FetchResult()
-
+        
         Task {
             do {
-                let roomListItem = try roomListService.room(roomId: roomID)
                 result.latestEvent = await roomListItem.latestEvent()
                 result.roomInfo = try await roomListItem.roomInfo()
             } catch {
@@ -222,12 +201,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         semaphore.wait()
         return (result.roomInfo, result.latestEvent)
     }
-
-    private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
-        let roomDetails = fetchRoomDetails(roomID: identifier)
+    
+    private func buildRoomSummary(from roomListItem: RoomListItem) -> RoomSummary {
+        let roomDetails = fetchRoomDetails(from: roomListItem)
         
         guard let roomInfo = roomDetails.roomInfo else {
-            return .empty
+            fatalError("Missing room info for \(roomListItem.id())")
         }
         
         var attributedLastMessage: AttributedString?
@@ -246,47 +225,24 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         let notificationMode = roomInfo.userDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
-        let details = RoomSummaryDetails(id: roomInfo.id,
-                                         isInvite: roomInfo.membership == .invited,
-                                         inviter: inviterProxy,
-                                         name: roomInfo.displayName ?? roomInfo.id,
-                                         isDirect: roomInfo.isDirect,
-                                         avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
-                                         heroes: roomInfo.heroes.map(UserProfileProxy.init),
-                                         lastMessage: attributedLastMessage,
-                                         lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
-                                         unreadMessagesCount: UInt(roomInfo.numUnreadMessages),
-                                         unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
-                                         unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),
-                                         notificationMode: notificationMode,
-                                         canonicalAlias: roomInfo.canonicalAlias,
-                                         hasOngoingCall: roomInfo.hasRoomCall,
-                                         isMarkedUnread: roomInfo.isMarkedUnread,
-                                         isFavourite: roomInfo.isFavourite)
-        
-        return invalidated ? .invalidated(details: details) : .filled(details: details)
-    }
-    
-    private func buildSummaryForRoomListEntry(_ entry: RoomListEntry) -> RoomSummary {
-        switch entry {
-        case .empty:
-            return .empty
-        case .filled(let roomId):
-            return buildRoomSummaryForIdentifier(roomId, invalidated: false)
-        case .invalidated(let roomId):
-            guard let cachedRoom = rooms.first(where: { $0.id == roomId }) else {
-                return buildRoomSummaryForIdentifier(roomId, invalidated: true)
-            }
-            
-            switch cachedRoom {
-            case .empty:
-                return .empty
-            case .filled(let details):
-                return .invalidated(details: details)
-            case .invalidated:
-                return cachedRoom
-            }
-        }
+        return RoomSummary(roomListItem: roomListItem,
+                           id: roomInfo.id,
+                           isInvite: roomInfo.membership == .invited,
+                           inviter: inviterProxy,
+                           name: roomInfo.displayName ?? roomInfo.id,
+                           isDirect: roomInfo.isDirect,
+                           avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
+                           heroes: roomInfo.heroes.map(UserProfileProxy.init),
+                           lastMessage: attributedLastMessage,
+                           lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
+                           unreadMessagesCount: UInt(roomInfo.numUnreadMessages),
+                           unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
+                           unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),
+                           notificationMode: notificationMode,
+                           canonicalAlias: roomInfo.canonicalAlias,
+                           hasOngoingCall: roomInfo.hasRoomCall,
+                           isMarkedUnread: roomInfo.isMarkedUnread,
+                           isFavourite: roomInfo.isFavourite)
     }
     
     private func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
@@ -294,10 +250,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         switch diff {
         case .append(let values):
-            let debugIdentifiers = values.map(\.debugIdentifier)
+            let debugIdentifiers = values.map { $0.id() }
             MXLog.verbose("\(name): Append \(debugIdentifiers)")
             for (index, value) in values.enumerated() {
-                let summary = buildSummaryForRoomListEntry(value)
+                let summary = buildRoomSummary(from: value)
                 changes.append(.insert(offset: rooms.count + index, element: summary, associatedWith: nil))
             }
         case .clear:
@@ -306,8 +262,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 changes.append(.remove(offset: index, element: value, associatedWith: nil))
             }
         case .insert(let index, let value):
-            MXLog.verbose("\(name): Insert at \(value.debugIdentifier) at \(index)")
-            let summary = buildSummaryForRoomListEntry(value)
+            MXLog.verbose("\(name): Insert at \(value.id()) at \(index)")
+            let summary = buildRoomSummary(from: value)
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .popBack:
             MXLog.verbose("\(name): Pop Back")
@@ -321,30 +277,30 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             let summary = rooms[0]
             changes.append(.remove(offset: 0, element: summary, associatedWith: nil))
         case .pushBack(let value):
-            MXLog.verbose("\(name): Push Back \(value.debugIdentifier)")
-            let summary = buildSummaryForRoomListEntry(value)
+            MXLog.verbose("\(name): Push Back \(value.id())")
+            let summary = buildRoomSummary(from: value)
             changes.append(.insert(offset: rooms.count, element: summary, associatedWith: nil))
         case .pushFront(let value):
-            MXLog.verbose("\(name): Push Front \(value.debugIdentifier)")
-            let summary = buildSummaryForRoomListEntry(value)
+            MXLog.verbose("\(name): Push Front \(value.id())")
+            let summary = buildRoomSummary(from: value)
             changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
         case .remove(let index):
             let summary = rooms[Int(index)]
-            MXLog.verbose("\(name): Remove \(summary.id ?? "") from \(index)")
+            MXLog.verbose("\(name): Remove \(summary.id) from \(index)")
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
         case .reset(let values):
-            let debugIdentifiers = values.map(\.debugIdentifier)
+            let debugIdentifiers = values.map { $0.id() }
             MXLog.verbose("\(name): Replace all items with \(debugIdentifiers)")
             for (index, summary) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: summary, associatedWith: nil))
             }
             
             for (index, value) in values.enumerated() {
-                changes.append(.insert(offset: index, element: buildSummaryForRoomListEntry(value), associatedWith: nil))
+                changes.append(.insert(offset: index, element: buildRoomSummary(from: value), associatedWith: nil))
             }
         case .set(let index, let value):
-            MXLog.verbose("\(name): Update \(value.debugIdentifier) at \(index)")
-            let summary = buildSummaryForRoomListEntry(value)
+            MXLog.verbose("\(name): Update \(value.id()) at \(index)")
+            let summary = buildRoomSummary(from: value)
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .truncate(let length):
@@ -384,14 +340,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
         
         rooms = rooms.map {
-            switch $0 {
-            case .empty:
-                return $0
-            case .filled(let details):
-                return self.buildRoomSummaryForIdentifier(details.id, invalidated: false)
-            case .invalidated(let details):
-                return self.buildRoomSummaryForIdentifier(details.id, invalidated: true)
-            }
+            self.buildRoomSummary(from: $0.roomListItem)
         }
         
         MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")
@@ -405,19 +354,6 @@ extension RoomSummaryProviderState {
             self = .notLoaded
         case .loaded(let maximumNumberOfRooms):
             self = .loaded(totalNumberOfRooms: UInt(maximumNumberOfRooms ?? 0))
-        }
-    }
-}
-
-extension MatrixRustSDK.RoomListEntry {
-    var debugIdentifier: String {
-        switch self {
-        case .empty:
-            return "Empty"
-        case .invalidated(let roomId):
-            return "Invalidated(\(roomId))"
-        case .filled(let roomId):
-            return "Filled(\(roomId))"
         }
     }
 }
