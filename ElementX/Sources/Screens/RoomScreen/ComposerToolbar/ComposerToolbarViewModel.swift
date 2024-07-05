@@ -310,7 +310,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 }
                 return
             }
-            plainText = context.plainComposerText.string
+            plainText = getPlainComposerContent().text
             htmlText = nil
         }
         
@@ -349,7 +349,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
     
-    private func sendPlainComposerText() {
+    private func getPlainComposerContent() -> PlainComposerContent {
         let attributedString = NSMutableAttributedString(attributedString: context.plainComposerText)
 
         var shouldMakeAnotherPass = false
@@ -396,9 +396,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
         } while shouldMakeAnotherPass
         
-        actionsSubject.send(.sendMessage(plain: attributedString.string, html: nil,
+        return .init(text: attributedString.string, mentionedUserIDs: userIDs, containsAtRoomMention: containsAtRoom)
+    }
+    
+    private func sendPlainComposerText() {
+        let plainComposerContent = getPlainComposerContent()
+        actionsSubject.send(.sendMessage(plain: plainComposerContent.text, html: nil,
                                          mode: state.composerMode,
-                                         intentionalMentions: .init(userIDs: userIDs, atRoom: containsAtRoom)))
+                                         intentionalMentions: .init(userIDs: plainComposerContent.mentionedUserIDs, atRoom: plainComposerContent.containsAtRoomMention)))
     }
     
     private func processVoiceMessageAction(_ action: ComposerToolbarVoiceMessageAction) {
@@ -657,4 +662,10 @@ private final class ComposerMentionReplacer: MentionReplacer {
     func replacementForMention(_ url: String, text: String) -> NSAttributedString? {
         replacementForMentionClosure(url, text)
     }
+}
+
+private struct PlainComposerContent {
+    let text: String
+    let mentionedUserIDs: Set<String>
+    let containsAtRoomMention: Bool
 }
