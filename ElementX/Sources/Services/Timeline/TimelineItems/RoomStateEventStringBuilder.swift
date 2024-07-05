@@ -44,7 +44,7 @@ struct RoomStateEventStringBuilder {
         case .joined:
             return memberIsYou ? L10n.stateEventRoomJoinByYou : L10n.stateEventRoomJoin(senderDisplayName)
         case .left:
-            return memberIsYou ? L10n.stateEventRoomLeaveByYou : L10n.stateEventRoomLeave(senderDisplayName)
+            return memberIsYou ? L10n.stateEventRoomLeaveByYou : L10n.stateEventRoomLeave(member)
         case .banned, .kickedAndBanned:
             return senderIsYou ? L10n.stateEventRoomBanByYou(member) : L10n.stateEventRoomBan(senderDisplayName, member)
         case .unbanned:
