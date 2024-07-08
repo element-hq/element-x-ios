@@ -19,7 +19,7 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class BugReportViewModelTests: XCTestCase {
+class BugReportScreenViewModelTests: XCTestCase {
     enum TestError: Error {
         case testError
     }
@@ -75,6 +75,7 @@ class BugReportViewModelTests: XCTestCase {
                                                  clientProxy: clientProxy,
                                                  screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
+        context.reportText = "This will succeed"
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
@@ -93,7 +94,7 @@ class BugReportViewModelTests: XCTestCase {
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.deviceID, "ABCDEFGH")
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.curve25519, "THECURVEKEYKEY")
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.ed25519, "THEEDKEYKEY")
-        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.text, "")
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.text, "This will succeed")
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.includeLogs, true)
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.canContact, false)
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.githubLabels, [])
@@ -110,6 +111,8 @@ class BugReportViewModelTests: XCTestCase {
         let viewModel = BugReportScreenViewModel(bugReportService: mockService,
                                                  clientProxy: clientProxy,
                                                  screenshot: nil, isModallyPresented: false)
+        let context = viewModel.context
+        context.reportText = "This will fail"
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
@@ -120,17 +123,11 @@ class BugReportViewModelTests: XCTestCase {
             }
         }
         
-        let context = viewModel.context
         context.send(viewAction: .submit)
         try await deferred.fulfill()
         
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
-        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.userID, "@mock.client.com")
-        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.deviceID, nil)
-        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.text, "")
-        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.includeLogs, true)
-        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.canContact, false)
-        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.githubLabels, [])
-        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.files, [])
+        XCTAssertEqual(context.reportText, "This will fail", "The bug report should remain in place so the user can retry.")
+        XCTAssertFalse(context.viewState.shouldDisableInteraction, "The user should be able to retry.")
     }
 }
