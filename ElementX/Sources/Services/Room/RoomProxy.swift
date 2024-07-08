@@ -21,7 +21,7 @@ import UIKit
 import MatrixRustSDK
 
 class RoomProxy: RoomProxyProtocol {
-    private static var subscriptionCountPerRoom: [String: Int] = [:]
+    private static var subscriptionTracker = SubscriptionTracker()
     
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
@@ -152,8 +152,7 @@ class RoomProxy: RoomProxyProtocol {
                                                         RequiredState(key: "m.room.join_rules", value: "")],
                                         timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit),
                                         includeHeroes: false) // We don't need heroes here as they're already included in the `all_rooms` list
-        roomListItem.subscribe(settings: settings)
-        Self.subscriptionCountPerRoom[roomListItem.id()] = (Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0) + 1
+        await Self.subscriptionTracker.subscribe(to: roomListItem, with: settings)
         
         await timeline.subscribeForUpdates()
         
@@ -162,12 +161,8 @@ class RoomProxy: RoomProxyProtocol {
         subscribeToTypingNotifications()
     }
     
-    func unsubscribeFromUpdates() {
-        Self.subscriptionCountPerRoom[roomListItem.id()] = max(0, (Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0) - 1)
-        
-        if Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0 <= 0 {
-            roomListItem.unsubscribe()
-        }
+    func unsubscribeFromUpdates() async {
+        await Self.subscriptionTracker.unsubscribe(from: roomListItem)
     }
     
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
@@ -658,5 +653,28 @@ private final class RoomTypingNotificationUpdateListener: TypingNotificationsLis
     
     func call(typingUserIds: [String]) {
         onUpdateClosure(typingUserIds)
+    }
+}
+
+private final actor SubscriptionTracker {
+    private var subscriptionCountPerRoom: [String: Int] = [:]
+    
+    // TODO: These methods probably needs to go through an AsyncStream.
+    
+    func subscribe(to roomListItem: RoomListItemProtocol, with settings: RoomSubscription?) {
+        let roomID = roomListItem.id()
+        if subscriptionCountPerRoom[roomID] ?? 0 == 0 {
+            roomListItem.subscribe(settings: settings)
+        }
+        subscriptionCountPerRoom[roomID] = (subscriptionCountPerRoom[roomID] ?? 0) + 1
+    }
+    
+    func unsubscribe(from roomListItem: RoomListItemProtocol) async {
+        let roomID = roomListItem.id()
+        subscriptionCountPerRoom[roomID] = max(0, (subscriptionCountPerRoom[roomID] ?? 0) - 1)
+        
+        if subscriptionCountPerRoom[roomID] ?? 0 <= 0 {
+            roomListItem.unsubscribe()
+        }
     }
 }

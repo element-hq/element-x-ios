@@ -8288,11 +8288,11 @@ class RoomProxyMock: RoomProxyProtocol {
     var unsubscribeFromUpdatesCalled: Bool {
         return unsubscribeFromUpdatesCallsCount > 0
     }
-    var unsubscribeFromUpdatesClosure: (() -> Void)?
+    var unsubscribeFromUpdatesClosure: (() async -> Void)?
 
-    func unsubscribeFromUpdates() {
+    func unsubscribeFromUpdates() async {
         unsubscribeFromUpdatesCallsCount += 1
-        unsubscribeFromUpdatesClosure?()
+        await unsubscribeFromUpdatesClosure?()
     }
     //MARK: - timelineFocusedOnEvent
 
