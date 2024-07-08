@@ -145,12 +145,8 @@ class RoomProxy: RoomProxyProtocol {
         }
         
         subscribedForUpdates = true
-        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
-                                                        RequiredState(key: "m.room.topic", value: ""),
-                                                        RequiredState(key: "m.room.avatar", value: ""),
-                                                        RequiredState(key: "m.room.canonical_alias", value: ""),
-                                                        RequiredState(key: "m.room.join_rules", value: "")],
-                                        timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit),
+        let settings = RoomSubscription(requiredState: SlidingSyncConstants.defaultRequiredState,
+                                        timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
                                         includeHeroes: false) // We don't need heroes here as they're already included in the `all_rooms` list
         await Self.subscriptionTracker.subscribe(to: roomListItem, with: settings)
         

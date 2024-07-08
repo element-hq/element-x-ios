@@ -58,7 +58,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     /// Build a new summary provider with the given parameters
     /// - Parameters:
-    ///   - shouldUpdateVisibleRange: whether this summary provider should foward visible ranges
+    ///   - shouldUpdateVisibleRange: whether this summary provider should forward visible ranges
     ///   to the room list service through the `applyInput(input: .viewport(ranges` api. Only useful for
     ///   lists that need to update the visible range on Sliding Sync
     init(roomListService: RoomListServiceProtocol,
@@ -123,6 +123,25 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         guard shouldUpdateVisibleRange else {
             return
+        }
+        
+        // The scroll view content size based visible range calculations might create large ranges
+        // This is just a safety check to not overload the backend
+        var range = range
+        if range.upperBound - range.lowerBound > SlidingSyncConstants.maximumVisibleRangeSize {
+            let upperBound = range.lowerBound + SlidingSyncConstants.maximumVisibleRangeSize
+            range = range.lowerBound..<upperBound
+        }
+
+        MXLog.info("\(name): Requesting subscriptions for visible range: \(range)")
+        
+        for index in range {
+            guard index < rooms.count else { return }
+            // Note, we must use the item received by the diff. Asking the roomListService to get
+            // a new item instance will result in /sync being called when already subscribed.
+            rooms[index].roomListItem.subscribe(settings: .init(requiredState: SlidingSyncConstants.defaultRequiredState,
+                                                                timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
+                                                                includeHeroes: false))
         }
     }
     
