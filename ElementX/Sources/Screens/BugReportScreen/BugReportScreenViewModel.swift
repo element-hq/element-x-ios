@@ -103,6 +103,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
         case .failure(let error):
             MXLog.error("Submission failed: \(error)")
             actionsSubject.send(.submitFailed(error: error))
+            state.shouldDisableInteraction = false
         }
     }
 }
