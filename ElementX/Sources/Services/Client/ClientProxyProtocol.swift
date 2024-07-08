@@ -46,7 +46,15 @@ enum ClientProxyError: Error {
 }
 
 enum SlidingSyncConstants {
-    static let defaultTimelineLimit: UInt = 20
+    static let defaultTimelineLimit: UInt32 = 20
+    static let maximumVisibleRangeSize = 30
+    static let defaultRequiredState = [
+        RequiredState(key: "m.room.name", value: ""),
+        RequiredState(key: "m.room.topic", value: ""),
+        RequiredState(key: "m.room.avatar", value: ""),
+        RequiredState(key: "m.room.canonical_alias", value: ""),
+        RequiredState(key: "m.room.join_rules", value: "")
+    ]
 }
 
 /// This struct represents the configuration that we are using to register the application through Pusher to Sygnal

@@ -21,8 +21,6 @@ import UIKit
 import MatrixRustSDK
 
 class RoomProxy: RoomProxyProtocol {
-    private static var subscriptionCountPerRoom: [String: Int] = [:]
-    
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
@@ -145,29 +143,16 @@ class RoomProxy: RoomProxyProtocol {
         }
         
         subscribedForUpdates = true
-        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
-                                                        RequiredState(key: "m.room.topic", value: ""),
-                                                        RequiredState(key: "m.room.avatar", value: ""),
-                                                        RequiredState(key: "m.room.canonical_alias", value: ""),
-                                                        RequiredState(key: "m.room.join_rules", value: "")],
-                                        timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit),
+        let settings = RoomSubscription(requiredState: SlidingSyncConstants.defaultRequiredState,
+                                        timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
                                         includeHeroes: false) // We don't need heroes here as they're already included in the `all_rooms` list
         roomListItem.subscribe(settings: settings)
-        Self.subscriptionCountPerRoom[roomListItem.id()] = (Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0) + 1
         
         await timeline.subscribeForUpdates()
         
         subscribeToRoomInfoUpdates()
         
         subscribeToTypingNotifications()
-    }
-    
-    func unsubscribeFromUpdates() {
-        Self.subscriptionCountPerRoom[roomListItem.id()] = max(0, (Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0) - 1)
-        
-        if Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0 <= 0 {
-            roomListItem.unsubscribe()
-        }
     }
     
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
