@@ -4922,15 +4922,15 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
 
     //MARK: - start
 
-    var startBaseURLClientIDUnderlyingCallsCount = 0
-    var startBaseURLClientIDCallsCount: Int {
+    var startBaseURLClientIDColorSchemeUnderlyingCallsCount = 0
+    var startBaseURLClientIDColorSchemeCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return startBaseURLClientIDUnderlyingCallsCount
+                return startBaseURLClientIDColorSchemeUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = startBaseURLClientIDUnderlyingCallsCount
+                    returnValue = startBaseURLClientIDColorSchemeUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4938,29 +4938,29 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
         }
         set {
             if Thread.isMainThread {
-                startBaseURLClientIDUnderlyingCallsCount = newValue
+                startBaseURLClientIDColorSchemeUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    startBaseURLClientIDUnderlyingCallsCount = newValue
+                    startBaseURLClientIDColorSchemeUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var startBaseURLClientIDCalled: Bool {
-        return startBaseURLClientIDCallsCount > 0
+    var startBaseURLClientIDColorSchemeCalled: Bool {
+        return startBaseURLClientIDColorSchemeCallsCount > 0
     }
-    var startBaseURLClientIDReceivedArguments: (baseURL: URL, clientID: String)?
-    var startBaseURLClientIDReceivedInvocations: [(baseURL: URL, clientID: String)] = []
+    var startBaseURLClientIDColorSchemeReceivedArguments: (baseURL: URL, clientID: String, colorScheme: ColorScheme)?
+    var startBaseURLClientIDColorSchemeReceivedInvocations: [(baseURL: URL, clientID: String, colorScheme: ColorScheme)] = []
 
-    var startBaseURLClientIDUnderlyingReturnValue: Result<URL, ElementCallWidgetDriverError>!
-    var startBaseURLClientIDReturnValue: Result<URL, ElementCallWidgetDriverError>! {
+    var startBaseURLClientIDColorSchemeUnderlyingReturnValue: Result<URL, ElementCallWidgetDriverError>!
+    var startBaseURLClientIDColorSchemeReturnValue: Result<URL, ElementCallWidgetDriverError>! {
         get {
             if Thread.isMainThread {
-                return startBaseURLClientIDUnderlyingReturnValue
+                return startBaseURLClientIDColorSchemeUnderlyingReturnValue
             } else {
                 var returnValue: Result<URL, ElementCallWidgetDriverError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = startBaseURLClientIDUnderlyingReturnValue
+                    returnValue = startBaseURLClientIDColorSchemeUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4968,26 +4968,26 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
         }
         set {
             if Thread.isMainThread {
-                startBaseURLClientIDUnderlyingReturnValue = newValue
+                startBaseURLClientIDColorSchemeUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    startBaseURLClientIDUnderlyingReturnValue = newValue
+                    startBaseURLClientIDColorSchemeUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var startBaseURLClientIDClosure: ((URL, String) async -> Result<URL, ElementCallWidgetDriverError>)?
+    var startBaseURLClientIDColorSchemeClosure: ((URL, String, ColorScheme) async -> Result<URL, ElementCallWidgetDriverError>)?
 
-    func start(baseURL: URL, clientID: String) async -> Result<URL, ElementCallWidgetDriverError> {
-        startBaseURLClientIDCallsCount += 1
-        startBaseURLClientIDReceivedArguments = (baseURL: baseURL, clientID: clientID)
+    func start(baseURL: URL, clientID: String, colorScheme: ColorScheme) async -> Result<URL, ElementCallWidgetDriverError> {
+        startBaseURLClientIDColorSchemeCallsCount += 1
+        startBaseURLClientIDColorSchemeReceivedArguments = (baseURL: baseURL, clientID: clientID, colorScheme: colorScheme)
         DispatchQueue.main.async {
-            self.startBaseURLClientIDReceivedInvocations.append((baseURL: baseURL, clientID: clientID))
+            self.startBaseURLClientIDColorSchemeReceivedInvocations.append((baseURL: baseURL, clientID: clientID, colorScheme: colorScheme))
         }
-        if let startBaseURLClientIDClosure = startBaseURLClientIDClosure {
-            return await startBaseURLClientIDClosure(baseURL, clientID)
+        if let startBaseURLClientIDColorSchemeClosure = startBaseURLClientIDColorSchemeClosure {
+            return await startBaseURLClientIDColorSchemeClosure(baseURL, clientID, colorScheme)
         } else {
-            return startBaseURLClientIDReturnValue
+            return startBaseURLClientIDColorSchemeReturnValue
         }
     }
     //MARK: - sendMessage

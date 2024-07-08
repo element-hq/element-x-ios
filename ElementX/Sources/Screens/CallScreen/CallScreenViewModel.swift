@@ -42,7 +42,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
          roomProxy: RoomProxyProtocol,
          clientID: String,
          elementCallBaseURL: URL,
-         elementCallBaseURLOverride: URL?) {
+         elementCallBaseURLOverride: URL?,
+         colorScheme: ColorScheme) {
         self.elementCallService = elementCallService
         self.roomProxy = roomProxy
         
@@ -100,7 +101,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 elementCallBaseURL
             }
             
-            switch await widgetDriver.start(baseURL: baseURL, clientID: clientID) {
+            switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
             case .success(let url):
                 state.url = url
             case .failure(let error):

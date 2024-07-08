@@ -143,7 +143,7 @@ extension RoomProxyMock {
             fatalError()
         }
         
-        widgetDriver.startBaseURLClientIDReturnValue = .success(url)
+        widgetDriver.startBaseURLClientIDColorSchemeReturnValue = .success(url)
         
         elementCallWidgetDriverReturnValue = widgetDriver
         sendCallNotificationIfNeeededReturnValue = .success(())

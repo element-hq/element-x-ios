@@ -24,6 +24,7 @@ struct CallScreenCoordinatorParameters {
     let clientID: String
     let elementCallBaseURL: URL
     let elementCallBaseURLOverride: URL?
+    let colorScheme: ColorScheme
 }
 
 enum CallScreenCoordinatorAction {
@@ -45,7 +46,8 @@ final class CallScreenCoordinator: CoordinatorProtocol {
                                         roomProxy: parameters.roomProxy,
                                         clientID: parameters.clientID,
                                         elementCallBaseURL: parameters.elementCallBaseURL,
-                                        elementCallBaseURLOverride: parameters.elementCallBaseURLOverride)
+                                        elementCallBaseURLOverride: parameters.elementCallBaseURLOverride,
+                                        colorScheme: parameters.colorScheme)
     }
     
     func start() {
