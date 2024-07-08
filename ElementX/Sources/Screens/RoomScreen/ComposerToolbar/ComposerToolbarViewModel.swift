@@ -310,7 +310,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 }
                 return
             }
-            plainText = getPlainComposerContent().text
+            plainText = plainComposerContent.text
             htmlText = nil
         }
         
@@ -349,7 +349,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
     
-    private func getPlainComposerContent() -> PlainComposerContent {
+    private var plainComposerContent: PlainComposerContent {
         let attributedString = NSMutableAttributedString(attributedString: context.plainComposerText)
 
         var shouldMakeAnotherPass = false
@@ -400,7 +400,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
     
     private func sendPlainComposerText() {
-        let plainComposerContent = getPlainComposerContent()
+        let plainComposerContent = plainComposerContent
         actionsSubject.send(.sendMessage(plain: plainComposerContent.text, html: nil,
                                          mode: state.composerMode,
                                          intentionalMentions: .init(userIDs: plainComposerContent.mentionedUserIDs, atRoom: plainComposerContent.containsAtRoomMention)))
