@@ -214,6 +214,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 fatalError("Trying to create different room proxies for the same flow coordinator")
             }
             
+            MXLog.warning("Found an existing proxy, returning.")
             return
         }
         
@@ -221,9 +222,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             fatalError("Requesting room details for an unjoined room")
         }
         
-        self.roomProxy = roomProxy
-        
         await roomProxy.subscribeForUpdates()
+        
+        // Make sure not to set this until after the subscription has succeeded, otherwise the
+        // early return above could result in trying to access the room's timeline provider
+        // before it has been set which triggers a fatal error.
+        self.roomProxy = roomProxy
     }
     
     // swiftlint:disable:next function_body_length
