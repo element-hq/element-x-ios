@@ -445,7 +445,7 @@
 "screen_key_backup_disable_confirmation_title" = "Вы действительно хотите отключить резервное копирование?";
 "screen_key_backup_disable_description" = "Отключение резервного копирования удалит текущую резервную копию ключа шифрования и отключит другие функции безопасности. В этом случае вы выполните следующие действия:";
 "screen_key_backup_disable_description_point_1" = "Нет зашифрованной истории сообщений на новых устройствах";
-"screen_key_backup_disable_description_point_2" = "Потерять доступ к зашифрованным сообщениям, если вы вышли из %1$@ любой точки мира";
+"screen_key_backup_disable_description_point_2" = "Вы потеряете доступ к зашифрованным сообщениям, если выйдете из %1$@ везде";
 "screen_key_backup_disable_title" = "Вы действительно хотите отключить резервное копирование?";
 "screen_login_error_deactivated_account" = "Данная учетная запись была деактивирована.";
 "screen_login_error_invalid_credentials" = "Неверное имя пользователя и/или пароль";
@@ -782,7 +782,7 @@
 "settings_version_number" = "Версия: %1$@ (%2$@)";
 "state_event_avatar_changed_too" = "(изображение тоже было изменено)";
 "state_event_avatar_url_changed" = "%1$@ сменили свое изображение";
-"state_event_avatar_url_changed_by_you" = "Вы сменили изображение";
+"state_event_avatar_url_changed_by_you" = "Вы сменили изображение профиля";
 "state_event_demoted_to_member" = "%1$@ был понижен в должности до участника";
 "state_event_demoted_to_moderator" = "%1$@ был понижен в должности до модератора";
 "state_event_display_name_changed_from" = "%1$@ изменил свое отображаемое имя с %2$@ на %3$@";

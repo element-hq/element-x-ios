@@ -760,7 +760,7 @@ internal enum L10n {
   internal static var screenAdvancedSettingsSendReadReceiptsDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_send_read_receipts_description") }
   /// Share presence
   internal static var screenAdvancedSettingsSharePresence: String { return L10n.tr("Localizable", "screen_advanced_settings_share_presence") }
-  /// If turned off, you won’t be able to send or receive read receipts or typing notifications
+  /// If turned off, you won’t be able to send or receive read receipts or typing notifications.
   internal static var screenAdvancedSettingsSharePresenceDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_share_presence_description") }
   /// Enable option to view message source in the timeline.
   internal static var screenAdvancedSettingsViewSourceDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_view_source_description") }
