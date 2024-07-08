@@ -8259,41 +8259,6 @@ class RoomProxyMock: RoomProxyProtocol {
         subscribeForUpdatesCallsCount += 1
         await subscribeForUpdatesClosure?()
     }
-    //MARK: - unsubscribeFromUpdates
-
-    var unsubscribeFromUpdatesUnderlyingCallsCount = 0
-    var unsubscribeFromUpdatesCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return unsubscribeFromUpdatesUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = unsubscribeFromUpdatesUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                unsubscribeFromUpdatesUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    unsubscribeFromUpdatesUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var unsubscribeFromUpdatesCalled: Bool {
-        return unsubscribeFromUpdatesCallsCount > 0
-    }
-    var unsubscribeFromUpdatesClosure: (() async -> Void)?
-
-    func unsubscribeFromUpdates() async {
-        unsubscribeFromUpdatesCallsCount += 1
-        await unsubscribeFromUpdatesClosure?()
-    }
     //MARK: - timelineFocusedOnEvent
 
     var timelineFocusedOnEventEventIDNumberOfEventsUnderlyingCallsCount = 0

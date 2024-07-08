@@ -680,8 +680,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             navigationStackCoordinator.setRootCoordinator(nil, animated: false)
         }
         
-        Task { await roomProxy?.unsubscribeFromUpdates() }
-        
         timelineController = nil
         
         actionsSubject.send(.finished)
