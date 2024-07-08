@@ -320,7 +320,7 @@
 "screen_advanced_settings_send_read_receipts" = "Potvrdenia o prečítaní";
 "screen_advanced_settings_send_read_receipts_description" = "Ak je táto funkcia vypnutá, vaše potvrdenia o prečítaní sa nebudú nikomu odosielať. Stále budete dostávať potvrdenia o prečítaní od ostatných používateľov.";
 "screen_advanced_settings_share_presence" = "Zdieľať prítomnosť";
-"screen_advanced_settings_share_presence_description" = "Ak je vypnuté, nebudete môcť odosielať ani prijímať potvrdenia o prečítaní alebo písať upozornenia";
+"screen_advanced_settings_share_presence_description" = "Ak je vypnuté, nebudete môcť odosielať ani prijímať potvrdenia o prečítaní alebo upozornenia o písaní";
 "screen_advanced_settings_view_source_description" = "Povoliť možnosť zobrazenia zdroja správy na časovej osi.";
 "screen_analytics_prompt_data_usage" = "Nezaznamenávame ani neprofilujeme žiadne osobné údaje";
 "screen_analytics_prompt_help_us_improve" = "Zdieľajte anonymné údaje o používaní, aby sme mohli identifikovať problémy.";

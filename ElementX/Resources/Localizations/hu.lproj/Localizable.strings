@@ -445,7 +445,7 @@
 "screen_key_backup_disable_confirmation_title" = "Biztos, hogy kikapcsolja a biztonsági mentéseket?";
 "screen_key_backup_disable_description" = "A biztonsági mentés kikapcsolása eltávolítja a jelenlegi titkosítási kulcsának mentését, és kikapcsol más biztonsági funkciókat is. Ebben az esetben:";
 "screen_key_backup_disable_description_point_1" = "Nem lesznek meg a titkosított üzenetek előzményei az új eszközein";
-"screen_key_backup_disable_description_point_2" = "Elveszti a titkosított üzenetei hozzáférését, ha mindenhol kilép az %1$@ből";
+"screen_key_backup_disable_description_point_2" = "Elveszti a hozzáférését a titkosított üzeneteihez, ha mindenhol kilép az %1$@ből";
 "screen_key_backup_disable_title" = "Biztos, hogy kikapcsolja a biztonsági mentéseket?";
 "screen_login_error_deactivated_account" = "Ez a fiók deaktiválva lett.";
 "screen_login_error_invalid_credentials" = "Helytelen felhasználónév vagy jelszó";

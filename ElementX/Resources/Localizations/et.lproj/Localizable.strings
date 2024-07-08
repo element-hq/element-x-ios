@@ -251,7 +251,7 @@
 "error_no_compatible_app_found" = "Ei õnnestunud leida selle tegevuse jaoks vajalikku välist rakendust.";
 "error_some_messages_have_not_been_sent" = "Mõned sõnumid on saatmata";
 "error_unknown" = "Vabandust, ilmnes viga";
-"full_screen_intent_banner_message" = "Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused lubatud.";
+"full_screen_intent_banner_message" = "Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused.";
 "full_screen_intent_banner_title" = "Täiusta oma telefonikõnede kogemust";
 "invite_friends_rich_title" = "🔐️ Liitu minuga rakenduses %1$@";
 "invite_friends_text" = "Hei, suhtle minuga %1$@ võrgus: %2$@";
@@ -320,7 +320,7 @@
 "screen_advanced_settings_send_read_receipts" = "Lugemisteatised";
 "screen_advanced_settings_send_read_receipts_description" = "Kui lülitad selle valiku välja, siis mitte keegi enam ei saa sinult lugemisteatisi. Küll aga saad sina teiste kasutajate lugemisteatisi.";
 "screen_advanced_settings_share_presence" = "Jaga oma olekut";
-"screen_advanced_settings_share_presence_description" = "Kui see eelistus on välja lülitatud, siis sa ei saa ega saada ei lugemisteatisi ega kirjutamise teavitusi";
+"screen_advanced_settings_share_presence_description" = "Kui see eelistus on välja lülitatud, siis sa ei saa ega saada ei lugemisteatisi ega kirjutamise teavitusi.";
 "screen_advanced_settings_view_source_description" = "Selle eelistuse sisselülitamisel on võimalik ajajoonel vaadata sõnumite lähtekoodi.";
 "screen_analytics_prompt_data_usage" = "Me ei salvesta ega profileeri sinu isiklikke andmeid";
 "screen_analytics_prompt_help_us_improve" = "Võimalike rakenduse vigade leidmiseks palun jaga anonüümset kasutusteavet.";
@@ -445,7 +445,7 @@
 "screen_key_backup_disable_confirmation_title" = "Kas sa oled kindel, et soovid varukoopiate tegemise välja lülitada?";
 "screen_key_backup_disable_description" = "Varunduse väljalülitamisel kustutatakse hetkel olemasolev sinu krüptovõtmete varukoopia ning lülituvad välja veel mõned turvafunktsionaalsused. Sellisel juhul sul:";
 "screen_key_backup_disable_description_point_1" = "sul ei ole krüptitud sõnumite ajalugu uutes seadmetes";
-"screen_key_backup_disable_description_point_2" = "sa kaotad ligipääsu oma krüptitud sõnumitele kui sa logid kõikjal %1$@ rakendusest välja";
+"screen_key_backup_disable_description_point_2" = "sa kaotad ligipääsu oma krüptitud sõnumitele, kui sa logid kõikjal välja rakendusest %1$@";
 "screen_key_backup_disable_title" = "Kas sa oled kindel, et soovid varunduse välja lülitada?";
 "screen_login_error_deactivated_account" = "Konto on kasutusest eemaldatud.";
 "screen_login_error_invalid_credentials" = "Vigane kasutajanimi ja/või salasõna";
@@ -511,7 +511,7 @@
 "screen_qr_code_login_device_not_signed_in_scan_state_subtitle" = "Teine seade pole sisselogitud";
 "screen_qr_code_login_error_cancelled_subtitle" = "Sisselogimine katkestati teises seadmes.";
 "screen_qr_code_login_error_cancelled_title" = "Sisselogimispäring on tühistatud";
-"screen_qr_code_login_error_declined_subtitle" = "Sisselogimisest keelduti teises seadmes.";
+"screen_qr_code_login_error_declined_subtitle" = "Sisselogimisest on teise seadmes keeldutud.";
 "screen_qr_code_login_error_declined_title" = "Sisselogimisest on keeldutud";
 "screen_qr_code_login_error_expired_subtitle" = "Sisselogimine aegus. Palun proovi uuesti.";
 "screen_qr_code_login_error_expired_title" = "Sisselogimine jäi etteantud aja jooksul tegemata";

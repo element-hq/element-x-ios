@@ -211,7 +211,7 @@
 "common_voice_message" = "Pesan suara";
 "common_waiting" = "Menunggu…";
 "common_waiting_for_decryption_key" = "Menunggu pesan ini";
-"common.do_not_show_this_again" = "Do not show this again";
+"common.do_not_show_this_again" = "Jangan tampilkan ini lagi";
 "common.send_to" = "Kirim ke";
 "common_no_room_name" = "Tidak ada nama ruangan";
 "common_poll_end_confirmation" = "Apakah Anda yakin ingin mengakhiri pemungutan suara ini?";
@@ -251,8 +251,8 @@
 "error_no_compatible_app_found" = "Tidak ada aplikasi yang kompatibel yang ditemukan untuk menangani tindakan ini.";
 "error_some_messages_have_not_been_sent" = "Beberapa pesan belum terkirim";
 "error_unknown" = "Maaf, terjadi kesalahan";
-"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
-"full_screen_intent_banner_title" = "Enhance your call experience";
+"full_screen_intent_banner_message" = "Untuk memastikan Anda tidak melewatkan panggilan penting, silakan ubah pengaturan Anda untuk memperbolehkan notifikasi layar penuh ketika ponsel Anda terkunci.";
+"full_screen_intent_banner_title" = "Tingkatkan pengalaman panggilan Anda";
 "invite_friends_rich_title" = "🔐️ Bergabunglah dengan saya di %1$@";
 "invite_friends_text" = "Hai, bicaralah dengan saya di %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "Apakah Anda yakin ingin keluar dari percakapan ini? Percakapan ini tidak umum dan Anda tidak akan dapat bergabung lagi tanpa undangan.";

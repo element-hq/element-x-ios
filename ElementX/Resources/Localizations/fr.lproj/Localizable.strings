@@ -320,7 +320,7 @@
 "screen_advanced_settings_send_read_receipts" = "Accusés de lecture";
 "screen_advanced_settings_send_read_receipts_description" = "En cas de désactivation, vos accusés de lecture ne seront pas envoyés aux autres membres. Vous verrez toujours les accusés des autres membres.";
 "screen_advanced_settings_share_presence" = "Partager la présence";
-"screen_advanced_settings_share_presence_description" = "Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie";
+"screen_advanced_settings_share_presence_description" = "Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie.";
 "screen_advanced_settings_view_source_description" = "Activer cette option pour pouvoir voir la source des messages dans la discussion.";
 "screen_analytics_prompt_data_usage" = "Nous n’enregistrerons ni ne profilerons aucune donnée personnelle";
 "screen_analytics_prompt_help_us_improve" = "Partagez des données d’utilisation anonymes pour nous aider à identifier les problèmes.";
@@ -729,7 +729,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Confirmez que les nombres ci-dessous correspondent à ceux affichés sur votre autre session.";
 "screen_session_verification_compare_numbers_title" = "Comparez les nombres";
 "screen_session_verification_complete_subtitle" = "Votre nouvelle session est désormais vérifiée. Elle a accès à vos messages chiffrés et les autres utilisateurs la verront identifiée comme fiable.";
-"screen_session_verification_enter_recovery_key" = "Confirmer la clé de récupération";
+"screen_session_verification_enter_recovery_key" = "Utiliser la clé de récupération";
 "screen_session_verification_open_existing_session_subtitle" = "Prouvez qu’il s’agit bien de vous pour accéder à l’historique de vos messages chiffrés.";
 "screen_session_verification_open_existing_session_title" = "Ouvrir une session existante";
 "screen_session_verification_positive_button_canceled" = "Réessayer la vérification";
