@@ -594,14 +594,14 @@ class ComposerToolbarViewModelTests: XCTestCase {
     
     func testRestoreMixedMentionsInPlainText() async throws {
         viewModel.context.composerFormattingEnabled = false
-        let text = "Hello [User1](https://matrix.to/#/@user1:matrix.org), [User2](https://matrix.to/#/@user2:matrix.org)"
+        let text = "Hello [User1](https://matrix.to/#/@user1:matrix.org), [User2](https://matrix.to/#/@user2:matrix.org) and @room"
         viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
         await Task.yield()
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
             case let .sendMessage(_, _, _, intentionalMentions):
-                return intentionalMentions == IntentionalMentions(userIDs: ["@user1:matrix.org", "@user2:matrix.org"], atRoom: false)
+                return intentionalMentions == IntentionalMentions(userIDs: ["@user1:matrix.org", "@user2:matrix.org"], atRoom: true)
             default:
                 return false
             }
