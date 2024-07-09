@@ -558,7 +558,6 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.composerFormattingEnabled = false
         let text = "Hello [TestName](https://matrix.to/#/@test:matrix.org)!"
         viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
-        await Task.yield()
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
@@ -577,8 +576,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.composerFormattingEnabled = false
         let text = "Hello @room"
         viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
-        await Task.yield()
-        
+
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
             case let .sendMessage(_, _, _, intentionalMentions):
@@ -596,7 +594,6 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.composerFormattingEnabled = false
         let text = "Hello [User1](https://matrix.to/#/@user1:matrix.org), [User2](https://matrix.to/#/@user2:matrix.org) and @room"
         viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
-        await Task.yield()
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
@@ -615,7 +612,6 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.composerFormattingEnabled = false
         let text = "Hello [User1](https://matrix.to/#/@roomuser:matrix.org)"
         viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
-        await Task.yield()
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
