@@ -610,6 +610,25 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.process(viewAction: .sendMessage)
         try await deferred.fulfill()
     }
+    
+    func testRestoreAmbiguousMention() async throws {
+        viewModel.context.composerFormattingEnabled = false
+        let text = "Hello [User1](https://matrix.to/#/@roomuser:matrix.org)"
+        viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
+        await Task.yield()
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case let .sendMessage(_, _, _, intentionalMentions):
+                return intentionalMentions == IntentionalMentions(userIDs: ["@roomuser:matrix.org"], atRoom: false)
+            default:
+                return false
+            }
+        }
+        
+        viewModel.process(viewAction: .sendMessage)
+        try await deferred.fulfill()
+    }
 }
 
 private extension MentionSuggestionItem {
