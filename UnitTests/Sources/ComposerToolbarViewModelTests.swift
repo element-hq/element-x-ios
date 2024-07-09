@@ -553,6 +553,85 @@ class ComposerToolbarViewModelTests: XCTestCase {
         await fulfillment(of: [expectation1, expectation2])
         XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world"))
     }
+    
+    func testRestoreUserMentionInPlainText() async throws {
+        viewModel.context.composerFormattingEnabled = false
+        let text = "Hello [TestName](https://matrix.to/#/@test:matrix.org)!"
+        viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case let .sendMessage(plainText, _, _, intentionalMentions):
+                // As of right now the markdown loses the display name when restored
+                return plainText == "Hello [@test:matrix.org](https://matrix.to/#/@test:matrix.org)!" &&
+                    intentionalMentions == IntentionalMentions(userIDs: ["@test:matrix.org"], atRoom: false)
+            default:
+                return false
+            }
+        }
+        
+        viewModel.process(viewAction: .sendMessage)
+        try await deferred.fulfill()
+    }
+    
+    func testRestoreAllUsersMentionInPlainText() async throws {
+        viewModel.context.composerFormattingEnabled = false
+        let text = "Hello @room"
+        viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
+
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case let .sendMessage(plainText, _, _, intentionalMentions):
+                return plainText == "Hello @room" &&
+                    intentionalMentions == IntentionalMentions(userIDs: [], atRoom: true)
+            default:
+                return false
+            }
+        }
+        
+        viewModel.process(viewAction: .sendMessage)
+        try await deferred.fulfill()
+    }
+    
+    func testRestoreMixedMentionsInPlainText() async throws {
+        viewModel.context.composerFormattingEnabled = false
+        let text = "Hello [User1](https://matrix.to/#/@user1:matrix.org), [User2](https://matrix.to/#/@user2:matrix.org) and @room"
+        viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case let .sendMessage(plainText, _, _, intentionalMentions):
+                // As of right now the markdown loses the display name when restored
+                return plainText == "Hello [@user1:matrix.org](https://matrix.to/#/@user1:matrix.org), [@user2:matrix.org](https://matrix.to/#/@user2:matrix.org) and @room" &&
+                    intentionalMentions == IntentionalMentions(userIDs: ["@user1:matrix.org", "@user2:matrix.org"], atRoom: true)
+            default:
+                return false
+            }
+        }
+        
+        viewModel.process(viewAction: .sendMessage)
+        try await deferred.fulfill()
+    }
+    
+    func testRestoreAmbiguousMention() async throws {
+        viewModel.context.composerFormattingEnabled = false
+        let text = "Hello [User1](https://matrix.to/#/@roomuser:matrix.org)"
+        viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case let .sendMessage(plainText, _, _, intentionalMentions):
+                // As of right now the markdown loses the display name when restored
+                return plainText == "Hello [@roomuser:matrix.org](https://matrix.to/#/@roomuser:matrix.org)" &&
+                    intentionalMentions == IntentionalMentions(userIDs: ["@roomuser:matrix.org"], atRoom: false)
+            default:
+                return false
+            }
+        }
+        
+        viewModel.process(viewAction: .sendMessage)
+        try await deferred.fulfill()
+    }
 }
 
 private extension MentionSuggestionItem {

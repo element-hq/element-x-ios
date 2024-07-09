@@ -506,10 +506,54 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             wysiwygViewModel.textView.flushPills()
             wysiwygViewModel.setHtmlContent(text)
         } else {
-            state.bindings.plainComposerText = .init(string: text)
+            let attributedString = NSMutableAttributedString(string: text)
+
+            parseUserMentionsMarkdown(text) { range, url in
+                // Call your handleUserMention function here
+                attributedString.addAttribute(.link, value: url, range: range)
+            }
+            
+            let matches = MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string)
+            for match in matches {
+                attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
+            }
+            
+            attributedStringBuilder.detectPermalinks(attributedString)
+            
+            state.bindings.plainComposerText = attributedString
         }
     }
-
+    
+    private func parseUserMentionsMarkdown(_ text: String, callback: (NSRange, URL) -> Void) {
+        // Define the regex pattern
+        let pattern = "\\[(.*?)\\]\\(https://matrix\\.to/#/(@.*?)\\)"
+        
+        // Create the regex
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            return
+        }
+        
+        // Find matches in the input text
+        let nsText = text as NSString
+        let matches = regex.matches(in: text, options: [], range: NSRange(location: 0, length: nsText.length))
+        
+        // Process each match
+        for match in matches.sorted(by: { $0.range.length > $1.range.length }) {
+            // Extract the display name, user ID, and full URL
+            guard match.numberOfRanges == 3 else { continue }
+            
+            let userIDRange = match.range(at: 2)
+            let fullRange = match.range(at: 0)
+            
+            let userID = nsText.substring(with: userIDRange)
+            let fullURLString = "https://matrix.to/#/\(userID)"
+            
+            if let url = URL(string: fullURLString) {
+                callback(fullRange, url)
+            }
+        }
+    }
+    
     private func createLinkAlert() {
         let linkAction = wysiwygViewModel.getLinkAction()
         currentLinkData = WysiwygLinkData(action: linkAction,
