@@ -15,8 +15,8 @@
 //
 
 import Combine
-import Foundation
 import MatrixRustSDK
+import SwiftUI
 
 private struct ElementCallWidgetMessage: Codable {
     enum Direction: String, Codable {
@@ -53,7 +53,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         self.room = room
     }
     
-    func start(baseURL: URL, clientID: String) async -> Result<URL, ElementCallWidgetDriverError> {
+    func start(baseURL: URL, clientID: String, colorScheme: ColorScheme) async -> Result<URL, ElementCallWidgetDriverError> {
         guard let room = room as? Room else {
             return .failure(.roomInvalid)
         }
@@ -75,10 +75,13 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
             return .failure(.failedBuildingWidgetSettings)
         }
         
+        let languageTag = "\(Locale.current.language.languageCode ?? "en")-\(Locale.current.language.region ?? "US")"
+        let theme = colorScheme == .light ? "light" : "dark"
+        
         guard let urlString = try? await generateWebviewUrl(widgetSettings: widgetSettings, room: room,
                                                             props: .init(clientId: clientID,
-                                                                         languageTag: nil,
-                                                                         theme: nil)) else {
+                                                                         languageTag: languageTag,
+                                                                         theme: theme)) else {
             return .failure(.failedBuildingCallURL)
         }
         

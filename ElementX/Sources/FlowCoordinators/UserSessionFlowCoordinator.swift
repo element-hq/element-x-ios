@@ -554,12 +554,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Calls
     
     private func presentCallScreen(roomProxy: RoomProxyProtocol) {
+        let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
                                                                             clientProxy: userSession.clientProxy,
                                                                             roomProxy: roomProxy,
                                                                             clientID: InfoPlistReader.main.bundleIdentifier,
                                                                             elementCallBaseURL: appSettings.elementCallBaseURL,
-                                                                            elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride))
+                                                                            elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
+                                                                            colorScheme: colorScheme))
         
         callScreenCoordinator.actions
             .sink { [weak self] action in

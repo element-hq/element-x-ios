@@ -27,7 +27,6 @@ struct CallScreen: View {
             .id(context.viewState.url)
             .ignoresSafeArea(edges: .bottom)
             .presentationDragIndicator(.visible)
-            .environment(\.colorScheme, .dark)
             .alert(item: $context.alertInfo)
     }
 }
@@ -181,7 +180,7 @@ struct CallScreen_Previews: PreviewProvider {
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
         widgetDriver.underlyingActions = PassthroughSubject<ElementCallWidgetDriverAction, Never>().eraseToAnyPublisher()
-        widgetDriver.startBaseURLClientIDReturnValue = .success(URL.userDirectory)
+        widgetDriver.startBaseURLClientIDColorSchemeReturnValue = .success(URL.userDirectory)
         
         roomProxy.elementCallWidgetDriverReturnValue = widgetDriver
         
@@ -190,7 +189,8 @@ struct CallScreen_Previews: PreviewProvider {
                                    roomProxy: roomProxy,
                                    clientID: "io.element.elementx",
                                    elementCallBaseURL: "https://call.element.io",
-                                   elementCallBaseURLOverride: nil)
+                                   elementCallBaseURLOverride: nil,
+                                   colorScheme: .light)
     }()
     
     static var previews: some View {
