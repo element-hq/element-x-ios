@@ -212,6 +212,7 @@
 "common_waiting" = "Esperando…";
 "common_waiting_for_decryption_key" = "Esperando este mensaje";
 "common.do_not_show_this_again" = "Do not show this again";
+"common.open_source_licenses" = "Open source licenses";
 "common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "¿Estás seguro de que quieres finalizar esta encuesta?";
@@ -347,9 +348,9 @@
 "screen_app_lock_setup_biometric_unlock_subtitle" = "Ahorra algo de tiempo y usa %1$@ para desbloquear la aplicación cada vez";
 "screen_app_lock_setup_choose_pin" = "Elegir PIN";
 "screen_app_lock_setup_confirm_pin" = "Confirmar PIN";
-"screen_app_lock_setup_pin_blacklisted_dialog_content" = "No puedes usar este código PIN por motivos de seguridad";
-"screen_app_lock_setup_pin_blacklisted_dialog_title" = "Elige un PIN diferente";
 "screen_app_lock_setup_pin_context" = "Añade un bloqueo a %1$@ para añadir seguridad adicional a tus chats.\n\nElige algo que puedas recordar. Si olvidas este PIN, se cerrará la sesión de la aplicación.";
+"screen_app_lock_setup_pin_forbidden_dialog_content" = "No puedes usar este código PIN por motivos de seguridad";
+"screen_app_lock_setup_pin_forbidden_dialog_title" = "Elige un PIN diferente";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Por favor ingresa el mismo PIN dos veces";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "Los PINs no coinciden";
 "screen_app_lock_signout_alert_message" = "Tendrás que volver a iniciar sesión y crear un nuevo PIN para continuar";

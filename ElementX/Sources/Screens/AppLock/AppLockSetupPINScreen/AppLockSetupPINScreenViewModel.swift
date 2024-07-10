@@ -132,8 +132,8 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
         switch alertType {
         case .weakPIN:
             state.bindings.alertInfo = .init(id: alertType,
-                                             title: L10n.screenAppLockSetupPinBlacklistedDialogTitle,
-                                             message: L10n.screenAppLockSetupPinBlacklistedDialogContent,
+                                             title: L10n.screenAppLockSetupPinForbiddenDialogTitle,
+                                             message: L10n.screenAppLockSetupPinForbiddenDialogContent,
                                              primaryButton: .init(title: L10n.actionOk) { self.state.bindings.pinCode = "" })
         case .pinMismatch:
             state.numberOfConfirmAttempts += 1

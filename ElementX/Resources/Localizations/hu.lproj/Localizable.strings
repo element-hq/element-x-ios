@@ -212,6 +212,7 @@
 "common_waiting" = "Várakozás…";
 "common_waiting_for_decryption_key" = "Várakozás a visszafejtési kulcsra";
 "common.do_not_show_this_again" = "Ne jelenjen meg többé";
+"common.open_source_licenses" = "Open source licenses";
 "common.send_to" = "Címzett";
 "common_no_room_name" = "Nincs szobanév";
 "common_poll_end_confirmation" = "Biztos, hogy befejezi ezt a szavazást?";
@@ -347,9 +348,9 @@
 "screen_app_lock_setup_biometric_unlock_subtitle" = "Spóroljon meg némi időt, és használja a %1$@t az alkalmazás feloldásához";
 "screen_app_lock_setup_choose_pin" = "PIN-kód kiválasztása";
 "screen_app_lock_setup_confirm_pin" = "PIN-kód megerősítése";
-"screen_app_lock_setup_pin_blacklisted_dialog_content" = "Ezt biztonsági okokból nem választhatja PIN-kódként";
-"screen_app_lock_setup_pin_blacklisted_dialog_title" = "Válasszon egy másik PIN-kódot";
 "screen_app_lock_setup_pin_context" = "Az %1$@ zárolása a csevegései nagyobb biztonsága érdekében.\n\nVálasszon valami megjegyezhetőt. Ha elfelejti a PIN-kódot, akkor ki lesz jelentkeztetve az alkalmazásból.";
+"screen_app_lock_setup_pin_forbidden_dialog_content" = "Ezt biztonsági okokból nem választhatja PIN-kódként";
+"screen_app_lock_setup_pin_forbidden_dialog_title" = "Válasszon egy másik PIN-kódot";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Adja meg a PIN-kódját kétszer";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "A PIN-kódok nem egyeznek";
 "screen_app_lock_signout_alert_message" = "A folytatáshoz újra be kell jelentkeznie, és létre kell hoznia egy új PIN-kódot";
