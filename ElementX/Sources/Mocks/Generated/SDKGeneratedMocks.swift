@@ -2185,6 +2185,46 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         try await removeAvatarClosure?()
     }
 
+    //MARK: - resetServerCapabilities
+
+    open var resetServerCapabilitiesThrowableError: Error?
+    var resetServerCapabilitiesUnderlyingCallsCount = 0
+    open var resetServerCapabilitiesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetServerCapabilitiesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetServerCapabilitiesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetServerCapabilitiesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetServerCapabilitiesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var resetServerCapabilitiesCalled: Bool {
+        return resetServerCapabilitiesCallsCount > 0
+    }
+    open var resetServerCapabilitiesClosure: (() async throws -> Void)?
+
+    open override func resetServerCapabilities() async throws {
+        if let error = resetServerCapabilitiesThrowableError {
+            throw error
+        }
+        resetServerCapabilitiesCallsCount += 1
+        try await resetServerCapabilitiesClosure?()
+    }
+
     //MARK: - resolveRoomAlias
 
     open var resolveRoomAliasRoomAliasThrowableError: Error?
@@ -2787,6 +2827,81 @@ open class ClientSDKMock: MatrixRustSDK.Client {
             self.setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang))
         }
         try await setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure?(identifiers, kind, appDisplayName, deviceDisplayName, profileTag, lang)
+    }
+
+    //MARK: - startSsoLogin
+
+    open var startSsoLoginRedirectUrlIdpIdThrowableError: Error?
+    var startSsoLoginRedirectUrlIdpIdUnderlyingCallsCount = 0
+    open var startSsoLoginRedirectUrlIdpIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return startSsoLoginRedirectUrlIdpIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = startSsoLoginRedirectUrlIdpIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                startSsoLoginRedirectUrlIdpIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    startSsoLoginRedirectUrlIdpIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var startSsoLoginRedirectUrlIdpIdCalled: Bool {
+        return startSsoLoginRedirectUrlIdpIdCallsCount > 0
+    }
+    open var startSsoLoginRedirectUrlIdpIdReceivedArguments: (redirectUrl: String, idpId: String?)?
+    open var startSsoLoginRedirectUrlIdpIdReceivedInvocations: [(redirectUrl: String, idpId: String?)] = []
+
+    var startSsoLoginRedirectUrlIdpIdUnderlyingReturnValue: SsoHandler!
+    open var startSsoLoginRedirectUrlIdpIdReturnValue: SsoHandler! {
+        get {
+            if Thread.isMainThread {
+                return startSsoLoginRedirectUrlIdpIdUnderlyingReturnValue
+            } else {
+                var returnValue: SsoHandler? = nil
+                DispatchQueue.main.sync {
+                    returnValue = startSsoLoginRedirectUrlIdpIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                startSsoLoginRedirectUrlIdpIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    startSsoLoginRedirectUrlIdpIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var startSsoLoginRedirectUrlIdpIdClosure: ((String, String?) async throws -> SsoHandler)?
+
+    open override func startSsoLogin(redirectUrl: String, idpId: String?) async throws -> SsoHandler {
+        if let error = startSsoLoginRedirectUrlIdpIdThrowableError {
+            throw error
+        }
+        startSsoLoginRedirectUrlIdpIdCallsCount += 1
+        startSsoLoginRedirectUrlIdpIdReceivedArguments = (redirectUrl: redirectUrl, idpId: idpId)
+        DispatchQueue.main.async {
+            self.startSsoLoginRedirectUrlIdpIdReceivedInvocations.append((redirectUrl: redirectUrl, idpId: idpId))
+        }
+        if let startSsoLoginRedirectUrlIdpIdClosure = startSsoLoginRedirectUrlIdpIdClosure {
+            return try await startSsoLoginRedirectUrlIdpIdClosure(redirectUrl, idpId)
+        } else {
+            return startSsoLoginRedirectUrlIdpIdReturnValue
+        }
     }
 
     //MARK: - subscribeToIgnoredUsers
@@ -4479,77 +4594,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
             return serverNameOrHomeserverUrlServerNameOrUrlClosure(serverNameOrUrl)
         } else {
             return serverNameOrHomeserverUrlServerNameOrUrlReturnValue
-        }
-    }
-
-    //MARK: - serverVersions
-
-    var serverVersionsVersionsUnderlyingCallsCount = 0
-    open var serverVersionsVersionsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return serverVersionsVersionsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = serverVersionsVersionsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                serverVersionsVersionsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    serverVersionsVersionsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var serverVersionsVersionsCalled: Bool {
-        return serverVersionsVersionsCallsCount > 0
-    }
-    open var serverVersionsVersionsReceivedVersions: [String]?
-    open var serverVersionsVersionsReceivedInvocations: [[String]] = []
-
-    var serverVersionsVersionsUnderlyingReturnValue: ClientBuilder!
-    open var serverVersionsVersionsReturnValue: ClientBuilder! {
-        get {
-            if Thread.isMainThread {
-                return serverVersionsVersionsUnderlyingReturnValue
-            } else {
-                var returnValue: ClientBuilder? = nil
-                DispatchQueue.main.sync {
-                    returnValue = serverVersionsVersionsUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                serverVersionsVersionsUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    serverVersionsVersionsUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var serverVersionsVersionsClosure: (([String]) -> ClientBuilder)?
-
-    open override func serverVersions(versions: [String]) -> ClientBuilder {
-        serverVersionsVersionsCallsCount += 1
-        serverVersionsVersionsReceivedVersions = versions
-        DispatchQueue.main.async {
-            self.serverVersionsVersionsReceivedInvocations.append(versions)
-        }
-        if let serverVersionsVersionsClosure = serverVersionsVersionsClosure {
-            return serverVersionsVersionsClosure(versions)
-        } else {
-            return serverVersionsVersionsReturnValue
         }
     }
 
@@ -16674,6 +16718,128 @@ open class SpanSDKMock: MatrixRustSDK.Span {
             return isNoneClosure()
         } else {
             return isNoneReturnValue
+        }
+    }
+}
+open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - finish
+
+    open var finishCallbackUrlThrowableError: Error?
+    var finishCallbackUrlUnderlyingCallsCount = 0
+    open var finishCallbackUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return finishCallbackUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = finishCallbackUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                finishCallbackUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    finishCallbackUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var finishCallbackUrlCalled: Bool {
+        return finishCallbackUrlCallsCount > 0
+    }
+    open var finishCallbackUrlReceivedCallbackUrl: String?
+    open var finishCallbackUrlReceivedInvocations: [String] = []
+    open var finishCallbackUrlClosure: ((String) async throws -> Void)?
+
+    open override func finish(callbackUrl: String) async throws {
+        if let error = finishCallbackUrlThrowableError {
+            throw error
+        }
+        finishCallbackUrlCallsCount += 1
+        finishCallbackUrlReceivedCallbackUrl = callbackUrl
+        DispatchQueue.main.async {
+            self.finishCallbackUrlReceivedInvocations.append(callbackUrl)
+        }
+        try await finishCallbackUrlClosure?(callbackUrl)
+    }
+
+    //MARK: - url
+
+    var urlUnderlyingCallsCount = 0
+    open var urlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return urlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = urlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                urlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    urlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var urlCalled: Bool {
+        return urlCallsCount > 0
+    }
+
+    var urlUnderlyingReturnValue: String!
+    open var urlReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return urlUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = urlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                urlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    urlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var urlClosure: (() -> String)?
+
+    open override func url() -> String {
+        urlCallsCount += 1
+        if let urlClosure = urlClosure {
+            return urlClosure()
+        } else {
+            return urlReturnValue
         }
     }
 }
