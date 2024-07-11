@@ -68,6 +68,7 @@ struct RoomListFiltersEmptyStateView_Previews: PreviewProvider, TestablePreview 
             }
             RoomListFiltersEmptyStateView(state: .init(activeFilters: [.people, .favourites]))
         }
+        .padding(.bottom)
         .previewLayout(.sizeThatFits)
     }
 }

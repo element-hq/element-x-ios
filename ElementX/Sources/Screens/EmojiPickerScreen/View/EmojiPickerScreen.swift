@@ -95,7 +95,14 @@ struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         EmojiPickerScreen(context: viewModel.context, selectedEmojis: ["😀", "😄"])
             .previewDisplayName("Screen")
-        
+            .snapshot(delay: 0.5)
+    }
+}
+
+struct EmojiPickerScreenSheet_Previews: PreviewProvider {
+    static let viewModel = EmojiPickerScreenViewModel(emojiProvider: EmojiProvider())
+    
+    static var previews: some View {
         Text("Timeline view")
             .sheet(isPresented: .constant(true)) {
                 EmojiPickerScreen(context: viewModel.context, selectedEmojis: ["😀", "😄"])
