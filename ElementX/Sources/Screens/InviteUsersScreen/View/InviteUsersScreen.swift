@@ -169,7 +169,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             InviteUsersScreen(context: viewModel.context)
         }
     }

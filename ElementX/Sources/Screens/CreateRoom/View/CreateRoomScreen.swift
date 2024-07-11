@@ -197,11 +197,11 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
     
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             CreateRoomScreen(context: viewModel.context)
         }
         .previewDisplayName("Create Room")
-        NavigationView {
+        NavigationStack {
             CreateRoomScreen(context: emtpyViewModel.context)
         }
         .previewDisplayName("Create Room without users")
