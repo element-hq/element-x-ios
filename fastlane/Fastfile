@@ -7,7 +7,7 @@ if File.exist?(enterprise)
 end
 
 before_all do
-  xcversion(version: "15.2")
+  xcversion(version: "15.4")
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
@@ -91,7 +91,8 @@ lane :unit_tests do |options|
   if !options[:skip_previews]
     run_tests(
       scheme: "PreviewTests",
-      device: 'iPhone 15',
+      device: 'iPhone SE (3rd generation)',
+      ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,
       xcargs: '-skipPackagePluginValidation',
