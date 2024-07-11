@@ -25,7 +25,7 @@ class Signposter {
     private let logger = Logger(subsystem: subsystem, category: category)
     
     /// Signpost name constants.
-    private enum Name {
+    enum Name {
         static let login: StaticString = "Login"
         static let firstSync: StaticString = "FirstSync"
         static let firstRooms: StaticString = "FirstRooms"
