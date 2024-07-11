@@ -212,6 +212,7 @@
 "common_waiting" = "Ootame…";
 "common_waiting_for_decryption_key" = "Ootame selle sõnumi dekrüptimisvõtit";
 "common.do_not_show_this_again" = "Ära enam näita seda uuesti";
+"common.open_source_licenses" = "Open source licenses";
 "common.send_to" = "Saada kasutajale";
 "common_no_room_name" = "Jututoal puudub nimi";
 "common_poll_end_confirmation" = "Kas oled kindel, et soovid selle küsitluse lõpetada?";
@@ -347,9 +348,9 @@
 "screen_app_lock_setup_biometric_unlock_subtitle" = "Säästa aega ja kasuta alati %1$@ rakenduse lukustuse eemaldamiseks";
 "screen_app_lock_setup_choose_pin" = "Vali PIN-kood";
 "screen_app_lock_setup_confirm_pin" = "Korda PIN-koodi";
-"screen_app_lock_setup_pin_blacklisted_dialog_content" = "Turvakaalutlustel sa ei saa sellist PIN-koodi kasutada";
-"screen_app_lock_setup_pin_blacklisted_dialog_title" = "Kasuta mõnda teist PIN-koodi";
 "screen_app_lock_setup_pin_context" = "Lisamaks oma %1$@ vestlustele turvalisust ja privaatsust, lukusta oma nutiseade.\n\nVali midagi, mis hästi meelde jääb. Kui unustad selle PIN-koodi, siis turvakaalutlustel logitakse sind rakendusest välja.";
+"screen_app_lock_setup_pin_forbidden_dialog_content" = "Turvakaalutlustel sa ei saa sellist PIN-koodi kasutada";
+"screen_app_lock_setup_pin_forbidden_dialog_title" = "Kasuta mõnda teist PIN-koodi";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Palun sisesta sama PIN-kood kaks korda";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN-koodid ei klapi omavahel";
 "screen_app_lock_signout_alert_message" = "Jätkamaks pead uuesti sisse logima ja looma uue PIN-koodi";

@@ -212,6 +212,7 @@
 "common_waiting" = "Čekání...";
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
 "common.do_not_show_this_again" = "Znovu nezobrazovat";
+"common.open_source_licenses" = "Open source licenses";
 "common.send_to" = "Odeslat do";
 "common_no_room_name" = "Žádný název místnosti";
 "common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
@@ -320,7 +321,7 @@
 "screen_advanced_settings_send_read_receipts" = "Potvrzení o přečtení";
 "screen_advanced_settings_send_read_receipts_description" = "Pokud je vypnuto, potvrzení o přečtení se nikomu neodesílají. Stále budete dostávat potvrzení o přečtení od ostatních uživatelů.";
 "screen_advanced_settings_share_presence" = "Sdílejte přítomnost";
-"screen_advanced_settings_share_presence_description" = "Pokud je tato funkce vypnutá, nebudete moci odesílat ani přijímat potvrzení o přečtení ani upozornění na psaní";
+"screen_advanced_settings_share_presence_description" = "Pokud je tato funkce vypnutá, nebudete moci odesílat ani přijímat potvrzení o přečtení ani upozornění o psaní.";
 "screen_advanced_settings_view_source_description" = "Povolit možnost zobrazení zdroje zprávy na časové ose.";
 "screen_analytics_prompt_data_usage" = "Nezaznamenáváme ani neprofilujeme žádné údaje o účtu";
 "screen_analytics_prompt_help_us_improve" = "Sdílejte anonymní údaje o používání, které nám pomohou identifikovat problémy.";
@@ -347,9 +348,9 @@
 "screen_app_lock_setup_biometric_unlock_subtitle" = "Ušetřete si čas a použijte pokaždé %1$@ pro odemknutí aplikace";
 "screen_app_lock_setup_choose_pin" = "Zvolte PIN";
 "screen_app_lock_setup_confirm_pin" = "Potvrďte PIN";
-"screen_app_lock_setup_pin_blacklisted_dialog_content" = "Z bezpečnostních důvodů si toto nemůžete zvolit jako svůj PIN kód";
-"screen_app_lock_setup_pin_blacklisted_dialog_title" = "Zvolte jiný PIN";
 "screen_app_lock_setup_pin_context" = "Zamkněte %1$@ pro zvýšení bezpečnosti vašich konverzací.\n\nVyberte si něco zapamatovatelného. Pokud tento kód PIN zapomenete, budete z aplikace odhlášeni.";
+"screen_app_lock_setup_pin_forbidden_dialog_content" = "Z bezpečnostních důvodů si toto nemůžete zvolit jako svůj PIN kód";
+"screen_app_lock_setup_pin_forbidden_dialog_title" = "Zvolte jiný PIN";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Zadejte stejný PIN dvakrát";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN kódy se neshodují.";
 "screen_app_lock_signout_alert_message" = "Abyste mohli pokračovat, budete se muset znovu přihlásit a vytvořit nový PIN";

@@ -830,16 +830,16 @@ internal enum L10n {
   internal static var screenAppLockSetupChoosePin: String { return L10n.tr("Localizable", "screen_app_lock_setup_choose_pin") }
   /// Confirm PIN
   internal static var screenAppLockSetupConfirmPin: String { return L10n.tr("Localizable", "screen_app_lock_setup_confirm_pin") }
-  /// You cannot choose this as your PIN code for security reasons
-  internal static var screenAppLockSetupPinBlacklistedDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_blacklisted_dialog_content") }
-  /// Choose a different PIN
-  internal static var screenAppLockSetupPinBlacklistedDialogTitle: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_blacklisted_dialog_title") }
   /// Lock %1$@ to add extra security to your chats.
   /// 
   /// Choose something memorable. If you forget this PIN, you will be logged out of the app.
   internal static func screenAppLockSetupPinContext(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_app_lock_setup_pin_context", String(describing: p1))
   }
+  /// You cannot choose this as your PIN code for security reasons
+  internal static var screenAppLockSetupPinForbiddenDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_forbidden_dialog_content") }
+  /// Choose a different PIN
+  internal static var screenAppLockSetupPinForbiddenDialogTitle: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_forbidden_dialog_title") }
   /// Please enter the same PIN twice
   internal static var screenAppLockSetupPinMismatchDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_mismatch_dialog_content") }
   /// PINs don't match
@@ -2226,6 +2226,8 @@ internal enum L10n {
   internal enum Common {
     /// Do not show this again
     internal static var doNotShowThisAgain: String { return L10n.tr("Localizable", "common.do_not_show_this_again") }
+    /// Open source licenses
+    internal static var openSourceLicenses: String { return L10n.tr("Localizable", "common.open_source_licenses") }
     /// Send to
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
   }
