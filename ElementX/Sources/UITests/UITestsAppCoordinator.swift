@@ -520,6 +520,9 @@ class MockScreen: Identifiable {
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             ServiceLocator.shared.settings.migratedAccounts[clientProxy.userID] = true
             
+            let appMediator = AppMediatorMock.default
+            appMediator.underlyingWindowManager = windowManager
+            
             let flowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                              navigationRootCoordinator: navigationRootCoordinator,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
@@ -527,7 +530,7 @@ class MockScreen: Identifiable {
                                                              bugReportService: BugReportServiceMock(),
                                                              elementCallService: ElementCallServiceMock(.init()),
                                                              roomTimelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()),
-                                                             appMediator: AppMediatorMock.default,
+                                                             appMediator: appMediator,
                                                              appSettings: appSettings,
                                                              analytics: ServiceLocator.shared.analytics,
                                                              notificationManager: NotificationManagerMock(),
