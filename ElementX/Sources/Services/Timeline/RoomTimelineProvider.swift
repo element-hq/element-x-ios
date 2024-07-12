@@ -21,15 +21,19 @@ import MatrixRustSDK
 class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
     private let serialDispatchQueue: DispatchQueue
+    
+    private var roomTimelineObservationToken: TaskHandle?
 
-    private let paginationStateSubject = CurrentValueSubject<PaginationState, Never>(.default)
+    private let paginationStateSubject = CurrentValueSubject<PaginationState, Never>(.initial)
     var paginationState: PaginationState {
         paginationStateSubject.value
     }
 
     private let itemProxiesSubject: CurrentValueSubject<[TimelineItemProxy], Never>
-    var itemProxies: [TimelineItemProxy] {
-        itemProxiesSubject.value
+    private(set) var itemProxies: [TimelineItemProxy] = [] {
+        didSet {
+            itemProxiesSubject.send(itemProxies)
+        }
     }
 
     var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
@@ -45,28 +49,40 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         membershipChangeSubject
             .eraseToAnyPublisher()
     }
+    
+    deinit {
+        roomTimelineObservationToken?.cancel()
+    }
 
-    init(currentItems: [TimelineItem],
-         isLive: Bool,
-         updatePublisher: AnyPublisher<[TimelineDiff], Never>,
-         paginationStatePublisher: AnyPublisher<PaginationState, Never>) {
+    init(timeline: Timeline, isLive: Bool, paginationStatePublisher: AnyPublisher<PaginationState, Never>) {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
-        itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>(currentItems.map(TimelineItemProxy.init))
+        itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
         self.isLive = isLive
         
-        // Manually call it here as the didSet doesn't work from constructors
-        itemProxiesSubject.send(itemProxies)
-
-        updatePublisher
-            .receive(on: serialDispatchQueue)
-            .sink { [weak self] in self?.updateItemsWithDiffs($0) }
-            .store(in: &cancellables)
-
         paginationStatePublisher
             .sink { [weak self] in
                 self?.paginationStateSubject.send($0)
             }
             .store(in: &cancellables)
+        
+        Task {
+            roomTimelineObservationToken = await timeline.addListener(listener: RoomTimelineListener { [weak self] timelineDiffs in
+                self?.serialDispatchQueue.sync {
+                    self?.updateItemsWithDiffs(timelineDiffs)
+                }
+            })
+        }
+    }
+    
+    /// A continuation to signal whether the initial timeline items have been loaded and processed.
+    private var hasLoadedInitialItemsContinuation: CheckedContinuation<Void, Never>?
+    /// A method that allows `await`ing the first update of timeline items from the listener, as the items
+    /// aren't added directly to the provider upon initialisation and may take some time to come in.
+    func waitForInitialItems() async {
+        guard itemProxies.isEmpty else { return }
+        return await withCheckedContinuation { continuation in
+            hasLoadedInitialItemsContinuation = continuation
+        }
     }
     
     // MARK: - Private
@@ -80,24 +96,26 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         
         MXLog.verbose("Received timeline diff")
         
-        let items = diffs
-            .reduce(itemProxies) { currentItems, diff in
-                guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
-                    MXLog.error("Failed building CollectionDifference from \(diff)")
-                    return currentItems
-                }
-                
-                guard let updatedItems = currentItems.applying(collectionDiff) else {
-                    MXLog.error("Failed applying diff: \(collectionDiff)")
-                    return currentItems
-                }
-                
-                return updatedItems
+        itemProxies = diffs.reduce(itemProxies) { currentItems, diff in
+            guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
+                MXLog.error("Failed building CollectionDifference from \(diff)")
+                return currentItems
             }
-
-        itemProxiesSubject.send(items)
+            
+            guard let updatedItems = currentItems.applying(collectionDiff) else {
+                MXLog.error("Failed applying diff: \(collectionDiff)")
+                return currentItems
+            }
+            
+            return updatedItems
+        }
         
         MXLog.verbose("Finished applying diffs, current items (\(itemProxies.count)) : \(itemProxies.map(\.debugIdentifier))")
+        
+        if let hasLoadedInitialItemsContinuation {
+            hasLoadedInitialItemsContinuation.resume()
+            self.hasLoadedInitialItemsContinuation = nil
+        }
     }
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -250,4 +268,16 @@ enum DebugIdentifier {
     case event(timelineID: String, eventID: String?, transactionID: String?)
     case virtual(timelineID: String, dscription: String)
     case unknown(timelineID: String)
+}
+
+private final class RoomTimelineListener: TimelineListener {
+    private let onUpdateClosure: ([TimelineDiff]) -> Void
+   
+    init(_ onUpdateClosure: @escaping ([TimelineDiff]) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(diff: [TimelineDiff]) {
+        onUpdateClosure(diff)
+    }
 }

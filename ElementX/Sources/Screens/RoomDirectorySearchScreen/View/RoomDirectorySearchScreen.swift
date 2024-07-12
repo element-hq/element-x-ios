@@ -40,14 +40,12 @@ struct RoomDirectorySearchScreen: View {
                                 .foregroundColor(.compound.textSecondary)
                                 .frame(maxWidth: .infinity)
                                 .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
-                        } else {
-                            // This needs to be in the else as when you start a search, the results are cleared making the footer visible.
-                            // We only want to trigger the pagination when the state is not loading.
-                            emptyRectangle
-                                .onAppear {
-                                    context.send(viewAction: .reachedBottom)
-                                }
                         }
+                        
+                        emptyRectangle
+                            .onAppear {
+                                context.send(viewAction: .reachedBottom)
+                            }
                     }
                     .listRowSeparator(.hidden)
                 }
@@ -85,13 +83,17 @@ struct RoomDirectorySearchScreen_Previews: PreviewProvider, TestablePreview {
                                                  alias: "#test_1:example.com",
                                                  name: "Test 1",
                                                  topic: "Test description 1",
-                                                 avatarURL: nil,
+                                                 avatar: .room(id: "test_1",
+                                                               name: "Test 1",
+                                                               avatarURL: nil),
                                                  canBeJoined: true),
                        RoomDirectorySearchResult(id: "test_2",
                                                  alias: "#test_2:example.com",
                                                  name: "Test 2",
                                                  topic: nil,
-                                                 avatarURL: URL.documentsDirectory,
+                                                 avatar: .room(id: "test_2",
+                                                               name: "Test 2",
+                                                               avatarURL: .documentsDirectory),
                                                  canBeJoined: false)]
         
         let roomDirectorySearchProxy = RoomDirectorySearchProxyMock(configuration: .init(results: results))

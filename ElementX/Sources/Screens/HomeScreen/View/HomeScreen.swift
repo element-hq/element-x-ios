@@ -75,6 +75,7 @@ struct HomeScreen: View {
                     gradientView.alpha = 1
                 }
             }
+            .sentryTrace("\(Self.self)")
     }
     
     // MARK: - Private

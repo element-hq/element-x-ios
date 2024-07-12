@@ -214,6 +214,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 fatalError("Trying to create different room proxies for the same flow coordinator")
             }
             
+            MXLog.warning("Found an existing proxy, returning.")
             return
         }
         
@@ -221,9 +222,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             fatalError("Requesting room details for an unjoined room")
         }
         
-        self.roomProxy = roomProxy
-        
         await roomProxy.subscribeForUpdates()
+        
+        // Make sure not to set this until after the subscription has succeeded, otherwise the
+        // early return above could result in trying to access the room's timeline provider
+        // before it has been set which triggers a fatal error.
+        self.roomProxy = roomProxy
     }
     
     // swiftlint:disable:next function_body_length
@@ -549,6 +553,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy)
         
+        let composerDraftService = ComposerDraftService(roomProxy: roomProxy, timelineItemfactory: timelineItemFactory)
+        
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          focussedEventID: focussedEventID,
                                                          timelineController: timelineController,
@@ -558,7 +564,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          emojiProvider: emojiProvider,
                                                          completionSuggestionService: completionSuggestionService,
                                                          appMediator: appMediator,
-                                                         appSettings: appSettings)
+                                                         appSettings: appSettings,
+                                                         composerDraftService: composerDraftService)
         
         let coordinator = RoomScreenCoordinator(parameters: parameters)
         coordinator.actions
@@ -672,8 +679,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             navigationStackCoordinator.popToRoot(animated: false)
             navigationStackCoordinator.setRootCoordinator(nil, animated: false)
         }
-        
-        roomProxy?.unsubscribeFromUpdates()
         
         timelineController = nil
         

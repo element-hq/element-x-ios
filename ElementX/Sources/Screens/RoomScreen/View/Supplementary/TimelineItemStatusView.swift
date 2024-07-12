@@ -20,7 +20,6 @@ import SwiftUI
 struct TimelineItemStatusView: View {
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
-    @Environment(\.timelineStyle) private var style
     @EnvironmentObject private var context: RoomScreenViewModel.Context
 
     private var isLastOutgoingMessage: Bool {
@@ -51,13 +50,8 @@ struct TimelineItemStatusView: View {
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
             }
         case .sendingFailed:
-            // Bubbles handle the failure internally, but plain items don't.
-            if style == .plain {
-                CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyMD)
-                    .foregroundColor(.compound.iconCriticalPrimary)
-                    .accessibilityLabel(L10n.commonSendingFailed)
-                    .accessibilityHint(L10n.actionTapForOptions)
-            }
+            // Bubbles handle the case internally
+            EmptyView()
         }
     }
 

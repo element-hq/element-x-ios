@@ -211,6 +211,8 @@
 "common_voice_message" = "Mensaje de voz";
 "common_waiting" = "Esperando…";
 "common_waiting_for_decryption_key" = "Esperando este mensaje";
+"common.do_not_show_this_again" = "Do not show this again";
+"common.open_source_licenses" = "Open source licenses";
 "common.send_to" = "Send to";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "¿Estás seguro de que quieres finalizar esta encuesta?";
@@ -250,6 +252,8 @@
 "error_no_compatible_app_found" = "No se encontró ninguna aplicación compatible con esta acción.";
 "error_some_messages_have_not_been_sent" = "Algunos mensajes no se han enviado";
 "error_unknown" = "Lo siento, se ha producido un error";
+"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
+"full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ Únete a mí en %1$@";
 "invite_friends_text" = "Hola, puedes hablar conmigo en %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "¿Estás seguro de que quieres salir de esta conversación? Esta conversación no es pública y no podrás volver a unirte sin una invitación.";
@@ -344,9 +348,9 @@
 "screen_app_lock_setup_biometric_unlock_subtitle" = "Ahorra algo de tiempo y usa %1$@ para desbloquear la aplicación cada vez";
 "screen_app_lock_setup_choose_pin" = "Elegir PIN";
 "screen_app_lock_setup_confirm_pin" = "Confirmar PIN";
-"screen_app_lock_setup_pin_blacklisted_dialog_content" = "No puedes usar este código PIN por motivos de seguridad";
-"screen_app_lock_setup_pin_blacklisted_dialog_title" = "Elige un PIN diferente";
 "screen_app_lock_setup_pin_context" = "Añade un bloqueo a %1$@ para añadir seguridad adicional a tus chats.\n\nElige algo que puedas recordar. Si olvidas este PIN, se cerrará la sesión de la aplicación.";
+"screen_app_lock_setup_pin_forbidden_dialog_content" = "No puedes usar este código PIN por motivos de seguridad";
+"screen_app_lock_setup_pin_forbidden_dialog_title" = "Elige un PIN diferente";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Por favor ingresa el mismo PIN dos veces";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "Los PINs no coinciden";
 "screen_app_lock_signout_alert_message" = "Tendrás que volver a iniciar sesión y crear un nuevo PIN para continuar";
@@ -663,6 +667,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Tu servidor principal no admite esta opción en salas cifradas, no recibirás notificaciones en esta sala.";
 "screen_room_notification_settings_mode_all_messages" = "Todos los mensajes";
 "screen_room_notification_settings_room_custom_settings_title" = "En esta sala, notificarme por";
+"screen_room_retry_send_menu_send_again_action" = "Enviar de nuevo";
 "screen_room_retry_send_menu_title" = "No se pudo enviar tu mensaje";
 "screen_room_roles_and_permissions_admins" = "Administradores";
 "screen_room_roles_and_permissions_change_my_role" = "Cambiar mi rol";

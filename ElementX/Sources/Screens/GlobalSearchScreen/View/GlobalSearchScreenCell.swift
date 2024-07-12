@@ -35,11 +35,9 @@ struct GlobalSearchScreenListRow: View {
     @ViewBuilder @MainActor
     var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
-            LoadableAvatarImage(url: room.avatarURL,
-                                name: room.name,
-                                contentID: room.id,
-                                avatarSize: .room(on: .messageForwarding),
-                                imageProvider: context.imageProvider)
+            RoomAvatarImage(avatar: room.avatar,
+                            avatarSize: .room(on: .messageForwarding),
+                            imageProvider: context.imageProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }
@@ -55,7 +53,9 @@ struct GlobalSearchScreenListRow_Previews: PreviewProvider, TestablePreview {
             GlobalSearchScreenListRow(room: .init(id: "123",
                                                   name: "Tech central",
                                                   alias: "The best place in the whole wide world",
-                                                  avatarURL: .picturesDirectory),
+                                                  avatar: .room(id: "123",
+                                                                name: "Tech central",
+                                                                avatarURL: .picturesDirectory)),
                                       context: viewModel.context)
         }
     }

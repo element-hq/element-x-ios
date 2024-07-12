@@ -22,14 +22,10 @@ final class TimelineProxy: TimelineProxyProtocol {
     private let timeline: Timeline
     
     private var backPaginationStatusObservationToken: TaskHandle?
-    private var roomTimelineObservationToken: TaskHandle?
     
-    // periphery:ignore - retaining purpose
-    private var timelineListener: RoomTimelineListener?
-    
-    private let backPaginationSubscriptionSubject = CurrentValueSubject<PaginationStatus, Never>(.idle)
+    // The default values don't matter here, they will be updated when calling subscribeToPagination.
+    private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
-    private let timelineUpdatesSubject = PassthroughSubject<[TimelineDiff], Never>()
     
     let isLive: Bool
    
@@ -40,7 +36,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     deinit {
         backPaginationStatusObservationToken?.cancel()
-        roomTimelineObservationToken?.cancel()
     }
     
     init(timeline: Timeline, isLive: Bool) {
@@ -54,26 +49,19 @@ final class TimelineProxy: TimelineProxyProtocol {
             return
         }
         
-        let timelineListener = RoomTimelineListener { [weak self] timelineDiffs in
-            self?.timelineUpdatesSubject.send(timelineDiffs)
-        }
-        
-        self.timelineListener = timelineListener
-        
-        let result = await timeline.addListener(listener: timelineListener)
-        roomTimelineObservationToken = result.itemsStream
-        
-        let paginationStatePublisher = backPaginationSubscriptionSubject
+        let paginationStatePublisher = backPaginationStatusSubject
             .combineLatest(forwardPaginationStatusSubject)
             .map { PaginationState(backward: $0.0, forward: $0.1) }
             .eraseToAnyPublisher()
         
         await subscribeToPagination()
         
-        innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
-                                                           isLive: isLive,
-                                                           updatePublisher: timelineUpdatesSubject.eraseToAnyPublisher(),
-                                                           paginationStatePublisher: paginationStatePublisher)
+        let provider = await RoomTimelineProvider(timeline: timeline, isLive: isLive, paginationStatePublisher: paginationStatePublisher)
+        // Make sure the existing items are built so that we have content in the timeline before
+        // determining whether or not the timeline should paginate to load more items.
+        await provider.waitForInitialItems()
+        
+        innerTimelineProvider = provider
     }
     
     func fetchDetails(for eventID: String) {
@@ -93,6 +81,22 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+        // We can't subscribe to back pagination on detached timelines and as live timelines
+        // can be shared between multiple instances of the same room on the stack, it is
+        // safer to still use the subscription logic for back pagination when live.
+        await if isLive {
+            paginateBackwardsOnLive(requestSize: requestSize)
+        } else {
+            focussedPaginate(.backwards, requestSize: requestSize)
+        }
+    }
+    
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+        await focussedPaginate(.forwards, requestSize: requestSize)
+    }
+    
+    /// Paginate backwards using the subscription from Rust to drive the pagination state.
+    private func paginateBackwardsOnLive(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Paginating backwards")
         
         do {
@@ -106,26 +110,36 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
-        // This extra check is necessary as forwards pagination status doesn't support subscribing.
+    /// Paginate forward or backwards using our own logic to drive the pagination state as the
+    /// Rust subscription isn't allowed on focussed/detached timelines.
+    private func focussedPaginate(_ direction: PaginationDirection, requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+        let subject = switch direction {
+        case .backwards: backPaginationStatusSubject
+        case .forwards: forwardPaginationStatusSubject
+        }
+        
+        // This extra check is necessary as detached timelines don't support subscribing to pagination status.
         // We need it to make sure we send a valid status after a failure.
-        guard forwardPaginationStatusSubject.value == .idle else {
-            MXLog.error("Attempting to paginate forwards when already at the end.")
+        guard subject.value == .idle else {
+            MXLog.error("Attempting to paginate \(direction.rawValue) when already at the end.")
             return .failure(.failedPaginatingEndReached)
         }
-
-        MXLog.info("Paginating forwards")
-        forwardPaginationStatusSubject.send(.paginating)
-
+        
+        MXLog.info("Paginating \(direction.rawValue)")
+        subject.send(.paginating)
+        
         do {
-            let timelineEndReached = try await timeline.focusedPaginateForwards(numEvents: requestSize)
-            MXLog.info("Finished paginating forwards")
+            let timelineEndReached = try await switch direction {
+            case .backwards: timeline.paginateBackwards(numEvents: requestSize)
+            case .forwards: timeline.focusedPaginateForwards(numEvents: requestSize)
+            }
+            MXLog.info("Finished paginating \(direction.rawValue)")
 
-            forwardPaginationStatusSubject.send(timelineEndReached ? .timelineEndReached : .idle)
+            subject.send(timelineEndReached ? .timelineEndReached : .idle)
             return .success(())
         } catch {
-            MXLog.error("Failed paginating forwards with error: \(error)")
-            forwardPaginationStatusSubject.send(.idle)
+            MXLog.error("Failed paginating \(direction.rawValue) with error: \(error)")
+            subject.send(.idle)
             return .failure(.sdkError(error))
         }
     }
@@ -144,7 +158,12 @@ final class TimelineProxy: TimelineProxyProtocol {
               intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Editing timeline item: \(timelineItemID)")
         
-        guard let eventTimelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID) else {
+        let editMode: EditMode
+        if let eventID = timelineItemID.eventID {
+            editMode = .remote(eventID: eventID)
+        } else if let eventTimelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID) {
+            editMode = .local(item: eventTimelineItem)
+        } else {
             MXLog.error("Unknown timeline item: \(timelineItemID)")
             return .failure(.failedEditing)
         }
@@ -154,7 +173,14 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                     intentionalMentions: intentionalMentions.toRustMentions())
         
         do {
-            try await timeline.edit(newContent: messageContent, editItem: eventTimelineItem)
+            switch editMode {
+            case let .local(item):
+                guard try await timeline.edit(item: item, newContent: messageContent) == true else {
+                    return .failure(.failedEditing)
+                }
+            case let .remote(eventID):
+                try await timeline.editByEventId(eventId: eventID, newContent: messageContent)
+            }
             
             MXLog.info("Finished editing timeline item: \(timelineItemID)")
             
@@ -186,6 +212,15 @@ final class TimelineProxy: TimelineProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed redacting timeline item: \(timelineItemID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func getLoadedReplyDetails(eventID: String) async -> Result<InReplyToDetails, TimelineProxyError> {
+        do {
+            return try await .success(timeline.loadReplyDetails(eventIdStr: eventID))
+        } catch {
+            MXLog.error("Failed getting reply details for event \(eventID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -344,8 +379,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         do {
             if let eventID {
-                let replyItem = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
-                try await timeline.sendReply(msg: messageContent, replyItem: replyItem)
+                try await timeline.sendReply(msg: messageContent, eventId: eventID)
                 MXLog.info("Finished sending reply to eventID: \(eventID)")
             } else {
                 _ = try await timeline.send(msg: messageContent)
@@ -509,39 +543,32 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     private func subscribeToPagination() async {
-        let backPaginationListener = RoomPaginationStatusListener { [weak self] status in
-            guard let self else {
-                return
+        if isLive {
+            let backPaginationListener = RoomPaginationStatusListener { [weak self] status in
+                guard let self else {
+                    return
+                }
+                
+                switch status {
+                case .idle(let hitStartOfTimeline):
+                    backPaginationStatusSubject.send(hitStartOfTimeline ? .timelineEndReached : .idle)
+                case .paginating:
+                    backPaginationStatusSubject.send(.paginating)
+                }
             }
             
-            switch status {
-            case .idle(let hitStartOfTimeline):
-                backPaginationSubscriptionSubject.send(hitStartOfTimeline ? .timelineEndReached : .idle)
-            case .paginating:
-                backPaginationSubscriptionSubject.send(.paginating)
+            do {
+                backPaginationStatusObservationToken = try await timeline.subscribeToBackPaginationStatus(listener: backPaginationListener)
+            } catch {
+                MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
             }
+        } else {
+            // Detached timelines don't support observation, set the initial state ourself.
+            backPaginationStatusSubject.send(.idle)
         }
         
-        do {
-            backPaginationStatusObservationToken = try await timeline.subscribeToBackPaginationStatus(listener: backPaginationListener)
-        } catch {
-            MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
-        }
-        
-        // Forward pagination doesn't support observation, set the initial state ourself.
+        // Detached timelines don't support observation, set the initial state ourself.
         forwardPaginationStatusSubject.send(isLive ? .timelineEndReached : .idle)
-    }
-}
-
-private final class RoomTimelineListener: TimelineListener {
-    private let onUpdateClosure: ([TimelineDiff]) -> Void
-   
-    init(_ onUpdateClosure: @escaping ([TimelineDiff]) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(diff: [TimelineDiff]) {
-        onUpdateClosure(diff)
     }
 }
 
@@ -597,4 +624,12 @@ extension Array where Element == TimelineItemProxy {
         
         return eventTimelineItemProxy?.item
     }
+}
+
+private enum EditMode {
+    /// edit for a message that is also found locally as a timeline item
+    case local(item: EventTimelineItem)
+    
+    /// edit for a message that was not found locally
+    case remote(eventID: String)
 }

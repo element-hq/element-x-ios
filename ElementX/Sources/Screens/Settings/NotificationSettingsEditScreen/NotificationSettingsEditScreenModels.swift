@@ -110,7 +110,7 @@ struct NotificationSettingsEditScreenRoom: Identifiable, Equatable {
     
     var name = ""
         
-    var avatarURL: URL?
+    var avatar: RoomAvatar
     
     var notificationMode: RoomNotificationModeProxy?
 }

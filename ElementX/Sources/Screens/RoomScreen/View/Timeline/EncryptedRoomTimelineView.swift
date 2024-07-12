@@ -44,8 +44,6 @@ struct EncryptedRoomTimelineView: View {
 }
 
 struct RoomTimelineViewLabelStyle: LabelStyle {
-    @Environment(\.timelineStyle) private var timelineStyle
-    
     func makeBody(configuration: Configuration) -> some View {
         HStack(alignment: .center, spacing: 8) {
             configuration.icon
@@ -53,7 +51,7 @@ struct RoomTimelineViewLabelStyle: LabelStyle {
             configuration.title
                 .foregroundColor(.compound.textPrimary)
         }
-        .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
+        .padding(.horizontal, 4)
     }
 }
 
@@ -62,9 +60,6 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         body.environmentObject(viewModel.context)
-        body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
     }
     
     static var body: some View {

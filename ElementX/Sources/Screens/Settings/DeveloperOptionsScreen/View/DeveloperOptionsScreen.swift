@@ -31,17 +31,18 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
                     Text("Hide grey dots")
                 }
+                
+                Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
+                    Text("Fuzzy searching")
+                }
             }
                                     
             Section("Element Call") {
-                TextField(context.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
+                TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
                     .submitLabel(.done)
                     .onSubmit {
-                        guard let url = URL(string: elementCallBaseURLString) else {
-                            return
-                        }
-                        
-                        context.elementCallBaseURL = url
+                        guard let url = URL(string: elementCallBaseURLString) else { return }
+                        context.elementCallBaseURLOverride = url
                     }
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)
@@ -144,7 +145,8 @@ private struct LogLevelConfigurationView: View {
 // MARK: - Previews
 
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
-    static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings)
+    static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings,
+                                                           elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL)
     static var previews: some View {
         NavigationStack {
             DeveloperOptionsScreen(context: viewModel.context)

@@ -27,6 +27,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let analyticsService: AnalyticsService
+    private let draftService: ComposerDraftServiceProtocol
     
     private let mentionBuilder: MentionBuilderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
@@ -46,15 +47,19 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private var currentLinkData: WysiwygLinkData?
+    
+    private var replyLoadingTask: Task<Void, Never>?
 
     init(wysiwygViewModel: WysiwygComposerViewModel,
          completionSuggestionService: CompletionSuggestionServiceProtocol,
          mediaProvider: MediaProviderProtocol,
          mentionDisplayHelper: MentionDisplayHelper,
-         analyticsService: AnalyticsService) {
+         analyticsService: AnalyticsService,
+         composerDraftService: ComposerDraftServiceProtocol) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.analyticsService = analyticsService
+        draftService = composerDraftService
         
         mentionBuilder = MentionBuilder()
         attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: mentionBuilder)
@@ -151,8 +156,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .cancelReply:
             set(mode: .default)
         case .cancelEdit:
-            set(mode: .default)
-            set(text: "")
+            if let draft = draftService.loadVolatileDraft() {
+                handleLoadDraft(draft)
+                draftService.clearVolatileDraft()
+            } else {
+                set(text: "")
+                set(mode: .default)
+            }
         case .attach(let attachment):
             state.bindings.composerFocused = false
             actionsSubject.send(.attach(attachment))
@@ -177,6 +187,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             completionSuggestionService.processTextMessage(state.bindings.plainComposerText.string)
         case .didToggleFormattingOptions:
             if context.composerFormattingEnabled {
+                guard !context.plainComposerText.string.isEmpty else {
+                    return
+                }
                 DispatchQueue.main.async {
                     self.wysiwygViewModel.textView.flushPills()
                     self.wysiwygViewModel.setMarkdownContent(self.context.plainComposerText.string)
@@ -190,14 +203,36 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     func process(roomAction: RoomScreenComposerAction) {
         switch roomAction {
         case .setMode(mode: let mode):
+            if state.composerMode.isComposingNewMessage, mode.isEdit {
+                handleSaveDraft(isVolatile: true)
+            }
             set(mode: mode)
-        case .setText(text: let text):
-            set(text: text)
+        case .setText(let plainText, let htmlText):
+            if let htmlText, context.composerFormattingEnabled {
+                set(text: htmlText)
+            } else {
+                set(text: plainText)
+            }
         case .removeFocus:
             state.bindings.composerFocused = false
         case .clear:
-            set(mode: .default)
-            set(text: "")
+            if let draft = draftService.loadVolatileDraft() {
+                handleLoadDraft(draft)
+                draftService.clearVolatileDraft()
+            } else {
+                set(mode: .default)
+                set(text: "")
+            }
+        case .saveDraft:
+            handleSaveDraft(isVolatile: false)
+        case .loadDraft:
+            Task {
+                guard case let .success(draft) = await draftService.loadDraft(),
+                      let draft else {
+                    return
+                }
+                handleLoadDraft(draft)
+            }
         }
     }
     
@@ -211,7 +246,110 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     // MARK: - Private
     
-    private func sendPlainComposerText() {
+    private func handleLoadDraft(_ draft: ComposerDraftProxy) {
+        if let html = draft.htmlText {
+            context.composerFormattingEnabled = true
+            DispatchQueue.main.async {
+                self.set(text: html)
+            }
+        } else {
+            context.composerFormattingEnabled = false
+            set(text: draft.plainText)
+        }
+        
+        switch draft.draftType {
+        case .newMessage:
+            set(mode: .default)
+        case .edit(let eventID):
+            set(mode: .edit(originalItemId: .init(timelineID: "", eventID: eventID)))
+        case .reply(let eventID):
+            set(mode: .reply(itemID: .init(timelineID: "", eventID: eventID), replyDetails: .loading(eventID: eventID), isThread: false))
+            replyLoadingTask = Task {
+                let reply = switch await draftService.getReply(eventID: eventID) {
+                case .success(let reply):
+                    reply
+                case .failure:
+                    TimelineItemReply(details: .error(eventID: eventID, message: L10n.commonSomethingWentWrong), isThreaded: false)
+                }
+                
+                guard !Task.isCancelled else {
+                    return
+                }
+                
+                set(mode: .reply(itemID: .init(timelineID: "", eventID: eventID), replyDetails: reply.details, isThread: reply.isThreaded))
+            }
+        }
+    }
+    
+    private func handleSaveDraft(isVolatile: Bool) {
+        let plainText: String
+        let htmlText: String?
+        let type: ComposerDraftProxy.ComposerDraftType
+        
+        if context.composerFormattingEnabled {
+            if wysiwygViewModel.isContentEmpty, state.composerMode == .default {
+                if isVolatile {
+                    draftService.clearVolatileDraft()
+                } else {
+                    Task {
+                        await draftService.clearDraft()
+                    }
+                }
+                return
+            }
+            plainText = wysiwygViewModel.content.markdown
+            htmlText = wysiwygViewModel.content.html
+        } else {
+            if context.plainComposerText.string.isEmpty, state.composerMode == .default {
+                if isVolatile {
+                    draftService.clearVolatileDraft()
+                } else {
+                    Task {
+                        await draftService.clearDraft()
+                    }
+                }
+                return
+            }
+            plainText = plainComposerContent.text
+            htmlText = nil
+        }
+        
+        switch state.composerMode {
+        case .default:
+            type = .newMessage
+        case .edit(let itemID):
+            guard let eventID = itemID.eventID else {
+                MXLog.error("The event id for this message is missing")
+                return
+            }
+            type = .edit(eventID: eventID)
+        case .reply(let itemID, _, _):
+            guard let eventID = itemID.eventID else {
+                MXLog.error("The event id for this message is missing")
+                return
+            }
+            type = .reply(eventID: eventID)
+        default:
+            if isVolatile {
+                draftService.clearVolatileDraft()
+            } else {
+                Task {
+                    await draftService.clearDraft()
+                }
+            }
+            return
+        }
+        
+        if isVolatile {
+            draftService.saveVolatileDraft(.init(plainText: plainText, htmlText: htmlText, draftType: type))
+        } else {
+            Task {
+                await draftService.saveDraft(.init(plainText: plainText, htmlText: htmlText, draftType: type))
+            }
+        }
+    }
+    
+    private var plainComposerContent: PlainComposerContent {
         let attributedString = NSMutableAttributedString(attributedString: context.plainComposerText)
 
         var shouldMakeAnotherPass = false
@@ -258,9 +396,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
         } while shouldMakeAnotherPass
         
-        actionsSubject.send(.sendMessage(plain: attributedString.string, html: nil,
+        return .init(text: attributedString.string, mentionedUserIDs: userIDs, containsAtRoomMention: containsAtRoom)
+    }
+    
+    private func sendPlainComposerText() {
+        let plainComposerContent = plainComposerContent
+        actionsSubject.send(.sendMessage(plain: plainComposerContent.text, html: nil,
                                          mode: state.composerMode,
-                                         intentionalMentions: .init(userIDs: userIDs, atRoom: containsAtRoom)))
+                                         intentionalMentions: .init(userIDs: plainComposerContent.mentionedUserIDs, atRoom: plainComposerContent.containsAtRoomMention)))
     }
     
     private func processVoiceMessageAction(_ action: ComposerToolbarVoiceMessageAction) {
@@ -320,7 +463,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
             
             if context.composerFormattingEnabled {
-                wysiwygViewModel.setMention(url: url.absoluteString, name: item.displayName ?? item.id, mentionType: .user)
+                wysiwygViewModel.setMention(url: url.absoluteString, name: item.id, mentionType: .user)
             } else {
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
                 mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: item.id, userDisplayName: item.displayName)
@@ -338,6 +481,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(mode: RoomScreenComposerMode) {
+        if state.composerMode.isLoadingReply, state.composerMode.replyEventID != mode.replyEventID {
+            replyLoadingTask?.cancel()
+        }
+        
         guard mode != state.composerMode else { return }
 
         state.composerMode = mode
@@ -357,13 +504,56 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func set(text: String) {
         if context.composerFormattingEnabled {
             wysiwygViewModel.textView.flushPills()
-            
             wysiwygViewModel.setHtmlContent(text)
         } else {
-            state.bindings.plainComposerText = .init(string: text)
+            let attributedString = NSMutableAttributedString(string: text)
+
+            parseUserMentionsMarkdown(text) { range, url in
+                // Call your handleUserMention function here
+                attributedString.addAttribute(.link, value: url, range: range)
+            }
+            
+            let matches = MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string)
+            for match in matches {
+                attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
+            }
+            
+            attributedStringBuilder.detectPermalinks(attributedString)
+            
+            state.bindings.plainComposerText = attributedString
         }
     }
-
+    
+    private func parseUserMentionsMarkdown(_ text: String, callback: (NSRange, URL) -> Void) {
+        // Define the regex pattern
+        let pattern = "\\[(.*?)\\]\\(https://matrix\\.to/#/(@.*?)\\)"
+        
+        // Create the regex
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            return
+        }
+        
+        // Find matches in the input text
+        let nsText = text as NSString
+        let matches = regex.matches(in: text, options: [], range: NSRange(location: 0, length: nsText.length))
+        
+        // Process each match
+        for match in matches.sorted(by: { $0.range.length > $1.range.length }) {
+            // Extract the display name, user ID, and full URL
+            guard match.numberOfRanges == 3 else { continue }
+            
+            let userIDRange = match.range(at: 2)
+            let fullRange = match.range(at: 0)
+            
+            let userID = nsText.substring(with: userIDRange)
+            let fullURLString = "https://matrix.to/#/\(userID)"
+            
+            if let url = URL(string: fullURLString) {
+                callback(fullRange, url)
+            }
+        }
+    }
+    
     private func createLinkAlert() {
         let linkAction = wysiwygViewModel.getLinkAction()
         currentLinkData = WysiwygLinkData(action: linkAction,
@@ -516,4 +706,10 @@ private final class ComposerMentionReplacer: MentionReplacer {
     func replacementForMention(_ url: String, text: String) -> NSAttributedString? {
         replacementForMentionClosure(url, text)
     }
+}
+
+private struct PlainComposerContent {
+    let text: String
+    let mentionedUserIDs: Set<String>
+    let containsAtRoomMention: Bool
 }

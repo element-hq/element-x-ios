@@ -73,7 +73,7 @@
 "action_quick_reply" = "Réponse rapide";
 "action_quote" = "Citer";
 "action_react" = "Réagissez";
-"action_reject" = "Reject";
+"action_reject" = "Rejeter";
 "action_remove" = "Supprimer";
 "action_reply" = "Répondre";
 "action_reply_in_thread" = "Répondre dans le fil de discussion";
@@ -202,7 +202,7 @@
 "common_unable_to_invite_message" = "Les invitations n’ont pas pu être envoyées à un ou plusieurs utilisateurs.";
 "common_unable_to_invite_title" = "Impossible d’envoyer une ou plusieurs invitations";
 "common_unlock" = "Déverrouillage";
-"common_unmute" = "Annuler la sourdine";
+"common_unmute" = "Retirer la sourdine";
 "common_unsupported_event" = "Événement non pris en charge";
 "common_username" = "Nom d’utilisateur";
 "common_verification_cancelled" = "Vérification annulée";
@@ -211,6 +211,8 @@
 "common_voice_message" = "Message vocal";
 "common_waiting" = "En attente...";
 "common_waiting_for_decryption_key" = "En attente de la clé de déchiffrement";
+"common.do_not_show_this_again" = "Ne plus afficher";
+"common.open_source_licenses" = "Open source licenses";
 "common.send_to" = "Envoyer vers";
 "common_no_room_name" = "Salon sans nom";
 "common_poll_end_confirmation" = "Êtes-vous sûr de vouloir mettre fin à ce sondage ?";
@@ -250,6 +252,8 @@
 "error_no_compatible_app_found" = "Aucune application compatible n’a été trouvée pour gérer cette action.";
 "error_some_messages_have_not_been_sent" = "Certains messages n’ont pas été envoyés";
 "error_unknown" = "Désolé, une erreur s’est produite";
+"full_screen_intent_banner_message" = "Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé.";
+"full_screen_intent_banner_title" = "Améliorez votre expérience d'appel";
 "invite_friends_rich_title" = "🔐️ Rejoignez-moi sur %1$@";
 "invite_friends_text" = "Salut, parle-moi sur %1$@ : %2$@";
 "leave_conversation_alert_subtitle" = "Êtes-vous sûr de vouloir quitter cette discussion? Vous ne pourrez pas la rejoindre à nouveau sans y être invité.";
@@ -260,9 +264,9 @@
 "notification_channel_call" = "Appel";
 "notification_channel_listening_for_events" = "À l’écoute des événements";
 "notification_channel_noisy" = "Notifications bruyantes";
-"notification_channel_ringing_calls" = "Ringing calls";
+"notification_channel_ringing_calls" = "Appels entrants";
 "notification_channel_silent" = "Notifications silencieuses";
-"notification_incoming_call" = "Incoming call";
+"notification_incoming_call" = "Appel entrant";
 "notification_inline_reply_failed" = "** Échec de l’envoi - veuillez ouvrir le salon";
 "notification_invitation_action_reject" = "Rejeter";
 "notification_invite_body" = "Vous a invité(e) à discuter";
@@ -317,7 +321,7 @@
 "screen_advanced_settings_send_read_receipts" = "Accusés de lecture";
 "screen_advanced_settings_send_read_receipts_description" = "En cas de désactivation, vos accusés de lecture ne seront pas envoyés aux autres membres. Vous verrez toujours les accusés des autres membres.";
 "screen_advanced_settings_share_presence" = "Partager la présence";
-"screen_advanced_settings_share_presence_description" = "Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie";
+"screen_advanced_settings_share_presence_description" = "Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie.";
 "screen_advanced_settings_view_source_description" = "Activer cette option pour pouvoir voir la source des messages dans la discussion.";
 "screen_analytics_prompt_data_usage" = "Nous n’enregistrerons ni ne profilerons aucune donnée personnelle";
 "screen_analytics_prompt_help_us_improve" = "Partagez des données d’utilisation anonymes pour nous aider à identifier les problèmes.";
@@ -344,9 +348,9 @@
 "screen_app_lock_setup_biometric_unlock_subtitle" = "Gagnez du temps en utilisant %1$@ pour déverrouiller l’application à chaque fois.";
 "screen_app_lock_setup_choose_pin" = "Choisissez un code PIN";
 "screen_app_lock_setup_confirm_pin" = "Confirmer le code PIN";
-"screen_app_lock_setup_pin_blacklisted_dialog_content" = "Vous ne pouvez pas choisir ce code PIN pour des raisons de sécurité";
-"screen_app_lock_setup_pin_blacklisted_dialog_title" = "Choisissez un code PIN différent";
 "screen_app_lock_setup_pin_context" = "Verrouillez %1$@ pour ajouter une sécurité supplémentaire à vos discussions.\n\nChoisissez un code facile à retenir. Si vous oubliez le code PIN, vous serez déconnecté.";
+"screen_app_lock_setup_pin_forbidden_dialog_content" = "Vous ne pouvez pas choisir ce code PIN pour des raisons de sécurité";
+"screen_app_lock_setup_pin_forbidden_dialog_title" = "Choisissez un code PIN différent";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Veuillez saisir le même code PIN deux fois";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "Les codes PIN ne correspondent pas";
 "screen_app_lock_signout_alert_message" = "Pour continuer, vous devrez vous connecter à nouveau et créer un nouveau code PIN.";
@@ -540,8 +544,8 @@
 "screen_recovery_key_change_success" = "Clé de récupération modifée";
 "screen_recovery_key_change_title" = "Changer la clé de récupération?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Créer une nouvelle clé de récupération";
-"screen_recovery_key_confirm_description" = "Assurez vous que personne d'autre ne regarde l'écran!";
-"screen_recovery_key_confirm_error_content" = "Veuillez réessayer pour accéder à votre historique chiffré.";
+"screen_recovery_key_confirm_description" = "Assurez vous que personne d'autre ne regarde votre écran!";
+"screen_recovery_key_confirm_error_content" = "Veuillez réessayer afin de pouvoir accéder à vos anciens messages.";
 "screen_recovery_key_confirm_error_title" = "Clé de récupération incorrecte";
 "screen_recovery_key_confirm_key_description" = "Si vous avez une clé de sécurité ou une phrase de sécurité, cela fonctionnera également.";
 "screen_recovery_key_confirm_key_label" = "Clé de récupération";
@@ -620,7 +624,7 @@
 "screen_room_encrypted_history_banner_unverified" = "L’historique de la discussion n’est pas disponible. Vérifiez cette session pour accéder à l’historique.";
 "screen_room_error_failed_retrieving_user_details" = "Impossible de récupérer les détails de l’utilisateur";
 "screen_room_invite_again_alert_message" = "Souhaitez-vous inviter l’ancien membre à revenir ?";
-"screen_room_invite_again_alert_title" = "Vous êtes seul dans ce salon";
+"screen_room_invite_again_alert_title" = "Vous êtes seul dans cette discussion";
 "screen_room_member_details_block_alert_action" = "Bloquer";
 "screen_room_member_details_block_alert_description" = "Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment.";
 "screen_room_member_details_block_user" = "Bloquer l’utilisateur";
@@ -663,6 +667,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous ne serez pas notifié(e) dans ce salon.";
 "screen_room_notification_settings_mode_all_messages" = "Tous les messages";
 "screen_room_notification_settings_room_custom_settings_title" = "Dans ce salon, prévenez-moi pour";
+"screen_room_retry_send_menu_send_again_action" = "Envoyer à nouveau";
 "screen_room_retry_send_menu_title" = "Votre message n’a pas pu être envoyé";
 "screen_room_roles_and_permissions_admins" = "Administrateurs";
 "screen_room_roles_and_permissions_change_my_role" = "Changer mon rôle";
@@ -725,7 +730,7 @@
 "screen_session_verification_compare_numbers_subtitle" = "Confirmez que les nombres ci-dessous correspondent à ceux affichés sur votre autre session.";
 "screen_session_verification_compare_numbers_title" = "Comparez les nombres";
 "screen_session_verification_complete_subtitle" = "Votre nouvelle session est désormais vérifiée. Elle a accès à vos messages chiffrés et les autres utilisateurs la verront identifiée comme fiable.";
-"screen_session_verification_enter_recovery_key" = "Confirmer la clé de récupération";
+"screen_session_verification_enter_recovery_key" = "Utiliser la clé de récupération";
 "screen_session_verification_open_existing_session_subtitle" = "Prouvez qu’il s’agit bien de vous pour accéder à l’historique de vos messages chiffrés.";
 "screen_session_verification_open_existing_session_title" = "Ouvrir une session existante";
 "screen_session_verification_positive_button_canceled" = "Réessayer la vérification";

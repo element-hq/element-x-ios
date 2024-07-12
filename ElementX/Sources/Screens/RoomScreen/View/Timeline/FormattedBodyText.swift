@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct FormattedBodyText: View {
-    @Environment(\.timelineStyle) private var timelineStyle
     @Environment(\.layoutDirection) private var layoutDirection
     
     private let attributedString: AttributedString
@@ -81,17 +80,12 @@ struct FormattedBodyText: View {
     
     @ViewBuilder
     var mainContent: some View {
-        if timelineStyle == .bubbles {
-            bubbleLayout
-                .tint(.compound.textLinkExternal)
-        } else {
-            plainLayout
-                .tint(.compound.textLinkExternal)
-        }
+        layout
+            .tint(.compound.textLinkExternal)
     }
     
     /// The attributed components laid out for the bubbles timeline style.
-    var bubbleLayout: some View {
+    var layout: some View {
         TimelineBubbleLayout(spacing: 8) {
             ForEach(attributedComponents) { component in
                 // Ignore if the string contains only the layout correction
@@ -115,7 +109,7 @@ struct FormattedBodyText: View {
                         .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                 } else {
                     MessageText(attributedString: component.attributedString)
-                        .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
+                        .padding(.horizontal, 4)
                         .fixedSize(horizontal: false, vertical: true)
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 }
@@ -130,27 +124,6 @@ struct FormattedBodyText: View {
                         .padding(.leading, 12.0)
                         .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
                         .hidden()
-                }
-            }
-        }
-    }
-    
-    /// The attributed components laid out for the plain timeline style.
-    var plainLayout: some View {
-        VStack(alignment: .leading, spacing: 8.0) {
-            ForEach(attributedComponents) { component in
-                if component.isBlockquote {
-                    HStack(spacing: 4.0) {
-                        Rectangle()
-                            .foregroundColor(Color.red)
-                            .frame(width: 4.0)
-                        MessageText(attributedString: component.attributedString)
-                    }
-                    .fixedSize(horizontal: false, vertical: true)
-                } else {
-                    MessageText(attributedString: component.attributedString)
-                        .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
-                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
         }
@@ -173,8 +146,6 @@ struct FormattedBodyText: View {
 struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         body
-        body
-            .environment(\.timelineStyle, .plain)
     }
     
     @ViewBuilder
@@ -248,13 +219,11 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
 }
 
 private struct PreviewBubbleModifier: ViewModifier {
-    @Environment(\.timelineStyle) private var timelineStyle
-    
     func body(content: Content) -> some View {
         content
-            .padding(timelineStyle == .bubbles ? 8 : 0)
-            .background(timelineStyle == .bubbles ? Color.compound._bgBubbleOutgoing : nil)
-            .cornerRadius(timelineStyle == .bubbles ? 12 : 0)
+            .padding(8)
+            .background(Color.compound._bgBubbleOutgoing)
+            .cornerRadius(12)
             .environmentObject(RoomScreenViewModel.mock.context)
     }
 }

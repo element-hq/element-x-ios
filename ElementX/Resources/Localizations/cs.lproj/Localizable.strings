@@ -73,7 +73,7 @@
 "action_quick_reply" = "Rychlá odpověď";
 "action_quote" = "Citovat";
 "action_react" = "Reagovat";
-"action_reject" = "Reject";
+"action_reject" = "Odmítnout";
 "action_remove" = "Odstranit";
 "action_reply" = "Odpovědět";
 "action_reply_in_thread" = "Odpovědět ve vlákně";
@@ -211,7 +211,9 @@
 "common_voice_message" = "Hlasová zpráva";
 "common_waiting" = "Čekání...";
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
-"common.send_to" = "Send to";
+"common.do_not_show_this_again" = "Znovu nezobrazovat";
+"common.open_source_licenses" = "Open source licenses";
+"common.send_to" = "Odeslat do";
 "common_no_room_name" = "Žádný název místnosti";
 "common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
 "common_poll_summary" = "Hlasování: %1$@";
@@ -250,6 +252,8 @@
 "error_no_compatible_app_found" = "Nebyla nalezena žádná kompatibilní aplikace, která by tuto akci zpracovala.";
 "error_some_messages_have_not_been_sent" = "Některé zprávy nebyly odeslány";
 "error_unknown" = "Omlouváme se, došlo k chybě";
+"full_screen_intent_banner_message" = "Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen.";
+"full_screen_intent_banner_title" = "Vylepšete si zážitek z volání";
 "invite_friends_rich_title" = "🔐️ Připojte se ke mně na %1$@";
 "invite_friends_text" = "Ahoj, ozvi se mi na %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "Opravdu chcete opustit tuto konverzaci? Tato konverzace není veřejná a bez pozvánky se k ní nebudete moci znovu připojit.";
@@ -262,7 +266,7 @@
 "notification_channel_noisy" = "Hlasitá oznámení";
 "notification_channel_ringing_calls" = "Vyzvánění hovorů";
 "notification_channel_silent" = "Tichá oznámení";
-"notification_incoming_call" = "Incoming call";
+"notification_incoming_call" = "Příchozí hovor";
 "notification_inline_reply_failed" = "** Nepodařilo se odeslat - otevřete prosím místnost";
 "notification_invitation_action_reject" = "Odmítnout";
 "notification_invite_body" = "Vás pozval(a) do chatu";
@@ -317,7 +321,7 @@
 "screen_advanced_settings_send_read_receipts" = "Potvrzení o přečtení";
 "screen_advanced_settings_send_read_receipts_description" = "Pokud je vypnuto, potvrzení o přečtení se nikomu neodesílají. Stále budete dostávat potvrzení o přečtení od ostatních uživatelů.";
 "screen_advanced_settings_share_presence" = "Sdílejte přítomnost";
-"screen_advanced_settings_share_presence_description" = "Pokud je tato funkce vypnutá, nebudete moci odesílat ani přijímat potvrzení o přečtení ani upozornění na psaní";
+"screen_advanced_settings_share_presence_description" = "Pokud je tato funkce vypnutá, nebudete moci odesílat ani přijímat potvrzení o přečtení ani upozornění o psaní.";
 "screen_advanced_settings_view_source_description" = "Povolit možnost zobrazení zdroje zprávy na časové ose.";
 "screen_analytics_prompt_data_usage" = "Nezaznamenáváme ani neprofilujeme žádné údaje o účtu";
 "screen_analytics_prompt_help_us_improve" = "Sdílejte anonymní údaje o používání, které nám pomohou identifikovat problémy.";
@@ -344,9 +348,9 @@
 "screen_app_lock_setup_biometric_unlock_subtitle" = "Ušetřete si čas a použijte pokaždé %1$@ pro odemknutí aplikace";
 "screen_app_lock_setup_choose_pin" = "Zvolte PIN";
 "screen_app_lock_setup_confirm_pin" = "Potvrďte PIN";
-"screen_app_lock_setup_pin_blacklisted_dialog_content" = "Z bezpečnostních důvodů si toto nemůžete zvolit jako svůj PIN kód";
-"screen_app_lock_setup_pin_blacklisted_dialog_title" = "Zvolte jiný PIN";
 "screen_app_lock_setup_pin_context" = "Zamkněte %1$@ pro zvýšení bezpečnosti vašich konverzací.\n\nVyberte si něco zapamatovatelného. Pokud tento kód PIN zapomenete, budete z aplikace odhlášeni.";
+"screen_app_lock_setup_pin_forbidden_dialog_content" = "Z bezpečnostních důvodů si toto nemůžete zvolit jako svůj PIN kód";
+"screen_app_lock_setup_pin_forbidden_dialog_title" = "Zvolte jiný PIN";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Zadejte stejný PIN dvakrát";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN kódy se neshodují.";
 "screen_app_lock_signout_alert_message" = "Abyste mohli pokračovat, budete se muset znovu přihlásit a vytvořit nový PIN";
@@ -663,6 +667,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Váš domovský server tuto možnost nepodporuje v šifrovaných místnostech, v této místnosti nebudete dostávat upozornění.";
 "screen_room_notification_settings_mode_all_messages" = "Všechny zprávy";
 "screen_room_notification_settings_room_custom_settings_title" = "V této místnosti mě upozornit na";
+"screen_room_retry_send_menu_send_again_action" = "Odeslat znovu";
 "screen_room_retry_send_menu_title" = "Vaši zprávu se nepodařilo odeslat";
 "screen_room_roles_and_permissions_admins" = "Správci";
 "screen_room_roles_and_permissions_change_my_role" = "Změnit moji roli";

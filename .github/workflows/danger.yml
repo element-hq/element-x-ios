@@ -1,6 +1,8 @@
 name: Danger CI
 
-on: [pull_request]
+on:
+  pull_request:
+    types: [ labeled, synchronize, opened, reopened ]
 
 jobs:
   build:

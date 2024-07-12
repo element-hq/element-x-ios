@@ -31,6 +31,7 @@ struct FormActionButtonStyle: ButtonStyle {
             Text(title)
                 .foregroundColor(.compound.textPrimary)
                 .font(.compound.bodyLG)
+                .textCase(.none)
         }
         .padding(.horizontal, 4)
         .padding(.vertical, 8)

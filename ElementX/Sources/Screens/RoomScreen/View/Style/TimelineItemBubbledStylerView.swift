@@ -73,7 +73,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .padding(.leading, bubbleAvatarPadding)
             }
         }
-        .padding(TimelineStyle.bubbles.rowInsets)
+        .padding(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
         .highlightedTimelineItem(isFocussed)
     }
     
@@ -110,9 +110,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         VStack(alignment: alignment, spacing: -3) {
             messageBubble
                 .timelineItemAccessibility(timelineItem) {
-                    if adjustedDeliveryStatus != .sendingFailed {
-                        context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
-                    }
+                    context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
                 }
             
             if !timelineItem.properties.reactions.isEmpty {
@@ -128,9 +126,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubble: some View {
         styledContent
-            .onTapGesture(count: 2) {
-                context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
-            }
             .onTapGesture {
                 context.send(viewAction: .itemTapped(itemID: timelineItem.id))
             }
@@ -521,7 +516,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                 }
             }
         }
-        .environment(\.timelineStyle, .bubbles)
         .environmentObject(viewModel.context)
     }
 

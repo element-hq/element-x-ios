@@ -39,11 +39,9 @@ struct NotificationSettingsEditScreenRoomCell: View {
     @ViewBuilder @MainActor
     var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
-            LoadableAvatarImage(url: room.avatarURL,
-                                name: room.name,
-                                contentID: room.roomId,
-                                avatarSize: .room(on: .notificationSettings),
-                                imageProvider: context.imageProvider)
+            RoomAvatarImage(avatar: room.avatar,
+                            avatarSize: .room(on: .notificationSettings),
+                            imageProvider: context.imageProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }
@@ -70,16 +68,12 @@ struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider, Testabl
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         
         let rooms: [NotificationSettingsEditScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary -> NotificationSettingsEditScreenRoom? in
-            switch summary {
-            case .empty, .invalidated:
-                return nil
-            case .filled(let details):
-                return NotificationSettingsEditScreenRoom(id: UUID().uuidString,
-                                                          roomId: details.id,
-                                                          name: details.name)
-            }
+            NotificationSettingsEditScreenRoom(id: UUID().uuidString,
+                                               roomId: summary.id,
+                                               name: summary.name,
+                                               avatar: summary.avatar)
         }
-
+        
         return VStack(spacing: 0) {
             ForEach(rooms) { room in
                 NotificationSettingsEditScreenRoomCell(room: room, context: viewModel.context)

@@ -81,13 +81,13 @@ struct RoomScreen: View {
                 context.send(viewAction: .handlePasteOrDrop(provider: provider))
                 return true
             }
+            .sentryTrace("\(Self.self)")
     }
 
     private var timeline: some View {
         TimelineView()
             .id(context.viewState.roomID)
             .environmentObject(context)
-            .environment(\.timelineStyle, context.viewState.timelineStyle)
             .environment(\.focussedEventID, context.viewState.timelineViewState.focussedEvent?.eventID)
             .overlay(alignment: .bottomTrailing) {
                 scrollToBottomButton
@@ -137,9 +137,8 @@ struct RoomScreen: View {
         // .principal + .primaryAction works better than .navigation leading + trailing
         // as the latter disables interaction in the action button for rooms with long names
         ToolbarItem(placement: .principal) {
-            RoomHeaderView(roomID: context.viewState.roomID,
-                           roomName: context.viewState.roomTitle,
-                           avatarURL: context.viewState.roomAvatarURL,
+            RoomHeaderView(roomName: context.viewState.roomTitle,
+                           roomAvatar: context.viewState.roomAvatar,
                            imageProvider: context.imageProvider)
                 // Using a button stops it from getting truncated in the navigation bar
                 .onTapGesture {
@@ -184,7 +183,9 @@ struct RoomScreen: View {
 // MARK: - Previews
 
 struct RoomScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room", hasOngoingCall: true)),
+    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(id: "stable_id",
+                                                                              name: "Preview room",
+                                                                              hasOngoingCall: true)),
                                                timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
                                                mediaPlayerProvider: MediaPlayerProviderMock(),

@@ -41,12 +41,20 @@ enum ClientProxyError: Error {
     case sdkError(Error)
     
     case invalidMedia
+    case invalidUserIDServerName
     case failedUploadingMedia(Error, MatrixErrorCode)
 }
 
 enum SlidingSyncConstants {
-    static let defaultTimelineLimit: UInt = 20
+    static let defaultTimelineLimit: UInt32 = 20
     static let maximumVisibleRangeSize = 30
+    static let defaultRequiredState = [
+        RequiredState(key: "m.room.name", value: ""),
+        RequiredState(key: "m.room.topic", value: ""),
+        RequiredState(key: "m.room.avatar", value: ""),
+        RequiredState(key: "m.room.canonical_alias", value: ""),
+        RequiredState(key: "m.room.join_rules", value: "")
+    ]
 }
 
 /// This struct represents the configuration that we are using to register the application through Pusher to Sygnal
@@ -94,6 +102,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var deviceID: String? { get }
 
     var homeserver: String { get }
+    
+    var userIDServerName: String? { get }
         
     var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> { get }
 
@@ -131,6 +141,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func joinRoom(_ roomID: String, via: [String]) async -> Result<Void, ClientProxyError>
     
+    func joinRoomAlias(_ roomAlias: String) async -> Result<Void, ClientProxyError>
+    
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError>
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
@@ -160,6 +172,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol
     
     func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError>
+    
+    func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError>
 
     // MARK: - Ignored users
     

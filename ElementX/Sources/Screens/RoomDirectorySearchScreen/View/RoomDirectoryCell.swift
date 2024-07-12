@@ -44,11 +44,9 @@ struct RoomDirectorySearchCell: View {
     }
     
     private var avatar: some View {
-        LoadableAvatarImage(url: result.avatarURL,
-                            name: result.name,
-                            contentID: result.id,
-                            avatarSize: .room(on: .roomDirectorySearch),
-                            imageProvider: imageProvider)
+        RoomAvatarImage(avatar: result.avatar,
+                        avatarSize: .room(on: .roomDirectorySearch),
+                        imageProvider: imageProvider)
             .accessibilityHidden(true)
     }
 }
@@ -62,7 +60,9 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   alias: "#test:example.com",
                                                   name: "Test title",
                                                   topic: "test description",
-                                                  avatarURL: nil,
+                                                  avatar: .room(id: "!test_id_1:matrix.org",
+                                                                name: "Test title",
+                                                                avatarURL: nil),
                                                   canBeJoined: true),
                                     imageProvider: MockMediaProvider()) { }
             
@@ -70,7 +70,9 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   alias: "#test:example.com",
                                                   name: nil,
                                                   topic: "test description",
-                                                  avatarURL: nil,
+                                                  avatar: .room(id: "!test_id_2:matrix.org",
+                                                                name: nil,
+                                                                avatarURL: nil),
                                                   canBeJoined: true),
                                     imageProvider: MockMediaProvider()) { }
             
@@ -78,7 +80,9 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   alias: "#test_no_topic:example.com",
                                                   name: "Test title no topic",
                                                   topic: nil,
-                                                  avatarURL: nil,
+                                                  avatar: .room(id: "!test_id_3:example.com",
+                                                                name: "Test title no topic",
+                                                                avatarURL: nil),
                                                   canBeJoined: true),
                                     imageProvider: MockMediaProvider()) { }
             
@@ -86,7 +90,9 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   alias: "#test_no_topic:example.com",
                                                   name: nil,
                                                   topic: nil,
-                                                  avatarURL: nil,
+                                                  avatar: .room(id: "!test_id_4:example.com",
+                                                                name: nil,
+                                                                avatarURL: nil),
                                                   canBeJoined: true),
                                     imageProvider: MockMediaProvider()) { }
             
@@ -94,7 +100,9 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   alias: nil,
                                                   name: "Test title no alias",
                                                   topic: nil,
-                                                  avatarURL: nil,
+                                                  avatar: .room(id: "!test_id_5:example.com",
+                                                                name: "Test title no alias",
+                                                                avatarURL: nil),
                                                   canBeJoined: false),
                                     imageProvider: MockMediaProvider()) { }
             
@@ -102,7 +110,9 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   alias: nil,
                                                   name: "Test title no alias",
                                                   topic: "Topic",
-                                                  avatarURL: nil,
+                                                  avatar: .room(id: "!test_id_6:example.com",
+                                                                name: "Test title no alias",
+                                                                avatarURL: nil),
                                                   canBeJoined: false),
                                     imageProvider: MockMediaProvider()) { }
             
@@ -110,15 +120,18 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   alias: nil,
                                                   name: nil,
                                                   topic: "Topic",
-                                                  avatarURL: nil,
+                                                  avatar: .room(id: "!test_id_7:example.com",
+                                                                name: nil,
+                                                                avatarURL: nil),
                                                   canBeJoined: false),
                                     imageProvider: MockMediaProvider()) { }
             RoomDirectorySearchCell(result: .init(id: "!test_id_8:example.com",
-                                                  
                                                   alias: nil,
                                                   name: nil,
                                                   topic: nil,
-                                                  avatarURL: nil,
+                                                  avatar: .room(id: "!test_id_8:example.com",
+                                                                name: nil,
+                                                                avatarURL: nil),
                                                   canBeJoined: false),
                                     imageProvider: MockMediaProvider()) { }
         }

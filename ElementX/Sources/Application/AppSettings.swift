@@ -39,11 +39,12 @@ final class AppSettings {
         case sharePresence
         case hideUnreadMessagesBadge
         
-        case elementCallBaseURL
+        case elementCallBaseURLOverride
         case elementCallEncryptionEnabled
         
         // Feature flags
         case publicSearchEnabled
+        case fuzzyRoomListSearchEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -73,6 +74,14 @@ final class AppSettings {
         store = userDefaults
     }
     
+    // MARK: - Hooks
+    
+    func override(defaultHomeserverAddress: String? = nil) {
+        if let defaultHomeserverAddress {
+            self.defaultHomeserverAddress = defaultHomeserverAddress
+        }
+    }
+    
     // MARK: - Application
     
     /// Whether or not the app is a development build that isn't in production.
@@ -93,7 +102,7 @@ final class AppSettings {
         
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
-    let defaultHomeserverAddress = "matrix.org"
+    private(set) var defaultHomeserverAddress = "matrix.org"
     
     /// An override of the homeserver's Sliding Sync proxy URL. This allows development against servers
     /// that don't yet have an officially trusted proxy configured in their well-known.
@@ -205,14 +214,14 @@ final class AppSettings {
     #if DEBUG
     /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element."),
                                                         host: "https://posthog.element.dev",
                                                         apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
                                                         termsURL: "https://element.io/cookie-policy")
     #else
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element."),
                                                         host: "https://posthog.element.io",
                                                         apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
                                                         termsURL: URL("https://element.io/cookie-policy"))
@@ -235,16 +244,15 @@ final class AppSettings {
     
     // MARK: - Room Screen
     
-    @UserPreference(key: UserDefaultsKeys.timelineStyle, defaultValue: TimelineStyle.bubbles, storageType: .userDefaults(store))
-    var timelineStyle
-    
     @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var viewSourceEnabled
 
     // MARK: - Element Call
     
-    @UserPreference(key: UserDefaultsKeys.elementCallBaseURL, defaultValue: "https://call.element.io", storageType: .userDefaults(store))
-    var elementCallBaseURL: URL
+    let elementCallBaseURL: URL = "https://call.element.io"
+    
+    @UserPreference(key: UserDefaultsKeys.elementCallBaseURLOverride, defaultValue: nil, storageType: .userDefaults(store))
+    var elementCallBaseURLOverride: URL?
     
     // MARK: - Users
     
@@ -268,6 +276,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.publicSearchEnabled, defaultValue: isDevelopmentBuild, storageType: .volatile)
     var publicSearchEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var fuzzyRoomListSearchEnabled
         
     #endif
     

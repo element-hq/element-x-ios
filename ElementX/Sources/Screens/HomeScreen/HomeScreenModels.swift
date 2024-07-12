@@ -152,12 +152,11 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     static let placeholderLastMessage = AttributedString("Hidden last message")
         
-    /// The list item identifier can be a real room identifier, a custom one for invalidated entries
-    /// or a completely unique one for empty items and skeletons
+    /// The list item identifier is it's room identifier.
     let id: String
     
     /// The real room identifier this item points to
-    let roomId: String?
+    let roomID: String?
     
     let type: RoomType
     
@@ -181,7 +180,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let lastMessage: AttributedString?
     
-    let avatarURL: URL?
+    let avatar: RoomAvatar
     
     let inviter: InviterDetails?
     
@@ -189,7 +188,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     static func placeholder() -> HomeScreenRoom {
         HomeScreenRoom(id: UUID().uuidString,
-                       roomId: nil,
+                       roomID: nil,
                        type: .placeholder,
                        badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, isCallShown: false),
                        name: "Placeholder room name",
@@ -198,46 +197,46 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        isFavourite: false,
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
-                       avatarURL: nil,
+                       avatar: .room(id: "", name: "", avatarURL: nil),
                        inviter: nil,
                        canonicalAlias: nil)
     }
 }
 
 extension HomeScreenRoom {
-    init(details: RoomSummaryDetails, invalidated: Bool, hideUnreadMessagesBadge: Bool) {
-        let identifier = invalidated ? "invalidated-" + details.id : details.id
+    init(summary: RoomSummary, hideUnreadMessagesBadge: Bool) {
+        let identifier = summary.id
         
-        let hasUnreadMessages = hideUnreadMessagesBadge ? false : details.hasUnreadMessages
+        let hasUnreadMessages = hideUnreadMessagesBadge ? false : summary.hasUnreadMessages
         
-        let isDotShown = hasUnreadMessages || details.hasUnreadMentions || details.hasUnreadNotifications || details.isMarkedUnread
-        let isMentionShown = details.hasUnreadMentions && !details.isMuted
-        let isMuteShown = details.isMuted
-        let isCallShown = details.hasOngoingCall
-        let isHighlighted = details.isMarkedUnread || (!details.isMuted && (details.hasUnreadNotifications || details.hasUnreadMentions))
+        let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread
+        let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
+        let isMuteShown = summary.isMuted
+        let isCallShown = summary.hasOngoingCall
+        let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions))
         
         var inviter: InviterDetails?
-        if let roomMemberProxy = details.inviter {
+        if let roomMemberProxy = summary.inviter {
             inviter = .init(userID: roomMemberProxy.userID,
                             displayName: roomMemberProxy.displayName,
                             avatarURL: roomMemberProxy.avatarURL)
         }
         
         self.init(id: identifier,
-                  roomId: details.id,
-                  type: details.isInvite ? .invite : .room,
+                  roomID: summary.id,
+                  type: summary.isInvite ? .invite : .room,
                   badges: .init(isDotShown: isDotShown,
                                 isMentionShown: isMentionShown,
                                 isMuteShown: isMuteShown,
                                 isCallShown: isCallShown),
-                  name: details.name,
-                  isDirect: details.isDirect,
+                  name: summary.name,
+                  isDirect: summary.isDirect,
                   isHighlighted: isHighlighted,
-                  isFavourite: details.isFavourite,
-                  timestamp: details.lastMessageFormattedTimestamp,
-                  lastMessage: details.lastMessage,
-                  avatarURL: details.avatarURL,
+                  isFavourite: summary.isFavourite,
+                  timestamp: summary.lastMessageFormattedTimestamp,
+                  lastMessage: summary.lastMessage,
+                  avatar: summary.avatar,
                   inviter: inviter,
-                  canonicalAlias: details.canonicalAlias)
+                  canonicalAlias: summary.canonicalAlias)
     }
 }

@@ -1,0 +1,31 @@
+changelog:
+  categories:
+    - title: ✨ Features
+      labels:
+        - pr-feature
+    - title: 🙌 Improvements
+      labels:
+        - pr-change
+    - title: 🐛 Bugfixes
+      labels:
+        - pr-bugfix
+    - title: ⚠️ API Changes
+      labels:
+        - pr-api
+    - title: 🗣 Translations
+      labels:
+        - pr-i18n
+    - title: 🧱 Build
+      labels:
+        - pr-build
+    - title: 📄 Documentation
+      labels:
+        - pr-doc
+    - title: 🚧 In development 🚧
+      labels:
+        - pr-wip
+
+    - title: Others
+      labels:
+        - pr-misc
+        - "*"

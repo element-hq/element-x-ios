@@ -31,6 +31,9 @@ class DateTests: XCTestCase {
         let yesterday = calendar.date(byAdding: .hour, value: 1, to: startOfYesterday)!
         XCTAssertEqual(yesterday.formattedMinimal(), yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence)))
         
+        let nearYesterday = calendar.date(byAdding: DateComponents(hour: -10), to: today)!
+        XCTAssertEqual(nearYesterday.formattedMinimal(), yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence)))
+        
         let threeDaysAgo = calendar.date(byAdding: .day, value: -3, to: startOfToday)!
         XCTAssertEqual(threeDaysAgo.formattedMinimal(), threeDaysAgo.formatted(.dateTime.weekday(.wide)))
         

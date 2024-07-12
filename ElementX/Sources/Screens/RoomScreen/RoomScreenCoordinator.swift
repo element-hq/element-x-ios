@@ -30,6 +30,7 @@ struct RoomScreenCoordinatorParameters {
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
+    let composerDraftService: ComposerDraftServiceProtocol
 }
 
 enum RoomScreenCoordinatorAction {
@@ -59,16 +60,17 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomScreenCoordinatorParameters) {
-        viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
-                                        focussedEventID: parameters.focussedEventID,
-                                        timelineController: parameters.timelineController,
-                                        mediaProvider: parameters.mediaProvider,
-                                        mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                        voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                        appMediator: parameters.appMediator,
-                                        appSettings: parameters.appSettings,
-                                        analyticsService: ServiceLocator.shared.analytics)
+        let viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
+                                            focussedEventID: parameters.focussedEventID,
+                                            timelineController: parameters.timelineController,
+                                            mediaProvider: parameters.mediaProvider,
+                                            mediaPlayerProvider: parameters.mediaPlayerProvider,
+                                            voiceMessageMediaManager: parameters.voiceMessageMediaManager,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                            appMediator: parameters.appMediator,
+                                            appSettings: parameters.appSettings,
+                                            analyticsService: ServiceLocator.shared.analytics)
+        self.viewModel = viewModel
 
         wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
@@ -78,7 +80,13 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                      completionSuggestionService: parameters.completionSuggestionService,
                                                      mediaProvider: parameters.mediaProvider,
                                                      mentionDisplayHelper: ComposerMentionDisplayHelper(roomContext: viewModel.context),
-                                                     analyticsService: ServiceLocator.shared.analytics)
+                                                     analyticsService: ServiceLocator.shared.analytics,
+                                                     composerDraftService: parameters.composerDraftService)
+        
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification).sink { _ in
+            viewModel.saveDraft()
+        }
+        .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -128,6 +136,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 viewModel.process(composerAction: action)
             }
             .store(in: &cancellables)
+        
+        // Loading the draft requires the subscriptions to be set up first otherwise the room won't be be able to propagate the information to the composer.
+        viewModel.loadDraft()
     }
     
     func focusOnEvent(eventID: String) {
@@ -135,6 +146,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func stop() {
+        viewModel.saveDraft()
         viewModel.stop()
     }
     
@@ -143,7 +155,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                               wysiwygViewModel: wysiwygViewModel,
                                               keyCommands: composerViewModel.keyCommands)
 
-        return AnyView(RoomScreen(context: viewModel.context, composerToolbar: composerToolbar))
+        return AnyView(RoomScreen(context: viewModel.context, composerToolbar: composerToolbar)
+            .onDisappear { [weak self] in
+                self?.viewModel.saveDraft()
+            })
     }
 }
 

@@ -81,27 +81,30 @@ class LoggingTests: XCTestCase {
         
         XCTAssertTrue(logFile.lastPathComponent.contains(target))
     }
-        
+    
     func validateRoomSummaryContentIsRedacted() throws {
         // Given a room summary that contains sensitive information
         let roomName = "Private Conversation"
         let lastMessage = "Secret information"
-        let roomSummary = RoomSummaryDetails(id: "myroomid",
-                                             isInvite: false,
-                                             inviter: nil,
-                                             name: roomName,
-                                             isDirect: true,
-                                             avatarURL: nil,
-                                             lastMessage: AttributedString(lastMessage),
-                                             lastMessageFormattedTimestamp: "Now",
-                                             unreadMessagesCount: 0,
-                                             unreadMentionsCount: 0,
-                                             unreadNotificationsCount: 0,
-                                             notificationMode: nil,
-                                             canonicalAlias: nil,
-                                             hasOngoingCall: false,
-                                             isMarkedUnread: false,
-                                             isFavourite: false)
+        let heroName = "Pseudonym"
+        let roomSummary = RoomSummary(roomListItem: .init(noPointer: .init()),
+                                      id: "myroomid",
+                                      isInvite: false,
+                                      inviter: nil,
+                                      name: roomName,
+                                      isDirect: true,
+                                      avatarURL: nil,
+                                      heroes: [.init(userID: "", displayName: heroName)],
+                                      lastMessage: AttributedString(lastMessage),
+                                      lastMessageFormattedTimestamp: "Now",
+                                      unreadMessagesCount: 0,
+                                      unreadMentionsCount: 0,
+                                      unreadNotificationsCount: 0,
+                                      notificationMode: nil,
+                                      canonicalAlias: nil,
+                                      hasOngoingCall: false,
+                                      isMarkedUnread: false,
+                                      isFavourite: false)
         
         // When logging that value
         MXLog.info(roomSummary)
@@ -116,6 +119,7 @@ class LoggingTests: XCTestCase {
         XCTAssertTrue(content.contains(roomSummary.id))
         XCTAssertFalse(content.contains(roomName))
         XCTAssertFalse(content.contains(lastMessage))
+        XCTAssertFalse(content.contains(heroName))
     }
         
     func validateTimelineContentIsRedacted() throws {

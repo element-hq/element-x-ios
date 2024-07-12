@@ -44,7 +44,7 @@ struct MessageForwardingRoom: Identifiable, Equatable {
     let id: String
     let name: String
     let alias: String?
-    let avatarURL: URL?
+    let avatar: RoomAvatar
 }
 
 struct MessageForwardingItem: Hashable {

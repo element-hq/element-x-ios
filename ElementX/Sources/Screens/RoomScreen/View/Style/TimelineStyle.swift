@@ -17,31 +17,6 @@
 import Foundation
 import SwiftUI
 
-enum TimelineStyle: String, CaseIterable, Codable {
-    case plain
-    case bubbles
-
-    /// List row insets for a timeline
-    var rowInsets: EdgeInsets {
-        switch self {
-        case .plain:
-            return EdgeInsets(top: 4, leading: 20, bottom: 4, trailing: 20)
-        case .bubbles:
-            return EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8)
-        }
-    }
-
-    /// Short hand for `self == .bubbles`
-    var isBubbles: Bool {
-        switch self {
-        case .plain:
-            return false
-        case .bubbles:
-            return true
-        }
-    }
-}
-
 enum TimelineGroupStyle: Hashable {
     case single
     case first
@@ -60,20 +35,11 @@ enum TimelineGroupStyle: Hashable {
 
 // MARK: - Environment
 
-private struct TimelineStyleKey: EnvironmentKey {
-    static let defaultValue = TimelineStyle.bubbles
-}
-
 private struct TimelineGroupStyleKey: EnvironmentKey {
     static let defaultValue = TimelineGroupStyle.single
 }
 
 extension EnvironmentValues {
-    var timelineStyle: TimelineStyle {
-        get { self[TimelineStyleKey.self] }
-        set { self[TimelineStyleKey.self] = newValue }
-    }
-    
     var timelineGroupStyle: TimelineGroupStyle {
         get { self[TimelineGroupStyleKey.self] }
         set { self[TimelineGroupStyleKey.self] = newValue }

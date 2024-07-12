@@ -31,8 +31,8 @@ struct HomeScreenRoomCell: View {
     
     var body: some View {
         Button {
-            if let roomId = room.roomId {
-                context.send(viewAction: .selectRoom(roomIdentifier: roomId))
+            if let roomID = room.roomID {
+                context.send(viewAction: .selectRoom(roomIdentifier: roomID))
             }
         } label: {
             HStack(spacing: 16.0) {
@@ -57,11 +57,9 @@ struct HomeScreenRoomCell: View {
     @ViewBuilder @MainActor
     private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
-            LoadableAvatarImage(url: room.avatarURL,
-                                name: room.name,
-                                contentID: room.roomId,
-                                avatarSize: .room(on: .home),
-                                imageProvider: context.imageProvider)
+            RoomAvatarImage(avatar: room.avatar,
+                            avatarSize: .room(on: .home),
+                            imageProvider: context.imageProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }
@@ -197,14 +195,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     }()
     
     static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
-        switch summary {
-        case .empty:
-            nil
-        case .invalidated(let details):
-            HomeScreenRoom(details: details, invalidated: true, hideUnreadMessagesBadge: false)
-        case .filled(let details):
-            HomeScreenRoom(details: details, invalidated: false, hideUnreadMessagesBadge: false)
-        }
+        HomeScreenRoom(summary: summary, hideUnreadMessagesBadge: false)
     }
     
     static var previews: some View {

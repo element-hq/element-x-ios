@@ -1,3 +1,72 @@
+## Changes in 1.6.13 (2024-07-04)
+
+### What's Changed
+
+✨ Features
+* Add support for editing local echoes and remove redundant failed sent message menu by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/2983
+* Allow Element Call's widget URL to be configured by the homeserver. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/2971
+* Volatile draft to restore the composer after an edit. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/2996
+
+🙌 Improvements
+* Hide timeline style selection by @Velin92 in https://github.com/element-hq/element-x-ios/pull/2968
+* Cleanup how we setup the CallKit provider and have it be used for outgoing calls as well by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/2967
+
+🐛 Bugfixes
+* Stop the timeline from requesting back pagination whilst loading existing items. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/2969
+* Edit by timeline item only if the event id is missing by @Velin92 in https://github.com/element-hq/element-x-ios/pull/2989
+* Add a missing scheme when getting the Element .well-known file. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/2995
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/2986
+
+🧱 Build
+* Replace Towncrier with GitHub releases + labels. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/2966
+* Trigger a Danger CI run when labelling a PR too. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/2972
+* Add changelog labels to PRs from Localazy and Renovate. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/2981
+* Use XcodeGen files for app variants and setup Enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/2976
+* Setup unit tests for Enterprise. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/2984
+
+Others
+* Remove plain style layout by @Velin92 in https://github.com/element-hq/element-x-ios/pull/2980
+* Remove layout styling abstraction by @Velin92 in https://github.com/element-hq/element-x-ios/pull/2982
+* Setup Sentry instrumentation on top of the existing Signposter by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/2985
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/2987
+* Add a bug report hook. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/2988
+* Use the same format for project.yml as Ruby's YAML output. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/2992
+* Update the SDK ready for the release. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/2999
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.6.12...1.6.13
+
+## Changes in 1.6.12 (2024-06-25)
+
+✨ Features
+
+- Draft restoring is enabled by default. ([#2943](https://github.com/element-hq/element-x-ios/pull/2943))
+
+🙌 Improvements
+
+- Adopt the new authentication methods exposed on Rust's Client. ([#2954](https://github.com/element-hq/element-x-ios/pull/2954))
+
+🐛 Bugfixes
+
+- Timestamps in room list inconsistently use absolute and relative formatting ([#2679](https://github.com/element-hq/element-x-ios/issues/2679))
+
+## Changes in 1.6.11 (2024-06-18)
+
+No significant changes.
+
+
+## Changes in 1.6.10 (2024-06-18)
+
+✨ Features
+
+- Composer drafts will now be saved upon leaving the screen, and get restored later when displayed again. ([#2849](https://github.com/element-hq/element-x-ios/issues/2849))
+
+🙌 Improvements
+
+- Allow timeline messages text selection on both the Mac and on iOS (not on long press but a double tap) ([#2924](https://github.com/element-hq/element-x-ios/issues/2924))
+
 ## Changes in 1.6.9 (2024-06-11)
 
 ✨ Features

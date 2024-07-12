@@ -47,12 +47,15 @@ protocol RoomProxyProtocol {
     
     var topic: String? { get }
     
+    /// The room's avatar info for use in a ``RoomAvatarImage``.
+    var avatar: RoomAvatar { get }
+    /// The room's avatar URL. Use this for editing and favour ``avatar`` for display.
     var avatarURL: URL? { get }
 
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> { get }
-        
+    
     var joinedMembersCount: Int { get }
     
     var activeMembersCount: Int { get }
@@ -62,8 +65,6 @@ protocol RoomProxyProtocol {
     var timeline: TimelineProxyProtocol { get }
     
     func subscribeForUpdates() async
-    
-    func unsubscribeFromUpdates()
     
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError>
     
@@ -126,7 +127,6 @@ protocol RoomProxyProtocol {
     // MARK: - Element Call
     
     func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError>
-    
     func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol
     
     func sendCallNotificationIfNeeeded() async -> Result<Void, RoomProxyError>
@@ -134,15 +134,20 @@ protocol RoomProxyProtocol {
     // MARK: - Permalinks
     
     func matrixToPermalink() async -> Result<URL, RoomProxyError>
-    
     func matrixToEventPermalink(_ eventID: String) async -> Result<URL, RoomProxyError>
+    
+    // MARK: - Drafts
+    
+    func saveDraft(_ draft: ComposerDraft) async -> Result<Void, RoomProxyError>
+    func loadDraft() async -> Result<ComposerDraft?, RoomProxyError>
+    func clearDraft() async -> Result<Void, RoomProxyError>
 }
 
 extension RoomProxyProtocol {
     var details: RoomDetails {
         RoomDetails(id: id,
                     name: name,
-                    avatarURL: avatarURL,
+                    avatar: avatar,
                     canonicalAlias: canonicalAlias,
                     isEncrypted: isEncrypted,
                     isPublic: isPublic)

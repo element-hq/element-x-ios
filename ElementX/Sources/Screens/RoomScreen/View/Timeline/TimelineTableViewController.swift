@@ -56,7 +56,6 @@ class TimelineTableViewController: UIViewController {
     private let coordinator: TimelineView.Coordinator
     private let tableView = UITableView(frame: .zero, style: .plain)
     
-    var timelineStyle: TimelineStyle
     var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>() {
         didSet {
             guard canApplySnapshot else {
@@ -117,7 +116,7 @@ class TimelineTableViewController: UIViewController {
     }
     
     /// The state of pagination (in both directions) of the current timeline.
-    var paginationState: PaginationState = .default {
+    var paginationState: PaginationState = .initial {
         didSet {
             // Paginate again if the threshold hasn't been satisfied.
             paginatePublisher.send(())
@@ -166,11 +165,9 @@ class TimelineTableViewController: UIViewController {
     private var hasAppearedOnce = false
     
     init(coordinator: TimelineView.Coordinator,
-         timelineStyle: TimelineStyle,
          isScrolledToBottom: Binding<Bool>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>) {
         self.coordinator = coordinator
-        self.timelineStyle = timelineStyle
         _isScrolledToBottom = isScrolledToBottom
         
         super.init(nibName: nil, bundle: nil)

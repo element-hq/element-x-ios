@@ -22,6 +22,7 @@ enum JoinRoomScreenViewModelAction {
 }
 
 enum JoinRoomScreenInteractionMode {
+    case loading
     case unknown
     case invited
     case join
@@ -34,31 +35,16 @@ struct JoinRoomScreenViewState: BindableState {
     
     var roomDetails: RoomPreviewDetails?
     
-    var mode: JoinRoomScreenInteractionMode {
-        guard let roomDetails else {
-            return .unknown
-        }
-        
-        if roomDetails.isInvited {
-            return .invited
-        }
-        
-        if roomDetails.isPublic {
-            return .join
-        }
-        
-        // Knocking is not supported yet, treat it as .unknown
-        // if roomDetails.canKnock {
-        //     return .knock
-        // }
-        
-        return .unknown
-    }
+    var mode: JoinRoomScreenInteractionMode = .loading
     
     var bindings = JoinRoomScreenViewStateBindings()
     
     var title: String {
         roomDetails?.name ?? L10n.screenJoinRoomTitleNoPreview
+    }
+    
+    var avatar: RoomAvatar {
+        .room(id: roomID, name: title, avatarURL: roomDetails?.avatarURL)
     }
 }
 

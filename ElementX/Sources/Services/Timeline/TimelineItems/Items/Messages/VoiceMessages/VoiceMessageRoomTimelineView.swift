@@ -86,10 +86,6 @@ struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         body.environmentObject(viewModel.context)
             .previewDisplayName("Bubble")
-        body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
-            .previewDisplayName("Plain")
     }
     
     static var body: some View {

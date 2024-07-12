@@ -118,24 +118,16 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
         
-        var builder = ClientBuilder()
+        let builder = ClientBuilder
+            .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,
+                         sessionDelegate: keychainController)
             .sessionPath(path: credentials.restorationToken.sessionDirectory.path(percentEncoded: false))
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
             .passphrase(passphrase: credentials.restorationToken.passphrase)
-            .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
-            .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
-                                           sessionDelegate: keychainController)
-            .serverVersions(versions: ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"]) // FIXME: Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
-        
-        if let homeserverURL = URL(string: homeserverURL),
-           let proxy = homeserverURL.globalProxy {
-            builder = builder.proxy(url: proxy)
-        }
-        let completeBuilder = builder
         
         do {
-            let client = try await completeBuilder.build()
+            let client = try await builder.build()
             
             try await client.restoreSession(session: credentials.restorationToken.session)
             
@@ -148,7 +140,8 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     private func setupProxyForClient(_ client: Client) async -> ClientProxyProtocol {
         await ClientProxy(client: client,
-                          networkMonitor: ServiceLocator.shared.networkMonitor)
+                          networkMonitor: ServiceLocator.shared.networkMonitor,
+                          appSettings: ServiceLocator.shared.settings)
     }
     
     private func deleteSessionDirectory(for credentials: KeychainCredentials) {

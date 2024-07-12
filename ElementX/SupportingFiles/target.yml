@@ -118,6 +118,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER)
         MARKETING_VERSION: $(MARKETING_VERSION)
         CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
         CODE_SIGN_ENTITLEMENTS: ElementX/SupportingFiles/ElementX.entitlements
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
@@ -195,6 +196,9 @@ targets:
     - package: SwiftState
     - package: GZIP
     - package: Sentry
+      products: 
+        - Sentry
+        - SentrySwiftUI
     - package: Version
     - package: Emojibase
     - package: WysiwygComposer

@@ -19,7 +19,6 @@ import SwiftUI
 
 struct NoticeRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     let timelineItem: NoticeRoomTimelineItem
-    @Environment(\.timelineStyle) var timelineStyle
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
@@ -30,9 +29,9 @@ struct NoticeRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
             
             Label {
                 if let attributedString = timelineItem.content.formattedBody {
-                    FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
+                    FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
                 } else {
-                    FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
+                    FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
                 }
             } icon: {
                 CompoundIcon(\.info, size: .small, relativeTo: .compound.bodyLG)
@@ -49,9 +48,6 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         body.environmentObject(viewModel.context)
-        body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
     }
     
     static var body: some View {

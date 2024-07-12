@@ -27,10 +27,6 @@ struct AdvancedSettingsScreen: View {
                         kind: .picker(selection: $context.appAppearance,
                                       items: AppAppearance.allCases.map { (title: $0.name, tag: $0) }))
                 
-                ListRow(label: .plain(title: L10n.commonMessageLayout),
-                        kind: .picker(selection: $context.timelineStyle,
-                                      items: TimelineStyle.allCases.map { (title: $0.name, tag: $0) }))
-                
                 ListRow(label: .plain(title: L10n.actionViewSource),
                         kind: .toggle($context.viewSourceEnabled))
                 
@@ -42,17 +38,6 @@ struct AdvancedSettingsScreen: View {
         .compoundList()
         .navigationTitle(L10n.commonAdvancedSettings)
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-private extension TimelineStyle {
-    var name: String {
-        switch self {
-        case .plain:
-            return L10n.commonModern
-        case .bubbles:
-            return L10n.commonBubbles
-        }
     }
 }
 

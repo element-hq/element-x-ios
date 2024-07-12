@@ -38,9 +38,12 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     ///   - callBaseURL: Which Element Call instance should be used
     ///   - clientID: Something to identify the current client on the Element Call side
     init(elementCallService: ElementCallServiceProtocol,
+         clientProxy: ClientProxyProtocol,
          roomProxy: RoomProxyProtocol,
-         callBaseURL: URL,
-         clientID: String) {
+         clientID: String,
+         elementCallBaseURL: URL,
+         elementCallBaseURLOverride: URL?,
+         colorScheme: ColorScheme) {
         self.elementCallService = elementCallService
         self.roomProxy = roomProxy
         
@@ -90,7 +93,15 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             .store(in: &cancellables)
         
         Task {
-            switch await widgetDriver.start(baseURL: callBaseURL, clientID: clientID) {
+            let baseURL = if let elementCallBaseURLOverride {
+                elementCallBaseURLOverride
+            } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCall = wellKnown?.call {
+                wellKnownCall.widgetURL
+            } else {
+                elementCallBaseURL
+            }
+            
+            switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
             case .success(let url):
                 state.url = url
             case .failure(let error):
@@ -102,7 +113,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 return
             }
             
-            await elementCallService.setupCallSession(title: roomProxy.roomTitle)
+            await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
             
             let _ = await roomProxy.sendCallNotificationIfNeeeded()
         }
@@ -128,15 +139,15 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     private func hangUp() async {
         let hangUpMessage = """
-        "api":"toWidget",
+        {"api":"fromWidget",
         "widgetId":"\(widgetDriver.widgetID)",
         "requestId":"widgetapi-\(UUID())",
         "action":"im.vector.hangup",
-        "data":{}
+        "data":{}}
         """
         
         let result = await widgetDriver.sendMessage(hangUpMessage)
-        MXLog.error("Result yo: \(result)")
+        MXLog.info("Sent hangUp message with result: \(result)")
     }
 
     private static let eventHandlerName = "elementx"

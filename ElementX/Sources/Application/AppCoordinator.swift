@@ -19,6 +19,7 @@ import BackgroundTasks
 import Combine
 import Intents
 import MatrixRustSDK
+import Sentry
 import SwiftUI
 import Version
 
@@ -29,6 +30,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appMediator: AppMediator
     private let appSettings: AppSettings
     private let appDelegate: AppDelegate
+    private let appHooks: AppHooks
     private let elementCallService: ElementCallServiceProtocol
 
     /// Common background task to continue long-running tasks in the background.
@@ -65,10 +67,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     @Consumable private var storedAppRoute: AppRoute?
 
     init(appDelegate: AppDelegate) {
+        let appHooks = AppHooks()
+        appHooks.configure()
+        
         windowManager = WindowManager(appDelegate: appDelegate)
         appMediator = AppMediator(windowManager: windowManager)
         
-        let appSettings = AppSettings()
+        let appSettings = appHooks.runAppSettingsHook(AppSettings())
         
         MXLog.configure(logLevel: appSettings.logLevel)
         
@@ -83,24 +88,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         self.appDelegate = appDelegate
         self.appSettings = appSettings
+        self.appHooks = appHooks
         appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
         
         elementCallService = ElementCallService()
         
         navigationRootCoordinator = NavigationRootCoordinator()
         
-        Self.setupServiceLocator(appSettings: appSettings)
-        
-        ServiceLocator.shared.analytics.isRunningPublisher
-            .removeDuplicates()
-            .sink { isRunning in
-                if isRunning {
-                    ServiceLocator.shared.bugReportService.start()
-                } else {
-                    ServiceLocator.shared.bugReportService.stop()
-                }
-            }
-            .store(in: &cancellables)
+        Self.setupServiceLocator(appSettings: appSettings, appHooks: appHooks)
         
         ServiceLocator.shared.analytics.startIfEnabled()
 
@@ -145,15 +140,28 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         registerBackgroundAppRefresh()
         
-        elementCallService.actions.sink { [weak self] action in
-            switch action {
-            case .answerCall(let roomID):
-                self?.handleAppRoute(.call(roomID: roomID))
-            case .declineCall:
-                break
+        ServiceLocator.shared.analytics.isRunningPublisher
+            .removeDuplicates()
+            .sink { [weak self] isRunning in
+                if isRunning {
+                    self?.setupSentry()
+                } else {
+                    self?.teardownSentry()
+                }
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
+        
+        elementCallService.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                switch action {
+                case .startCall(let roomID):
+                    self?.handleAppRoute(.call(roomID: roomID))
+                case .endCall:
+                    break // Handled internally in the UserSessionFlowCoordinator
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func start() {
@@ -332,15 +340,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     // MARK: - Private
     
-    private static func setupServiceLocator(appSettings: AppSettings) {
+    private static func setupServiceLocator(appSettings: AppSettings, appHooks: AppHooks) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         ServiceLocator.shared.register(appSettings: appSettings)
         ServiceLocator.shared.register(networkMonitor: NetworkMonitor())
         ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: appSettings.bugReportServiceBaseURL,
-                                                                          sentryURL: appSettings.bugReportSentryURL,
                                                                           applicationId: appSettings.bugReportApplicationId,
                                                                           sdkGitSHA: sdkGitSha(),
-                                                                          maxUploadSize: appSettings.bugReportMaxUploadSize))
+                                                                          maxUploadSize: appSettings.bugReportMaxUploadSize,
+                                                                          appHooks: appHooks))
         let posthogAnalyticsClient = PostHogAnalyticsClient()
         posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
         ServiceLocator.shared.register(analytics: AnalyticsService(client: posthogAnalyticsClient,
@@ -449,12 +457,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private func startAuthentication() {
         let encryptionKeyProvider = EncryptionKeyProvider()
-        let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
-                                                               encryptionKeyProvider: encryptionKeyProvider,
-                                                               appSettings: appSettings)
-        let qrCodeLoginService = QRCodeLoginService(oidcConfiguration: appSettings.oidcConfiguration.rustValue,
-                                                    encryptionKeyProvider: encryptionKeyProvider,
-                                                    userSessionStore: userSessionStore)
+        let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
+                                                          encryptionKeyProvider: encryptionKeyProvider,
+                                                          appSettings: appSettings)
+        let qrCodeLoginService = QRCodeLoginService(encryptionKeyProvider: encryptionKeyProvider,
+                                                    userSessionStore: userSessionStore,
+                                                    appSettings: appSettings)
         
         authenticationFlowCoordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
                                                                       qrCodeLoginService: qrCodeLoginService,
@@ -480,9 +488,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                           userDisplayName: userSession.clientProxy.userDisplayNamePublisher.value ?? "",
                                                           deviceID: userSession.clientProxy.deviceID)
             
-            let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore,
-                                                                   encryptionKeyProvider: EncryptionKeyProvider(),
-                                                                   appSettings: appSettings)
+            let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
+                                                              encryptionKeyProvider: EncryptionKeyProvider(),
+                                                              appSettings: appSettings)
             _ = await authenticationService.configure(for: userSession.clientProxy.homeserver)
             
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
@@ -665,7 +673,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
         ServiceLocator.shared.networkMonitor
             .reachabilityPublisher
-            .removeDuplicates()
             .sink { reachability in
                 MXLog.info("Reachability changed to \(reachability)")
                 
@@ -727,6 +734,62 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
+    private func setupSentry() {
+        SentrySDK.start { [weak self] options in
+            #if DEBUG
+            options.enabled = false
+            #endif
+            
+            options.dsn = self?.appSettings.bugReportSentryURL.absoluteString
+            
+            // Sentry swizzling shows up quite often as the heaviest stack trace when profiling
+            // We don't need any of the features it powers (see docs)
+            options.enableSwizzling = false
+            
+            // WatchdogTermination is currently the top issue but we've had zero complaints
+            // so it might very well just all be false positives
+            options.enableWatchdogTerminationTracking = false
+            
+            // Disabled as it seems to report a lot of false positives
+            options.enableAppHangTracking = false
+            
+            // Most of the network requests are made Rust side, this is useless
+            options.enableNetworkBreadcrumbs = false
+            
+            // Doesn't seem to work at all well with SwiftUI
+            options.enableAutoBreadcrumbTracking = false
+            
+            // Experimental. Stitches stack traces of asynchronous code together
+            options.swiftAsyncStacktraces = true
+            
+            // Uniform sample rate: 1.0 captures 100% of transactions
+            // In Production you will probably want a smaller number such as 0.5 for 50%
+            if AppSettings.isDevelopmentBuild {
+                options.sampleRate = 1.0
+                options.tracesSampleRate = 1.0
+                options.profilesSampleRate = 1.0
+            } else {
+                options.sampleRate = 0.5
+                options.tracesSampleRate = 0.5
+                options.profilesSampleRate = 0.5
+            }
+            
+            // This callback is only executed once during the entire run of the program to avoid
+            // multiple callbacks if there are multiple crash events to send (see method documentation)
+            options.onCrashedLastRun = { event in
+                MXLog.error("Sentry detected a crash in the previous run: \(event.eventId.sentryIdString)")
+                ServiceLocator.shared.bugReportService.lastCrashEventID = event.eventId.sentryIdString
+            }
+            
+            MXLog.info("SentrySDK started")
+        }
+    }
+    
+    private func teardownSentry() {
+        SentrySDK.close()
+        MXLog.info("SentrySDK stopped")
+    }
+           
     // MARK: Toasts and loading indicators
     
     private static let loadingIndicatorIdentifier = "\(AppCoordinator.self)-Loading"
@@ -756,7 +819,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func startSync() {
         guard let userSession else { return }
         
-        ServiceLocator.shared.analytics.signpost.beginFirstSync()
+        // FIXME: replace this with `user_id_server_name` from https://github.com/matrix-org/matrix-rust-sdk/pull/3617
+        let serverName = String(userSession.clientProxy.userID.split(separator: ":").last ?? "Unknown")
+        
+        ServiceLocator.shared.analytics.signpost.beginFirstSync(serverName: serverName)
         userSession.clientProxy.startSync()
         
         guard clientProxyObserver == nil else {

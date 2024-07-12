@@ -12,16 +12,16 @@ setup_xcode_cloud_environment () {
     # Prevent installing dependencies in system directories
     echo 'export GEM_HOME=$HOME/.gem' >>~/.zshrc
     echo 'export PATH=$GEM_HOME/bin:$PATH' >>~/.zshrc
-    echo 'export PATH="/usr/local/opt/ruby@2.7/bin:$PATH"' >> ~/.zshrc
+    echo 'export PATH="/usr/local/opt/ruby/bin:$PATH"' >> ~/.zshrc
     echo 'export PATH="/Users/local/Library/Python/3.9/bin:$PATH"' >> ~/.zshrc
 
     export GEM_HOME=$HOME/.gem
     export PATH=$GEM_HOME/bin:$PATH
-    export PATH="/usr/local/opt/ruby@2.7/bin:$PATH"
+    export PATH="/usr/local/opt/ruby/bin:$PATH"
     export PATH="/Users/local/Library/Python/3.9/bin:$PATH"
 
     # Things don't work well on the default ruby version
-    brew install ruby@2.7
+    brew install ruby
 
     gem install bundler
 
@@ -36,10 +36,6 @@ install_xcode_cloud_brew_dependencies () {
         brew install imagemagick@6
         brew link imagemagick@6 # imagemagick@6 is keg-only, which means it was not symlinked into /usr/local,
     fi
-}
-
-install_xcode_cloud_python_dependencies () {
-    pip3 install towncrier # Install towncrier for generating changelogs
 }
 
 setup_github_actions_environment() {

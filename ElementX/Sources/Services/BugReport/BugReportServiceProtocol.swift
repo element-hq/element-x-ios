@@ -26,7 +26,7 @@ struct BugReport: Equatable {
     let text: String
     let includeLogs: Bool
     let canContact: Bool
-    let githubLabels: [String]
+    var githubLabels: [String]
     let files: [URL]
 }
 
@@ -52,15 +52,10 @@ enum BugReportServiceError: LocalizedError {
 }
 
 // sourcery: AutoMockable
-protocol BugReportServiceProtocol {
-    // periphery: ignore
-    var isRunning: Bool { get }
-    
+protocol BugReportServiceProtocol: AnyObject {
     var crashedLastRun: Bool { get }
     
-    func start()
-           
-    func stop()
+    var lastCrashEventID: String? { get set }
     
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>

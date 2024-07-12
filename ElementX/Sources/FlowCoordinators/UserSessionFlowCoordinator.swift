@@ -168,6 +168,18 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
+        
+        elementCallService.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                switch action {
+                case .startCall:
+                    break
+                case .endCall:
+                    self?.dismissCallScreenIfNeeded()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func start() {
@@ -542,10 +554,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Calls
     
     private func presentCallScreen(roomProxy: RoomProxyProtocol) {
+        let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
+                                                                            clientProxy: userSession.clientProxy,
                                                                             roomProxy: roomProxy,
-                                                                            callBaseURL: appSettings.elementCallBaseURL,
-                                                                            clientID: InfoPlistReader.main.bundleIdentifier))
+                                                                            clientID: InfoPlistReader.main.bundleIdentifier,
+                                                                            elementCallBaseURL: appSettings.elementCallBaseURL,
+                                                                            elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
+                                                                            colorScheme: colorScheme))
         
         callScreenCoordinator.actions
             .sink { [weak self] action in
@@ -567,6 +583,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         presentCallScreen(roomProxy: roomProxy)
+    }
+    
+    private func dismissCallScreenIfNeeded() {
+        guard navigationSplitCoordinator.sheetCoordinator is CallScreenCoordinator else {
+            return
+        }
+        
+        navigationSplitCoordinator.setSheetCoordinator(nil)
     }
     
     // MARK: Secure backup confirmation

@@ -19,7 +19,7 @@ import Foundation
 struct RoomDetails {
     let id: String
     let name: String?
-    let avatarURL: URL?
+    let avatar: RoomAvatar
     let canonicalAlias: String?
     let isEncrypted: Bool
     let isPublic: Bool

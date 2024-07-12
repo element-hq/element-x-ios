@@ -19,21 +19,21 @@ import AuthenticationServices
 /// Presents a web authentication session for an OIDC request.
 @MainActor
 class OIDCAuthenticationPresenter: NSObject {
-    private let authenticationService: AuthenticationServiceProxyProtocol
+    private let authenticationService: AuthenticationServiceProtocol
     private let oidcRedirectURL: URL
     private let presentationAnchor: UIWindow
     
     /// The data required to complete a request.
     struct Request {
         let session: ASWebAuthenticationSession
-        let oidcData: OIDCAuthenticationDataProxy
+        let oidcData: OIDCAuthorizationDataProxy
         let continuation: CheckedContinuation<Result<UserSessionProtocol, AuthenticationServiceError>, Never>
     }
     
     /// The current request in progress. This is a single use value and will be moved on access.
     @Consumable private var request: Request?
     
-    init(authenticationService: AuthenticationServiceProxyProtocol, oidcRedirectURL: URL, presentationAnchor: UIWindow) {
+    init(authenticationService: AuthenticationServiceProtocol, oidcRedirectURL: URL, presentationAnchor: UIWindow) {
         self.authenticationService = authenticationService
         self.oidcRedirectURL = oidcRedirectURL
         self.presentationAnchor = presentationAnchor
@@ -41,7 +41,7 @@ class OIDCAuthenticationPresenter: NSObject {
     }
     
     /// Presents a web authentication session for the supplied data.
-    func authenticate(using oidcData: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func authenticate(using oidcData: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         await withCheckedContinuation { continuation in
             let session = ASWebAuthenticationSession(url: oidcData.url,
                                                      callbackURLScheme: oidcRedirectURL.scheme) { [weak self] url, error in
@@ -107,7 +107,10 @@ class OIDCAuthenticationPresenter: NSObject {
             return
         }
         
-        request.continuation.resume(returning: .failure(error))
+        Task {
+            await authenticationService.abortOIDCLogin(data: request.oidcData)
+            request.continuation.resume(returning: .failure(error))
+        }
     }
 }
 

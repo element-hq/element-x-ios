@@ -211,6 +211,8 @@
 "common_voice_message" = "Sprachnachricht";
 "common_waiting" = "Warten…";
 "common_waiting_for_decryption_key" = "Warte auf diese Nachricht";
+"common.do_not_show_this_again" = "Do not show this again";
+"common.open_source_licenses" = "Open source licenses";
 "common.send_to" = "Send to";
 "common_no_room_name" = "Kein Raumname";
 "common_poll_end_confirmation" = "Bist du sicher, dass du diese Umfrage beenden möchtest?";
@@ -250,6 +252,8 @@
 "error_no_compatible_app_found" = "Für diese Aktion wurde keine kompatible App gefunden.";
 "error_some_messages_have_not_been_sent" = "Einige Nachrichten wurden nicht gesendet";
 "error_unknown" = "Entschuldigung, es ist ein Fehler aufgetreten";
+"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
+"full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ Begleite mich auf %1$@";
 "invite_friends_text" = "Hey, sprich mit mir auf %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "Bist du sicher, dass du diese Unterhaltung verlassen willst? Diese Unterhaltung ist nicht öffentlich und du kannst ihr ohne Einladung nicht wieder beitreten.";
@@ -344,9 +348,9 @@
 "screen_app_lock_setup_biometric_unlock_subtitle" = "Spare dir etwas Zeit und benutze %1$@, um die App zu entsperren";
 "screen_app_lock_setup_choose_pin" = "PIN wählen";
 "screen_app_lock_setup_confirm_pin" = "PIN bestätigen";
-"screen_app_lock_setup_pin_blacklisted_dialog_content" = "Aus Sicherheitsgründen kann dieser PIN-Code nicht verwendet werden.";
-"screen_app_lock_setup_pin_blacklisted_dialog_title" = "Bitte eine andere PIN verwenden.";
 "screen_app_lock_setup_pin_context" = "Sperre %1$@ mit einem PIN Code, um den Zugriff auf deine Chats zu beschränken.\n\nWähle etwas Einprägsames. Bei falscher Eingabe wirst du aus der App ausgeloggt.";
+"screen_app_lock_setup_pin_forbidden_dialog_content" = "Aus Sicherheitsgründen kann dieser PIN-Code nicht verwendet werden.";
+"screen_app_lock_setup_pin_forbidden_dialog_title" = "Bitte eine andere PIN verwenden.";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Bitte gib die gleiche PIN wie zuvor ein.";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "Die PINs stimmen nicht überein";
 "screen_app_lock_signout_alert_message" = "Um fortzufahren, musst du dich erneut anmelden und eine neue PIN erstellen";
@@ -663,6 +667,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Dein Homeserver unterstützt diese Option in verschlüsselten Chats nicht. Du wirst in diesem Chat nicht benachrichtigt.";
 "screen_room_notification_settings_mode_all_messages" = "Alle Nachrichten";
 "screen_room_notification_settings_room_custom_settings_title" = "Benachrichtige mich bei";
+"screen_room_retry_send_menu_send_again_action" = "Erneut senden";
 "screen_room_retry_send_menu_title" = "Deine Nachricht konnte nicht gesendet werden";
 "screen_room_roles_and_permissions_admins" = "Administratoren";
 "screen_room_roles_and_permissions_change_my_role" = "Ändere meine Rolle";

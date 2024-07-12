@@ -104,6 +104,10 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
     }
     
     private func loadNextPage() {
+        guard !state.isLoading else {
+            return
+        }
+        
         Task {
             state.isLoading = true
             let _ = await roomDirectorySearchProxy.nextPage()

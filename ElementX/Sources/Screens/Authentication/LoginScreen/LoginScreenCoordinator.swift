@@ -19,7 +19,7 @@ import SwiftUI
 
 struct LoginScreenCoordinatorParameters {
     /// The service used to authenticate the user.
-    let authenticationService: AuthenticationServiceProxyProtocol
+    let authenticationService: AuthenticationServiceProtocol
     
     let analytics: AnalyticsService
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -38,7 +38,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     private let parameters: LoginScreenCoordinatorParameters
     private var viewModel: LoginScreenViewModelProtocol
         
-    private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
+    private var authenticationService: AuthenticationServiceProtocol { parameters.authenticationService }
 
     private let actionsSubject: PassthroughSubject<LoginScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()

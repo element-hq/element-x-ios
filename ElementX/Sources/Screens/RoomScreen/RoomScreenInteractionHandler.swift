@@ -265,17 +265,20 @@ class RoomScreenInteractionHandler {
     
     private func processEditMessageEvent(_ messageTimelineItem: EventBasedMessageTimelineItemProtocol) {
         let text: String
+        var htmlText: String?
         switch messageTimelineItem.contentType {
-        case .text:
-            text = messageTimelineItem.body
-        case .emote:
-            text = "/me " + messageTimelineItem.body
+        case .text(let content):
+            text = content.body
+            htmlText = content.formattedBodyHTMLString
+        case .emote(let content):
+            text = "/me " + content.body
         default:
             text = messageTimelineItem.body
         }
         
-        actionsSubject.send(.composer(action: .setText(text: text)))
+        // Always update the mode first and then the text so that the composer has time to save the text draft
         actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
+        actionsSubject.send(.composer(action: .setText(plainText: text, htmlText: htmlText)))
     }
     
     // MARK: Polls

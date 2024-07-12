@@ -77,8 +77,8 @@ class PreviewTests: XCTestCase {
                 fatalError("Unknown device name: \(deviceName)")
             }
             
-            // Ignore specific device safe area
-            device.safeArea = .zero
+            // Ignore specific device safe area (using the workaround value to fix rendering issues).
+            device.safeArea = .one
             
             // Ignore specific device display scale
             let traits = UITraitCollection(displayScale: 2.0)
@@ -159,7 +159,7 @@ class PreviewTests: XCTestCase {
         if let simulatorDevice {
             let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"]
             guard deviceModel?.contains(simulatorDevice) ?? false else {
-                fatalError("Switch to using \(simulatorDevice) for these tests.")
+                fatalError("\(deviceModel ?? "Unknown") is the wrong one. Switch to using \(simulatorDevice) for these tests.")
             }
         }
 
@@ -215,10 +215,12 @@ private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
             config = deviceConfig
         #endif
         case .sizeThatFits:
-            config = .init(safeArea: .zero, size: nil, traits: traits)
+            // Make sure to use the workaround safe area insets.
+            config = .init(safeArea: .one, size: nil, traits: traits)
         case let .fixed(width: width, height: height):
             let size = CGSize(width: width, height: height)
-            config = .init(safeArea: .zero, size: size, traits: traits)
+            // Make sure to use the workaround safe area insets.
+            config = .init(safeArea: .one, size: size, traits: traits)
         }
 
         return SimplySnapshotting<UIImage>(pathExtension: "png", diffing: .prefireImage(precision: precision, perceptualPrecision: perceptualPrecision, scale: traits.displayScale))
@@ -270,6 +272,12 @@ private extension Diffing where Value == UIImage {
             diff: { originalDiffing.diff($0, $1) }
         )
     }
+}
+
+private extension UIEdgeInsets {
+    /// A custom inset that prevents the snapshotting library from rendering the
+    /// origin at (10000, 10000) which breaks some of our views such as MessageText.
+    static var one: UIEdgeInsets { UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1) }
 }
 
 // swiftlint:enable all

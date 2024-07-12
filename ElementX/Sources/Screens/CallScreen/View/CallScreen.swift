@@ -27,7 +27,6 @@ struct CallScreen: View {
             .id(context.viewState.url)
             .ignoresSafeArea(edges: .bottom)
             .presentationDragIndicator(.visible)
-            .environment(\.colorScheme, .dark)
             .alert(item: $context.alertInfo)
     }
 }
@@ -172,19 +171,26 @@ private struct WebView: UIViewRepresentable {
 
 struct CallScreen_Previews: PreviewProvider {
     static let viewModel = {
+        let clientProxy = ClientProxyMock()
+        clientProxy.getElementWellKnownReturnValue = .success(nil)
+        
         let roomProxy = RoomProxyMock()
+        roomProxy.sendCallNotificationIfNeeededReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
         widgetDriver.underlyingActions = PassthroughSubject<ElementCallWidgetDriverAction, Never>().eraseToAnyPublisher()
-        widgetDriver.startBaseURLClientIDReturnValue = .success(URL.userDirectory)
+        widgetDriver.startBaseURLClientIDColorSchemeReturnValue = .success(URL.userDirectory)
         
         roomProxy.elementCallWidgetDriverReturnValue = widgetDriver
         
-        return CallScreenViewModel(elementCallService: ElementCallServiceMock(),
+        return CallScreenViewModel(elementCallService: ElementCallServiceMock(.init()),
+                                   clientProxy: clientProxy,
                                    roomProxy: roomProxy,
-                                   callBaseURL: "https://call.element.io",
-                                   clientID: "io.element.elementx")
+                                   clientID: "io.element.elementx",
+                                   elementCallBaseURL: "https://call.element.io",
+                                   elementCallBaseURLOverride: nil,
+                                   colorScheme: .light)
     }()
     
     static var previews: some View {

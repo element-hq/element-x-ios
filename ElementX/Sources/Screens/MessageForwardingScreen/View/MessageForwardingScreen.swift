@@ -88,11 +88,9 @@ private struct MessageForwardingListRow: View {
     @ViewBuilder @MainActor
     var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
-            LoadableAvatarImage(url: room.avatarURL,
-                                name: room.name,
-                                contentID: room.id,
-                                avatarSize: .room(on: .messageForwarding),
-                                imageProvider: context.imageProvider)
+            RoomAvatarImage(avatar: room.avatar,
+                            avatarSize: .room(on: .messageForwarding),
+                            imageProvider: context.imageProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }

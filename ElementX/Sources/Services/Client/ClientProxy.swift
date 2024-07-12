@@ -21,9 +21,11 @@ import OrderedCollections
 
 import MatrixRustSDK
 
+// swiftlint:disable file_length
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let networkMonitor: NetworkMonitorProtocol
+    private let appSettings: AppSettings
     
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
@@ -123,9 +125,11 @@ class ClientProxy: ClientProxyProtocol {
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
     init(client: ClientProtocol,
-         networkMonitor: NetworkMonitorProtocol) async {
+         networkMonitor: NetworkMonitorProtocol,
+         appSettings: AppSettings) async {
         self.client = client
         self.networkMonitor = networkMonitor
+        self.appSettings = appSettings
         
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
@@ -170,31 +174,19 @@ class ClientProxy: ClientProxyProtocol {
         })
         
         sendQueueStatusSubject
-            .removeDuplicates()
             .combineLatest(networkMonitor.reachabilityPublisher)
             .debounce(for: 1.0, scheduler: DispatchQueue.main)
             .sink { enabled, reachability in
-                MXLog.info("Send queue status changed to enabled: \(enabled)")
+                MXLog.info("Send queue status changed to enabled: \(enabled), reachability: \(reachability)")
                 
                 if enabled == false, reachability == .reachable {
                     MXLog.info("Enabling all send queues")
-                    client.enableAllSendQueues(enable: true)
+                    Task {
+                        await client.enableAllSendQueues(enable: true)
+                    }
                 }
             }
             .store(in: &cancellables)
-    }
-    
-    private func updateVerificationState(_ verificationState: VerificationState) {
-        let verificationState: SessionVerificationState = switch verificationState {
-        case .unknown:
-            .unknown
-        case .unverified:
-            .unverified
-        case .verified:
-            .verified
-        }
-        
-        verificationStateSubject.send(verificationState)
     }
     
     var userID: String {
@@ -210,13 +202,22 @@ class ClientProxy: ClientProxyProtocol {
         do {
             return try client.deviceId()
         } catch {
-            MXLog.error("Failed retrieving device id with error: \(error)")
+            MXLog.error("Failed retrieving deviceID with error: \(error)")
             return nil
         }
     }
 
     var homeserver: String {
         client.homeserver()
+    }
+    
+    var userIDServerName: String? {
+        do {
+            return try client.userIdServerName()
+        } catch {
+            MXLog.error("Failed retrieving userID server name with error: \(error)")
+            return nil
+        }
     }
 
     private(set) lazy var pusherNotificationClientIdentifier: String? = {
@@ -381,6 +382,20 @@ class ClientProxy: ClientProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed joining roomID: \(roomID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func joinRoomAlias(_ roomAlias: String) async -> Result<Void, ClientProxyError> {
+        do {
+            let room = try await client.joinRoomByIdOrAlias(roomIdOrAlias: roomAlias, serverNames: [])
+            
+            // Wait for the room to appear in the room lists to avoid issues downstream
+            let _ = await waitForRoomSummary(with: .success(room.id()), name: nil, timeout: 30)
+            
+            return .success(())
+        } catch {
+            MXLog.error("Failed joining roomAlias: \(roomAlias) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -598,6 +613,23 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError> {
+        guard let userIDServerName,
+              var url = URL(string: "https://\(userIDServerName)") else {
+            return .failure(.invalidUserIDServerName)
+        }
+        
+        url.append(path: "/.well-known/element/element.json")
+        
+        do {
+            let response = try await client.getUrl(url: url.absoluteString)
+            let sdkWellKnown = try makeElementWellKnown(string: response)
+            return .success(ElementWellKnown(sdkWellKnown))
+        } catch {
+            return .failure(.sdkError(error))
+        }
+    }
         
     // MARK: Ignored users
     
@@ -673,6 +705,19 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: - Private
+    
+    private func updateVerificationState(_ verificationState: VerificationState) {
+        let verificationState: SessionVerificationState = switch verificationState {
+        case .unknown:
+            .unknown
+        case .unverified:
+            .unverified
+        case .verified:
+            .verified
+        }
+        
+        verificationStateSubject.send(verificationState)
+    }
 
     private func loadUserAvatarURLFromCache() {
         loadCachedAvatarURLTask = Task {
@@ -712,13 +757,15 @@ class ClientProxy: ClientProxyProtocol {
                                                       eventStringBuilder: eventStringBuilder,
                                                       name: "AllRooms",
                                                       shouldUpdateVisibleRange: true,
-                                                      notificationSettings: notificationSettings)
+                                                      notificationSettings: notificationSettings,
+                                                      appSettings: appSettings)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                                eventStringBuilder: eventStringBuilder,
                                                                name: "MessageForwarding",
-                                                               notificationSettings: notificationSettings)
+                                                               notificationSettings: notificationSettings,
+                                                               appSettings: appSettings)
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
                         
             self.syncService = syncService
@@ -801,7 +848,7 @@ class ClientProxy: ClientProxyProtocol {
 
     private func roomTupleForIdentifier(_ identifier: String) async -> (RoomListItem?, Room?) {
         do {
-            let roomListItem = try await roomListService?.room(roomId: identifier)
+            let roomListItem = try roomListService?.room(roomId: identifier)
             if roomListItem?.isTimelineInitialized() == false {
                 try await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
             }

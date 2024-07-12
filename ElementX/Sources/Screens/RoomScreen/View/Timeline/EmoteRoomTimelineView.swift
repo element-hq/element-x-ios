@@ -18,15 +18,14 @@ import Foundation
 import SwiftUI
 
 struct EmoteRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
-    @Environment(\.timelineStyle) var timelineStyle
     let timelineItem: EmoteRoomTimelineItem
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             if let attributedString = timelineItem.content.formattedBody {
-                FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
+                FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
             } else {
-                FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
+                FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
             }
         }
     }
@@ -37,9 +36,6 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         body.environmentObject(viewModel.context)
-        body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
     }
     
     static var body: some View {

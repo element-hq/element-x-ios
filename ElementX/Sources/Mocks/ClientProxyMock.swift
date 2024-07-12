@@ -76,6 +76,8 @@ extension ClientProxyMock {
         recentlyVisitedRoomsReturnValue = .success([])
         recentConversationCounterpartsReturnValue = []
         
+        getElementWellKnownReturnValue = .success(nil)
+        
         loadMediaContentForSourceThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         loadMediaFileForSourceBodyThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
@@ -92,14 +94,7 @@ extension ClientProxyMock {
                 return nil
             }
             
-            let roomID = room.id ?? UUID().uuidString
-        
-            switch room {
-            case .empty:
-                return await RoomProxyMock(.init(name: "Empty room"))
-            case .filled(let details), .invalidated(let details):
-                return await RoomProxyMock(.init(id: roomID, name: details.name))
-            }
+            return await RoomProxyMock(.init(id: room.id, name: room.name))
         }
     }
 }

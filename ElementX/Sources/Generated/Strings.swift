@@ -562,6 +562,10 @@ internal enum L10n {
   internal static var errorSomeMessagesHaveNotBeenSent: String { return L10n.tr("Localizable", "error_some_messages_have_not_been_sent") }
   /// Sorry, an error occurred
   internal static var errorUnknown: String { return L10n.tr("Localizable", "error_unknown") }
+  /// To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.
+  internal static var fullScreenIntentBannerMessage: String { return L10n.tr("Localizable", "full_screen_intent_banner_message") }
+  /// Enhance your call experience
+  internal static var fullScreenIntentBannerTitle: String { return L10n.tr("Localizable", "full_screen_intent_banner_title") }
   /// 🔐️ Join me on %1$@
   internal static func inviteFriendsRichTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "invite_friends_rich_title", String(describing: p1))
@@ -756,7 +760,7 @@ internal enum L10n {
   internal static var screenAdvancedSettingsSendReadReceiptsDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_send_read_receipts_description") }
   /// Share presence
   internal static var screenAdvancedSettingsSharePresence: String { return L10n.tr("Localizable", "screen_advanced_settings_share_presence") }
-  /// If turned off, you won’t be able to send or receive read receipts or typing notifications
+  /// If turned off, you won’t be able to send or receive read receipts or typing notifications.
   internal static var screenAdvancedSettingsSharePresenceDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_share_presence_description") }
   /// Enable option to view message source in the timeline.
   internal static var screenAdvancedSettingsViewSourceDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_view_source_description") }
@@ -826,16 +830,16 @@ internal enum L10n {
   internal static var screenAppLockSetupChoosePin: String { return L10n.tr("Localizable", "screen_app_lock_setup_choose_pin") }
   /// Confirm PIN
   internal static var screenAppLockSetupConfirmPin: String { return L10n.tr("Localizable", "screen_app_lock_setup_confirm_pin") }
-  /// You cannot choose this as your PIN code for security reasons
-  internal static var screenAppLockSetupPinBlacklistedDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_blacklisted_dialog_content") }
-  /// Choose a different PIN
-  internal static var screenAppLockSetupPinBlacklistedDialogTitle: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_blacklisted_dialog_title") }
   /// Lock %1$@ to add extra security to your chats.
   /// 
   /// Choose something memorable. If you forget this PIN, you will be logged out of the app.
   internal static func screenAppLockSetupPinContext(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_app_lock_setup_pin_context", String(describing: p1))
   }
+  /// You cannot choose this as your PIN code for security reasons
+  internal static var screenAppLockSetupPinForbiddenDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_forbidden_dialog_content") }
+  /// Choose a different PIN
+  internal static var screenAppLockSetupPinForbiddenDialogTitle: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_forbidden_dialog_title") }
   /// Please enter the same PIN twice
   internal static var screenAppLockSetupPinMismatchDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_mismatch_dialog_content") }
   /// PINs don't match
@@ -1617,6 +1621,8 @@ internal enum L10n {
   internal static var screenRoomNotificationSettingsModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_mentions_and_keywords") }
   /// In this room, notify me for
   internal static var screenRoomNotificationSettingsRoomCustomSettingsTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_room_custom_settings_title") }
+  /// Send again
+  internal static var screenRoomRetrySendMenuSendAgainAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_send_again_action") }
   /// Your message failed to send
   internal static var screenRoomRetrySendMenuTitle: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_title") }
   /// Admins
@@ -2218,6 +2224,10 @@ internal enum L10n {
   }
 
   internal enum Common {
+    /// Do not show this again
+    internal static var doNotShowThisAgain: String { return L10n.tr("Localizable", "common.do_not_show_this_again") }
+    /// Open source licenses
+    internal static var openSourceLicenses: String { return L10n.tr("Localizable", "common.open_source_licenses") }
     /// Send to
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
   }

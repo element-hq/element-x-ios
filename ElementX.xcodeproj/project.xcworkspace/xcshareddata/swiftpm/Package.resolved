@@ -139,8 +139,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rich-text-editor-swift",
       "state" : {
-        "revision" : "48eaa6fc764f29a8dd50c9153fc65131134dac66",
-        "version" : "2.36.0"
+        "revision" : "acf0821a87ded426afe59647e578464f840eff43",
+        "version" : "2.37.5"
       }
     },
     {
@@ -148,8 +148,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "e1aa005300f7c5d38ac8203a1668df99fff21bd4",
-        "version" : "1.0.11"
+        "revision" : "dc2d7ac4b7293a0dce1d37c3dea8da52be5d6932",
+        "version" : "1.0.24"
       }
     },
     {
@@ -184,8 +184,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/BarredEwe/Prefire",
       "state" : {
-        "revision" : "608e7992dedc5ee409e59b3580010371ff0cef57",
-        "version" : "2.0.4"
+        "revision" : "237f4005c81f74d5359eddb534d2d10925ef2787",
+        "version" : "2.8.0"
       }
     },
     {
@@ -193,8 +193,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "0a915b93ff3abee1a9752448e47808334d306980",
-        "version" : "8.13.0"
+        "revision" : "8fd4e804f2e72e0b9c1b189ce4e8349c4d10b6a2",
+        "version" : "8.30.0"
       }
     },
     {
@@ -247,8 +247,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
-        "revision" : "625ccca8570773dd84a34ee51a81aa2bc5a4f97a",
-        "version" : "1.16.0"
+        "revision" : "8ddd519780452729c6634ad6bd0d2595938e9ea3",
+        "version" : "1.16.1"
       }
     },
     {

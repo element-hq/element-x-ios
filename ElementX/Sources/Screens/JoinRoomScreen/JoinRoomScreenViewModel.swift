@@ -74,6 +74,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         showLoadingIndicator()
         
         defer {
+            updateMode()
             hideLoadingIndicator()
         }
         
@@ -85,6 +86,23 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         }
     }
     
+    private func updateMode() {
+        guard let roomDetails = state.roomDetails else {
+            state.mode = .unknown
+            return
+        }
+        
+        if roomDetails.isPublic {
+            state.mode = .join
+        } else if roomDetails.isInvited {
+            state.mode = .invited
+        } else if roomDetails.canKnock { // Knocking is not supported yet, treat it as .unknown
+            state.mode = .unknown
+        } else {
+            state.mode = .unknown
+        }
+    }
+    
     private func joinRoom() async {
         showLoadingIndicator()
         
@@ -92,12 +110,23 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             hideLoadingIndicator()
         }
         
-        switch await clientProxy.joinRoom(roomID, via: via) {
-        case .success:
-            actionsSubject.send(.joined)
-        case .failure(let error):
-            MXLog.error("Failed joining room with error: \(error)")
-            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+        // Prioritise joining by the alias and letting the homeserver do the right thing
+        if let alias = state.roomDetails?.canonicalAlias {
+            switch await clientProxy.joinRoomAlias(alias) {
+            case .success:
+                actionsSubject.send(.joined)
+            case .failure(let error):
+                MXLog.error("Failed joining room alias: \(alias) with error: \(error)")
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
+        } else {
+            switch await clientProxy.joinRoom(roomID, via: via) {
+            case .success:
+                actionsSubject.send(.joined)
+            case .failure(let error):
+                MXLog.error("Failed joining room id: \(roomID) with error: \(error)")
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
         }
     }
     

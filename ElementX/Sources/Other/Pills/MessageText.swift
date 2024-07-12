@@ -81,7 +81,6 @@ struct MessageText: UIViewRepresentable {
         textView.adjustsFontForContentSizeCategory = true
 
         // Required to allow tapping links
-        // We disable selection at delegate level
         textView.isSelectable = true
         textView.isUserInteractionEnabled = true
         
@@ -133,10 +132,6 @@ struct MessageText: UIViewRepresentable {
 
         init(openURLAction: OpenURLAction) {
             self.openURLAction = openURLAction
-        }
-        
-        func textViewDidChangeSelection(_ textView: UITextView) {
-            textView.selectedTextRange = nil
         }
         
         func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {

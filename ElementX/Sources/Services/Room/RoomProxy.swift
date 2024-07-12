@@ -21,8 +21,6 @@ import UIKit
 import MatrixRustSDK
 
 class RoomProxy: RoomProxyProtocol {
-    private static var subscriptionCountPerRoom: [String: Int] = [:]
-    
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
@@ -100,6 +98,18 @@ class RoomProxy: RoomProxyProtocol {
     var avatarURL: URL? {
         roomListItem.avatarUrl().flatMap(URL.init(string:))
     }
+    
+    var avatar: RoomAvatar {
+        if isDirect, avatarURL == nil {
+            let heroes = room.heroes()
+            
+            if heroes.count == 1 {
+                return .heroes(heroes.map(UserProfileProxy.init))
+            }
+        }
+        
+        return .room(id: id, name: name, avatarURL: avatarURL)
+    }
 
     var joinedMembersCount: Int {
         Int(room.joinedMembersCount())
@@ -133,29 +143,16 @@ class RoomProxy: RoomProxyProtocol {
         }
         
         subscribedForUpdates = true
-        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
-                                                        RequiredState(key: "m.room.topic", value: ""),
-                                                        RequiredState(key: "m.room.avatar", value: ""),
-                                                        RequiredState(key: "m.room.canonical_alias", value: ""),
-                                                        RequiredState(key: "m.room.join_rules", value: "")],
-                                        timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit),
+        let settings = RoomSubscription(requiredState: SlidingSyncConstants.defaultRequiredState,
+                                        timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
                                         includeHeroes: false) // We don't need heroes here as they're already included in the `all_rooms` list
         roomListItem.subscribe(settings: settings)
-        Self.subscriptionCountPerRoom[roomListItem.id()] = (Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0) + 1
         
         await timeline.subscribeForUpdates()
         
         subscribeToRoomInfoUpdates()
         
         subscribeToTypingNotifications()
-    }
-    
-    func unsubscribeFromUpdates() {
-        Self.subscriptionCountPerRoom[roomListItem.id()] = max(0, (Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0) - 1)
-        
-        if Self.subscriptionCountPerRoom[roomListItem.id()] ?? 0 <= 0 {
-            roomListItem.unsubscribe()
-        }
     }
     
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
@@ -562,6 +559,37 @@ class RoomProxy: RoomProxyProtocol {
             return .success(url)
         } catch {
             MXLog.error("Failed creating permalink for eventID: \(eventID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    // MARK: - Drafts
+    
+    func saveDraft(_ draft: ComposerDraft) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.saveComposerDraft(draft: draft)
+            return .success(())
+        } catch {
+            MXLog.error("Failed saving draft with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func loadDraft() async -> Result<ComposerDraft?, RoomProxyError> {
+        do {
+            return try await .success(room.loadComposerDraft())
+        } catch {
+            MXLog.error("Failed restoring draft with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func clearDraft() async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.clearComposerDraft()
+            return .success(())
+        } catch {
+            MXLog.error("Failed clearing draft with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

@@ -15,6 +15,7 @@
 //
 
 import Combine
+import Compound
 import SwiftUI
 
 @MainActor
@@ -27,11 +28,9 @@ struct HomeScreenInviteCell: View {
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
             if dynamicTypeSize < .accessibility3 {
-                LoadableAvatarImage(url: room.avatarURL,
-                                    name: title,
-                                    contentID: room.id,
-                                    avatarSize: .custom(52),
-                                    imageProvider: context.imageProvider)
+                RoomAvatarImage(avatar: room.avatar,
+                                avatarSize: .custom(52),
+                                imageProvider: context.imageProvider)
                     .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                     .accessibilityHidden(true)
             }
@@ -48,8 +47,8 @@ struct HomeScreenInviteCell: View {
         .padding(.top, 12)
         .padding(.leading, 16)
         .onTapGesture {
-            if let roomId = room.roomId {
-                context.send(viewAction: .selectRoom(roomIdentifier: roomId))
+            if let roomID = room.roomID {
+                context.send(viewAction: .selectRoom(roomIdentifier: roomID))
             }
         }
     }
@@ -208,24 +207,26 @@ private extension HomeScreenRoom {
         inviter.displayName = "Jack"
         inviter.userID = "@jack:somewhere.com"
         
-        let details = RoomSummaryDetails(id: "@someone:somewhere.com",
-                                         isInvite: false,
-                                         inviter: inviter,
-                                         name: "Some Guy",
-                                         isDirect: true,
-                                         avatarURL: nil,
-                                         lastMessage: nil,
-                                         lastMessageFormattedTimestamp: nil,
-                                         unreadMessagesCount: 0,
-                                         unreadMentionsCount: 0,
-                                         unreadNotificationsCount: 0,
-                                         notificationMode: nil,
-                                         canonicalAlias: "#footest:somewhere.org",
-                                         hasOngoingCall: false,
-                                         isMarkedUnread: false,
-                                         isFavourite: false)
+        let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
+                                  id: "@someone:somewhere.com",
+                                  isInvite: false,
+                                  inviter: inviter,
+                                  name: "Some Guy",
+                                  isDirect: true,
+                                  avatarURL: nil,
+                                  heroes: [.init(userID: "@someone:somewhere.com")],
+                                  lastMessage: nil,
+                                  lastMessageFormattedTimestamp: nil,
+                                  unreadMessagesCount: 0,
+                                  unreadMentionsCount: 0,
+                                  unreadNotificationsCount: 0,
+                                  notificationMode: nil,
+                                  canonicalAlias: "#footest:somewhere.org",
+                                  hasOngoingCall: false,
+                                  isMarkedUnread: false,
+                                  isFavourite: false)
         
-        return .init(details: details, invalidated: false, hideUnreadMessagesBadge: false)
+        return .init(summary: summary, hideUnreadMessagesBadge: false)
     }
     
     static func roomInvite(alias: String? = nil, avatarURL: URL? = nil) -> HomeScreenRoom {
@@ -234,23 +235,25 @@ private extension HomeScreenRoom {
         inviter.userID = "@jack:somewhi.nl"
         inviter.avatarURL = avatarURL
         
-        let details = RoomSummaryDetails(id: "@someone:somewhere.com",
-                                         isInvite: false,
-                                         inviter: inviter,
-                                         name: "Awesome Room",
-                                         isDirect: false,
-                                         avatarURL: avatarURL,
-                                         lastMessage: nil,
-                                         lastMessageFormattedTimestamp: nil,
-                                         unreadMessagesCount: 0,
-                                         unreadMentionsCount: 0,
-                                         unreadNotificationsCount: 0,
-                                         notificationMode: nil,
-                                         canonicalAlias: alias,
-                                         hasOngoingCall: false,
-                                         isMarkedUnread: false,
-                                         isFavourite: false)
+        let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
+                                  id: "@someone:somewhere.com",
+                                  isInvite: false,
+                                  inviter: inviter,
+                                  name: "Awesome Room",
+                                  isDirect: false,
+                                  avatarURL: avatarURL,
+                                  heroes: [.init(userID: "@someone:somewhere.com")],
+                                  lastMessage: nil,
+                                  lastMessageFormattedTimestamp: nil,
+                                  unreadMessagesCount: 0,
+                                  unreadMentionsCount: 0,
+                                  unreadNotificationsCount: 0,
+                                  notificationMode: nil,
+                                  canonicalAlias: alias,
+                                  hasOngoingCall: false,
+                                  isMarkedUnread: false,
+                                  isFavourite: false)
         
-        return .init(details: details, invalidated: false, hideUnreadMessagesBadge: false)
+        return .init(summary: summary, hideUnreadMessagesBadge: false)
     }
 }

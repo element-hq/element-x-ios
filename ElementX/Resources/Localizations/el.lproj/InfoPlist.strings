@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Για να τραβήξεις φωτογραφίες ή βίντεο και να τα στείλεις ως μήνυμα, το Element X χρειάζεται πρόσβαση στην κάμερα.";
+"NSFaceIDUsageDescription" = "Το Face ID χρησιμοποιείται για την πρόσβαση στην εφαρμογή σου.";
+"NSLocationWhenInUseUsageDescription" = "Παραχώρησε πρόσβαση στην τοποθεσία, ώστε το Element X να μπορεί να μοιραστεί την τοποθεσία σου.";
+"NSMicrophoneUsageDescription" = "Για να καταγράψεις και να στείλεις μηνύματα με ήχο, το Element X πρέπει να έχει πρόσβαση στο μικρόφωνο.";
+"NSPhotoLibraryUsageDescription" = "Επιτρέπει την αποθήκευση φωτογραφιών και βίντεο στη βιβλιοθήκη σου.";

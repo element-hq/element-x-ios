@@ -19,17 +19,16 @@ import SwiftUI
 
 struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     let timelineItem: TextRoomTimelineItem
-    @Environment(\.timelineStyle) var timelineStyle
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             if let attributedString = timelineItem.content.formattedBody {
                 FormattedBodyText(attributedString: attributedString,
-                                  additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle),
+                                  additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
                                   boostEmojiSize: true)
             } else {
                 FormattedBodyText(text: timelineItem.body,
-                                  additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle),
+                                  additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
                                   boostEmojiSize: true)
             }
         }
@@ -43,18 +42,9 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         body.environmentObject(viewModel.context)
             .previewDisplayName("Bubble")
         body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
-            .previewDisplayName("Plain")
-        body
             .environmentObject(viewModel.context)
             .environment(\.layoutDirection, .rightToLeft)
             .previewDisplayName("Bubble RTL")
-        body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
-            .environment(\.layoutDirection, .rightToLeft)
-            .previewDisplayName("Plain RTL")
     }
     
     static var body: some View {

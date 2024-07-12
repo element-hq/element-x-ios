@@ -1,0 +1,64 @@
+name: Unit Tests (Enterprise)
+
+on:
+  workflow_dispatch:
+  
+  push:
+    branches: [ develop ]
+  
+  pull_request:
+
+jobs:
+  tests:
+    name: Tests (Enterprise)
+    runs-on: macos-14
+    
+    # Skip in forks
+    if: github.repository == 'element-hq/element-x-ios'
+
+    concurrency:
+      # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ format('unit-tests-enterprise{0}', github.ref) }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: nschloe/action-cached-lfs-checkout@v1
+        with:
+          submodules: recursive
+          token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+      - uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Setup environment
+        run: source ci_scripts/ci_common.sh && setup_github_actions_environment
+      
+      - name: Configure Enterprise
+        run: bundle exec fastlane config_enterprise
+        env:
+          MAPLIBRE_API_KEY: WeDontNeedOneForUnitTests
+      
+      - name: SwiftFormat
+        run: swiftformat --lint .
+      
+      - name: Run tests
+        run: bundle exec fastlane unit_tests skip_previews:true
+        
+      - name: Zip results # for faster upload
+        if: failure()
+        working-directory: fastlane/test_output
+        run: zip -r UnitTests.zip UnitTests.xcresult
+      
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        # We only care about artefacts if the tests fail
+        if: failure()
+        with:
+            name: Results
+            path: fastlane/test_output/UnitTests.zip
+            retention-days: 1
+            if-no-files-found: ignore

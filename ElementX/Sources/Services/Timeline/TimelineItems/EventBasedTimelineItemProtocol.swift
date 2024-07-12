@@ -68,10 +68,7 @@ extension EventBasedTimelineItemProtocol {
         }
     }
 
-    func additionalWhitespaces(timelineStyle: TimelineStyle) -> Int {
-        guard timelineStyle == .bubbles else {
-            return 0
-        }
+    func additionalWhitespaces() -> Int {
         var whiteSpaces = 1
         localizedSendInfo.forEach { _ in
             whiteSpaces += 1

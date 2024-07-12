@@ -18,7 +18,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
+class MockAuthenticationServiceProxy: AuthenticationServiceProtocol {
     let validCredentials = (username: "alice", password: "12345678")
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
@@ -48,11 +48,13 @@ class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         }
     }
     
-    func urlForOIDCLogin() async -> Result<OIDCAuthenticationDataProxy, AuthenticationServiceError> {
+    func urlForOIDCLogin() async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError> {
         .failure(.oidcError(.notSupported))
     }
     
-    func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async { }
+    
+    func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         .failure(.oidcError(.notSupported))
     }
     

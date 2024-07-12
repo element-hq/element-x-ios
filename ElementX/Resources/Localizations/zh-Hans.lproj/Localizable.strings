@@ -211,6 +211,8 @@
 "common_voice_message" = "语音留言";
 "common_waiting" = "等待...";
 "common_waiting_for_decryption_key" = "正在等待解密密钥";
+"common.do_not_show_this_again" = "Do not show this again";
+"common.open_source_licenses" = "Open source licenses";
 "common.send_to" = "Send to";
 "common_no_room_name" = "无房间名";
 "common_poll_end_confirmation" = "你确定要结束这个投票吗？";
@@ -250,6 +252,8 @@
 "error_no_compatible_app_found" = "找不到完成此项操作的合适应用。";
 "error_some_messages_have_not_been_sent" = "某些信息尚未发送";
 "error_unknown" = "抱歉，发生了错误";
+"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
+"full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ 加入我 %1$@";
 "invite_friends_text" = "嗨！请通过 %1$@ 与我联系：%2$@";
 "leave_conversation_alert_subtitle" = "您确定要离开此对话吗？此对话不公开，未经邀请您将无法重新加入。";
@@ -344,9 +348,9 @@
 "screen_app_lock_setup_biometric_unlock_subtitle" = "节省时间，用 %1$@ 来解锁应用程序";
 "screen_app_lock_setup_choose_pin" = "选择 PIN 码";
 "screen_app_lock_setup_confirm_pin" = "确认 PIN 码";
-"screen_app_lock_setup_pin_blacklisted_dialog_content" = "出于安全原因，您不能选择这个 PIN 码";
-"screen_app_lock_setup_pin_blacklisted_dialog_title" = "选择不同的 PIN 码";
 "screen_app_lock_setup_pin_context" = "锁定 %1$@ 以为聊天增加安全性。\n\n选择好记的 PIN 码。如果忘掉了这个 PIN 码，就不得不登出应用。";
+"screen_app_lock_setup_pin_forbidden_dialog_content" = "出于安全原因，您不能选择这个 PIN 码";
+"screen_app_lock_setup_pin_forbidden_dialog_title" = "选择不同的 PIN 码";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "请输入两次相同的 PIN 码";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN 码不匹配";
 "screen_app_lock_signout_alert_message" = "您需要重新登录并创建新的 PIN 才能继续";
@@ -663,6 +667,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "您的服务器在加密房间中不支持此选项，您无法在此房间收到通知。";
 "screen_room_notification_settings_mode_all_messages" = "所有消息";
 "screen_room_notification_settings_room_custom_settings_title" = "在这个聊天室，通知我：";
+"screen_room_retry_send_menu_send_again_action" = "重新发送";
 "screen_room_retry_send_menu_title" = "消息发送失败";
 "screen_room_roles_and_permissions_admins" = "管理员";
 "screen_room_roles_and_permissions_change_my_role" = "更改我的角色";
@@ -868,7 +873,7 @@
 "troubleshoot_notifications_test_firebase_availability_success" = "Firebase 可用。";
 "troubleshoot_notifications_test_firebase_availability_title" = "检查 Firebase";
 "troubleshoot_notifications_test_firebase_token_description" = "确保 Firebase 令牌可用。";
-"troubleshoot_notifications_test_firebase_token_failure" = "Firebas 令牌未知。";
+"troubleshoot_notifications_test_firebase_token_failure" = "Firebase 令牌未知。";
 "troubleshoot_notifications_test_firebase_token_success" = "Firebase 令牌：%1$@ 。";
 "troubleshoot_notifications_test_firebase_token_title" = "检查 Firebase 令牌";
 "troubleshoot_notifications_test_push_loop_back_description" = "确保应用程序正在接收推送。";

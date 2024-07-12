@@ -60,6 +60,38 @@ enum RoomScreenComposerMode: Equatable {
             return false
         }
     }
+    
+    var isLoadingReply: Bool {
+        switch self {
+        case .reply(_, let replyDetails, _):
+            switch replyDetails {
+            case .loading:
+                return true
+            default:
+                return false
+            }
+        default:
+            return false
+        }
+    }
+    
+    var replyEventID: String? {
+        switch self {
+        case .reply(let itemID, _, _):
+            return itemID.eventID
+        default:
+            return nil
+        }
+    }
+    
+    var isComposingNewMessage: Bool {
+        switch self {
+        case .default, .reply:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 enum RoomScreenViewPollAction {
@@ -110,20 +142,21 @@ enum RoomScreenViewAction {
 
 enum RoomScreenComposerAction {
     case setMode(mode: RoomScreenComposerMode)
-    case setText(text: String)
+    case setText(plainText: String, htmlText: String?)
     case removeFocus
     case clear
+    case saveDraft
+    case loadDraft
 }
 
 struct RoomScreenViewState: BindableState {
     var roomID: String
     var roomTitle = ""
-    var roomAvatarURL: URL?
+    var roomAvatar: RoomAvatar
     var members: [String: RoomMemberState] = [:]
     var typingMembers: [String] = []
     var showLoading = false
     var showReadReceipts = false
-    var timelineStyle: TimelineStyle
     var isEncryptedOneToOneRoom = false
     var timelineViewState: TimelineViewState // check the doc before changing this
 
@@ -202,7 +235,7 @@ struct RoomMemberState {
 /// Is also nice to have this as a wrapper for any state that is directly connected to the timeline.
 struct TimelineViewState {
     var isLive = true
-    var paginationState = PaginationState.default
+    var paginationState = PaginationState.initial
     
     /// The room is in the process of loading items from a new timeline (switching to/from a detached timeline).
     var isSwitchingTimelines = false

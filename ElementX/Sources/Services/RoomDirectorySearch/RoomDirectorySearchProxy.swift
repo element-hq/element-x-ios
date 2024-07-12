@@ -154,7 +154,7 @@ final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
                                   alias: value.alias,
                                   name: value.name,
                                   topic: value.topic,
-                                  avatarURL: value.avatarUrl.flatMap(URL.init(string:)),
+                                  avatar: .room(id: value.roomId, name: value.name, avatarURL: value.avatarUrl.flatMap(URL.init(string:))),
                                   canBeJoined: value.joinRule == .public)
     }
 }
