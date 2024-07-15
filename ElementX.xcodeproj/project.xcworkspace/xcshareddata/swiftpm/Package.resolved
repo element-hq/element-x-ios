@@ -1,13 +1,13 @@
 {
-  "originHash" : "f365b5beb40745f208e5ec7cd4891301b38101ddbeae52296261f3d4a25436c7",
+  "originHash" : "1b1fb14b1ac1438c44ffd2f0151af65c83018d71b8674cd7f13ec21abeb31bcd",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "5086370e2c8d6d23c761369c0ac6c3aef33fc5d6",
-        "version" : "1.3.0"
+        "revision" : "5350cf2871ef7edcf043ef57b8990858463db51b",
+        "version" : "1.6.0"
       }
     },
     {
@@ -15,7 +15,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "e44f649c9f0c9c562fed3f311aca10c144059725"
+        "revision" : "4c682f497b7b1c2ebbe84f564a1cecd2ed201414"
       }
     },
     {
@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols",
       "state" : {
-        "revision" : "afd0a1da4ed62bab1413caa6dd6b60a7a7089ed2",
-        "version" : "5.2.0"
+        "revision" : "e2e28f4e56e1769c2ec3c61c9355fc64eb7a535a",
+        "version" : "5.3.0"
       }
     },
     {
@@ -248,14 +248,14 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
-        "revision" : "8ddd519780452729c6634ad6bd0d2595938e9ea3",
-        "version" : "1.16.1"
+        "revision" : "c097f955b4e724690f0fc8ffb7a6d4b881c9c4e3",
+        "version" : "1.17.2"
       }
     },
     {
       "identity" : "swift-syntax",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-syntax.git",
+      "location" : "https://github.com/swiftlang/swift-syntax",
       "state" : {
         "revision" : "74203046135342e4a4a627476dd6caf8b28fe11b",
         "version" : "509.0.0"
@@ -275,8 +275,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/SwiftUI-Introspect",
       "state" : {
-        "revision" : "7dc5b287f8040e4ad5038739850b758e78f77808",
-        "version" : "1.1.4"
+        "revision" : "668a65735751432b640260c56dfa621cec568368",
+        "version" : "1.2.0"
       }
     },
     {
