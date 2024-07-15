@@ -140,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rich-text-editor-swift",
       "state" : {
-        "revision" : "acf0821a87ded426afe59647e578464f840eff43",
-        "version" : "2.37.5"
+        "revision" : "3f45e8e04d6998fc02fee4212f214a90687f42d7",
+        "version" : "2.37.6"
       }
     },
     {
