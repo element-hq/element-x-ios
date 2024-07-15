@@ -212,7 +212,7 @@
 "common_waiting" = "Čekání...";
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
 "common.do_not_show_this_again" = "Znovu nezobrazovat";
-"common.open_source_licenses" = "Open source licenses";
+"common.open_source_licenses" = "Licence s otevřeným zdrojovým kódem";
 "common.send_to" = "Odeslat do";
 "common_no_room_name" = "Žádný název místnosti";
 "common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
