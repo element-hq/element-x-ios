@@ -181,8 +181,12 @@ targets:
       script: |
         # The RTE XCFramework contains .frameworks instead of static libs. For some reason Xcode embeds the binary, but also
         # an empty framework containing a stub binary. This stub binary is generated for our app and so its version mismatches
-        # the one declared by the XCFramework's Info.plist file (and we can't match it because of Element iOS).
-        /usr/libexec/PlistBuddy -c "Set :MinimumOSVersion ${IPHONEOS_DEPLOYMENT_TARGET}" ${BUILT_PRODUCTS_DIR}/ElementX.app/Frameworks/WysiwygComposerFFI.framework/Info.plist
+        # the one declared by the XCFramework's Info.plist file (and we can't match it because of Element iOS). ASC doesn't like this.
+        if [ "$CONFIGURATION" == "Release" ]; then
+            # On the other hand local device builds detect a signature change, so only do this when in Release mode.
+            # Not ideal but helps us most of the time and we can remove this run phase locally if needed.
+            /usr/libexec/PlistBuddy -c "Set :MinimumOSVersion ${IPHONEOS_DEPLOYMENT_TARGET}" ${BUILT_PRODUCTS_DIR}/ElementX.app/Frameworks/WysiwygComposerFFI.framework/Info.plist
+        fi
 
     dependencies:
     - target: NSE
