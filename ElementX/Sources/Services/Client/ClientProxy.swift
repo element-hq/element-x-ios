@@ -481,6 +481,8 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
             return .success(.init(roomPreview))
+        } catch let error as ClientError where error.code == .forbidden {
+            return .failure(.roomPreviewIsPrivate)
         } catch {
             MXLog.error("Failed retrieving preview for room: \(identifier) with error: \(error)")
             return .failure(.sdkError(error))

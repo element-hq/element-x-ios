@@ -81,6 +81,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         switch await clientProxy.roomPreviewForIdentifier(roomID, via: via) {
         case .success(let roomDetails):
             state.roomDetails = roomDetails
+        case .failure(.roomPreviewIsPrivate):
+            break // Handled by the mode, we don't need an error indicator.
         case .failure:
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
         }

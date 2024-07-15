@@ -43,6 +43,7 @@ enum ClientProxyError: Error {
     case invalidMedia
     case invalidUserIDServerName
     case failedUploadingMedia(Error, MatrixErrorCode)
+    case roomPreviewIsPrivate
 }
 
 enum SlidingSyncConstants {

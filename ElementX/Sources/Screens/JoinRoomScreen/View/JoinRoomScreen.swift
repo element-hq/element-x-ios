@@ -51,10 +51,11 @@ struct JoinRoomScreen: View {
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
-                if let alias = context.viewState.roomDetails?.canonicalAlias {
-                    Text(alias)
+                if let subtitle = context.viewState.subtitle {
+                    Text(subtitle)
                         .font(.compound.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
+                        .multilineTextAlignment(.center)
                 }
                 
                 if let memberCount = context.viewState.roomDetails?.memberCount {
