@@ -73,7 +73,7 @@
 "action_quick_reply" = "Kiirvastus";
 "action_quote" = "Tsiteeri";
 "action_react" = "Reageeri";
-"action_reject" = "Lükka tagasi";
+"action_reject" = "Keeldu";
 "action_remove" = "Eemalda";
 "action_reply" = "Vasta";
 "action_reply_in_thread" = "Vasta jutulõngas";
@@ -137,7 +137,7 @@
 "common_image" = "Pilt";
 "common_in_reply_to" = "Vastuseks kasutajale %1$@";
 "common_invite_unknown_profile" = "Sellist Matrix'i kasutajatunnust ei õnnestu leida, seega sõnumit ilmselt keegi kätte ei saa.";
-"common_leaving_room" = "On lahkumas jututoast";
+"common_leaving_room" = "Oled lahkumas jututoast";
 "common_light" = "Hele";
 "common_link_copied_to_clipboard" = "Link on kopeeritud lõikelauale";
 "common_loading" = "Laadime…";
@@ -212,7 +212,7 @@
 "common_waiting" = "Ootame…";
 "common_waiting_for_decryption_key" = "Ootame selle sõnumi dekrüptimisvõtit";
 "common.do_not_show_this_again" = "Ära enam näita seda uuesti";
-"common.open_source_licenses" = "Open source licenses";
+"common.open_source_licenses" = "Avatud lähtekoodiga litsentsid";
 "common.send_to" = "Saada kasutajale";
 "common_no_room_name" = "Jututoal puudub nimi";
 "common_poll_end_confirmation" = "Kas oled kindel, et soovid selle küsitluse lõpetada?";
@@ -725,9 +725,9 @@
 "screen_server_confirmation_title_login" = "Sa oled sisselogimas koduserverisse %1$@";
 "screen_server_confirmation_title_register" = "Sa oled loomas kasutajakontot koduserveris %1$@";
 "screen_session_verification_cancelled_subtitle" = "Olukord pole päris õige. Päring kas aegus või teine osapool keeldus päringule vastamast.";
-"screen_session_verification_compare_emojis_subtitle" = "Kinnita, et kõik alljärgnevas kuvatud emojid on täpselt samad, mida sa näed oma teises sessioonis.";
+"screen_session_verification_compare_emojis_subtitle" = "Kinnita, et kõik järgnevalt kuvatud emojid on täpselt samad, mida sa näed oma teises sessioonis.";
 "screen_session_verification_compare_emojis_title" = "Võrdle emojisid";
-"screen_session_verification_compare_numbers_subtitle" = "Kinnita, et kõik alljärgnevas kuvatud numbrid on täpselt samad, mida sa näed oma teises sessioonis.";
+"screen_session_verification_compare_numbers_subtitle" = "Kinnita, et kõik järgnevalt kuvatud numbrid on täpselt samad, mida sa näed oma teises sessioonis.";
 "screen_session_verification_compare_numbers_title" = "Võrdle numbreid";
 "screen_session_verification_complete_subtitle" = "Sinu uus sessioon on nüüd verifitseeritud. Sellel sessioonil on nüüd ligipääs sinu krüptitud sõnumitele ja teised osapooled näevad teda usaldusväärsena.";
 "screen_session_verification_enter_recovery_key" = "Sisesta taastevõti";
