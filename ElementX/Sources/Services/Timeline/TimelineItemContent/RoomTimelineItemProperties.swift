@@ -26,4 +26,6 @@ struct RoomTimelineItemProperties: Hashable {
     var deliveryStatus: TimelineItemDeliveryStatus?
     /// The read receipts of the item, ordered from newest to oldest
     var orderedReadReceipts: [ReadReceipt] = []
+    /// Message shield for authenticity warnings
+    var shield: MessageShield?
 }

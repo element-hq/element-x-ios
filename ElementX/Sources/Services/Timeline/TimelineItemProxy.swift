@@ -120,8 +120,44 @@ class EventTimelineItemProxy {
         let debugInfo = item.debugInfo()
         return TimelineItemDebugInfo(model: debugInfo.model, originalJSON: debugInfo.originalJson, latestEditJSON: debugInfo.latestEditJson)
     }()
-
+    
+    lazy var shield: MessageShield? = {
+        if let shield = item.getShield(strict: false) {
+            return MessageShield.fromRustShield(shieldState: shield)
+        }
+        return nil
+    }()
+    
     lazy var readReceipts = item.readReceipts()
+}
+
+extension MessageShield {
+    static func fromRustShield(shieldState: ShieldState) -> MessageShield? {
+        switch shieldState {
+        case .red(let message):
+            return MessageShield(color: .RED, message: translatableFromRawString(message))
+        case .grey(let message):
+            return MessageShield(color: .GRAY, message: translatableFromRawString(message))
+        default: break
+        }
+        return nil
+    }
+    
+    // There is no i18n in the rust sdk, so we have to do it here from the raw string.
+    private static func translatableFromRawString(_ message: String) -> String {
+        return switch message {
+        case "The authenticity of this encrypted message can't be guaranteed on this device.":
+            L10n.eventShieldReasonAuthenticityNotGuaranteed
+        case "Encrypted by an unknown or deleted device.":
+            L10n.eventShieldReasonUnknownDevice
+        case "Encrypted by a device not verified by its owner.":
+            L10n.eventShieldReasonUnsignedDevice
+        case "Encrypted by an unverified user.":
+            L10n.eventShieldReasonUnverifiedIdentity
+        // Default to the raw english string
+        default: message
+        }
+    }
 }
 
 struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {
