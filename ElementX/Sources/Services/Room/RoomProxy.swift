@@ -155,6 +155,17 @@ class RoomProxy: RoomProxyProtocol {
         subscribeToTypingNotifications()
     }
     
+    func subscribeToRoomInfoUpdates() {
+        guard roomInfoObservationToken == nil else {
+            return
+        }
+        
+        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] in
+            MXLog.info("Received room info update")
+            self?.actionsSubject.send(.roomInfoUpdate)
+        })
+    }
+    
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
             let timeline = try await room.timelineFocusedOnEvent(eventId: eventID, numContextEvents: numberOfEvents, internalIdPrefix: UUID().uuidString)
@@ -595,13 +606,6 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     // MARK: - Private
-    
-    private func subscribeToRoomInfoUpdates() {
-        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] in
-            MXLog.info("Received room info update")
-            self?.actionsSubject.send(.roomInfoUpdate)
-        })
-    }
     
     private func subscribeToTypingNotifications() {
         typingNotificationObservationToken = room.subscribeToTypingNotifications(listener: RoomTypingNotificationUpdateListener { [weak self] typingUserIDs in

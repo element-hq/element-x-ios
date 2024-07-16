@@ -44,7 +44,17 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         return CXProvider(configuration: configuration)
     }()
     
-    private var incomingCallID: CallID?
+    private weak var clientProxy: ClientProxyProtocol?
+    
+    private var cancellables = Set<AnyCancellable>()
+    private var incomingCallID: CallID? {
+        didSet {
+            Task {
+                await observeIncomingCallRoomStateUpdates()
+            }
+        }
+    }
+    
     private var endUnansweredCallTask: Task<Void, Never>?
     
     private var ongoingCallID: CallID?
@@ -63,6 +73,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         pushRegistry.desiredPushTypes = [.voIP]
         
         callProvider.setDelegate(self, queue: nil)
+    }
+    
+    func setClientProxy(_ clientProxy: any ClientProxyProtocol) {
+        self.clientProxy = clientProxy
     }
     
     func setupCallSession(roomID: String, roomDisplayName: String) async {
@@ -220,5 +234,47 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
         
         ongoingCallID = nil
+    }
+    
+    func observeIncomingCallRoomStateUpdates() async {
+        cancellables.removeAll()
+        
+        guard let clientProxy, let incomingCallID else {
+            return
+        }
+        
+        guard let roomProxy = await clientProxy.roomForIdentifier(incomingCallID.roomID) else {
+            return
+        }
+        
+        roomProxy.subscribeToRoomInfoUpdates()
+        
+        // There's no incoming event for call cancellations so try to infer
+        // it from what we have. If the call is running before subscribing then wait
+        // for it to change to `false` otherwise wait for it to turn `true` before
+        // changing to `false`
+        let isCallOngoing = roomProxy.hasOngoingCall
+        
+        roomProxy
+            .actionsPublisher
+            .map { action in
+                switch action {
+                case .roomInfoUpdate:
+                    return roomProxy.hasOngoingCall
+                }
+            }
+            .removeDuplicates()
+            .dropFirst(isCallOngoing ? 0 : 1)
+            .sink { [weak self] hasOngoingCall in
+                guard let self else { return }
+                
+                if !hasOngoingCall {
+                    MXLog.info("Call has been cancelled")
+                    cancellables.removeAll()
+                    endUnansweredCallTask?.cancel()
+                    callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
+                }
+            }
+            .store(in: &cancellables)
     }
 }

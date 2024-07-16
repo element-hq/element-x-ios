@@ -14,23 +14,11 @@
 // limitations under the License.
 //
 
-import Combine
+import Foundation
 
-enum ElementCallServiceAction {
-    case startCall(roomID: String)
-    case endCall(roomID: String)
-    case setCallMuted(_ muted: Bool, roomID: String)
+enum ElementCallServiceNotificationKey: String {
+    case roomID
+    case roomDisplayName
 }
 
-// sourcery: AutoMockable
-protocol ElementCallServiceProtocol {
-    var actions: AnyPublisher<ElementCallServiceAction, Never> { get }
-    
-    func setClientProxy(_ clientProxy: ClientProxyProtocol)
-    
-    func setupCallSession(roomID: String, roomDisplayName: String) async
-    
-    func tearDownCallSession()
-    
-    func setCallMuted(_ muted: Bool, roomID: String)
-}
+let ElementCallServiceNotificationDiscardDelta = 10.0

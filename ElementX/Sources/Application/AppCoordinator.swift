@@ -42,6 +42,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         didSet {
             userSessionObserver?.cancel()
             if userSession != nil {
+                configureElementCallService()
                 configureNotificationManager()
                 observeUserSessionChanges()
                 startSync()
@@ -636,6 +637,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 windowManager.switchToMain()
             }
         }
+    }
+    
+    private func configureElementCallService() {
+        guard let userSession else {
+            fatalError("User session not setup")
+        }
+        
+        elementCallService.setClientProxy(userSession.clientProxy)
     }
 
     private func configureNotificationManager() {
