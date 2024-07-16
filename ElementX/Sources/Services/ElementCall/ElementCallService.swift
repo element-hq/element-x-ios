@@ -152,16 +152,6 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         MXLog.info("Call provider did reset: \(provider)")
     }
     
-    func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
-        if let ongoingCallID {
-            provider.reportOutgoingCall(with: ongoingCallID.callKitID, connectedAt: nil)
-        } else {
-            MXLog.error("Failed starting call, missing ongoingCallID")
-        }
-
-        action.fulfill()
-    }
-    
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
         if let incomingCallID {
             actionsSubject.send(.startCall(roomID: incomingCallID.roomID))

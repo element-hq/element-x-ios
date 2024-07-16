@@ -87,6 +87,9 @@ private struct WebView: UIViewRepresentable {
             webView.uiDelegate = self
             webView.navigationDelegate = self
             
+            // https://stackoverflow.com/a/77963877/730924
+            webView.allowsLinkPreview = true
+            
             // Try matching Element Call colors
             webView.isOpaque = false
             webView.backgroundColor = .compound.bgCanvasDefault
