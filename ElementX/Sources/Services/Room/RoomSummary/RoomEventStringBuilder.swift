@@ -32,8 +32,12 @@ struct RoomEventStringBuilder {
         }
         
         switch eventItemProxy.content.kind() {
-        case .unableToDecrypt:
-            return prefix(L10n.commonDecryptionError, with: displayName)
+        case .unableToDecrypt(let encryptedMessage):
+            let errorMessage = switch encryptedMessage {
+            case .megolmV1AesSha2(_, .membership): L10n.commonUnableToDecryptNoAccess
+            default: L10n.commonWaitingForDecryptionKey
+            }
+            return prefix(errorMessage, with: displayName)
         case .redactedMessage:
             return prefix(L10n.commonMessageRemoved, with: displayName)
         case .sticker:
