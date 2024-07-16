@@ -169,6 +169,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         
         return JoinRoomScreenViewModel(roomID: "1",
                                        via: [],
+                                       allowKnocking: true,
                                        clientProxy: clientProxy,
                                        mediaProvider: MockMediaProvider(),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
