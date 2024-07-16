@@ -241,6 +241,7 @@
 		386720B603F87D156DB01FB2 /* VoiceMessageMediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40076C770A5FB83325252973 /* VoiceMessageMediaManager.swift */; };
 		38896D54D6D675534E606195 /* RoomTimelineControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCC416A3BFE73DF7B3E6BF /* RoomTimelineControllerFactory.swift */; };
 		388D39ED9FE1122EA6D76BF2 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BC84BA0AF11C2128D58ABD /* Common.swift */; };
+		3895969759E68FAB90C63EF7 /* ElementCallServiceConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406C90AF8C3E98DF5D4E5430 /* ElementCallServiceConstants.swift */; };
 		3982C505960006B341CFD0C6 /* UserDetailsEditScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D0EA07BD545CC9F234DB8D /* UserDetailsEditScreenModels.swift */; };
 		3982E60F9C126437D5E488A3 /* PillContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A6314FDC51DA25712D9A81 /* PillContextTests.swift */; };
 		39A987B3E41B976D1DF944C6 /* CallScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A63A59BFDDC494B1C20119 /* CallScreenViewModel.swift */; };
@@ -453,7 +454,6 @@
 		6AECC84BE14A13440120FED8 /* NSESettingsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4F169D653296023ED65E6 /* NSESettingsProtocol.swift */; };
 		6B05AA5D9BBCD6D8D63B80EB /* TimelineItemAccessibilityModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C6F3DAD167F972702C8893 /* TimelineItemAccessibilityModifier.swift */; };
 		6B31508C6334C617360C2EAB /* RoomMemberDetailsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC589E641AE46EFB2962534D /* RoomMemberDetailsViewModelTests.swift */; };
-		6B67AC7AA41136FC9804C136 /* ElementCallServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC8B21E86B137BE4E91F82A /* ElementCallServiceProtocol.swift */; };
 		6BAD956B909A6E29F6CC6E7C /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC23C63849452BC86EA2852 /* ButtonStyle.swift */; };
 		6BB6944443C421C722ED1E7D /* portrait_test_video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F2D513D2477B57F90E98EEC0 /* portrait_test_video.mp4 */; };
 		6C34237AFB808E38FC8776B9 /* RoomStateEventStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D55702474F279D910D2D162 /* RoomStateEventStringBuilder.swift */; };
@@ -676,6 +676,7 @@
 		9DE801D278AC34737467F937 /* VoiceMessageMediaManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889DEDD63C68ABDA8AD29812 /* VoiceMessageMediaManagerProtocol.swift */; };
 		9E838A62918E47BC72D6640D /* UserIndicatorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB54B4F94686CCF0289B72F /* UserIndicatorPresenter.swift */; };
 		9EBDC79CAC9B63A0D626E333 /* LegalInformationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB2CAA266B921D128C35710 /* LegalInformationScreenCoordinator.swift */; };
+		9F11B9F347F9E2D236799FB3 /* ElementCallServiceConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406C90AF8C3E98DF5D4E5430 /* ElementCallServiceConstants.swift */; };
 		9F11E743EA01482E78A438B0 /* GlobalSearchScreenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DB19219E6CC4D002E15D48 /* GlobalSearchScreenCell.swift */; };
 		9F19096BFA629C0AC282B1E4 /* CreateRoomScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CEB4634C0DD7779C4AB504 /* CreateRoomScreenUITests.swift */; };
 		9FAF6DA7E8E85C9699757764 /* CollapsibleRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2656184491C505700D2405 /* CollapsibleRoomTimelineView.swift */; };
@@ -1412,6 +1413,7 @@
 		3FFDA99C98BE05F43A92343B /* test_pdf.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = test_pdf.pdf; sourceTree = "<group>"; };
 		40076C770A5FB83325252973 /* VoiceMessageMediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMessageMediaManager.swift; sourceTree = "<group>"; };
 		40316EFFEAC7B206EE9A55AE /* SecureBackupScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupScreenViewModelTests.swift; sourceTree = "<group>"; };
+		406C90AF8C3E98DF5D4E5430 /* ElementCallServiceConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementCallServiceConstants.swift; sourceTree = "<group>"; };
 		40B21E611DADDEF00307E7AC /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		4100DDE6BF3C566AB66B80CC /* MentionSuggestionItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentionSuggestionItemView.swift; sourceTree = "<group>"; };
 		4176C3E20C772DE8D182863C /* LegalInformationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalInformationScreen.swift; sourceTree = "<group>"; };
@@ -4097,6 +4099,7 @@
 			isa = PBXGroup;
 			children = (
 				33AE897D86784CCA5E4E9227 /* ElementCallService.swift */,
+				406C90AF8C3E98DF5D4E5430 /* ElementCallServiceConstants.swift */,
 				6FC8B21E86B137BE4E91F82A /* ElementCallServiceProtocol.swift */,
 				309AD8BAE6437C31BA7157BF /* ElementCallWidgetDriver.swift */,
 				A6C11AD9813045E44F950410 /* ElementCallWidgetDriverProtocol.swift */,
@@ -5720,7 +5723,7 @@
 				B5618E3C948584E5C1F67033 /* DTHTMLElement+AttributedStringBuilder.swift in Sources */,
 				DFCA89C4EC2A5332ED6B441F /* DataProtectionManager.swift in Sources */,
 				24A75F72EEB7561B82D726FD /* Date.swift in Sources */,
-				6B67AC7AA41136FC9804C136 /* ElementCallServiceProtocol.swift in Sources */,
+				9F11B9F347F9E2D236799FB3 /* ElementCallServiceConstants.swift in Sources */,
 				CFEC53440C572CEEABC4A6A0 /* ElementXAttributeScope.swift in Sources */,
 				A33784831AD880A670CAA9F9 /* FileManager.swift in Sources */,
 				59F940FCBE6BC343AECEF75E /* ImageCache.swift in Sources */,
@@ -6082,6 +6085,7 @@
 				AE1160076F663BF14E0E893A /* EffectsView.swift in Sources */,
 				FE4593FC2A02AAF92E089565 /* ElementAnimations.swift in Sources */,
 				5732395A4F71F51F9C754C5A /* ElementCallService.swift in Sources */,
+				3895969759E68FAB90C63EF7 /* ElementCallServiceConstants.swift in Sources */,
 				8E7A902CA16E24928F83646C /* ElementCallServiceMock.swift in Sources */,
 				48416BBEB8DDF3E4DED0EDB6 /* ElementCallServiceProtocol.swift in Sources */,
 				07CC13C5729C24255348CBBD /* ElementCallWidgetDriver.swift in Sources */,

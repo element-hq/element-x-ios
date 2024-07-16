@@ -66,6 +66,8 @@ protocol RoomProxyProtocol {
     
     func subscribeForUpdates() async
     
+    func subscribeToRoomInfoUpdates()
+    
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>

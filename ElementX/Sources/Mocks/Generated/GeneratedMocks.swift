@@ -4826,6 +4826,47 @@ class ElementCallServiceMock: ElementCallServiceProtocol {
     }
     var underlyingActions: AnyPublisher<ElementCallServiceAction, Never>!
 
+    //MARK: - setClientProxy
+
+    var setClientProxyUnderlyingCallsCount = 0
+    var setClientProxyCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setClientProxyUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setClientProxyUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setClientProxyUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setClientProxyUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setClientProxyCalled: Bool {
+        return setClientProxyCallsCount > 0
+    }
+    var setClientProxyReceivedClientProxy: ClientProxyProtocol?
+    var setClientProxyReceivedInvocations: [ClientProxyProtocol] = []
+    var setClientProxyClosure: ((ClientProxyProtocol) -> Void)?
+
+    func setClientProxy(_ clientProxy: ClientProxyProtocol) {
+        setClientProxyCallsCount += 1
+        setClientProxyReceivedClientProxy = clientProxy
+        DispatchQueue.main.async {
+            self.setClientProxyReceivedInvocations.append(clientProxy)
+        }
+        setClientProxyClosure?(clientProxy)
+    }
     //MARK: - setupCallSession
 
     var setupCallSessionRoomIDRoomDisplayNameUnderlyingCallsCount = 0
@@ -8299,6 +8340,41 @@ class RoomProxyMock: RoomProxyProtocol {
     func subscribeForUpdates() async {
         subscribeForUpdatesCallsCount += 1
         await subscribeForUpdatesClosure?()
+    }
+    //MARK: - subscribeToRoomInfoUpdates
+
+    var subscribeToRoomInfoUpdatesUnderlyingCallsCount = 0
+    var subscribeToRoomInfoUpdatesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToRoomInfoUpdatesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToRoomInfoUpdatesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToRoomInfoUpdatesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToRoomInfoUpdatesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var subscribeToRoomInfoUpdatesCalled: Bool {
+        return subscribeToRoomInfoUpdatesCallsCount > 0
+    }
+    var subscribeToRoomInfoUpdatesClosure: (() -> Void)?
+
+    func subscribeToRoomInfoUpdates() {
+        subscribeToRoomInfoUpdatesCallsCount += 1
+        subscribeToRoomInfoUpdatesClosure?()
     }
     //MARK: - timelineFocusedOnEvent
 
