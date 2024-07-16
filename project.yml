@@ -64,7 +64,7 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: e44f649c9f0c9c562fed3f311aca10c144059725
+    revision: 4c682f497b7b1c2ebbe84f564a1cecd2ed201414
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
@@ -130,13 +130,10 @@ packages:
     minorVersion: 8.30.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    minorVersion: 1.16.1
+    minorVersion: 1.17.2
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     minorVersion: 6.0.0
-  SwiftUIIntrospect:
-    url: https://github.com/siteline/SwiftUI-Introspect
-    minorVersion: 1.1.4
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.0.0
