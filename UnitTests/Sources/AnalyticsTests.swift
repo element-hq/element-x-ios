@@ -76,7 +76,6 @@ class AnalyticsTests: XCTestCase {
         // Given a fresh install of the app Analytics should be disabled
         XCTAssertEqual(appSettings.analyticsConsentState, .unknown)
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
-        XCTAssertFalse(ServiceLocator.shared.analytics.isRunningPublisher.value)
         XCTAssertFalse(analyticsClient.startAnalyticsConfigurationCalled)
     }
     
@@ -87,7 +86,6 @@ class AnalyticsTests: XCTestCase {
         // Then analytics should be disabled
         XCTAssertEqual(appSettings.analyticsConsentState, .optedOut)
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
-        XCTAssertFalse(ServiceLocator.shared.analytics.isRunningPublisher.value)
         XCTAssertFalse(analyticsClient.isRunning)
         // Analytics client should have been stopped
         XCTAssertTrue(analyticsClient.stopCalled)

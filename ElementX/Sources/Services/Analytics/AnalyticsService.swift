@@ -38,19 +38,11 @@ class AnalyticsService {
     
     /// A signpost client for performance testing the app. This client doesn't respect the
     /// `isRunning` state or behave any differently when `start`/`reset` are called.
-    let signpost = Signposter(isDevelopmentBuild: AppSettings.isDevelopmentBuild)
+    let signpost = Signposter()
     
-    /// Whether or not the object is enabled and sending events to the server.
-    private let isRunningSubject: CurrentValueSubject<Bool, Never> = .init(false)
-    var isRunningPublisher: CurrentValuePublisher<Bool, Never> {
-        isRunningSubject.asCurrentValuePublisher()
-    }
-
     init(client: AnalyticsClientProtocol, appSettings: AppSettings) {
         self.client = client
         self.appSettings = appSettings
-        
-        isRunningSubject.send(client.isRunning)
     }
     
     /// Whether to show the user the analytics opt in prompt.
@@ -76,21 +68,19 @@ class AnalyticsService {
         // The order is important here. PostHog ignores the reset if stopped.
         reset()
         client.stop()
-        
-        isRunningSubject.send(false)
+
         MXLog.info("Stopped.")
     }
     
     /// Starts the analytics client if the user has opted in, otherwise does nothing.
     func startIfEnabled() {
-        guard isEnabled, !isRunningPublisher.value else { return }
+        guard isEnabled, !client.isRunning else { return }
         
         client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
 
         // Sanity check in case something went wrong.
         guard client.isRunning else { return }
         
-        isRunningSubject.send(true)
         MXLog.info("Started.")
     }
     
