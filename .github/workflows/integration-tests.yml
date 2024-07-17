@@ -9,7 +9,7 @@ on:
 jobs:
   integration_tests:
     name: Integration Tests
-    runs-on: perf-only
+    runs-on: macos-14
 
     concurrency:
       # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
