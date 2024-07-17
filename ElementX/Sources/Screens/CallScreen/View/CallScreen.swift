@@ -185,7 +185,7 @@ struct CallScreen_Previews: PreviewProvider {
         widgetDriver.underlyingActions = PassthroughSubject<ElementCallWidgetDriverAction, Never>().eraseToAnyPublisher()
         widgetDriver.startBaseURLClientIDColorSchemeReturnValue = .success(URL.userDirectory)
         
-        roomProxy.elementCallWidgetDriverReturnValue = widgetDriver
+        roomProxy.elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
         
         return CallScreenViewModel(elementCallService: ElementCallServiceMock(.init()),
                                    clientProxy: clientProxy,

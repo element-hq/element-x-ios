@@ -10618,15 +10618,15 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - elementCallWidgetDriver
 
-    var elementCallWidgetDriverUnderlyingCallsCount = 0
-    var elementCallWidgetDriverCallsCount: Int {
+    var elementCallWidgetDriverDeviceIDUnderlyingCallsCount = 0
+    var elementCallWidgetDriverDeviceIDCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return elementCallWidgetDriverUnderlyingCallsCount
+                return elementCallWidgetDriverDeviceIDUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = elementCallWidgetDriverUnderlyingCallsCount
+                    returnValue = elementCallWidgetDriverDeviceIDUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -10634,27 +10634,29 @@ class RoomProxyMock: RoomProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                elementCallWidgetDriverUnderlyingCallsCount = newValue
+                elementCallWidgetDriverDeviceIDUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    elementCallWidgetDriverUnderlyingCallsCount = newValue
+                    elementCallWidgetDriverDeviceIDUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var elementCallWidgetDriverCalled: Bool {
-        return elementCallWidgetDriverCallsCount > 0
+    var elementCallWidgetDriverDeviceIDCalled: Bool {
+        return elementCallWidgetDriverDeviceIDCallsCount > 0
     }
+    var elementCallWidgetDriverDeviceIDReceivedDeviceID: String?
+    var elementCallWidgetDriverDeviceIDReceivedInvocations: [String] = []
 
-    var elementCallWidgetDriverUnderlyingReturnValue: ElementCallWidgetDriverProtocol!
-    var elementCallWidgetDriverReturnValue: ElementCallWidgetDriverProtocol! {
+    var elementCallWidgetDriverDeviceIDUnderlyingReturnValue: ElementCallWidgetDriverProtocol!
+    var elementCallWidgetDriverDeviceIDReturnValue: ElementCallWidgetDriverProtocol! {
         get {
             if Thread.isMainThread {
-                return elementCallWidgetDriverUnderlyingReturnValue
+                return elementCallWidgetDriverDeviceIDUnderlyingReturnValue
             } else {
                 var returnValue: ElementCallWidgetDriverProtocol? = nil
                 DispatchQueue.main.sync {
-                    returnValue = elementCallWidgetDriverUnderlyingReturnValue
+                    returnValue = elementCallWidgetDriverDeviceIDUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -10662,22 +10664,26 @@ class RoomProxyMock: RoomProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                elementCallWidgetDriverUnderlyingReturnValue = newValue
+                elementCallWidgetDriverDeviceIDUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    elementCallWidgetDriverUnderlyingReturnValue = newValue
+                    elementCallWidgetDriverDeviceIDUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var elementCallWidgetDriverClosure: (() -> ElementCallWidgetDriverProtocol)?
+    var elementCallWidgetDriverDeviceIDClosure: ((String) -> ElementCallWidgetDriverProtocol)?
 
-    func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol {
-        elementCallWidgetDriverCallsCount += 1
-        if let elementCallWidgetDriverClosure = elementCallWidgetDriverClosure {
-            return elementCallWidgetDriverClosure()
+    func elementCallWidgetDriver(deviceID: String) -> ElementCallWidgetDriverProtocol {
+        elementCallWidgetDriverDeviceIDCallsCount += 1
+        elementCallWidgetDriverDeviceIDReceivedDeviceID = deviceID
+        DispatchQueue.main.async {
+            self.elementCallWidgetDriverDeviceIDReceivedInvocations.append(deviceID)
+        }
+        if let elementCallWidgetDriverDeviceIDClosure = elementCallWidgetDriverDeviceIDClosure {
+            return elementCallWidgetDriverDeviceIDClosure(deviceID)
         } else {
-            return elementCallWidgetDriverReturnValue
+            return elementCallWidgetDriverDeviceIDReturnValue
         }
     }
     //MARK: - sendCallNotificationIfNeeeded

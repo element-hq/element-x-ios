@@ -44,10 +44,12 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
          elementCallBaseURL: URL,
          elementCallBaseURLOverride: URL?,
          colorScheme: ColorScheme) {
+        guard let deviceID = clientProxy.deviceID else { fatalError("Missing device ID for the call.") }
+        
         self.elementCallService = elementCallService
         self.roomProxy = roomProxy
         
-        widgetDriver = roomProxy.elementCallWidgetDriver()
+        widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
         
         super.init(initialViewState: CallScreenViewState(messageHandler: Self.eventHandlerName,
                                                          script: Self.eventHandlerInjectionScript))

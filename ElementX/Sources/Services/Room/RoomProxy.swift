@@ -526,8 +526,8 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol {
-        ElementCallWidgetDriver(room: room)
+    func elementCallWidgetDriver(deviceID: String) -> ElementCallWidgetDriverProtocol {
+        ElementCallWidgetDriver(room: room, deviceID: deviceID)
     }
     
     func sendCallNotificationIfNeeeded() async -> Result<Void, RoomProxyError> {
