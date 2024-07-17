@@ -158,12 +158,7 @@ final class TimelineProxy: TimelineProxyProtocol {
               intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Editing timeline item: \(timelineItemID)")
         
-        let editMode: EditMode
-        if let eventID = timelineItemID.eventID {
-            editMode = .remote(eventID: eventID)
-        } else if let eventTimelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID) {
-            editMode = .local(item: eventTimelineItem)
-        } else {
+        guard let timelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID) else {
             MXLog.error("Unknown timeline item: \(timelineItemID)")
             return .failure(.failedEditing)
         }
@@ -173,13 +168,8 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                     intentionalMentions: intentionalMentions.toRustMentions())
         
         do {
-            switch editMode {
-            case let .local(item):
-                guard try await timeline.edit(item: item, newContent: messageContent) == true else {
-                    return .failure(.failedEditing)
-                }
-            case let .remote(eventID):
-                try await timeline.editByEventId(eventId: eventID, newContent: messageContent)
+            guard try await timeline.edit(item: timelineItem, newContent: messageContent) == true else {
+                return .failure(.failedEditing)
             }
             
             MXLog.info("Finished editing timeline item: \(timelineItemID)")
@@ -624,12 +614,4 @@ extension Array where Element == TimelineItemProxy {
         
         return eventTimelineItemProxy?.item
     }
-}
-
-private enum EditMode {
-    /// edit for a message that is also found locally as a timeline item
-    case local(item: EventTimelineItem)
-    
-    /// edit for a message that was not found locally
-    case remote(eventID: String)
 }
