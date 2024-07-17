@@ -106,7 +106,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
         let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-        userSessionStore = UserSessionStore(keychainController: keychainController)
+        userSessionStore = UserSessionStore(keychainController: keychainController, appHooks: appHooks)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -460,10 +460,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let encryptionKeyProvider = EncryptionKeyProvider()
         let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
                                                           encryptionKeyProvider: encryptionKeyProvider,
-                                                          appSettings: appSettings)
+                                                          appSettings: appSettings,
+                                                          appHooks: appHooks)
         let qrCodeLoginService = QRCodeLoginService(encryptionKeyProvider: encryptionKeyProvider,
                                                     userSessionStore: userSessionStore,
-                                                    appSettings: appSettings)
+                                                    appSettings: appSettings,
+                                                    appHooks: appHooks)
         
         authenticationFlowCoordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
                                                                       qrCodeLoginService: qrCodeLoginService,
@@ -491,7 +493,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             
             let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
                                                               encryptionKeyProvider: EncryptionKeyProvider(),
-                                                              appSettings: appSettings)
+                                                              appSettings: appSettings,
+                                                              appHooks: appHooks)
             _ = await authenticationService.configure(for: userSession.clientProxy.homeserver)
             
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,

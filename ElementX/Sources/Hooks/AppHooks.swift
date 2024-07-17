@@ -15,10 +15,12 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 // MARK: Registration
 
 class AppHooks: AppHooksProtocol {
+    #if IS_MAIN_APP
     private var appSettingsHook: AppSettingsHookProtocol?
     func registerAppSettingsHook(_ hook: AppSettingsHookProtocol) {
         appSettingsHook = hook
@@ -38,6 +40,17 @@ class AppHooks: AppHooksProtocol {
         guard let bugReportHook else { return bugReport }
         return bugReportHook.run(bugReport: bugReport)
     }
+    #endif
+    
+    private var clientBuilderHook: ClientBuilderHookProtocol?
+    func registerClientBuilderHook(_ hook: ClientBuilderHookProtocol) {
+        clientBuilderHook = hook
+    }
+    
+    func runClientBuilderHook(_ clientBuilder: ClientBuilder) -> ClientBuilder {
+        guard let clientBuilderHook else { return clientBuilder }
+        return clientBuilderHook.run(builder: clientBuilder)
+    }
 }
 
 protocol AppHooksProtocol {
@@ -50,10 +63,16 @@ extension AppHooksProtocol {
 
 // MARK: Protocols
 
+#if IS_MAIN_APP
 protocol AppSettingsHookProtocol {
     func run(appSettings: AppSettings) -> AppSettings
 }
 
 protocol BugReportHookProtocol {
     func run(bugReport: BugReport) -> BugReport
+}
+#endif
+
+protocol ClientBuilderHookProtocol {
+    func run(builder: ClientBuilder) -> ClientBuilder
 }

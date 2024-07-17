@@ -50,6 +50,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     private var handler: ((UNNotificationContent) -> Void)?
     private var modifiedContent: UNMutableNotificationContent?
     
+    private let appHooks = AppHooks()
+    
     // Used to create one single UserSession across process/instances/runs
     private static let serialQueue = DispatchQueue(label: "io.element.elementx.nse")
     private static var userSession: NSEUserSession?
@@ -82,9 +84,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             if Self.userSession == nil {
                 // This function might be run concurrently and from different processes
                 // It's imperative that we create **at most** one UserSession/Client per process
-                Task.synchronous {
+                Task.synchronous { [appHooks] in
                     do {
-                        Self.userSession = try await NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController)
+                        Self.userSession = try await NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController, appHooks: appHooks)
                     } catch {
                         MXLog.error("Failed creating user session with error: \(error)")
                     }

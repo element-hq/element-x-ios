@@ -20,6 +20,7 @@ import MatrixRustSDK
 
 class UserSessionStore: UserSessionStoreProtocol {
     private let keychainController: KeychainControllerProtocol
+    private let appHooks: AppHooks
     private let matrixSDKStateKey = "matrix-sdk-state"
     
     /// Whether or not there are sessions in the store.
@@ -29,8 +30,9 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     var clientSessionDelegate: ClientSessionDelegate { keychainController }
     
-    init(keychainController: KeychainControllerProtocol) {
+    init(keychainController: KeychainControllerProtocol, appHooks: AppHooks) {
         self.keychainController = keychainController
+        self.appHooks = appHooks
     }
     
     /// Deletes all data stored in the shared container and keychain
@@ -120,7 +122,8 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         let builder = ClientBuilder
             .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,
-                         sessionDelegate: keychainController)
+                         sessionDelegate: keychainController,
+                         appHooks: appHooks)
             .sessionPath(path: credentials.restorationToken.sessionDirectory.path(percentEncoded: false))
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
