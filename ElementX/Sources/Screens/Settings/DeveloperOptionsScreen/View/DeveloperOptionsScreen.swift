@@ -50,6 +50,13 @@ struct DeveloperOptionsScreen: View {
                     Text("Fuzzy searching")
                 }
             }
+            
+            Section("Encryption") {
+                Toggle(isOn: $context.timelineItemShieldsEnabled) {
+                    Text("Timeline item shields")
+                    Text("Requires app reboot")
+                }
+            }
                                     
             Section("Element Call") {
                 TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)

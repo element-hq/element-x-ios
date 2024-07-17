@@ -24,11 +24,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     /// The Matrix ID of the current user.
     private let userID: String
+    private let shieldsEnabled: Bool
     
     init(userID: String,
+         shieldsEnabled: Bool,
          attributedStringBuilder: AttributedStringBuilderProtocol,
          stateEventStringBuilder: RoomStateEventStringBuilder) {
         self.userID = userID
+        self.shieldsEnabled = shieldsEnabled
         self.attributedStringBuilder = attributedStringBuilder
         self.stateEventStringBuilder = stateEventStringBuilder
     }
@@ -157,7 +160,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                        properties: RoomTimelineItemProperties(reactions: aggregateReactions(eventItemProxy.reactions),
                                                                               deliveryStatus: eventItemProxy.deliveryStatus,
                                                                               orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
-                                                                              shield: eventItemProxy.shield))
+                                                                              shield: shieldsEnabled ? eventItemProxy.shield : nil))
     }
     
     private func buildEncryptedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
@@ -222,7 +225,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
-                                                                    shield: eventItemProxy.shield))
+                                                                    shield: shieldsEnabled ? eventItemProxy.shield : nil))
     }
     
     private func buildImageTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -243,7 +246,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
                                                                      orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
-                                                                     shield: eventItemProxy.shield))
+                                                                     shield: shieldsEnabled ? eventItemProxy.shield : nil))
     }
     
     private func buildVideoTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -264,7 +267,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
                                                                      orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
-                                                                     shield: eventItemProxy.shield))
+                                                                     shield: shieldsEnabled ? eventItemProxy.shield : nil))
     }
     
     private func buildAudioTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -285,7 +288,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
                                                                      orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
-                                                                     shield: eventItemProxy.shield))
+                                                                     shield: shieldsEnabled ? eventItemProxy.shield : nil))
     }
     
     private func buildVoiceTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -306,7 +309,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                             reactions: aggregateReactions(eventItemProxy.reactions),
                                                                             deliveryStatus: eventItemProxy.deliveryStatus,
                                                                             orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
-                                                                            shield: eventItemProxy.shield))
+                                                                            shield: shieldsEnabled ? eventItemProxy.shield : nil))
     }
     
     private func buildFileTimelineItem(for eventItemProxy: EventTimelineItemProxy,
