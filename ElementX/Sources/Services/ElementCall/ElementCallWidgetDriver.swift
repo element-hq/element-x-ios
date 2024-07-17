@@ -39,6 +39,7 @@ private struct ElementCallWidgetMessage: Codable {
 
 class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriverProtocol {
     private let room: RoomProtocol
+    private let deviceID: String
     private var widgetDriver: WidgetDriverAndHandle?
     
     let widgetID = UUID().uuidString
@@ -49,8 +50,9 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(room: RoomProtocol) {
+    init(room: RoomProtocol, deviceID: String) {
         self.room = room
+        self.deviceID = deviceID
     }
     
     func start(baseURL: URL, clientID: String, colorScheme: ColorScheme) async -> Result<URL, ElementCallWidgetDriverError> {
@@ -143,7 +145,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
     // MARK: - WidgetCapabilitiesProvider
     
     func acquireCapabilities(capabilities: WidgetCapabilities) -> WidgetCapabilities {
-        getElementCallRequiredPermissions(ownUserId: room.ownUserId())
+        getElementCallRequiredPermissions(ownUserId: room.ownUserId(), ownDeviceId: deviceID)
     }
     
     // MARK: - Private
