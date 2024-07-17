@@ -20,6 +20,7 @@ import MatrixRustSDK
 
 class UserSessionStore: UserSessionStoreProtocol {
     private let keychainController: KeychainControllerProtocol
+    private let appSettings: AppSettings
     private let appHooks: AppHooks
     private let matrixSDKStateKey = "matrix-sdk-state"
     
@@ -30,8 +31,9 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     var clientSessionDelegate: ClientSessionDelegate { keychainController }
     
-    init(keychainController: KeychainControllerProtocol, appHooks: AppHooks) {
+    init(keychainController: KeychainControllerProtocol, appSettings: AppSettings, appHooks: AppHooks) {
         self.keychainController = keychainController
+        self.appSettings = appSettings
         self.appHooks = appHooks
     }
     
@@ -123,6 +125,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         let builder = ClientBuilder
             .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,
                          sessionDelegate: keychainController,
+                         simplifiedSlidingSyncEnabled: appSettings.simplifiedSlidingSyncEnabled,
                          appHooks: appHooks)
             .sessionPath(path: credentials.restorationToken.sessionDirectory.path(percentEncoded: false))
             .username(username: credentials.userID)

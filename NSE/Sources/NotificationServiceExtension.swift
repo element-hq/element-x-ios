@@ -86,7 +86,10 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 // It's imperative that we create **at most** one UserSession/Client per process
                 Task.synchronous { [appHooks] in
                     do {
-                        Self.userSession = try await NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController, appHooks: appHooks)
+                        Self.userSession = try await NSEUserSession(credentials: credentials,
+                                                                    clientSessionDelegate: keychainController,
+                                                                    simplifiedSlidingSyncEnabled: settings.simplifiedSlidingSyncEnabled,
+                                                                    appHooks: appHooks)
                     } catch {
                         MXLog.error("Failed creating user session with error: \(error)")
                     }

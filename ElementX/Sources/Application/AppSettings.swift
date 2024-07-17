@@ -43,6 +43,7 @@ final class AppSettings {
         case elementCallEncryptionEnabled
         
         // Feature flags
+        case simplifiedSlidingSyncEnabled
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
     }
@@ -286,4 +287,9 @@ final class AppSettings {
         
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
     var logLevel
+    
+    // MARK: Shared Feature Flags
+    
+    @UserPreference(key: UserDefaultsKeys.simplifiedSlidingSyncEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var simplifiedSlidingSyncEnabled
 }

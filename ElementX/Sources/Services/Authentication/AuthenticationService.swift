@@ -143,6 +143,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
                          slidingSyncProxy: appSettings.slidingSyncProxyURL,
                          sessionDelegate: userSessionStore.clientSessionDelegate,
+                         simplifiedSlidingSyncEnabled: appSettings.simplifiedSlidingSyncEnabled,
                          appHooks: appHooks)
             .sessionPath(path: sessionDirectory.path(percentEncoded: false))
             .passphrase(passphrase: passphrase)

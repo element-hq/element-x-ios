@@ -46,6 +46,7 @@ enum DeveloperOptionsScreenViewAction {
 
 protocol DeveloperOptionsProtocol: AnyObject {
     var logLevel: TracingConfiguration.LogLevel { get set }
+    var simplifiedSlidingSyncEnabled: Bool { get set }
     var hideUnreadMessagesBadge: Bool { get set }
     var elementCallBaseURLOverride: URL? { get set }
     var fuzzyRoomListSearchEnabled: Bool { get set }

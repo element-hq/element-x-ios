@@ -102,7 +102,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
         let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-        userSessionStore = UserSessionStore(keychainController: keychainController, appHooks: appHooks)
+        userSessionStore = UserSessionStore(keychainController: keychainController, appSettings: appSettings, appHooks: appHooks)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
