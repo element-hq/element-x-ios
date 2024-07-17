@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.4 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.5 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -6337,6 +6337,77 @@ open class EventTimelineItemSDKMock: MatrixRustSDK.EventTimelineItem {
         }
     }
 
+    //MARK: - getShield
+
+    var getShieldStrictUnderlyingCallsCount = 0
+    open var getShieldStrictCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getShieldStrictUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getShieldStrictUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getShieldStrictUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getShieldStrictUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getShieldStrictCalled: Bool {
+        return getShieldStrictCallsCount > 0
+    }
+    open var getShieldStrictReceivedStrict: Bool?
+    open var getShieldStrictReceivedInvocations: [Bool] = []
+
+    var getShieldStrictUnderlyingReturnValue: ShieldState?
+    open var getShieldStrictReturnValue: ShieldState? {
+        get {
+            if Thread.isMainThread {
+                return getShieldStrictUnderlyingReturnValue
+            } else {
+                var returnValue: ShieldState?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getShieldStrictUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getShieldStrictUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getShieldStrictUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getShieldStrictClosure: ((Bool) -> ShieldState?)?
+
+    open override func getShield(strict: Bool) -> ShieldState? {
+        getShieldStrictCallsCount += 1
+        getShieldStrictReceivedStrict = strict
+        DispatchQueue.main.async {
+            self.getShieldStrictReceivedInvocations.append(strict)
+        }
+        if let getShieldStrictClosure = getShieldStrictClosure {
+            return getShieldStrictClosure(strict)
+        } else {
+            return getShieldStrictReturnValue
+        }
+    }
+
     //MARK: - isEditable
 
     var isEditableUnderlyingCallsCount = 0
@@ -10543,6 +10614,52 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         } else {
             return displayNameReturnValue
         }
+    }
+
+    //MARK: - edit
+
+    open var editEventIdNewContentThrowableError: Error?
+    var editEventIdNewContentUnderlyingCallsCount = 0
+    open var editEventIdNewContentCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return editEventIdNewContentUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editEventIdNewContentUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editEventIdNewContentUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editEventIdNewContentUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var editEventIdNewContentCalled: Bool {
+        return editEventIdNewContentCallsCount > 0
+    }
+    open var editEventIdNewContentReceivedArguments: (eventId: String, newContent: RoomMessageEventContentWithoutRelation)?
+    open var editEventIdNewContentReceivedInvocations: [(eventId: String, newContent: RoomMessageEventContentWithoutRelation)] = []
+    open var editEventIdNewContentClosure: ((String, RoomMessageEventContentWithoutRelation) async throws -> Void)?
+
+    open override func edit(eventId: String, newContent: RoomMessageEventContentWithoutRelation) async throws {
+        if let error = editEventIdNewContentThrowableError {
+            throw error
+        }
+        editEventIdNewContentCallsCount += 1
+        editEventIdNewContentReceivedArguments = (eventId: eventId, newContent: newContent)
+        DispatchQueue.main.async {
+            self.editEventIdNewContentReceivedInvocations.append((eventId: eventId, newContent: newContent))
+        }
+        try await editEventIdNewContentClosure?(eventId, newContent)
     }
 
     //MARK: - enableSendQueue
@@ -17601,52 +17718,6 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         } else {
             return editItemNewContentReturnValue
         }
-    }
-
-    //MARK: - editByEventId
-
-    open var editByEventIdEventIdNewContentThrowableError: Error?
-    var editByEventIdEventIdNewContentUnderlyingCallsCount = 0
-    open var editByEventIdEventIdNewContentCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return editByEventIdEventIdNewContentUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = editByEventIdEventIdNewContentUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                editByEventIdEventIdNewContentUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    editByEventIdEventIdNewContentUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var editByEventIdEventIdNewContentCalled: Bool {
-        return editByEventIdEventIdNewContentCallsCount > 0
-    }
-    open var editByEventIdEventIdNewContentReceivedArguments: (eventId: String, newContent: RoomMessageEventContentWithoutRelation)?
-    open var editByEventIdEventIdNewContentReceivedInvocations: [(eventId: String, newContent: RoomMessageEventContentWithoutRelation)] = []
-    open var editByEventIdEventIdNewContentClosure: ((String, RoomMessageEventContentWithoutRelation) async throws -> Void)?
-
-    open override func editByEventId(eventId: String, newContent: RoomMessageEventContentWithoutRelation) async throws {
-        if let error = editByEventIdEventIdNewContentThrowableError {
-            throw error
-        }
-        editByEventIdEventIdNewContentCallsCount += 1
-        editByEventIdEventIdNewContentReceivedArguments = (eventId: eventId, newContent: newContent)
-        DispatchQueue.main.async {
-            self.editByEventIdEventIdNewContentReceivedInvocations.append((eventId: eventId, newContent: newContent))
-        }
-        try await editByEventIdEventIdNewContentClosure?(eventId, newContent)
     }
 
     //MARK: - editPoll
