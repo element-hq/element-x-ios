@@ -35,7 +35,6 @@ class Signposter {
         static let appStarted = "AppStarted"
         
         static let homeserver = "homeserver"
-        static let isDevelopmentBuild = "isDevelopmentBuild"
     }
     
     static let subsystem = "ElementX"
@@ -43,9 +42,8 @@ class Signposter {
     
     private var appStartupSpan: Span
     
-    init(isDevelopmentBuild: Bool) {
+    init() {
         appStartupSpan = SentrySDK.startTransaction(name: Name.appStartup, operation: Name.appStarted)
-        appStartupSpan.setData(value: isDevelopmentBuild, key: Name.isDevelopmentBuild)
     }
     
     // MARK: - Login
@@ -55,7 +53,7 @@ class Signposter {
     
     func beginLogin() {
         loginState = signposter.beginInterval(Name.login)
-        loginSpan = appStartupSpan.startChild(operation: "\(Name.login)")
+        loginSpan = appStartupSpan.startChild(operation: "\(Name.login)", description: "\(Name.login)")
     }
     
     func endLogin() {
@@ -80,7 +78,7 @@ class Signposter {
         appStartupSpan.setTag(value: serverName, key: Name.homeserver)
         
         firstSyncState = signposter.beginInterval(Name.firstSync)
-        firstSyncSpan = appStartupSpan.startChild(operation: "\(Name.firstSync)")
+        firstSyncSpan = appStartupSpan.startChild(operation: "\(Name.firstSync)", description: "\(Name.firstSync)")
     }
     
     func endFirstSync() {
@@ -100,7 +98,7 @@ class Signposter {
     
     func beginFirstRooms() {
         firstRoomsState = signposter.beginInterval(Name.firstRooms)
-        firstRoomsSpan = appStartupSpan.startChild(operation: "\(Name.firstRooms)")
+        firstRoomsSpan = appStartupSpan.startChild(operation: "\(Name.firstRooms)", description: "\(Name.firstRooms)")
     }
     
     func endFirstRooms() {
