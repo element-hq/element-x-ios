@@ -25,15 +25,17 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings
+    private let appHooks: AppHooks
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
     
-    init(userSessionStore: UserSessionStoreProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, appSettings: AppSettings) {
+    init(userSessionStore: UserSessionStoreProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, appSettings: AppSettings, appHooks: AppHooks) {
         sessionDirectory = .sessionsBaseDirectory.appending(component: UUID().uuidString)
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
+        self.appHooks = appHooks
         
         homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress,
                                                   loginMode: .unknown))
@@ -140,7 +142,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
         ClientBuilder
             .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
                          slidingSyncProxy: appSettings.slidingSyncProxyURL,
-                         sessionDelegate: userSessionStore.clientSessionDelegate)
+                         sessionDelegate: userSessionStore.clientSessionDelegate,
+                         appHooks: appHooks)
             .sessionPath(path: sessionDirectory.path(percentEncoded: false))
             .passphrase(passphrase: passphrase)
             .requiresSlidingSync()

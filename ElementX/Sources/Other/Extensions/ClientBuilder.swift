@@ -19,7 +19,11 @@ import MatrixRustSDK
 
 extension ClientBuilder {
     /// A helper method that applies the common builder modifiers needed for the app.
-    static func baseBuilder(setupEncryption: Bool = true, httpProxy: String? = nil, slidingSyncProxy: URL? = nil, sessionDelegate: ClientSessionDelegate) -> ClientBuilder {
+    static func baseBuilder(setupEncryption: Bool = true,
+                            httpProxy: String? = nil,
+                            slidingSyncProxy: URL? = nil,
+                            sessionDelegate: ClientSessionDelegate,
+                            appHooks: AppHooks) -> ClientBuilder {
         var builder = ClientBuilder()
             .slidingSyncProxy(slidingSyncProxy: slidingSyncProxy?.absoluteString)
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier, sessionDelegate: sessionDelegate)
@@ -36,6 +40,6 @@ extension ClientBuilder {
             builder = builder.proxy(url: httpProxy)
         }
         
-        return builder
+        return appHooks.runClientBuilderHook(builder)
     }
 }

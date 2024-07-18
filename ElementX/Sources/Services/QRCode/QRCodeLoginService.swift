@@ -22,8 +22,10 @@ import MatrixRustSDK
 final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     private let sessionDirectory: URL
     private let passphrase: String
+    
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings
+    private let appHooks: AppHooks
     
     private let qrLoginProgressSubject = PassthroughSubject<QrLoginProgress, Never>()
     var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
@@ -32,11 +34,13 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     
     init(encryptionKeyProvider: EncryptionKeyProviderProtocol,
          userSessionStore: UserSessionStoreProtocol,
-         appSettings: AppSettings) {
-        self.userSessionStore = userSessionStore
-        self.appSettings = appSettings
+         appSettings: AppSettings,
+         appHooks: AppHooks) {
         sessionDirectory = .sessionsBaseDirectory.appending(component: UUID().uuidString)
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
+        self.userSessionStore = userSessionStore
+        self.appSettings = appSettings
+        self.appHooks = appHooks
     }
     
     func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
@@ -56,7 +60,8 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
             let client = try await ClientBuilder
                 .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
                              slidingSyncProxy: appSettings.slidingSyncProxyURL,
-                             sessionDelegate: userSessionStore.clientSessionDelegate)
+                             sessionDelegate: userSessionStore.clientSessionDelegate,
+                             appHooks: appHooks)
                 .sessionPath(path: sessionDirectory.path(percentEncoded: false))
                 .passphrase(passphrase: passphrase)
                 .requiresSlidingSync()
