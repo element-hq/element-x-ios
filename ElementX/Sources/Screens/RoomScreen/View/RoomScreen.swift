@@ -60,6 +60,7 @@ struct RoomScreen: View {
                 let actions = TimelineItemMenuActionProvider(timelineItem: info.item,
                                                              canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
                                                              canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
+                                                             canCurrentUserPin: context.viewState.canCurrentUserPin,
                                                              isDM: context.viewState.isEncryptedOneToOneRoom,
                                                              isViewSourceEnabled: context.viewState.isViewSourceEnabled).makeActions()
                 if let actions {

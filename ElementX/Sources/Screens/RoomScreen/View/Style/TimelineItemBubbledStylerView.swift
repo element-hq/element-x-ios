@@ -146,6 +146,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 let provider = TimelineItemMenuActionProvider(timelineItem: timelineItem,
                                                               canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
                                                               canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
+                                                              canCurrentUserPin: context.viewState.canCurrentUserPin,
                                                               isDM: context.viewState.isEncryptedOneToOneRoom,
                                                               isViewSourceEnabled: context.viewState.isViewSourceEnabled)
                 TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in

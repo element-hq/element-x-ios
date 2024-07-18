@@ -171,6 +171,9 @@ class RoomScreenInteractionHandler {
             Task { await roomProxy.timeline.toggleReaction(key, to: eventID) }
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
+        case .pin:
+            // TODO: Implement the pin action
+            break
         }
         
         if action.switchToDefaultComposer {

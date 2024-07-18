@@ -20,6 +20,7 @@ struct TimelineItemMenuActionProvider {
     let timelineItem: RoomTimelineItemProtocol
     let canCurrentUserRedactSelf: Bool
     let canCurrentUserRedactOthers: Bool
+    let canCurrentUserPin: Bool
     let isDM: Bool
     let isViewSourceEnabled: Bool
     
@@ -63,6 +64,11 @@ struct TimelineItemMenuActionProvider {
         
         if item.isForwardable {
             actions.append(.forward(itemID: item.id))
+        }
+        
+        if canCurrentUserPin {
+            // TODO: If the event is already pinned use the unpinned action
+            actions.append(.pin)
         }
 
         if item.isEditable {
