@@ -77,7 +77,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
-        await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID)?.content().asMessage()?.content()
+        await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.content().asMessage()?.content()
     }
     
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
@@ -158,7 +158,16 @@ final class TimelineProxy: TimelineProxyProtocol {
               intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Editing timeline item: \(timelineItemID)")
         
-        guard let timelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID) else {
+        let timelineItem: EventTimelineItem? = if !timelineItemID.timelineID.isEmpty,
+                                                  let timelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID) {
+            timelineItem
+        } else if let eventID = timelineItemID.eventID {
+            nil // We need to edit by event ID which was removed.
+        } else {
+            nil
+        }
+        
+        guard let timelineItem else {
             MXLog.error("Unknown timeline item: \(timelineItemID)")
             return .failure(.failedEditing)
         }
@@ -184,7 +193,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     func redact(_ timelineItemID: TimelineItemIdentifier, reason: String?) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Redacting timeline item: \(timelineItemID)")
         
-        guard let eventTimelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingID(timelineItemID) else {
+        guard let eventTimelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID) else {
             MXLog.error("Unknown timeline item: \(timelineItemID)")
             return .failure(.failedRedacting)
         }
@@ -600,18 +609,15 @@ private extension MatrixRustSDK.PollKind {
 }
 
 extension Array where Element == TimelineItemProxy {
-    func firstEventTimelineItemUsingID(_ id: TimelineItemIdentifier) -> EventTimelineItem? {
-        var eventTimelineItemProxy: EventTimelineItemProxy?
-        
+    func firstEventTimelineItemUsingStableID(_ id: TimelineItemIdentifier) -> EventTimelineItem? {
         for item in self {
             if case let .event(eventTimelineItem) = item {
-                if eventTimelineItem.id == id {
-                    eventTimelineItemProxy = eventTimelineItem
-                    break
+                if eventTimelineItem.id.timelineID == id.timelineID {
+                    return eventTimelineItem.item
                 }
             }
         }
         
-        return eventTimelineItemProxy?.item
+        return nil
     }
 }

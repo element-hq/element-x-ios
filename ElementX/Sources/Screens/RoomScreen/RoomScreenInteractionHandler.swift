@@ -59,8 +59,6 @@ class RoomScreenInteractionHandler {
         }
     }
     
-    private var canCurrentUserRedactOthers = false
-    private var canCurrentUserRedactSelf = false
     private var resumeVoiceMessagePlaybackAfterScrubbing = false
     
     init(roomProxy: RoomProxyProtocol,
@@ -84,17 +82,12 @@ class RoomScreenInteractionHandler {
         self.appSettings = appSettings
         self.analyticsService = analyticsService
         pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService, roomProxy: roomProxy)
-        
-        // Set initial values for redacting from the macOS context menu.
-        Task { await updatePermissions() }
     }
     
     // MARK: Timeline Item Action Menu
     
     func displayTimelineItemActionMenu(for itemID: TimelineItemIdentifier) {
         Task {
-            await updatePermissions()
-         
             guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
                   let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
                 // Don't show a menu for non-event based items.
@@ -104,84 +97,6 @@ class RoomScreenInteractionHandler {
             actionsSubject.send(.composer(action: .removeFocus))
             actionsSubject.send(.showActionMenu(.init(item: eventTimelineItem)))
         }
-    }
-
-    // swiftlint:disable:next cyclomatic_complexity
-    func timelineItemMenuActionsForItemId(_ itemID: TimelineItemIdentifier) -> TimelineItemMenuActions? {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
-              let item = timelineItem as? EventBasedTimelineItemProtocol else {
-            // Don't show a context menu for non-event based items.
-            return nil
-        }
-
-        if timelineItem is StateRoomTimelineItem {
-            // Don't show a context menu for state events.
-            return nil
-        }
-
-        var debugActions: [TimelineItemMenuAction] = []
-        if appSettings.viewSourceEnabled {
-            debugActions.append(.viewSource)
-        }
-
-        if let encryptedItem = timelineItem as? EncryptedRoomTimelineItem {
-            switch encryptedItem.encryptionType {
-            case .megolmV1AesSha2(let sessionID, _):
-                debugActions.append(.retryDecryption(sessionID: sessionID))
-            default:
-                break
-            }
-            
-            return .init(actions: [.copyPermalink], debugActions: debugActions)
-        }
-        
-        var actions: [TimelineItemMenuAction] = []
-
-        if item.canBeRepliedTo {
-            if let messageItem = item as? EventBasedMessageTimelineItemProtocol {
-                actions.append(.reply(isThread: messageItem.isThreaded))
-            } else {
-                actions.append(.reply(isThread: false))
-            }
-        }
-        
-        if item.isForwardable {
-            actions.append(.forward(itemID: itemID))
-        }
-
-        if item.isEditable {
-            actions.append(.edit)
-        }
-
-        if item.isCopyable {
-            actions.append(.copy)
-        }
-        
-        if item.isRemoteMessage {
-            actions.append(.copyPermalink)
-        }
-
-        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = itemID.eventID {
-            actions.append(.endPoll(pollStartID: eventID))
-        }
-        
-        if canRedactItem(item) {
-            actions.append(.redact)
-        }
-
-        if !item.isOutgoing {
-            actions.append(.report)
-        }
-
-        if item.hasFailedToSend {
-            actions = actions.filter(\.canAppearInFailedEcho)
-        }
-
-        if item.isRedacted {
-            actions = actions.filter(\.canAppearInRedacted)
-        }
-
-        return .init(actions: actions, debugActions: debugActions)
     }
 
     func handleTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
@@ -601,24 +516,6 @@ class RoomScreenInteractionHandler {
     }
     
     // MARK: - Private
-    
-    private func updatePermissions() async {
-        if case let .success(value) = await roomProxy.canUserRedactOther(userID: roomProxy.ownUserID) {
-            canCurrentUserRedactOthers = value
-        } else {
-            canCurrentUserRedactOthers = false
-        }
-        
-        if case let .success(value) = await roomProxy.canUserRedactOwn(userID: roomProxy.ownUserID) {
-            canCurrentUserRedactSelf = value
-        } else {
-            canCurrentUserRedactSelf = false
-        }
-    }
-    
-    private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {
-        item.isOutgoing ? canCurrentUserRedactSelf : canCurrentUserRedactOthers && !roomProxy.isDirect
-    }
     
     private func buildReplyInfo(for item: EventBasedTimelineItemProtocol) -> ReplyInfo {
         switch item {

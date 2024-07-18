@@ -161,14 +161,14 @@ struct RoomScreenViewState: BindableState {
     var timelineViewState: TimelineViewState // check the doc before changing this
 
     var ownUserID: String
+    var canCurrentUserRedactOthers = false
+    var canCurrentUserRedactSelf = false
+    var isViewSourceEnabled: Bool
     
     var canJoinCall = false
     var hasOngoingCall = false
     
     var bindings: RoomScreenViewStateBindings
-    
-    /// A closure providing the actions to show when long pressing on an item in the timeline.
-    var timelineItemMenuActionProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
     
     /// A closure providing the associated audio player state for an item in the timeline.
     var audioPlayerStateProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> AudioPlayerState?)?

@@ -21,14 +21,14 @@ import SwiftUI
 /// The contents of the context menu shown when right clicking an item in the timeline on a Mac
 struct TimelineItemMacContextMenu: View {
     let item: RoomTimelineItemProtocol
-    let actionProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
+    let actionProvider: TimelineItemMenuActionProvider
     let send: (TimelineItemMenuAction) -> Void
     
     var body: some View {
         if ProcessInfo.processInfo.isiOSAppOnMac {
-            if let menuActions = actionProvider?(item.id) {
+            if let menuActions = actionProvider.makeActions() {
                 Section {
-                    if item.isReactable {
+                    if !menuActions.reactions.isEmpty {
                         if #available(iOS 17.0, *) {
                             let reactions = (item as? EventBasedTimelineItemProtocol)?.properties.reactions ?? []
                             ControlGroup {
