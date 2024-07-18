@@ -20,3 +20,10 @@ import UIKit
 protocol RoomTimelineItemProtocol {
     var id: TimelineItemIdentifier { get }
 }
+
+extension RoomTimelineItemProtocol {
+    var isReactable: Bool {
+        guard let eventItem = self as? EventBasedTimelineItemProtocol else { return false }
+        return !eventItem.isRedacted && !eventItem.hasFailedToSend && !eventItem.hasFailedDecryption
+    }
+}

@@ -57,7 +57,12 @@ struct RoomScreen: View {
             .alert(item: $context.alertInfo)
             .sheet(item: $context.debugInfo) { TimelineItemDebugView(info: $0) }
             .sheet(item: $context.actionMenuInfo) { info in
-                context.viewState.timelineItemMenuActionProvider?(info.item.id).map { actions in
+                let actions = TimelineItemMenuActionProvider(timelineItem: info.item,
+                                                             canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
+                                                             canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
+                                                             isDM: context.viewState.isEncryptedOneToOneRoom,
+                                                             isViewSourceEnabled: context.viewState.isViewSourceEnabled).makeActions()
+                if let actions {
                     TimelineItemMenu(item: info.item, actions: actions)
                         .environmentObject(context)
                 }

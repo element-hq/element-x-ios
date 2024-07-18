@@ -86,6 +86,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                          timelineViewState: TimelineViewState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                          ownUserID: roomProxy.ownUserID,
+                                                         isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                          hasOngoingCall: roomProxy.hasOngoingCall,
                                                          bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
@@ -98,13 +99,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         setupSubscriptions()
         setupDirectRoomSubscriptionsIfNeeded()
         
-        state.timelineItemMenuActionProvider = { [weak self] itemID -> TimelineItemMenuActions? in
-            guard let self else {
-                return nil
-            }
-            
-            return self.roomScreenInteractionHandler.timelineItemMenuActionsForItemId(itemID)
-        }
+        // Set initial values for redacting from the macOS context menu.
+        Task { await updatePermissions() }
 
         state.audioPlayerStateProvider = { [weak self] itemID -> AudioPlayerState? in
             guard let self else {
@@ -351,6 +347,20 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
+    private func updatePermissions() async {
+        if case let .success(value) = await roomProxy.canUserRedactOther(userID: roomProxy.ownUserID) {
+            state.canCurrentUserRedactOthers = value
+        } else {
+            state.canCurrentUserRedactOthers = false
+        }
+        
+        if case let .success(value) = await roomProxy.canUserRedactOwn(userID: roomProxy.ownUserID) {
+            state.canCurrentUserRedactSelf = value
+        } else {
+            state.canCurrentUserRedactSelf = false
+        }
+    }
+    
     private func setupSubscriptions() {
         timelineController.callbacks
             .receive(on: DispatchQueue.main)
@@ -393,6 +403,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .weakAssign(to: \.state.showReadReceipts, on: self)
             .store(in: &cancellables)
         
+        appSettings.$viewSourceEnabled
+            .weakAssign(to: \.state.isViewSourceEnabled, on: self)
+            .store(in: &cancellables)
+        
         roomProxy.membersPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.updateMembers($0) }
@@ -429,7 +443,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 case .displayRoomMemberDetails(userID: let userID):
                     actionsSubject.send(.displayRoomMemberDetails(userID: userID))
                 case .showActionMenu(let actionMenuInfo):
-                    state.bindings.actionMenuInfo = actionMenuInfo
+                    Task {
+                        await self.updatePermissions()
+                        self.state.bindings.actionMenuInfo = actionMenuInfo
+                    }
                 case .showDebugInfo(let debugInfo):
                     state.bindings.debugInfo = debugInfo
                 }

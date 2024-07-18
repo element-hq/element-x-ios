@@ -15,141 +15,7 @@
 //
 
 import Compound
-import SFSafeSymbols
 import SwiftUI
-
-struct TimelineItemMenuActions {
-    let reactions: [TimelineItemMenuReaction]
-    let actions: [TimelineItemMenuAction]
-    let debugActions: [TimelineItemMenuAction]
-    
-    init?(actions: [TimelineItemMenuAction], debugActions: [TimelineItemMenuAction]) {
-        if actions.isEmpty, debugActions.isEmpty {
-            return nil
-        }
-        
-        self.actions = actions
-        self.debugActions = debugActions
-        reactions = [
-            .init(key: "👍️", symbol: .handThumbsup),
-            .init(key: "👎️", symbol: .handThumbsdown),
-            .init(key: "🔥", symbol: .flame),
-            .init(key: "❤️", symbol: .heart),
-            .init(key: "👏", symbol: .handsClap)
-        ]
-    }
-    
-    var canReply: Bool {
-        for action in actions {
-            if case .reply = action {
-                return true
-            }
-        }
-        
-        return false
-    }
-}
-
-struct TimelineItemMenuReaction {
-    let key: String
-    let symbol: SFSymbol
-}
-
-enum TimelineItemMenuAction: Identifiable, Hashable {
-    case copy
-    case edit
-    case copyPermalink
-    case redact
-    case reply(isThread: Bool)
-    case forward(itemID: TimelineItemIdentifier)
-    case viewSource
-    case retryDecryption(sessionID: String)
-    case report
-    case react
-    case toggleReaction(key: String)
-    case endPoll(pollStartID: String)
-    
-    var id: Self { self }
-    
-    /// Whether the item should cancel a reply/edit occurring in the composer.
-    var switchToDefaultComposer: Bool {
-        switch self {
-        case .reply, .edit:
-            return false
-        default:
-            return true
-        }
-    }
-    
-    /// Whether the action should be shown for an item that failed to send.
-    var canAppearInFailedEcho: Bool {
-        switch self {
-        case .copy, .edit, .redact, .viewSource:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    /// Whether the action should be shown for a redacted item.
-    var canAppearInRedacted: Bool {
-        switch self {
-        case .viewSource:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    /// Whether or not the action is destructive.
-    var isDestructive: Bool {
-        switch self {
-        case .redact, .report:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    /// The action's label.
-    @ViewBuilder
-    var label: some View {
-        switch self {
-        case .copy:
-            Label(L10n.actionCopy, icon: \.copy)
-        case .edit:
-            Label(L10n.actionEdit, icon: \.edit)
-        case .copyPermalink:
-            Label(L10n.actionCopyLinkToMessage, icon: \.link)
-        case .reply(let isThread):
-            Label(isThread ? L10n.actionReplyInThread : L10n.actionReply, icon: \.reply)
-        case .forward:
-            Label(L10n.actionForward, icon: \.forward)
-        case .redact:
-            Label(L10n.actionRemove, icon: \.delete)
-        case .viewSource:
-            Label(L10n.actionViewSource, icon: \.code)
-        case .retryDecryption:
-            Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
-        case .report:
-            Label(L10n.actionReportContent, icon: \.chatProblem)
-        case .react:
-            Label(L10n.actionReact, icon: \.reactionAdd)
-        case .toggleReaction:
-            // Unused label - manually created in TimelineItemMacContextMenu.
-            Label(L10n.actionReact, icon: \.reactionAdd)
-        case .endPoll:
-            Label(L10n.actionEndPoll, icon: \.pollsEnd)
-        }
-    }
-}
-
-extension RoomTimelineItemProtocol {
-    var isReactable: Bool {
-        guard let eventItem = self as? EventBasedTimelineItemProtocol else { return false }
-        return !eventItem.isRedacted && !eventItem.hasFailedToSend && !eventItem.hasFailedDecryption
-    }
-}
 
 struct TimelineItemMenu: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
@@ -171,7 +37,7 @@ struct TimelineItemMenu: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 0.0) {
-                    if item.isReactable {
+                    if !actions.reactions.isEmpty {
                         reactionsSection
                             .padding(.top, 4.0)
                             .padding(.bottom, 8.0)
@@ -317,7 +183,7 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     @ViewBuilder
     static var testView: some View {
         if let item = RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol,
-           let actions = TimelineItemMenuActions(actions: [.copy, .edit, .reply(isThread: false), .redact], debugActions: [.viewSource]) {
+           let actions = TimelineItemMenuActions(isReactable: true, actions: [.copy, .edit, .reply(isThread: false), .redact], debugActions: [.viewSource]) {
             TimelineItemMenu(item: item, actions: actions)
                 .environmentObject(viewModel.context)
         }

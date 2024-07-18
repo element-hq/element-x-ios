@@ -137,14 +137,18 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             .swipeRightAction {
                 SwipeToReplyView(timelineItem: timelineItem)
             } shouldStartAction: {
-                context.viewState.timelineItemMenuActionProvider?(timelineItem.id)?.canReply ?? false
+                timelineItem.canBeRepliedTo
             } action: {
                 let isThread = (timelineItem as? EventBasedMessageTimelineItemProtocol)?.isThreaded ?? false
                 context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: .reply(isThread: isThread)))
             }
             .contextMenu {
-                TimelineItemMacContextMenu(item: timelineItem,
-                                           actionProvider: context.viewState.timelineItemMenuActionProvider) { action in
+                let provider = TimelineItemMenuActionProvider(timelineItem: timelineItem,
+                                                              canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
+                                                              canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
+                                                              isDM: context.viewState.isEncryptedOneToOneRoom,
+                                                              isViewSourceEnabled: context.viewState.isViewSourceEnabled)
+                TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in
                     context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: action))
                 }
             }
