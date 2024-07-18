@@ -23,11 +23,13 @@ extension ClientBuilder {
                             httpProxy: String? = nil,
                             slidingSyncProxy: URL? = nil,
                             sessionDelegate: ClientSessionDelegate,
+                            simplifiedSlidingSyncEnabled: Bool,
                             appHooks: AppHooks) -> ClientBuilder {
         var builder = ClientBuilder()
             .slidingSyncProxy(slidingSyncProxy: slidingSyncProxy?.absoluteString)
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier, sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
+            .simplifiedSlidingSync(enable: simplifiedSlidingSyncEnabled)
         
         if setupEncryption {
             builder = builder

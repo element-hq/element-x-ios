@@ -43,6 +43,7 @@ final class AppSettings {
         case elementCallEncryptionEnabled
         
         // Feature flags
+        case simplifiedSlidingSyncEnabled
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
     }
@@ -62,6 +63,7 @@ final class AppSettings {
     static func resetSessionSpecificSettings() {
         MXLog.warning("Resetting the user session specific AppSettings.")
         store.removeObject(forKey: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding.rawValue)
+        store.removeObject(forKey: UserDefaultsKeys.simplifiedSlidingSyncEnabled.rawValue)
     }
     
     static func configureWithSuiteName(_ name: String) {
@@ -286,4 +288,9 @@ final class AppSettings {
         
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
     var logLevel
+    
+    // MARK: Shared Feature Flags
+    
+    @UserPreference(key: UserDefaultsKeys.simplifiedSlidingSyncEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var simplifiedSlidingSyncEnabled
 }

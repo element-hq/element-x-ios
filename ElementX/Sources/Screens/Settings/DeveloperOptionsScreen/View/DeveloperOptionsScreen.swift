@@ -27,6 +27,13 @@ struct DeveloperOptionsScreen: View {
                 LogLevelConfigurationView(logLevel: $context.logLevel)
             }
             
+            Section("Sliding Sync") {
+                Toggle(isOn: $context.simplifiedSlidingSyncEnabled) {
+                    Text("Simplified Sliding Sync")
+                    Text("Requires app reboot")
+                }
+            }
+            
             Section("Room List") {
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
                     Text("Hide grey dots")
