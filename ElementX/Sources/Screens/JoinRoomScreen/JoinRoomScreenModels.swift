@@ -43,6 +43,14 @@ struct JoinRoomScreenViewState: BindableState {
         roomDetails?.name ?? L10n.screenJoinRoomTitleNoPreview
     }
     
+    var subtitle: String? {
+        switch mode {
+        case .loading: nil
+        case .unknown: L10n.screenJoinRoomSubtitleNoPreview
+        case .invited, .join, .knock: roomDetails?.canonicalAlias
+        }
+    }
+    
     var avatar: RoomAvatar {
         .room(id: roomID, name: title, avatarURL: roomDetails?.avatarURL)
     }

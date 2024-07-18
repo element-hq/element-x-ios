@@ -22,6 +22,7 @@ typealias JoinRoomScreenViewModelType = StateStoreViewModel<JoinRoomScreenViewSt
 class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewModelProtocol {
     private let roomID: String
     private let via: [String]
+    private let allowKnocking: Bool // For preview tests only, actions aren't sent.
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -32,11 +33,13 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
 
     init(roomID: String,
          via: [String],
+         allowKnocking: Bool = false,
          clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomID = roomID
         self.via = via
+        self.allowKnocking = allowKnocking
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
@@ -81,6 +84,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         switch await clientProxy.roomPreviewForIdentifier(roomID, via: via) {
         case .success(let roomDetails):
             state.roomDetails = roomDetails
+        case .failure(.roomPreviewIsPrivate):
+            break // Handled by the mode, we don't need an error indicator.
         case .failure:
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
         }
@@ -96,8 +101,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             state.mode = .join
         } else if roomDetails.isInvited {
             state.mode = .invited
-        } else if roomDetails.canKnock { // Knocking is not supported yet, treat it as .unknown
-            state.mode = .unknown
+        } else if roomDetails.canKnock, allowKnocking { // Knocking is not supported yet, the flag is purely for preview tests.
+            state.mode = .knock
         } else {
             state.mode = .unknown
         }
