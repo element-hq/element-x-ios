@@ -359,6 +359,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         } else {
             state.canCurrentUserRedactSelf = false
         }
+        
+        if appSettings.pinningEnabled,
+           case let .success(value) = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomPinnedEvents) {
+            state.canCurrentUserPin = value
+        } else {
+            state.canCurrentUserPin = false
+        }
     }
     
     private func setupSubscriptions() {

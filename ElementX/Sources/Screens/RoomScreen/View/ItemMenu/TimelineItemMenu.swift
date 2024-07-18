@@ -183,7 +183,7 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     @ViewBuilder
     static var testView: some View {
         if let item = RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol,
-           let actions = TimelineItemMenuActions(isReactable: true, actions: [.copy, .edit, .reply(isThread: false), .redact], debugActions: [.viewSource]) {
+           let actions = TimelineItemMenuActions(isReactable: true, actions: [.copy, .edit, .reply(isThread: false), .pin, .redact], debugActions: [.viewSource]) {
             TimelineItemMenu(item: item, actions: actions)
                 .environmentObject(viewModel.context)
         }

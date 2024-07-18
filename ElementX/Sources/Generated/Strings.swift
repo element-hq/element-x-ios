@@ -562,6 +562,14 @@ internal enum L10n {
   internal static var errorSomeMessagesHaveNotBeenSent: String { return L10n.tr("Localizable", "error_some_messages_have_not_been_sent") }
   /// Sorry, an error occurred
   internal static var errorUnknown: String { return L10n.tr("Localizable", "error_unknown") }
+  /// The authenticity of this encrypted message can't be guaranteed on this device.
+  internal static var eventShieldReasonAuthenticityNotGuaranteed: String { return L10n.tr("Localizable", "event_shield_reason_authenticity_not_guaranteed") }
+  /// Encrypted by an unknown or deleted device.
+  internal static var eventShieldReasonUnknownDevice: String { return L10n.tr("Localizable", "event_shield_reason_unknown_device") }
+  /// Encrypted by a device not verified by its owner.
+  internal static var eventShieldReasonUnsignedDevice: String { return L10n.tr("Localizable", "event_shield_reason_unsigned_device") }
+  /// Encrypted by an unverified user.
+  internal static var eventShieldReasonUnverifiedIdentity: String { return L10n.tr("Localizable", "event_shield_reason_unverified_identity") }
   /// To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.
   internal static var fullScreenIntentBannerMessage: String { return L10n.tr("Localizable", "full_screen_intent_banner_message") }
   /// Enhance your call experience
@@ -2221,6 +2229,8 @@ internal enum L10n {
   internal enum Action {
     /// Load more
     internal static var loadMore: String { return L10n.tr("Localizable", "action.load_more") }
+    /// Pin
+    internal static var pin: String { return L10n.tr("Localizable", "action.pin") }
   }
 
   internal enum Common {

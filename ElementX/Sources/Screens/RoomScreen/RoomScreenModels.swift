@@ -163,6 +163,7 @@ struct RoomScreenViewState: BindableState {
     var ownUserID: String
     var canCurrentUserRedactOthers = false
     var canCurrentUserRedactSelf = false
+    var canCurrentUserPin = false
     var isViewSourceEnabled: Bool
     
     var canJoinCall = false

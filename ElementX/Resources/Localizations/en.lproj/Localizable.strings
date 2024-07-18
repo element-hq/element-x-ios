@@ -102,6 +102,7 @@
 "action_view_source" = "View source";
 "action_yes" = "Yes";
 "action.load_more" = "Load more";
+"action.pin" = "Pin";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_advanced_settings" = "Advanced settings";
@@ -252,6 +253,10 @@
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
 "error_unknown" = "Sorry, an error occurred";
+"event_shield_reason_authenticity_not_guaranteed" = "The authenticity of this encrypted message can't be guaranteed on this device.";
+"event_shield_reason_unknown_device" = "Encrypted by an unknown or deleted device.";
+"event_shield_reason_unsigned_device" = "Encrypted by a device not verified by its owner.";
+"event_shield_reason_unverified_identity" = "Encrypted by an unverified user.";
 "full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
 "full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ Join me on %1$@";

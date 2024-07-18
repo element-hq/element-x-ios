@@ -34,6 +34,12 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("Message Pinning") {
+                Toggle(isOn: $context.pinningEnabled) {
+                    Text("Enable message pinning")
+                }
+            }
+            
             Section("Room List") {
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
                     Text("Hide grey dots")

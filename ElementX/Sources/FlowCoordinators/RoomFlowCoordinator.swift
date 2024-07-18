@@ -19,7 +19,6 @@ import SwiftState
 import SwiftUI
 import UserNotifications
 
-// swiftlint:disable file_length
 enum RoomFlowCoordinatorAction: Equatable {
     case presentCallScreen(roomProxy: RoomProxyProtocol)
     case finished
