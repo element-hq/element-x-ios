@@ -46,6 +46,7 @@ final class AppSettings {
         case simplifiedSlidingSyncEnabled
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
+        case pinningEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -281,6 +282,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var fuzzyRoomListSearchEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.pinningEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var pinningEnabled
         
     #endif
     

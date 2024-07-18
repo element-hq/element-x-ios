@@ -21,7 +21,6 @@ import OrderedCollections
 
 import MatrixRustSDK
 
-// swiftlint:disable file_length
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let networkMonitor: NetworkMonitorProtocol
