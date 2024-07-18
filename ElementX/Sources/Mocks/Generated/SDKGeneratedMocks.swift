@@ -4041,6 +4041,71 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
     }
 
+    //MARK: - disableBuiltInRootCertificates
+
+    var disableBuiltInRootCertificatesUnderlyingCallsCount = 0
+    open var disableBuiltInRootCertificatesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return disableBuiltInRootCertificatesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = disableBuiltInRootCertificatesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                disableBuiltInRootCertificatesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    disableBuiltInRootCertificatesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var disableBuiltInRootCertificatesCalled: Bool {
+        return disableBuiltInRootCertificatesCallsCount > 0
+    }
+
+    var disableBuiltInRootCertificatesUnderlyingReturnValue: ClientBuilder!
+    open var disableBuiltInRootCertificatesReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return disableBuiltInRootCertificatesUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = disableBuiltInRootCertificatesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                disableBuiltInRootCertificatesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    disableBuiltInRootCertificatesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var disableBuiltInRootCertificatesClosure: (() -> ClientBuilder)?
+
+    open override func disableBuiltInRootCertificates() -> ClientBuilder {
+        disableBuiltInRootCertificatesCallsCount += 1
+        if let disableBuiltInRootCertificatesClosure = disableBuiltInRootCertificatesClosure {
+            return disableBuiltInRootCertificatesClosure()
+        } else {
+            return disableBuiltInRootCertificatesReturnValue
+        }
+    }
+
     //MARK: - disableSslVerification
 
     var disableSslVerificationUnderlyingCallsCount = 0
@@ -4736,6 +4801,77 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
             return setSessionDelegateSessionDelegateClosure(sessionDelegate)
         } else {
             return setSessionDelegateSessionDelegateReturnValue
+        }
+    }
+
+    //MARK: - simplifiedSlidingSync
+
+    var simplifiedSlidingSyncEnableUnderlyingCallsCount = 0
+    open var simplifiedSlidingSyncEnableCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return simplifiedSlidingSyncEnableUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = simplifiedSlidingSyncEnableUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                simplifiedSlidingSyncEnableUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    simplifiedSlidingSyncEnableUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var simplifiedSlidingSyncEnableCalled: Bool {
+        return simplifiedSlidingSyncEnableCallsCount > 0
+    }
+    open var simplifiedSlidingSyncEnableReceivedEnable: Bool?
+    open var simplifiedSlidingSyncEnableReceivedInvocations: [Bool] = []
+
+    var simplifiedSlidingSyncEnableUnderlyingReturnValue: ClientBuilder!
+    open var simplifiedSlidingSyncEnableReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return simplifiedSlidingSyncEnableUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = simplifiedSlidingSyncEnableUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                simplifiedSlidingSyncEnableUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    simplifiedSlidingSyncEnableUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var simplifiedSlidingSyncEnableClosure: ((Bool) -> ClientBuilder)?
+
+    open override func simplifiedSlidingSync(enable: Bool) -> ClientBuilder {
+        simplifiedSlidingSyncEnableCallsCount += 1
+        simplifiedSlidingSyncEnableReceivedEnable = enable
+        DispatchQueue.main.async {
+            self.simplifiedSlidingSyncEnableReceivedInvocations.append(enable)
+        }
+        if let simplifiedSlidingSyncEnableClosure = simplifiedSlidingSyncEnableClosure {
+            return simplifiedSlidingSyncEnableClosure(enable)
+        } else {
+            return simplifiedSlidingSyncEnableReturnValue
         }
     }
 
@@ -15493,42 +15629,6 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
             self.subscribeSettingsReceivedInvocations.append(settings)
         }
         subscribeSettingsClosure?(settings)
-    }
-
-    //MARK: - unsubscribe
-
-    var unsubscribeUnderlyingCallsCount = 0
-    open var unsubscribeCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return unsubscribeUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = unsubscribeUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                unsubscribeUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    unsubscribeUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var unsubscribeCalled: Bool {
-        return unsubscribeCallsCount > 0
-    }
-    open var unsubscribeClosure: (() -> Void)?
-
-    open override func unsubscribe() {
-        unsubscribeCallsCount += 1
-        unsubscribeClosure?()
     }
 }
 open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
