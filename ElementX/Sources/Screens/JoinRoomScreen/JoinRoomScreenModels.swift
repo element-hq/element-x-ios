@@ -29,11 +29,19 @@ enum JoinRoomScreenInteractionMode {
     case knock
 }
 
+struct JoinRoomScreenRoomDetails {
+    let name: String?
+    let topic: String?
+    let canonicalAlias: String?
+    let avatar: RoomAvatar
+    let memberCount: UInt
+}
+
 struct JoinRoomScreenViewState: BindableState {
     // Maybe use room summary details or similar here??
     let roomID: String
     
-    var roomDetails: RoomPreviewDetails?
+    var roomDetails: JoinRoomScreenRoomDetails?
     
     var mode: JoinRoomScreenInteractionMode = .loading
     
@@ -52,7 +60,7 @@ struct JoinRoomScreenViewState: BindableState {
     }
     
     var avatar: RoomAvatar {
-        .room(id: roomID, name: title, avatarURL: roomDetails?.avatarURL)
+        roomDetails?.avatar ?? .room(id: roomID, name: title, avatarURL: nil)
     }
 }
 

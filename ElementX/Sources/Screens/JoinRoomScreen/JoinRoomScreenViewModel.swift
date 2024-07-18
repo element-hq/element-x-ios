@@ -26,6 +26,9 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
+    private var roomPreviewDetails: RoomPreviewDetails?
+    private var roomProxy: RoomProxyProtocol?
+    
     private let actionsSubject: PassthroughSubject<JoinRoomScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<JoinRoomScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -77,13 +80,23 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         showLoadingIndicator()
         
         defer {
-            updateMode()
             hideLoadingIndicator()
         }
         
+        // Using only the preview API isn't enough as it's not capable
+        // of giving us information for non-joined rooms (at least not on synapse)
+        // See if we known about the room locally and, if so, have that
+        // take priority over the preview one.
+        
+        if let roomProxy = await clientProxy.roomForIdentifier(roomID) {
+            self.roomProxy = roomProxy
+            updateRoomDetails()
+        }
+        
         switch await clientProxy.roomPreviewForIdentifier(roomID, via: via) {
-        case .success(let roomDetails):
-            state.roomDetails = roomDetails
+        case .success(let roomPreviewDetails):
+            self.roomPreviewDetails = roomPreviewDetails
+            updateRoomDetails()
         case .failure(.roomPreviewIsPrivate):
             break // Handled by the mode, we don't need an error indicator.
         case .failure:
@@ -91,17 +104,32 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         }
     }
     
+    private func updateRoomDetails() {
+        if roomProxy == nil, roomPreviewDetails == nil {
+            return
+        }
+        
+        let name = roomProxy?.name ?? roomPreviewDetails?.name
+        state.roomDetails = JoinRoomScreenRoomDetails(name: name,
+                                                      topic: roomProxy?.topic ?? roomPreviewDetails?.topic,
+                                                      canonicalAlias: roomProxy?.canonicalAlias ?? roomPreviewDetails?.canonicalAlias,
+                                                      avatar: roomProxy?.avatar ?? .room(id: roomID, name: name ?? "", avatarURL: roomPreviewDetails?.avatarURL),
+                                                      memberCount: UInt(roomProxy?.activeMembersCount ?? Int(roomPreviewDetails?.memberCount ?? 0)))
+        
+        updateMode()
+    }
+    
     private func updateMode() {
-        guard let roomDetails = state.roomDetails else {
+        if roomProxy == nil, roomPreviewDetails == nil {
             state.mode = .unknown
             return
         }
         
-        if roomDetails.isPublic {
+        if roomProxy?.isPublic ?? false || roomPreviewDetails?.isPublic ?? false {
             state.mode = .join
-        } else if roomDetails.isInvited {
+        } else if roomProxy?.membership == .invited || roomPreviewDetails?.isInvited ?? false {
             state.mode = .invited
-        } else if roomDetails.canKnock, allowKnocking { // Knocking is not supported yet, the flag is purely for preview tests.
+        } else if roomPreviewDetails?.canKnock ?? false, allowKnocking { // Knocking is not supported yet, the flag is purely for preview tests.
             state.mode = .knock
         } else {
             state.mode = .unknown
