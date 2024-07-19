@@ -40,20 +40,22 @@ class Signposter {
     static let subsystem = "ElementX"
     static let category = "PerformanceTests"
     
-    private var appStartupSpan: Span
+    private var appStartupTransaction: Span
     
     init() {
-        appStartupSpan = SentrySDK.startTransaction(name: Name.appStartup, operation: Name.appStarted)
+        appStartupTransaction = SentrySDK.startTransaction(name: Name.appStartup, operation: Name.appStarted)
     }
     
     // MARK: - Login
     
     private var loginState: OSSignpostIntervalState?
+    private var loginTransaction: Span?
     private var loginSpan: Span?
     
     func beginLogin() {
         loginState = signposter.beginInterval(Name.login)
-        loginSpan = appStartupSpan.startChild(operation: "\(Name.login)", description: "\(Name.login)")
+        loginTransaction = SentrySDK.startTransaction(name: "\(Name.login)", operation: "\(Name.login)")
+        loginSpan = appStartupTransaction.startChild(operation: "\(Name.login)", description: "\(Name.login)")
     }
     
     func endLogin() {
@@ -63,55 +65,68 @@ class Signposter {
         }
         
         signposter.endInterval(Name.login, loginState)
+        loginTransaction?.finish()
         loginSpan?.finish()
         
         self.loginState = nil
+        loginTransaction = nil
         loginSpan = nil
     }
     
     // MARK: - FirstSync
     
     private var firstSyncState: OSSignpostIntervalState?
+    private var firstSyncTransaction: Span?
     private var firstSyncSpan: Span?
     
     func beginFirstSync(serverName: String) {
-        appStartupSpan.setTag(value: serverName, key: Name.homeserver)
+        appStartupTransaction.setTag(value: serverName, key: Name.homeserver)
         
         firstSyncState = signposter.beginInterval(Name.firstSync)
-        firstSyncSpan = appStartupSpan.startChild(operation: "\(Name.firstSync)", description: "\(Name.firstSync)")
+        
+        firstSyncTransaction = SentrySDK.startTransaction(name: "\(Name.firstSync)", operation: "\(Name.firstSync)")
+        firstSyncTransaction?.setTag(value: serverName, key: Name.homeserver)
+        
+        firstSyncSpan = appStartupTransaction.startChild(operation: "\(Name.firstSync)", description: "\(Name.firstSync)")
     }
     
     func endFirstSync() {
         guard let firstSyncState else { return }
         
         signposter.endInterval(Name.firstSync, firstSyncState)
+        firstSyncTransaction?.finish()
         firstSyncSpan?.finish()
         
         self.firstSyncState = nil
+        firstSyncTransaction = nil
         firstSyncSpan = nil
     }
     
     // MARK: - FirstRooms
     
     private var firstRoomsState: OSSignpostIntervalState?
+    private var firstRoomsTransaction: Span?
     private var firstRoomsSpan: Span?
     
     func beginFirstRooms() {
         firstRoomsState = signposter.beginInterval(Name.firstRooms)
-        firstRoomsSpan = appStartupSpan.startChild(operation: "\(Name.firstRooms)", description: "\(Name.firstRooms)")
+        firstRoomsTransaction = SentrySDK.startTransaction(name: "\(Name.firstRooms)", operation: "\(Name.firstRooms)")
+        firstRoomsSpan = appStartupTransaction.startChild(operation: "\(Name.firstRooms)", description: "\(Name.firstRooms)")
     }
     
     func endFirstRooms() {
         defer {
-            appStartupSpan.finish()
+            appStartupTransaction.finish()
         }
         
         guard let firstRoomsState else { return }
         
         signposter.endInterval(Name.firstRooms, firstRoomsState)
+        firstRoomsTransaction?.finish()
         firstRoomsSpan?.finish()
         
         self.firstRoomsState = nil
+        firstRoomsTransaction = nil
         firstRoomsSpan = nil
     }
     
