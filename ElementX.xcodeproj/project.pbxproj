@@ -5334,7 +5334,6 @@
 				8E3CD0D0BB6697512E867C1D /* Embed Foundation Extensions */,
 				98CA896D84BFD53B2554E891 /* ⚠️ SwiftLint */,
 				B35AB66424BB30087EEE408C /* 🧹 SwiftFormat */,
-				C3B6A7500AE6E2A21B1DF527 /* 🔧 Fix the Rich Text Editor */,
 			);
 			buildRules = (
 			);
@@ -5700,25 +5699,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    swiftformat --lint --lenient \"$PROJECT_DIR\"\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
-		};
-		C3B6A7500AE6E2A21B1DF527 /* 🔧 Fix the Rich Text Editor */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "🔧 Fix the Rich Text Editor";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# The RTE XCFramework contains .frameworks instead of static libs. For some reason Xcode embeds the binary, but also\n# an empty framework containing a stub binary. This stub binary is generated for our app and so its version mismatches\n# the one declared by the XCFramework's Info.plist file (and we can't match it because of Element iOS). ASC doesn't like this.\nif [ \"$CONFIGURATION\" == \"Release\" ]; then\n    # On the other hand local device builds detect a signature change, so only do this when in Release mode.\n    # Not ideal but helps us most of the time and we can remove this run phase locally if needed.\n    /usr/libexec/PlistBuddy -c \"Set :MinimumOSVersion ${IPHONEOS_DEPLOYMENT_TARGET}\" ${BUILT_PRODUCTS_DIR}/ElementX.app/Frameworks/WysiwygComposerFFI.framework/Info.plist\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
