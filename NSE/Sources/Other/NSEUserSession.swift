@@ -35,8 +35,8 @@ final class NSEUserSession {
         let clientBuilder = ClientBuilder
             .baseBuilder(setupEncryption: false,
                          httpProxy: URL(string: homeserverURL)?.globalProxy,
+                         slidingSync: simplifiedSlidingSyncEnabled ? .simplified : .restored,
                          sessionDelegate: clientSessionDelegate,
-                         simplifiedSlidingSyncEnabled: simplifiedSlidingSyncEnabled,
                          appHooks: appHooks)
             .sessionPath(path: credentials.restorationToken.sessionDirectory.path(percentEncoded: false))
             .username(username: credentials.userID)

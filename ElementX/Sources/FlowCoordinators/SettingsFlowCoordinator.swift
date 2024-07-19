@@ -233,6 +233,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .clearCache:
                     actionsSubject.send(.clearCache)
+                case .forceLogout:
+                    actionsSubject.send(.forceLogout)
                 }
             }
             .store(in: &cancellables)

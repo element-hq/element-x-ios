@@ -18,6 +18,8 @@ import Foundation
 
 enum DeveloperOptionsScreenViewModelAction {
     case clearCache
+    /// Logout without a confirmation to avoid losing keys when trying SSS.
+    case forceLogout
 }
 
 struct DeveloperOptionsScreenViewState: BindableState {

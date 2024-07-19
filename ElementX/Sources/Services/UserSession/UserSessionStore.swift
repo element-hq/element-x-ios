@@ -124,8 +124,8 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         let builder = ClientBuilder
             .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,
+                         slidingSync: appSettings.simplifiedSlidingSyncEnabled ? .simplified : .restored,
                          sessionDelegate: keychainController,
-                         simplifiedSlidingSyncEnabled: appSettings.simplifiedSlidingSyncEnabled,
                          appHooks: appHooks)
             .sessionPath(path: credentials.restorationToken.sessionDirectory.path(percentEncoded: false))
             .username(username: credentials.userID)

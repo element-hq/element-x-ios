@@ -30,7 +30,7 @@ struct DeveloperOptionsScreen: View {
             Section("Sliding Sync") {
                 Toggle(isOn: $context.simplifiedSlidingSyncEnabled) {
                     Text("Simplified Sliding Sync")
-                    Text("Requires app reboot")
+                    Text("When toggled you'll be logged out of the app and will need to log in again.")
                 }
             }
             

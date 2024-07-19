@@ -141,13 +141,12 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private func makeClientBuilder() -> ClientBuilder {
         ClientBuilder
             .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
+                         slidingSync: appSettings.simplifiedSlidingSyncEnabled ? .simplified : .discovered,
                          slidingSyncProxy: appSettings.slidingSyncProxyURL,
                          sessionDelegate: userSessionStore.clientSessionDelegate,
-                         simplifiedSlidingSyncEnabled: appSettings.simplifiedSlidingSyncEnabled,
                          appHooks: appHooks)
             .sessionPath(path: sessionDirectory.path(percentEncoded: false))
             .passphrase(passphrase: passphrase)
-            .requiresSlidingSync()
     }
     
     private func userSession(for client: Client) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
