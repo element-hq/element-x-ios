@@ -270,7 +270,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 await presentCallScreen(roomID: roomID)
             }
         case .genericCallLink(let url):
-            navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url, appHooks: appHooks)), animated: animated)
+            navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
         case .oidcCallback:
