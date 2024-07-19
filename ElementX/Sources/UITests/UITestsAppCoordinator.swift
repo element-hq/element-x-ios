@@ -517,7 +517,7 @@ class MockScreen: Identifiable {
             appSettings.analyticsConsentState = .optedOut
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
             
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", deviceID: "MOCKCLIENT", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             ServiceLocator.shared.settings.migratedAccounts[clientProxy.userID] = true
             
             let appMediator = AppMediatorMock.default
