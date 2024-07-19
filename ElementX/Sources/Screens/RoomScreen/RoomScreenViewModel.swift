@@ -360,7 +360,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.canCurrentUserRedactSelf = false
         }
         
-        if appSettings.pinningEnabled,
+        if state.isPinningEnabled,
            case let .success(value) = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomPinnedEvents) {
             state.canCurrentUserPin = value
         } else {
@@ -412,6 +412,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         appSettings.$viewSourceEnabled
             .weakAssign(to: \.state.isViewSourceEnabled, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$pinningEnabled
+            .weakAssign(to: \.state.isPinningEnabled, on: self)
             .store(in: &cancellables)
         
         roomProxy.membersPublisher

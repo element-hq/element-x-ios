@@ -165,6 +165,7 @@ struct RoomScreenViewState: BindableState {
     var canCurrentUserRedactSelf = false
     var canCurrentUserPin = false
     var isViewSourceEnabled: Bool
+    var isPinningEnabled = false
     
     var canJoinCall = false
     var hasOngoingCall = false
