@@ -24,6 +24,9 @@ struct CallScreenViewState: BindableState {
     let messageHandler: String
     let script: String?
     var url: URL?
+    
+    let certificateValidator: CertificateValidatorHookProtocol
+    
     var bindings = Bindings()
 }
 

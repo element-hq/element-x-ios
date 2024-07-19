@@ -412,6 +412,7 @@ private_lane :config_secrets do
   set_xcconfig_value(
     path: './ElementX/SupportingFiles/secrets.xcconfig',
     name: 'MAPLIBRE_API_KEY',
-    value: maplibre_api_key
+    value: maplibre_api_key,
+    mask_value: true
   )
 end

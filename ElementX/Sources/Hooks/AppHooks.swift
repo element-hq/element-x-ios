@@ -16,6 +16,7 @@
 
 import Foundation
 import MatrixRustSDK
+import WebKit
 
 // MARK: Registration
 
@@ -39,6 +40,11 @@ class AppHooks: AppHooksProtocol {
     func runBugReportHook(_ bugReport: BugReport) -> BugReport {
         guard let bugReportHook else { return bugReport }
         return bugReportHook.run(bugReport: bugReport)
+    }
+    
+    private(set) var certificateValidatorHook: CertificateValidatorHookProtocol = DefaultCertificateValidator()
+    func registerCertificateValidatorHook(_ hook: CertificateValidatorHookProtocol) {
+        certificateValidatorHook = hook
     }
     #endif
     
@@ -70,6 +76,16 @@ protocol AppSettingsHookProtocol {
 
 protocol BugReportHookProtocol {
     func run(bugReport: BugReport) -> BugReport
+}
+
+protocol CertificateValidatorHookProtocol {
+    func respondTo(_ challenge: URLAuthenticationChallenge) async -> (URLSession.AuthChallengeDisposition, URLCredential?)
+}
+
+struct DefaultCertificateValidator: CertificateValidatorHookProtocol {
+    func respondTo(_ challenge: URLAuthenticationChallenge) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        (.performDefaultHandling, nil)
+    }
 }
 #endif
 

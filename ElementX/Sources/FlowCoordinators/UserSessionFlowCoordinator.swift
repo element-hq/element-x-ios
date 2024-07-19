@@ -32,6 +32,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let elementCallService: ElementCallServiceProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
+    private let appHooks: AppHooks
     private let analytics: AnalyticsService
     private let notificationManager: NotificationManagerProtocol
     
@@ -74,6 +75,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
+         appHooks: AppHooks,
          analytics: AnalyticsService,
          notificationManager: NotificationManagerProtocol,
          isNewLogin: Bool) {
@@ -85,6 +87,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.appMediator = appMediator
         self.appSettings = appSettings
+        self.appHooks = appHooks
         self.analytics = analytics
         self.notificationManager = notificationManager
         
@@ -267,7 +270,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 await presentCallScreen(roomID: roomID)
             }
         case .genericCallLink(let url):
-            navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
+            navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url, appHooks: appHooks)), animated: animated)
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
         case .oidcCallback:
@@ -561,7 +564,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             clientID: InfoPlistReader.main.bundleIdentifier,
                                                                             elementCallBaseURL: appSettings.elementCallBaseURL,
                                                                             elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
-                                                                            colorScheme: colorScheme))
+                                                                            colorScheme: colorScheme,
+                                                                            appHooks: appHooks))
         
         callScreenCoordinator.actions
             .sink { [weak self] action in

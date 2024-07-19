@@ -211,7 +211,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 if let userSessionFlowCoordinator {
                     userSessionFlowCoordinator.handleAppRoute(route, animated: true)
                 } else {
-                    navigationRootCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)))
+                    navigationRootCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url, appHooks: appHooks)))
                 }
             case .userProfile(let userID):
                 if isExternalURL {
@@ -534,6 +534,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory(),
                                                                     appMediator: appMediator,
                                                                     appSettings: appSettings,
+                                                                    appHooks: appHooks,
                                                                     analytics: ServiceLocator.shared.analytics,
                                                                     notificationManager: notificationManager,
                                                                     isNewLogin: isNewLogin)

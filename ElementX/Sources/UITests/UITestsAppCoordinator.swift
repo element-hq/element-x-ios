@@ -532,6 +532,7 @@ class MockScreen: Identifiable {
                                                              roomTimelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()),
                                                              appMediator: appMediator,
                                                              appSettings: appSettings,
+                                                             appHooks: AppHooks(),
                                                              analytics: ServiceLocator.shared.analytics,
                                                              notificationManager: NotificationManagerMock(),
                                                              isNewLogin: false)
@@ -648,6 +649,7 @@ class MockScreen: Identifiable {
                                                              roomTimelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init(timelineController: timelineController)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: appSettings,
+                                                             appHooks: AppHooks(),
                                                              analytics: ServiceLocator.shared.analytics,
                                                              notificationManager: NotificationManagerMock(),
                                                              isNewLogin: false)

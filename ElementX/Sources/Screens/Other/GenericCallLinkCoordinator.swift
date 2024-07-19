@@ -19,6 +19,7 @@ import WebKit
 
 struct GenericCallLinkCoordinatorParameters {
     let url: URL
+    let appHooks: AppHooks
 }
 
 private enum GenericCallLinkQueryParameters {
@@ -34,7 +35,7 @@ class GenericCallLinkCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(WebView(url: parameters.url)
+        AnyView(WebView(url: parameters.url, certificateValidator: parameters.appHooks.certificateValidatorHook)
             // This URL is stable, forces view reloads if this representable is ever reused for another url
             .id(parameters.url)
             .ignoresSafeArea(edges: .bottom)
@@ -44,13 +45,14 @@ class GenericCallLinkCoordinator: CoordinatorProtocol {
 
 private struct WebView: UIViewRepresentable {
     let url: URL
+    let certificateValidator: CertificateValidatorHookProtocol
 
     func makeUIView(context: Context) -> WKWebView {
         context.coordinator.webView
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(url: url)
+        Coordinator(url: url, certificateValidator: certificateValidator)
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
@@ -60,9 +62,11 @@ private struct WebView: UIViewRepresentable {
     @MainActor
     class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate {
         let url: URL
+        let certificateValidator: CertificateValidatorHookProtocol
         private(set) var webView: WKWebView!
 
-        init(url: URL) {
+        init(url: URL, certificateValidator: CertificateValidatorHookProtocol) {
+            self.certificateValidator = certificateValidator
             if var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) {
                 var fragmentQueryItems = urlComponents.fragmentQueryItems ?? []
                 
@@ -108,6 +112,10 @@ private struct WebView: UIViewRepresentable {
         }
         
         // MARK: - WKNavigationDelegate
+        
+        func webView(_ webView: WKWebView, respondTo challenge: URLAuthenticationChallenge) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+            await certificateValidator.respondTo(challenge)
+        }
         
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
             // Allow any content from the main URL.
