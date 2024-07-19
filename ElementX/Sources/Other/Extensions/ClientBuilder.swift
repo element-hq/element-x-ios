@@ -42,6 +42,6 @@ extension ClientBuilder {
             builder = builder.proxy(url: httpProxy)
         }
         
-        return appHooks.runClientBuilderHook(builder)
+        return appHooks.clientBuilderHook.configure(builder)
     }
 }

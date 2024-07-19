@@ -107,4 +107,5 @@ targets:
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
     - path: ../../ElementX/Sources/Services/ElementCall/ElementCallServiceConstants.swift
     - path: ../../ElementX/Sources/Application/AppSettings.swift
-    - path: ../../ElementX/Sources/Hooks/AppHooks.swift
+    - path: ../../ElementX/Sources/AppHooks/AppHooks.swift
+    - path: ../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift

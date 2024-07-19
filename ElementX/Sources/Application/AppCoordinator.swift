@@ -74,7 +74,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         windowManager = WindowManager(appDelegate: appDelegate)
         appMediator = AppMediator(windowManager: windowManager)
         
-        let appSettings = appHooks.runAppSettingsHook(AppSettings())
+        let appSettings = appHooks.appSettingsHook.configure(AppSettings())
         
         MXLog.configure(logLevel: appSettings.logLevel)
         
