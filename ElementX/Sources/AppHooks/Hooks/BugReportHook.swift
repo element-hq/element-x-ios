@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2024 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,27 +16,10 @@
 
 import Foundation
 
-enum CallScreenViewModelAction {
-    case dismiss
+protocol BugReportHookProtocol {
+    func update(_ bugReport: BugReport) -> BugReport
 }
 
-struct CallScreenViewState: BindableState {
-    let messageHandler: String
-    let script: String?
-    var url: URL?
-    
-    let certificateValidator: CertificateValidatorHookProtocol
-    
-    var bindings = Bindings()
-}
-
-struct Bindings {
-    var javaScriptMessageHandler: ((Any) -> Void)?
-    var javaScriptEvaluator: ((String) async throws -> Any)?
-    
-    var alertInfo: AlertInfo<UUID>?
-}
-
-enum CallScreenViewAction {
-    case urlChanged(URL?)
+struct DefaultBugReportHook: BugReportHookProtocol {
+    func update(_ bugReport: BugReport) -> BugReport { bugReport }
 }

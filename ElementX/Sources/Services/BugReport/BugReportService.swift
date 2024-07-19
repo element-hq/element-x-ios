@@ -58,7 +58,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     // swiftlint:disable:next cyclomatic_complexity
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
-        let bugReport = appHooks.runBugReportHook(bugReport)
+        let bugReport = appHooks.bugReportHook.update(bugReport)
         
         var params = [
             MultipartFormData(key: "text", type: .text(value: bugReport.text)),

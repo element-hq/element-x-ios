@@ -120,7 +120,7 @@ GEM
       rest-client (~> 2.0, >= 2.0.2)
     fastlane-plugin-sentry (1.20.0)
       os (~> 1.1, >= 1.1.4)
-    fastlane-plugin-xcconfig (2.0.0)
+    fastlane-plugin-xcconfig (2.1.0)
     fastlane-plugin-xcodegen (1.1.0)
       fastlane-plugin-brew (~> 0.1.1)
     gh_inspector (1.1.3)

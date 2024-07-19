@@ -54,6 +54,7 @@ private struct WebView: UIViewRepresentable {
     @MainActor
     class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate {
         private weak var viewModelContext: CallScreenViewModel.Context?
+        private let certificateValidator: CertificateValidatorHookProtocol
         
         private(set) var webView: WKWebView!
         
@@ -61,6 +62,7 @@ private struct WebView: UIViewRepresentable {
         
         init(viewModelContext: CallScreenViewModel.Context) {
             self.viewModelContext = viewModelContext
+            certificateValidator = viewModelContext.viewState.certificateValidator
             
             super.init()
             
@@ -131,6 +133,10 @@ private struct WebView: UIViewRepresentable {
         
         // MARK: - WKNavigationDelegate
         
+        func webView(_ webView: WKWebView, respondTo challenge: URLAuthenticationChallenge) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+            await certificateValidator.respondTo(challenge)
+        }
+        
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
             // Allow any content from the main URL.
             if navigationAction.request.url?.host == url.host {
@@ -193,7 +199,8 @@ struct CallScreen_Previews: PreviewProvider {
                                    clientID: "io.element.elementx",
                                    elementCallBaseURL: "https://call.element.io",
                                    elementCallBaseURLOverride: nil,
-                                   colorScheme: .light)
+                                   colorScheme: .light,
+                                   appHooks: AppHooks())
     }()
     
     static var previews: some View {
