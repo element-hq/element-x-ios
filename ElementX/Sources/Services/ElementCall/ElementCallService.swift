@@ -187,6 +187,20 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
         if let incomingCallID {
+            // Fixes broken videos on EC web when a CallKit session is established.
+            //
+            // Reporting an ongoing call through `reportNewIncomingCall` + `CXAnswerCallAction`
+            // or `reportOutgoingCall:connectedAt:` will give exclusive access for media to the
+            // ongoing process, which is different than the WKWebKit is running on, making EC
+            // unable to aquire media streams.
+            // Reporting the call as ended imediately after answering it works around that
+            // as EC gets access to media again and EX builds the right UI in `setupCallSession`
+            //
+            // https://github.com/element-hq/element-x-ios/issues/3041
+            // https://forums.developer.apple.com/forums/thread/685268
+            // https://stackoverflow.com/questions/71483732/webrtc-running-from-wkwebview-avaudiosession-development-roadblock
+            provider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .answeredElsewhere)
+            
             actionsSubject.send(.startCall(roomID: incomingCallID.roomID))
             endUnansweredCallTask?.cancel()
         } else {
@@ -210,6 +224,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
+        #if targetEnvironment(simulator)
+        // This gets called for no reason on simulators, where CallKit
+        // isn't even supported. Ignore
+        return
+        #endif
+        
         if let ongoingCallID {
             actionsSubject.send(.endCall(roomID: ongoingCallID.roomID))
         }

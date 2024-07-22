@@ -88,6 +88,7 @@ private struct WebView: UIViewRepresentable {
             webView = WKWebView(frame: .zero, configuration: configuration)
             webView.uiDelegate = self
             webView.navigationDelegate = self
+            webView.isInspectable = true
             
             // https://stackoverflow.com/a/77963877/730924
             webView.allowsLinkPreview = true
