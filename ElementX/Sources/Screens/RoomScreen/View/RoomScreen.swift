@@ -48,6 +48,16 @@ struct RoomScreen: View {
                     .environmentObject(context)
                     .environment(\.roomContext, context)
             }
+            .overlay(alignment: .top) {
+                if context.viewState.isPinningEnabled {
+                    // TODO: Implement tapping logic + hiding when scrolling
+                    PinnedItemsBannerView(pinIndex: 1,
+                                          pinsCount: 3,
+                                          pinContent: .init(stringLiteral: "Content"),
+                                          onMainButtonTap: { },
+                                          onViewAllButtonTap: { })
+                }
+            }
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(isNavigationBarHidden)
