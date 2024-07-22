@@ -336,6 +336,16 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    func edit(eventID: String, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.edit(eventId: eventID, newContent: newContent)
+            return .success(())
+        } catch {
+            MXLog.error("Failed editing event id \(eventID), in room \(id) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func sendTypingNotification(isTyping: Bool) async -> Result<Void, RoomProxyError> {
         MXLog.info("Sending typing notification isTyping: \(isTyping)")
         

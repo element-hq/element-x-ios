@@ -191,15 +191,38 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
               html: String?,
               intentionalMentions: IntentionalMentions) async {
         MXLog.info("Edit message in \(roomID)")
+        MXLog.info("Editing timeline item: \(timelineItemID)")
         
-        switch await activeTimeline.edit(timelineItemID,
-                                         message: message,
-                                         html: html,
-                                         intentionalMentions: intentionalMentions) {
-        case .success:
-            MXLog.info("Finished editing message")
-        case .failure(let error):
-            MXLog.error("Failed editing message with error: \(error)")
+        let editMode: EditMode
+        if !timelineItemID.timelineID.isEmpty,
+           let timelineItem = liveTimelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID) {
+            editMode = .byEvent(timelineItem)
+        } else if let eventID = timelineItemID.eventID {
+            editMode = .byID(eventID)
+        } else {
+            MXLog.error("Unknown timeline item: \(timelineItemID)")
+            return
+        }
+        
+        let messageContent = activeTimeline.buildMessageContentFor(message,
+                                                                   html: html,
+                                                                   intentionalMentions: intentionalMentions.toRustMentions())
+        
+        switch editMode {
+        case let .byEvent(item):
+            switch await activeTimeline.edit(item, newContent: messageContent) {
+            case .success:
+                MXLog.info("Finished editing message by event")
+            case let .failure(error):
+                MXLog.error("Failed editing message by event with error: \(error)")
+            }
+        case let .byID(eventID):
+            switch await roomProxy.edit(eventID: eventID, newContent: messageContent) {
+            case .success:
+                MXLog.info("Finished editing message by event ID")
+            case let .failure(error):
+                MXLog.error("Failed editing message by event ID with error: \(error)")
+            }
         }
     }
     
@@ -407,4 +430,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         return nil
     }
+}
+
+private enum EditMode {
+    case byEvent(EventTimelineItem)
+    case byID(String)
 }

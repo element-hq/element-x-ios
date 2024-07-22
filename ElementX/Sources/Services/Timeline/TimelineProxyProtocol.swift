@@ -41,10 +41,7 @@ protocol TimelineProxyProtocol {
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     
-    func edit(_ timelineItemID: TimelineItemIdentifier,
-              message: String,
-              html: String?,
-              intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
+    func edit(_ timelineItem: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
     
     func redact(_ timelineItemID: TimelineItemIdentifier,
                 reason: String?) async -> Result<Void, TimelineProxyError>
@@ -109,6 +106,10 @@ protocol TimelineProxyProtocol {
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineProxyError>
     
     func getLoadedReplyDetails(eventID: String) async -> Result<InReplyToDetails, TimelineProxyError>
+    
+    func buildMessageContentFor(_ message: String,
+                                html: String?,
+                                intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation
 }
 
 extension TimelineProxyProtocol {

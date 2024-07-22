@@ -153,39 +153,17 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func edit(_ timelineItemID: TimelineItemIdentifier,
-              message: String, html: String?,
-              intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Editing timeline item: \(timelineItemID)")
-        
-        let timelineItem: EventTimelineItem? = if !timelineItemID.timelineID.isEmpty,
-                                                  let timelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID) {
-            timelineItem
-        } else if let eventID = timelineItemID.eventID {
-            nil // We need to edit by event ID which was removed.
-        } else {
-            nil
-        }
-        
-        guard let timelineItem else {
-            MXLog.error("Unknown timeline item: \(timelineItemID)")
-            return .failure(.failedEditing)
-        }
-        
-        let messageContent = buildMessageContentFor(message,
-                                                    html: html,
-                                                    intentionalMentions: intentionalMentions.toRustMentions())
-        
+    func edit(_ timelineItem: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
         do {
-            guard try await timeline.edit(item: timelineItem, newContent: messageContent) == true else {
+            guard try await timeline.edit(item: timelineItem, newContent: newContent) == true else {
                 return .failure(.failedEditing)
             }
             
-            MXLog.info("Finished editing timeline item: \(timelineItemID)")
+            MXLog.info("Finished editing timeline item: \(timelineItem.eventId() ?? timelineItem.transactionId() ?? "unknown")")
             
             return .success(())
         } catch {
-            MXLog.error("Failed editing timeline item: \(timelineItemID) with error: \(error)")
+            MXLog.error("Failed editing timeline item: \(timelineItem.eventId() ?? timelineItem.transactionId() ?? "unknown") with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -505,12 +483,10 @@ final class TimelineProxy: TimelineProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-    
-    // MARK: - Private
-    
-    private func buildMessageContentFor(_ message: String,
-                                        html: String?,
-                                        intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation {
+        
+    func buildMessageContentFor(_ message: String,
+                                html: String?,
+                                intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation {
         let emoteSlashCommand = "/me "
         let isEmote: Bool = message.starts(with: emoteSlashCommand)
         
@@ -532,6 +508,8 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
         return content.withMentions(mentions: intentionalMentions)
     }
+    
+    // MARK: - Private
     
     private func buildEmoteMessageContentFor(_ message: String, html: String?) -> RoomMessageEventContentWithoutRelation {
         if let html {
