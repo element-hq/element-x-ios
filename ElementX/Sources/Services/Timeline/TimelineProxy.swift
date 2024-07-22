@@ -159,11 +159,11 @@ final class TimelineProxy: TimelineProxyProtocol {
                 return .failure(.failedEditing)
             }
             
-            MXLog.info("Finished editing timeline item: \(String(describing: timelineItem.eventId()))")
+            MXLog.info("Finished editing timeline item: \(timelineItem.eventId() ?? timelineItem.transactionId() ?? "unknown")")
             
             return .success(())
         } catch {
-            MXLog.error("Failed editing timeline item: \(String(describing: timelineItem.eventId())) with error: \(error)")
+            MXLog.error("Failed editing timeline item: \(timelineItem.eventId() ?? timelineItem.transactionId() ?? "unknown") with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
