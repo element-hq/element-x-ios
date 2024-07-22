@@ -2241,6 +2241,21 @@ internal enum L10n {
     /// Send to
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
   }
+
+  internal enum Screen {
+    internal enum Room {
+      /// %1$@ of %2$@
+      internal static func pinnedBannerIndicator(_ p1: Any, _ p2: Any) -> String {
+        return L10n.tr("Localizable", "screen.room.pinned_banner_indicator", String(describing: p1), String(describing: p2))
+      }
+      /// %1$@ Pinned messages
+      internal static func pinnedBannerIndicatorDescription(_ p1: Any) -> String {
+        return L10n.tr("Localizable", "screen.room.pinned_banner_indicator_description", String(describing: p1))
+      }
+      /// View All
+      internal static var pinnedBannerViewAllButtonTitle: String { return L10n.tr("Localizable", "screen.room.pinned_banner_view_all_button_title") }
+    }
+  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

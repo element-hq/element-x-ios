@@ -102,6 +102,7 @@
 "action_view_source" = "Afficher la source";
 "action_yes" = "Oui";
 "action.load_more" = "Voir plus";
+"action.pin" = "Pin";
 "common_about" = "À propos";
 "common_acceptable_use_policy" = "Politique d’utilisation acceptable";
 "common_advanced_settings" = "Paramètres avancés";
@@ -252,6 +253,10 @@
 "error_no_compatible_app_found" = "Aucune application compatible n’a été trouvée pour gérer cette action.";
 "error_some_messages_have_not_been_sent" = "Certains messages n’ont pas été envoyés";
 "error_unknown" = "Désolé, une erreur s’est produite";
+"event_shield_reason_authenticity_not_guaranteed" = "The authenticity of this encrypted message can't be guaranteed on this device.";
+"event_shield_reason_unknown_device" = "Encrypted by an unknown or deleted device.";
+"event_shield_reason_unsigned_device" = "Encrypted by a device not verified by its owner.";
+"event_shield_reason_unverified_identity" = "Encrypted by an unverified user.";
 "full_screen_intent_banner_message" = "Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé.";
 "full_screen_intent_banner_title" = "Améliorez votre expérience d'appel";
 "invite_friends_rich_title" = "🔐️ Rejoignez-moi sur %1$@";
@@ -308,6 +313,9 @@
 "screen_advanced_settings_element_call_base_url_description" = "Configurer une URL de base pour Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL invalide, assurez-vous d’inclure le protocol (http/https) et l’adresse correcte.";
 "screen_room_mentions_at_room_subtitle" = "Notifier tout le salon";
+"screen.room.pinned_banner_indicator" = "%1$@ of %2$@";
+"screen.room.pinned_banner_indicator_description" = "%1$@ Pinned messages";
+"screen.room.pinned_banner_view_all_button_title" = "View All";
 "screen_account_provider_change" = "Changer de fournisseur de compte";
 "screen_account_provider_form_hint" = "Adresse du serveur d’accueil";
 "screen_account_provider_form_notice" = "Entrez un terme de recherche ou une adresse de domaine.";

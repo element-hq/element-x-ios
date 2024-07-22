@@ -102,6 +102,7 @@
 "action_view_source" = "Переглянути джерело";
 "action_yes" = "Так";
 "action.load_more" = "Завантажити ще";
+"action.pin" = "Pin";
 "common_about" = "Відомості";
 "common_acceptable_use_policy" = "Політика прийнятного використання";
 "common_advanced_settings" = "Додаткові налаштування";
@@ -252,6 +253,10 @@
 "error_no_compatible_app_found" = "Не знайдено сумісного застосунку для виконання цієї дії.";
 "error_some_messages_have_not_been_sent" = "Деякі повідомлення не були надіслані";
 "error_unknown" = "Вибачте, сталася помилка";
+"event_shield_reason_authenticity_not_guaranteed" = "The authenticity of this encrypted message can't be guaranteed on this device.";
+"event_shield_reason_unknown_device" = "Encrypted by an unknown or deleted device.";
+"event_shield_reason_unsigned_device" = "Encrypted by a device not verified by its owner.";
+"event_shield_reason_unverified_identity" = "Encrypted by an unverified user.";
 "full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
 "full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ Приєднуйтеся до мене в %1$@";
@@ -308,6 +313,9 @@
 "screen_advanced_settings_element_call_base_url_description" = "Встановіть URL-адресу для Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Неправильна URL-адреса, будь ласка, переконайтеся, що ви вказали протокол (http/https) та правильну адресу.";
 "screen_room_mentions_at_room_subtitle" = "Сповістіть усю кімнату";
+"screen.room.pinned_banner_indicator" = "%1$@ of %2$@";
+"screen.room.pinned_banner_indicator_description" = "%1$@ Pinned messages";
+"screen.room.pinned_banner_view_all_button_title" = "View All";
 "screen_account_provider_change" = "Змінити провайдера облікового запису";
 "screen_account_provider_form_hint" = "Адреса домашнього сервера";
 "screen_account_provider_form_notice" = "Уведіть пошуковий термін або адресу домену.";

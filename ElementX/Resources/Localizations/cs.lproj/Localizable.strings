@@ -102,6 +102,7 @@
 "action_view_source" = "Zobrazit zdroj";
 "action_yes" = "Ano";
 "action.load_more" = "Načíst více";
+"action.pin" = "Pin";
 "common_about" = "O aplikaci";
 "common_acceptable_use_policy" = "Zásady používání";
 "common_advanced_settings" = "Pokročilá nastavení";
@@ -252,6 +253,10 @@
 "error_no_compatible_app_found" = "Nebyla nalezena žádná kompatibilní aplikace, která by tuto akci zpracovala.";
 "error_some_messages_have_not_been_sent" = "Některé zprávy nebyly odeslány";
 "error_unknown" = "Omlouváme se, došlo k chybě";
+"event_shield_reason_authenticity_not_guaranteed" = "The authenticity of this encrypted message can't be guaranteed on this device.";
+"event_shield_reason_unknown_device" = "Encrypted by an unknown or deleted device.";
+"event_shield_reason_unsigned_device" = "Encrypted by a device not verified by its owner.";
+"event_shield_reason_unverified_identity" = "Encrypted by an unverified user.";
 "full_screen_intent_banner_message" = "Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen.";
 "full_screen_intent_banner_title" = "Vylepšete si zážitek z volání";
 "invite_friends_rich_title" = "🔐️ Připojte se ke mně na %1$@";
@@ -308,6 +313,9 @@
 "screen_advanced_settings_element_call_base_url_description" = "Nastavte vlastní URL pro Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatné URL, ujistěte se, že jste uvedli protokol (http/https) a správnou adresu.";
 "screen_room_mentions_at_room_subtitle" = "Informujte celou místnost";
+"screen.room.pinned_banner_indicator" = "%1$@ of %2$@";
+"screen.room.pinned_banner_indicator_description" = "%1$@ Pinned messages";
+"screen.room.pinned_banner_view_all_button_title" = "View All";
 "screen_account_provider_change" = "Změna poskytovatele účtu";
 "screen_account_provider_form_hint" = "Adresa domovského serveru";
 "screen_account_provider_form_notice" = "Zadejte hledaný výraz nebo adresu domény.";

@@ -102,6 +102,7 @@
 "action_view_source" = "Vaata lähtekoodi";
 "action_yes" = "Jah";
 "action.load_more" = "Näita veel";
+"action.pin" = "Kinnita";
 "common_about" = "Rakenduse teave";
 "common_acceptable_use_policy" = "Vastuvõetava kasutamise põhimõtted";
 "common_advanced_settings" = "Täiendavad seadistused";
@@ -252,6 +253,10 @@
 "error_no_compatible_app_found" = "Ei õnnestunud leida selle tegevuse jaoks vajalikku välist rakendust.";
 "error_some_messages_have_not_been_sent" = "Mõned sõnumid on saatmata";
 "error_unknown" = "Vabandust, ilmnes viga";
+"event_shield_reason_authenticity_not_guaranteed" = "Selle krüptitud sõnumi tõepärasus pole selles seadmes tagatud.";
+"event_shield_reason_unknown_device" = "Krüptitud tundmatu või kustutatud seadme poolt.";
+"event_shield_reason_unsigned_device" = "Krüptitud seadme poolt, mida tema omanik pole verifitseerinud.";
+"event_shield_reason_unverified_identity" = "Krüptitud verifitseerimata kasutaja poolt.";
 "full_screen_intent_banner_message" = "Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused.";
 "full_screen_intent_banner_title" = "Täiusta oma telefonikõnede kogemust";
 "invite_friends_rich_title" = "🔐️ Liitu minuga rakenduses %1$@";
@@ -308,6 +313,9 @@
 "screen_advanced_settings_element_call_base_url_description" = "Seadista kohandatud teenuseaadress Element Calli jaoks.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Vigane url. Palun vaata, et url algaks protokolliga (http/https) ning aadress ise oleks ka õige.";
 "screen_room_mentions_at_room_subtitle" = "Teavita kogu jututuba";
+"screen.room.pinned_banner_indicator" = "%1$@ / %2$@";
+"screen.room.pinned_banner_indicator_description" = "%1$@ kinnitatud sõnumit";
+"screen.room.pinned_banner_view_all_button_title" = "Näita kõiki";
 "screen_account_provider_change" = "Muuda teenusepakkujat";
 "screen_account_provider_form_hint" = "Koduserveri aadress";
 "screen_account_provider_form_notice" = "Sisesta otsingusõna või domeeni nimi.";

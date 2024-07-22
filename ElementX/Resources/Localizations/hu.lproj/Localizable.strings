@@ -102,6 +102,7 @@
 "action_view_source" = "Forrás megtekintése";
 "action_yes" = "Igen";
 "action.load_more" = "Továbbiak betöltése";
+"action.pin" = "Kitűzés";
 "common_about" = "Névjegy";
 "common_acceptable_use_policy" = "Elfogadható használatra vonatkozó szabályzat";
 "common_advanced_settings" = "Speciális beállítások";
@@ -212,7 +213,7 @@
 "common_waiting" = "Várakozás…";
 "common_waiting_for_decryption_key" = "Várakozás a visszafejtési kulcsra";
 "common.do_not_show_this_again" = "Ne jelenjen meg többé";
-"common.open_source_licenses" = "Open source licenses";
+"common.open_source_licenses" = "Nyílt forráskódú licencek";
 "common.send_to" = "Címzett";
 "common_no_room_name" = "Nincs szobanév";
 "common_poll_end_confirmation" = "Biztos, hogy befejezi ezt a szavazást?";
@@ -252,6 +253,10 @@
 "error_no_compatible_app_found" = "Nem található kompatibilis alkalmazás a művelet kezeléséhez.";
 "error_some_messages_have_not_been_sent" = "Néhány üzenet nem került elküldésre";
 "error_unknown" = "Elnézést, hiba történt";
+"event_shield_reason_authenticity_not_guaranteed" = "A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni.";
+"event_shield_reason_unknown_device" = "Ismeretlen vagy törölt eszköz által titkosítva.";
+"event_shield_reason_unsigned_device" = "A tulajdonos által nem ellenőrzött eszköz által titkosítva.";
+"event_shield_reason_unverified_identity" = "Nem ellenőrzött felhasználó által titkosítva.";
 "full_screen_intent_banner_message" = "Annak érdekében, hogy soha ne maradjon le egyetlen fontos hívásról sem, módosítsa a beállításokat, hogy engedélyezze a teljes képernyős értesítéseket, amikor a telefon zárolva van.";
 "full_screen_intent_banner_title" = "Növelje a hívásélményét";
 "invite_friends_rich_title" = "🔐️ Csatlakozz hozzám itt: %1$@";
@@ -308,6 +313,9 @@
 "screen_advanced_settings_element_call_base_url_description" = "Egyéni alapwebcím beállítása az Element Callhoz.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Érvénytelen webcím, győződjön meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím.";
 "screen_room_mentions_at_room_subtitle" = "Az egész szoba értesítése";
+"screen.room.pinned_banner_indicator" = "%1$@ of %2$@";
+"screen.room.pinned_banner_indicator_description" = "%1$@ Pinned messages";
+"screen.room.pinned_banner_view_all_button_title" = "View All";
 "screen_account_provider_change" = "Fiókszolgáltató módosítása";
 "screen_account_provider_form_hint" = "Matrix-kiszolgáló webcíme";
 "screen_account_provider_form_notice" = "Adjon meg egy keresési kifejezést vagy egy tartománycímet.";
