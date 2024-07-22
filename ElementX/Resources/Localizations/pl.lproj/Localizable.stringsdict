@@ -13,9 +13,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d ციფრი ჩაიწერა</string>
-			<key>other</key>
-			<string>%1$d ციფრი ჩაიწერა</string>
+			<string>Wprowadzono %1$d cyfrę</string>
+			<key>few</key>
+			<string>Wprowadzono %1$d cyfry</string>
+			<key>many</key>
+			<string>Wprowadzono %1$d cyfr</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -29,9 +31,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>წაკითხულია %1$@ და %2$d-ს ადამიანის მიერ</string>
-			<key>other</key>
-			<string>წაკითხულია %1$@ და %2$d-ს ადამიანის მიერ</string>
+			<string>Odczytano przez %1$@ i %2$d inną</string>
+			<key>few</key>
+			<string>Odczytano przez %1$@ i %2$d innych</string>
+			<key>many</key>
+			<string>Odczytano przez %1$@ i %2$d innych</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -45,9 +49,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d წევრი</string>
-			<key>other</key>
-			<string>%1$d წევრები</string>
+			<string>%1$d członek</string>
+			<key>few</key>
+			<string>%1$d członki</string>
+			<key>many</key>
+			<string>%1$d członków</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -61,9 +67,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d ხმა</string>
-			<key>other</key>
-			<string>%d ხმა</string>
+			<string>%d głos</string>
+			<key>few</key>
+			<string>%d głosy</string>
+			<key>many</key>
+			<string>%d głosów</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -77,9 +85,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d შეტყობინება</string>
-			<key>other</key>
-			<string>%1$@: %2$d შეტყობინება</string>
+			<string>%1$@: %2$d wiadomość</string>
+			<key>few</key>
+			<string>%1$@: %2$d wiadomości</string>
+			<key>many</key>
+			<string>%1$@: %2$d wiadomości</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -93,9 +103,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d შეტყობინება</string>
-			<key>other</key>
-			<string>%d შეტყობინება</string>
+			<string>%d powiadomienie</string>
+			<key>few</key>
+			<string>%d powiadomienia</string>
+			<key>many</key>
+			<string>%d powiadomień</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -109,9 +121,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d მოწვევა</string>
-			<key>other</key>
-			<string>%d მოწვევები</string>
+			<string>%d zaproszenie</string>
+			<key>few</key>
+			<string>%d zaproszenia</string>
+			<key>many</key>
+			<string>%d zaproszeń</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -125,9 +139,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d ახალი მესიჯი</string>
-			<key>other</key>
-			<string>%d ახალი მესიჯი</string>
+			<string>%d nowa wiadomość</string>
+			<key>few</key>
+			<string>%d nowe wiadomości</string>
+			<key>many</key>
+			<string>%d nowych wiadomości</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -141,9 +157,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d წაუკითხავი შეტყობინება</string>
-			<key>other</key>
-			<string>%d წაუკითხავი შეტყობინება</string>
+			<string>%d nieprzeczytana wiadomość</string>
+			<key>few</key>
+			<string>%d nieprzeczytane wiadomość</string>
+			<key>many</key>
+			<string>%d nieprzeczytanych wiadomości</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -157,9 +175,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d ოთახი</string>
-			<key>other</key>
-			<string>%d ოთახი</string>
+			<string>%d pokój</string>
+			<key>few</key>
+			<string>%d pokoje</string>
+			<key>many</key>
+			<string>%d pokoi</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -173,9 +193,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>თქვენ გაქვთ %1$d მცდელობა განსაბლოკად</string>
-			<key>other</key>
-			<string>თქვენ გაქვთ %1$d მცდელობა განსაბლოკად</string>
+			<string>Masz %1$d próbę, żeby odblokować</string>
+			<key>few</key>
+			<string>Masz %1$d próby, żeby odblokować</string>
+			<key>many</key>
+			<string>Masz %1$d prób, żeby odblokować</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -189,9 +211,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>არასწორი PIN. თქვენ %1$d შანსი დაგრჩათ</string>
-			<key>other</key>
-			<string>არასწორი PIN. თქვენ %1$d შანსი დაგრჩათ</string>
+			<string>Błędny PIN. Pozostała %1$d próba</string>
+			<key>few</key>
+			<string>Błędny PIN. Pozostały %1$d próby</string>
+			<key>many</key>
+			<string>Błędny PIN. Pozostało %1$d prób</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -205,9 +229,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d ადამიანი</string>
-			<key>other</key>
-			<string>%1$d ადამიანი</string>
+			<string>%1$d osoba</string>
+			<key>few</key>
+			<string>%1$d osoby</string>
+			<key>many</key>
+			<string>%1$d osób</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -221,9 +247,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$dოთახის ცვლილება</string>
-			<key>other</key>
-			<string>%1$dოთახის ცვლილებები</string>
+			<string>%1$d zmiana pokoju</string>
+			<key>few</key>
+			<string>%1$d zmian pokoju</string>
+			<key>many</key>
+			<string>%1$d zmiany pokoju</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
@@ -269,9 +297,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
-			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ piszę</string>
+			<key>few</key>
+			<string>%1$@ piszą</string>
+			<key>many</key>
+			<string>%1$@ piszą</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>

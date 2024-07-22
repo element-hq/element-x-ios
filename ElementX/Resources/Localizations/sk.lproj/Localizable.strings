@@ -102,6 +102,7 @@
 "action_view_source" = "Zobraziť zdroj";
 "action_yes" = "Áno";
 "action.load_more" = "Načítať viac";
+"action.pin" = "Pripnúť";
 "common_about" = "O aplikácii";
 "common_acceptable_use_policy" = "Zásady prijateľného používania";
 "common_advanced_settings" = "Pokročilé nastavenia";
@@ -252,6 +253,10 @@
 "error_no_compatible_app_found" = "Nebola nájdená žiadna kompatibilná aplikácia, ktorá by túto akciu dokázala spracovať.";
 "error_some_messages_have_not_been_sent" = "Niektoré správy neboli odoslané";
 "error_unknown" = "Prepáčte, vyskytla sa chyba";
+"event_shield_reason_authenticity_not_guaranteed" = "Pravosť tejto šifrovanej správy nie je možné zaručiť na tomto zariadení.";
+"event_shield_reason_unknown_device" = "Zašifrované neznámym alebo odstráneným zariadením.";
+"event_shield_reason_unsigned_device" = "Šifrované zariadením, ktoré nie je overené jeho majiteľom.";
+"event_shield_reason_unverified_identity" = "Šifrované neovereným používateľom.";
 "full_screen_intent_banner_message" = "Aby ste už nikdy nezmeškali dôležitý hovor, zmeňte svoje nastavenia a povoľte upozornenia na celú obrazovku, keď je váš telefón uzamknutý.";
 "full_screen_intent_banner_title" = "Vylepšite svoj zážitok z hovoru";
 "invite_friends_rich_title" = "🔐️ Pripojte sa ku mne na %1$@";
@@ -308,6 +313,9 @@
 "screen_advanced_settings_element_call_base_url_description" = "Nastaviť vlastnú základnú URL adresu pre Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatná adresa URL, uistite sa, že ste uviedli protokol (http/https) a správnu adresu.";
 "screen_room_mentions_at_room_subtitle" = "Informovať celú miestnosť";
+"screen.room.pinned_banner_indicator" = "%1$@ z %2$@";
+"screen.room.pinned_banner_indicator_description" = "%1$@ Pripnutých správ";
+"screen.room.pinned_banner_view_all_button_title" = "Zobraziť všetko";
 "screen_account_provider_change" = "Zmeniť poskytovateľa účtu";
 "screen_account_provider_form_hint" = "Adresa domovského servera";
 "screen_account_provider_form_notice" = "Zadajte hľadaný výraz alebo adresu domény.";

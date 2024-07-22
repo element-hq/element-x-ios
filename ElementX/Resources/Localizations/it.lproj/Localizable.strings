@@ -102,6 +102,7 @@
 "action_view_source" = "Vedi codice sorgente";
 "action_yes" = "Sì";
 "action.load_more" = "Carica altro";
+"action.pin" = "Pin";
 "common_about" = "Informazioni";
 "common_acceptable_use_policy" = "Regole sull'utilizzo consentito";
 "common_advanced_settings" = "Impostazioni avanzate";
@@ -252,6 +253,10 @@
 "error_no_compatible_app_found" = "Non è stata trovata alcuna app compatibile per gestire questa azione.";
 "error_some_messages_have_not_been_sent" = "Alcuni messaggi non sono stati inviati";
 "error_unknown" = "Siamo spiacenti, si è verificato un errore";
+"event_shield_reason_authenticity_not_guaranteed" = "The authenticity of this encrypted message can't be guaranteed on this device.";
+"event_shield_reason_unknown_device" = "Encrypted by an unknown or deleted device.";
+"event_shield_reason_unsigned_device" = "Encrypted by a device not verified by its owner.";
+"event_shield_reason_unverified_identity" = "Encrypted by an unverified user.";
 "full_screen_intent_banner_message" = "Per non perdere mai una chiamata importante, modifica le impostazioni per consentire le notifiche a schermo intero quando il telefono è bloccato.";
 "full_screen_intent_banner_title" = "Migliora la tua esperienza di chiamata";
 "invite_friends_rich_title" = "🔐️ Unisciti a me su %1$@";
@@ -308,6 +313,9 @@
 "screen_advanced_settings_element_call_base_url_description" = "Imposta un URL di base personalizzato per Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL non valido, assicurati di includere il protocollo (http/https) e l'indirizzo corretto.";
 "screen_room_mentions_at_room_subtitle" = "Notifica l'intera stanza";
+"screen.room.pinned_banner_indicator" = "%1$@ of %2$@";
+"screen.room.pinned_banner_indicator_description" = "%1$@ Pinned messages";
+"screen.room.pinned_banner_view_all_button_title" = "View All";
 "screen_account_provider_change" = "Cambia fornitore dell'account";
 "screen_account_provider_form_hint" = "Indirizzo dell'homeserver";
 "screen_account_provider_form_notice" = "Inserisci un termine di ricerca o un indirizzo di dominio.";
@@ -321,7 +329,7 @@
 "screen_advanced_settings_send_read_receipts" = "Ricevute di visualizzazione";
 "screen_advanced_settings_send_read_receipts_description" = "Se disattivato, le tue ricevute di visualizzazione non verranno inviate a nessuno. Riceverai comunque ricevute di visualizzazione da altri utenti.";
 "screen_advanced_settings_share_presence" = "Condividi presenza online";
-"screen_advanced_settings_share_presence_description" = "Se disattivato, non potrai inviare o ricevere ricevute di visualizzazione o notifiche di scrittura.";
+"screen_advanced_settings_share_presence_description" = "Se disattivato, non potrai inviare o ricevere ricevute di lettura o notifiche di scrittura.";
 "screen_advanced_settings_view_source_description" = "Attiva l'opzione per visualizzare il codice sorgente del messaggio nella conversazione.";
 "screen_analytics_prompt_data_usage" = "Non registreremo né profileremo alcun dato personale";
 "screen_analytics_prompt_help_us_improve" = "Condividi dati di utilizzo anonimi per aiutarci a identificare problemi.";

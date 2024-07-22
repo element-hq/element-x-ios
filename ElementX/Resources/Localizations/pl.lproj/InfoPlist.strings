@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Aby robić zdjęcia lub nagrywać wideo i wysłać je jako wiadomość, Element X wymaga dostępu do aparatu.";
+"NSFaceIDUsageDescription" = "Face ID jest w użyciu, aby uzyskać dostęp do aplikacji.";
+"NSLocationWhenInUseUsageDescription" = "Przyznaj dostęp do lokalizacji, aby Element X mógł udostępnić Twoją lokalizację.";
+"NSMicrophoneUsageDescription" = "Aby nagrywać lub wysyłać wiadomości audio, Element X potrzebuje dostępu do mikrofonu.";
+"NSPhotoLibraryUsageDescription" = "Umożliwia zapisywanie zdjęć i filmów w bibliotece.";
