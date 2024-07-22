@@ -1,3 +1,65 @@
+## Changes in 1.7.0 (2024-07-22)
+
+### What's Changed
+
+✨ Features
+* Various CallKit and ElementCall fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/2975
+
+🙌 Improvements
+* Use local room list sorting from Rust. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/2978
+* Replace old visible rooms range with subscriptions in the room list. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3014
+* Update RTE to 2.37.5 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3015
+
+🐛 Bugfixes
+* Fix for the left room event using member instead of the sender by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3000
+* Fix a crash when 2 present room events are sent in quick succession. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3001
+* Make sure the BugReportScreen allows the user to retry if sending fails. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3012
+* FIX: saving draft did not save the pill markdown content by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3003
+* Update the SDK (fixes unnecessary encryption state requests in the room list). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3016
+* Restore Mentions in plain text mode by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3018
+* Make sure Element Call uses the correct theme and language. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3017
+* Fix stuck unread indicators. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3023
+* Fix the string used for encrypted events in the room list. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3030
+* Update the SDK fixing a few room list bugs. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3054
+* Fix a potential race condition when redacting a message. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3061
+* Use the same UI as Android when tapping a link to a private room. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3044
+* Use both the room list room and the room preview details to populate the join room screen by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3062
+* Fix editing items not in the timeline failing by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3075
+* ElementCall unable to access media on ongoing CallKit session. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3077
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3011
+* Handle renamed PIN alert string. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3024
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3038
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3074
+
+🧱 Build
+* Upgrade the project to use Xcode 15.4 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3027
+* Fix an App Store upload error due to an RTE version mismatch. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3029
+* Fix RTE framework signature error when building DEBUG builds for a device. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3040
+* Upgrade Compound. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3039
+* Run the integration tests on GitHub again. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3052
+* Removed RTE script by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3067
+
+🚧 In development 🚧
+* Add a feature flag for Simplified Sliding Sync. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3057
+* Add a feature flag for Message Pinning. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3063
+* Pinned Items Banner UI by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3072
+
+Others
+* Update dependency jpsim/Yams to from: "5.1.3" by @renovate in https://github.com/element-hq/element-x-ios/pull/3022
+* Update RTE with inline prediction working by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3043
+* Simplify how we setup Sentry to make sure it's configured before any … by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3053
+* Add a ClientBuilder hook. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3056
+* Update RTE to 2.37.7 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3064
+* Track sub-spans as transactions as well so that we can plot them on a sentry dashboard by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3066
+* Update dependency apple/swift-argument-parser to from: "1.5.0" by @renovate in https://github.com/element-hq/element-x-ios/pull/3065
+* Add a certificate validator hook. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3069
+* Set version to 1.7.0 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3076
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.6.13...1.7.0
+
 ## Changes in 1.6.13 (2024-07-04)
 
 ### What's Changed
