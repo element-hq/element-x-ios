@@ -14,9 +14,8 @@
 // limitations under the License.
 //
 
-import SwiftUI
-
 import Compound
+import SwiftUI
 
 struct PinnedItemsIndicatorView: View {
     let pinIndex: Int

@@ -14,9 +14,8 @@
 // limitations under the License.
 //
 
-import SwiftUI
-
 import Compound
+import SwiftUI
 
 struct PinnedItemsBannerView: View {
     let pinIndex: Int
@@ -48,32 +47,30 @@ struct PinnedItemsBannerView: View {
     }
     
     private var mainButton: some View {
-        Button(action: onMainButtonTap,
-               label: {
-                   HStack(spacing: 0) {
-                       HStack(spacing: 10) {
-                           PinnedItemsIndicatorView(pinIndex: pinIndex, pinsCount: pinsCount)
-                               .accessibilityHidden(true)
-                           CompoundIcon(\.pinSolid, size: .small, relativeTo: .compound.bodyMD)
-                               .foregroundColor(Color.compound.iconSecondaryAlpha)
-                               .accessibilityHidden(true)
-                           content
-                       }
-                       Spacer()
-                   }
-               })
-               .accessibilityElement(children: .contain)
+        Button { onMainButtonTap() } label: {
+            HStack(spacing: 0) {
+                HStack(spacing: 10) {
+                    PinnedItemsIndicatorView(pinIndex: pinIndex, pinsCount: pinsCount)
+                        .accessibilityHidden(true)
+                    CompoundIcon(\.pinSolid, size: .small, relativeTo: .compound.bodyMD)
+                        .foregroundColor(Color.compound.iconSecondaryAlpha)
+                        .accessibilityHidden(true)
+                    content
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .accessibilityElement(children: .contain)
     }
     
     private var viewAllButton: some View {
-        Button(action: onViewAllButtonTap,
-               label: {
-                   Text(L10n.Screen.Room.pinnedBannerViewAllButtonTitle)
-                       .font(.compound.bodyMDSemibold)
-                       .foregroundStyle(Color.compound.textPrimary)
-                       .padding(.horizontal, 16)
-                       .padding(.vertical, 5)
-               })
+        Button { onViewAllButtonTap() } label: {
+            Text(L10n.Screen.Room.pinnedBannerViewAllButtonTitle)
+                .font(.compound.bodyMDSemibold)
+                .foregroundStyle(Color.compound.textPrimary)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 5)
+        }
     }
     
     private var content: some View {
