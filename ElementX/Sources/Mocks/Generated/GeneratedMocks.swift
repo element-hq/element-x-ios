@@ -9297,6 +9297,76 @@ class RoomProxyMock: RoomProxyProtocol {
             return markAsReadReceiptTypeReturnValue
         }
     }
+    //MARK: - edit
+
+    var editEventIDNewContentUnderlyingCallsCount = 0
+    var editEventIDNewContentCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return editEventIDNewContentUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editEventIDNewContentUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editEventIDNewContentUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editEventIDNewContentUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var editEventIDNewContentCalled: Bool {
+        return editEventIDNewContentCallsCount > 0
+    }
+    var editEventIDNewContentReceivedArguments: (eventID: String, newContent: RoomMessageEventContentWithoutRelation)?
+    var editEventIDNewContentReceivedInvocations: [(eventID: String, newContent: RoomMessageEventContentWithoutRelation)] = []
+
+    var editEventIDNewContentUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var editEventIDNewContentReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return editEventIDNewContentUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editEventIDNewContentUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editEventIDNewContentUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editEventIDNewContentUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var editEventIDNewContentClosure: ((String, RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError>)?
+
+    func edit(eventID: String, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError> {
+        editEventIDNewContentCallsCount += 1
+        editEventIDNewContentReceivedArguments = (eventID: eventID, newContent: newContent)
+        DispatchQueue.main.async {
+            self.editEventIDNewContentReceivedInvocations.append((eventID: eventID, newContent: newContent))
+        }
+        if let editEventIDNewContentClosure = editEventIDNewContentClosure {
+            return await editEventIDNewContentClosure(eventID, newContent)
+        } else {
+            return editEventIDNewContentReturnValue
+        }
+    }
     //MARK: - sendTypingNotification
 
     var sendTypingNotificationIsTypingUnderlyingCallsCount = 0
@@ -12319,15 +12389,15 @@ class TimelineProxyMock: TimelineProxyProtocol {
     }
     //MARK: - edit
 
-    var editMessageHtmlIntentionalMentionsUnderlyingCallsCount = 0
-    var editMessageHtmlIntentionalMentionsCallsCount: Int {
+    var editNewContentUnderlyingCallsCount = 0
+    var editNewContentCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return editMessageHtmlIntentionalMentionsUnderlyingCallsCount
+                return editNewContentUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = editMessageHtmlIntentionalMentionsUnderlyingCallsCount
+                    returnValue = editNewContentUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -12335,29 +12405,29 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                editMessageHtmlIntentionalMentionsUnderlyingCallsCount = newValue
+                editNewContentUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    editMessageHtmlIntentionalMentionsUnderlyingCallsCount = newValue
+                    editNewContentUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var editMessageHtmlIntentionalMentionsCalled: Bool {
-        return editMessageHtmlIntentionalMentionsCallsCount > 0
+    var editNewContentCalled: Bool {
+        return editNewContentCallsCount > 0
     }
-    var editMessageHtmlIntentionalMentionsReceivedArguments: (timelineItemID: TimelineItemIdentifier, message: String, html: String?, intentionalMentions: IntentionalMentions)?
-    var editMessageHtmlIntentionalMentionsReceivedInvocations: [(timelineItemID: TimelineItemIdentifier, message: String, html: String?, intentionalMentions: IntentionalMentions)] = []
+    var editNewContentReceivedArguments: (timelineItem: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation)?
+    var editNewContentReceivedInvocations: [(timelineItem: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation)] = []
 
-    var editMessageHtmlIntentionalMentionsUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var editMessageHtmlIntentionalMentionsReturnValue: Result<Void, TimelineProxyError>! {
+    var editNewContentUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var editNewContentReturnValue: Result<Void, TimelineProxyError>! {
         get {
             if Thread.isMainThread {
-                return editMessageHtmlIntentionalMentionsUnderlyingReturnValue
+                return editNewContentUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, TimelineProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = editMessageHtmlIntentionalMentionsUnderlyingReturnValue
+                    returnValue = editNewContentUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -12365,26 +12435,26 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                editMessageHtmlIntentionalMentionsUnderlyingReturnValue = newValue
+                editNewContentUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    editMessageHtmlIntentionalMentionsUnderlyingReturnValue = newValue
+                    editNewContentUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var editMessageHtmlIntentionalMentionsClosure: ((TimelineItemIdentifier, String, String?, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
+    var editNewContentClosure: ((EventTimelineItem, RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>)?
 
-    func edit(_ timelineItemID: TimelineItemIdentifier, message: String, html: String?, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
-        editMessageHtmlIntentionalMentionsCallsCount += 1
-        editMessageHtmlIntentionalMentionsReceivedArguments = (timelineItemID: timelineItemID, message: message, html: html, intentionalMentions: intentionalMentions)
+    func edit(_ timelineItem: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
+        editNewContentCallsCount += 1
+        editNewContentReceivedArguments = (timelineItem: timelineItem, newContent: newContent)
         DispatchQueue.main.async {
-            self.editMessageHtmlIntentionalMentionsReceivedInvocations.append((timelineItemID: timelineItemID, message: message, html: html, intentionalMentions: intentionalMentions))
+            self.editNewContentReceivedInvocations.append((timelineItem: timelineItem, newContent: newContent))
         }
-        if let editMessageHtmlIntentionalMentionsClosure = editMessageHtmlIntentionalMentionsClosure {
-            return await editMessageHtmlIntentionalMentionsClosure(timelineItemID, message, html, intentionalMentions)
+        if let editNewContentClosure = editNewContentClosure {
+            return await editNewContentClosure(timelineItem, newContent)
         } else {
-            return editMessageHtmlIntentionalMentionsReturnValue
+            return editNewContentReturnValue
         }
     }
     //MARK: - redact
@@ -13475,6 +13545,76 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return await getLoadedReplyDetailsEventIDClosure(eventID)
         } else {
             return getLoadedReplyDetailsEventIDReturnValue
+        }
+    }
+    //MARK: - buildMessageContentFor
+
+    var buildMessageContentForHtmlIntentionalMentionsUnderlyingCallsCount = 0
+    var buildMessageContentForHtmlIntentionalMentionsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return buildMessageContentForHtmlIntentionalMentionsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildMessageContentForHtmlIntentionalMentionsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildMessageContentForHtmlIntentionalMentionsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildMessageContentForHtmlIntentionalMentionsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var buildMessageContentForHtmlIntentionalMentionsCalled: Bool {
+        return buildMessageContentForHtmlIntentionalMentionsCallsCount > 0
+    }
+    var buildMessageContentForHtmlIntentionalMentionsReceivedArguments: (message: String, html: String?, intentionalMentions: Mentions)?
+    var buildMessageContentForHtmlIntentionalMentionsReceivedInvocations: [(message: String, html: String?, intentionalMentions: Mentions)] = []
+
+    var buildMessageContentForHtmlIntentionalMentionsUnderlyingReturnValue: RoomMessageEventContentWithoutRelation!
+    var buildMessageContentForHtmlIntentionalMentionsReturnValue: RoomMessageEventContentWithoutRelation! {
+        get {
+            if Thread.isMainThread {
+                return buildMessageContentForHtmlIntentionalMentionsUnderlyingReturnValue
+            } else {
+                var returnValue: RoomMessageEventContentWithoutRelation? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildMessageContentForHtmlIntentionalMentionsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildMessageContentForHtmlIntentionalMentionsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildMessageContentForHtmlIntentionalMentionsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var buildMessageContentForHtmlIntentionalMentionsClosure: ((String, String?, Mentions) -> RoomMessageEventContentWithoutRelation)?
+
+    func buildMessageContentFor(_ message: String, html: String?, intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation {
+        buildMessageContentForHtmlIntentionalMentionsCallsCount += 1
+        buildMessageContentForHtmlIntentionalMentionsReceivedArguments = (message: message, html: html, intentionalMentions: intentionalMentions)
+        DispatchQueue.main.async {
+            self.buildMessageContentForHtmlIntentionalMentionsReceivedInvocations.append((message: message, html: html, intentionalMentions: intentionalMentions))
+        }
+        if let buildMessageContentForHtmlIntentionalMentionsClosure = buildMessageContentForHtmlIntentionalMentionsClosure {
+            return buildMessageContentForHtmlIntentionalMentionsClosure(message, html, intentionalMentions)
+        } else {
+            return buildMessageContentForHtmlIntentionalMentionsReturnValue
         }
     }
 }

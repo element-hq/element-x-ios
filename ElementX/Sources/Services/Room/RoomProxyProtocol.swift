@@ -96,6 +96,8 @@ protocol RoomProxyProtocol {
     
     func markAsRead(receiptType: ReceiptType) async -> Result<Void, RoomProxyError>
     
+    func edit(eventID: String, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError>
+    
     /// https://spec.matrix.org/v1.9/client-server-api/#typing-notifications
     @discardableResult func sendTypingNotification(isTyping: Bool) async -> Result<Void, RoomProxyError>
     
