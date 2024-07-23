@@ -50,13 +50,7 @@ struct RoomScreen: View {
             }
             .overlay(alignment: .top) {
                 if context.viewState.shouldShowPinBanner {
-                    // TODO: Implement tapping logic
-                    PinnedItemsBannerView(pinIndex: 1,
-                                          pinsCount: 3,
-                                          pinContent: .init(stringLiteral: "Content"),
-                                          onMainButtonTap: { },
-                                          onViewAllButtonTap: { })
-                        .transition(.move(edge: .top))
+                    pinnedItemsBanner
                 }
             }
             .animation(.elementDefault, value: context.viewState.shouldShowPinBanner)
@@ -110,6 +104,15 @@ struct RoomScreen: View {
             .overlay(alignment: .bottomTrailing) {
                 scrollToBottomButton
             }
+    }
+    
+    private var pinnedItemsBanner: some View {
+        PinnedItemsBannerView(pinIndex: context.viewState.currentPinIndex,
+                              pinsCount: context.viewState.pinnedItems.count,
+                              pinContent: context.viewState.selectedPinContent,
+                              onMainButtonTap: { context.send(viewAction: .nextPin) },
+                              onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
+            .transition(.move(edge: .top))
     }
     
     private var scrollToBottomButton: some View {

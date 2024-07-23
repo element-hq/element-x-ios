@@ -140,6 +140,8 @@ enum RoomScreenViewAction {
     case hasSwitchedTimeline
     
     case hasScrolled(direction: ScrollDirection)
+    case nextPin
+    case viewAllPins
 }
 
 enum RoomScreenComposerAction {
@@ -170,8 +172,20 @@ struct RoomScreenViewState: BindableState {
     
     var isPinningEnabled = false
     var lastScrolledDirection: ScrollDirection?
+    // These are just mocked items used for testing, their types might change
+    let pinnedItems = [
+        "Hello 1",
+        "How are you 2",
+        "I am fine 3",
+        "Thank you 4"
+    ]
+    var currentPinIndex = 0
     var shouldShowPinBanner: Bool {
-        isPinningEnabled && lastScrolledDirection != .top
+        isPinningEnabled && !pinnedItems.isEmpty && lastScrolledDirection != .top
+    }
+    
+    var selectedPinContent: AttributedString {
+        .init(pinnedItems[currentPinIndex])
     }
     
     var canJoinCall = false

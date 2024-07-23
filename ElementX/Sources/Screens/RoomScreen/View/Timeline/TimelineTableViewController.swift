@@ -204,8 +204,8 @@ class TimelineTableViewController: UIViewController {
             .store(in: &cancellables)
         
         scrollDirectionPublisher
-            .removeDuplicates()
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
+            .removeDuplicates()
             .sink { direction in
                 coordinator.send(viewAction: .hasScrolled(direction: direction))
             }
