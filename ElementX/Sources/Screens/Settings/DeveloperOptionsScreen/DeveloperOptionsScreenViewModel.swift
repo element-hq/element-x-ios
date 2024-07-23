@@ -31,6 +31,16 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         let state = DeveloperOptionsScreenViewState(elementCallBaseURL: elementCallBaseURL, bindings: bindings)
         
         super.init(initialViewState: state)
+        
+        context.$viewState
+            .map(\.bindings.simplifiedSlidingSyncEnabled)
+            .removeDuplicates()
+            .dropFirst() // Ignore the initial value received when opening the screen.
+            .sink { [weak self] isEnabled in
+                MXLog.error("Toggled simplifiedSlidingSyncEnabled: \(isEnabled). Signing out.")
+                self?.actionsSubject.send(.forceLogout)
+            }
+            .store(in: &cancellables)
     }
     
     override func process(viewAction: DeveloperOptionsScreenViewAction) {

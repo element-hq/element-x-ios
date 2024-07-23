@@ -59,13 +59,12 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         do {
             let client = try await ClientBuilder
                 .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
+                             slidingSync: appSettings.simplifiedSlidingSyncEnabled ? .simplified : .discovered,
                              slidingSyncProxy: appSettings.slidingSyncProxyURL,
                              sessionDelegate: userSessionStore.clientSessionDelegate,
-                             simplifiedSlidingSyncEnabled: appSettings.simplifiedSlidingSyncEnabled,
                              appHooks: appHooks)
                 .sessionPath(path: sessionDirectory.path(percentEncoded: false))
                 .passphrase(passphrase: passphrase)
-                .requiresSlidingSync()
                 .buildWithQrCode(qrCodeData: qrData, oidcConfiguration: appSettings.oidcConfiguration.rustValue, progressListener: listener)
             return await login(client: client)
         } catch let error as HumanQrLoginError {

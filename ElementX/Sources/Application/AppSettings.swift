@@ -64,7 +64,6 @@ final class AppSettings {
     static func resetSessionSpecificSettings() {
         MXLog.warning("Resetting the user session specific AppSettings.")
         store.removeObject(forKey: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding.rawValue)
-        store.removeObject(forKey: UserDefaultsKeys.simplifiedSlidingSyncEnabled.rawValue)
     }
     
     static func configureWithSuiteName(_ name: String) {

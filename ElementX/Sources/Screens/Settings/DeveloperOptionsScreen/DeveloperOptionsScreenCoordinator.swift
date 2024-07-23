@@ -19,6 +19,8 @@ import SwiftUI
 
 enum DeveloperOptionsScreenCoordinatorAction {
     case clearCache
+    /// Logout without a confirmation to avoid losing keys when trying SSS.
+    case forceLogout
 }
 
 final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
@@ -42,6 +44,8 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
                 switch action {
                 case .clearCache:
                     actionsSubject.send(.clearCache)
+                case .forceLogout:
+                    actionsSubject.send(.forceLogout)
                 }
             }
             .store(in: &cancellables)

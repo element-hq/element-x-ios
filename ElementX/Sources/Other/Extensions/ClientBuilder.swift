@@ -21,15 +21,20 @@ extension ClientBuilder {
     /// A helper method that applies the common builder modifiers needed for the app.
     static func baseBuilder(setupEncryption: Bool = true,
                             httpProxy: String? = nil,
+                            slidingSync: ClientBuilderSlidingSync,
                             slidingSyncProxy: URL? = nil,
                             sessionDelegate: ClientSessionDelegate,
-                            simplifiedSlidingSyncEnabled: Bool,
                             appHooks: AppHooks) -> ClientBuilder {
         var builder = ClientBuilder()
             .slidingSyncProxy(slidingSyncProxy: slidingSyncProxy?.absoluteString)
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier, sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
-            .simplifiedSlidingSync(enable: simplifiedSlidingSyncEnabled)
+        
+        builder = switch slidingSync {
+        case .restored: builder
+        case .discovered: builder.requiresSlidingSync()
+        case .simplified: builder.simplifiedSlidingSync(enable: true)
+        }
         
         if setupEncryption {
             builder = builder
@@ -44,4 +49,13 @@ extension ClientBuilder {
         
         return appHooks.clientBuilderHook.configure(builder)
     }
+}
+
+enum ClientBuilderSlidingSync {
+    /// The proxy will be supplied when restoring the Session.
+    case restored
+    /// A proxy must be discovered whilst building the session.
+    case discovered
+    /// Use Simplified Sliding Sync (discovery isn't a thing yet).
+    case simplified
 }
