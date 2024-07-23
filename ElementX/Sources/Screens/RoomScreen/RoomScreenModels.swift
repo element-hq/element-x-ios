@@ -138,6 +138,8 @@ enum RoomScreenViewAction {
     case scrolledToFocussedItem
     /// The table view has loaded the first items for a new timeline.
     case hasSwitchedTimeline
+    
+    case hasScrolled(direction: ScrollDirection)
 }
 
 enum RoomScreenComposerAction {
@@ -165,7 +167,12 @@ struct RoomScreenViewState: BindableState {
     var canCurrentUserRedactSelf = false
     var canCurrentUserPin = false
     var isViewSourceEnabled: Bool
+    
     var isPinningEnabled = false
+    var lastScrolledDirection: ScrollDirection?
+    var shouldShowPinBanner: Bool {
+        isPinningEnabled && lastScrolledDirection != .top
+    }
     
     var canJoinCall = false
     var hasOngoingCall = false
@@ -277,4 +284,9 @@ struct TimelineViewState {
     func hasLoadedItem(with eventID: String) -> Bool {
         itemViewStates.contains { $0.identifier.eventID == eventID }
     }
+}
+
+enum ScrollDirection: Equatable {
+    case top
+    case bottom
 }

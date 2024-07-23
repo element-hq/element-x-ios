@@ -194,6 +194,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             didScrollToFocussedItem()
         case .hasSwitchedTimeline:
             Task { state.timelineViewState.isSwitchingTimelines = false }
+        case let .hasScrolled(direction):
+            state.lastScrolledDirection = direction
         }
     }
 

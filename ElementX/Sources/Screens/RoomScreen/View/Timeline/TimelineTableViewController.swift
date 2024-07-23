@@ -161,6 +161,11 @@ class TimelineTableViewController: UIViewController {
     /// quick succession can execute before ``paginationState`` acknowledges that
     /// pagination is in progress.
     private let paginatePublisher = PassthroughSubject<Void, Never>()
+    
+    /// Used to keep track of the last scroll offset to determine the scroll direction
+    private var lastScrollOffset: CGFloat?
+    /// A publisher used to throttle scroll direction changes
+    private let scrollDirectionPublisher = PassthroughSubject<ScrollDirection, Never>()
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
     
@@ -195,6 +200,14 @@ class TimelineTableViewController: UIViewController {
             .collect(.byTime(DispatchQueue.main, 0.1))
             .sink { [weak self] _ in
                 self?.paginateIfNeeded()
+            }
+            .store(in: &cancellables)
+        
+        scrollDirectionPublisher
+            .throttle(for: 1, scheduler: DispatchQueue.main, latest: true)
+            .removeDuplicates()
+            .sink { direction in
+                coordinator.send(viewAction: .hasScrolled(direction: direction))
             }
             .store(in: &cancellables)
         
@@ -423,6 +436,17 @@ extension TimelineTableViewController: UITableViewDelegate {
         if scrollView.contentOffset.y == 0 {
             scrollView.contentOffset.y = -1
         }
+        
+        if let lastScrollOffset {
+            if lastScrollOffset > scrollView.contentOffset.y {
+                scrollDirectionPublisher.send(.bottom)
+            } else if lastScrollOffset < scrollView.contentOffset.y {
+                scrollDirectionPublisher.send(.top)
+            }
+            // Do not send if the content offset has not changed
+        }
+        
+        lastScrollOffset = scrollView.contentOffset.y
     }
     
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
