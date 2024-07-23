@@ -57,9 +57,9 @@ struct RoomScreen: View {
                                           onMainButtonTap: { },
                                           onViewAllButtonTap: { })
                         .transition(.move(edge: .top))
-                        .animation(.elementDefault, value: context.viewState.shouldShowPinBanner)
                 }
             }
+            .animation(.elementDefault, value: context.viewState.shouldShowPinBanner)
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(isNavigationBarHidden)

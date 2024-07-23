@@ -162,8 +162,8 @@ class TimelineTableViewController: UIViewController {
     /// pagination is in progress.
     private let paginatePublisher = PassthroughSubject<Void, Never>()
     
-    /// Used to keep track of the last scroll offset to determine the scroll direction
-    private var lastScrollOffset: CGFloat?
+    /// A value to determine the scroll velocity threshold to detect a change in direction of the scroll view
+    private let scrollVelocityThreshold: CGFloat = 50.0
     /// A publisher used to throttle scroll direction changes
     private let scrollDirectionPublisher = PassthroughSubject<ScrollDirection, Never>()
     /// Whether or not the view has been shown on screen yet.
@@ -204,8 +204,8 @@ class TimelineTableViewController: UIViewController {
             .store(in: &cancellables)
         
         scrollDirectionPublisher
-            .throttle(for: 1, scheduler: DispatchQueue.main, latest: true)
             .removeDuplicates()
+            .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             .sink { direction in
                 coordinator.send(viewAction: .hasScrolled(direction: direction))
             }
@@ -358,6 +358,7 @@ class TimelineTableViewController: UIViewController {
             return
         }
         tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
+        scrollDirectionPublisher.send(.bottom)
     }
 
     /// Scrolls to the oldest item in the timeline.
@@ -366,6 +367,7 @@ class TimelineTableViewController: UIViewController {
             return
         }
         tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 1), at: .bottom, animated: animated)
+        scrollDirectionPublisher.send(.top)
     }
     
     /// Scrolls to the item with the corresponding event ID if loaded in the timeline.
@@ -437,16 +439,12 @@ extension TimelineTableViewController: UITableViewDelegate {
             scrollView.contentOffset.y = -1
         }
         
-        if let lastScrollOffset {
-            if lastScrollOffset > scrollView.contentOffset.y {
-                scrollDirectionPublisher.send(.bottom)
-            } else if lastScrollOffset < scrollView.contentOffset.y {
-                scrollDirectionPublisher.send(.top)
-            }
-            // Do not send if the content offset has not changed
+        let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview).y
+        if velocity > scrollVelocityThreshold {
+            scrollDirectionPublisher.send(.top)
+        } else if velocity < -scrollVelocityThreshold {
+            scrollDirectionPublisher.send(.bottom)
         }
-        
-        lastScrollOffset = scrollView.contentOffset.y
     }
     
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
