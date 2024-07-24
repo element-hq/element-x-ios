@@ -73,7 +73,7 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
     }
     
     /// A layout where the content scrolls with the bottom content overlaid. Used with regular font sizes.
-    var standardLayout: some View {
+    @MainActor var standardLayout: some View {
         GeometryReader { geometry in
             ScrollView {
                 VStack(spacing: 0) {
