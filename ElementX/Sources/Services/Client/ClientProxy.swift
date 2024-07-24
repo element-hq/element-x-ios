@@ -608,7 +608,14 @@ class ClientProxy: ClientProxyProtocol {
     
     func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError> {
         do {
-            return try await .success(client.resolveRoomAlias(roomAlias: alias))
+            let resolvedAlias = try await client.resolveRoomAlias(roomAlias: alias)
+            
+            // Resolving aliases is done through the directory/room API which returns too many / all known
+            // vias, which in turn results in invalid join requests. Trim them to something manageable
+            // https://github.com/element-hq/synapse/issues/17298
+            let limitedAlias = ResolvedRoomAlias(roomId: resolvedAlias.roomId, servers: Array(resolvedAlias.servers.prefix(50)))
+            
+            return .success(limitedAlias)
         } catch {
             MXLog.error("Failed resolving room alias: \(alias) with error: \(error)")
             return .failure(.sdkError(error))
