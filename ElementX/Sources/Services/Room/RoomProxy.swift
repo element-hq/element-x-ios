@@ -16,9 +16,8 @@
 
 import Combine
 import Foundation
-import UIKit
-
 import MatrixRustSDK
+import UIKit
 
 class RoomProxy: RoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
@@ -84,6 +83,12 @@ class RoomProxy: RoomProxyProtocol {
     var isFavourite: Bool {
         get async {
             await (try? room.roomInfo().isFavourite) ?? false
+        }
+    }
+    
+    var pinnedEvents: [String] {
+        get async {
+            await (try? room.roomInfo().pinnedEventIds) ?? []
         }
     }
     
@@ -489,6 +494,15 @@ class RoomProxy: RoomProxyProtocol {
             return try await .success(room.canUserTriggerRoomNotification(userId: userID))
         } catch {
             MXLog.error("Failed checking if the user can trigger room notification with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func canUserPinOrUnpin(userID: String) async -> Result<Bool, RoomProxyError> {
+        do {
+            return try await .success(room.canUserPinUnpin(userId: userID))
+        } catch {
+            MXLog.error("Failed checking if the user can pin or unnpin: \(error)")
             return .failure(.sdkError(error))
         }
     }

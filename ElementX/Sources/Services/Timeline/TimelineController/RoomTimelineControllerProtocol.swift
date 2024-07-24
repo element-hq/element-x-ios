@@ -68,6 +68,10 @@ protocol RoomTimelineControllerProtocol {
 
     func redact(_ itemID: TimelineItemIdentifier) async
     
+    func pin(eventID: String) async
+    
+    func unpin(eventID: String) async
+    
     func messageEventContent(for itemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation?
     
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo

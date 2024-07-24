@@ -2231,6 +2231,8 @@ internal enum L10n {
     internal static var loadMore: String { return L10n.tr("Localizable", "action.load_more") }
     /// Pin
     internal static var pin: String { return L10n.tr("Localizable", "action.pin") }
+    /// Unpin
+    internal static var unpin: String { return L10n.tr("Localizable", "action.unpin") }
   }
 
   internal enum Common {

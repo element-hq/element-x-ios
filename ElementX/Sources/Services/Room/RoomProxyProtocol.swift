@@ -38,6 +38,7 @@ protocol RoomProxyProtocol {
     var isSpace: Bool { get }
     var isEncrypted: Bool { get }
     var isFavourite: Bool { get async }
+    var pinnedEvents: [String] { get async }
     var membership: Membership { get }
     var hasOngoingCall: Bool { get }
     var canonicalAlias: String? { get }
@@ -121,6 +122,7 @@ protocol RoomProxyProtocol {
     func canUserKick(userID: String) async -> Result<Bool, RoomProxyError>
     func canUserBan(userID: String) async -> Result<Bool, RoomProxyError>
     func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
+    func canUserPinOrUnpin(userID: String) async -> Result<Bool, RoomProxyError>
     
     // MARK: - Moderation
     

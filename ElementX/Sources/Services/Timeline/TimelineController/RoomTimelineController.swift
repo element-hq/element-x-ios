@@ -237,6 +237,36 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
+    func pin(eventID: String) async {
+        MXLog.info("Pinning event \(eventID) in \(roomID)")
+        
+        switch await activeTimeline.pin(eventID: eventID) {
+        case .success(let value):
+            if value {
+                MXLog.info("Finished pinning event \(eventID)")
+            } else {
+                MXLog.info("Failed pinning event \(eventID) because is already pinned")
+            }
+        case .failure(let error):
+            MXLog.info("Failed pinning event \(eventID) with error: \(error)")
+        }
+    }
+    
+    func unpin(eventID: String) async {
+        MXLog.info("Unpinning event \(eventID) in \(roomID)")
+        
+        switch await activeTimeline.unpin(eventID: eventID) {
+        case .success(let value):
+            if value {
+                MXLog.info("Finished unpinning event \(eventID)")
+            } else {
+                MXLog.info("Failed unpinning event \(eventID) because is not pinned")
+            }
+        case .failure(let error):
+            MXLog.info("Failed unpinning event \(eventID) with error: \(error)")
+        }
+    }
+    
     func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
         await activeTimeline.messageEventContent(for: timelineItemID)
     }

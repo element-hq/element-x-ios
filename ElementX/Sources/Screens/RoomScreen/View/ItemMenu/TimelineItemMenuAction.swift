@@ -62,6 +62,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case toggleReaction(key: String)
     case endPoll(pollStartID: String)
     case pin
+    case unpin
     
     var id: Self { self }
     
@@ -136,6 +137,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionEndPoll, icon: \.pollsEnd)
         case .pin:
             Label(L10n.Action.pin, icon: \.pin)
+        case .unpin:
+            Label(L10n.Action.unpin, icon: \.unpin)
         }
     }
 }

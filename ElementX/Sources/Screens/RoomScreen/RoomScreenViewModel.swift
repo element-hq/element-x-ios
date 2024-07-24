@@ -196,8 +196,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { state.timelineViewState.isSwitchingTimelines = false }
         case let .hasScrolled(direction):
             state.lastScrollDirection = direction
-        case .nextPin:
-            state.currentPinIndex = (state.currentPinIndex + 1) % state.pinnedItems.count
+        case .tappedPinBanner:
+            if let eventID = state.pinnedEventsState.selectedPin {
+                Task { await focusOnEvent(eventID: eventID) }
+            }
+            state.pinnedEventsState.nextPin()
         case .viewAllPins:
             // TODO: Implement
             break
@@ -368,7 +371,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         if state.isPinningEnabled,
-           case let .success(value) = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomPinnedEvents) {
+           case let .success(value) = await roomProxy.canUserPinOrUnpin(userID: roomProxy.ownUserID) {
             state.canCurrentUserPin = value
         } else {
             state.canCurrentUserPin = false
@@ -404,12 +407,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         roomProxy
             .actionsPublisher
             .filter { $0 == .roomInfoUpdate }
-            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
                 state.roomTitle = roomProxy.roomTitle
                 state.roomAvatar = roomProxy.avatar
                 state.hasOngoingCall = roomProxy.hasOngoingCall
+                Task { [weak self] in
+                    guard let self else { return }
+                    // TODO: For now we are using the order coming from the room info but we should instead have a ordered timeline of these events
+                    await state.pinnedEventsState.pinnedEvents = .init(roomProxy.pinnedEvents)
+                }
             }
             .store(in: &cancellables)
         

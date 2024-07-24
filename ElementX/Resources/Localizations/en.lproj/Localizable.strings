@@ -103,6 +103,7 @@
 "action_yes" = "Yes";
 "action.load_more" = "Load more";
 "action.pin" = "Pin";
+"action.unpin" = "Unpin";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_advanced_settings" = "Advanced settings";

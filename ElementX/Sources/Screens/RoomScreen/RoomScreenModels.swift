@@ -15,9 +15,8 @@
 //
 
 import Combine
-import SwiftUI
-
 import OrderedCollections
+import SwiftUI
 
 enum RoomScreenViewModelAction {
     case displayRoomDetails
@@ -140,7 +139,7 @@ enum RoomScreenViewAction {
     case hasSwitchedTimeline
     
     case hasScrolled(direction: ScrollDirection)
-    case nextPin
+    case tappedPinBanner
     case viewAllPins
 }
 
@@ -172,20 +171,11 @@ struct RoomScreenViewState: BindableState {
     
     var isPinningEnabled = false
     var lastScrollDirection: ScrollDirection?
-    // These are just mocked items used for testing, their types might change
-    let pinnedItems = [
-        "Hello 1",
-        "How are you 2",
-        "I am fine 3",
-        "Thank you 4"
-    ]
-    var currentPinIndex = 0
-    var shouldShowPinBanner: Bool {
-        isPinningEnabled && !pinnedItems.isEmpty && lastScrollDirection != .top
-    }
     
-    var selectedPinContent: AttributedString {
-        .init(pinnedItems[currentPinIndex])
+    var pinnedEventsState = PinnedEventsState()
+    
+    var shouldShowPinBanner: Bool {
+        isPinningEnabled && !pinnedEventsState.pinnedEvents.isEmpty && lastScrollDirection != .top
     }
     
     var canJoinCall = false
@@ -303,4 +293,41 @@ struct TimelineViewState {
 enum ScrollDirection: Equatable {
     case top
     case bottom
+}
+
+struct PinnedEventsState: Equatable {
+    // For now these will only contain and show the event IDs, but in the future they will also contain the content
+    var pinnedEvents: OrderedSet<String> = [] {
+        didSet {
+            if selectedPin == nil, !pinnedEvents.isEmpty {
+                selectedPin = pinnedEvents.first
+            } else if pinnedEvents.isEmpty {
+                selectedPin = nil
+            } else if let selectedPin, !pinnedEvents.contains(selectedPin) {
+                self.selectedPin = pinnedEvents.first
+            }
+        }
+    }
+    
+    var selectedPin: String?
+    
+    var selectedPinIndex: Int {
+        guard let selectedPin else {
+            return 0
+        }
+        return pinnedEvents.firstIndex(of: selectedPin) ?? 0
+    }
+    
+    var selectedPinContent: AttributedString {
+        .init(selectedPin ?? "")
+    }
+    
+    mutating func nextPin() {
+        guard !pinnedEvents.isEmpty else {
+            return
+        }
+        let currentIndex = selectedPinIndex
+        let nextIndex = (currentIndex + 1) % pinnedEvents.count
+        selectedPin = pinnedEvents[nextIndex]
+    }
 }
