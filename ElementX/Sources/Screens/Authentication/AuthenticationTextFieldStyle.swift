@@ -102,6 +102,7 @@ public struct AuthenticationTextFieldStyle: TextFieldStyle {
         self.accessibilityIdentifier = accessibilityIdentifier
     }
     
+    @MainActor
     public func _body(configuration: TextField<_Label>) -> some View {
         let rectangle = RoundedRectangle(cornerRadius: 14.0)
         
