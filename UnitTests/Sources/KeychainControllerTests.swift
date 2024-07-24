@@ -127,6 +127,28 @@ class KeychainControllerTests: XCTestCase {
         XCTAssertNotNil(keychain.restorationTokenForUsername("@test4:example.com"), "The restoration token should not have been deleted.")
     }
     
+    func testSimplifiedSlidingSyncRestorationToken() {
+        // Given an empty keychain.
+        XCTAssertTrue(keychain.restorationTokens().isEmpty, "The keychain should be empty to begin with.")
+        
+        // When adding an restoration token that doesn't contain a sliding sync proxy (e.g. for SSS).
+        let username = "@test:example.com"
+        let restorationToken = RestorationToken(session: .init(accessToken: "accessToken",
+                                                               refreshToken: "refreshToken",
+                                                               userId: "userId",
+                                                               deviceId: "deviceId",
+                                                               homeserverUrl: "homeserverUrl",
+                                                               oidcData: "oidcData",
+                                                               slidingSyncProxy: nil),
+                                                sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
+                                                passphrase: "passphrase",
+                                                pusherNotificationClientIdentifier: "pusherClientID")
+        keychain.setRestorationToken(restorationToken, forUsername: username)
+        
+        // Then decoding the restoration token from the keychain should still work.
+        XCTAssertEqual(keychain.restorationTokenForUsername(username), restorationToken, "The retrieved restoration token should match the value that was stored.")
+    }
+    
     func testAddPINCode() throws {
         // Given a keychain without a PIN code set.
         try XCTAssertFalse(keychain.containsPINCode(), "A new keychain shouldn't contain a PIN code.")
