@@ -245,10 +245,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             if value {
                 MXLog.info("Finished pinning event \(eventID)")
             } else {
-                MXLog.info("Failed pinning event \(eventID) because is already pinned")
+                MXLog.error("Failed pinning event \(eventID) because is already pinned")
             }
         case .failure(let error):
-            MXLog.info("Failed pinning event \(eventID) with error: \(error)")
+            MXLog.error("Failed pinning event \(eventID) with error: \(error)")
         }
     }
     
@@ -260,10 +260,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             if value {
                 MXLog.info("Finished unpinning event \(eventID)")
             } else {
-                MXLog.info("Failed unpinning event \(eventID) because is not pinned")
+                MXLog.error("Failed unpinning event \(eventID) because is not pinned")
             }
         case .failure(let error):
-            MXLog.info("Failed unpinning event \(eventID) with error: \(error)")
+            MXLog.error("Failed unpinning event \(eventID) with error: \(error)")
         }
     }
     
