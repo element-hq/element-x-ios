@@ -171,7 +171,7 @@ struct RoomScreenViewState: BindableState {
     var isViewSourceEnabled: Bool
     
     var isPinningEnabled = false
-    var lastScrolledDirection: ScrollDirection?
+    var lastScrollDirection: ScrollDirection?
     // These are just mocked items used for testing, their types might change
     let pinnedItems = [
         "Hello 1",
@@ -181,7 +181,7 @@ struct RoomScreenViewState: BindableState {
     ]
     var currentPinIndex = 0
     var shouldShowPinBanner: Bool {
-        isPinningEnabled && !pinnedItems.isEmpty && lastScrolledDirection != .top
+        isPinningEnabled && !pinnedItems.isEmpty && lastScrollDirection != .top
     }
     
     var selectedPinContent: AttributedString {

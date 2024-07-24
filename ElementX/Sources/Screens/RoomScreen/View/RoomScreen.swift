@@ -49,11 +49,13 @@ struct RoomScreen: View {
                     .environment(\.roomContext, context)
             }
             .overlay(alignment: .top) {
-                if context.viewState.shouldShowPinBanner {
-                    pinnedItemsBanner
+                Group {
+                    if context.viewState.shouldShowPinBanner {
+                        pinnedItemsBanner
+                    }
                 }
+                .animation(.elementDefault, value: context.viewState.shouldShowPinBanner)
             }
-            .animation(.elementDefault, value: context.viewState.shouldShowPinBanner)
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(isNavigationBarHidden)
