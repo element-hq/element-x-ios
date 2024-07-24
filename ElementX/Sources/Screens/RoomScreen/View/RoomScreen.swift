@@ -49,14 +49,12 @@ struct RoomScreen: View {
                     .environment(\.roomContext, context)
             }
             .overlay(alignment: .top) {
-                if context.viewState.isPinningEnabled {
-                    // TODO: Implement tapping logic + hiding when scrolling
-                    PinnedItemsBannerView(pinIndex: 1,
-                                          pinsCount: 3,
-                                          pinContent: .init(stringLiteral: "Content"),
-                                          onMainButtonTap: { },
-                                          onViewAllButtonTap: { })
+                Group {
+                    if context.viewState.shouldShowPinBanner {
+                        pinnedItemsBanner
+                    }
                 }
+                .animation(.elementDefault, value: context.viewState.shouldShowPinBanner)
             }
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
@@ -108,6 +106,15 @@ struct RoomScreen: View {
             .overlay(alignment: .bottomTrailing) {
                 scrollToBottomButton
             }
+    }
+    
+    private var pinnedItemsBanner: some View {
+        PinnedItemsBannerView(pinIndex: context.viewState.currentPinIndex,
+                              pinsCount: context.viewState.pinnedItems.count,
+                              pinContent: context.viewState.selectedPinContent,
+                              onMainButtonTap: { context.send(viewAction: .nextPin) },
+                              onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
+            .transition(.move(edge: .top))
     }
     
     private var scrollToBottomButton: some View {

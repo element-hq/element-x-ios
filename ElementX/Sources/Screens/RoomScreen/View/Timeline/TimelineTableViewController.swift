@@ -161,6 +161,11 @@ class TimelineTableViewController: UIViewController {
     /// quick succession can execute before ``paginationState`` acknowledges that
     /// pagination is in progress.
     private let paginatePublisher = PassthroughSubject<Void, Never>()
+    
+    /// A value to determine the scroll velocity threshold to detect a change in direction of the scroll view
+    private let scrollVelocityThreshold: CGFloat = 50.0
+    /// A publisher used to throttle scroll direction changes
+    private let scrollDirectionPublisher = PassthroughSubject<ScrollDirection, Never>()
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
     
@@ -195,6 +200,14 @@ class TimelineTableViewController: UIViewController {
             .collect(.byTime(DispatchQueue.main, 0.1))
             .sink { [weak self] _ in
                 self?.paginateIfNeeded()
+            }
+            .store(in: &cancellables)
+        
+        scrollDirectionPublisher
+            .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
+            .removeDuplicates()
+            .sink { direction in
+                coordinator.send(viewAction: .hasScrolled(direction: direction))
             }
             .store(in: &cancellables)
         
@@ -345,6 +358,7 @@ class TimelineTableViewController: UIViewController {
             return
         }
         tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
+        scrollDirectionPublisher.send(.bottom)
     }
 
     /// Scrolls to the oldest item in the timeline.
@@ -353,6 +367,7 @@ class TimelineTableViewController: UIViewController {
             return
         }
         tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 1), at: .bottom, animated: animated)
+        scrollDirectionPublisher.send(.top)
     }
     
     /// Scrolls to the item with the corresponding event ID if loaded in the timeline.
@@ -422,6 +437,13 @@ extension TimelineTableViewController: UITableViewDelegate {
         // We never want the table view to be fully at the bottom to allow the status bar tap to work properly
         if scrollView.contentOffset.y == 0 {
             scrollView.contentOffset.y = -1
+        }
+        
+        let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview).y
+        if velocity > scrollVelocityThreshold {
+            scrollDirectionPublisher.send(.top)
+        } else if velocity < -scrollVelocityThreshold {
+            scrollDirectionPublisher.send(.bottom)
         }
     }
     
