@@ -81,6 +81,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         defer {
             hideLoadingIndicator()
+            updateRoomDetails()
         }
         
         // Using only the preview API isn't enough as it's not capable
@@ -105,10 +106,6 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func updateRoomDetails() {
-        if roomProxy == nil, roomPreviewDetails == nil {
-            return
-        }
-        
         let name = roomProxy?.name ?? roomPreviewDetails?.name
         state.roomDetails = JoinRoomScreenRoomDetails(name: name,
                                                       topic: roomProxy?.topic ?? roomPreviewDetails?.topic,
@@ -120,11 +117,6 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func updateMode() {
-        if roomProxy == nil, roomPreviewDetails == nil {
-            state.mode = .unknown
-            return
-        }
-        
         if roomProxy?.isPublic ?? false || roomPreviewDetails?.isPublic ?? false {
             state.mode = .join
         } else if roomProxy?.membership == .invited || roomPreviewDetails?.isInvited ?? false {
@@ -132,7 +124,9 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         } else if roomPreviewDetails?.canKnock ?? false, allowKnocking { // Knocking is not supported yet, the flag is purely for preview tests.
             state.mode = .knock
         } else {
-            state.mode = .unknown
+            // If everything else fails fallback to showing the join button and
+            // letting the server figure it out.
+            state.mode = .join
         }
     }
     
