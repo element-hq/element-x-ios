@@ -40,9 +40,14 @@ class Signposter {
     static let subsystem = "ElementX"
     static let category = "PerformanceTests"
     
-    private var appStartupTransaction: Span
+    // MARK: - App Startup
     
-    init() {
+    private var appStartupTransaction: Span?
+    
+    // We have a manual start method because we need to configure the ServiceLocator *before* we configure
+    // Sentry but this class is created in the AnalyticsService and so spans and transactions are dropped
+    // until Sentry has been configured. Therefore doing this in the init doesn't work.
+    func start() {
         appStartupTransaction = SentrySDK.startTransaction(name: Name.appStartup, operation: Name.appStarted)
     }
     
@@ -55,7 +60,7 @@ class Signposter {
     func beginLogin() {
         loginState = signposter.beginInterval(Name.login)
         loginTransaction = SentrySDK.startTransaction(name: "\(Name.login)", operation: "\(Name.login)")
-        loginSpan = appStartupTransaction.startChild(operation: "\(Name.login)", description: "\(Name.login)")
+        loginSpan = appStartupTransaction?.startChild(operation: "\(Name.login)", description: "\(Name.login)")
     }
     
     func endLogin() {
@@ -80,14 +85,14 @@ class Signposter {
     private var firstSyncSpan: Span?
     
     func beginFirstSync(serverName: String) {
-        appStartupTransaction.setTag(value: serverName, key: Name.homeserver)
+        appStartupTransaction?.setTag(value: serverName, key: Name.homeserver)
         
         firstSyncState = signposter.beginInterval(Name.firstSync)
         
         firstSyncTransaction = SentrySDK.startTransaction(name: "\(Name.firstSync)", operation: "\(Name.firstSync)")
         firstSyncTransaction?.setTag(value: serverName, key: Name.homeserver)
         
-        firstSyncSpan = appStartupTransaction.startChild(operation: "\(Name.firstSync)", description: "\(Name.firstSync)")
+        firstSyncSpan = appStartupTransaction?.startChild(operation: "\(Name.firstSync)", description: "\(Name.firstSync)")
     }
     
     func endFirstSync() {
@@ -111,12 +116,12 @@ class Signposter {
     func beginFirstRooms() {
         firstRoomsState = signposter.beginInterval(Name.firstRooms)
         firstRoomsTransaction = SentrySDK.startTransaction(name: "\(Name.firstRooms)", operation: "\(Name.firstRooms)")
-        firstRoomsSpan = appStartupTransaction.startChild(operation: "\(Name.firstRooms)", description: "\(Name.firstRooms)")
+        firstRoomsSpan = appStartupTransaction?.startChild(operation: "\(Name.firstRooms)", description: "\(Name.firstRooms)")
     }
     
     func endFirstRooms() {
         defer {
-            appStartupTransaction.finish()
+            appStartupTransaction?.finish()
         }
         
         guard let firstRoomsState else { return }
