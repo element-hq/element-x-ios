@@ -407,6 +407,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         let roomInfoSubscription = roomProxy
             .actionsPublisher
             .filter { $0 == .roomInfoUpdate }
+        
         roomInfoSubscription
             .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
@@ -416,16 +417,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 state.hasOngoingCall = roomProxy.hasOngoingCall
             }
             .store(in: &cancellables)
-        roomInfoSubscription
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                Task { [weak self] in
-                    guard let self else { return }
-                    // TODO: For now we are using the order coming from the room info but we should instead have a ordered timeline of these events
-                    await state.pinnedEventsState.pinnedEventIDs = .init(roomProxy.pinnedEventIDs)
-                }
+        
+        Task { [weak self] in
+            guard let self else {
+                return
             }
-            .store(in: &cancellables)
+            // If the subscription has sent a value before the Task has started it might be lost, so before entering the loop we always do an update.
+            await state.pinnedEventsState.pinnedEventIDs = .init(roomProxy.pinnedEventIDs)
+            for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
+                guard !Task.isCancelled else {
+                    return
+                }
+                await state.pinnedEventsState.pinnedEventIDs = .init(roomProxy.pinnedEventIDs)
+            }
+        }
+        .store(in: &cancellables)
         
         appSettings.$sharePresence
             .weakAssign(to: \.state.showReadReceipts, on: self)

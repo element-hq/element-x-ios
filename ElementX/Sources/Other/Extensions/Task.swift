@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 
 public extension Task where Success == Never, Failure == Never {
@@ -59,5 +60,15 @@ public extension Task where Success == Never, Failure == Never {
                 }
             }
         }
+    }
+}
+
+extension Task {
+    func store(in cancellables: inout Set<AnyCancellable>) {
+        asCancellable().store(in: &cancellables)
+    }
+
+    func asCancellable() -> AnyCancellable {
+        AnyCancellable(cancel)
     }
 }
