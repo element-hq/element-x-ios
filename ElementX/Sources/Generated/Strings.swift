@@ -174,6 +174,8 @@ internal enum L10n {
   internal static var actionOpenSettings: String { return L10n.tr("Localizable", "action_open_settings") }
   /// Open with
   internal static var actionOpenWith: String { return L10n.tr("Localizable", "action_open_with") }
+  /// Pin
+  internal static var actionPin: String { return L10n.tr("Localizable", "action_pin") }
   /// Quick reply
   internal static var actionQuickReply: String { return L10n.tr("Localizable", "action_quick_reply") }
   /// Quote
@@ -232,6 +234,8 @@ internal enum L10n {
   internal static var actionTapForOptions: String { return L10n.tr("Localizable", "action_tap_for_options") }
   /// Try again
   internal static var actionTryAgain: String { return L10n.tr("Localizable", "action_try_again") }
+  /// Unpin
+  internal static var actionUnpin: String { return L10n.tr("Localizable", "action_unpin") }
   /// View source
   internal static var actionViewSource: String { return L10n.tr("Localizable", "action_view_source") }
   /// Yes
@@ -1629,6 +1633,16 @@ internal enum L10n {
   internal static var screenRoomNotificationSettingsModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_mentions_and_keywords") }
   /// In this room, notify me for
   internal static var screenRoomNotificationSettingsRoomCustomSettingsTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_room_custom_settings_title") }
+  /// %1$@ of %2$@
+  internal static func screenRoomPinnedBannerIndicator(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_pinned_banner_indicator", String(describing: p1), String(describing: p2))
+  }
+  /// %1$@ Pinned messages
+  internal static func screenRoomPinnedBannerIndicatorDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_pinned_banner_indicator_description", String(describing: p1))
+  }
+  /// View All
+  internal static var screenRoomPinnedBannerViewAllButtonTitle: String { return L10n.tr("Localizable", "screen_room_pinned_banner_view_all_button_title") }
   /// Send again
   internal static var screenRoomRetrySendMenuSendAgainAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_send_again_action") }
   /// Your message failed to send
@@ -2229,10 +2243,6 @@ internal enum L10n {
   internal enum Action {
     /// Load more
     internal static var loadMore: String { return L10n.tr("Localizable", "action.load_more") }
-    /// Pin
-    internal static var pin: String { return L10n.tr("Localizable", "action.pin") }
-    /// Unpin
-    internal static var unpin: String { return L10n.tr("Localizable", "action.unpin") }
   }
 
   internal enum Common {
@@ -2242,21 +2252,6 @@ internal enum L10n {
     internal static var openSourceLicenses: String { return L10n.tr("Localizable", "common.open_source_licenses") }
     /// Send to
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
-  }
-
-  internal enum Screen {
-    internal enum Room {
-      /// %1$@ of %2$@
-      internal static func pinnedBannerIndicator(_ p1: Any, _ p2: Any) -> String {
-        return L10n.tr("Localizable", "screen.room.pinned_banner_indicator", String(describing: p1), String(describing: p2))
-      }
-      /// %1$@ Pinned messages
-      internal static func pinnedBannerIndicatorDescription(_ p1: Any) -> String {
-        return L10n.tr("Localizable", "screen.room.pinned_banner_indicator_description", String(describing: p1))
-      }
-      /// View All
-      internal static var pinnedBannerViewAllButtonTitle: String { return L10n.tr("Localizable", "screen.room.pinned_banner_view_all_button_title") }
-    }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

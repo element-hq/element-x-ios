@@ -21,7 +21,7 @@ struct TimelineItemMenuActionProvider {
     let canCurrentUserRedactSelf: Bool
     let canCurrentUserRedactOthers: Bool
     let canCurrentUserPin: Bool
-    let pinnedEvents: Set<String>
+    let pinnedEventIDs: Set<String>
     let isDM: Bool
     let isViewSourceEnabled: Bool
     
@@ -68,7 +68,7 @@ struct TimelineItemMenuActionProvider {
         }
         
         if canCurrentUserPin, let eventID = item.id.eventID {
-            actions.append(pinnedEvents.contains(eventID) ? .unpin : .pin)
+            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
         }
 
         if item.isEditable {

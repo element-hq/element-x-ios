@@ -197,7 +197,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case let .hasScrolled(direction):
             state.lastScrollDirection = direction
         case .tappedPinBanner:
-            if let eventID = state.pinnedEventsState.selectedPin {
+            if let eventID = state.pinnedEventsState.selectedPinEventID {
                 Task { await focusOnEvent(eventID: eventID) }
             }
             state.pinnedEventsState.nextPin()
@@ -404,19 +404,25 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
 
-        roomProxy
+        let roomInfoSubscription = roomProxy
             .actionsPublisher
             .filter { $0 == .roomInfoUpdate }
-            .receive(on: DispatchQueue.main)
+        roomInfoSubscription
+            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
                 guard let self else { return }
                 state.roomTitle = roomProxy.roomTitle
                 state.roomAvatar = roomProxy.avatar
                 state.hasOngoingCall = roomProxy.hasOngoingCall
+            }
+            .store(in: &cancellables)
+        roomInfoSubscription
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
                 Task { [weak self] in
                     guard let self else { return }
                     // TODO: For now we are using the order coming from the room info but we should instead have a ordered timeline of these events
-                    await state.pinnedEventsState.pinnedEvents = .init(roomProxy.pinnedEvents)
+                    await state.pinnedEventsState.pinnedEventIDs = .init(roomProxy.pinnedEventIDs)
                 }
             }
             .store(in: &cancellables)

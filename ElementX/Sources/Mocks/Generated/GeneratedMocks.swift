@@ -8251,23 +8251,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     var underlyingIsFavourite: Bool!
     var isFavouriteClosure: (() async -> Bool)?
-    var pinnedEventsCallsCount = 0
-    var pinnedEventsCalled: Bool {
-        return pinnedEventsCallsCount > 0
+    var pinnedEventIDsCallsCount = 0
+    var pinnedEventIDsCalled: Bool {
+        return pinnedEventIDsCallsCount > 0
     }
 
-    var pinnedEvents: [String] {
+    var pinnedEventIDs: [String] {
         get async {
-            pinnedEventsCallsCount += 1
-            if let pinnedEventsClosure = pinnedEventsClosure {
-                return await pinnedEventsClosure()
+            pinnedEventIDsCallsCount += 1
+            if let pinnedEventIDsClosure = pinnedEventIDsClosure {
+                return await pinnedEventIDsClosure()
             } else {
-                return underlyingPinnedEvents
+                return underlyingPinnedEventIDs
             }
         }
     }
-    var underlyingPinnedEvents: [String]!
-    var pinnedEventsClosure: (() async -> [String])?
+    var underlyingPinnedEventIDs: [String]!
+    var pinnedEventIDsClosure: (() async -> [String])?
     var membership: Membership {
         get { return underlyingMembership }
         set(value) { underlyingMembership = value }

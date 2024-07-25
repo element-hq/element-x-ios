@@ -86,7 +86,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    var pinnedEvents: [String] {
+    var pinnedEventIDs: [String] {
         get async {
             await (try? room.roomInfo().pinnedEventIds) ?? []
         }
