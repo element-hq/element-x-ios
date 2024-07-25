@@ -112,10 +112,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
                                                   appSettings: appSettings)
         
+        Self.setupServiceLocator(appSettings: appSettings, appHooks: appHooks)
         Self.setupSentry(appSettings: appSettings)
         
-        Self.setupServiceLocator(appSettings: appSettings, appHooks: appHooks)
-        
+        ServiceLocator.shared.analytics.signpost.start()
         ServiceLocator.shared.analytics.startIfEnabled()
         
         windowManager.delegate = self
