@@ -10243,6 +10243,81 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
     }
 
+    //MARK: - canUserPinUnpin
+
+    open var canUserPinUnpinUserIdThrowableError: Error?
+    var canUserPinUnpinUserIdUnderlyingCallsCount = 0
+    open var canUserPinUnpinUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canUserPinUnpinUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canUserPinUnpinUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canUserPinUnpinUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canUserPinUnpinUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var canUserPinUnpinUserIdCalled: Bool {
+        return canUserPinUnpinUserIdCallsCount > 0
+    }
+    open var canUserPinUnpinUserIdReceivedUserId: String?
+    open var canUserPinUnpinUserIdReceivedInvocations: [String] = []
+
+    var canUserPinUnpinUserIdUnderlyingReturnValue: Bool!
+    open var canUserPinUnpinUserIdReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return canUserPinUnpinUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canUserPinUnpinUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canUserPinUnpinUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canUserPinUnpinUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var canUserPinUnpinUserIdClosure: ((String) async throws -> Bool)?
+
+    open override func canUserPinUnpin(userId: String) async throws -> Bool {
+        if let error = canUserPinUnpinUserIdThrowableError {
+            throw error
+        }
+        canUserPinUnpinUserIdCallsCount += 1
+        canUserPinUnpinUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.canUserPinUnpinUserIdReceivedInvocations.append(userId)
+        }
+        if let canUserPinUnpinUserIdClosure = canUserPinUnpinUserIdClosure {
+            return try await canUserPinUnpinUserIdClosure(userId)
+        } else {
+            return canUserPinUnpinUserIdReturnValue
+        }
+    }
+
     //MARK: - canUserRedactOther
 
     open var canUserRedactOtherUserIdThrowableError: Error?
@@ -18491,6 +18566,81 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
     }
 
+    //MARK: - pinEvent
+
+    open var pinEventEventIdThrowableError: Error?
+    var pinEventEventIdUnderlyingCallsCount = 0
+    open var pinEventEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return pinEventEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinEventEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinEventEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinEventEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var pinEventEventIdCalled: Bool {
+        return pinEventEventIdCallsCount > 0
+    }
+    open var pinEventEventIdReceivedEventId: String?
+    open var pinEventEventIdReceivedInvocations: [String] = []
+
+    var pinEventEventIdUnderlyingReturnValue: Bool!
+    open var pinEventEventIdReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return pinEventEventIdUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinEventEventIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinEventEventIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinEventEventIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var pinEventEventIdClosure: ((String) async throws -> Bool)?
+
+    open override func pinEvent(eventId: String) async throws -> Bool {
+        if let error = pinEventEventIdThrowableError {
+            throw error
+        }
+        pinEventEventIdCallsCount += 1
+        pinEventEventIdReceivedEventId = eventId
+        DispatchQueue.main.async {
+            self.pinEventEventIdReceivedInvocations.append(eventId)
+        }
+        if let pinEventEventIdClosure = pinEventEventIdClosure {
+            return try await pinEventEventIdClosure(eventId)
+        } else {
+            return pinEventEventIdReturnValue
+        }
+    }
+
     //MARK: - redactEvent
 
     open var redactEventItemReasonThrowableError: Error?
@@ -19337,6 +19487,81 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
             self.toggleReactionEventIdKeyReceivedInvocations.append((eventId: eventId, key: key))
         }
         try await toggleReactionEventIdKeyClosure?(eventId, key)
+    }
+
+    //MARK: - unpinEvent
+
+    open var unpinEventEventIdThrowableError: Error?
+    var unpinEventEventIdUnderlyingCallsCount = 0
+    open var unpinEventEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return unpinEventEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unpinEventEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unpinEventEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unpinEventEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var unpinEventEventIdCalled: Bool {
+        return unpinEventEventIdCallsCount > 0
+    }
+    open var unpinEventEventIdReceivedEventId: String?
+    open var unpinEventEventIdReceivedInvocations: [String] = []
+
+    var unpinEventEventIdUnderlyingReturnValue: Bool!
+    open var unpinEventEventIdReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return unpinEventEventIdUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unpinEventEventIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unpinEventEventIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unpinEventEventIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var unpinEventEventIdClosure: ((String) async throws -> Bool)?
+
+    open override func unpinEvent(eventId: String) async throws -> Bool {
+        if let error = unpinEventEventIdThrowableError {
+            throw error
+        }
+        unpinEventEventIdCallsCount += 1
+        unpinEventEventIdReceivedEventId = eventId
+        DispatchQueue.main.async {
+            self.unpinEventEventIdReceivedInvocations.append(eventId)
+        }
+        if let unpinEventEventIdClosure = unpinEventEventIdClosure {
+            return try await unpinEventEventIdClosure(eventId)
+        } else {
+            return unpinEventEventIdReturnValue
+        }
     }
 }
 open class TimelineDiffSDKMock: MatrixRustSDK.TimelineDiff {

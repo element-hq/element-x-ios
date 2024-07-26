@@ -29,6 +29,7 @@ struct RoomProxyMockConfiguration {
     var isEncrypted = true
     var hasOngoingCall = true
     var canonicalAlias: String?
+    var pinnedEventIDs: [String] = []
     
     var timelineStartReached = false
     
@@ -62,6 +63,8 @@ extension RoomProxyMock {
         isEncrypted = configuration.isEncrypted
         hasOngoingCall = configuration.hasOngoingCall
         canonicalAlias = configuration.canonicalAlias
+        
+        underlyingPinnedEventIDs = configuration.pinnedEventIDs
         
         let timeline = TimelineProxyMock()
         timeline.sendMessageEventContentReturnValue = .success(())

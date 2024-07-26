@@ -70,6 +70,7 @@
 "action_ok" = "OK";
 "action_open_settings" = "Settings";
 "action_open_with" = "Open with";
+"action_pin" = "Pin";
 "action_quick_reply" = "Quick reply";
 "action_quote" = "Quote";
 "action_react" = "React";
@@ -99,10 +100,10 @@
 "action_take_photo" = "Take photo";
 "action_tap_for_options" = "Tap for options";
 "action_try_again" = "Try again";
+"action_unpin" = "Unpin";
 "action_view_source" = "View source";
 "action_yes" = "Yes";
 "action.load_more" = "Load more";
-"action.pin" = "Pin";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_advanced_settings" = "Advanced settings";
@@ -313,9 +314,9 @@
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
 "screen_room_mentions_at_room_subtitle" = "Notify the whole room";
-"screen.room.pinned_banner_indicator" = "%1$@ of %2$@";
-"screen.room.pinned_banner_indicator_description" = "%1$@ Pinned messages";
-"screen.room.pinned_banner_view_all_button_title" = "View All";
+"screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
+"screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
+"screen_room_pinned_banner_view_all_button_title" = "View All";
 "screen_account_provider_change" = "Change account provider";
 "screen_account_provider_form_hint" = "Homeserver address";
 "screen_account_provider_form_notice" = "Enter a search term or a domain address.";

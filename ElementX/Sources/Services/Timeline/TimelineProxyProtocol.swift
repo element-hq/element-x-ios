@@ -46,6 +46,10 @@ protocol TimelineProxyProtocol {
     func redact(_ timelineItemID: TimelineItemIdentifier,
                 reason: String?) async -> Result<Void, TimelineProxyError>
     
+    func pin(eventID: String) async -> Result<Bool, TimelineProxyError>
+    
+    func unpin(eventID: String) async -> Result<Bool, TimelineProxyError>
+    
     // MARK: - Sending
     
     func sendAudio(url: URL,

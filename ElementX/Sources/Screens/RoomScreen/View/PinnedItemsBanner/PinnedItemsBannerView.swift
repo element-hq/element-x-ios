@@ -18,18 +18,16 @@ import Compound
 import SwiftUI
 
 struct PinnedItemsBannerView: View {
-    let pinIndex: Int
-    let pinsCount: Int
-    let pinContent: AttributedString
+    let pinnedEventsState: PinnedEventsState
     
     let onMainButtonTap: () -> Void
     let onViewAllButtonTap: () -> Void
     
     private var bannerIndicatorDescription: AttributedString {
-        let index = pinIndex + 1
+        let index = pinnedEventsState.selectedPinIndex + 1
         let boldPlaceholder = "{bold}"
-        var finalString = AttributedString(L10n.Screen.Room.pinnedBannerIndicatorDescription(boldPlaceholder))
-        var boldString = AttributedString(L10n.Screen.Room.pinnedBannerIndicator(index, pinsCount))
+        var finalString = AttributedString(L10n.screenRoomPinnedBannerIndicatorDescription(boldPlaceholder))
+        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, pinnedEventsState.pinnedEventIDs.count))
         boldString.bold()
         finalString.replace(boldPlaceholder, with: boldString)
         return finalString
@@ -50,7 +48,7 @@ struct PinnedItemsBannerView: View {
         Button { onMainButtonTap() } label: {
             HStack(spacing: 0) {
                 HStack(spacing: 10) {
-                    PinnedItemsIndicatorView(pinIndex: pinIndex, pinsCount: pinsCount)
+                    PinnedItemsIndicatorView(pinIndex: pinnedEventsState.selectedPinIndex, pinsCount: pinnedEventsState.pinnedEventIDs.count)
                         .accessibilityHidden(true)
                     CompoundIcon(\.pinSolid, size: .small, relativeTo: .compound.bodyMD)
                         .foregroundColor(Color.compound.iconSecondaryAlpha)
@@ -65,7 +63,7 @@ struct PinnedItemsBannerView: View {
     
     private var viewAllButton: some View {
         Button { onViewAllButtonTap() } label: {
-            Text(L10n.Screen.Room.pinnedBannerViewAllButtonTitle)
+            Text(L10n.screenRoomPinnedBannerViewAllButtonTitle)
                 .font(.compound.bodyMDSemibold)
                 .foregroundStyle(Color.compound.textPrimary)
                 .padding(.horizontal, 16)
@@ -79,7 +77,7 @@ struct PinnedItemsBannerView: View {
                 .font(.compound.bodySM)
                 .foregroundColor(.compound.textActionAccent)
                 .lineLimit(1)
-            Text(pinContent)
+            Text(pinnedEventsState.selectedPinContent)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
@@ -89,9 +87,7 @@ struct PinnedItemsBannerView: View {
 
 struct PinnedItemsBannerView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        PinnedItemsBannerView(pinIndex: 0,
-                              pinsCount: 3,
-                              pinContent: .init(stringLiteral: "Content"),
+        PinnedItemsBannerView(pinnedEventsState: .init(pinnedEventIDs: ["Content", "NotShown1", "NotShown2"], selectedPinEventID: "Content"),
                               onMainButtonTap: { },
                               onViewAllButtonTap: { })
     }

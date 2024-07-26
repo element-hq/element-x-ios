@@ -196,8 +196,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { state.timelineViewState.isSwitchingTimelines = false }
         case let .hasScrolled(direction):
             state.lastScrollDirection = direction
-        case .nextPin:
-            state.currentPinIndex = (state.currentPinIndex + 1) % state.pinnedItems.count
+        case .tappedPinBanner:
+            if let eventID = state.pinnedEventsState.selectedPinEventID {
+                Task { await focusOnEvent(eventID: eventID) }
+            }
+            state.pinnedEventsState.nextPin()
         case .viewAllPins:
             // TODO: Implement
             break
@@ -368,7 +371,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         if state.isPinningEnabled,
-           case let .success(value) = await roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomPinnedEvents) {
+           case let .success(value) = await roomProxy.canUserPinOrUnpin(userID: roomProxy.ownUserID) {
             state.canCurrentUserPin = value
         } else {
             state.canCurrentUserPin = false
@@ -401,9 +404,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
 
-        roomProxy
+        let roomInfoSubscription = roomProxy
             .actionsPublisher
             .filter { $0 == .roomInfoUpdate }
+        
+        roomInfoSubscription
             .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
                 guard let self else { return }
@@ -412,6 +417,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 state.hasOngoingCall = roomProxy.hasOngoingCall
             }
             .store(in: &cancellables)
+        
+        Task { [weak self] in
+            guard let self else {
+                return
+            }
+            // If the subscription has sent a value before the Task has started it might be lost, so before entering the loop we always do an update.
+            await state.pinnedEventsState.pinnedEventIDs = .init(roomProxy.pinnedEventIDs)
+            for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
+                guard !Task.isCancelled else {
+                    return
+                }
+                await state.pinnedEventsState.pinnedEventIDs = .init(roomProxy.pinnedEventIDs)
+            }
+        }
+        .store(in: &cancellables)
         
         appSettings.$sharePresence
             .weakAssign(to: \.state.showReadReceipts, on: self)

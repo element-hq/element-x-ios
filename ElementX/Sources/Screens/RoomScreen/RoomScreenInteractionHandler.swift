@@ -172,8 +172,11 @@ class RoomScreenInteractionHandler {
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
         case .pin:
-            // TODO: Implement the pin action
-            break
+            guard let eventID = itemID.eventID else { return }
+            Task { await timelineController.pin(eventID: eventID) }
+        case .unpin:
+            guard let eventID = itemID.eventID else { return }
+            Task { await timelineController.unpin(eventID: eventID) }
         }
         
         if action.switchToDefaultComposer {

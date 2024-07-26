@@ -69,6 +69,7 @@ struct RoomScreen: View {
                                                              canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
                                                              canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
                                                              canCurrentUserPin: context.viewState.canCurrentUserPin,
+                                                             pinnedEventIDs: context.viewState.pinnedEventsState.pinnedEventIDs.set,
                                                              isDM: context.viewState.isEncryptedOneToOneRoom,
                                                              isViewSourceEnabled: context.viewState.isViewSourceEnabled).makeActions()
                 if let actions {
@@ -109,10 +110,8 @@ struct RoomScreen: View {
     }
     
     private var pinnedItemsBanner: some View {
-        PinnedItemsBannerView(pinIndex: context.viewState.currentPinIndex,
-                              pinsCount: context.viewState.pinnedItems.count,
-                              pinContent: context.viewState.selectedPinContent,
-                              onMainButtonTap: { context.send(viewAction: .nextPin) },
+        PinnedItemsBannerView(pinnedEventsState: context.viewState.pinnedEventsState,
+                              onMainButtonTap: { context.send(viewAction: .tappedPinBanner) },
                               onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
             .transition(.move(edge: .top))
     }

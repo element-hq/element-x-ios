@@ -8251,6 +8251,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     var underlyingIsFavourite: Bool!
     var isFavouriteClosure: (() async -> Bool)?
+    var pinnedEventIDsCallsCount = 0
+    var pinnedEventIDsCalled: Bool {
+        return pinnedEventIDsCallsCount > 0
+    }
+
+    var pinnedEventIDs: [String] {
+        get async {
+            pinnedEventIDsCallsCount += 1
+            if let pinnedEventIDsClosure = pinnedEventIDsClosure {
+                return await pinnedEventIDsClosure()
+            } else {
+                return underlyingPinnedEventIDs
+            }
+        }
+    }
+    var underlyingPinnedEventIDs: [String]!
+    var pinnedEventIDsClosure: (() async -> [String])?
     var membership: Membership {
         get { return underlyingMembership }
         set(value) { underlyingMembership = value }
@@ -10406,6 +10423,76 @@ class RoomProxyMock: RoomProxyProtocol {
             return canUserTriggerRoomNotificationUserIDReturnValue
         }
     }
+    //MARK: - canUserPinOrUnpin
+
+    var canUserPinOrUnpinUserIDUnderlyingCallsCount = 0
+    var canUserPinOrUnpinUserIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canUserPinOrUnpinUserIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canUserPinOrUnpinUserIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canUserPinOrUnpinUserIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canUserPinOrUnpinUserIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var canUserPinOrUnpinUserIDCalled: Bool {
+        return canUserPinOrUnpinUserIDCallsCount > 0
+    }
+    var canUserPinOrUnpinUserIDReceivedUserID: String?
+    var canUserPinOrUnpinUserIDReceivedInvocations: [String] = []
+
+    var canUserPinOrUnpinUserIDUnderlyingReturnValue: Result<Bool, RoomProxyError>!
+    var canUserPinOrUnpinUserIDReturnValue: Result<Bool, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return canUserPinOrUnpinUserIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Bool, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canUserPinOrUnpinUserIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canUserPinOrUnpinUserIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canUserPinOrUnpinUserIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var canUserPinOrUnpinUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+
+    func canUserPinOrUnpin(userID: String) async -> Result<Bool, RoomProxyError> {
+        canUserPinOrUnpinUserIDCallsCount += 1
+        canUserPinOrUnpinUserIDReceivedUserID = userID
+        DispatchQueue.main.async {
+            self.canUserPinOrUnpinUserIDReceivedInvocations.append(userID)
+        }
+        if let canUserPinOrUnpinUserIDClosure = canUserPinOrUnpinUserIDClosure {
+            return await canUserPinOrUnpinUserIDClosure(userID)
+        } else {
+            return canUserPinOrUnpinUserIDReturnValue
+        }
+    }
     //MARK: - kickUser
 
     var kickUserUnderlyingCallsCount = 0
@@ -12525,6 +12612,146 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return await redactReasonClosure(timelineItemID, reason)
         } else {
             return redactReasonReturnValue
+        }
+    }
+    //MARK: - pin
+
+    var pinEventIDUnderlyingCallsCount = 0
+    var pinEventIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return pinEventIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinEventIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinEventIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinEventIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var pinEventIDCalled: Bool {
+        return pinEventIDCallsCount > 0
+    }
+    var pinEventIDReceivedEventID: String?
+    var pinEventIDReceivedInvocations: [String] = []
+
+    var pinEventIDUnderlyingReturnValue: Result<Bool, TimelineProxyError>!
+    var pinEventIDReturnValue: Result<Bool, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return pinEventIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Bool, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinEventIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinEventIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinEventIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var pinEventIDClosure: ((String) async -> Result<Bool, TimelineProxyError>)?
+
+    func pin(eventID: String) async -> Result<Bool, TimelineProxyError> {
+        pinEventIDCallsCount += 1
+        pinEventIDReceivedEventID = eventID
+        DispatchQueue.main.async {
+            self.pinEventIDReceivedInvocations.append(eventID)
+        }
+        if let pinEventIDClosure = pinEventIDClosure {
+            return await pinEventIDClosure(eventID)
+        } else {
+            return pinEventIDReturnValue
+        }
+    }
+    //MARK: - unpin
+
+    var unpinEventIDUnderlyingCallsCount = 0
+    var unpinEventIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return unpinEventIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unpinEventIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unpinEventIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unpinEventIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var unpinEventIDCalled: Bool {
+        return unpinEventIDCallsCount > 0
+    }
+    var unpinEventIDReceivedEventID: String?
+    var unpinEventIDReceivedInvocations: [String] = []
+
+    var unpinEventIDUnderlyingReturnValue: Result<Bool, TimelineProxyError>!
+    var unpinEventIDReturnValue: Result<Bool, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return unpinEventIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Bool, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unpinEventIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unpinEventIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unpinEventIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var unpinEventIDClosure: ((String) async -> Result<Bool, TimelineProxyError>)?
+
+    func unpin(eventID: String) async -> Result<Bool, TimelineProxyError> {
+        unpinEventIDCallsCount += 1
+        unpinEventIDReceivedEventID = eventID
+        DispatchQueue.main.async {
+            self.unpinEventIDReceivedInvocations.append(eventID)
+        }
+        if let unpinEventIDClosure = unpinEventIDClosure {
+            return await unpinEventIDClosure(eventID)
+        } else {
+            return unpinEventIDReturnValue
         }
     }
     //MARK: - sendAudio
