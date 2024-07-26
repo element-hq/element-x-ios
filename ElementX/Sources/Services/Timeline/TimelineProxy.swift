@@ -204,7 +204,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func pin(eventID: String) async -> Result<Bool, TimelineProxyError> {
         do {
-            return try await .success(timeline.pinEvent(eventIdStr: eventID))
+            return try await .success(timeline.pinEvent(eventId: eventID))
         } catch {
             MXLog.error("Failed to pin the event \(eventID) with error: \(error)")
             return .failure(.sdkError(error))
@@ -213,7 +213,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func unpin(eventID: String) async -> Result<Bool, TimelineProxyError> {
         do {
-            return try await .success(timeline.unpinEvent(eventIdStr: eventID))
+            return try await .success(timeline.unpinEvent(eventId: eventID))
         } catch {
             MXLog.error("Failed to unpin the event \(eventID) with error: \(error)")
             return .failure(.sdkError(error))
