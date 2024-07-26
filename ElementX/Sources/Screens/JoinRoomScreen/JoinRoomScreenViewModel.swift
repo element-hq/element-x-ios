@@ -119,10 +119,10 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func updateMode() {
-        if roomProxy?.isPublic ?? false || roomPreviewDetails?.isPublic ?? false {
-            state.mode = .join
-        } else if roomProxy?.membership == .invited || roomPreviewDetails?.isInvited ?? false {
+        if roomProxy?.membership == .invited || roomPreviewDetails?.isInvited ?? false { // Check invites first to show Accept/Decline buttons on public rooms.
             state.mode = .invited
+        } else if roomProxy?.isPublic ?? false || roomPreviewDetails?.isPublic ?? false {
+            state.mode = .join
         } else if roomPreviewDetails?.canKnock ?? false, allowKnocking { // Knocking is not supported yet, the flag is purely for preview tests.
             state.mode = .knock
         } else {
