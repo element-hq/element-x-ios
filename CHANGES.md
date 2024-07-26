@@ -1,3 +1,22 @@
+## Changes in 1.7.1 (2024-07-26)
+
+### What's Changed
+
+🐛 Bugfixes
+* Trim number of resolved alias vias and always default to a join button in the room preview screen by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3082
+* Fix a crash experienced when trying to report a crash. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3086
+
+🚧 In development 🚧
+* Automatically sign out when toggling the Simplified Sliding Sync feature flag. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3071
+* Fix the restoration of a Simplified Sliding Sync session. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3081
+* Hide/Show pin banner based on scroll direction by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3080
+
+Others
+* Update Compound and handle API breaks in Introspect. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3083
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.7.0...1.7.1
+
 ## Changes in 1.7.0 (2024-07-22)
 
 ### What's Changed
