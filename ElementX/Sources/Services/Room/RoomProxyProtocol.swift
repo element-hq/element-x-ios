@@ -39,6 +39,7 @@ protocol RoomProxyProtocol {
     var isEncrypted: Bool { get }
     var isFavourite: Bool { get async }
     var membership: Membership { get }
+    var inviter: RoomMemberProxyProtocol? { get async }
     var hasOngoingCall: Bool { get }
     var canonicalAlias: String? { get }
     var ownUserID: String { get }

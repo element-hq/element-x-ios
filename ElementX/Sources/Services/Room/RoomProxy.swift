@@ -65,6 +65,12 @@ class RoomProxy: RoomProxyProtocol {
         room.membership()
     }
     
+    var inviter: RoomMemberProxyProtocol? {
+        get async {
+            await (try? roomListItem.roomInfo().inviter).map(RoomMemberProxy.init)
+        }
+    }
+    
     var isDirect: Bool {
         room.isDirect()
     }

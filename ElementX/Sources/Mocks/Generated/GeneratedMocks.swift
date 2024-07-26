@@ -8256,6 +8256,23 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingMembership = value }
     }
     var underlyingMembership: Membership!
+    var inviterCallsCount = 0
+    var inviterCalled: Bool {
+        return inviterCallsCount > 0
+    }
+
+    var inviter: RoomMemberProxyProtocol? {
+        get async {
+            inviterCallsCount += 1
+            if let inviterClosure = inviterClosure {
+                return await inviterClosure()
+            } else {
+                return underlyingInviter
+            }
+        }
+    }
+    var underlyingInviter: RoomMemberProxyProtocol?
+    var inviterClosure: (() async -> RoomMemberProxyProtocol?)?
     var hasOngoingCall: Bool {
         get { return underlyingHasOngoingCall }
         set(value) { underlyingHasOngoingCall = value }
