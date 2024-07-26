@@ -288,11 +288,14 @@ class ClientProxy: ClientProxyProtocol {
             restartTask = nil
         }
         
-        Task {
+        // Capture the sync service strongly as this method is called on deinit and so the
+        // existence of self when the Task executes is questionable and would sometimes crash.
+        Task { [syncService] in
             do {
                 defer {
                     completion?()
                 }
+                
                 try await syncService?.stop()
             } catch {
                 MXLog.error("Failed stopping the sync service with error: \(error)")
