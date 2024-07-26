@@ -81,7 +81,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         defer {
             hideLoadingIndicator()
-            updateRoomDetails()
+            Task { await updateRoomDetails() }
         }
         
         // Using only the preview API isn't enough as it's not capable
@@ -91,13 +91,13 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         if let roomProxy = await clientProxy.roomForIdentifier(roomID) {
             self.roomProxy = roomProxy
-            updateRoomDetails()
+            await updateRoomDetails()
         }
         
         switch await clientProxy.roomPreviewForIdentifier(roomID, via: via) {
         case .success(let roomPreviewDetails):
             self.roomPreviewDetails = roomPreviewDetails
-            updateRoomDetails()
+            await updateRoomDetails()
         case .failure(.roomPreviewIsPrivate):
             break // Handled by the mode, we don't need an error indicator.
         case .failure:
@@ -105,13 +105,15 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         }
     }
     
-    private func updateRoomDetails() {
+    private func updateRoomDetails() async {
         let name = roomProxy?.name ?? roomPreviewDetails?.name
+        let inviter = await roomProxy?.inviter.flatMap(RoomInviterDetails.init)
         state.roomDetails = JoinRoomScreenRoomDetails(name: name,
                                                       topic: roomProxy?.topic ?? roomPreviewDetails?.topic,
                                                       canonicalAlias: roomProxy?.canonicalAlias ?? roomPreviewDetails?.canonicalAlias,
                                                       avatar: roomProxy?.avatar ?? .room(id: roomID, name: name ?? "", avatarURL: roomPreviewDetails?.avatarURL),
-                                                      memberCount: UInt(roomProxy?.activeMembersCount ?? Int(roomPreviewDetails?.memberCount ?? 0)))
+                                                      memberCount: UInt(roomProxy?.activeMembersCount ?? Int(roomPreviewDetails?.memberCount ?? 0)),
+                                                      inviter: inviter)
         
         updateMode()
     }
