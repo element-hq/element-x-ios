@@ -53,6 +53,26 @@ private struct TimelineItemSendInfoModifier: ViewModifier {
 private struct TimelineItemSendInfoLabel: View {
     let sendInfo: TimelineItemSendInfo
     
+    var statusIcon: KeyPath<CompoundIcons, Image>? {
+        switch sendInfo.status {
+        case .sendingFailed: \.error
+        case .unverifiedSession, .authenticityUnknown: \.admin
+        case .unencrypted: \.keyOff
+        case .none: nil
+        }
+    }
+    
+    var statusIconAccessibilityLabel: String? {
+        switch sendInfo.status {
+        case .sendingFailed: L10n.commonSendingFailed
+        case .none: nil
+        // Temporary testing strings.
+        case .unverifiedSession: L10n.eventShieldReasonUnsignedDevice
+        case .authenticityUnknown: L10n.eventShieldReasonAuthenticityNotGuaranteed
+        case .unencrypted: UntranslatedL10n.sendInfoNotEncrypted
+        }
+    }
+    
     var body: some View {
         switch sendInfo.layoutType {
         case .overlay(capsuleStyle: true):
@@ -79,9 +99,9 @@ private struct TimelineItemSendInfoLabel: View {
         HStack(spacing: 4) {
             Text(sendInfo.localizedString)
             
-            if sendInfo.adjustedDeliveryStatus == .sendingFailed {
-                CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyXS)
-                    .accessibilityLabel(L10n.commonSendingFailed)
+            if let statusIcon, let statusIconAccessibilityLabel {
+                CompoundIcon(statusIcon, size: .xSmall, relativeTo: .compound.bodyXS)
+                    .accessibilityLabel(statusIconAccessibilityLabel)
             }
         }
         .font(.compound.bodyXS)
@@ -91,9 +111,7 @@ private struct TimelineItemSendInfoLabel: View {
 
 /// All the data needed to render a timeline item's send info label.
 private struct TimelineItemSendInfo {
-    let localizedString: String
-    let layoutType: LayoutType
-    var adjustedDeliveryStatus: TimelineItemDeliveryStatus?
+    enum Status { case sendingFailed, unverifiedSession, authenticityUnknown, unencrypted }
     
     /// Describes how the content and the send info should be arranged inside a bubble
     enum LayoutType {
@@ -102,14 +120,30 @@ private struct TimelineItemSendInfo {
         case overlay(capsuleStyle: Bool)
     }
     
+    let localizedString: String
+    var status: Status?
+    let layoutType: LayoutType
+    
     var foregroundStyle: Color {
-        adjustedDeliveryStatus == .sendingFailed ? .compound.textCriticalPrimary : .compound.textSecondary
+        switch status {
+        case .sendingFailed, .unverifiedSession:
+            .compound.textCriticalPrimary
+        case .authenticityUnknown, .unencrypted, .none:
+            .compound.textSecondary
+        }
     }
 }
 
 private extension TimelineItemSendInfo {
     init(timelineItem: EventBasedTimelineItemProtocol, adjustedDeliveryStatus: TimelineItemDeliveryStatus?) {
         localizedString = timelineItem.localizedSendInfo
+        
+        status = if adjustedDeliveryStatus == .sendingFailed {
+            .sendingFailed
+        } else {
+            nil
+        }
+        
         layoutType = switch timelineItem {
         case is TextBasedRoomTimelineItem:
             .overlay(capsuleStyle: false)
@@ -124,7 +158,6 @@ private extension TimelineItemSendInfo {
         default:
             .horizontal()
         }
-        self.adjustedDeliveryStatus = adjustedDeliveryStatus
     }
 }
 
@@ -136,8 +169,17 @@ struct TimelineItemSendInfoLabel_Previews: PreviewProvider, TestablePreview {
             TimelineItemSendInfoLabel(sendInfo: .init(localizedString: "09:47 AM",
                                                       layoutType: .horizontal()))
             TimelineItemSendInfoLabel(sendInfo: .init(localizedString: "09:47 AM",
-                                                      layoutType: .horizontal(),
-                                                      adjustedDeliveryStatus: .sendingFailed))
+                                                      status: .sendingFailed,
+                                                      layoutType: .horizontal()))
+            TimelineItemSendInfoLabel(sendInfo: .init(localizedString: "09:47 AM",
+                                                      status: .unverifiedSession,
+                                                      layoutType: .horizontal()))
+            TimelineItemSendInfoLabel(sendInfo: .init(localizedString: "09:47 AM",
+                                                      status: .authenticityUnknown,
+                                                      layoutType: .horizontal()))
+            TimelineItemSendInfoLabel(sendInfo: .init(localizedString: "09:47 AM",
+                                                      status: .unencrypted,
+                                                      layoutType: .horizontal()))
         }
     }
 }

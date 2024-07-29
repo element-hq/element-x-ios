@@ -4,6 +4,10 @@
 /* Used for testing */
 "untranslated" = "Untranslated";
 
+// MARK: - Shields
+
+"send_info_not_encrypted" = "Not encrypted";
+
 // MARK: - Soft logout
 
 "soft_logout_signin_title" = "Sign in";
