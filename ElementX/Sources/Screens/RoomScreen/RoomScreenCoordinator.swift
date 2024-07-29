@@ -23,6 +23,7 @@ struct RoomScreenCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
     var focussedEventID: String?
     let timelineController: RoomTimelineControllerProtocol
+    let pinnedEventsTimelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
@@ -63,6 +64,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         let viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
                                             focussedEventID: parameters.focussedEventID,
                                             timelineController: parameters.timelineController,
+                                            pinnedEventsTimelineController: parameters.pinnedEventsTimelineController,
                                             mediaProvider: parameters.mediaProvider,
                                             mediaPlayerProvider: parameters.mediaPlayerProvider,
                                             voiceMessageMediaManager: parameters.voiceMessageMediaManager,

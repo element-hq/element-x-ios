@@ -42,16 +42,17 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     init(roomProxy: RoomProxyProtocol,
+         timelineProxy: TimelineProxyProtocol,
          initialFocussedEventID: String?,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          appSettings: AppSettings) {
         self.roomProxy = roomProxy
-        liveTimelineProvider = roomProxy.timeline.timelineProvider
+        liveTimelineProvider = timelineProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.appSettings = appSettings
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
-        activeTimeline = roomProxy.timeline
+        activeTimeline = timelineProxy
         activeTimelineProvider = liveTimelineProvider
         
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)

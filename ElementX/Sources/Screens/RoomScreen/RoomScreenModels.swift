@@ -175,7 +175,7 @@ struct RoomScreenViewState: BindableState {
     var pinnedEventsState = PinnedEventsState()
     
     var shouldShowPinBanner: Bool {
-        isPinningEnabled && !pinnedEventsState.pinnedEventIDs.isEmpty && lastScrollDirection != .top
+        isPinningEnabled && !pinnedEventsState.pinnedEvents.isEmpty && lastScrollDirection != .top
     }
     
     var canJoinCall = false
@@ -297,14 +297,14 @@ enum ScrollDirection: Equatable {
 
 struct PinnedEventsState: Equatable {
     // For now these will only contain and show the event IDs, but in the future they will also contain the content
-    var pinnedEventIDs: OrderedSet<String> = [] {
+    var pinnedEvents: OrderedDictionary<String, RoomTimelineItemType> = [:] {
         didSet {
-            if selectedPinEventID == nil, !pinnedEventIDs.isEmpty {
-                selectedPinEventID = pinnedEventIDs.first
-            } else if pinnedEventIDs.isEmpty {
+            if selectedPinEventID == nil, !pinnedEvents.isEmpty {
+                selectedPinEventID = pinnedEvents.firstNonNil { $0.key }
+            } else if pinnedEvents.isEmpty {
                 selectedPinEventID = nil
-            } else if let selectedPinEventID, !pinnedEventIDs.contains(selectedPinEventID) {
-                self.selectedPinEventID = pinnedEventIDs.first
+            } else if let selectedPinEventID, !pinnedEvents.keys.set.contains(selectedPinEventID) {
+                self.selectedPinEventID = pinnedEvents.firstNonNil { $0.key }
             }
         }
     }
@@ -315,7 +315,7 @@ struct PinnedEventsState: Equatable {
         guard let selectedPinEventID else {
             return 0
         }
-        return pinnedEventIDs.firstIndex(of: selectedPinEventID) ?? 0
+        return pinnedEvents.keys.firstIndex(of: selectedPinEventID) ?? 0
     }
     
     // For now we show the event ID as the content, but is just until we have a way to get the real content
@@ -324,11 +324,11 @@ struct PinnedEventsState: Equatable {
     }
     
     mutating func nextPin() {
-        guard !pinnedEventIDs.isEmpty else {
+        guard !pinnedEvents.isEmpty else {
             return
         }
         let currentIndex = selectedPinIndex
-        let nextIndex = (currentIndex + 1) % pinnedEventIDs.count
-        selectedPinEventID = pinnedEventIDs[nextIndex]
+        let nextIndex = (currentIndex + 1) % pinnedEvents.count
+        selectedPinEventID = pinnedEvents.keys[nextIndex]
     }
 }

@@ -23,6 +23,7 @@ class RoomProxy: RoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
+    let pinnedEventsTimeline: TimelineProxyProtocol
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
@@ -137,6 +138,7 @@ class RoomProxy: RoomProxyProtocol {
         
         do {
             timeline = try await TimelineProxy(timeline: room.timeline(), isLive: true)
+            pinnedEventsTimeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: "pinned_events_timeline"), isLive: false)
         } catch {
             MXLog.error("Failed creating timeline with error: \(error)")
             return nil
@@ -160,6 +162,7 @@ class RoomProxy: RoomProxyProtocol {
         roomListItem.subscribe(settings: settings)
         
         await timeline.subscribeForUpdates()
+        await pinnedEventsTimeline.subscribeForUpdates()
         
         subscribeToRoomInfoUpdates()
         

@@ -83,6 +83,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private var timelineController: RoomTimelineControllerProtocol?
+    private var pinnedItemsTimelineController: RoomTimelineControllerProtocol?
     
     init(roomID: String,
          userSession: UserSessionProtocol,
@@ -545,9 +546,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
+                                                                                           timelineProxy: roomProxy.timeline,
                                                                                            initialFocussedEventID: focussedEventID,
                                                                                            timelineItemFactory: timelineItemFactory)
         self.timelineController = timelineController
+        
+        let pinnedItemsTimelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy, timelineProxy: roomProxy.pinnedEventsTimeline, initialFocussedEventID: nil, timelineItemFactory: timelineItemFactory)
+        self.pinnedItemsTimelineController = pinnedItemsTimelineController
         
         analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
         
@@ -558,6 +563,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          focussedEventID: focussedEventID,
                                                          timelineController: timelineController,
+                                                         pinnedEventsTimelineController: pinnedItemsTimelineController,
                                                          mediaProvider: userSession.mediaProvider,
                                                          mediaPlayerProvider: MediaPlayerProvider(),
                                                          voiceMessageMediaManager: userSession.voiceMessageMediaManager,
@@ -1039,6 +1045,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
         let roomTimelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
+                                                                                               timelineProxy: roomProxy.timeline,
                                                                                                initialFocussedEventID: nil,
                                                                                                timelineItemFactory: timelineItemFactory)
         

@@ -13005,6 +13005,81 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
     }
 
+    //MARK: - pinnedEventsTimeline
+
+    open var pinnedEventsTimelineInternalIdPrefixThrowableError: Error?
+    var pinnedEventsTimelineInternalIdPrefixUnderlyingCallsCount = 0
+    open var pinnedEventsTimelineInternalIdPrefixCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return pinnedEventsTimelineInternalIdPrefixUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinnedEventsTimelineInternalIdPrefixUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinnedEventsTimelineInternalIdPrefixUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinnedEventsTimelineInternalIdPrefixUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var pinnedEventsTimelineInternalIdPrefixCalled: Bool {
+        return pinnedEventsTimelineInternalIdPrefixCallsCount > 0
+    }
+    open var pinnedEventsTimelineInternalIdPrefixReceivedInternalIdPrefix: String?
+    open var pinnedEventsTimelineInternalIdPrefixReceivedInvocations: [String?] = []
+
+    var pinnedEventsTimelineInternalIdPrefixUnderlyingReturnValue: Timeline!
+    open var pinnedEventsTimelineInternalIdPrefixReturnValue: Timeline! {
+        get {
+            if Thread.isMainThread {
+                return pinnedEventsTimelineInternalIdPrefixUnderlyingReturnValue
+            } else {
+                var returnValue: Timeline? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinnedEventsTimelineInternalIdPrefixUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinnedEventsTimelineInternalIdPrefixUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinnedEventsTimelineInternalIdPrefixUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var pinnedEventsTimelineInternalIdPrefixClosure: ((String?) async throws -> Timeline)?
+
+    open override func pinnedEventsTimeline(internalIdPrefix: String?) async throws -> Timeline {
+        if let error = pinnedEventsTimelineInternalIdPrefixThrowableError {
+            throw error
+        }
+        pinnedEventsTimelineInternalIdPrefixCallsCount += 1
+        pinnedEventsTimelineInternalIdPrefixReceivedInternalIdPrefix = internalIdPrefix
+        DispatchQueue.main.async {
+            self.pinnedEventsTimelineInternalIdPrefixReceivedInvocations.append(internalIdPrefix)
+        }
+        if let pinnedEventsTimelineInternalIdPrefixClosure = pinnedEventsTimelineInternalIdPrefixClosure {
+            return try await pinnedEventsTimelineInternalIdPrefixClosure(internalIdPrefix)
+        } else {
+            return pinnedEventsTimelineInternalIdPrefixReturnValue
+        }
+    }
+
     //MARK: - rawName
 
     var rawNameUnderlyingCallsCount = 0

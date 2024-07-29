@@ -66,6 +66,8 @@ protocol RoomProxyProtocol {
     
     var timeline: TimelineProxyProtocol { get }
     
+    var pinnedEventsTimeline: TimelineProxyProtocol { get }
+    
     func subscribeForUpdates() async
     
     func subscribeToRoomInfoUpdates()

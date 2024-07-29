@@ -27,7 +27,7 @@ struct PinnedItemsBannerView: View {
         let index = pinnedEventsState.selectedPinIndex + 1
         let boldPlaceholder = "{bold}"
         var finalString = AttributedString(L10n.screenRoomPinnedBannerIndicatorDescription(boldPlaceholder))
-        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, pinnedEventsState.pinnedEventIDs.count))
+        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, pinnedEventsState.pinnedEvents.count))
         boldString.bold()
         finalString.replace(boldPlaceholder, with: boldString)
         return finalString
@@ -48,7 +48,7 @@ struct PinnedItemsBannerView: View {
         Button { onMainButtonTap() } label: {
             HStack(spacing: 0) {
                 HStack(spacing: 10) {
-                    PinnedItemsIndicatorView(pinIndex: pinnedEventsState.selectedPinIndex, pinsCount: pinnedEventsState.pinnedEventIDs.count)
+                    PinnedItemsIndicatorView(pinIndex: pinnedEventsState.selectedPinIndex, pinsCount: pinnedEventsState.pinnedEvents.count)
                         .accessibilityHidden(true)
                     CompoundIcon(\.pinSolid, size: .small, relativeTo: .compound.bodyMD)
                         .foregroundColor(Color.compound.iconSecondaryAlpha)
@@ -87,7 +87,7 @@ struct PinnedItemsBannerView: View {
 
 struct PinnedItemsBannerView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        PinnedItemsBannerView(pinnedEventsState: .init(pinnedEventIDs: ["Content", "NotShown1", "NotShown2"], selectedPinEventID: "Content"),
+        PinnedItemsBannerView(pinnedEventsState: .init(pinnedEvents: [:], selectedPinEventID: "Content"),
                               onMainButtonTap: { },
                               onViewAllButtonTap: { })
     }
