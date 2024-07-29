@@ -14,10 +14,8 @@
 // limitations under the License.
 //
 
-import Foundation
-import SwiftUI
-
 import Compound
+import SwiftUI
 
 struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
@@ -34,9 +32,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     /// The base padding applied to bubbles on either side.
     ///
     /// **Note:** This is on top of the insets applied to the cells by the table view.
-    let bubbleHorizontalPadding: CGFloat = 8
+    private let bubbleHorizontalPadding: CGFloat = 8
     /// Additional padding applied to outgoing bubbles when the avatar is shown
-    var bubbleAvatarPadding: CGFloat {
+    private var bubbleAvatarPadding: CGFloat {
         guard !timelineItem.isOutgoing, !isEncryptedOneToOneRoom else { return 0 }
         return 8
     }
@@ -108,7 +106,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     private var messageBubbleWithReactions: some View {
         // Figma overlaps reactions by 3
         VStack(alignment: alignment, spacing: -3) {
-            messageBubble
+            messageBubbleWithActions
                 .timelineItemAccessibility(timelineItem) {
                     context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
                 }
@@ -124,8 +122,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         }
     }
     
-    var messageBubble: some View {
-        styledContent
+    var messageBubbleWithActions: some View {
+        messageBubble
             .onTapGesture {
                 context.send(viewAction: .itemTapped(itemID: timelineItem.id))
             }
@@ -156,58 +154,13 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             .padding(.top, messageBubbleTopPadding)
     }
-
-    @ViewBuilder
-    var styledContent: some View {
-        contentWithTimestamp
+    
+    var messageBubble: some View {
+        contentWithReply
+            .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus)
             .bubbleStyle(insets: timelineItem.bubbleInsets,
                          color: timelineItem.bubbleBackgroundColor,
                          corners: roundedCorners)
-    }
-
-    @ViewBuilder
-    var contentWithTimestamp: some View {
-        timelineItem.bubbleSendInfoLayoutType
-            .layout {
-                contentWithReply
-                layoutedLocalizedSendInfo
-            }
-    }
-
-    @ViewBuilder
-    var layoutedLocalizedSendInfo: some View {
-        switch timelineItem.bubbleSendInfoLayoutType {
-        case .overlay(capsuleStyle: true):
-            localizedSendInfo
-                .padding(.horizontal, 4)
-                .padding(.vertical, 2)
-                .background(Color.compound.bgSubtleSecondary)
-                .cornerRadius(10)
-                .padding(.trailing, 4)
-                .padding(.bottom, 4)
-        case .horizontal, .overlay(capsuleStyle: false):
-            localizedSendInfo
-                .padding(.bottom, -4)
-        case .vertical:
-            GridRow {
-                localizedSendInfo
-                    .gridColumnAlignment(.trailing)
-            }
-        }
-    }
-
-    @ViewBuilder
-    var localizedSendInfo: some View {
-        HStack(spacing: 4) {
-            Text(timelineItem.localizedSendInfo)
-            
-            if adjustedDeliveryStatus == .sendingFailed {
-                CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyXS)
-                    .accessibilityLabel(L10n.commonSendingFailed)
-            }
-        }
-        .font(.compound.bodyXS)
-        .foregroundColor(adjustedDeliveryStatus == .sendingFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
     }
     
     @ViewBuilder
@@ -293,28 +246,6 @@ private extension View {
     }
 }
 
-// Describes how the content and the send info should be arranged inside a bubble
-private enum BubbleSendInfoLayoutType {
-    case horizontal(spacing: CGFloat = 4)
-    case vertical(spacing: CGFloat = 4)
-    case overlay(capsuleStyle: Bool)
-
-    var layout: AnyLayout {
-        let layout: any Layout
-
-        switch self {
-        case .horizontal(let spacing):
-            layout = HStackLayout(alignment: .bottom, spacing: spacing)
-        case .vertical(let spacing):
-            layout = GridLayout(alignment: .leading, verticalSpacing: spacing)
-        case .overlay:
-            layout = ZStackLayout(alignment: .bottomTrailing)
-        }
-
-        return AnyLayout(layout)
-    }
-}
-
 private extension EventBasedTimelineItemProtocol {
     var bubbleBackgroundColor: Color? {
         let defaultColor: Color = isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
@@ -335,8 +266,8 @@ private extension EventBasedTimelineItemProtocol {
         }
     }
 
-    // The insets for the full bubble content.
-    // Padding affecting just the "send info" should be added inside `layoutedLocalizedSendInfo`
+    /// The insets for the full bubble content.
+    /// Padding affecting just the "send info" should be added inside `TimelineItemSendInfoView`
     var bubbleInsets: EdgeInsets {
         let defaultInsets: EdgeInsets = .init(around: 8)
 
@@ -363,25 +294,6 @@ private extension EventBasedTimelineItemProtocol {
             return defaultInsets
         }
     }
-
-    var bubbleSendInfoLayoutType: BubbleSendInfoLayoutType {
-        let defaultTimestampLayout: BubbleSendInfoLayoutType = .horizontal()
-
-        switch self {
-        case is TextBasedRoomTimelineItem:
-            return .overlay(capsuleStyle: false)
-        case is ImageRoomTimelineItem,
-             is VideoRoomTimelineItem,
-             is StickerRoomTimelineItem:
-            return .overlay(capsuleStyle: true)
-        case let locationTimelineItem as LocationRoomTimelineItem:
-            return .overlay(capsuleStyle: locationTimelineItem.content.geoURI != nil)
-        case is PollRoomTimelineItem:
-            return .vertical(spacing: 16)
-        default:
-            return defaultTimestampLayout
-        }
-    }
     
     var contentCornerRadius: CGFloat {
         guard let message = self as? EventBasedMessageTimelineItemProtocol else { return .zero }
@@ -394,6 +306,16 @@ private extension EventBasedTimelineItemProtocol {
         }
     }
 }
+
+private extension EdgeInsets {
+    init(around: CGFloat) {
+        self.init(top: around, leading: around, bottom: around, trailing: around)
+    }
+
+    static var zero: Self = .init(around: 0)
+}
+
+// MARK: - Previews
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
@@ -555,12 +477,4 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         }
         .environmentObject(viewModel.context)
     }
-}
-
-private extension EdgeInsets {
-    init(around: CGFloat) {
-        self.init(top: around, leading: around, bottom: around, trailing: around)
-    }
-
-    static var zero: Self = .init(around: 0)
 }
