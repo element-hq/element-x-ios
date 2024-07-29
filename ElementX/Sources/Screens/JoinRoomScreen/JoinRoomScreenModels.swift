@@ -35,6 +35,7 @@ struct JoinRoomScreenRoomDetails {
     let canonicalAlias: String?
     let avatar: RoomAvatar
     let memberCount: UInt
+    let inviter: RoomInviterDetails?
 }
 
 struct JoinRoomScreenViewState: BindableState {

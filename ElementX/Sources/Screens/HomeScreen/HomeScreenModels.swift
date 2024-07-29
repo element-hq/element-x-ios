@@ -144,12 +144,6 @@ struct HomeScreenRoom: Identifiable, Equatable {
         case invite
     }
     
-    struct InviterDetails: Equatable {
-        let userID: String
-        let displayName: String?
-        let avatarURL: URL?
-    }
-    
     static let placeholderLastMessage = AttributedString("Hidden last message")
         
     /// The list item identifier is it's room identifier.
@@ -182,7 +176,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let avatar: RoomAvatar
     
-    let inviter: InviterDetails?
+    let inviter: RoomInviterDetails?
     
     let canonicalAlias: String?
     
@@ -215,12 +209,7 @@ extension HomeScreenRoom {
         let isCallShown = summary.hasOngoingCall
         let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions))
         
-        var inviter: InviterDetails?
-        if let roomMemberProxy = summary.inviter {
-            inviter = .init(userID: roomMemberProxy.userID,
-                            displayName: roomMemberProxy.displayName,
-                            avatarURL: roomMemberProxy.avatarURL)
-        }
+        let inviter = summary.inviter.map(RoomInviterDetails.init)
         
         self.init(id: identifier,
                   roomID: summary.id,

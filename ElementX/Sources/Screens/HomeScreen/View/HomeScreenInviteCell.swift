@@ -74,17 +74,10 @@ struct HomeScreenInviteCell: View {
 
     @ViewBuilder
     private var inviterView: some View {
-        if let invitedText = attributedInviteText, let name = room.inviter?.displayName {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                LoadableAvatarImage(url: room.inviter?.avatarURL,
-                                    name: name,
-                                    contentID: name,
-                                    avatarSize: .custom(16),
-                                    imageProvider: context.imageProvider)
-                    .alignmentGuide(.firstTextBaseline) { $0[.bottom] * 0.8 }
-                
-                Text(invitedText)
-            }
+        if let inviter = room.inviter, !room.isDirect {
+            RoomInviterLabel(inviter: inviter, imageProvider: context.imageProvider)
+                .font(.compound.bodyMD)
+                .foregroundStyle(.compound.textPlaceholder)
         }
     }
     
@@ -130,27 +123,7 @@ struct HomeScreenInviteCell: View {
     }
     
     private var subtitle: String? {
-        room.isDirect ? room.inviter?.userID : room.canonicalAlias
-    }
-    
-    private var attributedInviteText: AttributedString? {
-        guard
-            room.isDirect == false,
-            let inviterName = room.inviter?.displayName,
-            let inviterID = room.inviter?.userID
-        else {
-            return nil
-        }
-        
-        let text = L10n.screenInvitesInvitedYou(inviterName, inviterID)
-        var attributedString = AttributedString(text)
-        attributedString.font = .compound.bodyMD
-        attributedString.foregroundColor = .compound.textPlaceholder
-        if let range = attributedString.range(of: inviterName) {
-            attributedString[range].foregroundColor = .compound.textPrimary
-            attributedString[range].font = .compound.bodyMDSemibold
-        }
-        return attributedString
+        room.isDirect ? room.inviter?.id : room.canonicalAlias
     }
     
     private var badge: some View {

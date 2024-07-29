@@ -35,6 +35,7 @@ struct RoomProxyMockConfiguration {
     
     var members: [RoomMemberProxyMock] = .allMembers
     var ownUserID = RoomMemberProxyMock.mockMe.userID
+    var inviter: RoomMemberProxyProtocol?
     
     var canUserInvite = true
     var canUserTriggerRoomNotification = false
@@ -85,6 +86,7 @@ extension RoomProxyMock {
 
         ownUserID = configuration.ownUserID
         membership = .joined
+        inviterClosure = { configuration.inviter }
         
         membersPublisher = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
