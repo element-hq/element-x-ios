@@ -42,17 +42,17 @@ extension EventBasedTimelineItemProtocol {
     var isRemoteMessage: Bool {
         id.eventID != nil
     }
-
-    var hasFailedToSend: Bool {
-        properties.deliveryStatus == .sendingFailed
+    
+    var isRedacted: Bool {
+        self is RedactedRoomTimelineItem
     }
-
+    
     var pollIfAvailable: Poll? {
         (self as? PollRoomTimelineItem)?.poll
     }
 
-    var isRedacted: Bool {
-        self is RedactedRoomTimelineItem
+    var hasFailedToSend: Bool {
+        properties.deliveryStatus == .sendingFailed
     }
 
     var hasFailedDecryption: Bool {
