@@ -24,8 +24,8 @@ struct RoomTimelineItemProperties: Hashable {
     var reactions: [AggregatedReaction] = []
     /// The delivery status for this item. If a sent message is echoed the value is nil.
     var deliveryStatus: TimelineItemDeliveryStatus?
-    /// The read receipts of the item, ordered from newest to oldest
+    /// The read receipts of the item, ordered from newest to oldest.
     var orderedReadReceipts: [ReadReceipt] = []
-    /// Message shield for authenticity warnings
-    var shield: MessageShield?
+    /// Authenticity warnings for item's sent in encrypted rooms.
+    var encryptionAuthenticity: EncryptionAuthenticity?
 }

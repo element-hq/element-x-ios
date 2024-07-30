@@ -24,7 +24,7 @@ class TimelineItemFactoryTests: XCTestCase {
         let senderUserID = "@bob:matrix.org"
 
         let factory = RoomTimelineItemFactory(userID: ownUserID,
-                                              shieldsEnabled: true,
+                                              encryptionAuthenticityEnabled: true,
                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                               stateEventStringBuilder: RoomStateEventStringBuilder(userID: ownUserID))
         

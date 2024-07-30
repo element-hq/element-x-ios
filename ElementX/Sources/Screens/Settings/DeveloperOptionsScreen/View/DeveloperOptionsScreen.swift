@@ -52,8 +52,8 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("Encryption") {
-                Toggle(isOn: $context.timelineItemShieldsEnabled) {
-                    Text("Timeline item shields")
+                Toggle(isOn: $context.timelineItemAuthenticityEnabled) {
+                    Text("Message authenticity warnings")
                     Text("Requires app reboot")
                 }
             }
