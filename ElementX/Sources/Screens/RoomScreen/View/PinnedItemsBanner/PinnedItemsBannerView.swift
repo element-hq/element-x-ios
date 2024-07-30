@@ -27,7 +27,7 @@ struct PinnedItemsBannerView: View {
         let index = pinnedEventsState.selectedPinIndex + 1
         let boldPlaceholder = "{bold}"
         var finalString = AttributedString(L10n.screenRoomPinnedBannerIndicatorDescription(boldPlaceholder))
-        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, pinnedEventsState.pinnedEvents.count))
+        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, pinnedEventsState.pinnedEventsContent.count))
         boldString.bold()
         finalString.replace(boldPlaceholder, with: boldString)
         return finalString
@@ -48,7 +48,7 @@ struct PinnedItemsBannerView: View {
         Button { onMainButtonTap() } label: {
             HStack(spacing: 0) {
                 HStack(spacing: 10) {
-                    PinnedItemsIndicatorView(pinIndex: pinnedEventsState.selectedPinIndex, pinsCount: pinnedEventsState.pinnedEvents.count)
+                    PinnedItemsIndicatorView(pinIndex: pinnedEventsState.selectedPinIndex, pinsCount: pinnedEventsState.pinnedEventsContent.count)
                         .accessibilityHidden(true)
                     CompoundIcon(\.pinSolid, size: .small, relativeTo: .compound.bodyMD)
                         .foregroundColor(Color.compound.iconSecondaryAlpha)
@@ -87,7 +87,10 @@ struct PinnedItemsBannerView: View {
 
 struct PinnedItemsBannerView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        PinnedItemsBannerView(pinnedEventsState: .init(pinnedEvents: [:], selectedPinEventID: "Content"),
+        PinnedItemsBannerView(pinnedEventsState: .init(pinnedEventsContent: ["1": "Content",
+                                                                             "2": "2",
+                                                                             "3": "3"],
+                                                       selectedPinEventID: "1"),
                               onMainButtonTap: { },
                               onViewAllButtonTap: { })
     }

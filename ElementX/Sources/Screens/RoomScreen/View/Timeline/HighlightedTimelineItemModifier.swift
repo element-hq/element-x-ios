@@ -97,7 +97,6 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room")),
                                                focussedEventID: focussedEventID,
                                                timelineController: MockRoomTimelineController(),
-                                               pinnedTimelineBuilder: .mock(),
                                                mediaProvider: MockMediaProvider(),
                                                mediaPlayerProvider: MediaPlayerProviderMock(),
                                                voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

@@ -29,7 +29,5 @@ extension RoomTimelineControllerFactoryMock {
             timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
             return timelineController
         }()
-        
-        buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryReturnValue = nil
     }
 }

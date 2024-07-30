@@ -209,7 +209,6 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                                               name: "Preview room",
                                                                               hasOngoingCall: true)),
                                                timelineController: MockRoomTimelineController(),
-                                               pinnedTimelineBuilder: .mock(),
                                                mediaProvider: MockMediaProvider(),
                                                mediaPlayerProvider: MediaPlayerProviderMock(),
                                                voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

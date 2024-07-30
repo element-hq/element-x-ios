@@ -21,9 +21,6 @@ protocol RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
                                      initialFocussedEventID: String?,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol
-    
-    func buildPinnedEventsTimelineController(roomProxy: RoomProxyProtocol,
-                                             timelineItemFactory: RoomTimelineItemFactoryProtocol) async -> RoomTimelineControllerProtocol?
 }
 
 // sourcery: AutoMockable

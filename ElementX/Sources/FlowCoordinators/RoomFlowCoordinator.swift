@@ -558,7 +558,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          focussedEventID: focussedEventID,
                                                          timelineController: timelineController,
-                                                         pinnedTimelineBuilder: PinnedEventsTimelineBuilder(timelineFactory: roomTimelineControllerFactory, timelineItemsFactory: timelineItemFactory),
                                                          mediaProvider: userSession.mediaProvider,
                                                          mediaPlayerProvider: MediaPlayerProvider(),
                                                          voiceMessageMediaManager: userSession.voiceMessageMediaManager,
@@ -1446,26 +1445,5 @@ private extension Result {
         case .failure:
             return true
         }
-    }
-}
-
-struct PinnedEventsTimelineBuilder {
-    private let timelineFactory: RoomTimelineControllerFactoryProtocol
-    private let timelineItemsFactory: RoomTimelineItemFactoryProtocol
-    
-    init(timelineFactory: RoomTimelineControllerFactoryProtocol,
-         timelineItemsFactory: RoomTimelineItemFactoryProtocol) {
-        self.timelineFactory = timelineFactory
-        self.timelineItemsFactory = timelineItemsFactory
-    }
-    
-    func buildPinnedEventsTimelineController(roomProxy: RoomProxyProtocol) async -> RoomTimelineControllerProtocol? {
-        await timelineFactory.buildPinnedEventsTimelineController(roomProxy: roomProxy, timelineItemFactory: timelineItemsFactory)
-    }
-    
-    @MainActor
-    static func mock() -> PinnedEventsTimelineBuilder {
-        PinnedEventsTimelineBuilder(timelineFactory: RoomTimelineControllerFactoryMock(configuration: .init()),
-                                    timelineItemsFactory: RoomTimelineItemFactory(userID: UUID().uuidString, attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()), stateEventStringBuilder: RoomStateEventStringBuilder(userID: UUID().uuidString)))
     }
 }

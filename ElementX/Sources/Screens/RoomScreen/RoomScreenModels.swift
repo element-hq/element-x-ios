@@ -178,7 +178,7 @@ struct RoomScreenViewState: BindableState {
     var pinnedEventsState = PinnedEventsState()
     
     var shouldShowPinBanner: Bool {
-        isPinningEnabled && !pinnedEventsState.pinnedEvents.isEmpty && lastScrollDirection != .top
+        isPinningEnabled && !pinnedEventsState.pinnedEventsContent.isEmpty && lastScrollDirection != .top
     }
     
     var canJoinCall = false
@@ -300,39 +300,42 @@ enum ScrollDirection: Equatable {
 
 struct PinnedEventsState: Equatable {
     // For now these will only contain and show the event IDs, but in the future they will also contain the content
-    var pinnedEvents: OrderedDictionary<String, RoomTimelineItemType> = [:] {
+    var pinnedEventsContent: OrderedDictionary<String, AttributedString> = [:] {
         didSet {
-            if selectedPinEventID == nil, !pinnedEvents.isEmpty {
-                selectedPinEventID = pinnedEvents.firstNonNil { $0.key }
-            } else if pinnedEvents.isEmpty {
+            if selectedPinEventID == nil, !pinnedEventsContent.keys.isEmpty {
+                selectedPinEventID = pinnedEventsContent.keys.last
+            } else if pinnedEventsContent.isEmpty {
                 selectedPinEventID = nil
-            } else if let selectedPinEventID, !pinnedEvents.keys.set.contains(selectedPinEventID) {
-                self.selectedPinEventID = pinnedEvents.firstNonNil { $0.key }
+            } else if let selectedPinEventID, !pinnedEventsContent.keys.set.contains(selectedPinEventID) {
+                self.selectedPinEventID = pinnedEventsContent.firstNonNil { $0.key }
             }
         }
     }
     
-    var selectedPinEventID: String?
+    private(set) var selectedPinEventID: String?
     
     var selectedPinIndex: Int {
-        let defaultValue = pinnedEvents.isEmpty ? 0 : pinnedEvents.count - 1
+        let defaultValue = pinnedEventsContent.isEmpty ? 0 : pinnedEventsContent.count - 1
         guard let selectedPinEventID else {
             return defaultValue
         }
-        return pinnedEvents.keys.firstIndex(of: selectedPinEventID) ?? defaultValue
+        return pinnedEventsContent.keys.firstIndex(of: selectedPinEventID) ?? defaultValue
     }
     
     // For now we show the event ID as the content, but is just until we have a way to get the real content
     var selectedPinContent: AttributedString {
-        .init(selectedPinEventID ?? "")
+        guard let selectedPinEventID else {
+            return AttributedString()
+        }
+        return pinnedEventsContent[selectedPinEventID] ?? AttributedString()
     }
     
     mutating func nextPin() {
-        guard !pinnedEvents.isEmpty else {
+        guard !pinnedEventsContent.isEmpty else {
             return
         }
         let currentIndex = selectedPinIndex
-        let nextIndex = (currentIndex + 1) % pinnedEvents.count
-        selectedPinEventID = pinnedEvents.keys[nextIndex]
+        let nextIndex = (currentIndex + 1) % pinnedEventsContent.count
+        selectedPinEventID = pinnedEventsContent.keys[nextIndex]
     }
 }

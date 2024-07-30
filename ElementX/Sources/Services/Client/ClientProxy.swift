@@ -759,10 +759,11 @@ class ClientProxy: ClientProxyProtocol {
             let roomListService = syncService.roomListService()
             
             let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
-                                                                                                                               mentionBuilder: PlainMentionBuilder()))
+                                                                                                                               mentionBuilder: PlainMentionBuilder()), prefix: .senderName)
             let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID, shouldDisambiguateDisplayNames: false),
                                                             messageEventStringBuilder: roomMessageEventStringBuilder,
-                                                            shouldDisambiguateDisplayNames: false)
+                                                            shouldDisambiguateDisplayNames: false,
+                                                            shouldPrefixSenderName: true)
             
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                       eventStringBuilder: eventStringBuilder,

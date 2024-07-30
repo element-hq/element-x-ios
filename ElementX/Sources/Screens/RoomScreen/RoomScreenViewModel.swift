@@ -36,6 +36,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
+    private let pinnedEventStringBuilder: RoomEventStringBuilder
     
     private let roomScreenInteractionHandler: RoomScreenInteractionHandler
     
@@ -49,12 +50,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
     
+    // Needs to be stored to allow the provider to keep sending updates.
     private var pinnedEventsTimelineController: RoomTimelineControllerProtocol?
 
     init(roomProxy: RoomProxyProtocol,
          focussedEventID: String? = nil,
          timelineController: RoomTimelineControllerProtocol,
-         pinnedTimelineBuilder: PinnedEventsTimelineBuilder,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
@@ -69,6 +70,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
+        pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
@@ -129,25 +131,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         Task {
-            guard let pinnedEventsTimelineController = await pinnedTimelineBuilder.buildPinnedEventsTimelineController(roomProxy: roomProxy) else {
+            guard let pinnedEventsTimelineProvider = await roomProxy.pinnedEventsTimeline?.timelineProvider else {
                 return
             }
             
-            buildPinnedEventsContent(timelineItems: pinnedEventsTimelineController.timelineItems)
+            buildPinnedEventsContent(timelineItems: pinnedEventsTimelineProvider.itemProxies)
             
-            pinnedEventsTimelineController.callbacks
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] callback in
+            pinnedEventsTimelineProvider.updatePublisher
+                .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
+                .sink { [weak self] updatedItems, _ in
                     guard let self else { return }
-
-                    switch callback {
-                    case .updatedTimelineItems(let updatedItems, _):
-                        buildPinnedEventsContent(timelineItems: updatedItems)
-                    default:
-                        break
-                    }
+                    buildPinnedEventsContent(timelineItems: updatedItems)
                 }
                 .store(in: &cancellables)
+            
+            self.pinnedEventsTimelineController = pinnedEventsTimelineController
         }
     }
     
@@ -660,17 +658,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Timeline Item Building
     
-    private func buildPinnedEventsContent(timelineItems: [RoomTimelineItemProtocol]) {
-        var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemType>()
+    private func buildPinnedEventsContent(timelineItems: [TimelineItemProxy]) {
+        var timelineItemsDictionary = OrderedDictionary<String, AttributedString>()
         
         for item in timelineItems {
             // Only remote events are pinned
-            if let eventID = item.id.eventID {
-                timelineItemsDictionary.updateValue(.init(item: item), forKey: eventID)
+            if case let .event(event) = item,
+               let eventID = event.id.eventID {
+                timelineItemsDictionary.updateValue(pinnedEventStringBuilder.buildAttributedString(for: event) ?? AttributedString(L10n.commonUnsupportedEvent),
+                                                    forKey: eventID)
             }
         }
         
-        state.pinnedEventsState.pinnedEvents = timelineItemsDictionary
+        state.pinnedEventsState.pinnedEventsContent = timelineItemsDictionary
     }
     
     private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
@@ -879,7 +879,6 @@ extension RoomScreenViewModel {
     static let mock = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room")),
                                           focussedEventID: nil,
                                           timelineController: MockRoomTimelineController(),
-                                          pinnedTimelineBuilder: .mock(),
                                           mediaProvider: MockMediaProvider(),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

@@ -18,10 +18,17 @@ import Foundation
 import MatrixRustSDK
 
 struct RoomMessageEventStringBuilder {
-    let attributedStringBuilder: AttributedStringBuilderProtocol
+    enum Prefix {
+        case senderName
+        case mediaType
+        case none
+    }
     
-    func buildAttributedString(for messageType: MessageType, senderDisplayName: String, prefixWithSenderName: Bool) -> AttributedString {
-        let message: String
+    let attributedStringBuilder: AttributedStringBuilderProtocol
+    let prefix: Prefix
+    
+    func buildAttributedString(for messageType: MessageType, senderDisplayName: String) -> AttributedString {
+        let message: AttributedString
         switch messageType {
         // Message types that don't need a prefix.
         case .emote(content: let content):
@@ -33,46 +40,54 @@ struct RoomMessageEventStringBuilder {
         // Message types that should be prefixed with the sender's name.
         case .audio(content: let content):
             let isVoiceMessage = content.voice != nil
-            message = isVoiceMessage ? L10n.commonVoiceMessage : L10n.commonAudio
+            var content = AttributedString(isVoiceMessage ? L10n.commonVoiceMessage : L10n.commonAudio)
+            if prefix == .mediaType {
+                content.bold()
+            }
+            message = content
         case .image(let content):
-            message = "\(L10n.commonImage) - \(content.body)"
+            message = prefix == .mediaType ? prefix(AttributedString(content.body), with: L10n.commonImage) : AttributedString("\(L10n.commonImage) - \(content.body)")
         case .video(let content):
-            message = "\(L10n.commonVideo) - \(content.body)"
+            message = prefix == .mediaType ? prefix(AttributedString(content.body), with: L10n.commonVideo) : AttributedString("\(L10n.commonVideo) - \(content.body)")
         case .file(let content):
-            message = "\(L10n.commonFile) - \(content.body)"
+            message = prefix == .mediaType ? prefix(AttributedString(content.body), with: L10n.commonFile) : AttributedString("\(L10n.commonFile) - \(content.body)")
         case .location:
-            message = L10n.commonSharedLocation
+            var content = AttributedString(L10n.commonSharedLocation)
+            if prefix == .mediaType {
+                content.bold()
+            }
+            message = content
         case .notice(content: let content):
             if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
-                message = String(attributedMessage.characters)
+                message = attributedMessage
             } else {
-                message = content.body
+                message = AttributedString(content.body)
             }
         case .text(content: let content):
             if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
-                message = String(attributedMessage.characters)
+                message = attributedMessage
             } else {
-                message = content.body
+                message = AttributedString(content.body)
             }
         case .other(_, let body):
-            message = body
+            message = AttributedString(body)
         }
 
-        if prefixWithSenderName {
+        if prefix == .senderName {
             return prefix(message, with: senderDisplayName)
         } else {
-            return AttributedString(message)
+            return message
         }
     }
     
-    private func prefix(_ eventSummary: String, with senderDisplayName: String) -> AttributedString {
-        let attributedEventSummary = AttributedString(eventSummary.trimmingCharacters(in: .whitespacesAndNewlines))
+    private func prefix(_ eventSummary: AttributedString, with textToBold: String) -> AttributedString {
+        let attributedEventSummary = AttributedString(eventSummary.string.trimmingCharacters(in: .whitespacesAndNewlines))
         
-        var attributedSenderDisplayName = AttributedString(senderDisplayName)
-        attributedSenderDisplayName.bold()
+        var attributedPrefix = AttributedString(textToBold + ":")
+        attributedPrefix.bold()
         
         // Don't include the message body in the markdown otherwise it makes tappable links.
-        return attributedSenderDisplayName + ": " + attributedEventSummary
+        return attributedPrefix + " " + attributedEventSummary
     }
     
     private func attributedMessageFrom(formattedBody: FormattedBody?) -> AttributedString? {
