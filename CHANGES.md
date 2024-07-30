@@ -1,3 +1,23 @@
+## Changes in 1.7.2 (2024-07-30)
+
+### What's Changed
+
+🙌 Improvements
+* Add the inviter to `JoinRoomScreen` when it's an invite. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3093
+
+🐛 Bugfixes
+* Fix a potential crash when logging out. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3090
+
+🚧 In development 🚧
+* Pin/Unpin Logic by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3084
+
+Others
+* Update dependency fastlane to v2.222.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3097
+* Refactor TimelineItemSendInfo out of the styler. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3100
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.7.1...1.7.2
+
 ## Changes in 1.7.1 (2024-07-26)
 
 ### What's Changed
