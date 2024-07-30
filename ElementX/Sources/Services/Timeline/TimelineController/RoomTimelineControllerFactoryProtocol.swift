@@ -19,9 +19,11 @@ import Foundation
 @MainActor
 protocol RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
-                                     timelineProxy: TimelineProxyProtocol,
                                      initialFocussedEventID: String?,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol
+    
+    func buildPinnedEventsTimelineController(roomProxy: RoomProxyProtocol,
+                                             timelineItemFactory: RoomTimelineItemFactoryProtocol) async -> RoomTimelineControllerProtocol?
 }
 
 // sourcery: AutoMockable

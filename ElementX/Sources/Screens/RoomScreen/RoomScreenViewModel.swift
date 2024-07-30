@@ -31,7 +31,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private let roomProxy: RoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
-    private let pinnedEventsTimelineController: RoomTimelineControllerProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
@@ -49,11 +48,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
+    
+    private var pinnedEventsTimelineController: RoomTimelineControllerProtocol?
 
     init(roomProxy: RoomProxyProtocol,
          focussedEventID: String? = nil,
          timelineController: RoomTimelineControllerProtocol,
-         pinnedEventsTimelineController: RoomTimelineControllerProtocol,
+         pinnedTimelineBuilder: PinnedEventsTimelineBuilder,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
@@ -62,7 +63,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          appSettings: AppSettings,
          analyticsService: AnalyticsService) {
         self.timelineController = timelineController
-        self.pinnedEventsTimelineController = pinnedEventsTimelineController
         self.mediaPlayerProvider = mediaPlayerProvider
         self.roomProxy = roomProxy
         self.appSettings = appSettings
@@ -114,7 +114,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         buildTimelineViews(timelineItems: timelineController.timelineItems)
-        buildPinnedEventsContent(timelineItems: timelineController.timelineItems)
         
         updateMembers(roomProxy.membersPublisher.value)
 
@@ -127,6 +126,28 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if case let .success(permission) = await roomProxy.canUserJoinCall(userID: userID) {
                 state.canJoinCall = permission
             }
+        }
+        
+        Task {
+            guard let pinnedEventsTimelineController = await pinnedTimelineBuilder.buildPinnedEventsTimelineController(roomProxy: roomProxy) else {
+                return
+            }
+            
+            buildPinnedEventsContent(timelineItems: pinnedEventsTimelineController.timelineItems)
+            
+            pinnedEventsTimelineController.callbacks
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] callback in
+                    guard let self else { return }
+
+                    switch callback {
+                    case .updatedTimelineItems(let updatedItems, _):
+                        buildPinnedEventsContent(timelineItems: updatedItems)
+                    default:
+                        break
+                    }
+                }
+                .store(in: &cancellables)
         }
     }
     
@@ -407,20 +428,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 }
             }
             .store(in: &cancellables)
-        
-        pinnedEventsTimelineController.callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                guard let self else { return }
-
-                switch callback {
-                case .updatedTimelineItems(let updatedItems, _):
-                    buildPinnedEventsContent(timelineItems: updatedItems)
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
 
         let roomInfoSubscription = roomProxy
             .actionsPublisher
@@ -436,20 +443,20 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-//        Task { [weak self] in
-//            guard let self else {
-//                return
-//            }
-//            // If the subscription has sent a value before the Task has started it might be lost, so before entering the loop we always do an update.
-//            await state.pinnedEventsState.pinnedEventIDs = .init(roomProxy.pinnedEventIDs)
-//            for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
-//                guard !Task.isCancelled else {
-//                    return
-//                }
-//                await state.pinnedEventsState.pinnedEventIDs = .init(roomProxy.pinnedEventIDs)
-//            }
-//        }
-//        .store(in: &cancellables)
+        Task { [weak self] in
+            guard let self else {
+                return
+            }
+            // If the subscription has sent a value before the Task has started it might be lost, so before entering the loop we always do an update.
+            await state.pinnedEventIDs = roomProxy.pinnedEventIDs
+            for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
+                guard !Task.isCancelled else {
+                    return
+                }
+                await state.pinnedEventIDs = roomProxy.pinnedEventIDs
+            }
+        }
+        .store(in: &cancellables)
         
         appSettings.$sharePresence
             .weakAssign(to: \.state.showReadReceipts, on: self)
@@ -872,7 +879,7 @@ extension RoomScreenViewModel {
     static let mock = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room")),
                                           focussedEventID: nil,
                                           timelineController: MockRoomTimelineController(),
-                                          pinnedEventsTimelineController: MockRoomTimelineController(),
+                                          pinnedTimelineBuilder: .mock(),
                                           mediaProvider: MockMediaProvider(),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

@@ -83,7 +83,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private var timelineController: RoomTimelineControllerProtocol?
-    private var pinnedItemsTimelineController: RoomTimelineControllerProtocol?
     
     init(roomID: String,
          userSession: UserSessionProtocol,
@@ -546,13 +545,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
-                                                                                           timelineProxy: roomProxy.timeline,
                                                                                            initialFocussedEventID: focussedEventID,
                                                                                            timelineItemFactory: timelineItemFactory)
         self.timelineController = timelineController
-        
-        let pinnedItemsTimelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy, timelineProxy: roomProxy.pinnedEventsTimeline, initialFocussedEventID: nil, timelineItemFactory: timelineItemFactory)
-        self.pinnedItemsTimelineController = pinnedItemsTimelineController
         
         analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
         
@@ -563,7 +558,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          focussedEventID: focussedEventID,
                                                          timelineController: timelineController,
-                                                         pinnedEventsTimelineController: pinnedItemsTimelineController,
+                                                         pinnedTimelineBuilder: PinnedEventsTimelineBuilder(timelineFactory: roomTimelineControllerFactory, timelineItemsFactory: timelineItemFactory),
                                                          mediaProvider: userSession.mediaProvider,
                                                          mediaPlayerProvider: MediaPlayerProvider(),
                                                          voiceMessageMediaManager: userSession.voiceMessageMediaManager,
@@ -1045,7 +1040,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
         let roomTimelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
-                                                                                               timelineProxy: roomProxy.timeline,
                                                                                                initialFocussedEventID: nil,
                                                                                                timelineItemFactory: timelineItemFactory)
         
@@ -1452,5 +1446,26 @@ private extension Result {
         case .failure:
             return true
         }
+    }
+}
+
+struct PinnedEventsTimelineBuilder {
+    private let timelineFactory: RoomTimelineControllerFactoryProtocol
+    private let timelineItemsFactory: RoomTimelineItemFactoryProtocol
+    
+    init(timelineFactory: RoomTimelineControllerFactoryProtocol,
+         timelineItemsFactory: RoomTimelineItemFactoryProtocol) {
+        self.timelineFactory = timelineFactory
+        self.timelineItemsFactory = timelineItemsFactory
+    }
+    
+    func buildPinnedEventsTimelineController(roomProxy: RoomProxyProtocol) async -> RoomTimelineControllerProtocol? {
+        await timelineFactory.buildPinnedEventsTimelineController(roomProxy: roomProxy, timelineItemFactory: timelineItemsFactory)
+    }
+    
+    @MainActor
+    static func mock() -> PinnedEventsTimelineBuilder {
+        PinnedEventsTimelineBuilder(timelineFactory: RoomTimelineControllerFactoryMock(configuration: .init()),
+                                    timelineItemsFactory: RoomTimelineItemFactory(userID: UUID().uuidString, attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()), stateEventStringBuilder: RoomStateEventStringBuilder(userID: UUID().uuidString)))
     }
 }

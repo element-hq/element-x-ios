@@ -38,7 +38,7 @@ protocol RoomProxyProtocol {
     var isSpace: Bool { get }
     var isEncrypted: Bool { get }
     var isFavourite: Bool { get async }
-    var pinnedEventIDs: [String] { get async }
+    var pinnedEventIDs: Set<String> { get async }
     var membership: Membership { get }
     var inviter: RoomMemberProxyProtocol? { get async }
     var hasOngoingCall: Bool { get }
@@ -66,7 +66,7 @@ protocol RoomProxyProtocol {
     
     var timeline: TimelineProxyProtocol { get }
     
-    var pinnedEventsTimeline: TimelineProxyProtocol { get }
+    var pinnedEventsTimeline: TimelineProxyProtocol? { get async }
     
     func subscribeForUpdates() async
     

@@ -24,10 +24,12 @@ extension RoomTimelineControllerFactoryMock {
     convenience init(configuration: RoomTimelineControllerFactoryMockConfiguration) {
         self.init()
         
-        buildRoomTimelineControllerRoomProxyTimelineProxyInitialFocussedEventIDTimelineItemFactoryReturnValue = configuration.timelineController ?? {
+        buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReturnValue = configuration.timelineController ?? {
             let timelineController = MockRoomTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
             return timelineController
         }()
+        
+        buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryReturnValue = nil
     }
 }

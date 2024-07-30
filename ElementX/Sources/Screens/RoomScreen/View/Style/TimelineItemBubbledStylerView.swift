@@ -145,7 +145,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                                               canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
                                                               canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
                                                               canCurrentUserPin: context.viewState.canCurrentUserPin,
-                                                              pinnedEventIDs: context.viewState.pinnedEventsState.pinnedEvents.keys.set,
+                                                              pinnedEventIDs: context.viewState.pinnedEventIDs,
                                                               isDM: context.viewState.isEncryptedOneToOneRoom,
                                                               isViewSourceEnabled: context.viewState.isViewSourceEnabled)
                 TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in

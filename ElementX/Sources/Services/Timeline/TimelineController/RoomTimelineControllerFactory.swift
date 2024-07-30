@@ -18,13 +18,20 @@ import Foundation
 
 struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
-                                     timelineProxy: TimelineProxyProtocol,
                                      initialFocussedEventID: String?,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol {
         RoomTimelineController(roomProxy: roomProxy,
-                               timelineProxy: timelineProxy,
+                               timelineProxy: roomProxy.timeline,
                                initialFocussedEventID: initialFocussedEventID,
                                timelineItemFactory: timelineItemFactory,
                                appSettings: ServiceLocator.shared.settings)
+    }
+    
+    func buildPinnedEventsTimelineController(roomProxy: RoomProxyProtocol,
+                                             timelineItemFactory: RoomTimelineItemFactoryProtocol) async -> RoomTimelineControllerProtocol? {
+        guard let pinnedEventsTimeline = await roomProxy.pinnedEventsTimeline else {
+            return nil
+        }
+        return RoomTimelineController(roomProxy: roomProxy, timelineProxy: pinnedEventsTimeline, initialFocussedEventID: nil, timelineItemFactory: timelineItemFactory, appSettings: ServiceLocator.shared.settings)
     }
 }

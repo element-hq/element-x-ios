@@ -69,7 +69,7 @@ struct RoomScreen: View {
                                                              canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
                                                              canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
                                                              canCurrentUserPin: context.viewState.canCurrentUserPin,
-                                                             pinnedEventIDs: context.viewState.pinnedEventsState.pinnedEvents.keys.set,
+                                                             pinnedEventIDs: context.viewState.pinnedEventIDs,
                                                              isDM: context.viewState.isEncryptedOneToOneRoom,
                                                              isViewSourceEnabled: context.viewState.isViewSourceEnabled).makeActions()
                 if let actions {
@@ -209,7 +209,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                                               name: "Preview room",
                                                                               hasOngoingCall: true)),
                                                timelineController: MockRoomTimelineController(),
-                                               pinnedEventsTimelineController: MockRoomTimelineController(),
+                                               pinnedTimelineBuilder: .mock(),
                                                mediaProvider: MockMediaProvider(),
                                                mediaPlayerProvider: MediaPlayerProviderMock(),
                                                voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

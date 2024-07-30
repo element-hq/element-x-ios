@@ -23,7 +23,24 @@ class RoomProxy: RoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
-    let pinnedEventsTimeline: TimelineProxyProtocol
+    private var innerPinnedEventsTimeline: TimelineProxyProtocol?
+    var pinnedEventsTimeline: TimelineProxyProtocol? {
+        get async {
+            if let innerPinnedEventsTimeline {
+                return innerPinnedEventsTimeline
+            } else {
+                do {
+                    let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil), isLive: false)
+                    await timeline.subscribeForUpdates()
+                    innerPinnedEventsTimeline = timeline
+                    return timeline
+                } catch {
+                    MXLog.error("Failed creating pinned events timeline with error: \(error)")
+                    return nil
+                }
+            }
+        }
+    }
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
@@ -93,9 +110,12 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    var pinnedEventIDs: [String] {
+    var pinnedEventIDs: Set<String> {
         get async {
-            await (try? room.roomInfo().pinnedEventIds) ?? []
+            guard let pinnedEventIDs = try? await room.roomInfo().pinnedEventIds else {
+                return []
+            }
+            return .init(pinnedEventIDs)
         }
     }
     
@@ -138,7 +158,6 @@ class RoomProxy: RoomProxyProtocol {
         
         do {
             timeline = try await TimelineProxy(timeline: room.timeline(), isLive: true)
-            pinnedEventsTimeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: "pinned_events_timeline"), isLive: false)
         } catch {
             MXLog.error("Failed creating timeline with error: \(error)")
             return nil
@@ -162,7 +181,6 @@ class RoomProxy: RoomProxyProtocol {
         roomListItem.subscribe(settings: settings)
         
         await timeline.subscribeForUpdates()
-        await pinnedEventsTimeline.subscribeForUpdates()
         
         subscribeToRoomInfoUpdates()
         

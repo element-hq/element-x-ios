@@ -172,6 +172,9 @@ struct RoomScreenViewState: BindableState {
     var isPinningEnabled = false
     var lastScrollDirection: ScrollDirection?
     
+    // The `pinnedEventIDs` is used only to determine if an item can be pinned or not since it does not depend on the pinned events timeline, but on the room info update which is faster
+    var pinnedEventIDs: Set<String> = []
+    // This is used to controler the banner
     var pinnedEventsState = PinnedEventsState()
     
     var shouldShowPinBanner: Bool {
@@ -312,10 +315,11 @@ struct PinnedEventsState: Equatable {
     var selectedPinEventID: String?
     
     var selectedPinIndex: Int {
+        let defaultValue = pinnedEvents.isEmpty ? 0 : pinnedEvents.count - 1
         guard let selectedPinEventID else {
-            return 0
+            return defaultValue
         }
-        return pinnedEvents.keys.firstIndex(of: selectedPinEventID) ?? 0
+        return pinnedEvents.keys.firstIndex(of: selectedPinEventID) ?? defaultValue
     }
     
     // For now we show the event ID as the content, but is just until we have a way to get the real content

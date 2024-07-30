@@ -29,7 +29,7 @@ struct RoomProxyMockConfiguration {
     var isEncrypted = true
     var hasOngoingCall = true
     var canonicalAlias: String?
-    var pinnedEventIDs: [String] = []
+    var pinnedEventIDs: Set<String> = []
     
     var timelineStartReached = false
     
