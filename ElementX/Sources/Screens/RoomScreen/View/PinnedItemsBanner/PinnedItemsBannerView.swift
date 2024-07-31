@@ -23,16 +23,6 @@ struct PinnedItemsBannerView: View {
     let onMainButtonTap: () -> Void
     let onViewAllButtonTap: () -> Void
     
-    private var bannerIndicatorDescription: AttributedString {
-        let index = pinnedEventsState.selectedPinIndex + 1
-        let boldPlaceholder = "{bold}"
-        var finalString = AttributedString(L10n.screenRoomPinnedBannerIndicatorDescription(boldPlaceholder))
-        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, pinnedEventsState.pinnedEventContents.count))
-        boldString.bold()
-        finalString.replace(boldPlaceholder, with: boldString)
-        return finalString
-    }
-    
     var body: some View {
         HStack(spacing: 0) {
             mainButton
@@ -73,7 +63,7 @@ struct PinnedItemsBannerView: View {
     
     private var content: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(bannerIndicatorDescription)
+            Text(pinnedEventsState.bannerIndicatorDescription)
                 .font(.compound.bodySM)
                 .foregroundColor(.compound.textActionAccent)
                 .lineLimit(1)
@@ -89,7 +79,10 @@ struct PinnedItemsBannerView_Previews: PreviewProvider, TestablePreview {
     static var attributedContent: AttributedString {
         var boldPart = AttributedString("Image:")
         boldPart.bold()
-        return boldPart + " content.png"
+        var final = boldPart + " content.png"
+        // This should be ignored when presented
+        final.font = .headline
+        return final
     }
     
     static var previews: some View {

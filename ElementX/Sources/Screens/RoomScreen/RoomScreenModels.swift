@@ -321,12 +321,23 @@ struct PinnedEventsState: Equatable {
         return pinnedEventContents.keys.firstIndex(of: selectedPinEventID) ?? defaultValue
     }
     
-    // For now we show the event ID as the content, but is just until we have a way to get the real content
     var selectedPinContent: AttributedString {
-        guard let selectedPinEventID else {
+        guard let selectedPinEventID,
+              var content = pinnedEventContents[selectedPinEventID] else {
             return AttributedString()
         }
-        return pinnedEventContents[selectedPinEventID] ?? AttributedString()
+        content.font = .compound.bodyMD
+        return content
+    }
+    
+    var bannerIndicatorDescription: AttributedString {
+        let index = selectedPinIndex + 1
+        let boldPlaceholder = "{bold}"
+        var finalString = AttributedString(L10n.screenRoomPinnedBannerIndicatorDescription(boldPlaceholder))
+        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, pinnedEventContents.count))
+        boldString.bold()
+        finalString.replace(boldPlaceholder, with: boldString)
+        return finalString
     }
     
     mutating func nextPin() {
