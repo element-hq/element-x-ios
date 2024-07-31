@@ -49,9 +49,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
-    
-    // Needs to be stored to allow the provider to keep sending updates.
-    private var pinnedEventsTimelineController: RoomTimelineControllerProtocol?
 
     init(roomProxy: RoomProxyProtocol,
          focussedEventID: String? = nil,
@@ -135,17 +132,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return
             }
             
-            buildPinnedEventsContent(timelineItems: pinnedEventsTimelineProvider.itemProxies)
+            buildPinnedEventContent(timelineItems: pinnedEventsTimelineProvider.itemProxies)
             
             pinnedEventsTimelineProvider.updatePublisher
+                // When pinning or unpinning an item, the timeline might return empty for a short while, so we need to debounce it to prevent weird UI behaviours like the banner disappearing
                 .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
                 .sink { [weak self] updatedItems, _ in
                     guard let self else { return }
-                    buildPinnedEventsContent(timelineItems: updatedItems)
+                    buildPinnedEventContent(timelineItems: updatedItems)
                 }
                 .store(in: &cancellables)
-            
-            self.pinnedEventsTimelineController = pinnedEventsTimelineController
         }
     }
     
@@ -219,7 +215,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { state.timelineViewState.isSwitchingTimelines = false }
         case let .hasScrolled(direction):
             state.lastScrollDirection = direction
-        case .tappedPinBanner:
+        case .tappedPinnedEventsBanner:
             if let eventID = state.pinnedEventsState.selectedPinEventID {
                 Task { await focusOnEvent(eventID: eventID) }
             }
@@ -658,19 +654,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Timeline Item Building
     
-    private func buildPinnedEventsContent(timelineItems: [TimelineItemProxy]) {
-        var timelineItemsDictionary = OrderedDictionary<String, AttributedString>()
+    private func buildPinnedEventContent(timelineItems: [TimelineItemProxy]) {
+        var pinnedEventContents = OrderedDictionary<String, AttributedString>()
         
         for item in timelineItems {
             // Only remote events are pinned
             if case let .event(event) = item,
                let eventID = event.id.eventID {
-                timelineItemsDictionary.updateValue(pinnedEventStringBuilder.buildAttributedString(for: event) ?? AttributedString(L10n.commonUnsupportedEvent),
-                                                    forKey: eventID)
+                pinnedEventContents.updateValue(pinnedEventStringBuilder.buildAttributedString(for: event) ?? AttributedString(L10n.commonUnsupportedEvent),
+                                                forKey: eventID)
             }
         }
         
-        state.pinnedEventsState.pinnedEventsContent = timelineItemsDictionary
+        state.pinnedEventsState.pinnedEventContents = pinnedEventContents
     }
     
     private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
