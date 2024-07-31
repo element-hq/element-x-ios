@@ -196,6 +196,8 @@ internal enum L10n {
   internal static var actionReportContent: String { return L10n.tr("Localizable", "action_report_content") }
   /// Reset
   internal static var actionReset: String { return L10n.tr("Localizable", "action_reset") }
+  /// Reset identity
+  internal static var actionResetIdentity: String { return L10n.tr("Localizable", "action_reset_identity") }
   /// Retry
   internal static var actionRetry: String { return L10n.tr("Localizable", "action_retry") }
   /// Retry decryption
@@ -1385,6 +1387,18 @@ internal enum L10n {
   internal static var screenReportContentExplanation: String { return L10n.tr("Localizable", "screen_report_content_explanation") }
   /// Reason for reporting this content
   internal static var screenReportContentHint: String { return L10n.tr("Localizable", "screen_report_content_hint") }
+  /// Yes, reset now
+  internal static var screenResetEncryptionConfirmationAlertAction: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_action") }
+  /// This process is irreversible.
+  internal static var screenResetEncryptionConfirmationAlertSubtitle: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_subtitle") }
+  /// Are you sure you want to reset your encryption?
+  internal static var screenResetEncryptionConfirmationAlertTitle: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_title") }
+  /// Enter...
+  internal static var screenResetEncryptionPasswordPlaceholder: String { return L10n.tr("Localizable", "screen_reset_encryption_password_placeholder") }
+  /// Confirm that you want to reset your encryption.
+  internal static var screenResetEncryptionPasswordSubtitle: String { return L10n.tr("Localizable", "screen_reset_encryption_password_subtitle") }
+  /// Enter your account password to continue
+  internal static var screenResetEncryptionPasswordTitle: String { return L10n.tr("Localizable", "screen_reset_encryption_password_title") }
   /// Failed to resolve room alias.
   internal static var screenRoomAliasResolverResolveAliasFailure: String { return L10n.tr("Localizable", "screen_room_alias_resolver_resolve_alias_failure") }
   /// Camera

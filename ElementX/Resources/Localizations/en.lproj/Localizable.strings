@@ -81,6 +81,7 @@
 "action_report_bug" = "Report bug";
 "action_report_content" = "Report content";
 "action_reset" = "Reset";
+"action_reset_identity" = "Reset identity";
 "action_retry" = "Retry";
 "action_retry_decryption" = "Retry decryption";
 "action_save" = "Save";
@@ -578,6 +579,12 @@
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
 "screen_report_content_explanation" = "This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.";
 "screen_report_content_hint" = "Reason for reporting this content";
+"screen_reset_encryption_confirmation_alert_action" = "Yes, reset now";
+"screen_reset_encryption_confirmation_alert_subtitle" = "This process is irreversible.";
+"screen_reset_encryption_confirmation_alert_title" = "Are you sure you want to reset your encryption?";
+"screen_reset_encryption_password_placeholder" = "Enter...";
+"screen_reset_encryption_password_subtitle" = "Confirm that you want to reset your encryption.";
+"screen_reset_encryption_password_title" = "Enter your account password to continue";
 "screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
 "screen_room_attachment_source_camera" = "Camera";
 "screen_room_attachment_source_camera_video" = "Record video";
