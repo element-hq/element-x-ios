@@ -190,8 +190,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func recentConversationCounterparts() async -> [UserProfileProxy]
     
-    // MARK: - Encryption Info
+    // MARK: - Crypto
     
     func ed25519Base64() async -> String?
     func curve25519Base64() async -> String?
+    
+    func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError>
 }
