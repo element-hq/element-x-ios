@@ -94,7 +94,7 @@ struct RoomEventStringBuilder {
     static func pinnedEventStringBuilder(userID: String) -> Self {
         RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID,
                                                               shouldDisambiguateDisplayNames: false),
-                               messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()),
+                               messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "pinnedEvents", mentionBuilder: PlainMentionBuilder()),
                                                                 prefix: .mediaType),
                                shouldDisambiguateDisplayNames: false,
                                shouldPrefixSenderName: false)
