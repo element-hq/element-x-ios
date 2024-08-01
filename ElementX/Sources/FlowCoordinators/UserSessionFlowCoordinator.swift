@@ -115,6 +115,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                               notificationManager: notificationManager,
                                                               navigationStackCoordinator: detailNavigationStackCoordinator,
                                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                              windowManager: appMediator.windowManager,
                                                               isNewLogin: isNewLogin)
         
         setupStateMachine()

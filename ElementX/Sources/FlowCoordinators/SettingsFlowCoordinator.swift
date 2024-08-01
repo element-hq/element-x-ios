@@ -153,9 +153,18 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentSecureBackupScreen(animated: Bool) {
         let coordinator = SecureBackupScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
-                                                                          secureBackupController: parameters.userSession.clientProxy.secureBackupController,
+                                                                          clientProxy: parameters.userSession.clientProxy,
                                                                           navigationStackCoordinator: navigationStackCoordinator,
-                                                                          userIndicatorController: parameters.userIndicatorController))
+                                                                          userIndicatorController: parameters.userIndicatorController,
+                                                                          mainWindow: parameters.windowManager.mainWindow))
+        
+        coordinator.actions.sink { [weak self] action in
+            switch action {
+            case .requestOIDCAuthorisation(let url):
+                self?.presentAccountManagementURL(url)
+            }
+        }
+        .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator, animated: animated)
     }

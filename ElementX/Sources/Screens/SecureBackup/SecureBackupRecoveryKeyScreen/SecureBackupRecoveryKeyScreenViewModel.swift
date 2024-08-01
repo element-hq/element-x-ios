@@ -40,13 +40,12 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
         
         secureBackupController.recoveryState
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak userIndicatorController] state in
-                let loadingIndicatorIdentifier = "SecureBackupRecoveryKeyScreenLoading"
+            .sink(receiveValue: { [weak self] state in
                 switch state {
                 case .settingUp:
-                    userIndicatorController?.submitIndicator(.init(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+                    self?.showLoadingIndicator()
                 default:
-                    userIndicatorController?.retractIndicatorWithId(loadingIndicatorIdentifier)
+                    self?.hideLoadingIndicator()
                 }
             })
             .store(in: &cancellables)
@@ -67,6 +66,8 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                     MXLog.error("Failed generating recovery key with error: \(error)")
                     state.bindings.alertInfo = .init(id: .init())
                 }
+                
+                hideLoadingIndicator()
             }
         case .copyKey:
             UIPasteboard.general.string = state.recoveryKey
@@ -76,8 +77,7 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
             state.doneButtonEnabled = true
         case .confirmKey:
             Task {
-                let loadingIndicatorIdentifier = "SecureBackupRecoveryKeyScreen"
-                userIndicatorController.submitIndicator(.init(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+                showLoadingIndicator()
                 
                 switch await secureBackupController.confirmRecoveryKey(state.bindings.confirmationRecoveryKey) {
                 case .success:
@@ -87,7 +87,7 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                     state.bindings.alertInfo = .init(id: .init())
                 }
                 
-                userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+                hideLoadingIndicator()
             }
         case .cancel:
             actionsSubject.send(.cancel)
@@ -100,9 +100,22 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                                                  guard let self else { return }
                                                  actionsSubject.send(.done(mode: context.viewState.mode))
                                              }))
-        case .resetKey:
-            actionsSubject.send(.showResetKeyInfo)
+        case .resetEncryption:
+            actionsSubject.send(.resetEncryption)
         }
+    }
+    
+    private static let loadingIndicatorIdentifier = "\(SecureBackupRecoveryKeyScreenViewModel.self)-Loading"
+    
+    private func showLoadingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }
 

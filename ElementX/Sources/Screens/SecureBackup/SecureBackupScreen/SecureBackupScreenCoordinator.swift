@@ -19,20 +19,31 @@ import SwiftUI
 
 struct SecureBackupScreenCoordinatorParameters {
     let appSettings: AppSettings
-    let secureBackupController: SecureBackupControllerProtocol
+    let clientProxy: ClientProxyProtocol
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userIndicatorController: UserIndicatorControllerProtocol
+    let mainWindow: UIWindow
+}
+
+enum SecureBackupScreenCoordinatorAction {
+    case requestOIDCAuthorisation(URL)
 }
 
 final class SecureBackupScreenCoordinator: CoordinatorProtocol {
     private let parameters: SecureBackupScreenCoordinatorParameters
     private var viewModel: SecureBackupScreenViewModelProtocol
+    
     private var cancellables = Set<AnyCancellable>()
+    
+    private let actionsSubject: PassthroughSubject<SecureBackupScreenCoordinatorAction, Never> = .init()
+    var actions: AnyPublisher<SecureBackupScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: SecureBackupScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = SecureBackupScreenViewModel(secureBackupController: parameters.secureBackupController,
+        viewModel = SecureBackupScreenViewModel(secureBackupController: parameters.clientProxy.secureBackupController,
                                                 userIndicatorController: parameters.userIndicatorController,
                                                 chatBackupDetailsURL: parameters.appSettings.chatBackupDetailsURL)
     }
@@ -43,9 +54,9 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
             
             switch action {
             case .recoveryKey:
-                let navigationStackCoordinator = NavigationStackCoordinator()
+                let recoveryNavigationStackCoordinator = NavigationStackCoordinator()
                 
-                let recoveryKeyCoordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: .init(secureBackupController: parameters.secureBackupController,
+                let recoveryKeyCoordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: .init(secureBackupController: parameters.clientProxy.secureBackupController,
                                                                                                         userIndicatorController: parameters.userIndicatorController,
                                                                                                         isModallyPresented: true))
                 
@@ -63,19 +74,19 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
                     case .recoveryFixed:
                         showSuccessIndicator(title: L10n.screenRecoveryKeyConfirmSuccess)
                         parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
-                    case .showResetKeyInfo:
-                        showResetRecoveryKeyScreen(navigationStackCoordinator: navigationStackCoordinator)
+                    case .resetEncryption:
+                        showEncryptionReset(recoveryNavigationStackCoordinator: recoveryNavigationStackCoordinator)
                     }
                 }
                 .store(in: &cancellables)
                 
-                navigationStackCoordinator.setRootCoordinator(recoveryKeyCoordinator, animated: true)
+                recoveryNavigationStackCoordinator.setRootCoordinator(recoveryKeyCoordinator, animated: true)
                 
-                parameters.navigationStackCoordinator?.setSheetCoordinator(navigationStackCoordinator)
+                parameters.navigationStackCoordinator?.setSheetCoordinator(recoveryNavigationStackCoordinator)
             case .keyBackup:
                 let navigationStackCoordinator = NavigationStackCoordinator()
                 
-                let keyBackupCoordinator = SecureBackupKeyBackupScreenCoordinator(parameters: .init(secureBackupController: parameters.secureBackupController,
+                let keyBackupCoordinator = SecureBackupKeyBackupScreenCoordinator(parameters: .init(secureBackupController: parameters.clientProxy.secureBackupController,
                                                                                                     userIndicatorController: parameters.userIndicatorController))
                 
                 keyBackupCoordinator.actions.sink { [weak self] action in
@@ -108,15 +119,30 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
                                                                  persistent: false))
     }
     
-    private func showResetRecoveryKeyScreen(navigationStackCoordinator: NavigationStackCoordinator) {
-        let coordinator = ResetRecoveryKeyScreenCoordinator()
-        coordinator.actionsPublisher.sink { action in
+    private func showEncryptionReset(recoveryNavigationStackCoordinator: NavigationStackCoordinator) {
+        let resetNavigationStackCoordinator = NavigationStackCoordinator()
+        
+        let coordinator = EncryptionResetScreenCoordinator(parameters: .init(clientProxy: parameters.clientProxy,
+                                                                             navigationStackCoordinator: resetNavigationStackCoordinator,
+                                                                             userIndicatorController: parameters.userIndicatorController))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
             switch action {
             case .cancel:
-                navigationStackCoordinator.setSheetCoordinator(nil)
+                recoveryNavigationStackCoordinator.setSheetCoordinator(nil)
+            case .requestOIDCAuthorisation(let url):
+                actionsSubject.send(.requestOIDCAuthorisation(url))
+            case .resetFinished:
+                parameters.navigationStackCoordinator?.setSheetCoordinator(nil) // Dismiss the recovery screen
+                recoveryNavigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)
-        navigationStackCoordinator.setSheetCoordinator(coordinator)
+        
+        resetNavigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        recoveryNavigationStackCoordinator.setSheetCoordinator(resetNavigationStackCoordinator)
     }
 }

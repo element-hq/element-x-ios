@@ -26,6 +26,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let notificationManager: NotificationManagerProtocol
     private let rootNavigationStackCoordinator: NavigationStackCoordinator
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let windowManager: WindowManagerProtocol
     private let isNewLogin: Bool
     
     private var navigationStackCoordinator: NavigationStackCoordinator!
@@ -57,6 +58,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
          notificationManager: NotificationManagerProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          userIndicatorController: UserIndicatorControllerProtocol,
+         windowManager: WindowManagerProtocol,
          isNewLogin: Bool) {
         self.userSession = userSession
         self.appLockService = appLockService
@@ -64,6 +66,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         self.appSettings = appSettings
         self.notificationManager = notificationManager
         self.userIndicatorController = userIndicatorController
+        self.windowManager = windowManager
         self.isNewLogin = isNewLogin
         
         rootNavigationStackCoordinator = navigationStackCoordinator
@@ -215,7 +218,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 appSettings.hasRunIdentityConfirmationOnboarding = true
                 stateMachine.tryEvent(.next)
             case .reset:
-                presentResetRecoveryKeyScreen()
+                presentEncryptionResetScreen()
             }
         }
         .store(in: &cancellables)
@@ -262,8 +265,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 case .recoveryFixed:
                     appSettings.hasRunIdentityConfirmationOnboarding = true
                     stateMachine.tryEvent(.next)
-                case .showResetKeyInfo:
-                    presentResetRecoveryKeyScreen()
+                case .resetEncryption:
+                    presentEncryptionResetScreen()
                 default:
                     MXLog.error("Unexpected recovery action: \(action)")
                 }
@@ -273,16 +276,32 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         presentCoordinator(coordinator)
     }
     
-    private func presentResetRecoveryKeyScreen() {
-        let coordinator = ResetRecoveryKeyScreenCoordinator()
+    private func presentEncryptionResetScreen() {
+        let resetNavigationStackCoordinator = NavigationStackCoordinator()
+        
+        let coordinator = EncryptionResetScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
+                                                                             navigationStackCoordinator: resetNavigationStackCoordinator,
+                                                                             userIndicatorController: userIndicatorController))
+        
         coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
             switch action {
             case .cancel:
-                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            case .requestOIDCAuthorisation(let url):
+                presentOIDCAuthorisationScreen(url: url)
+            case .resetFinished:
+                appSettings.hasRunIdentityConfirmationOnboarding = true
+                stateMachine.tryEvent(.next)
+                navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)
-        navigationStackCoordinator.setSheetCoordinator(coordinator)
+        
+        resetNavigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationStackCoordinator.setSheetCoordinator(resetNavigationStackCoordinator)
     }
     
     private func presentIdentityConfirmedScreen() {
@@ -360,5 +379,13 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         } else {
             navigationStackCoordinator.push(coordinator)
         }
+    }
+    
+    private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
+    private func presentOIDCAuthorisationScreen(url: URL) {
+        // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
+        // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
+        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url, presentationAnchor: windowManager.mainWindow)
+        accountSettingsPresenter?.start()
     }
 }
