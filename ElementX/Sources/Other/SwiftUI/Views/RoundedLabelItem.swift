@@ -58,12 +58,11 @@ struct RoundedLabelItem<Icon: View>: View {
 
 private struct CheckmarkLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 16) {
+        HStack(alignment: .top, spacing: 16) {
             configuration.icon
-                .font(.compound.bodyLGSemibold)
             configuration.title
-                .font(.compound.bodyMDSemibold)
         }
+        .font(.compound.bodyMD)
         .foregroundColor(.compound.textPrimary)
     }
 }

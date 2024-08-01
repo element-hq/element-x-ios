@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 /// A prompt that asks the user whether they would like to enable Analytics or not.
@@ -58,14 +59,6 @@ struct AnalyticsPromptScreen: View {
                 .foregroundColor(.compound.textSecondary)
         }
     }
-
-    @ViewBuilder
-    private var checkMark: some View {
-        Image(systemName: "checkmark.circle")
-            .symbolVariant(.fill)
-            .symbolRenderingMode(.palette)
-            .foregroundStyle(Color.compound.iconAccentTertiary, Color.compound.textOnSolidPrimary)
-    }
     
     /// The list of re-assurances about analytics.
     private var checkmarkList: some View {
@@ -82,7 +75,8 @@ struct AnalyticsPromptScreen: View {
     @ViewBuilder
     private func checkMarkItem(title: String, position: ListPosition) -> some View {
         RoundedLabelItem(title: title, listPosition: position) {
-            checkMark
+            CompoundIcon(\.checkCircle, size: .small, relativeTo: .body)
+                .foregroundColor(.compound.iconAccentPrimary)
         }
     }
     
