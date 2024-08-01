@@ -29,7 +29,7 @@ struct TimelineItemMenu: View {
     
     var body: some View {
         VStack(spacing: 8) {
-            header
+            messagePreview
                 .frame(idealWidth: 300.0)
             
             Divider()
@@ -63,34 +63,44 @@ struct TimelineItemMenu: View {
         .presentationDragIndicator(.visible)
     }
     
-    private var header: some View {
-        HStack(alignment: .top, spacing: 0.0) {
-            LoadableAvatarImage(url: item.sender.avatarURL,
-                                name: item.sender.displayName,
-                                contentID: item.sender.id,
-                                avatarSize: .user(on: .timeline),
-                                imageProvider: context.imageProvider)
-            
-            Spacer(minLength: 8.0)
-            
-            VStack(alignment: .leading, spacing: 0) {
-                Text(item.sender.displayName ?? item.sender.id)
-                    .font(.compound.bodySMSemibold)
-                    .foregroundColor(.compound.textPrimary)
-                    .textSelection(.enabled)
+    private var messagePreview: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            HStack(alignment: .top, spacing: 0.0) {
+                LoadableAvatarImage(url: item.sender.avatarURL,
+                                    name: item.sender.displayName,
+                                    contentID: item.sender.id,
+                                    avatarSize: .user(on: .timeline),
+                                    imageProvider: context.imageProvider)
+                    .accessibilityHidden(true)
                 
-                Text(item.timelineMenuDescription)
-                    .font(.compound.bodyMD)
+                Spacer(minLength: 8.0)
+                
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(item.sender.displayName ?? item.sender.id)
+                        .font(.compound.bodySMSemibold)
+                        .foregroundColor(.compound.textPrimary)
+                        .textSelection(.enabled)
+                    
+                    Text(item.timelineMenuDescription)
+                        .font(.compound.bodyMD)
+                        .foregroundColor(.compound.textSecondary)
+                        .lineLimit(1)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Spacer(minLength: 16.0)
+                
+                Text(item.timestamp)
+                    .font(.compound.bodyXS)
                     .foregroundColor(.compound.textSecondary)
-                    .lineLimit(1)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityElement(children: .combine)
             
-            Spacer(minLength: 16.0)
-            
-            Text(item.timestamp)
-                .font(.compound.bodyXS)
-                .foregroundColor(.compound.textSecondary)
+            if let authenticity = item.properties.encryptionAuthenticity {
+                Label(authenticity.message, icon: authenticity.icon, iconSize: .small, relativeTo: .compound.bodySMSemibold)
+                    .font(.compound.bodySMSemibold)
+                    .foregroundStyle(authenticity.foregroundStyle)
+            }
         }
         .padding(.horizontal)
         .padding(.top, 32.0)
@@ -169,23 +179,54 @@ struct TimelineItemMenu: View {
     }
 }
 
+private extension EncryptionAuthenticity {
+    var foregroundStyle: SwiftUI.Color {
+        switch color {
+        case .red: .compound.textCriticalPrimary
+        case .gray: .compound.textSecondary
+        }
+    }
+}
+
+// MARK: - Previews
+
 struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
+    static let (item, actions) = makeItem()
+    static let (backupItem, _) = makeItem(authenticity: .notGuaranteed(color: .gray))
+    static let (unencryptedItem, _) = makeItem(authenticity: .sentInClear(color: .red))
 
     static var previews: some View {
-        testView
+        TimelineItemMenu(item: item, actions: actions)
+            .environmentObject(viewModel.context)
             .previewDisplayName("With button shapes off")
-        testView
+        
+        TimelineItemMenu(item: item, actions: actions)
+            .environmentObject(viewModel.context)
             .environment(\._accessibilityShowButtonShapes, true)
             .previewDisplayName("With button shapes on")
+        
+        TimelineItemMenu(item: backupItem, actions: actions)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Authenticity not guaranteed")
+        
+        TimelineItemMenu(item: unencryptedItem, actions: actions)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Unencrypted")
     }
     
-    @ViewBuilder
-    static var testView: some View {
-        if let item = RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol,
-           let actions = TimelineItemMenuActions(isReactable: true, actions: [.copy, .edit, .reply(isThread: false), .pin, .redact], debugActions: [.viewSource]) {
-            TimelineItemMenu(item: item, actions: actions)
-                .environmentObject(viewModel.context)
+    static func makeItem(authenticity: EncryptionAuthenticity? = nil) -> (TextRoomTimelineItem, TimelineItemMenuActions)! {
+        guard var item = RoomTimelineItemFixtures.singleMessageChunk.first as? TextRoomTimelineItem,
+              let actions = TimelineItemMenuActions(isReactable: true,
+                                                    actions: [.copy, .edit, .reply(isThread: false), .pin, .redact],
+                                                    debugActions: [.viewSource]) else {
+            return nil
         }
+        
+        if let authenticity {
+            item.properties.encryptionAuthenticity = authenticity
+        }
+        
+        return (item, actions)
     }
 }

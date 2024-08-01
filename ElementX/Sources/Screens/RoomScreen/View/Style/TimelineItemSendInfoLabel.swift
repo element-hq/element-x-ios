@@ -20,15 +20,18 @@ import SwiftUI
 extension View {
     /// Adds the send info (timestamp along indicators for edits and delivery/encryption issues) for the given timeline item to this view.
     func timelineItemSendInfo(timelineItem: EventBasedTimelineItemProtocol,
-                              adjustedDeliveryStatus: TimelineItemDeliveryStatus?) -> some View {
+                              adjustedDeliveryStatus: TimelineItemDeliveryStatus?,
+                              context: RoomScreenViewModel.Context) -> some View {
         modifier(TimelineItemSendInfoModifier(sendInfo: .init(timelineItem: timelineItem,
-                                                              adjustedDeliveryStatus: adjustedDeliveryStatus)))
+                                                              adjustedDeliveryStatus: adjustedDeliveryStatus),
+                                              context: context))
     }
 }
 
 /// Adds the send info to a view with the correct layout.
 private struct TimelineItemSendInfoModifier: ViewModifier {
     let sendInfo: TimelineItemSendInfo
+    let context: RoomScreenViewModel.Context
     
     var layout: AnyLayout {
         switch sendInfo.layoutType {
@@ -44,7 +47,15 @@ private struct TimelineItemSendInfoModifier: ViewModifier {
     func body(content: Content) -> some View {
         layout {
             content
+            
             TimelineItemSendInfoLabel(sendInfo: sendInfo)
+                .contentShape(.rect)
+                // Tap gesture to avoid the message being detected as a button by VoiceOver
+                // (and the action shows a description that is already read to the user).
+                .onTapGesture {
+                    guard sendInfo.status != nil else { return }
+                    context.send(viewAction: .itemSendInfoTapped(itemID: sendInfo.itemID))
+                }
         }
     }
 }
@@ -55,26 +66,17 @@ private struct TimelineItemSendInfoLabel: View {
     
     var statusIcon: KeyPath<CompoundIcons, Image>? {
         switch sendInfo.status {
-        case .sendingFailed:
-            \.error
-        case .encryptionAuthenticity(.notGuaranteed):
-            \.infoSolid
-        case .encryptionAuthenticity(.unknownDevice),
-             .encryptionAuthenticity(.unsignedDevice),
-             .encryptionAuthenticity(.unverifiedIdentity),
-             .encryptionAuthenticity(.sentInClear):
-            \.lockOff
-        case .none:
-            nil
+        case .sendingFailed: \.error
+        case .encryptionAuthenticity(let authenticity): authenticity.icon
+        case .none: nil
         }
     }
     
     var statusIconAccessibilityLabel: String? {
         switch sendInfo.status {
         case .sendingFailed: L10n.commonSendingFailed
-        case .none: nil
-        // Temporary testing strings.
         case .encryptionAuthenticity(let authenticity): authenticity.message
+        case .none: nil
         }
     }
     
@@ -104,9 +106,10 @@ private struct TimelineItemSendInfoLabel: View {
         HStack(spacing: 4) {
             Text(sendInfo.localizedString)
             
-            if let statusIcon, let statusIconAccessibilityLabel {
+            if let statusIcon {
                 CompoundIcon(statusIcon, size: .xSmall, relativeTo: .compound.bodyXS)
-                    .accessibilityLabel(statusIconAccessibilityLabel)
+                    .accessibilityLabel(statusIconAccessibilityLabel ?? "")
+                    .accessibilityHidden(statusIconAccessibilityLabel == nil)
             }
         }
         .font(.compound.bodyXS)
@@ -125,6 +128,7 @@ private struct TimelineItemSendInfo {
         case overlay(capsuleStyle: Bool)
     }
     
+    let itemID: TimelineItemIdentifier
     let localizedString: String
     var status: Status?
     let layoutType: LayoutType
@@ -143,6 +147,7 @@ private struct TimelineItemSendInfo {
 
 private extension TimelineItemSendInfo {
     init(timelineItem: EventBasedTimelineItemProtocol, adjustedDeliveryStatus: TimelineItemDeliveryStatus?) {
+        itemID = timelineItem.id
         localizedString = timelineItem.localizedSendInfo
         
         status = if adjustedDeliveryStatus == .sendingFailed {
@@ -172,18 +177,9 @@ private extension TimelineItemSendInfo {
 
 private extension EncryptionAuthenticity {
     var foregroundStyle: SwiftUI.Color {
-        switch self {
-        case .notGuaranteed(let color),
-             .unknownDevice(let color),
-             .unsignedDevice(let color),
-             .unverifiedIdentity(let color),
-             .sentInClear(let color):
-            switch color {
-            case .red:
-                .compound.textCriticalPrimary
-            case .gray:
-                .compound.textSecondary
-            }
+        switch color {
+        case .red: .compound.textCriticalPrimary
+        case .gray: .compound.textSecondary
         }
     }
 }
@@ -193,20 +189,25 @@ private extension EncryptionAuthenticity {
 struct TimelineItemSendInfoLabel_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 16) {
-            TimelineItemSendInfoLabel(sendInfo: .init(localizedString: "09:47 AM",
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .random,
+                                                      localizedString: "09:47 AM",
                                                       layoutType: .horizontal()))
-            TimelineItemSendInfoLabel(sendInfo: .init(localizedString: "09:47 AM",
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .random,
+                                                      localizedString: "09:47 AM",
                                                       status: .sendingFailed,
                                                       layoutType: .horizontal()))
-            TimelineItemSendInfoLabel(sendInfo: .init(localizedString: "09:47 AM",
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .random,
+                                                      localizedString: "09:47 AM",
                                                       status: .encryptionAuthenticity(.unsignedDevice(color: .red)),
                                                       layoutType: .horizontal()))
-            TimelineItemSendInfoLabel(sendInfo: .init(localizedString: "09:47 AM",
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .random,
+                                                      localizedString: "09:47 AM",
                                                       status: .encryptionAuthenticity(.notGuaranteed(color: .gray)),
                                                       layoutType: .horizontal()))
-//            TimelineItemSendInfoLabel(sendInfo: .init(localizedString: "09:47 AM",
-//                                                      status: .unencrypted,
-//                                                      layoutType: .horizontal()))
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .random,
+                                                      localizedString: "09:47 AM",
+                                                      status: .encryptionAuthenticity(.sentInClear(color: .red)),
+                                                      layoutType: .horizontal()))
         }
     }
 }

@@ -57,14 +57,18 @@ struct HomeScreenInviteCell: View {
 
     private var mainContent: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .firstTextBaseline, spacing: 16) {
-                textualContent
-                badge
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: .firstTextBaseline, spacing: 16) {
+                    textualContent
+                    badge
+                }
+                
+                inviterView
+                    .padding(.top, 6)
+                    .padding(.trailing, 16)
             }
-            
-            inviterView
-                .padding(.top, 6)
-                .padding(.trailing, 16)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityElement(children: .combine)
             
             buttons
                 .padding(.top, 14)

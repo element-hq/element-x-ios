@@ -109,6 +109,7 @@ enum RoomScreenViewAction {
     case itemDisappeared(itemID: TimelineItemIdentifier)
     
     case itemTapped(itemID: TimelineItemIdentifier)
+    case itemSendInfoTapped(itemID: TimelineItemIdentifier)
     case toggleReaction(key: String, itemID: TimelineItemIdentifier)
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards
@@ -241,6 +242,8 @@ struct ReadReceiptSummaryInfo: Identifiable {
 enum RoomScreenAlertInfoType: Hashable {
     case audioRecodingPermissionError
     case pollEndConfirmation(String)
+    case sendingFailed
+    case encryptionAuthenticity(String)
 }
 
 struct RoomMemberState {
