@@ -1047,12 +1047,18 @@ internal enum L10n {
   internal static var screenEditProfileTitle: String { return L10n.tr("Localizable", "screen_edit_profile_title") }
   /// Updating profile…
   internal static var screenEditProfileUpdatingDetails: String { return L10n.tr("Localizable", "screen_edit_profile_updating_details") }
+  /// Can't confirm?
+  internal static var screenIdentityConfirmationCannotConfirm: String { return L10n.tr("Localizable", "screen_identity_confirmation_cannot_confirm") }
   /// Create a new recovery key
   internal static var screenIdentityConfirmationCreateNewRecoveryKey: String { return L10n.tr("Localizable", "screen_identity_confirmation_create_new_recovery_key") }
   /// Verify this device to set up secure messaging.
   internal static var screenIdentityConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_identity_confirmation_subtitle") }
   /// Confirm that it's you
   internal static var screenIdentityConfirmationTitle: String { return L10n.tr("Localizable", "screen_identity_confirmation_title") }
+  /// Use another device
+  internal static var screenIdentityConfirmationUseAnotherDevice: String { return L10n.tr("Localizable", "screen_identity_confirmation_use_another_device") }
+  /// Use recovery key
+  internal static var screenIdentityConfirmationUseRecoveryKey: String { return L10n.tr("Localizable", "screen_identity_confirmation_use_recovery_key") }
   /// Now you can read or send messages securely, and anyone you chat with can also trust this device.
   internal static var screenIdentityConfirmedSubtitle: String { return L10n.tr("Localizable", "screen_identity_confirmed_subtitle") }
   /// Device verified
