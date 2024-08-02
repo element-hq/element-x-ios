@@ -70,7 +70,7 @@ struct IdentityConfirmationScreen: View {
     
     @ViewBuilder
     private var actionButtons: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 16) {
             if context.viewState.availableActions.contains(.interactiveVerification) {
                 Button(L10n.screenIdentityConfirmationUseAnotherDevice) {
                     context.send(viewAction: .otherDevice)
@@ -101,6 +101,7 @@ struct IdentityConfirmationScreen: View {
                 context.send(viewAction: .reset)
             }
             .buttonStyle(.compound(.plain))
+            .padding(.vertical, 14)
         }
     }
 }

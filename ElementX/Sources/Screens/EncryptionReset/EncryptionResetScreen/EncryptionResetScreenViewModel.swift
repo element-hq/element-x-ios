@@ -72,6 +72,8 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
         
         switch await clientProxy.resetIdentity() {
         case .success(let handle):
+            // If the handle is missing then interactive authentication wasn't
+            // necessary and the reset proceeded as normal
             guard let handle else {
                 actionsSubject.send(.resetFinished)
                 return

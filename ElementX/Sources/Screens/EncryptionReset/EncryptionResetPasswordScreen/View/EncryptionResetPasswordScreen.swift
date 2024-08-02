@@ -19,7 +19,7 @@ import SwiftUI
 
 struct EncryptionResetPasswordScreen: View {
     @ObservedObject var context: EncryptionResetPasswordScreenViewModel.Context
-    @FocusState private var focused
+    @FocusState private var textFieldFocus
     
     var body: some View {
         FullscreenDialog {
@@ -47,6 +47,7 @@ struct EncryptionResetPasswordScreen: View {
         }
         .backgroundStyle(.compound.bgCanvasDefault)
         .interactiveDismissDisabled()
+        .onAppear { textFieldFocus = true }
     }
     
     @ViewBuilder
@@ -57,14 +58,11 @@ struct EncryptionResetPasswordScreen: View {
                 .font(.compound.bodySMSemibold)
             
             SecureField(L10n.screenResetEncryptionPasswordPlaceholder, text: $context.password)
-                .textContentType(.password) // Not ideal but stops random suggestions
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.compound.bgSubtleSecondaryLevel0)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
-                .focused($focused)
+                .focused($textFieldFocus)
                 .submitLabel(.done)
                 .onSubmit {
                     context.send(viewAction: .resetIdentity)

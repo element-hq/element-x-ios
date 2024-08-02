@@ -155,8 +155,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = SecureBackupScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
                                                                           clientProxy: parameters.userSession.clientProxy,
                                                                           navigationStackCoordinator: navigationStackCoordinator,
-                                                                          userIndicatorController: parameters.userIndicatorController,
-                                                                          mainWindow: parameters.windowManager.mainWindow))
+                                                                          userIndicatorController: parameters.userIndicatorController))
         
         coordinator.actions.sink { [weak self] action in
             switch action {

@@ -590,7 +590,7 @@
 "screen_reset_encryption_confirmation_alert_action" = "Yes, reset now";
 "screen_reset_encryption_confirmation_alert_subtitle" = "This process is irreversible.";
 "screen_reset_encryption_confirmation_alert_title" = "Are you sure you want to reset your encryption?";
-"screen_reset_encryption_password_placeholder" = "Enter...";
+"screen_reset_encryption_password_placeholder" = "Enter…";
 "screen_reset_encryption_password_subtitle" = "Confirm that you want to reset your encryption.";
 "screen_reset_encryption_password_title" = "Enter your account password to continue";
 "screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";

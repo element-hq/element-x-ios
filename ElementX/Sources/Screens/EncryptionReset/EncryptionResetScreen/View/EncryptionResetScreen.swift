@@ -55,7 +55,6 @@ struct EncryptionResetScreen: View {
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
-                .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.title)
             
             Text(L10n.screenEncryptionResetSubtitle)
                 .font(.compound.bodyMD)

@@ -22,7 +22,6 @@ struct SecureBackupScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userIndicatorController: UserIndicatorControllerProtocol
-    let mainWindow: UIWindow
 }
 
 enum SecureBackupScreenCoordinatorAction {

@@ -205,9 +205,6 @@ struct SecureBackupRecoveryKeyScreen: View {
                 .font(.compound.bodySMSemibold)
             
             SecureField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey)
-                .textContentType(.password) // Not ideal but stops random suggestions
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.compound.bgSubtleSecondaryLevel0)
