@@ -883,7 +883,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    // MARK: - Encryption
+    // MARK: - Crypto
     
     func ed25519Base64() async -> String? {
         await client.encryption().ed25519Key()
@@ -891,6 +891,14 @@ class ClientProxy: ClientProxyProtocol {
     
     func curve25519Base64() async -> String? {
         await client.encryption().curve25519Key()
+    }
+    
+    func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError> {
+        do {
+            return try await .success(client.encryption().resetIdentity())
+        } catch {
+            return .failure(.sdkError(error))
+        }
     }
 }
 

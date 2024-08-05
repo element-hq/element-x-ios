@@ -101,7 +101,7 @@ struct SecureBackupRecoveryKeyScreen: View {
             .disabled(context.confirmationRecoveryKey.isEmpty)
             
             Button {
-                context.send(viewAction: .resetKey)
+                context.send(viewAction: .resetEncryption)
             } label: {
                 Text(L10n.screenIdentityConfirmationCreateNewRecoveryKey)
                     .padding(.vertical, 14)
@@ -205,9 +205,6 @@ struct SecureBackupRecoveryKeyScreen: View {
                 .font(.compound.bodySMSemibold)
             
             SecureField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey)
-                .textContentType(.password) // Not ideal but stops random suggestions
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.compound.bgSubtleSecondaryLevel0)

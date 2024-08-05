@@ -16,11 +16,14 @@
 
 import Foundation
 
-enum ResetRecoveryKeyScreenViewModelAction {
+enum EncryptionResetScreenViewModelAction {
+    case requestPassword
+    case requestOIDCAuthorisation(url: URL)
+    case resetFinished
     case cancel
 }
 
-struct ResetRecoveryKeyScreenViewState: BindableState {
+struct EncryptionResetScreenViewState: BindableState {
     private let listItem3AttributedText = {
         let boldPlaceholder = "{bold}"
         var finalString = AttributedString(L10n.screenCreateNewRecoveryKeyListItem3(boldPlaceholder))
@@ -39,8 +42,15 @@ struct ResetRecoveryKeyScreenViewState: BindableState {
             AttributedString(L10n.screenCreateNewRecoveryKeyListItem5)
         ]
     }
+
+    var bindings: EncryptionResetScreenViewStateBindings
 }
 
-enum ResetRecoveryKeyScreenViewAction {
+struct EncryptionResetScreenViewStateBindings {
+    var alertInfo: AlertInfo<UUID>?
+}
+
+enum EncryptionResetScreenViewAction {
+    case reset
     case cancel
 }

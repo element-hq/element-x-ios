@@ -5915,6 +5915,75 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         }
     }
 
+    //MARK: - resetIdentity
+
+    open var resetIdentityThrowableError: Error?
+    var resetIdentityUnderlyingCallsCount = 0
+    open var resetIdentityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetIdentityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetIdentityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetIdentityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetIdentityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var resetIdentityCalled: Bool {
+        return resetIdentityCallsCount > 0
+    }
+
+    var resetIdentityUnderlyingReturnValue: IdentityResetHandle?
+    open var resetIdentityReturnValue: IdentityResetHandle? {
+        get {
+            if Thread.isMainThread {
+                return resetIdentityUnderlyingReturnValue
+            } else {
+                var returnValue: IdentityResetHandle?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetIdentityUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetIdentityUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetIdentityUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var resetIdentityClosure: (() async throws -> IdentityResetHandle?)?
+
+    open override func resetIdentity() async throws -> IdentityResetHandle? {
+        if let error = resetIdentityThrowableError {
+            throw error
+        }
+        resetIdentityCallsCount += 1
+        if let resetIdentityClosure = resetIdentityClosure {
+            return try await resetIdentityClosure()
+        } else {
+            return resetIdentityReturnValue
+        }
+    }
+
     //MARK: - resetRecoveryKey
 
     open var resetRecoveryKeyThrowableError: Error?
@@ -7593,6 +7662,128 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails {
         } else {
             return urlReturnValue
         }
+    }
+}
+open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - authType
+
+    var authTypeUnderlyingCallsCount = 0
+    open var authTypeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return authTypeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = authTypeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                authTypeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    authTypeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var authTypeCalled: Bool {
+        return authTypeCallsCount > 0
+    }
+
+    var authTypeUnderlyingReturnValue: CrossSigningResetAuthType!
+    open var authTypeReturnValue: CrossSigningResetAuthType! {
+        get {
+            if Thread.isMainThread {
+                return authTypeUnderlyingReturnValue
+            } else {
+                var returnValue: CrossSigningResetAuthType? = nil
+                DispatchQueue.main.sync {
+                    returnValue = authTypeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                authTypeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    authTypeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var authTypeClosure: (() -> CrossSigningResetAuthType)?
+
+    open override func authType() -> CrossSigningResetAuthType {
+        authTypeCallsCount += 1
+        if let authTypeClosure = authTypeClosure {
+            return authTypeClosure()
+        } else {
+            return authTypeReturnValue
+        }
+    }
+
+    //MARK: - reset
+
+    open var resetAuthThrowableError: Error?
+    var resetAuthUnderlyingCallsCount = 0
+    open var resetAuthCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetAuthUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetAuthUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetAuthUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetAuthUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var resetAuthCalled: Bool {
+        return resetAuthCallsCount > 0
+    }
+    open var resetAuthReceivedAuth: AuthData?
+    open var resetAuthReceivedInvocations: [AuthData?] = []
+    open var resetAuthClosure: ((AuthData?) async throws -> Void)?
+
+    open override func reset(auth: AuthData?) async throws {
+        if let error = resetAuthThrowableError {
+            throw error
+        }
+        resetAuthCallsCount += 1
+        resetAuthReceivedAuth = auth
+        DispatchQueue.main.async {
+            self.resetAuthReceivedInvocations.append(auth)
+        }
+        try await resetAuthClosure?(auth)
     }
 }
 open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle {

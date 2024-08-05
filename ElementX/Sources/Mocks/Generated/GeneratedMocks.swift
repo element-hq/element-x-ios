@@ -4095,6 +4095,70 @@ class ClientProxyMock: ClientProxyProtocol {
             return curve25519Base64ReturnValue
         }
     }
+    //MARK: - resetIdentity
+
+    var resetIdentityUnderlyingCallsCount = 0
+    var resetIdentityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetIdentityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetIdentityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetIdentityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetIdentityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var resetIdentityCalled: Bool {
+        return resetIdentityCallsCount > 0
+    }
+
+    var resetIdentityUnderlyingReturnValue: Result<IdentityResetHandle?, ClientProxyError>!
+    var resetIdentityReturnValue: Result<IdentityResetHandle?, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return resetIdentityUnderlyingReturnValue
+            } else {
+                var returnValue: Result<IdentityResetHandle?, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetIdentityUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetIdentityUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetIdentityUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var resetIdentityClosure: (() async -> Result<IdentityResetHandle?, ClientProxyError>)?
+
+    func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError> {
+        resetIdentityCallsCount += 1
+        if let resetIdentityClosure = resetIdentityClosure {
+            return await resetIdentityClosure()
+        } else {
+            return resetIdentityReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

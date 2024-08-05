@@ -17,7 +17,7 @@
 import Combine
 
 @MainActor
-protocol ResetRecoveryKeyScreenViewModelProtocol {
-    var actionsPublisher: AnyPublisher<ResetRecoveryKeyScreenViewModelAction, Never> { get }
-    var context: ResetRecoveryKeyScreenViewModelType.Context { get }
+protocol EncryptionResetPasswordScreenViewModelProtocol {
+    var actionsPublisher: AnyPublisher<EncryptionResetPasswordScreenViewModelAction, Never> { get }
+    var context: EncryptionResetPasswordScreenViewModelType.Context { get }
 }
