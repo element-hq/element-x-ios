@@ -20,7 +20,7 @@ import MatrixRustSDK
 struct RoomMessageEventStringBuilder {
     enum Prefix {
         case senderName
-        case mediaType
+        case type
         case none
     }
     
@@ -41,19 +41,19 @@ struct RoomMessageEventStringBuilder {
         case .audio(content: let content):
             let isVoiceMessage = content.voice != nil
             var content = AttributedString(isVoiceMessage ? L10n.commonVoiceMessage : L10n.commonAudio)
-            if prefix == .mediaType {
+            if prefix == .type {
                 content.bold()
             }
             message = content
         case .image(let content):
-            message = prefix == .mediaType ? prefix(AttributedString(content.body), with: L10n.commonImage) : AttributedString("\(L10n.commonImage) - \(content.body)")
+            message = prefix == .type ? prefix(AttributedString(content.body), with: L10n.commonImage) : AttributedString("\(L10n.commonImage) - \(content.body)")
         case .video(let content):
-            message = prefix == .mediaType ? prefix(AttributedString(content.body), with: L10n.commonVideo) : AttributedString("\(L10n.commonVideo) - \(content.body)")
+            message = prefix == .type ? prefix(AttributedString(content.body), with: L10n.commonVideo) : AttributedString("\(L10n.commonVideo) - \(content.body)")
         case .file(let content):
-            message = prefix == .mediaType ? prefix(AttributedString(content.body), with: L10n.commonFile) : AttributedString("\(L10n.commonFile) - \(content.body)")
+            message = prefix == .type ? prefix(AttributedString(content.body), with: L10n.commonFile) : AttributedString("\(L10n.commonFile) - \(content.body)")
         case .location:
             var content = AttributedString(L10n.commonSharedLocation)
-            if prefix == .mediaType {
+            if prefix == .type {
                 content.bold()
             }
             message = content

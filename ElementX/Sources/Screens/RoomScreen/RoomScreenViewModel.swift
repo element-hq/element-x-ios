@@ -676,7 +676,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func buildPinnedEventContent(timelineItems: [TimelineItemProxy]) {
         var pinnedEventContents = OrderedDictionary<String, AttributedString>()
         
-        for item in timelineItems {
+        for item in timelineItems.reversed() {
             // Only remote events are pinned
             if case let .event(event) = item,
                let eventID = event.id.eventID {
