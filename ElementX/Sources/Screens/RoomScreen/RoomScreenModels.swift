@@ -417,7 +417,7 @@ enum PinnedEventsBannerState: Equatable {
     mutating func setPinnedEventContents(_ pinnedEventContents: OrderedDictionary<String, AttributedString>) {
         switch self {
         case .loading:
-            self = .loaded(state: .init(pinnedEventContents: pinnedEventContents))
+            self = .loaded(state: .init(pinnedEventContents: pinnedEventContents, selectedPinEventID: pinnedEventContents.keys.last))
         case .loaded(var state):
             state.pinnedEventContents = pinnedEventContents
             self = .loaded(state: state)
