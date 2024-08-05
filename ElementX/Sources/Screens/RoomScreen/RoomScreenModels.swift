@@ -172,9 +172,10 @@ struct RoomScreenViewState: BindableState {
     var isPinningEnabled = false
     var lastScrollDirection: ScrollDirection?
     
-    // The `pinnedEventIDs` is used only to determine if an item can be pinned or not since it does not depend on the pinned events timeline, but on the room info update which is faster
+    // The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
+    // It's updated from the room info, so it's faster than using the timeline
     var pinnedEventIDs: Set<String> = []
-    // This is used to controler the banner
+    // This is used to control the banner
     var pinnedEventsState = PinnedEventsState()
     
     var shouldShowPinnedEventsBanner: Bool {
