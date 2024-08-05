@@ -50,7 +50,11 @@ extension EventBasedTimelineItemProtocol {
     var pollIfAvailable: Poll? {
         (self as? PollRoomTimelineItem)?.poll
     }
-
+    
+    var hasStatusIcon: Bool {
+        hasFailedToSend || properties.encryptionAuthenticity != nil
+    }
+    
     var hasFailedToSend: Bool {
         properties.deliveryStatus == .sendingFailed
     }
@@ -74,8 +78,8 @@ extension EventBasedTimelineItemProtocol {
             whiteSpaces += 1
         }
 
-        // To account for the extra spacing created by the alert icon
-        if hasFailedToSend {
+        // To account for the extra spacing created by the status icon
+        if hasStatusIcon {
             whiteSpaces += 3
         }
 

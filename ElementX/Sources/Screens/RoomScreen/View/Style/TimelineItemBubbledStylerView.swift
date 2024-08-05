@@ -330,6 +330,8 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             .previewDisplayName("Replies")
         threads
             .previewDisplayName("Thread decorator")
+        encryptionAuthenticity
+            .previewDisplayName("Encryption Indicators")
     }
     
     // These akwats include a reply
@@ -474,6 +476,82 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                                                    eventID: "123",
                                                                                                    eventContent: .message(.text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout."))))),
                                                   groupStyle: .single))
+        }
+        .environmentObject(viewModel.context)
+    }
+
+    static var encryptionAuthenticity: some View {
+        VStack(spacing: 0) {
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             isThreaded: false,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "A long message that should be on multiple lines."),
+                                                                             properties: RoomTimelineItemProperties(encryptionAuthenticity: .unsignedDevice(color: .red))),
+                                                  groupStyle: .single))
+            
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             isThreaded: false,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "A long message that should be on multiple lines."),
+                                                                             properties: RoomTimelineItemProperties(isEdited: true,
+                                                                                                                    encryptionAuthenticity: .unsignedDevice(color: .red))),
+                                                  groupStyle: .single))
+            
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: false,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             isThreaded: false,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "Short message"),
+                                                                             properties: RoomTimelineItemProperties(encryptionAuthenticity: .unknownDevice(color: .red))),
+                                                  groupStyle: .first))
+            
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: false,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             isThreaded: false,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "Message goes Here"),
+                                                                             properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))),
+                                                  groupStyle: .last))
+            
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .random,
+                                                                      timestamp: "Now",
+                                                                      isOutgoing: false,
+                                                                      isEditable: false,
+                                                                      canBeRepliedTo: true,
+                                                                      isThreaded: false,
+                                                                      sender: .init(id: "Bob"),
+                                                                      content: .init(body: "Some other image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil),
+                                                                      
+                                                                      properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))))
+            
+            VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
+                                                             timestamp: "10:42",
+                                                             isOutgoing: true,
+                                                             isEditable: false,
+                                                             canBeRepliedTo: true,
+                                                             isThreaded: true,
+                                                             sender: .init(id: ""),
+                                                             content: .init(body: "audio.ogg",
+                                                                            duration: 100,
+                                                                            waveform: EstimatedWaveform.mockWaveform,
+                                                                            source: nil,
+                                                                            contentType: nil),
+                                                             properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))),
+                                         playerState: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 10, waveform: EstimatedWaveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
     }

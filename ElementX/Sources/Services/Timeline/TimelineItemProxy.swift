@@ -120,7 +120,9 @@ class EventTimelineItemProxy {
         let debugInfo = item.debugInfo()
         return TimelineItemDebugInfo(model: debugInfo.model, originalJSON: debugInfo.originalJson, latestEditJSON: debugInfo.latestEditJson)
     }()
-
+    
+    lazy var shieldState = item.getShield(strict: false)
+    
     lazy var readReceipts = item.readReceipts()
 }
 
