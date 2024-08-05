@@ -177,10 +177,10 @@ struct RoomScreenViewState: BindableState {
     // It's updated from the room info, so it's faster than using the timeline
     var pinnedEventIDs: Set<String> = []
     // This is used to control the banner
-    var pinnedEventsState = PinnedEventsState()
+    var pinnedEventsBannerState: PinnedEventsBannerState = .loading(numbersOfEvents: 0)
     
     var shouldShowPinnedEventsBanner: Bool {
-        isPinningEnabled && !pinnedEventsState.pinnedEventContents.isEmpty && lastScrollDirection != .top
+        isPinningEnabled && !pinnedEventsBannerState.isEmpty && lastScrollDirection != .top
     }
     
     var canJoinCall = false
@@ -326,22 +326,13 @@ struct PinnedEventsState: Equatable {
     }
     
     var selectedPinContent: AttributedString {
-        guard let selectedPinEventID,
-              var content = pinnedEventContents[selectedPinEventID] else {
-            return AttributedString()
+        var content = AttributedString(" ")
+        if let selectedPinEventID,
+           var pinnedEventContent = pinnedEventContents[selectedPinEventID] {
+            content = pinnedEventContent
         }
         content.font = .compound.bodyMD
         return content
-    }
-    
-    var bannerIndicatorDescription: AttributedString {
-        let index = selectedPinIndex + 1
-        let boldPlaceholder = "{bold}"
-        var finalString = AttributedString(L10n.screenRoomPinnedBannerIndicatorDescription(boldPlaceholder))
-        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, pinnedEventContents.count))
-        boldString.bold()
-        finalString.replace(boldPlaceholder, with: boldString)
-        return finalString
     }
     
     mutating func nextPin() {
@@ -351,5 +342,85 @@ struct PinnedEventsState: Equatable {
         let currentIndex = selectedPinIndex
         let nextIndex = (currentIndex + 1) % pinnedEventContents.count
         selectedPinEventID = pinnedEventContents.keys[nextIndex]
+    }
+}
+
+enum PinnedEventsBannerState: Equatable {
+    case loading(numbersOfEvents: Int)
+    case loaded(state: PinnedEventsState)
+    
+    var isEmpty: Bool {
+        switch self {
+        case .loaded(let state):
+            return state.pinnedEventContents.isEmpty
+        case .loading(let numberOfEvents):
+            return numberOfEvents == 0
+        }
+    }
+    
+    var isLoading: Bool {
+        switch self {
+        case .loading:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    var selectedPinEventID: String? {
+        switch self {
+        case .loaded(let state):
+            return state.selectedPinEventID
+        default:
+            return nil
+        }
+    }
+    
+    var count: Int {
+        switch self {
+        case .loaded(let state):
+            return state.pinnedEventContents.count
+        case .loading(let numberOfEvents):
+            return numberOfEvents
+        }
+    }
+    
+    var selectedPinIndex: Int {
+        switch self {
+        case .loaded(let state):
+            return state.selectedPinIndex
+        case .loading(let numbersOfEvents):
+            return numbersOfEvents - 1
+        }
+    }
+    
+    var bannerIndicatorDescription: AttributedString {
+        let index = selectedPinIndex + 1
+        let boldPlaceholder = "{bold}"
+        var finalString = AttributedString(L10n.screenRoomPinnedBannerIndicatorDescription(boldPlaceholder))
+        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, count))
+        boldString.bold()
+        finalString.replace(boldPlaceholder, with: boldString)
+        return finalString
+    }
+    
+    mutating func nextPin() {
+        switch self {
+        case .loaded(var state):
+            state.nextPin()
+            self = .loaded(state: state)
+        default:
+            break
+        }
+    }
+    
+    mutating func setPinnedEventContents(_ pinnedEventContents: OrderedDictionary<String, AttributedString>) {
+        switch self {
+        case .loading:
+            self = .loaded(state: .init(pinnedEventContents: pinnedEventContents))
+        case .loaded(var state):
+            state.pinnedEventContents = pinnedEventContents
+            self = .loaded(state: state)
+        }
     }
 }

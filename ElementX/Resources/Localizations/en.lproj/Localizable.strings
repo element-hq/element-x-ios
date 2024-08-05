@@ -318,6 +318,7 @@
 "screen_room_mentions_at_room_subtitle" = "Notify the whole room";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
+"screen_room_pinned_banner_loading_description" = "Loading message...";
 "screen_room_pinned_banner_view_all_button_title" = "View All";
 "screen_account_provider_change" = "Change account provider";
 "screen_account_provider_form_hint" = "Homeserver address";
@@ -851,6 +852,12 @@
 "state_event_room_name_removed_by_you" = "You removed the room name";
 "state_event_room_none" = "%1$@ made no changes";
 "state_event_room_none_by_you" = "You made no changes";
+"state_event_room_pinned_events_changed" = "%1$@ changed the pinned messages";
+"state_event_room_pinned_events_changed_by_you" = "You changed the pinned messages";
+"state_event_room_pinned_events_pinned" = "%1$@ pinned a message";
+"state_event_room_pinned_events_pinned_by_you" = "You pinned a message";
+"state_event_room_pinned_events_unpinned" = "%1$@ unpinned a message";
+"state_event_room_pinned_events_unpinned_by_you" = "You unpinned a message";
 "state_event_room_reject" = "%1$@ rejected the invitation";
 "state_event_room_reject_by_you" = "You rejected the invitation";
 "state_event_room_remove" = "%1$@ removed %2$@";

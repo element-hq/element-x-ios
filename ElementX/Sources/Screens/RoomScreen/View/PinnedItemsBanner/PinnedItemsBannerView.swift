@@ -18,10 +18,19 @@ import Compound
 import SwiftUI
 
 struct PinnedItemsBannerView: View {
-    let pinnedEventsState: PinnedEventsState
+    let state: PinnedEventsBannerState
     
     let onMainButtonTap: () -> Void
     let onViewAllButtonTap: () -> Void
+    
+    private var displayedMessage: AttributedString {
+        switch state {
+        case .loading:
+            return AttributedString(L10n.screenRoomPinnedBannerLoadingDescription)
+        case .loaded(let state):
+            return state.selectedPinContent
+        }
+    }
     
     var body: some View {
         HStack(spacing: 0) {
@@ -38,7 +47,7 @@ struct PinnedItemsBannerView: View {
         Button { onMainButtonTap() } label: {
             HStack(spacing: 0) {
                 HStack(spacing: 10) {
-                    PinnedItemsIndicatorView(pinIndex: pinnedEventsState.selectedPinIndex, pinsCount: pinnedEventsState.pinnedEventContents.count)
+                    PinnedItemsIndicatorView(pinIndex: state.selectedPinIndex, pinsCount: state.count)
                         .accessibilityHidden(true)
                     CompoundIcon(\.pinSolid, size: .small, relativeTo: .compound.bodyMD)
                         .foregroundColor(Color.compound.iconSecondaryAlpha)
@@ -48,26 +57,34 @@ struct PinnedItemsBannerView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
+        .disabled(state.isLoading)
         .accessibilityElement(children: .contain)
     }
     
+    @ViewBuilder
     private var viewAllButton: some View {
-        Button { onViewAllButtonTap() } label: {
-            Text(L10n.screenRoomPinnedBannerViewAllButtonTitle)
-                .font(.compound.bodyMDSemibold)
-                .foregroundStyle(Color.compound.textPrimary)
+        switch state {
+        case .loaded:
+            Button { onViewAllButtonTap() } label: {
+                Text(L10n.screenRoomPinnedBannerViewAllButtonTitle)
+                    .font(.compound.bodyMDSemibold)
+                    .foregroundStyle(Color.compound.textPrimary)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 5)
+            }
+        case .loading:
+            ProgressView()
                 .padding(.horizontal, 16)
-                .padding(.vertical, 5)
         }
     }
     
     private var content: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(pinnedEventsState.bannerIndicatorDescription)
+            Text(state.bannerIndicatorDescription)
                 .font(.compound.bodySM)
                 .foregroundColor(.compound.textActionAccent)
                 .lineLimit(1)
-            Text(pinnedEventsState.selectedPinContent)
+            Text(displayedMessage)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
@@ -87,19 +104,22 @@ struct PinnedItemsBannerView_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         VStack(spacing: 20) {
-            PinnedItemsBannerView(pinnedEventsState: .init(pinnedEventContents: ["1": "Content",
-                                                                                 "2": "2",
-                                                                                 "3": "3"],
-                                                           selectedPinEventID: "1"),
+            PinnedItemsBannerView(state: .loaded(state: .init(pinnedEventContents: ["1": "Content",
+                                                                                    "2": "2",
+                                                                                    "3": "3"],
+                selectedPinEventID: "1")),
                                   onMainButtonTap: { },
                                   onViewAllButtonTap: { })
-            PinnedItemsBannerView(pinnedEventsState: .init(pinnedEventContents: ["1": "Very very very very long content here",
-                                                                                 "2": "2"],
-                                                           selectedPinEventID: "1"),
+            PinnedItemsBannerView(state: .loaded(state: .init(pinnedEventContents: ["1": "Very very very very long content here",
+                                                                                    "2": "2"],
+                selectedPinEventID: "1")),
                                   onMainButtonTap: { },
                                   onViewAllButtonTap: { })
-            PinnedItemsBannerView(pinnedEventsState: .init(pinnedEventContents: ["1": attributedContent],
-                                                           selectedPinEventID: "1"),
+            PinnedItemsBannerView(state: .loaded(state: .init(pinnedEventContents: ["1": attributedContent],
+                                                              selectedPinEventID: "1")),
+                                  onMainButtonTap: { },
+                                  onViewAllButtonTap: { })
+            PinnedItemsBannerView(state: .loading(numbersOfEvents: 5),
                                   onMainButtonTap: { },
                                   onViewAllButtonTap: { })
         }

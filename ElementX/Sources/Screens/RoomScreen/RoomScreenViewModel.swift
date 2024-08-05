@@ -218,10 +218,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case let .hasScrolled(direction):
             state.lastScrollDirection = direction
         case .tappedPinnedEventsBanner:
-            if let eventID = state.pinnedEventsState.selectedPinEventID {
+            if let eventID = state.pinnedEventsBannerState.selectedPinEventID {
                 Task { await focusOnEvent(eventID: eventID) }
             }
-            state.pinnedEventsState.nextPin()
+            state.pinnedEventsBannerState.nextPin()
         case .viewAllPins:
             // TODO: Implement
             break
@@ -444,12 +444,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return
             }
             // If the subscription has sent a value before the Task has started it might be lost, so before entering the loop we always do an update.
-            await state.pinnedEventIDs = roomProxy.pinnedEventIDs
+            await updatePinnedEventIDs()
             for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
                 guard !Task.isCancelled else {
                     return
                 }
-                await state.pinnedEventIDs = roomProxy.pinnedEventIDs
+                await updatePinnedEventIDs()
             }
         }
         .store(in: &cancellables)
@@ -511,6 +511,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    private func updatePinnedEventIDs() async {
+        let pinnedEventIDs = await roomProxy.pinnedEventIDs
+        // Only update the loading state of the banner
+        if state.pinnedEventsBannerState.isLoading {
+            state.pinnedEventsBannerState = .loading(numbersOfEvents: pinnedEventIDs.count)
+        }
+        state.pinnedEventIDs = pinnedEventIDs
     }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {
@@ -685,7 +694,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }
         
-        state.pinnedEventsState.pinnedEventContents = pinnedEventContents
+        state.pinnedEventsBannerState.setPinnedEventContents(pinnedEventContents)
     }
     
     private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {

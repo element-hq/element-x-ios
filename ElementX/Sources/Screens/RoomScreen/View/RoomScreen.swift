@@ -110,7 +110,7 @@ struct RoomScreen: View {
     }
     
     private var pinnedItemsBanner: some View {
-        PinnedItemsBannerView(pinnedEventsState: context.viewState.pinnedEventsState,
+        PinnedItemsBannerView(state: context.viewState.pinnedEventsBannerState,
                               onMainButtonTap: { context.send(viewAction: .tappedPinnedEventsBanner) },
                               onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
             .transition(.move(edge: .top))
