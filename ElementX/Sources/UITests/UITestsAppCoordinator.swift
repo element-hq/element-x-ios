@@ -634,6 +634,7 @@ class MockScreen: Identifiable {
             ServiceLocator.shared.settings.migratedAccounts[clientProxy.userID] = true
             
             let timelineController = RoomTimelineController(roomProxy: roomProxy,
+                                                            timelineProxy: roomProxy.timeline,
                                                             initialFocussedEventID: nil,
                                                             timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
                                                                                                          encryptionAuthenticityEnabled: true,

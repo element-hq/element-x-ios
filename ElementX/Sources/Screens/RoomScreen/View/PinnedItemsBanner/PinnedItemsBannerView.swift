@@ -23,16 +23,6 @@ struct PinnedItemsBannerView: View {
     let onMainButtonTap: () -> Void
     let onViewAllButtonTap: () -> Void
     
-    private var bannerIndicatorDescription: AttributedString {
-        let index = pinnedEventsState.selectedPinIndex + 1
-        let boldPlaceholder = "{bold}"
-        var finalString = AttributedString(L10n.screenRoomPinnedBannerIndicatorDescription(boldPlaceholder))
-        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, pinnedEventsState.pinnedEventIDs.count))
-        boldString.bold()
-        finalString.replace(boldPlaceholder, with: boldString)
-        return finalString
-    }
-    
     var body: some View {
         HStack(spacing: 0) {
             mainButton
@@ -48,7 +38,7 @@ struct PinnedItemsBannerView: View {
         Button { onMainButtonTap() } label: {
             HStack(spacing: 0) {
                 HStack(spacing: 10) {
-                    PinnedItemsIndicatorView(pinIndex: pinnedEventsState.selectedPinIndex, pinsCount: pinnedEventsState.pinnedEventIDs.count)
+                    PinnedItemsIndicatorView(pinIndex: pinnedEventsState.selectedPinIndex, pinsCount: pinnedEventsState.pinnedEventContents.count)
                         .accessibilityHidden(true)
                     CompoundIcon(\.pinSolid, size: .small, relativeTo: .compound.bodyMD)
                         .foregroundColor(Color.compound.iconSecondaryAlpha)
@@ -73,7 +63,7 @@ struct PinnedItemsBannerView: View {
     
     private var content: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(bannerIndicatorDescription)
+            Text(pinnedEventsState.bannerIndicatorDescription)
                 .font(.compound.bodySM)
                 .foregroundColor(.compound.textActionAccent)
                 .lineLimit(1)
@@ -86,9 +76,32 @@ struct PinnedItemsBannerView: View {
 }
 
 struct PinnedItemsBannerView_Previews: PreviewProvider, TestablePreview {
+    static var attributedContent: AttributedString {
+        var boldPart = AttributedString("Image:")
+        boldPart.bold()
+        var final = boldPart + " content.png"
+        // This should be ignored when presented
+        final.font = .headline
+        return final
+    }
+    
     static var previews: some View {
-        PinnedItemsBannerView(pinnedEventsState: .init(pinnedEventIDs: ["Content", "NotShown1", "NotShown2"], selectedPinEventID: "Content"),
-                              onMainButtonTap: { },
-                              onViewAllButtonTap: { })
+        VStack(spacing: 20) {
+            PinnedItemsBannerView(pinnedEventsState: .init(pinnedEventContents: ["1": "Content",
+                                                                                 "2": "2",
+                                                                                 "3": "3"],
+                                                           selectedPinEventID: "1"),
+                                  onMainButtonTap: { },
+                                  onViewAllButtonTap: { })
+            PinnedItemsBannerView(pinnedEventsState: .init(pinnedEventContents: ["1": "Very very very very long content here",
+                                                                                 "2": "2"],
+                                                           selectedPinEventID: "1"),
+                                  onMainButtonTap: { },
+                                  onViewAllButtonTap: { })
+            PinnedItemsBannerView(pinnedEventsState: .init(pinnedEventContents: ["1": attributedContent],
+                                                           selectedPinEventID: "1"),
+                                  onMainButtonTap: { },
+                                  onViewAllButtonTap: { })
+        }
     }
 }

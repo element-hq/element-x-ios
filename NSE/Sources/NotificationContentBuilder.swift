@@ -103,7 +103,7 @@ struct NotificationContentBuilder {
         var notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
         
         let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        let message = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName, prefixWithSenderName: false).characters)
+        let message = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName).characters)
         
         notification.body = notificationItem.hasMention ? L10n.notificationMentionedYouBody(message) : message
         

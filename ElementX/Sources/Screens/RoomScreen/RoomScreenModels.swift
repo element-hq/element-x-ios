@@ -139,7 +139,7 @@ enum RoomScreenViewAction {
     case hasSwitchedTimeline
     
     case hasScrolled(direction: ScrollDirection)
-    case tappedPinBanner
+    case tappedPinnedEventsBanner
     case viewAllPins
 }
 
@@ -172,10 +172,14 @@ struct RoomScreenViewState: BindableState {
     var isPinningEnabled = false
     var lastScrollDirection: ScrollDirection?
     
+    // The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
+    // It's updated from the room info, so it's faster than using the timeline
+    var pinnedEventIDs: Set<String> = []
+    // This is used to control the banner
     var pinnedEventsState = PinnedEventsState()
     
-    var shouldShowPinBanner: Bool {
-        isPinningEnabled && !pinnedEventsState.pinnedEventIDs.isEmpty && lastScrollDirection != .top
+    var shouldShowPinnedEventsBanner: Bool {
+        isPinningEnabled && !pinnedEventsState.pinnedEventContents.isEmpty && lastScrollDirection != .top
     }
     
     var canJoinCall = false
@@ -296,39 +300,53 @@ enum ScrollDirection: Equatable {
 }
 
 struct PinnedEventsState: Equatable {
-    // For now these will only contain and show the event IDs, but in the future they will also contain the content
-    var pinnedEventIDs: OrderedSet<String> = [] {
+    var pinnedEventContents: OrderedDictionary<String, AttributedString> = [:] {
         didSet {
-            if selectedPinEventID == nil, !pinnedEventIDs.isEmpty {
-                selectedPinEventID = pinnedEventIDs.first
-            } else if pinnedEventIDs.isEmpty {
+            if selectedPinEventID == nil, !pinnedEventContents.keys.isEmpty {
+                selectedPinEventID = pinnedEventContents.keys.last
+            } else if pinnedEventContents.isEmpty {
                 selectedPinEventID = nil
-            } else if let selectedPinEventID, !pinnedEventIDs.contains(selectedPinEventID) {
-                self.selectedPinEventID = pinnedEventIDs.first
+            } else if let selectedPinEventID, !pinnedEventContents.keys.set.contains(selectedPinEventID) {
+                self.selectedPinEventID = pinnedEventContents.firstNonNil { $0.key }
             }
         }
     }
     
-    var selectedPinEventID: String?
+    private(set) var selectedPinEventID: String?
     
     var selectedPinIndex: Int {
+        let defaultValue = pinnedEventContents.isEmpty ? 0 : pinnedEventContents.count - 1
         guard let selectedPinEventID else {
-            return 0
+            return defaultValue
         }
-        return pinnedEventIDs.firstIndex(of: selectedPinEventID) ?? 0
+        return pinnedEventContents.keys.firstIndex(of: selectedPinEventID) ?? defaultValue
     }
     
-    // For now we show the event ID as the content, but is just until we have a way to get the real content
     var selectedPinContent: AttributedString {
-        .init(selectedPinEventID ?? "")
+        guard let selectedPinEventID,
+              var content = pinnedEventContents[selectedPinEventID] else {
+            return AttributedString()
+        }
+        content.font = .compound.bodyMD
+        return content
+    }
+    
+    var bannerIndicatorDescription: AttributedString {
+        let index = selectedPinIndex + 1
+        let boldPlaceholder = "{bold}"
+        var finalString = AttributedString(L10n.screenRoomPinnedBannerIndicatorDescription(boldPlaceholder))
+        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, pinnedEventContents.count))
+        boldString.bold()
+        finalString.replace(boldPlaceholder, with: boldString)
+        return finalString
     }
     
     mutating func nextPin() {
-        guard !pinnedEventIDs.isEmpty else {
+        guard !pinnedEventContents.isEmpty else {
             return
         }
         let currentIndex = selectedPinIndex
-        let nextIndex = (currentIndex + 1) % pinnedEventIDs.count
-        selectedPinEventID = pinnedEventIDs[nextIndex]
+        let nextIndex = (currentIndex + 1) % pinnedEventContents.count
+        selectedPinEventID = pinnedEventContents.keys[nextIndex]
     }
 }

@@ -36,6 +36,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
+    private let pinnedEventStringBuilder: RoomEventStringBuilder
     
     private let roomScreenInteractionHandler: RoomScreenInteractionHandler
     
@@ -66,6 +67,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
+        pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
@@ -123,6 +125,23 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if case let .success(permission) = await roomProxy.canUserJoinCall(userID: userID) {
                 state.canJoinCall = permission
             }
+        }
+        
+        Task {
+            guard let pinnedEventsTimelineProvider = await roomProxy.pinnedEventsTimeline?.timelineProvider else {
+                return
+            }
+            
+            buildPinnedEventContent(timelineItems: pinnedEventsTimelineProvider.itemProxies)
+            
+            pinnedEventsTimelineProvider.updatePublisher
+                // When pinning or unpinning an item, the timeline might return empty for a short while, so we need to debounce it to prevent weird UI behaviours like the banner disappearing
+                .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
+                .sink { [weak self] updatedItems, _ in
+                    guard let self else { return }
+                    buildPinnedEventContent(timelineItems: updatedItems)
+                }
+                .store(in: &cancellables)
         }
     }
     
@@ -196,7 +215,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { state.timelineViewState.isSwitchingTimelines = false }
         case let .hasScrolled(direction):
             state.lastScrollDirection = direction
-        case .tappedPinBanner:
+        case .tappedPinnedEventsBanner:
             if let eventID = state.pinnedEventsState.selectedPinEventID {
                 Task { await focusOnEvent(eventID: eventID) }
             }
@@ -423,12 +442,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return
             }
             // If the subscription has sent a value before the Task has started it might be lost, so before entering the loop we always do an update.
-            await state.pinnedEventsState.pinnedEventIDs = .init(roomProxy.pinnedEventIDs)
+            await state.pinnedEventIDs = roomProxy.pinnedEventIDs
             for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
                 guard !Task.isCancelled else {
                     return
                 }
-                await state.pinnedEventsState.pinnedEventIDs = .init(roomProxy.pinnedEventIDs)
+                await state.pinnedEventIDs = roomProxy.pinnedEventIDs
             }
         }
         .store(in: &cancellables)
@@ -634,6 +653,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // MARK: - Timeline Item Building
+    
+    private func buildPinnedEventContent(timelineItems: [TimelineItemProxy]) {
+        var pinnedEventContents = OrderedDictionary<String, AttributedString>()
+        
+        for item in timelineItems {
+            // Only remote events are pinned
+            if case let .event(event) = item,
+               let eventID = event.id.eventID {
+                pinnedEventContents.updateValue(pinnedEventStringBuilder.buildAttributedString(for: event) ?? AttributedString(L10n.commonUnsupportedEvent),
+                                                forKey: eventID)
+            }
+        }
+        
+        state.pinnedEventsState.pinnedEventContents = pinnedEventContents
+    }
     
     private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
         var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()

@@ -21,6 +21,7 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                      initialFocussedEventID: String?,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol {
         RoomTimelineController(roomProxy: roomProxy,
+                               timelineProxy: roomProxy.timeline,
                                initialFocussedEventID: initialFocussedEventID,
                                timelineItemFactory: timelineItemFactory,
                                appSettings: ServiceLocator.shared.settings)

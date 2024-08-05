@@ -50,11 +50,11 @@ struct RoomScreen: View {
             }
             .overlay(alignment: .top) {
                 Group {
-                    if context.viewState.shouldShowPinBanner {
+                    if context.viewState.shouldShowPinnedEventsBanner {
                         pinnedItemsBanner
                     }
                 }
-                .animation(.elementDefault, value: context.viewState.shouldShowPinBanner)
+                .animation(.elementDefault, value: context.viewState.shouldShowPinnedEventsBanner)
             }
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
@@ -69,7 +69,7 @@ struct RoomScreen: View {
                                                              canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
                                                              canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
                                                              canCurrentUserPin: context.viewState.canCurrentUserPin,
-                                                             pinnedEventIDs: context.viewState.pinnedEventsState.pinnedEventIDs.set,
+                                                             pinnedEventIDs: context.viewState.pinnedEventIDs,
                                                              isDM: context.viewState.isEncryptedOneToOneRoom,
                                                              isViewSourceEnabled: context.viewState.isViewSourceEnabled).makeActions()
                 if let actions {
@@ -111,7 +111,7 @@ struct RoomScreen: View {
     
     private var pinnedItemsBanner: some View {
         PinnedItemsBannerView(pinnedEventsState: context.viewState.pinnedEventsState,
-                              onMainButtonTap: { context.send(viewAction: .tappedPinBanner) },
+                              onMainButtonTap: { context.send(viewAction: .tappedPinnedEventsBanner) },
                               onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
             .transition(.move(edge: .top))
     }

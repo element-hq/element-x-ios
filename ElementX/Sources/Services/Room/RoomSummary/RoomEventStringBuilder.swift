@@ -21,6 +21,7 @@ struct RoomEventStringBuilder {
     let stateEventStringBuilder: RoomStateEventStringBuilder
     let messageEventStringBuilder: RoomMessageEventStringBuilder
     let shouldDisambiguateDisplayNames: Bool
+    let shouldPrefixSenderName: Bool
     
     func buildAttributedString(for eventItemProxy: EventTimelineItemProxy) -> AttributedString? {
         let sender = eventItemProxy.sender
@@ -50,7 +51,7 @@ struct RoomEventStringBuilder {
             }
             
             let messageType = messageContent.msgtype()
-            return messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName, prefixWithSenderName: true)
+            return messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName)
         case .state(_, let state):
             return stateEventStringBuilder
                 .buildString(for: state, sender: sender, isOutgoing: isOutgoing)
@@ -78,6 +79,9 @@ struct RoomEventStringBuilder {
     }
     
     private func prefix(_ eventSummary: String, with senderDisplayName: String) -> AttributedString {
+        guard shouldPrefixSenderName else {
+            return AttributedString(eventSummary)
+        }
         let attributedEventSummary = AttributedString(eventSummary.trimmingCharacters(in: .whitespacesAndNewlines))
         
         var attributedSenderDisplayName = AttributedString(senderDisplayName)
@@ -85,5 +89,14 @@ struct RoomEventStringBuilder {
         
         // Don't include the message body in the markdown otherwise it makes tappable links.
         return attributedSenderDisplayName + ": " + attributedEventSummary
+    }
+    
+    static func pinnedEventStringBuilder(userID: String) -> Self {
+        RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID,
+                                                              shouldDisambiguateDisplayNames: false),
+                               messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "pinnedEvents", mentionBuilder: PlainMentionBuilder()),
+                                                                prefix: .mediaType),
+                               shouldDisambiguateDisplayNames: false,
+                               shouldPrefixSenderName: false)
     }
 }

@@ -8320,7 +8320,7 @@ class RoomProxyMock: RoomProxyProtocol {
         return pinnedEventIDsCallsCount > 0
     }
 
-    var pinnedEventIDs: [String] {
+    var pinnedEventIDs: Set<String> {
         get async {
             pinnedEventIDsCallsCount += 1
             if let pinnedEventIDsClosure = pinnedEventIDsClosure {
@@ -8330,8 +8330,8 @@ class RoomProxyMock: RoomProxyProtocol {
             }
         }
     }
-    var underlyingPinnedEventIDs: [String]!
-    var pinnedEventIDsClosure: (() async -> [String])?
+    var underlyingPinnedEventIDs: Set<String>!
+    var pinnedEventIDsClosure: (() async -> Set<String>)?
     var membership: Membership {
         get { return underlyingMembership }
         set(value) { underlyingMembership = value }
@@ -8403,6 +8403,23 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingTimeline = value }
     }
     var underlyingTimeline: TimelineProxyProtocol!
+    var pinnedEventsTimelineCallsCount = 0
+    var pinnedEventsTimelineCalled: Bool {
+        return pinnedEventsTimelineCallsCount > 0
+    }
+
+    var pinnedEventsTimeline: TimelineProxyProtocol? {
+        get async {
+            pinnedEventsTimelineCallsCount += 1
+            if let pinnedEventsTimelineClosure = pinnedEventsTimelineClosure {
+                return await pinnedEventsTimelineClosure()
+            } else {
+                return underlyingPinnedEventsTimeline
+            }
+        }
+    }
+    var underlyingPinnedEventsTimeline: TimelineProxyProtocol?
+    var pinnedEventsTimelineClosure: (() async -> TimelineProxyProtocol?)?
 
     //MARK: - subscribeForUpdates
 
