@@ -105,6 +105,9 @@ private struct UITextViewWrapper: UIViewRepresentable {
                                      .foregroundColor: UIColor(.compound.textPrimary)]
         
         if textView.attributedText != text {
+            // Remember the selection if only the attributes have changed.
+            let selection = textView.attributedText.string == text.string ? textView.selectedTextRange : nil
+            
             textView.attributedText = text
             
             // Re-apply the default font when setting text for e.g. edits.
@@ -120,6 +123,11 @@ private struct UITextViewWrapper: UIViewRepresentable {
                     textView.keyboardType = .default
                     textView.reloadInputViews()
                 }
+            } else if let selection {
+                // Fixes a bug where pressing Return in the middle of two paragraphs
+                // moves the caret back to the bottom of the composer.
+                // https://github.com/element-hq/element-x-ios/issues/3104
+                textView.selectedTextRange = selection
             }
         }
     }
