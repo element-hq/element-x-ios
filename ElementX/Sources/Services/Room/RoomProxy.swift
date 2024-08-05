@@ -30,7 +30,7 @@ class RoomProxy: RoomProxyProtocol {
                 return innerPinnedEventsTimeline
             } else {
                 do {
-                    let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil), isLive: false)
+                    let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil, maxEventsToLoad: 100), isLive: false)
                     await timeline.subscribeForUpdates()
                     innerPinnedEventsTimeline = timeline
                     return timeline

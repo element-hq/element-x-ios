@@ -10989,6 +10989,42 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         try await clearComposerDraftClosure?()
     }
 
+    //MARK: - clearPinnedEventsCache
+
+    var clearPinnedEventsCacheUnderlyingCallsCount = 0
+    open var clearPinnedEventsCacheCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return clearPinnedEventsCacheUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearPinnedEventsCacheUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearPinnedEventsCacheUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearPinnedEventsCacheUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var clearPinnedEventsCacheCalled: Bool {
+        return clearPinnedEventsCacheCallsCount > 0
+    }
+    open var clearPinnedEventsCacheClosure: (() async -> Void)?
+
+    open override func clearPinnedEventsCache() async {
+        clearPinnedEventsCacheCallsCount += 1
+        await clearPinnedEventsCacheClosure?()
+    }
+
     //MARK: - discardRoomKey
 
     open var discardRoomKeyThrowableError: Error?
@@ -13007,16 +13043,16 @@ open class RoomSDKMock: MatrixRustSDK.Room {
 
     //MARK: - pinnedEventsTimeline
 
-    open var pinnedEventsTimelineInternalIdPrefixThrowableError: Error?
-    var pinnedEventsTimelineInternalIdPrefixUnderlyingCallsCount = 0
-    open var pinnedEventsTimelineInternalIdPrefixCallsCount: Int {
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadThrowableError: Error?
+    var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingCallsCount = 0
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return pinnedEventsTimelineInternalIdPrefixUnderlyingCallsCount
+                return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = pinnedEventsTimelineInternalIdPrefixUnderlyingCallsCount
+                    returnValue = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -13024,29 +13060,29 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         set {
             if Thread.isMainThread {
-                pinnedEventsTimelineInternalIdPrefixUnderlyingCallsCount = newValue
+                pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    pinnedEventsTimelineInternalIdPrefixUnderlyingCallsCount = newValue
+                    pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var pinnedEventsTimelineInternalIdPrefixCalled: Bool {
-        return pinnedEventsTimelineInternalIdPrefixCallsCount > 0
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadCalled: Bool {
+        return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadCallsCount > 0
     }
-    open var pinnedEventsTimelineInternalIdPrefixReceivedInternalIdPrefix: String?
-    open var pinnedEventsTimelineInternalIdPrefixReceivedInvocations: [String?] = []
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReceivedArguments: (internalIdPrefix: String?, maxEventsToLoad: UInt16)?
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReceivedInvocations: [(internalIdPrefix: String?, maxEventsToLoad: UInt16)] = []
 
-    var pinnedEventsTimelineInternalIdPrefixUnderlyingReturnValue: Timeline!
-    open var pinnedEventsTimelineInternalIdPrefixReturnValue: Timeline! {
+    var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingReturnValue: Timeline!
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReturnValue: Timeline! {
         get {
             if Thread.isMainThread {
-                return pinnedEventsTimelineInternalIdPrefixUnderlyingReturnValue
+                return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingReturnValue
             } else {
                 var returnValue: Timeline? = nil
                 DispatchQueue.main.sync {
-                    returnValue = pinnedEventsTimelineInternalIdPrefixUnderlyingReturnValue
+                    returnValue = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -13054,29 +13090,29 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         set {
             if Thread.isMainThread {
-                pinnedEventsTimelineInternalIdPrefixUnderlyingReturnValue = newValue
+                pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    pinnedEventsTimelineInternalIdPrefixUnderlyingReturnValue = newValue
+                    pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var pinnedEventsTimelineInternalIdPrefixClosure: ((String?) async throws -> Timeline)?
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadClosure: ((String?, UInt16) async throws -> Timeline)?
 
-    open override func pinnedEventsTimeline(internalIdPrefix: String?) async throws -> Timeline {
-        if let error = pinnedEventsTimelineInternalIdPrefixThrowableError {
+    open override func pinnedEventsTimeline(internalIdPrefix: String?, maxEventsToLoad: UInt16) async throws -> Timeline {
+        if let error = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadThrowableError {
             throw error
         }
-        pinnedEventsTimelineInternalIdPrefixCallsCount += 1
-        pinnedEventsTimelineInternalIdPrefixReceivedInternalIdPrefix = internalIdPrefix
+        pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadCallsCount += 1
+        pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReceivedArguments = (internalIdPrefix: internalIdPrefix, maxEventsToLoad: maxEventsToLoad)
         DispatchQueue.main.async {
-            self.pinnedEventsTimelineInternalIdPrefixReceivedInvocations.append(internalIdPrefix)
+            self.pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReceivedInvocations.append((internalIdPrefix: internalIdPrefix, maxEventsToLoad: maxEventsToLoad))
         }
-        if let pinnedEventsTimelineInternalIdPrefixClosure = pinnedEventsTimelineInternalIdPrefixClosure {
-            return try await pinnedEventsTimelineInternalIdPrefixClosure(internalIdPrefix)
+        if let pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadClosure = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadClosure {
+            return try await pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadClosure(internalIdPrefix, maxEventsToLoad)
         } else {
-            return pinnedEventsTimelineInternalIdPrefixReturnValue
+            return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReturnValue
         }
     }
 
