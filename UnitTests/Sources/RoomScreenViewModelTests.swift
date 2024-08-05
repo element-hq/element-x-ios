@@ -351,6 +351,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
+                                            networkMonitor: ServiceLocator.shared.networkMonitor,
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics)
@@ -375,6 +376,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                             userIndicatorController: userIndicatorControllerMock,
+                                            networkMonitor: ServiceLocator.shared.networkMonitor,
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics)
@@ -398,7 +400,7 @@ class RoomScreenViewModelTests: XCTestCase {
                             mediaProvider: MockMediaProvider(),
                             mediaPlayerProvider: MediaPlayerProviderMock(),
                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                            userIndicatorController: userIndicatorControllerMock,
+                            userIndicatorController: userIndicatorControllerMock, networkMonitor: ServiceLocator.shared.networkMonitor,
                             appMediator: AppMediatorMock.default,
                             appSettings: ServiceLocator.shared.settings,
                             analyticsService: ServiceLocator.shared.analytics)
