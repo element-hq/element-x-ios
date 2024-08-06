@@ -118,7 +118,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         tearDownCallSession(sendEndCallAction: true)
     }
     
-    func setCallMuted(_ muted: Bool, roomID: String) {
+    func setAudioEnabled(_ enabled: Bool, roomID: String) {
         guard let ongoingCallID else {
             MXLog.error("Failed toggling call microphone, no calls running")
             return
@@ -129,7 +129,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             return
         }
         
-        let transaction = CXTransaction(action: CXSetMutedCallAction(call: ongoingCallID.callKitID, muted: muted))
+        let transaction = CXTransaction(action: CXSetMutedCallAction(call: ongoingCallID.callKitID, muted: !enabled))
         callController.request(transaction) { error in
             if let error {
                 MXLog.error("Failed toggling call microphone with error: \(error)")
@@ -211,16 +211,13 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     func provider(_ provider: CXProvider, perform action: CXSetMutedCallAction) {
-        // if let ongoingCallID {
-        //    actionsSubject.send(.setCallMuted(action.isMuted, roomID: ongoingCallID.roomID))
-        // } else {
-        //     MXLog.error("Failed muting/unmuting call, missing ongoingCallID")
-        // }
-        //
-        // action.fulfill()
+        if let ongoingCallID {
+            actionsSubject.send(.setAudioEnabled(!action.isMuted, roomID: ongoingCallID.roomID))
+        } else {
+            MXLog.error("Failed muting/unmuting call, missing ongoingCallID")
+        }
         
-        // TODO: EC doesn't expose controls for this yet. Fail the action for now.
-        action.fail()
+        action.fulfill()
     }
     
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {

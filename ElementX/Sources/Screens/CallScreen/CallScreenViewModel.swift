@@ -62,9 +62,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 return
             }
             
-            // TODO: intercept EC mute state changes and pass them over to CallKit
-            // elementCallService.setCallMuted(roomID: roomProxy.id, muted: muted)
-            
             Task {
                 await self.widgetDriver.sendMessage(message)
             }
@@ -76,14 +73,14 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 guard let self else { return }
                 
                 switch action {
-                case let .setCallMuted(muted, roomID):
+                case let .setAudioEnabled(enabled, roomID):
                     guard roomID == roomProxy.id else {
                         MXLog.error("Received mute request for a different room: \(roomID) != \(roomProxy.id)")
                         return
                     }
                     
                     Task {
-                        await self.setMuted(muted)
+                        await self.setAudioEnabled(enabled)
                     }
                 default:
                     break
@@ -97,13 +94,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 guard let self else { return }
                 
                 Task {
-                    do {
-                        let message = "postMessage(\(receivedMessage), '*')"
-                        let result = try await self.state.bindings.javaScriptEvaluator?(message)
-                        MXLog.debug("Evaluated javascript: \(message) with result: \(String(describing: result))")
-                    } catch {
-                        MXLog.error("Received javascript evaluation error: \(error)")
-                    }
+                    await self.postJSONToWidget(receivedMessage)
                 }
             }
             .store(in: &cancellables)
@@ -116,6 +107,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 switch action {
                 case .callEnded:
                     actionsSubject.send(.dismiss)
+                case .mediaStateChanged(let audioEnabled, _):
+                    elementCallService.setAudioEnabled(audioEnabled, roomID: roomProxy.id)
                 }
             }
             .store(in: &cancellables)
@@ -143,8 +136,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             
             await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
             
-            // TODO: Pass over the current EC mute status to CallKit
-            
             let _ = await roomProxy.sendCallNotificationIfNeeeded()
         }
     }
@@ -159,7 +150,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     func stop() {
         Task {
-            await hangUp()
+            await hangup()
         }
         
         elementCallService.tearDownCallSession()
@@ -167,23 +158,44 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     // MARK: - Private
     
-    private func setMuted(_ muted: Bool) async {
-        // Not supported on EC yet
+    private func setAudioEnabled(_ enabled: Bool) async {
+        let message = ElementCallWidgetMessage(direction: .toWidget,
+                                               action: .mediaState,
+                                               data: .init(audioEnabled: enabled),
+                                               widgetId: widgetDriver.widgetID)
+        await postMessageToWidget(message)
     }
     
-    private func hangUp() async {
-        let hangUpMessage = """
-        {"api":"fromWidget",
-        "widgetId":"\(widgetDriver.widgetID)",
-        "requestId":"widgetapi-\(UUID())",
-        "action":"im.vector.hangup",
-        "data":{}}
-        """
+    func hangup() async {
+        let message = ElementCallWidgetMessage(direction: .fromWidget,
+                                               action: .hangup,
+                                               widgetId: widgetDriver.widgetID)
         
-        let result = await widgetDriver.sendMessage(hangUpMessage)
-        MXLog.info("Sent hangUp message with result: \(result)")
+        await postMessageToWidget(message)
     }
-
+    
+    private func postMessageToWidget(_ message: ElementCallWidgetMessage) async {
+        do {
+            let data = try JSONEncoder().encode(message)
+            let json = String(decoding: data, as: UTF8.self)
+            _ = await widgetDriver.sendMessage(json)
+            
+            await postJSONToWidget(json)
+        } catch {
+            MXLog.error("Failed encoding widget message with error: \(error)")
+        }
+    }
+    
+    private func postJSONToWidget(_ json: String) async {
+        do {
+            let message = "postMessage(\(json), '*')"
+            let result = try await state.bindings.javaScriptEvaluator?(message)
+            MXLog.debug("Evaluated javascript: \(json) with result: \(String(describing: result))")
+        } catch {
+            MXLog.error("Received javascript evaluation error: \(error)")
+        }
+    }
+    
     private static let eventHandlerName = "elementx"
     
     private static var eventHandlerInjectionScript: String {

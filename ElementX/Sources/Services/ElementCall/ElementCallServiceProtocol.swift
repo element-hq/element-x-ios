@@ -19,7 +19,7 @@ import Combine
 enum ElementCallServiceAction {
     case startCall(roomID: String)
     case endCall(roomID: String)
-    case setCallMuted(_ muted: Bool, roomID: String)
+    case setAudioEnabled(_ enabled: Bool, roomID: String)
 }
 
 // sourcery: AutoMockable
@@ -32,5 +32,5 @@ protocol ElementCallServiceProtocol {
     
     func tearDownCallSession()
     
-    func setCallMuted(_ muted: Bool, roomID: String)
+    func setAudioEnabled(_ enabled: Bool, roomID: String)
 }
