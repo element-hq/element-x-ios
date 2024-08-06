@@ -58,6 +58,7 @@ struct RoomInviterLabel: View {
                                 avatarSize: .custom(16),
                                 imageProvider: imageProvider)
                 .alignmentGuide(.firstTextBaseline) { $0[.bottom] * 0.8 }
+                .accessibilityHidden(true)
             
             Text(inviter.attributedInviteText)
         }

@@ -14,8 +14,9 @@
 // limitations under the License.
 //
 
-import Foundation
+import Compound
 import MatrixRustSDK
+import SwiftUI
 
 /// Represents and issue with a timeline item's authenticity such as coming from an
 /// unsigned session or being sent unencrypted in an encrypted room. See Rust's
@@ -41,6 +42,25 @@ enum EncryptionAuthenticity: Hashable {
             L10n.eventShieldReasonUnverifiedIdentity
         case .sentInClear:
             L10n.eventShieldReasonSentInClear
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .notGuaranteed(let color),
+             .unknownDevice(let color),
+             .unsignedDevice(let color),
+             .unverifiedIdentity(let color),
+             .sentInClear(let color):
+            color
+        }
+    }
+    
+    var icon: KeyPath<CompoundIcons, Image> {
+        // TODO: Should sentInClear have a dedicated icon???
+        switch color {
+        case .red: \.error
+        case .gray: \.info
         }
     }
 }

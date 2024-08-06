@@ -169,6 +169,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
         case .itemTapped(let id):
             Task { await handleItemTapped(with: id) }
+        case .itemSendInfoTapped(let itemID):
+            handleItemSendInfoTapped(itemID: itemID)
         case .toggleReaction(let emoji, let itemId):
             Task { await timelineController.toggleReaction(emoji, to: itemId) }
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
@@ -607,6 +609,23 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         state.showLoading = false
     }
+    
+    private func handleItemSendInfoTapped(itemID: TimelineItemIdentifier) {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
+            MXLog.warning("Couldn't find timeline item.")
+            return
+        }
+        
+        guard let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
+            fatalError("Only events can have send info.")
+        }
+        
+        if eventTimelineItem.properties.deliveryStatus == .sendingFailed {
+            displayAlert(.sendingFailed)
+        } else if let authenticityMessage = eventTimelineItem.properties.encryptionAuthenticity?.message {
+            displayAlert(.encryptionAuthenticity(authenticityMessage))
+        }
+    }
 
     private func sendCurrentMessage(_ message: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions) async {
         guard !message.isEmpty else {
@@ -851,6 +870,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                              message: L10n.commonPollEndConfirmation,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
                                              secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
+        case .sendingFailed:
+            state.bindings.alertInfo = .init(id: type,
+                                             title: L10n.commonSendingFailed,
+                                             primaryButton: .init(title: L10n.actionOk, action: nil))
+        case .encryptionAuthenticity(let message):
+            state.bindings.alertInfo = .init(id: type,
+                                             title: message,
+                                             primaryButton: .init(title: L10n.actionOk, action: nil))
         }
     }
     
