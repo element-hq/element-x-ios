@@ -87,10 +87,10 @@ struct PinnedItemsBannerView_Previews: PreviewProvider, TestablePreview {
     static var attributedContent: AttributedString {
         var boldPart = AttributedString("Image:")
         boldPart.bold()
-        var final = boldPart + " content.png"
+        var finalString = boldPart + " content.png"
         // This should be ignored when presented
-        final.font = .headline
-        return final
+        finalString.font = .headline
+        return finalString
     }
     
     static var previews: some View {
