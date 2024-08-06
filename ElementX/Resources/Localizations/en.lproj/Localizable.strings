@@ -256,7 +256,7 @@
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
 "error_unknown" = "Sorry, an error occurred";
 "event_shield_reason_authenticity_not_guaranteed" = "The authenticity of this encrypted message can't be guaranteed on this device.";
-"event_shield_reason_sent_in_clear" = "Sent in clear.";
+"event_shield_reason_sent_in_clear" = "Not encrypted.";
 "event_shield_reason_unknown_device" = "Encrypted by an unknown or deleted device.";
 "event_shield_reason_unsigned_device" = "Encrypted by a device not verified by its owner.";
 "event_shield_reason_unverified_identity" = "Encrypted by an unverified user.";

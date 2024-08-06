@@ -194,6 +194,7 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     static let (item, actions) = makeItem()
     static let (backupItem, _) = makeItem(authenticity: .notGuaranteed(color: .gray))
+    static let (unsignedItem, _) = makeItem(authenticity: .unsignedDevice(color: .red))
     static let (unencryptedItem, _) = makeItem(authenticity: .sentInClear(color: .red))
 
     static var previews: some View {
@@ -209,6 +210,10 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
         TimelineItemMenu(item: backupItem, actions: actions)
             .environmentObject(viewModel.context)
             .previewDisplayName("Authenticity not guaranteed")
+        
+        TimelineItemMenu(item: unsignedItem, actions: actions)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Unsigned")
         
         TimelineItemMenu(item: unencryptedItem, actions: actions)
             .environmentObject(viewModel.context)
