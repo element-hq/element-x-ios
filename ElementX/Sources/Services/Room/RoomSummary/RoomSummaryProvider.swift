@@ -93,7 +93,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         do {
             listUpdatesSubscriptionResult = roomList.entriesWithDynamicAdapters(pageSize: UInt32(roomListPageSize), listener: RoomListEntriesListenerProxy { [weak self] updates in
                 guard let self else { return }
-                MXLog.verbose("\(name): Received list update")
                 diffsPublisher.send(updates)
             })
             
@@ -172,15 +171,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             span.exit()
         }
         
-        MXLog.info("Started processing room list diffs")
-        
-        MXLog.verbose("\(name): Received \(diffs.count) diffs, current room list \(rooms.map(\.id))")
+        MXLog.info("\(name): Received \(diffs.count) diffs")
         
         rooms = diffs.reduce(rooms) { currentItems, diff in
             processDiff(diff, on: currentItems)
         }
-        
-        MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.map(\.id))")
         
         MXLog.info("Finished processing room list diffs")
     }
@@ -270,46 +265,37 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         switch diff {
         case .append(let values):
             let debugIdentifiers = values.map { $0.id() }
-            MXLog.verbose("\(name): Append \(debugIdentifiers)")
             for (index, value) in values.enumerated() {
                 let summary = buildRoomSummary(from: value)
                 changes.append(.insert(offset: rooms.count + index, element: summary, associatedWith: nil))
             }
         case .clear:
-            MXLog.verbose("\(name): Clear all items")
             for (index, value) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: value, associatedWith: nil))
             }
         case .insert(let index, let value):
-            MXLog.verbose("\(name): Insert at \(value.id()) at \(index)")
             let summary = buildRoomSummary(from: value)
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .popBack:
-            MXLog.verbose("\(name): Pop Back")
             guard let value = rooms.last else {
                 fatalError()
             }
             
             changes.append(.remove(offset: rooms.count - 1, element: value, associatedWith: nil))
         case .popFront:
-            MXLog.verbose("\(name): Pop Front")
             let summary = rooms[0]
             changes.append(.remove(offset: 0, element: summary, associatedWith: nil))
         case .pushBack(let value):
-            MXLog.verbose("\(name): Push Back \(value.id())")
             let summary = buildRoomSummary(from: value)
             changes.append(.insert(offset: rooms.count, element: summary, associatedWith: nil))
         case .pushFront(let value):
-            MXLog.verbose("\(name): Push Front \(value.id())")
             let summary = buildRoomSummary(from: value)
             changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
         case .remove(let index):
             let summary = rooms[Int(index)]
-            MXLog.verbose("\(name): Remove \(summary.id) from \(index)")
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
         case .reset(let values):
             let debugIdentifiers = values.map { $0.id() }
-            MXLog.verbose("\(name): Replace all items with \(debugIdentifiers)")
             for (index, summary) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: summary, associatedWith: nil))
             }
@@ -318,7 +304,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 changes.append(.insert(offset: index, element: buildRoomSummary(from: value), associatedWith: nil))
             }
         case .set(let index, let value):
-            MXLog.verbose("\(name): Update \(value.id()) at \(index)")
             let summary = buildRoomSummary(from: value)
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
