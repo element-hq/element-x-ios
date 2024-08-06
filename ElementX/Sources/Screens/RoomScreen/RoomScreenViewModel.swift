@@ -50,6 +50,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
+    private var pinnedEventsTimelineProviderSetupTask: Task<Void, Never>?
     
     private var pinnedEventsTimelineProvider: RoomTimelineProviderProtocol? {
         didSet {
@@ -508,12 +509,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        networkMonitor.reachabilityPublisher.sink { [weak self] networkState in
-            if networkState == .reachable {
-                self?.setupPinnedEventsTimelineProviderIfNeeded()
+        networkMonitor.reachabilityPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] networkState in
+                if networkState == .reachable {
+                    self?.setupPinnedEventsTimelineProviderIfNeeded()
+                }
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
     }
     
     private func setupAppSettingsSubscriptions() {
@@ -531,14 +534,20 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func setupPinnedEventsTimelineProviderIfNeeded() {
-        Task {
+        guard pinnedEventsTimelineProvider == nil,
+              pinnedEventsTimelineProviderSetupTask == nil else {
+            return
+        }
+        
+        pinnedEventsTimelineProviderSetupTask = Task { [weak self] in
+            guard let self else { return }
+            
             guard let pinnedEventsTimelineProvider = await roomProxy.pinnedEventsTimeline?.timelineProvider else {
+                pinnedEventsTimelineProviderSetupTask = nil
                 return
             }
             
-            if self.pinnedEventsTimelineProvider == nil {
-                self.pinnedEventsTimelineProvider = pinnedEventsTimelineProvider
-            }
+            self.pinnedEventsTimelineProvider = pinnedEventsTimelineProvider
         }
     }
     
