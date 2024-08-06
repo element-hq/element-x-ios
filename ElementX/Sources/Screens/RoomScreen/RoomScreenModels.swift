@@ -311,7 +311,7 @@ struct PinnedEventsState: Equatable {
             } else if pinnedEventContents.isEmpty {
                 selectedPinEventID = nil
             } else if let selectedPinEventID, !pinnedEventContents.keys.set.contains(selectedPinEventID) {
-                self.selectedPinEventID = pinnedEventContents.firstNonNil { $0.key }
+                self.selectedPinEventID = pinnedEventContents.keys.last
             }
         }
     }

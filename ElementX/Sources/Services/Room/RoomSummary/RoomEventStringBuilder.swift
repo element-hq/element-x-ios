@@ -42,7 +42,7 @@ struct RoomEventStringBuilder {
         case .redactedMessage:
             return prefix(L10n.commonMessageRemoved, with: displayName)
         case .sticker:
-            if messageEventStringBuilder.prefix == .type {
+            if messageEventStringBuilder.prefix == .messageType {
                 var string = AttributedString(L10n.commonSticker)
                 string.bold()
                 return string
@@ -75,7 +75,7 @@ struct RoomEventStringBuilder {
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
         case .poll(let question, _, _, _, _, _, _):
-            if messageEventStringBuilder.prefix == .type {
+            if messageEventStringBuilder.prefix == .messageType {
                 let questionPlaceholder = "{question}"
                 var finalString = AttributedString(L10n.commonPollSummary(questionPlaceholder))
                 finalString.bold()
@@ -108,7 +108,7 @@ struct RoomEventStringBuilder {
         RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID,
                                                               shouldDisambiguateDisplayNames: false),
                                messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "pinnedEvents", mentionBuilder: PlainMentionBuilder()),
-                                                                prefix: .type),
+                                                                prefix: .messageType),
                                shouldDisambiguateDisplayNames: false,
                                shouldPrefixSenderName: false)
     }
