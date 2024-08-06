@@ -18,7 +18,7 @@ import Combine
 import MatrixRustSDK
 import SwiftUI
 
-private struct ElementCallWidgetMessage: Codable {
+struct ElementCallWidgetMessage: Codable {
     enum Direction: String, Codable {
         case fromWidget
         case toWidget
@@ -26,14 +26,32 @@ private struct ElementCallWidgetMessage: Codable {
     
     enum Action: String, Codable {
         case hangup = "im.vector.hangup"
+        case mediaState = "io.element.device_mute"
+    }
+    
+    struct Data: Codable {
+        var audioEnabled: Bool?
+        var videoEnabled: Bool?
+        
+        enum CodingKeys: String, CodingKey {
+            case audioEnabled = "audio_enabled"
+            case videoEnabled = "video_enabled"
+        }
     }
     
     let direction: Direction
     let action: Action
+    var data: Data = .init()
+    
+    let widgetId: String
+    var requestId = "widgetapi-\(UUID())"
     
     enum CodingKeys: String, CodingKey {
         case direction = "api"
         case action
+        case data
+        case widgetId
+        case requestId
     }
 }
 
@@ -151,16 +169,29 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
     // MARK: - Private
     
     func handleMessageIfNeeded(_ message: String) {
-        guard let data = message.data(using: .utf8),
-              let widgetMessage = try? JSONDecoder().decode(ElementCallWidgetMessage.self, from: data) else {
+        guard let data = message.data(using: .utf8) else {
             return
         }
         
-        if widgetMessage.direction == .fromWidget {
-            switch widgetMessage.action {
-            case .hangup:
-                actionsSubject.send(.callEnded)
+        do {
+            let widgetMessage = try JSONDecoder().decode(ElementCallWidgetMessage.self, from: data)
+            if widgetMessage.direction == .fromWidget {
+                switch widgetMessage.action {
+                case .hangup:
+                    actionsSubject.send(.callEnded)
+                case .mediaState:
+                    guard let audioEnabled = widgetMessage.data.audioEnabled,
+                          let videoEnabled = widgetMessage.data.videoEnabled else {
+                        MXLog.error("Media state change messages should contain info data")
+                        return
+                    }
+                    
+                    actionsSubject.send(.mediaStateChanged(audioEnabled: audioEnabled, videoEnabled: videoEnabled))
+                }
             }
+        } catch {
+            // Not all actions are supported
+            MXLog.verbose("Failed processing widget message with error: \(error)")
         }
     }
 }

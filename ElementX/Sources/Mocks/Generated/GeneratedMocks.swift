@@ -5007,17 +5007,17 @@ class ElementCallServiceMock: ElementCallServiceProtocol {
         tearDownCallSessionCallsCount += 1
         tearDownCallSessionClosure?()
     }
-    //MARK: - setCallMuted
+    //MARK: - setAudioEnabled
 
-    var setCallMutedRoomIDUnderlyingCallsCount = 0
-    var setCallMutedRoomIDCallsCount: Int {
+    var setAudioEnabledRoomIDUnderlyingCallsCount = 0
+    var setAudioEnabledRoomIDCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return setCallMutedRoomIDUnderlyingCallsCount
+                return setAudioEnabledRoomIDUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = setCallMutedRoomIDUnderlyingCallsCount
+                    returnValue = setAudioEnabledRoomIDUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5025,28 +5025,28 @@ class ElementCallServiceMock: ElementCallServiceProtocol {
         }
         set {
             if Thread.isMainThread {
-                setCallMutedRoomIDUnderlyingCallsCount = newValue
+                setAudioEnabledRoomIDUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    setCallMutedRoomIDUnderlyingCallsCount = newValue
+                    setAudioEnabledRoomIDUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var setCallMutedRoomIDCalled: Bool {
-        return setCallMutedRoomIDCallsCount > 0
+    var setAudioEnabledRoomIDCalled: Bool {
+        return setAudioEnabledRoomIDCallsCount > 0
     }
-    var setCallMutedRoomIDReceivedArguments: (muted: Bool, roomID: String)?
-    var setCallMutedRoomIDReceivedInvocations: [(muted: Bool, roomID: String)] = []
-    var setCallMutedRoomIDClosure: ((Bool, String) -> Void)?
+    var setAudioEnabledRoomIDReceivedArguments: (enabled: Bool, roomID: String)?
+    var setAudioEnabledRoomIDReceivedInvocations: [(enabled: Bool, roomID: String)] = []
+    var setAudioEnabledRoomIDClosure: ((Bool, String) -> Void)?
 
-    func setCallMuted(_ muted: Bool, roomID: String) {
-        setCallMutedRoomIDCallsCount += 1
-        setCallMutedRoomIDReceivedArguments = (muted: muted, roomID: roomID)
+    func setAudioEnabled(_ enabled: Bool, roomID: String) {
+        setAudioEnabledRoomIDCallsCount += 1
+        setAudioEnabledRoomIDReceivedArguments = (enabled: enabled, roomID: roomID)
         DispatchQueue.main.async {
-            self.setCallMutedRoomIDReceivedInvocations.append((muted: muted, roomID: roomID))
+            self.setAudioEnabledRoomIDReceivedInvocations.append((enabled: enabled, roomID: roomID))
         }
-        setCallMutedRoomIDClosure?(muted, roomID)
+        setAudioEnabledRoomIDClosure?(enabled, roomID)
     }
 }
 class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
