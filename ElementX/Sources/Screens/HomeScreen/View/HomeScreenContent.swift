@@ -87,6 +87,29 @@ struct HomeScreenContent: View {
             }
             .onChange(of: context.viewState.visibleRooms) { _ in
                 updateVisibleRange()
+                
+                // We have been seeing a lot of issues around the room list not updating properly after
+                // rooms shifting around:
+                // * Tapping on the room list doesn't always take you to the right room  - https://github.com/element-hq/element-x-ios/issues/2386
+                // * Big blank gaps in the room list - https://github.com/element-hq/element-x-ios/issues/3026
+                //
+                // We initially thought it's caused by the filters header or the geometry reader but
+                // the problem is still reproducible without those.
+                //
+                // As a last attempt we will manually force it to update by shifting the
+                // inner scroll view by a point every time the room list is updated
+                DispatchQueue.main.async {
+                    guard !scrollViewAdapter.isScrolling.value, let scrollView = scrollViewAdapter.scrollView else {
+                        return
+                    }
+                    
+                    let oldOffset = scrollView.contentOffset
+                    var newOffset = scrollView.contentOffset
+                    newOffset.y += 1
+                    
+                    scrollView.setContentOffset(newOffset, animated: false)
+                    scrollView.setContentOffset(oldOffset, animated: false)
+                }
             }
             .background {
                 Button("") {
