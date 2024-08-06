@@ -23,15 +23,6 @@ struct PinnedItemsBannerView: View {
     let onMainButtonTap: () -> Void
     let onViewAllButtonTap: () -> Void
     
-    private var displayedMessage: AttributedString {
-        switch state {
-        case .loading:
-            return AttributedString(L10n.screenRoomPinnedBannerLoadingDescription)
-        case .loaded(let state):
-            return state.selectedPinContent
-        }
-    }
-    
     var body: some View {
         HStack(spacing: 0) {
             mainButton
@@ -84,7 +75,7 @@ struct PinnedItemsBannerView: View {
                 .font(.compound.bodySM)
                 .foregroundColor(.compound.textActionAccent)
                 .lineLimit(1)
-            Text(displayedMessage)
+            Text(state.displayedMessage)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)

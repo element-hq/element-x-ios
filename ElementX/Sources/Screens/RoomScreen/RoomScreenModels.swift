@@ -306,6 +306,7 @@ struct PinnedEventsState: Equatable {
     var pinnedEventContents: OrderedDictionary<String, AttributedString> = [:] {
         didSet {
             if selectedPinEventID == nil, !pinnedEventContents.keys.isEmpty {
+                // The default selected event should always be the last one.
                 selectedPinEventID = pinnedEventContents.keys.last
             } else if pinnedEventContents.isEmpty {
                 selectedPinEventID = nil
@@ -390,7 +391,17 @@ enum PinnedEventsBannerState: Equatable {
         case .loaded(let state):
             return state.selectedPinIndex
         case .loading(let numbersOfEvents):
+            // We always want the index to be the last one when loading, since is the default one.
             return numbersOfEvents - 1
+        }
+    }
+    
+    var displayedMessage: AttributedString {
+        switch self {
+        case .loading:
+            return AttributedString(L10n.screenRoomPinnedBannerLoadingDescription)
+        case .loaded(let state):
+            return state.selectedPinContent
         }
     }
     
@@ -417,6 +428,7 @@ enum PinnedEventsBannerState: Equatable {
     mutating func setPinnedEventContents(_ pinnedEventContents: OrderedDictionary<String, AttributedString>) {
         switch self {
         case .loading:
+            // The default selected event should always be the last one.
             self = .loaded(state: .init(pinnedEventContents: pinnedEventContents, selectedPinEventID: pinnedEventContents.keys.last))
         case .loaded(var state):
             state.pinnedEventContents = pinnedEventContents

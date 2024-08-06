@@ -1675,7 +1675,7 @@ internal enum L10n {
   internal static func screenRoomPinnedBannerIndicatorDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_pinned_banner_indicator_description", String(describing: p1))
   }
-  /// Loading message...
+  /// Loading message…
   internal static var screenRoomPinnedBannerLoadingDescription: String { return L10n.tr("Localizable", "screen_room_pinned_banner_loading_description") }
   /// View All
   internal static var screenRoomPinnedBannerViewAllButtonTitle: String { return L10n.tr("Localizable", "screen_room_pinned_banner_view_all_button_title") }
