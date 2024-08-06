@@ -7,7 +7,7 @@ struct SetupProject: ParsableCommand {
 
     func run() throws {
         try setupGitHooks()
-        try brewBundleInstall()
+        try brewInstall()
         try mintPackagesInstall()
         try xcodegen()
     }
@@ -16,8 +16,8 @@ struct SetupProject: ParsableCommand {
         try Zsh.run(command: "git config core.hooksPath .githooks")
     }
 
-    func brewBundleInstall() throws {
-        try Zsh.run(command: "brew install xcodegen swiftgen swiftformat git-lfs sourcery mint kiliankoe/formulae/swift-outdated localazy/tools/localazy peripheryapp/periphery/periphery")
+    func brewInstall() throws {
+        try Zsh.run(command: "brew install xcodegen swiftgen swiftformat git-lfs sourcery mint kiliankoe/formulae/swift-outdated localazy/tools/localazy peripheryapp/periphery/periphery FelixHerrmann/tap/swift-package-list")
     }
 
     func mintPackagesInstall() throws {

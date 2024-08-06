@@ -407,6 +407,7 @@
 		5EE1D4E316D66943E97FDCF2 /* BloomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BEB970F500BFB248443FA1 /* BloomView.swift */; };
 		5F06AD3C66884CE793AE6119 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DF593C3F7AF4B2FBAEB05D /* FileManager.swift */; };
 		5F5488FBC9CFEB6F433D74A4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7109E709A7738E6BCC4553E6 /* Localizable.strings */; };
+		5FCD8AFA364206EE32B909A3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B050A6B233D95807A09289E7 /* Settings.bundle */; };
 		601AB75BD52B0B4276CEB84A /* SessionVerificationScreenStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161CD412E75F4086F422AE39 /* SessionVerificationScreenStateMachine.swift */; };
 		60ED66E63A169E47489348A8 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 886A0A498FA01E8EDD451D05 /* Sentry */; };
 		6146996D5C4DDD5DA816FC87 /* AuthenticationTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCACD75595C40EACD6AD4A74 /* AuthenticationTextFieldStyle.swift */; };
@@ -1881,6 +1882,7 @@
 		AF64B3A815D04325F1980E02 /* TimelineItemMenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemMenuAction.swift; sourceTree = "<group>"; };
 		AF848B41DAF1066F3054D4A1 /* SessionVerificationScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationScreenModels.swift; sourceTree = "<group>"; };
 		AFEF489B8E2450E2BA1A314E /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/SAS.strings; sourceTree = "<group>"; };
+		B050A6B233D95807A09289E7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = wrapper.cfbundle; path = Settings.bundle; sourceTree = "<group>"; };
 		B0618820D26F9871A4BBB40E /* ComposerToolbarViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerToolbarViewModelProtocol.swift; sourceTree = "<group>"; };
 		B0A307A44F952CD73E63AE31 /* RoomEventStringBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomEventStringBuilder.swift; sourceTree = "<group>"; };
 		B0BA67B3E4EF9D29D14A78CE /* AppLockSettingsScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockSettingsScreenViewModelTests.swift; sourceTree = "<group>"; };
@@ -2443,6 +2445,7 @@
 				81B17DB1BC3B0C62AF84D230 /* Info.plist */,
 				048A21188AB19349D026BECD /* PrivacyInfo.xcprivacy */,
 				E65DA46BD5CA83747AE144F3 /* secrets.xcconfig */,
+				B050A6B233D95807A09289E7 /* Settings.bundle */,
 				F012CB5EE3F2B67359F6CC52 /* target.yml */,
 			);
 			path = SupportingFiles;
@@ -5637,6 +5640,7 @@
 				6860721DB3091BE08164C132 /* MapAssets.xcassets in Resources */,
 				8B408C574E35E1C9B43A50CE /* PrivacyInfo.xcprivacy in Resources */,
 				C3317EF833AB4060988DF098 /* SAS.strings in Resources */,
+				5FCD8AFA364206EE32B909A3 /* Settings.bundle in Resources */,
 				CE1694C7BB93C3311524EF28 /* Untranslated.strings in Resources */,
 				2797C9D9BA642370F1C85D78 /* Untranslated.stringsdict in Resources */,
 				E67418DACEDBC29E988E6ACD /* message.caf in Resources */,
