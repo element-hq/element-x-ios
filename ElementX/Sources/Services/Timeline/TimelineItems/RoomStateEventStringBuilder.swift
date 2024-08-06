@@ -187,6 +187,15 @@ struct RoomStateEventStringBuilder {
             case (nil, true):
                 return L10n.stateEventRoomTopicRemovedByYou
             }
+        case .roomPinnedEvents(let change):
+            switch change {
+            case .added:
+                return isOutgoing ? L10n.stateEventRoomPinnedEventsPinnedByYou : L10n.stateEventRoomPinnedEventsPinned(displayName)
+            case .changed:
+                return isOutgoing ? L10n.stateEventRoomPinnedEventsChangedByYou : L10n.stateEventRoomPinnedEventsChanged(displayName)
+            case .removed:
+                return isOutgoing ? L10n.stateEventRoomPinnedEventsUnpinnedByYou : L10n.stateEventRoomPinnedEventsUnpinned(displayName)
+            }
         case .roomPowerLevels: // Long term we might show only the user changes, but we need an SDK filter to fix read receipts in that case.
             break
         case .policyRuleRoom, .policyRuleServer, .policyRuleUser: // No strings available.
@@ -197,7 +206,7 @@ struct RoomStateEventStringBuilder {
             break
         case .roomJoinRules: // Doesn't provide information about the change.
             break
-        case .roomPinnedEvents, .roomServerAcl: // Doesn't provide information about the change.
+        case .roomServerAcl: // Doesn't provide information about the change.
             break
         case .roomTombstone: // Handle as a virtual timeline item with a link to the upgraded room.
             break
