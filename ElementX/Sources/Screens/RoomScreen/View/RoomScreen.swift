@@ -110,7 +110,7 @@ struct RoomScreen: View {
     }
     
     private var pinnedItemsBanner: some View {
-        PinnedItemsBannerView(pinnedEventsState: context.viewState.pinnedEventsState,
+        PinnedItemsBannerView(state: context.viewState.pinnedEventsBannerState,
                               onMainButtonTap: { context.send(viewAction: .tappedPinnedEventsBanner) },
                               onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
             .transition(.move(edge: .top))
@@ -213,6 +213,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                mediaPlayerProvider: MediaPlayerProviderMock(),
                                                voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                               networkMonitor: ServiceLocator.shared.networkMonitor,
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings,
                                                analyticsService: ServiceLocator.shared.analytics)

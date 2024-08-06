@@ -1675,6 +1675,8 @@ internal enum L10n {
   internal static func screenRoomPinnedBannerIndicatorDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_pinned_banner_indicator_description", String(describing: p1))
   }
+  /// Loading message…
+  internal static var screenRoomPinnedBannerLoadingDescription: String { return L10n.tr("Localizable", "screen_room_pinned_banner_loading_description") }
   /// View All
   internal static var screenRoomPinnedBannerViewAllButtonTitle: String { return L10n.tr("Localizable", "screen_room_pinned_banner_view_all_button_title") }
   /// Send again
@@ -2111,6 +2113,24 @@ internal enum L10n {
   }
   /// You made no changes
   internal static var stateEventRoomNoneByYou: String { return L10n.tr("Localizable", "state_event_room_none_by_you") }
+  /// %1$@ changed the pinned messages
+  internal static func stateEventRoomPinnedEventsChanged(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "state_event_room_pinned_events_changed", String(describing: p1))
+  }
+  /// You changed the pinned messages
+  internal static var stateEventRoomPinnedEventsChangedByYou: String { return L10n.tr("Localizable", "state_event_room_pinned_events_changed_by_you") }
+  /// %1$@ pinned a message
+  internal static func stateEventRoomPinnedEventsPinned(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "state_event_room_pinned_events_pinned", String(describing: p1))
+  }
+  /// You pinned a message
+  internal static var stateEventRoomPinnedEventsPinnedByYou: String { return L10n.tr("Localizable", "state_event_room_pinned_events_pinned_by_you") }
+  /// %1$@ unpinned a message
+  internal static func stateEventRoomPinnedEventsUnpinned(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "state_event_room_pinned_events_unpinned", String(describing: p1))
+  }
+  /// You unpinned a message
+  internal static var stateEventRoomPinnedEventsUnpinnedByYou: String { return L10n.tr("Localizable", "state_event_room_pinned_events_unpinned_by_you") }
   /// %1$@ rejected the invitation
   internal static func stateEventRoomReject(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_reject", String(describing: p1))

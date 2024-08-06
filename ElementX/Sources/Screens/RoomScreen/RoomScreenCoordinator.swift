@@ -67,6 +67,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                             mediaPlayerProvider: parameters.mediaPlayerProvider,
                                             voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                            networkMonitor: ServiceLocator.shared.networkMonitor,
                                             appMediator: parameters.appMediator,
                                             appSettings: parameters.appSettings,
                                             analyticsService: ServiceLocator.shared.analytics)
