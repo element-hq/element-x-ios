@@ -179,7 +179,7 @@ lane :config_nightly do |options|
 
   release_version = get_version_number(target: "ElementX")
 
-  update_app_icon(caption_text: "#{release_version}(#{build_number})", modulate: "100,20,100")
+  update_app_icon(caption_text: "#{release_version} (#{build_number})", modulate: "100,20,100")
 end
 
 $sentry_retry=0
