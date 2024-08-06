@@ -37,7 +37,7 @@ struct DeveloperOptionsScreen: View {
             Section("Message Pinning") {
                 Toggle(isOn: $context.pinningEnabled) {
                     Text("Enable message pinning")
-                    Text("WIP - uses mocked content")
+                    Text("Requires app reboot")
                 }
             }
             
