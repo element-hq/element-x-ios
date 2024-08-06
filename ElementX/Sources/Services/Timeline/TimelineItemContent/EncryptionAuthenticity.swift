@@ -57,10 +57,10 @@ enum EncryptionAuthenticity: Hashable {
     }
     
     var icon: KeyPath<CompoundIcons, Image> {
-        // TODO: Should sentInClear have a dedicated icon???
-        switch color {
-        case .red: \.error
-        case .gray: \.info
+        switch self {
+        case .notGuaranteed: \.info
+        case .unknownDevice, .unsignedDevice, .unverifiedIdentity: \.helpSolid
+        case .sentInClear: \.lockOff
         }
     }
 }
