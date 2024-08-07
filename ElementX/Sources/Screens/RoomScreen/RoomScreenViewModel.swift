@@ -228,7 +228,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if let eventID = state.pinnedEventsBannerState.selectedPinEventID {
                 Task { await focusOnEvent(eventID: eventID) }
             }
-            state.pinnedEventsBannerState.nextPin()
+            state.pinnedEventsBannerState.previousPin()
         case .viewAllPins:
             // TODO: Implement
             break
@@ -723,7 +723,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func buildPinnedEventContent(timelineItems: [TimelineItemProxy]) {
         var pinnedEventContents = OrderedDictionary<String, AttributedString>()
         
-        for item in timelineItems.reversed() {
+        for item in timelineItems {
             // Only remote events are pinned
             if case let .event(event) = item,
                let eventID = event.id.eventID {
