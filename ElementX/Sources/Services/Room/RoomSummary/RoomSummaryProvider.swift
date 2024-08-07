@@ -264,7 +264,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         switch diff {
         case .append(let values):
-            let debugIdentifiers = values.map { $0.id() }
             for (index, value) in values.enumerated() {
                 let summary = buildRoomSummary(from: value)
                 changes.append(.insert(offset: rooms.count + index, element: summary, associatedWith: nil))
@@ -295,7 +294,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             let summary = rooms[Int(index)]
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
         case .reset(let values):
-            let debugIdentifiers = values.map { $0.id() }
             for (index, summary) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: summary, associatedWith: nil))
             }

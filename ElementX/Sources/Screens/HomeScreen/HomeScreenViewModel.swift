@@ -343,8 +343,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        MXLog.verbose("Updating rooms")
-        
         var rooms = [HomeScreenRoom]()
         
         for summary in roomSummaryProvider.roomListPublisher.value {
@@ -353,8 +351,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         state.rooms = rooms
-        
-        MXLog.verbose("Finished updating rooms")
     }
     
     private func updateVisibleRange(_ range: Range<Int>) {

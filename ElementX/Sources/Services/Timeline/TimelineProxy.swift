@@ -408,7 +408,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError> {
-        MXLog.verbose("Sending read receipt for eventID: \(eventID)")
+        MXLog.info("Sending read receipt for eventID: \(eventID)")
         
         do {
             try await timeline.sendReadReceipt(receiptType: type, eventId: eventID)

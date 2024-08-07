@@ -81,8 +81,6 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
     // MARK: - Private
     
     private func updateRooms() {
-        MXLog.verbose("Updating rooms")
-        
         var rooms = [MessageForwardingRoom]()
         
         for summary in roomSummaryProvider.roomListPublisher.value {
@@ -95,8 +93,6 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         }
         
         state.rooms = rooms
-        
-        MXLog.verbose("Finished updating rooms")
     }
     
     /// The actual range values don't matter as long as they contain the lower
