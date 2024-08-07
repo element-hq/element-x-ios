@@ -641,6 +641,7 @@
 "screen_room_details_notification_mode_custom" = "Custom";
 "screen_room_details_notification_mode_default" = "Default";
 "screen_room_details_notification_title" = "Notifications";
+"screen_room_details_pinned_events_title" = "Pinned messages";
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_details_title" = "Room info";
 "screen_room_details_updating_room" = "Updating room…";

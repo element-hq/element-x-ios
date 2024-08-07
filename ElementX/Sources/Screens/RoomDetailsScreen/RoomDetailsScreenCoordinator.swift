@@ -55,7 +55,9 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                                                analyticsService: parameters.analyticsService,
                                                userIndicatorController: parameters.userIndicatorController,
                                                notificationSettingsProxy: parameters.notificationSettings,
-                                               attributedStringBuilder: parameters.attributedStringBuilder)
+                                               attributedStringBuilder: parameters.attributedStringBuilder,
+                                               appSettings: ServiceLocator.shared.settings,
+                                               networkMonitor: ServiceLocator.shared.networkMonitor)
     }
     
     // MARK: - Public

@@ -198,6 +198,16 @@ struct RoomDetailsScreen: View {
                     context.send(viewAction: .toggleFavourite(isFavourite: newValue))
                 }
             
+            if context.viewState.isPinningEnabled {
+                ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsTitle,
+                                        icon: \.pin),
+                        details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
+                        kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
+                            context.send(viewAction: .processTapPinnedEvents)
+                        }))
+                        .disabled(context.viewState.pinnedEventsActionState.isLoading)
+            }
+            
             if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
                 ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
                                         icon: \.admin),
@@ -320,6 +330,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         notificationSettingsProxyMockConfiguration.roomMode.isDefault = false
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
         let appSettings = AppSettings()
+        appSettings.pinningEnabled = true
         
         return RoomDetailsScreenViewModel(roomProxy: roomProxy,
                                           clientProxy: ClientProxyMock(.init()),
@@ -327,7 +338,9 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
-                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
+                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                          appSettings: appSettings,
+                                          networkMonitor: ServiceLocator.shared.networkMonitor)
     }()
     
     static let dmRoomViewModel = {
@@ -345,6 +358,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                             members: members))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
+        appSettings.pinningEnabled = true
         
         return RoomDetailsScreenViewModel(roomProxy: roomProxy,
                                           clientProxy: ClientProxyMock(.init()),
@@ -352,7 +366,9 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
-                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
+                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                          appSettings: appSettings,
+                                          networkMonitor: ServiceLocator.shared.networkMonitor)
     }()
     
     static let simpleRoomViewModel = {
@@ -369,6 +385,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                             members: members))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
+        appSettings.pinningEnabled = true
         
         return RoomDetailsScreenViewModel(roomProxy: roomProxy,
                                           clientProxy: ClientProxyMock(.init()),
@@ -376,7 +393,9 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
-                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
+                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                          appSettings: appSettings,
+                                          networkMonitor: ServiceLocator.shared.networkMonitor)
     }()
     
     static var previews: some View {

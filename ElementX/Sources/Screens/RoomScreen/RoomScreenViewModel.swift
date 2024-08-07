@@ -50,7 +50,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
-    private var pinnedEventsTimelineProviderSetupTask: Task<Void, Never>?
     
     private var pinnedEventsTimelineProvider: RoomTimelineProviderProtocol? {
         didSet {
@@ -148,8 +147,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 state.canJoinCall = permission
             }
         }
-        
-        setupPinnedEventsTimelineProviderIfNeeded()
     }
     
     // MARK: - Public
@@ -230,8 +227,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             state.pinnedEventsBannerState.previousPin()
         case .viewAllPins:
-            // TODO: Implement
-            break
+            actionsSubject.send(.displayPinnedEventsTimeline)
         }
     }
 
@@ -510,11 +506,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .store(in: &cancellables)
         
         networkMonitor.reachabilityPublisher
+            .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] networkState in
-                if networkState == .reachable {
-                    self?.setupPinnedEventsTimelineProviderIfNeeded()
-                }
+            .sink { [weak self] _ in
+                self?.setupPinnedEventsTimelineProviderIfNeeded()
             }
             .store(in: &cancellables)
     }
@@ -534,20 +529,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func setupPinnedEventsTimelineProviderIfNeeded() {
-        guard pinnedEventsTimelineProvider == nil,
-              pinnedEventsTimelineProviderSetupTask == nil else {
+        guard pinnedEventsTimelineProvider == nil else {
             return
         }
         
-        pinnedEventsTimelineProviderSetupTask = Task { [weak self] in
-            guard let self else { return }
-            
-            guard let pinnedEventsTimelineProvider = await roomProxy.pinnedEventsTimeline?.timelineProvider else {
-                pinnedEventsTimelineProviderSetupTask = nil
+        Task {
+            guard let timelineProvider = await roomProxy.pinnedEventsTimeline?.timelineProvider else {
                 return
             }
             
-            self.pinnedEventsTimelineProvider = pinnedEventsTimelineProvider
+            if pinnedEventsTimelineProvider == nil {
+                pinnedEventsTimelineProvider = timelineProvider
+            }
         }
     }
     

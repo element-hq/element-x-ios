@@ -23,21 +23,38 @@ class RoomProxy: RoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
+    
     private var innerPinnedEventsTimeline: TimelineProxyProtocol?
+    private var innerPinnedEventsTimelineTask: Task<TimelineProxyProtocol?, Never>?
     var pinnedEventsTimeline: TimelineProxyProtocol? {
         get async {
             if let innerPinnedEventsTimeline {
                 return innerPinnedEventsTimeline
+            } else if let innerPinnedEventsTimelineTask {
+                return await innerPinnedEventsTimelineTask.value
             } else {
-                do {
-                    let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil, maxEventsToLoad: 100), isLive: false)
-                    await timeline.subscribeForUpdates()
-                    innerPinnedEventsTimeline = timeline
-                    return timeline
-                } catch {
-                    MXLog.error("Failed creating pinned events timeline with error: \(error)")
-                    return nil
+                let task = Task<TimelineProxyProtocol?, Never> { [weak self] in
+                    defer {
+                        self?.innerPinnedEventsTimelineTask = nil
+                    }
+                    
+                    guard let self else {
+                        return nil
+                    }
+                    
+                    do {
+                        let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil, maxEventsToLoad: 100), isLive: false)
+                        await timeline.subscribeForUpdates()
+                        innerPinnedEventsTimeline = timeline
+                        return timeline
+                    } catch {
+                        MXLog.error("Failed creating pinned events timeline with error: \(error)")
+                        return nil
+                    }
                 }
+                
+                innerPinnedEventsTimelineTask = task
+                return await task.value
             }
         }
     }

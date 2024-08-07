@@ -1535,6 +1535,8 @@ internal enum L10n {
   internal static var screenRoomDetailsNotificationModeDefault: String { return L10n.tr("Localizable", "screen_room_details_notification_mode_default") }
   /// Notifications
   internal static var screenRoomDetailsNotificationTitle: String { return L10n.tr("Localizable", "screen_room_details_notification_title") }
+  /// Pinned messages
+  internal static var screenRoomDetailsPinnedEventsTitle: String { return L10n.tr("Localizable", "screen_room_details_pinned_events_title") }
   /// Roles and permissions
   internal static var screenRoomDetailsRolesAndPermissions: String { return L10n.tr("Localizable", "screen_room_details_roles_and_permissions") }
   /// Room name

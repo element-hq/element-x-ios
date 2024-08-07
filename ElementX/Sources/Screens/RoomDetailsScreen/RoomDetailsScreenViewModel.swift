@@ -27,8 +27,26 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
+    private let appSettings: AppSettings
 
     private var dmRecipient: RoomMemberProxyProtocol?
+    private var pinnedEventsTimelineProvider: RoomTimelineProviderProtocol? {
+        didSet {
+            guard let pinnedEventsTimelineProvider else {
+                return
+            }
+            
+            state.pinnedEventsActionState = .loaded(numberOfItems: pinnedEventsTimelineProvider.itemProxies.filter(\.isEvent).count)
+            
+            pinnedEventsTimelineProvider.updatePublisher
+                // When pinning or unpinning an item, the timeline might return empty for a short while, so we need to debounce it to prevent weird UI behaviours like the banner disappearing
+                .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
+                .sink { [weak self] updatedItems, _ in
+                    self?.state.pinnedEventsActionState = .loaded(numberOfItems: updatedItems.filter(\.isEvent).count)
+                }
+                .store(in: &cancellables)
+        }
+    }
     
     private var actionsSubject: PassthroughSubject<RoomDetailsScreenViewModelAction, Never> = .init()
     
@@ -42,7 +60,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
          analyticsService: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
-         attributedStringBuilder: AttributedStringBuilderProtocol) {
+         attributedStringBuilder: AttributedStringBuilderProtocol,
+         appSettings: AppSettings,
+         networkMonitor: NetworkMonitorProtocol) {
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
@@ -50,6 +70,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         self.userIndicatorController = userIndicatorController
         self.notificationSettingsProxy = notificationSettingsProxy
         self.attributedStringBuilder = attributedStringBuilder
+        self.appSettings = appSettings
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.topic)
         
@@ -62,6 +83,18 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            notificationSettingsState: .loading,
                                            bindings: .init()),
                    imageProvider: mediaProvider)
+        
+        appSettings.$pinningEnabled
+            .weakAssign(to: \.state.isPinningEnabled, on: self)
+            .store(in: &cancellables)
+        
+        networkMonitor.reachabilityPublisher
+            .filter { $0 == .reachable }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.setupPinnedEventsTimelineProviderIfNeeded()
+            }
+            .store(in: &cancellables)
         
         Task {
             let userID = roomProxy.ownUserID
@@ -135,6 +168,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             actionsSubject.send(.requestRolesAndPermissionsPresentation)
         case .processTapCall:
             actionsSubject.send(.startCall)
+        case .processTapPinnedEvents:
+            // TODO: Implement navigation
+            break
         }
     }
     
@@ -334,6 +370,22 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             // We don't actually know the mime type here, assume it's an image.
             if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: avatarURL, mimeType: "image/jpeg")) {
                 state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomProxy.roomTitle)
+            }
+        }
+    }
+    
+    private func setupPinnedEventsTimelineProviderIfNeeded() {
+        guard pinnedEventsTimelineProvider == nil else {
+            return
+        }
+        
+        Task {
+            guard let timelineProvider = await roomProxy.pinnedEventsTimeline?.timelineProvider else {
+                return
+            }
+            
+            if pinnedEventsTimelineProvider == nil {
+                pinnedEventsTimelineProvider = timelineProvider
             }
         }
     }
