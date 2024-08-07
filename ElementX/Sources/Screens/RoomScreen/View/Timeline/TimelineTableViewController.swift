@@ -323,7 +323,6 @@ class TimelineTableViewController: UIViewController {
         snapshot.appendItems(timelineItemsIDs)
         
         let currentSnapshot = dataSource.snapshot()
-        MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
         
         // We only animate when new items come at the end of a live timeline, ignoring transitions through empty.
         let newestItemIdentifier = snapshot.mainItemIdentifiers.first
