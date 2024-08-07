@@ -163,6 +163,7 @@ struct RoomScreen: View {
                            roomAvatar: context.viewState.roomAvatar,
                            imageProvider: context.imageProvider)
                 // Using a button stops it from getting truncated in the navigation bar
+                .contentShape(.rect)
                 .onTapGesture {
                     context.send(viewAction: .displayRoomDetails)
                 }
