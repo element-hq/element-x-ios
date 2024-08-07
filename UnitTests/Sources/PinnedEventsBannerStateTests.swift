@@ -32,7 +32,7 @@ class PinnedEventsBannerStateTests: XCTestCase {
         
         var state = originalState
         // This should not affect the state when loading
-        state.nextPin()
+        state.previousPin()
         XCTAssertEqual(state, originalState)
         
         XCTAssertTrue(state.isLoading)
@@ -63,18 +63,18 @@ class PinnedEventsBannerStateTests: XCTestCase {
         XCTAssertEqual(state.bannerIndicatorDescription.string, L10n.screenRoomPinnedBannerIndicatorDescription(L10n.screenRoomPinnedBannerIndicator(2, 2)))
     }
     
-    func testNextPin() {
-        var state = PinnedEventsBannerState.loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2", "3": "test3"], selectedPinEventID: "3"))
-        XCTAssertEqual(state.selectedPinEventID, "3")
-        XCTAssertEqual(state.selectedPinIndex, 2)
-        XCTAssertEqual(state.displayedMessage.string, "test3")
-        
-        state.nextPin()
+    func testPreviousPin() {
+        var state = PinnedEventsBannerState.loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2", "3": "test3"], selectedPinEventID: "1"))
         XCTAssertEqual(state.selectedPinEventID, "1")
         XCTAssertEqual(state.selectedPinIndex, 0)
         XCTAssertEqual(state.displayedMessage.string, "test1")
         
-        state.nextPin()
+        state.previousPin()
+        XCTAssertEqual(state.selectedPinEventID, "3")
+        XCTAssertEqual(state.selectedPinIndex, 2)
+        XCTAssertEqual(state.displayedMessage.string, "test3")
+        
+        state.previousPin()
         XCTAssertEqual(state.selectedPinEventID, "2")
         XCTAssertEqual(state.selectedPinIndex, 1)
         XCTAssertEqual(state.displayedMessage.string, "test2")

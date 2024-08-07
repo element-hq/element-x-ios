@@ -329,20 +329,24 @@ struct PinnedEventsState: Equatable {
     var selectedPinContent: AttributedString {
         var content = AttributedString(" ")
         if let selectedPinEventID,
-           var pinnedEventContent = pinnedEventContents[selectedPinEventID] {
+           let pinnedEventContent = pinnedEventContents[selectedPinEventID] {
             content = pinnedEventContent
         }
         content.font = .compound.bodyMD
         return content
     }
     
-    mutating func nextPin() {
+    mutating func previousPin() {
         guard !pinnedEventContents.isEmpty else {
             return
         }
         let currentIndex = selectedPinIndex
-        let nextIndex = (currentIndex + 1) % pinnedEventContents.count
-        selectedPinEventID = pinnedEventContents.keys[nextIndex]
+        let nextIndex = currentIndex - 1
+        if nextIndex == -1 {
+            selectedPinEventID = pinnedEventContents.keys.last
+        } else {
+            selectedPinEventID = pinnedEventContents.keys[nextIndex % pinnedEventContents.count]
+        }
     }
 }
 
@@ -415,10 +419,10 @@ enum PinnedEventsBannerState: Equatable {
         return finalString
     }
     
-    mutating func nextPin() {
+    mutating func previousPin() {
         switch self {
         case .loaded(var state):
-            state.nextPin()
+            state.previousPin()
             self = .loaded(state: state)
         default:
             break
