@@ -43,6 +43,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     
     enum Event: EventType {
         case next
+        case nextSkippingIdentityConfimed
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -123,7 +124,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func configureStateMachine() {
-        stateMachine.addRouteMapping { [weak self] _, fromState, _ in
+        stateMachine.addRouteMapping { [weak self] event, fromState, _ in
             guard let self else {
                 return nil
             }
@@ -141,8 +142,22 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 return .finished
                 
             case (.identityConfirmation, _, _, _, _):
-                return .identityConfirmed
-                
+                if event == .nextSkippingIdentityConfimed {
+                    // Used when the verification state has updated to verified
+                    // after starting the onboarding flow
+                    switch (requiresAppLockSetup, requiresAnalyticsSetup, requiresNotificationsSetup) {
+                    case (true, _, _):
+                        return .appLockSetup
+                    case (false, true, _):
+                        return .analyticsPrompt
+                    case (false, false, true):
+                        return .notificationPermissions
+                    case (false, false, false):
+                        return .finished
+                    }
+                } else {
+                    return .identityConfirmed
+                }
             case (.identityConfirmed, _, true, _, _):
                 return .appLockSetup
             case (.identityConfirmed, _, false, true, _):
@@ -223,7 +238,25 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        presentCoordinator(coordinator)
+        // If the verification state is still unknown wait for it to resolve
+        // and just move on to the next steps if verified
+        var verificationStateCancellable: AnyCancellable?
+        if userSession.sessionSecurityStatePublisher.value.verificationState == .unknown {
+            verificationStateCancellable = userSession.sessionSecurityStatePublisher
+                .map(\.verificationState)
+                .removeDuplicates()
+                .sink { [weak self] value in
+                    if value == .verified {
+                        self?.stateMachine.tryEvent(.nextSkippingIdentityConfimed)
+                    } else {
+                        verificationStateCancellable = nil
+                    }
+                }
+        }
+        
+        presentCoordinator(coordinator) { [verificationStateCancellable] in
+            verificationStateCancellable?.cancel()
+        }
     }
     
     private func presentSessionVerificationScreen() async {
@@ -373,11 +406,11 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         presentCoordinator(coordinator)
     }
     
-    private func presentCoordinator(_ coordinator: CoordinatorProtocol) {
+    private func presentCoordinator(_ coordinator: CoordinatorProtocol, dismissalCallback: (() -> Void)? = nil) {
         if navigationStackCoordinator.rootCoordinator == nil {
-            navigationStackCoordinator.setRootCoordinator(coordinator)
+            navigationStackCoordinator.setRootCoordinator(coordinator, dismissalCallback: dismissalCallback)
         } else {
-            navigationStackCoordinator.push(coordinator)
+            navigationStackCoordinator.push(coordinator, dismissalCallback: dismissalCallback)
         }
     }
     
