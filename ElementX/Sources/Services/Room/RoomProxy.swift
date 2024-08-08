@@ -123,6 +123,10 @@ class RoomProxy: RoomProxyProtocol {
         room.hasActiveRoomCall()
     }
     
+    var activeRoomCallParticipants: [String] {
+        room.activeRoomCallParticipants()
+    }
+    
     var canonicalAlias: String? {
         room.canonicalAlias()
     }

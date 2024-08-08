@@ -288,22 +288,31 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         roomProxy
             .actionsPublisher
-            .map { action in
+            .map { action -> (Bool, [String]) in
                 switch action {
                 case .roomInfoUpdate:
-                    return roomProxy.hasOngoingCall
+                    return (roomProxy.hasOngoingCall, roomProxy.activeRoomCallParticipants)
                 }
             }
-            .removeDuplicates()
+            .removeDuplicates { $0 == $1 }
             .dropFirst(isCallOngoing ? 0 : 1)
-            .sink { [weak self] hasOngoingCall in
+            .sink { [weak self] hasOngoingCall, activeRoomCallParticipants in
                 guard let self else { return }
                 
+                let participants: [String] = activeRoomCallParticipants
+                
                 if !hasOngoingCall {
-                    MXLog.info("Call has been cancelled")
+                    MXLog.info("Call cancelled by remote")
+                    
                     cancellables.removeAll()
                     endUnansweredCallTask?.cancel()
                     callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
+                } else if participants.contains(roomProxy.ownUserID) {
+                    MXLog.info("Call anwered elsewhere")
+                    
+                    cancellables.removeAll()
+                    endUnansweredCallTask?.cancel()
+                    callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .answeredElsewhere)
                 }
             }
             .store(in: &cancellables)
