@@ -31,6 +31,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private var syncUpdateCancellable: AnyCancellable?
+    
     /// Designated initialiser
     /// - Parameters:
     ///   - elementCallService: service responsible for setting up CallKit
@@ -113,31 +115,42 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        Task {
-            let baseURL = if let elementCallBaseURLOverride {
-                elementCallBaseURLOverride
-            } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCall = wellKnown?.call {
-                wellKnownCall.widgetURL
-            } else {
-                elementCallBaseURL
-            }
-            
-            switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
-            case .success(let url):
-                state.url = url
-            case .failure(let error):
-                MXLog.error("Failed starting ElementCall Widget Driver with error: \(error)")
-                state.bindings.alertInfo = .init(id: UUID(), title: L10n.errorUnknown, primaryButton: .init(title: L10n.actionOk, action: { [weak self] in
-                    self?.actionsSubject.send(.dismiss)
-                }))
-                
-                return
-            }
-            
-            await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
-            
-            let _ = await roomProxy.sendCallNotificationIfNeeeded()
-        }
+        // Wait for room states to be up to date before starting the call and notifying others
+        syncUpdateCancellable = clientProxy.actionsPublisher
+            .filter(\.isSyncUpdate)
+            .timeout(.seconds(5), scheduler: DispatchQueue.main)
+            .first() // Timeout will make the publisher complete, use first to handle both branches in the same place
+            .sink(receiveCompletion: { [weak self] _ in
+                Task { [weak self] in
+                    guard let self else { return }
+                    
+                    let baseURL = if let elementCallBaseURLOverride {
+                        elementCallBaseURLOverride
+                    } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCall = wellKnown?.call {
+                        wellKnownCall.widgetURL
+                    } else {
+                        elementCallBaseURL
+                    }
+                    
+                    switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
+                    case .success(let url):
+                        state.url = url
+                    case .failure(let error):
+                        MXLog.error("Failed starting ElementCall Widget Driver with error: \(error)")
+                        state.bindings.alertInfo = .init(id: UUID(), title: L10n.errorUnknown, primaryButton: .init(title: L10n.actionOk, action: { [weak self] in
+                            self?.actionsSubject.send(.dismiss)
+                        }))
+                        
+                        return
+                    }
+                    
+                    await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
+                    
+                    _ = await roomProxy.sendCallNotificationIfNeeeded()
+                    
+                    syncUpdateCancellable = nil
+                }
+            }, receiveValue: { _ in })
     }
     
     override func process(viewAction: CallScreenViewAction) {
