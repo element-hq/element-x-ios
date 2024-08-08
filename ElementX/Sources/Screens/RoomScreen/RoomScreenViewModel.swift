@@ -440,16 +440,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .store(in: &cancellables)
         
         Task { [weak self] in
-            guard let self else {
-                return
-            }
             // If the subscription has sent a value before the Task has started it might be lost, so before entering the loop we always do an update.
-            await updatePinnedEventIDs()
+            await self?.updatePinnedEventIDs()
             for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
                 guard !Task.isCancelled else {
                     return
                 }
-                await updatePinnedEventIDs()
+                await self?.updatePinnedEventIDs()
             }
         }
         .store(in: &cancellables)
