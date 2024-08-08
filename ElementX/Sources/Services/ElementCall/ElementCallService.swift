@@ -105,13 +105,6 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         } catch {
             MXLog.error("Failed requesting start call action with error: \(error)")
         }
-        
-        do { // Setup the audio session even if setting up CallKit failed, ElementCall **is** running at this point
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [])
-            try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
-        } catch {
-            MXLog.error("Failed setting up audio session with error: \(error)")
-        }
     }
     
     func tearDownCallSession() {
@@ -180,6 +173,14 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     // MARK: - CXProviderDelegate
+    
+    func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
+        MXLog.info("Call provider did activate audio session")
+    }
+    
+    func provider(_ provider: CXProvider, didDeactivate audioSession: AVAudioSession) {
+        MXLog.info("Call provider did deactivate audio session")
+    }
     
     func providerDidReset(_ provider: CXProvider) {
         MXLog.info("Call provider did reset: \(provider)")
