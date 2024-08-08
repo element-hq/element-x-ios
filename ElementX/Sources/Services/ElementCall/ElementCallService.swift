@@ -192,28 +192,36 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
-        if let incomingCallID {
-            // Fixes broken videos on EC web when a CallKit session is established.
-            //
-            // Reporting an ongoing call through `reportNewIncomingCall` + `CXAnswerCallAction`
-            // or `reportOutgoingCall:connectedAt:` will give exclusive access for media to the
-            // ongoing process, which is different than the WKWebKit is running on, making EC
-            // unable to aquire media streams.
-            // Reporting the call as ended imediately after answering it works around that
-            // as EC gets access to media again and EX builds the right UI in `setupCallSession`
-            //
-            // https://github.com/element-hq/element-x-ios/issues/3041
-            // https://forums.developer.apple.com/forums/thread/685268
-            // https://stackoverflow.com/questions/71483732/webrtc-running-from-wkwebview-avaudiosession-development-roadblock
-            provider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .answeredElsewhere)
-            
-            actionsSubject.send(.startCall(roomID: incomingCallID.roomID))
-            endUnansweredCallTask?.cancel()
-        } else {
+        guard let incomingCallID else {
             MXLog.error("Failed answering incoming call, missing incomingCallID")
+            return
         }
         
+        // Fixes broken videos on EC web when a CallKit session is established.
+        //
+        // Reporting an ongoing call through `reportNewIncomingCall` + `CXAnswerCallAction`
+        // or `reportOutgoingCall:connectedAt:` will give exclusive access for media to the
+        // ongoing process, which is different than the WKWebKit is running on, making EC
+        // unable to aquire media streams.
+        // Reporting the call as ended imediately after answering it works around that
+        // as EC gets access to media again and EX builds the right UI in `setupCallSession`
+        //
+        // https://github.com/element-hq/element-x-ios/issues/3041
+        // https://forums.developer.apple.com/forums/thread/685268
+        // https://stackoverflow.com/questions/71483732/webrtc-running-from-wkwebview-avaudiosession-development-roadblock
+        
+        // First fullfill the action
         action.fulfill()
+        
+        // And delay ending the call so that the app has enough time
+        // to get deeplinked into
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            // Then end the and call rely on `setupCallSession` to create a new one
+            provider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
+            
+            self.actionsSubject.send(.startCall(roomID: incomingCallID.roomID))
+            self.endUnansweredCallTask?.cancel()
+        }
     }
     
     func provider(_ provider: CXProvider, perform action: CXSetMutedCallAction) {
