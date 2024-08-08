@@ -440,6 +440,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .store(in: &cancellables)
         
         Task { [weak self] in
+            // Don't guard let self here, otherwise the for await will strongify the self reference creating a strong reference cycle.
             // If the subscription has sent a value before the Task has started it might be lost, so before entering the loop we always do an update.
             await self?.updatePinnedEventIDs()
             for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
