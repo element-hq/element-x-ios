@@ -17,24 +17,16 @@
 import Foundation
 
 enum PinnedEventsTimelineScreenViewModelAction {
-    case done
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case dismiss
 }
 
 struct PinnedEventsTimelineScreenViewState: BindableState {
-    var title: String
-    var placeholder: String
-    var bindings: PinnedEventsTimelineScreenViewStateBindings
-}
-
-struct PinnedEventsTimelineScreenViewStateBindings {
-    var composerText: String
+    var title: String {
+        // TODO: Implement the non empty case
+        L10n.screenPinnedTimelineScreenTitleEmpty
+    }
 }
 
 enum PinnedEventsTimelineScreenViewAction {
-    case done
-    case textChanged
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case close
 }

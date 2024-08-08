@@ -33,12 +33,6 @@ class ServiceLocator {
         settings = appSettings
     }
     
-    private(set) var networkMonitor: NetworkMonitorProtocol!
-    
-    func register(networkMonitor: NetworkMonitorProtocol) {
-        self.networkMonitor = networkMonitor
-    }
-    
     private(set) var analytics: AnalyticsService!
     
     func register(analytics: AnalyticsService) {

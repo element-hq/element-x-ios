@@ -58,7 +58,6 @@ struct ReadReceiptsSummaryView_Previews: PreviewProvider, TestablePreview {
                                        mediaPlayerProvider: MediaPlayerProviderMock(),
                                        voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                        userIndicatorController: UserIndicatorControllerMock(),
-                                       networkMonitor: ServiceLocator.shared.networkMonitor,
                                        appMediator: AppMediatorMock.default,
                                        appSettings: ServiceLocator.shared.settings,
                                        analyticsService: ServiceLocator.shared.analytics)

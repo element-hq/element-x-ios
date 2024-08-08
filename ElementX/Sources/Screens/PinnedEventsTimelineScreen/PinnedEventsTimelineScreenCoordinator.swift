@@ -22,7 +22,7 @@ import SwiftUI
 struct PinnedEventsTimelineScreenCoordinatorParameters { }
 
 enum PinnedEventsTimelineScreenCoordinatorAction {
-    case done
+    case dismiss
     
     // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
@@ -34,7 +34,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
     private var cancellables = Set<AnyCancellable>()
  
     private let actionsSubject: PassthroughSubject<PinnedEventsTimelineScreenCoordinatorAction, Never> = .init()
-    var actionsPublisher: AnyPublisher<PinnedEventsTimelineScreenCoordinatorAction, Never> {
+    var actions: AnyPublisher<PinnedEventsTimelineScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -50,8 +50,8 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .done:
-                self.actionsSubject.send(.done)
+            case .dismiss:
+                self.actionsSubject.send(.dismiss)
             }
         }
         .store(in: &cancellables)

@@ -25,6 +25,7 @@ struct RoomDetailsScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
     let attributedStringBuilder: AttributedStringBuilderProtocol
+    let appMediator: AppMediatorProtocol
 }
 
 enum RoomDetailsScreenCoordinatorAction {
@@ -36,6 +37,7 @@ enum RoomDetailsScreenCoordinatorAction {
     case presentPollsHistory
     case presentRolesAndPermissionsScreen
     case presentCall
+    case presentPinnedEventsTimeline
 }
 
 final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
@@ -56,8 +58,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                                                userIndicatorController: parameters.userIndicatorController,
                                                notificationSettingsProxy: parameters.notificationSettings,
                                                attributedStringBuilder: parameters.attributedStringBuilder,
-                                               appSettings: ServiceLocator.shared.settings,
-                                               networkMonitor: ServiceLocator.shared.networkMonitor)
+                                               appMediator: parameters.appMediator,
+                                               appSettings: ServiceLocator.shared.settings)
     }
     
     // MARK: - Public
@@ -84,6 +86,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentRolesAndPermissionsScreen)
                 case .startCall:
                     actionsSubject.send(.presentCall)
+                case .displayPinnedEventsTimeline:
+                    actionsSubject.send(.presentPinnedEventsTimeline)
                 }
             }
             .store(in: &cancellables)

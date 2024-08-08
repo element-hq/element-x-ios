@@ -21,7 +21,7 @@ typealias SecureBackupLogoutConfirmationScreenViewModelType = StateStoreViewMode
 
 class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmationScreenViewModelType, SecureBackupLogoutConfirmationScreenViewModelProtocol {
     private let secureBackupController: SecureBackupControllerProtocol
-    private let networkMonitor: NetworkMonitorProtocol
+    private let appMediator: AppMediatorProtocol
     
     // periphery:ignore - auto cancels when reassigned
     @CancellableTask
@@ -32,13 +32,13 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(secureBackupController: SecureBackupControllerProtocol, networkMonitor: NetworkMonitorProtocol) {
+    init(secureBackupController: SecureBackupControllerProtocol, appMediator: AppMediatorProtocol) {
         self.secureBackupController = secureBackupController
-        self.networkMonitor = networkMonitor
+        self.appMediator = appMediator
         
         super.init(initialViewState: .init(mode: .saveRecoveryKey))
         
-        networkMonitor.reachabilityPublisher
+        appMediator.networkMonitor.reachabilityPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] reachability in
                 guard let self,
@@ -75,7 +75,7 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     
     private func attemptLogout() {
         if state.mode == .saveRecoveryKey {
-            state.mode = networkMonitor.reachabilityPublisher.value == .reachable ? .backupOngoing : .offline
+            state.mode = appMediator.networkMonitor.reachabilityPublisher.value == .reachable ? .backupOngoing : .offline
             
             keyUploadWaitingTask = Task {
                 var result = await secureBackupController.waitForKeyBackupUpload()

@@ -199,7 +199,7 @@ struct RoomDetailsScreen: View {
                 }
             
             if context.viewState.isPinningEnabled {
-                ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsTitle,
+                ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
                                         icon: \.pin),
                         details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
                         kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
@@ -339,8 +339,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                          appSettings: appSettings,
-                                          networkMonitor: ServiceLocator.shared.networkMonitor)
+                                          appMediator: AppMediatorMock.default,
+                                          appSettings: appSettings)
     }()
     
     static let dmRoomViewModel = {
@@ -367,8 +367,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                          appSettings: appSettings,
-                                          networkMonitor: ServiceLocator.shared.networkMonitor)
+                                          appMediator: AppMediatorMock.default,
+                                          appSettings: appSettings)
     }()
     
     static let simpleRoomViewModel = {
@@ -394,8 +394,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                          appSettings: appSettings,
-                                          networkMonitor: ServiceLocator.shared.networkMonitor)
+                                          appMediator: AppMediatorMock.default,
+                                          appSettings: appSettings)
     }()
     
     static var previews: some View {

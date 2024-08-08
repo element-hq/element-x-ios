@@ -126,7 +126,10 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
         let networkMonitor = NetworkMonitorMock()
         networkMonitor.underlyingReachabilityPublisher = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable).asCurrentValuePublisher()
         
+        let appMediator = AppMediatorMock()
+        appMediator.underlyingNetworkMonitor = networkMonitor
+        
         return SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                             networkMonitor: networkMonitor)
+                                                             appMediator: appMediator)
     }
 }

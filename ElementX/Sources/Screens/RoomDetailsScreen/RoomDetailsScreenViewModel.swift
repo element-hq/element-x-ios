@@ -61,8 +61,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol,
-         appSettings: AppSettings,
-         networkMonitor: NetworkMonitorProtocol) {
+         appMediator: AppMediatorProtocol,
+         appSettings: AppSettings) {
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
@@ -88,7 +88,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .weakAssign(to: \.state.isPinningEnabled, on: self)
             .store(in: &cancellables)
         
-        networkMonitor.reachabilityPublisher
+        appMediator.networkMonitor.reachabilityPublisher
             .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -169,8 +169,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapCall:
             actionsSubject.send(.startCall)
         case .processTapPinnedEvents:
-            // TODO: Implement navigation
-            break
+            actionsSubject.send(.displayPinnedEventsTimeline)
         }
     }
     

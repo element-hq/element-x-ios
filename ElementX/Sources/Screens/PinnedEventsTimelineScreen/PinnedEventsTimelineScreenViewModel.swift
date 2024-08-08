@@ -26,9 +26,7 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
     }
 
     init() {
-        super.init(initialViewState: PinnedEventsTimelineScreenViewState(title: "PinnedEventsTimeline title",
-                                                                         placeholder: "Enter something here",
-                                                                         bindings: .init(composerText: "Initial composer text")))
+        super.init(initialViewState: PinnedEventsTimelineScreenViewState())
     }
     
     // MARK: - Public
@@ -37,10 +35,8 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .done:
-            actionsSubject.send(.done)
-        case .textChanged:
-            MXLog.info("View model: composer text changed to: \(state.bindings.composerText)")
+        case .close:
+            actionsSubject.send(.dismiss)
         }
     }
 }

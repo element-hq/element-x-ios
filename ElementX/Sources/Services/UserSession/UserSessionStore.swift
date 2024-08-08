@@ -21,6 +21,7 @@ import MatrixRustSDK
 class UserSessionStore: UserSessionStoreProtocol {
     private let keychainController: KeychainControllerProtocol
     private let appSettings: AppSettings
+    private let networkMonitor: NetworkMonitorProtocol
     private let appHooks: AppHooks
     private let matrixSDKStateKey = "matrix-sdk-state"
     
@@ -31,10 +32,14 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     var clientSessionDelegate: ClientSessionDelegate { keychainController }
     
-    init(keychainController: KeychainControllerProtocol, appSettings: AppSettings, appHooks: AppHooks) {
+    init(keychainController: KeychainControllerProtocol,
+         appSettings: AppSettings,
+         appHooks: AppHooks,
+         networkMonitor: NetworkMonitorProtocol) {
         self.keychainController = keychainController
         self.appSettings = appSettings
         self.appHooks = appHooks
+        self.networkMonitor = networkMonitor
     }
     
     /// Deletes all data stored in the shared container and keychain
@@ -146,8 +151,8 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     private func setupProxyForClient(_ client: Client) async -> ClientProxyProtocol {
         await ClientProxy(client: client,
-                          networkMonitor: ServiceLocator.shared.networkMonitor,
-                          appSettings: ServiceLocator.shared.settings)
+                          networkMonitor: networkMonitor,
+                          appSettings: appSettings)
     }
     
     private func deleteSessionDirectory(for credentials: KeychainCredentials) {

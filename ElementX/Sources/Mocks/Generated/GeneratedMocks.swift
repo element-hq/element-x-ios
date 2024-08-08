@@ -808,6 +808,11 @@ class AppMediatorMock: AppMediatorProtocol {
         set(value) { underlyingWindowManager = value }
     }
     var underlyingWindowManager: WindowManagerProtocol!
+    var networkMonitor: NetworkMonitorProtocol {
+        get { return underlyingNetworkMonitor }
+        set(value) { underlyingNetworkMonitor = value }
+    }
+    var underlyingNetworkMonitor: NetworkMonitorProtocol!
     var appState: UIApplication.State {
         get { return underlyingAppState }
         set(value) { underlyingAppState = value }

@@ -47,7 +47,6 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         AppSettings.resetAllSettings()
         ServiceLocator.shared.register(appSettings: AppSettings())
         ServiceLocator.shared.register(bugReportService: BugReportServiceMock())
-        ServiceLocator.shared.register(networkMonitor: NetworkMonitorMock.default)
         
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false

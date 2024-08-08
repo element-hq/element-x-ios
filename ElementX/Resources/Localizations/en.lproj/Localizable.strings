@@ -315,11 +315,15 @@
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
+"screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
+"screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
+"screen_pinned_timeline_screen_title_empty" = "Pinned messages";
 "screen_room_mentions_at_room_subtitle" = "Notify the whole room";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
 "screen_room_pinned_banner_loading_description" = "Loading message…";
 "screen_room_pinned_banner_view_all_button_title" = "View All";
+"screen_room_details_pinned_events_row_title" = "Pinned messages";
 "screen_account_provider_change" = "Change account provider";
 "screen_account_provider_form_hint" = "Homeserver address";
 "screen_account_provider_form_notice" = "Enter a search term or a domain address.";
@@ -641,7 +645,6 @@
 "screen_room_details_notification_mode_custom" = "Custom";
 "screen_room_details_notification_mode_default" = "Default";
 "screen_room_details_notification_title" = "Notifications";
-"screen_room_details_pinned_events_title" = "Pinned messages";
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_details_title" = "Room info";
 "screen_room_details_updating_room" = "Updating room…";

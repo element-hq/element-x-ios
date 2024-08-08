@@ -30,6 +30,7 @@ enum RoomDetailsScreenViewModelAction {
     case requestPollsHistoryPresentation
     case requestRolesAndPermissionsPresentation
     case startCall
+    case displayPinnedEventsTimeline
 }
 
 // MARK: View

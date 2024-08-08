@@ -21,20 +21,41 @@ struct PinnedEventsTimelineScreen: View {
     @ObservedObject var context: PinnedEventsTimelineScreenViewModel.Context
     
     var body: some View {
-        Form {
-            Section {
-                ListRow(label: .plain(title: context.viewState.placeholder),
-                        kind: .textField(text: $context.composerText))
-                
-                ListRow(label: .centeredAction(title: L10n.actionDone,
-                                               systemIcon: .doorLeftHandClosed),
-                        kind: .button { context.send(viewAction: .done) })
-            }
+        content
+            .navigationTitle(context.viewState.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { toolbar }
+            .toolbarBackground(.compound.bgCanvasDefault)
+            .background(.compound.bgCanvasDefault)
+    }
+    
+    private var content: some View {
+        // TODO: Implement switching between empty state and timeline
+        VStack(spacing: 16) {
+            HeroImage(icon: \.pin, style: .normal)
+            Text(L10n.screenPinnedTimelineEmptyStateHeadline)
+                .font(.compound.headingSMSemibold)
+                .foregroundStyle(.compound.textPrimary)
+                .multilineTextAlignment(.center)
+            Text(L10n.screenPinnedTimelineEmptyStateDescription(L10n.actionPin))
+                .font(.compound.bodyMD)
+                .foregroundStyle(.compound.textSecondary)
+                .multilineTextAlignment(.center)
+            Spacer()
         }
-        .compoundList()
-        .navigationTitle(context.viewState.title)
-        .onChange(of: context.composerText) { _ in
-            context.send(viewAction: .textChanged)
+        .padding(.top, 48)
+        .padding(.horizontal, 16)
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .primaryAction) {
+            Button(L10n.actionClose) {
+                context.send(viewAction: .close)
+            }
+            // Using the same system font values of the title
+            .font(.body.weight(.semibold))
+            .foregroundColor(.primary)
         }
     }
 }

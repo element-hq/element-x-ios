@@ -40,6 +40,7 @@ struct RoomProxyMockConfiguration {
     var canUserInvite = true
     var canUserTriggerRoomNotification = false
     var canUserJoinCall = true
+    var canUserPin = true
     
     var shouldUseAutoUpdatingTimeline = false
 }
@@ -135,6 +136,7 @@ extension RoomProxyMock {
         }
         canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
         canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
+        canUserPinOrUnpinUserIDReturnValue = .success(configuration.canUserPin)
         
         kickUserReturnValue = .success(())
         banUserReturnValue = .success(())
