@@ -8359,6 +8359,7 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingHasOngoingCall = value }
     }
     var underlyingHasOngoingCall: Bool!
+    var activeRoomCallParticipants: [String] = []
     var canonicalAlias: String?
     var ownUserID: String {
         get { return underlyingOwnUserID }

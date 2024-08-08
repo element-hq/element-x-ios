@@ -41,7 +41,10 @@ protocol RoomProxyProtocol {
     var pinnedEventIDs: Set<String> { get async }
     var membership: Membership { get }
     var inviter: RoomMemberProxyProtocol? { get async }
+    
     var hasOngoingCall: Bool { get }
+    var activeRoomCallParticipants: [String] { get }
+    
     var canonicalAlias: String? { get }
     var ownUserID: String { get }
     
