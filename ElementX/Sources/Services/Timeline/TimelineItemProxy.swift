@@ -53,6 +53,15 @@ enum TimelineItemProxy {
             self = .unknown(item)
         }
     }
+    
+    var isEvent: Bool {
+        switch self {
+        case .event:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 /// The delivery status for the item.

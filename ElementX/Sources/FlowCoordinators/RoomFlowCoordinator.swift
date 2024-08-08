@@ -325,7 +325,19 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .pollForm
             case (.pollForm, .dismissPollForm):
                 return .room
-            
+                
+            case (.room, .presentPinnedEventsTimeline):
+                return .pinnedEventsTimeline(previousState: .room)
+            case (.roomDetails(let isRoot), .presentPinnedEventsTimeline):
+                return .pinnedEventsTimeline(previousState: .details(isRoot: isRoot))
+            case (.pinnedEventsTimeline(let previousState), .dismissPinnedEventsTimeline):
+                switch previousState {
+                case .room:
+                    return .room
+                case .details(let isRoot):
+                    return .roomDetails(isRoot: isRoot)
+                }
+                
             case (.roomDetails, .presentPollsHistory):
                 return .pollsHistory
             case (.pollsHistory, .dismissPollsHistory):
@@ -457,10 +469,20 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentPollForm(mode: mode)
             case (.pollForm, .dismissPollForm, .room):
                 break
+                
+            case (.room, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
+                presentPinnedEventsTimeline()
+            case (.pinnedEventsTimeline, .dismissPinnedEventsTimeline, .room):
+                break
 
             case (.roomDetails, .presentPollsHistory, .pollsHistory):
                 presentPollsHistory()
             case (.pollsHistory, .dismissPollsHistory, .roomDetails):
+                break
+                
+            case (.roomDetails, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
+                presentPinnedEventsTimeline()
+            case (.pinnedEventsTimeline, .dismissPinnedEventsTimeline, .roomDetails):
                 break
         
             case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
@@ -595,6 +617,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
                 case .presentCallScreen:
                     actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+                case .presentPinnedEventsTimeline:
+                    stateMachine.tryEvent(.presentPinnedEventsTimeline)
                 }
             }
             .store(in: &cancellables)
@@ -693,7 +717,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                             analyticsService: analytics,
                                                             userIndicatorController: userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
-                                                            attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
+                                                            attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                            appMediator: appMediator)
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -715,6 +740,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentRolesAndPermissionsScreen)
             case .presentCall:
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+            case .presentPinnedEventsTimeline:
+                stateMachine.tryEvent(.presentPinnedEventsTimeline)
             }
         }
         .store(in: &cancellables)
@@ -935,6 +962,28 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMapNavigator)
+        }
+    }
+    
+    private func presentPinnedEventsTimeline() {
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = PinnedEventsTimelineScreenCoordinator(parameters: .init())
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .dismiss:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissPinnedEventsTimeline)
         }
     }
 
@@ -1356,6 +1405,7 @@ private extension RoomFlowCoordinator {
         case pollsHistory
         case pollsHistoryForm
         case rolesAndPermissions
+        case pinnedEventsTimeline(previousState: PinnedEventsTimelineSource)
         
         /// A child flow is in progress.
         case presentingChild(childRoomID: String, previousState: State)
@@ -1425,6 +1475,9 @@ private extension RoomFlowCoordinator {
         case presentRolesAndPermissionsScreen
         case dismissRolesAndPermissionsScreen
         
+        case presentPinnedEventsTimeline
+        case dismissPinnedEventsTimeline
+        
         // Child room flow events
         case startChildFlow(roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint)
         case dismissChildFlow
@@ -1446,4 +1499,9 @@ private extension Result {
             return true
         }
     }
+}
+
+private enum PinnedEventsTimelineSource: Hashable {
+    case room
+    case details(isRoot: Bool)
 }

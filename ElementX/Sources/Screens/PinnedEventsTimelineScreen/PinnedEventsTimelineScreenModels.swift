@@ -1,5 +1,5 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2022 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,17 +14,19 @@
 // limitations under the License.
 //
 
-import UIKit
+import Foundation
 
-extension AppMediatorMock {
-    static var `default`: AppMediatorMock {
-        let mock = AppMediatorMock()
-        
-        mock.underlyingAppState = .active
-        mock.requestAuthorizationIfNeededUnderlyingReturnValue = true
-        mock.underlyingWindowManager = WindowManagerMock()
-        mock.underlyingNetworkMonitor = NetworkMonitorMock.default
-        
-        return mock
+enum PinnedEventsTimelineScreenViewModelAction {
+    case dismiss
+}
+
+struct PinnedEventsTimelineScreenViewState: BindableState {
+    var title: String {
+        // TODO: Implement the non empty case
+        L10n.screenPinnedTimelineScreenTitleEmpty
     }
+}
+
+enum PinnedEventsTimelineScreenViewAction {
+    case close
 }

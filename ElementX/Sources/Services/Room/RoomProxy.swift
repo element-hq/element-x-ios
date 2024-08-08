@@ -23,21 +23,38 @@ class RoomProxy: RoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
+    
     private var innerPinnedEventsTimeline: TimelineProxyProtocol?
+    private var innerPinnedEventsTimelineTask: Task<TimelineProxyProtocol?, Never>?
     var pinnedEventsTimeline: TimelineProxyProtocol? {
         get async {
+            // Check if is alrrady available.
             if let innerPinnedEventsTimeline {
                 return innerPinnedEventsTimeline
+                // Otherwise check if there is already a task loading it, and wait for it.
+            } else if let innerPinnedEventsTimelineTask,
+                      let value = await innerPinnedEventsTimelineTask.value {
+                return value
+                // Else create and store a new task to load it and wait for it.
             } else {
-                do {
-                    let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil, maxEventsToLoad: 100), isLive: false)
-                    await timeline.subscribeForUpdates()
-                    innerPinnedEventsTimeline = timeline
-                    return timeline
-                } catch {
-                    MXLog.error("Failed creating pinned events timeline with error: \(error)")
-                    return nil
+                let task = Task<TimelineProxyProtocol?, Never> { [weak self] in
+                    guard let self else {
+                        return nil
+                    }
+                    
+                    do {
+                        let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil, maxEventsToLoad: 100), isLive: false)
+                        await timeline.subscribeForUpdates()
+                        innerPinnedEventsTimeline = timeline
+                        return timeline
+                    } catch {
+                        MXLog.error("Failed creating pinned events timeline with error: \(error)")
+                        return nil
+                    }
                 }
+                
+                innerPinnedEventsTimelineTask = task
+                return await task.value
             }
         }
     }

@@ -19,9 +19,11 @@ import UIKit
 
 class AppMediator: AppMediatorProtocol {
     let windowManager: WindowManagerProtocol
+    let networkMonitor: NetworkMonitorProtocol
     
-    init(windowManager: WindowManagerProtocol) {
+    init(windowManager: WindowManagerProtocol, networkMonitor: NetworkMonitorProtocol) {
         self.windowManager = windowManager
+        self.networkMonitor = networkMonitor
     }
         
     // UIApplication.State won't update if we store this e.g. in the constructor

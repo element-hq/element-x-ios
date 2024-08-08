@@ -32,7 +32,6 @@ class PillContextTests: XCTestCase {
                                        mediaPlayerProvider: MediaPlayerProviderMock(),
                                        voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                       networkMonitor: ServiceLocator.shared.networkMonitor,
                                        appMediator: AppMediatorMock.default,
                                        appSettings: ServiceLocator.shared.settings,
                                        analyticsService: ServiceLocator.shared.analytics)
@@ -61,7 +60,6 @@ class PillContextTests: XCTestCase {
                                        mediaPlayerProvider: MediaPlayerProviderMock(),
                                        voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                       networkMonitor: ServiceLocator.shared.networkMonitor,
                                        appMediator: AppMediatorMock.default,
                                        appSettings: ServiceLocator.shared.settings,
                                        analyticsService: ServiceLocator.shared.analytics)
@@ -83,7 +81,6 @@ class PillContextTests: XCTestCase {
                                        mediaPlayerProvider: MediaPlayerProviderMock(),
                                        voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                       networkMonitor: ServiceLocator.shared.networkMonitor,
                                        appMediator: AppMediatorMock.default,
                                        appSettings: ServiceLocator.shared.settings,
                                        analyticsService: ServiceLocator.shared.analytics)

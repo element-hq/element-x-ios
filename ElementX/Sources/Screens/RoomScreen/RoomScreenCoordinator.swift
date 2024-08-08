@@ -45,6 +45,7 @@ enum RoomScreenCoordinatorAction {
     case presentRoomMemberDetails(userID: String)
     case presentMessageForwarding(forwardingItem: MessageForwardingItem)
     case presentCallScreen
+    case presentPinnedEventsTimeline
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -67,7 +68,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                             mediaPlayerProvider: parameters.mediaPlayerProvider,
                                             voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                            networkMonitor: ServiceLocator.shared.networkMonitor,
                                             appMediator: parameters.appMediator,
                                             appSettings: parameters.appSettings,
                                             analyticsService: ServiceLocator.shared.analytics)
@@ -126,6 +126,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     composerViewModel.process(roomAction: action)
                 case .displayCallScreen:
                     actionsSubject.send(.presentCallScreen)
+                case .displayPinnedEventsTimeline:
+                    actionsSubject.send(.presentPinnedEventsTimeline)
                 }
             }
             .store(in: &cancellables)

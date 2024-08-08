@@ -101,7 +101,6 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
                                                mediaPlayerProvider: MediaPlayerProviderMock(),
                                                voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               networkMonitor: ServiceLocator.shared.networkMonitor,
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings,
                                                analyticsService: ServiceLocator.shared.analytics)

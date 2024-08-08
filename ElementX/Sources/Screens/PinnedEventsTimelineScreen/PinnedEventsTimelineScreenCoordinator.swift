@@ -17,27 +17,29 @@
 import Combine
 import SwiftUI
 
-struct IdentityConfirmedScreenCoordinatorParameters { }
+struct PinnedEventsTimelineScreenCoordinatorParameters { }
 
-enum IdentityConfirmedScreenCoordinatorAction {
-    case done
+enum PinnedEventsTimelineScreenCoordinatorAction {
+    case dismiss
+    
+    // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
 
-final class IdentityConfirmedScreenCoordinator: CoordinatorProtocol {
-    private let parameters: IdentityConfirmedScreenCoordinatorParameters
-    private let viewModel: IdentityConfirmedScreenViewModelProtocol
+final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
+    private let parameters: PinnedEventsTimelineScreenCoordinatorParameters
+    private let viewModel: PinnedEventsTimelineScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
  
-    private let actionsSubject: PassthroughSubject<IdentityConfirmedScreenCoordinatorAction, Never> = .init()
-    var actionsPublisher: AnyPublisher<IdentityConfirmedScreenCoordinatorAction, Never> {
+    private let actionsSubject: PassthroughSubject<PinnedEventsTimelineScreenCoordinatorAction, Never> = .init()
+    var actions: AnyPublisher<PinnedEventsTimelineScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: IdentityConfirmedScreenCoordinatorParameters) {
+    init(parameters: PinnedEventsTimelineScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = IdentityConfirmedScreenViewModel()
+        viewModel = PinnedEventsTimelineScreenViewModel()
     }
     
     func start() {
@@ -46,14 +48,14 @@ final class IdentityConfirmedScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .done:
-                self.actionsSubject.send(.done)
+            case .dismiss:
+                self.actionsSubject.send(.dismiss)
             }
         }
         .store(in: &cancellables)
     }
         
     func toPresentable() -> AnyView {
-        AnyView(IdentityConfirmedScreen(context: viewModel.context))
+        AnyView(PinnedEventsTimelineScreen(context: viewModel.context))
     }
 }

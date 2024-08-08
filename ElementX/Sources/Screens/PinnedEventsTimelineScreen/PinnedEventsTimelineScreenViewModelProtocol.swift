@@ -1,5 +1,5 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2022 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,17 +14,10 @@
 // limitations under the License.
 //
 
-import UIKit
+import Combine
 
-extension AppMediatorMock {
-    static var `default`: AppMediatorMock {
-        let mock = AppMediatorMock()
-        
-        mock.underlyingAppState = .active
-        mock.requestAuthorizationIfNeededUnderlyingReturnValue = true
-        mock.underlyingWindowManager = WindowManagerMock()
-        mock.underlyingNetworkMonitor = NetworkMonitorMock.default
-        
-        return mock
-    }
+@MainActor
+protocol PinnedEventsTimelineScreenViewModelProtocol {
+    var actionsPublisher: AnyPublisher<PinnedEventsTimelineScreenViewModelAction, Never> { get }
+    var context: PinnedEventsTimelineScreenViewModelType.Context { get }
 }

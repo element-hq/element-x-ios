@@ -21,6 +21,7 @@ import UIKit
 @MainActor
 protocol AppMediatorProtocol {
     var windowManager: WindowManagerProtocol { get }
+    var networkMonitor: NetworkMonitorProtocol { get }
     
     var appState: UIApplication.State { get }
     

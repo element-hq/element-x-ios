@@ -30,6 +30,7 @@ enum RoomDetailsScreenViewModelAction {
     case requestPollsHistoryPresentation
     case requestRolesAndPermissionsPresentation
     case startCall
+    case displayPinnedEventsTimeline
 }
 
 // MARK: View
@@ -52,6 +53,8 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRolesOrPermissions = false
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     var canJoinCall = false
+    var isPinningEnabled = false
+    var pinnedEventsActionState = RoomDetailsScreenPinnedEventsActionState.loading
     
     var canEdit: Bool {
         !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
@@ -194,6 +197,7 @@ enum RoomDetailsScreenViewAction {
     case toggleFavourite(isFavourite: Bool)
     case processTapRolesAndPermissions
     case processTapCall
+    case processTapPinnedEvents
 }
 
 enum RoomDetailsScreenViewShortcut {
@@ -260,4 +264,27 @@ enum RoomDetailsScreenErrorType: Hashable {
     case alert
     /// Leaving room has failed..
     case unknown
+}
+
+enum RoomDetailsScreenPinnedEventsActionState {
+    case loading
+    case loaded(numberOfItems: Int)
+    
+    var count: String {
+        switch self {
+        case .loading:
+            return ""
+        case .loaded(let numberOfItems):
+            return "\(numberOfItems)"
+        }
+    }
+    
+    var isLoading: Bool {
+        switch self {
+        case .loading:
+            return true
+        default:
+            return false
+        }
+    }
 }

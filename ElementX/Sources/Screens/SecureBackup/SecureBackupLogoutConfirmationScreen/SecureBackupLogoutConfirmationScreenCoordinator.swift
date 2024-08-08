@@ -19,7 +19,7 @@ import SwiftUI
 
 struct SecureBackupLogoutConfirmationScreenCoordinatorParameters {
     let secureBackupController: SecureBackupControllerProtocol
-    let networkMonitor: NetworkMonitorProtocol
+    let appMediator: AppMediatorProtocol
 }
 
 enum SecureBackupLogoutConfirmationScreenCoordinatorAction {
@@ -39,7 +39,7 @@ final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol
     
     init(parameters: SecureBackupLogoutConfirmationScreenCoordinatorParameters) {
         viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: parameters.secureBackupController,
-                                                                  networkMonitor: parameters.networkMonitor)
+                                                                  appMediator: parameters.appMediator)
     }
     
     func start() {

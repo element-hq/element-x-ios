@@ -33,6 +33,7 @@ enum RoomScreenViewModelAction {
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case composer(action: RoomScreenComposerAction)
     case displayCallScreen
+    case displayPinnedEventsTimeline
 }
 
 enum RoomScreenComposerMode: Equatable {

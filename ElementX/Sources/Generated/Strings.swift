@@ -1237,6 +1237,18 @@ internal enum L10n {
   }
   /// Be in your element
   internal static var screenOnboardingWelcomeTitle: String { return L10n.tr("Localizable", "screen_onboarding_welcome_title") }
+  /// Press on a message and choose “%1$@” to include here.
+  internal static func screenPinnedTimelineEmptyStateDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_pinned_timeline_empty_state_description", String(describing: p1))
+  }
+  /// Pin important messages so that they can be easily discovered
+  internal static var screenPinnedTimelineEmptyStateHeadline: String { return L10n.tr("Localizable", "screen_pinned_timeline_empty_state_headline") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenPinnedTimelineScreenTitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_pinned_timeline_screen_title", p1)
+  }
+  /// Pinned messages
+  internal static var screenPinnedTimelineScreenTitleEmpty: String { return L10n.tr("Localizable", "screen_pinned_timeline_screen_title_empty") }
   /// Can't find any ongoing polls.
   internal static var screenPollsHistoryEmptyOngoing: String { return L10n.tr("Localizable", "screen_polls_history_empty_ongoing") }
   /// Can't find any past polls.
@@ -1535,6 +1547,8 @@ internal enum L10n {
   internal static var screenRoomDetailsNotificationModeDefault: String { return L10n.tr("Localizable", "screen_room_details_notification_mode_default") }
   /// Notifications
   internal static var screenRoomDetailsNotificationTitle: String { return L10n.tr("Localizable", "screen_room_details_notification_title") }
+  /// Pinned messages
+  internal static var screenRoomDetailsPinnedEventsRowTitle: String { return L10n.tr("Localizable", "screen_room_details_pinned_events_row_title") }
   /// Roles and permissions
   internal static var screenRoomDetailsRolesAndPermissions: String { return L10n.tr("Localizable", "screen_room_details_roles_and_permissions") }
   /// Room name

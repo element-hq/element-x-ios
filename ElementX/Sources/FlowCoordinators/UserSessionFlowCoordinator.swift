@@ -602,7 +602,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentSecureBackupLogoutConfirmationScreen() {
         let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
-                                                                                            networkMonitor: ServiceLocator.shared.networkMonitor))
+                                                                                            appMediator: appMediator))
         
         coordinator.actions
             .sink { [weak self] action in
