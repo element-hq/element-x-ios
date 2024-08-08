@@ -20,9 +20,7 @@ import SwiftUI
 struct RoomChangeRolesScreen: View {
     @ObservedObject var context: RoomChangeRolesScreenViewModel.Context
     
-    var showTopSection: Bool {
-        !context.viewState.membersWithRole.isEmpty || context.viewState.isSearching
-    }
+    var showTopSection: Bool { !context.viewState.membersWithRole.isEmpty }
     
     var body: some View {
         mainContent
@@ -56,14 +54,14 @@ struct RoomChangeRolesScreen: View {
                     }
                 }
                 
-                RoomChangeRolesScreenSection(members: context.viewState.administrators,
+                RoomChangeRolesScreenSection(members: context.viewState.visibleAdministrators,
                                              title: L10n.screenRoomChangeRoleSectionAdministrators,
                                              isAdministratorsSection: true,
                                              context: context)
-                RoomChangeRolesScreenSection(members: context.viewState.moderators,
+                RoomChangeRolesScreenSection(members: context.viewState.visibleModerators,
                                              title: L10n.screenRoomChangeRoleSectionModerators,
                                              context: context)
-                RoomChangeRolesScreenSection(members: context.viewState.users,
+                RoomChangeRolesScreenSection(members: context.viewState.visibleUsers,
                                              title: L10n.screenRoomChangeRoleSectionUsers,
                                              context: context)
             }
