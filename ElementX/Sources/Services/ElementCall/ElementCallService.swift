@@ -140,6 +140,11 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             return
         }
         
+        guard ongoingCallID?.roomID != roomID else {
+            MXLog.warning("Call already ongoing for room \(roomID), ignoring incoming push")
+            return
+        }
+        
         let callID = CallID(callKitID: UUID(), roomID: roomID)
         incomingCallID = callID
         
