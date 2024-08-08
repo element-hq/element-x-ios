@@ -54,7 +54,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     var canJoinCall = false
     var isPinningEnabled = false
-    var pinnedEventsActionState = PinnedEventsActionState.loading
+    var pinnedEventsActionState = RoomDetailsScreenPinnedEventsActionState.loading
     
     var canEdit: Bool {
         !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
@@ -266,7 +266,7 @@ enum RoomDetailsScreenErrorType: Hashable {
     case unknown
 }
 
-enum PinnedEventsActionState {
+enum RoomDetailsScreenPinnedEventsActionState {
     case loading
     case loaded(numberOfItems: Int)
     

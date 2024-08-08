@@ -14,8 +14,6 @@
 // limitations under the License.
 //
 
-// periphery:ignore:all - this is just a identityConfirmation remove this comment once generating the final file
-
 import Combine
 import SwiftUI
 

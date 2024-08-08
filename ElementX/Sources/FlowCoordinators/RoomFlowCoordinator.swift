@@ -327,11 +327,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .room
                 
             case (.room, .presentPinnedEventsTimeline):
-                return .pinnedEventsTimeline(source: .room)
+                return .pinnedEventsTimeline(previousState: .room)
             case (.roomDetails(let isRoot), .presentPinnedEventsTimeline):
-                return .pinnedEventsTimeline(source: .details(isRoot: isRoot))
-            case (.pinnedEventsTimeline(let source), .dismissPinnedEventsTimeline):
-                switch source {
+                return .pinnedEventsTimeline(previousState: .details(isRoot: isRoot))
+            case (.pinnedEventsTimeline(let previousState), .dismissPinnedEventsTimeline):
+                switch previousState {
                 case .room:
                     return .room
                 case .details(let isRoot):
@@ -1405,7 +1405,7 @@ private extension RoomFlowCoordinator {
         case pollsHistory
         case pollsHistoryForm
         case rolesAndPermissions
-        case pinnedEventsTimeline(source: PinnedEventsTimelineSource)
+        case pinnedEventsTimeline(previousState: PinnedEventsTimelineSource)
         
         /// A child flow is in progress.
         case presentingChild(childRoomID: String, previousState: State)

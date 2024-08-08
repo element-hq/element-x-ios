@@ -25,7 +25,6 @@ struct PinnedEventsTimelineScreen: View {
             .navigationTitle(context.viewState.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
-            .toolbarBackground(.compound.bgCanvasDefault)
             .background(.compound.bgCanvasDefault)
     }
     
@@ -49,13 +48,10 @@ struct PinnedEventsTimelineScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
+        ToolbarItem(placement: .confirmationAction) {
             Button(L10n.actionClose) {
                 context.send(viewAction: .close)
             }
-            // Using the same system font values of the title
-            .font(.body.weight(.semibold))
-            .foregroundColor(.primary)
         }
     }
 }

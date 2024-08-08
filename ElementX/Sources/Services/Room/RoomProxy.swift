@@ -28,16 +28,16 @@ class RoomProxy: RoomProxyProtocol {
     private var innerPinnedEventsTimelineTask: Task<TimelineProxyProtocol?, Never>?
     var pinnedEventsTimeline: TimelineProxyProtocol? {
         get async {
+            // Check if is alrrady available.
             if let innerPinnedEventsTimeline {
                 return innerPinnedEventsTimeline
-            } else if let innerPinnedEventsTimelineTask {
-                return await innerPinnedEventsTimelineTask.value
+                // Otherwise check if there is already a task loading it, and wait for it.
+            } else if let innerPinnedEventsTimelineTask,
+                      let value = await innerPinnedEventsTimelineTask.value {
+                return value
+                // Else create and store a new task to load it and wait for it.
             } else {
                 let task = Task<TimelineProxyProtocol?, Never> { [weak self] in
-                    defer {
-                        self?.innerPinnedEventsTimelineTask = nil
-                    }
-                    
                     guard let self else {
                         return nil
                     }
