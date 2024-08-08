@@ -231,7 +231,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 presentRecoveryKeyScreen()
             case .skip:
                 appSettings.hasRunIdentityConfirmationOnboarding = true
-                stateMachine.tryEvent(.next)
+                stateMachine.tryEvent(.nextSkippingIdentityConfimed)
             case .reset:
                 presentEncryptionResetScreen()
             }
@@ -246,10 +246,14 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 .map(\.verificationState)
                 .removeDuplicates()
                 .sink { [weak self] value in
+                    guard let self else { return }
+                    
                     if value == .verified {
-                        self?.stateMachine.tryEvent(.nextSkippingIdentityConfimed)
+                        appSettings.hasRunIdentityConfirmationOnboarding = true
+                        stateMachine.tryEvent(.nextSkippingIdentityConfimed)
                     } else {
-                        verificationStateCancellable = nil
+                        // Captured by the block below, nil-ing it wouldn't work
+                        verificationStateCancellable?.cancel()
                     }
                 }
         }
