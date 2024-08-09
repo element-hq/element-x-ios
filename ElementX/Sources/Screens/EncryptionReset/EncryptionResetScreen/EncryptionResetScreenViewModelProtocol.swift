@@ -22,4 +22,5 @@ protocol EncryptionResetScreenViewModelProtocol {
     var context: EncryptionResetScreenViewModelType.Context { get }
     
     func continueResetFlowWith(password: String)
+    func stop()
 }

@@ -64,6 +64,10 @@ final class EncryptionResetScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
+    
+    func stop() {
+        viewModel.stop()
+    }
         
     func toPresentable() -> AnyView {
         AnyView(EncryptionResetScreen(context: viewModel.context))

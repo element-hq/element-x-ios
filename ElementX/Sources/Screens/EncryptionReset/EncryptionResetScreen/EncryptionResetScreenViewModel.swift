@@ -61,6 +61,12 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
         }
     }
     
+    func stop() {
+        Task {
+            await identityResetHandle?.cancel()
+        }
+    }
+    
     // MARK: - Private
     
     private func startResetFlow() async {
