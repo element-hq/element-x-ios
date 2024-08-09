@@ -4455,6 +4455,77 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
     }
 
+    //MARK: - requestConfig
+
+    var requestConfigConfigUnderlyingCallsCount = 0
+    open var requestConfigConfigCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return requestConfigConfigUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestConfigConfigUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestConfigConfigUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestConfigConfigUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var requestConfigConfigCalled: Bool {
+        return requestConfigConfigCallsCount > 0
+    }
+    open var requestConfigConfigReceivedConfig: RequestConfig?
+    open var requestConfigConfigReceivedInvocations: [RequestConfig] = []
+
+    var requestConfigConfigUnderlyingReturnValue: ClientBuilder!
+    open var requestConfigConfigReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return requestConfigConfigUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestConfigConfigUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestConfigConfigUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestConfigConfigUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var requestConfigConfigClosure: ((RequestConfig) -> ClientBuilder)?
+
+    open override func requestConfig(config: RequestConfig) -> ClientBuilder {
+        requestConfigConfigCallsCount += 1
+        requestConfigConfigReceivedConfig = config
+        DispatchQueue.main.async {
+            self.requestConfigConfigReceivedInvocations.append(config)
+        }
+        if let requestConfigConfigClosure = requestConfigConfigClosure {
+            return requestConfigConfigClosure(config)
+        } else {
+            return requestConfigConfigReturnValue
+        }
+    }
+
     //MARK: - requiresSlidingSync
 
     var requiresSlidingSyncUnderlyingCallsCount = 0
@@ -16041,48 +16112,6 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
             return roomInfoReturnValue
         }
     }
-
-    //MARK: - subscribe
-
-    var subscribeSettingsUnderlyingCallsCount = 0
-    open var subscribeSettingsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return subscribeSettingsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = subscribeSettingsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                subscribeSettingsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    subscribeSettingsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var subscribeSettingsCalled: Bool {
-        return subscribeSettingsCallsCount > 0
-    }
-    open var subscribeSettingsReceivedSettings: RoomSubscription?
-    open var subscribeSettingsReceivedInvocations: [RoomSubscription?] = []
-    open var subscribeSettingsClosure: ((RoomSubscription?) -> Void)?
-
-    open override func subscribe(settings: RoomSubscription?) {
-        subscribeSettingsCallsCount += 1
-        subscribeSettingsReceivedSettings = settings
-        DispatchQueue.main.async {
-            self.subscribeSettingsReceivedInvocations.append(settings)
-        }
-        subscribeSettingsClosure?(settings)
-    }
 }
 open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
     init() {
@@ -16310,6 +16339,33 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
         }
     }
 
+    //MARK: - subscribeToRooms
+
+    open var subscribeToRoomsRoomIdsSettingsThrowableError: Error?
+    var subscribeToRoomsRoomIdsSettingsUnderlyingCallsCount = 0
+    open var subscribeToRoomsRoomIdsSettingsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToRoomsRoomIdsSettingsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToRoomsRoomIdsSettingsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToRoomsRoomIdsSettingsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToRoomsRoomIdsSettingsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
     //MARK: - syncIndicator
 
     var syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerUnderlyingCallsCount = 0
