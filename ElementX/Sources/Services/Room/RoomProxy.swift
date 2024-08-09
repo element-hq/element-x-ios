@@ -20,6 +20,7 @@ import MatrixRustSDK
 import UIKit
 
 class RoomProxy: RoomProxyProtocol {
+    private let roomListService: RoomListServiceProtocol
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
@@ -171,9 +172,11 @@ class RoomProxy: RoomProxyProtocol {
     var activeMembersCount: Int {
         Int(room.activeMembersCount())
     }
-
-    init?(roomListItem: RoomListItemProtocol,
+    
+    init?(roomListService: RoomListServiceProtocol,
+          roomListItem: RoomListItemProtocol,
           room: RoomProtocol) async {
+        self.roomListService = roomListService
         self.roomListItem = roomListItem
         self.room = room
         
@@ -199,7 +202,11 @@ class RoomProxy: RoomProxyProtocol {
         let settings = RoomSubscription(requiredState: SlidingSyncConstants.defaultRequiredState,
                                         timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
                                         includeHeroes: false) // We don't need heroes here as they're already included in the `all_rooms` list
-        roomListItem.subscribe(settings: settings)
+        do {
+            try roomListService.subscribeToRooms(roomIds: [id], settings: settings)
+        } catch {
+            MXLog.error("Failed subscribing to room with error: \(error)")
+        }
         
         await timeline.subscribeForUpdates()
         

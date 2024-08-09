@@ -134,13 +134,17 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
 
         MXLog.info("\(name): Requesting subscriptions for visible range: \(range)")
         
-        for index in range {
-            guard index < rooms.count else { return }
-            // Note, we must use the item received by the diff. Asking the roomListService to get
-            // a new item instance will result in /sync being called when already subscribed.
-            rooms[index].roomListItem.subscribe(settings: .init(requiredState: SlidingSyncConstants.defaultRequiredState,
-                                                                timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
-                                                                includeHeroes: false))
+        let roomIDs = range
+            .filter { $0 < rooms.count }
+            .map { rooms[$0].id }
+        
+        do {
+            try roomListService.subscribeToRooms(roomIds: roomIDs,
+                                                 settings: .init(requiredState: SlidingSyncConstants.defaultRequiredState,
+                                                                 timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
+                                                                 includeHeroes: false))
+        } catch {
+            MXLog.error("Failed subscribing to rooms with error: \(error)")
         }
     }
     
