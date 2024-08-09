@@ -334,6 +334,7 @@ struct PinnedEventsState: Equatable {
             content = pinnedEventContent
         }
         content.font = .compound.bodyMD
+        content.link = nil
         return content
     }
     
