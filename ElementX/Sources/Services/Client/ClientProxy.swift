@@ -444,11 +444,17 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
+        guard let roomListService else {
+            MXLog.error("Failed retrieving room, room list service not set up")
+            return nil
+        }
+        
         // Try fetching the room from the cold cache (if available) first
         var (roomListItem, room) = await roomTupleForIdentifier(identifier)
         
         if let roomListItem, let room {
-            return await RoomProxy(roomListItem: roomListItem,
+            return await RoomProxy(roomListService: roomListService,
+                                   roomListItem: roomListItem,
                                    room: room)
         }
         
@@ -475,7 +481,8 @@ class ClientProxy: ClientProxyProtocol {
             return nil
         }
         
-        return await RoomProxy(roomListItem: roomListItem,
+        return await RoomProxy(roomListService: roomListService,
+                               roomListItem: roomListItem,
                                room: room)
     }
     
