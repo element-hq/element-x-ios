@@ -571,13 +571,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         callScreenCoordinator.actions
             .sink { [weak self] action in
                 switch action {
+                case .hide:
+                    self?.navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
+                case .show:
+                    self?.navigationSplitCoordinator.setOverlayPresentationMode(.fullScreen)
                 case .dismiss:
-                    self?.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    self?.navigationSplitCoordinator.setOverlayCoordinator(nil)
                 }
             }
             .store(in: &cancellables)
         
-        navigationSplitCoordinator.setSheetCoordinator(callScreenCoordinator, animated: true)
+        navigationSplitCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: true)
         
         analytics.track(screen: .RoomCall)
     }

@@ -22,6 +22,13 @@ struct CallScreen: View {
     @ObservedObject var context: CallScreenViewModel.Context
     
     var body: some View {
+        content
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+    }
+    
+    @ViewBuilder
+    var content: some View {
         if context.viewState.url == nil {
             ProgressView()
         } else {

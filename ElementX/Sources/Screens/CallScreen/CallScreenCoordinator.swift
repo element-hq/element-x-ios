@@ -29,6 +29,11 @@ struct CallScreenCoordinatorParameters {
 }
 
 enum CallScreenCoordinatorAction {
+    /// The call is still ongoing but the user wishes to navigate around the app.
+    case hide
+    /// The call is hidden and the user wishes to return to it.
+    case show
+    /// The call is finished and the screen is done with.
     case dismiss
 }
 
@@ -62,6 +67,18 @@ final class CallScreenCoordinator: CoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .init("AVPictureInPictureControllerWillStartNotification"))
+            .sink { [weak self] _ in
+                self?.actionsSubject.send(.hide)
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .init("AVPictureInPictureControllerWillStopNotification"))
+            .sink { [weak self] _ in
+                self?.actionsSubject.send(.show)
+            }
+            .store(in: &cancellables)
     }
     
     func stop() {

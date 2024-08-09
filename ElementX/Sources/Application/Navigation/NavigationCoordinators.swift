@@ -115,6 +115,28 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         fullScreenCoverModule?.coordinator
     }
     
+    @Published fileprivate var overlayModule: NavigationModule? {
+        didSet {
+            if let oldValue {
+                logPresentationChange("Remove overlay", oldValue)
+                oldValue.tearDown()
+            }
+            
+            if let overlayModule {
+                logPresentationChange("Set overlay", overlayModule)
+                overlayModule.coordinator?.start()
+            }
+        }
+    }
+    
+    /// The currently displayed overlay coordinator
+    var overlayCoordinator: (any CoordinatorProtocol)? {
+        overlayModule?.coordinator
+    }
+    
+    enum OverlayPresentationMode { case fullScreen, minimized }
+    @Published fileprivate var overlayPresentationMode: OverlayPresentationMode = .minimized
+    
     fileprivate var compactLayoutRootModule: NavigationModule? {
         if let sidebarNavigationStackCoordinator = sidebarModule?.coordinator as? NavigationStackCoordinator {
             if let sidebarRootModule = sidebarNavigationStackCoordinator.rootModule {
@@ -282,6 +304,47 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
             fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
     }
+    
+    /// Present an overlay on top of the split view
+    /// - Parameters:
+    ///   - coordinator: the coordinator to display
+    ///   - presentationMode: how the coordinator should be presented
+    ///   - animated: whether the transition should be animated
+    ///   - dismissalCallback: called when the overlay has been dismissed, programatically or otherwise
+    func setOverlayCoordinator(_ coordinator: (any CoordinatorProtocol)?,
+                               presentationMode: OverlayPresentationMode = .fullScreen,
+                               animated: Bool = true,
+                               dismissalCallback: (() -> Void)? = nil) {
+        guard let coordinator else {
+            overlayModule = nil
+            return
+        }
+        
+        if overlayModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
+        }
+
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            overlayPresentationMode = presentationMode
+            overlayModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
+    }
+    
+    /// Updates the presentation of the overlay coordinator.
+    /// - Parameters:
+    ///   - mode: The type of presentation to use.
+    ///   - animated: whether the transition should be animated
+    func setOverlayPresentationMode(_ mode: OverlayPresentationMode, animated: Bool = true) {
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+        
+        withTransaction(transaction) {
+            overlayPresentationMode = mode
+        }
+    }
         
     // MARK: - CoordinatorProtocol
     
@@ -384,6 +447,16 @@ private struct NavigationSplitCoordinatorView: View {
         .fullScreenCover(item: $navigationSplitCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
                 .id(module.id)
+        }
+        .overlay {
+            Group {
+                if let coordinator = navigationSplitCoordinator.overlayModule?.coordinator {
+                    coordinator.toPresentable()
+                        .opacity(navigationSplitCoordinator.overlayPresentationMode == .minimized ? 0 : 1)
+                        .transition(.opacity)
+                }
+            }
+            .animation(.elementDefault, value: navigationSplitCoordinator.overlayPresentationMode)
         }
         // Handle `horizontalSizeClass` changes breaking the navigation bar
         // https://github.com/element-hq/element-x-ios/issues/617
