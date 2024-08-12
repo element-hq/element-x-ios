@@ -20,6 +20,4 @@ import Foundation
 protocol RoomScreenViewModelProtocol {
     var actions: AnyPublisher<RoomScreenViewModelAction, Never> { get }
     var context: RoomScreenViewModel.Context { get }
-    func loadDraft()
-    func saveDraft()
 }

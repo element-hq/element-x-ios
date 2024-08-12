@@ -51,7 +51,7 @@ enum RoomScreenCoordinatorAction {
 final class RoomScreenCoordinator: CoordinatorProtocol {
     private var roomViewModel: RoomScreenViewModelProtocol
     private var timelineViewModel: TimelineViewModelProtocol
-    private var composerViewModel: ComposerToolbarViewModel
+    private var composerViewModel: ComposerToolbarViewModelProtocol
     private var wysiwygViewModel: WysiwygComposerViewModel
 
     private var cancellables = Set<AnyCancellable>()
@@ -145,18 +145,13 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             .store(in: &cancellables)
         
         roomViewModel.actions
-            .sink { [weak self] action in
+            .sink { [weak self] _ in
                 guard let self else { return }
-
-                switch action {
-                case .composer(let action):
-                    composerViewModel.process(roomAction: action)
-                }
             }
             .store(in: &cancellables)
         
         // Loading the draft requires the subscriptions to be set up first otherwise the room won't be be able to propagate the information to the composer.
-        roomViewModel.loadDraft()
+        composerViewModel.loadDraft()
     }
     
     func focusOnEvent(eventID: String) {
@@ -164,7 +159,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func stop() {
-        roomViewModel.saveDraft()
+        composerViewModel.saveDraft()
         timelineViewModel.stop()
     }
     
@@ -177,7 +172,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                   timelineViewModel: timelineViewModel,
                                   composerToolbar: composerToolbar)
                 .onDisappear { [weak self] in
-                    self?.roomViewModel.saveDraft()
+                    self?.composerViewModel.saveDraft()
                 })
     }
 }

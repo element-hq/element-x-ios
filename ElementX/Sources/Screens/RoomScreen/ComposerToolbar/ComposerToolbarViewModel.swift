@@ -226,19 +226,18 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
     
-    func process(roomAction: RoomScreenComposerAction) {
-        switch roomAction {
-        case .saveDraft:
-            handleSaveDraft(isVolatile: false)
-        case .loadDraft:
-            Task {
-                guard case let .success(draft) = await draftService.loadDraft(),
-                      let draft else {
-                    return
-                }
-                handleLoadDraft(draft)
+    func loadDraft() {
+        Task {
+            guard case let .success(draft) = await draftService.loadDraft(),
+                  let draft else {
+                return
             }
+            handleLoadDraft(draft)
         }
+    }
+    
+    func saveDraft() {
+        handleSaveDraft(isVolatile: false)
     }
     
     var keyCommands: [WysiwygKeyCommand] {
