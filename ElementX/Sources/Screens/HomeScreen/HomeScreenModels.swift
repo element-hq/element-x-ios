@@ -120,7 +120,7 @@ struct HomeScreenViewState: BindableState {
     }
     
     var shouldShowFilters: Bool {
-        !bindings.isSearchFieldFocused
+        !bindings.isSearchFieldFocused && roomListMode == .rooms
     }
     
     var shouldShowRecoveryKeyConfirmationBanner: Bool {
