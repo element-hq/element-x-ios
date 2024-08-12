@@ -255,34 +255,13 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 case .configuredForOIDC:
                     // Pop back to the confirmation screen for OIDC login to continue.
                     navigationStackCoordinator.pop(animated: false)
-                case .isOnWaitlist(let credentials):
-                    showWaitlistScreen(for: credentials)
                 }
             }
             .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator)
     }
-    
-    private func showWaitlistScreen(for credentials: WaitlistScreenCredentials) {
-        let parameters = WaitlistScreenCoordinatorParameters(credentials: credentials,
-                                                             authenticationService: authenticationService)
-        let coordinator = WaitlistScreenCoordinator(parameters: parameters)
         
-        coordinator.actions.sink { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .signedIn(let userSession):
-                userHasSignedIn(userSession: userSession)
-            case .cancel:
-                navigationStackCoordinator.pop()
-            }
-        }
-        .store(in: &cancellables)
-        
-        navigationStackCoordinator.push(coordinator)
-    }
-    
     private func userHasSignedIn(userSession: UserSessionProtocol) {
         delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
     }
