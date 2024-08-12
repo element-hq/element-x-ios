@@ -114,10 +114,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
             // FIXME: How about we make a proper type in the FFI? 😅
             guard let error = error as? ClientError else { return .failure(.failedLoggingIn) }
             
-            if error.isElementWaitlist {
-                return .failure(.isOnWaitlist)
-            }
-            
             switch error.code {
             case .forbidden:
                 return .failure(.invalidCredentials)

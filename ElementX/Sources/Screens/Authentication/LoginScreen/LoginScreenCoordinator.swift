@@ -21,8 +21,6 @@ enum LoginScreenCoordinatorAction {
     case configuredForOIDC
     /// Login was successful.
     case signedIn(UserSessionProtocol)
-    /// The user's request to login failed due to being on the proxy waitlist.
-    case isOnWaitlist(WaitlistScreenCredentials)
 }
 
 final class LoginScreenCoordinator: CoordinatorProtocol {
@@ -132,16 +130,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             case .failure(let error):
                 stopLoading()
                 parameters.analytics.signpost.endLogin()
-                switch error {
-                case .isOnWaitlist:
-                    actionsSubject.send(.isOnWaitlist(.init(username: username,
-                                                            password: password,
-                                                            initialDeviceName: UIDevice.current.initialDeviceName,
-                                                            deviceID: nil,
-                                                            homeserver: authenticationService.homeserver.value)))
-                default:
-                    handleError(error)
-                }
+                handleError(error)
             }
         }
     }
