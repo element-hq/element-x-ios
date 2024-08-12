@@ -18,7 +18,7 @@ import Foundation
 import SwiftUI
 
 struct StickerRoomTimelineView: View {
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @EnvironmentObject private var context: TimelineViewModel.Context
     let timelineItem: StickerRoomTimelineItem
     
     var body: some View {
@@ -48,7 +48,7 @@ struct StickerRoomTimelineView: View {
 }
 
 struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
     
     static var previews: some View {
         body.environmentObject(viewModel.context)

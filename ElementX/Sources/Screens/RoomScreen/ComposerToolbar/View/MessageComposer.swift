@@ -208,7 +208,7 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
 }
 
 struct MessageComposer_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
     
     static let replyTypes: [TimelineItemReplyDetails] = [
         .loaded(sender: .init(id: "Dave"),

@@ -18,7 +18,7 @@ import Foundation
 import SwiftUI
 
 struct VideoRoomTimelineView: View {
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @EnvironmentObject private var context: TimelineViewModel.Context
     let timelineItem: VideoRoomTimelineItem
     
     var body: some View {
@@ -68,7 +68,7 @@ struct VideoRoomTimelineView: View {
 }
 
 struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
     
     static var previews: some View {
         body.environmentObject(viewModel.context)

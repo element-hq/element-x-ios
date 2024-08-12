@@ -122,7 +122,7 @@ struct TimelineReplyView: View {
             let cornerRadii: Double
         }
         
-        @EnvironmentObject private var context: RoomScreenViewModel.Context
+        @EnvironmentObject private var context: TimelineViewModel.Context
         @ScaledMetric private var imageContainerSize = 36.0
         
         let sender: TimelineItemSender
@@ -216,7 +216,7 @@ struct TimelineReplyView: View {
 }
 
 struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
     
     static let attributedStringWithMention = {
         var attributedString = AttributedString("To be replaced")

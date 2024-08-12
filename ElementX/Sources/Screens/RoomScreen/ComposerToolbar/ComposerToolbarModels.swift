@@ -288,3 +288,61 @@ extension FormatType {
         }
     }
 }
+
+enum RoomScreenComposerMode: Equatable {
+    case `default`
+    case reply(itemID: TimelineItemIdentifier, replyDetails: TimelineItemReplyDetails, isThread: Bool)
+    case edit(originalItemId: TimelineItemIdentifier)
+    case recordVoiceMessage(state: AudioRecorderState)
+    case previewVoiceMessage(state: AudioPlayerState, waveform: WaveformSource, isUploading: Bool)
+
+    var isEdit: Bool {
+        switch self {
+        case .edit:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var isTextEditingEnabled: Bool {
+        switch self {
+        case .default, .reply, .edit:
+            return true
+        case .recordVoiceMessage, .previewVoiceMessage:
+            return false
+        }
+    }
+    
+    var isLoadingReply: Bool {
+        switch self {
+        case .reply(_, let replyDetails, _):
+            switch replyDetails {
+            case .loading:
+                return true
+            default:
+                return false
+            }
+        default:
+            return false
+        }
+    }
+    
+    var replyEventID: String? {
+        switch self {
+        case .reply(let itemID, _, _):
+            return itemID.eventID
+        default:
+            return nil
+        }
+    }
+    
+    var isComposingNewMessage: Bool {
+        switch self {
+        case .default, .reply:
+            return true
+        default:
+            return false
+        }
+    }
+}

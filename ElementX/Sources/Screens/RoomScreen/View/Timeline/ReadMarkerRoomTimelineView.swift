@@ -36,7 +36,7 @@ struct ReadMarkerRoomTimelineView: View {
 }
 
 struct ReadMarkerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
 
     static let item = ReadMarkerRoomTimelineItem(id: .init(timelineID: .init(UUID().uuidString)))
 

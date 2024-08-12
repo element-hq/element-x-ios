@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2024 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,16 +16,10 @@
 
 import Combine
 import Foundation
-import SwiftUI
 
-@MainActor
 protocol RoomScreenViewModelProtocol {
     var actions: AnyPublisher<RoomScreenViewModelAction, Never> { get }
-    var context: RoomScreenViewModelType.Context { get }
-    func process(composerAction: ComposerToolbarViewModelAction)
-    /// Updates the timeline to show and highlight the item with the corresponding event ID.
-    func focusOnEvent(eventID: String) async
-    func stop()
+    var context: RoomScreenViewModel.Context { get }
     func loadDraft()
     func saveDraft()
 }

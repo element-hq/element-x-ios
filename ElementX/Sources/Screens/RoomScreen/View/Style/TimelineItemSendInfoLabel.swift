@@ -21,7 +21,7 @@ extension View {
     /// Adds the send info (timestamp along indicators for edits and delivery/encryption issues) for the given timeline item to this view.
     func timelineItemSendInfo(timelineItem: EventBasedTimelineItemProtocol,
                               adjustedDeliveryStatus: TimelineItemDeliveryStatus?,
-                              context: RoomScreenViewModel.Context) -> some View {
+                              context: TimelineViewModel.Context) -> some View {
         modifier(TimelineItemSendInfoModifier(sendInfo: .init(timelineItem: timelineItem,
                                                               adjustedDeliveryStatus: adjustedDeliveryStatus),
                                               context: context))
@@ -31,7 +31,7 @@ extension View {
 /// Adds the send info to a view with the correct layout.
 private struct TimelineItemSendInfoModifier: ViewModifier {
     let sendInfo: TimelineItemSendInfo
-    let context: RoomScreenViewModel.Context
+    let context: TimelineViewModel.Context
     
     var layout: AnyLayout {
         switch sendInfo.layoutType {

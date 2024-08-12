@@ -20,7 +20,7 @@ import SwiftUI
 struct TimelineItemStatusView: View {
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @EnvironmentObject private var context: TimelineViewModel.Context
 
     private var isLastOutgoingMessage: Bool {
         timelineItem.isOutgoing && context.viewState.timelineViewState.timelineIDs.last == timelineItem.id.timelineID

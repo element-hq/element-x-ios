@@ -32,7 +32,7 @@ struct EmoteRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
 }
 
 struct EmoteRoomTimelineView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
     
     static var previews: some View {
         body.environmentObject(viewModel.context)

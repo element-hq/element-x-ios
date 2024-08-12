@@ -55,7 +55,7 @@ struct MessageComposerTextField: View {
 }
 
 private struct UITextViewWrapper: UIViewRepresentable {
-    @Environment(\.roomContext) private var roomContext
+    @Environment(\.timelineContext) private var roomContext
 
     @Binding var text: NSAttributedString
 
@@ -182,7 +182,7 @@ private protocol ElementTextViewDelegate: AnyObject {
 }
 
 private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
-    var roomContext: RoomScreenViewModel.Context?
+    var roomContext: TimelineViewModel.Context?
     
     weak var elementDelegate: ElementTextViewDelegate?
     

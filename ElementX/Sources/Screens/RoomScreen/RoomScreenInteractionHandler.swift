@@ -18,7 +18,7 @@ import Combine
 import UIKit
 
 enum RoomScreenInteractionHandlerAction {
-    case composer(action: RoomScreenComposerAction)
+    case composer(action: TimelineComposerAction)
     
     case displayEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)

@@ -22,14 +22,14 @@ struct TimelineReactionsView: View {
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     @Environment(\.layoutDirection) private var layoutDirection: LayoutDirection
 
-    let context: RoomScreenViewModel.Context
+    let context: TimelineViewModel.Context
     let itemID: TimelineItemIdentifier
     let reactions: [AggregatedReaction]
     let isLayoutRTL: Bool
     
     private var collapsed: Binding<Bool>
     
-    init(context: RoomScreenViewModel.Context,
+    init(context: TimelineViewModel.Context,
          itemID: TimelineItemIdentifier,
          reactions: [AggregatedReaction],
          isLayoutRTL: Bool = false) {
@@ -204,20 +204,20 @@ struct TimelineReactionAddMoreButtonLabel: View {
 struct TimelineReactionViewPreviewsContainer: View {
     var body: some View {
         VStack(spacing: 8) {
-            TimelineReactionsView(context: RoomScreenViewModel.mock.context,
+            TimelineReactionsView(context: TimelineViewModel.mock.context,
                                   itemID: .init(timelineID: "1"),
                                   reactions: [AggregatedReaction.mockReactionWithLongText,
                                               AggregatedReaction.mockReactionWithLongTextRTL])
             Divider()
-            TimelineReactionsView(context: RoomScreenViewModel.mock.context,
+            TimelineReactionsView(context: TimelineViewModel.mock.context,
                                   itemID: .init(timelineID: "2"),
                                   reactions: Array(AggregatedReaction.mockReactions.prefix(3)))
             Divider()
-            TimelineReactionsView(context: RoomScreenViewModel.mock.context,
+            TimelineReactionsView(context: TimelineViewModel.mock.context,
                                   itemID: .init(timelineID: "3"),
                                   reactions: AggregatedReaction.mockReactions)
             Divider()
-            TimelineReactionsView(context: RoomScreenViewModel.mock.context,
+            TimelineReactionsView(context: TimelineViewModel.mock.context,
                                   itemID: .init(timelineID: "4"),
                                   reactions: AggregatedReaction.mockReactions,
                                   isLayoutRTL: true)

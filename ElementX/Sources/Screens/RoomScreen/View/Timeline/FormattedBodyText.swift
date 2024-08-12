@@ -224,7 +224,7 @@ private struct PreviewBubbleModifier: ViewModifier {
             .padding(8)
             .background(Color.compound._bgBubbleOutgoing)
             .cornerRadius(12)
-            .environmentObject(RoomScreenViewModel.mock.context)
+            .environmentObject(TimelineViewModel.mock.context)
     }
 }
 

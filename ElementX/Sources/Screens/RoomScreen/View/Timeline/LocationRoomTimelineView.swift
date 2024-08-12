@@ -81,7 +81,7 @@ private extension MapLibreStaticMapView {
 }
 
 struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
 
     static var previews: some View {
         ScrollView {

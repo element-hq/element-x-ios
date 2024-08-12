@@ -1,5 +1,5 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2022 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,11 +15,15 @@
 //
 
 import Combine
+import Foundation
+import SwiftUI
 
-// periphery: ignore - markdown protocol
-protocol ComposerToolbarViewModelProtocol {
-    var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> { get }
-    var context: ComposerToolbarViewModelType.Context { get }
-    func process(timelineAction: TimelineComposerAction)
-    func process(roomAction: RoomScreenComposerAction)
+@MainActor
+protocol TimelineViewModelProtocol {
+    var actions: AnyPublisher<TimelineViewModelAction, Never> { get }
+    var context: TimelineViewModel.Context { get }
+    func process(composerAction: ComposerToolbarViewModelAction)
+    /// Updates the timeline to show and highlight the item with the corresponding event ID.
+    func focusOnEvent(eventID: String) async
+    func stop()
 }

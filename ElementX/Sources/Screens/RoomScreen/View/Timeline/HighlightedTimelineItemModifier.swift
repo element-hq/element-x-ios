@@ -93,21 +93,24 @@ struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePrevie
 
 /// A preview that allows quick testing of the highlight appearance across various timeline scenarios.
 struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
+    static let roomViewModel = RoomScreenViewModel.mock()
     static let focussedEventID = "RoomTimelineItemFixtures.default.5"
-    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room")),
-                                               focussedEventID: focussedEventID,
-                                               timelineController: MockRoomTimelineController(),
-                                               mediaProvider: MockMediaProvider(),
-                                               mediaPlayerProvider: MediaPlayerProviderMock(),
-                                               voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               appMediator: AppMediatorMock.default,
-                                               appSettings: ServiceLocator.shared.settings,
-                                               analyticsService: ServiceLocator.shared.analytics)
+    static let timelineViewModel = TimelineViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room")),
+                                                     focussedEventID: focussedEventID,
+                                                     timelineController: MockRoomTimelineController(),
+                                                     mediaProvider: MockMediaProvider(),
+                                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                     appMediator: AppMediatorMock.default,
+                                                     appSettings: ServiceLocator.shared.settings,
+                                                     analyticsService: ServiceLocator.shared.analytics)
 
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar.mock())
+            RoomScreen(roomViewModel: roomViewModel,
+                       timelineViewModel: timelineViewModel,
+                       composerToolbar: ComposerToolbar.mock())
         }
         .previewDisplayName("Timeline")
     }

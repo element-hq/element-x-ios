@@ -19,7 +19,7 @@ import WysiwygComposer
 
 /// A table view wrapper that displays the timeline of a room.
 struct TimelineView: UIViewControllerRepresentable {
-    @EnvironmentObject private var viewModelContext: RoomScreenViewModel.Context
+    @EnvironmentObject private var viewModelContext: TimelineViewModel.Context
     
     func makeUIViewController(context: Context) -> TimelineTableViewController {
         let tableViewController = TimelineTableViewController(coordinator: context.coordinator,
@@ -40,9 +40,9 @@ struct TimelineView: UIViewControllerRepresentable {
     
     @MainActor
     class Coordinator {
-        let context: RoomScreenViewModel.Context
+        let context: TimelineViewModel.Context
         
-        init(viewModelContext: RoomScreenViewModel.Context) {
+        init(viewModelContext: TimelineViewModel.Context) {
             context = viewModelContext
         }
         
@@ -70,7 +70,7 @@ struct TimelineView: UIViewControllerRepresentable {
             }
         }
         
-        func send(viewAction: RoomScreenViewAction) {
+        func send(viewAction: TimelineViewAction) {
             context.send(viewAction: viewAction)
         }
     }
@@ -79,20 +79,23 @@ struct TimelineView: UIViewControllerRepresentable {
 // MARK: - Previews
 
 struct TimelineView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(id: "stable_id",
-                                                                              name: "Preview room")),
-                                               timelineController: MockRoomTimelineController(),
-                                               mediaProvider: MockMediaProvider(),
-                                               mediaPlayerProvider: MediaPlayerProviderMock(),
-                                               voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               appMediator: AppMediatorMock.default,
-                                               appSettings: ServiceLocator.shared.settings,
-                                               analyticsService: ServiceLocator.shared.analytics)
+    static let roomViewModel = RoomScreenViewModel.mock()
+    static let timelineViewModel = TimelineViewModel(roomProxy: RoomProxyMock(.init(id: "stable_id",
+                                                                                    name: "Preview room")),
+                                                     timelineController: MockRoomTimelineController(),
+                                                     mediaProvider: MockMediaProvider(),
+                                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                     appMediator: AppMediatorMock.default,
+                                                     appSettings: ServiceLocator.shared.settings,
+                                                     analyticsService: ServiceLocator.shared.analytics)
 
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar.mock())
+            RoomScreen(roomViewModel: roomViewModel,
+                       timelineViewModel: timelineViewModel,
+                       composerToolbar: ComposerToolbar.mock())
         }
     }
 }

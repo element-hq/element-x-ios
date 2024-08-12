@@ -18,7 +18,7 @@ import Foundation
 import SwiftUI
 
 struct VoiceMessageRoomTimelineView: View {
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @EnvironmentObject private var context: TimelineViewModel.Context
     private let timelineItem: VoiceMessageRoomTimelineItem
     private let playerState: AudioPlayerState
     @State private var resumePlaybackAfterScrubbing = false
@@ -63,7 +63,7 @@ struct VoiceMessageRoomTimelineView: View {
 }
 
 struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
     static let timelineItemIdentifier = TimelineItemIdentifier.random
     static let voiceRoomTimelineItem = VoiceMessageRoomTimelineItem(id: timelineItemIdentifier,
                                                                     timestamp: "Now",

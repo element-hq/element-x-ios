@@ -30,7 +30,7 @@ struct RedactedRoomTimelineView: View {
 }
 
 struct RedactedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
     
     static var previews: some View {
         VStack(alignment: .leading, spacing: 20.0) {

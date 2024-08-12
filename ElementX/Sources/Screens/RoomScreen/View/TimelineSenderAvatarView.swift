@@ -18,7 +18,7 @@ import Foundation
 import SwiftUI
 
 struct TimelineSenderAvatarView: View {
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @EnvironmentObject private var context: TimelineViewModel.Context
 
     let timelineItem: EventBasedTimelineItemProtocol
         

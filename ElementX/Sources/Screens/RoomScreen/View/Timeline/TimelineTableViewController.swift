@@ -127,7 +127,7 @@ class TimelineTableViewController: UIViewController {
     var isSwitchingTimelines = false
     
     /// The focussed event if navigating to an event permalink within the room.
-    var focussedEvent: TimelineViewState.FocussedEvent? {
+    var focussedEvent: TimelineState.FocussedEvent? {
         didSet {
             guard let focussedEvent, focussedEvent.appearance != .hasAppeared else { return }
             scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)
@@ -283,7 +283,7 @@ class TimelineTableViewController: UIViewController {
                         .id(id)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
-                        .environment(\.roomContext, coordinator.context)
+                        .environment(\.timelineContext, coordinator.context)
                 }
                 .margins(.all, 0) // Margins are handled in the stylers
                 .minSize(height: 1)

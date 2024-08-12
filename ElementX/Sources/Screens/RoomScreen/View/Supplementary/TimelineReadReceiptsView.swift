@@ -19,7 +19,7 @@ import SwiftUI
 struct TimelineReadReceiptsView: View {
     let displayNumber = 3
     let timelineItem: EventBasedTimelineItemProtocol
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @EnvironmentObject private var context: TimelineViewModel.Context
 
     var body: some View {
         HStack(spacing: 2) {
@@ -90,15 +90,15 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
         .mockMe
     ]
 
-    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(name: "Test", members: members)),
-                                               timelineController: MockRoomTimelineController(),
-                                               mediaProvider: MockMediaProvider(),
-                                               mediaPlayerProvider: MediaPlayerProviderMock(),
-                                               voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               appMediator: AppMediatorMock.default,
-                                               appSettings: ServiceLocator.shared.settings,
-                                               analyticsService: ServiceLocator.shared.analytics)
+    static let viewModel = TimelineViewModel(roomProxy: RoomProxyMock(.init(name: "Test", members: members)),
+                                             timelineController: MockRoomTimelineController(),
+                                             mediaProvider: MockMediaProvider(),
+                                             mediaPlayerProvider: MediaPlayerProviderMock(),
+                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                             appMediator: AppMediatorMock.default,
+                                             appSettings: ServiceLocator.shared.settings,
+                                             analyticsService: ServiceLocator.shared.analytics)
 
     static let singleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now")]
     static let doubleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now"),

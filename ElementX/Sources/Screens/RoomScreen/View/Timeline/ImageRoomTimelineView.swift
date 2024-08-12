@@ -18,7 +18,7 @@ import Foundation
 import SwiftUI
 
 struct ImageRoomTimelineView: View {
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @EnvironmentObject private var context: TimelineViewModel.Context
     let timelineItem: ImageRoomTimelineItem
     
     var body: some View {
@@ -56,7 +56,7 @@ struct ImageRoomTimelineView: View {
 }
 
 struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
     
     static var previews: some View {
         body

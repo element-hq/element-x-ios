@@ -21,7 +21,7 @@ import UIKit
 import WysiwygComposer
 
 protocol PillAttachmentViewProviderDelegate: AnyObject {
-    var roomContext: RoomScreenViewModel.Context? { get }
+    var roomContext: TimelineViewModel.Context? { get }
     
     func registerPillView(_ pillView: UIView)
     func invalidateTextAttachmentsDisplay()
@@ -93,20 +93,20 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
 }
 
 final class ComposerMentionDisplayHelper: MentionDisplayHelper {
-    weak var roomContext: RoomScreenViewModel.Context?
+    weak var roomContext: TimelineViewModel.Context?
 
-    init(roomContext: RoomScreenViewModel.Context) {
+    init(roomContext: TimelineViewModel.Context) {
         self.roomContext = roomContext
     }
     
     @MainActor
     static var mock: Self {
-        Self(roomContext: RoomScreenViewModel.mock.context)
+        Self(roomContext: TimelineViewModel.mock.context)
     }
 }
 
 extension WysiwygTextView: PillAttachmentViewProviderDelegate {
-    var roomContext: RoomScreenViewModel.Context? {
+    var roomContext: TimelineViewModel.Context? {
         (mentionDisplayHelper as? ComposerMentionDisplayHelper)?.roomContext
     }
     

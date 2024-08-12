@@ -18,7 +18,7 @@ import SwiftUI
 
 struct PollRoomTimelineView: View {
     let timelineItem: PollRoomTimelineItem
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @EnvironmentObject private var context: TimelineViewModel.Context
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
@@ -50,7 +50,7 @@ struct PollRoomTimelineView: View {
 }
 
 struct PollRoomTimelineView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
 
     static var previews: some View {
         PollRoomTimelineView(timelineItem: .mock(poll: .disclosed(), isOutgoing: false))

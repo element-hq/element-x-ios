@@ -18,7 +18,7 @@ import Compound
 import SwiftUI
 
 struct TimelineItemMenu: View {
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @EnvironmentObject private var context: TimelineViewModel.Context
     @Environment(\.dismiss) private var dismiss
     
     @State private var reactionsFrame = CGRect.zero
@@ -191,7 +191,7 @@ private extension EncryptionAuthenticity {
 // MARK: - Previews
 
 struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
     static let (item, actions) = makeItem()
     static let (backupItem, _) = makeItem(authenticity: .notGuaranteed(color: .gray))
     static let (unsignedItem, _) = makeItem(authenticity: .unsignedDevice(color: .red))

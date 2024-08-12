@@ -67,7 +67,7 @@ struct LongPressWithFeedback_Previews: PreviewProvider, TestablePreview {
     static var previews: some View { Preview() }
     
     struct Preview: View {
-        private let viewModel = RoomScreenViewModel.mock
+        private let viewModel = TimelineViewModel.mock
         @State private var isPresentingSheet = false
         
         var body: some View {

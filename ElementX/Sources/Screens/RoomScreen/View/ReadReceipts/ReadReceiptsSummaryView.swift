@@ -18,7 +18,7 @@ import SwiftUI
 
 struct ReadReceiptsSummaryView: View {
     let orderedReadReceipts: [ReadReceipt]
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @EnvironmentObject private var context: TimelineViewModel.Context
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -52,15 +52,15 @@ struct ReadReceiptsSummaryView_Previews: PreviewProvider, TestablePreview {
             .mockDan
         ]
         let roomProxyMock = RoomProxyMock(.init(name: "Room", members: members))
-        let mock = RoomScreenViewModel(roomProxy: roomProxyMock,
-                                       timelineController: MockRoomTimelineController(),
-                                       mediaProvider: MockMediaProvider(),
-                                       mediaPlayerProvider: MediaPlayerProviderMock(),
-                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                       userIndicatorController: UserIndicatorControllerMock(),
-                                       appMediator: AppMediatorMock.default,
-                                       appSettings: ServiceLocator.shared.settings,
-                                       analyticsService: ServiceLocator.shared.analytics)
+        let mock = TimelineViewModel(roomProxy: roomProxyMock,
+                                     timelineController: MockRoomTimelineController(),
+                                     mediaProvider: MockMediaProvider(),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: UserIndicatorControllerMock(),
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics)
         return mock
     }()
     

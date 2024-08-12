@@ -18,7 +18,7 @@ import Compound
 import SwiftUI
 
 struct TimelineItemBubbledStylerView<Content: View>: View {
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @EnvironmentObject private var context: TimelineViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     @Environment(\.focussedEventID) private var focussedEventID
     
@@ -318,7 +318,7 @@ private extension EdgeInsets {
 // MARK: - Previews
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
 
     static var previews: some View {
         mockTimeline

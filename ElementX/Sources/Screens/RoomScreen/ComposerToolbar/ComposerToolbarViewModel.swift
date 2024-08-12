@@ -200,8 +200,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
 
-    func process(roomAction: RoomScreenComposerAction) {
-        switch roomAction {
+    func process(timelineAction: TimelineComposerAction) {
+        switch timelineAction {
         case .setMode(mode: let mode):
             if state.composerMode.isComposingNewMessage, mode.isEdit {
                 handleSaveDraft(isVolatile: true)
@@ -223,6 +223,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 set(mode: .default)
                 set(text: "")
             }
+        }
+    }
+    
+    func process(roomAction: RoomScreenComposerAction) {
+        switch roomAction {
         case .saveDraft:
             handleSaveDraft(isVolatile: false)
         case .loadDraft:
