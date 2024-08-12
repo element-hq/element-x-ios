@@ -65,15 +65,6 @@ extension XCUIApplication {
             
             savePasswordButton.tap()
         }
-        
-        // Migration screen may be shown as an overlay.
-        // if that pops up soon enough, we just let that happen and wait
-        let message = staticTexts[A11yIdentifiers.migrationScreen.message]
-        
-        if message.waitForExistence(timeout: 10.0) {
-            currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: message)
-            currentTestCase.waitForExpectations(timeout: 300.0)
-        }
                 
         // Wait for the home screen to become visible.
         let profileButton = buttons[A11yIdentifiers.homeScreen.userAvatar]

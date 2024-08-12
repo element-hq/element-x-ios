@@ -14,7 +14,6 @@ final class AppSettings {
         case lastVersionLaunched
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
-        case migratedAccounts
         case timelineStyle
         
         case analyticsConsentState
@@ -159,14 +158,7 @@ final class AppSettings {
                                                                      contacts: [supportEmailAddress],
                                                                      staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString },
                                                                      dynamicRegistrationsFile: .sessionsBaseDirectory.appending(path: "oidc/registrations.json"))
-
-    /// A dictionary of accounts that have performed an initial sync through their proxy.
-    ///
-    /// This is a temporary workaround. In the future we should be able to receive a signal from the
-    /// proxy that it is the first sync (or that an upgrade on the backend will involve a slower sync).
-    @UserPreference(key: UserDefaultsKeys.migratedAccounts, defaultValue: [:], storageType: .userDefaults(store))
-    var migratedAccounts: [String: Bool]
-
+    
     // MARK: - Notifications
     
     var pusherAppId: String {

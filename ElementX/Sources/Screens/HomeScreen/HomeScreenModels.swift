@@ -43,15 +43,12 @@ enum HomeScreenViewAction {
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
-    case migration
     case skeletons
     case empty
     case rooms
     
     var description: String {
         switch self {
-        case .migration:
-            return "Showing account migration"
         case .skeletons:
             return "Showing placeholders"
         case .empty:

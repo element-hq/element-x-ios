@@ -16,13 +16,8 @@ struct HomeScreenContent: View {
     let scrollViewAdapter: ScrollViewAdapter
     
     var body: some View {
-        switch context.viewState.roomListMode {
-        case .migration:
-            migrationView
-        default:
-            roomList
-                .sentryTrace("\(Self.self)")
-        }
+        roomList
+            .sentryTrace("\(Self.self)")
     }
     
     private var roomList: some View {
@@ -59,8 +54,6 @@ struct HomeScreenContent: View {
                     .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
                     .compoundSearchField()
                     .disableAutocorrection(true)
-                case .migration:
-                    EmptyView()
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
@@ -139,47 +132,6 @@ struct HomeScreenContent: View {
             }
             .background(Color.compound.bgCanvasDefault)
         }
-    }
-    
-    @ViewBuilder
-    private var migrationView: some View {
-        if UIDevice.current.isPhone {
-            if verticalSizeClass == .compact {
-                migrationViewContent
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                WaitingDialog {
-                    migrationViewContent
-                } bottomContent: {
-                    EmptyView()
-                }
-            }
-        } else {
-            migrationViewContent
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-    }
-    
-    private var migrationViewContent: some View {
-        VStack(spacing: 16) {
-            ProgressView()
-                .tint(.compound.iconPrimary)
-                .padding(.bottom, 4)
-            
-            Text(L10n.screenMigrationTitle.tinting(".", color: Asset.Colors.brandColor.swiftUIColor))
-                .minimumScaleFactor(0.01)
-                .font(.compound.headingXLBold)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textPrimary)
-            
-            Text(L10n.screenMigrationMessage)
-                .minimumScaleFactor(0.01)
-                .font(.compound.bodyLG)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textPrimary)
-                .accessibilityIdentifier(A11yIdentifiers.migrationScreen.message)
-        }
-        .padding(.horizontal)
     }
     
     /// Often times the scroll view's content size isn't correct yet when this method is called e.g. when cancelling a search
