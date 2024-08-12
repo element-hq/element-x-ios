@@ -252,7 +252,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let items = [TextRoomTimelineItem(eventID: "t1"),
                      TextRoomTimelineItem(eventID: "t2"),
                      TextRoomTimelineItem(eventID: "t3")]
-        let (viewModel, _, timelineProxy, _, _) = readReceiptsConfiguration(with: items)
+        let (viewModel, _, timelineProxy, _) = readReceiptsConfiguration(with: items)
         
         // When sending a read receipt for the last item.
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
@@ -270,7 +270,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let items = [TextRoomTimelineItem(eventID: "t1"),
                      TextRoomTimelineItem(eventID: "t2"),
                      TextRoomTimelineItem(eventID: "t3")]
-        let (viewModel, _, timelineProxy, timelineController, _) = readReceiptsConfiguration(with: items)
+        let (viewModel, _, timelineProxy, timelineController) = readReceiptsConfiguration(with: items)
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 1)
@@ -303,7 +303,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let items = [SeparatorRoomTimelineItem(timelineID: "v1"),
                      SeparatorRoomTimelineItem(timelineID: "v2"),
                      SeparatorRoomTimelineItem(timelineID: "v3")]
-        let (viewModel, _, timelineProxy, _, _) = readReceiptsConfiguration(with: items)
+        let (viewModel, _, timelineProxy, _) = readReceiptsConfiguration(with: items)
         
         // When sending a read receipt for the last item.
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
@@ -318,7 +318,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let items: [RoomTimelineItemProtocol] = [TextRoomTimelineItem(eventID: "t1"),
                                                  TextRoomTimelineItem(eventID: "t2"),
                                                  SeparatorRoomTimelineItem(timelineID: "v3")]
-        let (viewModel, _, _, _, _) = readReceiptsConfiguration(with: items)
+        let (viewModel, _, _, _) = readReceiptsConfiguration(with: items)
         
         // When sending a read receipt for the last item.
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
@@ -330,9 +330,7 @@ class RoomScreenViewModelTests: XCTestCase {
     private func readReceiptsConfiguration(with items: [RoomTimelineItemProtocol]) -> (RoomScreenViewModel,
                                                                                        RoomProxyMock,
                                                                                        TimelineProxyMock,
-                                                                                       MockRoomTimelineController,
-                                                                                       NotificationCenterMock) {
-        let notificationCenter = NotificationCenterMock()
+                                                                                       MockRoomTimelineController) {
         let roomProxy = RoomProxyMock(.init(name: ""))
         
         let timelineProxy = TimelineProxyMock()
@@ -354,7 +352,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics)
-        return (viewModel, roomProxy, timelineProxy, timelineController, notificationCenter)
+        return (viewModel, roomProxy, timelineProxy, timelineController)
     }
     
     func testShowReadReceipts() async throws {

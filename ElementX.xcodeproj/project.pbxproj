@@ -29,7 +29,6 @@
 		024E70451A7CD9E4E034D8A9 /* VoiceMessageRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D529B976F8B2AA654D923422 /* VoiceMessageRoomTimelineItem.swift */; };
 		02A92F8F4538CECDFB4F2607 /* RoomDirectorySearchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562EAF6231151A675BED7A9 /* RoomDirectorySearchScreenCoordinator.swift */; };
 		02D8DF8EB7537EB4E9019DDB /* EventBasedTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218AB05B4E3889731959C5F1 /* EventBasedTimelineItemProtocol.swift */; };
-		02F4FAE40AF63A1941FD3BBA /* NotificationCenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B7F8EE25775DE2A305CBB5 /* NotificationCenterProtocol.swift */; };
 		037006FB6DF1374F94E4058D /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDCAC6CAAD65A2C24EA9C4B /* Dictionary.swift */; };
 		03CDCA6243F89B194E3FAD17 /* EncryptionAuthenticity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 955336CBD5ED73C792D1F580 /* EncryptionAuthenticity.swift */; };
 		0437765FF480249486893CC7 /* ScreenTrackerViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196004E7695FBA292A7944AF /* ScreenTrackerViewModifier.swift */; };
@@ -1234,7 +1233,6 @@
 		105429F29096729EDD3152CF /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/SAS.strings; sourceTree = "<group>"; };
 		1059E2AE7878CF7820592637 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		105B2A8426404EF66F00CFDB /* RoomTimelineItemFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemFactory.swift; sourceTree = "<group>"; };
-		10B7F8EE25775DE2A305CBB5 /* NotificationCenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterProtocol.swift; sourceTree = "<group>"; };
 		10CC626F97AD70FF0420C115 /* RoomSummaryProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryProviderProtocol.swift; sourceTree = "<group>"; };
 		10F130DF775CE6BC51A4E392 /* AppLockSetupBiometricsScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockSetupBiometricsScreenModels.swift; sourceTree = "<group>"; };
 		10F32E0B4B83D2A11EE8D011 /* InviteUsersScreenSelectedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreenSelectedItem.swift; sourceTree = "<group>"; };
@@ -4783,7 +4781,6 @@
 				7B25F959A434BB9923A3223F /* ExpiringTaskRunner.swift */,
 				6A580295A56B55A856CC4084 /* InfoPlistReader.swift */,
 				6AD1A853D605C2146B0DC028 /* MatrixEntityRegex.swift */,
-				10B7F8EE25775DE2A305CBB5 /* NotificationCenterProtocol.swift */,
 				B3A1398EFF65090FDA1CB639 /* ProcessInfo.swift */,
 				53482ECA4B6633961EC224F5 /* ScrollViewAdapter.swift */,
 				4481799F455B3DA243BDA2AC /* ShareToMapsAppActivity.swift */,
@@ -6410,7 +6407,6 @@
 				0C58A846F61949B1D545D661 /* NoticeRoomTimelineItem.swift in Sources */,
 				9408CE8B8865C0C8DD4C9869 /* NoticeRoomTimelineItemContent.swift in Sources */,
 				368C8758FCD079E6AAA18C2C /* NoticeRoomTimelineView.swift in Sources */,
-				02F4FAE40AF63A1941FD3BBA /* NotificationCenterProtocol.swift in Sources */,
 				3F70E237CE4C3FAB02FC227F /* NotificationConstants.swift in Sources */,
 				CE9530A4CA661E090635C2F2 /* NotificationItemProxy.swift in Sources */,
 				FD4C21F8DA1E273DE94FCD1A /* NotificationItemProxyProtocol.swift in Sources */,
