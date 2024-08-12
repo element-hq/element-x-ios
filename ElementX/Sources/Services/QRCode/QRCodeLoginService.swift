@@ -20,7 +20,7 @@ import Foundation
 import MatrixRustSDK
 
 final class QRCodeLoginService: QRCodeLoginServiceProtocol {
-    private let sessionDirectory: URL
+    private var sessionDirectory: URL
     private let passphrase: String
     
     private let userSessionStore: UserSessionStoreProtocol
@@ -57,16 +57,10 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         }
         
         do {
-            let client = try await ClientBuilder
-                .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
-                             slidingSync: appSettings.simplifiedSlidingSyncEnabled ? .simplified : .discovered,
-                             slidingSyncProxy: appSettings.slidingSyncProxyURL,
-                             sessionDelegate: userSessionStore.clientSessionDelegate,
-                             appHooks: appHooks)
-                .sessionPath(path: sessionDirectory.path(percentEncoded: false))
-                .passphrase(passphrase: passphrase)
-                .buildWithQrCode(qrCodeData: qrData, oidcConfiguration: appSettings.oidcConfiguration.rustValue, progressListener: listener)
-            return await login(client: client)
+            let client = try await makeClientBuilder().buildWithQrCode(qrCodeData: qrData,
+                                                                       oidcConfiguration: appSettings.oidcConfiguration.rustValue,
+                                                                       progressListener: listener)
+            return await userSession(for: client)
         } catch let error as HumanQrLoginError {
             MXLog.error("QRCode login error: \(error)")
             return .failure(error.serviceError)
@@ -76,7 +70,32 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         }
     }
     
-    private func login(client: Client) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
+    // MARK: - Private
+    
+    private func makeClientBuilder() -> ClientBuilder {
+        // Use a fresh session directory each time the user scans a QR code to ensure caches
+        // (e.g. server versions) are always fresh in case a different server is used.
+        rotateSessionDirectory()
+        
+        return ClientBuilder
+            .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
+                         slidingSync: appSettings.simplifiedSlidingSyncEnabled ? .simplified : .discovered,
+                         slidingSyncProxy: appSettings.slidingSyncProxyURL,
+                         sessionDelegate: userSessionStore.clientSessionDelegate,
+                         appHooks: appHooks)
+            .sessionPath(path: sessionDirectory.path(percentEncoded: false))
+            .passphrase(passphrase: passphrase)
+    }
+    
+    private func rotateSessionDirectory() {
+        if FileManager.default.directoryExists(at: sessionDirectory) {
+            try? FileManager.default.removeItem(at: sessionDirectory)
+        }
+        
+        sessionDirectory = .sessionsBaseDirectory.appending(component: UUID().uuidString)
+    }
+    
+    private func userSession(for client: Client) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
         switch await userSessionStore.userSession(for: client, sessionDirectory: sessionDirectory, passphrase: passphrase) {
         case .success(let session):
             return .success(session)

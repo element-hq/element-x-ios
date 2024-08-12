@@ -23,7 +23,7 @@ enum FileManagerError: Error {
 extension FileManager {
     func directoryExists(at url: URL) -> Bool {
         var isDirectory: ObjCBool = false
-        guard fileExists(atPath: url.path(), isDirectory: &isDirectory) else {
+        guard fileExists(atPath: url.path(percentEncoded: false), isDirectory: &isDirectory) else {
             return false
         }
         return isDirectory.boolValue

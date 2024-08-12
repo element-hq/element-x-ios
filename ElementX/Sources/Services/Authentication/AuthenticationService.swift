@@ -20,7 +20,7 @@ import MatrixRustSDK
 
 class AuthenticationService: AuthenticationServiceProtocol {
     private var client: Client?
-    private let sessionDirectory: URL
+    private var sessionDirectory: URL
     private let passphrase: String
     
     private let userSessionStore: UserSessionStoreProtocol
@@ -139,7 +139,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
     // MARK: - Private
     
     private func makeClientBuilder() -> ClientBuilder {
-        ClientBuilder
+        // Use a fresh session directory each time the user enters a different server
+        // so that caches (e.g. server versions) are always fresh for the new server.
+        rotateSessionDirectory()
+        
+        return ClientBuilder
             .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
                          slidingSync: appSettings.simplifiedSlidingSyncEnabled ? .simplified : .discovered,
                          slidingSyncProxy: appSettings.slidingSyncProxyURL,
@@ -147,6 +151,14 @@ class AuthenticationService: AuthenticationServiceProtocol {
                          appHooks: appHooks)
             .sessionPath(path: sessionDirectory.path(percentEncoded: false))
             .passphrase(passphrase: passphrase)
+    }
+    
+    private func rotateSessionDirectory() {
+        if FileManager.default.directoryExists(at: sessionDirectory) {
+            try? FileManager.default.removeItem(at: sessionDirectory)
+        }
+        
+        sessionDirectory = .sessionsBaseDirectory.appending(component: UUID().uuidString)
     }
     
     private func userSession(for client: Client) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
