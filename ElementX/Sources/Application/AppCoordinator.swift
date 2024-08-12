@@ -356,20 +356,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         MXLog.info("The app was upgraded from \(oldVersion) to \(newVersion)")
         
-        if oldVersion < Version(1, 1, 0) {
-            MXLog.info("Migrating to v1.1.0, signing out the user.")
-            // Version 1.1.0 switched the Rust crypto store to SQLite
-            // There are no migrations in place so we need to sign the user out
-            wipeUserData()
-        }
-        
-        if oldVersion < Version(1, 1, 7) {
-            MXLog.info("Migrating to v1.1.7, marking accounts as migrated.")
-            for userID in userSessionStore.userIDs {
-                appSettings.migratedAccounts[userID] = true
-            }
-        }
-        
         if oldVersion < Version(1, 6, 0) {
             MXLog.info("Migrating to v1.6.0, marking identity confirmation onboarding as ran.")
             if !userSessionStore.userIDs.isEmpty {

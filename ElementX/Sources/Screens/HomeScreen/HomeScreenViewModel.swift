@@ -19,8 +19,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
     
-    private var migrationCancellable: AnyCancellable?
-    
     private var actionsSubject: PassthroughSubject<HomeScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<HomeScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -223,27 +221,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         analyticsService.signpost.beginFirstRooms()
-        
-        let hasUserBeenMigrated = appSettings.migratedAccounts[userSession.clientProxy.userID] == true
-
-        if !hasUserBeenMigrated {
-            state.roomListMode = .migration
-            
-            MXLog.info("Account not migrated, setting view room list mode to \"\(state.roomListMode)\"")
-            
-            migrationCancellable = userSession.clientProxy.actionsPublisher
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] callback in
-                    guard let self, case .receivedSyncUpdate = callback else { return }
-                    migrationCancellable = nil
-                    appSettings.migratedAccounts[userSession.clientProxy.userID] = true
-                    
-                    MXLog.info("Received first sync response, updating room list mode")
-                    
-                    updateRoomListMode(with: roomSummaryProvider.statePublisher.value)
-                }
-        }
-        
+                
         roomSummaryProvider.statePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
@@ -262,11 +240,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState) {
-        guard appSettings.migratedAccounts[userSession.clientProxy.userID] == true else {
-            // Ignore room summary provider updates while "migrating"
-            return
-        }
-        
         let isLoadingData = !roomSummaryProviderState.isLoaded
         let hasNoRooms = roomSummaryProviderState.isLoaded && roomSummaryProviderState.totalNumberOfRooms == 0
         
