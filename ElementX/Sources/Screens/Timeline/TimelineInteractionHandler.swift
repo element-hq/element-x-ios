@@ -17,7 +17,7 @@
 import Combine
 import UIKit
 
-enum RoomScreenInteractionHandlerAction {
+enum TimelineInteractionHandlerAction {
     case composer(action: TimelineComposerAction)
     
     case displayEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
@@ -35,7 +35,7 @@ enum RoomScreenInteractionHandlerAction {
 }
 
 @MainActor
-class RoomScreenInteractionHandler {
+class TimelineInteractionHandler {
     private let roomProxy: RoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
     private let mediaProvider: MediaProviderProtocol
@@ -48,8 +48,8 @@ class RoomScreenInteractionHandler {
     private let analyticsService: AnalyticsService
     private let pollInteractionHandler: PollInteractionHandlerProtocol
     
-    private let actionsSubject: PassthroughSubject<RoomScreenInteractionHandlerAction, Never> = .init()
-    var actions: AnyPublisher<RoomScreenInteractionHandlerAction, Never> {
+    private let actionsSubject: PassthroughSubject<TimelineInteractionHandlerAction, Never> = .init()
+    var actions: AnyPublisher<TimelineInteractionHandlerAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     

@@ -38,7 +38,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let analyticsService: AnalyticsService
     private let pinnedEventStringBuilder: RoomEventStringBuilder
     
-    private let roomScreenInteractionHandler: RoomScreenInteractionHandler
+    private let timelineInteractionHandler: TimelineInteractionHandler
     
     private let composerFocusedSubject = PassthroughSubject<Bool, Never>()
     
@@ -89,16 +89,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
-        roomScreenInteractionHandler = RoomScreenInteractionHandler(roomProxy: roomProxy,
-                                                                    timelineController: timelineController,
-                                                                    mediaProvider: mediaProvider,
-                                                                    mediaPlayerProvider: mediaPlayerProvider,
-                                                                    voiceMessageMediaManager: voiceMessageMediaManager,
-                                                                    voiceMessageRecorder: voiceMessageRecorder,
-                                                                    userIndicatorController: userIndicatorController,
-                                                                    appMediator: appMediator,
-                                                                    appSettings: appSettings,
-                                                                    analyticsService: analyticsService)
+        timelineInteractionHandler = TimelineInteractionHandler(roomProxy: roomProxy,
+                                                                timelineController: timelineController,
+                                                                mediaProvider: mediaProvider,
+                                                                mediaPlayerProvider: mediaPlayerProvider,
+                                                                voiceMessageMediaManager: voiceMessageMediaManager,
+                                                                voiceMessageRecorder: voiceMessageRecorder,
+                                                                userIndicatorController: userIndicatorController,
+                                                                appMediator: appMediator,
+                                                                appSettings: appSettings,
+                                                                analyticsService: analyticsService)
         
         super.init(initialViewState: TimelineViewState(roomID: roomProxy.id,
                                                        roomTitle: roomProxy.roomTitle,
@@ -127,7 +127,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 return nil
             }
             
-            return self.roomScreenInteractionHandler.audioPlayerState(for: itemID)
+            return self.timelineInteractionHandler.audioPlayerState(for: itemID)
         }
         
         buildTimelineViews(timelineItems: timelineController.timelineItems)
@@ -176,16 +176,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             scrollToBottom()
             
         case .displayTimelineItemMenu(let itemID):
-            roomScreenInteractionHandler.displayTimelineItemActionMenu(for: itemID)
+            timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
-            roomScreenInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
+            timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
             
         case .displayRoomDetails:
             actionsSubject.send(.displayRoomDetails)
         case .displayRoomMemberDetails(userID: let userID):
-            Task { await roomScreenInteractionHandler.displayRoomMemberDetails(userID: userID) }
+            Task { await timelineInteractionHandler.displayRoomMemberDetails(userID: userID) }
         case .displayEmojiPicker(let itemID):
-            roomScreenInteractionHandler.displayEmojiPicker(for: itemID)
+            timelineInteractionHandler.displayEmojiPicker(for: itemID)
         case .displayReactionSummary(let itemID, let key):
             displayReactionSummary(for: itemID, selectedKey: key)
         case .displayReadReceipts(itemID: let itemID):
@@ -194,7 +194,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             actionsSubject.send(.displayCallScreen)
             analyticsService.trackInteraction(name: .MobileRoomCallButton)
         case .handlePasteOrDrop(let provider):
-            roomScreenInteractionHandler.handlePasteOrDrop(provider)
+            timelineInteractionHandler.handlePasteOrDrop(provider)
         case .handlePollAction(let pollAction):
             handlePollAction(pollAction)
         case .handleAudioPlayerAction(let audioPlayerAction):
@@ -234,7 +234,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .attach(let attachment):
             attach(attachment)
         case .handlePasteOrDrop(let provider):
-            roomScreenInteractionHandler.handlePasteOrDrop(provider)
+            timelineInteractionHandler.handlePasteOrDrop(provider)
         case .composerModeChanged(mode: let mode):
             trackComposerMode(mode)
         case .composerFocusedChanged(isFocused: let isFocused):
@@ -300,7 +300,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             return
         }
         
-        roomScreenInteractionHandler.handleTimelineItemMenuAction(.edit, itemID: item.id)
+        timelineInteractionHandler.handleTimelineItemMenuAction(.edit, itemID: item.id)
     }
     
     private func attach(_ attachment: ComposerAttachmentType) {
@@ -321,7 +321,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func handlePollAction(_ action: TimelineViewPollAction) {
         switch action {
         case let .selectOption(pollStartID, optionID):
-            roomScreenInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
+            timelineInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
         case let .end(pollStartID):
             displayAlert(.pollEndConfirmation(pollStartID))
         case .edit(let pollStartID, let poll):
@@ -332,9 +332,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func handleAudioPlayerAction(_ action: TimelineAudioPlayerAction) {
         switch action {
         case .playPause(let itemID):
-            Task { await roomScreenInteractionHandler.playPauseAudio(for: itemID) }
+            Task { await timelineInteractionHandler.playPauseAudio(for: itemID) }
         case .seek(let itemID, let progress):
-            Task { await roomScreenInteractionHandler.seekAudio(for: itemID, progress: progress) }
+            Task { await timelineInteractionHandler.seekAudio(for: itemID, progress: progress) }
         }
     }
     
@@ -343,24 +343,24 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .startRecording:
             Task {
                 await mediaPlayerProvider.detachAllStates(except: nil)
-                await roomScreenInteractionHandler.startRecordingVoiceMessage()
+                await timelineInteractionHandler.startRecordingVoiceMessage()
             }
         case .stopRecording:
-            Task { await roomScreenInteractionHandler.stopRecordingVoiceMessage() }
+            Task { await timelineInteractionHandler.stopRecordingVoiceMessage() }
         case .cancelRecording:
-            Task { await roomScreenInteractionHandler.cancelRecordingVoiceMessage() }
+            Task { await timelineInteractionHandler.cancelRecordingVoiceMessage() }
         case .deleteRecording:
-            Task { await roomScreenInteractionHandler.deleteCurrentVoiceMessage() }
+            Task { await timelineInteractionHandler.deleteCurrentVoiceMessage() }
         case .send:
-            Task { await roomScreenInteractionHandler.sendCurrentVoiceMessage() }
+            Task { await timelineInteractionHandler.sendCurrentVoiceMessage() }
         case .startPlayback:
-            Task { await roomScreenInteractionHandler.startPlayingRecordedVoiceMessage() }
+            Task { await timelineInteractionHandler.startPlayingRecordedVoiceMessage() }
         case .pausePlayback:
-            roomScreenInteractionHandler.pausePlayingRecordedVoiceMessage()
+            timelineInteractionHandler.pausePlayingRecordedVoiceMessage()
         case .seekPlayback(let progress):
-            Task { await roomScreenInteractionHandler.seekRecordedVoiceMessage(to: progress) }
+            Task { await timelineInteractionHandler.seekRecordedVoiceMessage(to: progress) }
         case .scrubPlayback(let scrubbing):
-            Task { await roomScreenInteractionHandler.scrubVoiceMessagePlayback(scrubbing: scrubbing) }
+            Task { await timelineInteractionHandler.scrubVoiceMessagePlayback(scrubbing: scrubbing) }
         }
     }
     
@@ -457,7 +457,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .weakAssign(to: \.state.typingMembers, on: self)
             .store(in: &cancellables)
         
-        roomScreenInteractionHandler.actions
+        timelineInteractionHandler.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 guard let self else { return }
@@ -624,7 +624,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
     private func handleItemTapped(with itemID: TimelineItemIdentifier) async {
         state.showLoading = true
-        let action = await roomScreenInteractionHandler.processItemTap(itemID)
+        let action = await timelineInteractionHandler.processItemTap(itemID)
 
         switch action {
         case .displayMediaFile(let file, let title):
@@ -897,7 +897,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                              title: L10n.actionEndPoll,
                                              message: L10n.commonPollEndConfirmation,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                             secondaryButton: .init(title: L10n.actionOk, action: { self.roomScreenInteractionHandler.endPoll(pollStartID: pollStartID) }))
+                                             secondaryButton: .init(title: L10n.actionOk, action: { self.timelineInteractionHandler.endPoll(pollStartID: pollStartID) }))
         case .sendingFailed:
             state.bindings.alertInfo = .init(id: type,
                                              title: L10n.commonSendingFailed,
