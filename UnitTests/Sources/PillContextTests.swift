@@ -26,15 +26,15 @@ class PillContextTests: XCTestCase {
         let proxyMock = RoomProxyMock(.init(name: "Test"))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
         proxyMock.membersPublisher = subject.asCurrentValuePublisher()
-        let mock = RoomScreenViewModel(roomProxy: proxyMock,
-                                       timelineController: MockRoomTimelineController(),
-                                       mediaProvider: MockMediaProvider(),
-                                       mediaPlayerProvider: MediaPlayerProviderMock(),
-                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                       appMediator: AppMediatorMock.default,
-                                       appSettings: ServiceLocator.shared.settings,
-                                       analyticsService: ServiceLocator.shared.analytics)
+        let mock = TimelineViewModel(roomProxy: proxyMock,
+                                     timelineController: MockRoomTimelineController(),
+                                     mediaProvider: MockMediaProvider(),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics)
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertFalse(context.viewState.isOwnMention)
@@ -54,15 +54,15 @@ class PillContextTests: XCTestCase {
         let proxyMock = RoomProxyMock(.init(name: "Test", ownUserID: id))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
         proxyMock.membersPublisher = subject.asCurrentValuePublisher()
-        let mock = RoomScreenViewModel(roomProxy: proxyMock,
-                                       timelineController: MockRoomTimelineController(),
-                                       mediaProvider: MockMediaProvider(),
-                                       mediaPlayerProvider: MediaPlayerProviderMock(),
-                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                       appMediator: AppMediatorMock.default,
-                                       appSettings: ServiceLocator.shared.settings,
-                                       analyticsService: ServiceLocator.shared.analytics)
+        let mock = TimelineViewModel(roomProxy: proxyMock,
+                                     timelineController: MockRoomTimelineController(),
+                                     mediaProvider: MockMediaProvider(),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics)
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)
@@ -75,15 +75,15 @@ class PillContextTests: XCTestCase {
         let proxyMock = RoomProxyMock(.init(id: id, name: displayName, avatarURL: avatarURL))
         let mockController = MockRoomTimelineController()
         mockController.roomProxy = proxyMock
-        let mock = RoomScreenViewModel(roomProxy: proxyMock,
-                                       timelineController: mockController,
-                                       mediaProvider: MockMediaProvider(),
-                                       mediaPlayerProvider: MediaPlayerProviderMock(),
-                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                       appMediator: AppMediatorMock.default,
-                                       appSettings: ServiceLocator.shared.settings,
-                                       analyticsService: ServiceLocator.shared.analytics)
+        let mock = TimelineViewModel(roomProxy: proxyMock,
+                                     timelineController: mockController,
+                                     mediaProvider: MockMediaProvider(),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics)
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)

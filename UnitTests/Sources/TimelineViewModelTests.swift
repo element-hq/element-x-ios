@@ -20,7 +20,7 @@ import Combine
 import XCTest
 
 @MainActor
-class RoomScreenViewModelTests: XCTestCase {
+class TimelineViewModelTests: XCTestCase {
     var userIndicatorControllerMock: UserIndicatorControllerMock!
     var cancellables = Set<AnyCancellable>()
 
@@ -327,7 +327,7 @@ class RoomScreenViewModelTests: XCTestCase {
     
     // swiftlint:enable force_unwrapping
     // swiftlint:disable:next large_tuple
-    private func readReceiptsConfiguration(with items: [RoomTimelineItemProtocol]) -> (RoomScreenViewModel,
+    private func readReceiptsConfiguration(with items: [RoomTimelineItemProtocol]) -> (TimelineViewModel,
                                                                                        RoomProxyMock,
                                                                                        TimelineProxyMock,
                                                                                        MockRoomTimelineController) {
@@ -343,15 +343,15 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         timelineController.roomProxy = roomProxy
 
-        let viewModel = RoomScreenViewModel(roomProxy: roomProxy,
-                                            timelineController: timelineController,
-                                            mediaProvider: MockMediaProvider(),
-                                            mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                            userIndicatorController: userIndicatorControllerMock,
-                                            appMediator: AppMediatorMock.default,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analyticsService: ServiceLocator.shared.analytics)
+        let viewModel = TimelineViewModel(roomProxy: roomProxy,
+                                          timelineController: timelineController,
+                                          mediaProvider: MockMediaProvider(),
+                                          mediaPlayerProvider: MediaPlayerProviderMock(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                          userIndicatorController: userIndicatorControllerMock,
+                                          appMediator: AppMediatorMock.default,
+                                          appSettings: ServiceLocator.shared.settings,
+                                          analyticsService: ServiceLocator.shared.analytics)
         return (viewModel, roomProxy, timelineProxy, timelineController)
     }
     
@@ -367,15 +367,15 @@ class RoomScreenViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = [message]
-        let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(name: "", members: [RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])),
-                                            timelineController: timelineController,
-                                            mediaProvider: MockMediaProvider(),
-                                            mediaPlayerProvider: MediaPlayerProviderMock(),
-                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                            userIndicatorController: userIndicatorControllerMock,
-                                            appMediator: AppMediatorMock.default,
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analyticsService: ServiceLocator.shared.analytics)
+        let viewModel = TimelineViewModel(roomProxy: RoomProxyMock(.init(name: "", members: [RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])),
+                                          timelineController: timelineController,
+                                          mediaProvider: MockMediaProvider(),
+                                          mediaPlayerProvider: MediaPlayerProviderMock(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                          userIndicatorController: userIndicatorControllerMock,
+                                          appMediator: AppMediatorMock.default,
+                                          appSettings: ServiceLocator.shared.settings,
+                                          analyticsService: ServiceLocator.shared.analytics)
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.bindings.readReceiptsSummaryInfo?.orderedReceipts == receipts
@@ -389,17 +389,17 @@ class RoomScreenViewModelTests: XCTestCase {
     
     private func makeViewModel(roomProxy: RoomProxyProtocol? = nil,
                                focussedEventID: String? = nil,
-                               timelineController: RoomTimelineControllerProtocol) -> RoomScreenViewModel {
-        RoomScreenViewModel(roomProxy: roomProxy ?? RoomProxyMock(.init(name: "")),
-                            focussedEventID: focussedEventID,
-                            timelineController: timelineController,
-                            mediaProvider: MockMediaProvider(),
-                            mediaPlayerProvider: MediaPlayerProviderMock(),
-                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                            userIndicatorController: userIndicatorControllerMock,
-                            appMediator: AppMediatorMock.default,
-                            appSettings: ServiceLocator.shared.settings,
-                            analyticsService: ServiceLocator.shared.analytics)
+                               timelineController: RoomTimelineControllerProtocol) -> TimelineViewModel {
+        TimelineViewModel(roomProxy: roomProxy ?? RoomProxyMock(.init(name: "")),
+                          focussedEventID: focussedEventID,
+                          timelineController: timelineController,
+                          mediaProvider: MockMediaProvider(),
+                          mediaPlayerProvider: MediaPlayerProviderMock(),
+                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                          userIndicatorController: userIndicatorControllerMock,
+                          appMediator: AppMediatorMock.default,
+                          appSettings: ServiceLocator.shared.settings,
+                          analyticsService: ServiceLocator.shared.analytics)
     }
 }
 
