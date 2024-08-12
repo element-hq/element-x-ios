@@ -655,7 +655,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
     }
 
-    private func sendCurrentMessage(_ message: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions) async {
+    private func sendCurrentMessage(_ message: String, html: String?, mode: ComposerMode, intentionalMentions: IntentionalMentions) async {
         guard !message.isEmpty else {
             fatalError("This message should never be empty")
         }
@@ -684,7 +684,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         scrollToBottom()
     }
         
-    private func trackComposerMode(_ mode: RoomScreenComposerMode) {
+    private func trackComposerMode(_ mode: ComposerMode) {
         var isEdit = false
         var isReply = false
         switch mode {

@@ -3533,9 +3533,6 @@
 			children = (
 				B8108C8F0ACF6A7EB72D0117 /* RoomScreenCoordinator.swift */,
 				0135A608FFAD86E6674EE730 /* RoomScreenInteractionHandler.swift */,
-				C2886615BEBAE33A0AA4D5F8 /* TimelineModels.swift */,
-				9CE3C90E487B255B735D73C8 /* TimelineViewModel.swift */,
-				A00C7A331B72C0F05C00392F /* TimelineViewModelProtocol.swift */,
 				44B4B5DB07E5C7871873548F /* ComposerToolbar */,
 				79023E5904B155E8E2B8B502 /* View */,
 				A77918F32C6A7AE800D3E9A2 /* RoomScreenViewModelProtocol.swift */,
@@ -3913,7 +3910,6 @@
 				1D8572B713A11CFDBF009B2F /* Replies */,
 				A312471EA62EFB0FD94E60DC /* Style */,
 				CCD48459CA34A1928EC7A26A /* Supplementary */,
-				B7D3886505ECC85A06DA8258 /* Timeline */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4694,6 +4690,9 @@
 		B7D3886505ECC85A06DA8258 /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
+				C2886615BEBAE33A0AA4D5F8 /* TimelineModels.swift */,
+				9CE3C90E487B255B735D73C8 /* TimelineViewModel.swift */,
+				A00C7A331B72C0F05C00392F /* TimelineViewModelProtocol.swift */,
 				FC2D505742FDA21FCDC4C18A /* AudioRoomTimelineView.swift */,
 				CA8F098AE48D958B4257EB24 /* CallInviteRoomTimelineView.swift */,
 				584509A363ADF6244DFDB96A /* CallNotificationRoomTimelineView.swift */,
@@ -5126,6 +5125,7 @@
 				0210F4932B59277E2EEEF7BC /* RoomNotificationSettingsScreen */,
 				D57B3BC211BB74420C9138D7 /* RoomPollsHistoryScreen */,
 				7B890CCD20B037760BFDF957 /* RoomRolesAndPermissionsScreen */,
+				B7D3886505ECC85A06DA8258 /* Timeline */,
 				679E9837ECA8D6776079D16E /* RoomScreen */,
 				2565414373E6F68005966B8E /* SecureBackup */,
 				70B74A432C241E56A7ACE610 /* Settings */,

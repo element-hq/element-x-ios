@@ -88,7 +88,7 @@ enum TimelineViewAction {
 }
 
 enum TimelineComposerAction {
-    case setMode(mode: RoomScreenComposerMode)
+    case setMode(mode: ComposerMode)
     case setText(plainText: String, htmlText: String?)
     case removeFocus
     case clear

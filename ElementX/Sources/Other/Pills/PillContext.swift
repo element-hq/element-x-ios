@@ -28,11 +28,11 @@ final class PillContext: ObservableObject {
     
     private var cancellable: AnyCancellable?
     
-    init(roomContext: TimelineViewModel.Context, data: PillTextAttachmentData) {
+    init(timelineContext: TimelineViewModel.Context, data: PillTextAttachmentData) {
         switch data.type {
         case let .user(id):
-            let isOwnMention = id == roomContext.viewState.ownUserID
-            if let profile = roomContext.viewState.members[id] {
+            let isOwnMention = id == timelineContext.viewState.ownUserID
+            if let profile = timelineContext.viewState.members[id] {
                 var name = id
                 if let displayName = profile.displayName {
                     name = "@\(displayName)"
@@ -40,7 +40,7 @@ final class PillContext: ObservableObject {
                 viewState = PillViewState(isOwnMention: isOwnMention, displayText: name)
             } else {
                 viewState = PillViewState(isOwnMention: isOwnMention, displayText: id)
-                cancellable = roomContext.$viewState.sink { [weak self] viewState in
+                cancellable = timelineContext.$viewState.sink { [weak self] viewState in
                     guard let self else {
                         return
                     }
@@ -73,7 +73,7 @@ extension PillContext {
         switch type {
         case .loadUser(let isOwn):
             pillType = .user(userID: testID)
-            let viewModel = PillContext(roomContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
+            let viewModel = PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
             viewModel.viewState = PillViewState(isOwnMention: isOwn, displayText: testID)
             Task {
                 try? await Task.sleep(for: .seconds(2))
@@ -82,12 +82,12 @@ extension PillContext {
             return viewModel
         case .loadedUser(let isOwn):
             pillType = .user(userID: "@test:test.com")
-            let viewModel = PillContext(roomContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
+            let viewModel = PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
             viewModel.viewState = PillViewState(isOwnMention: isOwn, displayText: "@Very Very Long Test Display Text")
             return viewModel
         case .allUsers:
             pillType = .allUsers
-            return PillContext(roomContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
+            return PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
         }
     }
 }

@@ -471,7 +471,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 break
                 
             case (.room, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
-                presentPinnedEventsTimeline()
+                Task { await self.presentPinnedEventsTimeline() }
             case (.pinnedEventsTimeline, .dismissPinnedEventsTimeline, .room):
                 break
 
@@ -481,7 +481,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 break
                 
             case (.roomDetails, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
-                presentPinnedEventsTimeline()
+                Task { await self.presentPinnedEventsTimeline() }
             case (.pinnedEventsTimeline, .dismissPinnedEventsTimeline, .roomDetails):
                 break
         
@@ -965,9 +965,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentPinnedEventsTimeline() {
+    private func presentPinnedEventsTimeline() async {
+        let userID = userSession.clientProxy.userID
+        let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
+                                                          encryptionAuthenticityEnabled: appSettings.timelineItemAuthenticityEnabled,
+                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
+                
+        guard let timelineController = await roomTimelineControllerFactory.buildRoomPinnedTimelineController(roomProxy: roomProxy, timelineItemFactory: timelineItemFactory) else {
+            fatalError("This can never fail because we allow this view to be presented only when the timeline is fully loaded and not nil")
+        }
+        
         let stackCoordinator = NavigationStackCoordinator()
-        let coordinator = PinnedEventsTimelineScreenCoordinator(parameters: .init())
+        let coordinator = PinnedEventsTimelineScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                                  timelineController: timelineController,
+                                                                                  mediaProvider: userSession.mediaProvider,
+                                                                                  mediaPlayerProvider: MediaPlayerProvider(),
+                                                                                  voiceMessageMediaManager: userSession.voiceMessageMediaManager,
+                                                                                  appMediator: appMediator))
         
         coordinator.actions
             .sink { [weak self] action in

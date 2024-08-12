@@ -18,7 +18,7 @@ import MatrixRustSDK
 import SwiftUI
 
 final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
-    var roomContext: TimelineViewModel.Context?
+    var timelineContext: TimelineViewModel.Context?
     var updateClosure: (() -> Void)?
     private var pillViews = NSHashTable<UIView>.weakObjects()
     
@@ -66,7 +66,7 @@ struct MessageText: UIViewRepresentable {
     func makeUIView(context: Context) -> MessageTextView {
         // Need to use TextKit 1 for mentions
         let textView = MessageTextView(usingTextLayoutManager: false)
-        textView.roomContext = viewModel
+        textView.timelineContext = viewModel
         textView.updateClosure = { [weak textView] in
             guard let textView else { return }
             do {

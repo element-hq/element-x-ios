@@ -484,7 +484,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
 
-    private func set(mode: RoomScreenComposerMode) {
+    private func set(mode: ComposerMode) {
         if state.composerMode.isLoadingReply, state.composerMode.replyEventID != mode.replyEventID {
             replyLoadingTask?.cancel()
         }

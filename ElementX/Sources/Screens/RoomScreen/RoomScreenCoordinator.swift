@@ -62,34 +62,33 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomScreenCoordinatorParameters) {
-        let roomViewModel = RoomScreenViewModel()
-        self.roomViewModel = roomViewModel
+        roomViewModel = RoomScreenViewModel()
         
-        let timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
-                                                  focussedEventID: parameters.focussedEventID,
-                                                  timelineController: parameters.timelineController,
-                                                  mediaProvider: parameters.mediaProvider,
-                                                  mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                                  voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                  appMediator: parameters.appMediator,
-                                                  appSettings: parameters.appSettings,
-                                                  analyticsService: ServiceLocator.shared.analytics)
-        self.timelineViewModel = timelineViewModel
+        timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
+                                              focussedEventID: parameters.focussedEventID,
+                                              timelineController: parameters.timelineController,
+                                              mediaProvider: parameters.mediaProvider,
+                                              mediaPlayerProvider: parameters.mediaPlayerProvider,
+                                              voiceMessageMediaManager: parameters.voiceMessageMediaManager,
+                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                              appMediator: parameters.appMediator,
+                                              appSettings: parameters.appSettings,
+                                              analyticsService: ServiceLocator.shared.analytics)
 
         wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
                                                     maxExpandedHeight: ComposerConstant.maxHeight,
                                                     parserStyle: .elementX)
-        composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
-                                                     completionSuggestionService: parameters.completionSuggestionService,
-                                                     mediaProvider: parameters.mediaProvider,
-                                                     mentionDisplayHelper: ComposerMentionDisplayHelper(roomContext: timelineViewModel.context),
-                                                     analyticsService: ServiceLocator.shared.analytics,
-                                                     composerDraftService: parameters.composerDraftService)
+        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                         completionSuggestionService: parameters.completionSuggestionService,
+                                                         mediaProvider: parameters.mediaProvider,
+                                                         mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
+                                                         analyticsService: ServiceLocator.shared.analytics,
+                                                         composerDraftService: parameters.composerDraftService)
+        self.composerViewModel = composerViewModel
         
         NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification).sink { _ in
-            roomViewModel.saveDraft()
+            composerViewModel.saveDraft()
         }
         .store(in: &cancellables)
     }

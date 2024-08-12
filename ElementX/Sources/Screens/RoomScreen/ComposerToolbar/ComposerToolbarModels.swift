@@ -31,13 +31,13 @@ enum ComposerToolbarVoiceMessageAction {
 }
 
 enum ComposerToolbarViewModelAction {
-    case sendMessage(plain: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions)
+    case sendMessage(plain: String, html: String?, mode: ComposerMode, intentionalMentions: IntentionalMentions)
     case editLastMessage
     case attach(ComposerAttachmentType)
 
     case handlePasteOrDrop(provider: NSItemProvider)
 
-    case composerModeChanged(mode: RoomScreenComposerMode)
+    case composerModeChanged(mode: ComposerMode)
     case composerFocusedChanged(isFocused: Bool)
     
     case voiceMessage(ComposerToolbarVoiceMessageAction)
@@ -72,7 +72,7 @@ enum ComposerAttachmentType {
 }
 
 struct ComposerToolbarViewState: BindableState {
-    var composerMode: RoomScreenComposerMode = .default
+    var composerMode: ComposerMode = .default
     var composerEmpty = true
     var suggestions: [SuggestionItem] = []
     var audioPlayerState: AudioPlayerState
@@ -289,7 +289,7 @@ extension FormatType {
     }
 }
 
-enum RoomScreenComposerMode: Equatable {
+enum ComposerMode: Equatable {
     case `default`
     case reply(itemID: TimelineItemIdentifier, replyDetails: TimelineItemReplyDetails, isThread: Bool)
     case edit(originalItemId: TimelineItemIdentifier)

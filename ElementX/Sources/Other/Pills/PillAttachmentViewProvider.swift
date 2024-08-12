@@ -21,7 +21,7 @@ import UIKit
 import WysiwygComposer
 
 protocol PillAttachmentViewProviderDelegate: AnyObject {
-    var roomContext: TimelineViewModel.Context? { get }
+    var timelineContext: TimelineViewModel.Context? { get }
     
     func registerPillView(_ pillView: UIView)
     func invalidateTextAttachmentsDisplay()
@@ -56,9 +56,9 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
             // The mock viewModel simulates the loading logic for testing purposes
             context = PillContext.mock(type: .loadUser(isOwn: false))
             imageProvider = MockMediaProvider()
-        } else if let roomContext = delegate?.roomContext {
-            context = PillContext(roomContext: roomContext, data: pillData)
-            imageProvider = roomContext.imageProvider
+        } else if let timelineContext = delegate?.timelineContext {
+            context = PillContext(timelineContext: timelineContext, data: pillData)
+            imageProvider = timelineContext.imageProvider
         } else {
             MXLog.failure("[PillAttachmentViewProvider]: missing room context")
             return
@@ -93,21 +93,21 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
 }
 
 final class ComposerMentionDisplayHelper: MentionDisplayHelper {
-    weak var roomContext: TimelineViewModel.Context?
+    weak var timelineContext: TimelineViewModel.Context?
 
-    init(roomContext: TimelineViewModel.Context) {
-        self.roomContext = roomContext
+    init(timelineContext: TimelineViewModel.Context) {
+        self.timelineContext = timelineContext
     }
     
     @MainActor
     static var mock: Self {
-        Self(roomContext: TimelineViewModel.mock.context)
+        Self(timelineContext: TimelineViewModel.mock.context)
     }
 }
 
 extension WysiwygTextView: PillAttachmentViewProviderDelegate {
-    var roomContext: TimelineViewModel.Context? {
-        (mentionDisplayHelper as? ComposerMentionDisplayHelper)?.roomContext
+    var timelineContext: TimelineViewModel.Context? {
+        (mentionDisplayHelper as? ComposerMentionDisplayHelper)?.timelineContext
     }
     
     func invalidateTextAttachmentsDisplay() { }

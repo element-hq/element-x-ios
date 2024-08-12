@@ -16,9 +16,7 @@
 
 import Foundation
 
-enum RoomScreenViewModelAction {
-    case composer(action: RoomScreenComposerAction)
-}
+enum RoomScreenViewModelAction { }
 
 enum RoomScreenViewAction { }
 

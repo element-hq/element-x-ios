@@ -57,7 +57,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testComposerMode() {
-        let mode: RoomScreenComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
+        let mode: ComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
         viewModel.process(roomAction: .setMode(mode: mode))
         XCTAssertEqual(viewModel.state.composerMode, mode)
         viewModel.process(roomAction: .clear)
@@ -65,7 +65,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testComposerModeIsPublished() {
-        let mode: RoomScreenComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
+        let mode: ComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
         let expectation = expectation(description: "Composer mode is published")
         let cancellable = viewModel
             .context

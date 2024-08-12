@@ -29,14 +29,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     init() {
         super.init(initialViewState: .init(bindings: .init()))
     }
-    
-    func loadDraft() {
-        actionsSubject.send(.composer(action: .loadDraft))
-    }
-    
-    func saveDraft() {
-        actionsSubject.send(.composer(action: .saveDraft))
-    }
 }
 
 extension RoomScreenViewModel {

@@ -35,7 +35,7 @@ class PillContextTests: XCTestCase {
                                        appMediator: AppMediatorMock.default,
                                        appSettings: ServiceLocator.shared.settings,
                                        analyticsService: ServiceLocator.shared.analytics)
-        let context = PillContext(roomContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
+        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertFalse(context.viewState.isOwnMention)
         XCTAssertEqual(context.viewState.displayText, id)
@@ -63,7 +63,7 @@ class PillContextTests: XCTestCase {
                                        appMediator: AppMediatorMock.default,
                                        appSettings: ServiceLocator.shared.settings,
                                        analyticsService: ServiceLocator.shared.analytics)
-        let context = PillContext(roomContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
+        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)
     }
@@ -84,7 +84,7 @@ class PillContextTests: XCTestCase {
                                        appMediator: AppMediatorMock.default,
                                        appSettings: ServiceLocator.shared.settings,
                                        analyticsService: ServiceLocator.shared.analytics)
-        let context = PillContext(roomContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
+        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)
         XCTAssertEqual(context.viewState.displayText, PillConstants.atRoom)
