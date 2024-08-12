@@ -6332,50 +6332,6 @@ class NetworkMonitorMock: NetworkMonitorProtocol {
     var underlyingReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
 
 }
-class NotificationCenterMock: NotificationCenterProtocol {
-
-    //MARK: - post
-
-    var postNameObjectUnderlyingCallsCount = 0
-    var postNameObjectCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return postNameObjectUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = postNameObjectUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                postNameObjectUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    postNameObjectUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var postNameObjectCalled: Bool {
-        return postNameObjectCallsCount > 0
-    }
-    var postNameObjectReceivedArguments: (aName: NSNotification.Name, anObject: Any?)?
-    var postNameObjectReceivedInvocations: [(aName: NSNotification.Name, anObject: Any?)] = []
-    var postNameObjectClosure: ((NSNotification.Name, Any?) -> Void)?
-
-    func post(name aName: NSNotification.Name, object anObject: Any?) {
-        postNameObjectCallsCount += 1
-        postNameObjectReceivedArguments = (aName: aName, anObject: anObject)
-        DispatchQueue.main.async {
-            self.postNameObjectReceivedInvocations.append((aName: aName, anObject: anObject))
-        }
-        postNameObjectClosure?(aName, anObject)
-    }
-}
 class NotificationManagerMock: NotificationManagerProtocol {
     weak var delegate: NotificationManagerDelegate?
 
