@@ -1,3 +1,49 @@
+## Changes in 1.7.3 (2024-08-13)
+
+### What's Changed
+
+✨ Features
+* Crypto identity reset by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3107
+* Fixes #3050 - Sync mute state between ElementCall and CallKit by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3120
+
+🐛 Bugfixes
+* Fix a bug where a new line in the composer could move the caret. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3114
+* Make sure the whole room header is tappable. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3125
+* Force the room list search text field to always be displayed by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3127
+* Fix search in the Change Roles screen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3138
+* Various ElementCall fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3140
+* Fixes #3126 - Prevent identity confirmation from blocking the user's progress after registering through OIDC by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3141
+* Fix a bug where the server versions for matrix.org were used when signing in to a different server. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3155
+* Stop showing filters when the room list is not in the `rooms` display mode by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3156
+
+🧱 Build
+* Update sonarcloud project key by @guillaumevillemont in https://github.com/element-hq/element-x-ios/pull/3112
+* Use SwiftPackageList to generate acknowledgements. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3117
+
+🚧 In development 🚧
+* Show Encryption Authenticity warnings on messages in the timeline. by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/3051
+* Pinned items timeline implementation for the banner by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3099
+* Add Encryption Authenticity explanations. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3116
+* Pinned events banner loading state by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3118
+* Finalise strings/icons for EncryptionAuthenticity. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3121
+* state events for pinning and unpinning by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3123
+* Pinned events banner goes backwards by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3128
+* Navigate to the Pinned events timeline by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3139
+* Fix for a memory leak by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3143
+* Remove links from pinned events banner by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3153
+
+Others
+* Put a space between the version and build numbers on the Nightly icon by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3124
+* Force update the home screen every time the room list changes by manually moving the inner scrollview by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3122
+* Delete more unnecessary logs by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3129
+* Adopt APIs available in SDK version 1.0.36 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3145
+* Bump the SDK to v1.0.37 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3158
+
+### New Contributors
+* @guillaumevillemont made their first contribution in https://github.com/element-hq/element-x-ios/pull/3112
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.7.2...1.7.3
+
 ## Changes in 1.7.2 (2024-07-30)
 
 ### What's Changed
