@@ -80,7 +80,8 @@ if hasPngs {
     warn("You seem to have made changes to some resource images. Please consider using an SVG or PDF.")
 }
 
-if danger.github.pullRequest.title.hasSuffix("…") {
+let fixesRegex = try! Regex("(Fixes|Fix) #\\d+")
+if danger.github.pullRequest.title.hasSuffix("…") || danger.github.pullRequest.title.starts(with: fixesRegex) {
     fail("Please provide a complete title that can be used as a changelog entry.")
 }
 
