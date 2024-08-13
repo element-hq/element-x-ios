@@ -91,7 +91,7 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     func start() {
         #if !DEBUG
         if bugReportService.crashedLastRun {
-            roomViewModel.presentCrashedLastRunAlert()
+            viewModel.presentCrashedLastRunAlert()
         }
         #endif
     }
