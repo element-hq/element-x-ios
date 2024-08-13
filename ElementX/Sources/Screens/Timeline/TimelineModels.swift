@@ -33,7 +33,7 @@ enum TimelineViewModelAction {
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case composer(action: TimelineComposerAction)
     case displayCallScreen
-    case displayPinnedEventsTimeline
+    case hasScrolled(direction: ScrollDirection)
 }
 
 enum TimelineViewPollAction {
@@ -83,8 +83,6 @@ enum TimelineViewAction {
     case hasSwitchedTimeline // t
     
     case hasScrolled(direction: ScrollDirection) // t
-    case tappedPinnedEventsBanner // not t
-    case viewAllPins // not t
 }
 
 enum TimelineComposerAction {
@@ -110,19 +108,10 @@ struct TimelineViewState: BindableState {
     var canCurrentUserRedactSelf = false
     var canCurrentUserPin = false
     var isViewSourceEnabled: Bool
-    
-    var isPinningEnabled = false
-    var lastScrollDirection: ScrollDirection?
-    
+        
     // The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
     // It's updated from the room info, so it's faster than using the timeline
     var pinnedEventIDs: Set<String> = []
-    // This is used to control the banner
-    var pinnedEventsBannerState: PinnedEventsBannerState = .loading(numbersOfEvents: 0)
-    
-    var shouldShowPinnedEventsBanner: Bool {
-        isPinningEnabled && !pinnedEventsBannerState.isEmpty && lastScrollDirection != .top
-    }
     
     var canJoinCall = false
     var hasOngoingCall = false
@@ -288,97 +277,6 @@ struct PinnedEventsState: Equatable {
             selectedPinEventID = pinnedEventContents.keys.last
         } else {
             selectedPinEventID = pinnedEventContents.keys[nextIndex % pinnedEventContents.count]
-        }
-    }
-}
-
-enum PinnedEventsBannerState: Equatable {
-    case loading(numbersOfEvents: Int)
-    case loaded(state: PinnedEventsState)
-    
-    var isEmpty: Bool {
-        switch self {
-        case .loaded(let state):
-            return state.pinnedEventContents.isEmpty
-        case .loading(let numberOfEvents):
-            return numberOfEvents == 0
-        }
-    }
-    
-    var isLoading: Bool {
-        switch self {
-        case .loading:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    var selectedPinEventID: String? {
-        switch self {
-        case .loaded(let state):
-            return state.selectedPinEventID
-        default:
-            return nil
-        }
-    }
-    
-    var count: Int {
-        switch self {
-        case .loaded(let state):
-            return state.pinnedEventContents.count
-        case .loading(let numberOfEvents):
-            return numberOfEvents
-        }
-    }
-    
-    var selectedPinIndex: Int {
-        switch self {
-        case .loaded(let state):
-            return state.selectedPinIndex
-        case .loading(let numbersOfEvents):
-            // We always want the index to be the last one when loading, since is the default one.
-            return numbersOfEvents - 1
-        }
-    }
-    
-    var displayedMessage: AttributedString {
-        switch self {
-        case .loading:
-            return AttributedString(L10n.screenRoomPinnedBannerLoadingDescription)
-        case .loaded(let state):
-            return state.selectedPinContent
-        }
-    }
-    
-    var bannerIndicatorDescription: AttributedString {
-        let index = selectedPinIndex + 1
-        let boldPlaceholder = "{bold}"
-        var finalString = AttributedString(L10n.screenRoomPinnedBannerIndicatorDescription(boldPlaceholder))
-        var boldString = AttributedString(L10n.screenRoomPinnedBannerIndicator(index, count))
-        boldString.bold()
-        finalString.replace(boldPlaceholder, with: boldString)
-        return finalString
-    }
-    
-    mutating func previousPin() {
-        switch self {
-        case .loaded(var state):
-            state.previousPin()
-            self = .loaded(state: state)
-        default:
-            break
-        }
-    }
-    
-    mutating func setPinnedEventContents(_ pinnedEventContents: OrderedDictionary<String, AttributedString>) {
-        switch self {
-        case .loading:
-            // The default selected event should always be the last one.
-            self = .loaded(state: .init(pinnedEventContents: pinnedEventContents, selectedPinEventID: pinnedEventContents.keys.last))
-        case .loaded(var state):
-            state.pinnedEventContents = pinnedEventContents
-            self = .loaded(state: state)
         }
     }
 }

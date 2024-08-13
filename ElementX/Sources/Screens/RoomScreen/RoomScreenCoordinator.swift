@@ -62,7 +62,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomScreenCoordinatorParameters) {
-        roomViewModel = RoomScreenViewModel()
+        roomViewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
+                                            appMediator: parameters.appMediator,
+                                            appSettings: ServiceLocator.shared.settings)
         
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               focussedEventID: parameters.focussedEventID,
@@ -129,8 +131,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     composerViewModel.process(timelineAction: action)
                 case .displayCallScreen:
                     actionsSubject.send(.presentCallScreen)
-                case .displayPinnedEventsTimeline:
-                    actionsSubject.send(.presentPinnedEventsTimeline)
+                case .hasScrolled(direction: let direction):
+                    roomViewModel.timelineHasScrolled(direction: direction)
                 }
             }
             .store(in: &cancellables)
@@ -144,8 +146,17 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             .store(in: &cancellables)
         
         roomViewModel.actions
-            .sink { [weak self] _ in
+            .sink { [weak self] actions in
                 guard let self else { return }
+                
+                switch actions {
+                case .focusEvent(eventID: let eventID):
+                    Task { [weak self] in
+                        await self?.timelineViewModel.focusOnEvent(eventID: eventID)
+                    }
+                case .displayPinnedEventsTimeline:
+                    actionsSubject.send(.presentPinnedEventsTimeline)
+                }
             }
             .store(in: &cancellables)
         
