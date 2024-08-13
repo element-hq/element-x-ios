@@ -21,17 +21,27 @@ struct PinnedEventsTimelineScreen: View {
     @ObservedObject var context: PinnedEventsTimelineScreenViewModel.Context
     @ObservedObject var timelineContext: TimelineViewModel.Context
     
+    private var title: String {
+        let pinnedEventIDs = timelineContext.viewState.pinnedEventIDs
+        guard !pinnedEventIDs.isEmpty else {
+            return L10n.screenPinnedTimelineScreenTitleEmpty
+        }
+        return L10n.screenPinnedTimelineScreenTitle(pinnedEventIDs.count)
+    }
+    
     var body: some View {
         content
-            .navigationTitle(context.viewState.title)
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .background(.compound.bgCanvasDefault)
+            .interactiveQuickLook(item: $timelineContext.mediaPreviewItem)
+            .interactiveDismissDisabled()
     }
     
     @ViewBuilder
     private var content: some View {
-        if timelineContext.viewState.timelineViewState.itemsDictionary.isEmpty {
+        if timelineContext.viewState.pinnedEventIDs.isEmpty {
             VStack(spacing: 16) {
                 HeroImage(icon: \.pin, style: .normal)
                 Text(L10n.screenPinnedTimelineEmptyStateHeadline)

@@ -385,6 +385,64 @@ class TimelineViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
+    // MARK: - Pins
+    
+    func testPinnedEvents() async throws {
+        let roomProxyMock = RoomProxyMock(.init(name: "",
+                                                pinnedEventIDs: .init(["test1"])))
+        let actionsSubject = PassthroughSubject<RoomProxyAction, Never>()
+        roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
+        let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
+                                          timelineController: MockRoomTimelineController(),
+                                          mediaProvider: MockMediaProvider(),
+                                          mediaPlayerProvider: MediaPlayerProviderMock(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                          userIndicatorController: userIndicatorControllerMock,
+                                          appMediator: AppMediatorMock.default,
+                                          appSettings: ServiceLocator.shared.settings,
+                                          analyticsService: ServiceLocator.shared.analytics)
+        
+        var deferred = deferFulfillment(viewModel.context.$viewState) { value in
+            value.pinnedEventIDs == ["test1"]
+        }
+        try await deferred.fulfill()
+        
+        roomProxyMock.underlyingPinnedEventIDs = ["test1", "test2"]
+        deferred = deferFulfillment(viewModel.context.$viewState) { value in
+            value.pinnedEventIDs == ["test1", "test2"]
+        }
+        actionsSubject.send(.roomInfoUpdate)
+        try await deferred.fulfill()
+    }
+    
+    func testCanUserPinEvents() async throws {
+        ServiceLocator.shared.settings.pinningEnabled = true
+        let roomProxyMock = RoomProxyMock(.init(name: "", canUserPin: false))
+        let actionsSubject = PassthroughSubject<RoomProxyAction, Never>()
+        roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
+        let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
+                                          timelineController: MockRoomTimelineController(),
+                                          mediaProvider: MockMediaProvider(),
+                                          mediaPlayerProvider: MediaPlayerProviderMock(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                          userIndicatorController: userIndicatorControllerMock,
+                                          appMediator: AppMediatorMock.default,
+                                          appSettings: ServiceLocator.shared.settings,
+                                          analyticsService: ServiceLocator.shared.analytics)
+        
+        var deferred = deferFulfillment(viewModel.context.$viewState) { value in
+            !value.canCurrentUserPin
+        }
+        try await deferred.fulfill()
+        
+        roomProxyMock.canUserPinOrUnpinUserIDReturnValue = .success(true)
+        deferred = deferFulfillment(viewModel.context.$viewState) { value in
+            value.canCurrentUserPin
+        }
+        actionsSubject.send(.roomInfoUpdate)
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Helpers
     
     private func makeViewModel(roomProxy: RoomProxyProtocol? = nil,

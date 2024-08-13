@@ -20,12 +20,7 @@ enum PinnedEventsTimelineScreenViewModelAction {
     case dismiss
 }
 
-struct PinnedEventsTimelineScreenViewState: BindableState {
-    var title: String {
-        // TODO: Implement the non empty case
-        L10n.screenPinnedTimelineScreenTitleEmpty
-    }
-}
+struct PinnedEventsTimelineScreenViewState: BindableState { }
 
 enum PinnedEventsTimelineScreenViewAction {
     case close
