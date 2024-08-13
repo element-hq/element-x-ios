@@ -80,9 +80,9 @@ class RoomScreenViewModelTests: XCTestCase {
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.pinnedEventsBannerState.count == 3
         }
-        providerUpdateSubject.send((([.event(.init(item: EventTimelineItemSDKMock(configuration: .init()), id: "1")),
-                                      .event(.init(item: EventTimelineItemSDKMock(configuration: .init()), id: "2")),
-                                      .event(.init(item: EventTimelineItemSDKMock(configuration: .init()), id: "3"))]), .initial))
+        providerUpdateSubject.send(([.event(.init(item: EventTimelineItemSDKMock(configuration: .init()), id: "1")),
+                                     .event(.init(item: EventTimelineItemSDKMock(configuration: .init()), id: "2")),
+                                     .event(.init(item: EventTimelineItemSDKMock(configuration: .init()), id: "3"))], .initial))
         XCTAssertFalse(viewModel.context.viewState.pinnedEventsBannerState.isLoading)
         XCTAssertTrue(viewModel.context.viewState.shouldShowPinnedEventsBanner)
         try await deferred.fulfill()
