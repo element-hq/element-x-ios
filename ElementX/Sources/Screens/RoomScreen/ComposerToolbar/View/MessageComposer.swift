@@ -24,7 +24,7 @@ typealias PasteHandler = (NSItemProvider) -> Void
 struct MessageComposer: View {
     @Binding var plainComposerText: NSAttributedString
     let composerView: WysiwygComposerView
-    let mode: RoomScreenComposerMode
+    let mode: ComposerMode
     let composerFormattingEnabled: Bool
     let showResizeGrabber: Bool
     @Binding var isExpanded: Bool
@@ -208,7 +208,7 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
 }
 
 struct MessageComposer_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
     
     static let replyTypes: [TimelineItemReplyDetails] = [
         .loaded(sender: .init(id: "Dave"),
@@ -241,7 +241,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     ]
     
     static func messageComposer(_ content: NSAttributedString = .init(string: ""),
-                                mode: RoomScreenComposerMode = .default) -> MessageComposer {
+                                mode: ComposerMode = .default) -> MessageComposer {
         let viewModel = WysiwygComposerViewModel(minHeight: 22,
                                                  maxExpandedHeight: 250)
         viewModel.setMarkdownContent(content.string)

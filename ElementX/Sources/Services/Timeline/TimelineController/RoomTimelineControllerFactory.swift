@@ -26,4 +26,16 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                timelineItemFactory: timelineItemFactory,
                                appSettings: ServiceLocator.shared.settings)
     }
+    
+    func buildRoomPinnedTimelineController(roomProxy: RoomProxyProtocol,
+                                           timelineItemFactory: RoomTimelineItemFactoryProtocol) async -> RoomTimelineControllerProtocol? {
+        guard let pinnedEventsTimeline = await roomProxy.pinnedEventsTimeline else {
+            return nil
+        }
+        return RoomTimelineController(roomProxy: roomProxy,
+                                      timelineProxy: pinnedEventsTimeline,
+                                      initialFocussedEventID: nil,
+                                      timelineItemFactory: timelineItemFactory,
+                                      appSettings: ServiceLocator.shared.settings)
+    }
 }

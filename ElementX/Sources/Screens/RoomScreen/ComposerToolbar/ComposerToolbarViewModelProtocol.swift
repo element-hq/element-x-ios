@@ -15,10 +15,15 @@
 //
 
 import Combine
+import WysiwygComposer
 
 // periphery: ignore - markdown protocol
 protocol ComposerToolbarViewModelProtocol {
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> { get }
     var context: ComposerToolbarViewModelType.Context { get }
-    func process(roomAction: RoomScreenComposerAction)
+    var keyCommands: [WysiwygKeyCommand] { get }
+
+    func process(timelineAction: TimelineComposerAction)
+    func loadDraft()
+    func saveDraft()
 }

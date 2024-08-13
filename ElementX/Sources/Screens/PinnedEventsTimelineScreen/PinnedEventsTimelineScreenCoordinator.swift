@@ -17,7 +17,14 @@
 import Combine
 import SwiftUI
 
-struct PinnedEventsTimelineScreenCoordinatorParameters { }
+struct PinnedEventsTimelineScreenCoordinatorParameters {
+    let roomProxy: RoomProxyProtocol
+    let timelineController: RoomTimelineControllerProtocol
+    let mediaProvider: MediaProviderProtocol
+    let mediaPlayerProvider: MediaPlayerProviderProtocol
+    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
+    let appMediator: AppMediatorProtocol
+}
 
 enum PinnedEventsTimelineScreenCoordinatorAction {
     case dismiss
@@ -28,6 +35,7 @@ enum PinnedEventsTimelineScreenCoordinatorAction {
 final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
     private let parameters: PinnedEventsTimelineScreenCoordinatorParameters
     private let viewModel: PinnedEventsTimelineScreenViewModelProtocol
+    private let timelineViewModel: TimelineViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
  
@@ -40,6 +48,15 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = PinnedEventsTimelineScreenViewModel()
+        timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
+                                              timelineController: parameters.timelineController,
+                                              mediaProvider: parameters.mediaProvider,
+                                              mediaPlayerProvider: parameters.mediaPlayerProvider,
+                                              voiceMessageMediaManager: parameters.voiceMessageMediaManager,
+                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                              appMediator: parameters.appMediator,
+                                              appSettings: ServiceLocator.shared.settings,
+                                              analyticsService: ServiceLocator.shared.analytics)
     }
     
     func start() {
@@ -56,6 +73,6 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(PinnedEventsTimelineScreen(context: viewModel.context))
+        AnyView(PinnedEventsTimelineScreen(context: viewModel.context, timelineContext: timelineViewModel.context))
     }
 }

@@ -19,6 +19,7 @@ import SwiftUI
 
 struct PinnedEventsTimelineScreen: View {
     @ObservedObject var context: PinnedEventsTimelineScreenViewModel.Context
+    @ObservedObject var timelineContext: TimelineViewModel.Context
     
     var body: some View {
         content
@@ -28,22 +29,29 @@ struct PinnedEventsTimelineScreen: View {
             .background(.compound.bgCanvasDefault)
     }
     
+    @ViewBuilder
     private var content: some View {
-        // TODO: Implement switching between empty state and timeline
-        VStack(spacing: 16) {
-            HeroImage(icon: \.pin, style: .normal)
-            Text(L10n.screenPinnedTimelineEmptyStateHeadline)
-                .font(.compound.headingSMSemibold)
-                .foregroundStyle(.compound.textPrimary)
-                .multilineTextAlignment(.center)
-            Text(L10n.screenPinnedTimelineEmptyStateDescription(L10n.actionPin))
-                .font(.compound.bodyMD)
-                .foregroundStyle(.compound.textSecondary)
-                .multilineTextAlignment(.center)
-            Spacer()
+        if timelineContext.viewState.timelineViewState.itemsDictionary.isEmpty {
+            VStack(spacing: 16) {
+                HeroImage(icon: \.pin, style: .normal)
+                Text(L10n.screenPinnedTimelineEmptyStateHeadline)
+                    .font(.compound.headingSMSemibold)
+                    .foregroundStyle(.compound.textPrimary)
+                    .multilineTextAlignment(.center)
+                Text(L10n.screenPinnedTimelineEmptyStateDescription(L10n.actionPin))
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textSecondary)
+                    .multilineTextAlignment(.center)
+                Spacer()
+            }
+            .padding(.top, 48)
+            .padding(.horizontal, 16)
+        } else {
+            TimelineView()
+                .id(timelineContext.viewState.roomID)
+                .environmentObject(timelineContext)
+                .environment(\.focussedEventID, timelineContext.viewState.timelineViewState.focussedEvent?.eventID)
         }
-        .padding(.top, 48)
-        .padding(.horizontal, 16)
     }
     
     @ToolbarContentBuilder
@@ -60,9 +68,24 @@ struct PinnedEventsTimelineScreen: View {
 
 struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = PinnedEventsTimelineScreenViewModel()
+    static let emptyTimelineViewModel: TimelineViewModel = {
+        let timelineController = MockRoomTimelineController()
+        timelineController.timelineItems = []
+        return TimelineViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room")),
+                                 timelineController: timelineController,
+                                 mediaProvider: MockMediaProvider(),
+                                 mediaPlayerProvider: MediaPlayerProviderMock(),
+                                 voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                 userIndicatorController: UserIndicatorControllerMock(),
+                                 appMediator: AppMediatorMock.default,
+                                 appSettings: ServiceLocator.shared.settings,
+                                 analyticsService: ServiceLocator.shared.analytics)
+    }()
+        
     static var previews: some View {
         NavigationStack {
-            PinnedEventsTimelineScreen(context: viewModel.context)
+            PinnedEventsTimelineScreen(context: viewModel.context, timelineContext: emptyTimelineViewModel.context)
         }
+        .previewDisplayName("Empty")
     }
 }

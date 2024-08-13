@@ -49,8 +49,9 @@ enum RoomScreenCoordinatorAction {
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
-    private var viewModel: RoomScreenViewModelProtocol
-    private var composerViewModel: ComposerToolbarViewModel
+    private var roomViewModel: RoomScreenViewModelProtocol
+    private var timelineViewModel: TimelineViewModelProtocol
+    private var composerViewModel: ComposerToolbarViewModelProtocol
     private var wysiwygViewModel: WysiwygComposerViewModel
 
     private var cancellables = Set<AnyCancellable>()
@@ -61,31 +62,33 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomScreenCoordinatorParameters) {
-        let viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
-                                            focussedEventID: parameters.focussedEventID,
-                                            timelineController: parameters.timelineController,
-                                            mediaProvider: parameters.mediaProvider,
-                                            mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                            voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                            appMediator: parameters.appMediator,
-                                            appSettings: parameters.appSettings,
-                                            analyticsService: ServiceLocator.shared.analytics)
-        self.viewModel = viewModel
+        roomViewModel = RoomScreenViewModel()
+        
+        timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
+                                              focussedEventID: parameters.focussedEventID,
+                                              timelineController: parameters.timelineController,
+                                              mediaProvider: parameters.mediaProvider,
+                                              mediaPlayerProvider: parameters.mediaPlayerProvider,
+                                              voiceMessageMediaManager: parameters.voiceMessageMediaManager,
+                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                              appMediator: parameters.appMediator,
+                                              appSettings: parameters.appSettings,
+                                              analyticsService: ServiceLocator.shared.analytics)
 
         wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
                                                     maxExpandedHeight: ComposerConstant.maxHeight,
                                                     parserStyle: .elementX)
-        composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
-                                                     completionSuggestionService: parameters.completionSuggestionService,
-                                                     mediaProvider: parameters.mediaProvider,
-                                                     mentionDisplayHelper: ComposerMentionDisplayHelper(roomContext: viewModel.context),
-                                                     analyticsService: ServiceLocator.shared.analytics,
-                                                     composerDraftService: parameters.composerDraftService)
+        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                         completionSuggestionService: parameters.completionSuggestionService,
+                                                         mediaProvider: parameters.mediaProvider,
+                                                         mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
+                                                         analyticsService: ServiceLocator.shared.analytics,
+                                                         composerDraftService: parameters.composerDraftService)
+        self.composerViewModel = composerViewModel
         
         NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification).sink { _ in
-            viewModel.saveDraft()
+            composerViewModel.saveDraft()
         }
         .store(in: &cancellables)
     }
@@ -93,7 +96,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.actions
+        timelineViewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }
 
@@ -123,7 +126,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 case .displayLocation(let body, let geoURI, let description):
                     actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
                 case .composer(let action):
-                    composerViewModel.process(roomAction: action)
+                    composerViewModel.process(timelineAction: action)
                 case .displayCallScreen:
                     actionsSubject.send(.presentCallScreen)
                 case .displayPinnedEventsTimeline:
@@ -136,21 +139,27 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
 
-                viewModel.process(composerAction: action)
+                timelineViewModel.process(composerAction: action)
+            }
+            .store(in: &cancellables)
+        
+        roomViewModel.actions
+            .sink { [weak self] _ in
+                guard let self else { return }
             }
             .store(in: &cancellables)
         
         // Loading the draft requires the subscriptions to be set up first otherwise the room won't be be able to propagate the information to the composer.
-        viewModel.loadDraft()
+        composerViewModel.loadDraft()
     }
     
     func focusOnEvent(eventID: String) {
-        Task { await viewModel.focusOnEvent(eventID: eventID) }
+        Task { await timelineViewModel.focusOnEvent(eventID: eventID) }
     }
     
     func stop() {
-        viewModel.saveDraft()
-        viewModel.stop()
+        composerViewModel.saveDraft()
+        timelineViewModel.stop()
     }
     
     func toPresentable() -> AnyView {
@@ -158,10 +167,12 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                               wysiwygViewModel: wysiwygViewModel,
                                               keyCommands: composerViewModel.keyCommands)
 
-        return AnyView(RoomScreen(context: viewModel.context, composerToolbar: composerToolbar)
-            .onDisappear { [weak self] in
-                self?.viewModel.saveDraft()
-            })
+        return AnyView(RoomScreen(roomViewModel: roomViewModel,
+                                  timelineViewModel: timelineViewModel,
+                                  composerToolbar: composerToolbar)
+                .onDisappear { [weak self] in
+                    self?.composerViewModel.saveDraft()
+                })
     }
 }
 

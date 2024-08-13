@@ -18,7 +18,7 @@ import MatrixRustSDK
 import SwiftUI
 
 final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
-    var roomContext: RoomScreenViewModel.Context?
+    var timelineContext: TimelineViewModel.Context?
     var updateClosure: (() -> Void)?
     private var pillViews = NSHashTable<UIView>.weakObjects()
     
@@ -54,7 +54,7 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
 
 struct MessageText: UIViewRepresentable {
     @Environment(\.openURL) private var openURLAction
-    @Environment(\.roomContext) private var viewModel
+    @Environment(\.timelineContext) private var viewModel
     @State private var computedSizes = [Double: CGSize]()
     
     @State var attributedString: AttributedString {
@@ -66,7 +66,7 @@ struct MessageText: UIViewRepresentable {
     func makeUIView(context: Context) -> MessageTextView {
         // Need to use TextKit 1 for mentions
         let textView = MessageTextView(usingTextLayoutManager: false)
-        textView.roomContext = viewModel
+        textView.timelineContext = viewModel
         textView.updateClosure = { [weak textView] in
             guard let textView else { return }
             do {
@@ -197,7 +197,7 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
     static var attachmentPreview: some View {
         MessageText(attributedString: attributedStringWithAttachment)
             .border(Color.purple)
-            .environmentObject(RoomScreenViewModel.mock.context)
+            .environmentObject(TimelineViewModel.mock.context)
     }
 
     static var previews: some View {

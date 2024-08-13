@@ -11508,6 +11508,76 @@ class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol {
             return buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryReturnValue
         }
     }
+    //MARK: - buildRoomPinnedTimelineController
+
+    var buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryUnderlyingCallsCount = 0
+    var buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryCalled: Bool {
+        return buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryCallsCount > 0
+    }
+    var buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryReceivedArguments: (roomProxy: RoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol)?
+    var buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryReceivedInvocations: [(roomProxy: RoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol)] = []
+
+    var buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryUnderlyingReturnValue: RoomTimelineControllerProtocol?
+    var buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryReturnValue: RoomTimelineControllerProtocol? {
+        get {
+            if Thread.isMainThread {
+                return buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryUnderlyingReturnValue
+            } else {
+                var returnValue: RoomTimelineControllerProtocol?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryClosure: ((RoomProxyProtocol, RoomTimelineItemFactoryProtocol) async -> RoomTimelineControllerProtocol?)?
+
+    func buildRoomPinnedTimelineController(roomProxy: RoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol) async -> RoomTimelineControllerProtocol? {
+        buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryCallsCount += 1
+        buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryReceivedArguments = (roomProxy: roomProxy, timelineItemFactory: timelineItemFactory)
+        DispatchQueue.main.async {
+            self.buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryReceivedInvocations.append((roomProxy: roomProxy, timelineItemFactory: timelineItemFactory))
+        }
+        if let buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryClosure = buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryClosure {
+            return await buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryClosure(roomProxy, timelineItemFactory)
+        } else {
+            return buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryReturnValue
+        }
+    }
 }
 class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
     var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
