@@ -19,7 +19,6 @@ import OrderedCollections
 import SwiftUI
 
 enum TimelineViewModelAction {
-    case displayRoomDetails
     case displayEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayCameraPicker
@@ -28,11 +27,10 @@ enum TimelineViewModelAction {
     case displayLocationPicker
     case displayPollForm(mode: PollFormMode)
     case displayMediaUploadPreviewScreen(url: URL)
-    case displayRoomMemberDetails(userID: String)
+    case tappedOnSenderDetails(userID: String)
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case composer(action: TimelineComposerAction)
-    case displayCallScreen
     case hasScrolled(direction: ScrollDirection)
 }
 
@@ -48,41 +46,39 @@ enum TimelineAudioPlayerAction {
 }
 
 enum TimelineViewAction {
-    case itemAppeared(itemID: TimelineItemIdentifier) // t
-    case itemDisappeared(itemID: TimelineItemIdentifier) // t
+    case itemAppeared(itemID: TimelineItemIdentifier)
+    case itemDisappeared(itemID: TimelineItemIdentifier)
     
-    case itemTapped(itemID: TimelineItemIdentifier) // t
-    case itemSendInfoTapped(itemID: TimelineItemIdentifier) // t
-    case toggleReaction(key: String, itemID: TimelineItemIdentifier) // t
-    case sendReadReceiptIfNeeded(TimelineItemIdentifier) // t
-    case paginateBackwards // t
-    case paginateForwards // t
-    case scrollToBottom // t
+    case itemTapped(itemID: TimelineItemIdentifier)
+    case itemSendInfoTapped(itemID: TimelineItemIdentifier)
+    case toggleReaction(key: String, itemID: TimelineItemIdentifier)
+    case sendReadReceiptIfNeeded(TimelineItemIdentifier)
+    case paginateBackwards
+    case paginateForwards
+    case scrollToBottom
     
-    case displayTimelineItemMenu(itemID: TimelineItemIdentifier) // t
-    case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction) // not t
+    case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
+    case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
     
-    case displayRoomDetails // not t
-    case displayRoomMemberDetails(userID: String) // t -> change name
-    case displayReactionSummary(itemID: TimelineItemIdentifier, key: String) // t -> handle externally
-    case displayEmojiPicker(itemID: TimelineItemIdentifier) // t -> handle externally
-    case displayReadReceipts(itemID: TimelineItemIdentifier) // t -> handle externally
-    case displayCall // not t
+    case tappedOnSenderDetails(userID: String)
+    case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
+    case displayEmojiPicker(itemID: TimelineItemIdentifier)
+    case displayReadReceipts(itemID: TimelineItemIdentifier)
     
-    case handlePasteOrDrop(provider: NSItemProvider) // not t
-    case handlePollAction(TimelineViewPollAction) // t
-    case handleAudioPlayerAction(TimelineAudioPlayerAction) // t
+    case handlePasteOrDrop(provider: NSItemProvider)
+    case handlePollAction(TimelineViewPollAction)
+    case handleAudioPlayerAction(TimelineAudioPlayerAction)
     
     /// Focus the timeline onto the specified event ID (switching to a detached timeline if needed).
-    case focusOnEventID(String) // t
+    case focusOnEventID(String)
     /// Switch back to a live timeline (from a detached one).
-    case focusLive // t
+    case focusLive
     /// The timeline scrolled to reveal the focussed item.
-    case scrolledToFocussedItem // t
+    case scrolledToFocussedItem
     /// The table view has loaded the first items for a new timeline.
-    case hasSwitchedTimeline // t
+    case hasSwitchedTimeline
     
-    case hasScrolled(direction: ScrollDirection) // t
+    case hasScrolled(direction: ScrollDirection)
 }
 
 enum TimelineComposerAction {
@@ -94,8 +90,6 @@ enum TimelineComposerAction {
 
 struct TimelineViewState: BindableState {
     var roomID: String
-    var roomTitle = ""
-    var roomAvatar: RoomAvatar
     var members: [String: RoomMemberState] = [:]
     var typingMembers: [String] = []
     var showLoading = false
@@ -112,9 +106,6 @@ struct TimelineViewState: BindableState {
     // The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
     // It's updated from the room info, so it's faster than using the timeline
     var pinnedEventIDs: Set<String> = []
-    
-    var canJoinCall = false
-    var hasOngoingCall = false
     
     var bindings: TimelineViewStateBindings
     

@@ -503,10 +503,6 @@ class TimelineInteractionHandler {
         actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
     }
     
-    func displayRoomMemberDetails(userID: String) async {
-        actionsSubject.send(.displayRoomMemberDetails(userID: userID))
-    }
-    
     func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
             return .none

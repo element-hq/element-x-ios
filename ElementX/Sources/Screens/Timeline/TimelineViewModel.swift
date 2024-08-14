@@ -81,13 +81,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 analyticsService: analyticsService)
         
         super.init(initialViewState: TimelineViewState(roomID: roomProxy.id,
-                                                       roomTitle: roomProxy.roomTitle,
-                                                       roomAvatar: roomProxy.avatar,
                                                        isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                        timelineViewState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
-                                                       hasOngoingCall: roomProxy.hasOngoingCall,
                                                        bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
         
@@ -117,13 +114,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         // Note: beware if we get to e.g. restore a reply / edit,
         // maybe we are tracking a non-needed first initial state
         trackComposerMode(.default)
-        
-        Task {
-            let userID = roomProxy.ownUserID
-            if case let .success(permission) = await roomProxy.canUserJoinCall(userID: userID) {
-                state.canJoinCall = permission
-            }
-        }
     }
     
     // MARK: - Public
@@ -157,19 +147,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
-        case .displayRoomDetails:
-            actionsSubject.send(.displayRoomDetails)
-        case .displayRoomMemberDetails(userID: let userID):
-            Task { await timelineInteractionHandler.displayRoomMemberDetails(userID: userID) }
+        case .tappedOnSenderDetails(userID: let userID):
+            actionsSubject.send(.tappedOnSenderDetails(userID: userID))
         case .displayEmojiPicker(let itemID):
             timelineInteractionHandler.displayEmojiPicker(for: itemID)
         case .displayReactionSummary(let itemID, let key):
             displayReactionSummary(for: itemID, selectedKey: key)
         case .displayReadReceipts(itemID: let itemID):
             displayReadReceipts(for: itemID)
-        case .displayCall:
-            actionsSubject.send(.displayCallScreen)
-            analyticsService.trackInteraction(name: .MobileRoomCallButton)
         case .handlePasteOrDrop(let provider):
             timelineInteractionHandler.handlePasteOrDrop(provider)
         case .handlePollAction(let pollAction):
@@ -389,17 +374,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         let roomInfoSubscription = roomProxy
             .actionsPublisher
             .filter { $0 == .roomInfoUpdate }
-        
-        roomInfoSubscription
-            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                state.roomTitle = roomProxy.roomTitle
-                state.roomAvatar = roomProxy.avatar
-                state.hasOngoingCall = roomProxy.hasOngoingCall
-            }
-            .store(in: &cancellables)
-        
         Task { [weak self] in
             // Don't guard let self here, otherwise the for await will strongify the self reference creating a strong reference cycle.
             // If the subscription has sent a value before the Task has started it might be lost, so before entering the loop we always do an update.
@@ -449,7 +423,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .displayMediaUploadPreviewScreen(let url):
                     actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
                 case .displayRoomMemberDetails(userID: let userID):
-                    actionsSubject.send(.displayRoomMemberDetails(userID: userID))
+                    actionsSubject.send(.tappedOnSenderDetails(userID: userID))
                 case .showActionMenu(let actionMenuInfo):
                     Task {
                         await self.updatePermissions()

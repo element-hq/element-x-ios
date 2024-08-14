@@ -25,6 +25,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let roomProxy: RoomProxyProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
+    private let analyticsService: AnalyticsService
     private let pinnedEventStringBuilder: RoomEventStringBuilder
     
     private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
@@ -51,14 +52,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     init(roomProxy: RoomProxyProtocol,
+         mediaProvider: MediaProviderProtocol,
          appMediator: AppMediatorProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         analyticsService: AnalyticsService) {
         self.roomProxy = roomProxy
         self.appMediator = appMediator
         self.appSettings = appSettings
+        self.analyticsService = analyticsService
         pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
 
-        super.init(initialViewState: .init(bindings: .init()))
+        super.init(initialViewState: .init(roomTitle: roomProxy.roomTitle,
+                                           roomAvatar: roomProxy.avatar,
+                                           hasOngoingCall: roomProxy.hasOngoingCall,
+                                           bindings: .init()),
+                   imageProvider: mediaProvider)
         
         setupSubscriptions()
     }
@@ -72,6 +80,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.pinnedEventsBannerState.previousPin()
         case .viewAllPins:
             actionsSubject.send(.displayPinnedEventsTimeline)
+        case .displayRoomDetails:
+            actionsSubject.send(.displayRoomDetails)
+        case .displayCall:
+            actionsSubject.send(.displayCall)
+            analyticsService.trackInteraction(name: .MobileRoomCallButton)
         }
     }
     
@@ -84,15 +97,25 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .actionsPublisher
             .filter { $0 == .roomInfoUpdate }
         
+        roomInfoSubscription
+            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                state.roomTitle = roomProxy.roomTitle
+                state.roomAvatar = roomProxy.avatar
+                state.hasOngoingCall = roomProxy.hasOngoingCall
+            }
+            .store(in: &cancellables)
+        
         Task { [weak self] in
             // Don't guard let self here, otherwise the for await will strongify the self reference creating a strong reference cycle.
             // If the subscription has sent a value before the Task has started it might be lost, so before entering the loop we always do an update.
-            await self?.updatePinnedEventIDs()
+            await self?.handleRoomInfoUpdate()
             for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
                 guard !Task.isCancelled else {
                     return
                 }
-                await self?.updatePinnedEventIDs()
+                await self?.handleRoomInfoUpdate()
             }
         }
         .store(in: &cancellables)
@@ -128,11 +151,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.pinnedEventsBannerState.setPinnedEventContents(pinnedEventContents)
     }
     
-    private func updatePinnedEventIDs() async {
+    private func handleRoomInfoUpdate() async {
         let pinnedEventIDs = await roomProxy.pinnedEventIDs
         // Only update the loading state of the banner
         if state.pinnedEventsBannerState.isLoading {
             state.pinnedEventsBannerState = .loading(numbersOfEvents: pinnedEventIDs.count)
+        }
+        
+        let userID = roomProxy.ownUserID
+        if case let .success(permission) = await roomProxy.canUserJoinCall(userID: userID) {
+            state.canJoinCall = permission
         }
     }
     
@@ -154,10 +182,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 }
 
 extension RoomScreenViewModel {
-    static func mock() -> RoomScreenViewModel {
-        RoomScreenViewModel(roomProxy: RoomProxyMock(.init()),
+    static func mock(roomProxyMock: RoomProxyMock) -> RoomScreenViewModel {
+        RoomScreenViewModel(roomProxy: roomProxyMock,
+                            mediaProvider: MockMediaProvider(),
                             appMediator: AppMediatorMock.default,
-                            appSettings: ServiceLocator.shared.settings)
+                            appSettings: ServiceLocator.shared.settings,
+                            analyticsService: ServiceLocator.shared.analytics)
     }
 }
 

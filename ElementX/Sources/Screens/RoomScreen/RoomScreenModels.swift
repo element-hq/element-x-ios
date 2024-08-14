@@ -20,14 +20,21 @@ import OrderedCollections
 enum RoomScreenViewModelAction {
     case focusEvent(eventID: String)
     case displayPinnedEventsTimeline
+    case displayRoomDetails
+    case displayCall
 }
 
 enum RoomScreenViewAction {
     case tappedPinnedEventsBanner
     case viewAllPins
+    case displayRoomDetails
+    case displayCall
 }
 
 struct RoomScreenViewState: BindableState {
+    var roomTitle = ""
+    var roomAvatar: RoomAvatar
+    
     var lastScrollDirection: ScrollDirection?
     var isPinningEnabled = false
     // This is used to control the banner
@@ -35,6 +42,9 @@ struct RoomScreenViewState: BindableState {
     var shouldShowPinnedEventsBanner: Bool {
         isPinningEnabled && !pinnedEventsBannerState.isEmpty && lastScrollDirection != .top
     }
+    
+    var canJoinCall = false
+    var hasOngoingCall: Bool
     
     var bindings: RoomScreenViewStateBindings
 }
