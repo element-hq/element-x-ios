@@ -7811,6 +7811,42 @@ open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle {
         }
     }
 
+    //MARK: - cancel
+
+    var cancelUnderlyingCallsCount = 0
+    open var cancelCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return cancelUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = cancelUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                cancelUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    cancelUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var cancelCalled: Bool {
+        return cancelCallsCount > 0
+    }
+    open var cancelClosure: (() async -> Void)?
+
+    open override func cancel() async {
+        cancelCallsCount += 1
+        await cancelClosure?()
+    }
+
     //MARK: - reset
 
     open var resetAuthThrowableError: Error?
@@ -9827,82 +9863,6 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
     }
 }
-open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData {
-    init() {
-        super.init(noPointer: .init())
-    }
-
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
-    }
-
-    fileprivate var pointer: UnsafeMutableRawPointer!
-
-    //MARK: - loginUrl
-
-    var loginUrlUnderlyingCallsCount = 0
-    open var loginUrlCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loginUrlUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginUrlUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginUrlUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginUrlUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var loginUrlCalled: Bool {
-        return loginUrlCallsCount > 0
-    }
-
-    var loginUrlUnderlyingReturnValue: String!
-    open var loginUrlReturnValue: String! {
-        get {
-            if Thread.isMainThread {
-                return loginUrlUnderlyingReturnValue
-            } else {
-                var returnValue: String? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginUrlUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginUrlUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginUrlUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var loginUrlClosure: (() -> String)?
-
-    open override func loginUrl() -> String {
-        loginUrlCallsCount += 1
-        if let loginUrlClosure = loginUrlClosure {
-            return loginUrlClosure()
-        } else {
-            return loginUrlReturnValue
-        }
-    }
-}
 open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {
     init() {
         super.init(noPointer: .init())
@@ -11058,42 +11018,6 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         clearComposerDraftCallsCount += 1
         try await clearComposerDraftClosure?()
-    }
-
-    //MARK: - clearPinnedEventsCache
-
-    var clearPinnedEventsCacheUnderlyingCallsCount = 0
-    open var clearPinnedEventsCacheCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return clearPinnedEventsCacheUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = clearPinnedEventsCacheUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                clearPinnedEventsCacheUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    clearPinnedEventsCacheUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var clearPinnedEventsCacheCalled: Bool {
-        return clearPinnedEventsCacheCallsCount > 0
-    }
-    open var clearPinnedEventsCacheClosure: (() async -> Void)?
-
-    open override func clearPinnedEventsCache() async {
-        clearPinnedEventsCacheCallsCount += 1
-        await clearPinnedEventsCacheClosure?()
     }
 
     //MARK: - discardRoomKey
@@ -16366,6 +16290,25 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
             }
         }
     }
+    open var subscribeToRoomsRoomIdsSettingsCalled: Bool {
+        return subscribeToRoomsRoomIdsSettingsCallsCount > 0
+    }
+    open var subscribeToRoomsRoomIdsSettingsReceivedArguments: (roomIds: [String], settings: RoomSubscription?)?
+    open var subscribeToRoomsRoomIdsSettingsReceivedInvocations: [(roomIds: [String], settings: RoomSubscription?)] = []
+    open var subscribeToRoomsRoomIdsSettingsClosure: (([String], RoomSubscription?) throws -> Void)?
+
+    open override func subscribeToRooms(roomIds: [String], settings: RoomSubscription?) throws {
+        if let error = subscribeToRoomsRoomIdsSettingsThrowableError {
+            throw error
+        }
+        subscribeToRoomsRoomIdsSettingsCallsCount += 1
+        subscribeToRoomsRoomIdsSettingsReceivedArguments = (roomIds: roomIds, settings: settings)
+        DispatchQueue.main.async {
+            self.subscribeToRoomsRoomIdsSettingsReceivedInvocations.append((roomIds: roomIds, settings: settings))
+        }
+        try subscribeToRoomsRoomIdsSettingsClosure?(roomIds, settings)
+    }
+
     //MARK: - syncIndicator
 
     var syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerUnderlyingCallsCount = 0
