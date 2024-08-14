@@ -163,29 +163,29 @@ struct RoomScreen: View {
         // .principal + .primaryAction works better than .navigation leading + trailing
         // as the latter disables interaction in the action button for rooms with long names
         ToolbarItem(placement: .principal) {
-            RoomHeaderView(roomName: timelineContext.viewState.roomTitle,
-                           roomAvatar: timelineContext.viewState.roomAvatar,
-                           imageProvider: timelineContext.imageProvider)
+            RoomHeaderView(roomName: roomContext.viewState.roomTitle,
+                           roomAvatar: roomContext.viewState.roomAvatar,
+                           imageProvider: roomContext.imageProvider)
                 // Using a button stops it from getting truncated in the navigation bar
                 .contentShape(.rect)
                 .onTapGesture {
-                    timelineContext.send(viewAction: .displayRoomDetails)
+                    roomContext.send(viewAction: .displayRoomDetails)
                 }
         }
         
         if !ProcessInfo.processInfo.isiOSAppOnMac {
             ToolbarItem(placement: .primaryAction) {
                 callButton
-                    .disabled(timelineContext.viewState.canJoinCall == false)
+                    .disabled(roomContext.viewState.canJoinCall == false)
             }
         }
     }
     
     @ViewBuilder
     private var callButton: some View {
-        if timelineContext.viewState.hasOngoingCall {
+        if roomContext.viewState.hasOngoingCall {
             Button {
-                timelineContext.send(viewAction: .displayCall)
+                roomContext.send(viewAction: .displayCall)
             } label: {
                 Label(L10n.actionJoin, icon: \.videoCallSolid)
                     .labelStyle(.titleAndIcon)
@@ -194,7 +194,7 @@ struct RoomScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         } else {
             Button {
-                timelineContext.send(viewAction: .displayCall)
+                roomContext.send(viewAction: .displayCall)
             } label: {
                 CompoundIcon(\.videoCallSolid)
             }
@@ -210,10 +210,11 @@ struct RoomScreen: View {
 // MARK: - Previews
 
 struct RoomScreen_Previews: PreviewProvider, TestablePreview {
-    static let roomViewModel = RoomScreenViewModel.mock()
-    static let timelineViewModel = TimelineViewModel(roomProxy: RoomProxyMock(.init(id: "stable_id",
-                                                                                    name: "Preview room",
-                                                                                    hasOngoingCall: true)),
+    static let roomProxyMock = RoomProxyMock(.init(id: "stable_id",
+                                                   name: "Preview room",
+                                                   hasOngoingCall: true))
+    static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
+    static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                      timelineController: MockRoomTimelineController(),
                                                      mediaProvider: MockMediaProvider(),
                                                      mediaPlayerProvider: MediaPlayerProviderMock(),

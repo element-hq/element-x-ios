@@ -63,8 +63,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: RoomScreenCoordinatorParameters) {
         roomViewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
+                                            mediaProvider: parameters.mediaProvider,
                                             appMediator: parameters.appMediator,
-                                            appSettings: ServiceLocator.shared.settings)
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics)
         
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               focussedEventID: parameters.focussedEventID,
@@ -103,8 +105,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
 
                 switch action {
-                case .displayRoomDetails:
-                    actionsSubject.send(.presentRoomDetails)
                 case .displayEmojiPicker(let itemID, let selectedEmojis):
                     actionsSubject.send(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .displayReportContent(let itemID, let senderID):
@@ -121,7 +121,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentPollForm(mode: mode))
                 case .displayMediaUploadPreviewScreen(let url):
                     actionsSubject.send(.presentMediaUploadPreviewScreen(url))
-                case .displayRoomMemberDetails(userID: let userID):
+                case .tappedOnSenderDetails(userID: let userID):
                     actionsSubject.send(.presentRoomMemberDetails(userID: userID))
                 case .displayMessageForwarding(let forwardingItem):
                     actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
@@ -129,8 +129,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
                 case .composer(let action):
                     composerViewModel.process(timelineAction: action)
-                case .displayCallScreen:
-                    actionsSubject.send(.presentCallScreen)
                 case .hasScrolled(direction: let direction):
                     roomViewModel.timelineHasScrolled(direction: direction)
                 }
@@ -154,6 +152,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     focusOnEvent(eventID: eventID)
                 case .displayPinnedEventsTimeline:
                     actionsSubject.send(.presentPinnedEventsTimeline)
+                case .displayRoomDetails:
+                    actionsSubject.send(.presentRoomDetails)
+                case .displayCall:
+                    actionsSubject.send(.presentCallScreen)
                 }
             }
             .store(in: &cancellables)

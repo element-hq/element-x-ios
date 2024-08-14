@@ -43,8 +43,10 @@ class RoomScreenViewModelTests: XCTestCase {
         // setup the room proxy actions publisher
         roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
+                                            mediaProvider: MockMediaProvider(),
                                             appMediator: AppMediatorMock.default,
-                                            appSettings: ServiceLocator.shared.settings)
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics)
         self.viewModel = viewModel
         
         // check if in the default state is not showing but is indeed loading
@@ -100,5 +102,42 @@ class RoomScreenViewModelTests: XCTestCase {
         
         viewModel.timelineHasScrolled(direction: .bottom)
         XCTAssertTrue(viewModel.context.viewState.shouldShowPinnedEventsBanner)
+    }
+    
+    func testRoomInfoUpdate() async throws {
+        let updateSubject = PassthroughSubject<RoomProxyAction, Never>()
+        let roomProxyMock = RoomProxyMock(.init(id: "TestID", name: "StartingName", avatarURL: nil, hasOngoingCall: false))
+        // setup the room proxy actions publisher
+        roomProxyMock.canUserJoinCallUserIDReturnValue = .success(false)
+        roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()
+        let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
+                                            mediaProvider: MockMediaProvider(),
+                                            appMediator: AppMediatorMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics)
+        self.viewModel = viewModel
+        
+        var deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
+            viewState.roomTitle == "StartingName" &&
+                viewState.roomAvatar == .room(id: "TestID", name: "StartingName", avatarURL: nil) &&
+                !viewState.canJoinCall &&
+                !viewState.hasOngoingCall
+        }
+        try await deferred.fulfill()
+        
+        roomProxyMock.name = "NewName"
+        roomProxyMock.avatar = .room(id: "TestID", name: "NewName", avatarURL: .documentsDirectory)
+        roomProxyMock.hasOngoingCall = true
+        roomProxyMock.canUserJoinCallUserIDReturnValue = .success(true)
+        
+        deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
+            viewState.roomTitle == "NewName" &&
+                viewState.roomAvatar == .room(id: "TestID", name: "NewName", avatarURL: .documentsDirectory) &&
+                viewState.canJoinCall &&
+                viewState.hasOngoingCall
+        }
+        
+        updateSubject.send(.roomInfoUpdate)
+        try await deferred.fulfill()
     }
 }
