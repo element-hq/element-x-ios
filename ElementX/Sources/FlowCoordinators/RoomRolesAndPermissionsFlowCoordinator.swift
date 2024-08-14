@@ -26,6 +26,7 @@ enum RoomRolesAndPermissionsFlowCoordinatorAction: Equatable {
 struct RoomRolesAndPermissionsFlowCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let networkMonitor: NetworkMonitorProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
@@ -35,6 +36,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
     private let roomProxy: RoomProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let mediaProvider: MediaProviderProtocol
+    private let networkMonitor: NetworkMonitorProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
     
@@ -78,6 +80,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         roomProxy = parameters.roomProxy
         navigationStackCoordinator = parameters.navigationStackCoordinator
         mediaProvider = parameters.mediaProvider
+        networkMonitor = parameters.networkMonitor
         userIndicatorController = parameters.userIndicatorController
         analytics = parameters.analytics
         
@@ -168,6 +171,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: mode,
                                                                     roomProxy: roomProxy,
                                                                     mediaProvider: mediaProvider,
+                                                                    networkMonitor: networkMonitor,
                                                                     userIndicatorController: userIndicatorController,
                                                                     analytics: analytics)
         let coordinator = RoomChangeRolesScreenCoordinator(parameters: parameters)

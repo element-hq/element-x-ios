@@ -89,7 +89,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                        hasOngoingCall: roomProxy.hasOngoingCall,
                                                        bindings: .init(reactionsCollapsed: [:])),
-                   imageProvider: mediaProvider)
+                   dependencies: .init(imageProvider: mediaProvider, networkMonitor: appMediator.networkMonitor))
         
         if focussedEventID != nil {
             // The timeline controller will start loading a detached timeline.

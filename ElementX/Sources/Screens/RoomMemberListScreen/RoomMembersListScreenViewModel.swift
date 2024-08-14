@@ -35,6 +35,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     init(initialMode: RoomMembersListScreenMode = .members,
          roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         networkMonitor: NetworkMonitorProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
         self.roomProxy = roomProxy
@@ -43,7 +44,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         
         super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount,
                                            bindings: .init(mode: initialMode)),
-                   imageProvider: mediaProvider)
+                   dependencies: .init(imageProvider: mediaProvider, networkMonitor: networkMonitor))
         
         setupMembers()
     }

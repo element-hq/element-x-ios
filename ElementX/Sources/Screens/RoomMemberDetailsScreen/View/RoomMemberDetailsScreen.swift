@@ -75,7 +75,8 @@ struct RoomMemberDetailsScreen: View {
         if let memberDetails = context.viewState.memberDetails {
             AvatarHeaderView(member: memberDetails,
                              avatarSize: .user(on: .memberDetails),
-                             imageProvider: context.imageProvider) {
+                             imageProvider: context.dependencies?.imageProvider,
+                             networkMonitor: context.dependencies?.networkMonitor) {
                 context.send(viewAction: .displayAvatar)
             } footer: {
                 otherUserFooter
@@ -83,7 +84,8 @@ struct RoomMemberDetailsScreen: View {
         } else {
             AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
                              avatarSize: .user(on: .memberDetails),
-                             imageProvider: context.imageProvider,
+                             imageProvider: context.dependencies?.imageProvider,
+                             networkMonitor: context.dependencies?.networkMonitor,
                              footer: { })
         }
     }
@@ -157,6 +159,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                 roomProxy: roomProxyMock,
                                                 clientProxy: clientProxyMock,
                                                 mediaProvider: MockMediaProvider(),
+                                                networkMonitor: NetworkMonitorMock.default,
                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                 analytics: ServiceLocator.shared.analytics)
     }

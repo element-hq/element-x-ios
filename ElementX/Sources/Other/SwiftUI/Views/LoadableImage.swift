@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Kingfisher
 import SwiftUI
 
@@ -29,6 +30,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     private let blurhash: String?
     private let size: CGSize?
     private let imageProvider: ImageProviderProtocol?
+    private let networkMonitor: NetworkMonitorProtocol?
     private let transformer: (AnyView) -> TransformerView
     private let placeholder: () -> PlaceholderView
     
@@ -45,6 +47,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
+         networkMonitor: NetworkMonitorProtocol?,
          transformer: @escaping (AnyView) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
         self.mediaSource = mediaSource
@@ -52,6 +55,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
         self.blurhash = blurhash
         self.size = size
         self.imageProvider = imageProvider
+        self.networkMonitor = networkMonitor
         self.transformer = transformer
         self.placeholder = placeholder
     }
@@ -61,6 +65,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
+         networkMonitor: NetworkMonitorProtocol?,
          transformer: @escaping (AnyView) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
         self.init(mediaSource: MediaSourceProxy(url: url, mimeType: nil),
@@ -68,6 +73,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
                   blurhash: blurhash,
                   size: size,
                   imageProvider: imageProvider,
+                  networkMonitor: networkMonitor,
                   transformer: transformer,
                   placeholder: placeholder)
     }
@@ -78,6 +84,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
                              blurhash: blurhash,
                              size: size,
                              imageProvider: imageProvider,
+                             networkMonitor: networkMonitor,
                              transformer: transformer,
                              placeholder: placeholder)
             // Binds the lifecycle of the LoadableImage to the associated URL.
@@ -100,6 +107,7 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
+         networkMonitor: NetworkMonitorProtocol?,
          transformer: @escaping (AnyView) -> TransformerView,
          placeholder: @escaping () -> PlaceholderView) {
         assert(imageProvider != nil, "Missing image provider, make sure one has been supplied to the view model.")
@@ -109,7 +117,10 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
         self.blurhash = blurhash
         self.transformer = transformer
         self.placeholder = placeholder
-        _contentLoader = StateObject(wrappedValue: ContentLoader(mediaSource: mediaSource, size: size, imageProvider: imageProvider))
+        _contentLoader = StateObject(wrappedValue: ContentLoader(mediaSource: mediaSource,
+                                                                 size: size,
+                                                                 imageProvider: imageProvider,
+                                                                 networkMonitor: networkMonitor))
     }
     
     var body: some View {
@@ -164,8 +175,11 @@ private class ContentLoader: ObservableObject {
     }
     
     private let imageProvider: ImageProviderProtocol?
+    private let networkMonitor: NetworkMonitorProtocol?
     private let mediaSource: MediaSourceProxy
     private let size: CGSize?
+    
+    private var cancellables = Set<AnyCancellable>()
     
     @Published private var cachedContent: Content?
     
@@ -186,10 +200,14 @@ private class ContentLoader: ObservableObject {
         return cachedContent
     }
     
-    init(mediaSource: MediaSourceProxy, size: CGSize?, imageProvider: ImageProviderProtocol?) {
+    init(mediaSource: MediaSourceProxy,
+         size: CGSize?,
+         imageProvider: ImageProviderProtocol?,
+         networkMonitor: NetworkMonitorProtocol?) {
         self.mediaSource = mediaSource
         self.size = size
         self.imageProvider = imageProvider
+        self.networkMonitor = networkMonitor
     }
     
     @MainActor

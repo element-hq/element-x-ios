@@ -42,7 +42,8 @@ struct JoinRoomScreen: View {
         VStack(spacing: 16) {
             RoomAvatarImage(avatar: context.viewState.avatar,
                             avatarSize: .room(on: .joinRoom),
-                            imageProvider: context.imageProvider)
+                            imageProvider: context.dependencies?.imageProvider,
+                            networkMonitor: context.dependencies?.networkMonitor)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
             
             VStack(spacing: 8) {
@@ -63,7 +64,9 @@ struct JoinRoomScreen: View {
                 }
                 
                 if let inviter = context.viewState.roomDetails?.inviter {
-                    RoomInviterLabel(inviter: inviter, imageProvider: context.imageProvider)
+                    RoomInviterLabel(inviter: inviter,
+                                     imageProvider: context.dependencies?.imageProvider,
+                                     networkMonitor: context.dependencies?.networkMonitor)
                         .font(.compound.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
                 }
@@ -178,6 +181,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
                                        allowKnocking: true,
                                        clientProxy: clientProxy,
                                        mediaProvider: MockMediaProvider(),
+                                       networkMonitor: NetworkMonitorMock.default,
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

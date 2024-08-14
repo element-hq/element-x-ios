@@ -90,7 +90,8 @@ private struct MessageForwardingListRow: View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,
                             avatarSize: .room(on: .messageForwarding),
-                            imageProvider: context.imageProvider)
+                            imageProvider: context.dependencies?.imageProvider,
+                            networkMonitor: context.dependencies?.networkMonitor)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }
@@ -108,7 +109,8 @@ struct MessageForwardingScreen_Previews: PreviewProvider, TestablePreview {
                                                          clientProxy: ClientProxyMock(.init()),
                                                          roomSummaryProvider: summaryProvider,
                                                          userIndicatorController: UserIndicatorControllerMock(),
-                                                         mediaProvider: MockMediaProvider())
+                                                         mediaProvider: MockMediaProvider(),
+                                                         networkMonitor: NetworkMonitorMock.default)
         
         NavigationStack {
             MessageForwardingScreen(context: viewModel.context)

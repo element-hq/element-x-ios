@@ -49,6 +49,7 @@ struct RoomInviterLabel: View {
     let inviter: RoomInviterDetails
     
     let imageProvider: ImageProviderProtocol?
+    let networkMonitor: NetworkMonitorProtocol?
     
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
@@ -56,7 +57,8 @@ struct RoomInviterLabel: View {
                                 name: inviter.displayName,
                                 contentID: inviter.id,
                                 avatarSize: .custom(16),
-                                imageProvider: imageProvider)
+                                imageProvider: imageProvider,
+                                networkMonitor: networkMonitor)
                 .alignmentGuide(.firstTextBaseline) { $0[.bottom] * 0.8 }
                 .accessibilityHidden(true)
             
@@ -71,13 +73,17 @@ struct RoomInviterLabel_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 10) {
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockAlice),
-                             imageProvider: MockMediaProvider())
+                             imageProvider: MockMediaProvider(),
+                             networkMonitor: NetworkMonitorMock.default)
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockDan),
-                             imageProvider: MockMediaProvider())
+                             imageProvider: MockMediaProvider(),
+                             networkMonitor: NetworkMonitorMock.default)
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockNoName),
-                             imageProvider: MockMediaProvider())
+                             imageProvider: MockMediaProvider(),
+                             networkMonitor: NetworkMonitorMock.default)
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockCharlie),
-                             imageProvider: MockMediaProvider())
+                             imageProvider: MockMediaProvider(),
+                             networkMonitor: NetworkMonitorMock.default)
                 .foregroundStyle(.compound.textPrimary)
         }
         .font(.compound.bodyMD)

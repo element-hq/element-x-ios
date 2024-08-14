@@ -59,7 +59,8 @@ struct HomeScreenRoomCell: View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,
                             avatarSize: .room(on: .home),
-                            imageProvider: context.imageProvider)
+                            imageProvider: context.dependencies?.imageProvider,
+                            networkMonitor: context.dependencies?.networkMonitor)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }
@@ -180,7 +181,8 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                    analyticsService: ServiceLocator.shared.analytics,
                                    appSettings: ServiceLocator.shared.settings,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                   networkMonitor: NetworkMonitorMock.default)
     }()
     
     static let summaryProviderForNotificationsState = RoomSummaryProviderMock(.init(state: .loaded(.mockRoomsWithNotificationsState)))
@@ -191,7 +193,8 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                    analyticsService: ServiceLocator.shared.analytics,
                                    appSettings: ServiceLocator.shared.settings,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                   networkMonitor: NetworkMonitorMock.default)
     }()
     
     static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {

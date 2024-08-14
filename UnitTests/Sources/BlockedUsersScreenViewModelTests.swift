@@ -26,7 +26,8 @@ class BlockedUsersScreenViewModelTests: XCTestCase {
         
         let viewModel = BlockedUsersScreenViewModel(hideProfiles: true,
                                                     clientProxy: clientProxy,
-                                                    mediaProvider: MockMediaProvider(),
+                                                    imageProvider: MockMediaProvider(),
+                                                    networkMonitor: NetworkMonitorMock.default,
                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { $0.blockedUsers.contains(where: { $0.displayName != nil }) }
@@ -41,7 +42,8 @@ class BlockedUsersScreenViewModelTests: XCTestCase {
         
         let viewModel = BlockedUsersScreenViewModel(hideProfiles: false,
                                                     clientProxy: clientProxy,
-                                                    mediaProvider: MockMediaProvider(),
+                                                    imageProvider: MockMediaProvider(),
+                                                    networkMonitor: NetworkMonitorMock.default,
                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { $0.blockedUsers.contains(where: { $0.displayName != nil }) }

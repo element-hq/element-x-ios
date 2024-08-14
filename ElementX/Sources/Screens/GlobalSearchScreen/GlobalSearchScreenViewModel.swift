@@ -26,13 +26,14 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
     var actions: AnyPublisher<GlobalSearchScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(roomSummaryProvider: RoomSummaryProviderProtocol,
-         imageProvider: ImageProviderProtocol) {
+         imageProvider: ImageProviderProtocol,
+         networkMonitor: NetworkMonitorProtocol) {
         self.roomSummaryProvider = roomSummaryProvider
         
         super.init(initialViewState: GlobalSearchScreenViewState(bindings: .init(searchQuery: "")),
-                   imageProvider: imageProvider)
+                   dependencies: .init(imageProvider: imageProvider, networkMonitor: networkMonitor))
         
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)

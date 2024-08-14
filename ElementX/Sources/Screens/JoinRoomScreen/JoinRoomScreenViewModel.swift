@@ -39,6 +39,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
          allowKnocking: Bool = false,
          clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         networkMonitor: NetworkMonitorProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomID = roomID
         self.via = via
@@ -46,7 +47,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: JoinRoomScreenViewState(roomID: roomID), imageProvider: mediaProvider)
+        super.init(initialViewState: JoinRoomScreenViewState(roomID: roomID),
+                   dependencies: .init(imageProvider: mediaProvider, networkMonitor: networkMonitor))
         
         Task {
             await loadRoomDetails()

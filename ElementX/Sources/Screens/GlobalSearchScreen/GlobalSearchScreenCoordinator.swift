@@ -21,6 +21,7 @@ import SwiftUI
 struct GlobalSearchScreenCoordinatorParameters {
     let roomSummaryProvider: RoomSummaryProviderProtocol
     let mediaProvider: MediaProviderProtocol
+    let networkMonitor: NetworkMonitorProtocol
 }
 
 enum GlobalSearchControllerAction {
@@ -41,7 +42,8 @@ class GlobalSearchScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: GlobalSearchScreenCoordinatorParameters) {
         viewModel = GlobalSearchScreenViewModel(roomSummaryProvider: parameters.roomSummaryProvider,
-                                                imageProvider: parameters.mediaProvider)
+                                                imageProvider: parameters.mediaProvider,
+                                                networkMonitor: parameters.networkMonitor)
         
         viewModel.actions
             .sink { [weak self] action in

@@ -82,7 +82,11 @@ struct RoomScreen: View {
                 }
             }
             .sheet(item: $timelineContext.reactionSummaryInfo) {
-                ReactionsSummaryView(reactions: $0.reactions, members: timelineContext.viewState.members, imageProvider: timelineContext.imageProvider, selectedReactionKey: $0.selectedKey)
+                ReactionsSummaryView(reactions: $0.reactions,
+                                     members: timelineContext.viewState.members,
+                                     imageProvider: timelineContext.dependencies?.imageProvider,
+                                     networkMonitor: timelineContext.dependencies?.networkMonitor,
+                                     selectedReactionKey: $0.selectedKey)
                     .edgesIgnoringSafeArea([.bottom])
             }
             .sheet(item: $timelineContext.readReceiptsSummaryInfo) {
@@ -165,7 +169,8 @@ struct RoomScreen: View {
         ToolbarItem(placement: .principal) {
             RoomHeaderView(roomName: timelineContext.viewState.roomTitle,
                            roomAvatar: timelineContext.viewState.roomAvatar,
-                           imageProvider: timelineContext.imageProvider)
+                           imageProvider: timelineContext.dependencies?.imageProvider,
+                           networkMonitor: timelineContext.dependencies?.networkMonitor)
                 // Using a button stops it from getting truncated in the navigation bar
                 .contentShape(.rect)
                 .onTapGesture {

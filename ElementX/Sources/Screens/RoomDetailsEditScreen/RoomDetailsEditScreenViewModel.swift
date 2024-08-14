@@ -31,6 +31,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     
     init(roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         networkMonitor: NetworkMonitorProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
@@ -44,7 +45,8 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                                                                     initialName: roomName ?? "",
                                                                     initialTopic: roomTopic ?? "",
                                                                     avatarURL: roomAvatar,
-                                                                    bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")), imageProvider: mediaProvider)
+                                                                    bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")),
+                   dependencies: .init(imageProvider: mediaProvider, networkMonitor: networkMonitor))
         
         Task {
             // Can't use async let because the mocks aren't thread safe when calling the same method 🤦‍♂️

@@ -88,7 +88,8 @@ struct InviteUsersScreen: View {
                 ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                     UserProfileListRow(user: user,
                                        membership: context.viewState.membershipState(user),
-                                       imageProvider: context.imageProvider,
+                                       imageProvider: context.dependencies?.imageProvider,
+                                       networkMonitor: context.dependencies?.networkMonitor,
                                        kind: .multiSelection(isSelected: context.viewState.isUserSelected(user)) {
                                            context.send(viewAction: .toggleUser(user))
                                        })
@@ -113,7 +114,9 @@ struct InviteUsersScreen: View {
             ScrollViewReader { scrollView in
                 HStack(spacing: 16) {
                     ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                        InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
+                        InviteUsersScreenSelectedItem(user: user,
+                                                      imageProvider: context.dependencies?.imageProvider,
+                                                      networkMonitor: context.dependencies?.networkMonitor) {
                             deselect(user)
                         }
                         .frame(width: cellWidth)
@@ -164,6 +167,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
                                           selectedUsers: .init([]),
                                           roomType: .draft,
                                           mediaProvider: MockMediaProvider(),
+                                          networkMonitor: NetworkMonitorMock.default,
                                           userDiscoveryService: userDiscoveryService,
                                           userIndicatorController: UserIndicatorControllerMock())
     }()

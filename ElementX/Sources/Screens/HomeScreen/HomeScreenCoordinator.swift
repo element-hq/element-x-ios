@@ -21,6 +21,10 @@ struct HomeScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
     let selectedRoomPublisher: CurrentValuePublisher<String?, Never>
+    let analyticsService: AnalyticsService
+    let appSettings: AppSettings
+    let userIndicatorController: UserIndicatorControllerProtocol
+    let networkMonitor: NetworkMonitorProtocol
 }
 
 enum HomeScreenCoordinatorAction {
@@ -50,10 +54,11 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: HomeScreenCoordinatorParameters) {
         viewModel = HomeScreenViewModel(userSession: parameters.userSession,
-                                        analyticsService: ServiceLocator.shared.analytics,
-                                        appSettings: ServiceLocator.shared.settings,
+                                        analyticsService: parameters.analyticsService,
+                                        appSettings: parameters.appSettings,
                                         selectedRoomPublisher: parameters.selectedRoomPublisher,
-                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                        userIndicatorController: parameters.userIndicatorController,
+                                        networkMonitor: parameters.networkMonitor)
         bugReportService = parameters.bugReportService
         
         viewModel.actions

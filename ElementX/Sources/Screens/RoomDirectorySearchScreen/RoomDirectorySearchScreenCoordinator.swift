@@ -20,6 +20,7 @@ import SwiftUI
 struct RoomDirectorySearchScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
     let imageProvider: ImageProviderProtocol
+    let networkMonitor: NetworkMonitorProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -42,7 +43,8 @@ final class RoomDirectorySearchScreenCoordinator: CoordinatorProtocol {
     init(parameters: RoomDirectorySearchScreenCoordinatorParameters) {
         viewModel = RoomDirectorySearchScreenViewModel(clientProxy: parameters.clientProxy,
                                                        userIndicatorController: parameters.userIndicatorController,
-                                                       imageProvider: parameters.imageProvider)
+                                                       imageProvider: parameters.imageProvider,
+                                                       networkMonitor: parameters.networkMonitor)
     }
     
     func start() {

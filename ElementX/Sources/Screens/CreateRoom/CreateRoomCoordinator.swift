@@ -20,6 +20,7 @@ import SwiftUI
 struct CreateRoomCoordinatorParameters {
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let networkMonitor: NetworkMonitorProtocol
     let createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>
     let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>
 }
@@ -46,7 +47,8 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
                                         createRoomParameters: parameters.createRoomParameters,
                                         selectedUsers: parameters.selectedUsers,
                                         analytics: ServiceLocator.shared.analytics,
-                                        userIndicatorController: parameters.userIndicatorController)
+                                        userIndicatorController: parameters.userIndicatorController,
+                                        networkMonitor: parameters.networkMonitor)
     }
     
     func start() {

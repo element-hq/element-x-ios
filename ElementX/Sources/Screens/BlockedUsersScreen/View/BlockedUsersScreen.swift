@@ -54,7 +54,8 @@ struct BlockedUsersScreen: View {
                             name: user.displayName,
                             contentID: user.userID,
                             avatarSize: .user(on: .blockedUsers),
-                            imageProvider: context.imageProvider)
+                            imageProvider: context.dependencies?.imageProvider,
+                            networkMonitor: context.dependencies?.networkMonitor)
             .accessibilityHidden(true)
     }
 }
@@ -64,7 +65,8 @@ struct BlockedUsersScreen: View {
 struct BlockedUsersScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = BlockedUsersScreenViewModel(hideProfiles: true,
                                                        clientProxy: ClientProxyMock(.init(userID: RoomMemberProxyMock.mockMe.userID)),
-                                                       mediaProvider: MockMediaProvider(),
+                                                       imageProvider: MockMediaProvider(),
+                                                       networkMonitor: NetworkMonitorMock.default,
                                                        userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {

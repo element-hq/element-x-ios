@@ -99,7 +99,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
                 
         settingsFlowCoordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
-                                                                            windowManager: appMediator.windowManager,
+                                                                            appMediator: appMediator,
                                                                             appLockService: appLockService,
                                                                             bugReportService: bugReportService,
                                                                             notificationSettings: userSession.clientProxy.notificationSettings,
@@ -381,7 +381,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func presentHomeScreen() {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          bugReportService: bugReportService,
-                                                         selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher())
+                                                         selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher(),
+                                                         analyticsService: analytics,
+                                                         appSettings: appSettings,
+                                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                         networkMonitor: appMediator.networkMonitor)
         let coordinator = HomeScreenCoordinator(parameters: parameters)
         
         coordinator.actions
@@ -532,6 +536,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = StartChatScreenCoordinatorParameters(orientationManager: appMediator.windowManager,
                                                               userSession: userSession,
                                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                              networkMonitor: appMediator.networkMonitor,
                                                               navigationStackCoordinator: startChatNavigationStackCoordinator,
                                                               userDiscoveryService: userDiscoveryService)
         
@@ -630,7 +635,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         let coordinator = GlobalSearchScreenCoordinator(parameters: .init(roomSummaryProvider: roomSummaryProvider,
-                                                                          mediaProvider: userSession.mediaProvider))
+                                                                          mediaProvider: userSession.mediaProvider,
+                                                                          networkMonitor: appMediator.networkMonitor))
         
         globalSearchScreenCoordinator = coordinator
         
@@ -667,6 +673,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func presentRoomDirectorySearch() {
         let coordinator = RoomDirectorySearchScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
                                                                                  imageProvider: userSession.mediaProvider,
+                                                                                 networkMonitor: appMediator.networkMonitor,
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
@@ -702,6 +709,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                 isPresentedModally: true,
                                                                 clientProxy: userSession.clientProxy,
                                                                 mediaProvider: userSession.mediaProvider,
+                                                                networkMonitor: appMediator.networkMonitor,
                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                 analytics: analytics)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)

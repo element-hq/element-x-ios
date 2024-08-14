@@ -41,7 +41,8 @@ struct NotificationSettingsEditScreenRoomCell: View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,
                             avatarSize: .room(on: .notificationSettings),
-                            imageProvider: context.imageProvider)
+                            imageProvider: context.dependencies?.imageProvider,
+                            networkMonitor: context.dependencies?.networkMonitor)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }
@@ -65,7 +66,8 @@ struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider, Testabl
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
         let viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                                 userSession: userSession,
-                                                                notificationSettingsProxy: notificationSettingsProxy)
+                                                                notificationSettingsProxy: notificationSettingsProxy,
+                                                                networkMonitor: NetworkMonitorMock.default)
         
         let rooms: [NotificationSettingsEditScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary -> NotificationSettingsEditScreenRoom? in
             NotificationSettingsEditScreenRoom(id: UUID().uuidString,

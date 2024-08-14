@@ -68,7 +68,8 @@ struct RoomDetailsEditScreen: View {
                                    name: context.viewState.initialName,
                                    contentID: context.viewState.roomID,
                                    avatarSize: .user(on: .memberDetails),
-                                   imageProvider: context.imageProvider)
+                                   imageProvider: context.dependencies?.imageProvider,
+                                   networkMonitor: context.dependencies?.networkMonitor)
                 .overlay(alignment: .bottomTrailing) {
                     if context.viewState.canEditAvatar {
                         avatarOverlayIcon
@@ -163,6 +164,7 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
         
         return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
                                               mediaProvider: MockMediaProvider(),
+                                              networkMonitor: NetworkMonitor(),
                                               userIndicatorController: UserIndicatorControllerMock.default)
     }()
     
@@ -173,6 +175,7 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
         
         return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
                                               mediaProvider: MockMediaProvider(),
+                                              networkMonitor: NetworkMonitor(),
                                               userIndicatorController: UserIndicatorControllerMock.default)
     }()
     

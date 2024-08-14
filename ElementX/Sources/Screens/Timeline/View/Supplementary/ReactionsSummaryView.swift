@@ -20,6 +20,7 @@ struct ReactionsSummaryView: View {
     let reactions: [AggregatedReaction]
     let members: [String: RoomMemberState]
     let imageProvider: ImageProviderProtocol?
+    let networkMonitor: NetworkMonitorProtocol?
     
     @State var selectedReactionKey: String
     
@@ -64,7 +65,10 @@ struct ReactionsSummaryView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 8) {
                         ForEach(reaction.senders) { sender in
-                            ReactionSummarySenderView(sender: sender, member: members[sender.id], imageProvider: imageProvider)
+                            ReactionSummarySenderView(sender: sender,
+                                                      member: members[sender.id],
+                                                      imageProvider: imageProvider,
+                                                      networkMonitor: networkMonitor)
                                 .padding(.horizontal, 16)
                         }
                     }
@@ -111,6 +115,7 @@ private struct ReactionSummarySenderView: View {
     var sender: ReactionSender
     var member: RoomMemberState?
     let imageProvider: ImageProviderProtocol?
+    let networkMonitor: NetworkMonitorProtocol?
     
     var displayName: String {
         member?.displayName ?? sender.id
@@ -122,7 +127,8 @@ private struct ReactionSummarySenderView: View {
                                 name: displayName,
                                 contentID: sender.id,
                                 avatarSize: .user(on: .timeline),
-                                imageProvider: imageProvider)
+                                imageProvider: imageProvider,
+                                networkMonitor: networkMonitor)
             
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 8) {
@@ -148,6 +154,7 @@ struct ReactionsSummaryView_Previews: PreviewProvider, TestablePreview {
         ReactionsSummaryView(reactions: AggregatedReaction.mockReactions,
                              members: [:],
                              imageProvider: MockMediaProvider(),
+                             networkMonitor: NetworkMonitorMock.default,
                              selectedReactionKey: AggregatedReaction.mockReactions[0].key)
     }
 }

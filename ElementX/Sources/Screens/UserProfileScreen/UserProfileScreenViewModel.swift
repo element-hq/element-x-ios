@@ -35,6 +35,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
          isPresentedModally: Bool,
          clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         networkMonitor: NetworkMonitorProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
         self.clientProxy = clientProxy
@@ -47,7 +48,8 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
                                                           isPresentedModally: isPresentedModally,
                                                           bindings: .init())
         
-        super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
+        super.init(initialViewState: initialViewState,
+                   dependencies: .init(imageProvider: mediaProvider, networkMonitor: networkMonitor))
         
         showLoadingIndicator(allowsInteraction: true)
         Task {

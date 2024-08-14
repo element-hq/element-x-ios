@@ -22,6 +22,7 @@ struct NotificationSettingsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let userNotificationCenter: UserNotificationCenterProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
+    let networkMonitor: NetworkMonitorProtocol
     let isModallyPresented: Bool
 }
 
@@ -77,7 +78,8 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
         let editSettingsParameters = NotificationSettingsEditScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
                                                                                          chatType: chatType,
                                                                                          userSession: parameters.userSession,
-                                                                                         notificationSettings: parameters.notificationSettings)
+                                                                                         notificationSettings: parameters.notificationSettings,
+                                                                                         networkMonitor: parameters.networkMonitor)
         let editSettingsCoordinator = NotificationSettingsEditScreenCoordinator(parameters: editSettingsParameters)
         navigationStackCoordinator?.push(editSettingsCoordinator)
     }

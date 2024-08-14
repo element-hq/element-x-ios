@@ -148,7 +148,8 @@ struct HomeScreen: View {
                                     name: context.viewState.userDisplayName,
                                     contentID: context.viewState.userID,
                                     avatarSize: .user(on: .home),
-                                    imageProvider: context.imageProvider)
+                                    imageProvider: context.dependencies?.imageProvider,
+                                    networkMonitor: context.dependencies?.networkMonitor)
                     .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
                     .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
                     .compositingGroup()
@@ -252,6 +253,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
                                    analyticsService: ServiceLocator.shared.analytics,
                                    appSettings: appSettings,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                   networkMonitor: NetworkMonitorMock.default)
     }
 }

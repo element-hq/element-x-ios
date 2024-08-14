@@ -21,6 +21,7 @@ struct StartChatScreenCoordinatorParameters {
     let orientationManager: OrientationManagerProtocol
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let networkMonitor: NetworkMonitorProtocol
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userDiscoveryService: UserDiscoveryServiceProtocol
 }
@@ -56,7 +57,8 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         viewModel = StartChatScreenViewModel(userSession: parameters.userSession,
                                              analytics: ServiceLocator.shared.analytics,
                                              userIndicatorController: parameters.userIndicatorController,
-                                             userDiscoveryService: parameters.userDiscoveryService)
+                                             userDiscoveryService: parameters.userDiscoveryService,
+                                             networkMonitor: parameters.networkMonitor)
     }
     
     func start() {
@@ -88,6 +90,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
                                                                       selectedUsers: selectedUsersPublisher,
                                                                       roomType: .draft,
                                                                       mediaProvider: parameters.userSession.mediaProvider,
+                                                                      networkMonitor: parameters.networkMonitor,
                                                                       userDiscoveryService: parameters.userDiscoveryService,
                                                                       userIndicatorController: parameters.userIndicatorController)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
@@ -116,6 +119,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     private func openCreateRoomScreen() {
         let createParameters = CreateRoomCoordinatorParameters(userSession: parameters.userSession,
                                                                userIndicatorController: parameters.userIndicatorController,
+                                                               networkMonitor: parameters.networkMonitor,
                                                                createRoomParameters: createRoomParametersPublisher,
                                                                selectedUsers: selectedUsersPublisher)
         let coordinator = CreateRoomCoordinator(parameters: createParameters)

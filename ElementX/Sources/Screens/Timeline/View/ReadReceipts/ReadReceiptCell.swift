@@ -20,6 +20,7 @@ struct ReadReceiptCell: View {
     let readReceipt: ReadReceipt
     let memberState: RoomMemberState?
     let imageProvider: ImageProviderProtocol?
+    let networkMonitor: NetworkMonitorProtocol?
     
     private var title: String {
         memberState?.displayName ?? readReceipt.userID
@@ -38,7 +39,8 @@ struct ReadReceiptCell: View {
                                 name: memberState?.displayName,
                                 contentID: readReceipt.userID,
                                 avatarSize: .user(on: .readReceiptSheet),
-                                imageProvider: imageProvider)
+                                imageProvider: imageProvider,
+                                networkMonitor: networkMonitor)
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 12) {
                     Text(title)
@@ -70,18 +72,21 @@ struct ReadReceiptCell_Previews: PreviewProvider, TestablePreview {
                                            formattedTimestamp: "10:00"),
                         memberState: .init(displayName: "Test",
                                            avatarURL: nil),
-                        imageProvider: MockMediaProvider())
+                        imageProvider: MockMediaProvider(),
+                        networkMonitor: NetworkMonitorMock.default)
             .previewDisplayName("No Image")
         ReadReceiptCell(readReceipt: .init(userID: "@test:matrix.org",
                                            formattedTimestamp: "10:00"),
                         memberState: .init(displayName: "Test",
                                            avatarURL: URL.documentsDirectory),
-                        imageProvider: MockMediaProvider())
+                        imageProvider: MockMediaProvider(),
+                        networkMonitor: NetworkMonitorMock.default)
             .previewDisplayName("With Image")
         ReadReceiptCell(readReceipt: .init(userID: "@test:matrix.org",
                                            formattedTimestamp: "10:00"),
                         memberState: nil,
-                        imageProvider: MockMediaProvider())
+                        imageProvider: MockMediaProvider(),
+                        networkMonitor: NetworkMonitorMock.default)
             .previewDisplayName("Loading Member")
     }
 }

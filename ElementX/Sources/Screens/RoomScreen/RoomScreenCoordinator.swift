@@ -84,6 +84,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                          completionSuggestionService: parameters.completionSuggestionService,
                                                          mediaProvider: parameters.mediaProvider,
+                                                         networkMonitor: parameters.appMediator.networkMonitor,
                                                          mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
                                                          analyticsService: ServiceLocator.shared.analytics,
                                                          composerDraftService: parameters.composerDraftService)

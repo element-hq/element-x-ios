@@ -545,8 +545,9 @@ class MockScreen: Identifiable {
         case .roomMembersListScreenPendingInvites:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
-            let coordinator = RoomMembersListScreenCoordinator(parameters: .init(mediaProvider: MockMediaProvider(),
-                                                                                 roomProxy: RoomProxyMock(.init(name: "test", members: members)),
+            let coordinator = RoomMembersListScreenCoordinator(parameters: .init(roomProxy: RoomProxyMock(.init(name: "test", members: members)),
+                                                                                 mediaProvider: MockMediaProvider(),
+                                                                                 networkMonitor: NetworkMonitorMock.default,
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                                  analytics: ServiceLocator.shared.analytics))
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -556,6 +557,7 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
             let coordinator = RoomRolesAndPermissionsFlowCoordinator(parameters: .init(roomProxy: RoomProxyMock(.init(members: .allMembersAsAdmin)),
                                                                                        mediaProvider: MockMediaProvider(),
+                                                                                       networkMonitor: NetworkMonitorMock.default,
                                                                                        navigationStackCoordinator: navigationStackCoordinator,
                                                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                                        analytics: ServiceLocator.shared.analytics))
@@ -570,6 +572,7 @@ class MockScreen: Identifiable {
             let parameters: StartChatScreenCoordinatorParameters = .init(orientationManager: OrientationManagerMock(),
                                                                          userSession: userSession,
                                                                          userIndicatorController: UserIndicatorControllerMock(),
+                                                                         networkMonitor: NetworkMonitorMock.default,
                                                                          navigationStackCoordinator: navigationStackCoordinator,
                                                                          userDiscoveryService: userDiscoveryMock)
             let coordinator = StartChatScreenCoordinator(parameters: parameters)
@@ -584,6 +587,7 @@ class MockScreen: Identifiable {
             let coordinator = StartChatScreenCoordinator(parameters: .init(orientationManager: OrientationManagerMock(),
                                                                            userSession: userSession,
                                                                            userIndicatorController: UserIndicatorControllerMock(),
+                                                                           networkMonitor: NetworkMonitorMock.default,
                                                                            navigationStackCoordinator: navigationStackCoordinator,
                                                                            userDiscoveryService: userDiscoveryMock))
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -596,6 +600,7 @@ class MockScreen: Identifiable {
             let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
             let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession,
                                                              userIndicatorController: UserIndicatorControllerMock(),
+                                                             networkMonitor: NetworkMonitorMock.default,
                                                              createRoomParameters: .init(createRoomParameters),
                                                              selectedUsers: .init(selectedUsers))
             let coordinator = CreateRoomCoordinator(parameters: parameters)
@@ -608,6 +613,7 @@ class MockScreen: Identifiable {
             let createRoomParameters = CreateRoomFlowParameters()
             let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession,
                                                              userIndicatorController: UserIndicatorControllerMock(),
+                                                             networkMonitor: NetworkMonitorMock.default,
                                                              createRoomParameters: .init(createRoomParameters),
                                                              selectedUsers: .init([]))
             let coordinator = CreateRoomCoordinator(parameters: parameters)

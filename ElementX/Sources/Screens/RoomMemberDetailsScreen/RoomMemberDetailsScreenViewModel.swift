@@ -38,6 +38,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
          roomProxy: RoomProxyProtocol,
          clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         networkMonitor: NetworkMonitorProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
         self.roomProxy = roomProxy
@@ -48,7 +49,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         
         let initialViewState = RoomMemberDetailsScreenViewState(userID: userID, bindings: .init())
         
-        super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
+        super.init(initialViewState: initialViewState,
+                   dependencies: .init(imageProvider: mediaProvider, networkMonitor: networkMonitor))
         
         showMemberLoadingIndicator()
         Task {

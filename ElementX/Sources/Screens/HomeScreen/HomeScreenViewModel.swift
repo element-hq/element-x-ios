@@ -42,7 +42,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
          analyticsService: AnalyticsService,
          appSettings: AppSettings,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         networkMonitor: NetworkMonitorProtocol) {
         self.userSession = userSession
         self.analyticsService = analyticsService
         self.appSettings = appSettings
@@ -51,7 +52,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
         super.init(initialViewState: .init(userID: userSession.clientProxy.userID),
-                   imageProvider: userSession.mediaProvider)
+                   dependencies: .init(imageProvider: userSession.mediaProvider, networkMonitor: networkMonitor))
         
         userSession.clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)

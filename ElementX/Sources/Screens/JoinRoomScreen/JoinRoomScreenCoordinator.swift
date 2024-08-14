@@ -22,6 +22,7 @@ struct JoinRoomScreenCoordinatorParameters {
     let via: [String]
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let networkMonitor: NetworkMonitorProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -45,6 +46,7 @@ final class JoinRoomScreenCoordinator: CoordinatorProtocol {
                                             via: parameters.via,
                                             clientProxy: parameters.clientProxy,
                                             mediaProvider: parameters.mediaProvider,
+                                            networkMonitor: parameters.networkMonitor,
                                             userIndicatorController: parameters.userIndicatorController)
     }
     

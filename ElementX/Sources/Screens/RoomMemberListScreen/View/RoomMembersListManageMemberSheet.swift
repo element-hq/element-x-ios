@@ -29,7 +29,8 @@ struct RoomMembersListManageMemberSheet: View {
         Form {
             AvatarHeaderView(member: member,
                              avatarSize: .user(on: .memberDetails),
-                             imageProvider: context.imageProvider) {
+                             imageProvider: context.dependencies?.imageProvider,
+                             networkMonitor: context.dependencies?.networkMonitor) {
                 EmptyView()
             }
             
@@ -110,6 +111,7 @@ private extension RoomMembersListScreenViewModel {
         RoomMembersListScreenViewModel(initialMode: .members,
                                        roomProxy: RoomProxyMock(.init(members: .allMembersAsAdmin)),
                                        mediaProvider: MockMediaProvider(),
+                                       networkMonitor: NetworkMonitorMock.default,
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                        analytics: ServiceLocator.shared.analytics)
     }

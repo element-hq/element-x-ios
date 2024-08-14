@@ -35,13 +35,15 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     init(userSession: UserSessionProtocol,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         userDiscoveryService: UserDiscoveryServiceProtocol) {
+         userDiscoveryService: UserDiscoveryServiceProtocol,
+         networkMonitor: NetworkMonitorProtocol) {
         self.userSession = userSession
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.userDiscoveryService = userDiscoveryService
         
-        super.init(initialViewState: StartChatScreenViewState(userID: userSession.clientProxy.userID), imageProvider: userSession.mediaProvider)
+        super.init(initialViewState: StartChatScreenViewState(userID: userSession.clientProxy.userID),
+                   dependencies: .init(imageProvider: userSession.mediaProvider, networkMonitor: networkMonitor))
         
         setupBindings()
         

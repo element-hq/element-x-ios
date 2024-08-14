@@ -22,6 +22,7 @@ struct MessageForwardingScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
     let roomSummaryProvider: RoomSummaryProviderProtocol
     let mediaProvider: MediaProviderProtocol
+    let networkMonitor: NetworkMonitorProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -44,7 +45,8 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
                                                      clientProxy: parameters.clientProxy,
                                                      roomSummaryProvider: parameters.roomSummaryProvider,
                                                      userIndicatorController: parameters.userIndicatorController,
-                                                     mediaProvider: parameters.mediaProvider)
+                                                     mediaProvider: parameters.mediaProvider,
+                                                     networkMonitor: parameters.networkMonitor)
     }
     
     func start() {

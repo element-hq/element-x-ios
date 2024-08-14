@@ -34,12 +34,14 @@ struct AvatarHeaderView<Footer: View>: View {
     
     private let avatarSize: AvatarSize
     private let imageProvider: ImageProviderProtocol?
+    private let networkMonitor: NetworkMonitorProtocol?
     private var onAvatarTap: (() -> Void)?
     @ViewBuilder private var footer: () -> Footer
     
     init(room: RoomDetails,
          avatarSize: AvatarSize,
          imageProvider: ImageProviderProtocol? = nil,
+         networkMonitor: NetworkMonitorProtocol?,
          onAvatarTap: (() -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .room(room.avatar)
@@ -48,6 +50,7 @@ struct AvatarHeaderView<Footer: View>: View {
         
         self.avatarSize = avatarSize
         self.imageProvider = imageProvider
+        self.networkMonitor = networkMonitor
         self.onAvatarTap = onAvatarTap
         self.footer = footer
         
@@ -62,6 +65,7 @@ struct AvatarHeaderView<Footer: View>: View {
     init(accountOwner: RoomMemberDetails,
          dmRecipient: RoomMemberDetails,
          imageProvider: ImageProviderProtocol? = nil,
+         networkMonitor: NetworkMonitorProtocol?,
          onAvatarTap: (() -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         let dmRecipientProfile = UserProfileProxy(member: dmRecipient)
@@ -71,6 +75,7 @@ struct AvatarHeaderView<Footer: View>: View {
         
         avatarSize = .user(on: .dmDetails)
         self.imageProvider = imageProvider
+        self.networkMonitor = networkMonitor
         self.onAvatarTap = onAvatarTap
         self.footer = footer
         // In EL-X a DM is by definition always encrypted
@@ -80,6 +85,7 @@ struct AvatarHeaderView<Footer: View>: View {
     init(member: RoomMemberDetails,
          avatarSize: AvatarSize,
          imageProvider: ImageProviderProtocol? = nil,
+         networkMonitor: NetworkMonitorProtocol?,
          onAvatarTap: (() -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         let profile = UserProfileProxy(member: member)
@@ -87,6 +93,7 @@ struct AvatarHeaderView<Footer: View>: View {
         self.init(user: profile,
                   avatarSize: avatarSize,
                   imageProvider: imageProvider,
+                  networkMonitor: networkMonitor,
                   onAvatarTap: onAvatarTap,
                   footer: footer)
     }
@@ -94,6 +101,7 @@ struct AvatarHeaderView<Footer: View>: View {
     init(user: UserProfileProxy,
          avatarSize: AvatarSize,
          imageProvider: ImageProviderProtocol? = nil,
+         networkMonitor: NetworkMonitorProtocol?,
          onAvatarTap: (() -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .user(user)
@@ -102,6 +110,7 @@ struct AvatarHeaderView<Footer: View>: View {
         
         self.avatarSize = avatarSize
         self.imageProvider = imageProvider
+        self.networkMonitor = networkMonitor
         self.onAvatarTap = onAvatarTap
         self.footer = footer
         badges = []
@@ -136,13 +145,15 @@ struct AvatarHeaderView<Footer: View>: View {
         case .room(let roomAvatar):
             RoomAvatarImage(avatar: roomAvatar,
                             avatarSize: avatarSize,
-                            imageProvider: imageProvider)
+                            imageProvider: imageProvider,
+                            networkMonitor: networkMonitor)
         case .user(let userProfile):
             LoadableAvatarImage(url: userProfile.avatarURL,
                                 name: userProfile.displayName,
                                 contentID: userProfile.userID,
                                 avatarSize: avatarSize,
-                                imageProvider: imageProvider)
+                                imageProvider: imageProvider,
+                                networkMonitor: networkMonitor)
         }
     }
     
@@ -199,7 +210,8 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                                          isEncrypted: true,
                                          isPublic: true),
                              avatarSize: .room(on: .details),
-                             imageProvider: MockMediaProvider()) {
+                             imageProvider: MockMediaProvider(),
+                             networkMonitor: NetworkMonitorMock.default) {
                 HStack(spacing: 32) {
                     ShareLink(item: "test") {
                         Image(systemName: "square.and.arrow.up")
@@ -213,7 +225,8 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
         
         Form {
             AvatarHeaderView(accountOwner: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockMe), dmRecipient: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
-                             imageProvider: MockMediaProvider()) {
+                             imageProvider: MockMediaProvider(),
+                             networkMonitor: NetworkMonitorMock.default) {
                 HStack(spacing: 32) {
                     ShareLink(item: "test") {
                         Image(systemName: "square.and.arrow.up")
@@ -228,11 +241,13 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 16) {
             AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
                              avatarSize: .room(on: .details),
-                             imageProvider: MockMediaProvider()) { Text("") }
+                             imageProvider: MockMediaProvider(),
+                             networkMonitor: NetworkMonitorMock.default) { Text("") }
             
             AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockBanned[3]),
                              avatarSize: .room(on: .details),
-                             imageProvider: MockMediaProvider()) { Text("") }
+                             imageProvider: MockMediaProvider(),
+                             networkMonitor: NetworkMonitorMock.default) { Text("") }
         }
         .padding()
         .background(Color.compound.bgSubtleSecondaryLevel0)

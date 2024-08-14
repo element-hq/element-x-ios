@@ -22,6 +22,7 @@ struct InviteUsersScreenCoordinatorParameters {
     let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>
     let roomType: InviteUsersScreenRoomType
     let mediaProvider: MediaProviderProtocol
+    let networkMonitor: NetworkMonitorProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -47,6 +48,7 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
                                                selectedUsers: parameters.selectedUsers,
                                                roomType: parameters.roomType,
                                                mediaProvider: parameters.mediaProvider,
+                                               networkMonitor: parameters.networkMonitor,
                                                userDiscoveryService: parameters.userDiscoveryService,
                                                userIndicatorController: parameters.userIndicatorController)
     }

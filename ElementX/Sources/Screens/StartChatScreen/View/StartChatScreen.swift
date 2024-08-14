@@ -90,7 +90,8 @@ struct StartChatScreen: View {
                 ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                     UserProfileListRow(user: user,
                                        membership: nil,
-                                       imageProvider: context.imageProvider,
+                                       imageProvider: context.dependencies?.imageProvider,
+                                       networkMonitor: context.dependencies?.networkMonitor,
                                        kind: .button {
                                            context.send(viewAction: .selectUser(user))
                                        })
@@ -135,7 +136,8 @@ struct StartChatScreen_Previews: PreviewProvider, TestablePreview {
         let viewModel = StartChatScreenViewModel(userSession: userSession,
                                                  analytics: ServiceLocator.shared.analytics,
                                                  userIndicatorController: UserIndicatorControllerMock(),
-                                                 userDiscoveryService: userDiscoveryService)
+                                                 userDiscoveryService: userDiscoveryService,
+                                                 networkMonitor: NetworkMonitorMock.default)
         return viewModel
     }()
     

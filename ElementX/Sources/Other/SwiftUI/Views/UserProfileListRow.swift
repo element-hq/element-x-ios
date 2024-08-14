@@ -22,6 +22,7 @@ struct UserProfileListRow: View {
     let user: UserProfileProxy
     let membership: MembershipState?
     let imageProvider: ImageProviderProtocol?
+    let networkMonitor: NetworkMonitorProtocol?
     
     let kind: ListRow<LoadableAvatarImage, EmptyView, EmptyView, Bool>.Kind<EmptyView, Bool>
     
@@ -52,7 +53,8 @@ struct UserProfileListRow: View {
                             name: user.displayName,
                             contentID: user.userID,
                             avatarSize: .user(on: .startChat),
-                            imageProvider: imageProvider)
+                            imageProvider: imageProvider,
+                            networkMonitor: networkMonitor)
     }
 }
 
@@ -74,21 +76,21 @@ struct UserProfileCell_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         Form {
-            UserProfileListRow(user: .mockAlice, membership: nil, imageProvider: MockMediaProvider(),
+            UserProfileListRow(user: .mockAlice, membership: nil, imageProvider: MockMediaProvider(), networkMonitor: NetworkMonitorMock.default,
                                kind: .multiSelection(isSelected: true, action: action))
             
-            UserProfileListRow(user: .mockBob, membership: nil, imageProvider: MockMediaProvider(),
+            UserProfileListRow(user: .mockBob, membership: nil, imageProvider: MockMediaProvider(), networkMonitor: NetworkMonitorMock.default,
                                kind: .multiSelection(isSelected: false, action: action))
             
-            UserProfileListRow(user: .mockCharlie, membership: .join, imageProvider: MockMediaProvider(),
+            UserProfileListRow(user: .mockCharlie, membership: .join, imageProvider: MockMediaProvider(), networkMonitor: NetworkMonitorMock.default,
                                kind: .multiSelection(isSelected: true, action: action))
                 .disabled(true)
             
-            UserProfileListRow(user: .init(userID: "@someone:matrix.org"), membership: .join, imageProvider: MockMediaProvider(),
+            UserProfileListRow(user: .init(userID: "@someone:matrix.org"), membership: .join, imageProvider: MockMediaProvider(), networkMonitor: NetworkMonitorMock.default,
                                kind: .multiSelection(isSelected: false, action: action))
                 .disabled(true)
             
-            UserProfileListRow(user: .init(userID: "@someone:matrix.org"), membership: nil, imageProvider: MockMediaProvider(),
+            UserProfileListRow(user: .init(userID: "@someone:matrix.org"), membership: nil, imageProvider: MockMediaProvider(), networkMonitor: NetworkMonitorMock.default,
                                kind: .multiSelection(isSelected: false, action: action))
         }
         .compoundList()

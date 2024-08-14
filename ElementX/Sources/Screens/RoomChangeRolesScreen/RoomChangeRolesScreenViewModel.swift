@@ -32,6 +32,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
     init(mode: RoomMemberDetails.Role,
          roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         networkMonitor: NetworkMonitorProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
         guard mode != .user else { fatalError("Invalid screen configuration: \(mode)") }
@@ -45,7 +46,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
                                                                     moderators: [],
                                                                     users: [],
                                                                     bindings: .init()),
-                   imageProvider: mediaProvider)
+                   dependencies: .init(imageProvider: mediaProvider, networkMonitor: networkMonitor))
         
         roomProxy.membersPublisher
             .receive(on: DispatchQueue.main)

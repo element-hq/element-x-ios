@@ -164,7 +164,8 @@ struct TimelineReplyView: View {
                     LoadableImage(mediaSource: mediaSource,
                                   size: .init(width: imageContainerSize,
                                               height: imageContainerSize),
-                                  imageProvider: context.imageProvider) {
+                                  imageProvider: context.dependencies?.imageProvider,
+                                  networkMonitor: context.dependencies?.networkMonitor) {
                         Image(systemName: "photo")
                             .padding(4.0)
                     }

@@ -35,7 +35,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
          createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>,
          selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         networkMonitor: NetworkMonitorProtocol) {
         let parameters = createRoomParameters.value
         
         self.userSession = userSession
@@ -45,7 +46,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         
         let bindings = CreateRoomViewStateBindings(roomName: parameters.name, roomTopic: parameters.topic, isRoomPrivate: parameters.isRoomPrivate)
 
-        super.init(initialViewState: CreateRoomViewState(selectedUsers: selectedUsers.value, bindings: bindings), imageProvider: userSession.mediaProvider)
+        super.init(initialViewState: CreateRoomViewState(selectedUsers: selectedUsers.value, bindings: bindings),
+                   dependencies: .init(imageProvider: userSession.mediaProvider, networkMonitor: networkMonitor))
         
         createRoomParameters
             .map(\.avatarImageMedia)

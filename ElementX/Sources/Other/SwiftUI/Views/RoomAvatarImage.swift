@@ -33,6 +33,7 @@ struct RoomAvatarImage: View {
     
     let avatarSize: AvatarSize
     let imageProvider: ImageProviderProtocol?
+    let networkMonitor: NetworkMonitorProtocol?
     
     var body: some View {
         switch avatar {
@@ -41,7 +42,8 @@ struct RoomAvatarImage: View {
                                 name: name,
                                 contentID: id,
                                 avatarSize: avatarSize,
-                                imageProvider: imageProvider)
+                                imageProvider: imageProvider,
+                                networkMonitor: networkMonitor)
         case .heroes(let users):
             // We will expand upon this with more stack sizes in the future.
             if users.count == 0 {
@@ -54,14 +56,16 @@ struct RoomAvatarImage: View {
                                         name: users[0].displayName,
                                         contentID: users[0].userID,
                                         avatarSize: avatarSize,
-                                        imageProvider: imageProvider)
+                                        imageProvider: imageProvider,
+                                        networkMonitor: networkMonitor)
                         .scaledFrame(size: clusterSize, alignment: .topTrailing)
                     
                     LoadableAvatarImage(url: users[1].avatarURL,
                                         name: users[1].displayName,
                                         contentID: users[1].userID,
                                         avatarSize: avatarSize,
-                                        imageProvider: imageProvider)
+                                        imageProvider: imageProvider,
+                                        networkMonitor: networkMonitor)
                         .mask {
                             Rectangle()
                                 .fill(Color.white)
@@ -83,7 +87,8 @@ struct RoomAvatarImage: View {
                                     name: users[0].displayName,
                                     contentID: users[0].userID,
                                     avatarSize: avatarSize,
-                                    imageProvider: imageProvider)
+                                    imageProvider: imageProvider,
+                                    networkMonitor: networkMonitor)
             }
         }
     }
@@ -92,34 +97,31 @@ struct RoomAvatarImage: View {
 struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         HStack(spacing: 8) {
-            RoomAvatarImage(avatar: .room(id: "!1:server.com",
-                                          name: "Room",
-                                          avatarURL: nil),
+            RoomAvatarImage(avatar: .room(id: "!1:server.com", name: "Room", avatarURL: nil),
                             avatarSize: .room(on: .home),
-                            imageProvider: MockMediaProvider())
+                            imageProvider: MockMediaProvider(),
+                            networkMonitor: NetworkMonitorMock.default)
             
-            RoomAvatarImage(avatar: .room(id: "!2:server.com",
-                                          name: "Room",
-                                          avatarURL: .picturesDirectory),
+            RoomAvatarImage(avatar: .room(id: "!2:server.com", name: "Room", avatarURL: .picturesDirectory),
                             avatarSize: .room(on: .home),
-                            imageProvider: MockMediaProvider())
+                            imageProvider: MockMediaProvider(),
+                            networkMonitor: NetworkMonitorMock.default)
             
-            RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com",
-                                                   displayName: "User",
-                                                   avatarURL: nil)]),
-            avatarSize: .room(on: .home),
-            imageProvider: MockMediaProvider())
+            RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com", displayName: "User", avatarURL: nil)]),
+                            avatarSize: .room(on: .home),
+                            imageProvider: MockMediaProvider(),
+                            networkMonitor: NetworkMonitorMock.default)
             
-            RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com",
-                                                   displayName: "User",
-                                                   avatarURL: .picturesDirectory)]),
-            avatarSize: .room(on: .home),
-            imageProvider: MockMediaProvider())
+            RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com", displayName: "User", avatarURL: .picturesDirectory)]),
+                            avatarSize: .room(on: .home),
+                            imageProvider: MockMediaProvider(),
+                            networkMonitor: NetworkMonitorMock.default)
             
             RoomAvatarImage(avatar: .heroes([.init(userID: "@alice:server.com", displayName: "Alice", avatarURL: nil),
                                              .init(userID: "@bob:server.net", displayName: "Bob", avatarURL: nil)]),
                             avatarSize: .room(on: .home),
-                            imageProvider: MockMediaProvider())
+                            imageProvider: MockMediaProvider(),
+                            networkMonitor: NetworkMonitorMock.default)
         }
     }
 }

@@ -30,7 +30,8 @@ struct HomeScreenInviteCell: View {
             if dynamicTypeSize < .accessibility3 {
                 RoomAvatarImage(avatar: room.avatar,
                                 avatarSize: .custom(52),
-                                imageProvider: context.imageProvider)
+                                imageProvider: context.dependencies?.imageProvider,
+                                networkMonitor: context.dependencies?.networkMonitor)
                     .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                     .accessibilityHidden(true)
             }
@@ -79,7 +80,9 @@ struct HomeScreenInviteCell: View {
     @ViewBuilder
     private var inviterView: some View {
         if let inviter = room.inviter, !room.isDirect {
-            RoomInviterLabel(inviter: inviter, imageProvider: context.imageProvider)
+            RoomInviterLabel(inviter: inviter,
+                             imageProvider: context.dependencies?.imageProvider,
+                             networkMonitor: context.dependencies?.networkMonitor)
                 .font(.compound.bodyMD)
                 .foregroundStyle(.compound.textPlaceholder)
         }
@@ -173,7 +176,8 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
                                    analyticsService: ServiceLocator.shared.analytics,
                                    appSettings: ServiceLocator.shared.settings,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                   networkMonitor: NetworkMonitorMock.default)
     }
 }
 

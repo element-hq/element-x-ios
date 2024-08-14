@@ -21,6 +21,7 @@ struct RoomChangeRolesScreenCoordinatorParameters {
     let mode: RoomMemberDetails.Role
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let networkMonitor: NetworkMonitorProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
 }
@@ -46,6 +47,7 @@ final class RoomChangeRolesScreenCoordinator: CoordinatorProtocol {
         viewModel = RoomChangeRolesScreenViewModel(mode: parameters.mode,
                                                    roomProxy: parameters.roomProxy,
                                                    mediaProvider: parameters.mediaProvider,
+                                                   networkMonitor: parameters.networkMonitor,
                                                    userIndicatorController: parameters.userIndicatorController,
                                                    analytics: parameters.analytics)
     }

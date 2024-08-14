@@ -64,7 +64,8 @@ struct UserDetailsEditScreen: View {
                                    name: context.viewState.currentDisplayName,
                                    contentID: context.viewState.userID,
                                    avatarSize: .user(on: .editUserDetails),
-                                   imageProvider: context.imageProvider)
+                                   imageProvider: context.dependencies?.imageProvider,
+                                   networkMonitor: context.dependencies?.networkMonitor)
                 .overlay(alignment: .bottomTrailing) {
                     avatarOverlayIcon
                 }
@@ -125,7 +126,8 @@ struct UserDetailsEditScreen: View {
 
 struct UserDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = UserDetailsEditScreenViewModel(clientProxy: ClientProxyMock(.init(userID: "@stefan:matrix.org")),
-                                                          mediaProvider: MockMediaProvider(),
+                                                          imageProvider: MockMediaProvider(),
+                                                          networkMonitor: NetworkMonitorMock.default,
                                                           userIndicatorController: UserIndicatorControllerMock.default)
     
     static var previews: some View {

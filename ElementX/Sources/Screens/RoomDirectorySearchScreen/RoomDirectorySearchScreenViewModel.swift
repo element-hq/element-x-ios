@@ -30,11 +30,13 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
         
     init(clientProxy: ClientProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         imageProvider: ImageProviderProtocol) {
+         imageProvider: ImageProviderProtocol,
+         networkMonitor: NetworkMonitorProtocol) {
         roomDirectorySearchProxy = clientProxy.roomDirectorySearchProxy()
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: RoomDirectorySearchScreenViewState(), imageProvider: imageProvider)
+        super.init(initialViewState: RoomDirectorySearchScreenViewState(),
+                   dependencies: .init(imageProvider: imageProvider, networkMonitor: networkMonitor))
         
         state.rooms = roomDirectorySearchProxy.resultsPublisher.value
         

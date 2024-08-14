@@ -29,7 +29,8 @@ struct RoomChangeRolesScreenSection: View {
             Section {
                 ForEach(members, id: \.id) { member in
                     RoomChangeRolesScreenRow(member: member,
-                                             imageProvider: context.imageProvider,
+                                             imageProvider: context.dependencies?.imageProvider,
+                                             networkMonitor: context.dependencies?.networkMonitor,
                                              isSelected: isMemberSelected(member)) {
                         context.send(viewAction: .toggleMember(member))
                     }

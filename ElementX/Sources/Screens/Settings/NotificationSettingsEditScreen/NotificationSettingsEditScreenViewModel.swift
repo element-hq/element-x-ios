@@ -35,7 +35,10 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(chatType: NotificationSettingsChatType, userSession: UserSessionProtocol, notificationSettingsProxy: NotificationSettingsProxyProtocol) {
+    init(chatType: NotificationSettingsChatType,
+         userSession: UserSessionProtocol,
+         notificationSettingsProxy: NotificationSettingsProxyProtocol,
+         networkMonitor: NetworkMonitorProtocol) {
         let bindings = NotificationSettingsEditScreenViewStateBindings()
         self.chatType = chatType
         self.userSession = userSession
@@ -44,7 +47,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         
         super.init(initialViewState: NotificationSettingsEditScreenViewState(bindings: bindings,
                                                                              strings: NotificationSettingsEditScreenStrings(chatType: chatType)),
-                   imageProvider: userSession.mediaProvider)
+                   dependencies: .init(imageProvider: userSession.mediaProvider, networkMonitor: networkMonitor))
         
         setupNotificationSettingsSubscription()
         setupRoomSummaryProviderSubscription()

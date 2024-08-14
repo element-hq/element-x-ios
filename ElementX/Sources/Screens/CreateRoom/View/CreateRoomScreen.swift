@@ -130,7 +130,9 @@ struct CreateRoomScreen: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 16) {
                 ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                    InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
+                    InviteUsersScreenSelectedItem(user: user,
+                                                  imageProvider: context.dependencies?.imageProvider,
+                                                  networkMonitor: context.dependencies?.networkMonitor) {
                         context.send(viewAction: .deselectUser(user))
                     }
                     .frame(width: invitedUserCellWidth)
@@ -183,7 +185,8 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                    createRoomParameters: .init(parameters),
                                    selectedUsers: .init(selectedUsers),
                                    analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock())
+                                   userIndicatorController: UserIndicatorControllerMock(),
+                                   networkMonitor: NetworkMonitorMock.default)
     }()
     
     static let emtpyViewModel = {
@@ -193,7 +196,8 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                    createRoomParameters: .init(parameters),
                                    selectedUsers: .init([]),
                                    analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock())
+                                   userIndicatorController: UserIndicatorControllerMock(),
+                                   networkMonitor: NetworkMonitorMock.default)
     }()
     
     static var previews: some View {

@@ -23,6 +23,7 @@ struct UserDetailsEditScreenCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userIndicatorController: UserIndicatorControllerProtocol
+    let networkMonitor: NetworkMonitorProtocol
 }
 
 final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
@@ -34,7 +35,8 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = UserDetailsEditScreenViewModel(clientProxy: parameters.clientProxy,
-                                                   mediaProvider: parameters.mediaProvider,
+                                                   imageProvider: parameters.mediaProvider,
+                                                   networkMonitor: parameters.networkMonitor,
                                                    userIndicatorController: parameters.userIndicatorController)
     }
     

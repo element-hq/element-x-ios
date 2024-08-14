@@ -36,13 +36,16 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
          selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
          roomType: InviteUsersScreenRoomType,
          mediaProvider: MediaProviderProtocol,
+         networkMonitor: NetworkMonitorProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomType = roomType
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), imageProvider: mediaProvider)
+        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value,
+                                                                isCreatingRoom: roomType.isCreatingRoom),
+                   dependencies: .init(imageProvider: mediaProvider, networkMonitor: networkMonitor))
                 
         setupSubscriptions(selectedUsers: selectedUsers)
         fetchMembersIfNeeded()

@@ -58,7 +58,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
             imageProvider = MockMediaProvider()
         } else if let timelineContext = delegate?.timelineContext {
             context = PillContext(timelineContext: timelineContext, data: pillData)
-            imageProvider = timelineContext.imageProvider
+            imageProvider = timelineContext.dependencies?.imageProvider
         } else {
             MXLog.failure("[PillAttachmentViewProvider]: missing room context")
             return

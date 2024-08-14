@@ -22,6 +22,7 @@ struct NotificationSettingsEditScreenCoordinatorParameters {
     let chatType: NotificationSettingsChatType
     let userSession: UserSessionProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
+    let networkMonitor: NetworkMonitorProtocol
 }
 
 final class NotificationSettingsEditScreenCoordinator: CoordinatorProtocol {
@@ -34,7 +35,8 @@ final class NotificationSettingsEditScreenCoordinator: CoordinatorProtocol {
         
         viewModel = NotificationSettingsEditScreenViewModel(chatType: parameters.chatType,
                                                             userSession: parameters.userSession,
-                                                            notificationSettingsProxy: parameters.notificationSettings)
+                                                            notificationSettingsProxy: parameters.notificationSettings,
+                                                            networkMonitor: parameters.networkMonitor)
     }
     
     func start() {

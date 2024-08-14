@@ -25,7 +25,8 @@ struct ImageRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             LoadableImage(mediaSource: source,
                           blurhash: timelineItem.content.blurhash,
-                          imageProvider: context.imageProvider) {
+                          imageProvider: context.dependencies?.imageProvider,
+                          networkMonitor: context.dependencies?.networkMonitor) {
                 placeholder
             }
             .timelineMediaFrame(height: timelineItem.content.height,

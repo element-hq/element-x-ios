@@ -31,7 +31,8 @@ struct ReadReceiptsSummaryView: View {
                     ForEach(orderedReadReceipts) { receipt in
                         ReadReceiptCell(readReceipt: receipt,
                                         memberState: context.viewState.members[receipt.userID],
-                                        imageProvider: context.imageProvider)
+                                        imageProvider: context.dependencies?.imageProvider,
+                                        networkMonitor: context.dependencies?.networkMonitor)
                     }
                 }
             }

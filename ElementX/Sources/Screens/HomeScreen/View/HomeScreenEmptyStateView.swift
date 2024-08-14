@@ -156,6 +156,7 @@ struct HomeScreenEmptyStateView_Previews: PreviewProvider, TestablePreview {
                                    analyticsService: ServiceLocator.shared.analytics,
                                    appSettings: ServiceLocator.shared.settings,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                   networkMonitor: NetworkMonitorMock.default)
     }()
 }

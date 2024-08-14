@@ -20,6 +20,7 @@ import SwiftUI
 struct SettingsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let appSettings: AppSettings
+    let networkMonitor: NetworkMonitorProtocol
 }
 
 enum SettingsScreenCoordinatorAction {
@@ -51,7 +52,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     // MARK: - Setup
     
     init(parameters: SettingsScreenCoordinatorParameters) {
-        viewModel = SettingsScreenViewModel(userSession: parameters.userSession)
+        viewModel = SettingsScreenViewModel(userSession: parameters.userSession,
+                                            networkMonitor: parameters.networkMonitor)
         
         viewModel.actions
             .sink { [weak self] action in

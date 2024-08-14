@@ -20,6 +20,7 @@ import SwiftUI
 struct RoomDirectorySearchCell: View {
     let result: RoomDirectorySearchResult
     let imageProvider: ImageProviderProtocol?
+    let networkMonitor: NetworkMonitorProtocol?
     let joinAction: () -> Void
         
     private var description: String? {
@@ -46,7 +47,8 @@ struct RoomDirectorySearchCell: View {
     private var avatar: some View {
         RoomAvatarImage(avatar: result.avatar,
                         avatarSize: .room(on: .roomDirectorySearch),
-                        imageProvider: imageProvider)
+                        imageProvider: imageProvider,
+                        networkMonitor: networkMonitor)
             .accessibilityHidden(true)
     }
 }
@@ -64,7 +66,8 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                                 name: "Test title",
                                                                 avatarURL: nil),
                                                   canBeJoined: true),
-                                    imageProvider: MockMediaProvider()) { }
+                                    imageProvider: MockMediaProvider(),
+                                    networkMonitor: NetworkMonitorMock.default) { }
             
             RoomDirectorySearchCell(result: .init(id: "!test_id_2:matrix.org",
                                                   alias: "#test:example.com",
@@ -74,7 +77,8 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                                 name: nil,
                                                                 avatarURL: nil),
                                                   canBeJoined: true),
-                                    imageProvider: MockMediaProvider()) { }
+                                    imageProvider: MockMediaProvider(),
+                                    networkMonitor: NetworkMonitorMock.default) { }
             
             RoomDirectorySearchCell(result: .init(id: "!test_id_3:example.com",
                                                   alias: "#test_no_topic:example.com",
@@ -84,7 +88,8 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                                 name: "Test title no topic",
                                                                 avatarURL: nil),
                                                   canBeJoined: true),
-                                    imageProvider: MockMediaProvider()) { }
+                                    imageProvider: MockMediaProvider(),
+                                    networkMonitor: NetworkMonitorMock.default) { }
             
             RoomDirectorySearchCell(result: .init(id: "!test_id_4:example.com",
                                                   alias: "#test_no_topic:example.com",
@@ -94,7 +99,8 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                                 name: nil,
                                                                 avatarURL: nil),
                                                   canBeJoined: true),
-                                    imageProvider: MockMediaProvider()) { }
+                                    imageProvider: MockMediaProvider(),
+                                    networkMonitor: NetworkMonitorMock.default) { }
             
             RoomDirectorySearchCell(result: .init(id: "!test_id_5:example.com",
                                                   alias: nil,
@@ -104,7 +110,8 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                                 name: "Test title no alias",
                                                                 avatarURL: nil),
                                                   canBeJoined: false),
-                                    imageProvider: MockMediaProvider()) { }
+                                    imageProvider: MockMediaProvider(),
+                                    networkMonitor: NetworkMonitorMock.default) { }
             
             RoomDirectorySearchCell(result: .init(id: "!test_id_6:example.com",
                                                   alias: nil,
@@ -114,7 +121,8 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                                 name: "Test title no alias",
                                                                 avatarURL: nil),
                                                   canBeJoined: false),
-                                    imageProvider: MockMediaProvider()) { }
+                                    imageProvider: MockMediaProvider(),
+                                    networkMonitor: NetworkMonitorMock.default) { }
             
             RoomDirectorySearchCell(result: .init(id: "!test_id_7:example.com",
                                                   alias: nil,
@@ -124,7 +132,8 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                                 name: nil,
                                                                 avatarURL: nil),
                                                   canBeJoined: false),
-                                    imageProvider: MockMediaProvider()) { }
+                                    imageProvider: MockMediaProvider(),
+                                    networkMonitor: NetworkMonitorMock.default) { }
             RoomDirectorySearchCell(result: .init(id: "!test_id_8:example.com",
                                                   alias: nil,
                                                   name: nil,
@@ -133,7 +142,8 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                                 name: nil,
                                                                 avatarURL: nil),
                                                   canBeJoined: false),
-                                    imageProvider: MockMediaProvider()) { }
+                                    imageProvider: MockMediaProvider(),
+                                    networkMonitor: NetworkMonitorMock.default) { }
         }
         .compoundList()
     }

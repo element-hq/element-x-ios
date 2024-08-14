@@ -22,6 +22,7 @@ struct UserProfileScreenCoordinatorParameters {
     let isPresentedModally: Bool
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let networkMonitor: NetworkMonitorProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
 }
@@ -47,6 +48,7 @@ final class UserProfileScreenCoordinator: CoordinatorProtocol {
                                                isPresentedModally: parameters.isPresentedModally,
                                                clientProxy: parameters.clientProxy,
                                                mediaProvider: parameters.mediaProvider,
+                                               networkMonitor: parameters.networkMonitor,
                                                userIndicatorController: parameters.userIndicatorController,
                                                analytics: parameters.analytics)
     }

@@ -31,7 +31,8 @@ struct TimelineReadReceiptsView: View {
                                         name: context.viewState.members[receipt.userID]?.displayName,
                                         contentID: receipt.userID,
                                         avatarSize: .user(on: .readReceipt),
-                                        imageProvider: context.imageProvider)
+                                        imageProvider: context.dependencies?.imageProvider,
+                                        networkMonitor: context.dependencies?.networkMonitor)
                         .overlay {
                             RoundedRectangle(cornerRadius: .infinity)
                                 .stroke(Color.compound.bgCanvasDefault, lineWidth: 1)

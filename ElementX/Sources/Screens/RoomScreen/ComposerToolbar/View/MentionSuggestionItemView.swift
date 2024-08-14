@@ -18,6 +18,7 @@ import SwiftUI
 
 struct MentionSuggestionItemView: View {
     let imageProvider: ImageProviderProtocol?
+    let networkMonitor: NetworkMonitorProtocol?
     let item: MentionSuggestionItem
     
     var body: some View {
@@ -26,7 +27,8 @@ struct MentionSuggestionItemView: View {
                                 name: item.displayName,
                                 contentID: item.id,
                                 avatarSize: .user(on: .suggestions),
-                                imageProvider: imageProvider)
+                                imageProvider: imageProvider,
+                                networkMonitor: networkMonitor)
             VStack(alignment: .leading, spacing: 0) {
                 Text(item.displayName ?? item.id)
                     .font(.compound.bodyLG)
@@ -47,7 +49,11 @@ struct MentionSuggestionItemView_Previews: PreviewProvider, TestablePreview {
     static let mockMediaProvider = MockMediaProvider()
     
     static var previews: some View {
-        MentionSuggestionItemView(imageProvider: mockMediaProvider, item: .init(id: "test", displayName: "Test", avatarURL: URL.documentsDirectory, range: .init()))
-        MentionSuggestionItemView(imageProvider: mockMediaProvider, item: .init(id: "test2", displayName: nil, avatarURL: nil, range: .init()))
+        MentionSuggestionItemView(imageProvider: mockMediaProvider,
+                                  networkMonitor: NetworkMonitorMock.default,
+                                  item: .init(id: "test", displayName: "Test", avatarURL: URL.documentsDirectory, range: .init()))
+        MentionSuggestionItemView(imageProvider: mockMediaProvider,
+                                  networkMonitor: NetworkMonitorMock.default,
+                                  item: .init(id: "test2", displayName: nil, avatarURL: nil, range: .init()))
     }
 }

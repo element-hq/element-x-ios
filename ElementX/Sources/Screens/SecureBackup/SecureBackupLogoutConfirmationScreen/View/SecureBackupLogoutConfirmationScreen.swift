@@ -123,7 +123,7 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
         let secureBackupController = SecureBackupControllerMock()
         secureBackupController.underlyingKeyBackupState = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled).asCurrentValuePublisher()
         
-        let networkMonitor = NetworkMonitorMock()
+        let networkMonitor = NetworkMonitorMock.default
         networkMonitor.underlyingReachabilityPublisher = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable).asCurrentValuePublisher()
         
         let appMediator = AppMediatorMock()

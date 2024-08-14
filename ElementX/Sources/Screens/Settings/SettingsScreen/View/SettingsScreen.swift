@@ -56,7 +56,8 @@ struct SettingsScreen: View {
                                             name: context.viewState.userDisplayName,
                                             contentID: context.viewState.userID,
                                             avatarSize: .user(on: .settings),
-                                            imageProvider: context.imageProvider)
+                                            imageProvider: context.dependencies?.imageProvider,
+                                            networkMonitor: context.dependencies?.networkMonitor)
                             .accessibilityHidden(true)
                         
                         VStack(alignment: .leading, spacing: 2) {
@@ -227,7 +228,8 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com",
                                                                                    deviceID: "AAAAAAAAAAA"))))
-        return SettingsScreenViewModel(userSession: userSession)
+        return SettingsScreenViewModel(userSession: userSession,
+                                       networkMonitor: NetworkMonitorMock.default)
     }()
     
     static var previews: some View {

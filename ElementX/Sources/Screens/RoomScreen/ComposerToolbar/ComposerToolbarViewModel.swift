@@ -53,6 +53,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     init(wysiwygViewModel: WysiwygComposerViewModel,
          completionSuggestionService: CompletionSuggestionServiceProtocol,
          mediaProvider: MediaProviderProtocol,
+         networkMonitor: NetworkMonitorProtocol,
          mentionDisplayHelper: MentionDisplayHelper,
          analyticsService: AnalyticsService,
          composerDraftService: ComposerDraftServiceProtocol) {
@@ -67,7 +68,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview, duration: 0),
                                                               audioRecorderState: .init(),
                                                               bindings: .init()),
-                   imageProvider: mediaProvider)
+                   dependencies: .init(imageProvider: mediaProvider, networkMonitor: networkMonitor))
 
         context.$viewState
             .map(\.composerMode)

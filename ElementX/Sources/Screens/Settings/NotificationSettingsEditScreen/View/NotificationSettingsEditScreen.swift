@@ -77,7 +77,8 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
                                                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))))
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                                 userSession: userSession,
-                                                                notificationSettingsProxy: notificationSettingsProxy)
+                                                                notificationSettingsProxy: notificationSettingsProxy,
+                                                                networkMonitor: NetworkMonitorMock.default)
         viewModel.fetchInitialContent()
         return viewModel
     }()
@@ -90,7 +91,8 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
                                                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))))
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                                 userSession: userSession,
-                                                                notificationSettingsProxy: notificationSettingsProxy)
+                                                                notificationSettingsProxy: notificationSettingsProxy,
+                                                                networkMonitor: NetworkMonitorMock.default)
         viewModel.fetchInitialContent()
         return viewModel
     }()
@@ -103,7 +105,8 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
         
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                                 userSession: userSession,
-                                                                notificationSettingsProxy: notificationSettingsProxy)
+                                                                notificationSettingsProxy: notificationSettingsProxy,
+                                                                networkMonitor: NetworkMonitorMock.default)
         viewModel.state.pendingMode = .mentionsAndKeywordsOnly
         viewModel.fetchInitialContent()
         return viewModel
@@ -118,7 +121,8 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview
                                                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))))
         var viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                                 userSession: userSession,
-                                                                notificationSettingsProxy: notificationSettingsProxy)
+                                                                notificationSettingsProxy: notificationSettingsProxy,
+                                                                networkMonitor: NetworkMonitorMock.default)
         viewModel.fetchInitialContent()
         return viewModel
     }()

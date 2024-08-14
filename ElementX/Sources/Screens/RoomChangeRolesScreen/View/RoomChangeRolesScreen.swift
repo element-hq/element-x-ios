@@ -74,7 +74,9 @@ struct RoomChangeRolesScreen: View {
             ScrollViewReader { scrollView in
                 HStack(spacing: 16) {
                     ForEach(context.viewState.membersWithRole, id: \.id) { member in
-                        RoomChangeRolesScreenSelectedItem(member: member, imageProvider: context.imageProvider) {
+                        RoomChangeRolesScreenSelectedItem(member: member,
+                                                          imageProvider: context.dependencies?.imageProvider,
+                                                          networkMonitor: context.dependencies?.networkMonitor) {
                             context.send(viewAction: .demoteMember(member))
                         }
                         .frame(width: cellWidth)
@@ -132,6 +134,7 @@ struct RoomChangeRolesScreen_Previews: PreviewProvider, TestablePreview {
         RoomChangeRolesScreenViewModel(mode: mode,
                                        roomProxy: RoomProxyMock(.init(members: .allMembersAsAdmin)),
                                        mediaProvider: MockMediaProvider(),
+                                       networkMonitor: NetworkMonitorMock.default,
                                        userIndicatorController: UserIndicatorControllerMock(),
                                        analytics: ServiceLocator.shared.analytics)
     }

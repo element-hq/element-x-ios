@@ -26,11 +26,11 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol) {
+    init(userSession: UserSessionProtocol, networkMonitor: NetworkMonitorProtocol) {
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userID: userSession.clientProxy.userID,
                                            showDeveloperOptions: AppSettings.isDevelopmentBuild),
-                   imageProvider: userSession.mediaProvider)
+                   dependencies: .init(imageProvider: userSession.mediaProvider, networkMonitor: networkMonitor))
         
         userSession.clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)

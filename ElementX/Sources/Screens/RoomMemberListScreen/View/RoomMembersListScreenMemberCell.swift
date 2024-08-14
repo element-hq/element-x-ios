@@ -29,7 +29,8 @@ struct RoomMembersListScreenMemberCell: View {
                                     name: avatarName,
                                     contentID: member.id,
                                     avatarSize: .user(on: .roomDetails),
-                                    imageProvider: context.imageProvider)
+                                    imageProvider: context.dependencies?.imageProvider,
+                                    networkMonitor: context.dependencies?.networkMonitor)
                     .accessibilityHidden(true)
                 
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
@@ -109,6 +110,7 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(.init(name: "Some room",
                                                                                          members: members)),
                                                           mediaProvider: MockMediaProvider(),
+                                                          networkMonitor: NetworkMonitorMock.default,
                                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                           analytics: ServiceLocator.shared.analytics)
     static var previews: some View {

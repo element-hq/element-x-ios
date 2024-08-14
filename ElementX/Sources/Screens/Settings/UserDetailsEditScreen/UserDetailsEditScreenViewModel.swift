@@ -30,13 +30,14 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
     }
     
     init(clientProxy: ClientProxyProtocol,
-         mediaProvider: MediaProviderProtocol,
+         imageProvider: ImageProviderProtocol,
+         networkMonitor: NetworkMonitorProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: UserDetailsEditScreenViewState(userID: clientProxy.userID,
-                                                                    bindings: .init()), imageProvider: mediaProvider)
+        super.init(initialViewState: UserDetailsEditScreenViewState(userID: clientProxy.userID, bindings: .init()),
+                   dependencies: .init(imageProvider: imageProvider, networkMonitor: networkMonitor))
         
         clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)

@@ -25,6 +25,11 @@ import Foundation
 /// we can do it in this centralised place.
 @MainActor
 class StateStoreViewModel<State: BindableState, ViewAction> {
+    struct Dependencies {
+        let imageProvider: ImageProviderProtocol?
+        let networkMonitor: NetworkMonitorProtocol?
+    }
+    
     /// For storing subscription references.
     ///
     /// Left as public for `ViewModel` implementations convenience.
@@ -38,8 +43,8 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
         set { context.viewState = newValue }
     }
 
-    init(initialViewState: State, imageProvider: ImageProviderProtocol? = nil) {
-        context = Context(initialViewState: initialViewState, imageProvider: imageProvider)
+    init(initialViewState: State, dependencies: Dependencies? = nil) {
+        context = Context(initialViewState: initialViewState, dependencies: dependencies)
         context.viewModel = self
     }
 
@@ -71,9 +76,7 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
         /// Get-able/Observable `Published` property for the `ViewState`
         @Published fileprivate(set) var viewState: State
     
-        /// An optional image loading service so that views can manage themselves
-        /// Intentionally non-generic so that it doesn't grow uncontrollably
-        let imageProvider: ImageProviderProtocol?
+        let dependencies: Dependencies?
     
         /// Set-able/Bindable access to the bindable state.
         subscript<T>(dynamicMember keyPath: WritableKeyPath<State.BindStateType, T>) -> T {
@@ -87,9 +90,9 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
             viewModel?.process(viewAction: viewAction)
         }
     
-        fileprivate init(initialViewState: State, imageProvider: ImageProviderProtocol?) {
+        fileprivate init(initialViewState: State, dependencies: Dependencies? = nil) {
             self.viewState = initialViewState
-            self.imageProvider = imageProvider
+            self.dependencies = dependencies
         }
     }
 }
