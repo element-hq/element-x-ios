@@ -25,7 +25,6 @@ enum TimelineInteractionHandlerAction {
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayMediaUploadPreviewScreen(url: URL)
     case displayPollForm(mode: PollFormMode)
-    case displayRoomMemberDetails(userID: String)
     
     case showActionMenu(TimelineItemActionMenuInfo)
     case showDebugInfo(TimelineItemDebugInfo)

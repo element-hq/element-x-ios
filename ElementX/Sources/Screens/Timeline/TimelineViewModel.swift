@@ -422,8 +422,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     actionsSubject.send(.displayReportContent(itemID: itemID, senderID: senderID))
                 case .displayMediaUploadPreviewScreen(let url):
                     actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
-                case .displayRoomMemberDetails(userID: let userID):
-                    actionsSubject.send(.tappedOnSenderDetails(userID: userID))
                 case .showActionMenu(let actionMenuInfo):
                     Task {
                         await self.updatePermissions()
