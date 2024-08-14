@@ -208,6 +208,20 @@ private class ContentLoader: ObservableObject {
         self.size = size
         self.imageProvider = imageProvider
         self.networkMonitor = networkMonitor
+        
+        // Try to reload images when the network comes back. If a request is
+        // in flight the new one will get coalesced on the image provider level
+        networkMonitor?.reachabilityPublisher
+            .sink { [weak self] value in
+                guard let self, cachedContent == nil, value == .reachable else {
+                    return
+                }
+                
+                Task {
+                    await self.load()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     @MainActor
