@@ -36,7 +36,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
-    private let pinnedEventStringBuilder: RoomEventStringBuilder
     
     private let timelineInteractionHandler: TimelineInteractionHandler
     
@@ -49,24 +48,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
-    
-    private var pinnedEventsTimelineProvider: RoomTimelineProviderProtocol? {
-        didSet {
-            guard let pinnedEventsTimelineProvider else {
-                return
-            }
-            
-            buildPinnedEventContent(timelineItems: pinnedEventsTimelineProvider.itemProxies)
-            pinnedEventsTimelineProvider.updatePublisher
-                // When pinning or unpinning an item, the timeline might return empty for a short while, so we need to debounce it to prevent weird UI behaviours like the banner disappearing
-                .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
-                .sink { [weak self] updatedItems, _ in
-                    guard let self else { return }
-                    buildPinnedEventContent(timelineItems: updatedItems)
-                }
-                .store(in: &cancellables)
-        }
-    }
 
     init(roomProxy: RoomProxyProtocol,
          focussedEventID: String? = nil,
@@ -85,7 +66,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
-        pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
@@ -159,7 +139,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await timelineController.processItemAppearance(id) }
         case .itemDisappeared(let id):
             Task { await timelineController.processItemDisappearance(id) }
-            
         case .itemTapped(let id):
             Task { await handleItemTapped(with: id) }
         case .itemSendInfoTapped(let itemID):
@@ -174,12 +153,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             paginateForwards()
         case .scrollToBottom:
             scrollToBottom()
-            
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
-            
         case .displayRoomDetails:
             actionsSubject.send(.displayRoomDetails)
         case .displayRoomMemberDetails(userID: let userID):
@@ -199,7 +176,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             handlePollAction(pollAction)
         case .handleAudioPlayerAction(let audioPlayerAction):
             handleAudioPlayerAction(audioPlayerAction)
-            
         case .focusOnEventID(let eventID):
             Task { await focusOnEvent(eventID: eventID) }
         case .focusLive:
@@ -209,14 +185,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .hasSwitchedTimeline:
             Task { state.timelineViewState.isSwitchingTimelines = false }
         case let .hasScrolled(direction):
-            state.lastScrollDirection = direction
-        case .tappedPinnedEventsBanner:
-            if let eventID = state.pinnedEventsBannerState.selectedPinEventID {
-                Task { await focusOnEvent(eventID: eventID) }
-            }
-            state.pinnedEventsBannerState.previousPin()
-        case .viewAllPins:
-            actionsSubject.send(.displayPinnedEventsTimeline)
+            actionsSubject.send(.hasScrolled(direction: direction))
         }
     }
 
@@ -383,7 +352,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.canCurrentUserRedactSelf = false
         }
         
-        if state.isPinningEnabled,
+        if appSettings.pinningEnabled,
            case let .success(value) = await roomProxy.canUserPinOrUnpin(userID: roomProxy.ownUserID) {
             state.canCurrentUserPin = value
         } else {
@@ -491,15 +460,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 }
             }
             .store(in: &cancellables)
-        
-        appSettings.$pinningEnabled
-            .combineLatest(appMediator.networkMonitor.reachabilityPublisher)
-            .filter { $0.0 && $0.1 == .reachable }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.setupPinnedEventsTimelineProviderIfNeeded()
-            }
-            .store(in: &cancellables)
     }
     
     private func setupAppSettingsSubscriptions() {
@@ -510,35 +470,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         appSettings.$viewSourceEnabled
             .weakAssign(to: \.state.isViewSourceEnabled, on: self)
             .store(in: &cancellables)
-        
-        appSettings.$pinningEnabled
-            .weakAssign(to: \.state.isPinningEnabled, on: self)
-            .store(in: &cancellables)
-    }
-    
-    private func setupPinnedEventsTimelineProviderIfNeeded() {
-        guard pinnedEventsTimelineProvider == nil else {
-            return
-        }
-        
-        Task {
-            guard let timelineProvider = await roomProxy.pinnedEventsTimeline?.timelineProvider else {
-                return
-            }
-            
-            if pinnedEventsTimelineProvider == nil {
-                pinnedEventsTimelineProvider = timelineProvider
-            }
-        }
     }
     
     private func updatePinnedEventIDs() async {
-        let pinnedEventIDs = await roomProxy.pinnedEventIDs
-        // Only update the loading state of the banner
-        if state.pinnedEventsBannerState.isLoading {
-            state.pinnedEventsBannerState = .loading(numbersOfEvents: pinnedEventIDs.count)
-        }
-        state.pinnedEventIDs = pinnedEventIDs
+        state.pinnedEventIDs = await roomProxy.pinnedEventIDs
     }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {
@@ -700,21 +635,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     // MARK: - Timeline Item Building
-    
-    private func buildPinnedEventContent(timelineItems: [TimelineItemProxy]) {
-        var pinnedEventContents = OrderedDictionary<String, AttributedString>()
-        
-        for item in timelineItems {
-            // Only remote events are pinned
-            if case let .event(event) = item,
-               let eventID = event.id.eventID {
-                pinnedEventContents.updateValue(pinnedEventStringBuilder.buildAttributedString(for: event) ?? AttributedString(L10n.commonUnsupportedEvent),
-                                                forKey: eventID)
-            }
-        }
-        
-        state.pinnedEventsBannerState.setPinnedEventContents(pinnedEventContents)
-    }
     
     private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
         var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()

@@ -54,11 +54,11 @@ struct RoomScreen: View {
             }
             .overlay(alignment: .top) {
                 Group {
-                    if timelineContext.viewState.shouldShowPinnedEventsBanner {
+                    if roomContext.viewState.shouldShowPinnedEventsBanner {
                         pinnedItemsBanner
                     }
                 }
-                .animation(.elementDefault, value: timelineContext.viewState.shouldShowPinnedEventsBanner)
+                .animation(.elementDefault, value: roomContext.viewState.shouldShowPinnedEventsBanner)
             }
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
@@ -114,9 +114,9 @@ struct RoomScreen: View {
     }
     
     private var pinnedItemsBanner: some View {
-        PinnedItemsBannerView(state: timelineContext.viewState.pinnedEventsBannerState,
-                              onMainButtonTap: { timelineContext.send(viewAction: .tappedPinnedEventsBanner) },
-                              onViewAllButtonTap: { timelineContext.send(viewAction: .viewAllPins) })
+        PinnedItemsBannerView(state: roomContext.viewState.pinnedEventsBannerState,
+                              onMainButtonTap: { roomContext.send(viewAction: .tappedPinnedEventsBanner) },
+                              onViewAllButtonTap: { roomContext.send(viewAction: .viewAllPins) })
             .transition(.move(edge: .top))
     }
     

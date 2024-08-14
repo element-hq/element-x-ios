@@ -87,8 +87,11 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
             // The QLPreviewController will not automatically dismiss itself when the underlying view is removed
             // (e.g. switching rooms from a notification) and it continues to hold on to the whole hierarcy.
             // Manually tell it to dismiss itself here.
-            dismissalObserver = dismissalPublisher.sink { _ in
-                self.dismiss(animated: true)
+            dismissalObserver = dismissalPublisher.sink { [weak self] _ in
+                // Dispatching on main.async with weak self we avoid doing an extra dismiss if the view is presented on top of another modal
+                DispatchQueue.main.async { [weak self] in
+                    self?.dismiss(animated: true)
+                }
             }
         }
         
