@@ -36,15 +36,18 @@ class RoomScreenViewModelTests: XCTestCase {
         let timelineSubject = PassthroughSubject<TimelineProxyProtocol, Never>()
         let updateSubject = PassthroughSubject<RoomProxyAction, Never>()
         let roomProxyMock = RoomProxyMock(.init())
+        // setup a way to inject the mock of the pinned events timeline
         roomProxyMock.pinnedEventsTimelineClosure = {
             await timelineSubject.values.first()
         }
+        // setup the room proxy actions publisher
         roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings)
         self.viewModel = viewModel
         
+        // check if in the default state is not showing but is indeed loading
         var deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.pinnedEventsBannerState.count == 0
         }
@@ -52,6 +55,7 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.context.viewState.pinnedEventsBannerState.isLoading)
         XCTAssertFalse(viewModel.context.viewState.shouldShowPinnedEventsBanner)
 
+        // check if if after the pinned event ids are set the banner is still in a loading state, but is both loading and showing with a counter
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.pinnedEventsBannerState.count == 2
         }
@@ -61,6 +65,7 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.context.viewState.pinnedEventsBannerState.isLoading)
         XCTAssertTrue(viewModel.context.viewState.shouldShowPinnedEventsBanner)
         
+        // setup the loaded pinned events injection in the timeline
         let pinnedTimelineMock = TimelineProxyMock()
         let pinnedTimelineProviderMock = RoomTimelineProviderMock()
         let providerUpdateSubject = PassthroughSubject<([TimelineItemProxy], PaginationState), Never>()
@@ -69,6 +74,7 @@ class RoomScreenViewModelTests: XCTestCase {
         pinnedTimelineProviderMock.itemProxies = [.event(.init(item: EventTimelineItemSDKMock(configuration: .init()), id: "1")),
                                                   .event(.init(item: EventTimelineItemSDKMock(configuration: .init()), id: "2"))]
         
+        // check if the banner is now in a loaded state and is showing the counter
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             !viewState.pinnedEventsBannerState.isLoading
         }
@@ -77,6 +83,7 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.context.viewState.pinnedEventsBannerState.count, 2)
         XCTAssertTrue(viewModel.context.viewState.shouldShowPinnedEventsBanner)
         
+        // check if the banner is updating alongside the timeline
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.pinnedEventsBannerState.count == 3
         }
@@ -87,7 +94,11 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.context.viewState.shouldShowPinnedEventsBanner)
         try await deferred.fulfill()
         
+        // check how the scrolling changes the banner visibility
         viewModel.timelineHasScrolled(direction: .top)
         XCTAssertFalse(viewModel.context.viewState.shouldShowPinnedEventsBanner)
+        
+        viewModel.timelineHasScrolled(direction: .bottom)
+        XCTAssertTrue(viewModel.context.viewState.shouldShowPinnedEventsBanner)
     }
 }

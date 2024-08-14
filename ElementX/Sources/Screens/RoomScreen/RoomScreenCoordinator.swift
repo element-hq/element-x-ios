@@ -151,9 +151,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 
                 switch actions {
                 case .focusEvent(eventID: let eventID):
-                    Task { [weak self] in
-                        await self?.timelineViewModel.focusOnEvent(eventID: eventID)
-                    }
+                    focusOnEvent(eventID: eventID)
                 case .displayPinnedEventsTimeline:
                     actionsSubject.send(.presentPinnedEventsTimeline)
                 }
