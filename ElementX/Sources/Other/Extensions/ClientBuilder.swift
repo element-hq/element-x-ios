@@ -29,6 +29,7 @@ extension ClientBuilder {
             .slidingSyncProxy(slidingSyncProxy: slidingSyncProxy?.absoluteString)
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier, sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
+            .requestConfig(config: .init(retryLimit: 0, timeout: 15000, maxConcurrentRequests: nil, retryTimeout: nil))
         
         builder = switch slidingSync {
         case .restored: builder
