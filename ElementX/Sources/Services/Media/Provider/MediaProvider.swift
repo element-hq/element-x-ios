@@ -21,7 +21,7 @@ import UIKit
 struct MediaProvider: MediaProviderProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let imageCache: Kingfisher.ImageCache
-    private let networkMonitor: NetworkMonitorProtocol!
+    private let networkMonitor: NetworkMonitorProtocol?
     
     init(mediaLoader: MediaLoaderProtocol,
          imageCache: Kingfisher.ImageCache,
@@ -76,7 +76,11 @@ struct MediaProvider: MediaProviderProtocol {
     }
     
     func loadImageRetryingOnReconnection(_ source: MediaSourceProxy, size: CGSize?) -> Task<UIImage, any Error> {
-        Task {
+        guard let networkMonitor else {
+            fatalError("This method shouldn't be invoked without a NetworkMonitor set.")
+        }
+        
+        return Task {
             if case let .success(image) = await loadImageFromSource(source, size: size) {
                 return image
             }
@@ -90,16 +94,18 @@ struct MediaProvider: MediaProviderProtocol {
                     throw MediaProviderError.cancelled
                 }
                 
-                if reachability == .reachable {
-                    switch await loadImageFromSource(source, size: size) {
-                    case .success(let image):
-                        return image
-                    case .failure:
-                        // If it fails after a retry with the network available
-                        // then something else must be wrong. Bail out.
-                        if reachability == .reachable {
-                            throw MediaProviderError.cancelled
-                        }
+                guard reachability == .reachable else {
+                    continue
+                }
+                
+                switch await loadImageFromSource(source, size: size) {
+                case .success(let image):
+                    return image
+                case .failure:
+                    // If it fails after a retry with the network available
+                    // then something else must be wrong. Bail out.
+                    if reachability == .reachable {
+                        throw MediaProviderError.cancelled
                     }
                 }
             }
